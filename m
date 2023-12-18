@@ -1,117 +1,173 @@
-Return-Path: <linux-next+bounces-427-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-428-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E8AF816616
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 06:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5030381661B
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 06:48:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86C27281B30
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 05:42:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CFBC282044
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 05:48:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26EED63CD;
-	Mon, 18 Dec 2023 05:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38E5563D3;
+	Mon, 18 Dec 2023 05:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DbhgfMK9"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AWD1oy6q"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF44C63C5;
-	Mon, 18 Dec 2023 05:42:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F7D63AA;
+	Mon, 18 Dec 2023 05:48:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702878125;
-	bh=x9ABy5vCpnKgmRlRZ90DI4YDdJgQGcJKqGSjNRufGGk=;
+	s=201702; t=1702878493;
+	bh=6EkdkOoPvJi8d4K4K1G/cZM8HRKq5yRNGdpX+aZ6Yjc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=DbhgfMK9uGSsLqdZdbHpDmrkuzRR4RL9INGBMWPAp2g0IT8hbDRCn/xlPP4dO+ZN5
-	 LXs6iLXio2AX3siw+/E+PKCpFRiQxDTOBEV9dbxZjOMNgpJpIh4dA3Ll/5d9W4lnLm
-	 hEmktBpyMWkUOQr8/o221dGFh3Rwrgh+hQfgS6P35zj6VXt5Z3vrUGW9lKdtI+1Ilx
-	 +cNY05PSYOt0UpV5UMg+XOF50lFlXTfQcjIBXb8iocrNqreWeJs7qgsD1qz8Epso7P
-	 fN9PJF/nJOvXCbdoOwWakAB5/FDXmUfA5SiKrwZc6tBrnoLs4xRVAB0ZbWCol5S2lS
-	 SnxgXrBKbletg==
+	b=AWD1oy6qUt+uq+WdrOBJGVSWoBWcE8iN1lRseSLkdXdjT3Dg3RBcRkquxcNNR2ptw
+	 Zt1TNoLujVn4cH9w0TxgFERKNiNColD9ZA/9jRILLqgRBICquQAH+j6Cjq2Qc9M6hq
+	 WLT8ZHQo7NH+2fN0Pry2G0wS+DjuEwrs9R+K/zA77PnUIHXDsjwK0oxdupHDk+OHwe
+	 zuIkPvvk+kgwTSwqA88mxNQhR0OWitMux3EKrMjRhGSpOnwSST5qHBurWXdkJhqQH5
+	 65SXfU+sMNw+vl7fCYHE2o/Mw1h3ilsRKFHKaWT0aDrm2Q1CV+m4niwetyib5PAG5T
+	 vxAT3EAOu87VQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4StpcD29n3z4xM2;
-	Mon, 18 Dec 2023 16:42:04 +1100 (AEDT)
-Date: Mon, 18 Dec 2023 16:42:03 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4StplK15nmz4xCp;
+	Mon, 18 Dec 2023 16:48:13 +1100 (AEDT)
+Date: Mon, 18 Dec 2023 16:48:12 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Rob Herring <robh@kernel.org>, Greg KH <greg@kroah.com>, Arnd Bergmann
- <arnd@arndb.de>, Jarkko Sakkinen <jarkko@kernel.org>, Bjorn Helgaas
- <bhelgaas@google.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof
- =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the devicetree tree
-Message-ID: <20231218164203.530ad4f7@canb.auug.org.au>
+To: Rob Herring <robh@kernel.org>, Greg KH <greg@kroah.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Kyle Tso <kyletso@google.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the devicetree tree with the usb tree
+Message-ID: <20231218164812.327db2af@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qsN_.e7Or5x+KDHl86iA0Qy";
+Content-Type: multipart/signed; boundary="Sig_/TpXr3zQnUF_Qfml_0=hY_HS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/qsN_.e7Or5x+KDHl86iA0Qy
+--Sig_/TpXr3zQnUF_Qfml_0=hY_HS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in various other trees as different
-commits (but the same patches):
+Today's linux-next merge of the devicetree tree got a conflict in:
 
-  11844f340318 ("cdx: Explicitly include correct DT includes, again")
-  319e31686b9f ("tpm: nuvoton: Use i2c_get_match_data()")
-  5adf0863e467 ("serial: esp32_acm: Add explicit platform_device.h include")
-  68398c844813 ("serial: esp32_uart: Use device_get_match_data()")
-  72cc46a84b80 ("pci: rcar-gen4: Replace of_device.h with explicit of.h inc=
-lude")
+  Documentation/devicetree/bindings/connector/usb-connector.yaml
 
-These are commits
+between commits:
 
-  aaee477e3e2c ("cdx: Explicitly include correct DT includes, again")
+  76cd718a9ffd ("dt-bindings: connector: usb: add accessory mode descriptio=
+n")
+  d1756ac67e7f ("dt-bindings: connector: usb: add altmodes description")
 
-from the char-misc tree
+from the usb tree and commit:
 
-  ebf2d4e8e582 ("tpm: nuvoton: Use i2c_get_match_data()")
+  0d3a771610d0 ("dt-bindings: connector: Add child nodes for multiple PD ca=
+pabilities")
 
-from the tpmdd tree
+from the devicetree tree.
 
-  2600d9939440 ("serial: esp32_acm: Add explicit platform_device.h include")
-  3d19ff562d06 ("serial: esp32_uart: Use device_get_match_data()")
-
-from the tty tree
-
-  ec2152374804 ("PCI: rcar-gen4: Replace of_device.h with explicit of.h inc=
-lude")
-
-from the pci tree.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/qsN_.e7Or5x+KDHl86iA0Qy
+diff --cc Documentation/devicetree/bindings/connector/usb-connector.yaml
+index f5966b3a2d9a,5a93cdb9fdbc..000000000000
+--- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
++++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+@@@ -166,49 -141,6 +141,44 @@@ properties
+      maxItems: 6
+      $ref: /schemas/types.yaml#/definitions/uint32-array
+ =20
+-   op-sink-microwatt:
+-     description: Sink required operating power in microwatt, if source ca=
+n't
+-       offer the power, Capability Mismatch is set. Required for power sin=
+k and
+-       power dual role.
+-=20
+ +  accessory-mode-audio:
+ +    type: boolean
+ +    description: Whether the device supports Audio Adapter Accessory Mode=
+. This
+ +      is only necessary if there are no other means to discover supported
+ +      alternative modes (e.g. through the UCSI firmware interface).
+ +
+ +  accessory-mode-debug:
+ +    type: boolean
+ +    description: Whether the device supports Debug Accessory Mode. This
+ +      is only necessary if there are no other means to discover supported
+ +      alternative modes (e.g. through the UCSI firmware interface).
+ +
+ +  altmodes:
+ +    type: object
+ +    description: List of Alternative Modes supported by the schematics on=
+ the
+ +      particular device. This is only necessary if there are no other mea=
+ns to
+ +      discover supported alternative modes (e.g. through the UCSI firmware
+ +      interface).
+ +
+ +    additionalProperties: false
+ +
+ +    patternProperties:
+ +      "^(displayport)$":
+ +        type: object
+ +        description:
+ +          A single USB-C Alternative Mode as supported by the USB-C conne=
+ctor logic.
+ +
+ +        additionalProperties: false
+ +
+ +        properties:
+ +          svid:
+ +            $ref: /schemas/types.yaml#/definitions/uint16
+ +            description: Unique value assigned by USB-IF to the Vendor / =
+AltMode.
+ +            enum: [ 0xff01 ]
+ +          vdo:
+ +            $ref: /schemas/types.yaml#/definitions/uint32
+ +            description: VDO returned by Discover Modes USB PD command.
+ +
+    port:
+      $ref: /schemas/graph.yaml#/properties/port
+      description: OF graph bindings modeling a data bus to the connector, =
+e.g.
+
+--Sig_/TpXr3zQnUF_Qfml_0=hY_HS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/26sACgkQAVBC80lX
-0GyAWgf/WzLidDn/pnzIIYfzXPAdRsuUenXGZZQdqu9bGMTvUAPM2TaD6/z6osP5
-b2/Ue6gzVmDFZkJxv39is00Aipp5VZUCcdZU1LUzEHSSLTwctSy8W5i51LZO9Xr/
-Eh5BsHLp26LraWORjl9QhLF7AppRfGub/Wr41b2z8S1GG/DiwXrN195R2g9dM+je
-czLoZeh1SakzlJgBWx9ynofl4cJDQYvhEK6/XH9cuv13K3BIa0DUIp3g6RYF/k94
-4cp91wJo5sZFkxoNH4iRQnIdh9QGijAxBDBYc2k9BdJf+DM8Zt0nXzaak4CXeau9
-hFTQjXns+541l2EbySp/8x1qX3xstw==
-=g5tz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/3RwACgkQAVBC80lX
+0GzA7Qf+Lo4E+AtV95EJ9wbkn8X8Lqlfa/tf45BG+CiononD0HBknFipzc26RiUa
+ap1lzfDg9zzP1CRStffg5XzLxBJMloENVGjT/biAk7JEg+tqBZ2AGwDdKExr7Qdn
+chiH7vscqgGi+JO8i3bnz+OLxZWRIYL8WyQ9f1Hjo+0e3non32XRP+rN9Wn/M3v7
+emgRqvEQENj2Q5WpAFRdyIMLBS4IXN/0NvQq1WSaA+P9ovqVlXwQeLs4dMXL75Yc
+KrO3aHAQ7nICA+1ToeERvJt9abAHUBO+6+PDDn7qAEqQuIGYDm63mDh+l2F61M8b
+1Y++4qOl3wY5s0G/9CEULRGDRe2NIQ==
+=9+k4
 -----END PGP SIGNATURE-----
 
---Sig_/qsN_.e7Or5x+KDHl86iA0Qy--
+--Sig_/TpXr3zQnUF_Qfml_0=hY_HS--
 

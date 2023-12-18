@@ -1,176 +1,118 @@
-Return-Path: <linux-next+bounces-437-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-438-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DA4A816A02
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 10:40:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2876B816AFE
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 11:26:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D023A1C227AE
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 09:40:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0D5F1F235BD
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 10:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A3D2125A3;
-	Mon, 18 Dec 2023 09:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BC3714F8D;
+	Mon, 18 Dec 2023 10:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="EdNm0eyB"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="ZerVlu5G";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PmiVBL13"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C7A11C9B
-	for <linux-next@vger.kernel.org>; Mon, 18 Dec 2023 09:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3ba4850f65dso1475019b6e.2
-        for <linux-next@vger.kernel.org>; Mon, 18 Dec 2023 01:40:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1702892402; x=1703497202; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=AKXsow4l8ToPr/9VMvEIRSahQmiuSBL7eLvg0kldo4Y=;
-        b=EdNm0eyBp/2mIdARuxGv2n7nleAEphtPxNnN41i4U0IQe307gOLUv80Qm7hHR5WBCp
-         FDrnoKrlO6pNGkmIMcejoV6F4wIQbvTFO+NNag73mBHQjHCeL4olT1Znx/JC1qNIuZvw
-         hU637sosQfR0yvnO+lIh2crVi9+ZbIdBXJtSKfj1o49MtVQN+xMKn5jvDgyGqgnCNMNN
-         gH0SLFeYLKIwdNoQfSjQlH7IVA0+8DMSuu7QihqDC3IVvkJ7Idc/+6fvtpBGD5eTu6NG
-         4+DrNh0VyQY0+s0bIx58Twn/JdDHr3v43x2BNc7cu/2FgJQXd2QrykmhyagSQXylLb1O
-         AdKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702892402; x=1703497202;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AKXsow4l8ToPr/9VMvEIRSahQmiuSBL7eLvg0kldo4Y=;
-        b=pqzNXSsDK2vxUHIf7Qy2EiasusCwdTHJTkYBfIjm4iKyYz/+/J5W1TIqm4tQgWTWeL
-         ywU/ciQqI3zSwMBIXFgTXX3rPcz+4E17ZvnJTkZ77sAmjzMz4IzBtiD7Eh9SLoUIXIbs
-         1uQmz6Wkuhm4BD7D72WxgsNsyCNhwqDzYA5pONrn//fpGdu9OfhYQCZ23wB2T5wygKGb
-         /+63hTXNVLK2WDzKZ504Qa7AmnciqsG2OQJwQ7/H9bQFi+3Q0i4ZMYgvtQihqr+1WEzc
-         l92ZPVwsZkPu31vpp0OPicXtV2FA0TziUwqnEgZyL4YDAL6BTHAAtGVAnKiL1RxIhllj
-         3c3A==
-X-Gm-Message-State: AOJu0YznOBsmLHDF7xc0qTpRVz2XXLJUSNYnU+7xz+jWBJAo9yu4unvs
-	N4mbkyW9iWSLEuYdk5l8Qn1RlVg8s5AdEXdzeVQ=
-X-Google-Smtp-Source: AGHT+IHCiJClWBEJOBqnFWzz3slsPhbkY3o43ksP2CX1XDPXIEVavIujMjwTAj89DPfT62PdXSVhyA==
-X-Received: by 2002:a05:6358:60c1:b0:16c:4fe:7bfc with SMTP id i1-20020a05635860c100b0016c04fe7bfcmr17691783rwi.22.1702892401966;
-        Mon, 18 Dec 2023 01:40:01 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id ei22-20020a056a0080d600b006ce75e0ef83sm692559pfb.179.2023.12.18.01.40.01
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Dec 2023 01:40:01 -0800 (PST)
-Message-ID: <65801371.050a0220.dfecf.10ca@mx.google.com>
-Date: Mon, 18 Dec 2023 01:40:01 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09AC14F77;
+	Mon, 18 Dec 2023 10:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailout.nyi.internal (Postfix) with ESMTP id E3F445C00A3;
+	Mon, 18 Dec 2023 05:26:10 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 18 Dec 2023 05:26:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1702895170; x=1702981570; bh=9uksYQ3xlp
+	5Ys6n47ab5G9eyxt8+vJzx9s8YHlsl6CE=; b=ZerVlu5GdVUJ32eoZAxhSLi9iP
+	jmWqoNCIUStPB8usIURsHsC7o+C9PmXGle1H72gd2FVOb+m6Of7ZEAr6AhHAjYDs
+	S3Wo4df/LdK/oiDQBxVRVi+M2I+Usj9awwV+gohcKRPy23sVnAC0FTi/+GWxPW96
+	8VwnHLFAEeXB/1k3NsliEqd37wHx4pXbDJlUnTcQXhzeOj7CDUlLfA4kglLE52P2
+	y63apleI4HhGwDpyrg3/iC/Bj16lHPSuspU1Nti5fQo1QjNJkFtAHR7db5ocOGrn
+	Up4kDpibPZeKV4YC5WBDbFt7366Rh2T8qX8SeQuaqCDdXOD/NSosey3bds9A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1702895170; x=1702981570; bh=9uksYQ3xlp5Ys6n47ab5G9eyxt8+
+	vJzx9s8YHlsl6CE=; b=PmiVBL132KEraaa7AjHtqrtidVGr0PQSrLROV2dWd5ji
+	p44PFKX4cHzS9k6kF5MM9ADk06ycJ8PW/ZUtpV2X6v1TETMNtXy6Y0TGDmQ7pWNq
+	1+tjBEE+oNvf+rwt8eHbywbY4t0B01x02upNvRIeqVJAgt+qrfmcgVoYhXIYOlJs
+	J5refyb4X+ylLVGEksKraFIi0sg6M5Juuj9r+pBY4kZD+lHSPWbi244StNqiJhxz
+	oApPiHoUd7l+0fq2IM0FRgA/5Fn7WyM54XUsHv+fjSFJhxWYnG+LOIBDIAElpmZd
+	MIrAJA0VMwsml4X9v0fn9HTtgKbQ3XYrzdlAjc1k6w==
+X-ME-Sender: <xms:Qh6AZWObw1FiNYIBoTZjrAT6vkwONxJL-wRO2tTFhfbSQIldzQ6xAg>
+    <xme:Qh6AZU83Hu_Q6g19G9wWKB8_fTABcDNs8aXyDq0LWKmmh8dzqVrRvQxmjgVhWnXcz
+    DsGCibNS146cw>
+X-ME-Received: <xmr:Qh6AZdTewmvAsMkZ-m5CERBNkhDiGquwSraTR7nuZEo2TC8uLUFK6gUCJqA3UUcHpzEexZplLnJRy4P6UUN05Ww6qCDm1dPftA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddtkedgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:Qh6AZWvEfn782ml61zYOW_mq_1ssIQZ7o0Dej3D49c3tiRWl39rzDA>
+    <xmx:Qh6AZeeHWdmzizu9n9aufun4Cn-gRPZop_eNtuNWa_DuYimcFoOUQg>
+    <xmx:Qh6AZa0DExewc7klkOxCGsy7J76FXxfwCPDuktCjLsgypH535yeUfg>
+    <xmx:Qh6AZWSfKn5RcdEk9g3IXFyWLRE1eQNeDjvFPPlJYb8U7ry-Elxacw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 18 Dec 2023 05:26:10 -0500 (EST)
+Date: Mon, 18 Dec 2023 11:26:08 +0100
+From: Greg KH <greg@kroah.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the driver-core tree
+Message-ID: <2023121857-myself-contact-8ca8@gregkh>
+References: <20231218154034.56bf4c68@canb.auug.org.au>
+ <20231217215429.944b318dc38a3646e734a807@linux-foundation.org>
+ <20231218173506.2165eef6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.7-rc5-456-g002453f88f609
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc5-456-g002453f88f609)
-To: linux-next@vger.kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231218173506.2165eef6@canb.auug.org.au>
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
-5-456-g002453f88f609)
+On Mon, Dec 18, 2023 at 05:35:06PM +1100, Stephen Rothwell wrote:
+> Hi Andrew,
+> 
+> On Sun, 17 Dec 2023 21:54:29 -0800 Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > On Mon, 18 Dec 2023 15:40:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > 
+> > > The following commit is also in the mm tree as a different commit (but
+> > > the same patch):
+> > > 
+> > >   2678fd2fe9ee ("initramfs: Expose retained initrd as sysfs file")
+> > > 
+> > > This is commit
+> > > 
+> > >   426081603f6c ("initramfs: expose retained initrd as sysfs file")
+> > > 
+> > > in the mm tree.  
+> > 
+> > I'm suspecting that something went wrong here?
+> 
+> Like what?  You and Greg have applied the same patch.  It happens.
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.7-rc5-456-g002453f88f609/
+Yeah, sorry about that, git should be able to handle this fine.
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.7-rc5-456-g002453f88f609
-Git Commit: 002453f88f6094816d34378e953d87b8a8a54518
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+greg k-h
 

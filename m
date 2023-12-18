@@ -1,173 +1,68 @@
-Return-Path: <linux-next+bounces-428-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-429-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5030381661B
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 06:48:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE2A081662C
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 06:54:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CFBC282044
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 05:48:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E2731F2262F
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 05:54:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38E5563D3;
-	Mon, 18 Dec 2023 05:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465D46FBA;
+	Mon, 18 Dec 2023 05:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AWD1oy6q"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="BKUd9jZd"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F7D63AA;
-	Mon, 18 Dec 2023 05:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702878493;
-	bh=6EkdkOoPvJi8d4K4K1G/cZM8HRKq5yRNGdpX+aZ6Yjc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=AWD1oy6qUt+uq+WdrOBJGVSWoBWcE8iN1lRseSLkdXdjT3Dg3RBcRkquxcNNR2ptw
-	 Zt1TNoLujVn4cH9w0TxgFERKNiNColD9ZA/9jRILLqgRBICquQAH+j6Cjq2Qc9M6hq
-	 WLT8ZHQo7NH+2fN0Pry2G0wS+DjuEwrs9R+K/zA77PnUIHXDsjwK0oxdupHDk+OHwe
-	 zuIkPvvk+kgwTSwqA88mxNQhR0OWitMux3EKrMjRhGSpOnwSST5qHBurWXdkJhqQH5
-	 65SXfU+sMNw+vl7fCYHE2o/Mw1h3ilsRKFHKaWT0aDrm2Q1CV+m4niwetyib5PAG5T
-	 vxAT3EAOu87VQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4StplK15nmz4xCp;
-	Mon, 18 Dec 2023 16:48:13 +1100 (AEDT)
-Date: Mon, 18 Dec 2023 16:48:12 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Rob Herring <robh@kernel.org>, Greg KH <greg@kroah.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Kyle Tso <kyletso@google.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FFB6FA3;
+	Mon, 18 Dec 2023 05:54:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5438AC433C8;
+	Mon, 18 Dec 2023 05:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1702878870;
+	bh=epOGSnTxreQ/s5ZdzE92LmaoiqGP2R33lgR9pl8PglM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BKUd9jZdVV1i+8UHRdM6hvmutR90V3XyNx07x2hLl8whXAehi+RmHAt+kZjw4/LIr
+	 n7J3VpikTHfwJa+8mHopsb4ScysQ39i7PjkZ9Zf4Ea0tx512dZhnbhiG8VgJL46wLi
+	 5RA0Lr0W8BK7KYy4xHXB/ZRhdpOIEBK0lUgWaeFM=
+Date: Sun, 17 Dec 2023 21:54:29 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Greg KH <greg@kroah.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the devicetree tree with the usb tree
-Message-ID: <20231218164812.327db2af@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patch in the driver-core tree
+Message-Id: <20231217215429.944b318dc38a3646e734a807@linux-foundation.org>
+In-Reply-To: <20231218154034.56bf4c68@canb.auug.org.au>
+References: <20231218154034.56bf4c68@canb.auug.org.au>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TpXr3zQnUF_Qfml_0=hY_HS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/TpXr3zQnUF_Qfml_0=hY_HS
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+On Mon, 18 Dec 2023 15:40:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+> Hi all,
+> 
+> The following commit is also in the mm tree as a different commit (but
+> the same patch):
+> 
+>   2678fd2fe9ee ("initramfs: Expose retained initrd as sysfs file")
+> 
+> This is commit
+> 
+>   426081603f6c ("initramfs: expose retained initrd as sysfs file")
+> 
+> in the mm tree.
 
-  Documentation/devicetree/bindings/connector/usb-connector.yaml
-
-between commits:
-
-  76cd718a9ffd ("dt-bindings: connector: usb: add accessory mode descriptio=
-n")
-  d1756ac67e7f ("dt-bindings: connector: usb: add altmodes description")
-
-from the usb tree and commit:
-
-  0d3a771610d0 ("dt-bindings: connector: Add child nodes for multiple PD ca=
-pabilities")
-
-from the devicetree tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/devicetree/bindings/connector/usb-connector.yaml
-index f5966b3a2d9a,5a93cdb9fdbc..000000000000
---- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-+++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-@@@ -166,49 -141,6 +141,44 @@@ properties
-      maxItems: 6
-      $ref: /schemas/types.yaml#/definitions/uint32-array
- =20
--   op-sink-microwatt:
--     description: Sink required operating power in microwatt, if source ca=
-n't
--       offer the power, Capability Mismatch is set. Required for power sin=
-k and
--       power dual role.
--=20
- +  accessory-mode-audio:
- +    type: boolean
- +    description: Whether the device supports Audio Adapter Accessory Mode=
-. This
- +      is only necessary if there are no other means to discover supported
- +      alternative modes (e.g. through the UCSI firmware interface).
- +
- +  accessory-mode-debug:
- +    type: boolean
- +    description: Whether the device supports Debug Accessory Mode. This
- +      is only necessary if there are no other means to discover supported
- +      alternative modes (e.g. through the UCSI firmware interface).
- +
- +  altmodes:
- +    type: object
- +    description: List of Alternative Modes supported by the schematics on=
- the
- +      particular device. This is only necessary if there are no other mea=
-ns to
- +      discover supported alternative modes (e.g. through the UCSI firmware
- +      interface).
- +
- +    additionalProperties: false
- +
- +    patternProperties:
- +      "^(displayport)$":
- +        type: object
- +        description:
- +          A single USB-C Alternative Mode as supported by the USB-C conne=
-ctor logic.
- +
- +        additionalProperties: false
- +
- +        properties:
- +          svid:
- +            $ref: /schemas/types.yaml#/definitions/uint16
- +            description: Unique value assigned by USB-IF to the Vendor / =
-AltMode.
- +            enum: [ 0xff01 ]
- +          vdo:
- +            $ref: /schemas/types.yaml#/definitions/uint32
- +            description: VDO returned by Discover Modes USB PD command.
- +
-    port:
-      $ref: /schemas/graph.yaml#/properties/port
-      description: OF graph bindings modeling a data bus to the connector, =
-e.g.
-
---Sig_/TpXr3zQnUF_Qfml_0=hY_HS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/3RwACgkQAVBC80lX
-0GzA7Qf+Lo4E+AtV95EJ9wbkn8X8Lqlfa/tf45BG+CiononD0HBknFipzc26RiUa
-ap1lzfDg9zzP1CRStffg5XzLxBJMloENVGjT/biAk7JEg+tqBZ2AGwDdKExr7Qdn
-chiH7vscqgGi+JO8i3bnz+OLxZWRIYL8WyQ9f1Hjo+0e3non32XRP+rN9Wn/M3v7
-emgRqvEQENj2Q5WpAFRdyIMLBS4IXN/0NvQq1WSaA+P9ovqVlXwQeLs4dMXL75Yc
-KrO3aHAQ7nICA+1ToeERvJt9abAHUBO+6+PDDn7qAEqQuIGYDm63mDh+l2F61M8b
-1Y++4qOl3wY5s0G/9CEULRGDRe2NIQ==
-=9+k4
------END PGP SIGNATURE-----
-
---Sig_/TpXr3zQnUF_Qfml_0=hY_HS--
+I'm suspecting that something went wrong here?
 

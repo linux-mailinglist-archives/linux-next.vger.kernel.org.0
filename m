@@ -1,142 +1,95 @@
-Return-Path: <linux-next+bounces-422-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-423-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1044B816551
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 04:25:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90BFC8165B3
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 05:40:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B70F62822BE
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 03:25:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56C272822B2
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 04:40:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E10E63AA;
-	Mon, 18 Dec 2023 03:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01E363AA;
+	Mon, 18 Dec 2023 04:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="aPL2BAlU"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HjMemx5V"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9990063A3;
-	Mon, 18 Dec 2023 03:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB9263A3;
+	Mon, 18 Dec 2023 04:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702869938;
-	bh=p1ZUN9yydH+yIhaR4/KLunbUiJVXbsKuyzg7+saLzXI=;
+	s=201702; t=1702874435;
+	bh=RZCUTY3WdDKvXPR5OpEDurVy+wjz0J7rb/2i6L34Ntk=;
 	h=Date:From:To:Cc:Subject:From;
-	b=aPL2BAlUkMKm/b6Q3dc9R4366ZfBE0jj06r1cKS+Y3YY32/RqYSX46yw0vm+a9siK
-	 9L695vqaBDvWUYlYeh5vT279Y8hnmdn7XM8syXqM5il8EFb9qcO5VYGPW8IAPbqYmN
-	 dJECTRKVeeqrRW8MLawwuZeQp3Y4/bHUAoPO9Z61DS+xqY/RDmqgOg+FNuRsm63X0q
-	 aOwDpcgBbI2hoN/t2H0WXwhC4Sw/hc7MyAUHxB3w8QdFRzE3nad1O75+y6bYUnYhYD
-	 yfyP08kB+3hRkSXliSXhYnMpxdIE2hcoxppLKADXXG/y4+iYgk/W+HJ+YS2hGscryv
-	 jeutvPcxoyZ+g==
+	b=HjMemx5VOUJbpBiGJ+s0BgKedpacrCz733kPGOH5LoDBhnU2/yfQhE5ki+mCLoq39
+	 fkgDTW4h8MiM2zBg6qDSz2EPfsUwpVrM85Op3fCJcj05Ce6xGg78vlIoE3YVWQHiUU
+	 ncPt3/5dRDV2Wuesrhevd1xtBUeAdI0BwKCmxw7Ngq2srReTZVfdGDEESjTYzAc3sc
+	 YVYwTYIFHWVqzGFJSUjTecoSoirOZ0Iys2/roPYAemTMR1eqDhX2I4hCcTgYxJKfWl
+	 p7u89q0zJ+Tv9eRroUFoGhH3uBufIyh2zh/LXi/cm7T1Q11VqwBhCq9LNLbo7f8o2N
+	 u6t3mWgmqIhow==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4StlZn5VzMz4xPh;
-	Mon, 18 Dec 2023 14:25:37 +1100 (AEDT)
-Date: Mon, 18 Dec 2023 14:25:37 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4StnFH1rbmz4wc8;
+	Mon, 18 Dec 2023 15:40:35 +1100 (AEDT)
+Date: Mon, 18 Dec 2023 15:40:34 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Paul E. McKenney" <paulmck@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>
+To: Greg KH <greg@kroah.com>, Andrew Morton <akpm@linux-foundation.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Vlastimil Babka <vbabka@suse.cz>
-Subject: linux-next: manual merge of the rcu tree with the jc_docs tree
-Message-ID: <20231218142537.3b74c770@canb.auug.org.au>
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the driver-core tree
+Message-ID: <20231218154034.56bf4c68@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=tx.bSTmqmFJghJvb9Kx2Al";
+Content-Type: multipart/signed; boundary="Sig_/=WCEwTXc2st=ctHxEtl4Lgf";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/=tx.bSTmqmFJghJvb9Kx2Al
+--Sig_/=WCEwTXc2st=ctHxEtl4Lgf
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the rcu tree got a conflict in:
+The following commit is also in the mm tree as a different commit (but
+the same patch):
 
-  Documentation/admin-guide/kernel-parameters.txt
+  2678fd2fe9ee ("initramfs: Expose retained initrd as sysfs file")
 
-between commit:
+This is commit
 
-  a3a27827452f ("Documentation, mm/unaccepted: document accept_memory kerne=
-l parameter")
+  426081603f6c ("initramfs: expose retained initrd as sysfs file")
 
-from the jc_docs tree and commit:
-
-  801f246637ed ("doc: Add EARLY flag to early-parsed kernel boot parameters=
-")
-
-from the rcu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+in the mm tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/admin-guide/kernel-parameters.txt
-index 33859d298907,b8f131977682..000000000000
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@@ -1,15 -1,4 +1,15 @@@
- +	accept_memory=3D  [MM]
- +			Format: { eager | lazy }
- +			default: lazy
- +			By default, unaccepted memory is accepted lazily to
- +			avoid prolonged boot times. The lazy option will add
- +			some runtime overhead until all memory is eventually
- +			accepted. In most cases the overhead is negligible.
- +			For some workloads or for debugging purposes
- +			accept_memory=3Deager can be used to accept all memory
- +			at once during boot.
- +
-- 	acpi=3D		[HW,ACPI,X86,ARM64,RISCV64]
-+ 	acpi=3D		[HW,ACPI,X86,ARM64,RISCV64,EARLY]
-  			Advanced Configuration and Power Interface
-  			Format: { force | on | off | strict | noirq | rsdt |
-  				  copy_dsdt }
-@@@ -2449,9 -2440,9 +2451,9 @@@
-  			between unregistering the boot console and initializing
-  			the real console.
- =20
- -	keepinitrd	[HW,ARM]
- +	keepinitrd	[HW,ARM] See retain_initrd.
- =20
-- 	kernelcore=3D	[KNL,X86,IA-64,PPC]
-+ 	kernelcore=3D	[KNL,X86,IA-64,PPC,EARLY]
-  			Format: nn[KMGTPE] | nn% | "mirror"
-  			This parameter specifies the amount of memory usable by
-  			the kernel for non-movable allocations.  The requested
-
---Sig_/=tx.bSTmqmFJghJvb9Kx2Al
+--Sig_/=WCEwTXc2st=ctHxEtl4Lgf
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/u7EACgkQAVBC80lX
-0GwBkwf/QLoReSVnXc/lAGz8KS+ERdxML4dVE20YnwQw1SmaUC1Vc6+rQhLkuOE4
-rJd6Gc7aV9M6QOZuo/08JACwpPi2XpvJDNxbSwCKZxjfw6exkEMuUXW2VKWvx55H
-avDvZhUIZ4nCxTx4UzOFXVxF6mI9f51VliSFMmTfOzTavEaO/JoeBX1pOtasj4O8
-wJANi5Ku61oXWoJjHj/r20gnPw1WoAZzS1RxWcMWgPvt4m9tk7sU9GyBlmj82r+c
-yBhgyG4/Yzo7xkdYJvudIB6wCWVn3hyOTlmliK6Smok0SkvcQsZz+9vT6AgWC1Hk
-ySNAF27vRWWO8vpv6La/2Rb/WeEp8A==
-=i5Lj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/zUIACgkQAVBC80lX
+0GzSSgf9HqWxxl/XYzvqbOM+K/OEseX4eK84k4h+BpHcmir+gdI7dIoBDm5pzVUf
+62B7NaupC10mDQZ7kTZ2FLVc6FWHC3WCR2QSALBpPDZqCU0ln1PXnIb0X1WsB5I4
+Z//v/uF1+k/0FghGF2Pdg3MHGCy5JxoccYJxZYcdvACCbGttCSYGijluPUZSKqW7
+PxM8XgTQqonobTvjxkZoa2040FBjeP4AQ4MNS5nrzvkPefz9m/g/pF8v856Kc3sv
+C1EVlsf71ebd82UJciEzqp9dB5NzOfdfi05mpxaetR/LNl1hRq/ZKw+JTW4pgtjM
+bVkiGHXMPMLJ+dq2KSXoKCpXvt4Y0Q==
+=dq91
 -----END PGP SIGNATURE-----
 
---Sig_/=tx.bSTmqmFJghJvb9Kx2Al--
+--Sig_/=WCEwTXc2st=ctHxEtl4Lgf--
 

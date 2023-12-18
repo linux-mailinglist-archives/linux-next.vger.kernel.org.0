@@ -1,95 +1,126 @@
-Return-Path: <linux-next+bounces-423-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-424-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90BFC8165B3
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 05:40:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E73D88165B7
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 05:45:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56C272822B2
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 04:40:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46F2A28241B
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 04:45:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01E363AA;
-	Mon, 18 Dec 2023 04:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 025E879C1;
+	Mon, 18 Dec 2023 04:45:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HjMemx5V"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tBbXiqYO"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB9263A3;
-	Mon, 18 Dec 2023 04:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6714479C0;
+	Mon, 18 Dec 2023 04:45:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702874435;
-	bh=RZCUTY3WdDKvXPR5OpEDurVy+wjz0J7rb/2i6L34Ntk=;
+	s=201702; t=1702874722;
+	bh=ZXB6ZFNDe3ozZs3/77x3SEORE0DodjB1qFk+2S8Q/yQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=HjMemx5VOUJbpBiGJ+s0BgKedpacrCz733kPGOH5LoDBhnU2/yfQhE5ki+mCLoq39
-	 fkgDTW4h8MiM2zBg6qDSz2EPfsUwpVrM85Op3fCJcj05Ce6xGg78vlIoE3YVWQHiUU
-	 ncPt3/5dRDV2Wuesrhevd1xtBUeAdI0BwKCmxw7Ngq2srReTZVfdGDEESjTYzAc3sc
-	 YVYwTYIFHWVqzGFJSUjTecoSoirOZ0Iys2/roPYAemTMR1eqDhX2I4hCcTgYxJKfWl
-	 p7u89q0zJ+Tv9eRroUFoGhH3uBufIyh2zh/LXi/cm7T1Q11VqwBhCq9LNLbo7f8o2N
-	 u6t3mWgmqIhow==
+	b=tBbXiqYOBeKWtzw+O+tG1vINmSfIyLCknz+OApbqSrsFqywrUjYeHMIjgCKlDUO6Q
+	 q+MNphtZy6ee+3ROqfPu1L2hCuWLzFFuwMzjX9zvCEN2tcNic8ptuxd9MSsc32p7cM
+	 xTCrZ1Eltfwg2y4x2R1Rfj0NSl7wbBB2JgrHFQZgwC1/PpMBDxFpxNzbQjmmkG6511
+	 A33pw27eMKrwnDluq/niZkCRivsNyXIVzuvgqk/2Ujbcagj0ksw63XNWX6HY2hj/dx
+	 qgkyJ72XtDmoiBQd98xDzrFzgk24jIuzbmnSkiYFvYANDrqa1jth4c9ILZGKsc5ure
+	 ybQfhdwW9xIug==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4StnFH1rbmz4wc8;
-	Mon, 18 Dec 2023 15:40:35 +1100 (AEDT)
-Date: Mon, 18 Dec 2023 15:40:34 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4StnLp30zHz4xM2;
+	Mon, 18 Dec 2023 15:45:22 +1100 (AEDT)
+Date: Mon, 18 Dec 2023 15:45:21 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>, Andrew Morton <akpm@linux-foundation.org>
+To: Shuah Khan <skhan@linuxfoundation.org>, Brendan Higgins
+ <brendanhiggins@google.com>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the driver-core tree
-Message-ID: <20231218154034.56bf4c68@canb.auug.org.au>
+ Mailing List <linux-next@vger.kernel.org>, Michal Wajdeczko
+ <michal.wajdeczko@intel.com>, Rae Moar <rmoar@google.com>
+Subject: linux-next: manual merge of the kunit-next tree with Linus' tree
+Message-ID: <20231218154521.2394ed2c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=WCEwTXc2st=ctHxEtl4Lgf";
+Content-Type: multipart/signed; boundary="Sig_/8C8pzyDxSCAHjp_ftBpRCd9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/=WCEwTXc2st=ctHxEtl4Lgf
+--Sig_/8C8pzyDxSCAHjp_ftBpRCd9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the mm tree as a different commit (but
-the same patch):
+Today's linux-next merge of the kunit-next tree got a conflict in:
 
-  2678fd2fe9ee ("initramfs: Expose retained initrd as sysfs file")
+  lib/kunit/test.c
 
-This is commit
+between commit:
 
-  426081603f6c ("initramfs: expose retained initrd as sysfs file")
+  2e3c94aed51e ("kunit: Reset suite counter right before running tests")
 
-in the mm tree.
+from Linus' tree and commit:
+
+  6d696c4695c5 ("kunit: add ability to run tests after boot using debugfs")
+
+from the kunit-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/=WCEwTXc2st=ctHxEtl4Lgf
+diff --cc lib/kunit/test.c
+index 7aceb07a1af9,e803d998e855..000000000000
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@@ -708,8 -675,11 +713,13 @@@ int __kunit_test_suites_init(struct kun
+  		return 0;
+  	}
+ =20
+ +	kunit_suite_counter =3D 1;
+ +
++ 	/* Use mutex lock to guard against running tests concurrently. */
++ 	if (mutex_lock_interruptible(&kunit_run_lock)) {
++ 		pr_err("kunit: test interrupted\n");
++ 		return -EINTR;
++ 	}
+  	static_branch_inc(&kunit_running);
+ =20
+  	for (i =3D 0; i < num_suites; i++) {
+
+--Sig_/8C8pzyDxSCAHjp_ftBpRCd9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/zUIACgkQAVBC80lX
-0GzSSgf9HqWxxl/XYzvqbOM+K/OEseX4eK84k4h+BpHcmir+gdI7dIoBDm5pzVUf
-62B7NaupC10mDQZ7kTZ2FLVc6FWHC3WCR2QSALBpPDZqCU0ln1PXnIb0X1WsB5I4
-Z//v/uF1+k/0FghGF2Pdg3MHGCy5JxoccYJxZYcdvACCbGttCSYGijluPUZSKqW7
-PxM8XgTQqonobTvjxkZoa2040FBjeP4AQ4MNS5nrzvkPefz9m/g/pF8v856Kc3sv
-C1EVlsf71ebd82UJciEzqp9dB5NzOfdfi05mpxaetR/LNl1hRq/ZKw+JTW4pgtjM
-bVkiGHXMPMLJ+dq2KSXoKCpXvt4Y0Q==
-=dq91
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/zmEACgkQAVBC80lX
+0Gzr5Qf/TRS7iuYjnSrBZanWQ49Ai1Qpo6HKAxwGtQ3L2MAl08Y6+N7P1EUe7Wxp
+W8tbPwkQlSSvaRasPvFdSOgJmvrSqC8q8U7ghiFeQHn57raKHj5AQqtF7tsgwoxf
+3EHQwE0rtkdf3b8nO6KuX+sYExd1W4vgtMg9TXdjG3Ub7jvNvYKcZ0FNtzlfQVNK
+yfDtx5aNF7kFtT2qeCS90iLVB+tNyXGkhp7lViRtcCnuRJmkCkfpP4Y9nD33q52A
+67jDiMt2Itwb8ITLEg+5ZoWuCkJgEu0z0u47HxCxTmSV72rLG6h9phbU1iAS5Xnj
+mCdBhC9VrsGgToRWMnH+KYILh6WWMQ==
+=TBja
 -----END PGP SIGNATURE-----
 
---Sig_/=WCEwTXc2st=ctHxEtl4Lgf--
+--Sig_/8C8pzyDxSCAHjp_ftBpRCd9--
 

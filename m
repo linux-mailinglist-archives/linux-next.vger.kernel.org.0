@@ -1,97 +1,108 @@
-Return-Path: <linux-next+bounces-449-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-450-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5499817E30
-	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 00:37:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9401C817F92
+	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 03:11:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 538F8B22C1D
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 23:37:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B79A31C21FB3
+	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 02:11:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3079F28398;
-	Mon, 18 Dec 2023 23:37:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E56581C3D;
+	Tue, 19 Dec 2023 02:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cTgFV7HJ"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="KDGx26C2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851411D14D;
-	Mon, 18 Dec 2023 23:37:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702942647;
-	bh=46/1y0bwzTDSoSxJQVUpZ7e0bPr6XBblpse94JxyJjI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=cTgFV7HJeFXCp3LQV5+eUEZlJnYNVDHYPSLt7X+a5gwXvxO3ozY1MqKClb7Je5gTv
-	 yZLJjUo/HVARQHmd+6WDT43cwxo4UKIpBryO5uFCV7C4g8yMLbE0xpfGcUP6rL1ogx
-	 WAuMxd/78lV7vS3U0TCSLmMbvQiXRo86GWkyGb+wad8hHIEQqQxqH8D0U/8VwGmvgl
-	 fVCWfMGDaesJg2Q4v54MIJtwRbzzHRAuIg1e3kZRscUppngubRAvM0qvRtgmRyCtpF
-	 9p8i4rqOVkDnXjyHRXPjYjlV3YwZzH+rc0vI75Gs703Pc0tGR00TInMJ7vX5FGF5ym
-	 +WkU8S/1Zpfeg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27011187F;
+	Tue, 19 Dec 2023 02:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from mail.denx.de (unknown [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SvGT32qK1z4wbr;
-	Tue, 19 Dec 2023 10:37:27 +1100 (AEDT)
-Date: Tue, 19 Dec 2023 10:37:26 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pm tree
-Message-ID: <20231219103726.720e569a@canb.auug.org.au>
+	(Authenticated sender: festevam@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id DC18286EF3;
+	Tue, 19 Dec 2023 03:10:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1702951846;
+	bh=o0/an4JLoBy6ZGiSNhJfIYsgD5HBecZioCSamrEdvKk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KDGx26C2iWbstqsg1stE34+Q/3S3yBZNuK9b5YgBNMqzFsy4oCnuJncQE+VoFCpE4
+	 Ff7RBASnXU6h2UCSKa9HMZquGbHf05xmn6JfIQcsVaigeTumwCbxezkp5bIpm0X/E1
+	 kn6uPo9+nogDgrGMmhOu949PI9JcK5tvZzQfUkTrR+vvugPV4yTMzfTFcfJpYiCp29
+	 QOISXc1o7HIx1VO6Z9RVthgBOQjrtfq0FgGfpQOiouTXTBoqB7Nx0odJwfynesdLMw
+	 7vvnZaHMiSvzJTT49GzoV1PqQlTj58WCyR+XdISkM3IBufEj2WtKVZAez3C88hqs3U
+	 4AqXX7RQbeVgg==
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zNRhK8t9mistuNOsyYNsue1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Mon, 18 Dec 2023 23:10:45 -0300
+From: Fabio Estevam <festevam@denx.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
+ <rui.zhang@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the thermal tree
+In-Reply-To: <20231219103457.4e034e9a@canb.auug.org.au>
+References: <20231219103457.4e034e9a@canb.auug.org.au>
+Message-ID: <68012fb93e0057f62c03a5d9b01237c4@denx.de>
+X-Sender: festevam@denx.de
+User-Agent: Roundcube Webmail/1.3.6
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
---Sig_/zNRhK8t9mistuNOsyYNsue1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On 18/12/2023 20:34, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the thermal tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> ERROR: modpost: "__hw_protection_shutdown"
+> [drivers/platform/chrome/cros_ec_lpcs.ko] undefined!
+> 
+> Caused by commit
+> 
+>   726edaad90f6 ("thermal/core: Prepare for introduction of thermal 
+> reboot")
 
-After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Thanks for reporting.
 
-ERROR: modpost: "acpi_device_dep" [drivers/platform/surface/surface_acpi_no=
-tify.ko] undefined!
+Daniel,
 
-Caused by commit
+Could you please squash the following fix to the commit above?
 
-  90d843b96b49 ("ACPI: utils: Introduce helper for _DEP list lookup")
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index 07eb6537ed8b..f814568525f1 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -1002,6 +1002,7 @@ void __hw_protection_shutdown(const char *reason, 
+int ms_until_forced, bool shut
+         if (shutdown)
+                 orderly_poweroff(true);
+  }
++EXPORT_SYMBOL_GPL(__hw_protection_shutdown);
 
-I have used the pm tree from next-20231218 for today.
+  static int __init reboot_setup(char *str)
+  {
 
---=20
-Cheers,
-Stephen Rothwell
+x86_64 allmodconfig builds successfully with this change.
 
---Sig_/zNRhK8t9mistuNOsyYNsue1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+Thanks,
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWA17YACgkQAVBC80lX
-0Gw1Ggf+KBUya7nVI79McFN5WTC6C+B5nlep8a7O+1rb9bHICBUXXhkZhpwc6HTl
-GESZFHGvQwnk4Mf4k0wLaVgDoCVhapc/iUT52Bl1IRMA6PVeK+mRyLjO8Q8Wdevb
-cZMff2HDymhZG0DrdjeQ5jVMYosDlUwtMT5Ni23rmPN/44X79UgCYCTq77ldJIhX
-VYDkYSnvhM127G97ljI2Kq/NPMHcmJsv/ZaDCPUpDr/YWUl6qdoJANuBxNa1Gnc1
-EpH/VoBXSEK9edh7SxmqyRPqaRRvgiNLqp+Xy26ERM3PuPP1klz4SaaHY3zUVqYw
-Mr1h6I6NWh6oLjhYbLw9xvXNhEh2sQ==
-=qFQ3
------END PGP SIGNATURE-----
-
---Sig_/zNRhK8t9mistuNOsyYNsue1--
+Fabio Estevam
 

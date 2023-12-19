@@ -1,108 +1,102 @@
-Return-Path: <linux-next+bounces-463-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-464-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE8908191B0
-	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 21:48:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D699B8191D2
+	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 21:58:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72EE81F25327
-	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 20:48:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 941D3285FF8
+	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 20:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B354039ADF;
-	Tue, 19 Dec 2023 20:48:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C936739AEC;
+	Tue, 19 Dec 2023 20:58:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IDX/Pr7I"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Lcx1T6rp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761013986C
-	for <linux-next@vger.kernel.org>; Tue, 19 Dec 2023 20:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Tue, 19 Dec 2023 15:48:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1703018905;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AJ1ocseWQHxPvBXfq20mMbpwj8SclcUvB29LRUEj++0=;
-	b=IDX/Pr7IzCItPsNkUeIgy08NcNCT0NSt2I5hcm7UuR9omz145qOoLRTAF127gw36Ezwtkx
-	jLcuRRvicIj1G0uth6yy8fCEE4HhOfW8sZSjeAq9IEoOJ0w7joWHdLEs3nugsxvTFIRjx6
-	ZRbOl9KBa1gAe+HgKGedSwdJVm+Iop4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Anders Roxell <anders.roxell@linaro.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Linux-Next Mailing List <linux-next@vger.kernel.org>,
-	linux-parisc <linux-parisc@vger.kernel.org>,
-	Linux Regressions <regressions@lists.linux.dev>,
-	lkft-triage@lists.linaro.org,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>
-Subject: Re: arch/parisc/mm/init.c:534:29: error: invalid application of
- 'sizeof' to incomplete type 'struct shmid64_ds'
-Message-ID: <20231219204821.vok7nch6knn2bhgo@moria.home.lan>
-References: <CA+G9fYvq+wdDhTjR2YkULF-_-nQNPGzCeOON-08EbVyidj-J6w@mail.gmail.com>
- <CADYN=9+0stxkNLkqcbodZD879r8DACT1M-3QyZrt4JsrAi0E1Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BFB39AEA;
+	Tue, 19 Dec 2023 20:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1703019473;
+	bh=HL+J12pGhDwMatKlkflli5mu1mZB75z2ODA2GA/b1lU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Lcx1T6rpxvGwsRI7qdwtAsV2Hefhi8R6YM2K118OqEW1F3b8PLtsE4yV2lIY3rHM5
+	 dyYSzCnJEvqYT+iNxV2xFyXWNBatw3/tdOxpJEga+rSYepXMcGIqcqPq/TtVMZUGAO
+	 EPz7fjYolqgsx2y+NAK4NbW2CcyOVxSvZ7ZvvIFZzG/k+Hxu4ePsSbaVuI4PU9R7Ia
+	 GGuDYCN84FFXIEioDqG/GaYZSSiKA8Y/6UmjYl7xVXIC/d5VF1vzXTehe0Ov0r51as
+	 Al5aaRTlAOaBKiiO+0K+PRUGaq7rMfOW+2r5fbpYnfFVuK199H1+V5rfRHdWzGoHhZ
+	 ti8hcluPI3eFA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SvptT1Rfjz4wdB;
+	Wed, 20 Dec 2023 07:57:52 +1100 (AEDT)
+Date: Wed, 20 Dec 2023 07:57:50 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Yury Norov <yury.norov@gmail.com>, Networking <netdev@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20231220075750.19541c67@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADYN=9+0stxkNLkqcbodZD879r8DACT1M-3QyZrt4JsrAi0E1Q@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; boundary="Sig_/B9wA7/bc.L3DUIsAuTRRMxS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Dec 19, 2023 at 08:19:43PM +0100, Anders Roxell wrote:
-> On Tue, 19 Dec 2023 at 16:02, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > Following build failures noticed on parisc on Linux next-20231219 tag.
-> >
-> > parisc:
-> >   build:
-> >     * gcc-11-defconfig - Failed
-> >     * gcc-11-allnoconfig - Failed
-> >     * gcc-11-tinyconfig - Failed
-> >
-> > Build error:
-> > arch/parisc/mm/init.c: In function 'mem_init':
-> > arch/parisc/mm/init.c:534:29: error: invalid application of 'sizeof'
-> > to incomplete type 'struct shmid64_ds'
-> >   534 |         BUILD_BUG_ON(sizeof(struct shmid64_ds) != 104);
-> >       |                             ^~~~~~
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Steps to reproduce:
-> >
-> >  tuxmake --runtime podman --target-arch parisc --toolchain gcc-11
-> > --kconfig defconfig
-> 
-> A bisection showed this patch as the faulty 1e462c05f65b ("shm: Slim
-> down dependencies")
-> Revering this patch made it build.
+--Sig_/B9wA7/bc.L3DUIsAuTRRMxS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, I've applied the following fixup:
-commit ab6400d24d17e5248cbb0db37a56745554e6b6a5
-Author: Kent Overstreet <kent.overstreet@linux.dev>
-Date:   Tue Dec 19 15:47:45 2023 -0500
+Hi all,
 
-    fixup! shm: Slim down dependencies
+In commit
 
-diff --git a/arch/parisc/mm/init.c b/arch/parisc/mm/init.c
-index a2a3e89f2d9a..f876af56e13f 100644
---- a/arch/parisc/mm/init.c
-+++ b/arch/parisc/mm/init.c
-@@ -33,6 +33,7 @@
- #include <asm/msgbuf.h>
- #include <asm/sparsemem.h>
- #include <asm/asm-offsets.h>
-+#include <asm/shmbuf.h>
- 
- extern int  data_start;
- extern void parisc_kernel_start(void);	/* Kernel entry point in head.S */
+  340943fbff3d ("net: mana: select PAGE_POOL")
+
+Fixes tag
+
+  Fixes: ca9c54d2 ("net: mana: Add a driver for Microsoft Azure Network Ada=
+pter")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/B9wA7/bc.L3DUIsAuTRRMxS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWCA84ACgkQAVBC80lX
+0GwbGggAj9qHrs5DFB1oOI5tpHL58AuwA/yPDi7pXV386Wyk8VFTCSR3QOhqsu0U
+80NRS/roDih6w6XcfKTuKSYWHJKf2J7kT6HzaFMpxtmiyKxAcePdsm6ZZDFSbRV7
+S4lJi3Qh+34LFpYO4Tb26/1uQdUXvG4KvteWVNX+08/xX3vWR0aeNZxtq424DEeT
+whfdU1H1etjN+Lt8tpDmlKgES+iM+fhNeuWN5tyxCw12PVYs0oh2KtlRWNFbvWKP
+1sNwzna9nTbHaOtNg0gNTZy7m1DQ0boM+tf5oqv4+DMoz6gy5bOzXOtWI/boW+7+
+/FTWRfU6G+uU5Z4CR1tBFwb/U+G4Bw==
+=mpp2
+-----END PGP SIGNATURE-----
+
+--Sig_/B9wA7/bc.L3DUIsAuTRRMxS--
 

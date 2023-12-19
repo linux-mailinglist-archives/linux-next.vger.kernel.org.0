@@ -1,61 +1,62 @@
-Return-Path: <linux-next+bounces-469-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-470-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8E408194BA
-	for <lists+linux-next@lfdr.de>; Wed, 20 Dec 2023 00:47:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 096858194D1
+	for <lists+linux-next@lfdr.de>; Wed, 20 Dec 2023 00:56:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1D061C2502B
-	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 23:47:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 731C51F21948
+	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 23:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED3683EA7E;
-	Tue, 19 Dec 2023 23:47:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E96740BE2;
+	Tue, 19 Dec 2023 23:56:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WyRKwk0t"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GOFGxc/E"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15143EA7D;
-	Tue, 19 Dec 2023 23:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA03F40BE3;
+	Tue, 19 Dec 2023 23:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1703029656;
-	bh=yG7epzk7fodBt427P9omimt0DRcleEmV5g9hp/dhs9Q=;
+	s=201702; t=1703030168;
+	bh=NLVVHDWoo4m9iV9XvG532dnuIVRB29z5UhevReT02ss=;
 	h=Date:From:To:Cc:Subject:From;
-	b=WyRKwk0tYsa/jB71M+fNNx5RKP1TTRuAkQIP7opN2wHz4/uhIg/skV7yR5/QgalI2
-	 9ZZ4x+bPfV1zgpuPPM7UBU7qfLI9cr0lhR9bjxsC4aQiV28m2X4kuBnpeyrsdmmxeo
-	 L/QVc4hJXI3a4+HPadNtMNFBbyUynru8c6dZCghe9VFFjXjiQCiG1C+4FfcdTBsWJt
-	 pnJqw+32uwZ1x7tLvLp+r44aAKma885Ye801DVdAM8/CQP+6xanavIZlH+6xAjboUb
-	 n3xzTGMTgKJgC66RxvN7tUoktLLZdGzBwxwhdUpFdMShj50X5KvGp2tNkqyS9UFdEE
-	 J7Bvt8ZJH4eew==
+	b=GOFGxc/EXg4t8Q81hlp7wTBJEzma4pTGro4f+Ku01X+fHL19gw6Wpe8ElOYWhSQL7
+	 8kWez2H7MtSv3unqU1vGc7xZbsx4r6cAQJRY2eCUjUEAsslqChDSXJSFo3qIEA/6cc
+	 Uyak7e09rnA/RuOleRw0VacSqoGSITzmByv9YbH/OWxLkHZtLckBjHU+gWU+7qfi/1
+	 GDAh78GAZvG3TpDIlbsQPG8sndNsVLfoGQSDD2Xuyz2m0es/eImTdNvi/sNF+9RU0y
+	 grEdvV5QDDA0RRACyPximZtPItWkeGzsuLfJHSbYLlQ3D1XktDULHo1tlOgaTsogwq
+	 myp8nwp313cOw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SvtfH2JjLz4wd4;
-	Wed, 20 Dec 2023 10:47:35 +1100 (AEDT)
-Date: Wed, 20 Dec 2023 10:47:34 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Svtr65D82z4wdB;
+	Wed, 20 Dec 2023 10:56:06 +1100 (AEDT)
+Date: Wed, 20 Dec 2023 10:56:05 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Al Viro <viro@ZenIV.linux.org.uk>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc: Chao Yu <chao@kernel.org>, Jan Kara <jack@suse.cz>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs tree with the f2fs tree
-Message-ID: <20231220104734.0979a9f8@canb.auug.org.au>
+To: Al Viro <viro@ZenIV.linux.org.uk>, Miklos Szeredi <miklos@szeredi.hu>,
+ Amir Goldstein <amir73il@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vfs tree with the overlayfs-fixes
+ tree
+Message-ID: <20231220105605.6f288fb6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5=M40P7dLA5C/mRQPI=9M=u";
+Content-Type: multipart/signed; boundary="Sig_/6g6=DC18imHbQW_6+JNOh7b";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/5=M40P7dLA5C/mRQPI=9M=u
+--Sig_/6g6=DC18imHbQW_6+JNOh7b
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -63,16 +64,17 @@ Hi all,
 
 Today's linux-next merge of the vfs tree got a conflict in:
 
-  fs/f2fs/namei.c
+  fs/overlayfs/copy_up.c
 
 between commit:
 
-  53edb549565f ("f2fs: fix to avoid dirent corruption")
+  413ba91089c7 ("ovl: fix dentry reference leak after changes to underlying=
+ layers")
 
-from the f2fs tree and commit:
+from the overlayfs-fixes tree and commit:
 
-  7deee77b993a ("f2fs: Avoid reading renamed directory if parent does not c=
-hange")
+  a8b0026847b8 ("rename(): avoid a deadlock in the case of parents having n=
+o common ancestor")
 
 from the vfs tree.
 
@@ -87,38 +89,45 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/f2fs/namei.c
-index ede6afb81762,fdc97df6bb85..000000000000
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@@ -1104,8 -1106,8 +1105,8 @@@ static int f2fs_rename(struct mnt_idma
-  		iput(whiteout);
-  	}
- =20
-- 	if (old_dir_entry) {
-- 		if (old_dir !=3D new_dir)
-+ 	if (old_is_dir) {
- -		if (old_dir_entry && !whiteout)
-++		if (old_dir_entry)
-  			f2fs_set_link(old_inode, old_dir_entry,
-  						old_dir_page, new_dir);
-  		else
+diff --cc fs/overlayfs/copy_up.c
+index 696478f09cc1,e44dc5f66161..000000000000
+--- a/fs/overlayfs/copy_up.c
++++ b/fs/overlayfs/copy_up.c
+@@@ -779,13 -757,14 +779,15 @@@ static int ovl_copy_up_workdir(struct o
+  	 * lock ordering with sb_writers, which shouldn't be held when calling
+  	 * ovl_copy_up_data(), so lock workdir and destdir and make sure that
+  	 * temp wasn't moved before copy up completion or cleanup.
+ -	 * If temp was moved, abort without the cleanup.
+  	 */
+  	ovl_start_write(c->dentry);
+- 	if (lock_rename(c->workdir, c->destdir) !=3D NULL ||
+- 	    temp->d_parent !=3D c->workdir) {
++ 	trap =3D lock_rename(c->workdir, c->destdir);
++ 	if (trap || temp->d_parent !=3D c->workdir) {
+ +		/* temp or workdir moved underneath us? abort without cleanup */
+ +		dput(temp);
+  		err =3D -EIO;
++ 		if (IS_ERR(trap))
++ 			goto out;
+  		goto unlock;
+  	} else if (err) {
+  		goto cleanup;
 
---Sig_/5=M40P7dLA5C/mRQPI=9M=u
+--Sig_/6g6=DC18imHbQW_6+JNOh7b
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWCK5YACgkQAVBC80lX
-0Gw4qwf+PrXULbmLGlG3NKze/3B5ZSapHarkOg4bEeMAqWy9R9kUjDf2F13jk294
-NVuiXgagmCdUdGO8BVv5V1/j6TmCegD7CdxRl5cZr4PEOYL7/mwCk39ao5HjAXEA
-KPDc1MiZB9fTmX5EM6y99KXGJ+GX9s6fMl6Mm3iImU10b6eSPuGNhkau1UJQrEb6
-evJl/uqMtNcN0QE+X6CqXIugQmj9uWpgD7N+PMASLKJbrWfs5AbJwJ90YJ0lhdvm
-qkV9vl1NDtgBWfBURzQXXN1uAdBKFUSZZwj17S9lqfPqqb9+wgZa5P4XHtk+YhS/
-NhpbpZbF1n879QUv+/c0w+qGL3B6cw==
-=OCYL
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWCLZUACgkQAVBC80lX
+0Gy9ZQf/TKvMMRNi2k9D3lsqVxFiufLXa2OFmMjxwlWt31G/X7V0Xahdf4Rsbiye
+n8x6fxhIHw4Q8dnGjVxHibQqChCb7LCzIW/g7Wdk3LlgnnBRzxBeJWNKN04309LA
+LHw943nz7ZLTgilDCs6Yztzf7Rzlj6fT/guFCxDIEqK2bGhS/KSoIFO10fO+kdI4
+p23fevEVZIH7WuzTeQHtDln+29HWBGVKjfhrB7yeVhzlOTmm1UX7b73DRS44RfV3
+C5sCicivmXoBau2TKyb0hpOPN9dtHH2aTjfbGIToDzC77DAjgGeKf/C8GbUIi7ID
+6cLLrcDDrRc7FXNfNSKIzQNCc7Bc3A==
+=fRHf
 -----END PGP SIGNATURE-----
 
---Sig_/5=M40P7dLA5C/mRQPI=9M=u--
+--Sig_/6g6=DC18imHbQW_6+JNOh7b--
 

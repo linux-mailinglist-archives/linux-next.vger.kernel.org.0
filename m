@@ -1,198 +1,104 @@
-Return-Path: <linux-next+bounces-459-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-460-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53D23818906
-	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 14:53:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96941818ABC
+	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 16:03:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E06328A132
-	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 13:53:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37B541F2977A
+	for <lists+linux-next@lfdr.de>; Tue, 19 Dec 2023 15:03:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C69061BDCD;
-	Tue, 19 Dec 2023 13:53:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BB71C284;
+	Tue, 19 Dec 2023 15:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ejFTNNlA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f1OiNQBm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8CD1BDC4;
-	Tue, 19 Dec 2023 13:53:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702994022; x=1734530022;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=yfmGb2CU0aifKMp5SXmmNHyvc7SvPOQRc4aakgQN3Vw=;
-  b=ejFTNNlAeBuUMsfNYHQ0+vodrkud9uQbetc+MXuXCW9keE7jVwXoNmyI
-   Zjm5mrxDDdX/bQO921CFYRygdG4a7veg1sdEhBAD5Mcv3L8M9nhZ6AtNr
-   mj2Og11GmQODz+mhij0rqOrAAvwS+baza4xfPiNfslVX6J6hiamKPX+2Q
-   eKfbxluheRYs6+Wyj4Hb/IZ0a2voFIt8ASyORch8jSIjxxoP/8lAzJaHh
-   ulC7/OoD63VBROV/UuUr3OzSiqh5zc6GhwVgRxeR+1NssPOz/rHyq+eS+
-   1mawp7ff8Ta7CEoGWpa0nzZ3kYsKsPk1plxVeSn4K6N1Y2TmeOeBXADBU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="399492488"
-X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="399492488"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 05:53:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="769244133"
-X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="769244133"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.74])
-  by orsmga007.jf.intel.com with SMTP; 19 Dec 2023 05:53:39 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 19 Dec 2023 15:53:38 +0200
-Date: Tue, 19 Dec 2023 15:53:38 +0200
-From: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>,
-	Dave Airlie <airlied@redhat.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	DRI <dri-devel@lists.freedesktop.org>
-Subject: Re: linux-next: build failure after merge of the header_cleanup tree
-Message-ID: <ZYGgYvsCHmazP2jH@intel.com>
-References: <20231218174030.3ed72f54@canb.auug.org.au>
- <20231219145734.13e40e1e@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02331C298
+	for <linux-next@vger.kernel.org>; Tue, 19 Dec 2023 15:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4b6c1d3edcfso504551e0c.2
+        for <linux-next@vger.kernel.org>; Tue, 19 Dec 2023 07:02:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702998175; x=1703602975; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ux8sE7fHthR2voG70KnB7oZ6Al+8xU+cq54AC46rn+E=;
+        b=f1OiNQBmkE/WwH0eRklqLQxrvKR3jrms8WO1P+V2JQ5xPPfrbuojhZxOM88hgjC7+e
+         cYBNtjHoGSCjw77S3mLInsMbw+ZAg+xrJjRsPkOax5meqvuK06ZbYCJelrEj5IxuE63U
+         je3a4J/iBKrJJeHZOZBNoo2u8ILyDMHJE3rSO1Ai6VXT0d2OfaCD9winWIMSllEM/xs3
+         DqKOF5WOUQL/Pwu+LcOM9nMzNJWMkM1oKh7ACHfU9k6pJAUEFXoE5wsaercIk+U5b0S8
+         7ce1es0pi4gQPhpBfWPLp1chDVfC//Lo9Afd3g16lwJrd2SG/L0lSJMs9rlGI2NengUX
+         RNwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702998175; x=1703602975;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ux8sE7fHthR2voG70KnB7oZ6Al+8xU+cq54AC46rn+E=;
+        b=GFgwT42hr66Db0iMMPZgKj41CnnPJS8DTH6raPV4eP/lO1KiJ6ppE9CIf9cOJrQsMb
+         trBGWKA9CHncAmL7OEL7jFbDI6TiVkJZw0fgKmFb9RvTZCAt0/hJDk8Q70AMqSXa1zly
+         44U+Ib8snOxLK2p1GTiVIdY/B9tqeNuNVPw6gHQTCy+sVJQYtmr+8egIoab2fmhaz9Dp
+         wfHLtPT2rvDkytk/1OnwWZdXNCRWH+IO2Q/dpMfofyu0MmFXwXFUvXMyAAc/ul8R3YgN
+         sY1ipj+36kn8rS/3EFeNtDY/YCcJBwK//qI5V+txZX3ZCuGCXTSKx6hi6sCNHDg77/p5
+         Cwsw==
+X-Gm-Message-State: AOJu0YwVa5AC2QeEr4/sdFNUXlc3Wp4E5szy1FZHRQyHaJvrHwdQbL+c
+	zS6eCaDfSESDiPkPvumS6XNQXfUDul8LfFIuLFAAf268TXDaKMsTY/g=
+X-Google-Smtp-Source: AGHT+IG6e+HOmJxSwcUNT8DhH+LV9pJe4Lfz8mAYCBraGDKFr0Sdv68iV56I17MY7FbjZFs19wdqPnFaFyVyj8ww5z4=
+X-Received: by 2002:ac5:ca0a:0:b0:4b6:b829:7d14 with SMTP id
+ c10-20020ac5ca0a000000b004b6b8297d14mr1300298vkm.11.1702998174099; Tue, 19
+ Dec 2023 07:02:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231219145734.13e40e1e@canb.auug.org.au>
-X-Patchwork-Hint: comment
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 19 Dec 2023 20:32:42 +0530
+Message-ID: <CA+G9fYvq+wdDhTjR2YkULF-_-nQNPGzCeOON-08EbVyidj-J6w@mail.gmail.com>
+Subject: arch/parisc/mm/init.c:534:29: error: invalid application of 'sizeof'
+ to incomplete type 'struct shmid64_ds'
+To: Linux-Next Mailing List <linux-next@vger.kernel.org>, linux-parisc <linux-parisc@vger.kernel.org>, 
+	Linux Regressions <regressions@lists.linux.dev>, lkft-triage@lists.linaro.org
+Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Dec 19, 2023 at 02:57:34PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Mon, 18 Dec 2023 17:40:30 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > After merging the header_cleanup tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> > 
-> > In file included from include/linux/kernel.h:27,
-> >                  from drivers/gpu/ipu-v3/ipu-dp.c:7:
-> > include/drm/drm_color_mgmt.h: In function 'drm_color_lut_extract':
-> > include/drm/drm_color_mgmt.h:45:46: error: implicit declaration of function 'mul_u32_u32' [-Werror=implicit-function-declaration]
-> >    45 |                 return DIV_ROUND_CLOSEST_ULL(mul_u32_u32(user_input, (1 << bit_precision) - 1),
-> >       |                                              ^~~~~~~~~~~
-> > include/linux/math.h:104:36: note: in definition of macro 'DIV_ROUND_CLOSEST_ULL'
-> >   104 |         unsigned long long _tmp = (x) + (__d) / 2;      \
-> >       |                                    ^
-> > In file included from include/linux/time.h:6,
-> >                  from include/linux/videodev2.h:59,
-> >                  from include/video/imx-ipu-v3.h:16,
-> >                  from drivers/gpu/ipu-v3/ipu-dp.c:14:
-> > include/linux/math64.h: At top level:
-> > include/linux/math64.h:155:19: error: conflicting types for 'mul_u32_u32'; have 'u64(u32,  u32)' {aka 'long long unsigned int(unsigned int,  unsigned int)'}
-> >   155 | static inline u64 mul_u32_u32(u32 a, u32 b)
-> >       |                   ^~~~~~~~~~~
-> > include/drm/drm_color_mgmt.h:45:46: note: previous implicit declaration of 'mul_u32_u32' with type 'int()'
-> >    45 |                 return DIV_ROUND_CLOSEST_ULL(mul_u32_u32(user_input, (1 << bit_precision) - 1),
-> >       |                                              ^~~~~~~~~~~
-> > include/linux/math.h:104:36: note: in definition of macro 'DIV_ROUND_CLOSEST_ULL'
-> >   104 |         unsigned long long _tmp = (x) + (__d) / 2;      \
-> >       |                                    ^
-> > cc1: some warnings being treated as errors
-> > In file included from include/linux/kernel.h:27,
-> >                  from drivers/gpu/drm/omapdrm/dss/dispc_coefs.c:7:
-> > include/drm/drm_color_mgmt.h: In function 'drm_color_lut_extract':
-> > include/drm/drm_color_mgmt.h:45:46: error: implicit declaration of function 'mul_u32_u32' [-Werror=implicit-function-declaration]
-> >    45 |                 return DIV_ROUND_CLOSEST_ULL(mul_u32_u32(user_input, (1 << bit_precision) - 1),
-> >       |                                              ^~~~~~~~~~~
-> > include/linux/math.h:104:36: note: in definition of macro 'DIV_ROUND_CLOSEST_ULL'
-> >   104 |         unsigned long long _tmp = (x) + (__d) / 2;      \
-> >       |                                    ^
-> > In file included from include/linux/jiffies.h:7,
-> >                  from include/linux/ktime.h:25,
-> >                  from include/linux/timer.h:6,
-> >                  from include/linux/workqueue.h:9,
-> >                  from include/linux/mm_types.h:19,
-> >                  from include/linux/mmzone.h:22,
-> >                  from include/linux/gfp.h:7,
-> >                  from include/linux/stackdepot.h:25,
-> >                  from include/drm/drm_modeset_lock.h:28,
-> >                  from include/drm/drm_crtc.h:30,
-> >                  from drivers/gpu/drm/omapdrm/dss/omapdss.h:11,
-> >                  from drivers/gpu/drm/omapdrm/dss/dispc_coefs.c:9:
-> > include/linux/math64.h: At top level:
-> > include/linux/math64.h:155:19: error: conflicting types for 'mul_u32_u32'; have 'u64(u32,  u32)' {aka 'long long unsigned int(unsigned int,  unsigned int)'}
-> >   155 | static inline u64 mul_u32_u32(u32 a, u32 b)
-> >       |                   ^~~~~~~~~~~
-> > include/drm/drm_color_mgmt.h:45:46: note: previous implicit declaration of 'mul_u32_u32' with type 'int()'
-> >    45 |                 return DIV_ROUND_CLOSEST_ULL(mul_u32_u32(user_input, (1 << bit_precision) - 1),
-> >       |                                              ^~~~~~~~~~~
-> > include/linux/math.h:104:36: note: in definition of macro 'DIV_ROUND_CLOSEST_ULL'
-> >   104 |         unsigned long long _tmp = (x) + (__d) / 2;      \
-> >       |                                    ^
-> > cc1: some warnings being treated as errors
-> 
-> This turns out to be a semantic conflict (or exposing a bug in commit
-> 
->  c6fbb6bca108 ("drm: Fix color LUT rounding")
-> 
-> from the drm tree.
-> 
-> I have applied the following merge fix up patch (which should probably
-> be applied to the drm tree, if possible).
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 19 Dec 2023 14:43:41 +1100
-> Subject: [PATCH] drm: using mul_u32_u32() requires linux/math64.h
-> 
-> Some pending include file cleanups produced this error:
-> 
-> In file included from include/linux/kernel.h:27,
->                  from drivers/gpu/ipu-v3/ipu-dp.c:7:
-> include/drm/drm_color_mgmt.h: In function 'drm_color_lut_extract':
-> include/drm/drm_color_mgmt.h:45:46: error: implicit declaration of function 'mul_u32_u32' [-Werror=implicit-function-declaration]
->    45 |                 return DIV_ROUND_CLOSEST_ULL(mul_u32_u32(user_input, (1 << bit_precision) - 1),
->       |                                              ^~~~~~~~~~~
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Following build failures noticed on parisc on Linux next-20231219 tag.
 
-Mea culpa.
+parisc:
+  build:
+    * gcc-11-defconfig - Failed
+    * gcc-11-allnoconfig - Failed
+    * gcc-11-tinyconfig - Failed
 
-I slapped on a
-Fixes: c6fbb6bca108 ("drm: Fix color LUT rounding")
+Build error:
+arch/parisc/mm/init.c: In function 'mem_init':
+arch/parisc/mm/init.c:534:29: error: invalid application of 'sizeof'
+to incomplete type 'struct shmid64_ds'
+  534 |         BUILD_BUG_ON(sizeof(struct shmid64_ds) != 104);
+      |                             ^~~~~~
 
-and applied this to drm-misc-next-fixes. Thanks.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> ---
->  include/drm/drm_color_mgmt.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/include/drm/drm_color_mgmt.h b/include/drm/drm_color_mgmt.h
-> index 54b2b2467bfd..ed81741036d7 100644
-> --- a/include/drm/drm_color_mgmt.h
-> +++ b/include/drm/drm_color_mgmt.h
-> @@ -24,6 +24,7 @@
->  #define __DRM_COLOR_MGMT_H__
->  
->  #include <linux/ctype.h>
-> +#include <linux/math64.h>
->  #include <drm/drm_property.h>
->  
->  struct drm_crtc;
-> -- 
-> 2.40.1
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Steps to reproduce:
+
+ tuxmake --runtime podman --target-arch parisc --toolchain gcc-11
+--kconfig defconfig
 
 
 
--- 
-Ville Syrjälä
-Intel
+Links:
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231219/testrun/21768759/suite/build/test/gcc-11-defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231219/testrun/21768759/suite/build/tests/
+
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
 

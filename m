@@ -1,134 +1,176 @@
-Return-Path: <linux-next+bounces-474-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-475-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D8A18194FF
-	for <lists+linux-next@lfdr.de>; Wed, 20 Dec 2023 01:13:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD0A58195CD
+	for <lists+linux-next@lfdr.de>; Wed, 20 Dec 2023 01:42:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78BB8B228DE
-	for <lists+linux-next@lfdr.de>; Wed, 20 Dec 2023 00:13:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C11CD1C206FD
+	for <lists+linux-next@lfdr.de>; Wed, 20 Dec 2023 00:42:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BAE37493;
-	Wed, 20 Dec 2023 00:13:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B6C223B8;
+	Wed, 20 Dec 2023 00:42:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Qs5HHIlt"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="vuKEytuy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2F4747B;
-	Wed, 20 Dec 2023 00:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1703031207;
-	bh=rZnBd1T/fKVecpDX9jnpYUYyafbdv3cCHuAbDvu51mQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Qs5HHIltPUGSTmwK6MzJ/DD4vTdAgRb+eUwBGVMLbWn12wM6DD51BZWbckznetHvr
-	 2DlutB3I7IH8v7uzOMxBOqxNJ/wnuoRQoYisLlFuBbatXmEUft0q3qmqBDHd5QhxpF
-	 0CPYxws6svbErrHvquMGdOkTVEH3VuuvFGoAuxcYlIjiUxLqP0TOO1Z0YU4WbVvwAS
-	 BPF5GBwum7IzBldqWdXCU3yVYzRjFgUM4fvVdJp5pt4O16o+vZCNWG5+8fyZAHCUyk
-	 +1boyUZ0M1H24e/YKYcIkFn92SS7OkSDtQcKoBI8bcGqL8oyCZNzMArPaXjFUawgJF
-	 Jjr/fBlIWKpFQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SvvD661Vhz4wdB;
-	Wed, 20 Dec 2023 11:13:26 +1100 (AEDT)
-Date: Wed, 20 Dec 2023 11:13:25 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Al Viro <viro@ZenIV.linux.org.uk>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc: Chao Yu <chao@kernel.org>, Jan Kara <jack@suse.cz>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the vfs tree with the f2fs tree
-Message-ID: <20231220111325.5dd55e47@canb.auug.org.au>
-In-Reply-To: <20231220104734.0979a9f8@canb.auug.org.au>
-References: <20231220104734.0979a9f8@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CAFC23AF
+	for <linux-next@vger.kernel.org>; Wed, 20 Dec 2023 00:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-203fdc82937so461556fac.0
+        for <linux-next@vger.kernel.org>; Tue, 19 Dec 2023 16:42:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1703032961; x=1703637761; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cIw0nnk/AxQgWFDfklYu40xaoPUg3IWDRouLyXoRfvs=;
+        b=vuKEytuyTMncfd70+v05VwqjCkhqLx//KJh0ai9aiYv9GV8o8CHD02Gm3JQlk2rXoc
+         KdAJV+IMmQqnrUsJkFJe5U5bmLQQNwIq+eN7C2OIAxwkcHkXh8NNt3KWaFB26XudTYUr
+         MQunahDOx5CbHUUzDy32Pt+uwfrXXhdpVY5NlBENd3dufZTSyLIwmMzn+1mt3ntXVA1m
+         4EcaT1Y77hHqBTGE9zawMO62xENYrlVlyIH7dIK76g3XfErICXdBd/+m6WZXkfwsH9Lw
+         duqSNRciIo9wPHK5/qZILH0xxwFrhJDYiNyb4XkDikW8PZkZn3xv5ivjTQ5DhylcxKup
+         JLNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703032961; x=1703637761;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cIw0nnk/AxQgWFDfklYu40xaoPUg3IWDRouLyXoRfvs=;
+        b=aRuXyF3xAXwt+UMb/lUQV/4q5R5gHUyecXMYlm/oooLaB3eY5vB9hryYAc5j4zgGfD
+         DnSZc6n4djR6lasMfeWwuck9OppsGPqvBMQc4usly1m7uKFFkDu69JeyKijr45MnyptV
+         iv5LP3N6usGn1JiTH3xHlenoI1KO4IJmD/XOjdSUUzXM+H/UH8vOyhEhKFb43Hfs5+1L
+         QYCs5jPGTOrSqdy1LKU20SD6yWvBHfTNlzYL5gV4E2o5p07dEjwYx8xihoRO9iOiyDiS
+         /A+Ssq0H4QsKyYEfq08BydPH91APoZIKuevWwqNRCD/q7+35leOnV6IyeuGD/HPq1iRP
+         HHNA==
+X-Gm-Message-State: AOJu0YwyAek0H33Qv7EX+wKmVewQISHAGi18u5JymexAFz+0QqLGk46G
+	Oe4P4mRjrWa3/6HxBV/Mhk4KtpWrndE45wmtkro=
+X-Google-Smtp-Source: AGHT+IF+At/NgEvSffwgRSTuGMal7VrM9Lw4W8A9vu7nxzGP9F3eN8PqQDlAHu7i4ESBMtQOxqCkHg==
+X-Received: by 2002:a05:6358:784:b0:16e:12c:16b8 with SMTP id n4-20020a056358078400b0016e012c16b8mr19636566rwj.7.1703032960771;
+        Tue, 19 Dec 2023 16:42:40 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id gw24-20020a17090b0a5800b00286ed94466dsm2238465pjb.32.2023.12.19.16.42.39
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 16:42:39 -0800 (PST)
+Message-ID: <6582387f.170a0220.315b2.71b6@mx.google.com>
+Date: Tue, 19 Dec 2023 16:42:39 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/za_oBUSqBa1NS65BZ31N7+h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/za_oBUSqBa1NS65BZ31N7+h
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.7-rc6-238-g46bcd2aac1f1f
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.7-rc6-238-g46bcd2aac1f1f)
+To: linux-next@vger.kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Al,
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
+6-238-g46bcd2aac1f1f)
 
-On Wed, 20 Dec 2023 10:47:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the vfs tree got a conflict in:
->=20
->   fs/f2fs/namei.c
->=20
-> between commit:
->=20
->   53edb549565f ("f2fs: fix to avoid dirent corruption")
->=20
-> from the f2fs tree and commit:
->=20
->   7deee77b993a ("f2fs: Avoid reading renamed directory if parent does not=
- change")
->=20
-> from the vfs tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.7-rc6-238-g46bcd2aac1f1f/
 
-Then I remembered to look at your suggested resolution and redid it
-like you did (see below).
---=20
-Cheers,
-Stephen Rothwell
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.7-rc6-238-g46bcd2aac1f1f
+Git Commit: 46bcd2aac1f1fabb3d1b44562d5d898d2d99350f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@@ -1104,12 -1106,12 +1105,9 @@@ static int f2fs_rename(struct mnt_idma
-  		iput(whiteout);
-  	}
- =20
- -	if (old_is_dir) {
- -		if (old_dir_entry && !whiteout)
- -			f2fs_set_link(old_inode, old_dir_entry,
- +	if (old_dir_entry) {
-- 		if (old_dir !=3D new_dir)
-- 			f2fs_set_link(old_inode, old_dir_entry,
-++		f2fs_set_link(old_inode, old_dir_entry,
-  						old_dir_page, new_dir);
---		else
---			f2fs_put_page(old_dir_page, 0);
-  		f2fs_i_links_write(old_dir, false);
-  	}
-  	if (F2FS_OPTION(sbi).fsync_mode =3D=3D FSYNC_MODE_STRICT) {
+Warnings Detected:
 
---Sig_/za_oBUSqBa1NS65BZ31N7+h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arc:
 
------BEGIN PGP SIGNATURE-----
+arm64:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWCMaUACgkQAVBC80lX
-0GxkUQf/dro/dS32sGdL1hEyx/nQs9iXfBANu2fWDrvBoPiEsnWKSAb5jyjHkg3o
-PWxyCM+umwm5PlM/bXqGYcdcpBeaVH38ioE8zY7LfJW/wvHiR9LLPwHY7rnARU0E
-pvBvBBDtxZpqqnr2wLEad42ycOmXNFCjqboZCoA4FrQU7aE8Vhr9fQV5jdiz7hPU
-sSybwakljN+k/5MvAC6z9O4xGFlKunCymFeA2sCLTrjuamKF17Sfk/jXMX6d7wfM
-IzU2Rw5XA+ZLRsnlRwXczPuWm4brlBp/Kzfq8G2EuIjhgzPOfOcrcQQP48YygD/X
-Qdhav14q6MQmn+0sgK0mOJYp7H5eSw==
-=Brhi
------END PGP SIGNATURE-----
+arm:
 
---Sig_/za_oBUSqBa1NS65BZ31N7+h--
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 

@@ -1,82 +1,142 @@
-Return-Path: <linux-next+bounces-513-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-514-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D8FD81B460
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 11:51:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FF6681B58E
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 13:13:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A059E1C2539D
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 10:51:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C54D1C2315C
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 12:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE3846BB25;
-	Thu, 21 Dec 2023 10:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28F96C6D7;
+	Thu, 21 Dec 2023 12:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Xp/f26T+"
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="NokE8d95"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BC16ABB9
-	for <linux-next@vger.kernel.org>; Thu, 21 Dec 2023 10:50:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1703155851;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TV++FB5pPdD4o2Vgx5Or1C/+V8n11WxfDyriDQArJ0o=;
-	b=Xp/f26T+4pP2PIGFcaX82xrp67QBTZ4/vrznRiM1RS2uZ6GW8ursDO+IzOySxNMROGMl1Q
-	KsOk+SjiM1S9aX1FxgpEM72W9WQjyBX+IqVEmBiEnKGdYwrg/z84Ephm9s6POBf+VDcZza
-	TeAJaFr/I504htPz0mv9HdpjcabcocY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-28-rAr2947VMkaEEFYzqi51nw-1; Thu, 21 Dec 2023 05:50:50 -0500
-X-MC-Unique: rAr2947VMkaEEFYzqi51nw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99929830FD7;
-	Thu, 21 Dec 2023 10:50:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.195.169])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C640B492BE6;
-	Thu, 21 Dec 2023 10:50:48 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <20231221110016.21168260@canb.auug.org.au>
-References: <20231221110016.21168260@canb.auug.org.au>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: dhowells@redhat.com, Christian Brauner <brauner@kernel.org>,
-    Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-    Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the vfs-brauner tree
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C81A6A02A;
+	Thu, 21 Dec 2023 12:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1703160785; bh=Qsqg2Nh+p/M5AnL5ZaWqItsHScIrmvOCFyl0+ZYAWN4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NokE8d95GceSvL1OTOagLWTS7zq1fSwLslCZGcnGjkiVXSc14/NUjpsv4a7Xaln1D
+	 jXGX2OxdS9oZ1D3/MzvrMQDbUkX/Dro+tYh9FktE3eX220X0NA4ot4u/P+yD6gBqWA
+	 tWG4LoCgzytRxw4cTe+eYWgVApcoQmhyUAdDEQtKAKv0mVtVOaFZvI+kxE6fCtAeJ/
+	 KdqTVzIpzb9Z4IKwsS/6uE/dDM+5lS5mmlMkbDTPcTURIYv4tfJtvZT+++xWQLL17m
+	 XBXZAgtm2HTmcgdlzd4AxOZ9iefpyEO/DXRii9EhPEgN04l00OZ8Ne/G7tdSY9v9NP
+	 39vkbr9m5g1yw==
+Received: by gofer.mess.org (Postfix, from userid 1000)
+	id 5D1B81000FD; Thu, 21 Dec 2023 12:13:05 +0000 (GMT)
+Date: Thu, 21 Dec 2023 12:13:05 +0000
+From: Sean Young <sean@mess.org>
+To: Lee Jones <lee@kernel.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Flavio Suligoi <f.suligoi@asem.it>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the pwm tree
+Message-ID: <ZYQr0TkzdgJpoR5v@gofer.mess.org>
+References: <20231221165805.0c4771c1@canb.auug.org.au>
+ <ZYQEcg0-SEFEeuN6@orome.fritz.box>
+ <20231221100950.GC10102@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1583608.1703155848.1@warthog.procyon.org.uk>
-Date: Thu, 21 Dec 2023 10:50:48 +0000
-Message-ID: <1583609.1703155848@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231221100950.GC10102@google.com>
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Thu, Dec 21, 2023 at 10:09:50AM +0000, Lee Jones wrote:
+> On Thu, 21 Dec 2023, Thierry Reding wrote:
+> 
+> > On Thu, Dec 21, 2023 at 04:58:05PM +1100, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > After merging the backlight tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > > 
+> > > drivers/video/backlight/mp3309c.c: In function 'mp3309c_bl_update_status':
+> > > drivers/video/backlight/mp3309c.c:134:23: error: implicit declaration of function 'pwm_apply_state'; did you mean 'pwm_apply_args'? [-Werror=implicit-function-declaration]
+> > >   134 |                 ret = pwm_apply_state(chip->pwmd, &pwmstate);
+> > >       |                       ^~~~~~~~~~~~~~~
+> > >       |                       pwm_apply_args
+> > > 
+> > > Caused by commit
+> > > 
+> > >   c748a6d77c06 ("pwm: Rename pwm_apply_state() to pwm_apply_might_sleep()")
+> > > 
+> > > interacting with commit
+> > > 
+> > >   2e914516a58c ("backlight: mp3309c: Add support for MPS MP3309C")
+> > > 
+> > > from the backlight tree.
+> > > 
+> > > I have appplied the following merge fix patch.
+> > > 
+> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Date: Thu, 21 Dec 2023 16:13:37 +1100
+> > > Subject: [PATCH] fix up for "backlight: mp3309c: Add support for MPS MP3309C"
+> > > 
+> > > from the backlight tree interacting with commit
+> > > 
+> > >   c748a6d77c06 ("pwm: Rename pwm_apply_state() to pwm_apply_might_sleep()")
+> > > 
+> > > from the pwm tree.
+> > > 
+> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > ---
+> > >  drivers/video/backlight/mp3309c.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/video/backlight/mp3309c.c b/drivers/video/backlight/mp3309c.c
+> > > index 34d71259fac1..b0d9aef6942b 100644
+> > > --- a/drivers/video/backlight/mp3309c.c
+> > > +++ b/drivers/video/backlight/mp3309c.c
+> > > @@ -131,7 +131,7 @@ static int mp3309c_bl_update_status(struct backlight_device *bl)
+> > >  					    chip->pdata->levels[brightness],
+> > >  					    chip->pdata->levels[chip->pdata->max_brightness]);
+> > >  		pwmstate.enabled = true;
+> > > -		ret = pwm_apply_state(chip->pwmd, &pwmstate);
+> > > +		ret = pwm_apply_might_sleep(chip->pwmd, &pwmstate);
+> > >  		if (ret)
+> > >  			return ret;
+> > >  
+> > > @@ -393,7 +393,7 @@ static int mp3309c_probe(struct i2c_client *client)
+> > >  					    chip->pdata->default_brightness,
+> > >  					    chip->pdata->max_brightness);
+> > >  		pwmstate.enabled = true;
+> > > -		ret = pwm_apply_state(chip->pwmd, &pwmstate);
+> > > +		ret = pwm_apply_might_sleep(chip->pwmd, &pwmstate);
+> > >  		if (ret)
+> > >  			return dev_err_probe(chip->dev, ret,
+> > >  					     "error setting pwm device\n");
+> > 
+> > Hi Lee,
+> > 
+> > We could exchange stable tags to make this work, but given that people
+> > (myself included) are getting into holiday mode I'm inclined to just add
+> > a pwm_apply_state() compatibility inline for now and then we can address
+> > this in the new year or for the next cycle. What do you think?
+> 
+> Sorry, why is this happening?
+> 
+> I still see support for pwm_apply_state() in -next.
 
-> It looks like the afs tree has been rebased since (part of) it was merged
-> into the vfs-brauner tree. :-(
+Not any more:
 
-What's the best way to deal with this?  Push these two patches down to the
-bottom of the branches and then base both trees off those two same commits?
+$ git grep pwm_apply_state linux-next/master 
+$ 
 
-David
 
+Sean
 

@@ -1,111 +1,103 @@
-Return-Path: <linux-next+bounces-487-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-488-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C2F781AB3C
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 00:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 547F581AB80
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 01:01:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08B0A2849D2
-	for <lists+linux-next@lfdr.de>; Wed, 20 Dec 2023 23:52:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEB2A284C60
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 00:01:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C94A24B143;
-	Wed, 20 Dec 2023 23:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B438487;
+	Thu, 21 Dec 2023 00:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TDaD5Y/x"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="KJ30+E3X"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE3F4B150;
-	Wed, 20 Dec 2023 23:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0883FDC;
+	Thu, 21 Dec 2023 00:00:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1703116361;
-	bh=m0Lb4XC1o9pGevEvKRp00ahDVelGACJyDn5HW36/lkE=;
+	s=201702; t=1703116817;
+	bh=bpzC8D+KLpxF9XeakBLRcW6+dvOr86hJcQ6jC6JNzZw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=TDaD5Y/xTrbNOJB8sFBQ8IQnxAAiZcbA+0jhfROtxkw+s36zrOssin/038VunDiml
-	 EX52of0CXd2L6pCxZvKSb206t8md8u20UmXyYZroehONWNJooJceRauUK9pOr+cvUp
-	 Qo7MS/EbE0vts2lMgB7SeUcGauw2W+9SU6kQ003MW2iMJgSynvXmgshBR6xMOylt/N
-	 HaEBsNIavGrJSV6HVU+PJvAqB5NiDVHrGAoUO3Wx6/vjaAa+0J8eQf08Hnlxk+Y7UC
-	 8sg2gX2Pk7UoYjF3mPqaJ9+eK3ExM3dLIlf7pXWRYzJ2GpEEZiW+iRxT3Z0GzBJ8hu
-	 psFu9EOZ36DEQ==
+	b=KJ30+E3X6muJtAwswqJHu5c9dwkMSWsdlx5yurwssXsZX5neiYnnZ0+o1roKkFGOX
+	 jcpSUt9J4llDxO/6R0fjIydwAoi5Z0ANTvHWg+03YfY1zvGMp6w2RGbZIsVne+D/k2
+	 SpeY8PHspQCKEFBGUlx7WXl54wfv3GrqSUrVuU7VMpgxDS3FfkI1+pkvCr1XH930xD
+	 84iOKvHi4ETpng/X/CIV580cdTPDIpfBCKs0cQX72NCIkz7U/JLWZdqabPapOH7AS9
+	 wCaknaBLgdgRqEr+sl9YzcunYl2cDTiZHnWRsau2/xhlzszWN8ArbWUdsgCWHUbxcf
+	 JSDFKnh60XBZA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SwVjj11BVz4wd4;
-	Thu, 21 Dec 2023 10:52:41 +1100 (AEDT)
-Date: Thu, 21 Dec 2023 10:52:38 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SwVtT2RZ5z4wd4;
+	Thu, 21 Dec 2023 11:00:17 +1100 (AEDT)
+Date: Thu, 21 Dec 2023 11:00:16 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: David Howells <dhowells@redhat.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>
-Subject: linux-next: manual merge of the vfs-brauner tree with the mm-stable
- tree
-Message-ID: <20231221105238.4d16892a@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>, David Howells
+ <dhowells@redhat.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the vfs-brauner tree
+Message-ID: <20231221110016.21168260@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UQvRs_nl0/Vvnj2w2aH_dAD";
+Content-Type: multipart/signed; boundary="Sig_/ca=k/4zVqJp3_XEr/RZHzWd";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/UQvRs_nl0/Vvnj2w2aH_dAD
+--Sig_/ca=k/4zVqJp3_XEr/RZHzWd
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
+The following commits are also in the afs tree as different commits
+(but the same patches):
 
-  fs/afs/write.c
+  a6654861bcd3 ("afs: Automatically generate trace tag enums")
+  66ea28c510d7 ("afs: Remove whitespace before most ')' from the trace head=
+er")
 
-between commits:
+these are commits
 
-  8525d5984b7b ("afs: do not test the return value of folio_start_writeback=
-()")
-  af7628d6ec19 ("fs: convert error_remove_page to error_remove_folio")
+  88dc7a203f2b ("afs: Automatically generate trace tag enums")
+  96a98801cbf3 ("afs: Remove whitespace before most ')' from the trace head=
+er")
 
-from the mm-stable tree and commit:
+in the afs tree.
 
-  874ff39da314 ("afs: Use the netfs write helpers")
-
-from the vfs-brauner tree.
-
-I fixed it up (the latter removed the code modified by the former) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+It looks like the afs tree has been rebased since (part of) it was merged
+into the vfs-brauner tree. :-(
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UQvRs_nl0/Vvnj2w2aH_dAD
+--Sig_/ca=k/4zVqJp3_XEr/RZHzWd
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWDfkYACgkQAVBC80lX
-0Gwxngf9Houx3yuHoZXUI8LLchJdw971OE64uunJGARtuR1GLHU2Y6KmUHWvYV23
-wVAjQ+SvU/rYqFmkKDoZM23GFRUhp5nXQjOsUvJ4043xek7pqHSF8aC0GCL08BP0
-2yljE68SA7yuqypzDg6wMOfZbTqOfI/GAtCQ/wlzeZIOIj9J+uI1nHcueEH/44rg
-nAAVUMaElXCEWQwkfn27GEeRX3lL7o4TVntcp93LJc3ljghc4C5N1IgOTiKWY0Yw
-F7yZcEegPuuWqedZfmd/pdmKDf/BZ2iagRHKDVyU/TpNzSbis+cGpv/NaUKEPNr3
-kdQrwmHPYW320fTfGc+f8C0ke26jPw==
-=p6fs
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWDgBAACgkQAVBC80lX
+0GxrIgf/dz3MDki83fc6mAHgfChbqpZDBpE79icbb6mYWdk9Wlbt96RUd9WCBwzI
+fk3fwINmMKHap+V2kb8KdGeMrjm2m0GtrQ6z+keGcaX11TiL9OzwPYYkndIwTzOb
+MEL93C6RHLIobihH/4yCt3WaY8VYcagMCi0q0G2LpFLCv2VFIPCRJXDjngJSKK+W
+MzUBq6U4goFa4a1J3wnD6xgUgKrzDWuSGJccyjeK8bg0xcHwnmjkqeDV0JCtQcXE
+i3pTOzZD5kCObpX46GqiuHvRIcOJOSm9YXrjjBKrfPDNx6HBqJPdPgtriL+1eIIA
+QMAxu6lSzDWolc3+XwufrYyu5Jw57A==
+=llwN
 -----END PGP SIGNATURE-----
 
---Sig_/UQvRs_nl0/Vvnj2w2aH_dAD--
+--Sig_/ca=k/4zVqJp3_XEr/RZHzWd--
 

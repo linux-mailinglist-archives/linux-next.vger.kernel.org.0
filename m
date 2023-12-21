@@ -1,195 +1,187 @@
-Return-Path: <linux-next+bounces-509-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-510-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39AA881B050
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 09:30:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B453C81B255
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 10:30:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57C941C21914
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 08:30:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EDC8B20ACB
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 09:30:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46950168A3;
-	Thu, 21 Dec 2023 08:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 837554C3DE;
+	Thu, 21 Dec 2023 09:25:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="1Hu8txHf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TP4HLqo7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FD2C12B
-	for <linux-next@vger.kernel.org>; Thu, 21 Dec 2023 08:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5ca5b61f101so212856a12.0
-        for <linux-next@vger.kernel.org>; Thu, 21 Dec 2023 00:30:48 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20054C3CE;
+	Thu, 21 Dec 2023 09:25:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a2343c31c4bso64574966b.1;
+        Thu, 21 Dec 2023 01:25:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1703147447; x=1703752247; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=rpJqmmuU3RsV3WU12xAoaTlzNL7f2emlaHxpsaQ442E=;
-        b=1Hu8txHfWKsF6JwfgvKr7Fsf7illBG+dW/iq9XnJQnLLhYJHvxOjaP/64rvArPPHPG
-         wGhAx1Vc0yoS3XmlOPYutJ1lH/Z9QR7ENtc/U0eTBg1s/twUm8lmcdb4aX9IG0aMeNyu
-         NI4OEkLsqNBU7yfkvBCfNVwFiJgjvdQJ9Pn4L8SgEGwogKy95gV1TjfkTtObqqtKQjAs
-         NrM2CqsDnm9CdWtzrZ4jxIT8cHxIAaNGp68CvXFU15sE3RN/6U3fbsmZ8h5uVsEhdLzC
-         wqy0PD054wej1Kdj2+DxZqWTMKKaHW3NIxFS4xkSbMOQKB270zktjZdBzswZ/4hqGu/J
-         X1Lw==
+        d=gmail.com; s=20230601; t=1703150709; x=1703755509; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=318Hwb+NUs47iOlM3PJU3kXLhvOZfDlGLt+SH+g0hdw=;
+        b=TP4HLqo7+RwFG2KClbI9l8Mqq8n0oVGq8g8TvP6BFWg9lT9QTwSbTo3tynUhKD0L54
+         tP0y1z0DblnwSGlRw5NGrKxlfjMj+jzo3O7G+PsD/0M1qDkABfHmz/0T9oCQEW4hj/Ha
+         DgWmjDQUqBiJYDyMeNXJAYQrZJArX0Nkzfzg/DD2Yrp8R+g9QFtudPXAyNY5ZVUsNY1S
+         CthhEn2pO60enUpUgpCWNFCoZbYIqzMKWYm5Ct/AixRAkb8DxyoL/dbDQKDKcbmacqff
+         WEilo0mGX936glwgE3UW/MVutxiE2MZX+ggYc9wnrwPMxYOgxd7G6YKpmX5aDpmJqa94
+         7kHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703147447; x=1703752247;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rpJqmmuU3RsV3WU12xAoaTlzNL7f2emlaHxpsaQ442E=;
-        b=mVjgJ1nnUv/zokN3JJSKSbFgRHTwDkitKnrvx4a5TRW7KIVjdirFH8/+7nWshv1rgr
-         pHp5/8rf+xmSlFWLk14DP2OKB0z/r5Y6oIRgmtmVddTVWxflVN4EVVOd1Xqhfl8ls3fc
-         CswSFZm6sWdczRH9l6XqJMGSKj+AI+1I12xMG8JeF3VXZLcnhqxboytSdMQmhjW7eeci
-         LQwBiX/ufybYpwhbXK7efmQvLLCEU7bTyyE6uhpP48TN+oh5H6CLsxCqVnktAJTco57+
-         n/1Om/A/OmHkDR/Ox4QYeoEC/3uAveYJCBz84qQGORIAU+r9XZU64swbG2MmBpkWooRV
-         C6Xg==
-X-Gm-Message-State: AOJu0YwjVFpXi2x5iTY5YjGp014HSyhiHeh7l3W3Bo7n3Tw7YtIpB6yn
-	cTbotEVxIUifNLkMm1O125LI8+FrTALOQgApU1Q=
-X-Google-Smtp-Source: AGHT+IEqZGiSZfXV2BNxuVWO+bM+6CCuyewgPuedf23NHEpDEPPrByPIKjhaQs9k1wQHd2Xf9N7aQA==
-X-Received: by 2002:a17:903:32c7:b0:1d3:6110:32fd with SMTP id i7-20020a17090332c700b001d3611032fdmr9676075plr.110.1703147447272;
-        Thu, 21 Dec 2023 00:30:47 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id y6-20020a170902700600b001d0ca40158dsm1035373plk.280.2023.12.21.00.30.46
+        d=1e100.net; s=20230601; t=1703150709; x=1703755509;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=318Hwb+NUs47iOlM3PJU3kXLhvOZfDlGLt+SH+g0hdw=;
+        b=MQqLqOGHyXdx3TIb+YHcaebhmZl5MYm+f7U592nhAPf18IANuLZrUr6e0zfn0n0q9k
+         VnAKCHEpMweeBSYPhTkz1M6f0RyJcA0dE28OhGWYgwMm3UgBZs+qPQ8C+VoLZDYgQe/u
+         R+1a939EvmxZS7f5ro1/Y6xUIbPpVXcam5avAcBuvwbvvwOA2OqFPM7+1vxCsyS28LJD
+         j1u8jPu0Ns2qXjYCGQZyAZw31fUC7ACXMmmAXjx778atg+mgQMVe9BRqeQl+wtxsZ66b
+         5dzpZyouZltVGSO0u9+5CywqNhncNCaHDAst9Ifo+XvR9eX1S5XTvouu3ru9mfKUtc2s
+         mwsw==
+X-Gm-Message-State: AOJu0YzxAPDc9jnzJqcsvKNPoUqVVZD0TaAWkuSG7oGar/9dny96Gv9b
+	yTnZltAeqokDkOE593mSa0rJW4EwLys=
+X-Google-Smtp-Source: AGHT+IGjP79JDVHIs1i54YJ69+2fSyPnPub8zWqBSUddOD16MhDxtVwDgymQMy0hHtUn3VQUpGj+4g==
+X-Received: by 2002:a17:906:7390:b0:a26:983b:969b with SMTP id f16-20020a170906739000b00a26983b969bmr732337ejl.64.1703150708759;
+        Thu, 21 Dec 2023 01:25:08 -0800 (PST)
+Received: from orome.fritz.box (p200300e41f0fa600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:a600:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id w6-20020a170906480600b00a2693a66d03sm736312ejq.160.2023.12.21.01.25.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Dec 2023 00:30:46 -0800 (PST)
-Message-ID: <6583f7b6.170a0220.c5a23.2eaf@mx.google.com>
-Date: Thu, 21 Dec 2023 00:30:46 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 21 Dec 2023 01:25:08 -0800 (PST)
+Date: Thu, 21 Dec 2023 10:25:06 +0100
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Lee Jones <lee@kernel.org>
+Cc: Sean Young <sean@mess.org>, Stephen Rothwell <sfr@canb.auug.org.au>,
+	Flavio Suligoi <f.suligoi@asem.it>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the pwm tree
+Message-ID: <ZYQEcg0-SEFEeuN6@orome.fritz.box>
+References: <20231221165805.0c4771c1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="0Q/Ht7HQv8P8dMbf"
+Content-Disposition: inline
+In-Reply-To: <20231221165805.0c4771c1@canb.auug.org.au>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+
+
+--0Q/Ht7HQv8P8dMbf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.7-rc6-268-gc6eb02b33bd24
-Subject: next/pending-fixes baseline: 70 runs,
- 3 regressions (v6.7-rc6-268-gc6eb02b33bd24)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes baseline: 70 runs, 3 regressions (v6.7-rc6-268-gc6eb02b3=
-3bd24)
+On Thu, Dec 21, 2023 at 04:58:05PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the backlight tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/video/backlight/mp3309c.c: In function 'mp3309c_bl_update_status':
+> drivers/video/backlight/mp3309c.c:134:23: error: implicit declaration of =
+function 'pwm_apply_state'; did you mean 'pwm_apply_args'? [-Werror=3Dimpli=
+cit-function-declaration]
+>   134 |                 ret =3D pwm_apply_state(chip->pwmd, &pwmstate);
+>       |                       ^~~~~~~~~~~~~~~
+>       |                       pwm_apply_args
+>=20
+> Caused by commit
+>=20
+>   c748a6d77c06 ("pwm: Rename pwm_apply_state() to pwm_apply_might_sleep()=
+")
+>=20
+> interacting with commit
+>=20
+>   2e914516a58c ("backlight: mp3309c: Add support for MPS MP3309C")
+>=20
+> from the backlight tree.
+>=20
+> I have appplied the following merge fix patch.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 21 Dec 2023 16:13:37 +1100
+> Subject: [PATCH] fix up for "backlight: mp3309c: Add support for MPS MP33=
+09C"
+>=20
+> from the backlight tree interacting with commit
+>=20
+>   c748a6d77c06 ("pwm: Rename pwm_apply_state() to pwm_apply_might_sleep()=
+")
+>=20
+> from the pwm tree.
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/video/backlight/mp3309c.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/video/backlight/mp3309c.c b/drivers/video/backlight/=
+mp3309c.c
+> index 34d71259fac1..b0d9aef6942b 100644
+> --- a/drivers/video/backlight/mp3309c.c
+> +++ b/drivers/video/backlight/mp3309c.c
+> @@ -131,7 +131,7 @@ static int mp3309c_bl_update_status(struct backlight_=
+device *bl)
+>  					    chip->pdata->levels[brightness],
+>  					    chip->pdata->levels[chip->pdata->max_brightness]);
+>  		pwmstate.enabled =3D true;
+> -		ret =3D pwm_apply_state(chip->pwmd, &pwmstate);
+> +		ret =3D pwm_apply_might_sleep(chip->pwmd, &pwmstate);
+>  		if (ret)
+>  			return ret;
+> =20
+> @@ -393,7 +393,7 @@ static int mp3309c_probe(struct i2c_client *client)
+>  					    chip->pdata->default_brightness,
+>  					    chip->pdata->max_brightness);
+>  		pwmstate.enabled =3D true;
+> -		ret =3D pwm_apply_state(chip->pwmd, &pwmstate);
+> +		ret =3D pwm_apply_might_sleep(chip->pwmd, &pwmstate);
+>  		if (ret)
+>  			return dev_err_probe(chip->dev, ret,
+>  					     "error setting pwm device\n");
 
-Regressions Summary
--------------------
+Hi Lee,
 
-platform       | arch  | lab          | compiler | defconfig | regressions
----------------+-------+--------------+----------+-----------+------------
-meson-gxm-q200 | arm64 | lab-baylibre | gcc-10   | defconfig | 3          =
+We could exchange stable tags to make this work, but given that people
+(myself included) are getting into holiday mode I'm inclined to just add
+a pwm_apply_state() compatibility inline for now and then we can address
+this in the new year or for the next cycle. What do you think?
 
+Thierry
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.7-rc6-268-gc6eb02b33bd24/plan/baseline/
+--0Q/Ht7HQv8P8dMbf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.7-rc6-268-gc6eb02b33bd24
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      c6eb02b33bd24f8f4a60947b539db4871ef914cd =
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmWEBHIACgkQ3SOs138+
+s6GBoQ/8CDWjDCw4kMybF0fuITOSwjywIj3s25B5D+0/fKrhrPYUlX8n/2k/x5Ue
+SOSMI/8uYJGxYucxPme3p5Cd594BrtUT9sMDUqa+BUyl6PGgXdW6sElXmaXd+rRG
+bI3F2zDZf/DymmnAYQixuuS5NnJaJGQIrhG74OINI5J3wq2p9nFyDH7aGroId9KS
+9KCFHnBXqfn3Etw/rSyXPh4aB/F4KQEy2iz8sQi+medqJNiD5zXMLzgWTto8sYdM
+qZAU9YichkvYf2U45MbIppBHeU0egvAty+YXgJHuuBEUTuZh4y+e2tNv9VtNcN1O
+T8jyCUdTYBLOz+V/CmJCm8aRng4a07QN/+bBWJXnuG2iVf/Mu8RvtQBiOVysenoL
+5b9EMXBzXXpL4IzjT+BB83oKl4ca4mEAO+O5EmUOHFPgMk7Wd8zbrBJmRj2OxzLI
+My0+C+5voAkdM2IPer6TE41YQCnw8c50s5mZ6lJwhAi3W4h0shHOCDLoM28dEXFF
+R0t4r/hMM4IGaUzmAV5kcWBTByTlP5VCU+Zu1NSvdqp03orHhaaLNhylhiYh2q9t
+vLklmmolE6BZDuF/17tWegZkqLtTIQs2QuCkkaD0NWAab87pnXjdEg/vOSJsJ+38
+w/Ysa/q++LyCFVcByaQ0UkyTuZ3qT94o7XZshfhK2iAJE2PxmT0=
+=Q5Hq
+-----END PGP SIGNATURE-----
 
-
-Test Regressions
----------------- =
-
-
-
-platform       | arch  | lab          | compiler | defconfig | regressions
----------------+-------+--------------+----------+-----------+------------
-meson-gxm-q200 | arm64 | lab-baylibre | gcc-10   | defconfig | 3          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6583c6e4d6836b66e0e134cb
-
-  Results:     3 PASS, 3 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc6-26=
-8-gc6eb02b33bd24/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxm-q20=
-0.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc6-26=
-8-gc6eb02b33bd24/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxm-q20=
-0.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6583c6e4d6836b66e0e134d0
-        new failure (last pass: v6.7-rc6-238-g46bcd2aac1f1f)
-
-    2023-12-21T05:02:11.116258  kern  :alert : [00000000000000c8] pgd=3D080=
-00000126cb003, p4d=3D08000000126cb003, pud=3D08000000126cc003, pmd=3D000000=
-0000000000
-    2023-12-21T05:02:11.116882  kern  :emerg : Internal error: Oops: 000000=
-0096000006 [#1] PREEMPT SMP
-    2023-12-21T05:02:11.117378  kern  :emerg : Code: d503233f a9bf7bfd 9100=
-03fd f9403c00 (f9406400) =
-
-    2023-12-21T05:02:11.120455  + set +x
-    2023-12-21T05:02:11.223281  / # #
-    2023-12-21T05:02:11.324721  export SHELL=3D/bin/sh
-    2023-12-21T05:02:11.325357  #
-    2023-12-21T05:02:11.426445  / # export SHELL=3D/bin/sh. /lava-3891279/e=
-nvironment
-    2023-12-21T05:02:11.427064  =
-
-    2023-12-21T05:02:11.528157  / # . /lava-3891279/environment/lava-389127=
-9/bin/lava-test-runner /lava-3891279/1 =
-
-    ... (14 line(s) more)  =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/6583c6e4d6836b6=
-6e0e134d2
-        new failure (last pass: v6.7-rc6-238-g46bcd2aac1f1f)
-        2 lines
-
-    2023-12-21T05:02:11.046620  kern  :alert :   FSC =3D 0x06: level 2 tran=
-slation fault
-    2023-12-21T05:02:11.084962  kern  :alert : Data abort info:
-    2023-12-21T05:02:11.085257  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
-006, ISS2 =3D 0x00000000
-    2023-12-21T05:02:11.085687  kern  :alert :   CM =3D 0, WnR =3D 0, TnD =
-=3D 0, TagAccess =3D 0
-    2023-12-21T05:02:11.085898  kern  :alert :   GCS =3D 0, Overlay =3D 0, =
-DirtyBit =3D 0, Xs =3D 0
-    2023-12-21T05:02:11.086129  kern  :aler<8>[   16.265228] <LAVA_SIGNAL_T=
-ESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>
-    2023-12-21T05:02:11.086328  t : user pgtable: 4k pag<8>[   16.275448] <=
-LAVA_SIGNAL_ENDRUN 0_dmesg 3891279_1.5.2.4.1>
-    2023-12-21T05:02:11.086519  es, 48-bit VAs, pgdp=3D00000000126c9000   =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6583c6e4d6836b6=
-6e0e134d3
-        new failure (last pass: v6.7-rc6-238-g46bcd2aac1f1f)
-        13 lines
-
-    2023-12-21T05:02:11.042602  kern  :alert : Unable to handle kernel NULL=
- pointer dereference at virtual address 00000000000000c8
-    2023-12-21T05:02:11.042943  kern  :alert : Mem abort info:
-    2023-12-21T05:02:11.043365  kern  :alert :   ESR =3D 0x0000<8>[   16.22=
-0385] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dline=
-s MEASUREMENT=3D13>
-    2023-12-21T05:02:11.043578  000096000006
-    2023-12-21T05:02:11.043780  kern  :alert :   EC =3D 0x25: DABT (current=
- EL), IL =3D 32 bits
-    2023-12-21T05:02:11.043972  kern  :alert :   SET =3D 0, FnV =3D 0
-    2023-12-21T05:02:11.044209  kern  :alert :   EA =3D 0, S1PTW =3D 0   =
-
- =20
+--0Q/Ht7HQv8P8dMbf--
 

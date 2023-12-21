@@ -1,112 +1,95 @@
-Return-Path: <linux-next+bounces-507-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-508-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B151E81AFC2
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 08:46:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBB8481AFCD
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 08:49:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F858286680
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 07:46:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AB901C22E22
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 07:49:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A641E156C9;
-	Thu, 21 Dec 2023 07:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD5CA156D4;
+	Thu, 21 Dec 2023 07:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Ag9SUkmw"
 X-Original-To: linux-next@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A74C156C3;
-	Thu, 21 Dec 2023 07:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4SwjCR6mPNz1wp7V;
-	Thu, 21 Dec 2023 15:45:39 +0800 (CST)
-Received: from kwepemd100002.china.huawei.com (unknown [7.221.188.184])
-	by mail.maildlp.com (Postfix) with ESMTPS id 812C414011B;
-	Thu, 21 Dec 2023 15:45:55 +0800 (CST)
-Received: from M910t (10.110.54.157) by kwepemd100002.china.huawei.com
- (7.221.188.184) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1258.28; Thu, 21 Dec
- 2023 15:45:54 +0800
-Date: Thu, 21 Dec 2023 15:45:43 +0800
-From: Changbin Du <changbin.du@huawei.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-CC: Andrew Morton <akpm@linux-foundation.org>, Changbin Du
-	<changbin.du@huawei.com>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
-	<linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <20231221074543.ahl6zmvmkgw7i52k@M910t>
-References: <20231221183803.1dd342aa@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61956156C9;
+	Thu, 21 Dec 2023 07:48:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1703144937;
+	bh=nqVI3JA9aEoz73f5c4pDD1oc3m2TjqW6l6YBxyiNWmY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Ag9SUkmwCGLkheOgOoMJ6PGZUbBbdYHGVix5Zp8QmKgt0Ih03ovSTXauXljeJ/sOz
+	 1V1ogCoMDzjyKmx35xFbZHouLBOrlEOW9Qtf9cxKtMwlQRdTJNhnzA/EVBtxO31LBQ
+	 vZUG9EkOQReY9Z0zF38Jw8ShCWaiOTHBO9AMj7A8J56mKEu7jMW83P1R/E74trYyYx
+	 RdGmWzwBU6LxIpulMJ9Gwn9D/c3Rd+O38uwbTHQesxbQ0WW7J+yuDs/6P8tUgnTYxf
+	 6Aggu6NAZGynr3Zv0M786h5QbbtY9FwAghSBR8L5O1UQjjMSAqqYH5IjzxIDQSlIWz
+	 vmA7jH5V4hPog==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SwjHF2SHDz4x5m;
+	Thu, 21 Dec 2023 18:48:57 +1100 (AEDT)
+Date: Thu, 21 Dec 2023 18:48:56 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the vfs-brauner tree
+Message-ID: <20231221184856.71d71623@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20231221183803.1dd342aa@canb.auug.org.au>
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemd100002.china.huawei.com (7.221.188.184)
+Content-Type: multipart/signed; boundary="Sig_/uyCGBqUue/5TS.dfQHXhFEd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi, Rothwell,
-Please hold this patch. It need more discussion and probably the flush can be
-simply removed.
+--Sig_/uyCGBqUue/5TS.dfQHXhFEd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 21, 2023 at 06:38:03PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the mm tree, today's linux-next build (x86_64 allnoconfig)
-> failed like this:
-> 
-> x86_64-linux-gnu-ld: init/main.o: in function `kernel_init':
-> main.c:(.ref.text+0xbf): undefined reference to `flush_module_init_free_work'
-> 
-> Caused by commit
-> 
->   1d8053432676 ("modules: wait do_free_init correctly")
-> 
-> This build has
-> # CONFIG_MODULES is not set
-> 
-> I have applied this (hack) patch for today.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 21 Dec 2023 18:27:07 +1100
-> Subject: [PATCH] fix up for "modules: wait do_free_init correctly"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  init/main.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/init/main.c b/init/main.c
-> index f0b7e21ac67f..1df1106ff09b 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -1407,7 +1407,9 @@ static void mark_readonly(void)
->  		 * flushed so that we don't hit false positives looking for
->  		 * insecure pages which are W+X.
->  		 */
-> +#ifdef CONFIG_MODULES
->  		flush_module_init_free_work();
-> +#endif
->  		mark_rodata_ro();
->  		rodata_test();
->  	} else
-> -- 
-> 2.43.0
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Hi all,
 
+After merging the vfs-brauner tree, today's linux-next build (s390
+defconfig) produced this warning:
 
+arch/s390/configs/defconfig:626:warning: symbol value 'm' invalid for FSCAC=
+HE
 
--- 
+Introduced by commit
+
+  9896c4f367fc ("netfs, fscache: Combine fscache with netfs")
+
+--=20
 Cheers,
-Changbin Du
+Stephen Rothwell
+
+--Sig_/uyCGBqUue/5TS.dfQHXhFEd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWD7egACgkQAVBC80lX
+0GySvAf+KZePxfiBcN0u77VGhlxIdFOTPTLGQFW1t4oB1TskApPZq6f/Yw9Y+gW9
+X/FsgDrq8NGCd6a6Nkyk1/pfeBrASeKMie1G/hpzSmiBfiZ5XX2OZ9tb+6KmxBxr
+ApPonvcGZaDFBJSK44nSSHBbq++VpNvd4ce/IkHZBEMp6a0Y1weZa9r57rEjupN9
+5D0+kQYP8/HYoS/MNluW7Lz/5a59oU173OhwfLpISv8MSFoSiBuD9TAk3M2Gmz6S
+A+A94NeDVTBeqdzPAciFP8F7SykX8MPlLaV0mccQhqsoBeTHzhzFDZyjBGjosJXb
+6o/TNDSA4cKvFgJ8ltlkikQDrePR2Q==
+=hVmy
+-----END PGP SIGNATURE-----
+
+--Sig_/uyCGBqUue/5TS.dfQHXhFEd--
 

@@ -1,96 +1,90 @@
-Return-Path: <linux-next+bounces-520-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-521-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E073781B732
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 14:19:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8921381BA92
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 16:24:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EB4A1C25A37
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 13:19:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26F401F25137
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 15:24:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893A573480;
-	Thu, 21 Dec 2023 13:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 856EE539FD;
+	Thu, 21 Dec 2023 15:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LGwcbqbw"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="svt2mg6S"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272F6768E8
-	for <linux-next@vger.kernel.org>; Thu, 21 Dec 2023 13:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1703164755;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D2ohWlgIJHuTnnOW+YkeJQK3jRdgNiZC8Tevy1gSvb8=;
-	b=LGwcbqbw8erSPQK7hwwK9pcbVZzd98tVYzWDu/FEop17NH0KDGs1Q8JQ4vIBA5hyks/Q1N
-	4hi949+NsIaVC62X1+r8XPc1mg9db0eOooiany4OLvgSDPzX8Su4G867bh6j27N2/AC94O
-	Roq/UC5+tmkn1DN4jNI1GEO2yToDyg4=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-97-Cx_w8fHUNH-mvIQlEwDw4Q-1; Thu,
- 21 Dec 2023 08:19:13 -0500
-X-MC-Unique: Cx_w8fHUNH-mvIQlEwDw4Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0267B539E6;
+	Thu, 21 Dec 2023 15:23:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from mail.denx.de (unknown [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34723280D464;
-	Thu, 21 Dec 2023 13:19:13 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.195.169])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 36F383C25;
-	Thu, 21 Dec 2023 13:19:12 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <20231221184856.71d71623@canb.auug.org.au>
-References: <20231221184856.71d71623@canb.auug.org.au>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: dhowells@redhat.com, Christian Brauner <brauner@kernel.org>,
-    Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-    Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the vfs-brauner tree
+	(Authenticated sender: festevam@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id D334A86FF7;
+	Thu, 21 Dec 2023 16:23:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1703172212;
+	bh=QJ7p7Bf1SpIwh6wh64K5dmUR5iPUQamZcwq0EDP2pGg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=svt2mg6Ss5mVi+p/cR9EZ4Np2p5Zo+n5x3+3Ea0A84sV2Rrmmozs8Eh3ghG/OQEWh
+	 esvN8EC4ltWPpKd/WctfqhuX0rdX7qklbj1fsEnLfOH8FnlP7YT7zClIz9JM/6/Xwm
+	 6mTKg3Of9lZgiw88ghLsBdIMGaWASPGw0zYdz8LjttVKOMzoixgyIdCwt48S3SAuNX
+	 Npa42vLHuQmgG+4B5rlh7PLj9RU9PJl94N5kfHzUwoX2j2XHEl9JnT4+XXQo5rm6Rv
+	 VdDL11SF2ua8jfAkqI4iTBPOmZBo8vUQEwAgld0Iar204Zb264Lmn8XF9iXAnr1M1b
+	 +SayZDrjmetQg==
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1601737.1703164751.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 21 Dec 2023 13:19:11 +0000
-Message-ID: <1601738.1703164751@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date: Thu, 21 Dec 2023 12:23:32 -0300
+From: Fabio Estevam <festevam@denx.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
+ <rui.zhang@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the thermal tree
+In-Reply-To: <20231221121745.2771ab8a@canb.auug.org.au>
+References: <20231219103457.4e034e9a@canb.auug.org.au>
+ <68012fb93e0057f62c03a5d9b01237c4@denx.de>
+ <c2a170ea-39e8-49bf-9aeb-60eb20a22454@linaro.org>
+ <20231221121745.2771ab8a@canb.auug.org.au>
+Message-ID: <182f7809380d0db9aea3a56253dfdd63@denx.de>
+X-Sender: festevam@denx.de
+User-Agent: Roundcube Webmail/1.3.6
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi Stephen,
 
-> =
+On 20/12/2023 22:17, Stephen Rothwell wrote:
 
-> After merging the vfs-brauner tree, today's linux-next build (s390
-> defconfig) produced this warning:
-> =
+>> > diff --git a/kernel/reboot.c b/kernel/reboot.c
+>> > index 07eb6537ed8b..f814568525f1 100644
+>> > --- a/kernel/reboot.c
+>> > +++ b/kernel/reboot.c
+>> > @@ -1002,6 +1002,7 @@ void __hw_protection_shutdown(const char *reason, > int ms_until_forced, bool shut
+>> >          if (shutdown)
+>> >                  orderly_poweroff(true);
+>> >   }
+>> > +EXPORT_SYMBOL_GPL(__hw_protection_shutdown);
+>> 
+>> Yeah, I've done it
+> 
+> Forgot to push out?
 
-> arch/s390/configs/defconfig:626:warning: symbol value 'm' invalid for FS=
-CACHE
-> =
+The 'bleeding-edge' branch contains the fix now:
 
-> Introduced by commit
-> =
-
->   9896c4f367fc ("netfs, fscache: Combine fscache with netfs")
-
-I've fixed the arches that had FSCACHE=3Dm to have NETFS_SUPPORT=3Dm and
-FSCACHE=3Dy.
-
-David
-
+https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=bleeding-edge&id=f21b0d185f75e15561047312dd4b8306eac8ad71
 

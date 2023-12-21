@@ -1,110 +1,106 @@
-Return-Path: <linux-next+bounces-528-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-529-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F55B81C05E
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 22:41:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD5A81C06F
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 22:47:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F6C01F27882
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 21:41:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97250287245
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 21:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6406676DBB;
-	Thu, 21 Dec 2023 21:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F071977631;
+	Thu, 21 Dec 2023 21:47:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="h2J3pc0d"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="r1sNB2RK"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D9E768EF;
-	Thu, 21 Dec 2023 21:41:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA4255E59;
+	Thu, 21 Dec 2023 21:47:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1703194881;
-	bh=LLwn0bXTzEtLZgXJFyrR3N2SO0obanZicVjfnAtabY8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=h2J3pc0dezuHGyBx9ILXQdBVbip9cMvAV0c5L4jNW/TwqWUHeoF/HNqMlCZHv4DdX
-	 I7RQ9M59jtMOXlmGbvh7InQSlA6Lvn1EAiQi1FKLsxaLKSlUXvMIBalPyk5hqtDV8g
-	 TRQco/5kEtu24kUtXQUzagE1ITRjyqRLlpRUziNv4Udk9SBOV+mS3OuM817ytu/Uni
-	 UPsCHSubStJ31WaiWyPpmgP9btO+0MelRGqBg8Z7A7GgBPb/n3nJU8NYa/K9yZpzY1
-	 c5PK9s0OKfFoYzQe99ko4aEY39KaxzQ5bt5oRErRfTmVCF4HQMbMmeqOMTmZ48wwNm
-	 ++DMU4U0xAKDQ==
+	s=201702; t=1703195269;
+	bh=QW6K9I5GRmra/INHSX8phU1RLjZ/aDqVjMaB4iNs/S4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=r1sNB2RK43ZlkFUSLckaBMxvimCo6iyMRTUZToMEmeMHOesBHk6hSjvJxsQaMH3KY
+	 JA1MupjJ9JcWhta2NH0pUh+tOoiFdePGWPh0Wt0rnY5iGW9jVWJ5HeAa6lGVD0GBNt
+	 23X25Bc9Kvd0ZLWWYK8Vi7dGz4gQhzhbBm6A4sfl1d/iHoYP5cy3rTS3YV8VnqxYX+
+	 kPWn1C4FovwArKRnivn22PeztMwYhtsm29cXLYyObQ7qxieYT9QQIc/UoxO7PxscDv
+	 lGffG2nZ9xLRr+gETRozdBdeIhQx4JVprpeweuHlQ1w2tnIqVwSFZHmN9CuDv0fvMq
+	 bK3pSP9hJuqDg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sx3lj0cmHz4xNG;
-	Fri, 22 Dec 2023 08:41:20 +1100 (AEDT)
-Date: Fri, 22 Dec 2023 08:41:20 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sx3v92Bcmz4xNG;
+	Fri, 22 Dec 2023 08:47:48 +1100 (AEDT)
+Date: Fri, 22 Dec 2023 08:47:46 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
- <johan.hedberg@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+To: Peter Rosin <peda@axentia.se>
+Cc: Vinod Koul <vkoul@kernel.org>, Jan Kuliga <jankul@alatek.krakow.pl>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20231222084120.2700e077@canb.auug.org.au>
-In-Reply-To: <20231221122425.5bcaee70@canb.auug.org.au>
-References: <20231221122425.5bcaee70@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the mux tree
+Message-ID: <20231222084746.3d9dcb90@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Wf7ME7ys3kMae_t9=Xb6gOF";
+Content-Type: multipart/signed; boundary="Sig_/Eg0eMuR4EWDkVHafv_4CPkE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Wf7ME7ys3kMae_t9=Xb6gOF
+--Sig_/Eg0eMuR4EWDkVHafv_4CPkE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 21 Dec 2023 12:24:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> The following commits are also in the net tree as different commits
-> (but the same patches):
->=20
->   01edddb9f366 ("Bluetooth: hci_core: Fix hci_conn_hash_lookup_cis")
->   27a4852d53c1 ("Bluetooth: hci_event: Fix not checking if HCI_OP_INQUIRY=
- has been sent")
->   315a4c9045df ("Bluetooth: af_bluetooth: Fix Use-After-Free in bt_sock_r=
-ecvmsg")
->   37044639ad5e ("Bluetooth: hci_event: shut up a false-positive warning")
->   6ab75888baf7 ("Bluetooth: MGMT/SMP: Fix address type when using SMP ove=
-r BREDR/LE")
->   8127ee3d7e0f ("Bluetooth: Fix not notifying when connection encryption =
-changes")
->   8d79bc35fb81 ("Bluetooth: Fix deadlock in vhci_send_frame")
->   aaa600f30fad ("Bluetooth: Add more enc key size check")
->   b207711da3d7 ("Bluetooth: L2CAP: Send reject on command corrupted reque=
-st")
+In commit
 
-These are now duplicating commits in Linus' tree.
+  2e142cebb164 ("dmaengine: xilinx: xdma: Rework xdma_terminate_all()")
+
+Fixes tag
+
+  Fixes: 49a701d8dc1e ("dmaengine: xilinx: xdma: Add terminate_all/synchron=
+ize callbacks")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 5c392d106e7 ("dmaengine: xilinx: xdma: Add terminate_all/synchronize=
+ callbacks")
+
+Also, please keep all the commit message tags together at the end of
+the commit message.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Wf7ME7ys3kMae_t9=Xb6gOF
+--Sig_/Eg0eMuR4EWDkVHafv_4CPkE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWEsQAACgkQAVBC80lX
-0Gwyrwf/VF3T8NPf0gjFL/oMwa0JveXBwLhmYFnyh+s+eBtDOpaOP8z5j7IWEVFl
-qdfV2+3Hx9PPfcmjdEpmx9/WqvYzapciOPNGT/3SUqg297te0FLEPrm/Jvy8gkh/
-QiyElLR4fFYbOjtm6BWRgDWM43PRGw63MdKQLY6Ij+h8QfScwd3icJmuLhPf8mQ2
-JC6xej8Kyu1A5FnXikhE7du+EX78M9SIK9sMJKWozbuxy8npzUsFAOrvreIvh0jI
-9v+xMM93Wtyz8O4r0/u8TtCjpB2Ebyvn54utugB3p00zhzRd3bYTGhuxRf/ufMKi
-OK/DNwD9ivWaSftQN1J8M3dvO5CCDA==
-=+Z/8
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWEsoIACgkQAVBC80lX
+0GxGuwf+M9wWUbB3i0dhU1FyEWeparAwkQdoSIKgTFY3+TQtIq8WhGV2Me9GQ5Fv
+Yoxbic1ZwhivGgSwFBxZzf9x0iI0IYZCk7F//BGXweAIv3gsvBDTkmjp8w7jwE7+
+5HXQ98H9XS9CPV2KLamgZX5DRAX4t/sMaGtK7VPqcm2JcbHhJwC7isWHiAYIVG5T
+saY0W/h74XWQKNEaNECJg7+sl/tA0fxaTqjWLyaiKsOkzVzDAEqD0HARLaYjCUNW
+lXWaIySKbEB1g0NkSN9q7w1H+9u7b7tnl3BoBEgOdY+Z3dAAEnvtrRF0TLf5cXGE
+/2KYa8Y9ccDAhJH5iEcL98lqCSg6RQ==
+=eNz2
 -----END PGP SIGNATURE-----
 
---Sig_/Wf7ME7ys3kMae_t9=Xb6gOF--
+--Sig_/Eg0eMuR4EWDkVHafv_4CPkE--
 

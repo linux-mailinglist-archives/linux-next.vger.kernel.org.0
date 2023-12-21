@@ -1,181 +1,123 @@
-Return-Path: <linux-next+bounces-494-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-495-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E49A81AC8D
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 03:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2955881ACB6
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 03:45:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D8532837CD
-	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 02:18:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D54A2287021
+	for <lists+linux-next@lfdr.de>; Thu, 21 Dec 2023 02:45:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8EA015CC;
-	Thu, 21 Dec 2023 02:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DAC43C3D;
+	Thu, 21 Dec 2023 02:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y7iUM7jT"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iiWvjyLm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF63184C;
-	Thu, 21 Dec 2023 02:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40c39ef63d9so3213145e9.3;
-        Wed, 20 Dec 2023 18:18:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703125083; x=1703729883; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=KepcuEsz7y7X78GKxHSSB7fpm+ci/PvvheM0C8NHiQw=;
-        b=Y7iUM7jTZxT9TqQFvfiMsyVYAUtxoXw4XTa8r2G2MVFCXH2gZ9mT3rFvoaPaDnz6aX
-         MGjeT2fVxsKXU9DZYxm3RD/MN5IdDwnaPqq/3hOoRHYJhNgSfqptwqKh7zFYbmunfhRK
-         ns1JKAykHvS/WkTeNmDjPp4iOQ4OPQ3buTcO8kUpY02uYjKwUQVC+4dCbtcvfjAH5zpl
-         dVl62A+vtzlhEXpcwE77nEv/FNbZdDqcn1EVwtmP9XBOe+tvEInbQidE5Sq6hg4unDbm
-         Q7dbCpSW8QqkheXmj7d7yAy/12Vbnw3EAUn56iHUBM45cWyn/4F+E94FVJNo41lZYDMY
-         lIcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703125083; x=1703729883;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KepcuEsz7y7X78GKxHSSB7fpm+ci/PvvheM0C8NHiQw=;
-        b=wIDosFsLlrG6R1NdW8VBbkjsPvne6PLiFn8XHco0a1adXLZ/utagxs+cVNvEk0GDcV
-         mpiP7Q3ghn4KhvWqaWuueq2Yxufn9C3lKwJlGl+9NBdxKujN+UYK19VzsGefH51PLaZ0
-         SvxhgamymBQshXtySRxLi/jDPR4JHQa42+JJY8uLMcgioWFFQJ3HvcfUaCNHftdil1IF
-         B8+4dB6897xJYGFDgxqj4ckkOVVb8651rxVLIV2fN0jIIbAQzNnJRAQx5lcYI2JA7MnU
-         DqyEGIHKNC2pLeSNrs9v/ZZSYb/DQVFQT65OzwLFUrEkueiYO/xeVzp56CFmB8fYUPvZ
-         HQYQ==
-X-Gm-Message-State: AOJu0YygFPFLAe/h81tPmNxf9vdXTAUtWcrRrtPsIWyeNzDZMIVVqmVH
-	6ixQnY5+0aT78/Or7eADA3o=
-X-Google-Smtp-Source: AGHT+IFPJCKBCnMsv5PlF48qQH9bVjG1uiHVkKiu0dqFfd0UrYbmA2orJF5s6NBOtOuz63FpDYpavA==
-X-Received: by 2002:a05:600c:c18:b0:40c:348a:1f8 with SMTP id fm24-20020a05600c0c1800b0040c348a01f8mr277051wmb.17.1703125083085;
-        Wed, 20 Dec 2023 18:18:03 -0800 (PST)
-Received: from Ansuel-xps. (host-95-250-248-68.retail.telecomitalia.it. [95.250.248.68])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05600c4f0200b003feae747ff2sm9312050wmq.35.2023.12.20.18.18.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Dec 2023 18:18:02 -0800 (PST)
-Message-ID: <6583a05a.050a0220.bc5e1.2e6d@mx.google.com>
-X-Google-Original-Message-ID: <ZYOgWCEl52hX-Zox@Ansuel-xps.>
-Date: Thu, 21 Dec 2023 03:18:00 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Networking <netdev@vger.kernel.org>,
-	Mathis Marion <mathis.marion@silabs.com>,
-	Robert Marko <robimarko@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-References: <20231221130946.7ed9a805@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7163C34;
+	Thu, 21 Dec 2023 02:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1703126730;
+	bh=4JUUkyq4Szf2FSLo/m+X1SFuBiyu9JLbhik0x5Gd5lU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=iiWvjyLmySbjYGHbpm4TDCKsdaA28J+R0REpM+lcfjXuIvRpmIZOO7pDr8vw3ekH1
+	 SY4zm7AdPgvialOdj1ceqvza5A2KvvAvvqHC+AvN9R0LlgSQWU2URcPYfKXYR2zJXx
+	 eH/XgignUCT2GEpNObkiCyQVcHZIFzVHPk/vYM+R5shtVEk7/wraijBJShynGxVvTc
+	 vbVeHzNq10Xnzwx6qfS4gNiIH6B/ptiNSf11Vhp30FOp7tdMsGht8XP0U8qfG48Z7W
+	 aaznfA+NI4YFiPinGVWtAViVaO/3hmV0fxmxUjPp8uRQ6K2aGc+U2+l7UdjgzxsEd7
+	 n8hUZKj5bF79g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SwZY53yx6z4xGC;
+	Thu, 21 Dec 2023 13:45:28 +1100 (AEDT)
+Date: Thu, 21 Dec 2023 13:45:27 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jens Axboe <axboe@kernel.dk>, David Sterba <dsterba@suse.cz>
+Cc: Christoph Hellwig <hch@lst.de>, David Sterba <dsterba@suse.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the block tree with the btrfs tree
+Message-ID: <20231221134527.38493677@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231221130946.7ed9a805@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/ubuOmb9ut+BJKLRVkyv6T+I";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Dec 21, 2023 at 01:09:46PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the net-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/net/phy/aquantia/aquantia_firmware.c: In function 'aqr_fw_load_memory':
-> drivers/net/phy/aquantia/aquantia_firmware.c:135:23: error: implicit declaration of function 'crc_ccitt_false'; did you mean 'crc_ccitt_byte'? [-Werror=implicit-function-declaration]
->   135 |                 crc = crc_ccitt_false(crc, crc_data, sizeof(crc_data));
->       |                       ^~~~~~~~~~~~~~~
->       |                       crc_ccitt_byte
-> 
-> Caused by commit
-> 
->   e93984ebc1c8 ("net: phy: aquantia: add firmware load support")
-> 
-> interacting with commit
-> 
->   56ded2dd1a43 ("lib: crc_ccitt_false() is identical to crc_itu_t()")
-> 
-> from the mm tree.
-> 
-> I have applied the following merge fix patch:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 21 Dec 2023 12:49:11 +1100
-> Subject: [PATCH] fix up for "net: phy: aquantia: add firmware load support"
-> 
-> interacting with commit
-> 
->   56ded2dd1a43 ("lib: crc_ccitt_false() is identical to crc_itu_t()")
-> 
-> from the mm tree.
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+--Sig_/ubuOmb9ut+BJKLRVkyv6T+I
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks can confirm the conversion is correct.
+Hi all,
 
-> ---
->  drivers/net/phy/aquantia/Kconfig             | 2 +-
->  drivers/net/phy/aquantia/aquantia_firmware.c | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/phy/aquantia/Kconfig b/drivers/net/phy/aquantia/Kconfig
-> index a35de4b9b554..1a65678583cf 100644
-> --- a/drivers/net/phy/aquantia/Kconfig
-> +++ b/drivers/net/phy/aquantia/Kconfig
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  config AQUANTIA_PHY
->  	tristate "Aquantia PHYs"
-> -	select CRC_CCITT
-> +	select CRC_ITU_T
->  	help
->  	  Currently supports the Aquantia AQ1202, AQ2104, AQR105, AQR405
-> diff --git a/drivers/net/phy/aquantia/aquantia_firmware.c b/drivers/net/phy/aquantia/aquantia_firmware.c
-> index ff34d00d5a0e..0c9640ef153b 100644
-> --- a/drivers/net/phy/aquantia/aquantia_firmware.c
-> +++ b/drivers/net/phy/aquantia/aquantia_firmware.c
-> @@ -3,7 +3,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/of.h>
->  #include <linux/firmware.h>
-> -#include <linux/crc-ccitt.h>
-> +#include <linux/crc-itu-t.h>
->  #include <linux/nvmem-consumer.h>
->  
->  #include <asm/unaligned.h>
-> @@ -132,7 +132,7 @@ static int aqr_fw_load_memory(struct phy_device *phydev, u32 addr,
->  		crc_data[3] = word;
->  
->  		/* ...calculate CRC as we load data... */
-> -		crc = crc_ccitt_false(crc, crc_data, sizeof(crc_data));
-> +		crc = crc_itu_t(crc, crc_data, sizeof(crc_data));
->  	}
->  	/* ...gets CRC from MAILBOX after we have loaded the entire section... */
->  	up_crc = phy_read_mmd(phydev, MDIO_MMD_VEND1, VEND1_GLOBAL_MAILBOX_INTERFACE2);
-> @@ -164,7 +164,7 @@ static int aqr_fw_boot(struct phy_device *phydev, const u8 *data, size_t size,
->  		phydev_err(phydev, "bad firmware CRC in firmware\n");
->  		return ret;
->  	}
-> -	calculated_crc = crc_ccitt_false(0, data, size - sizeof(u16));
-> +	calculated_crc = crc_itu_t(0, data, size - sizeof(u16));
->  	if (read_crc != calculated_crc) {
->  		phydev_err(phydev, "bad firmware CRC: file 0x%04x calculated 0x%04x\n",
->  			   read_crc, calculated_crc);
-> -- 
-> 2.43.0
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Today's linux-next merge of the block tree got a conflict in:
 
+  fs/btrfs/zoned.h
 
+between commit:
 
--- 
-	Ansuel
+  eefaf0a1a6f1 ("btrfs: fix typos found by codespell")
+
+from the btrfs tree and commit:
+
+  7437bb73f087 ("block: remove support for the host aware zone model")
+
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/btrfs/zoned.h
+index f24a5ffb7807,bc1b540c1597..000000000000
+--- a/fs/btrfs/zoned.h
++++ b/fs/btrfs/zoned.h
+@@@ -319,8 -323,8 +319,8 @@@ static inline bool btrfs_check_device_z
+  			(bdev_zone_sectors(bdev) << SECTOR_SHIFT);
+  	}
+ =20
+ -	/* Do not allow Host Manged zoned device */
+ +	/* Do not allow Host Managed zoned device. */
+- 	return bdev_zoned_model(bdev) !=3D BLK_ZONED_HM;
++ 	return !bdev_is_zoned(bdev);
+  }
+ =20
+  static inline bool btrfs_check_super_location(struct btrfs_device *device=
+, u64 pos)
+
+--Sig_/ubuOmb9ut+BJKLRVkyv6T+I
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWDpscACgkQAVBC80lX
+0Gy96ggAhDofuBU3W/sZc+bvZ1KvpgZLxYrW2i8B0BNQYp3liP1j9Nki2WTYQ88Z
+nQ19IBL6RFf9c4YriQ6W5N+mrW2UUZXTfNpS/XBLwrokGN5yfh0GD5vIlTFRLTKE
+CCnehcDr4GMd2Yre+jbr2CeS5d2u38PyY7jTosK4alwAKUO3NemDcFl8oO5y+3HJ
+dbhXxQzog4cacB+Z4X54pz2NLFpwVHI/Arlz1Q3gTymqpjciut9bxGv2ErDH8tdi
+LXuMwh/ywI9TGCYVYrr/Gc4yL+UANqkrpJ0jSD65d7ThymyHwex7CwsfZ8Q5dOF4
+4Gims0dr+xCyoP9koHaprhgmGwFwTA==
+=A2P9
+-----END PGP SIGNATURE-----
+
+--Sig_/ubuOmb9ut+BJKLRVkyv6T+I--
 

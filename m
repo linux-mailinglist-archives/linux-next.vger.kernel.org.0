@@ -1,60 +1,60 @@
-Return-Path: <linux-next+bounces-554-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-555-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 312CF82143C
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 16:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6182D821440
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 16:40:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A12B91F21605
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 15:35:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF7DD1F21605
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 15:40:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492F36117;
-	Mon,  1 Jan 2024 15:35:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CADBB8C13;
+	Mon,  1 Jan 2024 15:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="a4tQRYGN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="JxHRPZFm"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9906107;
-	Mon,  1 Jan 2024 15:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3428BE0;
+	Mon,  1 Jan 2024 15:40:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704123319;
-	bh=D6Jimca1ki/Zt/pPbHd/s6KTJ3H9Gnnwp/PlULhpxNk=;
+	s=201702; t=1704123629;
+	bh=sTNPU00RZdL+kGV/+OIsP9cSnvAS+K8KYC7jYkrJS9E=;
 	h=Date:From:To:Cc:Subject:From;
-	b=a4tQRYGNNHT6URDIOLDf9PZ9v3ndIE8AoCHjb1RJ8NkZrVzYGz0BEN42kCVsxDoLl
-	 d2aIatKa701+uArriYgJukl2hjnHDnSlSBgjR6KBz2GRW9QHeJxC35N7YLB/MiiHfZ
-	 A/K2fX8VYpzQDqwA7kwECThLZwr7rfPj97514XHFf/QIarWuTXEnHP/QT/aAnkl1bH
-	 ZnUNTX0HLR7H2TWoxHWfwj0HmNKKz47gBW4oY4EeP7gZalQ/nI/2Rz28Sv0yIJEajy
-	 tZLtgwclSCuM6TYn9mbfbIycJcZzlfjTGH+xd5cIdkhg3re5lxGMaGIIvGlzlhRjSI
-	 IX2rwRxUQfgRQ==
+	b=JxHRPZFml0vI9v0qMQnJNqv5qoZ/l+51qioIO4hXSN0Cur1mkjDaOtBuerEHgv7P6
+	 YZaFWL946LPElGD2ESBspAjXTSGIwd+DO2sGrklhBnlUqA2aOTzbDjvkkZBDrMl+Rv
+	 7QnsvhrOpomi1h0MjwWlqXGHUXixyAdpJM0nqG4ByTg+R4C/6gzdstoVCfNVgV7QlA
+	 4TC1TnBzmc5OiFGPYjsNUALpJ7zEmfUphNwWvxE0ZDmiX78jNp455cUit7ZLRiM5v8
+	 S+WoS92F5FepUGAR0CQsXi0cgGGFJkzbCVcxkcOrYvAWJv49KYicyU9Jre+ehfUOQf
+	 aPwERGHraJ8HA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T3g6H27Xdz4wd0;
-	Tue,  2 Jan 2024 02:35:19 +1100 (AEDT)
-Date: Tue, 2 Jan 2024 02:35:18 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T3gDD6W6Tz4wbh;
+	Tue,  2 Jan 2024 02:40:28 +1100 (AEDT)
+Date: Tue, 2 Jan 2024 02:40:28 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Howells <dhowells@redhat.com>
+To: Yury Norov <yury.norov@gmail.com>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the afs tree
-Message-ID: <20240102023518.50c7f729@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the bitmap tree
+Message-ID: <20240102024028.143385f4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j6ahBeaeukeb8xe7ia+_tKF";
+Content-Type: multipart/signed; boundary="Sig_/mLswZ3w1ZasX=VzAXT+gNuA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/j6ahBeaeukeb8xe7ia+_tKF
+--Sig_/mLswZ3w1ZasX=VzAXT+gNuA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -62,29 +62,29 @@ Hi all,
 
 Commit
 
-  9174b2995e9b ("afs: Add some more info to /proc/net/afs/servers")
+  6ae0831c4b17 ("bitmap: Step down as a reviewer")
 
-is missing a Signed-off-by from its author and committer.
+is missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/j6ahBeaeukeb8xe7ia+_tKF
+--Sig_/mLswZ3w1ZasX=VzAXT+gNuA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWS27YACgkQAVBC80lX
-0GxveQf/f79DHcuUr0SpK7ERJhlh/7hDf4b5MF65gq64Gs98AC1uxmqsPu6IDMi+
-MxWbw+FD5GYV11QnSbKxVtE5SGSVQ9IzLBHBOfejPQd0n9epVmn4ehwRTIWiPYWw
-1im+GdPo+C+MgR2X0WN+Nx/FiUqe2gXK3i3AuYC8i1gciK8WvJd+gO2Ov0NaPZDU
-F67/N8hunnvCw1gLxGrETG38qY2Yv87irDQGRW9myL4uzC96GeETT7dSX0rjOLWc
-d1ZVpYpTetZsPwUSbVK5Zu9rc1NuRbq4V4dOMnR3p+NveOW4WR6PNZW99PvEmxAa
-2vruso+NN8vABh/e6SFXsaGXmb3HZQ==
-=pn7Y
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWS3OwACgkQAVBC80lX
+0GxVPwf+PqMpUv8iK00kHLoTReCYZTvBgzmPqXoQup5tBBBMiLN6i+fHNYav2zt6
+7dw4ULjnKHFefH03iuLF+zWmt7zOWbzNZ1guxVPgcz1iYxq+uvacgo2PGBXjSaWM
+MhthJa8aqQWz1mizUeHlaxaeolyTXASk6oGf8pnAM1xUr/Jagxr8XmdT1EaJ8LJQ
+MMaxfLmfcXN6oBd8qgDM8qdMAeN6w48ThOZKdMHK7sbyPpJ6lcMApJCe1fHWUmaY
+xAW8O027xfcLEaAQq72CKY29tZmTKCK+Golh/lGi0i5SxH2yPXfbbFgVGdOnNc/x
+QKHweIeT1td94J0k60E4dgp+JrGOag==
+=yl37
 -----END PGP SIGNATURE-----
 
---Sig_/j6ahBeaeukeb8xe7ia+_tKF--
+--Sig_/mLswZ3w1ZasX=VzAXT+gNuA--
 

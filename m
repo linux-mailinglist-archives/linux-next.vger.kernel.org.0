@@ -1,84 +1,82 @@
-Return-Path: <linux-next+bounces-560-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-561-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 063D68215E6
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 00:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8155E8215F0
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 00:52:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05EA31C209CB
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 23:09:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6B811C20972
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 23:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08938E565;
-	Mon,  1 Jan 2024 23:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C886EEAD3;
+	Mon,  1 Jan 2024 23:52:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UZlhKkmt"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="P8mvohA+"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F0CE560;
-	Mon,  1 Jan 2024 23:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E1FEAC2;
+	Mon,  1 Jan 2024 23:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704150560;
-	bh=WrdV0DO+otQoGTvpb0fiYqj7oilBjqJ5gqC8CkzQJ8U=;
+	s=201702; t=1704153147;
+	bh=fT41D17aS053xSaBSdZ3kdXTNCwLSGWr3ETa4koZxS8=;
 	h=Date:From:To:Cc:Subject:From;
-	b=UZlhKkmtRZ7zpboc2IHCS2nKksXh9ku1cX/cAPgF0UNEEVxmyEpiGd9wPiAEHnQXo
-	 zwTjc0Ek8tMJtJdp3NYhDM9hSUoAEyFYvSRX3WOdKxGs5ufT5IpSK9XyVn9LFpplV6
-	 CMV/f6BxWSIN4qRb7a1YfwD1vJ9ATqAMlr15J8n4ZQ5DuYPtkCmoNMV7gIkbwjK/qd
-	 YIQnhNZL+qyfFrKogKhpy4sU14J7n6ApQUBOM4F3h5VUozl0gUZ16OG9y30HyKg9pz
-	 4O5R/Of4hKR4WgJ3T6gBbUJmbHn4blzFO3ahGoRsl0ZxCuIUwffJyC5ZZB81yaLq/0
-	 Pb6u+pAvRTVIA==
+	b=P8mvohA+p/ebDhIvw/T9nlWkUTd4qKsZrS1kZ9xSZHdCPrD2x8VU2+Y2ULHn3xIS7
+	 5RZRSn0M7HvtfLGubOmmZEntUqUwtg3IIDSgPZhbQBKxCkRgomKYRlpuDMil2EWRsy
+	 KZ6++jVYDmBN7kfBA5s3pHnVMQTgC79zU4UUlrLh71Wc9DU4TFwZCN5Znb3DmTkiyj
+	 8tLf8LNIS2KxQdPH/Q8MgQpMNJ6JBN1UNQW1N5aUfG4nqQ0p8prZHrHQsKB+4B/drI
+	 TZE/qIQM2qoimJfB6TZShNhxJeFqBpBGmu5203dgW484W0rvzQjm5aV1DBiqmQSa6d
+	 siM3uTWu4yLXw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T3sB66nQ6z4wwG;
-	Tue,  2 Jan 2024 10:09:18 +1100 (AEDT)
-Date: Tue, 2 Jan 2024 10:09:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T3t7s510tz4wny;
+	Tue,  2 Jan 2024 10:52:25 +1100 (AEDT)
+Date: Tue, 2 Jan 2024 10:52:23 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
- <rui.zhang@intel.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Fabio Estevam <festevam@denx.de>, Linux Kernel Mailing List
+To: Dave Airlie <airlied@redhat.com>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: DRI <dri-devel@lists.freedesktop.org>, Jeffrey Hugo
+ <quic_jhugo@quicinc.com>, "Kirill A. Shutemov"
+ <kirill.shutemov@linux.intel.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, "Rafael J.
- Wysocki" <rafael.j.wysocki@intel.com>
-Subject: linux-next: manual merge of the thermal tree with the pm tree
-Message-ID: <20240102100917.223cd3b7@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm tree with the mm tree
+Message-ID: <20240102105223.7634699d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qWlOHJx/LvaBKrIXrEu0bD5";
+Content-Type: multipart/signed; boundary="Sig_/nj3n3oz8ER.n_Fp.+QqdXTS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/qWlOHJx/LvaBKrIXrEu0bD5
+--Sig_/nj3n3oz8ER.n_Fp.+QqdXTS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the thermal tree got conflicts in:
+Today's linux-next merge of the drm tree got a conflict in:
 
-  drivers/thermal/thermal_core.c
-  drivers/thermal/thermal_core.h
+  drivers/accel/qaic/qaic_data.c
 
 between commit:
 
-  a8c959402d4d ("thermal: core: Add governor callback for thermal zone chan=
-ge")
+  78f5d33f3dd4 ("mm, treewide: rename MAX_ORDER to MAX_PAGE_ORDER")
 
-from the pm tree and commits:
+from the mm tree and commit:
 
-  726edaad90f6 ("thermal/core: Prepare for introduction of thermal reboot")
-  f21b0d185f75 ("reboot: Introduce thermal_zone_device_critical_reboot()")
+  47fbee5f27ed ("accel/qaic: Update MAX_ORDER use to be inclusive")
 
-from the thermal tree.
+from the drm tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -91,59 +89,36 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/thermal/thermal_core.c
-index 58958288b559,9d47347d4242..000000000000
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@@ -309,16 -314,7 +309,16 @@@ static void handle_non_critical_trips(s
-  		       def_governor->throttle(tz, trip);
-  }
- =20
- +void thermal_governor_update_tz(struct thermal_zone_device *tz,
- +				enum thermal_notify_event reason)
- +{
- +	if (!tz->governor || !tz->governor->update_tz)
- +		return;
- +
- +	tz->governor->update_tz(tz, reason);
- +}
- +
-- void thermal_zone_device_critical(struct thermal_zone_device *tz)
-+ static void thermal_zone_device_halt(struct thermal_zone_device *tz, bool=
- shutdown)
-  {
-  	/*
-  	 * poweroff_delay_ms must be a carefully profiled positive value.
-diff --cc drivers/thermal/thermal_core.h
-index 479c3b6917e4,36364688b4a2..000000000000
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@@ -114,8 -114,7 +114,9 @@@ int thermal_zone_device_set_policy(stru
-  int thermal_build_list_of_policies(char *buf);
-  void __thermal_zone_device_update(struct thermal_zone_device *tz,
-  				  enum thermal_notify_event event);
- +void thermal_governor_update_tz(struct thermal_zone_device *tz,
- +				enum thermal_notify_event reason);
-+ void thermal_zone_device_critical_reboot(struct thermal_zone_device *tz);
- =20
-  /* Helpers */
-  #define for_each_trip(__tz, __trip)	\
+diff --cc drivers/accel/qaic/qaic_data.c
+index 24e886f857d5,cf2898eda7ae..000000000000
+--- a/drivers/accel/qaic/qaic_data.c
++++ b/drivers/accel/qaic/qaic_data.c
+@@@ -451,7 -452,7 +452,7 @@@ static int create_sgt(struct qaic_devic
+  		 * later
+  		 */
+  		buf_extra =3D (PAGE_SIZE - size % PAGE_SIZE) % PAGE_SIZE;
+- 		max_order =3D min(MAX_PAGE_ORDER - 1, get_order(size));
+ -		max_order =3D min(MAX_ORDER, get_order(size));
+++		max_order =3D min(MAX_PAGE_ORDER, get_order(size));
+  	} else {
+  		/* allocate a single page for book keeping */
+  		nr_pages =3D 1;
 
---Sig_/qWlOHJx/LvaBKrIXrEu0bD5
+--Sig_/nj3n3oz8ER.n_Fp.+QqdXTS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTRh0ACgkQAVBC80lX
-0Gx2NQgAg98fLdnuaiHDbndtNbLsBCqi4Ta0d/d+sqsLFKhEaoUf7qicHqpHOmEa
-tuO0mzUT7sbGliABjhRo2ny3RU89mWk9/yjNP4MQzZzm3aH7R8lGPJTIBOPJ4WuS
-k+WQT+GTJBZY168pCvqD7L5GbZdROe9miU/PfXLtIZzpA+SxUJFPXdE1prT2tC1c
-J5ezBaauwjKU0OwtRkvSQsYcgfPBQxR/CrTTjvPoX3MLlN0iY7ZimBkXQ4ZOO/4W
-2x188uwbgzaHtZwXXGiJUdsFJoS/Skmfw/Mye2HC87OVjFIaPSWnKEYWEfKro5zU
-+2uHg+xT+niapXjvZuJBqsYAE+vD7w==
-=8cWV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTUDcACgkQAVBC80lX
+0GwR1Af+MZT5Ie1hMcp412OyeJLJP0VMgjSICZYZoyTVEuZm4DiYz+eWPvLkvOh8
+rmdRatJrE/Y29xaFjIHtAiCv0ab4M+f50hkw3p/6aA4PHCUKf8+Zg5bRQqjAcXB+
+O8TQ6K+ZrrLSgbkCSPuhJa1aiSXL3jlraM6MPBrkepIWeTw53aBS80BnRXO0kZh0
++5gwMvO2UqZ/9t/vEH0TYVrVmau1zAiRx+20miBvHlk8wlF0gStwWuhKrRxZkMqE
+4gzZnQGqbpTEpyqlodNQO9AIhHH3vu/p5CYrrluEplEGsH54Cel091bvjXyoEALF
+ETWtLZ+Ng6X289xTrivLUWqYUc3N9w==
+=eTR6
 -----END PGP SIGNATURE-----
 
---Sig_/qWlOHJx/LvaBKrIXrEu0bD5--
+--Sig_/nj3n3oz8ER.n_Fp.+QqdXTS--
 

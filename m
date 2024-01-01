@@ -1,96 +1,127 @@
-Return-Path: <linux-next+bounces-556-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-557-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C55A1821563
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 22:02:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4CD082157D
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 23:08:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01C63281E03
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 21:02:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 858341C20D7C
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jan 2024 22:08:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA644DF51;
-	Mon,  1 Jan 2024 21:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3D7E544;
+	Mon,  1 Jan 2024 22:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IxmOx9rU"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="g/4OIVud"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6A9DF44;
-	Mon,  1 Jan 2024 21:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B942DE542;
+	Mon,  1 Jan 2024 22:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704142954;
-	bh=EIW2vDb1KTE0G8eEn3f1S4gxIzX2t7EeMvzyiXPHCxs=;
+	s=201702; t=1704146895;
+	bh=JRJV7ElX1rFWpuMu0jxb+JP+5jXn4iWDgasR8SjPBR8=;
 	h=Date:From:To:Cc:Subject:From;
-	b=IxmOx9rUCPPR5yU5ufFGX3AEfcRpDzttrbeBUYjE9Iu5Ckfu1z8BizMnWZHiAK/69
-	 1cAi/3MfJq6WqBYRVFexfYNUVkRXuMfmwAL5bJFqHSiqa8+vkWhutSUXk/2GnhB521
-	 /g/Kj9+4uLGwoo3FWMKffFkF1jFzWSYEEp8xxhsRfpW52+zm0TP9JUBTWls+Mb9KIM
-	 o/W4/Mh0Qe9VUpX5uGDxHL2SxXe3jtlK3Mx4K33dhYGeYCl5yPtmYuniqjH1Y0LWxc
-	 ILzhWYc9hCFo/54xKpgJZK366flOIFnF8DxY6n+EInRP9gCWc1blH3GXP6PfDNjxXy
-	 BgZgvHux4ixHg==
+	b=g/4OIVudulbA6rz+YktAcBt+UiCTpml1fEgJrjwfoKDRmozz+PetIukmkd46rC0qm
+	 JwRN9iZe5a0jKC1vlTI0G3IfOs2T9oef0HCPahpZzrqIAWCzpp5pvfBx94opjva4dz
+	 4jNeNKQrOuXwWanJZGXPZOKODuh7lttMH2oRrjbgkNnIjKEDG3RdGJaIa9VRb96UV1
+	 W7yqZ8ZKXjpu/6YPlvXpYaAOARL/y1BvtB8GbZ/cRqWSlBNXmDT02Byy/ksKHEvfEg
+	 Q8UP2Igab7AhVyezPmQarvJY77mxbdhG1obJQuNvityo5w7fxPvYOk7BwbNBP2WYMx
+	 qx2dPGG/J1Lwg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T3pMt4cLXz4wcH;
-	Tue,  2 Jan 2024 08:02:34 +1100 (AEDT)
-Date: Tue, 2 Jan 2024 08:02:33 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T3qqf21Xhz4wny;
+	Tue,  2 Jan 2024 09:08:13 +1100 (AEDT)
+Date: Tue, 2 Jan 2024 09:08:12 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: errors fetching the irqchip trees
-Message-ID: <20240102080233.20aca3ec@canb.auug.org.au>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the mips tree with the mm-nonmm-stable
+ tree
+Message-ID: <20240102090812.4243eb88@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/s=31OqnaH7m=QkKzKf7uf4Y";
+Content-Type: multipart/signed; boundary="Sig_/fZjx__JmfJNt+gu7.ewxQtS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/s=31OqnaH7m=QkKzKf7uf4Y
+--Sig_/fZjx__JmfJNt+gu7.ewxQtS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Attempting to fetch the irqchip and irqchip-fixes trees today fails
-like this:
+Today's linux-next merge of the mips tree got a conflict in:
 
-fatal: couldn't find remote ref refs/heads/irq/irqchip-next
+  arch/mips/kernel/traps.c
 
-and
+between commit:
 
-fatal: couldn't find remote ref refs/heads/irq/irqchip-fixes
+  ec47b986e53e ("mips: fix tlb_init() prototype")
 
-They both use
-git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git .
+from the mm-nonmm-stable tree and commit:
+
+  8e1803900ef1 ("MIPS: Remove unused shadow GPR support from vector irq set=
+up")
+
+from the mips tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/s=31OqnaH7m=QkKzKf7uf4Y
+diff --cc arch/mips/kernel/traps.c
+index c58c0c3c5b40,c1b2b18b0505..000000000000
+--- a/arch/mips/kernel/traps.c
++++ b/arch/mips/kernel/traps.c
+@@@ -2152,11 -2120,8 +2120,6 @@@ void *set_vi_handler(int n, vi_handler_
+  	return (void *)old_handler;
+  }
+ =20
+- void *set_vi_handler(int n, vi_handler_t addr)
+- {
+- 	return set_vi_srs_handler(n, addr, 0);
+- }
+ -extern void tlb_init(void);
+--
+  /*
+   * Timer interrupt
+   */
+
+--Sig_/fZjx__JmfJNt+gu7.ewxQtS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTKGkACgkQAVBC80lX
-0GzbvggAhQ2yecAt3Ym8sjFDkVJLD8/ew2cZFyVsa0/MSyuHBtWGAgWtWIA/ndWX
-w6TU5182GjVO1rg/nCU+WIO2ZmSv4509Gf3Ah2FgfunPSi95WUjR/6kJez/wY0NJ
-K7iz5ccy3iIKKplR7YkgsH9SbyNaa1pbENGR6EIyIXG7z7xHsXpTa2geBQ8fgiWI
-FNOk0GKHXyTvIq72Hd4dNB5uMOtijOvwatiGyIbRFNh73xvQQKM1jhHOvjFG7A1Q
-E8vNTFAYgk96hKpqVPSJlH433SS7uc9OXD/8dcLtV0kXynNOtmaA3oJbhdao51mN
-CL0Q480rv7KIS6dMclGnLD1vul/qaQ==
-=skAQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTN8wACgkQAVBC80lX
+0Gx1CAf+IR1LIlgHlyn3zRBuAeco8OLQE0QwpSBPVlyvKJhYUBbME2bUN4xUqzy7
+xY5+sIVIfDuRo1z5I9+bDAlADEF+F5S0B5hcR+b3QyIOTEdoO9ZxWSorIABmpiQI
+Sg+zTEXPh+6YXx2Joymv0cQfHZFKSAv7TXbzPc+fv9amdtmBpFYXkyT5R2rd1I81
+y4qSPjrfuS/adFVr3shMbzgFakqxophk4MdqID/g39XWUWt0RP4eZulFw3KbWZ9v
+p3afnJrzoU6q/pDIC6KHTdTQvqpoDLt2TtKUkt7Y7qhMkv02F7kX8u5oRXUcnprk
+vg1pcJJ3lh8ZiWNhbj27nwODgRGq7A==
+=p0Ql
 -----END PGP SIGNATURE-----
 
---Sig_/s=31OqnaH7m=QkKzKf7uf4Y--
+--Sig_/fZjx__JmfJNt+gu7.ewxQtS--
 

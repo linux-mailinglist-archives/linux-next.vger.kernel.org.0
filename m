@@ -1,162 +1,99 @@
-Return-Path: <linux-next+bounces-573-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-574-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45EFE8218FD
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 10:39:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF4C48219F8
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 11:36:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69DA01C2131E
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 09:39:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DFE6283016
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 10:36:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D8FCA69;
-	Tue,  2 Jan 2024 09:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 572C0DF68;
+	Tue,  2 Jan 2024 10:36:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vVwIFhjD";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="aSrVRgSr";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vVwIFhjD";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="aSrVRgSr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQosxIJE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E345BCA64;
-	Tue,  2 Jan 2024 09:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 22BEC1FCEE;
-	Tue,  2 Jan 2024 09:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1704188383; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6HV5HJpG1KKudNCL8oIywmvIrREkaLBolbe1DzJoFAg=;
-	b=vVwIFhjDTTO4c0zm4tHaOvX6OEHGLAgz9YRcYQIvKp+gx57R76BaNzVciF7VFg2prfEBP5
-	TBehobeTh9R7bzU69TdBM21gy0zT6ISn5Cs136j8WPJ7zsS+qUxcYIxyo2k9bsxriX9PmS
-	oIBjXrOlQTOx2ImxSdTt7TXfLW2aNdg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1704188383;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6HV5HJpG1KKudNCL8oIywmvIrREkaLBolbe1DzJoFAg=;
-	b=aSrVRgSr6MVxcpTyo9eLtVgG8cHXTVP7vfKFyckc7DgOOl5KA4BylcoZrXMUL+GGID0QWV
-	xhopyGNO694mXBAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1704188383; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6HV5HJpG1KKudNCL8oIywmvIrREkaLBolbe1DzJoFAg=;
-	b=vVwIFhjDTTO4c0zm4tHaOvX6OEHGLAgz9YRcYQIvKp+gx57R76BaNzVciF7VFg2prfEBP5
-	TBehobeTh9R7bzU69TdBM21gy0zT6ISn5Cs136j8WPJ7zsS+qUxcYIxyo2k9bsxriX9PmS
-	oIBjXrOlQTOx2ImxSdTt7TXfLW2aNdg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1704188383;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6HV5HJpG1KKudNCL8oIywmvIrREkaLBolbe1DzJoFAg=;
-	b=aSrVRgSr6MVxcpTyo9eLtVgG8cHXTVP7vfKFyckc7DgOOl5KA4BylcoZrXMUL+GGID0QWV
-	xhopyGNO694mXBAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1369413AC6;
-	Tue,  2 Jan 2024 09:39:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id XRFSBN/Zk2U7DwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 02 Jan 2024 09:39:43 +0000
-Message-ID: <0d98192e-f9ac-cc49-fd7e-3551c7af1881@suse.cz>
-Date: Tue, 2 Jan 2024 10:39:42 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F07DF61;
+	Tue,  2 Jan 2024 10:36:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5F0C433C7;
+	Tue,  2 Jan 2024 10:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704191764;
+	bh=wBiPi3OqenP3/d8i2Zyn6QRFfKftQ+PXOkxe7wK8bDk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IQosxIJEZHZEbqaL5mlaFCs7oulvqBZXfoIkSzU+SvPDBSKdAxfbh+/VoNKgX+72y
+	 EgwACH/ociBEJbfEuTkHBLwqsv414pVT56fZzq620fwEzPBlXQbf+8GJ/p8vRzzWJT
+	 94aWaz8IIHaLpHN6CERpcKxaD/naD3AhquAkDpOdpKY37ynrkfd7tJiAjM5TiUv0QJ
+	 BrsEuYP7y93BhMdOVbUzdIYkvTgWXwpvWpxeLgYXHfK0O/FDykb8pYIdvX+YzTc1pj
+	 zgnFGtuYbCCCaRLljDi/CkJExeBRLoVTfduDPYk/F6HyX8KTv70hSqFwcEG1TJH7S5
+	 EG/IZtgMMWyeg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rKc7u-008BET-0N;
+	Tue, 02 Jan 2024 10:36:02 +0000
+Date: Tue, 02 Jan 2024 10:36:01 +0000
+Message-ID: <87ttnwt432.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: errors fetching the irqchip trees
+In-Reply-To: <20240102080233.20aca3ec@canb.auug.org.au>
+References: <20240102080233.20aca3ec@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: linux-next: manual merge of the rcu tree with the jc_docs tree
-Content-Language: en-US
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- "Paul E. McKenney" <paulmck@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20231218142537.3b74c770@canb.auug.org.au>
-From: Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20231218142537.3b74c770@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: -1.31
-X-Spamd-Result: default: False [-1.31 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-0.02)[51.97%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 MIME_GOOD(-0.10)[text/plain];
-	 RCPT_COUNT_FIVE(0.00)[5];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 TO_DN_ALL(0.00)[];
-	 NEURAL_HAM_SHORT(-0.19)[-0.960];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 MID_RHS_MATCH_FROM(0.00)[]
-X-Spam-Flag: NO
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 12/18/23 04:25, Stephen Rothwell wrote:
+Hi Stephen,
+
+On Mon, 01 Jan 2024 21:02:33 +0000,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
 > Hi all,
-
-Hi,
-
-
-> Today's linux-next merge of the rcu tree got a conflict in:
 > 
->   Documentation/admin-guide/kernel-parameters.txt
+> Attempting to fetch the irqchip and irqchip-fixes trees today fails
+> like this:
 > 
-> between commit:
+> fatal: couldn't find remote ref refs/heads/irq/irqchip-next
 > 
->   a3a27827452f ("Documentation, mm/unaccepted: document accept_memory kernel parameter")
+> and
 > 
-> from the jc_docs tree and commit:
+> fatal: couldn't find remote ref refs/heads/irq/irqchip-fixes
 > 
->   801f246637ed ("doc: Add EARLY flag to early-parsed kernel boot parameters")
+> They both use
+> git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git .
 
-in light of that commit, the accept_memory should now have:
+Ah, my bad. I have recently removed myself from the irqchip
+maintenance (see commit b673fe1a6229), and forgot to let you know,
+apologies for that.
 
- +	accept_memory=  [MM,EARLY]
+Please drop these two branches from -next, as it is unlikely I will
+resume any significant activity on that front in the near future. You
+probably already pull from tip anyway.
 
-Jon, can you update it still, or want a followup patch, or perhaps will
-suggest Linus to do that as part of the merge?
+Thanks,
 
-> 
-> from the rcu tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.
 

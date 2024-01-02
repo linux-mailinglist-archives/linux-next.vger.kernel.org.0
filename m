@@ -1,90 +1,139 @@
-Return-Path: <linux-next+bounces-577-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-578-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0348D821C12
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 13:54:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25A96821DA5
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 15:30:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 961E62832B7
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 12:54:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE6C41F22B06
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 14:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36AA6FBE7;
-	Tue,  2 Jan 2024 12:54:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46AF76AAB;
+	Tue,  2 Jan 2024 14:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KbVlq6Se"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qoxBGGkr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8032FBE4;
-	Tue,  2 Jan 2024 12:54:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704200048; x=1735736048;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b9ZtFWya/borF20E2dsQXsGQe8PlDKzqEuLfQAbaE4A=;
-  b=KbVlq6SerJ2Q2FVE0s8eZePzclvJtVLQF4ZpvjziOScfJJtZtSkCjD9R
-   T8knFuwp+ByZ713qmEJV5H0MMyLb9vZWQ5DiNkT8KW8vXalQhTBGUEbhF
-   qyH6ISRUG0sbr6G+dBTaBYHP8yK47ow+aQ/xhnhsKg/CxG83Nf5+ntv4K
-   /B72jxkD4ejx12LldZAo9oSfk89elCRnjnln5KwFBXraA+I8D2USidcdx
-   44IYH9Zqf4vtXs1hPQy2+u8WprN7SktjOwc6Y9S0xNvTMHROrS7tOnE0R
-   kAllNHI13AoNAjNUcyLAgZ+XZZtVXdWxHcRkLz40Z9Bw2FOE1g7xrICVT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="3713336"
-X-IronPort-AV: E=Sophos;i="6.04,325,1695711600"; 
-   d="scan'208";a="3713336"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 04:54:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,325,1695711600"; 
-   d="scan'208";a="28056210"
-Received: from rmuntslx-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.36.81])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 04:54:05 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-	id C4FDE10A568; Tue,  2 Jan 2024 15:54:02 +0300 (+03)
-Date: Tue, 2 Jan 2024 15:54:02 +0300
-From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the mm tree
-Message-ID: <20240102125402.g4i23a757sak3ai2@box.shutemov.name>
-References: <20240102164040.2ea3e1f0@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145C811194;
+	Tue,  2 Jan 2024 14:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 402DiaPn028526;
+	Tue, 2 Jan 2024 14:30:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=L9wsvGMZSJp3/jakokQi4h502LASYRmsodDRfbt57OQ=;
+ b=qoxBGGkriObmkRHbAbAUQjd2XgP7A9KuX2IVb8ThgO+8eZk82+1qkhA7fLA02shbeD1g
+ SXf6lQW4K3H0WpHfLQYY3jjIVhi2KBFOdSVls4KhaDAGMq85HbyHlVIfilwhr5x7/4aZ
+ abodRpg1wXpQqQ1NijOVp7ACRxB2rXiI/tB/xO3Plw3otNAgTo8z5eyVo+Fz6n36FF3R
+ q7HnW7L1j7wNkEt1utZgh5yXlazwgUtFzqSF/Od+PkmqhaeWcD8rq2/oiGYYUb18Idaw
+ kVv1xNEdMQnFJyO1/6vhFPTxfXbSb06a8f2zc5/fcsbQCcWODDvTuZCjjulxabGNd2rS Vg== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vcjqut883-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Jan 2024 14:30:21 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 402EKUji019424;
+	Tue, 2 Jan 2024 14:30:21 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vc30sce2g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Jan 2024 14:30:21 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 402EUKVX20841146
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 2 Jan 2024 14:30:20 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7427058057;
+	Tue,  2 Jan 2024 14:30:20 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5CC8A58058;
+	Tue,  2 Jan 2024 14:30:20 +0000 (GMT)
+Received: from localhost (unknown [9.61.111.122])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  2 Jan 2024 14:30:20 +0000 (GMT)
+From: Nathan Lynch <nathanl@linux.ibm.com>
+To: Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Cc: "sachinp@linux.vnet.com" <sachinp@linux.vnet.com>,
+        "abdhalee@linux.vnet.ibm.com" <abdhalee@linux.vnet.ibm.com>,
+        "mputtash@linux.vnet.com" <mputtash@linux.vnet.com>
+Subject: Re: [Mainline/linux-next-netdev/net-next/scsi]Dlpar remove, drmgr
+ phb and pci remove operations are failing
+In-Reply-To: <2b1814f7-c7a2-4ea3-8bc7-abd8712ebef8@linux.vnet.ibm.com>
+References: <2b1814f7-c7a2-4ea3-8bc7-abd8712ebef8@linux.vnet.ibm.com>
+Date: Tue, 02 Jan 2024 08:30:20 -0600
+Message-ID: <87v88breo3.fsf@li-e15d104c-2135-11b2-a85c-d7ef17e56be6.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240102164040.2ea3e1f0@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 95FaDXZkav18y2DRoiU7nROnM0bySmGv
+X-Proofpoint-ORIG-GUID: 95FaDXZkav18y2DRoiU7nROnM0bySmGv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-02_04,2024-01-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 spamscore=0 bulkscore=0 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401020111
 
-On Tue, Jan 02, 2024 at 04:40:40PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the mm tree, today's linux-next build (htmldocs) produced
-> this warning:
-> 
-> Documentation/admin-guide/kdump/vmcoreinfo.rst:193: WARNING: Title underline too short.
-> 
-> (zone.free_area, NR_PAGE_ORDERS)
-> -------------------------------
-> 
-> Introduced by commit
-> 
->   bfbd51786990 ("mm, treewide: introduce NR_PAGE_ORDERS")
+Hi,
 
-The fixup:
+Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com> writes:
+>  =C2=A0[Mainline/linux-next-netdev/net-next/scsi]
 
-https://lore.kernel.org/all/20240101111512.7empzyifq7kxtzk3@box/
+What does this mean? Are you reporting this issue against four separate
+trees?
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> Dlpar remove, drmgr phb and=20
+> pci remove operations are failing
+>
+> command ---> chhwres -r io --rsubtype slot -m "managed system name" -o r=
+=20
+> --id 6 -l 21030014
+>
+> output --->
+>
+> HSCL2929 The dynamic removal of I/O resources failed: The I/O slot=20
+> dynamic partitioning operation failed.=C2=A0 Here are the I/O slot IDs th=
+at=20
+> failed and the reasons for failure:
+>
+> Jan 02 02:20:22 caDlparCommand:execv to drmgr
+> Validating PHB DLPAR capability...yes.
+> Could not find drc index 0x20000014 to add to phb list
+> There are no DR capable slots on this system
+> Could not find PHB PHB 20
+>
+> The OS return code is 3.
+
+This isn't really a useful report to send to kernel mailing lists. This
+is a mixture of output from the HMC (Hardware Management Console) and
+output from drmgr, a powerpc-specific utility that the HMC invokes
+remotely on the host. There's no indication of a kernel problem.
+
+This is just a guess, but please ensure your powerpc-utils package
+(which contains drmgr) is reasonably recent. Versions up until something
+like 3-4 years ago don't understand the ibm,drc-info properties in the
+device tree and may experience failures like this.
+
+If that doesn't help, there is likely some other issue (kernel or not)
+to investigate here. Your best route to a resolution is probably to file
+an internal bug and make the test environment available to a developer
+who can look into it.
 

@@ -1,174 +1,98 @@
-Return-Path: <linux-next+bounces-570-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-571-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBB5F8216EA
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 05:34:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACE0B821773
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 06:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88F75280FDF
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 04:34:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BDCE282333
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 05:40:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23BF7EC9;
-	Tue,  2 Jan 2024 04:34:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16F772583;
+	Tue,  2 Jan 2024 05:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="g2fWFsoV"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gmxWiEhC"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EDEECD;
-	Tue,  2 Jan 2024 04:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63ECB2578;
+	Tue,  2 Jan 2024 05:40:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704170081;
-	bh=p84+/d7JM+5YT13P6Sdcft2mkIKgQb6NrBwFdV6zXhc=;
+	s=201702; t=1704174042;
+	bh=d6xn+WIHTzsqP8ORICwjmZ/ZzVaJexHGtmoB98rSg9g=;
 	h=Date:From:To:Cc:Subject:From;
-	b=g2fWFsoVuCi5K2VRN6suIsXmlTswGRWKDDL2J5SELg3fZsn6HN48y0hO8RTiEpzdV
-	 JRluCoTJeKHGg3sCnOwiZsstd/+lcb/o5uNMkuWiMDpI/IdODjSv+BLQAMtcLtlXcI
-	 D1s3/v9msAU0W9KTU5/gkn1G38pollHFiv/Jk3ndmH4aqzeLDFB3+3j4CtvIdWBN/u
-	 fB0Muf86MLNIijyQW6bEORmuXxvmp7bayD6uIGAdB1Qgem30IXhD6UpO9A/li4Apg3
-	 aMyepnyUfXZGtKuI8IjBd7y8YlJdoJcILoeD9ZqtfxMXJy12O/DZ+Zmq9Wmb2TLj6L
-	 RVQEl04/aTZNQ==
+	b=gmxWiEhCowbP35fpsyYDRDOoQu/hu6cUwvkoBVeAl0IwtmswWhsvM2Vf1viuOVVxg
+	 ijYy5iM+RQ5rtrwHJuRpAMj11KhHDH8Gy01DnXS+ah3RVsN/s7dj9BUxndRMLVEQLy
+	 IsXIEQ9cxU0ro8dU7vdsG0j0m9PSkqO1PIufo09bv4Rh8RuLTx66uzxU8ddWr9Sswj
+	 Z2/s3ARLt9mIdqCX7eMlSmOZ3WfmIAgL/73gOwos6d9ZSXjHG1cAUX9fr/GJWmMQkf
+	 k0Oe1aCbmuTg/Hv3D9WVugMOLy8qcAO7pcl59a82f1psnABw8p+NL7d5Z+l6n3l1wC
+	 Fr0cGkvlVY+ew==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T40PX5vrcz4wcd;
-	Tue,  2 Jan 2024 15:34:40 +1100 (AEDT)
-Date: Tue, 2 Jan 2024 15:34:38 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T41sj3d3lz4wbp;
+	Tue,  2 Jan 2024 16:40:41 +1100 (AEDT)
+Date: Tue, 2 Jan 2024 16:40:40 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Vlastimil Babka <vbabka@suse.cz>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>
-Subject: linux-next: manual merge of the slab tree with the mm tree
-Message-ID: <20240102153438.5b29f8c5@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the mm tree
+Message-ID: <20240102164040.2ea3e1f0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bs=xQ.87GHfE6RoDVE0Wg4h";
+Content-Type: multipart/signed; boundary="Sig_/pahxHYb0EYNbXm_Urb2dmD5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/bs=xQ.87GHfE6RoDVE0Wg4h
+--Sig_/pahxHYb0EYNbXm_Urb2dmD5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the slab tree got a conflict in:
+After merging the mm tree, today's linux-next build (htmldocs) produced
+this warning:
 
-  mm/slab_common.c
+Documentation/admin-guide/kdump/vmcoreinfo.rst:193: WARNING: Title underlin=
+e too short.
 
-between commits:
+(zone.free_area, NR_PAGE_ORDERS)
+-------------------------------
 
-  01869cf7b4c6 ("slub: use folio APIs in free_large_kmalloc()")
-  8017164cb101 ("slub: use a folio in __kmalloc_large_node")
+Introduced by commit
 
-from the mm tree and commits:
-
-  b774d3e326d3 ("mm/slab: move kfree() from slab_common.c to slub.c")
-  4862caa5cba0 ("mm/slab: move kmalloc() functions from slab_common.c to sl=
-ub.c")
-
-from the slab tree.
-
-I fixed it up (I used the latter version of this file and applied the
-following merge fix patch) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 2 Jan 2024 15:26:48 +1100
-Subject: [PATCH] fix up for "mm/slab: move kfree() from slab_common.c to
- slub.c"
-
-and "mm/slab: move kmalloc() functions from slab_common.c to slub.c"
-interacting with commits
-
-  01869cf7b4c6 ("slub: use folio APIs in free_large_kmalloc()")
-  8017164cb101 ("slub: use a folio in __kmalloc_large_node")
-
-from the mm tree
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/slub.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/mm/slub.c b/mm/slub.c
-index 236e728e49ed..2ef88bbf56a3 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -3915,7 +3915,7 @@ EXPORT_SYMBOL(kmem_cache_alloc_node);
-  */
- static void *__kmalloc_large_node(size_t size, gfp_t flags, int node)
- {
--	struct page *page;
-+	struct folio *folio;
- 	void *ptr =3D NULL;
- 	unsigned int order =3D get_order(size);
-=20
-@@ -3923,10 +3923,10 @@ static void *__kmalloc_large_node(size_t size, gfp_=
-t flags, int node)
- 		flags =3D kmalloc_fix_flags(flags);
-=20
- 	flags |=3D __GFP_COMP;
--	page =3D alloc_pages_node(node, flags, order);
--	if (page) {
--		ptr =3D page_address(page);
--		mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
-+	folio =3D (struct folio *)alloc_pages_node(node, flags, order);
-+	if (folio) {
-+		ptr =3D folio_address(folio);
-+		lruvec_stat_mod_folio(folio, NR_SLAB_UNRECLAIMABLE_B,
- 				      PAGE_SIZE << order);
- 	}
-=20
-@@ -4375,9 +4375,9 @@ static void free_large_kmalloc(struct folio *folio, v=
-oid *object)
- 	kasan_kfree_large(object);
- 	kmsan_kfree_large(object);
-=20
--	mod_lruvec_page_state(folio_page(folio, 0), NR_SLAB_UNRECLAIMABLE_B,
-+	lruvec_stat_mod_folio(folio, NR_SLAB_UNRECLAIMABLE_B,
- 			      -(PAGE_SIZE << order));
--	__free_pages(folio_page(folio, 0), order);
-+	folio_put(folio);
- }
-=20
- /**
---=20
-2.43.0
+  bfbd51786990 ("mm, treewide: introduce NR_PAGE_ORDERS")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/bs=xQ.87GHfE6RoDVE0Wg4h
+--Sig_/pahxHYb0EYNbXm_Urb2dmD5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTkl4ACgkQAVBC80lX
-0GxAZwf+N41qMPpe3J/EtCJxlZ2HvAR+pDkZYD9sqXeOGzL3POQ7VrhSA/CQHnQy
-cxQXI1vydvEKwRBU/DAvRg3MofNywsqM8klfo7sOlzB+iaRq6d0uP6YdY/R9dNwV
-4yRGh+/F+IWKJMHF6sXvYPZBm0s6yOiozPyp+mysp0IlBnL+CzGLH4MZjfA420HC
-URji94yXD+fRU9O6xWi7NMu6E7kUHExh5DqYaYu9RCwGG42hs3toB+sn75xp002m
-3TSE0wfMHiUDxoISQOdMxGO7fPXgpGUrlsANyMOvcvhp5+wvZLyWgkUq8p9zJt4h
-otm6MRpuqY2S/3GscDMkGg2ip15jyA==
-=Ngof
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTodgACgkQAVBC80lX
+0GzIZQf/SYrCG4got9Nhx5Js+OJTIRsfMY+EbEIpXZtDcw3JI5Yoi5LRex6s6EcF
+A0X8N77vVetcfcC2MqdP87J8WMIejxWGwXz+0wcSQhwUc3DEq0YLhuDyEUHIk9mF
+zXJnOa78gHvNtZ3vZrbQA0/Y+pLm+SC+Qqs/+uW4vh6vaFQsM8bmCZTw5B3Y65xR
+Oy34ccizG4763TMbaH7+IVhYClccnpjS5z2xOBIagMP3gTn0j3ENHFMgLjpzU9ir
+2kf9EpzlMSRIhi/VJl2tjL73x0tY0Qyve8Q5Gjl6qyQOplDmr92nPQC49zJ4Z2Fz
+eYVwX/Y3imVnnNwrvUDJ3ncgALYd3g==
+=+oVT
 -----END PGP SIGNATURE-----
 
---Sig_/bs=xQ.87GHfE6RoDVE0Wg4h--
+--Sig_/pahxHYb0EYNbXm_Urb2dmD5--
 

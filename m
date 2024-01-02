@@ -1,64 +1,62 @@
-Return-Path: <linux-next+bounces-569-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-570-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 174A28216DA
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 05:14:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBB5F8216EA
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 05:34:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FA7E1C210C4
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 04:14:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88F75280FDF
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 04:34:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F26EC9;
-	Tue,  2 Jan 2024 04:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23BF7EC9;
+	Tue,  2 Jan 2024 04:34:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="F+hD3Sct"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="g2fWFsoV"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7E0ECB;
-	Tue,  2 Jan 2024 04:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EDEECD;
+	Tue,  2 Jan 2024 04:34:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704168813;
-	bh=nzjB48cCE5VSIzRwROBH6itfJxdakHetauGeOCGlZUQ=;
+	s=201702; t=1704170081;
+	bh=p84+/d7JM+5YT13P6Sdcft2mkIKgQb6NrBwFdV6zXhc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=F+hD3SctfdecCH+JptjFhCzUgVmxxW375fljX4auBlQk5z5uqJMa/dlCg5j1SktBe
-	 N1VUvhdeO1C+DM4flBZyXe2IP0oDQWVSUgTTaV2d794tNsIlBO7nOg48pnTYX7B5RI
-	 cbdxYcv/TyhssTXnmqIYuuGp0Y+DL8Ov8utgqwae37NlhPJrjH2UhZ/w8vHyX9SKFW
-	 SgdFMgv+ajOy5mxkPpAD0xCgkolyDJiNBA7lKO7RC7k8PIVij0KIzdXORmOCtscOlm
-	 HO6SVgflewncTorvwM13S2ax+YTy3IxRLfbU5Cnypx8mJMkx2k8uXqams8Q2cNfJiz
-	 nOnWBL8l35bdA==
+	b=g2fWFsoVuCi5K2VRN6suIsXmlTswGRWKDDL2J5SELg3fZsn6HN48y0hO8RTiEpzdV
+	 JRluCoTJeKHGg3sCnOwiZsstd/+lcb/o5uNMkuWiMDpI/IdODjSv+BLQAMtcLtlXcI
+	 D1s3/v9msAU0W9KTU5/gkn1G38pollHFiv/Jk3ndmH4aqzeLDFB3+3j4CtvIdWBN/u
+	 fB0Muf86MLNIijyQW6bEORmuXxvmp7bayD6uIGAdB1Qgem30IXhD6UpO9A/li4Apg3
+	 aMyepnyUfXZGtKuI8IjBd7y8YlJdoJcILoeD9ZqtfxMXJy12O/DZ+Zmq9Wmb2TLj6L
+	 RVQEl04/aTZNQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T3zx94417z4wcM;
-	Tue,  2 Jan 2024 15:13:33 +1100 (AEDT)
-Date: Tue, 2 Jan 2024 15:13:32 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T40PX5vrcz4wcd;
+	Tue,  2 Jan 2024 15:34:40 +1100 (AEDT)
+Date: Tue, 2 Jan 2024 15:34:38 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Vlastimil Babka <vbabka@suse.cz>, Andrew Morton
  <akpm@linux-foundation.org>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>, Andrey Konovalov
- <andreyknvl@google.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the slab tree with the mm-stable, mm
- trees
-Message-ID: <20240102151332.48a87d86@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>
+Subject: linux-next: manual merge of the slab tree with the mm tree
+Message-ID: <20240102153438.5b29f8c5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wfB=MU5Q0Sr7Y2VG9iIw_Sa";
+Content-Type: multipart/signed; boundary="Sig_/bs=xQ.87GHfE6RoDVE0Wg4h";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/wfB=MU5Q0Sr7Y2VG9iIw_Sa
+--Sig_/bs=xQ.87GHfE6RoDVE0Wg4h
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -66,85 +64,111 @@ Hi all,
 
 Today's linux-next merge of the slab tree got a conflict in:
 
-  mm/kasan/quarantine.c
+  mm/slab_common.c
 
 between commits:
 
-  773688a6cb24 ("kasan: use stack_depot_put for Generic mode")
-  435736586ddc ("kasan: stop leaking stack trace handles")
+  01869cf7b4c6 ("slub: use folio APIs in free_large_kmalloc()")
+  8017164cb101 ("slub: use a folio in __kmalloc_large_node")
 
-from the mm-stable, mm trees and commit:
+from the mm tree and commits:
 
-  72786c0a3dc5 ("KASAN: remove code paths guarded by CONFIG_SLAB")
+  b774d3e326d3 ("mm/slab: move kfree() from slab_common.c to slub.c")
+  4862caa5cba0 ("mm/slab: move kmalloc() functions from slab_common.c to sl=
+ub.c")
 
 from the slab tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
+I fixed it up (I used the latter version of this file and applied the
+following merge fix patch) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
 conflicts should be mentioned to your upstream maintainer when your tree
 is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 2 Jan 2024 15:26:48 +1100
+Subject: [PATCH] fix up for "mm/slab: move kfree() from slab_common.c to
+ slub.c"
+
+and "mm/slab: move kmalloc() functions from slab_common.c to slub.c"
+interacting with commits
+
+  01869cf7b4c6 ("slub: use folio APIs in free_large_kmalloc()")
+  8017164cb101 ("slub: use a folio in __kmalloc_large_node")
+
+from the mm tree
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ mm/slub.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/mm/slub.c b/mm/slub.c
+index 236e728e49ed..2ef88bbf56a3 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3915,7 +3915,7 @@ EXPORT_SYMBOL(kmem_cache_alloc_node);
+  */
+ static void *__kmalloc_large_node(size_t size, gfp_t flags, int node)
+ {
+-	struct page *page;
++	struct folio *folio;
+ 	void *ptr =3D NULL;
+ 	unsigned int order =3D get_order(size);
+=20
+@@ -3923,10 +3923,10 @@ static void *__kmalloc_large_node(size_t size, gfp_=
+t flags, int node)
+ 		flags =3D kmalloc_fix_flags(flags);
+=20
+ 	flags |=3D __GFP_COMP;
+-	page =3D alloc_pages_node(node, flags, order);
+-	if (page) {
+-		ptr =3D page_address(page);
+-		mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
++	folio =3D (struct folio *)alloc_pages_node(node, flags, order);
++	if (folio) {
++		ptr =3D folio_address(folio);
++		lruvec_stat_mod_folio(folio, NR_SLAB_UNRECLAIMABLE_B,
+ 				      PAGE_SIZE << order);
+ 	}
+=20
+@@ -4375,9 +4375,9 @@ static void free_large_kmalloc(struct folio *folio, v=
+oid *object)
+ 	kasan_kfree_large(object);
+ 	kmsan_kfree_large(object);
+=20
+-	mod_lruvec_page_state(folio_page(folio, 0), NR_SLAB_UNRECLAIMABLE_B,
++	lruvec_stat_mod_folio(folio, NR_SLAB_UNRECLAIMABLE_B,
+ 			      -(PAGE_SIZE << order));
+-	__free_pages(folio_page(folio, 0), order);
++	folio_put(folio);
+ }
+=20
+ /**
+--=20
+2.43.0
+
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc mm/kasan/quarantine.c
-index 8afa77bc5d3b,138c57b836f2..000000000000
---- a/mm/kasan/quarantine.c
-+++ b/mm/kasan/quarantine.c
-@@@ -143,10 -143,7 +143,9 @@@ static void *qlink_to_object(struct qli
-  static void qlink_free(struct qlist_node *qlink, struct kmem_cache *cache)
-  {
-  	void *object =3D qlink_to_object(qlink, cache);
- -	struct kasan_free_meta *meta =3D kasan_get_free_meta(cache, object);
- +	struct kasan_free_meta *free_meta =3D kasan_get_free_meta(cache, object);
-- 	unsigned long flags;
- +
- +	kasan_release_object_meta(cache, object);
- =20
-  	/*
-  	 * If init_on_free is enabled and KASAN's free metadata is stored in
-@@@ -156,15 -153,15 +155,9 @@@
-  	 */
-  	if (slab_want_init_on_free(cache) &&
-  	    cache->kasan_info.free_meta_offset =3D=3D 0)
- -		memzero_explicit(meta, sizeof(*meta));
- -
- -	/*
- -	 * As the object now gets freed from the quarantine, assume that its
- -	 * free track is no longer valid.
- -	 */
- -	*(u8 *)kasan_mem_to_shadow(object) =3D KASAN_SLAB_FREE;
- +		memzero_explicit(free_meta, sizeof(*free_meta));
- =20
-- 	if (IS_ENABLED(CONFIG_SLAB))
-- 		local_irq_save(flags);
--=20
-  	___cache_free(cache, object, _THIS_IP_);
--=20
-- 	if (IS_ENABLED(CONFIG_SLAB))
-- 		local_irq_restore(flags);
-  }
- =20
-  static void qlist_free_all(struct qlist_head *q, struct kmem_cache *cache)
-
---Sig_/wfB=MU5Q0Sr7Y2VG9iIw_Sa
+--Sig_/bs=xQ.87GHfE6RoDVE0Wg4h
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTjWwACgkQAVBC80lX
-0Gy4/Af/cL43FDP9ZkJ03TvRNhUmSZ6igR6ZwynFZcTGx0PzE/F+8zWZNL02iGWy
-LrQ6npksmc6H6xGkUfzh4YUIh3rsgjXp7EVEeDQz+nWQu8mc6i5mUsUfa5nxmafX
-DO/9c5UjfAEvCqlV4hpP5lyaB6PrubPY9xWs7uNn992kCcpQXVHZhrPpT5kkIjKb
-n0SW4HWapBha/ojZuTudzjQxP4AJeR+ofxg/788AYY2D83OnEheYVNbGS+9OEyOy
-RMtDQeFrKWI+nJF8GmNB5KfEc1lMHQklfShGiYsHwbLtEhZHcKyoHLHAJRQHH3yg
-FsbdXGYTJqEPCIIi3lIBXcRGGNZkqg==
-=7QH2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTkl4ACgkQAVBC80lX
+0GxAZwf+N41qMPpe3J/EtCJxlZ2HvAR+pDkZYD9sqXeOGzL3POQ7VrhSA/CQHnQy
+cxQXI1vydvEKwRBU/DAvRg3MofNywsqM8klfo7sOlzB+iaRq6d0uP6YdY/R9dNwV
+4yRGh+/F+IWKJMHF6sXvYPZBm0s6yOiozPyp+mysp0IlBnL+CzGLH4MZjfA420HC
+URji94yXD+fRU9O6xWi7NMu6E7kUHExh5DqYaYu9RCwGG42hs3toB+sn75xp002m
+3TSE0wfMHiUDxoISQOdMxGO7fPXgpGUrlsANyMOvcvhp5+wvZLyWgkUq8p9zJt4h
+otm6MRpuqY2S/3GscDMkGg2ip15jyA==
+=Ngof
 -----END PGP SIGNATURE-----
 
---Sig_/wfB=MU5Q0Sr7Y2VG9iIw_Sa--
+--Sig_/bs=xQ.87GHfE6RoDVE0Wg4h--
 

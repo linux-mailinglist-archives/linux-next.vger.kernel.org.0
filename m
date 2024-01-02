@@ -1,63 +1,63 @@
-Return-Path: <linux-next+bounces-566-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-567-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 204468216BE
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 04:49:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B3638216C4
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 04:55:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA26B1C20CC5
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 03:49:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4924F1C2109A
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jan 2024 03:55:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87628EC9;
-	Tue,  2 Jan 2024 03:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF7C1FBC;
+	Tue,  2 Jan 2024 03:55:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MSH5f8Dt"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iImMsRKf"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F00EBF;
-	Tue,  2 Jan 2024 03:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A461A1856;
+	Tue,  2 Jan 2024 03:55:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704167367;
-	bh=fHH2oL5nwatjdyOgNtoiTqFaYGBo4OoqMQjSZLVF+N8=;
+	s=201702; t=1704167736;
+	bh=9EJzV/K6BJHDIpYls8ca3lyX+yAhIKGtHlsors8qaBw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=MSH5f8DtAwJHOoRk1DPqduTTJeF/Xi4jsKsBhsoW/i3fEs/aBNKK6AVpeWxcc+iKV
-	 I2UIs0/oSe5yE18b722exYGgudFhIYW8TDtQKFftE8Dn81d4MRphXKNHekMZyUlKUv
-	 hSqiun8yL48o18f0r+NUlHaRN/zhKZMDRmdnL3qmZCyI1Ub8m6LZR+ljVH8zqPHKQn
-	 jIopWmPOwBOTkJEZWj9vZRrHziA5dhs7De3oMxOSnlYOf2BzGBOrFa4cH0SQ4BAU7A
-	 FMzXrd7rg7r0Y7FI8vqoGaXWhFdv2x000cS9wZjbM22IOZL+RbhG5+UW4JFq0RNAZb
-	 FyMdXwfhfxtOw==
+	b=iImMsRKf9IcHsewduk7yOdcFUvwJ0vk7FY2bCgvNCLevQqnxDE9th4olCvzoBxeeH
+	 1ZUfScF63xjpEKkhVHmUSAjnGc5vIp1kkiuxaF6f2h0uvAL5F+Jz5Ff/cYWMDzKaO8
+	 aAHpWut+HRwyXOh6n5NDJKlg3rxlYpr56JgCngxkRL50Z6MvQh77NUCllLCg1RWnei
+	 HU6+dJG+jnkgIs7CB/KwvWX0Zn89OugN9czqQ+8/Lx+n4EX4xJwRUM4FK/I6MBubXM
+	 GXlHDySAbtjOWYNA/k19Y8oWyciYBaLazzqJz7YTcikOyf9DcEnY4d02CazctuOupS
+	 3fTmfNKeTqrPA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T3zPL2C8kz4wxX;
-	Tue,  2 Jan 2024 14:49:26 +1100 (AEDT)
-Date: Tue, 2 Jan 2024 14:49:24 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T3zXS431hz4wx8;
+	Tue,  2 Jan 2024 14:55:36 +1100 (AEDT)
+Date: Tue, 2 Jan 2024 14:55:34 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Dan Williams <dan.j.williams@intel.com>, "Rafael J. Wysocki"
  <rjw@rjwysocki.net>
 Cc: Dave Jiang <dave.jiang@intel.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>
+ <rafael.j.wysocki@intel.com>, Yuntao Wang <ytcoode@gmail.com>
 Subject: linux-next: manual merge of the cxl tree with the pm tree
-Message-ID: <20240102144924.1fdfa044@canb.auug.org.au>
+Message-ID: <20240102145534.5c977c95@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/f6bH5xUlDv/hJA7yK.XU.zQ";
+Content-Type: multipart/signed; boundary="Sig_/a.JrPGJ7CTLo+ha_W7wqBAa";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/f6bH5xUlDv/hJA7yK.XU.zQ
+--Sig_/a.JrPGJ7CTLo+ha_W7wqBAa
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -65,21 +65,21 @@ Hi all,
 
 Today's linux-next merge of the cxl tree got a conflict in:
 
-  include/linux/acpi.h
+  lib/fw_table.c
 
 between commit:
 
-  f47507988145 ("thermal: ACPI: Move the ACPI thermal library to drivers/ac=
-pi/")
+  4b3805daaacb ("ACPI: tables: Correct and clean up the logic of acpi_parse=
+_entries_array()")
 
 from the pm tree and commit:
 
-  ca53543d8e34 ("acpi: numa: Add helper function to retrieve the performanc=
-e attributes")
+  60e43fe5285e ("lib/firmware_table: tables: Add CDAT table parsing support=
+")
 
 from the cxl tree.
 
-Dan, thanks for the heads up.
+Dan, thanks again for the heads up.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -92,54 +92,110 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/acpi.h
-index 118a18b7ff84,8b0761c682f9..000000000000
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@@ -424,13 -425,16 +425,23 @@@ extern int acpi_blacklisted(void)
-  extern void acpi_osi_setup(char *str);
-  extern bool acpi_osi_is_win8(void);
+diff --cc lib/fw_table.c
+index c49a09ee3853,1e5e0b2f7012..000000000000
+--- a/lib/fw_table.c
++++ b/lib/fw_table.c
+@@@ -85,9 -98,27 +98,22 @@@ acpi_get_subtable_type(char *id
+  	return ACPI_SUBTABLE_COMMON;
+  }
  =20
- +#ifdef CONFIG_ACPI_THERMAL_LIB
- +int thermal_acpi_active_trip_temp(struct acpi_device *adev, int id, int *=
-ret_temp);
- +int thermal_acpi_passive_trip_temp(struct acpi_device *adev, int *ret_tem=
-p);
- +int thermal_acpi_hot_trip_temp(struct acpi_device *adev, int *ret_temp);
- +int thermal_acpi_critical_trip_temp(struct acpi_device *adev, int *ret_te=
-mp);
- +#endif
- +
-+ #ifdef CONFIG_ACPI_HMAT
-+ int acpi_get_genport_coordinates(u32 uid, struct access_coordinate *coord=
-);
-+ #else
-+ static inline int acpi_get_genport_coordinates(u32 uid,
-+ 					       struct access_coordinate *coord)
+- static __init_or_acpilib int call_handler(struct acpi_subtable_proc *proc,
+- 					  union acpi_subtable_headers *hdr,
+- 					  unsigned long end)
++ static unsigned long __init_or_fwtbl_lib
++ acpi_table_get_length(enum acpi_subtable_type type,
++ 		      union fw_table_header *header)
 + {
-+ 	return -EOPNOTSUPP;
-+ }
-+ #endif
++ 	if (type =3D=3D CDAT_SUBTABLE) {
++ 		__le32 length =3D (__force __le32)header->cdat.length;
 +=20
-  #ifdef CONFIG_ACPI_NUMA
-  int acpi_map_pxm_to_node(int pxm);
-  int acpi_get_node(acpi_handle handle);
++ 		return le32_to_cpu(length);
++ 	}
++=20
++ 	return header->acpi.length;
++ }
++=20
+ -static __init_or_fwtbl_lib bool has_handler(struct acpi_subtable_proc *pr=
+oc)
+ -{
+ -	return proc->handler || proc->handler_arg;
+ -}
+ -
++ static __init_or_fwtbl_lib int call_handler(struct acpi_subtable_proc *pr=
+oc,
++ 					    union acpi_subtable_headers *hdr,
++ 					    unsigned long end)
+  {
+  	if (proc->handler)
+  		return proc->handler(hdr, end);
+@@@ -127,10 -158,14 +153,13 @@@ acpi_parse_entries_array(char *id, unsi
+  {
+  	unsigned long table_end, subtable_len, entry_len;
+  	struct acpi_subtable_entry entry;
++ 	enum acpi_subtable_type type;
+  	int count =3D 0;
+ -	int errs =3D 0;
+  	int i;
+ =20
+- 	table_end =3D (unsigned long)table_header + table_header->length;
++ 	type =3D acpi_get_subtable_type(id);
++ 	table_end =3D (unsigned long)table_header +
++ 		    acpi_table_get_length(type, table_header);
+ =20
+  	/* Parse all entries looking for a match. */
+ =20
+@@@ -168,9 -209,31 +197,31 @@@
+  	}
+ =20
+  	if (max_entries && count > max_entries) {
+ -		pr_warn("[%4.4s:0x%02x] found the maximum %i entries\n",
+ -			id, proc->id, count);
+ +		pr_warn("[%4.4s:0x%02x] ignored %i entries of %i found\n",
+ +			id, proc->id, count - max_entries, count);
+  	}
+ =20
+ -	return errs ? -EINVAL : count;
+ +	return count;
+  }
++=20
++ int __init_or_fwtbl_lib
++ cdat_table_parse(enum acpi_cdat_type type,
++ 		 acpi_tbl_entry_handler_arg handler_arg,
++ 		 void *arg,
++ 		 struct acpi_table_cdat *table_header)
++ {
++ 	struct acpi_subtable_proc proc =3D {
++ 		.id		=3D type,
++ 		.handler_arg	=3D handler_arg,
++ 		.arg		=3D arg,
++ 	};
++=20
++ 	if (!table_header)
++ 		return -EINVAL;
++=20
++ 	return acpi_parse_entries_array(ACPI_SIG_CDAT,
++ 					sizeof(struct acpi_table_cdat),
++ 					(union fw_table_header *)table_header,
++ 					&proc, 1, 0);
++ }
++ EXPORT_SYMBOL_FWTBL_LIB(cdat_table_parse);
 
---Sig_/f6bH5xUlDv/hJA7yK.XU.zQ
+--Sig_/a.JrPGJ7CTLo+ha_W7wqBAa
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTh8QACgkQAVBC80lX
-0GxdPAgAhA+s3BHKsaU1OvdOYJ4rEh13P2Xvl3m1AR36VmgCbDO6QtLramQl5dW8
-V7dpjHs5wJbifzj2HLfhsL/jHFgykZOMvdkBK8N/ZDmW3TQ5xNKbrKWFx7HCSdkg
-BgH3OAHkYJI2y5glhMFm4UyBy0uGr7kqzpRzFA21/35q1BRCzlcwJI7qT9tB8Dn1
-gyNVfDt0wZrI20cg7EizQyVbraTPzq43xWX3FsnJjyh8XWi4kgR4mp7Q3llJhRld
-4UkExckcrVBK2YPAcovWDY1RGVoO5nHlQVgSg8xk5Q91RvdNYmRXqU0tR/WNg9mc
-cb1MeiKVjgq9Nuny8pt0WjYsSZbAkQ==
-=OyXZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWTiTYACgkQAVBC80lX
+0Gxfjwf7BoXSKRmPb56yX1xFojky3aQn1ISSt90PYAKtNAarGy4pJOkLHznVjg+l
+tcI5bWjvzanbSOZ3BJRPfOUdtyNBoM6tbfnstOFZJTyQNIe2amlgZppMDzr3MVeG
+Vp+oIr6m3+V5/4n3No1uknJvr7c0DtpJJdj+pJbFzS9F5vTGwlSn076lDnrtaQgS
+hN/p9pC1WgRNRO31m1cw862P99CfMvP9WWBX3g9KLxYk4pnlM5eJrwHYFpy3jV7g
+fJWoA+tTD4et4pT1/YOlcCRTfje29lWG4s3NNfApUN+rOf3dM4W5rtcey+6tm0sf
+0fYsdSS0H2jEArM9S7A9d6CMTuex/g==
+=zpug
 -----END PGP SIGNATURE-----
 
---Sig_/f6bH5xUlDv/hJA7yK.XU.zQ--
+--Sig_/a.JrPGJ7CTLo+ha_W7wqBAa--
 

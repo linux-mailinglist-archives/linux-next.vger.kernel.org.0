@@ -1,176 +1,208 @@
-Return-Path: <linux-next+bounces-586-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-587-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B062C822636
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jan 2024 02:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 44A8882267B
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jan 2024 02:19:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17651B21CB0
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jan 2024 01:03:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91384B214AE
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jan 2024 01:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E9DEC5;
-	Wed,  3 Jan 2024 01:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1254ED3;
+	Wed,  3 Jan 2024 01:19:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="MJlrPr7+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kKzEWp4c"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6313DEBD
-	for <linux-next@vger.kernel.org>; Wed,  3 Jan 2024 01:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3605cc5919eso925915ab.1
-        for <linux-next@vger.kernel.org>; Tue, 02 Jan 2024 17:03:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1704243809; x=1704848609; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=L+gEpu32YH+QW6z6BbC9twpsyrxWMKXizRTZ/xrOk2g=;
-        b=MJlrPr7+e/tsthbSahQCB6ek9Hnd8Q6v/e3XQ/P/zKUBfh0+2tWnO49JeAmKpo1loJ
-         qJSwmqJsd3r/D2+1+dwQrzTreFLMwhcxum7SJe/zYQ/nKomthRUG5F037YswwJ1nic7l
-         EaWiQECnuR1ip22k9JNffRG19PXrCrOVdiL9SnCFUzHDtsy6DD9rqX2osg7FFpxitcKl
-         6e8jUgP9gAv9gxplRtzRlnaUgj7f8R9NnKB4f4G4tH3ZmOk+YntrjNzt0rsmbPkq9tuN
-         4keJ69o36U2i7pAnLIysdNuxG7caiOEdwvkMFeh/ey5zZV3DibmAa0dyjZUXR2Oq6+op
-         qVXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704243809; x=1704848609;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L+gEpu32YH+QW6z6BbC9twpsyrxWMKXizRTZ/xrOk2g=;
-        b=PJKm2NjztCav/nHVDguKHvvWyEEWdfWLCFECMJSPccBQjc7oHobBaIoyQwmlp4MMIu
-         wiu6eqIaT8mOMCqAiBTkb08CJYsk6Rf1jUS2yx9eKhwUc9OmG61NeOpmav3ojwzGHCix
-         52i8IV4nFDUNFf31JyVAP6Q8TnjlvI45ijFHoJucG8jzN7Ez5xDzpAg0DSTEV4UNlZME
-         OLveOrF1+CDOWVIdbDvwIlh2PzF26+6QwBH36Tp2UDf4e73ATF4CA8/wbTGXUhmf4tBF
-         WEbO0uyiGvo/HaWZUku1U7zg26AQ4OaXc4HwFzdFlGxbOh8/P8kDZysq1Wn7Z69Wf1r9
-         5kdQ==
-X-Gm-Message-State: AOJu0YzKgLY5sbXqRLzVvezW3OWhbbv821j9IEJKXabVg25cJfuzLScd
-	XREfir221Hg7vYme79RCxpHNRRQ12Wuc1PVI3dNJz3D5h/4=
-X-Google-Smtp-Source: AGHT+IEHmCeePXIhCO+eEzZS7O5B0g8FE/o3v3S67wVr4UEhKmMDUMG1cV4/aj1B87SYuFsfQIJiIQ==
-X-Received: by 2002:a05:6e02:3202:b0:35f:eb58:7c51 with SMTP id cd2-20020a056e02320200b0035feb587c51mr24329731ilb.75.1704243808997;
-        Tue, 02 Jan 2024 17:03:28 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id m22-20020a17090a159600b0028b3539cd97sm285254pja.20.2024.01.02.17.03.27
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jan 2024 17:03:28 -0800 (PST)
-Message-ID: <6594b260.170a0220.de327.0e56@mx.google.com>
-Date: Tue, 02 Jan 2024 17:03:28 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68144EC5;
+	Wed,  3 Jan 2024 01:19:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1704244754;
+	bh=urPXJ9CAYT+AG+LKifc8d+LB3sczHO2f6I4c8ea4VpE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=kKzEWp4cchQIXLs1cN6l3dUvIQqDcqdefD9ABjxbRlSwO7w7ofFZo9Q8auORLv1Pp
+	 FU1zKJQSuJUkW4ToO/6/fR5L+HTLpBSZzyiUcXq1jX6HF3CkRdwgSq1+zTEupwn/sX
+	 TbdHdtavH50jiQ8qgfCPwGUltxZSmrRPH0OHcoyTkbDARPli9Cuaei3uLKEpTIBqHx
+	 NHINDOF2OrvRr1AgHubajbM9NtEet7sHAlLni3Ta7l1fYiuQnjuwVucskrO624h6AH
+	 veY4DliHpXo3//LEy+PtyviPM3DFnC63TlLUjrOKEznLZmhicpR853YvOCHxEIN8yD
+	 170kI47eTCg6Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T4X1Z0Lj2z4wcc;
+	Wed,  3 Jan 2024 12:19:14 +1100 (AEDT)
+Date: Wed, 3 Jan 2024 12:19:11 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Dave Airlie <airlied@redhat.com>
+Cc: DRI <dri-devel@lists.freedesktop.org>, Andrzej Hajda
+ <andrzej.hajda@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm tree
+Message-ID: <20240103121911.4ec8f237@canb.auug.org.au>
+In-Reply-To: <20240102111222.2db11208@canb.auug.org.au>
+References: <20240102111222.2db11208@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/s+4cTGjQsACLBK52RwMBU/+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/s+4cTGjQsACLBK52RwMBU/+
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.7-rc8-93-g29f356fda1035
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc8-93-g29f356fda1035)
-To: linux-next@vger.kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
-8-93-g29f356fda1035)
+Hi all,
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.7-rc8-93-g29f356fda1035/
+On Tue, 2 Jan 2024 11:12:22 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the drm tree, today's linux-next build (x86_64 allmodconfig)
+> produced this warning:
+>=20
+> In file included from include/drm/drm_mm.h:51,
+>                  from drivers/gpu/drm/xe/xe_bo_types.h:11,
+>                  from drivers/gpu/drm/xe/xe_bo.h:11,
+>                  from drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem=
+_object.h:11,
+>                  from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:1=
+5,
+>                  from drivers/gpu/drm/i915/display/intel_display_power.c:=
+8:
+> drivers/gpu/drm/i915/display/intel_display_power.c: In function 'print_as=
+ync_put_domains_state':
+> drivers/gpu/drm/i915/display/intel_display_power.c:408:29: warning: forma=
+t '%lu' expects argument of type 'long unsigned int', but argument 5 has ty=
+pe 'int' [-Wformat=3D]
+>   408 |         drm_dbg(&i915->drm, "async_put_wakeref %lu\n",
+>       |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+>   409 |                 power_domains->async_put_wakeref);
+>       |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |                              |
+>       |                              int
+>=20
+> Introduced by commit
+>=20
+>   b49e894c3fd8 ("drm/i915: Replace custom intel runtime_pm tracker with r=
+ef_tracker library")
+>=20
+> This would be an error except that I am building with CONFIG_WERROR=3Dn
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.7-rc8-93-g29f356fda1035
-Git Commit: 29f356fda10353cf707f9856793c3de2c954572f
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+OK, so I have turned off CONFIG_WERROR=3Dn in the run up to the merge
+window opening and so this is now a build failure.  I have tried
+applying the following patch for today:
 
-Warnings Detected:
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 3 Jan 2024 11:40:26 +1100
+Subject: [PATCH] fix up for "drm/i915: Replace custom intel runtime_pm trac=
+ker
+ with ref_tracker library"
 
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-For more info write to <info@kernelci.org>
+ drivers/gpu/drm/i915/display/intel_display_power.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/display/intel_display_power.c b/drivers/g=
+pu/drm/i915/display/intel_display_power.c
+index 5f091502719b..f23080a4368d 100644
+--- a/drivers/gpu/drm/i915/display/intel_display_power.c
++++ b/drivers/gpu/drm/i915/display/intel_display_power.c
+@@ -405,7 +405,7 @@ print_async_put_domains_state(struct i915_power_domains=
+ *power_domains)
+ 						     struct drm_i915_private,
+ 						     display.power.domains);
+=20
+-	drm_dbg(&i915->drm, "async_put_wakeref %lu\n",
++	drm_dbg(&i915->drm, "async_put_wakeref %u\n",
+ 		power_domains->async_put_wakeref);
+=20
+ 	print_power_domains(power_domains, "async_put_domains[0]",
+--=20
+2.43.0
+
+but that produces this failure:
+
+In file included from include/drm/ttm/ttm_resource.h:34,
+                 from include/drm/ttm/ttm_device.h:30,
+                 from drivers/gpu/drm/i915/i915_drv.h:37,
+                 from drivers/gpu/drm/i915/display/intel_display_power.c:8:=
+ =20
+drivers/gpu/drm/i915/display/intel_display_power.c: In function 'print_asyn=
+c_put_domains_state':
+drivers/gpu/drm/i915/display/intel_display_power.c:408:29: error: format '%=
+u' expects argument of type 'unsigned int', but argument 5 has type 'intel_=
+wakeref_t' {aka 'long unsigned int'} [-Werror=3Dformat=3D]
+  408 |         drm_dbg(&i915->drm, "async_put_wakeref %u\n",
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~
+  409 |                 power_domains->async_put_wakeref);
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                              |
+      |                              intel_wakeref_t {aka long unsigned int}
+
+I don't understand how the above patch can change the compilation like
+that.  I must be missing something obvious.  Maybe my compiler is
+strangely broken?  I have applied the following instead (which at least
+builds):
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 3 Jan 2024 11:40:26 +1100
+Subject: [PATCH] fix up for "drm/i915: Replace custom intel runtime_pm trac=
+ker
+ with ref_tracker library"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/i915/display/intel_display_power.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/display/intel_display_power.c b/drivers/g=
+pu/drm/i915/display/intel_display_power.c
+index 5f091502719b..6253ce061d20 100644
+--- a/drivers/gpu/drm/i915/display/intel_display_power.c
++++ b/drivers/gpu/drm/i915/display/intel_display_power.c
+@@ -406,7 +406,7 @@ print_async_put_domains_state(struct i915_power_domains=
+ *power_domains)
+ 						     display.power.domains);
+=20
+ 	drm_dbg(&i915->drm, "async_put_wakeref %lu\n",
+-		power_domains->async_put_wakeref);
++		(unsigned long int)power_domains->async_put_wakeref);
+=20
+ 	print_power_domains(power_domains, "async_put_domains[0]",
+ 			    &power_domains->async_put_domains[0]);
+--=20
+2.43.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/s+4cTGjQsACLBK52RwMBU/+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWUtg8ACgkQAVBC80lX
+0Gw4XAf/SsBTSacexMHcgjpPAfhFCyCSKx7Hj9djfVTEPpclTByCq0TFzqw1cZwb
+mm/uqwWRxtMyoHFvPQaZGQE8vWp1pN+r5w8oXTr2SZYAftR7MNMvQDzRJG8lBcUW
+lSmGcerxuyvbK04KfugYSZbCe8ePdQIXW47fe8W+k63ri5Du8XvxoGcUGMd5R6+m
+bRP/nZ0LX/+OTw1ycd3ZPpmQOmyqa8DZpqiDRVx1pa/BjxYQhub2tjSlxlJoQUUF
+ZVjYg9+pjzqV0g3q53kWKw/lbjxpoPT/yXlg01Nqtt1GdcSYQFC7J6WClBn2O4nX
+MWI4OBNfOFMlsgPeZxbVOLuZqvRdVQ==
+=/R/y
+-----END PGP SIGNATURE-----
+
+--Sig_/s+4cTGjQsACLBK52RwMBU/+--
 

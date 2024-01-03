@@ -1,135 +1,109 @@
-Return-Path: <linux-next+bounces-595-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-596-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E76482333A
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jan 2024 18:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CF52823398
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jan 2024 18:41:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 216851F24D11
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jan 2024 17:30:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0C091F2145E
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jan 2024 17:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCFEC1C291;
-	Wed,  3 Jan 2024 17:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0FE31D55C;
+	Wed,  3 Jan 2024 17:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uUPap1lO"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="S8cBOPo0";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qYLe51Oe"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9911C283;
-	Wed,  3 Jan 2024 17:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72774C433C7;
-	Wed,  3 Jan 2024 17:30:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704303024;
-	bh=Ju7Vq8CwuQ7jiiyXLGXUEI+QEL8KuKs42zh0z+rASmY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uUPap1lOmnZZcoDn17aA8Nd55HVoqi1isFli+gdAOiYCvRBKZm3kV6DODXZqV3dQN
-	 /nDvDhmFjdjQA/MmahaHI21zT33AjRILypCNBJG4A1uriIOq8ZAINhWLrW9YJXn+Kz
-	 eO+wKSkeRD6KYVw8sAxMUMcAOc8gwL5oqZSe5zD9PR1tGE+yO7nY7MKdJWeueZAUs3
-	 Pd4Bk8blzw16+B7IoBhzdeDHSYtx7JQvdKY5WL6sOtSHNBf7OuUmRddln8AdADXFtF
-	 At8jiyYJw+898xhPXiBkt486fIHDmNiLKnQw46JUnD6uVU1Wjib88XKgtGuwetLQWC
-	 7bP87sEkD5xHw==
-Date: Wed, 3 Jan 2024 17:30:18 +0000
-From: Will Deacon <will@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-	ARM <linux-arm-kernel@lists.infradead.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the arm-soc tree with the arm-perf
- tree
-Message-ID: <20240103173018.GD5954@willie-the-truck>
-References: <20240103100324.05f47bb8@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29DF1D52E;
+	Wed,  3 Jan 2024 17:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 564E43200A5E;
+	Wed,  3 Jan 2024 12:39:18 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 03 Jan 2024 12:39:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1704303557; x=1704389957; bh=AmXiwz8LUM
+	E91m64esk/QdAtIjEuLeDqTmwpf180Hkw=; b=S8cBOPo0YUOXhtfvbQl/dKlMmp
+	spGNpNrq0X7DR1Z/N2hHrSSWtspS3rLy+YRxi9aSMRpk8ZPLpp7QD4TyNdsbYYF2
+	xyHxbFVOjHXs1qwFkxfeN81PJMY8b/c/UeyQT2++d22Ogz5AJFDbDK6m0yhSLTi7
+	Z3DKTDpP7gYaqZ43iO+3GqL/P12TWhnzS4giFFA9GZZaUHSihyo8Qq6JR3f23Yu2
+	XpwGpv4MWaDuHi+M1OTMD7dNisZmF6tYhY886XPY+QqtOCqbC+nPprV6OehWLU/r
+	IwIyN+cHfo60HZOL/DRVslfA+ymQFslUDwYDnadol3xnU19WtbGNNdk5HZtA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1704303557; x=1704389957; bh=AmXiwz8LUME91m64esk/QdAtIjEu
+	LeDqTmwpf180Hkw=; b=qYLe51OejE4O8CPjq4w8PpeRfhYj45FIxb0C37utI4XQ
+	pmVsKLnU95WUUBarcRSTOYBC1C/1nXBlflucmE/1v6/BE2d8cQ4u2NNHLWv/4eUf
+	tNIokEP/dyylTacQw4rfGTJI5WNfF68Te8kAsP97qZqWeEInoDwkZQZd+pOg4hl7
+	ULCCh0XDsPRhLilaB8BFwRFpDhyK1G7smD9hfMadk9tS33Ma/FyZ5NQbWhJH7o5T
+	6SCRAmRXtzgYAglvgzZfp20aEfMx8ng1b24bHHBcjTQqjQ0/4wf+nczqDK/633cf
+	2fNEOZYpcvPELfsi6Ogv/VB1QyMaYyi896ADrF6Cbg==
+X-ME-Sender: <xms:xZuVZVUhuJar-8WeWKnC-YYGCex-mx5ofyIVScjpIJhelXn7EiM5pg>
+    <xme:xZuVZVmrqlKHo8FsOqJPCLwUS8W7L2Y9rsZyl7a4YYzNOz55TK-daxd8jldeCa2QY
+    VchgGpZMg444-0AVV0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeghedguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:xZuVZRZDCaQsfdqKc0n7CNRjOxD3FrUw3WFcHqXHMTJ6cXpjlYfqXA>
+    <xmx:xZuVZYXAYlvSxmRai9aXpDhcI9B0pqRw69UbOeT2HSwtw4fxlAJT0w>
+    <xmx:xZuVZfk64679EPjiLJ1Hh0n-QtEqmesaxgITzZKKHOb0mpFiOWr8LA>
+    <xmx:xZuVZataAukvJIIRcVXi_OasVXWMDl0eNZeB5Mg0VGgatBo6hEaOTg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 0C337B6008D; Wed,  3 Jan 2024 12:39:16 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240103100324.05f47bb8@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Message-Id: <5a6d441a-54bb-42ed-9ab7-3a7f24c8a14b@app.fastmail.com>
+In-Reply-To: <20240103173018.GD5954@willie-the-truck>
+References: <20240103100324.05f47bb8@canb.auug.org.au>
+ <20240103173018.GD5954@willie-the-truck>
+Date: Wed, 03 Jan 2024 18:38:55 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Will Deacon" <will@kernel.org>, "Stephen Rothwell" <sfr@canb.auug.org.au>
+Cc: "Olof Johansson" <olof@lixom.net>,
+ ARM <linux-arm-kernel@lists.infradead.org>,
+ "Anshuman Khandual" <anshuman.khandual@arm.com>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ linux-next <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the arm-soc tree with the arm-perf tree
+Content-Type: text/plain
 
-On Wed, Jan 03, 2024 at 10:03:24AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the arm-soc tree got a conflict in:
-> 
->   arch/arm/kernel/perf_event_v6.c
-> 
-> between commit:
-> 
->   5cd7da19cb97 ("arm: perf: Remove PMU locking")
-> 
-> from the arm-perf tree and commit:
-> 
->   ced296f63635 ("ARM: Delete ARM11MPCore perf leftovers")
-> 
-> from the arm-soc tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc arch/arm/kernel/perf_event_v6.c
-> index 8fc080c9e4fb,0cbf46233d6b..000000000000
-> --- a/arch/arm/kernel/perf_event_v6.c
-> +++ b/arch/arm/kernel/perf_event_v6.c
-> @@@ -436,35 -386,9 +373,8 @@@ static void armv6pmu_disable_event(stru
->   	val &= ~mask;
->   	val |= evt;
->   	armv6_pmcr_write(val);
->  -	raw_spin_unlock_irqrestore(&events->pmu_lock, flags);
->   }
->   
-> - static void armv6mpcore_pmu_disable_event(struct perf_event *event)
-> - {
-> - 	unsigned long val, mask, evt = 0;
-> - 	struct hw_perf_event *hwc = &event->hw;
-> - 	int idx = hwc->idx;
-> - 
-> - 	if (ARMV6_CYCLE_COUNTER == idx) {
-> - 		mask	= ARMV6_PMCR_CCOUNT_IEN;
-> - 	} else if (ARMV6_COUNTER0 == idx) {
-> - 		mask	= ARMV6_PMCR_COUNT0_IEN;
-> - 	} else if (ARMV6_COUNTER1 == idx) {
-> - 		mask	= ARMV6_PMCR_COUNT1_IEN;
-> - 	} else {
-> - 		WARN_ONCE(1, "invalid counter number (%d)\n", idx);
-> - 		return;
-> - 	}
-> - 
-> - 	/*
-> - 	 * Unlike UP ARMv6, we don't have a way of stopping the counters. We
-> - 	 * simply disable the interrupt reporting.
-> - 	 */
-> - 	val = armv6_pmcr_read();
-> - 	val &= ~mask;
-> - 	val |= evt;
-> - 	armv6_pmcr_write(val);
-> - }
-> - 
->   static int armv6_map_event(struct perf_event *event)
->   {
->   	return armpmu_map_event(event, &armv6_perf_map,
+On Wed, Jan 3, 2024, at 18:30, Will Deacon wrote:
+> On Wed, Jan 03, 2024 at 10:03:24AM +1100, Stephen Rothwell wrote:
+>>   static int armv6_map_event(struct perf_event *event)
+>>   {
+>>   	return armpmu_map_event(event, &armv6_perf_map,
+>
+> Thanks, this looks fine to me (just remove all the 11MPCore code).
+>
+> Arnd -- anything you need me to do in the perf tree here other than mention
+> this in my pull request?
 
-Thanks, this looks fine to me (just remove all the 11MPCore code).
+No, I think we're good here as far as I can tell.
 
-Arnd -- anything you need me to do in the perf tree here other than mention
-this in my pull request?
-
-Will
+    Arnd
 

@@ -1,72 +1,92 @@
-Return-Path: <linux-next+bounces-621-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-622-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 780CE824A18
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 22:15:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB600824A28
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 22:19:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 238D11F21AA8
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 21:15:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 740CE285A36
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 21:19:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 267A42C1BA;
-	Thu,  4 Jan 2024 21:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F662C699;
+	Thu,  4 Jan 2024 21:19:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ELGaajLK"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lOwG5ZF/"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A932C197;
-	Thu,  4 Jan 2024 21:15:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E857C433C7;
-	Thu,  4 Jan 2024 21:15:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704402947;
-	bh=Hop6+r5XKbN1rDwgG+qbZQBmGuqmnkpWYMbhXP1QkD8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ELGaajLK3aMQKLYY3R56E1ATyJwevf7zA2+E1v0z18wjZli/mcGsG/zGczRBzsS9C
-	 4kh58FsLXsxoDPdyFFbNQQaE3r5XVnotKEKo1cKqEcazP6pBqF1fFPsChX5H85XZw+
-	 /88S1WUU3xxeQukK0XZTpvp9quZUu6lMkHTdQ7gKFna9/MubzfDljSIHhgjlqoZf8p
-	 cQSI/6j1+eok+RtctJt7KiVuo/SdpVYzI/w8BOmOi40oUHQvMJIBKpBzFnp1kB5t53
-	 2dycVmQUPRWkv/dUAtuxa0m7Q0JRxd5iICbvz8k4zEuGAlYmOyV1vqRB5MI53jpAQw
-	 +pCtMp7WEqoZg==
-Date: Thu, 4 Jan 2024 13:15:46 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Miller <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
- Andrew Morton <akpm@linux-foundation.org>, Networking
- <netdev@vger.kernel.org>, Mathis Marion <mathis.marion@silabs.com>,
- Christian Marangi <ansuelsmth@gmail.com>, Robert Marko
- <robimarko@gmail.com>, Linux Kernel Mailing List
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9CF2C69A;
+	Thu,  4 Jan 2024 21:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1704403178;
+	bh=fujCdHQHv0NgQ2SbS9qqMKryEJ+V2cKmbOSdWeBXIEE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lOwG5ZF/h5D/smG2QSXd/ytq8vvFK3b0itD+CcSTA8odqR79gMS3dz5BZq3PTf1Gd
+	 q5YIyaVsj/AVD1U9/rxZ+cZpMZcEvU4TLnouOhHmWYSNiypmQuyxjEdVfE4RADK9Wh
+	 cAN73yNFFKw8gpJcFa6thvHsfg3/i18P57BNzJHr3kMBF/ZM4HrAleVXMVgs4+9hZh
+	 rUz4cHAyn/1Tacn4asDX7BTE2wBRV9UJ9PriQttd8fUH63RY9uz/XFXEiN9uJF1inV
+	 QJ/a7m9PcjimbWsZ11eA5qMTDincHfkw11Z94hcisu5ccqNSJY4mMjFpDltKEAbCSC
+	 rcnHtLBNlELlQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5fcB473sz4xCp;
+	Fri,  5 Jan 2024 08:19:38 +1100 (AEDT)
+Date: Fri, 5 Jan 2024 08:19:37 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: David McFarland <corngood@gmail.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20240104131546.0dbe74c4@kernel.org>
-In-Reply-To: <20231221130946.7ed9a805@canb.auug.org.au>
-References: <20231221130946.7ed9a805@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the pm tree
+Message-ID: <20240105081937.25076977@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Sl2CPoQSajVgk3aiN.EZ8=l";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/Sl2CPoQSajVgk3aiN.EZ8=l
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 21 Dec 2023 13:09:46 +1100 Stephen Rothwell wrote:
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 21 Dec 2023 12:49:11 +1100
-> Subject: [PATCH] fix up for "net: phy: aquantia: add firmware load support"
-> 
-> interacting with commit
-> 
->   56ded2dd1a43 ("lib: crc_ccitt_false() is identical to crc_itu_t()")
-> 
-> from the mm tree.
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Hi all,
 
-Applied to net-next with a massaged commit msg, thanks!
+Commit
+
+  e2605d4039a4 ("ACPI: resource: Add Infinity laptops to irq1_edge_low_forc=
+e_override")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Sl2CPoQSajVgk3aiN.EZ8=l
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXIOkACgkQAVBC80lX
+0GzPsAf/XTCKWl8iym9GiQlzoTrl+cxUwrK2ki6SHXZ9oNuKjexfict/sNyE2ql0
+CVHqGFhEut3mZyE7uKh4QlQbCKROTZHu2HVOjKEJ/l+M7vmnxLNk/dsP9uVxx26l
+987cEc4qUIsq9ZNlLJES5IzaUOy8PmTvpYsICjQqeeNKwDb8Pqwx3EPLfTswEG0U
+wG681g+rxNstHPzonOz5y3bOHkKBP+OgyNhgVWMJMiB6roQI9MhIeBjHCfw7iZQ1
+MRlyO80nXiax2ANYOQN7v2kN5zHUNIT6Py/mG1rPUm2ZsYiQucDuGl4xm8+gT83I
+8m2iPdKrf0ZnasZlPnv+x1OSv/ugbQ==
+=s5Vz
+-----END PGP SIGNATURE-----
+
+--Sig_/Sl2CPoQSajVgk3aiN.EZ8=l--
 

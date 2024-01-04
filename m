@@ -1,29 +1,32 @@
-Return-Path: <linux-next+bounces-613-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-614-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA1D682402D
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 12:04:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF38D82404E
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 12:08:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7BD6DB23AB7
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 11:04:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 111E31C23922
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 11:08:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E602E210F9;
-	Thu,  4 Jan 2024 11:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CCDF20DF6;
+	Thu,  4 Jan 2024 11:08:13 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD286210F1;
-	Thu,  4 Jan 2024 11:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B629720DDF;
+	Thu,  4 Jan 2024 11:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7888E240005;
-	Thu,  4 Jan 2024 11:02:07 +0000 (UTC)
-Message-ID: <b402da25-74a7-4e27-8e43-623ae1599d84@ghiti.fr>
-Date: Thu, 4 Jan 2024 12:02:07 +0100
+Received: from relay2-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::222])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 29B06C3F28;
+	Thu,  4 Jan 2024 11:08:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A524C40009;
+	Thu,  4 Jan 2024 11:07:51 +0000 (UTC)
+Message-ID: <752c11ea-7172-40ff-a821-c78aeb6c5518@ghiti.fr>
+Date: Thu, 4 Jan 2024 12:07:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -31,62 +34,81 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Jan 2 (riscv: exittext undef. references)
+Subject: Re: [PATCH] RISC-V: KVM: Require HAVE_KVM
 Content-Language: en-US
-To: Randy Dunlap <rdunlap@infradead.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-riscv <linux-riscv@lists.infradead.org>
-References: <20240102165725.6d18cc50@canb.auug.org.au>
- <8693bf84-b3b5-407b-871f-4add127272ee@infradead.org>
+To: Andrew Jones <ajones@ventanamicro.com>, linux-riscv@lists.infradead.org,
+ linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ anup@brainfault.org, atishp@atishpatra.org, rdunlap@infradead.org,
+ sfr@canb.auug.org.au, mpe@ellerman.id.au, npiggin@gmail.com,
+ linuxppc-dev@lists.ozlabs.org
+References: <20240104104307.16019-2-ajones@ventanamicro.com>
+ <20240104-d5ebb072b91a6f7abbb2ac76@orel>
 From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <8693bf84-b3b5-407b-871f-4add127272ee@infradead.org>
+In-Reply-To: <20240104-d5ebb072b91a6f7abbb2ac76@orel>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-GND-Sasl: alex@ghiti.fr
 
-Hi Randy,
+On 04/01/2024 11:52, Andrew Jones wrote:
+> This applies to linux-next, but I forgot to append -next to the PATCH
+> prefix.
 
-On 02/01/2024 18:15, Randy Dunlap wrote:
+
+Shoudn't this go to -fixes instead? With a Fixes tag?
+
+
 >
-> On 1/1/24 21:57, Stephen Rothwell wrote:
->> Hi all,
+> On Thu, Jan 04, 2024 at 11:43:08AM +0100, Andrew Jones wrote:
+>> KVM requires EVENTFD, which is selected by HAVE_KVM. Other KVM
+>> supporting architectures select HAVE_KVM and then their KVM
+>> Kconfigs ensure its there with a depends on HAVE_KVM. Make RISCV
+>> consistent with that approach which fixes configs which have KVM
+>> but not EVENTFD, as was discovered with a randconfig test.
 >>
->> Changes since 20231222:
+>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+>> Closes: https://lore.kernel.org/all/44907c6b-c5bd-4e4a-a921-e4d3825539d8@infradead.org/
+> I think powerpc may need a patch like this as well, since I don't see
+> anything ensuring EVENTFD is selected for it anymore either.
+>
+> Thanks,
+> drew
+>
+>> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+>> ---
+>>   arch/riscv/Kconfig     | 1 +
+>>   arch/riscv/kvm/Kconfig | 2 +-
+>>   2 files changed, 2 insertions(+), 1 deletion(-)
 >>
-> on riscv 64-bit:
-> (gcc 13.2.0)
->
-> riscv64-linux-ld: arch/riscv/kernel/patch.o: in function `.L8':
-> patch.c:(.text+0x17e): undefined reference to `__exittext_begin'
-> riscv64-linux-ld: patch.c:(.text+0x19c): undefined reference to `__exittext_end'
-> riscv64-linux-ld: arch/riscv/kernel/patch.o: in function `.L43':
-> patch.c:(.text+0x40a): undefined reference to `__exittext_begin'
-> riscv64-linux-ld: arch/riscv/kernel/patch.o: in function `.L0 ':
-> patch.c:(.text+0x428): undefined reference to `__exittext_end'
-> riscv64-linux-ld: patch.c:(.text+0xae8): undefined reference to `__exittext_begin'
-> riscv64-linux-ld: arch/riscv/kernel/patch.o: in function `.L82':
-> patch.c:(.text+0xb06): undefined reference to `__exittext_end'
-> riscv64-linux-ld: arch/riscv/kernel/patch.o: in function `.L118':
-> patch.c:(.text+0xd6e): undefined reference to `__exittext_begin'
-> riscv64-linux-ld: patch.c:(.text+0xd8c): undefined reference to `__exittext_end'
-
-
-This one is already fixed by this patch: 
-https://lore.kernel.org/linux-riscv/20231214091926.203439-1-alexghiti@rivosinc.com/
-
-Thanks for the report!
-
-Alex
-
-
->
->
-> Full randconfig file is attached.
->
->
->
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index a935a5f736b9..daba06a3b76f 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -128,6 +128,7 @@ config RISCV
+>>   	select HAVE_KPROBES if !XIP_KERNEL
+>>   	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+>>   	select HAVE_KRETPROBES if !XIP_KERNEL
+>> +	select HAVE_KVM
+>>   	# https://github.com/ClangBuiltLinux/linux/issues/1881
+>>   	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
+>>   	select HAVE_MOVE_PMD
+>> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
+>> index 1fd76aee3b71..36fa8ec9e5ba 100644
+>> --- a/arch/riscv/kvm/Kconfig
+>> +++ b/arch/riscv/kvm/Kconfig
+>> @@ -19,7 +19,7 @@ if VIRTUALIZATION
+>>   
+>>   config KVM
+>>   	tristate "Kernel-based Virtual Machine (KVM) support (EXPERIMENTAL)"
+>> -	depends on RISCV_SBI && MMU
+>> +	depends on HAVE_KVM && RISCV_SBI && MMU
+>>   	select HAVE_KVM_IRQCHIP
+>>   	select HAVE_KVM_IRQ_ROUTING
+>>   	select HAVE_KVM_MSI
+>> -- 
+>> 2.43.0
+>>
 > _______________________________________________
 > linux-riscv mailing list
 > linux-riscv@lists.infradead.org

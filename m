@@ -1,92 +1,100 @@
-Return-Path: <linux-next+bounces-622-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-623-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB600824A28
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 22:19:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2066A824A81
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 22:53:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 740CE285A36
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 21:19:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46C201C225C1
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 21:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F662C699;
-	Thu,  4 Jan 2024 21:19:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5912CCB2;
+	Thu,  4 Jan 2024 21:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lOwG5ZF/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jT76Tn6G"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9CF2C69A;
-	Thu,  4 Jan 2024 21:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115CE2CCB0;
+	Thu,  4 Jan 2024 21:53:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704403178;
-	bh=fujCdHQHv0NgQ2SbS9qqMKryEJ+V2cKmbOSdWeBXIEE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=lOwG5ZF/h5D/smG2QSXd/ytq8vvFK3b0itD+CcSTA8odqR79gMS3dz5BZq3PTf1Gd
-	 q5YIyaVsj/AVD1U9/rxZ+cZpMZcEvU4TLnouOhHmWYSNiypmQuyxjEdVfE4RADK9Wh
-	 cAN73yNFFKw8gpJcFa6thvHsfg3/i18P57BNzJHr3kMBF/ZM4HrAleVXMVgs4+9hZh
-	 rUz4cHAyn/1Tacn4asDX7BTE2wBRV9UJ9PriQttd8fUH63RY9uz/XFXEiN9uJF1inV
-	 QJ/a7m9PcjimbWsZ11eA5qMTDincHfkw11Z94hcisu5ccqNSJY4mMjFpDltKEAbCSC
-	 rcnHtLBNlELlQ==
+	s=201702; t=1704405187;
+	bh=pDXgYGPQvMZ+WSbHvTdIkjk/z+GYCZlcPmuxoW3COew=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=jT76Tn6G76UklbwJfFclIVdBoPxbX5iQC+1FnGJNnfErZJZaPARbTEP+g5szJmlsZ
+	 VlwUYUZKmYK2/vFfNJhGrRAs8H7O/4ecNqpt6D/R/dVWEIjTIPa6GuF0Uh9E8SOaX9
+	 iXBCAHsyUzp0Pe8/b2IEKSZUI6XsrvmrNcse6ntG+FcDc2lMFLdh12XT/uvYu2GN3W
+	 Bu+jXP23GL3skyJFXjW3SeznScjw/mJ0GW40FSPbeuPNOgUqnPwEwV4l0He0XfGNsI
+	 vvrA492/R7NsDMpZ4Gby7dEvCp2oKfuDK1PqFxf0lLWm1ycxo3vie6xrEwStM7Ch1d
+	 qGL3ONBbKRouA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5fcB473sz4xCp;
-	Fri,  5 Jan 2024 08:19:38 +1100 (AEDT)
-Date: Fri, 5 Jan 2024 08:19:37 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5gLq53Y0z4x1x;
+	Fri,  5 Jan 2024 08:53:07 +1100 (AEDT)
+Date: Fri, 5 Jan 2024 08:53:06 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: David McFarland <corngood@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the pm tree
-Message-ID: <20240105081937.25076977@canb.auug.org.au>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the cxl-fixes tree
+Message-ID: <20240105085306.60979082@canb.auug.org.au>
+In-Reply-To: <20240102023218.3cd3e4ea@canb.auug.org.au>
+References: <20240102023218.3cd3e4ea@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Sl2CPoQSajVgk3aiN.EZ8=l";
+Content-Type: multipart/signed; boundary="Sig_/5kw+qjFC7gX84eadh50uSB2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Sl2CPoQSajVgk3aiN.EZ8=l
+--Sig_/5kw+qjFC7gX84eadh50uSB2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Dan,
 
-Commit
+On Tue, 2 Jan 2024 02:32:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> A large number of commits in the cxl-fixes tree are also in Linus
+> Torvalds' tree as different commits (but the same patches).
+>=20
+> A bad rebase onto v6.7-rc6 has been done.  I cannot use this tree as
+> it is.
 
-  e2605d4039a4 ("ACPI: resource: Add Infinity laptops to irq1_edge_low_forc=
-e_override")
+Can this be fixed up, please?
 
-is missing a Signed-off-by from its author.
+$ git rebase --onto v6.7-rc6 251c56533a2c
 
+should do it
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Sl2CPoQSajVgk3aiN.EZ8=l
+--Sig_/5kw+qjFC7gX84eadh50uSB2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXIOkACgkQAVBC80lX
-0GzPsAf/XTCKWl8iym9GiQlzoTrl+cxUwrK2ki6SHXZ9oNuKjexfict/sNyE2ql0
-CVHqGFhEut3mZyE7uKh4QlQbCKROTZHu2HVOjKEJ/l+M7vmnxLNk/dsP9uVxx26l
-987cEc4qUIsq9ZNlLJES5IzaUOy8PmTvpYsICjQqeeNKwDb8Pqwx3EPLfTswEG0U
-wG681g+rxNstHPzonOz5y3bOHkKBP+OgyNhgVWMJMiB6roQI9MhIeBjHCfw7iZQ1
-MRlyO80nXiax2ANYOQN7v2kN5zHUNIT6Py/mG1rPUm2ZsYiQucDuGl4xm8+gT83I
-8m2iPdKrf0ZnasZlPnv+x1OSv/ugbQ==
-=s5Vz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXKMIACgkQAVBC80lX
+0Gx1GggAoNcTsf/OdSyde3sH9bRzCFS5pYwAsnpfJU+AZRVjI6bL5cKlMH6WJImR
+yHV/JO/+Qpmynv7emjlkHDusJ1MuClMTkL+B74GftWi6I7h5dkgZFyA3rrW/zsZp
+g4UjvinB1mdBrKCyvayg1/1wJP4adYvOgf+oLIG8aHcUhS3ZkFRGNivOydbG43ZU
+tn58iSLoN4cAa/VdvrDqqUxY2POML0GEo3iZd6V6g/NEJ75og388g3JIQOxhEVbX
+NGS2dTcFu9Ezw6zAdqrdHKU6mlYkG9ImCYYDmvbezJLaV4D11pG/i0CcEnS8Cqdj
+jfWGvYqgHTi0lFvy56FMnkEERe42zA==
+=Jc26
 -----END PGP SIGNATURE-----
 
---Sig_/Sl2CPoQSajVgk3aiN.EZ8=l--
+--Sig_/5kw+qjFC7gX84eadh50uSB2--
 

@@ -1,70 +1,97 @@
-Return-Path: <linux-next+bounces-602-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-603-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CB788239F1
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 01:59:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73CFE823AFF
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 04:11:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DA0DB247F6
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 00:59:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F6781C24A62
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 03:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D68EA37B;
-	Thu,  4 Jan 2024 00:59:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8B0522A;
+	Thu,  4 Jan 2024 03:11:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KZ4BJ3NY"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ttiwR0w6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72775221;
-	Thu,  4 Jan 2024 00:59:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33CFCC433C9;
-	Thu,  4 Jan 2024 00:59:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704329967;
-	bh=HfyO2BBvvpPgvHn99fSkOKBYwTQEs5Bb353iEMV9WsM=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=KZ4BJ3NYvW2wdG3ZSaVLkzd7XU10gFIElcXH3P8gLcw+CW7+IKP2SD5mqidXkJQFP
-	 Om47CoLgQIae8n0w4YvmlUfIFEIeFDiGtVMG2gA7r8rOJSBGwjZX11lIvzWE0UHN1K
-	 VlaSeJPfU/1VW+zDgvvUxd+W9tDPv1drAexhzuGIWh9KWWoHK84Lz+ap4jKurm/gGR
-	 MD4aWr68y7lfsG5beLU5m3xTSAYt5JOWb0n46jS9EPoCXQbCvGTiwaAGjquaEO9aWR
-	 8ulu8JI/SqMMzpFnoaeIDwiAZlFk3Y95GaBW+LKjEejqvDasT86hU61MY3v4KxD7iN
-	 EC8PDQYMM+l8g==
-Message-ID: <922a9ea36dc6eb25b32ca5c714beb7b9.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 301B15223;
+	Thu,  4 Jan 2024 03:11:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1704337881;
+	bh=9g4Tr4INbzmrWdVTUlA2qZox3cTiBSg1jgQ1KlUSeBg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ttiwR0w6lkSFErfYr6hke7NMBVqPn5RMYw9lLFcHRNarygpw9nwa+VCVaZLWC9h12
+	 L4SqpwYmUZiQrsL1YWKmI8fWHbzVdJAop/YCT9k+ubjF36n+lgbsfaYwqDpK6vd66C
+	 bu3x9uYqSaqAT4BUt5heeCUNhPWeb6NQDBtNioisIt5IrdcsGKG7Z9qG3rnLycmf7u
+	 lAVKfQqP52ogZR2qcSfQjUPAF2S3omW4Mhe888v1BGAxZ1E4cQhlQcXFp35wcVxBf8
+	 UFwB04/ErsrkSUxWzJUFJf5UO8FPTEXJeMdQjX+DW7/TiZkpfASQGAQXSHRRNR6+Du
+	 UtpBeK9tPOhhA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5BST3HNTz4wcd;
+	Thu,  4 Jan 2024 14:11:21 +1100 (AEDT)
+Date: Thu, 4 Jan 2024 14:11:19 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the sound-asoc tree
+Message-ID: <20240104141119.205ed261@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/9Y1BO=p_h3YeyzwubdY6VN7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/9Y1BO=p_h3YeyzwubdY6VN7
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240104100428.1f2c3f6a@canb.auug.org.au>
-References: <20240104100428.1f2c3f6a@canb.auug.org.au>
-Subject: Re: linux-next: build failure after merge of the clk tree
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Daniel Golle <daniel@makrotopia.org>, Sam Shih <sam.shih@mediatek.com>, Stephen Boyd <swboyd@chromium.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-To: Mike Turquette <mturquette@baylibre.com>, Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 03 Jan 2024 16:59:25 -0800
-User-Agent: alot/0.10
 
-Quoting Stephen Rothwell (2024-01-03 15:04:28)
-> Hi all,
->=20
-> After merging the clk tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
->=20
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/clk/mediatek/clk-mt79=
-88-infracfg.o
->=20
-> Caused by commit
->=20
->   7589129341ad ("clk: mediatek: add drivers for MT7988 SoC")
->=20
-> I have used the clk tree from next-20240103 for today.
->=20
+Hi all,
 
-Thanks. I've fixed it up.
+The following commit is also in the sound-current tree as a different
+commit (but the same patch):
+
+  ce17aa4cf2db ("ASoC: SOF: Intel: hda-codec: Delay the codec device regist=
+ration")
+
+This is commit
+
+  c344ef36dbc2 ("ASoC: SOF: Intel: hda-codec: Delay the codec device regist=
+ration")
+
+in the sound-current tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9Y1BO=p_h3YeyzwubdY6VN7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWWIdcACgkQAVBC80lX
+0Gwz7QgAnsfz+LgdknbgXsLbF96MIC2couRCodtaDCZvTifLSm9oLccT4BHbX40Z
+bGCVZLMp+enxWeDboCx2bclfPisDhvDpyq4vmFLbtBWpKD9qXrwg1vYkNHpGDK90
+TAsVUuIwuwAhMqceFGEiJRFAy9EbOHexHB+5p26uwOvHqk2nxv2eIrfR1bymjdCq
+u2C2Fnijnwo3pm346XLPzeY+/+ENJWBFHhX7TZ6YxNWtPZrhCW8HRxm6qzAC64FB
+ftYAU4KkAArMI0lFvyMmzlhLqUM+iD7xi3jh2PGZCDt96JIAximDqERgE+VmdSpL
+fvVD+SJ1oCazn1PfLREZOaXJmUKCgA==
+=FkF7
+-----END PGP SIGNATURE-----
+
+--Sig_/9Y1BO=p_h3YeyzwubdY6VN7--
 

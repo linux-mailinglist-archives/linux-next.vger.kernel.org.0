@@ -1,189 +1,95 @@
-Return-Path: <linux-next+bounces-626-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-625-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3889F824ABA
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 23:10:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 106C0824AB7
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 23:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD5F0281C64
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 22:10:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA99A1F22DD1
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 22:09:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F472C6B6;
-	Thu,  4 Jan 2024 22:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A092C85F;
+	Thu,  4 Jan 2024 22:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rothwell.id.au header.i=@rothwell.id.au header.b="c1KjIIBQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BF/kKbgI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gimli.rothwell.id.au (gimli.rothwell.id.au [103.230.158.156])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BDA1E4A8;
-	Thu,  4 Jan 2024 22:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rothwell.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rothwell.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
-	s=201702; t=1704405892;
-	bh=If2814HFR+59WDsBz9gf/4ej7C70sl4Dq1sz0ZnVow0=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAB52C851;
+	Thu,  4 Jan 2024 22:09:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1704406181;
+	bh=nMwM4tabfgvUmj/yESFJVCo5ldndFofaIIe+kUJVT/0=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=c1KjIIBQ43iscQf/typY4aFGldEFLPGs188eQ0bDYCYo4QYVixsQospEPF3mjw/nG
-	 48oEEv6kF4Lp4CkVXn5VTr5siaM6CdCpqqSnh0rG2qCLyLzeo3lioBTw4jeBLwDfPu
-	 xgkyzNl+LFh/uPDQgX/HwdhFMP2qvNExm2rpZgBtSUgHWxN3kjleiI/SzPxGWJWhpg
-	 cAF0MC9Djf+yISgrjElB/zfsTtLQPY58VijdJYR1pQwS+CeYHFkp4bG84wbOJnsnh6
-	 ZYlZV1FDd3rWO77YNkKIqjpapDdqlk3saXdgy4Ue+fkqBCzW0KfHSfpz/hyeflILrY
-	 Uj7JLzqHxOSoQ==
-Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
+	b=BF/kKbgIenjtl6Ye8bLyw/8sAiTdyFENfv7XZWc2/oVwuWBycGkg7uoA0P8yDAT3L
+	 fILAlRdePVhcXdBCKHW74MEBKcmdM7OdS6OXi0c5CwWGeJzMqzwoD/XEsyMycrqOZW
+	 T9g3/MEDp0P72wgo82JxzGeBcxMVilIKN31MqonwYe5aAdHfQ4L5RhjdssDXNQNxaS
+	 zdOX4iMCg11bE6A+RPGT5LBxX020Bz7GWVAKebHHqhjoH39hQy1HQSgcdUefKMoM4v
+	 jDBgUso3FK4mXzpEZP1bBzkQ8TdiQT0tcdIgG2akCe0Jq6jKixon340LU71fpVQ+Ec
+	 7Z6F2CgCheUFQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.rothwell.id.au (Postfix) with ESMTPSA id 4T5gcM013wzyb9;
-	Fri,  5 Jan 2024 09:04:50 +1100 (AEDT)
-Date: Fri, 5 Jan 2024 09:04:49 +1100
-From: Stephen Rothwell <sfr@rothwell.id.au>
-To: Sean Young <sean@mess.org>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>, Thierry Reding
- <thierry.reding@gmail.com>, Lee Jones <lee@kernel.org>, Jingoo Han
- <jingoohan1@gmail.com>, Linus Torvalds <torvalds@linux-foundation.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>, Flavio Suligoi
- <f.suligoi@asem.it>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Linux DRI Development
- <dri-devel@lists.freedesktop.org>
-Subject: Re: (subset) linux-next: build failure after merge of the pwm tree
-Message-ID: <20240105090449.5cf240ec@oak>
-In-Reply-To: <ZZaplFvjLADNz-2m@gofer.mess.org>
-References: <20231221165805.0c4771c1@canb.auug.org.au>
-	<170316329164.542553.8341559295114557258.b4-ty@kernel.org>
-	<20231221125801.GG10102@google.com>
-	<ZYSFUZf8NcK5vvLv@orome.fritz.box>
-	<ZZaCQahr3t8CUumD@archie.me>
-	<ZZaplFvjLADNz-2m@gofer.mess.org>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5gjx1FdGz4x7V;
+	Fri,  5 Jan 2024 09:09:40 +1100 (AEDT)
+Date: Fri, 5 Jan 2024 09:09:39 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "Linux Next
+ Mailing List" <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the cxl-fixes tree
+Message-ID: <20240105090939.704a5fed@canb.auug.org.au>
+In-Reply-To: <659729ee7673a_8dc682941d@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20240102023218.3cd3e4ea@canb.auug.org.au>
+	<20240105085306.60979082@canb.auug.org.au>
+	<659729ee7673a_8dc682941d@dwillia2-xfh.jf.intel.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xW9ccXYMuSXzGh3Fg8i_Q4P";
+Content-Type: multipart/signed; boundary="Sig_/=I/oHD6_vaDW2nyyXF=K0L9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/xW9ccXYMuSXzGh3Fg8i_Q4P
+--Sig_/=I/oHD6_vaDW2nyyXF=K0L9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Dan,
 
-On Thu, 4 Jan 2024 12:50:28 +0000 Sean Young <sean@mess.org> wrote:
+On Thu, 4 Jan 2024 13:58:06 -0800 Dan Williams <dan.j.williams@intel.com> w=
+rote:
 >
-> On Thu, Jan 04, 2024 at 05:02:41PM +0700, Bagas Sanjaya wrote:
-> > [also add Jingoo (additional backlight maintainer) and Linus]
-> >=20
-> > On Thu, Dec 21, 2023 at 07:34:57PM +0100, Thierry Reding wrote: =20
-> > > On Thu, Dec 21, 2023 at 12:58:01PM +0000, Lee Jones wrote: =20
-> > > > On Thu, 21 Dec 2023, Lee Jones wrote:
-> > > >  =20
-> > > > > On Thu, 21 Dec 2023 16:58:05 +1100, Stephen Rothwell wrote: =20
-> > > > > > After merging the backlight tree, today's linux-next build (x86=
-_64
-> > > > > > allmodconfig) failed like this:
-> > > > > >=20
-> > > > > > drivers/video/backlight/mp3309c.c: In function 'mp3309c_bl_upda=
-te_status':
-> > > > > > drivers/video/backlight/mp3309c.c:134:23: error: implicit decla=
-ration of function 'pwm_apply_state'; did you mean 'pwm_apply_args'? [-Werr=
-or=3Dimplicit-function-declaration]
-> > > > > >   134 |                 ret =3D pwm_apply_state(chip->pwmd, &pw=
-mstate);
-> > > > > >       |                       ^~~~~~~~~~~~~~~
-> > > > > >       |                       pwm_apply_args
-> > > > > >=20
-> > > > > > [...] =20
-> > > > >=20
-> > > > > Applied, thanks!
-> > > > >=20
-> > > > > [1/1] linux-next: build failure after merge of the pwm tree
-> > > > >       commit: f7baa9ccef93ba1c36a8ecf58c2f4e86fb3181b9 =20
-> > > >=20
-> > > > Actually it's:
-> > > >=20
-> > > >   f7baa9ccef93b ("backlight: mp3309c: Rename  pwm_apply_state() to =
-pwm_apply_might_sleep()")
-> > > >=20
-> > > > But don't bank on the commit ID staying the same. =20
-> > >=20
-> > > This is likely going to break the build on your branch because
-> > > pwm_apply_might_sleep() is only available in the PWM tree right now. =
-In
-> > > any case, I've now pushed a commit that adds pwm_apply_state() back a=
-s a
-> > > compatibility stub, so it should be okay for you to drop this if you
-> > > run into problems. It's always possible that somebody else wants to a=
-dd
-> > > a new caller of pwm_apply_state() and in retrospect we should've
-> > > probably done this from the start, at least as a transitional measure
-> > > for one or two cycles.
-> > >  =20
-> >=20
-> > Hi Lee and Thierry,
-> >=20
-> > I know that we're still on New Year vibes, so some things are not up to=
- full
-> > steam for now; but since we're close to v6.7 release and v6.8 merge win=
-dow,
-> > hence allow me to ask:
-> >=20
-> > Stephen Rothwell is still complaining about backlight tree build failure
-> > due to f7baa9ccef93b, yet it has not been fixed so far. Has the culprit
-> > been dropped/reverted as he requested? The worst case is the culprit sl=
-ips
-> > through and become part of backlight PR and Linus will likely not happy
-> > with the build regression (maybe he had to fix by himself). =20
->=20
-> This should be fixed by 9a216587a03df, and on current linux-next I can't=
-=20
-> reproduce the problem any more (x86_64 allmodconfig).
+> Yes, will do that promptly. I am trying to figure out how this happend.
 
-Of course linux-next is fine, because I have fixed it up in there.
-
-Here is the problem:  the backlight tree
-(git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git#for-backli=
-ght-next)
-is broken when built in its own because of the above patch (which is
-commit f7baa9ccef93).  In linux-next, I have been merging the previous
-working version of the backlight tree (with head commit 7d84a63a39b7).
-The patch (commit f7baa9ccef93) can only be applied to the merge of the
-backlight tree and the pwm tree
-(git://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git=
-#for-next)
-which is merged much later in the linux-next process.  If the backlight
-tree was merged by Linus before the pwm tree, it would break his build
-(and he would not be happy).  But the patch on the head of the
-backlight tree was made unnecessary by commit 9a216587a03d in the pwm
-tree.  So, please either revert commit f7baa9ccef93 in the backlight
-tree (or simply to a "git reset --hard HEAD^" there).  The patch of
-commit f7baa9ccef93 can be applied some time later (after Linus has
-merged both trees.
+Thanks.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/xW9ccXYMuSXzGh3Fg8i_Q4P
+--Sig_/=I/oHD6_vaDW2nyyXF=K0L9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXK4EACgkQAVBC80lX
-0Gy01Qf6A1C5SMeayXoJVjrb1sBes2bSqA6BnrLQT9O2O/FGzvW678lYwOppq2Z4
-vgkvFcEMrBD82x/7DBmRZye3XdnyZwjHwHuHqA7Q+soXunIWOz6DgyaJ89GQ4BBs
-Nyndkrfj/f1xNN9PCxxDzB/Uv45RUVNT9EMMWlVdjZLSrcJLj8YL3NWNEE50++K8
-8eYw2XF8j6SASp55r+bgZfLJEvygCwrzY4IgrPWt9gP5YXSsZ8MpPvo32UhEqUnJ
-Y7vZCwE+W3Geyd1W+ujzT3GnZKyI5L3Jtok5CJI6gzXKC9LYI+aCVwgjy580qtbG
-CZC/3XsFPtr2wLlnB32M7KuCRhoAZA==
-=M1fR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXLKMACgkQAVBC80lX
+0GxxFAgAjsM6Nzo9hjB5/eLl+ylk89hnVuR+aGcTS7s4oDkeaAUEeMOP1Ojbe7XA
+blpHuCE4Lci2a5N83jcs0zpEV7ahyHnwDAswU7OxThUeuQp8F5tNRV6ZhuOddR+l
+mbryBMlRql1VINHO5SiwVIK8iD1iI7JC5JFF6OdyM5uS/HuSnE76gWJTucITknxX
+fyTDEytCKV8RWOupfbwyel6XNPwxZKjK+TOwmZTUhpML20p+NCRaSsPfvtpD7zSb
+HTUlFrWm2oEAgZkcO8ge+itjsnn+qGK++CN6gKE5v9PTx9YZ6tkzU+a4xjfUvk0Y
+bB31RPeyQGFIH0BqzSCeVad/lBcHaQ==
+=nKt9
 -----END PGP SIGNATURE-----
 
---Sig_/xW9ccXYMuSXzGh3Fg8i_Q4P--
+--Sig_/=I/oHD6_vaDW2nyyXF=K0L9--
 

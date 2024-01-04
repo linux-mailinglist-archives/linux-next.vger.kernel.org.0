@@ -1,96 +1,72 @@
-Return-Path: <linux-next+bounces-620-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-621-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00D168246B1
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 17:52:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 780CE824A18
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 22:15:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12DDA1C2252C
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 16:52:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 238D11F21AA8
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jan 2024 21:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE682555D;
-	Thu,  4 Jan 2024 16:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 267A42C1BA;
+	Thu,  4 Jan 2024 21:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y5nUPbA7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ELGaajLK"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25CE25554;
-	Thu,  4 Jan 2024 16:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704387130; x=1735923130;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=UdCcRXEMi569p6+ITr0KHlXsSxx0feyXn0U+aodkq0k=;
-  b=Y5nUPbA7kbyc4srFtpTeDW8aftVeQc/W7r0uy2u8lDUqToT7BBRAmM+3
-   he1VlQSgV5b+O0WfB9SCTW8HvQBNDc3cBC9Jjxw9Y3/gAwNAGRt9wT3Sl
-   1WgbITQS6BPFw4ubU9Y/XPs+Uj8Z573UPeO+5B8PnNvjHPcsPpEOtzl0Z
-   toel2EI605/zMGArnEUq3yjuy3a+X5PU/r5M3+6wsxnDBBSBOPX445IHU
-   eKke9xPgps56w7kqJdjmolyokR/krreaShvjnIK1qwqV9gC7FFfsl6Taq
-   2m/wuKOfj3ZHAkO//dZDucgwfbTY17M4flvLVKkY05gzJS10YUS06wvm1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="382278649"
-X-IronPort-AV: E=Sophos;i="6.04,331,1695711600"; 
-   d="scan'208";a="382278649"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2024 08:52:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="814705023"
-X-IronPort-AV: E=Sophos;i="6.04,331,1695711600"; 
-   d="scan'208";a="814705023"
-Received: from pdelarag-mobl.ger.corp.intel.com (HELO localhost) ([10.252.36.32])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2024 08:52:06 -0800
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Dave Airlie <airlied@redhat.com>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, Andrzej Hajda
- <andrzej.hajda@intel.com>, DRI <dri-devel@lists.freedesktop.org>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm tree
-In-Reply-To: <20240103122734.16b29e09@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20240102111222.2db11208@canb.auug.org.au>
- <20240103121911.4ec8f237@canb.auug.org.au>
- <20240103122734.16b29e09@canb.auug.org.au>
-Date: Thu, 04 Jan 2024 18:52:03 +0200
-Message-ID: <87frzdyrbg.fsf@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A932C197;
+	Thu,  4 Jan 2024 21:15:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E857C433C7;
+	Thu,  4 Jan 2024 21:15:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704402947;
+	bh=Hop6+r5XKbN1rDwgG+qbZQBmGuqmnkpWYMbhXP1QkD8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ELGaajLK3aMQKLYY3R56E1ATyJwevf7zA2+E1v0z18wjZli/mcGsG/zGczRBzsS9C
+	 4kh58FsLXsxoDPdyFFbNQQaE3r5XVnotKEKo1cKqEcazP6pBqF1fFPsChX5H85XZw+
+	 /88S1WUU3xxeQukK0XZTpvp9quZUu6lMkHTdQ7gKFna9/MubzfDljSIHhgjlqoZf8p
+	 cQSI/6j1+eok+RtctJt7KiVuo/SdpVYzI/w8BOmOi40oUHQvMJIBKpBzFnp1kB5t53
+	 2dycVmQUPRWkv/dUAtuxa0m7Q0JRxd5iICbvz8k4zEuGAlYmOyV1vqRB5MI53jpAQw
+	 +pCtMp7WEqoZg==
+Date: Thu, 4 Jan 2024 13:15:46 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: David Miller <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Networking
+ <netdev@vger.kernel.org>, Mathis Marion <mathis.marion@silabs.com>,
+ Christian Marangi <ansuelsmth@gmail.com>, Robert Marko
+ <robimarko@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20240104131546.0dbe74c4@kernel.org>
+In-Reply-To: <20231221130946.7ed9a805@canb.auug.org.au>
+References: <20231221130946.7ed9a805@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, 03 Jan 2024, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> OK, the only thing I can find is that there are 2 intel_wakeref.h files
-> that have different definitions for intel_wakeref_t:
->
-> ./drivers/gpu/drm/i915/intel_wakeref.h:typedef unsigned long intel_wakeref_t;
-> ./drivers/gpu/drm/xe/compat-i915-headers/intel_wakeref.h:typedef bool intel_wakeref_t;
->
-> and the two compilations above seem to use different include paths, but
-> how the single character change causes that is beyond me.
+On Thu, 21 Dec 2023 13:09:46 +1100 Stephen Rothwell wrote:
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 21 Dec 2023 12:49:11 +1100
+> Subject: [PATCH] fix up for "net: phy: aquantia: add firmware load support"
+> 
+> interacting with commit
+> 
+>   56ded2dd1a43 ("lib: crc_ccitt_false() is identical to crc_itu_t()")
+> 
+> from the mm tree.
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-There are a few things going on here, but the gist of it is that
-intel_wakeref_t is supposed to be an opaque cookie, and printing its
-value does not make sense, especially not when you can't be certain
-which printf format should be used for it.
-
-Fix at [1], thanks for the report.
-
-BR,
-Jani.
-
-
-[1] https://patchwork.freedesktop.org/patch/msgid/20240104164600.783371-1-jani.nikula@intel.com
-
-
--- 
-Jani Nikula, Intel
+Applied to net-next with a massaged commit msg, thanks!
 

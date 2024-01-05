@@ -1,99 +1,89 @@
-Return-Path: <linux-next+bounces-645-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-646-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E828825C8A
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 23:34:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BADF825CF5
+	for <lists+linux-next@lfdr.de>; Sat,  6 Jan 2024 00:02:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E384FB23541
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 22:34:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EA1E1F245E0
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 23:02:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 398753609F;
-	Fri,  5 Jan 2024 22:33:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E8D3609A;
+	Fri,  5 Jan 2024 23:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UvCy5qCH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mh94wv/f"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BF03609A;
-	Fri,  5 Jan 2024 22:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704494029;
-	bh=rpezY7E7ZYFhLGmpW92hvMon9DAaxzXvUdwXft+X8tc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UvCy5qCHEgsGakVwoutRV0dY4JQTExUxsDlnY+N/erjEEJ0aIJi+66jN1Z3xLOTFy
-	 lQyN7ZwqZeoPAqQhPwdLZsAurebpERn8lrKbwKpZfrIV6GUywLwmFTMXffgl1CQUlz
-	 hufERs1nSajfvLeWovN2ZT7MvmsRYLcvqoBuse4Tl9QtOfqjcNPx5mj3/+azOH50g4
-	 /9bsdufZH69jA8HmpK9JAqx55sk1JqYm/pSFR7P6J0g0TclO/4xMJt/yoeTnTwJL2g
-	 lZFBNeR1q/7IWRMYOmtYiyFgX6yLuzq03ObljnkswzLbPpQUaguQ6x193dXt0g7I3G
-	 JuRCtMajxGpqw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T6JCJ5yhcz4wnv;
-	Sat,  6 Jan 2024 09:33:48 +1100 (AEDT)
-Date: Sat, 6 Jan 2024 09:33:47 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Chuck Lever <chuck.lever@oracle.com>
-Cc: Jeff Layton <jlayton@kernel.org>, Jeffrey Layton <jlayton@redhat.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, NeilBrown <neilb@suse.de>
-Subject: Re: linux-next: manual merge of the nfsd tree with the nfsd-fixes
- tree
-Message-ID: <20240106093347.15810e18@canb.auug.org.au>
-In-Reply-To: <ZZd8q4RSTTN/5wSq@tissot.1015granger.net>
-References: <20240105110007.3f932561@canb.auug.org.au>
-	<ZZd8q4RSTTN/5wSq@tissot.1015granger.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECBE136096;
+	Fri,  5 Jan 2024 23:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7810d8759e7so209885a.0;
+        Fri, 05 Jan 2024 15:02:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704495736; x=1705100536; darn=vger.kernel.org;
+        h=mime-version:user-agent:message-id:date:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pQyFGK18sBCI6dlds62qZM1cJoYfjwJznu/a2Ec9awA=;
+        b=mh94wv/fX1rtF3KIaCOw6KLdhQhB9F+vwZel/IudYalxFSsbImDO1/secBleaDjM92
+         zeIPsZL151vua6jPPhBkjgGgzEy6m/6SbpvzbVc3CHMtughUTHEmc5QgfYcg17B03d4T
+         XteWEksmGNUboQNlShekDgN2R+up0mpM251VrrGs5InLPmiB2p89KS5T9TBefQTkzR7s
+         esG4Tp4MM7qprxunB76nh1WYBQf2jVeP3Kzna1W/jCasj4vQ0RUamTZw2ipOJmkME1el
+         u0YKybInZRcdrEeHdUw7RrDHrRY/F+Jx5KFOWP6rCT1EF8IHt1eCZYxI1Kk/OVF4IHmJ
+         Nndw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704495736; x=1705100536;
+        h=mime-version:user-agent:message-id:date:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pQyFGK18sBCI6dlds62qZM1cJoYfjwJznu/a2Ec9awA=;
+        b=NIST+mgNPq5U1xHiH494OxaFUQDj/LZKY4anqwjzNdB0BCz/Eu8TVBxzivFt3FdmzS
+         PRS3hfXP6zZCwQJt/m+DVkITpuc07fYBFXlIRkV25sxbqXXH9u2sOFcKFk+NJ2jUVBuT
+         w+zE3d6RuISgUtk+xtallfPeORT1nKsdevnrabVNhHcFZkBUF0z9yckIKNgPw4OH+zAC
+         F1cpMKHmypuhpEc4+H83GbQ74+B4t/IJwkBbc/SaATnVUwDUEHHt/3sDBLgC8X5xjuud
+         HhroMnm9ZpCBMNeEPU0E70v+3OiPXGBZy1EI6DpwxuzvuYmndNxDy+GfM3d9QE4PEDlx
+         tX6A==
+X-Gm-Message-State: AOJu0YxE6PZHg1Kb7lfegQFhlp1JD60WUBHM3Ntnl96s99hBj14VK3hb
+	nFQMz4WcpS7Z7RMhtSkvbG1VZnYvP+g54A==
+X-Google-Smtp-Source: AGHT+IFVgDckdegLP44yi38RKX0R8iNrnT7y6/H/HAaf0pwJrBcIANZdCupdnUJbeQT85EDnjtRtyg==
+X-Received: by 2002:a05:620a:45a3:b0:783:b9d:ec51 with SMTP id bp35-20020a05620a45a300b007830b9dec51mr235776qkb.4.1704495736290;
+        Fri, 05 Jan 2024 15:02:16 -0800 (PST)
+Received: from davidm-laptop (hlfxns018gw-134-41-185-34.dhcp-dynamic.fibreop.ns.bellaliant.net. [134.41.185.34])
+        by smtp.gmail.com with ESMTPSA id oo24-20020a05620a531800b0078156dd57a3sm934705qkn.15.2024.01.05.15.02.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jan 2024 15:02:15 -0800 (PST)
+From: David McFarland <corngood@gmail.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,  Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>,  Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the pm tree
+In-Reply-To: <20240105081937.25076977@canb.auug.org.au> (Stephen Rothwell's
+	message of "Fri, 5 Jan 2024 08:19:37 +1100")
+References: <20240105081937.25076977@canb.auug.org.au>
+Date: Fri, 05 Jan 2024 19:02:12 -0400
+Message-ID: <87y1d32xl7.fsf@gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MmCxwecSmrAxXalQUn_hEhd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 
---Sig_/MmCxwecSmrAxXalQUn_hEhd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi Chuck,
+Hi Stephen/Rafael,
 
-On Thu, 4 Jan 2024 22:51:07 -0500 Chuck Lever <chuck.lever@oracle.com> wrot=
-e:
->
-> I plan to rebase nfsd-next as soon as 76d296a82657 ("nfsd: drop the
-> nfsd_put helper") is merged. I'll have a closer look at this
-> conflict tomorrow (my time).
+Should I send another patch, or can someone add my sign-off?
 
-Instead of rebasing your tree just before the merge window, why not
-just merge nfsd-fixes into the nfsd tree?
+I didn't realise I was supposed to add the tag, but I certainly do
+sign-off on e2605d4039a4.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MmCxwecSmrAxXalQUn_hEhd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWYg8sACgkQAVBC80lX
-0GxJcAf/ZHPehlLspMqSMbDDHS5utWs2Myw33qiBeO9fpibNe/r6f6cRE77pjTqM
-vcO9cDtniiIngaeK4YSGhBCCQaM5N+/XgTENGd3NLMp+0/kyhJERH5FpGIKhCyLB
-kHIir0OGWmSRsrG5sH9F+Vpwce456kSVsolqgy45nrw4ok6w0sERz5uOvMC5oMck
-tEYKqGkwgkKU1bFV68NoG9zSkq9p/plcE95xLy3/y1baGq2jRjgxggypCRozrN4R
-y7Ov5PPAArTXqWqmitO0A/Jv2sliVvr0I6xdHeYtyb6mbzDJz88xRZPbxSSy8hUv
-qHdVt567wWmo/80QzpTOnHVzdSpkig==
-=5bt7
------END PGP SIGNATURE-----
-
---Sig_/MmCxwecSmrAxXalQUn_hEhd--
+Sorry about that,
+Dave
 

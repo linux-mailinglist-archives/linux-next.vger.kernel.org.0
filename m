@@ -1,80 +1,80 @@
-Return-Path: <linux-next+bounces-628-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-629-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3BB6824BF9
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 01:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6034D824C12
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 01:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B392285AAA
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 00:00:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DFC1282FBC
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 00:10:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8D382D606;
-	Fri,  5 Jan 2024 00:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2FB57F4;
+	Fri,  5 Jan 2024 00:10:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TCmSXmbQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qZZv/VnU"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4F92D601;
-	Fri,  5 Jan 2024 00:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB2EA35;
+	Fri,  5 Jan 2024 00:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704412810;
-	bh=fKTT20mUaFZY3aDpSIBX+2Ae7sQrUaC79fPao4Mb0Fw=;
+	s=201702; t=1704413418;
+	bh=gq6qCo8Z9i5nzsJTvOM5IqitMFtRngmF8UYkyG6IgLI=;
 	h=Date:From:To:Cc:Subject:From;
-	b=TCmSXmbQ7Y3+a9JsKY0i5cANtaJ7cT67pUSaPAWxiKxXX2AXU8Q/Jtb0ArC9l7r8q
-	 6fuUbPawVMeksZb6SX/cdSMM0LV9DRMVwI2K22ErZPs1RnoC9mfVTi2XNYN7TgjJZM
-	 r45lOjl18xgtyTKEi8vzf2c2lxDOE27HmGBYtz+qAlpy9U2yW+ZiMsoHQ57+EgnKYj
-	 q7nCjBjxoMvM4AZLTMIJCKVo3/oqXY4crGyn79KhJPJabao7RT7ZApgQBWtOiv9uCL
-	 nFEUlE38VJyosmKK25Iw4kU769waCsFqCYfpjkCnt/3vkY10k3Kxn4XoTKHBN84TmH
-	 QVOT4PYmSXIkw==
+	b=qZZv/VnUGgF27DKkt8zKc47S1xoU+VSaEhy10ezAbEBXIiqcrme/M6fEvefqcqvnB
+	 CU8xT9wlEADFaDV2M1wy8c1DWsvk7WcWi+B8cX7U1zOyoBz+wDoQ8naPKxLFZ6JRqA
+	 iofjlSONBn3/bcdbaNxOaDhzx8L2zB/hXdflAQHO9B2rWuPi0IyIgiONp0GFFel1tA
+	 T5T/jZ119zprh6eI61G+/l9btLhjsqndjHk1oPm98YNqSf3QE0Cbyj3YezjM3D0V/9
+	 Yc0mbxUHyZu1kCATIPSPCFhftBwWJ/m33o693LEdSrm/Y8MzM6o2OsuMrnCIpPTDla
+	 uS1nQVNAUlBIg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5k9P1dNMz4x1p;
-	Fri,  5 Jan 2024 11:00:09 +1100 (AEDT)
-Date: Fri, 5 Jan 2024 11:00:07 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5kP540tgz4x1x;
+	Fri,  5 Jan 2024 11:10:16 +1100 (AEDT)
+Date: Fri, 5 Jan 2024 11:10:16 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Chuck Lever <chuck.lever@oracle.com>
-Cc: Jeff Layton <jlayton@kernel.org>, Jeffrey Layton <jlayton@redhat.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, NeilBrown <neilb@suse.de>
-Subject: linux-next: manual merge of the nfsd tree with the nfsd-fixes tree
-Message-ID: <20240105110007.3f932561@canb.auug.org.au>
+To: Al Viro <viro@ZenIV.linux.org.uk>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, "Steven Rostedt (Google)"
+ <rostedt@goodmis.org>
+Subject: linux-next: manual merge of the vfs tree with Linus' tree
+Message-ID: <20240105111016.5a3c36d0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4J7C/_dIb=E8/SkMhbC3zsY";
+Content-Type: multipart/signed; boundary="Sig_/hLOUkIKURAkrPlh9NLFO6P3";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/4J7C/_dIb=E8/SkMhbC3zsY
+--Sig_/hLOUkIKURAkrPlh9NLFO6P3
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the nfsd tree got a conflict in:
+Today's linux-next merge of the vfs tree got a conflict in:
 
-  fs/nfsd/nfsctl.c
+  fs/tracefs/inode.c
 
-between commit:
+between commits:
 
-  76d296a82657 ("nfsd: drop the nfsd_put helper")
+  7e8358edf503 ("eventfs: Fix file and directory uid and gid ownership")
+  ad579864637a ("tracefs: Check for dentry->d_inode exists in set_gid()")
 
-from the nfsd-fixes tree and commits:
+from Linus' tree and commit:
 
-  3a0b966ab40f ("SUNRPC: discard sv_refcnt, and svc_get/svc_put")
-  9bf4b41b79a3 ("nfsd: rename nfsd_last_thread() to nfsd_destroy_serv()")
+  da549bdd15c2 ("dentry: switch the lists of children to hlist")
 
-from the nfsd tree.
+from the vfs tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -87,76 +87,58 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/nfsd/nfsctl.c
-index 87fed75808ff,cca1dd7b8c55..000000000000
---- a/fs/nfsd/nfsctl.c
-+++ b/fs/nfsd/nfsctl.c
-@@@ -704,15 -707,12 +708,12 @@@ static ssize_t __write_ports_addfd(cha
-  	if (err !=3D 0)
-  		return err;
+diff --cc fs/tracefs/inode.c
+index bc86ffdb103b,61ca5fcf10f9..000000000000
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@@ -207,28 -206,14 +206,25 @@@ static void set_gid(struct dentry *pare
  =20
- -	err =3D svc_addsock(nn->nfsd_serv, net, fd, buf, SIMPLE_TRANSACTION_LIMI=
-T, cred);
- +	serv =3D nn->nfsd_serv;
- +	err =3D svc_addsock(serv, net, fd, buf, SIMPLE_TRANSACTION_LIMIT, cred);
+  	change_gid(this_parent, gid);
+  repeat:
+- 	next =3D this_parent->d_subdirs.next;
++ 	dentry =3D d_first_child(this_parent);
+  resume:
+- 	while (next !=3D &this_parent->d_subdirs) {
++ 	hlist_for_each_entry_from(dentry, d_sib) {
+ +		struct tracefs_inode *ti;
+- 		struct list_head *tmp =3D next;
+- 		struct dentry *dentry =3D list_entry(tmp, struct dentry, d_child);
+- 		next =3D tmp->next;
+ +
+ +		/* Note, getdents() can add a cursor dentry with no inode */
+ +		if (!dentry->d_inode)
+ +			continue;
+ +
+  		spin_lock_nested(&dentry->d_lock, DENTRY_D_LOCK_NESTED);
  =20
-- 	if (err < 0 && !serv->sv_nrthreads && !nn->keep_active)
-- 		nfsd_last_thread(net);
-- 	else if (err >=3D 0 && !serv->sv_nrthreads && !xchg(&nn->keep_active, 1))
-- 		svc_get(serv);
- -	if (!nn->nfsd_serv->sv_nrthreads &&
- -	    list_empty(&nn->nfsd_serv->sv_permsocks))
-++	if (!serv->sv_nrthreads && list_empty(&serv->sv_permsocks))
-+ 		nfsd_destroy_serv(net);
+  		change_gid(dentry, gid);
  =20
-- 	svc_put(serv);
-  	return err;
-  }
- =20
-@@@ -750,22 -748,18 +751,17 @@@ static ssize_t __write_ports_addxprt(ch
-  	if (err < 0 && err !=3D -EAFNOSUPPORT)
-  		goto out_close;
- =20
-- 	if (!serv->sv_nrthreads && !xchg(&nn->keep_active, 1))
-- 		svc_get(serv);
--=20
-- 	svc_put(serv);
-  	return 0;
-  out_close:
- -	xprt =3D svc_find_xprt(nn->nfsd_serv, transport, net, PF_INET, port);
- +	xprt =3D svc_find_xprt(serv, transport, net, PF_INET, port);
-  	if (xprt !=3D NULL) {
-  		svc_xprt_close(xprt);
-  		svc_xprt_put(xprt);
-  	}
-  out_err:
-- 	if (!serv->sv_nrthreads && !nn->keep_active)
-- 		nfsd_last_thread(net);
- -	if (!nn->nfsd_serv->sv_nrthreads &&
- -	    list_empty(&nn->nfsd_serv->sv_permsocks))
-++	if (!serv->sv_nrthreads && list_empty(&serv->sv_permsocks))
-+ 		nfsd_destroy_serv(net);
- =20
-- 	svc_put(serv);
-  	return err;
-  }
- =20
+ +		/* If this is the events directory, update that too */
+ +		ti =3D get_tracefs(dentry->d_inode);
+ +		if (ti && (ti->flags & TRACEFS_EVENT_INODE))
+ +			eventfs_update_gid(dentry, gid);
+ +
+- 		if (!list_empty(&dentry->d_subdirs)) {
++ 		if (!hlist_empty(&dentry->d_children)) {
+  			spin_unlock(&this_parent->d_lock);
+  			spin_release(&dentry->d_lock.dep_map, _RET_IP_);
+  			this_parent =3D dentry;
 
---Sig_/4J7C/_dIb=E8/SkMhbC3zsY
+--Sig_/hLOUkIKURAkrPlh9NLFO6P3
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXRocACgkQAVBC80lX
-0GxoLwf8CAznof5TpCGOMEYHE0qxsUY5kVk9I4YjG9oBj7zdEdV+qmMVWXJRH//t
-PqgfRR3HtE3nGjzWvHzDpvlPtW0q2OzpHgtWPD7QRB6+qc+rv4jW7sdE7MFnXkP1
-JvSzLdSaEuD/eSp3lH7u6/zSRCgE7Bu/zTPtk5Pj77Zv2BYE3jSlPoqXPznjkyor
-6J8WyAMbHuhyBQiGVF8YSSgQ3FgyH+1ILK1KYG2vRtobf3XHzFhZFva+zlCLtKAr
-bF8vLQRietvbjjg0F53rKs2fNHVb4sSAtG8iP9bO88hasNcQNlAUN22r0LVPbL6D
-eNLLgQ2ovLPNLX+SVo4NFY5aQkALgg==
-=1D7m
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXSOgACgkQAVBC80lX
+0GxAvQgAjIHA5kp6W+popfdm1cZs9mOmIEWQsDuvlY/d3y7egnTLP5ORVMZHq+9s
+Ebb9O5vwCTxZnAj9qSZShR+VlikK/DYQqJ3S/LXxwrnIRv7w9Gb/kpMCl82jG7tZ
+XUxQn+rOdKAZTeM1Gl7rKlBo4xFJdoS8qLZ9P8NP8Y/8fwIVoRQtbn0Wje5+UNPW
+zktv4P9ydiwY3XZhwHgYnITR9hyQIOOpoAEMlArtqA4Fvb4k49eDPkGPkAHAfNMK
+UKER1a4e/4UkPLqCDirfbFndmlxRk/nxEzM2J5RgC9a8kK6OA7ZfCRS17K0jaXKo
+HoOb3HuQDvIyBlxAbCWgUDgLnkfhkQ==
+=qIof
 -----END PGP SIGNATURE-----
 
---Sig_/4J7C/_dIb=E8/SkMhbC3zsY--
+--Sig_/hLOUkIKURAkrPlh9NLFO6P3--
 

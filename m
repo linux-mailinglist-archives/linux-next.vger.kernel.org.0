@@ -1,114 +1,117 @@
-Return-Path: <linux-next+bounces-630-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-631-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14E34824C17
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 01:19:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93C5A824C34
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 01:43:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02DF21C21A78
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 00:19:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E2A2B221F3
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 00:43:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF6C1102;
-	Fri,  5 Jan 2024 00:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D7291FB4;
+	Fri,  5 Jan 2024 00:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XBO/jfZD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67135A2D;
-	Fri,  5 Jan 2024 00:19:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98EA4C433C8;
-	Fri,  5 Jan 2024 00:19:13 +0000 (UTC)
-Date: Thu, 4 Jan 2024 19:20:19 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Al Viro <viro@ZenIV.linux.org.uk>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Linus Torvalds
- <torvalds@linux-foundation.org>
-Subject: Re: linux-next: manual merge of the vfs tree with Linus' tree
-Message-ID: <20240104192019.4d550363@gandalf.local.home>
-In-Reply-To: <20240105111016.5a3c36d0@canb.auug.org.au>
-References: <20240105111016.5a3c36d0@canb.auug.org.au>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40971FA3;
+	Fri,  5 Jan 2024 00:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1704415398;
+	bh=B3VvRKT7Vpp6a+w7wdq1LM7SVAhg25085ZnjiGYLjME=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=XBO/jfZDMMdczDta5F2TtDDEGnMS8VSwwDXQ+STl7oI85E35l5CS7Nrf7T4koPrqq
+	 KgoXBgJZy0W5JKPFgyOrtcJqU0r6F+gVBks5RnZMZ4RqWGC1fHrKHxg+ckr8u45yxG
+	 hcRXP8HRzz1NChJqfUzsMBv4QRIW0mkl0UdU/0VfEorev0FatDNLeLBcCNlkEv2bMz
+	 CjUH2+kcUdFQJ030BfR2v3XtLdpOI+sNX/toLQjlgs/Z+7FAUmW4ihc7KrWzssT6OP
+	 70/XyAkvBBWD4yiY6HkU8iZUDaa0adU1op9Y/jPA4yvmqqwytXEd49ATux/t0B6K25
+	 DvcBvXOp2HV4g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5l7B0p1kz4wcg;
+	Fri,  5 Jan 2024 11:43:17 +1100 (AEDT)
+Date: Fri, 5 Jan 2024 11:43:16 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "Linux Next
+ Mailing List" <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the cxl-fixes tree
+Message-ID: <20240105114316.03aa2a8b@canb.auug.org.au>
+In-Reply-To: <65972daf5c889_8dc68294d2@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20240102023218.3cd3e4ea@canb.auug.org.au>
+	<20240105085306.60979082@canb.auug.org.au>
+	<65972daf5c889_8dc68294d2@dwillia2-xfh.jf.intel.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_//JOj3WKCn6vCSF+63sDrcPI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_//JOj3WKCn6vCSF+63sDrcPI
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 5 Jan 2024 11:10:16 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi Dan,
 
-> Hi all,
-> 
-> Today's linux-next merge of the vfs tree got a conflict in:
-> 
->   fs/tracefs/inode.c
-> 
-> between commits:
-> 
->   7e8358edf503 ("eventfs: Fix file and directory uid and gid ownership")
->   ad579864637a ("tracefs: Check for dentry->d_inode exists in set_gid()")
-> 
-> from Linus' tree and commit:
-> 
->   da549bdd15c2 ("dentry: switch the lists of children to hlist")
-> 
-> from the vfs tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+On Thu, 4 Jan 2024 14:14:07 -0800 Dan Williams <dan.j.williams@intel.com> w=
+rote:
+>
+> Now fixed, but the divergence is just odd. Most of the commits were
+> identical but below ones were different (trimmed git range-diff
+> cef295b57778...5459e186a5c9). Not even sure where I would pick up a
+> bunch of commits with edited changelogs.
+>=20
+>   7:  6eb467e165fc !   7:  f40f939917b2 platform/x86: hp-bioscfg: Fix err=
+or handling in hp_add_other_attributes()
+>     @@ Commit message
+>          used by all the error paths after kobject_init_and_add().
+>     =20
+>          Fixes: a34fc329b189 ("platform/x86: hp-bioscfg: bioscfg")
+>     -    Cc: stable@vger.kernel.org # 6.6.x: acfff1760745: platform/x86: =
+hp-bioscfg: Simplify return check in hp_add_other_attributes()
+>     -    Cc: stable@vger.kernel.org # 6.6.x: 9950a86160a1: platform/x86: =
+hp-bioscfg: move mutex_lock() down in hp_add_other_attributes()
+>     +    Cc: stable@vger.kernel.org # 6.6.x: c5dbf0416000: platform/x86: =
+hp-bioscfg: Simplify return check in hp_add_other_attributes()
+>     +    Cc: stable@vger.kernel.org # 6.6.x: 5736aa9537c9: platform/x86: =
+hp-bioscfg: move mutex_lock() down in hp_add_other_attributes()
+>          Reported-by: kernel test robot <lkp@intel.com>
+>          Reported-by: Dan Carpenter <error27@gmail.com>
+>          Closes: https://lore.kernel.org/r/202309201412.on0VXJGo-lkp@inte=
+l.com/
 
-> diff --cc fs/tracefs/inode.c
-> index bc86ffdb103b,61ca5fcf10f9..000000000000
-> --- a/fs/tracefs/inode.c
-> +++ b/fs/tracefs/inode.c
-> @@@ -207,28 -206,14 +206,25 @@@ static void set_gid(struct dentry *pare
+yeah, very weird.
 
-Oh, and this is the code that I'm removing and will be in linux-next soon.
+--=20
+Cheers,
+Stephen Rothwell
 
--- Steve
+--Sig_//JOj3WKCn6vCSF+63sDrcPI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
->   
->   	change_gid(this_parent, gid);
->   repeat:
-> - 	next = this_parent->d_subdirs.next;
-> + 	dentry = d_first_child(this_parent);
->   resume:
-> - 	while (next != &this_parent->d_subdirs) {
-> + 	hlist_for_each_entry_from(dentry, d_sib) {
->  +		struct tracefs_inode *ti;
-> - 		struct list_head *tmp = next;
-> - 		struct dentry *dentry = list_entry(tmp, struct dentry, d_child);
-> - 		next = tmp->next;
->  +
->  +		/* Note, getdents() can add a cursor dentry with no inode */
->  +		if (!dentry->d_inode)
->  +			continue;
->  +
->   		spin_lock_nested(&dentry->d_lock, DENTRY_D_LOCK_NESTED);
->   
->   		change_gid(dentry, gid);
->   
->  +		/* If this is the events directory, update that too */
->  +		ti = get_tracefs(dentry->d_inode);
->  +		if (ti && (ti->flags & TRACEFS_EVENT_INODE))
->  +			eventfs_update_gid(dentry, gid);
->  +
-> - 		if (!list_empty(&dentry->d_subdirs)) {
-> + 		if (!hlist_empty(&dentry->d_children)) {
->   			spin_unlock(&this_parent->d_lock);
->   			spin_release(&dentry->d_lock.dep_map, _RET_IP_);
->   			this_parent = dentry;
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXUKQACgkQAVBC80lX
+0GzNzQf7BJeP18IqLxHeh0R+Bj4x2t3AQaTEjqsiQJbeHAMBtBhQzmu4/+K5iTIJ
+6FEn0jLRIIgr//QB6fUufqP49OpvV3QH97I00pbRDdsraN4564LL+Te4yPzO9aSo
+a9JeTv5D1f58u+FK0GtOdgqtoF2cct8Wa9WaER7NhGM/pb0CbILxSsAsuYpxKyBL
+ojgetNMHRqVRuOZviGX6joK+x136GnQZYTiNeJmAO3iPj/+mJmXIrqFH1By8bteD
+nPa5vK8SpnORarQam6UhHUEdTnD1+2JTD5Eb1nYDodTL3kj9k+x6KdaggjI7n6ZM
+YxQsdGWwNry59XUyw47ZtuNJjxiiww==
+=UVNz
+-----END PGP SIGNATURE-----
+
+--Sig_//JOj3WKCn6vCSF+63sDrcPI--
 

@@ -1,165 +1,97 @@
-Return-Path: <linux-next+bounces-637-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-638-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70989824E09
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 06:17:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 042E4824EA2
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 07:29:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FD2F1F22C43
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 05:17:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA3E71F21FEF
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 06:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D502538B;
-	Fri,  5 Jan 2024 05:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2991DDF5;
+	Fri,  5 Jan 2024 06:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kwRuDrs6"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NKv2N6VG"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF7A538D;
-	Fri,  5 Jan 2024 05:17:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A821DDD9;
+	Fri,  5 Jan 2024 06:29:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704431832;
-	bh=nHoW9gobpmGg5BUBY8TzEAIrwDE1AD2t9/HhOPtJlj4=;
+	s=201702; t=1704436181;
+	bh=0KTXj9eriEvGD7WssZFoeIm+vhVPJwH+2vZ744sORAc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=kwRuDrs6at1fxwuh2IqqTH/memtEe2Mp7N/TXa8Rt4C+8QvzyQgg4lBsgCarwY4Mm
-	 y6JHmE5bXeeisr8c12cKlUq5nTfLz4SGVzgU4CdWRQAGBCz0F7MdTUBf/NZH5ST68f
-	 k5nFNcg0q4rKW9A3DuWBLepolIcV5hNf6eFUeKr7YArmAamjwUR3wyFAnymBWmw7sX
-	 w8wX8Rea3zB22l2Kibk9y/z9yBvNAe+VXrRmw1CLo52v6zwPKBM+m5T7KaAKiOhCIV
-	 uSPCd6RoMNeWCfhU1WDjj95xpzA7QHKAqzXCJOPLAhYeTkgGawlC4avcBxX9yBoL84
-	 jcMHJOzdYagNQ==
+	b=NKv2N6VGdfmgJL7vnCHCJSApUXcGxaPV9p81WUJMQH5CoqQVA0OM/AZDGui8B172R
+	 BQ7BLVjEDsLZrnBg3L3XC8SAz+oIbpNLyWTESYUDCL1PRKdR0l3xtLzGjluf58QB+N
+	 cjugTizb8tPq7zordyDsktMKSyrcc5KXYzGIRIxGWZSQE97hguuHshs3Q54WErQaBf
+	 TGPYSjycG9CCAZUIXsGGxJXmWfofPc1/7RUbLp8Wcyjq/6ie983ElX61rIgpcHAymX
+	 JO1LrLfep6GKtU07YZKMu0iw9J32JxMTzcW7uKhWsMKkg3PleYsnhuuXGx37NEYo5m
+	 R1M4uHKg95I8w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5sCD0DR5z4x1x;
-	Fri,  5 Jan 2024 16:17:11 +1100 (AEDT)
-Date: Fri, 5 Jan 2024 16:17:09 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5tps3LC7z4x1p;
+	Fri,  5 Jan 2024 17:29:41 +1100 (AEDT)
+Date: Fri, 5 Jan 2024 17:29:40 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>, Linux Kernel Mailing List
+To: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>
+Cc: Henry Shi <henryshi2018@gmail.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the cxl tree
-Message-ID: <20240105161709.22d1b027@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the drivers-x86 tree
+Message-ID: <20240105172940.018d4bc9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gvNwq2VFK1sACazWmpghUWe";
+Content-Type: multipart/signed; boundary="Sig_/V3xBY8brWa4wkBNHxH_ho7n";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/gvNwq2VFK1sACazWmpghUWe
+--Sig_/V3xBY8brWa4wkBNHxH_ho7n
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the cxl tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+After merging the drivers-x86 tree, today's linux-next build
+(htmldocs) produced this warning:
 
-drivers/cxl/core/cdat.c: In function 'match_cxlrd_hb':
-drivers/cxl/core/cdat.c:327:43: error: 'struct cxl_switch_decoder' has no m=
-ember named 'target_lock'
-  327 |                 seq =3D read_seqbegin(&cxlsd->target_lock);
-      |                                           ^~
-drivers/cxl/core/cdat.c:332:38: error: 'struct cxl_switch_decoder' has no m=
-ember named 'target_lock'
-  332 |         } while (read_seqretry(&cxlsd->target_lock, seq));
-      |                                      ^~
+Warning: file /home/sfr/next/next/Documentation/ABI/testing/sysfs-platform-=
+silicom#20:
+        What '/sys/devices/platform/silicom-platform/power_cycle' doesn't h=
+ave a description
 
-Caused by commit
+Introduced by commit
 
-  185c1a489f87 ("cxl: Check qos_class validity on memdev probe")
-
-interacting with commit
-
-  5459e186a5c9 ("cxl/port: Fix missing target list lock")
-
-from hte cls-fixes tree.
-
-I have applied the following merge resolution for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 5 Jan 2024 15:44:24 +1100
-Subject: [PATCH] fix up for "cxl: Check qos_class validity on memdev probe"
-
-interacting with "cxl/port: Fix missing target list lock"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/cxl/core/cdat.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/cxl/core/cdat.c b/drivers/cxl/core/cdat.c
-index cd84d87f597a..10ac76bed477 100644
---- a/drivers/cxl/core/cdat.c
-+++ b/drivers/cxl/core/cdat.c
-@@ -8,6 +8,7 @@
- #include "cxlpci.h"
- #include "cxlmem.h"
- #include "cxl.h"
-+#include "core.h"
-=20
- struct dsmas_entry {
- 	struct range dpa_range;
-@@ -315,7 +316,6 @@ static int match_cxlrd_hb(struct device *dev, void *dat=
-a)
- 	struct device *host_bridge =3D data;
- 	struct cxl_switch_decoder *cxlsd;
- 	struct cxl_root_decoder *cxlrd;
--	unsigned int seq;
-=20
- 	if (!is_root_decoder(dev))
- 		return 0;
-@@ -323,13 +323,11 @@ static int match_cxlrd_hb(struct device *dev, void *d=
-ata)
- 	cxlrd =3D to_cxl_root_decoder(dev);
- 	cxlsd =3D &cxlrd->cxlsd;
-=20
--	do {
--		seq =3D read_seqbegin(&cxlsd->target_lock);
--		for (int i =3D 0; i < cxlsd->nr_targets; i++) {
--			if (host_bridge =3D=3D cxlsd->target[i]->dport_dev)
--				return 1;
--		}
--	} while (read_seqretry(&cxlsd->target_lock, seq));
-+	guard(rwsem_read)(&cxl_region_rwsem);
-+	for (int i =3D 0; i < cxlsd->nr_targets; i++) {
-+		if (host_bridge =3D=3D cxlsd->target[i]->dport_dev)
-+			return 1;
-+	}
-=20
- 	return 0;
- }
---=20
-2.43.0
+  d9cd21d441c8 ("platform/x86: Add Silicom Platform Driver")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gvNwq2VFK1sACazWmpghUWe
+--Sig_/V3xBY8brWa4wkBNHxH_ho7n
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXkNUACgkQAVBC80lX
-0GwC8wf/fe51lisvUioHJWYNubsayAdREhIgyRKw3s4LBfDnjseGmnrShJx2PQeq
-7asAvMVmyOtqoqxVhfD4tgRKIehCs+niQVEdwsCEMhROTdurXvq3ohVKvgdaorUR
-SARToAHg7U5qAj4C42MGVGDPSgxQXASHznfB82oeGsoFez8hEF1H+1Krif5KaAaq
-AZZv8pICTgwm+V4knauxtjPXw+M8CkRFpUU33gzexwWEkFpZPYPqNoZiE0aq68N2
-49FKwevy2Z/Hrl8gIsO3WcweAUJ+fgeuLGsTABYmcSBZW884Un8G/KKgn8c8hwHx
-bKPrbHTVJ+xdCLvW9q71LVBkdxW5xw==
-=0Juv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXodQACgkQAVBC80lX
+0GwINwf+N4fffopCPJJXDGxL7Lg337Tz6DFb9aWzexAgZtfKQdjnFkz8phBzTOth
+0sM1aigMyJhiHeUT6oGB+ex1rSLrfFYO6bXEzb67lMoZ2r/tQfuFcF0doXQlHNY8
+3VLOnzUeiSNofXMkMMUYiExLSCvQibilGO0DUQaf+nOkn6sTWPARWiyrA9zW7K37
+NyU8uzVdaEW/2Dbt0LH+fTzYIG0aH3Q9vrleE3ry3X026YxnJP2T0ZD82E6xwgM3
+wXtXTKcS8bNMeYh+hBaHiuXFEFqF2yq+qmeUCGfqfVcdgZy2h5ufJaCVMtLoEyTl
+z9ZpnM32EGoUpkA3ynLp4Q1wj/eGRQ==
+=RfQp
 -----END PGP SIGNATURE-----
 
---Sig_/gvNwq2VFK1sACazWmpghUWe--
+--Sig_/V3xBY8brWa4wkBNHxH_ho7n--
 

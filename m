@@ -1,117 +1,151 @@
-Return-Path: <linux-next+bounces-631-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-632-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93C5A824C34
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 01:43:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11654824C41
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 01:55:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E2A2B221F3
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 00:43:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBCED286B1E
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jan 2024 00:55:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D7291FB4;
-	Fri,  5 Jan 2024 00:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5300D39D;
+	Fri,  5 Jan 2024 00:55:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XBO/jfZD"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lKJ0KuPo"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40971FA3;
-	Fri,  5 Jan 2024 00:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150B523A6;
+	Fri,  5 Jan 2024 00:55:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704415398;
-	bh=B3VvRKT7Vpp6a+w7wdq1LM7SVAhg25085ZnjiGYLjME=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XBO/jfZDMMdczDta5F2TtDDEGnMS8VSwwDXQ+STl7oI85E35l5CS7Nrf7T4koPrqq
-	 KgoXBgJZy0W5JKPFgyOrtcJqU0r6F+gVBks5RnZMZ4RqWGC1fHrKHxg+ckr8u45yxG
-	 hcRXP8HRzz1NChJqfUzsMBv4QRIW0mkl0UdU/0VfEorev0FatDNLeLBcCNlkEv2bMz
-	 CjUH2+kcUdFQJ030BfR2v3XtLdpOI+sNX/toLQjlgs/Z+7FAUmW4ihc7KrWzssT6OP
-	 70/XyAkvBBWD4yiY6HkU8iZUDaa0adU1op9Y/jPA4yvmqqwytXEd49ATux/t0B6K25
-	 DvcBvXOp2HV4g==
+	s=201702; t=1704416111;
+	bh=8TrWvylCAPZ2BiUDABrg29fW1pEG9DML2Obb3DxuN1o=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lKJ0KuPoPuQMvyN0atkOY5V2TOfP4L2rdbKErPIs3elna1teRJC+PaCnV9J2wO8/P
+	 mTeZbY9Md4x8Ys0I9mcjeD0g3GmEGqOf4Ka2JK2I6xK1JG9emCt2GYErmaqh+PdaEz
+	 +Ex+fXTj/Mk8t8Vzs+ofSduKQ+F/aVNZ8ymNEtNGf83qBHLr0Gp+HFqY/w1PbXdJTV
+	 zsWfCULSdwL4qD0D03OsoNJQ89y/zwbb5W6IoQ9GbU2GldnFVveVP9mYdeuEfkQjxw
+	 l37fZLAFRhXhYi1GQqfGi+LxTl1sLF2U+SYMO8ovZb+G+7ne/YajNuhb2vDyg6zihM
+	 izscRmY0HpaMQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5l7B0p1kz4wcg;
-	Fri,  5 Jan 2024 11:43:17 +1100 (AEDT)
-Date: Fri, 5 Jan 2024 11:43:16 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T5lNt58sQz4x1x;
+	Fri,  5 Jan 2024 11:55:10 +1100 (AEDT)
+Date: Fri, 5 Jan 2024 11:55:09 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "Linux Next
- Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the cxl-fixes tree
-Message-ID: <20240105114316.03aa2a8b@canb.auug.org.au>
-In-Reply-To: <65972daf5c889_8dc68294d2@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20240102023218.3cd3e4ea@canb.auug.org.au>
-	<20240105085306.60979082@canb.auug.org.au>
-	<65972daf5c889_8dc68294d2@dwillia2-xfh.jf.intel.com.notmuch>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Michael Chan <michael.chan@broadcom.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20240105115509.225aa8a2@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//JOj3WKCn6vCSF+63sDrcPI";
+Content-Type: multipart/signed; boundary="Sig_/rt2RrppPJEEeCHLheu3xs91";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_//JOj3WKCn6vCSF+63sDrcPI
+--Sig_/rt2RrppPJEEeCHLheu3xs91
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Dan,
+Hi all,
 
-On Thu, 4 Jan 2024 14:14:07 -0800 Dan Williams <dan.j.williams@intel.com> w=
-rote:
->
-> Now fixed, but the divergence is just odd. Most of the commits were
-> identical but below ones were different (trimmed git range-diff
-> cef295b57778...5459e186a5c9). Not even sure where I would pick up a
-> bunch of commits with edited changelogs.
->=20
->   7:  6eb467e165fc !   7:  f40f939917b2 platform/x86: hp-bioscfg: Fix err=
-or handling in hp_add_other_attributes()
->     @@ Commit message
->          used by all the error paths after kobject_init_and_add().
->     =20
->          Fixes: a34fc329b189 ("platform/x86: hp-bioscfg: bioscfg")
->     -    Cc: stable@vger.kernel.org # 6.6.x: acfff1760745: platform/x86: =
-hp-bioscfg: Simplify return check in hp_add_other_attributes()
->     -    Cc: stable@vger.kernel.org # 6.6.x: 9950a86160a1: platform/x86: =
-hp-bioscfg: move mutex_lock() down in hp_add_other_attributes()
->     +    Cc: stable@vger.kernel.org # 6.6.x: c5dbf0416000: platform/x86: =
-hp-bioscfg: Simplify return check in hp_add_other_attributes()
->     +    Cc: stable@vger.kernel.org # 6.6.x: 5736aa9537c9: platform/x86: =
-hp-bioscfg: move mutex_lock() down in hp_add_other_attributes()
->          Reported-by: kernel test robot <lkp@intel.com>
->          Reported-by: Dan Carpenter <error27@gmail.com>
->          Closes: https://lore.kernel.org/r/202309201412.on0VXJGo-lkp@inte=
-l.com/
+Today's linux-next merge of the net-next tree got a conflict in:
 
-yeah, very weird.
+  drivers/net/ethernet/broadcom/bnxt/bnxt.c
+
+between commit:
+
+  e009b2efb7a8 ("bnxt_en: Remove mis-applied code from bnxt_cfg_ntp_filters=
+()")
+
+from the net tree and commit:
+
+  0f2b21477988 ("bnxt_en: Fix compile error without CONFIG_RFS_ACCEL")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//JOj3WKCn6vCSF+63sDrcPI
+diff --cc drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index e1f1e646cf48,8f10ab4d4a43..000000000000
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@@ -13081,30 -14088,18 +14090,16 @@@ static void bnxt_cfg_ntp_filters(struc
+  				if (rc)
+  					del =3D true;
+  				else
+- 					set_bit(BNXT_FLTR_VALID, &fltr->state);
++ 					set_bit(BNXT_FLTR_VALID, &fltr->base.state);
+  			}
+ =20
+- 			if (del) {
+- 				spin_lock_bh(&bp->ntp_fltr_lock);
+- 				hlist_del_rcu(&fltr->hash);
+- 				bp->ntp_fltr_count--;
+- 				spin_unlock_bh(&bp->ntp_fltr_lock);
+- 				synchronize_rcu();
+- 				clear_bit(fltr->sw_id, bp->ntp_fltr_bmap);
+- 				kfree(fltr);
+- 			}
++ 			if (del)
++ 				bnxt_del_ntp_filter(bp, fltr);
+  		}
+  	}
+ -	if (test_and_clear_bit(BNXT_HWRM_PF_UNLOAD_SP_EVENT, &bp->sp_event))
+ -		netdev_info(bp->dev, "Receive PF driver unload event!\n");
++ #endif
+  }
+ =20
+- #else
+-=20
+- static void bnxt_cfg_ntp_filters(struct bnxt *bp)
+- {
+- }
+-=20
+- #endif /* CONFIG_RFS_ACCEL */
+-=20
+  static int bnxt_udp_tunnel_set_port(struct net_device *netdev, unsigned i=
+nt table,
+  				    unsigned int entry, struct udp_tunnel_info *ti)
+  {
+
+--Sig_/rt2RrppPJEEeCHLheu3xs91
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXUKQACgkQAVBC80lX
-0GzNzQf7BJeP18IqLxHeh0R+Bj4x2t3AQaTEjqsiQJbeHAMBtBhQzmu4/+K5iTIJ
-6FEn0jLRIIgr//QB6fUufqP49OpvV3QH97I00pbRDdsraN4564LL+Te4yPzO9aSo
-a9JeTv5D1f58u+FK0GtOdgqtoF2cct8Wa9WaER7NhGM/pb0CbILxSsAsuYpxKyBL
-ojgetNMHRqVRuOZviGX6joK+x136GnQZYTiNeJmAO3iPj/+mJmXIrqFH1By8bteD
-nPa5vK8SpnORarQam6UhHUEdTnD1+2JTD5Eb1nYDodTL3kj9k+x6KdaggjI7n6ZM
-YxQsdGWwNry59XUyw47ZtuNJjxiiww==
-=UVNz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWXU20ACgkQAVBC80lX
+0Gwg/Qf9GX4MQ+uLcAc+deNFVMi7ZVCclDpzYzXt8kGQN10cSdXeLVRvozjzWIfT
+ZU+SULmostQaubrPXSlb/7tyAsU/+sRkvUe3+z1llmaWdPaaHuCzaoi6BBuuTWYh
+tq3s/osd+e/82/DG5tM54NBvuLH0sCsUttlyNNue7MsbGIcPyTljtTTp8yPltc23
+mOmBZKjjXIBhN33vUN5ZswsduE2P4Gj8elSm2UbD7cObPXi/5BhLLYxtQdo/9ug0
+e4K8HE4dXUY/kXvYhETE0q/ECn7ismKt4lQKme6L6oAY+cb7vMC2s5mde5QQxfSo
+a5tJVGGrgzxQQ/dFop1Ey2hVjcrvrA==
+=4a2U
 -----END PGP SIGNATURE-----
 
---Sig_//JOj3WKCn6vCSF+63sDrcPI--
+--Sig_/rt2RrppPJEEeCHLheu3xs91--
 

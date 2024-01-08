@@ -1,132 +1,101 @@
-Return-Path: <linux-next+bounces-666-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-667-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C50D18268B6
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 08:37:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C497C8268D9
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 08:46:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CC3EB20F59
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 07:37:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DBCC1F211A2
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 07:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1E3A8BFA;
-	Mon,  8 Jan 2024 07:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC30BE62;
+	Mon,  8 Jan 2024 07:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="cEMcvmCG"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="FdsUbwJh";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CjXCbyxz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828E58BE3;
-	Mon,  8 Jan 2024 07:37:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-	t=1704699453; x=1705304253; i=deller@gmx.de;
-	bh=XgElwOJD6e4nyDVLhR8tkMhPyt8Gjuugn7w7UEWYGds=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=cEMcvmCGOZ1PNiYT6U3GyhenWjt/JQiMAbBhBBjPnGK6Pn1tfwcGR2fqZHxF3FSr
-	 PE1/4Hlv7OmZ8B0Nw1dGLn+XWxJYnNHr+Ee2X6vcmWRId6yjvk7cuJpoLe69Vx46b
-	 fwque85QEw6G86nv6y/nXQivwHBY7nnjYV+5erdCwVxSMkLfyxsmKUFEaP/Lu9w3P
-	 WKkYDE6fBYYZrHS+xWiAmSANkxZj7ZJFFK+cAvRw/n7lbO27ZDfMj1rnKkrKQcztJ
-	 +3a3GAN0Ee6UOtc7am55j8weyVPfinNPX/p8biMkInj466zSWyZi2OJTCdgiqDEVC
-	 j5se660Is0ZeS5BjAw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.55] ([94.134.148.84]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MmDEg-1qwAsH3C2C-00iEwU; Mon, 08
- Jan 2024 08:37:33 +0100
-Message-ID: <b47068a7-473e-4b0e-9511-0d3f2afc4724@gmx.de>
-Date: Mon, 8 Jan 2024 08:37:32 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1B6BE58;
+	Mon,  8 Jan 2024 07:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id 8CB2D320128F;
+	Mon,  8 Jan 2024 02:46:04 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 08 Jan 2024 02:46:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1704699964; x=1704786364; bh=H9r8WTz9DN
+	D0Cp3bEl392WyrJu7uzpB3aWtuQ49mSEU=; b=FdsUbwJhPPDFTiw1qrsQaX8/FE
+	es90Gg2sJUBGdwKoi79ptpprHdo2uRO95KqFKFbpB41CzQQKkuKrM+gigIaxq8YN
+	hcItO2IBD3SU78VcMMuXy4N1dlTTixf2LOeS9XLz650sSE4WrDqVh31sMdwoc72Y
+	dqfrAkKeBu5/kmbVM6d1OSj1M7kSiY2mHAtikgs2rla2QFYlsNHUrk8eKu/PyAru
+	u5b5h7gAIyBJQWvIjEhM1RqYNSNnrrFfYj6J/WK9sJhg6qT23IupDAxxWB7E1MXk
+	WmDXqndu7u0XVuleUhkY5Da3v1rF6se01PrcLYXU90XdzHCYU4ydf/oZ799g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1704699964; x=1704786364; bh=H9r8WTz9DND0Cp3bEl392WyrJu7u
+	zpB3aWtuQ49mSEU=; b=CjXCbyxz5nSuNaDurZZn8V9gdG87fQy9v677uQc7s+3b
+	Dlyh0TEuCrYvjGgk47MU74daE4RklOauj/M2HJ2n2dGFpLOpBBukBPtlw2J531zr
+	NN18LZfB/ouMuA3cowqbd/uDbaSwJZ68/20Ckn5/iYNJavm+cnbyAh0Cad7dfwn1
+	vYCXBtXZwnvkMXf+zY1v6oKj0NdU2Iof4m5LZtCTmFaH2fXzCNfP6mvN3q5Ywfnx
+	IObViQNunj3mNZTsmFFRm7rvLwTQY02WQF/XNALa6+pvd4nYIzNOXo81gRHo+mO7
+	fY7yN/Ghr5OFC5TdPFKUw2lm2vrZPblRG9gznnQkLA==
+X-ME-Sender: <xms:O6ibZWO5axERj17YFXE_qkJxJwWUMTxOW81XvwuYEL8K8jFpYinfJQ>
+    <xme:O6ibZU_9pjyDVVKxvppduB_WOiSFBArkWJcy2Rz9kM-_56Jjz7AvPi6gVNLYANRl3
+    oV4KQysW7JgSw>
+X-ME-Received: <xmr:O6ibZdQs49gYsVuXQ2iNvCVH2rDx3WdfdoityGi_O4N-yHdvHvNWDX3JqGNBLXeMvcphU5LhWgDBh5SasRMKBI2eZd5xmjL9cg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdehiedggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:O6ibZWv6U-MIH8TXTTANV1V1ZiONphS41cgFObRwWN5Oz57lZDvsgg>
+    <xmx:O6ibZeeFpR6Gn5ki_z_VKfeoK9QLqtnHfFchG9-weyq_Sbiy1Y8BMw>
+    <xmx:O6ibZa0pogaYPvEiDln-3k4j4w5dsNhKnyupPck9YLVzgozOReo-nA>
+    <xmx:PKibZVzyxt_T5w7BDQuhRG7o9NhdPUzN1tiPlIctE4RU7qvFYAHYnw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 8 Jan 2024 02:46:02 -0500 (EST)
+Date: Mon, 8 Jan 2024 08:46:01 +0100
+From: Greg KH <greg@kroah.com>
+To: Helge Deller <deller@gmx.de>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Arnd Bergmann <arnd@arndb.de>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the char-misc tree
+Message-ID: <2024010857-scandal-unlit-51f7@gregkh>
+References: <20240108135842.34543bb6@canb.auug.org.au>
+ <b47068a7-473e-4b0e-9511-0d3f2afc4724@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: duplicate patch in the char-misc tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
- Arnd Bergmann <arnd@arndb.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240108135842.34543bb6@canb.auug.org.au>
-Content-Language: en-US
-From: Helge Deller <deller@gmx.de>
-Autocrypt: addr=deller@gmx.de; keydata=
- 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
-In-Reply-To: <20240108135842.34543bb6@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:HRUvsujthT/fFOI6JdjKGNCCR0Nv9L4HETnu/xjWiwDnk5fzMQB
- UJd3VVscduNdDQFD+9od6XnmkxlXM0BJgc63MDgyEHeNPrGhIqIuCbkzw1ZZGSA/8W9fFD6
- RmjFOfl/PrAptN3trRfTM1C7O7Pr1Sh88CoLy8OU0s8ZMn39V3SK3a/RooMMMgMYl6kzOQS
- XYQ/S8Rm6Rb1M5CAhmSnA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:PaqQDI8RUXI=;e6IMytBKTN2/3MXaeqzmzQFevyu
- 9HWfVLdToA1LIRXP20wlDNGsrHsy4w9hCi+G0X/h0pRxjx1DLdAIc+ixe0t0tzfMOgpIFwknJ
- YEXdwhY2dNmHaNNDza0gN/by8UmXG22xTsHjgvL/osp2xe0zetBTTiVwYu2go20X5fMgT68Gv
- 82NAWsbdFLtGpY4oIE236KBx6sx9/4O1YGL3BvjZMSJkSRO2JH1qJlab+mdxYttIamNQkgI4J
- +Fhfe08s4YdxAIts9/l4QFe6ZajHSI0umKyAtCrTZvdHl/sU4ArDY3UyxX72iUPfMZfsUdM8N
- mXFk8Pb6CTcxUAegP+HSYWYzZPIco/z/5Yk19q/tCNGDd6fPgIYIPKnB9o/KneF9UlUykLdwc
- K2dHncVHceRzLkKhYlpE6XSZgMsXI8rU/wfarIGmZqBXMIR19pzZwiR3s+CuBF/XopILuqyYL
- h4qSWOXrHaP8sq9t9mGdXEDP8wj4adqSzpsfntjncJtUPYl6PEv/J06oeJgNTy6Bq3XuwRbSm
- n69pZZQNbWWN0qtpSVJFkpER4qKN13EnbK1X0FhhIRMDioqmzBd9uf8oSbmg7PKbxB/MKRteH
- DcPau4VysMxB69KWGGDCEsiwtJROzp8o/Wj7vkFeZAbMgJwWKjQ7UveSn43/7ktFm9viI/h1J
- WI0S8tGejssbaekPdoflkOfOp3Am49MveRAIZH+lKqzCQ8+lEWBk413Je/K7gfcob+571TjZy
- zr6grH52qLzWyxdLPbnMNE5rs0gLxiFBCB0Frij3c+re+C0WBeFYt+pET+2LAQ8bmu1KcmP16
- M4Na+Zrk3B21HdtMemAxtsPs8v9jWH6zmMrUdJbC2Pe31vOoknm9z8qGqLqB6RT+Q3Y58u7fT
- T4pX9pyvDwhyBUk+Y1OgXLZQFQpauWR7yNvZgOIu9a1qymUpcHN+tboVEPGR8RsI+SvsxLrib
- 06+faiaz8hOgwOvAlnEzWLDQznk=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b47068a7-473e-4b0e-9511-0d3f2afc4724@gmx.de>
 
-On 1/8/24 03:58, Stephen Rothwell wrote:
-> The following commit is also in the fbdev tree as a different commit
-> (but the same patch):
->    110684d58bdb ("vgacon: drop IA64 reference in VGA_CONSOLE dependency list")
+On Mon, Jan 08, 2024 at 08:37:32AM +0100, Helge Deller wrote:
+> On 1/8/24 03:58, Stephen Rothwell wrote:
+> > The following commit is also in the fbdev tree as a different commit
+> > (but the same patch):
+> >    110684d58bdb ("vgacon: drop IA64 reference in VGA_CONSOLE dependency list")
+> 
+> I've dropped that patch from fbdev git tree.
 
-I've dropped that patch from fbdev git tree.
-
-Helge
+Thanks!
 

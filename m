@@ -1,107 +1,98 @@
-Return-Path: <linux-next+bounces-657-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-658-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 266B2826730
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 02:49:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B573826751
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 03:59:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A4F01F217D4
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 01:49:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5FF91F21374
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 02:58:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED9368F5F;
-	Mon,  8 Jan 2024 01:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CB010F7;
+	Mon,  8 Jan 2024 02:58:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FBYJFMab"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gLrPwg2O"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7753A7F;
-	Mon,  8 Jan 2024 01:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93896EDE;
+	Mon,  8 Jan 2024 02:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704678564;
-	bh=Lf53kHBVwbitP7k47OPxiji8oPEUlYg9H+eTQgsaYEI=;
+	s=201702; t=1704682725;
+	bh=JW8/JcRwBpEWLXDnPFIBPw458AOy8bltOmNiNM9TzZs=;
 	h=Date:From:To:Cc:Subject:From;
-	b=FBYJFMabJvocXp/zMaN/XvQQpocHjMm9B3K+lCfmlgvzeC4uC0YQXawKi8LCL6k87
-	 ZpAlrK1+WJssR59IdKUHavJo9Q9wtBl7w+xEnfbevpQ3hHU4l3VLJt0fsDR+6TqTO7
-	 I17e+jDNMTlSqKdcLRhCPvxcDW/5wHZQpD8FkvI+t+cJ5ST+wBTpQsSgBaDPD/dl0J
-	 VxI5BP7ngcWSw33M6AgobSj6cfGRxsRY3lJEZtmV0FMSPuLc9PYivn5RPmHxeoJCwH
-	 wCPS0EHorcbUhrf7px/p/tMsw8nIqkST1C+MMzVc/N0/oCbkVrRP7qE30oHjLctuuu
-	 CLmz7yD4XNg9A==
+	b=gLrPwg2Ouruqg1xFWNoUTw/xIUhvULAPHH/lAVzBT5Go6nVly+SxFKgti/azFhTlY
+	 XSpTig/+dP2cS397aVitKU3MlkP+5lZj9OT3COBzD74dgXPdsq06xik86mvfSLUK4z
+	 I+Hq7xSNmDNvq4q01iEIbVeETzu8v/Ol0MIkaGvTom5xfx2Lm9LoMpAhEDwzjkED0i
+	 7J19ZpQmnCWhVjWLAkvWKUEIZ5qv5YwYPxgVz2PmUjHIypPMiCHOKYUuHtI/KXWXeV
+	 foAJpddmSOLbAzz1vio2aS+mOmcdlITXbAE6JHr8lo3s3W1Of2XRj6GU8UP4tBtzPy
+	 fh4PQxxg/BK4A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T7cS32zMPz4wx5;
-	Mon,  8 Jan 2024 12:49:23 +1100 (AEDT)
-Date: Mon, 8 Jan 2024 12:49:22 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T7f03625Fz4wc6;
+	Mon,  8 Jan 2024 13:58:43 +1100 (AEDT)
+Date: Mon, 8 Jan 2024 13:58:42 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
+To: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>, Helge Deller
+ <deller@gmx.de>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ftrace tree with the vfs tree
-Message-ID: <20240108124922.37bd7fe3@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the char-misc tree
+Message-ID: <20240108135842.34543bb6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/x+fIwksRk+Kxf4h2ScQydzQ";
+Content-Type: multipart/signed; boundary="Sig_/EXBMrwQJoC8pQDL=7JNggJb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/x+fIwksRk+Kxf4h2ScQydzQ
+--Sig_/EXBMrwQJoC8pQDL=7JNggJb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the ftrace tree got a conflict in:
+The following commit is also in the fbdev tree as a different commit
+(but the same patch):
 
-  fs/tracefs/inode.c
+  110684d58bdb ("vgacon: drop IA64 reference in VGA_CONSOLE dependency list=
+")
 
-between commit:
+This is commit
 
-  da549bdd15c2 ("dentry: switch the lists of children to hlist")
+  7f55464ec616 ("vgacon: drop IA64 reference in VGA_CONSOLE dependency list=
+")
 
-from the vfs tree and commit:
-
-  8186fff7ab64 ("tracefs/eventfs: Use root and instance inodes as default o=
-wnership")
-
-from the ftrace tree.
-
-I fixed it up (the latter removed the code modified by the former, so
-I just did that) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+in the fbdev tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/x+fIwksRk+Kxf4h2ScQydzQ
+--Sig_/EXBMrwQJoC8pQDL=7JNggJb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWbVKIACgkQAVBC80lX
-0Gx/qgf8CIlnK9gkNc0lxCD8t2z0dljFVw/iVj1F96iBZ/FHXPnErhceK36SzzOU
-zc+Smwz4tfrP730btCvE2P4cUzK4ifRBM0KBJGzeseqIbcOShqdQmp9W5cB1dh53
-iP9xGMEQZwR6lQ1KiyAQUOdymDQS4q+e0FuWArwUJBbR0nX161NxUq85bIPTD2Y1
-7xGrgTzBL/5MBH8Ql8wM7NfBjZrOND/yFYQuXTtfbPlxAM2F6pIpMfeLky5fcxhP
-zgUlEN5gyk5KzUGmYqewXC54wVGX2cEHtvoahtIIyaobDOGAt4LIKWJqaxJyA4+0
-B2ITAuDyrNKcHOPfn/qaErzXqPMK0Q==
-=SVM+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWbZOIACgkQAVBC80lX
+0Gz9CQf/U1i0x9o41jGePmkyDqYsYi8hoJK6tO5M9XlZq9RkflQRgmAgHGM01DmZ
+LOXRTe/bCrOevSXjSWnnJpdg7wCBOKO1SFBr0+d2Kkat/WTks/sDQqLni3Df3eRS
+q0XLw1C1abRoi3JNmM3LFk0RVfiA0sA34XNUTz1O0pfIffbcxurwlz3rLcP0bCO5
+VxjggRECVJTqXnxK4k2V7/ROc07/Kfc+I1K8+Etc8mU3ulrWrisfkeySOXfuV3/V
+Kk9yVpvmAoxKP7BKWREu6slzs8MTCxGPBGzH0+/SQtai9F9sT9OPWWVgu6ZUiggB
+ThGyLFtsxa7OPg0mRPbW+qeFTVgywA==
+=nvKq
 -----END PGP SIGNATURE-----
 
---Sig_/x+fIwksRk+Kxf4h2ScQydzQ--
+--Sig_/EXBMrwQJoC8pQDL=7JNggJb--
 

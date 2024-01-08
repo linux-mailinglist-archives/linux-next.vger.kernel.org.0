@@ -1,102 +1,99 @@
-Return-Path: <linux-next+bounces-659-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-660-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E1D9826753
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 04:03:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60EEC826756
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 04:07:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E5391F213D7
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 03:03:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DAC5B20FF2
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 03:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D29D879DE;
-	Mon,  8 Jan 2024 03:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A2A15AE;
+	Mon,  8 Jan 2024 03:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VXHvqpVQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ba7B1aEe"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2E479CD;
-	Mon,  8 Jan 2024 03:02:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6178E1364;
+	Mon,  8 Jan 2024 03:07:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704682976;
-	bh=IS89/SkN86WNNdQRLDW8trsgzd/IVCxj3T7Ic2G2CVA=;
+	s=201702; t=1704683234;
+	bh=5a+m4uiBLce08WIeCid5K2za95zqkWU2/ciHOKAyf7U=;
 	h=Date:From:To:Cc:Subject:From;
-	b=VXHvqpVQAsSI3PyrecpmFrw+a98dOo+Dc8kP7HL3FIvNK6KLFm88fwovJbNS9ASFT
-	 c67XHdAWkdraBenjW+pmzPnI33o4pRMJGZD2hE/cIgAylmPH6CdB4m3N5ik6ZE3wyt
-	 PJFetoki2y2iNhHr8QvZVuFxfQFvZyEtFVpTXt+qZGhtZwcekC+r+cAaF35lEdzj7p
-	 meF3L6c4HNTPbZczqC8wsGeJ24qlSRw8qeF8QvdRLClkH1PJezPazUYfoToqmaCZcW
-	 uylPYpBRpGuAa+521MU1qacAUgpkgk+XCF5kdHk3aUnKkJ0xWkYKGtmEGZJHLJdjOX
-	 hQESdjiEcB6eQ==
+	b=ba7B1aEesenpyizvEpCUdOXw4l5PsJGx3BEzvSkxRyNiGUjNEd96PvSh8UHMfYQQh
+	 Blq6h9I1AWaY1hs7xv0f5p7b9frJDoHPsFVqgrnjEOxrWUZIS8iO2xUsfekeSdOLCS
+	 ycTAHucXgFKjcdL7R+nI66j0YlrahdM/c4yZVisD/jFHPXI+bTTuYkr8q09euWak6j
+	 HTzoOWMVLOESeA/wx5gZ9et4LiEJoSLomaXaEzaNfeeKiPjcyeFWr3hoTKRJ/T8Jvs
+	 A7GYKwhyzD+U1RkOVmOkI5le5xd5w40ADzBDiycxmaH5kA9uzKFZDIfTfCtWcYAeE6
+	 22D4dVrPpzOsQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T7f4w1Xwsz4wcg;
-	Mon,  8 Jan 2024 14:02:56 +1100 (AEDT)
-Date: Mon, 8 Jan 2024 14:02:54 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T7f9t07Ykz4wch;
+	Mon,  8 Jan 2024 14:07:13 +1100 (AEDT)
+Date: Mon, 8 Jan 2024 14:07:13 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>, Sudeep Holla
- <sudeep.holla@arm.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the char-misc tree
-Message-ID: <20240108140254.6def2dc7@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>, Tzung-Bi Shih
+ <tzungbi@kernel.org>
+Cc: Chrome Platform <chrome-platform@lists.linux.dev>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the char-misc tree
+Message-ID: <20240108140713.143f27e1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/La/UTwjNqCFaMe7Dk.TjP2t";
+Content-Type: multipart/signed; boundary="Sig_/BYnEZsThSNEHzOW2YdvWmzt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/La/UTwjNqCFaMe7Dk.TjP2t
+--Sig_/BYnEZsThSNEHzOW2YdvWmzt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the scmi tree as different commits
-(but the same patches):
+The following commit is also in the chrome-platform-firmware tree as a
+different commit (but the same patch):
 
-  259566503782 ("firmware: arm_scpi: Convert to platform remove callback re=
-turning void")
-  927e11300d8e ("firmware: arm_scmi: Convert to platform remove callback re=
-turning void")
+  f69583d32fcb ("firmware: coreboot_table: Convert to platform remove callb=
+ack returning void")
 
-These are commits
+This is commit
 
-  8b12056b2cbf ("firmware: arm_scpi: Convert to platform remove callback re=
-turning void")
-  66926739f592 ("firmware: arm_scmi: Convert to platform remove callback re=
+  09aeaabebdaf ("firmware: coreboot: Convert to platform remove callback re=
 turning void")
 
-in the scmi tree.
+in the chrome-platform-firmware tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/La/UTwjNqCFaMe7Dk.TjP2t
+--Sig_/BYnEZsThSNEHzOW2YdvWmzt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWbZd4ACgkQAVBC80lX
-0GzKgQf/eyLiTSfjg4adrHtwlxpYK5TgKKcmAXzC2XpQYSKQh46NeZOyOyZ6FQ4W
-6fAuY+JYZsgJ/9Q4JdRQJOsnEi2Jt5QSMtkRblTSHB5DSFeiCgwSvu+qXuTlfVxn
-OeU1J8qPZkGNNrJkkj7c4kmzjDPoqkD0eiU7zmQt59AFsuwmLRitKLkuMsbcEYgU
-zCpribJumbpJjZASjiDlxeQXMLE2hIUZUOtLlQ7YE/IIG0mgp9YWKcoSaocEvzbu
-jxjX3rSgNsmMsvACjo8IdhA5IgXVejFDhjWRIv0iocFMQ6h5zoHsjJcUeKSkV4Cu
-f1fAY0lkGf82L+MUBVoVM2w78gnXuA==
-=lD7/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWbZuEACgkQAVBC80lX
+0GxtpAf7B6xUxFHzDSAa0ICEtFT3C1zVbX6Rjq686Pxw9woWau3joExL6w85DngI
+r8Q8SlyeVHYq6oMYbh7BZVNMlc2cx7mjsdWa8FvGUrZ4LXnAvUbHsJbSFjUY8oI0
+igRjMoMOcYkIoWSoeevnmfj2JIE7sn3nJe5JSMUfpobZ634ijADxQZqYEpGg+QG6
+82G0zZ/lHmnJibCynMzpjVWBSU2rMogUJGN+X02uhZbSp2o8Y26aBK6vPdr4DfYM
+CgopsP/fZ9iryibLd8v0Gjer9wyHJv6lAuZqr1y6PIl8rnhWSvr+bT3B4gZG1cMC
+VVkKX5dOGZw7L98MRotXWOgV/faWsQ==
+=l3uy
 -----END PGP SIGNATURE-----
 
---Sig_/La/UTwjNqCFaMe7Dk.TjP2t--
+--Sig_/BYnEZsThSNEHzOW2YdvWmzt--
 

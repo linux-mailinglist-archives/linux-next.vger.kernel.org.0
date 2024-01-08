@@ -1,99 +1,110 @@
-Return-Path: <linux-next+bounces-660-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-661-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60EEC826756
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 04:07:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D68C482676F
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 04:36:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DAC5B20FF2
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 03:07:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D27B1F21159
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jan 2024 03:36:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A2A15AE;
-	Mon,  8 Jan 2024 03:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893E91115;
+	Mon,  8 Jan 2024 03:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ba7B1aEe"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="QUg1mS/a"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6178E1364;
-	Mon,  8 Jan 2024 03:07:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2D110F5;
+	Mon,  8 Jan 2024 03:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1704683234;
-	bh=5a+m4uiBLce08WIeCid5K2za95zqkWU2/ciHOKAyf7U=;
+	s=201702; t=1704684989;
+	bh=rLJkeC1ri2q4IsnLMJ/ivzjYisiUMhtXCeHKxDAJr+k=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ba7B1aEesenpyizvEpCUdOXw4l5PsJGx3BEzvSkxRyNiGUjNEd96PvSh8UHMfYQQh
-	 Blq6h9I1AWaY1hs7xv0f5p7b9frJDoHPsFVqgrnjEOxrWUZIS8iO2xUsfekeSdOLCS
-	 ycTAHucXgFKjcdL7R+nI66j0YlrahdM/c4yZVisD/jFHPXI+bTTuYkr8q09euWak6j
-	 HTzoOWMVLOESeA/wx5gZ9et4LiEJoSLomaXaEzaNfeeKiPjcyeFWr3hoTKRJ/T8Jvs
-	 A7GYKwhyzD+U1RkOVmOkI5le5xd5w40ADzBDiycxmaH5kA9uzKFZDIfTfCtWcYAeE6
-	 22D4dVrPpzOsQ==
+	b=QUg1mS/aHOvGTBet0I0I8iQnVx0Ys+qcANNMupVtI+QZFhCl/nFR+1UoCPAtcjqgj
+	 +GQKfYYYN2q60h1OitWOYlZQSLgGy8L8++befyIuM09aI2P8/Mm8M+FmfKu/S0+1mw
+	 nF2xsmLo+XSQJa2pyIp5J99mTiU2K+Y4vdmHN9EwaE/uvoC7YOv5o/ZJw8b5sX5FQO
+	 AeYLYCfxHFjpsJOK1mjyASAdjdDcKNdyGVBs9YELY4fhF4k0Wu3jbY3du4lQm4jK3f
+	 TfP1fTdRhRzKDobDHREm3XlmERKlMd+GGRgq5tZajMDD2ojEhlQ42iYgE4jALMt4jN
+	 MVJYwk0J56DdQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T7f9t07Ykz4wch;
-	Mon,  8 Jan 2024 14:07:13 +1100 (AEDT)
-Date: Mon, 8 Jan 2024 14:07:13 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T7fqc5lSfz4wcg;
+	Mon,  8 Jan 2024 14:36:28 +1100 (AEDT)
+Date: Mon, 8 Jan 2024 14:36:27 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>, Tzung-Bi Shih
- <tzungbi@kernel.org>
-Cc: Chrome Platform <chrome-platform@lists.linux.dev>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Yury Norov <yury.norov@gmail.com>, Greg KH <greg@kroah.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hugo Villeneuve
+ <hvilleneuve@dimonoff.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the char-misc tree
-Message-ID: <20240108140713.143f27e1@canb.auug.org.au>
+Subject: linux-next: manual merge of the bitmap tree with the tty tree
+Message-ID: <20240108143627.29ac91fe@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BYnEZsThSNEHzOW2YdvWmzt";
+Content-Type: multipart/signed; boundary="Sig_/joe/0VJoWKMra3/TtN=Q_XD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/BYnEZsThSNEHzOW2YdvWmzt
+--Sig_/joe/0VJoWKMra3/TtN=Q_XD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the chrome-platform-firmware tree as a
-different commit (but the same patch):
+Today's linux-next merge of the bitmap tree got a conflict in:
 
-  f69583d32fcb ("firmware: coreboot_table: Convert to platform remove callb=
-ack returning void")
+  drivers/tty/serial/sc16is7xx.c
 
-This is commit
+between commits:
 
-  09aeaabebdaf ("firmware: coreboot: Convert to platform remove callback re=
-turning void")
+  8a1060ce9749 ("serial: sc16is7xx: fix invalid sc16is7xx_lines bitfield in=
+ case of probe error")
+  3837a0379533 ("serial: sc16is7xx: improve regmap debugfs by using one reg=
+map per port")
 
-in the chrome-platform-firmware tree.
+from the tty tree and commit:
+
+  e63a961be48f ("serial: sc12is7xx: optimize sc16is7xx_alloc_line()")
+
+from the bitmap tree.
+
+I fixed it up (the former removed the function updated by the latter) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/BYnEZsThSNEHzOW2YdvWmzt
+--Sig_/joe/0VJoWKMra3/TtN=Q_XD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWbZuEACgkQAVBC80lX
-0GxtpAf7B6xUxFHzDSAa0ICEtFT3C1zVbX6Rjq686Pxw9woWau3joExL6w85DngI
-r8Q8SlyeVHYq6oMYbh7BZVNMlc2cx7mjsdWa8FvGUrZ4LXnAvUbHsJbSFjUY8oI0
-igRjMoMOcYkIoWSoeevnmfj2JIE7sn3nJe5JSMUfpobZ634ijADxQZqYEpGg+QG6
-82G0zZ/lHmnJibCynMzpjVWBSU2rMogUJGN+X02uhZbSp2o8Y26aBK6vPdr4DfYM
-CgopsP/fZ9iryibLd8v0Gjer9wyHJv6lAuZqr1y6PIl8rnhWSvr+bT3B4gZG1cMC
-VVkKX5dOGZw7L98MRotXWOgV/faWsQ==
-=l3uy
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWbbbsACgkQAVBC80lX
+0GwWIwf/UTC0V4/vsfmGBdLPKQTKU10BciR19F+wmCfF5gbfHpjHabEzVPVK8HIF
+C2pEfpFYfsm2dmMooUvcd3cnxYHyynq94U2omzBgPTgtXUjbSpDDH34eylehQHc3
+nPFeUtvfkxhLCcoBAf3O6W5ubwzo1rNNLsJIP23/Sk2eDJJem/u4D9hH/Dxky6iU
+Y2zuL7s0lCtLqiM15by9STcKUJjiSkDG2LUuIP5SULbool2XGcvGC0nKrGgRHE3P
+7pFkO1/r6AUN6NXthYlqVOPzSroupqKu/HQ0klvsXpdaLcBLh3/+UUkEILBIDMRP
+2gnN8vJVua9XmtOO7lX4z8l8Dq9yVw==
+=s768
 -----END PGP SIGNATURE-----
 
---Sig_/BYnEZsThSNEHzOW2YdvWmzt--
+--Sig_/joe/0VJoWKMra3/TtN=Q_XD--
 

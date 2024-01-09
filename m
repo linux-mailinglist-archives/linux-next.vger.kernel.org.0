@@ -1,202 +1,100 @@
-Return-Path: <linux-next+bounces-683-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-684-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 310FA827CEB
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jan 2024 03:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1EE6827DE3
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jan 2024 05:41:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79C70285664
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jan 2024 02:32:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BA4228603E
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jan 2024 04:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB432573;
-	Tue,  9 Jan 2024 02:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C71F939B;
+	Tue,  9 Jan 2024 04:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="UXwpeIvM"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LHjc+J9j"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7012A187E
-	for <linux-next@vger.kernel.org>; Tue,  9 Jan 2024 02:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d3ec3db764so6829665ad.2
-        for <linux-next@vger.kernel.org>; Mon, 08 Jan 2024 18:32:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1704767554; x=1705372354; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=cEkNMWhtPOifz85q6viqmcAU1LNlutH93fwe8bX67B8=;
-        b=UXwpeIvMrb7CeMCyWp9zJ40i2HbU0dOc82Jh7kKawm+z8PDuimWJMcc7Yqd54uI4bc
-         2TaJGssb05VnwirW5MBoIid+1ynVDhYbXccJ4yHjGdYCnFgol3eqduLMS8Eq6YMOnOZL
-         9tCydqbhfa5l/kKhoVnl38CtpUt5ur0LORVciaLqet0kDfTiup1R4GIusIGmnuf4vfmq
-         7y02GJLyo++2iav7J4yTdpCyNiM6Kccwgahpz+Itc+bPi7hQlsVCgKHAvGjuobCVVBLk
-         kFQDkPgmwZwD+06F7mJ0XYowPedmtHNvxsRBfxsvgxJBucT3UaCc9cyAI0B39C61sH7n
-         f8MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704767554; x=1705372354;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cEkNMWhtPOifz85q6viqmcAU1LNlutH93fwe8bX67B8=;
-        b=WhnQv1G9dpjnUF36I1DL/NWAhze2gIwYiTV0B7GZSHMHnZHj4J/5bTmNZY+IkdqUSv
-         EWBXVqWPg9NcoetcnT+ixkucmWG9VckaZAvKsBEZhmnrJAJzxv8EgkTjPw53B8A/1Vfa
-         13VFW+GAbqE7Lkwvdb1tppy8e2xqTYvN42oXNg3KgpAWs+q+EN2F1nx8qxoeDQqjE+CD
-         njwejmG1kUkE6JjIIK3klztbbUWiCP9A8IpA40NlqD7DXZxWye2P4YNxnDYVs/KTfHxi
-         Fe2TKuoEIbQmsKYUCfWDHJ9bZhfb7gML+7mmKIgo/yajjZwqQX8j66aFXrzt/0QYM+Gn
-         TSnw==
-X-Gm-Message-State: AOJu0YzzgJuEDuUZRH4bwo1lhMfEu/nDuckWa4kDo/qSiRpC/NIV6fBx
-	jUlG8HF9AMlk1IOsKVHVmVG6+xAOG6PJbEzEn0ZcFYWmGio=
-X-Google-Smtp-Source: AGHT+IHOXSW+pnu74hEfH2h2CskOdMGIpgQSDuNovYXkemrSjuNU7XOL89NvrCrg+bDf4dntDwV4EQ==
-X-Received: by 2002:a17:902:7485:b0:1d0:6ffe:1e7f with SMTP id h5-20020a170902748500b001d06ffe1e7fmr2213458pll.98.1704767554265;
-        Mon, 08 Jan 2024 18:32:34 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id ix1-20020a170902f80100b001d4872d9429sm562305plb.156.2024.01.08.18.32.33
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 18:32:33 -0800 (PST)
-Message-ID: <659cb041.170a0220.2d09a.3e4c@mx.google.com>
-Date: Mon, 08 Jan 2024 18:32:33 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7886124;
+	Tue,  9 Jan 2024 04:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1704775249;
+	bh=OD1kdsXDxhb0d73nWXl4qvfjYdrXuITC1OxevP0TOq8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=LHjc+J9jIAtaDmZKtYM6LKC6HUssL49hPyPoW+FVpOdkMb5vyv7uTZZU/UEJImNH4
+	 cGpLKZ5cBFxDbT+LZoJnVfF5JyPrPTTLY+MlD7SalpvNK2QAca5dXJF/w0Bdt8cL0O
+	 54ydOBf6m9LiVKrPnaaNTcP8/RxchYjjCUIyRrIFkqHcVUIEViEzN9IffB+oP/i4CG
+	 LCNVPtU96bCwiCAGCnWOPbDp3EhCwFh0u7BdLK+uHrMLNtsOcfppOJnKEHxbF0Bb65
+	 TCnutvrX6TaH9B4LU60G5/LqT6uSAt1op2Yy+OuD6dP6beiYcwwVYYBkt2Ltt0dy03
+	 0/dOV8pYa3SRQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4T8JCN5Zy6z4wbR;
+	Tue,  9 Jan 2024 15:40:48 +1100 (AEDT)
+Date: Tue, 9 Jan 2024 15:40:46 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Boris Brezillon  <boris.brezillon@collabora.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Frank Li
+ <Frank.Li@nxp.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the i3c tree
+Message-ID: <20240109154046.71ad80d2@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/K9Wo=8QArLdjIPEdYYXEIsL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/K9Wo=8QArLdjIPEdYYXEIsL
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.7-530-g1593fdc6832f
-X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 8 builds: 1 failed, 7 passed, 2 errors,
- 6 warnings (v6.7-530-g1593fdc6832f)
-To: linux-next@vger.kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes build: 8 builds: 1 failed, 7 passed, 2 errors, 6 warning=
-s (v6.7-530-g1593fdc6832f)
+Hi all,
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.7-530-g1593fdc6832f/
+After merging the i3c tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.7-530-g1593fdc6832f
-Git Commit: 1593fdc6832f58f66843e2abb40b21ccd65f12ad
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+include/linux/i3c/master.h:464: warning: Function parameter or struct membe=
+r 'enable_hotjoin' not described in 'i3c_master_controller_ops'
+include/linux/i3c/master.h:464: warning: Function parameter or struct membe=
+r 'disable_hotjoin' not described in 'i3c_master_controller_ops'
+include/linux/i3c/master.h:506: warning: Function parameter or struct membe=
+r 'hotjoin' not described in 'i3c_master_controller'
 
-Build Failure Detected:
+Introduced by commit
 
-arm64:
-    defconfig: (gcc-10) FAIL
+  317bacf960a4 ("i3c: master: add enable(disable) hot join in sys entry")
 
-Errors and Warnings Detected:
+--=20
+Cheers,
+Stephen Rothwell
 
-arc:
+--Sig_/K9Wo=8QArLdjIPEdYYXEIsL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-arm64:
-    defconfig (gcc-10): 2 errors, 2 warnings
+-----BEGIN PGP SIGNATURE-----
 
-arm:
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWczk4ACgkQAVBC80lX
+0GzI6gf8DnmLRstU0lsNjqZvxOdUqA9FjMCndxkzn4uLhYbdUZ++iJh1Lua0HdMJ
+9XaGw1dSdoGDMLb0396tUyjTDYmx92fWm1CQ1zgE66HAusaazvQONf4/zsiJ8Wbd
+K2slxXxPUe+iGP7nU6pllUCDIGWZbRSMSIkapNsLcvm2xOtXOckb3x4oBQOADQPw
+B/RQkYyjR/LpuQJVLQkUV+dWZq6lEsmckxVZUjRflUOkfqhPI/ZNTq9OdRKVy3Hp
+dvH1RScvxbzgps3pVhqRC0hbUrt0cQKCTnMwSkwIGsY9895rFz7BfDrmFDwq2lEl
+HZ9q3pX+YOjQb6333xVf0iBWn4XDbw==
+=pb7e
+-----END PGP SIGNATURE-----
 
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-Errors summary:
-
-    1    arch/arm64/include/asm/unistd32.h:924:24: error: array index in in=
-itializer exceeds array bounds
-    1    arch/arm64/include/asm/unistd32.h:922:24: error: array index in in=
-itializer exceeds array bounds
-
-Warnings summary:
-
-    2    arch/arm64/kernel/sys32.c:130:35: warning: excess elements in arra=
-y initializer
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section m=
-ismatches
-
-Errors:
-    arch/arm64/include/asm/unistd32.h:922:24: error: array index in initial=
-izer exceeds array bounds
-    arch/arm64/include/asm/unistd32.h:924:24: error: array index in initial=
-izer exceeds array bounds
-
-Warnings:
-    arch/arm64/kernel/sys32.c:130:35: warning: excess elements in array ini=
-tializer
-    arch/arm64/kernel/sys32.c:130:35: warning: excess elements in array ini=
-tializer
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+--Sig_/K9Wo=8QArLdjIPEdYYXEIsL--
 

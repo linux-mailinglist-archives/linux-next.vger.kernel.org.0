@@ -1,111 +1,217 @@
-Return-Path: <linux-next+bounces-709-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-710-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E50B829467
-	for <lists+linux-next@lfdr.de>; Wed, 10 Jan 2024 08:38:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76B0F82965A
+	for <lists+linux-next@lfdr.de>; Wed, 10 Jan 2024 10:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEA341F270CA
-	for <lists+linux-next@lfdr.de>; Wed, 10 Jan 2024 07:38:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1689D286F63
+	for <lists+linux-next@lfdr.de>; Wed, 10 Jan 2024 09:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55EAA39FCB;
-	Wed, 10 Jan 2024 07:38:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A5B3E49F;
+	Wed, 10 Jan 2024 09:36:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="EizVZI9+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="S8TMmgL1"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="EuderK3W"
 X-Original-To: linux-next@vger.kernel.org
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C7938DC0;
-	Wed, 10 Jan 2024 07:37:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 368A13200B21;
-	Wed, 10 Jan 2024 02:37:57 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 10 Jan 2024 02:37:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1704872276; x=1704958676; bh=9wkDRQh6pF
-	FKUXGsU4Ant2stj6MA5eYv8VwCd+J8M4g=; b=EizVZI9+THloNiP6QFH9F3BR6i
-	Pt+D3ruiLPekF/vwc+I0992Dh+A4ps7yM/edsEqX6wFEhm9CV06d2dnqsbfwG8kt
-	2+MVR0cbw/eTE5hcy5SxNSSHR/jJhU/0+jTE6Jtzlc7TjcT5yKsE1HRn2fWUH4Uw
-	t3g0ohsiosQdLzYG4gvac2RPHblBvV0rNHm73ADYVQf7FZU+L9rvjejTGtuFM5nh
-	epIStmMNRqn8gNDoKQ3VoSGPMtrXnJWEg9sG4FeQQT1RGMAc6p+E94la9XPgJLIQ
-	3kzHItOdm6qXxEbpbjm7O59UIgzhJnQgm+LHEiS9iu8sQfDBnKiAIwaEq0ug==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1704872276; x=1704958676; bh=9wkDRQh6pFFKUXGsU4Ant2stj6MA
-	5eYv8VwCd+J8M4g=; b=S8TMmgL1glDm7J7wIXXbSpAM12cRTah6GJkpxVEeYMao
-	It+lVaxyw+JNOxqw9qWrGAldwoNF0uYBKPQ08Yrjerpc9JWDdwl28BqHgleMcSUh
-	uv1ZDV3mC5Aym1ostbuVj8wB8blbsgTdtlyV8tvAwmpNg2gwbsWrTsg1+ktnpzdB
-	sgA7FzVtT7/KFyF+dk0k+XphOBnCN1LVhWfdD86wyFxJmxA0X8/3o/SZ60YQnFGb
-	ThK3NfH136+Vbp8Khh8F9MCAHfrRK5pxBkUpFcnJPzweAaQants85VY/C54zsZFw
-	un6HP4sNBsZse6b/UTLtGjv4JSElUdEnMe0CVRewDw==
-X-ME-Sender: <xms:VEmeZcsfuhgUOJ_LNXYcuFqnZZdU7bEUCGk2jF5NPsniRCt9nhl5oA>
-    <xme:VEmeZZcH6mCccEm5HG3gXlehNsHqlWCXJ45NVppqp9pL_2VclTiwGE_TaxMPwTSXd
-    ZFjWS7-j_yrpxfNXds>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeitddguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:VEmeZXw9C29aEeyIT_GfJQNaVGuKfPJFiJwEEl2OppZxHsIlFUnU4Q>
-    <xmx:VEmeZfMBOtx7GMdYH0WjQuOw490MXBKsRBq6zeFp3d4mFWYnqSjRBQ>
-    <xmx:VEmeZc_quqQcjGDCYybWNQLDD4pTsTsO7GtPv5dboJQrH4FhW302Qg>
-    <xmx:VEmeZREO3FrIkUpm_MwN4gsKDHf5qJWT6UDAk1KpJzQDO_UX6EYSow>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 404E8B6008F; Wed, 10 Jan 2024 02:37:56 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC479374FD
+	for <linux-next@vger.kernel.org>; Wed, 10 Jan 2024 09:36:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3bba50cd318so4078731b6e.0
+        for <linux-next@vger.kernel.org>; Wed, 10 Jan 2024 01:36:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1704879386; x=1705484186; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=qv/ouOO+g86YVJeWGzsi0Eii7uvPVIqlOXQVwI5sgqA=;
+        b=EuderK3WciFJI5feKWBldOFOGC7iPcYt9ovizF5F0N7G3QGypeitTmP11Y6rjMrL/j
+         G5CskyXh2IOIBl+qlmLrSl3kkEWfOuymQEVzIPGcAIXBuRhTPJXyk/P4bYK4gNnnfnTd
+         krVgMwCtZOw6QBwsy5ZzqtNqobD1t+sJJtuRItxvcPJwN5rKeunPugFOqYBmjGGuyZfV
+         gMon19RZELJmL6hQTNLEi4d/p3DaYOBVgzakhswH78MCP0WnTs7DtybQMD7KwjxfDtSL
+         fizHYVGjH3NkaAbzflHDkK02ba6TiKnb2qzpxvD4rDk2gs9NM3cBabJiBKrterydg60v
+         CFdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704879386; x=1705484186;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qv/ouOO+g86YVJeWGzsi0Eii7uvPVIqlOXQVwI5sgqA=;
+        b=MesVL2fURpGss37vyIG+reOtz7oiUyugwaQkpzCm18dVLAx2+gucEsoCd+3lTFTNPr
+         7MYU3Rdcyfg9OWYslHnisF8n9dFDrhavy18XeQFRAUmV6qItpBDkOj6Omjd0gnOZo1y8
+         6CgoRXehY6EMZoFMfIlwM4d5jLL04OEfh7w6bH1BXpmnv/V1w0lpuONklIQHUr7JJ6cB
+         pg7HBsFXwWs6QyymcZ/CL4Ymg1hdyYzNlh5Zhd9zp1YYgnTEve9qsOOEXJyeiCjCx3q4
+         /Y6Gf21EiAfUdIz8JOnXbV8QOaviCVMEq992qoXbolcgg5PXdPjvvd8BYWsGh+uExxQM
+         ZmGQ==
+X-Gm-Message-State: AOJu0YwdUw3MMveQsKDg+19yCxgqOn+lcqo/vXyz3Ucmiir7SjQM3s3Q
+	4LZoACkHwEzbNhC9Y4skmsKZlxis1dR2HYCqvaHkLO5JB3k=
+X-Google-Smtp-Source: AGHT+IGnf2DZ7ASwx458XGjNzIT4rVkradnACR2C8u2mkA1Qwy9KKwZiAnS7SiLeljld2do9BPTxrw==
+X-Received: by 2002:a05:6808:199e:b0:3bb:821b:4b56 with SMTP id bj30-20020a056808199e00b003bb821b4b56mr1189351oib.2.1704879386420;
+        Wed, 10 Jan 2024 01:36:26 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id e8-20020a056a0000c800b006d9ecb8e956sm3172268pfj.173.2024.01.10.01.36.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jan 2024 01:36:25 -0800 (PST)
+Message-ID: <659e6519.050a0220.83d82.d201@mx.google.com>
+Date: Wed, 10 Jan 2024 01:36:25 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a74946d3-3fa1-47ce-8dee-13123c0fdfca@app.fastmail.com>
-In-Reply-To: <20240110083442.6728646c@canb.auug.org.au>
-References: <20240110083442.6728646c@canb.auug.org.au>
-Date: Wed, 10 Jan 2024 08:37:35 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Stephen Rothwell" <sfr@canb.auug.org.au>
-Cc: "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the asm-generic tree
-Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v6.7-1609-g22841eabe9226
+X-Kernelci-Report-Type: test
+Subject: next/pending-fixes baseline: 74 runs,
+ 2 regressions (v6.7-1609-g22841eabe9226)
+To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+ kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Tue, Jan 9, 2024, at 22:34, Stephen Rothwell wrote:
-> Hi all,
->
-> The following commit is also in Linus Torvalds' tree as a different commit
-> (but the same patch):
->
->   e8cf41b96bc9 ("asm-generic: make sparse happy with odd-sized 
-> put_unaligned_*()")
->
-> This is commit
->
->   1ab33c03145d ("asm-generic: make sparse happy with odd-sized 
-> put_unaligned_*()")
->
-> in Linus' tree.
+next/pending-fixes baseline: 74 runs, 2 regressions (v6.7-1609-g22841eabe92=
+26)
 
-I ropped mine now, thanks for the report. It was still on top
-of the branch, so I'll just send the pull request without this
-one.
+Regressions Summary
+-------------------
 
-    Arnd
+platform              | arch | lab          | compiler | defconfig         =
+ | regressions
+----------------------+------+--------------+----------+-------------------=
+-+------------
+sun7i-a20-cubieboard2 | arm  | lab-baylibre | gcc-10   | multi_v7_defconfig=
+ | 1          =
+
+sun7i-a20-cubieboard2 | arm  | lab-clabbe   | gcc-10   | multi_v7_defconfig=
+ | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v6.7-1609-g22841eabe9226/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v6.7-1609-g22841eabe9226
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      22841eabe92265eb1fd24ba860ce5d9042ceda5b =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch | lab          | compiler | defconfig         =
+ | regressions
+----------------------+------+--------------+----------+-------------------=
+-+------------
+sun7i-a20-cubieboard2 | arm  | lab-baylibre | gcc-10   | multi_v7_defconfig=
+ | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/659e32560067abcf7052a3f2
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-1609-g=
+22841eabe9226/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun7i-a20=
+-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-1609-g=
+22841eabe9226/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun7i-a20=
+-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/659e32560067abcf7052a3fb
+        failing since 56 days (last pass: v6.4-rc7-260-g7124fb0a8216, first=
+ fail: v6.7-rc1-127-gaea4a488542f)
+
+    2024-01-10T05:59:24.947802  / # #
+    2024-01-10T05:59:25.050804  export SHELL=3D/bin/sh
+    2024-01-10T05:59:25.052073  #
+    2024-01-10T05:59:25.154241  / # export SHELL=3D/bin/sh. /lava-3905286/e=
+nvironment
+    2024-01-10T05:59:25.155449  =
+
+    2024-01-10T05:59:25.257480  / # . /lava-3905286/environment/lava-390528=
+6/bin/lava-test-runner /lava-3905286/1
+    2024-01-10T05:59:25.259064  =
+
+    2024-01-10T05:59:25.270170  / # /lava-3905286/bin/lava-test-runner /lav=
+a-3905286/1
+    2024-01-10T05:59:25.396990  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-10T05:59:25.398155  + cd /lava-3905286/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+ =
+
+
+
+platform              | arch | lab          | compiler | defconfig         =
+ | regressions
+----------------------+------+--------------+----------+-------------------=
+-+------------
+sun7i-a20-cubieboard2 | arm  | lab-clabbe   | gcc-10   | multi_v7_defconfig=
+ | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/659e3256acc546e5e952a3f2
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-1609-g=
+22841eabe9226/arm/multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun7i-a20-c=
+ubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-1609-g=
+22841eabe9226/arm/multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun7i-a20-c=
+ubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/659e3256acc546e5e952a3fb
+        failing since 56 days (last pass: v6.4-rc7-260-g7124fb0a8216, first=
+ fail: v6.7-rc1-127-gaea4a488542f)
+
+    2024-01-10T05:59:27.986589  + set +x[   22.185294] <LAVA_SIGNAL_ENDRUN =
+0_dmesg 451666_1.5.2.4.1>
+    2024-01-10T05:59:27.986911  =
+
+    2024-01-10T05:59:28.095160  / # #
+    2024-01-10T05:59:28.196675  export SHELL=3D/bin/sh
+    2024-01-10T05:59:28.197205  #
+    2024-01-10T05:59:28.298170  / # export SHELL=3D/bin/sh. /lava-451666/en=
+vironment
+    2024-01-10T05:59:28.298673  =
+
+    2024-01-10T05:59:28.399656  / # . /lava-451666/environment/lava-451666/=
+bin/lava-test-runner /lava-451666/1
+    2024-01-10T05:59:28.400507  =
+
+    2024-01-10T05:59:28.405289  / # /lava-451666/bin/lava-test-runner /lava=
+-451666/1 =
+
+    ... (12 line(s) more)  =
+
+ =20
 

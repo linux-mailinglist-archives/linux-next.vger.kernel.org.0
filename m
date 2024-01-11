@@ -1,134 +1,133 @@
-Return-Path: <linux-next+bounces-728-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-729-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0C4282AF01
-	for <lists+linux-next@lfdr.de>; Thu, 11 Jan 2024 13:55:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12FBE82B0D2
+	for <lists+linux-next@lfdr.de>; Thu, 11 Jan 2024 15:41:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69464285D74
-	for <lists+linux-next@lfdr.de>; Thu, 11 Jan 2024 12:55:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13D921C21929
+	for <lists+linux-next@lfdr.de>; Thu, 11 Jan 2024 14:41:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7F915E85;
-	Thu, 11 Jan 2024 12:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17F848790;
+	Thu, 11 Jan 2024 14:40:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BMV4yOHv";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nrUdzr6x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJ3q0zXo"
 X-Original-To: linux-next@vger.kernel.org
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60C315AE9;
-	Thu, 11 Jan 2024 12:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id F2A543200258;
-	Thu, 11 Jan 2024 07:55:47 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 11 Jan 2024 07:55:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1704977747; x=1705064147; bh=n7Flv4sDP2
-	we1RAcMNYutGo+Ms3cmgPKVxBB6NzlfbI=; b=BMV4yOHvD6RNJ4gKwjz8eJiho5
-	MuZnwjbYPMPctC3x5+8khcxrp10wy43dm0CuDs41cIlUu1itHZpeur4ThCGOpH5Q
-	R/PAKoF4uJsOX0MEAnGqPwYGrnWO/p/+j95ZAZ+QDHBUq4tJmU7oKoKgsLrD6kO8
-	iEctsAHd4R903F/Xwo8lb5OS5qB4dLUOi8kYU4qEsdY0Uwcv+7JOkjxJZ2MEVfUG
-	YbkpODU5INMHIbc5FoF9BBrOn/RvuYPryRLHuudMvQ5ZmjfPLczg+vVFgj1Jg1UJ
-	Wj8SrRapaSTz/aQkcPW6qo37nPlfqjQmK3PQptDu2j/IjRNAX6B2yr5+cggw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1704977747; x=1705064147; bh=n7Flv4sDP2we1RAcMNYutGo+Ms3c
-	mgPKVxBB6NzlfbI=; b=nrUdzr6x4aT4f4aJSErB7UJYRsMkiISvZnY5PXbhtgpb
-	EfBhv9SmKahvHIaV88z+Of1ai0prhzzuGiVJs4rB2qkZWdI7nFwoZ+J9xqORqhpi
-	q71KiRfmqJW6Wqn3TjQg54RZBrf7eALnwotOd1wW7baIjdpwRinDtkt/Yn0Th5ik
-	3STJ5Q5Gk4sLmlbyXfZAGxdRErWdtzIElfFVCzQpCnNu1/SDftDdLxbOvfuyaQT7
-	5Recd5pmgvGuJsAUyeo3OgFRQgYO0Oa4BixRO0eMUPzByzyTD9Y3lMZ4zmCeeHVj
-	R84jonajBxTqt2W2eiQzAOlQ4pCDKgOOkwh5dZ6yfA==
-X-ME-Sender: <xms:U-WfZUkRqQAutNFK73pQAn7MN559CMu1_vFdfU49PTOKXBRatGLlEA>
-    <xme:U-WfZT0OxrL_6yIlikHv9O7Im9GiUAccdFCDTSpVTE620IimfHTKZJHWPyf-4CSds
-    YgTU5j6WvBSU6ghLcE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeifedggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:U-WfZSo2uwxG5HPRm8WLuHIXFz4D6xNqec1BKzgyXsAxM8qiBWVikg>
-    <xmx:U-WfZQk4-z096u_Db9SFTtSs4VkclUiZ19G40qwhZvtO_mr237SLbw>
-    <xmx:U-WfZS223sqdo6C1OMDpB0yg51BEwUzP2uKLxgqd4RGCiJ5fsUHMgw>
-    <xmx:U-WfZcpakV0xlJAzGCgiWztRhmxp5WRLdfsSsTaGZQ9f6qInK9BX-w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1A00CB6008D; Thu, 11 Jan 2024 07:55:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1374-gc37f3abe3d-fm-20240102.001-gc37f3abe
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFDEC4879E;
+	Thu, 11 Jan 2024 14:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-50e7af5f618so6133555e87.1;
+        Thu, 11 Jan 2024 06:40:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704984001; x=1705588801; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8mAIvsCtxIylMlbMRjknP4e8iPnfceCQkHo2rcUGc2I=;
+        b=BJ3q0zXoCcAyqrdLx25YQeLfKD5s4mHRHYT+8nTKFpyY9gKWprW+XHkfS3OnZcyY6F
+         x2bvuHPTZ68B+CLkBBOWLiSXLJCaSNonC3KMfvEkZMmTDGnf014TyA/O/8Xtn9KKRnbF
+         LR8q9N7W4Rm6MvELKMquqUU3TfQSQS1oH8oy0eXwW1O4k5czgjkR3tAnoGQ37EZBVLSx
+         j6rRRijGVc8Vjv6obEMFVntGxsVbjJEFrh6CDJeVknyy8ASKqDe1eJTWpSouKIIeuIx2
+         1pMGcbSKsXFYl6vijD9L9QPjFsvEhh2yezixdVIu5o8oyI+a0u2ejDGthg2mqSiP65C7
+         hScg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704984001; x=1705588801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8mAIvsCtxIylMlbMRjknP4e8iPnfceCQkHo2rcUGc2I=;
+        b=vFIWPQZt50T9ANN3R2afMroWUHH2b7OJDCZT75/58Fh1anO7AiWRx0VJjVre09UlLS
+         ROWFRRpgVEy8p6cfPbXoiAFrSkwVE/sPU/TVSytndLsjmbIhBNNr/4BMtqtlOWH/yjsl
+         CXXiCXX+BMxT8kysrZF36wRh2A5bxBg3LuyjHgYY03eZ6PakvZgbTlMh4p1Se4aurGoD
+         8VVGNuN29KS1hBEGo0x+Di04Eef86x0Kjhm5FbJMLGBdM9yztB4dWLJ7VxCXpqgd8yYx
+         Gj7cU+0eTEAej0EOxlgTUpJbNsIQ9iErblINV9HhhiDAMpHNe3iMco/In216W+VCQukj
+         /q6A==
+X-Gm-Message-State: AOJu0Yyes1jquXysmgWztG5xXYXU0AqOxSu+BzkZGzkVY5XlRjQii39v
+	Wh67FCyO6xEr6m3eDEil4tFkNYqvoMF+WraI2NzE+ryxlIyPQg==
+X-Google-Smtp-Source: AGHT+IFyZDF02qfgdF+6WcVylw8qmSkY3NTBJXWOY0xj18fA1mBswAQ86LK62ie6goXkLZpapcGcTOoZ+H5O13P0u0U=
+X-Received: by 2002:a19:655b:0:b0:50e:7e53:8f6b with SMTP id
+ c27-20020a19655b000000b0050e7e538f6bmr612536lfj.127.1704984000555; Thu, 11
+ Jan 2024 06:40:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <908325ed-08af-4b0c-926e-da9afba25772@app.fastmail.com>
-In-Reply-To: <628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
-References: 
- <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
- <628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
-Date: Thu, 11 Jan 2024 13:55:15 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Dan Carpenter" <dan.carpenter@linaro.org>,
- "Naresh Kamboju" <naresh.kamboju@linaro.org>,
- "Uladzislau Rezki" <urezki@gmail.com>
-Cc: linux-next <linux-next@vger.kernel.org>,
- "open list" <linux-kernel@vger.kernel.org>,
- "Linux Regressions" <regressions@lists.linux.dev>,
- clang-built-linux <llvm@lists.linux.dev>, lkft-triage@lists.linaro.org,
- "Andrew Morton" <akpm@linux-foundation.org>
-Subject: Re: mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when used
- here [-Werror,-Wuninitialized]
-Content-Type: text/plain
+References: <20240108143627.29ac91fe@canb.auug.org.au> <2024010830-swimsuit-ferment-8b88@gregkh>
+ <20240108115155.f2d2f1e5789d74b90d1b7426@hugovil.com>
+In-Reply-To: <20240108115155.f2d2f1e5789d74b90d1b7426@hugovil.com>
+From: Yury Norov <yury.norov@gmail.com>
+Date: Thu, 11 Jan 2024 06:39:49 -0800
+Message-ID: <CAAH8bW-eLNebwabvvJeos4XbB77p4vGsutkwGtKMxR5-HpzTDA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the bitmap tree with the tty tree
+To: Hugo Villeneuve <hugo@hugovil.com>
+Cc: Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 11, 2024, at 12:16, Dan Carpenter wrote:
-> On Thu, Jan 11, 2024 at 04:23:09PM +0530, Naresh Kamboju wrote:
->> Following build failures noticed on i386 and x86 with clang builds on the
->> Linux next-20240111 tag.
->> 
->> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->> 
->> Build error:
->> ----------
->> mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when
->> used here [-Werror,-Wuninitialized]
->>  4691 |                 va = __find_vmap_area(addr, &vn->busy.root);
->>       |                                       ^~~~
->> mm/vmalloc.c:4684:20: note: initialize the variable 'addr' to silence
->> this warning
->>  4684 |         unsigned long addr;
->>       |                           ^
->>       |                            = 0
->> 1 error generated.
+On Mon, Jan 8, 2024 at 8:52=E2=80=AFAM Hugo Villeneuve <hugo@hugovil.com> w=
+rote:
 >
-> We turned off uninitialized variable warnings for GCC a long time ago...
-> :/ I don't know if we'll be able to re-enable it in a -Werror world
-> although Clang seems to be managing alright so perhaps there is hope.
+> On Mon, 8 Jan 2024 08:53:40 +0100
+> Greg KH <greg@kroah.com> wrote:
+>
+> > On Mon, Jan 08, 2024 at 02:36:27PM +1100, Stephen Rothwell wrote:
+> > > Hi all,
+> > >
+> > > Today's linux-next merge of the bitmap tree got a conflict in:
+> > >
+> > >   drivers/tty/serial/sc16is7xx.c
+> > >
+> > > between commits:
+> > >
+> > >   8a1060ce9749 ("serial: sc16is7xx: fix invalid sc16is7xx_lines bitfi=
+eld in case of probe error")
+> > >   3837a0379533 ("serial: sc16is7xx: improve regmap debugfs by using o=
+ne regmap per port")
+> > >
+> > > from the tty tree and commit:
+> > >
+> > >   e63a961be48f ("serial: sc12is7xx: optimize sc16is7xx_alloc_line()")
+> > >
+> > > from the bitmap tree.
+> > >
+> > > I fixed it up (the former removed the function updated by the latter)=
+ and
+> > > can carry the fix as necessary. This is now fixed as far as linux-nex=
+t
+> > > is concerned, but any non trivial conflicts should be mentioned to yo=
+ur
+> > > upstream maintainer when your tree is submitted for merging.  You may
+> > > also want to consider cooperating with the maintainer of the conflict=
+ing
+> > > tree to minimise any particularly complex conflicts.
+> >
+> > Fix looks coks correct, thanks.
+>
+> Yes, I confirm patch:
+>     e63a961be48f ("serial: sc12is7xx: optimize sc16is7xx_alloc_line()")
+>
+> is now obsoleted by patch:
+>     8a1060ce9749 ("serial: sc16is7xx: fix invalid sc16is7xx_lines
+> bitfield in case of probe error")
 
-The problem with gcc's warning is that it is non-deterministic and
-in recent versions actually got more false-positives even without
--Os or -fsanitize=. Clang does not catch all that gcc does because
-it doesn't track state across inline functions, but at least its
-output is always the same regardless of optimization and other
-options.
+Hi guys,
 
-At least this particular one is an obvious bug and easily gets
-caught by lkft and lkp even if gcc's -Wuninitilized doesn't
-flag it.
+I've already sent a pull request that includes the e63a961be48f. If I'll ha=
+ve to
+re-send it, I'll exclude the obsolete patch. Otherwise, can you adjust the
+8a1060ce9749?
 
-    Arnd
+Thanks,
+Yury
 

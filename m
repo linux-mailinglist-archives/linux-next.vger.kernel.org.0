@@ -1,158 +1,129 @@
-Return-Path: <linux-next+bounces-745-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-746-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CC5482FD12
-	for <lists+linux-next@lfdr.de>; Tue, 16 Jan 2024 23:40:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8478D82FDC4
+	for <lists+linux-next@lfdr.de>; Wed, 17 Jan 2024 00:36:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 917E51C28900
-	for <lists+linux-next@lfdr.de>; Tue, 16 Jan 2024 22:40:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3911B1F24F47
+	for <lists+linux-next@lfdr.de>; Tue, 16 Jan 2024 23:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1461EB4F;
-	Tue, 16 Jan 2024 22:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B6591D523;
+	Tue, 16 Jan 2024 23:36:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lxkQ+G6s"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PF05/ej8"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B13D1DA50;
-	Tue, 16 Jan 2024 22:22:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269211CD0F;
+	Tue, 16 Jan 2024 23:35:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705443738; cv=none; b=FbDCA6fK6KP+x+DH2rThVwfRWGYy7YvL6V2xyE58i5dU5f47xptXAVk/Kf7bVZBxm20LXQVOHWg4wekpDtUAu1s9Taoh9ulcMsaQKHErVl2TVpY1dArwR0q0jtsHf+lSCbGnBMQAzQz22A3Zgq49lvZ03RJghP8GMc8knBTaR0Q=
+	t=1705448160; cv=none; b=ITtQ1lf9rzicjmhjcUZYT2aDzXpRFFgBBiWpQGPy2vu7fhr6t+QJKsbIgus4/fhi50ivb/RTBpsAY3nOG9XXDv1a7CEZKLyiSKvI1jdZ0Mk2G4fciCEkU16bWSsKGyIyx1bCaeE2DP+st4lIjsKeCoxyuXhmg6prutJETFob4Mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705443738; c=relaxed/simple;
-	bh=P3ol08Fw41CIfzFFQooVhb0iE3Fv1ZRgddqxkDDBgGg=;
+	s=arc-20240116; t=1705448160; c=relaxed/simple;
+	bh=odl2Y9Kivf8+W0FpEJhEXzn+jbTtzX0v6NW8SwFabUM=;
 	h=DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
-	 MIME-Version:Content-Type; b=G3XXjjFM2QFpmnWtvhIHvMcHCURrPOJczb2KkgnLFizvWK7B+bF0gy+7HQjZSCOEthFsI07+CFdTRh88yKIiYQwq2ycIC7HrQAK7XsaHXqYSc4uRlf7Fq4hJS/FwfAPkuXM9/KLFgXxiVFtjPqznCNzEk8QAHZYYCno6K7+K194=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lxkQ+G6s; arc=none smtp.client-ip=150.107.74.76
+	 In-Reply-To:References:MIME-Version:Content-Type; b=RzRsCeV0Nzc0RHtu6J19yQhcgFWnFGwMnkC2NrSshaQppdZuzGMIpc2siDQb7d2Zjo/FEOI1j6e3YHkus3Z8fiAvFM1+AWpHWnhwiJLXivsbASfsS3G3BYP91OkKZFkXx+jhXmvfbEKbsrxfCdaFCLiqzrbglDfoisbmuQ1hAV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PF05/ej8; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1705443731;
-	bh=AxIQOMJi6FIcABc8p8DFjfS3N7iZ0CR4Tu2qx3sFLAs=;
-	h=Date:From:To:Cc:Subject:From;
-	b=lxkQ+G6sqWoHvr9pwuzJeAVNYHtUK9BYGqsXPYEeYIrdHAJ5/11VUhkvS5EiPScaT
-	 JVCm8S8CuKXrtjkT6a+2bUwxYfIS/Mv1jMXEv8GawzP9YwJMX8q7XJxybrsICrVPtk
-	 vkktWDAOWOkafvMqnJz/6cmgQ/oaRCdbHSKDXmMZQ/rivDMCkGyRxyYzr25gMrUfV1
-	 XExGCfilTnw+uWQyb4QVMo41rmwu3aLKDW6vHKPFip/mu8rCnIH3vWzk7dtOiIB2Bi
-	 QWIkerNtRfbNel09XWVDixut9KeqiH1GIGxQZ9s0xg1arcmdzNTl25T7goOyqAmqtl
-	 1mUfX9NDSJKaw==
+	s=201702; t=1705448153;
+	bh=UBD3Mzd0bAfPfkeBET4buY5BWvFVqwQWr712c4DLxHw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PF05/ej8oUoUgON8PX/6BpRQm0oljRc/ofAVltRGEOuXmO9Fs/ousb4QDcQzOioni
+	 OauwXiq9U4qeEplzx36/jBJlfiE3ZmOk7x6vHickKhUYFnBbKyP8dMy+rztIthry71
+	 4kLt+XVXR1XFb3TJlypF67VVJCeJzQwGpxPgyrMLsGp8S9Nvs+wqsqgw3MdvckvUri
+	 dlNFbrUnojekleoscupnSVYUk4qHQgKwWFMgobD32Mg0ctyc1Lg94OZK8DdopnHhQ9
+	 /cBCXctfvcXCUjDNHPJ+vpoDMkCCgO8jKzXP3HzUul/qGj2i0LV1if7NF6rGNmfGlu
+	 V3obXCWi6YVUQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TF3Qq0kyGz4xP9;
-	Wed, 17 Jan 2024 09:22:11 +1100 (AEDT)
-Date: Wed, 17 Jan 2024 09:22:09 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TF53r0SFTz4wcJ;
+	Wed, 17 Jan 2024 10:35:51 +1100 (AEDT)
+Date: Wed, 17 Jan 2024 10:35:50 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Yury Norov <yury.norov@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm-nonmm-unstable
- branch of the mm tree
-Message-ID: <20240117092209.7157a9c2@canb.auug.org.au>
+To: Wolfram Sang <wsa@the-dreams.de>
+Cc: Helge Deller <deller@gmx.de>, Heiner Kallweit <hkallweit1@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Thomas Zimmermann
+ <tzimmermann@suse.de>, Wolfram Sang <wsa@kernel.org>
+Subject: Re: linux-next: manual merge of the fbdev tree with the i2c tree
+Message-ID: <20240117103550.05ccef37@canb.auug.org.au>
+In-Reply-To: <20240109113914.6178e733@canb.auug.org.au>
+References: <20240109113914.6178e733@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ieYZL_P0CFftq=Ot5lzFi/N";
+Content-Type: multipart/signed; boundary="Sig_/fRlDahp=ZCP3F83WHkgmat4";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/ieYZL_P0CFftq=Ot5lzFi/N
+--Sig_/fRlDahp=ZCP3F83WHkgmat4
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+On Tue, 9 Jan 2024 11:39:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Hi all,
+>=20
+> Today's linux-next merge of the fbdev tree got a conflict in:
+>=20
+>   drivers/video/fbdev/intelfb/intelfb_i2c.c
+>=20
+> between commit:
+>=20
+>   ef2984d633ce ("fbdev: remove I2C_CLASS_DDC support")
+>=20
+> from the i2c tree and commit:
+>=20
+>   256b7e8673a6 ("fbdev/intelfb: Remove driver")
 
-In file included from include/uapi/linux/posix_types.h:5,
-                 from include/uapi/linux/types.h:14,
-                 from include/linux/types.h:6,
-                 from include/linux/kasan-checks.h:5,
-                 from include/asm-generic/rwonce.h:26,
-                 from ./arch/powerpc/include/generated/asm/rwonce.h:1,
-                 from include/linux/compiler.h:251,
-                 from include/linux/array_size.h:5,
-                 from include/linux/kernel.h:16,
-                 from lib/group_cpus.c:6:
-lib/group_cpus.c: In function 'group_cpus_evenly':
-include/linux/stddef.h:8:14: error: invalid initializer
-    8 | #define NULL ((void *)0)
-      |              ^
-lib/group_cpus.c:356:59: note: in expansion of macro 'NULL'
-  356 |         cpumask_var_t npresmsk __free(free_cpumask_var) =3D NULL;
-      |                                                           ^~~~
+This is now commit
 
-Caused by commit
+  689237ab37c5 ("fbdev/intelfb: Remove driver")
 
-  f004021b058f ("lib/group_cpus: fix initialization section in group_cpus_e=
-venly()")
+in Linus' tree.
 
-CONFIG_CPUMASK_OFFSTACK is not set for this build (so cpumask_var_t is
-an single element array, not a pointer).
+> I fixed it up (I just removed the file) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-I applied this hack for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 17 Jan 2024 09:15:07 +1100
-Subject: [PATCH] fix up for "lib/group_cpus: fix initialization section in =
-group_cpus_evenly()"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- lib/group_cpus.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/lib/group_cpus.c b/lib/group_cpus.c
-index c9c95b21e6c6..2c54b49d4c59 100644
---- a/lib/group_cpus.c
-+++ b/lib/group_cpus.c
-@@ -353,7 +353,11 @@ struct cpumask *group_cpus_evenly(unsigned int numgrps)
- {
- 	cpumask_var_t *node_to_cpumask __free(free_node_to_cpumask) =3D alloc_nod=
-e_to_cpumask();
- 	struct cpumask *masks __free(kfree) =3D kcalloc(numgrps, sizeof(*masks), =
-GFP_KERNEL);
-+#ifdef CONFIG_CPUMASK_OFFSTACK
- 	cpumask_var_t npresmsk __free(free_cpumask_var) =3D NULL;
-+#else
-+	cpumask_var_t npresmsk __free(free_cpumask_var);
-+#endif
- 	int curgrp, nr_present, nr_others;
-=20
- 	if (!masks || !node_to_cpumask || !alloc_cpumask_var(&npresmsk, GFP_KERNE=
-L))
---=20
-2.43.0
+This is now a conflict between the i2c tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ieYZL_P0CFftq=Ot5lzFi/N
+--Sig_/fRlDahp=ZCP3F83WHkgmat4
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWnAZEACgkQAVBC80lX
-0GzXmwf+JI6+3rRdCG2/ZbxzjpcItSDfA73tvA0ndNYsQrlKjzOTdmKl95Au5BaL
-ZYhjfIlgXrcmS+5Kkm+cyH8bVaW6dJc6dDa2LDCpoFTUp2tY5YMc+TJMuJnBthwe
-bqgEVaslkVU2qZ/7daLN9rZ0zPDlS0CQcDqQESh1jARcI7OdH64f3fLO6ZuqODHx
-n12YedFA0ZYRg4LgkWTkhPI+sW9WuM2ZbSU0OOeSNuKECNnNEvISbRzEcKG7nPlQ
-WyR9kVAYXoL+aAh6fQ8yhOePwnhbZlZxCAbifK3FQk16WA2Vvq8GvJ85DjDYA4Ow
-BXFiokhnnDaikcXhGk3s2D8Dsobg0A==
-=slum
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWnEtYACgkQAVBC80lX
+0GyudQf/Z/mpbXa+b+XsD23H9VsHyrj/k4L4keARN1c9rhDccUK9kZIrx88W7Ys1
+ps+3LTRhdBnurUO6SZAXbAcQP/uEHMrRSlapbjStMfdvTdbohzLZ0SiW9UtaFSHL
+4TOeESCIoQ86EPmaDoFQtxqTp5eegjji7rp3YvvSoJxS8fI5YqgJk4p24mmbzmk/
+bAXVtIyeu/SnOmntfiBa6CNEkLfYn1zYQj+HLTxRiVJEq84GOqI+slrZTrOnJMqj
+JrMA/8b067WxCL7E4y/TjUpHBteh/J3wo9NdIxTHekyajyabzXAo2+Ru2AiTk3Z6
+hFr+tdtvDNAw59KChMORq78GSU66bg==
+=Es1E
 -----END PGP SIGNATURE-----
 
---Sig_/ieYZL_P0CFftq=Ot5lzFi/N--
+--Sig_/fRlDahp=ZCP3F83WHkgmat4--
 

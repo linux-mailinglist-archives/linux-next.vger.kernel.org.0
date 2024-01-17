@@ -1,129 +1,109 @@
-Return-Path: <linux-next+bounces-746-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-747-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8478D82FDC4
-	for <lists+linux-next@lfdr.de>; Wed, 17 Jan 2024 00:36:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FD7282FE10
+	for <lists+linux-next@lfdr.de>; Wed, 17 Jan 2024 01:46:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3911B1F24F47
-	for <lists+linux-next@lfdr.de>; Tue, 16 Jan 2024 23:36:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09BFE28A3A3
+	for <lists+linux-next@lfdr.de>; Wed, 17 Jan 2024 00:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B6591D523;
-	Tue, 16 Jan 2024 23:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AD0E10F5;
+	Wed, 17 Jan 2024 00:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PF05/ej8"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GzkwTOHC"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269211CD0F;
-	Tue, 16 Jan 2024 23:35:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F3910E9;
+	Wed, 17 Jan 2024 00:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705448160; cv=none; b=ITtQ1lf9rzicjmhjcUZYT2aDzXpRFFgBBiWpQGPy2vu7fhr6t+QJKsbIgus4/fhi50ivb/RTBpsAY3nOG9XXDv1a7CEZKLyiSKvI1jdZ0Mk2G4fciCEkU16bWSsKGyIyx1bCaeE2DP+st4lIjsKeCoxyuXhmg6prutJETFob4Mg=
+	t=1705452366; cv=none; b=YFm9V6py98Q+hAXg0UD5W0RHoBo5/hRR4ob7tXS1HRepy1vo1SF/nXb29vg2lfrDg+pysPCbcmHUzSH96ZSAcDuiQUHvEO5PnnvM+q2srp7hBS3vfmWNXnPhgcFuvS3SNjCTLjgYBvHbq8K203uPNU2PsqDrPs1SBn92RMoFw3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705448160; c=relaxed/simple;
-	bh=odl2Y9Kivf8+W0FpEJhEXzn+jbTtzX0v6NW8SwFabUM=;
+	s=arc-20240116; t=1705452366; c=relaxed/simple;
+	bh=sPPRMtzitfA1rzjzKYhYQH1roHXakfuZRbwwYXenG9U=;
 	h=DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type; b=RzRsCeV0Nzc0RHtu6J19yQhcgFWnFGwMnkC2NrSshaQppdZuzGMIpc2siDQb7d2Zjo/FEOI1j6e3YHkus3Z8fiAvFM1+AWpHWnhwiJLXivsbASfsS3G3BYP91OkKZFkXx+jhXmvfbEKbsrxfCdaFCLiqzrbglDfoisbmuQ1hAV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PF05/ej8; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=jebXGTAtgKH/1LVjDoW0i/6RmmT1VBCAhckm3GtchX4nrkqkrxNUxeJs0JytvKQl+9AAsV2B/QBLllddzF79swrZfa0cxZEP3tMhJM0hzLMIRYYC+Yx4mY1clmgBNGg2ftUMOZXGnULC4fkxlDNFXshcHt8MOySimV4PLwhJToU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GzkwTOHC; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1705448153;
-	bh=UBD3Mzd0bAfPfkeBET4buY5BWvFVqwQWr712c4DLxHw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=PF05/ej8oUoUgON8PX/6BpRQm0oljRc/ofAVltRGEOuXmO9Fs/ousb4QDcQzOioni
-	 OauwXiq9U4qeEplzx36/jBJlfiE3ZmOk7x6vHickKhUYFnBbKyP8dMy+rztIthry71
-	 4kLt+XVXR1XFb3TJlypF67VVJCeJzQwGpxPgyrMLsGp8S9Nvs+wqsqgw3MdvckvUri
-	 dlNFbrUnojekleoscupnSVYUk4qHQgKwWFMgobD32Mg0ctyc1Lg94OZK8DdopnHhQ9
-	 /cBCXctfvcXCUjDNHPJ+vpoDMkCCgO8jKzXP3HzUul/qGj2i0LV1if7NF6rGNmfGlu
-	 V3obXCWi6YVUQ==
+	s=201702; t=1705452357;
+	bh=9Ygua69Jodct9U/NXrL9McrdGQOHloyD8Glis1dIoTI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=GzkwTOHCggK5kSbWP0EMTbSbgukF6MSfk4Yhd3nGhOiK+IPbpn3XBkmXnZfFJy/dj
+	 T7E5kR7HCd/S68ij2RtAK7Ti5JrsLscbXWXxHw5XWhKTcGNcFHFzLPRSsiuWh7qYQT
+	 gOpEIg/rb69jtFfLLPBMgfx2z5CRrI0NMLJ4PGupN78PtA+5xgFT+s99LV65kwQOnF
+	 H4XN0f9v4yhujaT47CdUV/uJQQb4amNbf0amxidcxQexgiw9huJmlM/eF1dKXzBAZR
+	 rXYys9kSdxVomOTkvmLyN1UoekzOluykbwcm/C220NF2q5aUT5Rv5HUBZIUoJZnHfo
+	 COnayWR39iNbg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TF53r0SFTz4wcJ;
-	Wed, 17 Jan 2024 10:35:51 +1100 (AEDT)
-Date: Wed, 17 Jan 2024 10:35:50 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TF6cj5656z4wxZ;
+	Wed, 17 Jan 2024 11:45:55 +1100 (AEDT)
+Date: Wed, 17 Jan 2024 11:45:53 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Wolfram Sang <wsa@the-dreams.de>
-Cc: Helge Deller <deller@gmx.de>, Heiner Kallweit <hkallweit1@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Thomas Zimmermann
- <tzimmermann@suse.de>, Wolfram Sang <wsa@kernel.org>
-Subject: Re: linux-next: manual merge of the fbdev tree with the i2c tree
-Message-ID: <20240117103550.05ccef37@canb.auug.org.au>
-In-Reply-To: <20240109113914.6178e733@canb.auug.org.au>
-References: <20240109113914.6178e733@canb.auug.org.au>
+To: David Sterba <dsterba@suse.cz>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the btrfs tree
+Message-ID: <20240117114553.62798913@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fRlDahp=ZCP3F83WHkgmat4";
+Content-Type: multipart/signed; boundary="Sig_/Vf4B7AVV628jMlIiYUJtMvU";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/fRlDahp=ZCP3F83WHkgmat4
+--Sig_/Vf4B7AVV628jMlIiYUJtMvU
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 9 Jan 2024 11:39:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Hi all,
->=20
-> Today's linux-next merge of the fbdev tree got a conflict in:
->=20
->   drivers/video/fbdev/intelfb/intelfb_i2c.c
->=20
-> between commit:
->=20
->   ef2984d633ce ("fbdev: remove I2C_CLASS_DDC support")
->=20
-> from the i2c tree and commit:
->=20
->   256b7e8673a6 ("fbdev/intelfb: Remove driver")
+The following commits are also in the btrfs-fixes tree as different
+commits (but the same patches):
 
-This is now commit
-
-  689237ab37c5 ("fbdev/intelfb: Remove driver")
-
-in Linus' tree.
-
-> I fixed it up (I just removed the file) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-
-This is now a conflict between the i2c tree and Linus' tree.
+  4b60f3880d23 ("btrfs: zoned: factor out prepare_allocation_zoned()")
+  62ec22633c6a ("btrfs: zoned: optimize hint byte for zoned allocator")
+  690381ca057e ("btrfs: fix unbalanced unlock of mapping_tree_lock")
+  92dd093f23d2 ("btrfs: avoid copying BTRFS_ROOT_SUBVOL_DEAD flag to snapsh=
+ot of subvolume being deleted")
+  a5592dcde6c6 ("btrfs: fix kvcalloc() arguments order in btrfs_ioctl_send(=
+)")
+  aa434e486204 ("btrfs: ref-verify: free ref cache before clearing mount op=
+t")
+  c31b9639579d ("btrfs: zoned: fix lock ordering in btrfs_zone_activate()")
+  de4b77527d36 ("btrfs: don't abort filesystem when attempting to snapshot =
+deleted subvolume")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/fRlDahp=ZCP3F83WHkgmat4
+--Sig_/Vf4B7AVV628jMlIiYUJtMvU
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWnEtYACgkQAVBC80lX
-0GyudQf/Z/mpbXa+b+XsD23H9VsHyrj/k4L4keARN1c9rhDccUK9kZIrx88W7Ys1
-ps+3LTRhdBnurUO6SZAXbAcQP/uEHMrRSlapbjStMfdvTdbohzLZ0SiW9UtaFSHL
-4TOeESCIoQ86EPmaDoFQtxqTp5eegjji7rp3YvvSoJxS8fI5YqgJk4p24mmbzmk/
-bAXVtIyeu/SnOmntfiBa6CNEkLfYn1zYQj+HLTxRiVJEq84GOqI+slrZTrOnJMqj
-JrMA/8b067WxCL7E4y/TjUpHBteh/J3wo9NdIxTHekyajyabzXAo2+Ru2AiTk3Z6
-hFr+tdtvDNAw59KChMORq78GSU66bg==
-=Es1E
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWnI0EACgkQAVBC80lX
+0Gzu+Af/cCGM8JwobPJfq5KT6L3+uo63PfOC92qrzqfBaYm98MNhWSDSzBEivUKR
+i6uo9ytXSLs+cBdpyVGQUIwhYiiX54OqgyE1/IYH18NlCRsRfpcBNB9EAKuvIwjs
+6Myj1apV/8ebp7oz/8CtLr6etKH85qoFWg3riPkjvF3kLx72lbGd3eA/8C5JZsRA
+en9hmT7KgfvoywmB6iiqJDV2/KPkRkbQ6Y0pz1IVYfynCbp+7p1GywNVAPWXm5xm
++GYx+5puJnynrHewjLU6ECHPPBSJVyGCC9q76uZTLU675i29LbIsT2YwUVpgFeEo
+dzLcJCj9Hj3SeLWRQThO2oj88MPI+w==
+=dQcS
 -----END PGP SIGNATURE-----
 
---Sig_/fRlDahp=ZCP3F83WHkgmat4--
+--Sig_/Vf4B7AVV628jMlIiYUJtMvU--
 

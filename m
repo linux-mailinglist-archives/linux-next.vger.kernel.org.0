@@ -1,149 +1,117 @@
-Return-Path: <linux-next+bounces-762-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-763-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D22488319C8
-	for <lists+linux-next@lfdr.de>; Thu, 18 Jan 2024 13:59:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC96C831E8F
+	for <lists+linux-next@lfdr.de>; Thu, 18 Jan 2024 18:40:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 710781F22DD8
-	for <lists+linux-next@lfdr.de>; Thu, 18 Jan 2024 12:59:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7603EB22D63
+	for <lists+linux-next@lfdr.de>; Thu, 18 Jan 2024 17:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 401A324B57;
-	Thu, 18 Jan 2024 12:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C8412D04E;
+	Thu, 18 Jan 2024 17:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="sAdDn6QI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="olk/jPcO"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E724724B50
-	for <linux-next@vger.kernel.org>; Thu, 18 Jan 2024 12:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0D52D04B
+	for <linux-next@vger.kernel.org>; Thu, 18 Jan 2024 17:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705582769; cv=none; b=CrEfaUuElT6h/vggcuCFpF4lIL/PYoQRGTV4d7G6RqSLGQI7560aUS06yrpJZgndgxUSY29ENut+wXriBVtkJ1DwOn935XC87IQmR6FSzzQ5it69RiJ+ojGVEraKfMY/cYLzEKAUd09BHymxcQ/nMdVNkFO8iEgr8XUIRINdnYw=
+	t=1705599639; cv=none; b=uiMorvY2WKITdzDPVfZCmmt9pC1E++I4iJBZU8B5fRMUN6qck9jbP6t15PIHKNohRbqK2vjpkwfenIiZDsPSEtFAmMAqhGTtc/S6BYyAOv3hmQgxqz2Rp9olba8/BflVVLQ3nWwcFiWEyPoiJwtn7iuGLYUqETjo4TcFPPVkcMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705582769; c=relaxed/simple;
-	bh=NyU7+c+3R5qieLOE7iZQGD9dmLTqV7McsWlPf5E4zCw=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding; b=oKHanfXr+z11PWYSQpsYswq8VnaKJ7L3a9Ekuji/5DyokMJ3sK4Z0HtNHbb2QMXoTsgMisBJ++jh2xUyf42Jm+gyaEA23/T7bfd7O/PdY/7+Z//be5evfaXHMF/TjGY01vkNqepy6iVRy0uX6Mt5aUYZOwxsEpx0u/mj9oaZu7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=sAdDn6QI; arc=none smtp.client-ip=209.85.166.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3608cfa5ce6so56403115ab.0
-        for <linux-next@vger.kernel.org>; Thu, 18 Jan 2024 04:59:27 -0800 (PST)
+	s=arc-20240116; t=1705599639; c=relaxed/simple;
+	bh=ltTdpIF83mD4FLWoP8ES+hjgX7H5akmsbH+KpszV1Tw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=vBQBMpQJlpFP3cnTaAXIbbOls6PW6mMNchuvfoYkwSjTkTGvJqzT7a02YTBsk1lO22x+th7i555K+5mE3OK3zW/W8xAs4ggn4sX1x2XzR9JlPIwFK1UxqqvsvaZTNpvZsUTQAeZYXwhaacz0BiIUV1iWiUM3HvyXgRIucf46kpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=olk/jPcO; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5cdf9a354a0so7629887a12.3
+        for <linux-next@vger.kernel.org>; Thu, 18 Jan 2024 09:40:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1705582767; x=1706187567; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HWADTwPjX+2jaYXFvN/zsXEQ2ZmoOpg5k/PCeUcdjSk=;
-        b=sAdDn6QI8crmJgVo+jnaEFygVmZ7zyFNm6KMdmnS43XY1SxfIEsbV8M1DrcvFZFLMl
-         Q5UFaOBpJb9CYb17hnTZ0u7v417roGLBDtPLhC/ZWVTa3JVYmg5hr8r+6yWtuOp5Y2Xt
-         9t0f1UoA1Xw7fx1TvjUKabrd/BBo1cLMjDOHhR1aejp8L86na+fFTUDHi9ZPdub70rSD
-         jjFyY/cC/9H0YJhyHgiw3eZqX5eXrkWvcz+CYvfGSLt+LFLZhfXrKWByfQSLZuQpvC3s
-         feVSPTsxY/Pn8ZBfqDJIgOqEMGaP07AGy0IV59neSM26io8ClnTJ7tA52erAiRBAUPsT
-         a7bA==
+        d=google.com; s=20230601; t=1705599637; x=1706204437; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5Q3C3WGrieoJdAKFaeIZlXobOygHM9XDpw7BX2KbOhI=;
+        b=olk/jPcOL4P18CmMZSUtVuZLS1/hmMykvKVXtE47UIUdOVpEC43luKhwfj9E/nsUGX
+         syyfL4xpvdeuuSQTA7VZ6oem8PxUpEMwLzj3+7biCEhfkdZR+XMqFfK6FGoyhhu67y3r
+         26q9AfNAgS2BkoqzObqM78oMFvm3n/+OYBcUOXguw5reox20j8ZIM7lgj/82kpoX3raa
+         Wm2iIwLJjpNp2XCGM0MpPVO+2v5SeUhohXFKvaHD8noAunKUwzUDKGJBK7u62lwoT6r1
+         okP6bJyvaTrIPoJYYoDIwae7f0RatLauOG0sdKEXuIoyguvDMxuEXYeeKIeaTiWNADae
+         4YfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705582767; x=1706187567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HWADTwPjX+2jaYXFvN/zsXEQ2ZmoOpg5k/PCeUcdjSk=;
-        b=rKo0FLjxrHe2VZBORq/IBDmi1DhJ6I6m++CELl4iLOCcj+5F5JzyhE6cb+GA3l/gLy
-         GyQPYOXmF++Bkfane4lc7V9b3v8Vj6U6XVlSQTFD+zyDQTnJ40uE7gx6doEV05Xi1xFj
-         dFOMmrRwQa2ShXAZr58Ug8uxlIlM5s87IiwkCMN19jMFT4J09Fbi49t75XUMD2+LZGb1
-         Rjdg57Kfb82/8qz7IT+Y2JZEUCTh1bZm9lmoZaksnhFJ3b0HUwJqf2cc+SPUUpY++Ta4
-         FqTqChYChKOF3qzRJ4UUnp+Cr/QYfYILpORbXABJikIGThXA2KT1GqkeuG0+czo6dD1r
-         TXkg==
-X-Gm-Message-State: AOJu0YwsbeGy5Iuah5WzJUTiIP3RnI08wlBvkXbfe9EeyoTn0wb5IeCg
-	q1HFVm/yO/XwrWT0j1Vlus8+p7NtPlu497++WPhCApBLvMtfrbRiL3cM1eHjMvoVPQVnlsV/ESy
-	DUus8LWqGl2TB5scwMv5WCfUk7USkNAKP3LZO4w==
-X-Google-Smtp-Source: AGHT+IEULXICvafspeHkLMkr6soWFzV0SUySB8GzLHkUsKVp+V05biZlODsydI6eC8onv1WinflroTNSid+Lah/ulTM=
-X-Received: by 2002:a05:6e02:5ac:b0:361:98a3:a7ac with SMTP id
- k12-20020a056e0205ac00b0036198a3a7acmr879075ils.58.1705582767073; Thu, 18 Jan
- 2024 04:59:27 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705599637; x=1706204437;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5Q3C3WGrieoJdAKFaeIZlXobOygHM9XDpw7BX2KbOhI=;
+        b=Y/O8ZLSAzKgLKj8oT1U4t87Q4pKForataagwjGxAhicq998jfaCVWt1xKey1+DJYRs
+         0fs7marwsqb7MJHi+bqosFGcshfLlHXFtjZqIs/DG7n1Ki3Aq+7uglhBQNePANy2Flc7
+         vIIln120BKhwgBgenfRG7M0dNOAzCCyFbQwjsld3Ua2w2ePk7UHRRW22jcjOGLU7xm8r
+         0VMHfVDGKv+oaOlicwAyuvN/txN2R6k2inuD0eifgZFID+Zi09+8oFQtPIIVYzj9/13T
+         O2Dh7RUBJCZRWHjU4XRLMmP0OwQgfT4RoGfvb6wMF2jcAOiBCj+kWIKtaRW0G5iLvnc5
+         uPkQ==
+X-Gm-Message-State: AOJu0Yx2Zbt5l2DFm3VipNFavffMM8wI9+vMHEOI4YvqqjTVJEK9uuTL
+	dN2tJ9pkzRWy+luF7cRIzTDaO+MiYfeerEQiTM0rJa4o8wRQT6q6NtQlz1/K4p3a+mwSOHUhbj5
+	PoA==
+X-Google-Smtp-Source: AGHT+IHQno7PAwboCP87bGIkYG2fH+s8EoDNQ4sFTOlwoU3XmXeAa1RkI+vnnDxRDet8Cr9UHVnWumLJcOM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:63c3:0:b0:5ce:1891:dfac with SMTP id
+ n3-20020a6563c3000000b005ce1891dfacmr6154pgv.4.1705599637554; Thu, 18 Jan
+ 2024 09:40:37 -0800 (PST)
+Date: Thu, 18 Jan 2024 09:40:36 -0800
+In-Reply-To: <CAAhSdy0SxZWdCHQVW0Bki+bHpg4qrHWV0aFzJq8V2xYtwsMWhw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240104123727.76987-2-ajones@ventanamicro.com>
-In-Reply-To: <20240104123727.76987-2-ajones@ventanamicro.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Thu, 18 Jan 2024 18:29:16 +0530
-Message-ID: <CAAhSdy0SxZWdCHQVW0Bki+bHpg4qrHWV0aFzJq8V2xYtwsMWhw@mail.gmail.com>
+Mime-Version: 1.0
+References: <20240104123727.76987-2-ajones@ventanamicro.com> <CAAhSdy0SxZWdCHQVW0Bki+bHpg4qrHWV0aFzJq8V2xYtwsMWhw@mail.gmail.com>
+Message-ID: <ZalilFSHBa_XHolD@google.com>
 Subject: Re: [PATCH -fixes v2] RISC-V: KVM: Require HAVE_KVM
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: linux-riscv@lists.infradead.org, linux-next@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+From: Sean Christopherson <seanjc@google.com>
+To: Anup Patel <anup@brainfault.org>
+Cc: Andrew Jones <ajones@ventanamicro.com>, linux-riscv@lists.infradead.org, 
+	linux-next@vger.kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
 	kvm-riscv@lists.infradead.org, paul.walmsley@sifive.com, palmer@dabbelt.com, 
 	aou@eecs.berkeley.edu, atishp@atishpatra.org, rdunlap@infradead.org, 
 	sfr@canb.auug.org.au, alex@ghiti.fr, mpe@ellerman.id.au, npiggin@gmail.com, 
 	linuxppc-dev@lists.ozlabs.org, pbonzini@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 4, 2024 at 6:07=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
-m> wrote:
->
-> KVM requires EVENTFD, which is selected by HAVE_KVM. Other KVM
-> supporting architectures select HAVE_KVM and then their KVM
-> Kconfigs ensure its there with a depends on HAVE_KVM. Make RISCV
-> consistent with that approach which fixes configs which have KVM
-> but not EVENTFD, as was discovered with a randconfig test.
->
-> Fixes: 99cdc6c18c2d ("RISC-V: Add initial skeletal KVM support")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/all/44907c6b-c5bd-4e4a-a921-e4d3825539d8@=
-infradead.org/
-> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+On Thu, Jan 18, 2024, Anup Patel wrote:
+> On Thu, Jan 4, 2024 at 6:07=E2=80=AFPM Andrew Jones <ajones@ventanamicro.=
+com> wrote:
+> >
+> > KVM requires EVENTFD, which is selected by HAVE_KVM. Other KVM
+> > supporting architectures select HAVE_KVM and then their KVM
+> > Kconfigs ensure its there with a depends on HAVE_KVM. Make RISCV
+> > consistent with that approach which fixes configs which have KVM
+> > but not EVENTFD, as was discovered with a randconfig test.
+> >
+> > Fixes: 99cdc6c18c2d ("RISC-V: Add initial skeletal KVM support")
+> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > Closes: https://lore.kernel.org/all/44907c6b-c5bd-4e4a-a921-e4d3825539d=
+8@infradead.org/
+> > Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+>=20
+> Queued this patch for Linux-6.8
 
-Queued this patch for Linux-6.8
+That should be unnecessary.  Commit caadf876bb74 ("KVM: introduce CONFIG_KV=
+M_COMMON"),
+which is in Paolo's pull request for 6.8, addresses the EVENTFD issue.  And=
+ the
+rest of Paolo's series[*], which presumably will get queued for 6.9, elimin=
+ates
+HAVE_KVM entirely.
 
-Regards,
-Anup
-
-> ---
->
-> v2:
->  - Added Fixes tag and -fixes prefix [Alexandre/Anup]
->
->  arch/riscv/Kconfig     | 1 +
->  arch/riscv/kvm/Kconfig | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index a935a5f736b9..daba06a3b76f 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -128,6 +128,7 @@ config RISCV
->         select HAVE_KPROBES if !XIP_KERNEL
->         select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
->         select HAVE_KRETPROBES if !XIP_KERNEL
-> +       select HAVE_KVM
->         # https://github.com/ClangBuiltLinux/linux/issues/1881
->         select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
->         select HAVE_MOVE_PMD
-> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
-> index 1fd76aee3b71..36fa8ec9e5ba 100644
-> --- a/arch/riscv/kvm/Kconfig
-> +++ b/arch/riscv/kvm/Kconfig
-> @@ -19,7 +19,7 @@ if VIRTUALIZATION
->
->  config KVM
->         tristate "Kernel-based Virtual Machine (KVM) support (EXPERIMENTA=
-L)"
-> -       depends on RISCV_SBI && MMU
-> +       depends on HAVE_KVM && RISCV_SBI && MMU
->         select HAVE_KVM_IRQCHIP
->         select HAVE_KVM_IRQ_ROUTING
->         select HAVE_KVM_MSI
-> --
-> 2.43.0
->
+[*] https://lore.kernel.org/all/20240108124740.114453-6-pbonzini@redhat.com
 

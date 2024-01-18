@@ -1,77 +1,76 @@
-Return-Path: <linux-next+bounces-760-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-761-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BD9A8312CC
-	for <lists+linux-next@lfdr.de>; Thu, 18 Jan 2024 07:42:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AC7C831681
+	for <lists+linux-next@lfdr.de>; Thu, 18 Jan 2024 11:11:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C21A02828BC
-	for <lists+linux-next@lfdr.de>; Thu, 18 Jan 2024 06:42:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30A321F23607
+	for <lists+linux-next@lfdr.de>; Thu, 18 Jan 2024 10:11:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E6211CA9;
-	Thu, 18 Jan 2024 06:42:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 211DB2030E;
+	Thu, 18 Jan 2024 10:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="zuW3tO2E"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="k11p3Eaj"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9811B11C80
-	for <linux-next@vger.kernel.org>; Thu, 18 Jan 2024 06:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D00D200BC
+	for <linux-next@vger.kernel.org>; Thu, 18 Jan 2024 10:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705560129; cv=none; b=OI1VI+utyQz+gfgZc4nE6T7PgsaEhpMcmRcNy4WLdilQL6uJNInaoCLl9DsrHL+N7CS+Kt5NEbUbI1UbDi7aXGkRgKaS9GhZ8dxStGgUEP+WAbnlXlBgcX67WPeOerl4wesLHDXGDrm4wvBd6g0hvQEfF/y+erPlFmpqjqJF2RM=
+	t=1705572674; cv=none; b=mlTEDnXxSX1s/QaOXzT23CbAr0c71o7J7IPZ9eGTdjhai4gDQfVTftSjIN/Rj6pwaVel2JjtihSK1hkGkugrCdC3MfpKqBzfY1s3Dqfu9IOw1+i4gQ1/d3w/7g9YwgnIEiXDfQzzUjwdoW9OAT43uyVjMn3CKpOw+nWo+Yu4c3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705560129; c=relaxed/simple;
-	bh=wFzw19RNS7QdxMoweeIXyzIcbyllRtXQes8ql8ZOM9o=;
+	s=arc-20240116; t=1705572674; c=relaxed/simple;
+	bh=Z7nxHBbdejko8CmngJZVzKfbCZ0uE11Q8oNxIHYK/dM=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
 	 Message-ID:Date:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:X-Kernelci-Branch:X-Kernelci-Tree:
-	 X-Kernelci-Kernel:X-Kernelci-Report-Type:Subject:To:From; b=eNux1Jk9RWNVlfGw9cpoa5XEpYPbKdXHYl4ax/tzC0uQeGd/MfLpl48/At4vtwAdST8V8qS47M1BJ+ClcmPBlzbADu/tbZ+vYZi/lXbq/5J6HWKOUAHVRHMm04fksKwsmoAh/bihD7K99mYHZXHCzVVvuv9W0DutDr8D9z3IUD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=zuW3tO2E; arc=none smtp.client-ip=209.85.214.177
+	 X-Kernelci-Kernel:X-Kernelci-Report-Type:Subject:To:From; b=IMdjrS/UGAwcdQNuQwtxQS6UhGwSU3X4/j1/FK53Ig5jXE4ITfZrtENMdldkaLsQIxAKGok50/YPhQaFuF0Q1IfNNJUkI5OsHfdUdFWyWTAn6m6uX3WEkFa9iXDhkZI5vRwsowiKTa2cGTi9kC+IN7RVUzSAE0c76OL+3dttSeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=k11p3Eaj; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d70a98c189so742675ad.1
-        for <linux-next@vger.kernel.org>; Wed, 17 Jan 2024 22:42:04 -0800 (PST)
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5ce74ea4bf2so431745a12.0
+        for <linux-next@vger.kernel.org>; Thu, 18 Jan 2024 02:11:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1705560123; x=1706164923; darn=vger.kernel.org;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1705572669; x=1706177469; darn=vger.kernel.org;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=TFq/jJLVKKR2Rekdxg3nrXlr1CNcHb5YmmWxOq5NRko=;
-        b=zuW3tO2EQ6iUghIpcuxqV7t95GNY2/ydOEbaVONHSlIOIVQRIcsvOggUDEyphdbht5
-         5BZLmPSrOY8A0GS/sZvC9WDKcp/yv+WcBJ8m4POwTbN2v3bb42LKkcTQoYYM9N2HfEGQ
-         0V7z5gHCAJvhy0572ZO80+8CWvZbAF1P02TmQkwxwM7p5+ruVXn9ylf9V26t39TsM+WU
-         dCvjn3vCFRcVeaMzhknOSaX4rQq5dnPPAMhHbzT0XQu9uF9wjlaNRhaU1/ouee+MUHmM
-         OcP6NKhCsq31aqatxLktEQJo2p3q1E4OjTb36D5WUC2dQfCLHyWQsis0UNgI+s/HREr9
-         +AYw==
+        bh=yKVarRXkD/acLPm4Y7V/stBmqfOT06/pHL2qYcGcJaE=;
+        b=k11p3EajSyrVDw0W4cO6nslc1ISkvDCb3AbxntBJn4o3zt+rzaxKcWtr50zWsiAfDH
+         Qexg4NphxbVhhuQLl15ID4yMEWaQFce52N3DmctVW3ns199iT1xTi+P70nvFEbHMYZJx
+         SB3Xyp8jhwVH5j3AOx2TwzTvkiqvWBgsst4IfZvk6wMFcUmcgv7DRTVWPSPGkcusZukY
+         k/3jNbt/J+R8tRNm39+BVz3/89N1U5eVB6yFN/+SLRbcLCLENpK57L3b5RnBh9HiVfu9
+         ZsJknYrUPVvB6MCl4Yzn/+v9+Ppoge8BqwU7TQY9ZaMdDLj73ne/F1ZEUdlF7FfWTKxu
+         Bseg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705560123; x=1706164923;
+        d=1e100.net; s=20230601; t=1705572669; x=1706177469;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TFq/jJLVKKR2Rekdxg3nrXlr1CNcHb5YmmWxOq5NRko=;
-        b=R49KfsJ3GyzWkLgkZQyGN/qkVUZvrqKkmkk2yylPnwFekXJORlak8LoWOLSx/oNkKb
-         zT8GMk9bJ+MTgFWOv0PpxAHQ5waGx0VXlO+C4dEFN8AVakRvYBt9VteKVhZvo/w5AVbp
-         pPFESaL4iESeTtnotYTDkZy//x/z2jZEkCVgkmKdXO0GiOM/O3Kbk0x/5EIvGFBnksyk
-         XY8O1sPAe+iu1ZTVEhDfcX5ZJgNaqBpq0a/rFCRodqAGaaZq6D9wv0DVZkKOzRKu82Qq
-         SwMtMCnFzL9Lw9BF7ZAEFYue37x2HHgoG1IXpN1YPdXnjadxaDc7qSLukTsrhHV5gtIK
-         W5Lw==
-X-Gm-Message-State: AOJu0YzQAIMyUp992zCQATO3IGAMhlW2jz/aNOFyvBFSGkRnLKBbqXOB
-	JcY05rWRF9AzbKkO/jLdHILGCT9ONrl3by77zIl4qY6gR36FuWNyxXHLwPmQZOV0/QLmgVv5Yja
-	QL1c=
-X-Google-Smtp-Source: AGHT+IFbrZ6PhiJJuqgKqx0WxwGNOxMnjWfjHQbuaEmeBnhlHqKf6zI4GSgm6RjXKEJHT1T1jnGeXw==
-X-Received: by 2002:a17:902:b603:b0:1d5:36e9:3a0d with SMTP id b3-20020a170902b60300b001d536e93a0dmr324486pls.56.1705560122413;
-        Wed, 17 Jan 2024 22:42:02 -0800 (PST)
+        bh=yKVarRXkD/acLPm4Y7V/stBmqfOT06/pHL2qYcGcJaE=;
+        b=YChRpdRH/11q1/BL0pFw2IMxPmRuDCWoaHr6+eoBYkOVq7T+mZu/bPrntCZPKyyoiH
+         HQN0d23nfxamBXKJ5exv7dhjTFB9wzCYb7zLYUWVlBTOYlVxTivg2WcU8BXyhoHDfqRJ
+         YGLdVjmiw0Jq4kDPOYk9FyxVjejs5JivBPX2dgFBycF6U7LSK5KVF8va+2iYSQotfdnM
+         ynCCnq7nHWgqFIHbfFEtSaEk/Q8FTKs+KdZjS6txrnWHZgNLbOrDU/c8A62/KF/fHSqT
+         BJmyktTdspgUTH+GbSExaK0vCxpHBfQCsyX4nLL8Oo+qo82qKbKjepqJO0i031/p2ZCp
+         pPfA==
+X-Gm-Message-State: AOJu0YzXe0+t9Kj4MRXBHha2J4b3hQgxP4/DdaA8sSh/YuRO0gamu2AH
+	Hi364hWwKOn0XfLs9znFJeZ2xYvENgy23hg1wdOT2WPxMjRQMZXmS44viOwZz/2soymwHOrnJbf
+	9SNA=
+X-Google-Smtp-Source: AGHT+IHrWeV1rrGJCU/gfp1OuEsAqCzjaZ0W/8U7HXlTenml/O6F2AYn4PH+4cQ6t16eYzZ9nXVYXA==
+X-Received: by 2002:a17:90a:cf04:b0:290:1966:cc84 with SMTP id h4-20020a17090acf0400b002901966cc84mr1328471pju.1.1705572668680;
+        Thu, 18 Jan 2024 02:11:08 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 12-20020a170902e9cc00b001d7035b11d6sm629194plk.254.2024.01.17.22.42.01
-        for <linux-next@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id ky12-20020a170902f98c00b001d4c98c7439sm1055931plb.276.2024.01.18.02.11.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jan 2024 22:42:01 -0800 (PST)
-Message-ID: <65a8c839.170a0220.387f7.2919@mx.google.com>
-Date: Wed, 17 Jan 2024 22:42:01 -0800 (PST)
+        Thu, 18 Jan 2024 02:11:08 -0800 (PST)
+Message-ID: <65a8f93c.170a0220.32680.3541@mx.google.com>
+Date: Thu, 18 Jan 2024 02:11:08 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
@@ -83,2404 +82,1815 @@ Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Branch: master
 X-Kernelci-Tree: next
 X-Kernelci-Kernel: next-20240118
-X-Kernelci-Report-Type: build
-Subject: next/master build: 178 builds: 8 failed, 170 passed, 7 errors,
- 360 warnings (next-20240118)
-To: linux-next@vger.kernel.org
+X-Kernelci-Report-Type: test
+Subject: next/master baseline: 369 runs, 53 regressions (next-20240118)
+To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+ kernelci-results@groups.io
 From: "kernelci.org bot" <bot@kernelci.org>
 
-next/master build: 178 builds: 8 failed, 170 passed, 7 errors, 360 warnings=
- (next-20240118)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20240118/
-
-Tree: next
-Branch: master
-Git Describe: next-20240118
-Git Commit: 2863b714f3ad0a9686f2de1b779228ad8c7a8052
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arc:
-    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
-
-i386:
-    i386_defconfig: (gcc-10) FAIL
-    i386_defconfig+debug: (gcc-10) FAIL
-    i386_defconfig+kselftest: (gcc-10) FAIL
-
-x86_64:
-    x86_64_defconfig: (gcc-10) FAIL
-    x86_64_defconfig+kselftest: (gcc-10) FAIL
-    x86_64_defconfig+x86-board: (gcc-10) FAIL
-    x86_64_defconfig+x86-board+kselftest: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-    allnoconfig (gcc-10): 1 warning
-    axs103_defconfig (gcc-10): 1 warning
-    axs103_smp_defconfig (gcc-10): 1 warning
-    haps_hs_defconfig (gcc-10): 1 warning
-    haps_hs_smp_defconfig (gcc-10): 2 warnings
-    haps_hs_smp_defconfig+debug (gcc-10): 2 warnings
-    haps_hs_smp_defconfig+kselftest (gcc-10): 2 warnings
-    hsdk_defconfig (gcc-10): 1 warning
-    nsimosci_hs_defconfig (gcc-10): 2 warnings
-    nsimosci_hs_smp_defconfig (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-    vdk_hs38_defconfig (gcc-10): 1 warning
-    vdk_hs38_smp_defconfig (gcc-10): 1 warning
-
-arm64:
-    defconfig (gcc-10): 1 warning
-    defconfig+CONFIG_ARM64_16K_PAGES=3Dy (gcc-10): 1 warning
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 3 warnings
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-17): 2 warnings
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
-    defconfig+arm64-chromebook (gcc-10): 1 warning
-    defconfig+arm64-chromebook+videodec (gcc-10): 1 warning
-    defconfig+kselftest (gcc-10): 2 warnings
-    defconfig+videodec (gcc-10): 1 warning
-
-arm:
-    collie_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-    mxs_defconfig (gcc-10): 1 warning
-    omap2plus_defconfig (gcc-10): 1 warning
-    pxa_defconfig (gcc-10): 1 warning
-
-i386:
-    i386_defconfig (gcc-10): 1 error, 1 warning
-    i386_defconfig+debug (gcc-10): 1 error, 1 warning
-    i386_defconfig+kselftest (gcc-10): 1 error, 1 warning
-
-mips:
-    ath79_defconfig (gcc-10): 3 warnings
-    bcm63xx_defconfig (gcc-10): 8 warnings
-    bigsur_defconfig (gcc-10): 15 warnings
-    cavium_octeon_defconfig (gcc-10): 12 warnings
-    cobalt_defconfig (gcc-10): 2 warnings
-    db1xxx_defconfig (gcc-10): 27 warnings
-    decstation_64_defconfig (gcc-10): 9 warnings
-    decstation_defconfig (gcc-10): 9 warnings
-    decstation_r4k_defconfig (gcc-10): 9 warnings
-    fuloong2e_defconfig (gcc-10): 1 warning
-    gpr_defconfig (gcc-10): 7 warnings
-    ip22_defconfig (gcc-10): 7 warnings
-    ip27_defconfig (gcc-10): 13 warnings
-    ip28_defconfig (gcc-10): 9 warnings
-    ip32_defconfig (gcc-10): 8 warnings
-    jazz_defconfig (gcc-10): 6 warnings
-    lemote2f_defconfig (gcc-10): 22 warnings
-    loongson1b_defconfig (gcc-10): 1 warning
-    loongson1c_defconfig (gcc-10): 1 warning
-    loongson2k_defconfig (gcc-10): 4 warnings
-    loongson3_defconfig (gcc-10): 5 warnings
-    maltaaprp_defconfig (gcc-10): 4 warnings
-    mtx1_defconfig (gcc-10): 6 warnings
-    omega2p_defconfig (gcc-10): 2 warnings
-    pic32mzda_defconfig (gcc-10): 1 warning
-    rb532_defconfig (gcc-10): 3 warnings
-    rbtx49xx_defconfig (gcc-10): 1 warning
-    rm200_defconfig (gcc-10): 9 warnings
-    rt305x_defconfig (gcc-10): 2 warnings
-    sb1250_swarm_defconfig (gcc-10): 16 warnings
-    vocore2_defconfig (gcc-10): 2 warnings
-
-riscv:
-    defconfig (gcc-10): 1 warning
-
-sparc:
-    allnoconfig (gcc-10): 5 warnings
-    sparc32_defconfig (gcc-10): 6 warnings
-    sparc64_defconfig (gcc-10): 26 warnings
-    sparc64_defconfig+debug (gcc-10): 24 warnings
-    sparc64_defconfig+kselftest (gcc-10): 25 warnings
-    tinyconfig (gcc-10): 5 warnings
-
-x86_64:
-    x86_64_defconfig (gcc-10): 1 error, 1 warning
-    x86_64_defconfig+kselftest (gcc-10): 1 error, 1 warning
-    x86_64_defconfig+kselftest (rustc-1.74): 1 warning
-    x86_64_defconfig+x86-board (gcc-10): 1 error, 1 warning
-    x86_64_defconfig+x86-board+kselftest (gcc-10): 1 error, 1 warning
-
-Errors summary:
-
-    3    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_me=
-mcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-    2    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset =
-32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-    2    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin=
-_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bou=
-nds]
-
-Warnings summary:
-
-    13   arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
-r 'syscall_trace_enter' [-Wmissing-prototypes]
-    10   security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offse=
-t 32 is out of the bounds [0, 0] [-Warray-bounds]
-    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    7    cc1: all warnings being treated as errors
-    5    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype fo=
-r =E2=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-    5    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
-or 'arc_kprobe_handler' [-Wmissing-prototypes]
-    3    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98fre=
-e_dma=E2=80=99 [-Wmissing-prototypes]
-    3    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98req=
-uest_dma=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
-=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    3    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
-=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
-r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
- =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =
-=E2=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =
-=E2=80=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
- for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
-e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
-ypes]
-    3    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
- for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
-e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
-pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
-or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
-for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
-for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =
-=E2=80=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =
-=E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototyp=
-e for =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototyp=
-e for =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous protot=
-ype for =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =
-=E2=80=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =
-=E2=80=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =
-=E2=80=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =
-=E2=80=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =
-=E2=80=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype fo=
-r =E2=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/setup.c:57:13: warning: no previous proto=
-type for =E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/prom.c:59:7: warning: no previous prototy=
-pe for =E2=80=98prom_getenv=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/prom.c:48:13: warning: no previous protot=
-ype for =E2=80=98prom_init_cmdline=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/prom.c:127:12: warning: no previous proto=
-type for =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/clock.c:140:13: warning: no previous prot=
-otype for =E2=80=98alchemy_set_lpj=E2=80=99 [-Wmissing-prototypes]
-    2    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_=
-memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    2    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =
-=E2=80=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
-    2    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous =
-prototype for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
-    2    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
- for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    2    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
-e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototyp=
-e for =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous=
- prototype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previou=
-s prototype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous=
- prototype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous pr=
-ototype for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous p=
-rototype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous pr=
-ototype for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sgi-ip22/ip22-time.c:119:18: warning: no previous protot=
-ype for =E2=80=98indy_8254timer_irq=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sgi-ip22/ip22-gio.c:398:12: warning: no previous prototy=
-pe for =E2=80=98ip22_gio_init=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sgi-ip22/ip22-gio.c:249:6: warning: no previous prototyp=
-e for =E2=80=98ip22_gio_set_64bit=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for=
- =E2=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson64/pm.c:67:13: warning: no previous prototype fo=
-r =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson64/pm.c:63:13: warning: no previous prototype fo=
-r =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson64/pm.c:59:13: warning: no previous prototype fo=
-r =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson64/dma.c:25:13: warning: no previous prototype f=
-or =E2=80=98plat_swiotlb_setup=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson32/common/platform.c:71:5: warning: no previous =
-prototype for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previou=
-s prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-protot=
-ypes]
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: .text+0x14d2f9
-    1    include/linux/fortify-string.h:402:12: warning: writing 1 byte int=
-o a region of size 0 [-Wstringop-overflow=3D]
-    1    include/linux/array_size.h:11:25: warning: overflow in conversion =
-from =E2=80=98long unsigned int=E2=80=99 to =E2=80=98int=E2=80=99 changes v=
-alue from =E2=80=9818446744073709551615=E2=80=99 to =E2=80=98-1=E2=80=99 [-=
-Woverflow]
-    1    drivers/watchdog/octeon-wdt-main.c:210:6: warning: no previous pro=
-totype for =E2=80=98octeon_wdt_nmi_stage3=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:565:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_drv_resume=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:548:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_drv_suspend=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:523:6: warning: no previous prototy=
-pe for =E2=80=98au1100fb_drv_remove=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:341:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_fb_mmap=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:294:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_fb_pan_display=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:235:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_fb_setcolreg=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:138:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_setmode=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/tty/serial/serial_txx9.c:933:12: warning: no previous prot=
-otype for =E2=80=98early_serial_txx9_setup=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous protot=
-ype for =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/net/ethernet/sgi/meth.c:271:5: warning: no previous protot=
-ype for =E2=80=98meth_reset=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-pic32-evic.c:164:5: warning: no previous proto=
-type for =E2=80=98pic32_irq_domain_xlate=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-mxs.c:133:39: warning: no previous prototype f=
-or =E2=80=98icoll_handle_irq=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-ath79-misc.c:26:5: warning: no previous protot=
-ype for =E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-ath79-misc.c:181:13: warning: no previous prot=
-otype for =E2=80=98ath79_misc_irq_init=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-ath79-cpu.c:89:13: warning: no previous protot=
-ype for =E2=80=98ath79_cpu_irq_init=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/gpu/drm/imagination/pvr_vm_mips.c:105:49: warning: implici=
-t conversion from 'unsigned long' to 'int' changes value from 1844674407370=
-9551615 to -1 [-Wconstant-conversion]
-    1    drivers/gpu/drm/imagination/pvr_fw_mips.c:140:60: warning: array s=
-ubscript 0 is outside the bounds of an interior zero-length array =E2=80=98=
-dma_addr_t[0]=E2=80=99 {aka =E2=80=98long long unsigned int[]=E2=80=99} [-W=
-zero-length-bounds]
-    1    arch/sparc/include/asm/string.h:15:25: warning: =E2=80=98__builtin=
-_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    1    arch/mips/sni/rm200.c:428:6: warning: no previous prototype for =
-=E2=80=98disable_rm200_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/rm200.c:387:13: warning: no previous prototype for =
-=E2=80=98sni_rm200_i8259_irqs=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/rm200.c:331:6: warning: no previous prototype for =
-=E2=80=98sni_rm200_init_8259A=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/rm200.c:211:6: warning: no previous prototype for =
-=E2=80=98sni_rm200_mask_and_ack_8259A=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/reset.c:45:6: warning: no previous prototype for =E2=
-=80=98sni_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/reset.c:28:6: warning: no previous prototype for =E2=
-=80=98sni_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/pcit.c:168:6: warning: no previous prototype for =E2=
-=80=98disable_pcit_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/pcimt.c:206:6: warning: no previous prototype for =
-=E2=80=98disable_pcimt_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/time.c:10:13: warning: no previous prototy=
-pe for =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/smp.c:38:6: warning: no previous prototype=
- for =E2=80=98sb1250_smp_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/smp.c:147:6: warning: no previous prototyp=
-e for =E2=80=98sb1250_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/setup.c:79:5: warning: no previous prototy=
-pe for =E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/setup.c:168:13: warning: no previous proto=
-type for =E2=80=98sb1250_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/irq.c:182:13: warning: no previous prototy=
-pe for =E2=80=98init_sb1250_irqs=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/time.c:10:13: warning: no previous protot=
-ype for =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/smp.c:49:6: warning: no previous prototyp=
-e for =E2=80=98bcm1480_smp_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/smp.c:158:6: warning: no previous prototy=
-pe for =E2=80=98bcm1480_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/setup.c:104:13: warning: no previous prot=
-otype for =E2=80=98bcm1480_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/irq.c:200:13: warning: no previous protot=
-ype for =E2=80=98init_bcm1480_irqs=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/ip32-reset.c:93:6: warning: no previous prototy=
-pe for =E2=80=98ip32_prepare_poweroff=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/ip32-memory.c:21:13: warning: no previous proto=
-type for =E2=80=98prom_meminit=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/ip32-berr.c:35:13: warning: no previous prototy=
-pe for =E2=80=98ip32_be_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/crime.c:93:13: warning: no previous prototype f=
-or =E2=80=98crime_cpuerr_intr=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/crime.c:42:13: warning: no previous prototype f=
-or =E2=80=98crime_memerr_intr=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/crime.c:26:13: warning: no previous prototype f=
-or =E2=80=98crime_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:56:6: warning: no previous prototype=
- for =E2=80=98nmi_cpu_eframe_save=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:37:6: warning: no previous prototype=
- for =E2=80=98install_cpu_nmi_handler=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:30:6: warning: no previous prototype=
- for =E2=80=98nmi_dump=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:183:1: warning: no previous prototyp=
-e for =E2=80=98cont_nmi_dump=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:174:1: warning: no previous prototyp=
-e for =E2=80=98nmi_eframes_save=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:156:6: warning: no previous prototyp=
-e for =E2=80=98nmi_node_eframe_save=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:132:6: warning: no previous prototyp=
-e for =E2=80=98nmi_dump_hub_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-memory.c:391:13: warning: no previous prot=
-otype for =E2=80=98prom_meminit=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-irq.c:250:6: warning: no previous prototyp=
-e for =E2=80=98install_ipi=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-hubio.c:30:15: warning: no previous protot=
-ype for =E2=80=98hub_pio_map=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-hubio.c:175:6: warning: no previous protot=
-ype for =E2=80=98hub_pio_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-berr.c:82:13: warning: no previous prototy=
-pe for =E2=80=98ip27_be_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-berr.c:60:5: warning: no previous prototyp=
-e for =E2=80=98ip27_be_handler=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip28-berr.c:474:5: warning: no previous prototy=
-pe for =E2=80=98ip28_show_be_info=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip28-berr.c:469:13: warning: no previous protot=
-ype for =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip28-berr.c:440:6: warning: no previous prototy=
-pe for =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip22-eisa.c:95:12: warning: no previous prototy=
-pe for =E2=80=98ip22_eisa_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip22-berr.c:89:6: warning: no previous prototyp=
-e for =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip22-berr.c:113:13: warning: no previous protot=
-ype for =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/rb532/serial.c:48:12: warning: no previous prototype for=
- =E2=80=98setup_serial_port=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/rb532/prom.c:49:13: warning: no previous prototype for =
-=E2=80=98prom_setup_cmdline=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/rb532/gpio.c:200:12: warning: no previous prototype for =
-=E2=80=98rb532_gpio_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/pci/pcie-octeon.c:1465:5: warning: no previous prototype=
- for =E2=80=98octeon_pcie_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/pci/pci-octeon.c:234:12: warning: no previous prototype =
-for =E2=80=98octeon_pci_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/pci/msi-octeon.c:343:12: warning: no previous prototype =
-for =E2=80=98octeon_msi_initialize=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/mm/c-octeon.c:351:17: warning: no previous prototype for=
- =E2=80=98cache_parity_error_octeon_non_recoverable=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/mm/c-octeon.c:342:17: warning: no previous prototype for=
- =E2=80=98cache_parity_error_octeon_recoverable=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/mips/mm/c-octeon.c:303:5: warning: no previous prototype for =
-=E2=80=98unregister_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/mm/c-octeon.c:297:5: warning: no previous prototype for =
-=E2=80=98register_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/pm.c:90:5: warning: no previous pr=
-ototype for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/pm.c:52:6: warning: no previous pr=
-ototype for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/pm.c:142:13: warning: no previous =
-prototype for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/pm.c:137:13: warning: no previous =
-prototype for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/machtype.c:10:13: warning: no prev=
-ious prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/loongson2ef/common/pm.c:66:12: warning: no previous prot=
-otype for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/common/pm.c:59:13: warning: no previous prot=
-otype for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/common/pm.c:118:13: warning: no previous pro=
-totype for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/common/pm.c:114:13: warning: no previous pro=
-totype for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:70:5: warning: n=
-o previous prototype for =E2=80=98pci_ohci_read_reg=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:15:6: warning: n=
-o previous prototype for =E2=80=98pci_ohci_write_reg=E2=80=99 [-Wmissing-pr=
-ototypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:84:6: warning: no=
- previous prototype for =E2=80=98pci_isa_write_bar=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:228:5: warning: n=
-o previous prototype for =E2=80=98pci_isa_read_reg=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:134:6: warning: n=
-o previous prototype for =E2=80=98pci_isa_write_reg=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:110:5: warning: n=
-o previous prototype for =E2=80=98pci_isa_read_bar=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: warning: no=
- previous prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Wmissing-proto=
-types]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: warning: no=
- previous prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:75:5: warning: n=
-o previous prototype for =E2=80=98pci_ehci_read_reg=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:15:6: warning: n=
-o previous prototype for =E2=80=98pci_ehci_write_reg=E2=80=99 [-Wmissing-pr=
-ototypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:62:5: warning: no=
- previous prototype for =E2=80=98pci_acc_read_reg=E2=80=99 [-Wmissing-proto=
-types]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:15:6: warning: no=
- previous prototype for =E2=80=98pci_acc_write_reg=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/kvm/loongson_ipi.c:190:6: warning: no previous prototype=
- for =E2=80=98kvm_init_loongson_ipi=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/vpe-mt.c:226:5: warning: no previous prototype fo=
-r =E2=80=98vpe_free=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/vpe-mt.c:205:5: warning: no previous prototype fo=
-r =E2=80=98vpe_stop=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/vpe-mt.c:195:5: warning: no previous prototype fo=
-r =E2=80=98vpe_start=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/vpe-mt.c:177:7: warning: no previous prototype fo=
-r =E2=80=98vpe_alloc=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/csrc-sb1250.c:53:13: warning: no previous prototy=
-pe for =E2=80=98sb1250_clocksource_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/csrc-bcm1480.c:37:13: warning: no previous protot=
-ype for =E2=80=98sb1480_clocksource_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/cevt-sb1250.c:95:6: warning: no previous prototyp=
-e for =E2=80=98sb1250_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/cevt-bcm1480.c:96:6: warning: no previous prototy=
-pe for =E2=80=98sb1480_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/setup.c:54:13: warning: no previous prototype for =
-=E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/reset.c:49:6: warning: no previous prototype for =
-=E2=80=98jazz_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/irq.c:55:13: warning: no previous prototype for =E2=
-=80=98init_r4030_ints=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/irq.c:38:6: warning: no previous prototype for =E2=
-=80=98disable_r4030_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/irq.c:128:13: warning: no previous prototype for =
-=E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cobalt/reset.c:46:6: warning: no previous prototype for =
-=E2=80=98cobalt_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cobalt/reset.c:32:6: warning: no previous prototype for =
-=E2=80=98cobalt_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cavium-octeon/smp.c:100:6: warning: no previous prototyp=
-e for =E2=80=98octeon_send_ipi_single=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cavium-octeon/octeon-platform.c:701:13: warning: no prev=
-ious prototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: w=
-arning: no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en=
-_enable=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cavium-octeon/executive/cvmx-helper-errata.c:49:6: warni=
-ng: no previous prototype for =E2=80=98__cvmx_helper_errata_qlm_disable_2nd=
-_order_cdr=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/timer.c:181:5: warning: no previous prototype fo=
-r =E2=80=98bcm63xx_timer_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/setup.c:162:12: warning: no previous prototype f=
-or =E2=80=98bcm63xx_register_devices=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/irq.c:75:6: warning: no previous prototype for =
-=E2=80=98__dispatch_internal_64=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/irq.c:75:6: warning: no previous prototype for =
-=E2=80=98__dispatch_internal_32=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/dev-wdt.c:37:12: warning: no previous prototype =
-for =E2=80=98bcm63xx_wdt_register=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/dev-uart.c:52:12: warning: no previous prototype=
- for =E2=80=98bcm63xx_uart_register=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/dev-rng.c:29:12: warning: no previous prototype =
-for =E2=80=98bcm63xx_rng_register=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/boards/board_bcm963xx.c:705:5: warning: no previ=
-ous prototype for =E2=80=98bcm63xx_get_fallback_sprom=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/mips/alchemy/devboards/platform.c:68:12: warning: no previous=
- prototype for =E2=80=98db1x_register_pcmcia_socket=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/alchemy/devboards/platform.c:152:12: warning: no previou=
-s prototype for =E2=80=98db1x_register_norflash=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/mips/alchemy/devboards/db1xxx.c:57:13: warning: no previous p=
-rototype for =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1xxx.c:52:13: warning: no previous p=
-rototype for =E2=80=98get_system_type=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1550.c:582:12: warning: no previous =
-prototype for =E2=80=98db1550_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1550.c:56:12: warning: no previous p=
-rototype for =E2=80=98db1550_board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1550.c:501:12: warning: no previous =
-prototype for =E2=80=98db1550_pci_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1300.c:855:12: warning: no previous =
-prototype for =E2=80=98db1300_board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1300.c:786:12: warning: no previous =
-prototype for =E2=80=98db1300_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1200.c:799:12: warning: no previous =
-prototype for =E2=80=98db1200_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1200.c:116:12: warning: no previous =
-prototype for =E2=80=98db1200_board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1000.c:93:12: warning: no previous p=
-rototype for =E2=80=98db1500_pci_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1000.c:451:12: warning: no previous =
-prototype for =E2=80=98db1000_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1000.c:35:12: warning: no previous p=
-rototype for =E2=80=98db1000_board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/board-mtx1.c:53:13: warning: no previous prototy=
-pe for =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/board-gpr.c:61:13: warning: no previous prototyp=
-e for =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    1 warning generated.
-    1    ......./arch/sparc/kernel/traps_64.c:2035:6: warning: no previous =
-prototype for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    1    ............................./arch/sparc/kernel/traps_64.c:253:6: =
-warning: no previous prototype for =E2=80=98is_no_fault_exception=E2=80=99 =
-[-Wmissing-prototypes]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section=
- mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98request_=
-dma=E2=80=99 [-Wmissing-prototypes]
-    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98free_dma=
-=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =E2=80=
-=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =E2=
-=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/irqchip/irq-ath79-cpu.c:89:13: warning: no previous prototype f=
-or =E2=80=98ath79_cpu_irq_init=E2=80=99 [-Wmissing-prototypes]
-    drivers/irqchip/irq-ath79-misc.c:26:5: warning: no previous prototype f=
-or =E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    drivers/irqchip/irq-ath79-misc.c:181:13: warning: no previous prototype=
- for =E2=80=98ath79_misc_irq_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/bcm63xx/boards/board_bcm963xx.c:705:5: warning: no previous p=
-rototype for =E2=80=98bcm63xx_get_fallback_sprom=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/mips/bcm63xx/irq.c:75:6: warning: no previous prototype for =E2=80=
-=98__dispatch_internal_32=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/irq.c:75:6: warning: no previous prototype for =E2=80=
-=98__dispatch_internal_64=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/setup.c:162:12: warning: no previous prototype for =
-=E2=80=98bcm63xx_register_devices=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/timer.c:181:5: warning: no previous prototype for =E2=
-=80=98bcm63xx_timer_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/dev-rng.c:29:12: warning: no previous prototype for =
-=E2=80=98bcm63xx_rng_register=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/dev-uart.c:52:12: warning: no previous prototype for =
-=E2=80=98bcm63xx_uart_register=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/dev-wdt.c:37:12: warning: no previous prototype for =
-=E2=80=98bcm63xx_wdt_register=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 15 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/sibyte/bcm1480/setup.c:104:13: warning: no previous prototype=
- for =E2=80=98bcm1480_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/bcm1480/irq.c:200:13: warning: no previous prototype f=
-or =E2=80=98init_bcm1480_irqs=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/bcm1480/time.c:10:13: warning: no previous prototype f=
-or =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/bcm1480/smp.c:49:6: warning: no previous prototype for=
- =E2=80=98bcm1480_smp_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/bcm1480/smp.c:158:6: warning: no previous prototype fo=
-r =E2=80=98bcm1480_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototype for=
- =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous prot=
-otype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previous pro=
-totype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous prot=
-otype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous prototy=
-pe for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous protot=
-ype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous prototy=
-pe for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-bcm1480.c:96:6: warning: no previous prototype fo=
-r =E2=80=98sb1480_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/csrc-bcm1480.c:37:13: warning: no previous prototype f=
-or =E2=80=98sb1480_clocksource_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for =E2=
-=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 12 warning=
-s, 0 section mismatches
-
-Warnings:
-    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: warnin=
-g: no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en_enab=
-le=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/cavium-octeon/executive/cvmx-helper-errata.c:49:6: warning: n=
-o previous prototype for =E2=80=98__cvmx_helper_errata_qlm_disable_2nd_orde=
-r_cdr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/cavium-octeon/octeon-platform.c:701:13: warning: no previous =
-prototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/mips/cavium-octeon/smp.c:100:6: warning: no previous prototype for=
- =E2=80=98octeon_send_ipi_single=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/c-octeon.c:297:5: warning: no previous prototype for =E2=
-=80=98register_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/c-octeon.c:303:5: warning: no previous prototype for =E2=
-=80=98unregister_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/c-octeon.c:342:17: warning: no previous prototype for =E2=
-=80=98cache_parity_error_octeon_recoverable=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/c-octeon.c:351:17: warning: no previous prototype for =E2=
-=80=98cache_parity_error_octeon_non_recoverable=E2=80=99 [-Wmissing-prototy=
-pes]
-    arch/mips/pci/pci-octeon.c:234:12: warning: no previous prototype for =
-=E2=80=98octeon_pci_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/pci/pcie-octeon.c:1465:5: warning: no previous prototype for =
-=E2=80=98octeon_pcie_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/pci/msi-octeon.c:343:12: warning: no previous prototype for =
-=E2=80=98octeon_msi_initialize=E2=80=99 [-Wmissing-prototypes]
-    drivers/watchdog/octeon-wdt-main.c:210:6: warning: no previous prototyp=
-e for =E2=80=98octeon_wdt_nmi_stage3=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/cobalt/reset.c:32:6: warning: no previous prototype for =E2=
-=80=98cobalt_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/cobalt/reset.c:46:6: warning: no previous prototype for =E2=
-=80=98cobalt_machine_restart=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype f=
-or =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 27 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/alchemy/common/prom.c:48:13: warning: no previous prototype f=
-or =E2=80=98prom_init_cmdline=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:59:7: warning: no previous prototype fo=
-r =E2=80=98prom_getenv=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:127:12: warning: no previous prototype =
-for =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/platform.c:68:12: warning: no previous prot=
-otype for =E2=80=98db1x_register_pcmcia_socket=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/alchemy/devboards/platform.c:152:12: warning: no previous pro=
-totype for =E2=80=98db1x_register_norflash=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1000.c:35:12: warning: no previous protot=
-ype for =E2=80=98db1000_board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1000.c:93:12: warning: no previous protot=
-ype for =E2=80=98db1500_pci_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1000.c:451:12: warning: no previous proto=
-type for =E2=80=98db1000_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/clock.c:140:13: warning: no previous prototype=
- for =E2=80=98alchemy_set_lpj=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1200.c:116:12: warning: no previous proto=
-type for =E2=80=98db1200_board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1200.c:799:12: warning: no previous proto=
-type for =E2=80=98db1200_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1300.c:786:12: warning: no previous proto=
-type for =E2=80=98db1300_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1300.c:855:12: warning: no previous proto=
-type for =E2=80=98db1300_board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1xxx.c:52:13: warning: no previous protot=
-ype for =E2=80=98get_system_type=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1xxx.c:57:13: warning: no previous protot=
-ype for =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1550.c:56:12: warning: no previous protot=
-ype for =E2=80=98db1550_board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1550.c:501:12: warning: no previous proto=
-type for =E2=80=98db1550_pci_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1550.c:582:12: warning: no previous proto=
-type for =E2=80=98db1550_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/setup.c:57:13: warning: no previous prototype =
-for =E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:138:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_setmode=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:235:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_fb_setcolreg=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:294:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_fb_pan_display=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:341:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_fb_mmap=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:523:6: warning: no previous prototype fo=
-r =E2=80=98au1100fb_drv_remove=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:548:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_drv_suspend=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:565:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_drv_resume=E2=80=99 [-Wmissing-prototypes]
-    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous proto=
-type for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings=
-, 0 section mismatches
-
-Warnings:
-    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
-=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
-=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
-=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
-=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
-=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
- =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
- =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
-or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
-=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
-=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
-=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
-=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
-=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
-=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
- =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
- =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
-or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
-=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warning=
-s, 0 section mismatches
-
-Warnings:
-    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
-=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
-=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
-=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
-=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
-=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
- =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
- =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
-or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
-=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 1 warning, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 3 warnings, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-    drivers/gpu/drm/imagination/pvr_fw_mips.c:140:60: warning: array subscr=
-ipt 0 is outside the bounds of an interior zero-length array =E2=80=98dma_a=
-ddr_t[0]=E2=80=99 {aka =E2=80=98long long unsigned int[]=E2=80=99} [-Wzero-=
-length-bounds]
-    include/linux/array_size.h:11:25: warning: overflow in conversion from =
-=E2=80=98long unsigned int=E2=80=99 to =E2=80=98int=E2=80=99 changes value =
-from =E2=80=9818446744073709551615=E2=80=99 to =E2=80=98-1=E2=80=99 [-Wover=
-flow]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
-rors, 2 warnings, 0 section mismatches
-
-Warnings:
-    drivers/gpu/drm/imagination/pvr_vm_mips.c:105:49: warning: implicit con=
-version from 'unsigned long' to 'int' changes value from 184467440737095516=
-15 to -1 [-Wconstant-conversion]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 1 warning, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 1 warning, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    include/linux/fortify-string.h:402:12: warning: writing 1 byte into a r=
-egion of size 0 [-Wstringop-overflow=3D]
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previous pro=
-totype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 7 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/mips/alchemy/board-gpr.c:61:13: warning: no previous prototype for=
- =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:48:13: warning: no previous prototype f=
-or =E2=80=98prom_init_cmdline=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:59:7: warning: no previous prototype fo=
-r =E2=80=98prom_getenv=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:127:12: warning: no previous prototype =
-for =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/clock.c:140:13: warning: no previous prototype=
- for =E2=80=98alchemy_set_lpj=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/setup.c:57:13: warning: no previous prototype =
-for =E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous proto=
-type for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
-ngs, 0 section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 0 errors, 2 w=
-arnings, 0 section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
-
-Errors:
-    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
-ection mismatches
-
-Errors:
-    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning,=
- 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 7 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/sgi-ip22/ip22-time.c:119:18: warning: no previous prototype f=
-or =E2=80=98indy_8254timer_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-gio.c:249:6: warning: no previous prototype for=
- =E2=80=98ip22_gio_set_64bit=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-gio.c:398:12: warning: no previous prototype fo=
-r =E2=80=98ip22_gio_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-berr.c:89:6: warning: no previous prototype for=
- =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-berr.c:113:13: warning: no previous prototype f=
-or =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =E2=80=
-=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 13 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/sgi-ip27/ip27-berr.c:60:5: warning: no previous prototype for=
- =E2=80=98ip27_be_handler=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-berr.c:82:13: warning: no previous prototype fo=
-r =E2=80=98ip27_be_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-irq.c:250:6: warning: no previous prototype for=
- =E2=80=98install_ipi=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-memory.c:391:13: warning: no previous prototype=
- for =E2=80=98prom_meminit=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:30:6: warning: no previous prototype for =
-=E2=80=98nmi_dump=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:37:6: warning: no previous prototype for =
-=E2=80=98install_cpu_nmi_handler=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:56:6: warning: no previous prototype for =
-=E2=80=98nmi_cpu_eframe_save=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:132:6: warning: no previous prototype for=
- =E2=80=98nmi_dump_hub_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:156:6: warning: no previous prototype for=
- =E2=80=98nmi_node_eframe_save=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:174:1: warning: no previous prototype for=
- =E2=80=98nmi_eframes_save=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:183:1: warning: no previous prototype for=
- =E2=80=98cont_nmi_dump=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-hubio.c:30:15: warning: no previous prototype f=
-or =E2=80=98hub_pio_map=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-hubio.c:175:6: warning: no previous prototype f=
-or =E2=80=98hub_pio_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/sgi-ip22/ip22-time.c:119:18: warning: no previous prototype f=
-or =E2=80=98indy_8254timer_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-gio.c:249:6: warning: no previous prototype for=
- =E2=80=98ip22_gio_set_64bit=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-gio.c:398:12: warning: no previous prototype fo=
-r =E2=80=98ip22_gio_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip28-berr.c:440:6: warning: no previous prototype fo=
-r =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip28-berr.c:469:13: warning: no previous prototype f=
-or =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip28-berr.c:474:5: warning: no previous prototype fo=
-r =E2=80=98ip28_show_be_info=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-eisa.c:95:12: warning: no previous prototype fo=
-r =E2=80=98ip22_eisa_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =E2=80=
-=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/sgi-ip32/ip32-berr.c:35:13: warning: no previous prototype fo=
-r =E2=80=98ip32_be_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/ip32-reset.c:93:6: warning: no previous prototype fo=
-r =E2=80=98ip32_prepare_poweroff=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/crime.c:26:13: warning: no previous prototype for =
-=E2=80=98crime_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/crime.c:42:13: warning: no previous prototype for =
-=E2=80=98crime_memerr_intr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/crime.c:93:13: warning: no previous prototype for =
-=E2=80=98crime_cpuerr_intr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/ip32-memory.c:21:13: warning: no previous prototype =
-for =E2=80=98prom_meminit=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-    drivers/net/ethernet/sgi/meth.c:271:5: warning: no previous prototype f=
-or =E2=80=98meth_reset=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/jazz/irq.c:38:6: warning: no previous prototype for =E2=80=98=
-disable_r4030_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/jazz/irq.c:55:13: warning: no previous prototype for =E2=80=
-=98init_r4030_ints=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/jazz/irq.c:128:13: warning: no previous prototype for =E2=80=
-=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/jazz/reset.c:49:6: warning: no previous prototype for =E2=80=
-=98jazz_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/jazz/setup.c:54:13: warning: no previous prototype for =E2=80=
-=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 22 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: warning: no prev=
-ious prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: warning: no prev=
-ious prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:15:6: warning: no prev=
-ious prototype for =E2=80=98pci_acc_write_reg=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:62:5: warning: no prev=
-ious prototype for =E2=80=98pci_acc_read_reg=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:15:6: warning: no pre=
-vious prototype for =E2=80=98pci_ohci_write_reg=E2=80=99 [-Wmissing-prototy=
-pes]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:70:5: warning: no pre=
-vious prototype for =E2=80=98pci_ohci_read_reg=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:84:6: warning: no prev=
-ious prototype for =E2=80=98pci_isa_write_bar=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:110:5: warning: no pre=
-vious prototype for =E2=80=98pci_isa_read_bar=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:134:6: warning: no pre=
-vious prototype for =E2=80=98pci_isa_write_reg=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:228:5: warning: no pre=
-vious prototype for =E2=80=98pci_isa_read_reg=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:15:6: warning: no pre=
-vious prototype for =E2=80=98pci_ehci_write_reg=E2=80=99 [-Wmissing-prototy=
-pes]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:75:5: warning: no pre=
-vious prototype for =E2=80=98pci_ehci_read_reg=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previous pro=
-totype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/pm.c:59:13: warning: no previous prototype=
- for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/pm.c:66:12: warning: no previous prototype=
- for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/pm.c:114:13: warning: no previous prototyp=
-e for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/pm.c:118:13: warning: no previous prototyp=
-e for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/lemote-2f/machtype.c:10:13: warning: no previous =
-prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/loongson2ef/lemote-2f/pm.c:52:6: warning: no previous prototy=
-pe for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/lemote-2f/pm.c:90:5: warning: no previous prototy=
-pe for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/lemote-2f/pm.c:137:13: warning: no previous proto=
-type for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/lemote-2f/pm.c:142:13: warning: no previous proto=
-type for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/loongson32/common/platform.c:71:5: warning: no previous proto=
-type for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/loongson32/common/platform.c:71:5: warning: no previous proto=
-type for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/mips/loongson64/dma.c:25:13: warning: no previous prototype for =
-=E2=80=98plat_swiotlb_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:59:13: warning: no previous prototype for =E2=
-=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:63:13: warning: no previous prototype for =E2=
-=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:67:13: warning: no previous prototype for =E2=
-=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/loongson64/dma.c:25:13: warning: no previous prototype for =
-=E2=80=98plat_swiotlb_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:59:13: warning: no previous prototype for =E2=
-=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:63:13: warning: no previous prototype for =E2=
-=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:67:13: warning: no previous prototype for =E2=
-=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kvm/loongson_ipi.c:190:6: warning: no previous prototype for =
-=E2=80=98kvm_init_loongson_ipi=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/kernel/vpe-mt.c:177:7: warning: no previous prototype for =E2=
-=80=98vpe_alloc=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/vpe-mt.c:195:5: warning: no previous prototype for =E2=
-=80=98vpe_start=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/vpe-mt.c:205:5: warning: no previous prototype for =E2=
-=80=98vpe_stop=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/vpe-mt.c:226:5: warning: no previous prototype for =E2=
-=80=98vpe_free=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/alchemy/board-mtx1.c:53:13: warning: no previous prototype fo=
-r =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:48:13: warning: no previous prototype f=
-or =E2=80=98prom_init_cmdline=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:59:7: warning: no previous prototype fo=
-r =E2=80=98prom_getenv=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:127:12: warning: no previous prototype =
-for =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/clock.c:140:13: warning: no previous prototype=
- for =E2=80=98alchemy_set_lpj=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/setup.c:57:13: warning: no previous prototype =
-for =E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    drivers/irqchip/irq-mxs.c:133:39: warning: no previous prototype for =
-=E2=80=98icoll_handle_irq=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
-=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
-=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    drivers/irqchip/irq-pic32-evic.c:164:5: warning: no previous prototype =
-for =E2=80=98pic32_irq_domain_xlate=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/rb532/serial.c:48:12: warning: no previous prototype for =E2=
-=80=98setup_serial_port=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/rb532/prom.c:49:13: warning: no previous prototype for =E2=80=
-=98prom_setup_cmdline=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/rb532/gpio.c:200:12: warning: no previous prototype for =E2=
-=80=98rb532_gpio_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    drivers/tty/serial/serial_txx9.c:933:12: warning: no previous prototype=
- for =E2=80=98early_serial_txx9_setup=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/sni/reset.c:28:6: warning: no previous prototype for =E2=80=
-=98sni_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/reset.c:45:6: warning: no previous prototype for =E2=80=
-=98sni_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/rm200.c:211:6: warning: no previous prototype for =E2=80=
-=98sni_rm200_mask_and_ack_8259A=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/rm200.c:331:6: warning: no previous prototype for =E2=80=
-=98sni_rm200_init_8259A=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/rm200.c:387:13: warning: no previous prototype for =E2=80=
-=98sni_rm200_i8259_irqs=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/rm200.c:428:6: warning: no previous prototype for =E2=80=
-=98disable_rm200_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/pcimt.c:206:6: warning: no previous prototype for =E2=80=
-=98disable_pcimt_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/pcit.c:168:6: warning: no previous prototype for =E2=80=
-=98disable_pcit_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
-=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
-=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 16 warnings=
-, 0 section mismatches
-
-Warnings:
-    arch/mips/sibyte/sb1250/setup.c:79:5: warning: no previous prototype fo=
-r =E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/setup.c:168:13: warning: no previous prototype =
-for =E2=80=98sb1250_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/irq.c:182:13: warning: no previous prototype fo=
-r =E2=80=98init_sb1250_irqs=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/time.c:10:13: warning: no previous prototype fo=
-r =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/smp.c:38:6: warning: no previous prototype for =
-=E2=80=98sb1250_smp_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/smp.c:147:6: warning: no previous prototype for=
- =E2=80=98sb1250_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototype for=
- =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous prot=
-otype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previous pro=
-totype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous prot=
-otype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous prototy=
-pe for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous protot=
-ype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous prototy=
-pe for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for =E2=
-=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-sb1250.c:95:6: warning: no previous prototype for=
- =E2=80=98sb1250_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/csrc-sb1250.c:53:13: warning: no previous prototype fo=
-r =E2=80=98sb1250_clocksource_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98request_=
-dma=E2=80=99 [-Wmissing-prototypes]
-    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98free_dma=
-=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =E2=80=
-=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =E2=
-=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
-=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 24 warnin=
-gs, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
-=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 25 wa=
-rnings, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    ............................./arch/sparc/kernel/traps_64.c:253:6: warni=
-ng: no previous prototype for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmi=
-ssing-prototypes]
-    ......./arch/sparc/kernel/traps_64.c:2035:6: warning: no previous proto=
-type for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/include/asm/string.h:15:25: warning: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =E2=80=
-=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =E2=
-=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
-    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98request_=
-dma=E2=80=99 [-Wmissing-prototypes]
-    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98free_dma=
-=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
-matches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
- section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
-=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
-=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
-tion mismatches
-
-Errors:
-    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
- out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, rustc-1.74) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
-ing, 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, rustc-1.74) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: .text+0x14d2f9
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust (x86_64, rustc-1.74) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust-samples (x86_64, rustc-1.74) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-board (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
-ing, 0 section mismatches
-
-Errors:
-    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
- out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-board+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 err=
-or, 1 warning, 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----
-For more info write to <info@kernelci.org>
+next/master baseline: 369 runs, 53 regressions (next-20240118)
+
+Regressions Summary
+-------------------
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+at91sam9g20ek                | arm   | lab-broonie   | gcc-10   | multi_v5_=
+defconfig           | 1          =
+
+bcm2836-rpi-2-b              | arm   | lab-collabora | gcc-10   | bcm2835_d=
+efconfig            | 1          =
+
+bcm2836-rpi-2-b              | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
+
+beaglebone-black             | arm   | lab-cip       | clang-17 | multi_v7_=
+defconfig           | 1          =
+
+jetson-tk1                   | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+k3-am625-sk                  | arm64 | lab-baylibre  | gcc-10   | defconfig=
++kselftest          | 1          =
+
+k3-j721e-sk                  | arm64 | lab-baylibre  | gcc-10   | defconfig=
++kselftest          | 1          =
+
+k3-j721e-sk                  | arm64 | lab-baylibre  | gcc-10   | defconfig=
+                    | 1          =
+
+kontron-kbox-a-230-ls        | arm64 | lab-kontron   | gcc-10   | defconfig=
++kselftest          | 1          =
+
+kontron-kbox-a-230-ls        | arm64 | lab-kontron   | gcc-10   | defconfig=
++videodec           | 5          =
+
+kontron-kbox-a-230-ls        | arm64 | lab-kontron   | gcc-10   | defconfig=
++CON..._64K_PAGES=3Dy | 5          =
+
+kontron-kbox-a-230-ls        | arm64 | lab-kontron   | gcc-10   | defconfig=
+                    | 5          =
+
+kontron-sl28-var3-ads2       | arm64 | lab-kontron   | gcc-10   | defconfig=
++kselftest          | 1          =
+
+kontron-sl28-var3-ads2       | arm64 | lab-kontron   | gcc-10   | defconfig=
++videodec           | 2          =
+
+kontron-sl28-var3-ads2       | arm64 | lab-kontron   | gcc-10   | defconfig=
++CON..._64K_PAGES=3Dy | 2          =
+
+kontron-sl28-var3-ads2       | arm64 | lab-kontron   | gcc-10   | defconfig=
+                    | 2          =
+
+meson-g12b-odroid-n2         | arm64 | lab-baylibre  | gcc-10   | defconfig=
++kselftest          | 2          =
+
+meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre  | gcc-10   | defconfig=
++CON...BIG_ENDIAN=3Dy | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre  | gcc-10   | defconfig=
++kselftest          | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
++kselftest          | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64 | lab-clabbe    | gcc-10   | defconfig=
++kselftest          | 1          =
+
+mt8192-asurada-spherion-r0   | arm64 | lab-collabora | gcc-10   | defconfig=
++arm...ook+videodec | 1          =
+
+mt8195-cherry-tomato-r2      | arm64 | lab-collabora | gcc-10   | defconfig=
++arm...ook+videodec | 1          =
+
+r8a7743-iwg20d-q7            | arm   | lab-cip       | gcc-10   | shmobile_=
+defconfig           | 1          =
+
+r8a774a1-hihope-rzg2m-ex     | arm64 | lab-cip       | gcc-10   | defconfig=
++videodec           | 1          =
+
+r8a774a1-hihope-rzg2m-ex     | arm64 | lab-cip       | gcc-10   | defconfig=
++CON..._64K_PAGES=3Dy | 1          =
+
+rk3288-rock2-square          | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+rk3288-veyron-jaq            | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+sun50i-h6-orangepi-one-plus  | arm64 | lab-clabbe    | gcc-10   | defconfig=
++kselftest          | 1          =
+
+sun50i-h6-pine-h64           | arm64 | lab-clabbe    | gcc-10   | defconfig=
++kselftest          | 1          =
+
+sun50i-h6-pine-h64           | arm64 | lab-collabora | gcc-10   | defconfig=
++kselftest          | 1          =
+
+sun7i-a20-cubieboard2        | arm   | lab-baylibre  | clang-17 | multi_v7_=
+defconfig           | 1          =
+
+sun7i-a20-cubieboard2        | arm   | lab-clabbe    | clang-17 | multi_v7_=
+defconfig           | 1          =
+
+sun7i-a20-cubieboard2        | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
+
+sun7i-a20-cubieboard2        | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...CONFIG_SMP=3Dn | 1          =
+
+sun7i-a20-cubieboard2        | arm   | lab-clabbe    | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
+
+sun7i-a20-cubieboard2        | arm   | lab-clabbe    | gcc-10   | multi_v7_=
+defc...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+240118/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20240118
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      2863b714f3ad0a9686f2de1b779228ad8c7a8052 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+at91sam9g20ek                | arm   | lab-broonie   | gcc-10   | multi_v5_=
+defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c15ce88d09097452a404
+
+  Results:     52 PASS, 2 FAIL, 1 SKIP
+  Full config: multi_v5_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v5_defconfig/gcc-10/lab-broonie/baseline-at91sam9g20ek.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v5_defconfig/gcc-10/lab-broonie/baseline-at91sam9g20ek.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.atmel-ramc-driver-present: https://kernelci.org/test/ca=
+se/id/65a8c15ce88d09097452a421
+        failing since 227 days (last pass: next-20230601, first fail: next-=
+20230605)
+
+    2024-01-18T06:12:16.860776  /lava-468519/1/../bin/lava-test-case
+    2024-01-18T06:12:16.902336  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Datm=
+el-ramc-driver-present RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+bcm2836-rpi-2-b              | arm   | lab-collabora | gcc-10   | bcm2835_d=
+efconfig            | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8bca95e2f1c366052a401
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: bcm2835_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+bcm2835_defconfig/gcc-10/lab-collabora/baseline-bcm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+bcm2835_defconfig/gcc-10/lab-collabora/baseline-bcm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8bca95e2f1c366052a=
+402
+        failing since 227 days (last pass: next-20230601, first fail: next-=
+20230605) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+bcm2836-rpi-2-b              | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c132994f1534eb52a428
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-b=
+cm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-b=
+cm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c132994f1534eb52a=
+429
+        failing since 295 days (last pass: next-20230327, first fail: next-=
+20230328) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+beaglebone-black             | arm   | lab-cip       | clang-17 | multi_v7_=
+defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8cb2a340283816852a3f1
+
+  Results:     40 PASS, 9 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    clang-17 (Debian clang version 17.0.6 (++20231208085823+6009=
+708b4367-1~exp1~20231208085918.75))
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig/clang-17/lab-cip/baseline-beaglebone-black.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig/clang-17/lab-cip/baseline-beaglebone-black.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/65a8cb2a34028381=
+6852a3f6
+        new failure (last pass: next-20240111)
+        1 lines
+
+    2024-01-18T06:54:08.670071  / # =
+
+    2024-01-18T06:54:08.676441  =
+
+    2024-01-18T06:54:08.782548  / # #
+    2024-01-18T06:54:08.788321  #
+    2024-01-18T06:54:08.890452  / # export SHELL=3D/bin/sh
+    2024-01-18T06:54:08.901198  export SHELL=3D/bin/sh
+    2024-01-18T06:54:09.003058  / # . /lava-1077862/environment
+    2024-01-18T06:54:09.011961  . /lava-1077862/environment
+    2024-01-18T06:54:09.113470  / # /lava-1077862/bin/lava-test-runner /lav=
+a-1077862/0
+    2024-01-18T06:54:09.124064  /lava-1077862/bin/lava-test-runner /lava-10=
+77862/0 =
+
+    ... (9 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+jetson-tk1                   | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8bbf381c15ba86652a3f8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-baylibre/b=
+aseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-baylibre/b=
+aseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8bbf381c15ba86652a=
+3f9
+        failing since 646 days (last pass: next-20220401, first fail: next-=
+20220411) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+k3-am625-sk                  | arm64 | lab-baylibre  | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c181e51cc523b652a3fb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-k3-am625-sk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-k3-am625-sk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c181e51cc523b652a=
+3fc
+        failing since 69 days (last pass: next-20231103, first fail: next-2=
+0231110) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+k3-j721e-sk                  | arm64 | lab-baylibre  | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c1a70b38ff637952a44b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-k3-j721e-sk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-k3-j721e-sk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c1a70b38ff637952a=
+44c
+        failing since 76 days (last pass: next-20231025, first fail: next-2=
+0231103) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+k3-j721e-sk                  | arm64 | lab-baylibre  | gcc-10   | defconfig=
+                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c8f0d3192c613652a5bd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-k3-j721e-sk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-k3-j721e-sk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c8f0d3192c613652a=
+5be
+        new failure (last pass: next-20240117) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-kbox-a-230-ls        | arm64 | lab-kontron   | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c13f08eeacdf3052a452
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c13f08eeacdf3052a=
+453
+        failing since 34 days (last pass: next-20231205, first fail: next-2=
+0231215) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-kbox-a-230-ls        | arm64 | lab-kontron   | gcc-10   | defconfig=
++videodec           | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c22f1578e04a9952a449
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+videodec/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+videodec/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c22f1578e04a9952a450
+        failing since 36 days (last pass: next-20231207, first fail: next-2=
+0231212)
+
+    2024-01-18T06:15:55.612127  / # #
+    2024-01-18T06:15:55.712802  export SHELL=3D/bin/sh
+    2024-01-18T06:15:55.713048  #
+    2024-01-18T06:15:55.813561  / # export SHELL=3D/bin/sh. /lava-418072/en=
+vironment
+    2024-01-18T06:15:55.813799  =
+
+    2024-01-18T06:15:55.914354  / # . /lava-418072/environment/lava-418072/=
+bin/lava-test-runner /lava-418072/1
+    2024-01-18T06:15:55.914763  =
+
+    2024-01-18T06:15:55.926582  / # /lava-418072/bin/lava-test-runner /lava=
+-418072/1
+    2024-01-18T06:15:56.019541  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-18T06:15:56.019655  + cd /lava-418072/1/tests/1_bootrr =
+
+    ... (14 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/65a8c22f1578e04a9952a454
+        failing since 36 days (last pass: next-20231207, first fail: next-2=
+0231212)
+
+    2024-01-18T06:15:58.235942  /lava-418072/1/../bin/lava-test-case
+    2024-01-18T06:15:58.263912  <8>[   26.005888] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/65=
+a8c22f1578e04a9952a456
+        failing since 36 days (last pass: next-20231207, first fail: next-2=
+0231212)
+
+    2024-01-18T06:15:59.325755  /lava-418072/1/../bin/lava-test-case
+    2024-01-18T06:15:59.352291  <8>[   27.094289] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65a8c22f1578e04a9952a45b
+        failing since 36 days (last pass: next-20231207, first fail: next-2=
+0231212)
+
+    2024-01-18T06:16:00.584771  /lava-418072/1/../bin/lava-test-case
+    2024-01-18T06:16:00.611752  <8>[   28.354084] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/65a8c22f1578e04a9952a45c
+        failing since 36 days (last pass: next-20231207, first fail: next-2=
+0231212)
+
+    2024-01-18T06:16:01.635389  /lava-418072/1/../bin/lava-test-case
+    2024-01-18T06:16:01.661146  <8>[   29.404029] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-kbox-a-230-ls        | arm64 | lab-kontron   | gcc-10   | defconfig=
++CON..._64K_PAGES=3Dy | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c32009dbc215ed52a40b
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-kontron/baseline-kontron-=
+kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-kontron/baseline-kontron-=
+kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c32009dbc215ed52a412
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:19:55.089682  / # #
+    2024-01-18T06:19:55.191894  export SHELL=3D/bin/sh
+    2024-01-18T06:19:55.192590  #
+    2024-01-18T06:19:55.294068  / # export SHELL=3D/bin/sh. /lava-418085/en=
+vironment
+    2024-01-18T06:19:55.294779  =
+
+    2024-01-18T06:19:55.396276  / # . /lava-418085/environment/lava-418085/=
+bin/lava-test-runner /lava-418085/1
+    2024-01-18T06:19:55.397412  =
+
+    2024-01-18T06:19:55.442341  / # /lava-418085/bin/lava-test-runner /lava=
+-418085/1
+    2024-01-18T06:19:55.497598  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-18T06:19:55.498080  + cd /lava-418085/1/tests/1_bootrr =
+
+    ... (14 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/65a8c32009dbc215ed52a416
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:19:57.680096  /lava-418085/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/65=
+a8c32009dbc215ed52a418
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:19:58.745353  /lava-418085/1/../bin/lava-test-case
+    2024-01-18T06:19:58.748658  <8>[   26.961055] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65a8c32009dbc215ed52a41d
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:19:59.946869  /lava-418085/1/../bin/lava-test-case
+    2024-01-18T06:19:59.968012  <8>[   28.174498] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/65a8c32009dbc215ed52a41e
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:20:01.006116  /lava-418085/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-kbox-a-230-ls        | arm64 | lab-kontron   | gcc-10   | defconfig=
+                    | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c7d16dc5d535ae52a42c
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c7d16dc5d535ae52a433
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:40:01.634086  / # #
+    2024-01-18T06:40:01.736120  export SHELL=3D/bin/sh
+    2024-01-18T06:40:01.736383  #
+    2024-01-18T06:40:01.837234  / # export SHELL=3D/bin/sh. /lava-418102/en=
+vironment
+    2024-01-18T06:40:01.837666  =
+
+    2024-01-18T06:40:01.939139  / # . /lava-418102/environment/lava-418102/=
+bin/lava-test-runner /lava-418102/1
+    2024-01-18T06:40:01.940275  =
+
+    2024-01-18T06:40:01.945968  / # /lava-418102/bin/lava-test-runner /lava=
+-418102/1
+    2024-01-18T06:40:02.009209  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-18T06:40:02.043967  + cd /lava-418102/1/tests/1_bootrr =
+
+    ... (14 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/65a8c7d16dc5d535ae52a437
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:40:04.259746  /lava-418102/1/../bin/lava-test-case
+    2024-01-18T06:40:04.288813  <8>[   26.090221] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/65=
+a8c7d16dc5d535ae52a439
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:40:05.348495  /lava-418102/1/../bin/lava-test-case
+    2024-01-18T06:40:05.376651  <8>[   27.178202] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65a8c7d16dc5d535ae52a43e
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:40:06.607959  /lava-418102/1/../bin/lava-test-case
+    2024-01-18T06:40:06.636073  <8>[   28.437577] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/65a8c7d16dc5d535ae52a43f
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:40:07.657967  /lava-418102/1/../bin/lava-test-case
+    2024-01-18T06:40:07.686085  <8>[   29.487735] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-sl28-var3-ads2       | arm64 | lab-kontron   | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c141673b1c86a552a3fa
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c141673b1c86a552a=
+3fb
+        failing since 34 days (last pass: next-20231205, first fail: next-2=
+0231215) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-sl28-var3-ads2       | arm64 | lab-kontron   | gcc-10   | defconfig=
++videodec           | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c1b94ea1bc566052a459
+
+  Results:     101 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+videodec/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+videodec/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c1b94ea1bc566052a460
+        failing since 36 days (last pass: next-20231207, first fail: next-2=
+0231212)
+
+    2024-01-18T06:13:57.828773  / # #
+    2024-01-18T06:13:57.929432  export SHELL=3D/bin/sh
+    2024-01-18T06:13:57.929773  #
+    2024-01-18T06:13:58.030459  / # export SHELL=3D/bin/sh. /lava-418070/en=
+vironment
+    2024-01-18T06:13:58.030778  =
+
+    2024-01-18T06:13:58.131533  / # . /lava-418070/environment/lava-418070/=
+bin/lava-test-runner /lava-418070/1
+    2024-01-18T06:13:58.132443  =
+
+    2024-01-18T06:13:58.140699  / # /lava-418070/bin/lava-test-runner /lava=
+-418070/1
+    2024-01-18T06:13:58.236408  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-18T06:13:58.236865  + cd /lava-418070/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65a8c1b94ea1bc566052a473
+        failing since 36 days (last pass: next-20231207, first fail: next-2=
+0231212)
+
+    2024-01-18T06:14:01.173501  /lava-418070/1/../bin/lava-test-case
+    2024-01-18T06:14:01.201516  <8>[   27.096073] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-sl28-var3-ads2       | arm64 | lab-kontron   | gcc-10   | defconfig=
++CON..._64K_PAGES=3Dy | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c21b1002cda74352a3ff
+
+  Results:     101 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-kontron/baseline-kontron-=
+sl28-var3-ads2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-kontron/baseline-kontron-=
+sl28-var3-ads2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c21b1002cda74352a406
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:15:43.969311  / # #
+    2024-01-18T06:15:44.071187  export SHELL=3D/bin/sh
+    2024-01-18T06:15:44.071918  #
+    2024-01-18T06:15:44.173101  / # export SHELL=3D/bin/sh. /lava-418088/en=
+vironment
+    2024-01-18T06:15:44.173836  =
+
+    2024-01-18T06:15:44.275177  / # . /lava-418088/environment/lava-418088/=
+bin/lava-test-runner /lava-418088/1
+    2024-01-18T06:15:44.276082  =
+
+    2024-01-18T06:15:44.281127  / # /lava-418088/bin/lava-test-runner /lava=
+-418088/1
+    2024-01-18T06:15:44.380152  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-18T06:15:44.380592  + cd /lava-418088/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65a8c21c1002cda74352a419
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:15:47.139013  /lava-418088/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-sl28-var3-ads2       | arm64 | lab-kontron   | gcc-10   | defconfig=
+                    | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c7a927c63ed6c352a82d
+
+  Results:     101 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c7a927c63ed6c352a834
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:39:18.167607  / # #
+    2024-01-18T06:39:18.268289  export SHELL=3D/bin/sh
+    2024-01-18T06:39:18.268523  #
+    2024-01-18T06:39:18.369033  / # export SHELL=3D/bin/sh. /lava-418099/en=
+vironment
+    2024-01-18T06:39:18.369266  =
+
+    2024-01-18T06:39:18.469789  / # . /lava-418099/environment/lava-418099/=
+bin/lava-test-runner /lava-418099/1
+    2024-01-18T06:39:18.470149  =
+
+    2024-01-18T06:39:18.481517  / # /lava-418099/bin/lava-test-runner /lava=
+-418099/1
+    2024-01-18T06:39:18.576351  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-18T06:39:18.576482  + cd /lava-418099/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65a8c7a927c63ed6c352a847
+        failing since 37 days (last pass: next-20231207, first fail: next-2=
+0231211)
+
+    2024-01-18T06:39:21.511324  /lava-418099/1/../bin/lava-test-case
+    2024-01-18T06:39:21.540411  <8>[   27.065855] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+meson-g12b-odroid-n2         | arm64 | lab-baylibre  | gcc-10   | defconfig=
++kselftest          | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c147673b1c86a552a3ff
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/65a8c147673b1c8=
+6a552a402
+        failing since 43 days (last pass: next-20231120, first fail: next-2=
+0231205)
+        2 lines
+
+    2024-01-18T06:12:07.230448  kern  :alert :   FSC =3D 0x04: level 0 tran=
+slation fault
+    2024-01-18T06:12:07.230668  kern  :alert : Data abort info:
+    2024-01-18T06:12:07.270188  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
+004, ISS2 =3D 0x00000000
+    2024-01-18T06:12:07.270408  kern  :alert :   CM =3D 0, WnR =3D 0, TnD =
+=3D 0, TagAccess =3D 0
+    2024-01-18T06:12:07.270592  kern  :alert :   GCS =3D 0, Overlay =3D 0, =
+DirtyBit =3D 0, Xs =3D 0
+    2024-01-18T06:12:07.270804  kern  :alert : [cccccccccccccccc] address b=
+etween user and kernel address ranges
+    2024-01-18T06:12:07.270953  kern  <8>[   19.790636] <LAVA_SIGNAL_TESTCA=
+SE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>   =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/65a8c147673b1c8=
+6a552a403
+        failing since 43 days (last pass: next-20231120, first fail: next-2=
+0231205)
+        12 lines
+
+    2024-01-18T06:12:07.227307  kern  :alert : Unable to handle kernel pagi=
+ng request at virtual address cccccccccccccccc
+    2024-01-18T06:12:07.227588  kern  :alert : Mem abort info:
+    2024-01-18T06:12:07.227784  kern  :alert :   ESR =3D 0x0000000096000004
+    2024-01-18T06:12:07.227914  kern  :alert :   EC =3D 0x25: DABT (current=
+ EL), IL =3D 32 bits<8>[   19.743999] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3D=
+alert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D12>
+    2024-01-18T06:12:07.228040  =
+
+    2024-01-18T06:12:07.228207  kern  :alert :   SET =3D 0, FnV =3D 0
+    2024-01-18T06:12:07.228368  kern  :alert :   EA =3D 0, S1PTW =3D 0   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre  | gcc-10   | defconfig=
++CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8bd46c730ab474952a3fa
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8bd46c730ab474952a=
+3fb
+        new failure (last pass: next-20240111) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre  | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c24a666431cdbc52a408
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-libretec=
+h-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-libretec=
+h-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c24a666431cdbc52a=
+409
+        failing since 344 days (last pass: next-20230206, first fail: next-=
+20230207) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c12b904fb3a88c52a454
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech=
+-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech=
+-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c12b904fb3a88c52a=
+455
+        failing since 344 days (last pass: next-20230206, first fail: next-=
+20230207) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-clabbe    | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c120994f1534eb52a41e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-meson-gxl-s905x-libretech-=
+cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-meson-gxl-s905x-libretech-=
+cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c120994f1534eb52a=
+41f
+        failing since 344 days (last pass: next-20230206, first fail: next-=
+20230207) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+mt8192-asurada-spherion-r0   | arm64 | lab-collabora | gcc-10   | defconfig=
++arm...ook+videodec | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c7bf32b0b8f71d52a405
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+arm64-chromebook+videodec/gcc-10/lab-collabora/baseline-mt8192-=
+asurada-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+arm64-chromebook+videodec/gcc-10/lab-collabora/baseline-mt8192-=
+asurada-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c7bf32b0b8f71d52a=
+406
+        new failure (last pass: next-20240112) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+mt8195-cherry-tomato-r2      | arm64 | lab-collabora | gcc-10   | defconfig=
++arm...ook+videodec | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c7ad32b0b8f71d52a3f3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+arm64-chromebook+videodec/gcc-10/lab-collabora/baseline-mt8195-=
+cherry-tomato-r2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+arm64-chromebook+videodec/gcc-10/lab-collabora/baseline-mt8195-=
+cherry-tomato-r2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c7ad32b0b8f71d52a=
+3f4
+        failing since 6 days (last pass: next-20240110, first fail: next-20=
+240112) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+r8a7743-iwg20d-q7            | arm   | lab-cip       | gcc-10   | shmobile_=
+defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8b7620a3c77668552a406
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: shmobile_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8b7620a3c77668552a=
+407
+        new failure (last pass: next-20240117) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+r8a774a1-hihope-rzg2m-ex     | arm64 | lab-cip       | gcc-10   | defconfig=
++videodec           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c30a09dbc215ed52a3fd
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+videodec/gcc-10/lab-cip/baseline-r8a774a1-hihope-rzg2m-ex.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+videodec/gcc-10/lab-cip/baseline-r8a774a1-hihope-rzg2m-ex.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c30a09dbc215ed52a406
+        failing since 163 days (last pass: next-20230710, first fail: next-=
+20230808)
+
+    2024-01-18T06:19:43.116887  + set +x
+    2024-01-18T06:19:43.120454  <8>[   28.330116] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 1077828_1.5.2.4.1>
+    2024-01-18T06:19:43.229194  / # #
+    2024-01-18T06:19:44.693969  export SHELL=3D/bin/sh
+    2024-01-18T06:19:44.714868  #
+    2024-01-18T06:19:44.715090  / # export SHELL=3D/bin/sh
+    2024-01-18T06:19:46.673636  / # . /lava-1077828/environment
+    2024-01-18T06:19:50.276854  /lava-1077828/bin/lava-test-runner /lava-10=
+77828/1
+    2024-01-18T06:19:50.298367  . /lava-1077828/environment
+    2024-01-18T06:19:50.298734  / # /lava-1077828/bin/lava-test-runner /lav=
+a-1077828/1 =
+
+    ... (27 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+r8a774a1-hihope-rzg2m-ex     | arm64 | lab-cip       | gcc-10   | defconfig=
++CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c3be31d23f998a52a417
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-r8a774a1-hih=
+ope-rzg2m-ex.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-r8a774a1-hih=
+ope-rzg2m-ex.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c3be31d23f998a52a420
+        failing since 170 days (last pass: next-20230712, first fail: next-=
+20230801)
+
+    2024-01-18T06:22:24.673681  + set +x
+    2024-01-18T06:22:24.677021  <8>[   28.396382] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 1077839_1.5.2.4.1>
+    2024-01-18T06:22:24.785129  / # #
+    2024-01-18T06:22:26.250072  export SHELL=3D/bin/sh
+    2024-01-18T06:22:26.271028  #
+    2024-01-18T06:22:26.271254  / # export SHELL=3D/bin/sh
+    2024-01-18T06:22:28.228908  / # . /lava-1077839/environment
+    2024-01-18T06:22:31.832478  /lava-1077839/bin/lava-test-runner /lava-10=
+77839/1
+    2024-01-18T06:22:31.853501  . /lava-1077839/environment
+    2024-01-18T06:22:31.853678  / # /lava-1077839/bin/lava-test-runner /lav=
+a-1077839/1 =
+
+    ... (27 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+rk3288-rock2-square          | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8bcf9d35c8016cd52a3f1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8bcf9d35c8016cd52a=
+3f2
+        failing since 421 days (last pass: next-20221121, first fail: next-=
+20221122) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+rk3288-veyron-jaq            | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8bbf513857d5c5952a403
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-veyron-jaq.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-veyron-jaq.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8bbf513857d5c5952a=
+404
+        failing since 421 days (last pass: next-20221121, first fail: next-=
+20221122) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sun50i-h6-orangepi-one-plus  | arm64 | lab-clabbe    | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c1345512159eae52a3f1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-h6-orangepi-one-plu=
+s.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-h6-orangepi-one-plu=
+s.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c1345512159eae52a=
+3f2
+        failing since 96 days (last pass: next-20230125, first fail: next-2=
+0231013) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sun50i-h6-pine-h64           | arm64 | lab-clabbe    | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c1355512159eae52a3f4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c1355512159eae52a=
+3f5
+        failing since 342 days (last pass: next-20230127, first fail: next-=
+20230210) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sun50i-h6-pine-h64           | arm64 | lab-collabora | gcc-10   | defconfig=
++kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c147e88d09097452a3f8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm6=
+4/defconfig+kselftest/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65a8c147e88d09097452a=
+3f9
+        failing since 342 days (last pass: next-20230127, first fail: next-=
+20230210) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sun7i-a20-cubieboard2        | arm   | lab-baylibre  | clang-17 | multi_v7_=
+defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c3f37c45107c6b52a3f2
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    clang-17 (Debian clang version 17.0.6 (++20231208085823+6009=
+708b4367-1~exp1~20231208085918.75))
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig/clang-17/lab-baylibre/baseline-sun7i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig/clang-17/lab-baylibre/baseline-sun7i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c3f37c45107c6b52a3fb
+        failing since 231 days (last pass: next-20230530, first fail: next-=
+20230601)
+
+    2024-01-18T06:23:34.414902  / # #
+    2024-01-18T06:23:34.517558  export SHELL=3D/bin/sh
+    2024-01-18T06:23:34.518530  #
+    2024-01-18T06:23:34.620215  / # export SHELL=3D/bin/sh. /lava-3910354/e=
+nvironment
+    2024-01-18T06:23:34.621096  =
+
+    2024-01-18T06:23:34.722553  / # . /lava-3910354/environment/lava-391035=
+4/bin/lava-test-runner /lava-3910354/1
+    2024-01-18T06:23:34.724188  =
+
+    2024-01-18T06:23:34.739005  / # /lava-3910354/bin/lava-test-runner /lav=
+a-3910354/1
+    2024-01-18T06:23:34.865476  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-18T06:23:34.866368  + cd /lava-3910354/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sun7i-a20-cubieboard2        | arm   | lab-clabbe    | clang-17 | multi_v7_=
+defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c3c8282c71af6152a402
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    clang-17 (Debian clang version 17.0.6 (++20231208085823+6009=
+708b4367-1~exp1~20231208085918.75))
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig/clang-17/lab-clabbe/baseline-sun7i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig/clang-17/lab-clabbe/baseline-sun7i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c3c8282c71af6152a40b
+        failing since 231 days (last pass: next-20230530, first fail: next-=
+20230601)
+
+    2024-01-18T06:22:49.867754  + set +x
+    2024-01-18T06:22:49.869491  [   18.919545] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+453310_1.5.2.4.1>
+    2024-01-18T06:22:49.978227  / # #
+    2024-01-18T06:22:50.079758  export SHELL=3D/bin/sh
+    2024-01-18T06:22:50.080274  #
+    2024-01-18T06:22:50.181231  / # export SHELL=3D/bin/sh. /lava-453310/en=
+vironment
+    2024-01-18T06:22:50.181761  =
+
+    2024-01-18T06:22:50.282740  / # . /lava-453310/environment/lava-453310/=
+bin/lava-test-runner /lava-453310/1
+    2024-01-18T06:22:50.283542  =
+
+    2024-01-18T06:22:50.286203  / # /lava-453310/bin/lava-test-runner /lava=
+-453310/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sun7i-a20-cubieboard2        | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c10c27fa263a4e52a44c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-su=
+n7i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-su=
+n7i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c10c27fa263a4e52a455
+        failing since 225 days (last pass: next-20230517, first fail: next-=
+20230607)
+
+    2024-01-18T06:11:08.013729  + set +x<8>[   13.670724] <LAVA_SIGNAL_ENDR=
+UN 0_dmesg 3910303_1.5.2.4.1>
+    2024-01-18T06:11:08.013897  =
+
+    2024-01-18T06:11:08.118055  / # #
+    2024-01-18T06:11:08.219083  export SHELL=3D/bin/sh
+    2024-01-18T06:11:08.219504  #
+    2024-01-18T06:11:08.320315  / # export SHELL=3D/bin/sh. /lava-3910303/e=
+nvironment
+    2024-01-18T06:11:08.320688  =
+
+    2024-01-18T06:11:08.421397  / # . /lava-3910303/environment/lava-391030=
+3/bin/lava-test-runner /lava-3910303/1
+    2024-01-18T06:11:08.421996  =
+
+    2024-01-18T06:11:08.463878  / # /lava-3910303/bin/lava-test-runner /lav=
+a-3910303/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sun7i-a20-cubieboard2        | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c194e51cc523b652a417
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-sun7i-a20-cu=
+bieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-sun7i-a20-cu=
+bieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c194e51cc523b652a420
+        failing since 225 days (last pass: next-20230525, first fail: next-=
+20230607)
+
+    2024-01-18T06:13:33.075047  / # #
+    2024-01-18T06:13:33.178000  export SHELL=3D/bin/sh
+    2024-01-18T06:13:33.178874  #
+    2024-01-18T06:13:33.280346  / # export SHELL=3D/bin/sh. /lava-3910328/e=
+nvironment
+    2024-01-18T06:13:33.281165  =
+
+    2024-01-18T06:13:33.382720  / # . /lava-3910328/environment/lava-391032=
+8/bin/lava-test-runner /lava-3910328/1
+    2024-01-18T06:13:33.384347  =
+
+    2024-01-18T06:13:33.396855  / # /lava-3910328/bin/lava-test-runner /lav=
+a-3910328/1
+    2024-01-18T06:13:33.477219  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-18T06:13:33.510847  + cd /lava-3910328/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sun7i-a20-cubieboard2        | arm   | lab-clabbe    | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c29c39902c2b4d52a43e
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-clabbe/baseline-sun7=
+i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-clabbe/baseline-sun7=
+i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c29c39902c2b4d52a447
+        failing since 225 days (last pass: next-20230517, first fail: next-=
+20230607)
+
+    2024-01-18T06:17:46.046960  + set +x
+    2024-01-18T06:17:46.048703  [   19.942717] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+453293_1.5.2.4.1>
+    2024-01-18T06:17:46.157003  / # #
+    2024-01-18T06:17:46.258702  export SHELL=3D/bin/sh
+    2024-01-18T06:17:46.259339  #
+    2024-01-18T06:17:46.360303  / # export SHELL=3D/bin/sh. /lava-453293/en=
+vironment
+    2024-01-18T06:17:46.360944  =
+
+    2024-01-18T06:17:46.461948  / # . /lava-453293/environment/lava-453293/=
+bin/lava-test-runner /lava-453293/1
+    2024-01-18T06:17:46.462914  =
+
+    2024-01-18T06:17:46.465638  / # /lava-453293/bin/lava-test-runner /lava=
+-453293/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sun7i-a20-cubieboard2        | arm   | lab-clabbe    | gcc-10   | multi_v7_=
+defc...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65a8c300f3086d63c452a3f4
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-clabbe/baseline-sun7i-a20-cubi=
+eboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240118/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-clabbe/baseline-sun7i-a20-cubi=
+eboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65a8c300f3086d63c452a3fd
+        failing since 225 days (last pass: next-20230525, first fail: next-=
+20230607)
+
+    2024-01-18T06:19:31.487149  + set +x
+    2024-01-18T06:19:31.488867  [   24.136247] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+453300_1.5.2.4.1>
+    2024-01-18T06:19:31.596909  / # #
+    2024-01-18T06:19:31.698470  export SHELL=3D/bin/sh
+    2024-01-18T06:19:31.699014  #
+    2024-01-18T06:19:31.799970  / # export SHELL=3D/bin/sh. /lava-453300/en=
+vironment
+    2024-01-18T06:19:31.800480  =
+
+    2024-01-18T06:19:31.901531  / # . /lava-453300/environment/lava-453300/=
+bin/lava-test-runner /lava-453300/1
+    2024-01-18T06:19:31.902468  =
+
+    2024-01-18T06:19:31.905054  / # /lava-453300/bin/lava-test-runner /lava=
+-453300/1 =
+
+    ... (12 line(s) more)  =
+
+ =20
 

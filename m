@@ -1,199 +1,107 @@
-Return-Path: <linux-next+bounces-770-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-771-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEE358322CF
-	for <lists+linux-next@lfdr.de>; Fri, 19 Jan 2024 01:59:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B032283231E
+	for <lists+linux-next@lfdr.de>; Fri, 19 Jan 2024 02:47:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2F2C2B22583
-	for <lists+linux-next@lfdr.de>; Fri, 19 Jan 2024 00:58:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67285286958
+	for <lists+linux-next@lfdr.de>; Fri, 19 Jan 2024 01:47:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EAA0A59;
-	Fri, 19 Jan 2024 00:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4256FED9;
+	Fri, 19 Jan 2024 01:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lSBy4ghG"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="srtiBcBV"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3763881F;
-	Fri, 19 Jan 2024 00:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA1B4691;
+	Fri, 19 Jan 2024 01:47:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705625933; cv=none; b=tC6wUFvDVf5edrDwCaMcKWpUk58vzYtUEthCbu0ed0XH8GuJkvdoYQuNL8kaZ48P55toagd0Bjo2jNMkfXM0Up9LK58mq4lZab7Ky9AUiJALMtGHJDS4lHl3Ry4duS0YGaT4HUU9N9YfBFrudvu5Sz52SXWZt9Q4UJh2seYSqXg=
+	t=1705628846; cv=none; b=tI3376qsQspeAx4lhd8zWQfo96qrFs3l5yuG0ZVqIr8/1xqGxtBhBhEkjVDNS8eCIHIQge9b3eIoC57zimJCVyX5R4GxsatiEyddARx8rSfcmMW7e78TU/Dhz5mvi+1lretU3H6HCvwvaIPh0ZOJr7K47RP0tHEOiMqPgc+kPaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705625933; c=relaxed/simple;
-	bh=z0fVImkm7UGSmqgWkIF+werv/LoyB0dHD2X3KsTXHlY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b7Kw7dkn+vXcdbHFCcgCPOtCSAcMlkSwhEiuqw/pvuCZIvjTjULUGixwk7ETOLHjO5/8wUmzUDbzNPrCIDr/bBDcW+3g7ayE+U4Z/xbXMXiacG99lZiCDI7eM+UWeYkInjD3mTVJV5XUvp1SYGux+ikYTAUiqZ2SS3TY/mPOxn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lSBy4ghG; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1705628846; c=relaxed/simple;
+	bh=wQivY0pWW6w7xKu/OOnqm/ChK0c4f+0qQZR/pZI3LCY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sYBZwjeqKnEg3QFvateC4oPKUXmRnNqzDMqF1im2g9Kjzrq7Qe2Gg6XdIOK5shbUofouDmzso+F+B9n/OgxsYUA0JYhlpXdmbHHwA2MWhM5jK25Hk4r9E1wqQuP2/DsANJP4gYIQI1jneM50VZPiqW17QPMQd/VdgpRE4WAwZGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=srtiBcBV; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1705625925;
-	bh=43Ub4cxvhf4UbencJZZh1E96E6g/2qxuS/dzdCa2liY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lSBy4ghGe/51Y2lDRsKIun3YhCV07Bi8ZiVOBS3k2yUfyeuOQcflB2Fzoe3vr5W3y
-	 7HQN6425dTl7Gr++PCG736NzCH7tvzCb2aIlcn3fYiKt60mgjfBhYMr5xvt3RmPhG5
-	 raZ7Y2+ZUcfWyGI4EhF4yDGV09fJ8CJyJS2OczvXkwtGpR5K8xhGDY/lWTamMg+ave
-	 gMVwZDoEgyPOgjoOw3Gi9ehiYLdXQco00nRjjs9n8BZktvfxHLT05/yZeBngx3OU+V
-	 YqmtrA5xMuBU3HOW3GqQK2r4ocHVJgzBCrHYJfdWcz9YNUpk0aV4WGiPiDp7URYWzP
-	 7eTbl4pMOrQZg==
+	s=201702; t=1705628839;
+	bh=KtGZVy2bxqM8exDfb7DvTYM5vDGOCgBQyRjFAA6zJws=;
+	h=Date:From:To:Cc:Subject:From;
+	b=srtiBcBV/92pcjHNjpwRASIOenAa5LUdfiMXh2tTyRFOrEnagjM5Sz9Ure4V0M6vQ
+	 T99sK2m8sYZkZLQPWJPxB2JtJDTqsbGikrxPdNT0S0fEGwrhhtZ3TH9Rs7wckdp0Tl
+	 h5w1fOD1ZjIWQ26CDwYCP87qfTy3LA3IgKTNvkgZ1YfK2qTFRbsJQ56AG6ElCbybTN
+	 xi/I8dn0+/isDZ7gk5PtvaRXDyHV/3hMFaxrmnrw6gNyO9ABFYL/bcATZ9oJ8WHp8V
+	 wRj+CcDQH+Q+/UXVUsMXvk/p3iZo0+F1oE+u4KDQICfVVmeZePYmIpYJWBrkoSC6Yv
+	 7cT6smvbGB9Ng==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TGLpY2SD9z4x5m;
-	Fri, 19 Jan 2024 11:58:45 +1100 (AEDT)
-Date: Fri, 19 Jan 2024 11:58:43 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TGMtZ5mdmz4wy9;
+	Fri, 19 Jan 2024 12:47:18 +1100 (AEDT)
+Date: Fri, 19 Jan 2024 12:47:15 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>
-Cc: Abel Vesa <abel.vesa@linaro.org>, Bjorn Andersson
- <andersson@kernel.org>, Rajendra Nayak <quic_rjendra@quicinc.com>, Sibi
- Sankar <quic_sibis@quicinc.com>, Linux Kernel Mailing List
+To: Steve French <smfrench@gmail.com>
+Cc: CIFS <linux-cifs@vger.kernel.org>, Steve French
+ <stfrench@microsoft.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the devicetree tree
-Message-ID: <20240119115843.5556189a@canb.auug.org.au>
-In-Reply-To: <20231211160510.0aef871b@canb.auug.org.au>
-References: <20231211160510.0aef871b@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the cifs tree
+Message-ID: <20240119124715.7be9a3d7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S/UQqlq2sNIGyL.SIsfvLS4";
+Content-Type: multipart/signed; boundary="Sig_/F4BzNxJH3cRkWVtPzKyKz=Q";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/S/UQqlq2sNIGyL.SIsfvLS4
+--Sig_/F4BzNxJH3cRkWVtPzKyKz=Q
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 11 Dec 2023 16:05:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the devicetree tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/clk/qcom/gcc-x1e80100.c:6786:15: error: variable 'gcc_x1e80100_dr=
-iver' has initializer but incomplete type
->  6786 | static struct platform_driver gcc_x1e80100_driver =3D {
->       |               ^~~~~~~~~~~~~~~
-> drivers/clk/qcom/gcc-x1e80100.c:6787:10: error: 'struct platform_driver' =
-has no member named 'probe'
->  6787 |         .probe =3D gcc_x1e80100_probe,
->       |          ^~~~~
-> drivers/clk/qcom/gcc-x1e80100.c:6787:18: warning: excess elements in stru=
-ct initializer
->  6787 |         .probe =3D gcc_x1e80100_probe,
->       |                  ^~~~~~~~~~~~~~~~~~
-> drivers/clk/qcom/gcc-x1e80100.c:6787:18: note: (near initialization for '=
-gcc_x1e80100_driver')
-> drivers/clk/qcom/gcc-x1e80100.c:6788:10: error: 'struct platform_driver' =
-has no member named 'driver'
->  6788 |         .driver =3D {
->       |          ^~~~~~
-> drivers/clk/qcom/gcc-x1e80100.c:6788:19: error: extra brace group at end =
-of initializer
->  6788 |         .driver =3D {
->       |                   ^
-> drivers/clk/qcom/gcc-x1e80100.c:6788:19: note: (near initialization for '=
-gcc_x1e80100_driver')
-> drivers/clk/qcom/gcc-x1e80100.c:6788:19: warning: excess elements in stru=
-ct initializer
-> drivers/clk/qcom/gcc-x1e80100.c:6788:19: note: (near initialization for '=
-gcc_x1e80100_driver')
-> drivers/clk/qcom/gcc-x1e80100.c: In function 'gcc_x1e80100_init':
-> drivers/clk/qcom/gcc-x1e80100.c:6796:16: error: implicit declaration of f=
-unction 'platform_driver_register' [-Werror=3Dimplicit-function-declaration]
->  6796 |         return platform_driver_register(&gcc_x1e80100_driver);
->       |                ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/clk/qcom/gcc-x1e80100.c: In function 'gcc_x1e80100_exit':
-> drivers/clk/qcom/gcc-x1e80100.c:6802:9: error: implicit declaration of fu=
-nction 'platform_driver_unregister'; did you mean 'driver_unregister'? [-We=
-rror=3Dimplicit-function-declaration]
->  6802 |         platform_driver_unregister(&gcc_x1e80100_driver);
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
->       |         driver_unregister
-> drivers/clk/qcom/gcc-x1e80100.c: At top level:
-> drivers/clk/qcom/gcc-x1e80100.c:6786:31: error: storage size of 'gcc_x1e8=
-0100_driver' isn't known
->  6786 | static struct platform_driver gcc_x1e80100_driver =3D {
->       |                               ^~~~~~~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   0d18bcdebb2f ("of: Stop circularly including of_device.h and of_platfor=
-m.h")
->=20
-> interacting with commit
->=20
->   161b7c401f4b ("clk: qcom: Add Global Clock controller (GCC) driver for =
-X1E80100")
->=20
-> from the qcom tree.
->=20
-> I have applied the following merge resolution patch.  This patch could
-> be applied to the gcom tree.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 11 Dec 2023 15:47:55 +1100
-> Subject: [PATCH] fix up for "of: Stop circularly including of_device.h an=
-d of_platform.h"
->=20
-> interacting with
-> "clk: qcom: Add Global Clock controller (GCC) driver for X1E80100"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/clk/qcom/gcc-x1e80100.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/qcom/gcc-x1e80100.c b/drivers/clk/qcom/gcc-x1e80=
-100.c
-> index 74db7fef237b..d7182d6e9783 100644
-> --- a/drivers/clk/qcom/gcc-x1e80100.c
-> +++ b/drivers/clk/qcom/gcc-x1e80100.c
-> @@ -4,8 +4,9 @@
->   */
-> =20
->  #include <linux/clk-provider.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/module.h>
-> -#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> =20
->  #include <dt-bindings/clock/qcom,x1e80100-gcc.h>
-> --=20
-> 2.40.1
+After merging the cifs tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Did this get lost somewhere among the merges?  I am still applying the patch
-to linux-next.
+Documentation/admin-guide/cifs/todo.rst:7: WARNING: Definition list ends wi=
+thout a blank line; unexpected unindent.
+Documentation/admin-guide/cifs/todo.rst:20: ERROR: Unexpected indentation.
+Documentation/admin-guide/cifs/todo.rst:21: WARNING: Block quote ends witho=
+ut a blank line; unexpected unindent.
+
+Introduced by commit
+
+  e7dccb219fde ("smb3: minor documentation updates")
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/S/UQqlq2sNIGyL.SIsfvLS4
+--Sig_/F4BzNxJH3cRkWVtPzKyKz=Q
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWpyUMACgkQAVBC80lX
-0GyWkQf+L0vDJrDDH7ETJZAIiuSjI874TntKzNyCasngpcN2J2sFxUweE51ghqrW
-h3WPB3fpnddjz1IGkIOZEPMWVjxXK+NuyI8XIlvrk0p3Vs8uFNJAtX9vTkcTpAlf
-it4P/WsdikzL1Q0iwzM3RCgIV8OtfvsDKjMZSLU1DxIG82DtAUMx7O4fKdGBnbWM
-VFPhJIPP9EhSX2pjQZXiHcXR5UtYiDACpipAYcF30unu31g5UlWutSpjXiCGklig
-UxAtNhFebWTZbGs0yHdTwWabW5WFvxh0VxNyv+Fv9dWfUKNj1JWQkFnonfZCO1Fh
-gpsnQSXE7WNTTc5NQwd9fna3rB/rBA==
-=2/Ew
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWp1KMACgkQAVBC80lX
+0GzQHQf8CxeQqMZ38/JSJ3yNqBinSX0qKVxwNkji223x3zo5bLjkkmIO9GNE6Req
+dlLMYVP4DpGfJvTnWcf0vATrdqxyc0G0pgvbrsxOiHN3rN55qPjwiPzIKPExLBsg
+8sfo+GiSTe1ZPO+E8GBDl5LurAW7GvOQPn41ssak61wyAvtIcGGnGrDnX91ohxXw
+YKaCeFaCkibQzl1WLSSeGkukmGZM7QoV0H89vo3yejfgp9VSX4FgRYELcQEfa8y6
+ZkUEROGi0WWpASf05D36pvWumt27l+aDiXYEIoj43Qerf91gSRx5yWtY3b6O+9+A
+Y2L33at6kZSvLl8MmCxKXPI0PENLAw==
+=awMF
 -----END PGP SIGNATURE-----
 
---Sig_/S/UQqlq2sNIGyL.SIsfvLS4--
+--Sig_/F4BzNxJH3cRkWVtPzKyKz=Q--
 

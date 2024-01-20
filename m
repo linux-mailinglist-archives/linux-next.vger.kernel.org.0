@@ -1,49 +1,49 @@
-Return-Path: <linux-next+bounces-777-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-778-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B54883362D
-	for <lists+linux-next@lfdr.de>; Sat, 20 Jan 2024 22:10:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19B77833646
+	for <lists+linux-next@lfdr.de>; Sat, 20 Jan 2024 22:12:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E2841C20AC0
-	for <lists+linux-next@lfdr.de>; Sat, 20 Jan 2024 21:10:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C37A1C20CD5
+	for <lists+linux-next@lfdr.de>; Sat, 20 Jan 2024 21:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5F014A98;
-	Sat, 20 Jan 2024 21:09:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA9D924A14;
+	Sat, 20 Jan 2024 21:09:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GCFgON7j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a2Ni8Gaj"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D2014A86;
-	Sat, 20 Jan 2024 21:09:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FC3208D8;
+	Sat, 20 Jan 2024 21:09:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705784989; cv=none; b=Lq2G81hRj7csw139FnAKhT/TwTJgAKPC/UBVssdxX2PqMvrLHh4+OWam4izCyJakFcT84WplcLrSDMgK7WF4cJEZH8j7GA07xkoGrgldz+yhOU5JpaNzpEPiqdclA+MLDonrc/RsZhrYu6PNt+e5aKLFNC6Q/+t1QrCvZtFv1hk=
+	t=1705784999; cv=none; b=TiwMzbrfwRNwy4VKcqWv9BQU7/0sFJRZpRWmLI8kF1yppY76PDlr0kpZ46xnuu3gBwk0fsV8rROP5jsGHcExYkNZddHQXf4Cdm1jijhKQ01oF5mmEYKTgOgvGqx2CL4TcM59G+tg+hrnUYweke7YYlH+OSTGFBO6wn+HxeT0iRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705784989; c=relaxed/simple;
-	bh=2UTuaFwcqkRBRMR5A80pWR7ePvnb57nQBapA7qClW9g=;
+	s=arc-20240116; t=1705784999; c=relaxed/simple;
+	bh=tBihYQAUnauvx11/kprMMa7zEBfkVJTlWEglY1n6W24=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=o6qNyKo9mCE3w+Dod5n3EoGuyclOAfZDGORWJGjic3dtXtaklh68aoz9vnou5dF2oL1qsEBwT87waXHFWAKT6QRpcoYGT5X5pg8nhpPytEOyr1aH5wRpciLnHzGXZ9alVh/o6IlD34vBkjhRJA/OPJpXjgTAoTsHT6DwKH0P43g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GCFgON7j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D89D9C43141;
-	Sat, 20 Jan 2024 21:09:48 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=aPuLSJoVSnwRLeFKY5IKb9/pJDRizaE6VoACOLCgZTUQAo8x+gb+X+4LgcEzInAyeEIuLsA9afT8GfCqX+7omxM28Hc5u8oCewiU8fZAPy2QZnR6HEyXeknIiAqS0WBJVS3IEue9BMYfBk/LplKYiBgF5K1aBEBwk847ZSJuVy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a2Ni8Gaj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2FC8EC43330;
+	Sat, 20 Jan 2024 21:09:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705784988;
-	bh=2UTuaFwcqkRBRMR5A80pWR7ePvnb57nQBapA7qClW9g=;
+	s=k20201202; t=1705784999;
+	bh=tBihYQAUnauvx11/kprMMa7zEBfkVJTlWEglY1n6W24=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GCFgON7je9PmSZ4JWW4H7qhf2jXKJufA9RJF+aDPsUTPyFRTwt8720JgNMYl1nQOx
-	 5z96haFqCw4cJpkp/avsXwPOKPdGDhbXj2SmyVhUYirkdEWnRHr87oAbbTzbU2lToI
-	 XVGVCKWCtTJrgSY9ixOL95af/XN2w43U589ETZIDlAN7m5HYoAGz86IeUTqr7ON/B+
-	 SqUIGruWhHRoCJ3gX7h5s2NQCBRKIHV8+a7D51Uy6QB2F1x7hQECHLOdB+4mPO2C60
-	 jbnIPDaQPRrqq91pz4HFZIDD7ULmwvSv70Uq+YKiq4r8sUWZetzmMK1BBqbX1hUZZm
-	 OUJDHPoC6B8Ug==
+	b=a2Ni8GajTJBMZhYjI/P1Gb1obqmTNY8oiBOjL/gc25l6/9JWBrkswOROVMAiU1ELz
+	 qMgDyFGlwBMTunLLCthgMEtCKVoR3zibtD3dHXuju5NA6ma4S7gbUYR7G0ZzLD7CJi
+	 nfczKrWkZQjn02b6dktq9bpOT5E6ocX0e7GkcCcEINEFxRt4JXQSA5IOKK6RZ7GI60
+	 WQtdy4odT7xT7xR2ZXy+cVn56WP/+OEngZsL+z4IkAczCPpo9UI9m3Z2JJg2hUea4m
+	 4kFAYe7Q/+R4+DJ3hZYXYP0II7ukaGha1aHmaJsC7PXBkphki9YjNdSyCFLy0jM1eh
+	 GLB2fWOAO3ldA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C48C5D8C96C;
-	Sat, 20 Jan 2024 21:09:48 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1F34CD8C985;
+	Sat, 20 Jan 2024 21:09:59 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
@@ -52,41 +52,39 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/2] riscv, crash: don't export some symbols when CONFIG_MMU=n
+Subject: Re: [PATCH] riscv: Fix build error on rv32 + XIP
 From: patchwork-bot+linux-riscv@kernel.org
 Message-Id: 
- <170578498880.24348.17790461588886369808.git-patchwork-notify@kernel.org>
-Date: Sat, 20 Jan 2024 21:09:48 +0000
-References: <ZW03ODUKGGhP1ZGU@MiWiFi-R3L-srv>
-In-Reply-To: <ZW03ODUKGGhP1ZGU@MiWiFi-R3L-srv>
-To: Baoquan He <bhe@redhat.com>
+ <170578499912.24348.17976593950031551472.git-patchwork-notify@kernel.org>
+Date: Sat, 20 Jan 2024 21:09:59 +0000
+References: <20240118212120.2087803-1-alexghiti@rivosinc.com>
+In-Reply-To: <20240118212120.2087803-1-alexghiti@rivosinc.com>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
 Cc: linux-riscv@lists.infradead.org, rdunlap@infradead.org,
- sfr@canb.auug.org.au, akpm@linux-foundation.org, ignat@cloudflare.com,
- linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
- kexec@lists.infradead.org, eric_devolder@yahoo.com
+ sfr@canb.auug.org.au, linux-next@vger.kernel.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, haxel@fzi.de,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to riscv/linux.git (fixes)
-by Andrew Morton <akpm@linux-foundation.org>:
+This patch was applied to riscv/linux.git (fixes)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On Mon, 4 Dec 2023 10:19:36 +0800 you wrote:
-> When dropping select of KEXEC and dependency on ARCH_SUPPORTS_KEXEC
-> from CRASH_DUMP, compiling error is reported when below config items are
-> set:
-> -----------------------
-> CONFIG_CRASH_CORE=y
-> CONFIG_KEXEC_CORE=y
-> CONFIG_CRASH_DUMP=y
-> ......
+On Thu, 18 Jan 2024 22:21:20 +0100 you wrote:
+> commit 66f1e6809397 ("riscv: Make XIP bootable again") restricted page
+> offset to the sv39 page offset instead of the default sv57, which makes
+> sense since probably the platforms that target XIP kernels do not
+> support anything else than sv39 and we do not try to find out the
+> largest address space supported on XIP kernels (ie set_satp_mode()).
+> 
+> But PAGE_OFFSET_L3 is not defined for rv32, so fix the build error by
+> restoring the previous behaviour which picks CONFIG_PAGE_OFFSET for rv32.
 > 
 > [...]
 
 Here is the summary with links:
-  - [1/2] riscv, crash: don't export some symbols when CONFIG_MMU=n
-    https://git.kernel.org/riscv/c/c41bd2514184
-  - [2/2] riscv, kexec: fix dependency of two items
-    (no matching commit)
+  - riscv: Fix build error on rv32 + XIP
+    https://git.kernel.org/riscv/c/66f962d8939f
 
 You are awesome, thank you!
 -- 

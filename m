@@ -1,189 +1,97 @@
-Return-Path: <linux-next+bounces-776-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-777-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D4E5832AF6
-	for <lists+linux-next@lfdr.de>; Fri, 19 Jan 2024 15:08:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B54883362D
+	for <lists+linux-next@lfdr.de>; Sat, 20 Jan 2024 22:10:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E07C0287BFC
-	for <lists+linux-next@lfdr.de>; Fri, 19 Jan 2024 14:08:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E2841C20AC0
+	for <lists+linux-next@lfdr.de>; Sat, 20 Jan 2024 21:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F37153801;
-	Fri, 19 Jan 2024 14:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5F014A98;
+	Sat, 20 Jan 2024 21:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QDevurz7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GCFgON7j"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797CF537F8;
-	Fri, 19 Jan 2024 14:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D2014A86;
+	Sat, 20 Jan 2024 21:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705673273; cv=none; b=X85vx5FHMOXLEzPZqtARaZ3elqnx9ILqvRSB5cE/1dZlzS4F5W1cqTa5qjZQ3t2c0EMPDHzPRjPDFAqBq72sYiY/WWYm5AyQTogaGttsbjci8ftsxkfPqLpZEhSU1hrRbZDNNOecvga+vCnnpN7gqcuWUbCxeFshzwpj0ZhkvrY=
+	t=1705784989; cv=none; b=Lq2G81hRj7csw139FnAKhT/TwTJgAKPC/UBVssdxX2PqMvrLHh4+OWam4izCyJakFcT84WplcLrSDMgK7WF4cJEZH8j7GA07xkoGrgldz+yhOU5JpaNzpEPiqdclA+MLDonrc/RsZhrYu6PNt+e5aKLFNC6Q/+t1QrCvZtFv1hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705673273; c=relaxed/simple;
-	bh=9gWt20bJrYzN8KUJ3FLlC9ALjS6WuHIP3vCqrGPDA24=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DcK6WQPVxw24gkqxJTNH5QuJMgrqs7fobtUcEE+GyJdK+IyoR0TJjjm1AzM52KJWCl2JlnLfpdnJ8vrnFol2p1XmCMMZmzWG28/4RKEVrDmhJFy8Kz9gw+bsqcYpRFmA+FIeQYUjLAejjJifgwH6f2iwzYIa4znvSZ20beo8h0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QDevurz7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC3FC433F1;
-	Fri, 19 Jan 2024 14:07:52 +0000 (UTC)
+	s=arc-20240116; t=1705784989; c=relaxed/simple;
+	bh=2UTuaFwcqkRBRMR5A80pWR7ePvnb57nQBapA7qClW9g=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=o6qNyKo9mCE3w+Dod5n3EoGuyclOAfZDGORWJGjic3dtXtaklh68aoz9vnou5dF2oL1qsEBwT87waXHFWAKT6QRpcoYGT5X5pg8nhpPytEOyr1aH5wRpciLnHzGXZ9alVh/o6IlD34vBkjhRJA/OPJpXjgTAoTsHT6DwKH0P43g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GCFgON7j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D89D9C43141;
+	Sat, 20 Jan 2024 21:09:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705673273;
-	bh=9gWt20bJrYzN8KUJ3FLlC9ALjS6WuHIP3vCqrGPDA24=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QDevurz73QpNeCT5uLWPhdRmxJLDNaENLyR4YMoW7Af83PoKClv/8Ce9TecrVLJcG
-	 ipiR2tGDMFOi+119skzB89fTgjaLujQXa0c7k4BRhp1QSPWOYoTf3gin6oStYvmK06
-	 LS6W/fOzTaZESJ/4wG2XU16tM7itl3oyn5Pe/uzX4Jmn09wbPFZZXufWCZs8QlRNu0
-	 zSLyZj6PblCVJDU+khdaCEMYOm3b4zqAytVMvedOiu6ZQR2Fsn0KidSnZ6a1CRXuJK
-	 SeDIKnW7GYS09WHXEaLntYogGV5SPH3bvnl3F8BYQba88vUFZ3keXKLvVn2HIvbLwD
-	 T1RmnSRKhph6A==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50e4e3323a6so2073019e87.0;
-        Fri, 19 Jan 2024 06:07:52 -0800 (PST)
-X-Gm-Message-State: AOJu0YxHQRnJhDzsir67qf2Tbxr1vXrGlwuizggE4rS6DnqmZ37Rud+R
-	mUglJ5WCWa//DT7KShwWDjS2VnkZJfj+BSoKSvW/C1HmEu2yAPGthvIUQTw77vY0luaCi9p+FJ2
-	Kx63jwDhr4i+h4KOMQ5e809Y4Uw==
-X-Google-Smtp-Source: AGHT+IFM+LBRxDVA1L2DbmI4tWCfgPIDKugjYb0C66a28GKBvSwHPbqRRJcdXjcn8wNjD6mv8KVGjp1WforYWUXcIpo=
-X-Received: by 2002:a05:6512:313a:b0:50e:765b:1ea3 with SMTP id
- p26-20020a056512313a00b0050e765b1ea3mr758065lfd.22.1705673271160; Fri, 19 Jan
- 2024 06:07:51 -0800 (PST)
+	s=k20201202; t=1705784988;
+	bh=2UTuaFwcqkRBRMR5A80pWR7ePvnb57nQBapA7qClW9g=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=GCFgON7je9PmSZ4JWW4H7qhf2jXKJufA9RJF+aDPsUTPyFRTwt8720JgNMYl1nQOx
+	 5z96haFqCw4cJpkp/avsXwPOKPdGDhbXj2SmyVhUYirkdEWnRHr87oAbbTzbU2lToI
+	 XVGVCKWCtTJrgSY9ixOL95af/XN2w43U589ETZIDlAN7m5HYoAGz86IeUTqr7ON/B+
+	 SqUIGruWhHRoCJ3gX7h5s2NQCBRKIHV8+a7D51Uy6QB2F1x7hQECHLOdB+4mPO2C60
+	 jbnIPDaQPRrqq91pz4HFZIDD7ULmwvSv70Uq+YKiq4r8sUWZetzmMK1BBqbX1hUZZm
+	 OUJDHPoC6B8Ug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C48C5D8C96C;
+	Sat, 20 Jan 2024 21:09:48 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231211160510.0aef871b@canb.auug.org.au> <20240119115843.5556189a@canb.auug.org.au>
-In-Reply-To: <20240119115843.5556189a@canb.auug.org.au>
-From: Rob Herring <robh@kernel.org>
-Date: Fri, 19 Jan 2024 08:07:38 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLTx9k2Nq130PB9y--dv=Spjs3ELVttTwB4=Tf1s1moCg@mail.gmail.com>
-Message-ID: <CAL_JsqLTx9k2Nq130PB9y--dv=Spjs3ELVttTwB4=Tf1s1moCg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the devicetree tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andy Gross <agross@kernel.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Rajendra Nayak <quic_rjendra@quicinc.com>, 
-	Sibi Sankar <quic_sibis@quicinc.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/2] riscv, crash: don't export some symbols when CONFIG_MMU=n
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <170578498880.24348.17790461588886369808.git-patchwork-notify@kernel.org>
+Date: Sat, 20 Jan 2024 21:09:48 +0000
+References: <ZW03ODUKGGhP1ZGU@MiWiFi-R3L-srv>
+In-Reply-To: <ZW03ODUKGGhP1ZGU@MiWiFi-R3L-srv>
+To: Baoquan He <bhe@redhat.com>
+Cc: linux-riscv@lists.infradead.org, rdunlap@infradead.org,
+ sfr@canb.auug.org.au, akpm@linux-foundation.org, ignat@cloudflare.com,
+ linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kexec@lists.infradead.org, eric_devolder@yahoo.com
 
-On Thu, Jan 18, 2024 at 6:58=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> On Mon, 11 Dec 2023 16:05:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the devicetree tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >
-> > drivers/clk/qcom/gcc-x1e80100.c:6786:15: error: variable 'gcc_x1e80100_=
-driver' has initializer but incomplete type
-> >  6786 | static struct platform_driver gcc_x1e80100_driver =3D {
-> >       |               ^~~~~~~~~~~~~~~
-> > drivers/clk/qcom/gcc-x1e80100.c:6787:10: error: 'struct platform_driver=
-' has no member named 'probe'
-> >  6787 |         .probe =3D gcc_x1e80100_probe,
-> >       |          ^~~~~
-> > drivers/clk/qcom/gcc-x1e80100.c:6787:18: warning: excess elements in st=
-ruct initializer
-> >  6787 |         .probe =3D gcc_x1e80100_probe,
-> >       |                  ^~~~~~~~~~~~~~~~~~
-> > drivers/clk/qcom/gcc-x1e80100.c:6787:18: note: (near initialization for=
- 'gcc_x1e80100_driver')
-> > drivers/clk/qcom/gcc-x1e80100.c:6788:10: error: 'struct platform_driver=
-' has no member named 'driver'
-> >  6788 |         .driver =3D {
-> >       |          ^~~~~~
-> > drivers/clk/qcom/gcc-x1e80100.c:6788:19: error: extra brace group at en=
-d of initializer
-> >  6788 |         .driver =3D {
-> >       |                   ^
-> > drivers/clk/qcom/gcc-x1e80100.c:6788:19: note: (near initialization for=
- 'gcc_x1e80100_driver')
-> > drivers/clk/qcom/gcc-x1e80100.c:6788:19: warning: excess elements in st=
-ruct initializer
-> > drivers/clk/qcom/gcc-x1e80100.c:6788:19: note: (near initialization for=
- 'gcc_x1e80100_driver')
-> > drivers/clk/qcom/gcc-x1e80100.c: In function 'gcc_x1e80100_init':
-> > drivers/clk/qcom/gcc-x1e80100.c:6796:16: error: implicit declaration of=
- function 'platform_driver_register' [-Werror=3Dimplicit-function-declarati=
-on]
-> >  6796 |         return platform_driver_register(&gcc_x1e80100_driver);
-> >       |                ^~~~~~~~~~~~~~~~~~~~~~~~
-> > drivers/clk/qcom/gcc-x1e80100.c: In function 'gcc_x1e80100_exit':
-> > drivers/clk/qcom/gcc-x1e80100.c:6802:9: error: implicit declaration of =
-function 'platform_driver_unregister'; did you mean 'driver_unregister'? [-=
-Werror=3Dimplicit-function-declaration]
-> >  6802 |         platform_driver_unregister(&gcc_x1e80100_driver);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> >       |         driver_unregister
-> > drivers/clk/qcom/gcc-x1e80100.c: At top level:
-> > drivers/clk/qcom/gcc-x1e80100.c:6786:31: error: storage size of 'gcc_x1=
-e80100_driver' isn't known
-> >  6786 | static struct platform_driver gcc_x1e80100_driver =3D {
-> >       |                               ^~~~~~~~~~~~~~~~~~~
-> >
-> > Caused by commit
-> >
-> >   0d18bcdebb2f ("of: Stop circularly including of_device.h and of_platf=
-orm.h")
-> >
-> > interacting with commit
-> >
-> >   161b7c401f4b ("clk: qcom: Add Global Clock controller (GCC) driver fo=
-r X1E80100")
-> >
-> > from the qcom tree.
-> >
-> > I have applied the following merge resolution patch.  This patch could
-> > be applied to the gcom tree.
-> >
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Mon, 11 Dec 2023 15:47:55 +1100
-> > Subject: [PATCH] fix up for "of: Stop circularly including of_device.h =
-and of_platform.h"
-> >
-> > interacting with
-> > "clk: qcom: Add Global Clock controller (GCC) driver for X1E80100"
-> >
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/clk/qcom/gcc-x1e80100.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/clk/qcom/gcc-x1e80100.c b/drivers/clk/qcom/gcc-x1e=
-80100.c
-> > index 74db7fef237b..d7182d6e9783 100644
-> > --- a/drivers/clk/qcom/gcc-x1e80100.c
-> > +++ b/drivers/clk/qcom/gcc-x1e80100.c
-> > @@ -4,8 +4,9 @@
-> >   */
-> >
-> >  #include <linux/clk-provider.h>
-> > +#include <linux/mod_devicetable.h>
-> >  #include <linux/module.h>
-> > -#include <linux/of_device.h>
-> > +#include <linux/platform_device.h>
-> >  #include <linux/regmap.h>
-> >
-> >  #include <dt-bindings/clock/qcom,x1e80100-gcc.h>
-> > --
-> > 2.40.1
->
-> Did this get lost somewhere among the merges?  I am still applying the pa=
-tch
-> to linux-next.
+Hello:
 
-Thanks for pointing that out. I guess the QCom folks never applied it.
-I'm going to send the final patch to Linus today and will add this one
-in.
+This series was applied to riscv/linux.git (fixes)
+by Andrew Morton <akpm@linux-foundation.org>:
 
-Rob
+On Mon, 4 Dec 2023 10:19:36 +0800 you wrote:
+> When dropping select of KEXEC and dependency on ARCH_SUPPORTS_KEXEC
+> from CRASH_DUMP, compiling error is reported when below config items are
+> set:
+> -----------------------
+> CONFIG_CRASH_CORE=y
+> CONFIG_KEXEC_CORE=y
+> CONFIG_CRASH_DUMP=y
+> ......
+> 
+> [...]
+
+Here is the summary with links:
+  - [1/2] riscv, crash: don't export some symbols when CONFIG_MMU=n
+    https://git.kernel.org/riscv/c/c41bd2514184
+  - [2/2] riscv, kexec: fix dependency of two items
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 

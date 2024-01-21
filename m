@@ -1,89 +1,133 @@
-Return-Path: <linux-next+bounces-784-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-785-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 866C58355B2
-	for <lists+linux-next@lfdr.de>; Sun, 21 Jan 2024 13:36:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20FC383582A
+	for <lists+linux-next@lfdr.de>; Sun, 21 Jan 2024 23:26:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A71128212B
-	for <lists+linux-next@lfdr.de>; Sun, 21 Jan 2024 12:36:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4428281BE5
+	for <lists+linux-next@lfdr.de>; Sun, 21 Jan 2024 22:26:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2271364CD;
-	Sun, 21 Jan 2024 12:36:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E6538F82;
+	Sun, 21 Jan 2024 22:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jyv+MI1w"
 X-Original-To: linux-next@vger.kernel.org
-Received: from pokefinder.org (pokefinder.org [135.181.139.117])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EDDE26AFA;
-	Sun, 21 Jan 2024 12:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.181.139.117
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB57138DE7;
+	Sun, 21 Jan 2024 22:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705840562; cv=none; b=DI9JykkUUzm1AvhQW6t5/Z5/mWWHA9bGL4SRtRMwTWOHdcKP3SYotllDp/ctsQJlFOHt8HjrsGEUxFU1D3QV+9McZK1hSUQ8rpyD9i9W5wsjQKM3w8rP/RdOZdbRRy9aPjFC02AwilUsd9AK26Leo6XyBMDV0BtTxO5hOnNgULM=
+	t=1705875941; cv=none; b=YszetmINPp5VFXQHGqe6icK4P7xWSjI4AHFamADFaJpmRWYtJp3qeSRGbaZMqvces6zyWZ1gVDMBqN8FuXYi1W1dcr0TPqWAhj46mjB8SgfeVyL3fofvlMy8T5qi43LjvuOie6lbGW3YqF1zK3yEx9qc3eiDxW7dpmYGB0OLPkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705840562; c=relaxed/simple;
-	bh=U6x/Pqa5bsuJf3Rb2m+g6xKom/nhxnVCtBpXz5jdJtU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=urSD9dbl2WOpHOCWBR0QsDXQVszNxMiQUPLpTZH8ctXhKhiqXgptjHyZIpUs9ROk9XPNvxLMQ0bnw1lteRN8N+QkzNMMECpuOlDPUPnj9iss66h8LvumjuJQrleBffumnmda440U2PRRG5DkApbepXQtrEtFnz7d9EqO+8rCYPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de; spf=pass smtp.mailfrom=the-dreams.de; arc=none smtp.client-ip=135.181.139.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=the-dreams.de
-Received: from localhost (77-123-142-46.pool.kielnet.net [46.142.123.77])
-	by pokefinder.org (Postfix) with ESMTPSA id 1FB37A43FF3;
-	Sun, 21 Jan 2024 13:27:08 +0100 (CET)
-Date: Sun, 21 Jan 2024 13:27:07 +0100
-From: Wolfram Sang <wsa@the-dreams.de>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the i2c tree
-Message-ID: <Za0Nm2GvQjy51sqN@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240121200534.57bf614a@canb.auug.org.au>
+	s=arc-20240116; t=1705875941; c=relaxed/simple;
+	bh=E4gq6a9zOlIEmJ40gwnnHLl9HxWFk9Dhksp7/qOACdg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BNBo/YPfuOO7W8qgF7mfTgmD3KLqkicEIi5oZTTZzjC/kM/tEf4nBrC9IWcWgBZmbOGyZ4b0FgSD6KFu0O8fsINdA/opQIOQSHTS7zr9oYrNg1pwxiG4+a8xH6VeeLtZKVVxP0743PYMTy/VNjJOSaMf7dBUIklXA17/ofzUu3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jyv+MI1w; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1705875934;
+	bh=r1mbkvsH1Tw6GErB5aGRuFX4QTAhmff/iRgdLLRbQds=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=jyv+MI1wWW+BA4ZFuA/cwmMAocUqbSHOT9RvEvqB2APqOyV3SPeLgANM9wjz8traO
+	 4W4YslnVZei6GI+Xh6m605VjU7+ggypB8+laAoLXhf40ssme2G0IBHSBhxoyP99ULa
+	 sovznKvecigIzs5kiSIFfGKpnXtFvePlz5hkpZ98dlT1jVHzgQe7DMHj3QxC9spv8I
+	 rzl/7x0xKItkrdzuqGtxwS5X5eepG4U4JDnuy+Bl5SmzRmO7Hpq2q5JetXh2yHKNGy
+	 0nIAupwnIu3DujY1ut0yIcN1K1f0IJDWDhnJHsB6SgWJTC5K4coX8v8UWVSv5ivust
+	 DEmxH+54I8ZDQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TJ7GN5N6Zz4wyl;
+	Mon, 22 Jan 2024 09:25:32 +1100 (AEDT)
+Date: Mon, 22 Jan 2024 09:25:20 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
+ <dri-devel@lists.freedesktop.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm-intel tree
+Message-ID: <20240122092520.68a86f48@canb.auug.org.au>
+In-Reply-To: <87y1f0sol1.fsf@intel.com>
+References: <20231114141715.6f435118@canb.auug.org.au>
+	<8734x8u4la.fsf@intel.com>
+	<87y1f0sol1.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="g8ipBbQwaxWKBXSQ"
-Content-Disposition: inline
-In-Reply-To: <20240121200534.57bf614a@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/wRTTQqaNc4XzgCWXZZqmNJE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/wRTTQqaNc4XzgCWXZZqmNJE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---g8ipBbQwaxWKBXSQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi all,
 
+On Tue, 14 Nov 2023 10:53:30 +0200 Jani Nikula <jani.nikula@linux.intel.com=
+> wrote:
+>
+> On Tue, 14 Nov 2023, Jani Nikula <jani.nikula@linux.intel.com> wrote:
+> > On Tue, 14 Nov 2023, Stephen Rothwell <sfr@canb.auug.org.au> wrote: =20
+> >>
+> >> After merging the drm-intel tree, today's linux-next build (htmldocs)
+> >> produced this warning:
+> >>
+> >> Documentation/gpu/drm-kms-helpers:296: drivers/gpu/drm/display/drm_dp_=
+mst_topology.c:5484: ERROR: Unexpected indentation.
+> >> Documentation/gpu/drm-kms-helpers:296: drivers/gpu/drm/display/drm_dp_=
+mst_topology.c:5488: WARNING: Block quote ends without a blank line; unexpe=
+cted unindent.
+> >>
+> >> Introduced by commit
+> >>
+> >>   1cd0a5ea4279 ("drm/dp_mst: Factor out a helper to check the atomic s=
+tate of a topology manager") =20
+> >
+> > Imre, please fix this. =20
+>=20
+> Just noticed there's a fix [1]. Need to merge that via drm-intel.
+>=20
+> BR,
+> Jani.
+>=20
+> [1] https://patchwork.freedesktop.org/patch/msgid/20231114081033.27343-1-=
+bagasdotme@gmail.com
 
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
+This is still not fixed.
 
-Thanks, I fixed my trees and pushed out now.
+--=20
+Cheers,
+Stephen Rothwell
 
-
---g8ipBbQwaxWKBXSQ
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/wRTTQqaNc4XzgCWXZZqmNJE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWtDZcACgkQFA3kzBSg
-KbZmZA/8CYElVjl73HSe5F+FKVjktM3MGeW2vZNzwBy8phQB9qpgO236hVWycFMp
-XgHIi4UuTMQQoPo+danmaGUH0KaJtJYnnLhqc0hs3NKeZNe1/r8LaSSBcFkIEOwt
-Kan5K/C3IvvxbmO+ijfaq2E5pW1YoWfTOM2w6JZ3mLyi8TitYvAEfMLR7Z36s4TZ
-mbIizwbtamaypz06LWzrAhIxyOA4MLKiE/Egr0tEm8GJ6tewz0JS8dYHsvw3Q0AX
-aCJfaBiuhWX/IwmOewM4x4pdVST0GkDFr4svF1UmI1fhDfmar77bgjzIPpPcp6NM
-LSj8QFi+1Jt9avw7+/9jsgPcvCsl+SHhWmOZdpy7Fkp+mTm1arfllLetyLzQO/mF
-z7wbmeVtXkYKnXg5UbqLo3efCEFCkMNUFJB4rrnJc0KfsFd+eWavheigGqMMI1xB
-I6BrN6kGQvHmEPTL0bn6Q7ihQxePVxdQQVEQac8+LcnsQBgkP/1beP7Ext2qZ2w+
-8jGDK3CiQHDdJ+LhbiiNURkns2nX/inwNw+5xu6LMPOCmYUt707G7xPbOlo0tv7l
-FPKoPgjmBS+HXmGSpZ4fkYPzFVU1D5lI7ZGYIWa4LtcdP/uk33wAv2xKbfSshLbh
-H+4jCOLHAOeUucCtq6NNWwJzccwYnpUT5ogUWrjZGvGH08SOuL4=
-=Rn33
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWtmdAACgkQAVBC80lX
+0Gx3RAf/YnenmQC4D8I1Oh5yglRdacM2m/Scpo+6Cw2VWloUSrj2PAKrU6+CjvI/
+MJuf/g1YBhFLJeBvOhweBu2kTO0h+8+GbaD9SgEwixf+9jIdAZTx4Y3YYarXJ3u5
+shAYBQwKwvo0ff0wqeC9LTth/Vg8RHKv8PV5L9XXA8K4qYWsxQc3cTQVJB3J1e8O
+ktRUQyhv995RViXnyLMaIiM2hzjDF3Q5UcaPEGUpUrkUE8v6z0sElnrQNw2mkeTt
+KfnPDpmcD/MtFXQA9Q5vCPzHTsSd96ea+C+pNPoYihMKvMPjzvqZJvz2I+3cAi02
+t6UBTgpftELqtsgP/2t1nqaVE6vrEg==
+=wuPD
 -----END PGP SIGNATURE-----
 
---g8ipBbQwaxWKBXSQ--
+--Sig_/wRTTQqaNc4XzgCWXZZqmNJE--
 

@@ -1,99 +1,97 @@
-Return-Path: <linux-next+bounces-794-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-795-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41EB08373FF
-	for <lists+linux-next@lfdr.de>; Mon, 22 Jan 2024 21:39:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E3398374B9
+	for <lists+linux-next@lfdr.de>; Mon, 22 Jan 2024 21:57:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7EFF1F290B3
-	for <lists+linux-next@lfdr.de>; Mon, 22 Jan 2024 20:39:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0BC91C27E06
+	for <lists+linux-next@lfdr.de>; Mon, 22 Jan 2024 20:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9AB1405CF;
-	Mon, 22 Jan 2024 20:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7C6481A3;
+	Mon, 22 Jan 2024 20:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CtculEr4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YIIPI7Bx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 460CC3FB3D;
-	Mon, 22 Jan 2024 20:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172B6481A1;
+	Mon, 22 Jan 2024 20:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705955953; cv=none; b=rLRqyRpz9ZuHR1/km/7sWQSbiDU4KzgzcfSuK7tQaCIFu/GVOEHLKgJ/JOQcdsMglsm0rjp0A5JKaQQH9iTBvBEUXELw78jSUnLONLpV8Lt5cOdIlIOsQ9Eoz2I07oc4V0ZrQL5Tij9VIUu0yke3Im7nfGqPkR9MdEOmIKvTHSI=
+	t=1705957022; cv=none; b=kOdl34VaM7TaoSWeKhbgyLcsCVCY6DaR4Aigq0uXqDFIUmZMhg3HfFmxdDfFHxQueXCyyVCFVwIDieizkQ9Rx67IFIXswQP6q4FtdRRUB6p7l1jhI+s4LKZVB7Gd+uxd9SJRukCVwKqUGtqqWTKWJxmGKrheN0VEP9WescdNGUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705955953; c=relaxed/simple;
-	bh=Tu4VrZDY7EI4nayK8NLWcr7vdYA/pNCCWSTBO/UZBxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BShl0r2UOJLAzJ18njEsuZdoY2plecCc5beKt/VEw1JGnMsgk9vh7vhxdguzf7y9KvaMtDC2/lIdwKAx/dzNlt9NlylWgjfbtAbHCPvnrR9PvwGK5ShvtfdHtqUnINUfTsPI+YisNKku6xBk9aHbwbP6CpkgCWlA5Xo0qobQjSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CtculEr4; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1705955949;
-	bh=BCEd7w/4X/G8T7MnawwU202rAIPdkECpqauMjfgff80=;
-	h=Date:From:To:Cc:Subject:From;
-	b=CtculEr461b+Km9LduKUAt6Cb7FsYHMpqtCs171kBGPpfP39iCGGzbu7hkNel++j/
-	 zS3e5CefRMHyH27DiqTh/2uJZwS6m2MpqZrgMWqTpUHLnulUuLp6mvlzKc8AxphOu1
-	 7UUcNAEWE0+/xgvqCkhZjo/LxnkzoYMUP5D5BWviKr2DtRj5E2PGj0HHRpGVtTB+MR
-	 W/fzLq3lZw9F98k4b2HgqprSrnsKN68DUuaHLEtHVxqNtnuaayl1umoDXoi0x+f9+o
-	 dwd3jHJNoUZ47mRGixJGuZwfnnAA0rKAOVau7UeGHw+tYYJOeZ6HIR9G552NTwR3m8
-	 tOBzYU1qjSwGg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TJhs94dzkz4wcH;
-	Tue, 23 Jan 2024 07:39:09 +1100 (AEDT)
-Date: Tue, 23 Jan 2024 07:39:08 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Conor Dooley <Conor.Dooley@microchip.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the riscv-dt tree
-Message-ID: <20240123073908.0580509b@canb.auug.org.au>
+	s=arc-20240116; t=1705957022; c=relaxed/simple;
+	bh=30vMh/yunuAeIvcrZtsprLMxftdtP+dJWsdphN56t3U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lkaf+uR44Fvy93q1azbCyC/PSxw0mCDdAo0uH4BwmMZQ95zKVVX1zwYgIvm+ip20aaJ7te9mg/SnIITwfo/UcH4VgfXw+rfne6ABD62BBrlC42oYrU09gsaxyszAmiX3xWSSU8mShni1TSTBS8HMUu77DXx06hnDQUtcEzCBW1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YIIPI7Bx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805D1C43399;
+	Mon, 22 Jan 2024 20:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705957020;
+	bh=30vMh/yunuAeIvcrZtsprLMxftdtP+dJWsdphN56t3U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YIIPI7Bx31kn7lnd7CuXfJk/mE7AUvUzDq+RMuO/Lv7lnE5IdM4pUJkAlKPJyER4p
+	 AlVlcQygK9ExCKg2EnjLptfaajFoT9PeZ23xOBkn7urTlttw31wun9pKNW79rM0LXs
+	 ejEr+0qBm7mK1js0TN6HLA3XBSqMQ6SOMC7qwOmJ+yX4vbNO8Laj4yzWqrGOAftkwy
+	 OqohG2utwUxA8dHxJWw6Urd1fewMdVDUJbfx+SlAPyce2cYzTxjKRHz8LTH5snrfT9
+	 TZVmaktu5SBvSy+lFNeaQbC3hAZL2q0I42KAETBkMgcEzVXeq1NbDG6PW9sUDWw1sM
+	 RPbkagdyZeVTQ==
+Date: Mon, 22 Jan 2024 20:56:57 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Conor Dooley <Conor.Dooley@microchip.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the riscv-dt tree
+Message-ID: <20240122-harddisk-ancient-8a9d8216d3f8@spud>
+References: <20240123073908.0580509b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/f0katS1ah5M53pMH4m2EWNh";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="jhfAtKZIEWbPWmC/"
+Content-Disposition: inline
+In-Reply-To: <20240123073908.0580509b@canb.auug.org.au>
 
---Sig_/f0katS1ah5M53pMH4m2EWNh
-Content-Type: text/plain; charset=US-ASCII
+
+--jhfAtKZIEWbPWmC/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Tue, Jan 23, 2024 at 07:39:08AM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Commit
+>=20
+>   89e69872b909 ("fixup! riscv: dts: starfive: jh7100: Add PWM node and pi=
+ns configuration")
+>=20
+> is missing a Signed-off-by from its author and committer.
 
-Commit
+Whoops, that was meant to be squashed... I'll go fix it up.
 
-  89e69872b909 ("fixup! riscv: dts: starfive: jh7100: Add PWM node and pins=
- configuration")
+Thanks,
+Conor.
 
-is missing a Signed-off-by from its author and committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/f0katS1ah5M53pMH4m2EWNh
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--jhfAtKZIEWbPWmC/
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWu0mwACgkQAVBC80lX
-0GzVFwf/TGZ3b9t77BcXHxpazfM/GAFyCvaPc7taC//n6TL2KJLCoETQUXfmtrHD
-ofkbDJVPb3VdE7x3mRVrXWK6UxSf9eB4udyo+TAP+jzoAqOYvwtAVQk6e3bjUzCx
-qrlzfRAVNeR7SQEGvS6Mf0yWToFloKRQT/pk5eZKd3yV+ahko6osUKreBdPTUMwM
-O60QXIlqswYWMOGM7DvZN9LGLgu81bAnEjLJNim6RqXzlBPZNPTi5skoQkGIuDxD
-rm4KnE1/UnPSvCJMd/ou18efQGJH/L1Laz+YCTwLFRhEfO4bTGQzIoAEMJa5s7mJ
-4nk26kjqAftbgnUcWry/GSuNhBp2/A==
-=hpeO
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZa7WmQAKCRB4tDGHoIJi
+0j0LAP4z/jlD0zRSfnHI5Oy8uJviY57OsXS/FCR9NVFI9EIKkQEAgIcwypfCWH5X
+nidrgaaVfzbbt/iAu2xpGOcVdNVcHAQ=
+=pKxT
 -----END PGP SIGNATURE-----
 
---Sig_/f0katS1ah5M53pMH4m2EWNh--
+--jhfAtKZIEWbPWmC/--
 

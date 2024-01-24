@@ -1,133 +1,119 @@
-Return-Path: <linux-next+bounces-833-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-834-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B51A83AB87
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 15:20:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9898B83AD73
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 16:35:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0ACE11F218A1
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 14:20:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB5E81C22961
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 15:35:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D277A717;
-	Wed, 24 Jan 2024 14:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD127C0BE;
+	Wed, 24 Jan 2024 15:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j9fhaF0j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I/H438GI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B258B77641;
-	Wed, 24 Jan 2024 14:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32147C09A;
+	Wed, 24 Jan 2024 15:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706106043; cv=none; b=ltsZ8Pksd3bJ1yrreE7QIUGEuG+flwF1geYNZb6qLX2kpYDU9Rdvlc++JVI3/pUBEIzTPZiJPVp1qB9jh8kS+0eC79DxpzTDh/4sEs5iU4bCqSJrzH427pSphhNsIyuXNnfuAgh/+HCiF9kf1j8fwwFMxhl/Ef8xUgC7kFc4omI=
+	t=1706110509; cv=none; b=KLQhZgW8ufy9ZpGJpmMNNoFVJ6YzaCz9f6IBsu9LTQB4pazjYRQEgum9gcCNmCR7T6xe1wMwQHmnrV2Ud4nwVwaoNMemETfyspDZNdabNNvhIJLf/LBx0O25Kz/JQqTwA+mtj6eMrAFZR2AsnT2BzNUv0euOAs4ry1v2k0cvB1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706106043; c=relaxed/simple;
-	bh=cZwooKZYY+5BxcC/oTMQ6fPAMp5nU8PfPmstszDkUQw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pZcKNz5TyM1Wwl1ham5WvUgKDzNv1TOROYM+qqFrc2jptXHsvzaqoXAIjb9zfxfS6XSOisZPmOXgfVs9e+sQ46kPxLWwVV2c+iqA3LGfsCNoawP+MCc1p3cKiWLMVHzrliVFaLIQDWha+BxFUbDki+iJF1GKo8eENSv6ROi4D0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j9fhaF0j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F3BFC433F1;
-	Wed, 24 Jan 2024 14:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706106043;
-	bh=cZwooKZYY+5BxcC/oTMQ6fPAMp5nU8PfPmstszDkUQw=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=j9fhaF0jRiU4dn2ygpxvyPiRkUv1hD3E8jANrC8fc+AdPMBxjRgorSZ75Uh4dPxkb
-	 EPhxfsYtbxPof0WQH3kooCzZODEqCjBAuQqaEORiN3vsik91a/WOkAvT4Tci5YqBhB
-	 Pkm9YYXgbmWRW83bJdQ4xplrXSItNmej84/n+Q6LWFoomXfrQAtvUhyWcuVmwtRbDm
-	 fPbyR3yC+Dqb/8M5XNOF8Vh+WtEjRSChu8wbQ/l9JxMkpAngXIGxoHEVqGSFkRpoZY
-	 WWuFDWg/waOnx4BMuVTbPPL5yj5Ji6xcpGCwqdDE+JgmQCzXfyhHSvLZaJ761/AUT6
-	 qws8JAbw1XLkQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id CADFECE0E8B; Wed, 24 Jan 2024 06:20:42 -0800 (PST)
-Date: Wed, 24 Jan 2024 06:20:42 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Jiri Wiesner <jwiesner@suse.de>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rcu tree
-Message-ID: <f9225eac-7ed9-4abe-8ffc-94936ece0238@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240124151743.052082af@canb.auug.org.au>
- <20240124094954.GL3303@incl>
- <6b5c4acc-f184-4ad9-9029-dd7967fe4a04@paulmck-laptop>
- <20240124133105.GM3303@incl>
+	s=arc-20240116; t=1706110509; c=relaxed/simple;
+	bh=+8JTMV1B+xUws5Fqq/KkkTH19dYQj6SUFIZ+eCArfoc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=twHvT73C0rVGgnNhnr+3V+kqjRWfRotonVw1FWI62E0VWDNPWvzkxfOiRqbOYSODhsRVB5XbL9pZk3PyBHhg6E8ZEnkhmrVxA7UZjsbzuYxRhJtXUGW5MjgmZS2QMj/pTdrb2Dw1HgRuoGV1eBVVA4PLMRfQCfKJlqMQ0qWUQu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I/H438GI; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-339208f5105so4827070f8f.1;
+        Wed, 24 Jan 2024 07:35:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706110506; x=1706715306; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tq3rHmajHdoRuvin6AmYJUUivHaABBxlRIi8R3NRBWo=;
+        b=I/H438GIZXCk+bjRuq3B/KY8pe4xm0Jn3YdiZrTZl0k4xTwnTUHEdZ4oTzTY8nqnFc
+         Vu0yN9ymk4lUYiKImo5RBeZwhZaBnO7rggTtjWoTwIVhdUn9dKECw8Ab4oIV1/6A5RdO
+         p/1k7QT8xUIyFiIp9LMz32RNQHbDkUjWF1zBcwSUdH+Wz13doWFKuUQen1rOgIGHL4x7
+         2N8nx0zsvfad1lxzfOg0WAbEzuzgEES+I9KE93SGYdFerFTUT7YKV/WhvwBwcPIg0wUg
+         TedBwlcIGM/UJrkG/D2TNyjSVuDZwiY7l+xLVr4NBz8z1M+nNSbXMG/sO2QelU9EyTwe
+         ehQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706110506; x=1706715306;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tq3rHmajHdoRuvin6AmYJUUivHaABBxlRIi8R3NRBWo=;
+        b=UF+Vs+6SsHotRK/FHuE3g1PD3OtwIS5SuyiW1lJM4wk34Acahe+y7aDyXrvRFmOvlP
+         mIZIqhxJHZu0fIQlE3klIZsbVe53vvHM4FTg6eWPLpnLz+2ZOTwcjL83hijEn/EzDYwB
+         dnhtsFaM63Y0UW/iyWWS/8C83SQaimBjmLucyzzcyCNT3zubfKD/WZRCcjVAyQkV1+4w
+         XUnGwZ3mAeGvubuPWLWvS2CCLlJCZI0nn3poByx6/bx4pxfzR54hCF0AlSoYD3Ta5LVt
+         W+u6YklMExZJl06qtFpUdLi8/eq46wq+89fw+k0mV3h7cvWxeHwLqeRh+zIorjTqmYay
+         5j6w==
+X-Gm-Message-State: AOJu0YxqcptXV8YRnQYR2JlAbI/U5AaJT1XFY/ah7bLhzvzq8UeLgM96
+	U6DUOK+W0LB/YZYJr16vUp4aS7d71gLulZkqsuSQlLGguvMhPMBZyUlmFGDdw6ctKBcKZwh66zI
+	f1G/0RqDo16cm04GRk/ESamwOGBk=
+X-Google-Smtp-Source: AGHT+IFyW3CbLgXs+fHEYb4Mq62sD30ZjNWsYFvjEe0YQggvEANXkHJWwyuCvTOMp+X3qpF5stjBqdV62fWDzTndjpE=
+X-Received: by 2002:a5d:4211:0:b0:337:aa5c:a8c6 with SMTP id
+ n17-20020a5d4211000000b00337aa5ca8c6mr491519wrq.128.1706110505854; Wed, 24
+ Jan 2024 07:35:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240124133105.GM3303@incl>
+References: <20240124121605.1c4cc5bc@canb.auug.org.au> <CAADnVQKBCpkwx1HVaNy1wmHqVrekgkd4LEZm9UzqOkOBniTOyw@mail.gmail.com>
+ <20240124001808.bfff657f089afe10e5b0824c@linux-foundation.org>
+In-Reply-To: <20240124001808.bfff657f089afe10e5b0824c@linux-foundation.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 24 Jan 2024 07:34:54 -0800
+Message-ID: <CAADnVQJe-BxbKYsMUXXrsh4wEUPacDT6RtF_qrO1ewns_8T1_w@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the mm tree
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 24, 2024 at 02:31:05PM +0100, Jiri Wiesner wrote:
-> On Wed, Jan 24, 2024 at 04:12:23AM -0800, Paul E. McKenney wrote:
-> > On Wed, Jan 24, 2024 at 10:49:54AM +0100, Jiri Wiesner wrote:
-> > > On Wed, Jan 24, 2024 at 03:17:43PM +1100, Stephen Rothwell wrote:
-> > > > After merging the rcu tree, today's linux-next build (i386 defconfig)
-> > > > failed like this:
-> > > > In file included from include/linux/dev_printk.h:14,
-> > > >                  from include/linux/device.h:15,
-> > > >                  from kernel/time/clocksource.c:10:
-> > > > kernel/time/clocksource.c: In function 'clocksource_watchdog':
-> > > > kernel/time/clocksource.c:103:34: error: integer overflow in expression of type 'long int' results in '-1619276800' [-Werror=overflow]
-> > > >   103 |                                  * NSEC_PER_SEC / HZ)
-> > > >       |                                  ^
-> > > > Caused by commit
-> > > >   1a4545025600 ("clocksource: Skip watchdog check for large watchdog intervals")
-> > > > I have used the rcu tree from next-20240123 for today.
-> > > 
-> > > This particular patch is still beging discussed on the LKML. This is the 
-> > > latest submission with improved variable naming, increased threshold and 
-> > > changes to the log and the warning message (as proposed by tglx):
-> > > https://lore.kernel.org/lkml/20240122172350.GA740@incl/
-> > > Especially the change to the message is important. I think this message 
-> > > will be commonplace on 8 NUMA node (and larger) machines. If there is 
-> > > anything else I can do to assist please let me know.
-> > 
-> > Here is the offending #define:
-> > 
-> > #define WATCHDOG_INTR_MAX_NS	((WATCHDOG_INTERVAL + (WATCHDOG_INTERVAL >> 1))\
-> > 				 * NSEC_PER_SEC / HZ)
-> > 
-> > The problem is that these things are int or long, and on i386, that
-> > is only 32 bits.  NSEC_PER_SEC is one billion, and WATCHDOG_INTERVAL
-> > is often 1000, which overflows.  The division by HZ gets this back in
-> > range at about 1.5x10^9.
-> 
-> Exactly.
-> 
-> > So this computation must be done in 64 bits even on 32-bit systems.
-> > My thought would be a cast to u64, then back to long for the result.
-> 
-> This will be a more precise solution than enclosing NSEC_PER_SEC / HZ in 
-> brackets, which I chose to do in the v2 of this patch.
-> 
-> > Whatever approach, Jiri, would you like to send an updated patch?
-> 
-> Yes, I can incorporate the casting to u64 and back to long into the patch. 
-> At this point, I am not sure which version to use. There are:
-> * v1 (submitted to the LKML on Jan 3rd): the patch that got merged into linux-next
-> * v2 (submitted to the LKML on Jan 10th): that has an alternative fix for the interger overflow
-> * v3 (submitted to the LKML on Jan 22nd): that incoporates suggestions by Thomas Gleixner
-> 
-> I could update the v3 of this patch with casting to u64 and back to long. 
-> WATCHDOG_INTERVAL_MAX_NS got set to 2 * WATCHDOG_INTERVAL in v3 - a change 
-> I do not entirely agree with. I think WATCHDOG_INTERVAL_MAX_NS should be 
-> kept narrow so as not to impose a limit on time skew that is too strict 
-> for readout intervals approaching 2 * WATCHDOG_INTERVAL in their length. 
-> The question is what is too strict.
+On Wed, Jan 24, 2024 at 12:18=E2=80=AFAM Andrew Morton
+<akpm@linux-foundation.org> wrote:
+>
+> On Tue, 23 Jan 2024 17:18:55 -0800 Alexei Starovoitov <alexei.starovoitov=
+@gmail.com> wrote:
+>
+> > > Today's linux-next merge of the bpf-next tree got a conflict in:
+> > >
+> > >   tools/testing/selftests/bpf/README.rst
+> > >
+> > > between commit:
+> > >
+> > >   0d57063bef1b ("selftests/bpf: update LLVM Phabricator links")
+> > >
+> > > from the mm-nonmm-unstable branch of the mm tree and commit:
+> > >
+> > >   f067074bafd5 ("selftests/bpf: Update LLVM Phabricator links")
+> > >
+> > > from the bpf-next tree.
+> >
+> > Andrew,
+> > please drop the bpf related commit from your tree.
+>
+> um, please don't cherry-pick a single patch from a multi-patch series
+> which I have already applied.
 
-Please accept my apologies!  I should have caught your updates.
+hmm. There was a clear feedback on the v1 of the series not to mix bpf
+and non-bpf patches and a standalone patch was sent as v2.
 
-I will drop my current version of your patch and queue your v3 for review
-and testing.
-
-							Thanx, Paul
+Thanks.
 

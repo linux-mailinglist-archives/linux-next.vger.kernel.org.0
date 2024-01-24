@@ -1,115 +1,121 @@
-Return-Path: <linux-next+bounces-841-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-842-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0B6883B441
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 22:49:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69A1F83B452
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 22:56:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDC37285325
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 21:49:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3F831F225EF
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 21:56:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B801353FE;
-	Wed, 24 Jan 2024 21:49:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9260135403;
+	Wed, 24 Jan 2024 21:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="K12E1atQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VMq1xbHg"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4381350FB;
-	Wed, 24 Jan 2024 21:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3969B134743;
+	Wed, 24 Jan 2024 21:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706132986; cv=none; b=mrY7+V7Xbzf2W8xGv6wAARbAmgirdA+KNKZHkD5Cn+XjimHmEbHZC6RVn1ANF2WL4yy5WVa5KGnkJPqygR0/1ZOW9ILwpiAq9F9gkc8UJI4F98H6T7lCRQBpC3cLpylxOooWC6OKkUjQ7UGNTjQYURopxOBERSEggTwJCvXko4M=
+	t=1706133382; cv=none; b=HqKH6XFBQSVW9Kg1modoNHeODKhJFA66fPMtfonUow5gu7LudNhOnbejGJFo9iws59CxblS1t7isQNsYgujWSCHOw9ZRPi4OChnUHQOcugEicQuvHB3yKwPnJjdBk3NzvhP8TCwwNRnb97asg8aosRioY7d+yA7fwft/d9FrU9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706132986; c=relaxed/simple;
-	bh=MKg2ZgMaCUbFS1Y/fuLD3dW/JooHkDcS/BaaGyTK7KQ=;
+	s=arc-20240116; t=1706133382; c=relaxed/simple;
+	bh=WZZ8Nj8txsejMqxZrzwHTQyuaWzKN0XJM7J8Ki/5nu8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZCQ0MtNu4CZVWuFgkgnya3ZtEXH2i6tO2qHqQGI7aFPJwMQ1fBDcHzquNjjKKcRcFGgQnkr2P+iFSx+y0wd0nwi+R5RwxpTNjy2KPMSG8EZIixKUXOY4GWapyDy2GE/tJGxC6nuXDKtDJJQWM9UwMJYKAJEojPXXoRfMzIWkclM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=K12E1atQ; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=KdbSJwtqrd/E6IvOBpqMU/vPjtJ3myTzqEB3OTXOWbGBE9pX2HCAHXQLB5WI1XCbFqgoVfQ3FFb5/qdBusBwN1j+F8NWFnUbiZOmVBa7e11PgzRrJfciYsrOvagMZ0aJgtWlwlqwl8jcyQ0WXedc/i73Y4LULtej5v8m8Q8sunI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VMq1xbHg; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706132980;
-	bh=MKg2ZgMaCUbFS1Y/fuLD3dW/JooHkDcS/BaaGyTK7KQ=;
+	s=201702; t=1706133378;
+	bh=F6LfXeYpI9/QDoGYpZBbglp6gqzi9Qth5mg3ENYkJfs=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=K12E1atQl6pUvDUxmOw3WTjlXw9iy4WtacOimQPvv+xZu18+NKkTw4bT7dN32fUpC
-	 tQ5AW13XTtnEdgdgt7ax/kEyrq3nLhET/ZsAaxe+SbuMIVqGWa8NPbhG9PnWk2XpoV
-	 48un1A7ieQe6+IqE95lJHJQtPoYGpQqn6nLlFR2GwXps5sRa2gAAgZVUAC5tTVkj22
-	 GIO/d+zDLXVw+mSlBvvfbr5Otz1l5DA5PSojaDjVSQ6lNygZB7MxIwF/MyPP9enWzN
-	 NaMa9NAfFGNn+VDTyJGsgtHFCE+5ymqI3UvH+d+mLuKMXMW0I9vSSFcpMRtRBIDx0E
-	 YyCAN+bpTBHGA==
+	b=VMq1xbHgywaKbK2+jzej1Xe5mWK+0p2m6DCjoV9TKB5HRu1Yeg4A4LeAjxPuvgumC
+	 TTzCdz/ZLMnrYYotDYuWzDmBdO1cFtcoB3YrtdJ4TmmRkuMoIcG3YRUGfTrf2/qjGK
+	 ijxr6pmsFTzz9i+Q3802NoyORZlzZblDdg84ZtgHwg6msLO/PKKc/osinTDd0nWBjw
+	 yKons/Tl9fm0VXLaPJgMd4cHgRchzKAm5ocsL0S9DpBBRRE6wppn4eAR6aWhtwlNaE
+	 AMlRawCDw7nl43PgTYH6EG1eLE52VChGKneAq/b5B/89xyZXPn3EvIXTjr1kgn5R3t
+	 OrZ8gJdW6J6aA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TKyKX1Fc2z4wbh;
-	Thu, 25 Jan 2024 08:49:35 +1100 (AEDT)
-Date: Thu, 25 Jan 2024 08:49:35 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TKyTD0f91z4x2T;
+	Thu, 25 Jan 2024 08:56:16 +1100 (AEDT)
+Date: Thu, 25 Jan 2024 08:56:15 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Mike Marshall <hubcap@omnibond.com>
+To: Lee Jones <lee@kernel.org>
 Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, Linux Kernel
  Mailing List <linux-kernel@vger.kernel.org>, David Miller
  <davem@davemloft.net>, "Eric W. Biederman" <ebiederm@xmission.com>, Florian
  Fainelli <f.fainelli@gmail.com>, Hector Martin <marcan@marcan.st>, "Jason
- A. Donenfeld" <Jason@zx2c4.com>, Jean Delvare <jdelvare@suse.de>, Lee Jones
- <lee@kernel.org>, Micah Morton <mortonm@chromium.org>, Pavel Machek
- <pavel@ucw.cz>, "Theodore Ts'o" <tytso@mit.edu>
+ A. Donenfeld" <Jason@zx2c4.com>, Jean Delvare <jdelvare@suse.de>, Micah
+ Morton <mortonm@chromium.org>, Mike Marshall <hubcap@omnibond.com>, Pavel
+ Machek <pavel@ucw.cz>, Theodore Ts'o <tytso@mit.edu>
 Subject: Re: linux-next: trees being removed
-Message-ID: <20240125084935.3f3f7685@canb.auug.org.au>
-In-Reply-To: <CAOg9mSQ0GBrRbBWtcNad1vSU+H5vZq6akcCQVDnUS-iw9yWGFg@mail.gmail.com>
+Message-ID: <20240125085615.3cf579c4@canb.auug.org.au>
+In-Reply-To: <20240124155046.GB74950@google.com>
 References: <20240124130101.428c09a3@canb.auug.org.au>
-	<CAOg9mSQ0GBrRbBWtcNad1vSU+H5vZq6akcCQVDnUS-iw9yWGFg@mail.gmail.com>
+	<20240124155046.GB74950@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S5snyCkhsxN_RNr.9WWoMRh";
+Content-Type: multipart/signed; boundary="Sig_/vacaS5r54qcPnQDB8jXOInP";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/S5snyCkhsxN_RNr.9WWoMRh
+--Sig_/vacaS5r54qcPnQDB8jXOInP
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Mike,
+Hi Lee,
 
-On Wed, 24 Jan 2024 10:41:50 -0500 Mike Marshall <hubcap@omnibond.com> wrot=
-e:
+On Wed, 24 Jan 2024 15:50:46 +0000 Lee Jones <lee@kernel.org> wrote:
 >
-> We are active with Orangefs, both on the userspace
-> side and in the kernel... I might only run xfstests to
-> make sure we're not regressing as kernel code
-> changes through numerous development cycles,
-> but we do intend to continue contributing in the
-> future...
+> > backlight-fixes		2023-01-01 13:53:16 -0800
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git#for-b=
+acklight-fixes =20
+>=20
+> This is still active, when it's needed.
+>=20
+> > mfd-fixes		2023-01-01 13:53:16 -0800
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git#for-mfd-fix=
+es =20
+>=20
+> As is this one.
 
-OK, restored.
+Both restored.
 
-If you just do a fast forward merge of v6.8-rc1^0, the I won't bother you
-for another year :-)
+> I'll update them both now if it helps.
+
+That will keep them off my radar for a year :-)
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/S5snyCkhsxN_RNr.9WWoMRh
+--Sig_/vacaS5r54qcPnQDB8jXOInP
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWxhe8ACgkQAVBC80lX
-0GwMpwgAo3Bkcb0GypxJ1emvkWnWl2C8mrKDIwBh94lCqxYke3HmfCLOm1tZU1+N
-ZtSjdhmUiEC7reaGG2S/8KYEzhAlqoCVss9HA+vgX0yLWzIA69ycpLHpZ82F/yl4
-S1r2n628KhreZzKqRV11peJ0r7C9gIId5dr8jQwY4K3LcuON8fVdhmfJPVSmB9cT
-438sPhwSStGbZbdbm+RaG2dp046JV5n1PNWwduzkiC2n9eheK7NZJjr4MDT8t5jV
-z53hfJ1hLaur6VgOMRrsJMJbVeqJsLCAppBc8Ad3vEHvzOeMxvQXBAXs1cEwIoTM
-Ut15ECi0nkuIESSR18M4Xau8MeohaQ==
-=UXGh
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWxh38ACgkQAVBC80lX
+0Gwglwf+K0XyEY8ZpZJWp1i+RKTJqnEg+S/ahENZmmWP1Tp/wXIHLIsydnJmqpJE
+QP1Ds1NpLCXgwJRFboFO/sraDTTODnwAEooIdAhbfBAOYUqd0THb7aMHM7XGdLcc
+wVpTVcb/YvwUPVNgiUZhQxBvebwx9QQnLCWgM4qNo20/sblt/Hf8eJDT+HRvkECJ
+CXyz+WYcjGBjr/LhnKxnXcPN7Tvq8N+ST4iWcuTlsq4eY7kAV5n23TMbXEUCgx7b
+Maak9fWVJm774GLc2MQflLHO37Gcpr7Kj0L3BDiq3cVZeqUJUQjoCpAg0uU2DvN5
+dv8gVq5suw5CaOIjMqRnGmPZisCqdg==
+=raVj
 -----END PGP SIGNATURE-----
 
---Sig_/S5snyCkhsxN_RNr.9WWoMRh--
+--Sig_/vacaS5r54qcPnQDB8jXOInP--
 

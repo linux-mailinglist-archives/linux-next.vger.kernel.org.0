@@ -1,145 +1,195 @@
-Return-Path: <linux-next+bounces-807-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-808-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13FF7839E2B
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 02:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EDB96839E38
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 02:27:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD57D1F2AB91
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 01:20:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A57DA1F2AF74
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 01:27:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 260A415BB;
-	Wed, 24 Jan 2024 01:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B6563C23;
+	Wed, 24 Jan 2024 01:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="YmOWnwON"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="P3YtdJXD"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868B910E5;
-	Wed, 24 Jan 2024 01:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7734323C9;
+	Wed, 24 Jan 2024 01:27:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706059246; cv=none; b=J2E0jEW+/aewpLE3LzdCzjfnbli52+2kb2H55KR/yHbOd6Lgle/IFVJm6kwxYgJXUTpLcRuzzJxmDSoexAVBuAaUw5qHZAd6nD+xheAHK/l+mJ+dHG2bcAgeSArN+co5bp/huAKLaGgty0m52vFkses8xL4Xo9ZoK11GnB4+XCE=
+	t=1706059625; cv=none; b=KH//5+pj/uOsdl5EpTcPNRDfJU1cpAwe6dGiEYFYcSyJ3wsJZy1aMmYgDxOPQcqijlErUCILyq89FfStkt4ZwY4Uh0kRxG4wkoDqiqzRqxscAMgUZNZLs6BkDZHzvPG0r/6dq5zrXqIMa4DVdfl8ZrWiEyz1tch5s63+tci0dn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706059246; c=relaxed/simple;
-	bh=DlUG2Zfv+VlC9R78AA7XXMcscCle7LDwie4DRrQrrS0=;
+	s=arc-20240116; t=1706059625; c=relaxed/simple;
+	bh=CwnF1RLedr0VAG5gpWbO8BA47Nu19+G9Eezjy1BRssI=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dkSnCHumjwonKCB7lfx3L8YkYdb63QoKLOuE0fXhXDiroOeMhvCMsfdoqihkLQoXIcf6RrF/XMC/JkoXa0oG0IFeZWKALQ1mGvQWaSYTk4kNMYsuNiEBY/FzSxb839gTac3mh3Rxkx5V9iCIoHgQsztq7MFPIMyJoxrHJLxM5LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=YmOWnwON; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=WGqIk/9Nc0UxzKLcmkKJeaQPNmE5ed/tyClp2OuLMTMnWqdVyBTZNqOeDnyvFxnJ+4k+OBOcbyJ7XJFmscWMplVrPi+gH8GB6Ewmq6YPsXqeDXoccBtzBRXwoLqpmlQubmfspoEVG36QKVd2spySAJtKHOiG3/o0MKzXuqzl0Lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=P3YtdJXD; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706059241;
-	bh=asYAKAHzzR5q9ebahZtAuIYyNofHyBLRh6/Ww9HqgsE=;
+	s=201702; t=1706059620;
+	bh=YnVXiiq94aCxCahXVksW2BxErM3PzztZ/SdNRmm/714=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YmOWnwONzpqZisp4gxI7yM1h9NcFd/B4O8H+4A64RQa65JxJ+A5weP5QMdFm3LhFZ
-	 /OPbSydxNhOo/zl5JoXq7N4soubnk/aLNoXoc7Xcl44zvdljJB6v9RLpIyYLmJR8Xd
-	 b0T3lAdm3/t5JJzpduy21xoxaxE58SVIg9fBItlDXfSY4eIniseNZdaBDkSDGGSjFU
-	 kf2f4w32KeGskWTv2UrIUBddUk2/37FnY/v+jQ7aSvHL3Huyf/Hm80+R6i4Zi8QSDR
-	 N33mi1dVodAQPtEtuoOJtwdLA2gkQUFVY0SO77eRTqfphv1F1ANRpUNmy0ho5/ycNz
-	 dt9Pqd4kekLcA==
+	b=P3YtdJXDRvbh3VvzkhBRYfv63vXkwTqLrlN93BFx/Bma4xYNh9dRfJTaFd8Bn1nL7
+	 RfGhwG3F638RE8BK8ILMFOQ56S6NUmcJPHdNCr0sXoQyk5Jix6KScGYTymJGZztLj6
+	 hJ832DlR4QewqjJo4AGDd6mEpJTgL+f2ISyfmjEIhFmGMASTX+seghpuz/KcCnA+PJ
+	 8tF2YhPlPUfnud2O5oJYbZD8yfP1GrhhGmZG6BUZChu6Ks5pXRBoQyk93uEoW9T4y6
+	 HiZaGt9H8eGboYCSmp4rwPciwZCC8ZVyWR4I/Ie3QgkwV0YLTP6dE+15Uk55ab9BSo
+	 3r8DK5C73IUvw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TKR3Y1Bxjz4wby;
-	Wed, 24 Jan 2024 12:20:41 +1100 (AEDT)
-Date: Wed, 24 Jan 2024 12:20:40 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TKRBr3W9Tz4x2T;
+	Wed, 24 Jan 2024 12:27:00 +1100 (AEDT)
+Date: Wed, 24 Jan 2024 12:26:59 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Baokun Li <libaokun1@huawei.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20240124122040.04cd2c8a@canb.auug.org.au>
-In-Reply-To: <20240123125227.0521c8d9@canb.auug.org.au>
-References: <20240123125227.0521c8d9@canb.auug.org.au>
+To: Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>
+Subject: linux-next: stats (Was: Linux 6.8-rc1)
+Message-ID: <20240124122659.0405e382@canb.auug.org.au>
+In-Reply-To: <CAHk-=wiB4iHTtfZKiy5pC24uOjun4fbj4kSX0=ZnGsOXadMf6g@mail.gmail.com>
+References: <CAHk-=wiB4iHTtfZKiy5pC24uOjun4fbj4kSX0=ZnGsOXadMf6g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oWBOxkiS20m+fB2I4rUQ7ZR";
+Content-Type: multipart/signed; boundary="Sig_/3VfPglI5Xlmd_t6os2PkxDm";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/oWBOxkiS20m+fB2I4rUQ7ZR
+--Sig_/3VfPglI5Xlmd_t6os2PkxDm
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 23 Jan 2024 12:52:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> After merging the vfs-brauner tree, today's linux-next build (powerpc
-> allnoconfig) failed like this:
->=20
-> In file included from <command-line>:
-> In function 'i_size_read',
->     inlined from '__iomap_dio_rw' at fs/iomap/direct-io.c:570:16:
-> include/linux/compiler_types.h:435:45: error: call to '__compiletime_asse=
-rt_229' declared with attribute error: Need native word sized stores/loads =
-for atomicity.
->   435 |         _compiletime_assert(condition, msg, __compiletime_assert_=
-, __COUNTER__)
->       |                                             ^
-> include/linux/compiler_types.h:416:25: note: in definition of macro '__co=
-mpiletime_assert'
->   416 |                         prefix ## suffix();                      =
-       \
->       |                         ^~~~~~
-> include/linux/compiler_types.h:435:9: note: in expansion of macro '_compi=
-letime_assert'
->   435 |         _compiletime_assert(condition, msg, __compiletime_assert_=
-, __COUNTER__)
->       |         ^~~~~~~~~~~~~~~~~~~
-> include/linux/compiler_types.h:438:9: note: in expansion of macro 'compil=
-etime_assert'
->   438 |         compiletime_assert(__native_word(t),                     =
-       \
->       |         ^~~~~~~~~~~~~~~~~~
-> include/asm-generic/barrier.h:206:9: note: in expansion of macro 'compile=
-time_assert_atomic_type'
->   206 |         compiletime_assert_atomic_type(*p);                      =
-       \
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/fs.h:911:16: note: in expansion of macro 'smp_load_acquire'
->   911 |         return smp_load_acquire(&inode->i_size);
->       |                ^~~~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   4bbd51d0f0ad ("fs: make the i_size_read/write helpers be smp_load_acqui=
-re/store_release()")
->=20
-> I have used the vfs-brauner tree from next-20240122 for today.
+As usual, the executive friendly graph is at
+http://neuling.org/linux-next-size.html :-)
 
-Pending a better resolution, today I have reverted that commit and the
-following one.
+(No merge commits counted, next-20240108 was the first linux-next after
+the merge window opened.)
+
+Commits in v6.8-rc1 (relative to v6.7):            12239
+Commits in next-20240108:                          11796
+Commits with the same SHA1:                        11318
+Commits with the same patch_id:                      201 (1)
+Commits with the same subject line:                   14 (1)
+
+(1) not counting those in the lines above.
+
+So commits in -rc1 that were in next-20240108:     11533 94%
+
+Some breakdown of the list of extra commits (relative to next-20240108)
+in -rc1:
+
+Top ten first word of commit summary:
+
+     88 drm
+     47 riscv
+     47 bcachefs
+     25 net
+     25 dt-bindings
+     18 s390
+     17 mailbox
+     16 selftests
+     15 pci
+     15 maintainers
+
+Top ten authors:
+
+     42 kent.overstreet@linux.dev
+     16 kuba@kernel.org
+     15 u.kleine-koenig@pengutronix.de
+     14 rdunlap@infradead.org
+     12 arnd@arndb.de
+     10 hch@lst.de
+      9 zhoubinbin@loongson.cn
+      9 zhao1.liu@intel.com
+      9 nathan@kernel.org
+      9 ira.weiny@intel.com
+
+Top ten commiters:
+
+     69 palmer@rivosinc.com
+     53 alexander.deucher@amd.com
+     49 kuba@kernel.org
+     47 kent.overstreet@linux.dev
+     30 stfrench@microsoft.com
+     28 axboe@kernel.dk
+     25 kbusch@kernel.org
+     22 chenhuacai@kernel.org
+     21 rafael.j.wysocki@intel.com
+     20 jaswinder.singh@linaro.org
+
+There are also 263 commits in next-20240108 that didn't make it into
+v6.8-rc1.
+
+Top ten first word of commit summary:
+
+     40 drm
+     28 x86
+     25 i2c
+     20 fs
+     20 arm
+     14 soc
+      7 dt-bindings
+      6 bluetooth
+      5 lib
+      5 firmware
+
+Top ten authors:
+
+     36 yury.norov@gmail.com
+     25 ubizjak@gmail.com
+     25 andriy.shevchenko@linux.intel.com
+     17 almaz.alexandrovich@paragon-software.com
+     11 yangchen.openbmc@gmail.com
+      9 kkartik@nvidia.com
+      8 jani.nikula@intel.com
+      7 jouni.hogander@intel.com
+      7 arnd@arndb.de
+      6 suijingfeng@loongson.cn
+
+Top ten commiters:
+
+     38 yury.norov@gmail.com
+     27 mingo@kernel.org
+     26 wsa@kernel.org
+     22 joel@jms.id.au
+     17 almaz.alexandrovich@paragon-software.com
+     11 treding@nvidia.com
+     11 jani.nikula@intel.com
+     10 l.stach@pengutronix.de
+      7 jouni.hogander@intel.com
+      7 ebiederm@xmission.com
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/oWBOxkiS20m+fB2I4rUQ7ZR
+--Sig_/3VfPglI5Xlmd_t6os2PkxDm
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWwZegACgkQAVBC80lX
-0GwPMAf9GnMCwBQOZ0NigjRc3FjjD1Y8bDXIXTo+EGovtHKenqWztRjLFB093BWP
-dDxqGiNHBFRk/Qly4u8MX2EBRdbYF7S1W8nEF54DfbAJgZCH5ADnDYIdXR30/Zsl
-nvhYbGdLI6BMzqB0axafN1Wcz2sRqh7h3MwimYXSNlAqvJdaoI0XXTMX0NPWityB
-EUhOb7qO0IQXjGCQRMTITHElqd2qoTxHMa+WAPd408eTBlCxM+sjGwlbPs2GvQm0
-pcp9DUr46Wm16xXDvUwaOUgIWGfw26XMmXqKFT3F9xJLyhzh8KncYuXy9xEESEV5
-jbpHSFM4K1RTPB1Te/MZ44KuoHeC7A==
-=Vnmt
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWwZ2MACgkQAVBC80lX
+0Gytegf/QSal6eIoJx6guRerZDEftNZude6uKuCMDi+pXjXaMQwT+5yrma5gS4gS
+8RJ8r/s9m69C4laA49c4fPuJ2KArt+dLcheR2mJjOC+4AUVMxBIPeCjTS/FakAe5
+r2sjsubIk49ktRazntpiSPd2LRATxPhDW+iboVrvdK5GfDVmIiLer2vZLeJWW59K
+ZEWdsuEVcL95VP49SyZ2kn8vLaNpF8xxGRqIeq1Zha7cUIJtnbzEi+sL8cpsbiAO
+ajzgO8yTNB9BqAIJ6gNHmUSHgTApvNKmhHVngRjHWJ76Tv5cRtStFhC7SU+Wd2gF
+VJ3bC/q32IXKD1aBDq/jv5d7olOR4g==
+=e+b3
 -----END PGP SIGNATURE-----
 
---Sig_/oWBOxkiS20m+fB2I4rUQ7ZR--
+--Sig_/3VfPglI5Xlmd_t6os2PkxDm--
 

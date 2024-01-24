@@ -1,109 +1,115 @@
-Return-Path: <linux-next+bounces-840-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-841-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B23B883B422
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 22:38:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0B6883B441
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 22:49:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 685B91F249A3
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 21:38:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDC37285325
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 21:49:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22692135408;
-	Wed, 24 Jan 2024 21:37:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B801353FE;
+	Wed, 24 Jan 2024 21:49:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="YtH9TzG7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="K12E1atQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from sonic315-27.consmr.mail.ne1.yahoo.com (sonic315-27.consmr.mail.ne1.yahoo.com [66.163.190.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1B5135406
-	for <linux-next@vger.kernel.org>; Wed, 24 Jan 2024 21:37:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.190.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4381350FB;
+	Wed, 24 Jan 2024 21:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706132231; cv=none; b=g/XRaoKxCadBJP4QbxEBQJCK0XbtfSDRQzCZ+isTOzEClYJsI59Xqx4x5FIo2z3kkWjcHjiCgKP7OFG68+2a1yAWQKhIkrH4dbpsV8hgOmV5JRCucpNiWKGQMhMJ26UxgropmoL4lHxvPJWp6ybn37reI7F7OmdXkdaF5qLklUI=
+	t=1706132986; cv=none; b=mrY7+V7Xbzf2W8xGv6wAARbAmgirdA+KNKZHkD5Cn+XjimHmEbHZC6RVn1ANF2WL4yy5WVa5KGnkJPqygR0/1ZOW9ILwpiAq9F9gkc8UJI4F98H6T7lCRQBpC3cLpylxOooWC6OKkUjQ7UGNTjQYURopxOBERSEggTwJCvXko4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706132231; c=relaxed/simple;
-	bh=j9iyNJ1EOsrzQxpUtTqvr0ncAwltHc1F/url79CFuYo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KFDj27pErZedis27X7LF54Hdtj1r0fwghulCSWhFVhq/7POxtllGnMvkCnJQPodfFzMEoBvgJVb1Z2P0mFc7ptDqrILTXEOypmgrfxNFb83TiVzjAT3grl5QkHOTKG/8vL3Ce3uxo1N7MJ6dx6drGfxb6Qf6i+2+70itGvvwaHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=YtH9TzG7; arc=none smtp.client-ip=66.163.190.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1706132228; bh=0A6MdijwVgm70s9hlUr7/2Vkpj41FkL308wLk6/luXs=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=YtH9TzG7Brd9lvvSvaRyhGHvfjLq7I39yrZ7fzklWx3hPRvA3p4Un6+Uy2eneKz4pETjI6Oj8ErTSsHIye3/xd8rWAuyPWXXv7lXi1lb7NlrvEf+qKM8CIQjT8m6y1mhpn/Gtjx2ptiVX/wYqWLIWC2t0GFK57rbGExwvbmvvHdE8vADO8U6ZpyNqRWoyn9akhOOCIHkWf+fXnQsmfjNKU3NMNbVq/RrfTrqG3vwW04zG+s0Yri5DP/aBv6WYWr560BMO5WEegRplUVW2h8EMWDJIq9TjplpY7jfncWnOKO9Yx6s4DBeXNFEmJKvnJv9aU1dNNGiKkAm1Z/flllc8A==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1706132228; bh=kpUXfrUS7KrSm6/np/axz8QMGK42ZhDGTA3MzPb3Kxi=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=J1ti84borgZs6rkZT+KegLBxkLayiouh4eLstjQG5WkgEPULlW/WsqWdIgrF5US7PoOd6Q1sIVDD4Tb1D4IhGkrMq+n06FKeT2qxZxK3tRBYpPcDSkLIWFlNJcByyB+lGXgUAYG/OZSNXETuj5xslVcZj6wbsdNUZsVmcasmmdtQxQLdW7VPOWDinlwHuUWPdBtnPkXSlxsVu4Tuc+pO3HfTQA6Vas4UJKqf3qFEXEPnNo0yPRRfYGeTG50adNzMDFM6QmLA0bEyW1BYTQYgRvtfkhkTBeHwtCxvZjt/TjbjRyzwTac6E1FIwOekeoVSfuSlJg/AexsHsB9nle4ofA==
-X-YMail-OSG: AESbeFYVM1kOCB.un0EO9apSvGSDM1WIt_OiCsVYliJzzgYf9M5KIagvdah1xaf
- sbynUH4qlmDryiU9zS38E0t15wMVh9q7XoBtSq5TC2DhbWkJuYuPunCK1HuuCQg2pP8lI4EhsfC9
- HzDg5PgM7GxnPrYmVQ03I4fjE7dpUJDYnRuY0sd9xToxlbBBQ_1hySb_HNy5EwvVcKsvixjjUwGZ
- TpJG5yL3oI.azHE2wkTVKIqRhPduPmB63oOseD4NHZp9QwpIyA6ig4ImOzaaWp9yzDvNn4c54OZJ
- bK5iGVznDh6IVxsN2d2Nw9WHXaSbMDKYV_7mwSNaT1C4W5ElQR_PY8iifY7H0sxuTkc1E_PEVczy
- mhexNTKSqx_gA8T1v.fkJ0f5uQh1_x5I9RXeE0h1hVCnPtVnG79CnTEUG5pHgx9gHqnIEObN3aRR
- UARuZkjaUlzwR7AoRAwlRn7_HLu.FEhrFhLhJg3djVyRjtYgCaF7NIy3p5B2CzJUp_LPw8eHOQ4x
- KjTjA7RiJom_88.9dDdkP1v3SkVp3LUSTLM94IiKcxr_neqRF6oLV2zclzrpA1CDyB59HjLIMuq7
- PHBCeOCATUKxxU2gVcLlAkdUB43u2FrQdmdianP0BCly0rbd8Rb7UD2m.ffHQdt29HWZ8Ee9ef57
- fLHjKIjA.FgABXRexLl0roeqOp_.da2R0ibhhEHcskVTwieIBFtBUJ5fbUv_is47n9MtRRDuQNIy
- S7P8jWO.9GbL8ZqIXrCyDfmYXGgsYZQ6yFaccWf5qwKtNlimByH4g8hBP9igz7VEEyg.tIgxtF7E
- FSbhJKyX630hvX92PWUMiDeiwpTmZ4rnPXKpmxPGQphXSo_T2jRZT0W.tiBwB0UjPnlZwnZNuY4b
- 7yJqlHlZzgkQMuyQNB8gmM89MOEA5kyl6O8Un_1HIun1WNjhRvep54MMCQos8yRrwfqn34X8eWsn
- lek53F48XZIZkWngXSmYbOiZPLjRKQ2tODGAwr0tdkGd91cWg4.Ve0KkQ4EuACwQVxQdprTmD8HH
- EDnJ.stpEjV0fShesQCJhBLJ8w7qG_eYaMn52BbakZxzusglNaGybN6_flM3K.Q32SGnhXYX7w2g
- gDMb4lum5iG6Hu.7S5t0Y0lolVbCkXEaAoT04KHf9MTFAL8lC.z6DeOrAOuMzWZ8SMOt2NWwKoKi
- 13Spq_vuG33FA0lPFeA4lfurmxLRVarsBwpzC7MB6Q5xEV6rOoHKLI9p2H7G3Lu0Xfmlp9p5xf9z
- vVaLL6YVdmSKxLrUXV46.d1lIBYDwJhwOkcv.jKwZf6CGJpM.Ws9DbaXtg_xl3k0lPxW0NTSS56O
- jfsZ61D33BJ7wBaX0nXGPjhXYEJB46TN4GbzR392OPFG9RYG3uBu5nMn261zY3U1yCk7Immy9hyT
- w61iuUzJmmbOrrzWl46EGY.eYThb5UpakpMRj7VouyFqXDjDK7lGDXXPXdLFIsL.R32HQWOSGiQj
- LFI.UgsNKwwfoPlFgW0CDWX5yoAOKn1.P164TijLS.0vRFHJkPUNUHDGo2wE7yd3kyfTEBHyHxpp
- xyfwT5TE644IUvVCWC4PIrUd77d6fi1UIW.fktEYPU0aaqC.eYMA0cxLZOqnCKSqhvsA_b5NkhhK
- ubEGR9IgnUJOTwKymRwerEt93oMmppQ_.d9h6CmaDu3q7bTR1u3ys5Mpt03QF.qCYIHGnT5XAG9I
- TT4CFfEuy31sIqhVlAFe2WAI4W1JSJS6ktd8PxMPG1r3vygvTrI5ImsVpdFU6D1CksRCP3y8jaE2
- GwLo7XQsUDuapRvqd0HwKQrQ6VqN6_VFRpI.FToAnSkvgK.LJaqySDDsthlys26izKDCRo7H93cO
- W9K3OVcbTIKbuslzx7eKMd9o.CBakwYRxkonbuuLxgMzycaLAAzHrzsQRQZiZlKS_JG3Zc3RK.XA
- XdvWKKsGDUUVY40qpjNi2LgSxGLFS8vHypa9LMXdBDlmIkgYM._O2vYGY0w9K.x48rPFa31OCKxJ
- ZOWjutmP9EhtiBsnI2BXsGqqkysugy_A2aF8ZgOeF8R8VAfWTjUGwFWFJxZygk.51zag33kthBJN
- MXx._kmd3_dYrsQopMaMwhWWFFAbPxPk3DN8X.Cv7KvDv4774HaQmc3EY7EQnGZbNwMmNi6Uh5fm
- axty00VQbbOaF14TbFuihhJABHaJkwszhucFH57j2LnG_vCOThQcZm.ky0ccNhr2HJDJ0KBndlkV
- EPQPqmK2zhB95T_5MQvTfVvDoB2otWX__vHbPs91fqok8eeHVdBuW5xnU..MKcVCKNbrdeMAiB_7
- EVg--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: a7823e1d-bb67-4c11-98e0-cb460a567784
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Wed, 24 Jan 2024 21:37:08 +0000
-Received: by hermes--production-gq1-78d49cd6df-xrrtm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 27de38ab2d7ec3af79905f5602158dac;
-          Wed, 24 Jan 2024 21:37:06 +0000 (UTC)
-Message-ID: <04cd0a0a-63e6-4acb-b80e-a77e4d7d8d84@schaufler-ca.com>
-Date: Wed, 24 Jan 2024 13:37:04 -0800
+	s=arc-20240116; t=1706132986; c=relaxed/simple;
+	bh=MKg2ZgMaCUbFS1Y/fuLD3dW/JooHkDcS/BaaGyTK7KQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZCQ0MtNu4CZVWuFgkgnya3ZtEXH2i6tO2qHqQGI7aFPJwMQ1fBDcHzquNjjKKcRcFGgQnkr2P+iFSx+y0wd0nwi+R5RwxpTNjy2KPMSG8EZIixKUXOY4GWapyDy2GE/tJGxC6nuXDKtDJJQWM9UwMJYKAJEojPXXoRfMzIWkclM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=K12E1atQ; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1706132980;
+	bh=MKg2ZgMaCUbFS1Y/fuLD3dW/JooHkDcS/BaaGyTK7KQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=K12E1atQl6pUvDUxmOw3WTjlXw9iy4WtacOimQPvv+xZu18+NKkTw4bT7dN32fUpC
+	 tQ5AW13XTtnEdgdgt7ax/kEyrq3nLhET/ZsAaxe+SbuMIVqGWa8NPbhG9PnWk2XpoV
+	 48un1A7ieQe6+IqE95lJHJQtPoYGpQqn6nLlFR2GwXps5sRa2gAAgZVUAC5tTVkj22
+	 GIO/d+zDLXVw+mSlBvvfbr5Otz1l5DA5PSojaDjVSQ6lNygZB7MxIwF/MyPP9enWzN
+	 NaMa9NAfFGNn+VDTyJGsgtHFCE+5ymqI3UvH+d+mLuKMXMW0I9vSSFcpMRtRBIDx0E
+	 YyCAN+bpTBHGA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TKyKX1Fc2z4wbh;
+	Thu, 25 Jan 2024 08:49:35 +1100 (AEDT)
+Date: Thu, 25 Jan 2024 08:49:35 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mike Marshall <hubcap@omnibond.com>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, David Miller
+ <davem@davemloft.net>, "Eric W. Biederman" <ebiederm@xmission.com>, Florian
+ Fainelli <f.fainelli@gmail.com>, Hector Martin <marcan@marcan.st>, "Jason
+ A. Donenfeld" <Jason@zx2c4.com>, Jean Delvare <jdelvare@suse.de>, Lee Jones
+ <lee@kernel.org>, Micah Morton <mortonm@chromium.org>, Pavel Machek
+ <pavel@ucw.cz>, "Theodore Ts'o" <tytso@mit.edu>
+Subject: Re: linux-next: trees being removed
+Message-ID: <20240125084935.3f3f7685@canb.auug.org.au>
+In-Reply-To: <CAOg9mSQ0GBrRbBWtcNad1vSU+H5vZq6akcCQVDnUS-iw9yWGFg@mail.gmail.com>
+References: <20240124130101.428c09a3@canb.auug.org.au>
+	<CAOg9mSQ0GBrRbBWtcNad1vSU+H5vZq6akcCQVDnUS-iw9yWGFg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Signed-off-by missing for commit in the smack tree
-Content-Language: en-US
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20240125083229.6bba94ec@canb.auug.org.au>
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20240125083229.6bba94ec@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.22046 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Type: multipart/signed; boundary="Sig_/S5snyCkhsxN_RNr.9WWoMRh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 1/24/2024 1:32 PM, Stephen Rothwell wrote:
-> Hi all,
->
-> Commits
->
->   39fcdc643c23 ("smack: Initialize the in-memory inode in smack_inode_init_security()")
->   ea2d37d1b553 ("smack: Always determine inode labels in smack_inode_init_security()")
->   da5bea06bde0 ("smack: Handle SMACK64TRANSMUTE in smack_inode_setsecurity()")
->   9c5589ad9d82 ("smack: Set SMACK64TRANSMUTE only for dirs in smack_inode_setxattr()")
->
-> are missing a Signed-off-by from their committer.
+--Sig_/S5snyCkhsxN_RNr.9WWoMRh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Bugger. Sorry, will repair.
+Hi Mike,
 
+On Wed, 24 Jan 2024 10:41:50 -0500 Mike Marshall <hubcap@omnibond.com> wrot=
+e:
+>
+> We are active with Orangefs, both on the userspace
+> side and in the kernel... I might only run xfstests to
+> make sure we're not regressing as kernel code
+> changes through numerous development cycles,
+> but we do intend to continue contributing in the
+> future...
+
+OK, restored.
+
+If you just do a fast forward merge of v6.8-rc1^0, the I won't bother you
+for another year :-)
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/S5snyCkhsxN_RNr.9WWoMRh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWxhe8ACgkQAVBC80lX
+0GwMpwgAo3Bkcb0GypxJ1emvkWnWl2C8mrKDIwBh94lCqxYke3HmfCLOm1tZU1+N
+ZtSjdhmUiEC7reaGG2S/8KYEzhAlqoCVss9HA+vgX0yLWzIA69ycpLHpZ82F/yl4
+S1r2n628KhreZzKqRV11peJ0r7C9gIId5dr8jQwY4K3LcuON8fVdhmfJPVSmB9cT
+438sPhwSStGbZbdbm+RaG2dp046JV5n1PNWwduzkiC2n9eheK7NZJjr4MDT8t5jV
+z53hfJ1hLaur6VgOMRrsJMJbVeqJsLCAppBc8Ad3vEHvzOeMxvQXBAXs1cEwIoTM
+Ut15ECi0nkuIESSR18M4Xau8MeohaQ==
+=UXGh
+-----END PGP SIGNATURE-----
+
+--Sig_/S5snyCkhsxN_RNr.9WWoMRh--
 

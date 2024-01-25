@@ -1,57 +1,58 @@
-Return-Path: <linux-next+bounces-858-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-859-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 496C383C12D
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 12:41:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97D2983C372
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 14:19:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAFF61F26FDF
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 11:41:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C071291256
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 13:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6513F4439A;
-	Thu, 25 Jan 2024 11:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 436094F61C;
+	Thu, 25 Jan 2024 13:18:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bNtFBgEM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bcOoxCBj"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC4944363;
-	Thu, 25 Jan 2024 11:41:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB674E1C6;
+	Thu, 25 Jan 2024 13:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706182899; cv=none; b=Sq5Bdp7RnCjaHNy9Nv/sTE59yez1NwqxTx2ZXHxcas0aaKOjMALwZzY/O4r63cXUoiV1yVk+0ZEODoG2Jk3BocARXBGYesvuYuQwXMHOuToIAkE1Q+c1+2e1MWYu9OKikLUkW1gcaNXlTycV2+ILOCHQ4rmTh3uCovcDie0At3Y=
+	t=1706188735; cv=none; b=HYvdVdkz14lXcUkOUNkf/sEP6gaCpWF4nIP2ybJ/HIifloeUPuScisTH8ZcWk4/KFz3F2U1l9usGXKH8qsp3DoT2tSVHvfIkEwDwue/hsd+vQgnJE88iiI5MV8ENYetxwy0PHMl8sPkad7ZZl1q3VTeR0cpXpimfCsbxBc+DOSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706182899; c=relaxed/simple;
-	bh=MKey3YQTd92e4aAsfwfIM20Iq3jFKrjkcDjDuS9hx1I=;
+	s=arc-20240116; t=1706188735; c=relaxed/simple;
+	bh=bY17jvWnfeTpSntdXGaQifQf3sNAI7rGnIfhJ2qaRVg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ld1sXg+m6v2XsACLkBCESnnaZEG1UCP2ROCcPoFMhlIL2y/TuYt7nfrjFNQI0pOEDP+IloOIvwgIEj0qoBrzse7cyZj71jwjNSM72rnF1Vcq88gd+bxJVdr3bLafMMRQ5Y5PWeI8503Kc/cKLT/xmrP1rajuG1I4jiL36TpIXxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bNtFBgEM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550F4C433F1;
-	Thu, 25 Jan 2024 11:41:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=W3a5Tmo8QECF+w7kvxzE9tZOvdkzwpA4OrXR72B0ewq54Z8Bh1Fbn/8F7l4Oe0gfWu+x/ArYUpX4sz2Y06Ff4RY35vDlzS2plrG7QhlAYgWKAVUCx5H4LZtDHu1a5IGVm43dqfs4/qrF991Y6q1ObFmDeOrinkYT2v/h9K2lgTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bcOoxCBj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84DFCC433C7;
+	Thu, 25 Jan 2024 13:18:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706182898;
-	bh=MKey3YQTd92e4aAsfwfIM20Iq3jFKrjkcDjDuS9hx1I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bNtFBgEMv1Ev5WK11pfPhwcDRyYz5zgqGlmBqM5RNoLy7aouMQ2cPj8SpuJRmpotL
-	 BZI39nNFua6PUr1E+Lcig8cp74shLSM4R6b8sTezKK1XWh6TymeOuRg5Wm1QZj29os
-	 mga/3J/MnBbSzzyctaDAFQHBLEl/W4y0XcU3gXAo/Q1VY4XcikM9hYMQNrqubZ3bN2
-	 mb94Eq0FiN8uCzAypzjgyerqm82+2WSExpBp91zBFhTfuFLXX/jLVdEWNM+8d49oD/
-	 JnPnbvnfAT0Qpf7ksYfkcioS1nmYPr0f/br5Q6s5htilAxTG5oSba6VfGf+2cq+g60
-	 J/k51Rvw4gCxw==
-Date: Thu, 25 Jan 2024 17:11:35 +0530
-From: Vinod Koul <vkoul@kernel.org>
+	s=k20201202; t=1706188734;
+	bh=bY17jvWnfeTpSntdXGaQifQf3sNAI7rGnIfhJ2qaRVg=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=bcOoxCBjpc57KyQCJkqDE4FgvksiptVn/lDz/eZXgIyA2ceRpLduJwO6geyVUg27w
+	 2j7AgwmO6z7idJAN6uePhJvH5cc07+nWtF5jGP6yFWozNTj9RVne1AzOgMfEB9h7vT
+	 rk9X7vdF11wegR2tL51mk5LVCBJs4yrKCCjSniy6x18wEYAYk5n8mJ1l+inUthPjFm
+	 3wQCWRkWIZiXYaaxQcQYOmgAyjmDJ2AQhe3MWclO6y/6r1wGmtGIrFzw+KZpbFjHWT
+	 ppnOHRjXA1BMD0BgMPUQDkoDvM+S/FlZSemSsMVzYRi/bx/a4zOvYBXrR767NGYXda
+	 QmbaNYNTBQgJA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 17BF0CE189D; Thu, 25 Jan 2024 05:18:54 -0800 (PST)
+Date: Thu, 25 Jan 2024 05:18:54 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+Cc: Frederic Weisbecker <frederic@kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Mantas Pucka <mantas@8devices.com>
-Subject: Re: linux-next: manual merge of the phy-next tree with the phy tree
-Message-ID: <ZbJI7437Hd22EuF3@matsya>
-References: <20240125123327.4e2825ab@canb.auug.org.au>
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the rcu tree
+Message-ID: <b4ae2b65-f297-429d-8456-9b9285a4d1de@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20240125143332.70c0866a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -60,79 +61,38 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240125123327.4e2825ab@canb.auug.org.au>
+In-Reply-To: <20240125143332.70c0866a@canb.auug.org.au>
 
-On 25-01-24, 12:33, Stephen Rothwell wrote:
+On Thu, Jan 25, 2024 at 02:33:32PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the phy-next tree got a conflict in:
+> After merging the rcu tree, today's linux-next build (htmldocs) produced
+> this warning:
 > 
->   drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+> include/linux/hrtimer.h:199: warning: Function parameter or struct member 'online' not described in 'hrtimer_cpu_base'
 > 
-> between commit:
+> Introduced by commit
 > 
->   f74c35b630d4 ("phy: qcom-qmp-usb: fix register offsets for ipq8074/ipq6018")
-> 
-> from the phy tree and commit:
-> 
->   52cfdc9c6c33 ("phy: qcom: qmp-usb: drop dual-lane handling")
-> 
-> from the phy-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>   7525a3cbb106 ("hrtimer: Report offline hrtimer enqueue")
 
-Thanks Stephen, this looks good to me. I will notify Linus when he pulls
-this
+Apologies for the hassle, and please see the proposed fixup patch below.
+Unless I hear otherwise, I will merge this into the original before the
+likely start of your day.
 
-BR
+							Thanx, Paul
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> index 6621246e4ddf,e62539ce99a6..25d8d881b2f3
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> @@@ -1621,28 -1385,8 +1393,24 @@@ static const struct qmp_usb_offsets qmp
->   	.rx		= 0x1000,
->   };
->   
->  +static const struct qmp_phy_cfg ipq6018_usb3phy_cfg = {
-> - 	.lanes			= 1,
-> - 
->  +	.offsets		= &qmp_usb_offsets_ipq8074,
->  +
->  +	.serdes_tbl		= ipq9574_usb3_serdes_tbl,
->  +	.serdes_tbl_num		= ARRAY_SIZE(ipq9574_usb3_serdes_tbl),
->  +	.tx_tbl			= msm8996_usb3_tx_tbl,
->  +	.tx_tbl_num		= ARRAY_SIZE(msm8996_usb3_tx_tbl),
->  +	.rx_tbl			= ipq8074_usb3_rx_tbl,
->  +	.rx_tbl_num		= ARRAY_SIZE(ipq8074_usb3_rx_tbl),
->  +	.pcs_tbl		= ipq8074_usb3_pcs_tbl,
->  +	.pcs_tbl_num		= ARRAY_SIZE(ipq8074_usb3_pcs_tbl),
->  +	.vreg_list		= qmp_phy_vreg_l,
->  +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
->  +	.regs			= qmp_v3_usb3phy_regs_layout,
->  +};
->  +
->   static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
-> - 	.lanes			= 1,
-> - 
->  -	.offsets		= &qmp_usb_offsets_v3,
->  +	.offsets		= &qmp_usb_offsets_ipq8074,
->   
->   	.serdes_tbl		= ipq8074_usb3_serdes_tbl,
->   	.serdes_tbl_num		= ARRAY_SIZE(ipq8074_usb3_serdes_tbl),
+------------------------------------------------------------------------
 
-
-
--- 
-~Vinod
+diff --git a/include/linux/hrtimer.h b/include/linux/hrtimer.h
+index 4f2cf7309486..991c83e929b4 100644
+--- a/include/linux/hrtimer.h
++++ b/include/linux/hrtimer.h
+@@ -151,6 +151,7 @@ enum  hrtimer_base_type {
+  * @hang_detected:	The last hrtimer interrupt detected a hang
+  * @softirq_activated:	displays, if the softirq is raised - update of softirq
+  *			related settings is not required then.
++ * @online:		CPU is online from an hrtimers viewpoint
+  * @nr_events:		Total number of hrtimer interrupt events
+  * @nr_retries:		Total number of hrtimer interrupt retries
+  * @nr_hangs:		Total number of hrtimer interrupt hangs
 

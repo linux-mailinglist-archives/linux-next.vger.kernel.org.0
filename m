@@ -1,105 +1,78 @@
-Return-Path: <linux-next+bounces-863-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-864-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 285A283CA7C
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 19:04:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8091D83CD6A
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 21:28:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13EFAB22301
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 18:03:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 203C71F21846
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 20:28:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC55133986;
-	Thu, 25 Jan 2024 18:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D30137C2B;
+	Thu, 25 Jan 2024 20:28:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rrPGGLr4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NIGZQP+i"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2F0130E52;
-	Thu, 25 Jan 2024 18:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F3A137C20
+	for <linux-next@vger.kernel.org>; Thu, 25 Jan 2024 20:28:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706205830; cv=none; b=eQ4r5VJjecS0JuH9qRtff60T0hOQ//6JwpmoOVHKsLZktJGl3WFj8VRWWMyQiedYLJjcDAfZ+cVEWCSwd8fligBb0VbkYmXXthcih9JsMIDzwlp+8gNPA5KZK1H9EQ0/TAc3fICLBTNk/EdLpDdmC44zqR4v92PAFv3eG2t6/lg=
+	t=1706214495; cv=none; b=gIt0KHpdjwJaWCfOB2DATFFte39JTdfuta+yomVPqmMx3alDFe6ppwxhkaqlHAtPG6SjMucZMRZ6V2bYszfZosJnY/lzwx4kxYbkAfSwEjaQaPmCyHcj3WTsug/mxwilaztb/9yVveWbLz2NCoWnHSdpvTrclSBU2oKC7BH8NrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706205830; c=relaxed/simple;
-	bh=f0VirH3aoOMfVFq19AkhrwdHXxAYRf5CyVpkEEI0bCQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lzIX0Rt+tsVUWKrwPsqkFcd7ZVWq+lKVJbUSjiEuJKOQ633hHRubxDqtBNf7ksEgfwJOVxso1tWFwpYjqduX/kAKnIlbj9DwbODAz0Ilz/AaOFU+3DDWHVjKAZ+gfV2cR1mAIDMLSF4C+kg8SJohMbdQa04lVdaOuvaclKesStg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rrPGGLr4; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706205822;
-	bh=f0VirH3aoOMfVFq19AkhrwdHXxAYRf5CyVpkEEI0bCQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rrPGGLr4NzgbTLCvykTOggvEt7AnRyruooAhV1XtwsJAHgsX6bgpGqsUs4ycj4YmT
-	 t9LI8IW8jd/O9NqeVPqoqAq1HqRNmDjQIlcuWuaA+rYO1OER3llN73gUFYeYCP3UBM
-	 bBUg77utUaw7igSDSnhmqHsgQE/7k/Aaj6kRK4IhvcYi+CmtQA1xHaywHlWHH+DPPA
-	 o9JGkesH79Rqp9b5stnLDykP89RQl7/fMEWCevvHJfyxai6PjvZWujBD+hcAqSgDao
-	 5q/kkYZTT6allIs4IoLAm52OBjGCu/n+4se2Qqay8De4A4O97SuLWPKxF5seMwfACK
-	 BRjge497JUL+Q==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TLTGP6gdRz4x7q;
-	Fri, 26 Jan 2024 05:03:41 +1100 (AEDT)
-Date: Fri, 26 Jan 2024 05:03:39 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Baoquan He <bhe@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <20240126050339.58b9131e@canb.auug.org.au>
-In-Reply-To: <ZbJwMyCpz4HDySoo@MiWiFi-R3L-srv>
-References: <20240125142907.33015c9f@canb.auug.org.au>
-	<ZbJwMyCpz4HDySoo@MiWiFi-R3L-srv>
+	s=arc-20240116; t=1706214495; c=relaxed/simple;
+	bh=VCG+iDb+024mkml8Ygr5HcqslC9O52rWCSkA2Bj5RUs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=L0FrkglYxFveN1+sJmO3ce8/Ac5bKHtfdMrmBmqNujzy63EzgIxVWQElxQf1VVsXC/MbTwGkHrsEJtjx2ZJG4zRyazW8SXWzjhHb9d4H1kHZl1btDqEGyOklBAvGgiIMaWYV+qP5pXXCYYnKAaQXy9fihcrDtrILCsfRyCPiso0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NIGZQP+i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38EAFC433F1;
+	Thu, 25 Jan 2024 20:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706214495;
+	bh=VCG+iDb+024mkml8Ygr5HcqslC9O52rWCSkA2Bj5RUs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=NIGZQP+iSBEem5QAbpncCod7hHoPrlg1k7KaV7qGTT90C1mSz1bW+4N+JoSIJ21C2
+	 /xNyq96WHZX5qJc+ra03RcsP2JhQ5S9nwGXdAVYUZZYxontC3MEbrwhcuREmC727MJ
+	 9SiWrWcg4GEc4CHU8gQwsqBXHYyQmF3lTv1F+XEXcOZ6Vj8In88oyVjZi+DirIlRGa
+	 z5SfeuEiISDTMYMwOWDZK/rsEDd94uwQrDq9xONST+x9tnxm82s7NfItC07UlApkRi
+	 kmzcBDcGqpVazw/lar4wYQ0zFTq/n+hT4Ge6iz3WQgUvBpgoIrdSVlO8bGeXW7Os5H
+	 pAqqb0GbmPE2w==
+Date: Thu, 25 Jan 2024 21:28:09 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Wolfram Sang <wsa@kernel.org>, linux-next <linux-next@vger.kernel.org>
+Subject: Request for i2c re-inclusion in linux-next
+Message-ID: <sripk25leahdjiziacby4ql45kspw5cd3ic5vj23lctsawc2lm@be4sg32fjilu>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iR0Z=g9BdJGL7_56aZmEqQk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---Sig_/iR0Z=g9BdJGL7_56aZmEqQk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi Baoquan,
+could you please include in the linux-next i2c related branches
+from my repository:
 
-On Thu, 25 Jan 2024 22:29:07 +0800 Baoquan He <bhe@redhat.com> wrote:
->
-> I reproduced the failure with allnoconfig on ppc, and found below change
-> can fix it too. And the change makes ARCH_SELECTS_KEXEC consistent with
-> ARCH_SELECTS_KEXEC_FILE on the dependency. What do you think?
+https://kernel.googlesource.com/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
-Makes sense to me.
+the following branches:
 
---=20
-Cheers,
-Stephen Rothwell
+for next:       i2c/for-next
+fixes:          i2c/for-current
 
---Sig_/iR0Z=g9BdJGL7_56aZmEqQk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+I have requested this branch to be the main repository for
+collecting i2c host patches[*].
 
------BEGIN PGP SIGNATURE-----
+Thank you,
+Andi
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWyonsACgkQAVBC80lX
-0GwqDQf8Co2Rwr1bjHmMJDNCKFi+I7JzMls5lcBh4eLGzGeoPB4ZaCJ9Va4YJSMq
-v9EZkk6JuYnTaZ1Kl0Nlz+8g9wdTt77+bTRJiCkxwDmTihaknn636s0HXePxQvSJ
-luyRLJxJGRgB9Ln5H+pAjj1JQq4yKD9xBW0RKwZHlBHy8s8r/ubZu6xqvI3+hECD
-LoOWxgDxL6LLe+fbweaAOCxWas2qjTyS4f5oSGdhPtZC7fBaw0FY29tXkem+3r6C
-7gp6hHaqzoIQ5ZskPLknQ+AI2RzsLSbcf7Tt1kF45ghPOtnavdHuyUqI6KZAZgmU
-Rfl1nnYq+wOubfl0mDceIG50q1FuDA==
-=+oJq
------END PGP SIGNATURE-----
-
---Sig_/iR0Z=g9BdJGL7_56aZmEqQk--
+[*] https://lore.kernel.org/all/20240124225031.3152667-1-andi.shyti@kernel.org/
 

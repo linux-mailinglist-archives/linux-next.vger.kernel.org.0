@@ -1,146 +1,151 @@
-Return-Path: <linux-next+bounces-847-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-848-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22A4883B61E
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 01:38:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2977E83B690
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 02:33:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5120F1C22535
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 00:38:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DB1E1F22B2D
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 01:33:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05F965F;
-	Thu, 25 Jan 2024 00:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B937ECC;
+	Thu, 25 Jan 2024 01:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OG9odM+7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HwXyssm6"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF2662B;
-	Thu, 25 Jan 2024 00:38:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE0AEA9;
+	Thu, 25 Jan 2024 01:33:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706143100; cv=none; b=IoveJc+zup/lnScGkg+XSNQ8ZOUT2OCMJJ2KirCoCzV/aNtAMroAxe5FxQWXqCr84cjH1qIcetEyd1gtV7j0RQIPwxHmE3tATN0kZbK6J3UX34p+F2eqhnHzto5xABuS00MOlfbZKp3W5xGOx1p4bBf482QYGGk3u7mVrusQk4s=
+	t=1706146416; cv=none; b=Pq28U947J4osuKfhlbf4nEdqY7wDQfzvwtYbzqoI8yBiweGC8JGVPfC61zFKh0o5++K5lWyKwzLToAd16qPcZV34ISJAPBKrA0I8ruH52I2W2l0ae0VdYjUKGg2AZPSe1RGbnlGfA113s3ATY5RqGM5I0Qxm4KWyQ8st/3tfdnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706143100; c=relaxed/simple;
-	bh=Z6Gx+1HI/cQiz1WsNvPb5BnvWUuaUrMwOZklI9se1G0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EQkntV7f5F0qAjYOkYBCJ4VJ/YIgcFHPF6hW6XKvH0HjXkEJeo+4O8vJU7vydJ+ntMYHLK5zHl3EoO4ZDHn3aklTh1fzz4NHvszH4OonZkTlpTwCl2KC/3VslV2Li59ds++rESOYoWlUjJE386XW5+QINDz91yevSeMBAKbpbiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OG9odM+7; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1706146416; c=relaxed/simple;
+	bh=jU/2S0TPmYwsFAEcLm1nhe1J12jMGQjYbEw/4xSLtXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BS+MopigDWEwPnwsCLnIQ0EfBU+zlRw3xdPx9TzXPuSDy/mnT2GsMbuly+HrHnMZVYb+Cr6MKPMl9eCaJLAfUhl7Zu/kmzuxEKgy72GaY+11Bc/fLEzFRXSO5TNg3h9qt9NxxKwHKUdoRnZAcEqMPqRzEDNhkVazKNIiadcdVFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HwXyssm6; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706143096;
-	bh=YwXNSfbCPDAxJEf8R0beprqeBVbc89WpZb+pt8wZxhM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OG9odM+70bg+i3iy3g5324JYZ/TmAC08tIF56ZIXaQls7TpQk3f+emWrHK+YnFKH2
-	 aSd2+TPuI0ESsYtf3Jv3j8q4cer9Vi0UnIpboLXDa9ij+MWkjjhNnvQIMHGIliDejh
-	 +bqtk2I7H63Dzp3yrNu2ftthqPPms7LAfF6ZkR8PjNiGhZN8LVbT4e3tEhh98wXC0U
-	 U/FGzIIIQhIb3P42drfMxAHF0ejA3wue13Dr5/GGvFDgr3nemA3bjAb0y2Wp+vjq8n
-	 UWEy2Zbvulv75HPruTenoM7s9mSRhXXN7DZoj+tBnIJF9k5DPxyYgFePUSgzmDcg2y
-	 6Tbdggo1SShag==
+	s=201702; t=1706146411;
+	bh=OMpz/Ji0fdOajaSAOBxQ3VgIldu0JQQGzsMSMM/0E3E=;
+	h=Date:From:To:Cc:Subject:From;
+	b=HwXyssm6v0JDKe7PoaSDeqQFetH7S+3t4YlnxNCkg6vs6JwK71kXPwRlWjLp+B+DS
+	 wXtum/h1A1VvR5Cakqtudn0Ay9g2o63PanmNFtTd56q98JuNAbpHu/vOx+lz6KC+CU
+	 V7+YYaAWWfkeWi/DZKDzeYT2+HzT3tpZCnEo4eVoR/ilCMquczSuA67d2x07AIry+m
+	 XlATYHNsYP5K2kxWMB4tYmQlghh1RVjxhUAHaZ8WzM9vxMfthRRQMTRj3ughhM6dfX
+	 /kHQijwmlvMULyeJTV1FW3dKFgY62obiFS16IGDZoe6iTawu1AwcgNNHSBoVkIeCTJ
+	 peCsVZTG+iZbA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TL2481CF5z4wc8;
-	Thu, 25 Jan 2024 11:38:15 +1100 (AEDT)
-Date: Thu, 25 Jan 2024 11:38:14 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TL3Ht63XHz4wcg;
+	Thu, 25 Jan 2024 12:33:30 +1100 (AEDT)
+Date: Thu, 25 Jan 2024 12:33:27 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Florian Eckert <fe@dev.tdt.de>
-Cc: Jonathan Corbet <corbet@lwn.net>, Lee Jones <lee@kernel.org>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the leds-lj tree
-Message-ID: <20240125113814.532f1fb5@canb.auug.org.au>
-In-Reply-To: <20240109222031.6ce4aecc@canb.auug.org.au>
-References: <20240105173352.6ce1a546@canb.auug.org.au>
-	<17b4305d9fe1fbed3e39597f0767f7bd@dev.tdt.de>
-	<20240109222031.6ce4aecc@canb.auug.org.au>
+To: Kishon Vijay Abraham I <kishon@kernel.org>, Vinod Koul
+ <vkoul@kernel.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Mantas Pucka <mantas@8devices.com>
+Subject: linux-next: manual merge of the phy-next tree with the phy tree
+Message-ID: <20240125123327.4e2825ab@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4uO6+UUiXI0D9d4GYIhnp8B";
+Content-Type: multipart/signed; boundary="Sig_/P.9/+PAaV=dIUGYBEyvUrXX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/4uO6+UUiXI0D9d4GYIhnp8B
+--Sig_/P.9/+PAaV=dIUGYBEyvUrXX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 9 Jan 2024 22:20:31 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> On Mon, 08 Jan 2024 08:47:07 +0100 Florian Eckert <fe@dev.tdt.de> wrote:
-> >
-> > thanks for your hint
-> >=20
-> > On 2024-01-05 07:33, Stephen Rothwell wrote: =20
-> > > Hi all,
-> > >=20
-> > > After merging the leds-lj tree, today's linux-next build (htmldocs)
-> > > produced this warning:
-> > >=20
-> > > Warning: /sys/class/leds/<led>/rx is defined 2 times: Documentation/A=
-BI/testing/sysfs-class-led-trigger-tty:7 Documentation/ABI/testing/sysfs-cl=
-ass-led-trigger-netdev:49
-> > > Warning: /sys/class/leds/<led>/tx is defined 2 times: Documentation/A=
-BI/testing/sysfs-class-led-trigger-tty:15 Documentation/ABI/testing/sysfs-c=
-lass-led-trigger-netdev:34   =20
-> >=20
-> > The behavior of the tty trigger can be controlled via the Rx and Tx fil=
-e.
-> > If a value is set in Rx or Tx, the LED flashes when data is transmitted=
- in
-> > this direction. The same behavior is used for the netdev trigger.
-> > I have therefore used the same pattern for the new tty trigger as well.
-> >=20
-> > I didn't know that the names have to be unique!
-> >=20
-> > I'm a bit at a loss as to what to do now. Should I put a prefix "tty_"
-> > in front of the names so that we have "tty_rx", "tty_tx"?
-> >=20
-> > If we do it this way, however, the general question arises as to whether
-> > we do have to use a prefix everywhere! If new triggers are added, then =
-the
-> > names for a config file are already used up and anyone who then wants t=
-o use
-> > the same name for an other trigger with the same config file because it=
- describe
-> > the same function must then work with a prefix! =20
->=20
-> I think this is only a problem with the documentation system, not the
-> actual sysfs file naming.  Maybe just adding a uniquifying bit to the
-> "<led>" part will solve it.  Or maybe we need the tooling to be taught
-> about placeholders in sysfs names (or maybe there is already a way).
+Today's linux-next merge of the phy-next tree got a conflict in:
 
-I am still seeing these warnings.
+  drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+
+between commit:
+
+  f74c35b630d4 ("phy: qcom-qmp-usb: fix register offsets for ipq8074/ipq601=
+8")
+
+from the phy tree and commit:
+
+  52cfdc9c6c33 ("phy: qcom: qmp-usb: drop dual-lane handling")
+
+from the phy-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/4uO6+UUiXI0D9d4GYIhnp8B
+diff --cc drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+index 6621246e4ddf,e62539ce99a6..25d8d881b2f3
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+@@@ -1621,28 -1385,8 +1393,24 @@@ static const struct qmp_usb_offsets qmp
+  	.rx		=3D 0x1000,
+  };
+ =20
+ +static const struct qmp_phy_cfg ipq6018_usb3phy_cfg =3D {
+- 	.lanes			=3D 1,
+-=20
+ +	.offsets		=3D &qmp_usb_offsets_ipq8074,
+ +
+ +	.serdes_tbl		=3D ipq9574_usb3_serdes_tbl,
+ +	.serdes_tbl_num		=3D ARRAY_SIZE(ipq9574_usb3_serdes_tbl),
+ +	.tx_tbl			=3D msm8996_usb3_tx_tbl,
+ +	.tx_tbl_num		=3D ARRAY_SIZE(msm8996_usb3_tx_tbl),
+ +	.rx_tbl			=3D ipq8074_usb3_rx_tbl,
+ +	.rx_tbl_num		=3D ARRAY_SIZE(ipq8074_usb3_rx_tbl),
+ +	.pcs_tbl		=3D ipq8074_usb3_pcs_tbl,
+ +	.pcs_tbl_num		=3D ARRAY_SIZE(ipq8074_usb3_pcs_tbl),
+ +	.vreg_list		=3D qmp_phy_vreg_l,
+ +	.num_vregs		=3D ARRAY_SIZE(qmp_phy_vreg_l),
+ +	.regs			=3D qmp_v3_usb3phy_regs_layout,
+ +};
+ +
+  static const struct qmp_phy_cfg ipq8074_usb3phy_cfg =3D {
+- 	.lanes			=3D 1,
+-=20
+ -	.offsets		=3D &qmp_usb_offsets_v3,
+ +	.offsets		=3D &qmp_usb_offsets_ipq8074,
+ =20
+  	.serdes_tbl		=3D ipq8074_usb3_serdes_tbl,
+  	.serdes_tbl_num		=3D ARRAY_SIZE(ipq8074_usb3_serdes_tbl),
+
+--Sig_/P.9/+PAaV=dIUGYBEyvUrXX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWxrXYACgkQAVBC80lX
-0GxV1Qf/bYGwt4bH5nc7W/ImRPtKuWZYgw1QJek/CY9UD4JGqOxrZqRTW4Kd/9gU
-XpdsmaYOKXdOaTRvIszBMDsi2V/IBrcm0fssjicaO4N3l8iPyOJMhruTyqHzt5lH
-yPm5LhxC/Pwr+IV18GONTqpR+vVKszVlqinS2CZCg34G9fUSE9SA1r8qOIg/r49I
-xl2gRYcflDuEh2V+UuM0GXAZcdN/ZEviCQoAWS6IUOjgr9QBiOnYk7QEJSKs6KZ8
-8bI0PQr6ijZouTAgxYfDj4vLBjmOHrzXbxjT+w51O0IlGsNYOolUyVcIjC4gN0Zw
-U0x8Fw6TNCrZo8xd4Sbf6dyXKMMzHA==
-=SSGo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWxumcACgkQAVBC80lX
+0GyAxQf/b9N4//QzimAOUh3oYTiKCCjP6pgi7X8jxOIr6+9zMlfQMNjOnGSlLUb5
+5M7dk5m/II92euWE2sfxnmyaRuCJDsW1Y+nzCMUg73ClZb5kcx+hdYOx1xNkb97q
+Lkj7wCg6rvJDJZvtA6y30l4l8L1CYW8QBsEXpn21GezNaCYvGkkjpnvgYaWc/2jX
+t0W9RMpQNeNTI97sWRSWLq4ZdW2lYNmpg7xRBwYI/3KvmlPT4Dih9pV/nV+gM6uM
+nrjC4+kZ/dFHYSd5pnYL4X/xaPoAmPDxWE0M7bcO4UUdOCNqMFktkdhtDoOxbFDS
+uVzAoqQu4skcPV25x0zqE/nJhPXt0Q==
+=xuwC
 -----END PGP SIGNATURE-----
 
---Sig_/4uO6+UUiXI0D9d4GYIhnp8B--
+--Sig_/P.9/+PAaV=dIUGYBEyvUrXX--
 

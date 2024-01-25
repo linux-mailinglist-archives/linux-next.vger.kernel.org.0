@@ -1,131 +1,135 @@
-Return-Path: <linux-next+bounces-844-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-845-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9860B83B5C2
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 00:52:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79B7483B618
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 01:34:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FCD82870E4
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jan 2024 23:52:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 100AA1F21F13
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 00:34:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16BC6136675;
-	Wed, 24 Jan 2024 23:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D59564E;
+	Thu, 25 Jan 2024 00:33:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VkrwiB2a"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="C+9SZWnS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAD312C532
-	for <linux-next@vger.kernel.org>; Wed, 24 Jan 2024 23:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9AE62B;
+	Thu, 25 Jan 2024 00:33:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706140359; cv=none; b=tuxC3Jnf6C9vupjFV14Xi/wXlPijsvIcMd4iJ5toxa09AmCbB6dvwwBvIjTaT7Ig3oRyMm1nTI6+NBJf2mrWcEw/a1SNigRgDo/I/GWtDcmULvQUwXmndlNo6gSUJ/EGjXRvyFzlRjnb9dCqyG+/kKSWAmXatdMWFGvRo8NLuu4=
+	t=1706142835; cv=none; b=uJY7UphlUhUhAfk5oaFpVsD/gjSNhI5VvlG6dHrVmTmnsM+z6FYs+4TB8oJ3ZqsMkZqfeflDCnfEBkowUeV/Umx7GvavB9e5xfI6JearkbIEgGM9LaaK4uMbtDjBNtqZZaX6XdO6S44lsVuGldwoDsuk7qiwaU+HE8KpvHK4zMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706140359; c=relaxed/simple;
-	bh=dkPOXnDEon7hfFcvOvi0AHwWCXpk2G2X1sh8XFl80fI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AI7T/xI6k0KCP2tMVyoFPi7i5wHaVOwxBn4Lsxc2Sglskt2jhk4Rc4rLYK50pHfEE8ACE/E0pAILha1mhphBxNpzCXkf21l6AGDzI84bIGNQzOv3yOgjeKkV68BjZL1DRNVoxVhwOvEyMnKyD/KOs9ybbxFFDxRB9jvHBLrClXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VkrwiB2a; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dc221f01302so4837517276.2
-        for <linux-next@vger.kernel.org>; Wed, 24 Jan 2024 15:52:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706140355; x=1706745155; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=siCkJ3+nRrnEEV/cIxml7sSFdBvyOQ4Q3/VfxMKRmag=;
-        b=VkrwiB2aYR8Ztd/HS9hY4v4hfVji3ojdjzkMphh3/05a+4RTXGwpCkWCZaTE3XwzYp
-         gV2HinEvRdE8rNoEk+HdXKOQ2xgIe00u+wr38dTrwhnWc0zV8YdjVvwJ+xvizZ0PQ81g
-         eV+CdbzE1ukzu5eKrqqaaQ/0FlhTN25BaDjjOG20vsniUya+x8HDWZBE5Ez5ZLUJcGtC
-         NcPv3N0WEgenwGj7VQeu7d0IITe3a4eEQvJwgZfa7hv+gjZrelJ5nfflcY7Qo1lPA5qY
-         WaGTrjwcxNUvJC5yHmZYsAhhrQBVcL3GfukVygNqxHGvmP2Un7L8DiJtPRhYvVLOGdJ4
-         sPYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706140355; x=1706745155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=siCkJ3+nRrnEEV/cIxml7sSFdBvyOQ4Q3/VfxMKRmag=;
-        b=l9ZchUrThDvwCFgMs4mPcJwmHtLH/9adLv42uKg9Nli4LaRfaXQFpXpJ7RXcePteRd
-         3K5ywvEadoDGBgNLROrUQgqH07/Nm14LWhkXasEyqX8+GcPOQUC7KlGdRYRDqy84zIKt
-         oZyLJAR1soQBTBlf9OlO0yBYc0cvs0M+UjJoOD/b1k+4Hm7jVJderHqsxNyqry6HvmEQ
-         LDG0uEiZVTeveDDaGjz/Ay5IKKIiRNCzW9flzMC47BmoWTrIMNgGbK9rjpALECApsORQ
-         niKH16yJuJyWr9r68woHMhTKRRXg1mNhEp2jKYo1k9Rmn9JWoUQy3G7B4AO+Bcz5Uhq7
-         +q0A==
-X-Gm-Message-State: AOJu0Ywf2lwmPkHgLxCJxR00/nHm37fojmrZCup7Rw8gyEdCpqhUVXtP
-	oR5+e9ldsKRqlEf5NgCIEGV42zuhJ5Pffyl6UHvotLugqPVQs1hFxEwMWKIMlNPBLjXVIktbNOp
-	PWabbQP/nRrI2WkJtJNO7Y5GZgB51aZfcCQLN
-X-Google-Smtp-Source: AGHT+IGTfJYt4MI4ga2viErUFyGW78IX6A5k6MCpNuIrV7N3/YoYwHJJePqA5mzf2ETqdzLEnreaB2rWAee9DU1dIpA=
-X-Received: by 2002:a5b:4d1:0:b0:dc2:325c:57cd with SMTP id
- u17-20020a5b04d1000000b00dc2325c57cdmr145494ybp.73.1706140354766; Wed, 24 Jan
- 2024 15:52:34 -0800 (PST)
+	s=arc-20240116; t=1706142835; c=relaxed/simple;
+	bh=VlUFiFKANzH5XTYPF9DZ3GcQtYy4aKlKIL71NaTZ3HE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oVgIjMhy86V+76bjijZKa4uzjt9KD0LF6DNe0d9Td1lEsF+YwBNkbR5m9oZosyN1QoewmCYKMwbpfCrMYRQwZfMVCfRPp830+KUc4YgAQuy0Q7yV6n/5bUc4K0NECWdZtvkFCnAoRe4Wndlc/lA5Z6xLeviebAvkgLVGrMBZg+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=C+9SZWnS; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1706142828;
+	bh=E648+W+X9N7+DnPy6fA/Cr+MHbMYJCW4iZrz/S0GTeU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=C+9SZWnSl4uElwrb/T1oXus3N8LdUB2m+FH3TKf/NHQ4+Z4m31eJT6bF3kV+KR4tQ
+	 Wfj31nKqWhlm6apDJec2B9ta/4HoewFksAdNENAmmNRmkP3r04IEjgdx7jk07CQxGs
+	 L7IkN+UB4qW77+wGRTc8U5g1MWlAVcezwO4b9OSrSDP0NCTCg2o4RQ0S6EwmHfWOFI
+	 MeZhVexY3hv/8w8Ib5JKYxMrjzhAZ3CVGOLo2Lb3jXk9ZRaK9q8dcuPEV4pIW2hNCH
+	 +RneezX+MTFHFHjfLTYkWXylRJ/uMuL6+4/xvri8fpnts+F8qF2aakFmpPN4K/ufsr
+	 Ej5JR0tjVo/Pg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TL1yy5xv1z4wbh;
+	Thu, 25 Jan 2024 11:33:46 +1100 (AEDT)
+Date: Thu, 25 Jan 2024 11:33:45 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Dave Airlie <airlied@redhat.com>
+Cc: DRI <dri-devel@lists.freedesktop.org>, Badal Nilawar
+ <badal.nilawar@intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm tree
+Message-ID: <20240125113345.291118ff@canb.auug.org.au>
+In-Reply-To: <20240105174745.78b94cb5@canb.auug.org.au>
+References: <20240105174745.78b94cb5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125102333.6701aa08@canb.auug.org.au>
-In-Reply-To: <20240125102333.6701aa08@canb.auug.org.au>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 24 Jan 2024 15:52:22 -0800
-Message-ID: <CAJuCfpEyOd2Y-5gMGPhWDDKe+fEdFOGRCw8CnFkk8Si=1hOo=A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the mm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/CfWWVmfh9DcKFJxP2bE3FfP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/CfWWVmfh9DcKFJxP2bE3FfP
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 24, 2024 at 3:24=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> After merging the mm tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->
-> make[4]: *** No rule to make target 'kernel/elfcorehdr.o', needed by 'ker=
-nel/built-in.a'.  Stop.
->
-> Presumably caused by commit
->
->   1777bfb42f56 ("crash: remove dependency of FA_DUMP on CRASH_DUMP")
->
-> from the mm-unstable branch of the mm tree.  It looks like the expected
-> file rename did not happen.
->
-> I have applied the following (git) patch for today.
+Hi all,
 
-I've got the same error in mm-unstable and your patch below fixed it. Thank=
-s!
+On Fri, 5 Jan 2024 17:47:45 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> After merging the drm tree, today's linux-next build (htmldocs) produced
+> this warning:
+>=20
+> Warning: /sys/devices/.../hwmon/hwmon<i>/curr1_crit is defined 2 times:  =
+Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:35  Documentation/ABI=
+/testing/sysfs-driver-intel-i915-hwmon:52
+> Warning: /sys/devices/.../hwmon/hwmon<i>/energy1_input is defined 2 times=
+:  Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:54  Documentation/=
+ABI/testing/sysfs-driver-intel-i915-hwmon:65
+> Warning: /sys/devices/.../hwmon/hwmon<i>/in0_input is defined 2 times:  D=
+ocumentation/ABI/testing/sysfs-driver-intel-xe-hwmon:46  Documentation/ABI/=
+testing/sysfs-driver-intel-i915-hwmon:0
+> Warning: /sys/devices/.../hwmon/hwmon<i>/power1_crit is defined 2 times: =
+ Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:22  Documentation/AB=
+I/testing/sysfs-driver-intel-i915-hwmon:39
+> Warning: /sys/devices/.../hwmon/hwmon<i>/power1_max is defined 2 times:  =
+Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:0  Documentation/ABI/=
+testing/sysfs-driver-intel-i915-hwmon:8
+> Warning: /sys/devices/.../hwmon/hwmon<i>/power1_max_interval is defined 2=
+ times:  Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:62  Document=
+ation/ABI/testing/sysfs-driver-intel-i915-hwmon:30
+> Warning: /sys/devices/.../hwmon/hwmon<i>/power1_rated_max is defined 2 ti=
+mes:  Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:14  Documentati=
+on/ABI/testing/sysfs-driver-intel-i915-hwmon:22
+>=20
+> Introduced by commits
+>=20
+>   fb1b70607f73 ("drm/xe/hwmon: Expose power attributes")
+>   92d44a422d0d ("drm/xe/hwmon: Expose card reactive critical power")
+>   fbcdc9d3bf58 ("drm/xe/hwmon: Expose input voltage attribute")
+>   71d0a32524f9 ("drm/xe/hwmon: Expose hwmon energy attribute")
+>   4446fcf220ce ("drm/xe/hwmon: Expose power1_max_interval")
 
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 25 Jan 2024 09:58:54 +1100
-> Subject: [PATCH] fix up for "crash: remove dependency of FA_DUMP on
->  CRASH_DUMP"
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  kernel/{crash_dump.c =3D> elfcorehdr.c} | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename kernel/{crash_dump.c =3D> elfcorehdr.c} (100%)
->
-> diff --git a/kernel/crash_dump.c b/kernel/elfcorehdr.c
-> similarity index 100%
-> rename from kernel/crash_dump.c
-> rename to kernel/elfcorehdr.c
-> --
-> 2.43.0
->
-> --
-> Cheers,
-> Stephen Rothwell
+I am still getting these warnings.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/CfWWVmfh9DcKFJxP2bE3FfP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWxrGkACgkQAVBC80lX
+0GwQKQgAnYX/KC3T2ez2yjBvF6mdwNZVXqMijYMGfqrFSKVlZYqtgks6bEbB+hod
+RLl2fur8BmN4ZVuKs5PgwCxvXiOo62kuMlXh+2ZepBlW/fGqa5MVMClgAqH8Zi7U
+DuQlPnaFHexBKvXH91EPHIPD+MYcTlMARH/OlOYeQOEK7U2BUzGaCY7coFzBpzml
+U2RCzNKn6U9wnLskiYJYj5E39mbuWEQR+7yhtgFMmVAV94fPed3XbtimWX21rb+M
+n0UoHwoIrOmj0cN8i8Ks2oHhJsHPluAaGo6tEEC4p84/38P+IQzTa91UquWnkXJD
+cIe/jhgLjuuLMbZyZGFAt4FG0qhkug==
+=iqyx
+-----END PGP SIGNATURE-----
+
+--Sig_/CfWWVmfh9DcKFJxP2bE3FfP--
 

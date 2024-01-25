@@ -1,151 +1,130 @@
-Return-Path: <linux-next+bounces-848-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-849-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2977E83B690
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 02:33:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F23A283B741
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 03:41:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DB1E1F22B2D
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 01:33:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 552B12840A9
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jan 2024 02:41:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B937ECC;
-	Thu, 25 Jan 2024 01:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD266882D;
+	Thu, 25 Jan 2024 02:40:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HwXyssm6"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fjMWnRBF"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE0AEA9;
-	Thu, 25 Jan 2024 01:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF46979F1
+	for <linux-next@vger.kernel.org>; Thu, 25 Jan 2024 02:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706146416; cv=none; b=Pq28U947J4osuKfhlbf4nEdqY7wDQfzvwtYbzqoI8yBiweGC8JGVPfC61zFKh0o5++K5lWyKwzLToAd16qPcZV34ISJAPBKrA0I8ruH52I2W2l0ae0VdYjUKGg2AZPSe1RGbnlGfA113s3ATY5RqGM5I0Qxm4KWyQ8st/3tfdnQ=
+	t=1706150436; cv=none; b=uZF3pAbXpwK4s3BJltsckQHfG2CDQM9RDo2SeFOOLDwyha0a+5vxL7o7JV4oeZIN7R/9Ef8k22evVpZWm29GnIUvYCazhVpSSO5Ah0Ya2WIvuYgurQah4HCM3FwCfj9HYoVcN0b2C4yFGEKkj3LyVL6Eq6XRYIBNQUvh8w6CFuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706146416; c=relaxed/simple;
-	bh=jU/2S0TPmYwsFAEcLm1nhe1J12jMGQjYbEw/4xSLtXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BS+MopigDWEwPnwsCLnIQ0EfBU+zlRw3xdPx9TzXPuSDy/mnT2GsMbuly+HrHnMZVYb+Cr6MKPMl9eCaJLAfUhl7Zu/kmzuxEKgy72GaY+11Bc/fLEzFRXSO5TNg3h9qt9NxxKwHKUdoRnZAcEqMPqRzEDNhkVazKNIiadcdVFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HwXyssm6; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706146411;
-	bh=OMpz/Ji0fdOajaSAOBxQ3VgIldu0JQQGzsMSMM/0E3E=;
-	h=Date:From:To:Cc:Subject:From;
-	b=HwXyssm6v0JDKe7PoaSDeqQFetH7S+3t4YlnxNCkg6vs6JwK71kXPwRlWjLp+B+DS
-	 wXtum/h1A1VvR5Cakqtudn0Ay9g2o63PanmNFtTd56q98JuNAbpHu/vOx+lz6KC+CU
-	 V7+YYaAWWfkeWi/DZKDzeYT2+HzT3tpZCnEo4eVoR/ilCMquczSuA67d2x07AIry+m
-	 XlATYHNsYP5K2kxWMB4tYmQlghh1RVjxhUAHaZ8WzM9vxMfthRRQMTRj3ughhM6dfX
-	 /kHQijwmlvMULyeJTV1FW3dKFgY62obiFS16IGDZoe6iTawu1AwcgNNHSBoVkIeCTJ
-	 peCsVZTG+iZbA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	s=arc-20240116; t=1706150436; c=relaxed/simple;
+	bh=wPcuYZSJ0QphQZzs3m5GU2Qnxq3Wvke1LT50McCvckQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RTjyqNYHq4FXPMy6H/fyWlhHQS2BO3IduOLSG1P7qG5GlNmPDSU5uG3o1jZfqgI2F2fSHAzwwoYO7Avf9L7khuMFeWFEolkZMwYCAwCGzd16N1QY58cyEM5L6L7I5AcyalUuCW+LklQNeM7Bq7foGrBFz1yKjIyv1CsKvyisodE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fjMWnRBF; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706150433;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KnEJU8pLQPVQ9UeCpSGWTiDfm3jivdZsACBZWicB2xo=;
+	b=fjMWnRBFD2L3VOzS8J5zsvbofURefFgdcKAuPBxJel/gJ2sHww0ZmErgaqTxT6JeD1rUnP
+	0B692QAW1BVJEvR7HR3YPG+ZvgHv5Uc7/zTSzj/bOxEmpaPRhFDVuMKnvgxTqEqpuIc4op
+	soImP3dxp3R8RJ3rhMU2Mm1GCpRX7js=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-360-2OzoEwXHMUWJSzr6Q7ekGg-1; Wed, 24 Jan 2024 21:40:27 -0500
+X-MC-Unique: 2OzoEwXHMUWJSzr6Q7ekGg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TL3Ht63XHz4wcg;
-	Thu, 25 Jan 2024 12:33:30 +1100 (AEDT)
-Date: Thu, 25 Jan 2024 12:33:27 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kishon Vijay Abraham I <kishon@kernel.org>, Vinod Koul
- <vkoul@kernel.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Mantas Pucka <mantas@8devices.com>
-Subject: linux-next: manual merge of the phy-next tree with the phy tree
-Message-ID: <20240125123327.4e2825ab@canb.auug.org.au>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA2F81013660;
+	Thu, 25 Jan 2024 02:40:26 +0000 (UTC)
+Received: from localhost (unknown [10.72.116.117])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 0A1321BDDF;
+	Thu, 25 Jan 2024 02:40:25 +0000 (UTC)
+Date: Thu, 25 Jan 2024 10:40:21 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <ZbHKFS05kMMqJK/N@MiWiFi-R3L-srv>
+References: <20240125102333.6701aa08@canb.auug.org.au>
+ <CAJuCfpEyOd2Y-5gMGPhWDDKe+fEdFOGRCw8CnFkk8Si=1hOo=A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/P.9/+PAaV=dIUGYBEyvUrXX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpEyOd2Y-5gMGPhWDDKe+fEdFOGRCw8CnFkk8Si=1hOo=A@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
---Sig_/P.9/+PAaV=dIUGYBEyvUrXX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 01/24/24 at 03:52pm, Suren Baghdasaryan wrote:
+> On Wed, Jan 24, 2024 at 3:24 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > After merging the mm tree, today's linux-next build (powerpc
+> > ppc64_defconfig) failed like this:
+> >
+> > make[4]: *** No rule to make target 'kernel/elfcorehdr.o', needed by 'kernel/built-in.a'.  Stop.
+> >
+> > Presumably caused by commit
+> >
+> >   1777bfb42f56 ("crash: remove dependency of FA_DUMP on CRASH_DUMP")
+> >
+> > from the mm-unstable branch of the mm tree.  It looks like the expected
+> > file rename did not happen.
+> >
+> > I have applied the following (git) patch for today.
+> 
+> I've got the same error in mm-unstable and your patch below fixed it. Thanks!
 
-Hi all,
+This happened in v2 merging. I doubt there's something wrong with Andrew's
+patch merging script regarding this kind of patch renaming.
 
-Today's linux-next merge of the phy-next tree got a conflict in:
+> 
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Thu, 25 Jan 2024 09:58:54 +1100
+> > Subject: [PATCH] fix up for "crash: remove dependency of FA_DUMP on
+> >  CRASH_DUMP"
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  kernel/{crash_dump.c => elfcorehdr.c} | 0
+> >  1 file changed, 0 insertions(+), 0 deletions(-)
+> >  rename kernel/{crash_dump.c => elfcorehdr.c} (100%)
+> >
+> > diff --git a/kernel/crash_dump.c b/kernel/elfcorehdr.c
+> > similarity index 100%
+> > rename from kernel/crash_dump.c
+> > rename to kernel/elfcorehdr.c
+> > --
+> > 2.43.0
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+> 
 
-  drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-
-between commit:
-
-  f74c35b630d4 ("phy: qcom-qmp-usb: fix register offsets for ipq8074/ipq601=
-8")
-
-from the phy tree and commit:
-
-  52cfdc9c6c33 ("phy: qcom: qmp-usb: drop dual-lane handling")
-
-from the phy-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 6621246e4ddf,e62539ce99a6..25d8d881b2f3
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@@ -1621,28 -1385,8 +1393,24 @@@ static const struct qmp_usb_offsets qmp
-  	.rx		=3D 0x1000,
-  };
- =20
- +static const struct qmp_phy_cfg ipq6018_usb3phy_cfg =3D {
-- 	.lanes			=3D 1,
--=20
- +	.offsets		=3D &qmp_usb_offsets_ipq8074,
- +
- +	.serdes_tbl		=3D ipq9574_usb3_serdes_tbl,
- +	.serdes_tbl_num		=3D ARRAY_SIZE(ipq9574_usb3_serdes_tbl),
- +	.tx_tbl			=3D msm8996_usb3_tx_tbl,
- +	.tx_tbl_num		=3D ARRAY_SIZE(msm8996_usb3_tx_tbl),
- +	.rx_tbl			=3D ipq8074_usb3_rx_tbl,
- +	.rx_tbl_num		=3D ARRAY_SIZE(ipq8074_usb3_rx_tbl),
- +	.pcs_tbl		=3D ipq8074_usb3_pcs_tbl,
- +	.pcs_tbl_num		=3D ARRAY_SIZE(ipq8074_usb3_pcs_tbl),
- +	.vreg_list		=3D qmp_phy_vreg_l,
- +	.num_vregs		=3D ARRAY_SIZE(qmp_phy_vreg_l),
- +	.regs			=3D qmp_v3_usb3phy_regs_layout,
- +};
- +
-  static const struct qmp_phy_cfg ipq8074_usb3phy_cfg =3D {
-- 	.lanes			=3D 1,
--=20
- -	.offsets		=3D &qmp_usb_offsets_v3,
- +	.offsets		=3D &qmp_usb_offsets_ipq8074,
- =20
-  	.serdes_tbl		=3D ipq8074_usb3_serdes_tbl,
-  	.serdes_tbl_num		=3D ARRAY_SIZE(ipq8074_usb3_serdes_tbl),
-
---Sig_/P.9/+PAaV=dIUGYBEyvUrXX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWxumcACgkQAVBC80lX
-0GyAxQf/b9N4//QzimAOUh3oYTiKCCjP6pgi7X8jxOIr6+9zMlfQMNjOnGSlLUb5
-5M7dk5m/II92euWE2sfxnmyaRuCJDsW1Y+nzCMUg73ClZb5kcx+hdYOx1xNkb97q
-Lkj7wCg6rvJDJZvtA6y30l4l8L1CYW8QBsEXpn21GezNaCYvGkkjpnvgYaWc/2jX
-t0W9RMpQNeNTI97sWRSWLq4ZdW2lYNmpg7xRBwYI/3KvmlPT4Dih9pV/nV+gM6uM
-nrjC4+kZ/dFHYSd5pnYL4X/xaPoAmPDxWE0M7bcO4UUdOCNqMFktkdhtDoOxbFDS
-uVzAoqQu4skcPV25x0zqE/nJhPXt0Q==
-=xuwC
------END PGP SIGNATURE-----
-
---Sig_/P.9/+PAaV=dIUGYBEyvUrXX--
 

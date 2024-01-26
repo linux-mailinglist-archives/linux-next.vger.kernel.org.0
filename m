@@ -1,140 +1,108 @@
-Return-Path: <linux-next+bounces-869-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-870-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C673C83D619
-	for <lists+linux-next@lfdr.de>; Fri, 26 Jan 2024 10:24:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 748FE83D621
+	for <lists+linux-next@lfdr.de>; Fri, 26 Jan 2024 10:24:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82F9F2858B0
-	for <lists+linux-next@lfdr.de>; Fri, 26 Jan 2024 09:24:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6DE61C26C23
+	for <lists+linux-next@lfdr.de>; Fri, 26 Jan 2024 09:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61E891429A;
-	Fri, 26 Jan 2024 08:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDA9717BAF;
+	Fri, 26 Jan 2024 08:50:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TvFncENm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GW2zwJnm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC0B14271;
-	Fri, 26 Jan 2024 08:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E3513AD8
+	for <linux-next@vger.kernel.org>; Fri, 26 Jan 2024 08:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706258915; cv=none; b=tOvMYCD5aQNY8n+983xP6gKnojQqJotYPHChPM9hS75Zt4au44mwqWttmYYAa90am9n8iDTeCC7KEpLGt3nAVR19enc4UhPnGE0E310dqyvoYAtod743s5XnAIkbGMwTwPD27XpHcC3nAW97Q3Nv395sMcvZ1YHK810ZeYfO3V8=
+	t=1706259056; cv=none; b=V/XaPOXuEgRjtQ1qRLFHHVp7UozSs4OUVQGWLwDsDZ1hd1arGHnNs/J5q9vUy0Mh6P2jJeDziEL5cwkFpmNCoRh/i+4OkcO2x7usBXbKa/qQb5YcC4rU6WkZmVtWIbqb8D0BxPDrZlFyZN7/Urb/cQaYpiNHnUJfFVNQM4EuPEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706258915; c=relaxed/simple;
-	bh=A7lMnjB+Aaj8pkHbSGZqjInOm+WxB4FCR3WUWFKf5CI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MWXH32pWAzlFs6+po4w+ySQJi4Ago0kIICMHHvBWbwPbTdgUXHkYmlPK5QDl54V4WnTeWm9v7gfmKE1iY9G8ImUc0Wj8xWgJFHWgDCzsjoK/ezMenUL+ZNrWNsa/5wZAwXwx8zKjufq9+L2eQj8K6pKKCZeovAkcWoduAIf3dXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TvFncENm; arc=none smtp.client-ip=134.134.136.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706258913; x=1737794913;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=A7lMnjB+Aaj8pkHbSGZqjInOm+WxB4FCR3WUWFKf5CI=;
-  b=TvFncENmPi4g/aElWfCYaxATw4JdHNonQtbWeZ2wCKzXZys1NzgzVU0g
-   Y3MBcMNMgrSlX5jSupPISuVt7mospmKAMpzAdBXZHsktBGfRS4kBOwMXO
-   dn0KxkT3SBTE0RRet/htyvRdi2MF386SB1S/onQ8OZAiUal3bmC5ZZ3U3
-   yI5N2vU/HlAcxvuHmeBDttQGtEk/BfcO7OvZPAflqzkr6En+sSDvSAaqE
-   b+qywHYH+evtOfsTmXeJuvctMl3m9mrdOyf3/vygcJFPdfZqMeE3ier1S
-   q0WSM60Bk+TL3Suk1rV1xT4sYiziaKadrZTR+Ik4/Ev31Hv0VSLVcpPw/
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="466698840"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="466698840"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 00:48:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="960153916"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="960153916"
-Received: from clillies-mobl1.ger.corp.intel.com (HELO [10.249.254.111]) ([10.249.254.111])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 00:48:30 -0800
-Message-ID: <da82b69db55c414699429a81150d20ff52032304.camel@linux.intel.com>
-Subject: Re: linux-next: build warning after merge of the drm tree
-From: Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Dave Airlie <airlied@redhat.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Badal Nilawar
- <badal.nilawar@intel.com>, DRI <dri-devel@lists.freedesktop.org>, Rodrigo
- Vivi <rodrigo.vivi@intel.com>
-Date: Fri, 26 Jan 2024 09:48:27 +0100
-In-Reply-To: <20240125113345.291118ff@canb.auug.org.au>
-References: <20240105174745.78b94cb5@canb.auug.org.au>
-	 <20240125113345.291118ff@canb.auug.org.au>
-Autocrypt: addr=thomas.hellstrom@linux.intel.com; prefer-encrypt=mutual;
- keydata=mDMEZaWU6xYJKwYBBAHaRw8BAQdAj/We1UBCIrAm9H5t5Z7+elYJowdlhiYE8zUXgxcFz360SFRob21hcyBIZWxsc3Ryw7ZtIChJbnRlbCBMaW51eCBlbWFpbCkgPHRob21hcy5oZWxsc3Ryb21AbGludXguaW50ZWwuY29tPoiTBBMWCgA7FiEEbJFDO8NaBua8diGTuBaTVQrGBr8FAmWllOsCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQuBaTVQrGBr/yQAD/Z1B+Kzy2JTuIy9LsKfC9FJmt1K/4qgaVeZMIKCAxf2UBAJhmZ5jmkDIf6YghfINZlYq6ixyWnOkWMuSLmELwOsgPuDgEZaWU6xIKKwYBBAGXVQEFAQEHQF9v/LNGegctctMWGHvmV/6oKOWWf/vd4MeqoSYTxVBTAwEIB4h4BBgWCgAgFiEEbJFDO8NaBua8diGTuBaTVQrGBr8FAmWllOsCGwwACgkQuBaTVQrGBr/P2QD9Gts6Ee91w3SzOelNjsus/DcCTBb3fRugJoqcfxjKU0gBAKIFVMvVUGbhlEi6EFTZmBZ0QIZEIzOOVfkaIgWelFEH
-Organization: Intel Sweden AB, Registration Number: 556189-6027
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	s=arc-20240116; t=1706259056; c=relaxed/simple;
+	bh=epPae/YNPKFDUOpUlHvcq/AtqEzooMv8xC07CnSkD9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pBvKIt9ltitDqGk3507hFnSJuj/n5HfhCEn53D+aV+jFuvshGTh/nXooC12Zxv1I5Jf4RgnOuGu8irDSnixgN3u60Dmed33SiaoRLP2vcyZiVvkA2ympzSkysyzTIlyCHEswgbi2SnkrV8wWxUqcShjku48NCr+uhtn9/O1Jnqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GW2zwJnm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D69EC433F1;
+	Fri, 26 Jan 2024 08:50:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706259056;
+	bh=epPae/YNPKFDUOpUlHvcq/AtqEzooMv8xC07CnSkD9E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GW2zwJnmMYCVHdilmqBCrRLa3G41oXFeh6IU5od+sEUITYasKniRDEys5VzP44utR
+	 mbes0hc7bSbkIyFpeBGin3nd5KouxNf9tKIqD5zqvG6a/JKnk9YaWEOZQrRn95c8Dd
+	 ivZPuPVoEsEbk7TLHgGmeOpvNBdcRFE0Yx46jRRRYr0z6odOGdYZaN+dd+SFdfWv9w
+	 CLXskKGsVOI5ggM/pBQAjEOHL3HiFpgI7yAznuAVyI7n7J3jTnZzVmcbNbvvkFQf3v
+	 BEsbEhQM9bqaBasl0r4BWCrWaaMbqY9G3Xjh37ZooWy+3m/15Ax45Scf4i8tFFTSPW
+	 mtQXfQjKPuRkg==
+Date: Fri, 26 Jan 2024 09:50:52 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+	linux-next <linux-next@vger.kernel.org>
+Subject: Re: Request for i2c re-inclusion in linux-next
+Message-ID: <ZbNybBjbVpz-DC4v@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-next <linux-next@vger.kernel.org>
+References: <sripk25leahdjiziacby4ql45kspw5cd3ic5vj23lctsawc2lm@be4sg32fjilu>
+ <20240126115011.55da6838@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
-On Thu, 2024-01-25 at 11:33 +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> On Fri, 5 Jan 2024 17:47:45 +1100 Stephen Rothwell
-> <sfr@canb.auug.org.au> wrote:
-> >=20
-> > After merging the drm tree, today's linux-next build (htmldocs)
-> > produced
-> > this warning:
-> >=20
-> > Warning: /sys/devices/.../hwmon/hwmon<i>/curr1_crit is defined 2
-> > times:=C2=A0 Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:35=
-=C2=A0
-> > Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon:52
-> > Warning: /sys/devices/.../hwmon/hwmon<i>/energy1_input is defined 2
-> > times:=C2=A0 Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:54=
-=C2=A0
-> > Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon:65
-> > Warning: /sys/devices/.../hwmon/hwmon<i>/in0_input is defined 2
-> > times:=C2=A0 Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:46=
-=C2=A0
-> > Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon:0
-> > Warning: /sys/devices/.../hwmon/hwmon<i>/power1_crit is defined 2
-> > times:=C2=A0 Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:22=
-=C2=A0
-> > Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon:39
-> > Warning: /sys/devices/.../hwmon/hwmon<i>/power1_max is defined 2
-> > times:=C2=A0 Documentation/ABI/testing/sysfs-driver-intel-xe-hwmon:0=C2=
-=A0
-> > Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon:8
-> > Warning: /sys/devices/.../hwmon/hwmon<i>/power1_max_interval is
-> > defined 2 times:=C2=A0 Documentation/ABI/testing/sysfs-driver-intel-xe-
-> > hwmon:62=C2=A0 Documentation/ABI/testing/sysfs-driver-intel-i915-
-> > hwmon:30
-> > Warning: /sys/devices/.../hwmon/hwmon<i>/power1_rated_max is
-> > defined 2 times:=C2=A0 Documentation/ABI/testing/sysfs-driver-intel-xe-
-> > hwmon:14=C2=A0 Documentation/ABI/testing/sysfs-driver-intel-i915-
-> > hwmon:22
-> >=20
-> > Introduced by commits
-> >=20
-> > =C2=A0 fb1b70607f73 ("drm/xe/hwmon: Expose power attributes")
-> > =C2=A0 92d44a422d0d ("drm/xe/hwmon: Expose card reactive critical
-> > power")
-> > =C2=A0 fbcdc9d3bf58 ("drm/xe/hwmon: Expose input voltage attribute")
-> > =C2=A0 71d0a32524f9 ("drm/xe/hwmon: Expose hwmon energy attribute")
-> > =C2=A0 4446fcf220ce ("drm/xe/hwmon: Expose power1_max_interval")
->=20
-> I am still getting these warnings.
->=20
-
-We're looking at fixing those.
-
-Thanks,
-Thomas
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="l2JbtYSFX8iqtKbR"
+Content-Disposition: inline
+In-Reply-To: <20240126115011.55da6838@canb.auug.org.au>
 
 
+--l2JbtYSFX8iqtKbR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Stephen,
+
+> OK, I currently have an i2c tree from Wolfram who is listed as the
+> maintainer, so I need to hear from him (and do you meant to replace his
+> tree, or add another one?).  Also, above you list a git tree from
+
+This is about adding another one. I will keep maintaining the I2C core,
+while Andi is picking up patches for the host controller drivers.
+
+Thank you!
+
+   Wolfram
+
+
+--l2JbtYSFX8iqtKbR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWzcmgACgkQFA3kzBSg
+Kbbs2RAAnSdpNZ0PUikZ8J9C8pI8F/6a58AHXOn+111xqaAMYa2WZNvs9kg0GSit
+dllnG0zrWRhSSb/3heWr9qI55GneqVYd9zTnZIyIcOqkjUTkISBUqNyrhOO5IJ85
+mJ3fMU2b+BQmrWRrzT9fKyZzq41Po0lwsWOl7tUdWI9tEBhsg6+ICqEz8JLM/kmE
+4/S5Ru9kLQVJhrb3BqBViL8OOEWkjcGH1JRqYLGcuwPbTsvhPVobCF7LInB3og3/
+jbQheKeBbI8jwhMocZMRhZPbFaCs+lPQD90vO87XdZTuR9ptrgM+BRmtXVkA8c5C
+r+/UBjaNznTqDa7mty1DxcqkSjeS6XotdVt6z32EQzcrmex26uBE1nTizkosFjrp
+NEUe07d3ggFw1t0sUD+dDWS3/BdWe+OJ57UJhrgIjnuq6lZmj0aceBEASNQUH1CW
+ERXMVlgIyBiDp9SIuCl8Blopth2SS+u+lMoQY67EQd/kGjgL0MUF08KZzCmjOJEO
+leQw5APj3qsJsf1bmbe6eG3lb8CAGGqFYRJyKKY/d6Mgbm3rrvoLcKF3SnVHZuKv
+adRk9734M34Fh6e0XlB4kHfYM2AERG0dheWZfeVwZbLJx1X1Kz96U7ou718T8pV9
+zG6H4jTCWYl/Z+KyRYgCN4alBYXvqlX9LDibMvCrnGiHTc+TKSk=
+=3ycF
+-----END PGP SIGNATURE-----
+
+--l2JbtYSFX8iqtKbR--
 

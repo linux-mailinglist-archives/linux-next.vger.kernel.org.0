@@ -1,117 +1,119 @@
-Return-Path: <linux-next+bounces-882-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-883-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E25DA83FA30
-	for <lists+linux-next@lfdr.de>; Sun, 28 Jan 2024 22:53:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3CE083FBB4
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 02:22:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48D10282C8E
-	for <lists+linux-next@lfdr.de>; Sun, 28 Jan 2024 21:53:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DF411C214B5
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 01:22:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589B33C08A;
-	Sun, 28 Jan 2024 21:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE23CD528;
+	Mon, 29 Jan 2024 01:22:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="bKCMLFQ2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="uK5XGN4S"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D651E3C082;
-	Sun, 28 Jan 2024 21:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DD5D512;
+	Mon, 29 Jan 2024 01:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706478791; cv=none; b=JQcjqhbUKyeKPZVL4yJTjrLJr4LkZ+YvGMSqmR2I1nbyRerHk1B9wGSUuZs+I0X1HCovTcJJ/TLwBMXtxvG8h4wVk57FJQD+fowpWGYvoSbqL8RySoX6UsXu8OR28Z0NQqbXDVSqLS3DykT30AZT5kstrWlWpMAblc8vovMlMrs=
+	t=1706491355; cv=none; b=qPrnUBL9D6cUiZgclc8tFAzJPZFGcypI+2my/7dPz4B5KbBnVMTNw52ViTcG0hC4KXez2va2oWuX265uMgonP02Iae76owhICwOw6/1i+hvxOVmJDWOoNhGpB2AaaK7BXFBNocLx0JCe6AlGEhv7LHr7Rkxgczqi4Ct6flMHXjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706478791; c=relaxed/simple;
-	bh=yaUWbY1oUaSRGJ3fokVxSpbJK4jJy/AGjLwGcK+D9JE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kRxu37YruKwz4V1z1wqz5tWZwZtB1JhwPwas4czjNZr5BTjNbjajMpFMtu+LmylTXt+9efoRppXP9cCvMs85+tHPWmcA631Ve/ng1P+znKYdW9HOmOuXx9W2Qoezew8criELZIaP6kniCArn3O//AY5ZlhqlLXjeMmBtC5VKHPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=bKCMLFQ2; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1706491355; c=relaxed/simple;
+	bh=pjbYvFMENRbS68jZj8cjMBd/jpeufTJF+qdJQv7i5CU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MZk7LvSkSGI9AbL8tgQrAYlks48NlEtbXHFkMyjS6PIZdgjUufzyALPyg/45rNFeygXb/6GvEUrfLiOm32Gq2F5WtXmljUL8zx40WQ63eF3elu4fMq62tR6F+dleFF28ZrwD6cB4G6S+qTW8AC80Lvx5Q7T1hGDImsp8FhPW7G4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=uK5XGN4S; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706478784;
-	bh=c0dCsj8bvKSas1/xBqPrrvD7tLg1R9eK8Z2xbNVGXmY=;
+	s=201702; t=1706491346;
+	bh=ej++JI4xHBopx3cmrO3Csbo3V0nSbz03q6RENvGen1k=;
 	h=Date:From:To:Cc:Subject:From;
-	b=bKCMLFQ2wwZO7EEXdfnOgznq5H0hjvBju8/mjZ5ie8yhb0Hw/EzgEGZYvapi/klas
-	 7NhArawQNfwP/PKnxGumL7l4aLtIp4eIdTlsE5IAJGXh7GOsDRKro3COzRMj79XVpG
-	 X0GbtXxijdPux6HsmvuQMvvP+AAp7iHKSGv6EUG5Y+eykgY07Z52J6gpzBMMkaWo8V
-	 wN5s2q79CtoaGkxFgaxIlJycoc2N/LpcA6ORLhy9jiGZFA/tSdngrmx9jEULTf8g5c
-	 amO0L97Ld+zc+7N6UcRUrqXTsLB/6pzZV/V0b+S157oyFa6BgIYi7S1VwGuKSU4XPY
-	 nn6eUTXLgLRgg==
+	b=uK5XGN4SRcnIrVdEOHSZGGnFWIFfN03eRsQ2CWBSLRm2DD9sqQlXkR6iCI78r0Wzt
+	 HoX6lX8/exAM9ZVcTFhpIQWfWMNMHMdxx4GfNGA7VVHiFuYsxak9y8v7rrYPcNy3Ko
+	 5vW065r3zxtYt79VDgNVm/xs7H+dG+29hp6JXy/9SUHElKbKhdGkiE9mh1uBQZmR99
+	 LTUydIjo0imc326exahSYizZDL+GCdpJfxrCdfJ/Xvq/fZKEA3rXaLUskFjYCkWECP
+	 qQFNwO8LXrKKEw/1JYhMSVwdgSFY5ABebHPKhA/27KAg5sT5o3t5mWVrCX93kPUHLf
+	 reU9oLH9OPEcA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TNQCg22t8z4wc6;
-	Mon, 29 Jan 2024 08:53:03 +1100 (AEDT)
-Date: Mon, 29 Jan 2024 08:53:01 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TNVsD3T4qz4wc3;
+	Mon, 29 Jan 2024 12:22:24 +1100 (AEDT)
+Date: Mon, 29 Jan 2024 12:22:22 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: "Hu.Yadi" <hu.yadi@h3c.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Muhammad Usama Anjum
- <usama.anjum@collabora.com>, Shuah Khan <skhan@linuxfoundation.org>
-Subject: linux-next: manual merge of the kselftest-fixes tree with the
- mm-hotfixes tree
-Message-ID: <20240129085301.5458880a@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the tip tree
+Message-ID: <20240129122222.6b690c58@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BhzWz.dN6KBzdwan9nN4ZKz";
+Content-Type: multipart/signed; boundary="Sig_/nHeO8L+/kxhVHrklb2Pbdyv";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/BhzWz.dN6KBzdwan9nN4ZKz
+--Sig_/nHeO8L+/kxhVHrklb2Pbdyv
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kselftest-fixes tree got a conflict in:
+After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-  tools/testing/selftests/core/close_range_test.c
+In file included from include/linux/compiler_types.h:89,
+                 from <command-line>:
+kernel/irq/irq_sim.c: In function 'irq_domain_create_sim':
+include/linux/compiler_attributes.h:76:41: error: expected expression befor=
+e '__attribute__'
+   76 | #define __cleanup(func)                 __attribute__((__cleanup__(=
+func)))
+      |                                         ^~~~~~~~~~~~~
+include/linux/cleanup.h:64:25: note: in expansion of macro '__cleanup'
+   64 | #define __free(_name)   __cleanup(__free_##_name)
+      |                         ^~~~~~~~~
+kernel/irq/irq_sim.c:173:19: note: in expansion of macro '__free'
+  173 |         pending =3D __free(bitmap) =3D bitmap_zalloc(num_irqs, GFP_=
+KERNEL);
+      |                   ^~~~~~
 
-between commit:
+Caused by commit
 
-  27a593e3f13a ("selftests: core: include linux/close_range.h for CLOSE_RAN=
-GE_* macros")
+  590610d72a79 ("genirq/irq_sim: Shrink code by using cleanup helpers")
 
-from the mm-hotfixes-unstable branch of the mm-hotfixes tree and commit:
-
-  b5a8a6de69bc ("selftests/core: Fix build issue with CLOSE_RANGE_UNSHARE")
-
-from the kselftest-fixes tree.
-
-I fixed it up (basically the same patch, I used the former which kept
-the blank line) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+I have used the tip tree from next-20240125 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/BhzWz.dN6KBzdwan9nN4ZKz
+--Sig_/nHeO8L+/kxhVHrklb2Pbdyv
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW2zL0ACgkQAVBC80lX
-0Gx1Qwf/dH0jDQMJIhLy2JVgJShYzAqq/jEkeDOtAXGJ8Q49S04vU8xk5/+L8rMf
-TgWtWTiXIgsezYftqYnTbOz6nczn51mKS15B5b7xzY2HSIeroMEonY+K9sJ3C8PO
-F0MRlSbw1t4jO/E4XhKX6ZmkOAW4fzvJWJTzL4QjowbA8gHYI3kVV4yxxWmfRPGm
-Ihq6K3wXIt73YFfr7gudz93o2VVIUc7dvlT7zBQ4so7Gabn/J94FUObGleULUtKS
-HwK/VwpiTm8qA9kOvVh0IJhtX4lP/9DQcC6qV5Lo6ExglRYOKueXvDxFTH4kBkUv
-zxZgt0k9ZQodTRXIVpLgzHXJP1oIGg==
-=IBZo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW2/c4ACgkQAVBC80lX
+0GyNDAgAnU/0sz8sLlaeAwJ93uQ3icCr92C7tIgqcxtiZtJ4RJvwxlYeViXVOEGB
+D64S8WmL/D3Q/jgWtAM/6VO86U+bNLlewRAfKMWa/HaI2Y0vqQNfmaFOVUskJG1u
+qkuQggEdWe3rjD2pa8DMyqomXspCD9XHCuBUZ9ttSe5wYlIaJZKltB4+g8Ytt/Ax
+ME/P5WoiEjzdH2NvI8hKsql1Y5vJtH8iZFeEpBHybs7aBeEN0qcwwvVkRXcTAm1M
+VSOxr4ck0forFXWFfTomxXTmpr0kq/LHHD7PRJI7c2zoLGLunH+LDeKfqY3D9QYP
+4AQ65L5+eutQC2zNgWO31Rs2Dk8MfQ==
+=fn+n
 -----END PGP SIGNATURE-----
 
---Sig_/BhzWz.dN6KBzdwan9nN4ZKz--
+--Sig_/nHeO8L+/kxhVHrklb2Pbdyv--
 

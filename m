@@ -1,122 +1,105 @@
-Return-Path: <linux-next+bounces-887-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-888-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39B6483FFC2
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 09:14:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83C148412DC
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 19:57:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C2F31C20D2C
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 08:14:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 407322870CC
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 18:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F65E52F6F;
-	Mon, 29 Jan 2024 08:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD06179AB;
+	Mon, 29 Jan 2024 18:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s/kiLwnB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hm+t7Cdd"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C7952F6D
-	for <linux-next@vger.kernel.org>; Mon, 29 Jan 2024 08:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46F776C80;
+	Mon, 29 Jan 2024 18:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706516059; cv=none; b=Jgo4aY6VNPVfGgZa+PsJ9VIrIEZGc88yN7/ojcE0JoKxzQO6w2EJ2nSG6YxNU1Hw9oTXzCHhewhiJjFsE6ONL2Zx15/LP50yt1fFXIzuenQQza8TuL3qXSu1bsdvu6dMKYeZ82ksCLYgSoMxHJE6PE7I9ie/dwjyPXodZbkqqg0=
+	t=1706554654; cv=none; b=qp8uW0LcnnGghHbCEntzXV5tcW3K3XqAgpRf3p6p9kunkMRKPaRMEU/YiOrLt1OL0wVaAxFqr4Zm+y0HPHJqqii9OcsyZueZ0WvICyeOR1hKBDesAV++A32vWDi3qfMgU9JHL18ojTHiLM8oOoI91irJwuOQMPrNUTn5Lqa6g98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706516059; c=relaxed/simple;
-	bh=GjRJ7N2AN6+nVd0ooC5HSu51Pgqr674PVVlLwNU5juE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DytKSV6MD7xKG29OzXeu+nf7ze9MLQxEhL4r7XMrK9zeXqgTEgzbGDar4HAgT5AD9tU1/f3FT6g321VP6OQVcQNak5OMtxD1jts0uD1bnG8uMluZai+Ig5YM3KBr1QxGC8EPTc0QO8PhwyAeWVwj8R488Oc4n9+0fLJC4dvhRV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s/kiLwnB; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5ff9adbf216so21790237b3.1
-        for <linux-next@vger.kernel.org>; Mon, 29 Jan 2024 00:14:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706516056; x=1707120856; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=s2EnDbBMqDGbBhFQtliI/OLJRkwmER6ZZAy6Ip4xfDU=;
-        b=s/kiLwnByVZN9S8Cbq9OhGCD7AKthmb/pw9zKvOxp9e/+0X1AWQV/wC3IG4gV2GSID
-         IdMYt0CG39yv4T2tkFSsP1aCVnPes7U0CZst09fFUKn+XJMDQCb/tjzbhSn+nN82uTzR
-         hHwRkW8ozWRC5yNITP7+52EHVAXXjRC4vPNYYsk2id05MrknuodgiDLUYFiDCbdGwmXV
-         PltNnlW8kV0z7lxN6OnpCAUnGYcnbcHwmvTO4fIaxRQSMbQ4X1ApD+sjGZuKvU4dvSGK
-         Vxl5OBf10PlH7VxPbk2Q/gWxDa7T7lYpEx+y/3UGTaIt/b87vMYxxepdDOe6P8Wqo5Kq
-         IJ4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706516056; x=1707120856;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s2EnDbBMqDGbBhFQtliI/OLJRkwmER6ZZAy6Ip4xfDU=;
-        b=lVop600GLVw5KG55Yhw/mGlyw6VhOiQxhE3DIHH285No0r3HY5f0aFDkzppa/fRcb1
-         MdIEwFl8o7wRiFCDA2A41NwdOFck9t26bOzndvsQctVhm8XgQiXqTIJkakFDhqG6gMXE
-         QprgC/iKT62q8nuzsmnuZjIcGul312MGjmUnyeBgXX+9aVI1fEYUjLJ0Pwz69JDXSYLa
-         6dEU9RfEXzZyOBSYTZGi2ciM2AShO9AC24100qV17vt/iAQkil3b7tJjL+eZG1C/qY7Z
-         hy/cMX7sKF4pcRvBPffZOzkgzVj+ucI6bMxlIz4cGFoMSu9UiyVd2rGPQ0+HbrsH+T4g
-         Jv2Q==
-X-Gm-Message-State: AOJu0YzEuiaTnipBT5DQ5cCDzyK7sOR1Ztbpf4HNQ0YUI4JUtwiAZjg5
-	xzn37i7bRXk3oo6kliirZjuOf9MDR0RkVbTs8/QuE/YhmNwhyrkVxm5jk9JeMZGZP1TvjNO/kv0
-	PEWH2gBcumrJsKLQl/bF6GAHCYZmm49XLa0gZAg==
-X-Google-Smtp-Source: AGHT+IHoQ4lHklai6GeRs9anEF15zJtmMSEEoJ71q/uoTgpvBAB/SEG/Cz2GSBtiVZLFQpCVIghkMhjg4twujJwqqio=
-X-Received: by 2002:a0d:d495:0:b0:603:e7b6:79a7 with SMTP id
- w143-20020a0dd495000000b00603e7b679a7mr5729ywd.88.1706516056317; Mon, 29 Jan
- 2024 00:14:16 -0800 (PST)
+	s=arc-20240116; t=1706554654; c=relaxed/simple;
+	bh=SwDdJL+Nm9UEEmIj2eW+6ZzHj7AInw4B8ATbaB0vh7I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GTaSVmCXdtvbDNA7ZC739B7MeZ/XNjB18w8IeuyIZxdJCkaU4VeQB3F8Eq3pWfq0FS3UaI3dYJtQjJMxmgRKPX5ZyOhoZjcLp3JbV+5Lz5oi1ii99sowvyFQuT6DktSzUqbPnPMhZKEB4A9cqXHu9ZxM/jI1w0bNzCjad6Hg0xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hm+t7Cdd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD05EC433C7;
+	Mon, 29 Jan 2024 18:57:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706554653;
+	bh=SwDdJL+Nm9UEEmIj2eW+6ZzHj7AInw4B8ATbaB0vh7I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hm+t7CddhYd3Bj79q1h2YjXnMdphkCvMPuOxR9oY5y6nTchHGliBNbYe0eYCFIIKr
+	 qWBmDqQVZjfUepf7YlUx9EjlgNa+LePJQMEMr3IJ1zXKkXZ7XXdWR2XoB2/XxR+Jid
+	 Z33d2V0Xt1jmRp6JpXKq/E5CmksuFPgH2EYw8W1qy9ijoQzhjn4R/vJVzdBlT9ZfpR
+	 Vo46e1b6BieyguxmntOfIOoRtane6g5UiGDP5JK4Y1kidNgof8ttfxVpSYvjo5qJxc
+	 Kz9QEn8e/jPJ63j9vZGDnUWRasv/T70fFSW4NKF6mJxXeFvGzPFk3o7VFxGrj27azy
+	 e3FxQ9AjfxnWQ==
+Date: Mon, 29 Jan 2024 18:57:29 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Conor Dooley <Conor.Dooley@microchip.com>,
+	Arnd Bergmann <arnd@arndb.de>, Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@outlook.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the riscv-dt-fixes tree
+Message-ID: <20240129-enquirer-rice-cf33d9da89a8@spud>
+References: <20240128144537.78dcaf09@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240129122222.6b690c58@canb.auug.org.au>
-In-Reply-To: <20240129122222.6b690c58@canb.auug.org.au>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Mon, 29 Jan 2024 09:14:05 +0100
-Message-ID: <CACMJSeuGJ2-++wrKcT34e_Lrvuz96LynwG-=_HYDoCGUkSi04Q@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the tip tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="VgeXS1sFY9w1/+LC"
+Content-Disposition: inline
+In-Reply-To: <20240128144537.78dcaf09@canb.auug.org.au>
 
-On Mon, 29 Jan 2024 at 02:22, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
+
+--VgeXS1sFY9w1/+LC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Jan 28, 2024 at 02:45:37PM +1100, Stephen Rothwell wrote:
 > Hi all,
->
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
->
-> In file included from include/linux/compiler_types.h:89,
->                  from <command-line>:
-> kernel/irq/irq_sim.c: In function 'irq_domain_create_sim':
-> include/linux/compiler_attributes.h:76:41: error: expected expression before '__attribute__'
->    76 | #define __cleanup(func)                 __attribute__((__cleanup__(func)))
->       |                                         ^~~~~~~~~~~~~
-> include/linux/cleanup.h:64:25: note: in expansion of macro '__cleanup'
->    64 | #define __free(_name)   __cleanup(__free_##_name)
->       |                         ^~~~~~~~~
-> kernel/irq/irq_sim.c:173:19: note: in expansion of macro '__free'
->   173 |         pending = __free(bitmap) = bitmap_zalloc(num_irqs, GFP_KERNEL);
->       |                   ^~~~~~
->
-> Caused by commit
->
->   590610d72a79 ("genirq/irq_sim: Shrink code by using cleanup helpers")
->
-> I have used the tip tree from next-20240125 for today.
->
-> --
-> Cheers,
-> Stephen Rothwell
+>=20
+> The following commit is also in Linus Torvalds' tree as a different commit
+> (but the same patch):
+>=20
+>   a75f0b6e6f74 ("riscv: dts: sophgo: separate sg2042 mtime and mtimecmp t=
+o fit aclint format")
+>=20
+> This is commit
+>=20
+>   1f4a994be2c3 ("riscv: dts: sophgo: separate sg2042 mtime and mtimecmp t=
+o fit aclint format")
+>=20
+> in Linus' tree.
 
-For the record: this is not my code. This is what I sent:
-https://lore.kernel.org/all/20240122124243.44002-5-brgl@bgdev.pl/
+Now dropped thanks. Ended up getting a new platform maintainer who send
+it off themselves :)
 
-Applying my version will fix the problem.
 
-Thanks,
-Bartosz
+
+--VgeXS1sFY9w1/+LC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbf1GQAKCRB4tDGHoIJi
+0qVdAP9bhzmgws8NEXNBUF4pLmbTOkfELUoCjbXZNm/BBGMOHAD/ZegsMs3mJHPr
+W/m9xlsWSDA0UxuI39p3iikJd0gojAw=
+=qItF
+-----END PGP SIGNATURE-----
+
+--VgeXS1sFY9w1/+LC--
 

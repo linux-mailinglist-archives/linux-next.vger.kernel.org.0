@@ -1,108 +1,135 @@
-Return-Path: <linux-next+bounces-884-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-885-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B709383FC0B
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 03:11:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CA3083FC43
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 03:34:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E58F1F22CC0
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 02:11:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 282BE285D41
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 02:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC7EDF66;
-	Mon, 29 Jan 2024 02:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D417914A9E;
+	Mon, 29 Jan 2024 02:34:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CNFGJc6I"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EADrx82o"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744CBDF58;
-	Mon, 29 Jan 2024 02:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681B214A8B;
+	Mon, 29 Jan 2024 02:33:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706494261; cv=none; b=LueF6YRYBs6pcByEScbClIY9pbuNQVtcb91v3ldETXX0mxU952fiYKGmVlaNMQ4H8QCV2Mp7f/1bKIgSWFGm0VHSSF0htPahqvcnjhcHdY1nUcPeQEdTUKh2exPtln9t2t3zCemtEnAZm3wK4FLnnRnejGzqBieot58+Kvg7goc=
+	t=1706495640; cv=none; b=tZKYuLrlKj3BdrZkSJhtGpBXvEovQYiwfTJLCCm3U/KDKYyiWGebHfWUExISeVIXeGn1AUrcNd3rKEL0wXbMkMOfpF5J0+S3e3aolDrfwRVAK/WdRu4pXup8Z742BE9cJdRriiKURlLsK2DaeUnLOdDCkPp7zvz/yt284Fete8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706494261; c=relaxed/simple;
-	bh=xc0+o90YWKonTND4pxaXSTh2S+4HBxP9QlVQ1N95Igw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EltFCBA/mZGoAbT4DOQXx32BkfWduy85XqmKFJntdJBsFzHGK3BKbF+6R29IAjKHxUKSqvtUcHMdtmYOURpzdzLe7waVqlTzKJVVvC4y3afhKZPvh76lC+2mahL4/wAV36BmmqSwQebi4627SDIRBp8CzK4w4lIgWxLKy5JdWAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CNFGJc6I; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1706495640; c=relaxed/simple;
+	bh=8TOeeWD/2D0/4l8IGm1//aIl2M4Ap4d6hJGFq6oUnZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=u/QzXy1vsbKXLUI9DGG4ZXwGCOLprZMMcoV+MnBwSaPjW3BZaiF0pz+5Iz2fno7xCF4mA31LbTgQETZFtgtEMh0v0WOU2KdN0jorKRoPUU3cm2FsI+S7+AIKh46y8X9mPIdlhPgqHfn0xg0BImKMa8TqegbLnijwtTk/4gwl+gU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EADrx82o; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706494255;
-	bh=DCEX5eQgeVc6ideEoDhNqJm9bizkzjs7+HmSlqFV868=;
+	s=201702; t=1706495634;
+	bh=sVqEco6myPIGO0i/9dacl7z3nklP6DquNjZ2EOIPXYA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=CNFGJc6I9oLy59bhiAqFIwS1OYkr2SpN1Ev7UUMuB4XErodUHLmBLg5Pb49VwqFdS
-	 JxJULbJONI3R7E28WyWVEp+PlMT8UicifNGskZHByAWMTOR5stjrGIVyvm4ia9IWw3
-	 4avq56voki6s+8w26T3dz71E931MitVzdjvsch1+cDuNNbobRZGccFfFxqOdSNpFLd
-	 CcYUv4TOyujSP5nCBkBXnyurF3+BtgJnpZMhfV59OMGEzBgT0p4YbkJeA/FCahr+gm
-	 Het/t/mMwV7A3FjOsyxYq25LFGAvA6Ej34MKdHJ+MLVcCe6fP3nCi4wfWJOMksABqr
-	 U5kU4kjv7fy3A==
+	b=EADrx82owkZmngGSE+bw/v8XvEoK9enK4z0L86wrOAZCPtLBPTSTTeodpnOq4yxEy
+	 HtdrmuLep+tkS9qlPk9r96+Wu+xRnA4o60dpQKwe5CySsMqRPQox1Y4HL5L9M0DVHT
+	 HKRIp38YOMP9riZOwgjoDEykxdk8h1Sujlaj2m87VVCrwAoixI9d66tSbMhHTbTtSm
+	 J+42Q07iZdrAoDJNiuRLoYkUzOYG++4gZiEA//iZUYDYY6DU2K0ELqL+5I6HiqmGsA
+	 AvKj2BjgyMkY1+otB5aCeXmCREGBY0prOD+r3s42HdHRlMWevVMt4nU7YZqkU+KSsV
+	 2h8BWsI9DvaAA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TNWxC22Tnz4wbQ;
-	Mon, 29 Jan 2024 13:10:55 +1100 (AEDT)
-Date: Mon, 29 Jan 2024 13:10:54 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TNXRk01r8z4wc6;
+	Mon, 29 Jan 2024 13:33:53 +1100 (AEDT)
+Date: Mon, 29 Jan 2024 13:33:52 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Lee Jones <lee@kernel.org>
-Cc: Anjelique Melendez <quic_amelende@quicinc.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the leds-lj tree
-Message-ID: <20240129131054.14bc453e@canb.auug.org.au>
+To: Miguel Ojeda <ojeda@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>
+Subject: linux-next: manual merge of the rust tree with the mm tree
+Message-ID: <20240129133352.25a3ee19@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.=b/cx/ZuiL/LD.awKyrudi";
+Content-Type: multipart/signed; boundary="Sig_/Te+XTXsK9_2B292JnXKszzb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/.=b/cx/ZuiL/LD.awKyrudi
+--Sig_/Te+XTXsK9_2B292JnXKszzb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the leds-lj tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the rust tree got a conflict in:
 
-drivers/leds/rgb/leds-qcom-lpg.c:17:10: fatal error: linux/soc/qcom/qcom-pb=
-s.h: No such file or directory
-   17 | #include <linux/soc/qcom/qcom-pbs.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Documentation/process/changes.rst
 
-Caused by commit
+between commit:
 
-  8148c8234e10 ("leds: rgb: leds-qcom-lpg: Add support for PPG through sing=
-le SDAM")
+  3d21fad38152 ("kbuild: raise the minimum supported version of LLVM to 13.=
+0.1")
 
-I have used the leds-lj tree from next-20240125 for today.
+from the mm-non-mm-unstable branch of the mm tree and commit:
+
+  c5fed8ce6549 ("rust: upgrade to Rust 1.75.0")
+
+from the rust tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/.=b/cx/ZuiL/LD.awKyrudi
+diff --cc Documentation/process/changes.rst
+index d7306b8cad13,eab7e2f8c196..000000000000
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@@ -30,8 -30,8 +30,8 @@@ you probably needn't concern yourself w
+          Program        Minimal version       Command to check the version
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+  GNU C                  5.1              gcc --version
+ -Clang/LLVM (optional)  11.0.0           clang --version
+ +Clang/LLVM (optional)  13.0.1           clang --version
+- Rust (optional)        1.74.1           rustc --version
++ Rust (optional)        1.75.0           rustc --version
+  bindgen (optional)     0.65.1           bindgen --version
+  GNU make               3.82             make --version
+  bash                   4.2              bash --version
+
+--Sig_/Te+XTXsK9_2B292JnXKszzb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW3CS4ACgkQAVBC80lX
-0Gw9TQf/TGNhcewAWcOl3nj05SIDcdUnLWSk/FAv6nVlheokDundoEI65LRKWWrJ
-ia8vR00/EoQAjiWPI0pBbhYIH8zhlBvNBxC4FcrJvA78F+DROhale94bij+1hWuv
-77mUc0NUYZt2OVwtw9UhiwKhJZqUx9rp1sfIUjZ5HEV708zCY9KYMtWPEtRhtuJh
-ir5gx249ikvg+j6hgv5YJrJbL09sl4q5E2xCQS9y0HpyZtdM/HIMcCuqqiIwKBkj
-JoOzY9F7rhzciuMdPl/0pDRcTV/Der2/7YTfxXE1wAdsxEjO2/WxSprZdpfck0EK
-C1BD2NEnj1hFkP4urZSnhsHUCPt6VA==
-=mT0l
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW3DpAACgkQAVBC80lX
+0GzZWAf9GRE8mBBaN9909dq4E2m2tDSCbbEsLzzaqmc2UE0Rpyhp8IfODjJACmie
+kNIwtUvlE7C3Z1l8MkRCRzRG2fjwbrDRb7lEFP4nS3Y0QFXub4oLlr/TICmupvM4
+h8xrO6mWYtS1Sot5o0v/J8mWL6l4yJSiEN9liWoAK/SO419qpgu1YlNgmckYJnJN
+/IgyjYRbrbju+eegnVkFXFL2M9/mjisHBIllLzsfPa2hVxPbpQvpzrmowczqngAj
+9CaoLwTOg0+dqZWAAD12lifEqUGHfGOmX87lmTfce9eZz98xMayWJQ+e3Cc6Ye0V
+WMMGnYmz1siymut5zvl7UfEqP2/GQw==
+=8WMk
 -----END PGP SIGNATURE-----
 
---Sig_/.=b/cx/ZuiL/LD.awKyrudi--
+--Sig_/Te+XTXsK9_2B292JnXKszzb--
 

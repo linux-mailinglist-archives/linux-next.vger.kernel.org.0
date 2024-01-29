@@ -1,119 +1,108 @@
-Return-Path: <linux-next+bounces-883-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-884-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3CE083FBB4
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 02:22:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B709383FC0B
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 03:11:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DF411C214B5
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 01:22:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E58F1F22CC0
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jan 2024 02:11:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE23CD528;
-	Mon, 29 Jan 2024 01:22:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC7EDF66;
+	Mon, 29 Jan 2024 02:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="uK5XGN4S"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CNFGJc6I"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DD5D512;
-	Mon, 29 Jan 2024 01:22:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744CBDF58;
+	Mon, 29 Jan 2024 02:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706491355; cv=none; b=qPrnUBL9D6cUiZgclc8tFAzJPZFGcypI+2my/7dPz4B5KbBnVMTNw52ViTcG0hC4KXez2va2oWuX265uMgonP02Iae76owhICwOw6/1i+hvxOVmJDWOoNhGpB2AaaK7BXFBNocLx0JCe6AlGEhv7LHr7Rkxgczqi4Ct6flMHXjc=
+	t=1706494261; cv=none; b=LueF6YRYBs6pcByEScbClIY9pbuNQVtcb91v3ldETXX0mxU952fiYKGmVlaNMQ4H8QCV2Mp7f/1bKIgSWFGm0VHSSF0htPahqvcnjhcHdY1nUcPeQEdTUKh2exPtln9t2t3zCemtEnAZm3wK4FLnnRnejGzqBieot58+Kvg7goc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706491355; c=relaxed/simple;
-	bh=pjbYvFMENRbS68jZj8cjMBd/jpeufTJF+qdJQv7i5CU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MZk7LvSkSGI9AbL8tgQrAYlks48NlEtbXHFkMyjS6PIZdgjUufzyALPyg/45rNFeygXb/6GvEUrfLiOm32Gq2F5WtXmljUL8zx40WQ63eF3elu4fMq62tR6F+dleFF28ZrwD6cB4G6S+qTW8AC80Lvx5Q7T1hGDImsp8FhPW7G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=uK5XGN4S; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1706494261; c=relaxed/simple;
+	bh=xc0+o90YWKonTND4pxaXSTh2S+4HBxP9QlVQ1N95Igw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EltFCBA/mZGoAbT4DOQXx32BkfWduy85XqmKFJntdJBsFzHGK3BKbF+6R29IAjKHxUKSqvtUcHMdtmYOURpzdzLe7waVqlTzKJVVvC4y3afhKZPvh76lC+2mahL4/wAV36BmmqSwQebi4627SDIRBp8CzK4w4lIgWxLKy5JdWAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CNFGJc6I; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706491346;
-	bh=ej++JI4xHBopx3cmrO3Csbo3V0nSbz03q6RENvGen1k=;
+	s=201702; t=1706494255;
+	bh=DCEX5eQgeVc6ideEoDhNqJm9bizkzjs7+HmSlqFV868=;
 	h=Date:From:To:Cc:Subject:From;
-	b=uK5XGN4SRcnIrVdEOHSZGGnFWIFfN03eRsQ2CWBSLRm2DD9sqQlXkR6iCI78r0Wzt
-	 HoX6lX8/exAM9ZVcTFhpIQWfWMNMHMdxx4GfNGA7VVHiFuYsxak9y8v7rrYPcNy3Ko
-	 5vW065r3zxtYt79VDgNVm/xs7H+dG+29hp6JXy/9SUHElKbKhdGkiE9mh1uBQZmR99
-	 LTUydIjo0imc326exahSYizZDL+GCdpJfxrCdfJ/Xvq/fZKEA3rXaLUskFjYCkWECP
-	 qQFNwO8LXrKKEw/1JYhMSVwdgSFY5ABebHPKhA/27KAg5sT5o3t5mWVrCX93kPUHLf
-	 reU9oLH9OPEcA==
+	b=CNFGJc6I9oLy59bhiAqFIwS1OYkr2SpN1Ev7UUMuB4XErodUHLmBLg5Pb49VwqFdS
+	 JxJULbJONI3R7E28WyWVEp+PlMT8UicifNGskZHByAWMTOR5stjrGIVyvm4ia9IWw3
+	 4avq56voki6s+8w26T3dz71E931MitVzdjvsch1+cDuNNbobRZGccFfFxqOdSNpFLd
+	 CcYUv4TOyujSP5nCBkBXnyurF3+BtgJnpZMhfV59OMGEzBgT0p4YbkJeA/FCahr+gm
+	 Het/t/mMwV7A3FjOsyxYq25LFGAvA6Ej34MKdHJ+MLVcCe6fP3nCi4wfWJOMksABqr
+	 U5kU4kjv7fy3A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TNVsD3T4qz4wc3;
-	Mon, 29 Jan 2024 12:22:24 +1100 (AEDT)
-Date: Mon, 29 Jan 2024 12:22:22 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TNWxC22Tnz4wbQ;
+	Mon, 29 Jan 2024 13:10:55 +1100 (AEDT)
+Date: Mon, 29 Jan 2024 13:10:54 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Lee Jones <lee@kernel.org>
+Cc: Anjelique Melendez <quic_amelende@quicinc.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20240129122222.6b690c58@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the leds-lj tree
+Message-ID: <20240129131054.14bc453e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nHeO8L+/kxhVHrklb2Pbdyv";
+Content-Type: multipart/signed; boundary="Sig_/.=b/cx/ZuiL/LD.awKyrudi";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/nHeO8L+/kxhVHrklb2Pbdyv
+--Sig_/.=b/cx/ZuiL/LD.awKyrudi
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+After merging the leds-lj tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-In file included from include/linux/compiler_types.h:89,
-                 from <command-line>:
-kernel/irq/irq_sim.c: In function 'irq_domain_create_sim':
-include/linux/compiler_attributes.h:76:41: error: expected expression befor=
-e '__attribute__'
-   76 | #define __cleanup(func)                 __attribute__((__cleanup__(=
-func)))
-      |                                         ^~~~~~~~~~~~~
-include/linux/cleanup.h:64:25: note: in expansion of macro '__cleanup'
-   64 | #define __free(_name)   __cleanup(__free_##_name)
-      |                         ^~~~~~~~~
-kernel/irq/irq_sim.c:173:19: note: in expansion of macro '__free'
-  173 |         pending =3D __free(bitmap) =3D bitmap_zalloc(num_irqs, GFP_=
-KERNEL);
-      |                   ^~~~~~
+drivers/leds/rgb/leds-qcom-lpg.c:17:10: fatal error: linux/soc/qcom/qcom-pb=
+s.h: No such file or directory
+   17 | #include <linux/soc/qcom/qcom-pbs.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Caused by commit
 
-  590610d72a79 ("genirq/irq_sim: Shrink code by using cleanup helpers")
+  8148c8234e10 ("leds: rgb: leds-qcom-lpg: Add support for PPG through sing=
+le SDAM")
 
-I have used the tip tree from next-20240125 for today.
+I have used the leds-lj tree from next-20240125 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/nHeO8L+/kxhVHrklb2Pbdyv
+--Sig_/.=b/cx/ZuiL/LD.awKyrudi
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW2/c4ACgkQAVBC80lX
-0GyNDAgAnU/0sz8sLlaeAwJ93uQ3icCr92C7tIgqcxtiZtJ4RJvwxlYeViXVOEGB
-D64S8WmL/D3Q/jgWtAM/6VO86U+bNLlewRAfKMWa/HaI2Y0vqQNfmaFOVUskJG1u
-qkuQggEdWe3rjD2pa8DMyqomXspCD9XHCuBUZ9ttSe5wYlIaJZKltB4+g8Ytt/Ax
-ME/P5WoiEjzdH2NvI8hKsql1Y5vJtH8iZFeEpBHybs7aBeEN0qcwwvVkRXcTAm1M
-VSOxr4ck0forFXWFfTomxXTmpr0kq/LHHD7PRJI7c2zoLGLunH+LDeKfqY3D9QYP
-4AQ65L5+eutQC2zNgWO31Rs2Dk8MfQ==
-=fn+n
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW3CS4ACgkQAVBC80lX
+0Gw9TQf/TGNhcewAWcOl3nj05SIDcdUnLWSk/FAv6nVlheokDundoEI65LRKWWrJ
+ia8vR00/EoQAjiWPI0pBbhYIH8zhlBvNBxC4FcrJvA78F+DROhale94bij+1hWuv
+77mUc0NUYZt2OVwtw9UhiwKhJZqUx9rp1sfIUjZ5HEV708zCY9KYMtWPEtRhtuJh
+ir5gx249ikvg+j6hgv5YJrJbL09sl4q5E2xCQS9y0HpyZtdM/HIMcCuqqiIwKBkj
+JoOzY9F7rhzciuMdPl/0pDRcTV/Der2/7YTfxXE1wAdsxEjO2/WxSprZdpfck0EK
+C1BD2NEnj1hFkP4urZSnhsHUCPt6VA==
+=mT0l
 -----END PGP SIGNATURE-----
 
---Sig_/nHeO8L+/kxhVHrklb2Pbdyv--
+--Sig_/.=b/cx/ZuiL/LD.awKyrudi--
 

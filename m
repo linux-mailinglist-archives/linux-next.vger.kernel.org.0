@@ -1,90 +1,104 @@
-Return-Path: <linux-next+bounces-916-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-917-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB369843124
-	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 00:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BCE884318E
+	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 00:47:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78832284838
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jan 2024 23:25:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB0A628260E
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jan 2024 23:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35710762E7;
-	Tue, 30 Jan 2024 23:25:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B8178665;
+	Tue, 30 Jan 2024 23:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IWDOsg8O"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="iPYjb+MK"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0448B7EF06;
-	Tue, 30 Jan 2024 23:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF21C79949;
+	Tue, 30 Jan 2024 23:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706657120; cv=none; b=BYlxUl9xTQYK5yo7nqCGY/n4RPIFE+J996TRXKbHGSi4TGAoiZapszwL6634QS0ZiEolpVovNFcjUvFQBL+ywgJ3BQ/YtH2NT41qy6LXbcft37Fy6M+4kbHfB6CuAj1fGCADrdnlxRF+kASfbsebc74emucd3sv4IkkelJ1H6r4=
+	t=1706658475; cv=none; b=E8UDGp+63wSOOuWPrwkgT93W/A5YjUWFApQnZEDNXppDuYEeG2i4PnnkiI/krSnYpua01wHXOWe6W0iqLNJxJjaAGzj4p9EnjCb7Wq8OWloV6NgrGFZR0SvZTWOcwblFeTenpmT/+0umE17q3NGZI1XXLDTKmKvHUjfVXdsjxOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706657120; c=relaxed/simple;
-	bh=xhHQxDgz4WJv9YDPEekgMzWVmwxQu21H4INhA2VR63Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L5KT3z3/DBgMqVvoV7GfkWw343pdwMd4M5RnRmsCxGa/pmlKGNVxsRM859p2fRplfF9FXNtbf1t8YAEcviL5HEurS5gGJgTO5DM3mP8DGkSKc12zp/LIRtftO3q8uO+k804PCPc3eRN6nbV++GjVTEjaDM/oEbBg1a8R+v20vu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IWDOsg8O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 422D1C433C7;
-	Tue, 30 Jan 2024 23:25:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706657119;
-	bh=xhHQxDgz4WJv9YDPEekgMzWVmwxQu21H4INhA2VR63Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IWDOsg8O/ginvXn1r+dEyk5UMI4cIUldqsgzVfcGXmn+EVug5vwZeOOfEAn1onrK8
-	 8UDinIWIBiVVXVpF11OGM+8Jm9duax2nCg2uN6MjdquY0MTWtZ1sfviPV3v9K5GUpF
-	 FOV3gA3nqsADviJFn2fGrLoIqhkeHGi0tYSyZ5vo=
-Date: Tue, 30 Jan 2024 15:25:18 -0800
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Udipto Goswami <quic_ugoswami@quicinc.com>
+	s=arc-20240116; t=1706658475; c=relaxed/simple;
+	bh=gctvI4c91ZSe947+t3hshpyres3oHGTht00pgMABwFQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=qtPvtqAwATnnGWmlJw26pEeDGH5dvxG/4/QXfyffbzi5dcU5LSfIdVbL4jPpN+hRf4bMme03bMDP03CraHZhltr/YhSZ8TfF3zPHAtJt/rDnroFjnusSIl7EGwwwImMn64hEftjSwyoeOYRwR9TS6gEHMG923ufDujC0KaKpdsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=iPYjb+MK; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 49EC341A47
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1706658467; bh=YSz7eSIovPWVPhBp2QrZNSSUITddjIeIoqMEKbJWRGA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=iPYjb+MKZtw+jS8PLorMz2kanellKAa+RfVkuG7ywSujVT8Ed4wJSZZckc3LBv3mp
+	 tvtgGJiIF3eSsevqCmoF/+VXNXN+l40A3WDqvy0FWTBMw9mV1erUDggnbmQOBW6fQz
+	 1FFR1bvpagKpWyTX3vM80tEZiwXgPTjHlnBzkXOIku85AP947u+MGkgqxvmyeF2JB+
+	 DFWTcuCSVCJO1ubG71SDpLPJgUMERTwmi2bzheJZY9Fa2VKQfximKhPK6xu4eKAUcz
+	 Sa3ru1yGlyIsSKkPtTD2eP0IffxnmzkGpeFFVG4mw85ZXrnVp5BVogQdczgDoSCKr1
+	 osUsjZNz//Hbg==
+Received: from localhost (unknown [IPv6:2601:280:5e00:7e19::646])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 49EC341A47;
+	Tue, 30 Jan 2024 23:47:47 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Stephen Rothwell
+ <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Udipto Goswami <quic_ugoswami@quicinc.com>
 Subject: Re: linux-next: manual merge of the jc_docs tree with the
  usb.current tree
-Message-ID: <2024013009-helium-woozy-c6c2@gregkh>
+In-Reply-To: <2024013009-helium-woozy-c6c2@gregkh>
 References: <20240131095231.292911c3@canb.auug.org.au>
+ <2024013009-helium-woozy-c6c2@gregkh>
+Date: Tue, 30 Jan 2024 16:47:46 -0700
+Message-ID: <87le868jtp.fsf@meer.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240131095231.292911c3@canb.auug.org.au>
+Content-Type: text/plain
 
-On Wed, Jan 31, 2024 at 09:52:31AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the jc_docs tree got a conflict in:
-> 
->   Documentation/usb/gadget-testing.rst
-> 
-> between commit:
-> 
->   20d03ae36ec0 ("usb: gadget: ncm: Fix indentations in documentation of NCM section")
-> 
-> from the usb.current tree and commit:
-> 
->   e49bf650ab5b ("usb: gadget: fix max_segment_size malformed table")
-> 
-> from the jc_docs tree.
-> 
-> I fixed it up (these commits fix the same problem, I used the former) and
-> can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-Fixup sounds good, thanks!
+> On Wed, Jan 31, 2024 at 09:52:31AM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>> 
+>> Today's linux-next merge of the jc_docs tree got a conflict in:
+>> 
+>>   Documentation/usb/gadget-testing.rst
+>> 
+>> between commit:
+>> 
+>>   20d03ae36ec0 ("usb: gadget: ncm: Fix indentations in documentation of NCM section")
+>> 
+>> from the usb.current tree and commit:
+>> 
+>>   e49bf650ab5b ("usb: gadget: fix max_segment_size malformed table")
+>> 
+>> from the jc_docs tree.
+>> 
+>> I fixed it up (these commits fix the same problem, I used the former) and
+>> can carry the fix as necessary. This is now fixed as far as linux-next
+>> is concerned, but any non trivial conflicts should be mentioned to your
+>> upstream maintainer when your tree is submitted for merging.  You may
+>> also want to consider cooperating with the maintainer of the conflicting
+>> tree to minimise any particularly complex conflicts.
+>
+> Fixup sounds good, thanks!
 
-gre gk-h
+OK, fine, I'll drop the patch out of docs-next.
+
+Thanks,
+
+jon
 

@@ -1,103 +1,188 @@
-Return-Path: <linux-next+bounces-893-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-894-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B02D984195E
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jan 2024 03:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 14BA4841990
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jan 2024 03:50:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4969D1F2842E
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jan 2024 02:38:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F0401F23871
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jan 2024 02:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40AC036B01;
-	Tue, 30 Jan 2024 02:37:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8237B376E9;
+	Tue, 30 Jan 2024 02:50:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="bV9YhjR5"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oedhXLvb"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7731D55F;
-	Tue, 30 Jan 2024 02:37:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24742376EC;
+	Tue, 30 Jan 2024 02:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706582275; cv=none; b=KjaCE9Z1afPRiM9yF+/WSQB8L8wro/vw3KcF/m+4XjgeZ55S01GcS9cVq/T31pWP9v/j9hI+88Uxk4+KgxEgANY2sWkS5n3tvLewIt3DRfVSYouoez42/7prnQ1jDQBgrFZptxb8UIGzPTAyVt26TOuUIkY/cXf+Y2wCL4WsdqY=
+	t=1706583001; cv=none; b=XLY/ca1r7CnPZG5Z3/wfNpIC4jkyPLyQTOsNpt5i9lRtZEBNZuuFEsBj63npOTvb/D6WLF2iT/ei3lKnq5wGZ8eJd/1SI/mlF+Y2J62A4uZmHHEdrwtTQmG/ykUiomCKvnPesrnfv+I+r/Y+5q8+31Ht0b8s9y6HrT1+lHhUDsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706582275; c=relaxed/simple;
-	bh=Cx6jrY1LqK0Mi0xtR9ncr3IyboSqCtIVTeXRYU9xQS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EB8CfrAbTc50wPcWqaBPfGR9/SYX07Fs2AQPWLE1eMVL6fHypWL3lm6yBJZbjRqunKv04hu51Jr5XM6suR/6rPmnlqOvtaQNgPgUGScQW/egpvSIgUh8APBiFaDR7pQcjdLY10tlvS1BJg+JGbNOeqeTqIR1UH+8ZZSR36Zerw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=bV9YhjR5; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1706583001; c=relaxed/simple;
+	bh=ItO9x5D6H9JYyGjTAgHUEiIFhOZPWAuezmni19/rk7U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jvlirXO0j+PZojNrQUiIRmTydW44ACfDc35Xm5CRG4cFtBz9UFYfkFvBr/s4XSMIvVcqn/4dgo8zazGpNLXUC1/JJvUi5v9GnJiCtD/5e/k2FtP0fD69IbTfZPnIH13RCWO2SRbmjbCN6z9AXjhS4vcn8ryFyK/6PSkdSNZquK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oedhXLvb; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706582269;
-	bh=1pIrZnyMO+/9z4pqrFTOiyJtxbZC4vdz1Rs57pXkRGk=;
+	s=201702; t=1706582996;
+	bh=nI4mBita6iA8xDpiKFKIuNj+Ycgew+KbDCEq7YIIirA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=bV9YhjR5AfWleeRZLa54gVwAFiKQjQggPAPE1Mf7kVRTNY2RPAHqEY+rK9J8Cimhr
-	 SL36OIvD2vtI8Tqhsvyd+oemUCg49ERpKxfXM7h5V/s4HOwj//+V2Fwm5ogYKkMnws
-	 gEPxRE3Y0h8+BFMa2UNIhKdzu8+9RMOQIa98zs67k0Hkcml7iBIJVuL+xB2ij8uK4B
-	 KG0PyRD3iGhgY0WRxBWWDX4VQ/+IjnVoyWLjwHGm1FNyWRs2Cqiq03Ypp87r7AjVMW
-	 D9CC6VuXhr6MT0vXmNd7NlzEDknBp+yYijQWu/epFVlRc4m/sTBhth7ydYVvWopjzk
-	 KZkEk5zydWuUQ==
+	b=oedhXLvbsLUho7iO9/TTjHDNXbywiqeYf+Mhql9Ma2/YwmvnupmcmBq4Z0COSATOa
+	 bqOKesBDOhFTsrhC58juBW6AvPR6ZdNbOMbZa23+gmadRGM6ltJ25FMzkv2XjlnDNy
+	 DeJTd2QBHS1IlMx/mX73+JEJ9dZJ+of6QuXZuexQr7ZAglYvGAWalsE5bHb5orHojU
+	 tcgm71Kq2fhEwF5nJdldugIyvwyNQYBeyMHtAYKBUgyUmV7Rl0igtzxOKI/IN5ytKl
+	 Ien9fRtZrBYiZLHY4l3jBm/VtcUx67W4aoty5AxZQWdRCr0uot0g+7bGqrkkByHgLr
+	 gqsB5LqPWfaCA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TP8Tn1gmrz4wc3;
-	Tue, 30 Jan 2024 13:37:49 +1100 (AEDT)
-Date: Tue, 30 Jan 2024 13:37:48 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TP8ll3wZkz4wc3;
+	Tue, 30 Jan 2024 13:49:55 +1100 (AEDT)
+Date: Tue, 30 Jan 2024 13:49:54 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Tejun Heo <tj@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the workqueues tree
-Message-ID: <20240130133748.7c30d71f@canb.auug.org.au>
+To: Alex Deucher <alexdeucher@gmail.com>, Dave Airlie <airlied@redhat.com>,
+ DRI <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Cc: Alex Deucher <alexander.deucher@amd.com>, Rodrigo Siqueira
+ <Rodrigo.Siqueira@amd.com>
+Subject: linux-next: build warnings after merge of the amdgpu tree
+Message-ID: <20240130134954.04fcf763@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QQbdYwxTkUeMtU1al5QzKYb";
+Content-Type: multipart/signed; boundary="Sig_/6mX_kiWSiCoFKiVsyRduY3I";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/QQbdYwxTkUeMtU1al5QzKYb
+--Sig_/6mX_kiWSiCoFKiVsyRduY3I
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the workqueues tree, today's linux-next build (htmldocs)
-produced this warning:
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-Documentation/core-api/workqueue:761: include/linux/workqueue.h:476: WARNIN=
-G: Inline literal start-string without end-string.
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of =
+kernel-doc format:          * @@overlap_only: Whether overlapping of differ=
+ent planes is allowed.
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of =
+kernel-doc format:          * @@overlap_only: Whether overlapping of differ=
+ent planes is allowed.
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:1: warning: no structured comme=
+nts found
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of =
+kernel-doc format:          * @@overlap_only: Whether overlapping of differ=
+ent planes is allowed.
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:162: warning: Function paramete=
+r or struct member 'pre_multiplied_alpha' not described in 'mpcc_blnd_cfg'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:162: warning: Function paramete=
+r or struct member 'overlap_only' not described in 'mpcc_blnd_cfg'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'read_mpcc_state' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'mpc_init_single_inst' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'get_mpcc_for_dpp_from_secondary' not described in 'mpc_=
+funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'get_mpcc_for_dpp' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'wait_for_idle' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'assert_mpcc_idle_before_connect' not described in 'mpc_=
+funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'init_mpcc_list_from_hw' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_denorm' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_denorm_clamp' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_output_csc' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_ocsc_default' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_output_gamma' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'power_on_mpc_mem_pwr' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_dwb_mux' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'disable_dwb_mux' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'is_dwb_idle' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_out_rate_control' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_gamut_remap' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'program_1dlut' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'program_shaper' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'acquire_rmu' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'program_3dlut' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'release_rmu' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'get_mpc_out_mux' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_bg_color' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function paramete=
+r or struct member 'set_mpc_mem_lp_mode' not described in 'mpc_funcs'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of =
+kernel-doc format:          * @@overlap_only: Whether overlapping of differ=
+ent planes is allowed.
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:162: warning: Function paramete=
+r or struct member 'pre_multiplied_alpha' not described in 'mpcc_blnd_cfg'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:162: warning: Function paramete=
+r or struct member 'overlap_only' not described in 'mpcc_blnd_cfg'
+drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of =
+kernel-doc format:          * @@overlap_only: Whether overlapping of differ=
+ent planes is allowed.
+Documentation/gpu/amdgpu/display/display-manager:134: drivers/gpu/drm/amd/d=
+isplay/dc/inc/hw/mpc.h:3: WARNING: Duplicate C declaration, also defined at=
+ gpu/amdgpu/display/dcn-blocks:100.
+Documentation/gpu/amdgpu/display/display-manager:146: drivers/gpu/drm/amd/d=
+isplay/dc/inc/hw/mpc.h:3: WARNING: Duplicate C declaration, also defined at=
+ gpu/amdgpu/display/dcn-blocks:3.
 
 Introduced by commit
 
-  5797b1c18919 ("workqueue: Implement system-wide nr_active enforcement for=
- unbound workqueues")
+  b8c1c3a82e75 ("Documentation/gpu: Add kernel doc entry for MPC")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/QQbdYwxTkUeMtU1al5QzKYb
+--Sig_/6mX_kiWSiCoFKiVsyRduY3I
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW4YPwACgkQAVBC80lX
-0Gw51Qf/dKfGSDCfaimg5w4kWJn3/b12BW0uO11C6eC9b71asCxk4pjT9LhH2LiY
-JnmIfMFRzvBX1FBoEFIw6NvBxHjK0jkX4zJ1QEFHAp/JGRjEgSC6zEv9gshDdEJ7
-yJgIHet37lj1CekAHjxy+BrWkgJ+ihtbueTwXSWuBU8aP4naf0kl/gR0wEvQDtko
-0S3cNMqzPsSzXjNnrZ2GBF+3ZYiEYV+hQCvDlcf8ehb47odEFTa4Gx0GDvE4fhf8
-AS45RYznyuPpDAQ8DYDXB09CrYVb2hRP/qi2zznXSiuXzB3B3BsnVtz70qimDkaG
-ngKGFu+nEb1m+e7s9+PHRzQkYtP9Iw==
-=/410
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW4Y9IACgkQAVBC80lX
+0Gw4XQf/Rq+HoNJdEzy50YbklXtbrHfZWcovvUP25Ov2KbjaEvw5mqb9aJGeCA2n
+Ynadi0JpBtSp/YoJnUxK/J6BJdLV+Xp+FDEuZ132GWMUGoS4USETaMLi8mi91f5A
+KS6o6uA90bxUchztNbdgvlLG7YdjGHKAmVbNyxU42s0TJ52mjt19N4KxlBHjWsOr
+rmQ3eLwxPvFtNWisu7wMPeSaHbbJFRvVgMWrEsf8PA+81yfd03J5Chm3ROmgKc9x
+HspOGJNycgvsdA8eusTs/Yj0BGg+B3NUj9/7nSld3geUyq+jikRffthG/yJVbEJ+
+gjABTJKFxNXPD4p0xKVyoaEdQua5NQ==
+=wJtR
 -----END PGP SIGNATURE-----
 
---Sig_/QQbdYwxTkUeMtU1al5QzKYb--
+--Sig_/6mX_kiWSiCoFKiVsyRduY3I--
 

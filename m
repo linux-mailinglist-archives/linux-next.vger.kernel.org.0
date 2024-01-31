@@ -1,98 +1,81 @@
-Return-Path: <linux-next+bounces-931-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-932-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0918C844947
-	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 21:58:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F07E6844A5C
+	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 22:49:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 857BB1F21491
-	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 20:58:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A58951F21B45
+	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 21:49:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45CAE38DDA;
-	Wed, 31 Jan 2024 20:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B237E39AC7;
+	Wed, 31 Jan 2024 21:49:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Xqo6CuYo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGjgx3Gz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507943985A;
-	Wed, 31 Jan 2024 20:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5DB39AD7
+	for <linux-next@vger.kernel.org>; Wed, 31 Jan 2024 21:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706734714; cv=none; b=kzb4miMBSq5CceflmhCUS+OfzaTSkxKXTzMphllfKHyRH+TdnA5PWxgWSOCT2MGPcA54Az4cGKp3GjN//ZsPGs7307buSMi2lRXEkXA/bP5JxsLzy1xqHPnW2h/+W0wbMwxf/rqsP0LbiF57JskyU5vBPnPbOJQ0aVV2N/rZVP8=
+	t=1706737753; cv=none; b=udIadjnmes8S8b9oIQ2KyrC3P2iCn5CyegpCwIdRhMO/k9P9skEg+ljbIIIH61ZsHbiZYLCB2u9UxAnCt7zQsFISyHme1M1ZUpK33aA8GfkekgyWGWM1Ba2dlHZ4jomawruPNMhPQmUfg8RZP+HoYZOqo6jtWatXWAcDjUplSfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706734714; c=relaxed/simple;
-	bh=rPMC5cU+Nyq+sFBsKBFbVltshjTEvmOAtMoftXoiX7E=;
+	s=arc-20240116; t=1706737753; c=relaxed/simple;
+	bh=Rkx3SI++5WgBpXN1FZD0sNTrJ1XmYsk0llRCozkGgK8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lqHlkglt/VoM81I4f2Nro0+4Xv0orEzaBwQf/NsebqG0Z03TihOaVGg4Q5iipEmKDi9RbjSgacs+CvaYaTzXhMkbl1XJcTJ900UEA/INbOm0BCUKr7ko/rQD7fD8PcI/TZOILlsVU/2T+p/L8aurw/+6BUxZyrpSkTU2WYiNIF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Xqo6CuYo; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id ADBB940E016C;
-	Wed, 31 Jan 2024 20:58:28 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id qW6VHcQ9oDn9; Wed, 31 Jan 2024 20:58:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706734706; bh=X/M3CRf/7J/jGncONPz+Kryk1EvhpJloRvQ9Nn42wI8=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=a9HprE5z98/T2ztihef1xzZeBCTVyAp6doyPqSFZlgKqnpBRpDuK+9VIKTlys1CzxYC8Be9W48dpyO0kmSskICJCE8IWyI445mTmhu5b1gY0WS3phRFR99xQZUNuWeXjWm5g+x7fdbS+vkN1k73CvMJ9br5NhUYuwNKvG/onbDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGjgx3Gz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD8CC433C7;
+	Wed, 31 Jan 2024 21:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706737753;
+	bh=Rkx3SI++5WgBpXN1FZD0sNTrJ1XmYsk0llRCozkGgK8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xqo6CuYor7xU/s3jrsDwZPHRIXeS9D9clChrM1leGkFn1ezh65cbl2Bl3ABABJhM/
-	 hMuqi2U6+nfJ1z7Kr7cjrMa1o1mvE7wmtnIIOmvcxzoEJC3O5TwCvDYtwTR30Di134
-	 HMXRPs2Y/nIIg5PhdBVTcnq24HjRZbAhdST/K8KxoukJ8iqAFjXbiiCE+L+YxRtyog
-	 h8I7JPk9Px/gCskH4BF/i5/HKmvqQKMyPVn+lZzVLBh/6IpBuB/ft0+6Ssc3+s/jSd
-	 ZlR/w8nEcIi6wfgm7qfIxn3t0U/8i6tnTwrjeO4yAa0ikD3CQsrgvYvBVhh5DFfF9r
-	 2+Shep780NtDmpk0Gkx56EBI5Vp8fi6WCazqM5fcA55ETnAsTCCCSFsmPeRQmNlzPh
-	 PrHR5P3UlFL7iiuNJMQXiN6X780+F3RGOHKGCIIUfBfM4GU9sMZhOva0E3tUHuzNB7
-	 UnGescROGXYSTueHqsG1iYs49syAtbfrwMP58WcSg3HfvYfDm6oY7ZH9QxTMxoGFjh
-	 fgrFziW46c7C1t+I5lONMHEn62VCvhlMSBb3crzbXr09y9sGp7ulX/TXLm+vWNbZwN
-	 RCetH0gydsyLfdKuyfJQNRJlBJsTcrA5a8t0wrodvl+ifZwwYC9NcZCnvjK8B/7etO
-	 AN36X+T+wjs6i+nuRbC9Im64=
-Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8885040E00C5;
-	Wed, 31 Jan 2024 20:58:19 +0000 (UTC)
-Date: Wed, 31 Jan 2024 21:58:14 +0100
-From: Borislav Petkov <bp@alien8.de>
+	b=aGjgx3GzyOy8iXpo3o/aCowbrgOXwdnr9p/Mhx8ZEKbh0HRZCQkQNjLY26dBN1xRq
+	 KoazCpN9AeqlcitG/A3DTeTdnLzJ1WthH3UgRtkrVT/ERZAXZ6aOZ5CkOug8zZiFkM
+	 kbzA6BQLtqXr947Psfap9mWM3Wc4zDgdcxUbAJ1MD46ItVjcU7KoYv2c+4H4micL4k
+	 Tb00wXbjXEFLm6r6gvwGXNxoqkFqIO0bLU97yUc0FBSfDMpSXtu0KWBo3H7gMMal/e
+	 9z/TckVh4zvYZMqhj+YiYxe/sfnLR1De3wQ/jLcQvrye64gukt/o3GBxIco9e2LGMH
+	 d9Jtz/bC4Y+ug==
+Date: Wed, 31 Jan 2024 22:49:09 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the tip tree
-Message-ID: <20240131205814.GMZbq0ZgKtxHZ9d4k7@fat_crate.local>
-References: <20240201074102.00726258@canb.auug.org.au>
+Cc: Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>, 
+	linux-next <linux-next@vger.kernel.org>
+Subject: Re: Request for i2c re-inclusion in linux-next
+Message-ID: <nmrjm4edxqh4e7bzmktjbpmz5al4wv47aew52f2dwzh4pgbeip@n4bddtmsb6pb>
+References: <sripk25leahdjiziacby4ql45kspw5cd3ic5vj23lctsawc2lm@be4sg32fjilu>
+ <20240128142804.21d49045@canb.auug.org.au>
+ <xewyobkwecyhluztyrpwzhnuv3f25eq56iwkh3obfzxgqghe7p@2agb275csehd>
+ <20240201075605.5db74042@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240201074102.00726258@canb.auug.org.au>
+In-Reply-To: <20240201075605.5db74042@canb.auug.org.au>
 
-On Thu, Feb 01, 2024 at 07:41:33AM +1100, Stephen Rothwell wrote:
-> are missing a Signed-off-by from their committer.
+Hi Stephen,
 
-Yes, I decided to rebase the branch in order to have it clean from build
-breakages. Lemme add my SOB to all the commits which got their SHA1s
-changed in the process.
+On Thu, Feb 01, 2024 at 07:56:05AM +1100, Stephen Rothwell wrote:
+> Hi Andi,
+> 
+> On Tue, 30 Jan 2024 13:35:35 +0100 Andi Shyti <andi.shyti@kernel.org> wrote:
+> >
+> > Thanks! I have renamed them in my repo as i2c-host and
+> > i2c-host-fixes to be aligned with your naming. I'll keep both
+> > naming for a while until you decide to update.
+> 
+> I have updated my end.
 
-Thx.
+Thanks!
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Andi
 

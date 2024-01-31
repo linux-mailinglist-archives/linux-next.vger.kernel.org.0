@@ -1,65 +1,137 @@
-Return-Path: <linux-next+bounces-928-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-929-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3D748442B9
-	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 16:11:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E30B384490F
+	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 21:42:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9925D1F24B75
-	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 15:11:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21C8D1C21B4D
+	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 20:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A81CC86ADE;
-	Wed, 31 Jan 2024 15:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA8222087;
+	Wed, 31 Jan 2024 20:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ARBz+MSp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C5E84A44;
-	Wed, 31 Jan 2024 15:11:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D52B20DE0;
+	Wed, 31 Jan 2024 20:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706713892; cv=none; b=l5YKIaQ/Lg5Rmg10Y+GZaIS4S1u2vasL13a9OSOsr4eOvzSMxnD2FXRkbvbKrmPeciIL9RT2YZLE1b/37N3KZ1bWYj2tgJMSXrMKXdh/EomJ+F4Ma8Fv+zg8b/VJlWP1F1wQY3QXPgWgC8+96Mr6LG2FhxfeNeO753Zc1A3wWWQ=
+	t=1706733741; cv=none; b=E6w6elcYy/RIG2g0PX2QhBGV4J6cQCptEBTX2t4HHbM7v677IPOLQrWhPo7O/RJ8yJmkfppQZTJO2IlTITrhEVG/IT9pVlJL4VgW8I50YQHCDcJuqcg8Xc2h6hPUE58aKW36aljjmas3bs/G1uyN0MnJe5jFOJgvqZRZN1AS+vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706713892; c=relaxed/simple;
-	bh=VU+M8Ww5lmZFUC/OKedPmORF4YD7skgGYytTSjMIqvg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qDTdBdi4t3Iv5QbXrXV2bGnQZxfJhbcngUw9nEGsmzz+pJCmI2FQDt5+BLR+FyZzrok3uKK3KC6Pp/kpoYbX0NcBnVSHkd9oweSgXPpLPgwiCmZ2WFQ4WqQcGFyKNe9aIevQupp0/gSKgOvcXUIOdZsJQPFwVLIvUuROqTtnKt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=strlen.de; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-	(envelope-from <fw@strlen.de>)
-	id 1rVCFA-0002et-B5; Wed, 31 Jan 2024 16:11:16 +0100
-Date: Wed, 31 Jan 2024 16:11:16 +0100
-From: Florian Westphal <fw@strlen.de>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Network Development <netdev@vger.kernel.org>,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	Florian Westphal <fw@strlen.de>
-Subject: Re: linux-next: Tree for Jan 30 (netfilter, xtables)
-Message-ID: <20240131151116.GA6403@breakpoint.cc>
-References: <20240130135808.3967a805@canb.auug.org.au>
- <d0dfbaef-046a-4c42-9daa-53636664bf6d@infradead.org>
+	s=arc-20240116; t=1706733741; c=relaxed/simple;
+	bh=iCd/z3ZhJiwbvZDbjGrTq6Xj86/HS7Uqec1TZyUbpnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uefJ+hFZ7236WwtgQsdsxOLuye9KrNSGtafFhyIVyLXI+fOQdXcvCiupo5XAHKX0+/tQqcAt3GJp2SOfNbufJ0PI5OjVuK5Sxo+5vKBCM/wC10c5MT4+oZEBR+VImqUfi6nvxzVZbtvFnNJTfBA7WTcP6mJs6W8OtYj+IyJPyGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ARBz+MSp; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1706733735;
+	bh=4rdtf4LuoZzh7J5jcGE4PvRQ08J1Kn0j1es+qeP3Of4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ARBz+MSp5QPT0RVndSxMgeU2dfJxNe60FDNIwoySbxY4Manme7xiSRRr481PblJOJ
+	 mn5yrv91BlDfUNsWk9vQtvNBQOe5S4Ht1tBCcFsGsLgVkPtzgM3uI/uLAskcOuO8WC
+	 /qOQUdT23ShdbnkG8AqDccZsxYJLminfZ1H/S5yOatd60sWC6jc3dCc7PgM7fhz0er
+	 wwMgx1lMvXZSmf3XZNjTAlhivUd/2ugUXYcJYssT3gb6QEldbNB9V/B1MZJcM+BCeV
+	 GWNPRSNoj5LSLnhjQOomtFzpOTm5CY4GY1Q1Klpb1KHAVwMiBvL707lDYEkioFHIks
+	 uit9wDzCkU+aw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TQDVX75lPz4x1v;
+	Thu,  1 Feb 2024 07:42:12 +1100 (AEDT)
+Date: Thu, 1 Feb 2024 07:41:33 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: "Borislav Petkov (AMD)" <bp@alien8.de>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the tip tree
+Message-ID: <20240201074102.00726258@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0dfbaef-046a-4c42-9daa-53636664bf6d@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/dktiJloPzo_9TMacUSWcm3n";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Randy Dunlap <rdunlap@infradead.org> wrote:
-> /opt/crosstool/gcc-13.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: net/ipv4/netfilter/arp_tables.o: in function `arpt_unregister_table_pre_exit':
-> arp_tables.c:(.text+0x20): undefined reference to `xt_find_table'
+--Sig_/dktiJloPzo_9TMacUSWcm3n
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for reporting, original Kconfig had a 'select' for X_TABLES which
-isn't there anymore.  I'll send a followup patch.
+Hi all,
+
+Commits
+
+  b564b0111a3f ("x86/fred: Invoke FRED initialization code to enable FRED")
+  43ca697baecf ("x86/fred: Add FRED initialization functions")
+  ae46f3978ae4 ("x86/syscall: Split IDT syscall setup code into idt_syscall=
+_init()")
+  cb5429aaa0c5 ("KVM: VMX: Call fred_entry_from_kvm() for IRQ/NMI handling")
+  d8fbd0496286 ("x86/entry: Add fred_entry_from_kvm() for VMX to handle IRQ=
+/NMI")
+  8c968f4df73c ("x86/entry/calling: Allow PUSH_AND_CLEAR_REGS being used be=
+yond actual entry code")
+  ed63bc7d4953 ("x86/fred: Fixup fault on ERETU by jumping to fred_entrypoi=
+nt_user")
+  531ff17a705a ("x86/fred: Let ret_from_fork_asm() jmp to asm_fred_exit_use=
+r when FRED is enabled")
+  db7c787d8ba2 ("x86/traps: Add sysvec_install() to install a system interr=
+upt handler")
+  5dd56c94ca2f ("x86/fred: Add a machine check entry stub for FRED")
+  3e91abaa5673 ("x86/fred: Add a NMI entry stub for FRED")
+  4af12f6a393c ("x86/fred: Add a debug fault entry stub for FRED")
+  2ad2917c6f50 ("x86/idtentry: Incorporate definitions/declarations of the =
+FRED entries")
+  9f6870bafc18 ("x86/fred: Make exc_page_fault() work for FRED")
+  f102fe126d28 ("x86/fred: Allow single-step trap and NMI when starting a n=
+ew task")
+  d0fb796dc347 ("x86/fred: No ESPFIX needed when FRED is enabled")
+  5710910a6c94 ("x86/fred: Disallow the swapgs instruction when FRED is ena=
+bled")
+  f393835cbab6 ("x86/fred: Update MSR_IA32_FRED_RSP0 during task switch")
+  fcd06abf6de2 ("x86/fred: Reserve space for the FRED stack frame")
+  c413db75cb7d ("x86/fred: Add a new header file for FRED definitions")
+  c125443456e9 ("x86/ptrace: Add FRED additional information to the pt_regs=
+ structure")
+  ed262541af19 ("x86/ptrace: Cleanup the definition of the pt_regs structur=
+e")
+  0b2e6c1c724f ("x86/cpu: Add MSR numbers for FRED configuration")
+  95d34efac1a0 ("x86/cpu: Add X86_CR4_FRED macro")
+  379ae086a73c ("x86/objtool: Teach objtool about ERET[US]")
+  567f7205dd7a ("x86/opcode: Add ERET[US] instructions to the x86 opcode ma=
+p")
+
+are missing a Signed-off-by from their committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/dktiJloPzo_9TMacUSWcm3n
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW6sH0ACgkQAVBC80lX
+0GwOzwf/ZlD0dCYGex2yyQcDWd8K3JmimV7jZBIKLFZW1h7DLaCuqJoEQY1eOrzT
+26eFaHFCM/Ied3NXdV08l/e2X+JcxOXNqIvzE4gG8b+JTwIX8BC6ydsRZQSY/S1O
+Q4IHixG1n69+hIkHLO9vw1k/hUuxJdo0JZ32b+MNguXBi/i8ysrAqpH+N2Wm/eVE
+r4C3EOA/4fp4LBr0jMlDP1uxIuPwEY6L8mRFFjI8aTErdPyEKK3f2PZZnh8EV+iM
+fGYUP7Do9SzAvD79zB3bEoun8lkjD7quig+w2CB4hWiPkUG4SNYn9S4B+wAPZhsM
+gHdPYH9IRZ76sVxgNwXH5CkTN2uT4w==
+=g9ed
+-----END PGP SIGNATURE-----
+
+--Sig_/dktiJloPzo_9TMacUSWcm3n--
 

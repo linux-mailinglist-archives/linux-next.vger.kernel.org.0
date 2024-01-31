@@ -1,58 +1,50 @@
-Return-Path: <linux-next+bounces-927-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-928-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B75C84429E
-	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 16:07:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3D748442B9
+	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 16:11:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 020421F2B9DF
-	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 15:07:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9925D1F24B75
+	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 15:11:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571D380C04;
-	Wed, 31 Jan 2024 15:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uTXNxpIR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A81CC86ADE;
+	Wed, 31 Jan 2024 15:11:32 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D00F69D00;
-	Wed, 31 Jan 2024 15:07:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C5E84A44;
+	Wed, 31 Jan 2024 15:11:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706713657; cv=none; b=IwLoF0vn1SlJkfrxdTdtycxZv1SPShaxUwNCqfHxB1q621nXxYmJZkusYg2ZdCB5+ddJFR9ejy5ZOEtl24msbphK3dcoYWxpxADN6uWXEAwV0+1+8ciQnfed4S0Q98VlXIfI0UjXbGWg8AnH/sGtoaKZ+fVcQqgNt8KcB9/sofw=
+	t=1706713892; cv=none; b=l5YKIaQ/Lg5Rmg10Y+GZaIS4S1u2vasL13a9OSOsr4eOvzSMxnD2FXRkbvbKrmPeciIL9RT2YZLE1b/37N3KZ1bWYj2tgJMSXrMKXdh/EomJ+F4Ma8Fv+zg8b/VJlWP1F1wQY3QXPgWgC8+96Mr6LG2FhxfeNeO753Zc1A3wWWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706713657; c=relaxed/simple;
-	bh=3aiCCA7CxoRzULPh9IwHf5NFobEP7nFqJa6RSSR5YKY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=Autg2wiW0/a1lRSpDzEIFdKO3ZJL5MOQ96eSRBfD/Av8Zog4uwhYt8VhSGpW9rVJvGSB+LQfMD8GxEquVfvnzLZWylO3PbDFBubqoQw5zqFkln6opJ0Q9Jk9Gr3EbDp4U+xUVdv1gIkHXjlpYwRyDXbAAd8B3IWqnfkzeVYTPnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uTXNxpIR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 600FEC43394;
-	Wed, 31 Jan 2024 15:07:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706713656;
-	bh=3aiCCA7CxoRzULPh9IwHf5NFobEP7nFqJa6RSSR5YKY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=uTXNxpIRBUUC/CUHs3JtFSRg+n+3BvDfZVl1RrjZZXQvlDOxAOmbrhSQjSrTOOVhE
-	 9QwSX9FDbGNCTXYAGJ+G5ilToXA/H1Qu+4NSpZKMb9g9aUxJkI+fxAQa+7IHu1bIAN
-	 /w+DzhEuV/wg8BDXmC2frAZ+wrU9CBVs0NmD1qbwY8eQ1ChEkJoLeaRr5XHPQ1XENu
-	 qwFGUJNqgiaNRioT4lIHOyjeoedcrR8q7h2Ow1vDsR7Yg7XFF6j6RMBN1GJtxL8sBP
-	 TXLbf8JiLUSVXlwf0NZ07WGe6M7NTkF4I8yja798jwaUzWQky8LtwnTQoYVGc/G5hr
-	 Or2bHLC3KC1Bg==
-Date: Wed, 31 Jan 2024 09:07:34 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Johan Hovold <johan@kernel.org>
+	s=arc-20240116; t=1706713892; c=relaxed/simple;
+	bh=VU+M8Ww5lmZFUC/OKedPmORF4YD7skgGYytTSjMIqvg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qDTdBdi4t3Iv5QbXrXV2bGnQZxfJhbcngUw9nEGsmzz+pJCmI2FQDt5+BLR+FyZzrok3uKK3KC6Pp/kpoYbX0NcBnVSHkd9oweSgXPpLPgwiCmZ2WFQ4WqQcGFyKNe9aIevQupp0/gSKgOvcXUIOdZsJQPFwVLIvUuROqTtnKt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=strlen.de; arc=none smtp.client-ip=91.216.245.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+	(envelope-from <fw@strlen.de>)
+	id 1rVCFA-0002et-B5; Wed, 31 Jan 2024 16:11:16 +0100
+Date: Wed, 31 Jan 2024 16:11:16 +0100
+From: Florian Westphal <fw@strlen.de>
+To: Randy Dunlap <rdunlap@infradead.org>
 Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the pci-current tree
-Message-ID: <20240131150734.GA585821@bhelgaas>
+	Network Development <netdev@vger.kernel.org>,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	Florian Westphal <fw@strlen.de>
+Subject: Re: linux-next: Tree for Jan 30 (netfilter, xtables)
+Message-ID: <20240131151116.GA6403@breakpoint.cc>
+References: <20240130135808.3967a805@canb.auug.org.au>
+ <d0dfbaef-046a-4c42-9daa-53636664bf6d@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -61,48 +53,13 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zbn58XcoOXauLUjN@hovoldconsulting.com>
+In-Reply-To: <d0dfbaef-046a-4c42-9daa-53636664bf6d@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Jan 31, 2024 at 08:42:41AM +0100, Johan Hovold wrote:
-> On Wed, Jan 31, 2024 at 12:58:43PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the pci-current tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> > 
-> > drivers/pci/bus.c:440: warning: Function parameter or struct member 'top' not described in 'pci_walk_bus'
-> > drivers/pci/bus.c:440: warning: Function parameter or struct member 'cb' not described in 'pci_walk_bus'
-> > drivers/pci/bus.c:440: warning: Function parameter or struct member 'userdata' not described in 'pci_walk_bus'
-> > 
-> > Introduced by commit
-> > 
-> >   69fb843fdbd9 ("PCI/ASPM: Fix deadlock when enabling ASPM")
-> 
-> Bah, I added a newline after the opening /** when moving a comment
-> without noticing that the kernel doc comment was malformed.
-> 
-> Bjorn, you could either remove that newline or squash the below patch
-> address this.
+Randy Dunlap <rdunlap@infradead.org> wrote:
+> /opt/crosstool/gcc-13.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: net/ipv4/netfilter/arp_tables.o: in function `arpt_unregister_table_pre_exit':
+> arp_tables.c:(.text+0x20): undefined reference to `xt_find_table'
 
-Squashed in, thanks!
-
-> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
-> index 116415f91195..826b5016a101 100644
-> --- a/drivers/pci/bus.c
-> +++ b/drivers/pci/bus.c
-> @@ -425,9 +425,9 @@ static void __pci_walk_bus(struct pci_bus *top, int (*cb)(struct pci_dev *, void
->  
->  /**
->   *  pci_walk_bus - walk devices on/under bus, calling callback.
-> - *  @top      bus whose devices should be walked
-> - *  @cb       callback to be called for each device found
-> - *  @userdata arbitrary pointer to be passed to callback.
-> + *  @top: bus whose devices should be walked
-> + *  @cb: callback to be called for each device found
-> + *  @userdata: arbitrary pointer to be passed to callback
->   *
->   *  Walk the given bus, including any bridged devices
->   *  on buses under this bus.  Call the provided callback
-
-
+Thanks for reporting, original Kconfig had a 'select' for X_TABLES which
+isn't there anymore.  I'll send a followup patch.
 

@@ -1,109 +1,117 @@
-Return-Path: <linux-next+bounces-939-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-940-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BC48844FFF
-	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 05:02:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BE8A84507A
+	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 05:47:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7976B2521D
-	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 04:02:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E6451C23118
+	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 04:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369513B786;
-	Thu,  1 Feb 2024 04:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A2E3BB2D;
+	Thu,  1 Feb 2024 04:47:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NtNOpGBb"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PJ00XLhD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BCC3B197;
-	Thu,  1 Feb 2024 04:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E6B538DE1;
+	Thu,  1 Feb 2024 04:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706760164; cv=none; b=hbs/ux0Nyi68lh91sN1QaglSGdVpk0gh4vfXoOcZDR7MBgKl4S/ixjjmoQnGr+nMlAr9cRtX4LYSJM2gtSo4IR6tQfjnf1vLZ+ezx6kQSME2Oo5PUWL4m1hT0a5N5WzuFs/AUYrwNg/WS7E6O+Ddu0Lp/0a083NIOJoB9cIReyU=
+	t=1706762856; cv=none; b=tPZDP9A1aUTYyhahdZnGqAlGJwfOVtsX0Zz9oaHyAxPENEd9QlqBF5R2nUlzRnq9vAns9sP/hx/CjnTt30V0bg2xoRzqdW0LqmLA+XaPV38H44X3J+DX7ZqngSE/gg1xKoH/y+wWI68lR654kS0VDD6AfdJi0YID3g0wNwvWNAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706760164; c=relaxed/simple;
-	bh=hPKW73gAksxfQpaKEhrAgPFmqi1zqRBcjvlb3w5rebQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KKGB3AoA5ZtYPtwoqI5VoxqFeRV7HrreEz1O6va8Oop8rZpVWTEgElRJi1YvcftBgMGlEBAwmcYC8THphr5l0rBcmExN9V+d/PkJTBWZRp/3hKY1bz/PDXpV6voTzD62qRwHt/5gFE0n1JalfNcBwrWj2RGitW2GWQDgFyOeKjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NtNOpGBb; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e775695c6so4329155e9.3;
-        Wed, 31 Jan 2024 20:02:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706760160; x=1707364960; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s1i8p9n07cJh4ODWFjIGPnEhKZdHIlULx3g4LfLVCIs=;
-        b=NtNOpGBbpWnYjPCyHJstCviaGDSW4Bq1QFFkYDQc4OaJ8HBvjla6g5AQc0hoYgRaTt
-         ywD3P/MySOttOnntRQKuoWF7CrvT9urmOSCNjMyYEcih+vkIRIzspjByIweLseA3Aki8
-         2egp8ssCPhUXgq84Ri/knAp5iu2nbfC/xE7DYjdQ/k0j1ztffKIR/nBX18b2ZkcDvLgm
-         FiKr+VdXbyclJKkIVFALxnYEa3Y1GwVvy3mMJJOzjjlM3N0eCupmZV533rs5GjeGozQ0
-         zWLupO5AfxJ3FumozmQKCNNkrEX9keeYupYv4xjrO1vutZjFMKncfEUnoimh/ObqxzYk
-         4rLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706760160; x=1707364960;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s1i8p9n07cJh4ODWFjIGPnEhKZdHIlULx3g4LfLVCIs=;
-        b=U7jYJlxDx/b5/OIFsQdYLB4f/GAEc/DbMnNEyYyd/eqTrswpbQHfT647ICCnFsibFJ
-         kyef1WyuceQ1VTfYaHpyc/s8srsePw3YiS1Oyc3Wy4f5xI07E/wxNNEXSM2s4pGF/g+R
-         eT8ZhhHcAkCJPsbUoxFJJbn1js5esDg0+9PF8+ZGznxR7XyRG05yNG8MKepZsacJKVsq
-         TDJTDx/vQJBr5RHtJH8SuTeEQ9skY+78O4Y/1wRVHErUihbpEtdr09429WjfmU7v3zFO
-         Pcz5dZ2tyRD7a7CULcCfW/oaWfaZ4j00XBw/a8oi7vTLEWS5p3ok+p6JbGmYJfBEj891
-         tkkA==
-X-Gm-Message-State: AOJu0YyQ8LAALFHZFmTV7Pn4cZkW6Qsxnhg3x3azbnoA13rwuCHET7Nx
-	oeTTG3NnyERCzSBODvs1/3RUxMW7xhNzs+5rWupyUn2zJeU1FncX1+/VHQkAWFPjToTdJrnAdBM
-	/T5o23Trro2GoaT/rMG6k20WNn90=
-X-Google-Smtp-Source: AGHT+IGGkb96zpJM/P8w8LxvQTONN/AaUnpoZY25e9Lt+ah7T6i5ENdcMUOLj7ojHL5lv5lHP3YGZ+rz1DXaZ2zPvZM=
-X-Received: by 2002:adf:f5d0:0:b0:33b:14e8:c97a with SMTP id
- k16-20020adff5d0000000b0033b14e8c97amr300079wrp.30.1706760160438; Wed, 31 Jan
- 2024 20:02:40 -0800 (PST)
+	s=arc-20240116; t=1706762856; c=relaxed/simple;
+	bh=TO5EoA5D34t9gL56uly/Y17i1sqa2TP9ujAaDNI3dUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=u/Izw51tTuCCyix6d/aJVAJaNIrVv8K6KX5PLO0nBMIdQlQFDR7rHPnMDzs7v1dTJsHNOnlH3j/+uuWACTfN3+Y20WNFq7MYcAGLwlg1UbjoeebFLysyozyTi9Vpk7exMugbeBxvkvCmrB8gdy04pW0DuRlYxdnk0dR8ozUjhzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PJ00XLhD; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1706762849;
+	bh=TO5EoA5D34t9gL56uly/Y17i1sqa2TP9ujAaDNI3dUM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PJ00XLhDIgZPSO3B5zSUPYBpGdHLpkqei/mzpkLVeW5gCLR9YM/rSJNzIlOE8SULe
+	 MryzVypOej3qNiBMgMOC5uqvXWUsu6oQd0ucItu6s9mrIgPFHmU88oY1PgcIe1vwlT
+	 zDM8BUjU3uzlUEo+LvaLndpWjK/QqhO/eXyUPrbJpR2pUdqMcyP5H1flZAqBqr02hf
+	 H8Y1ZSfwtMfBc4N5bi7AVLoMr8S60M2WAh5b2yTXEUnXsL0iV70xNJ6wZ1dTH1PvEG
+	 ydIk6ztKhSYQTWY7zgunBQpwq0UZsBLymMTEDWR1GbMoqVudTBeIv32ftG9oVnVcDP
+	 xsAg/zfCo0m4w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TQRGT4LwDz4x5K;
+	Thu,  1 Feb 2024 15:47:29 +1100 (AEDT)
+Date: Thu, 1 Feb 2024 15:47:27 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Xu <dxu@dxuuu.xyz>, Daniel Borkmann <daniel@iogearbox.net>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: runtime warnings after merge of the bpf-next tree
+Message-ID: <20240201154727.6dff97a1@canb.auug.org.au>
+In-Reply-To: <CAADnVQLGZFf64X+HinDzCkVxzhB0ja62aMSeMG7Lm0=KLd977g@mail.gmail.com>
+References: <20240201142348.38ac52d5@canb.auug.org.au>
+	<CAADnVQLGZFf64X+HinDzCkVxzhB0ja62aMSeMG7Lm0=KLd977g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240201142348.38ac52d5@canb.auug.org.au> <yeujnwul3nd6vhk2pidnh72l5lx4zp4sgup4qzgbe2fpex42yf@2wtt67dvl7s3>
-In-Reply-To: <yeujnwul3nd6vhk2pidnh72l5lx4zp4sgup4qzgbe2fpex42yf@2wtt67dvl7s3>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 31 Jan 2024 20:02:28 -0800
-Message-ID: <CAADnVQJT8nOiiX90g3Pm7Ud0hzBBjBOQmPtPV1iwUYKMcuBFig@mail.gmail.com>
-Subject: Re: linux-next: runtime warnings after merge of the bpf-next tree
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/q69lYkRZLZHjA3cPQ7CUxDU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/q69lYkRZLZHjA3cPQ7CUxDU
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 31, 2024 at 7:55=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
->
->
-> diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-> index 0fe4f1cd1918..e24aabfe8ecc 100644
-> --- a/include/linux/btf_ids.h
-> +++ b/include/linux/btf_ids.h
-> @@ -227,7 +227,7 @@ BTF_SET8_END(name)
->  #define BTF_SET_END(name)
->  #define BTF_SET8_START(name) static struct btf_id_set8 __maybe_unused na=
-me =3D { 0 };
->  #define BTF_SET8_END(name)
-> -#define BTF_KFUNCS_START(name) static struct btf_id_set8 __maybe_unused =
-name =3D { 0 };
-> +#define BTF_KFUNCS_START(name) static struct btf_id_set8 __maybe_unused =
-name =3D { .flags =3D BTF_SET8_KFUNCS };
->  #define BTF_KFUNCS_END(name)
+Hi Alexei,
 
-Most likely you're correct.
-Force pushed bpf-next with this fix.
+On Wed, 31 Jan 2024 19:55:01 -0800 Alexei Starovoitov <alexei.starovoitov@g=
+mail.com> wrote:
+>
+> On Wed, Jan 31, 2024 at 7:23=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.o=
+rg.au> wrote:
+> >
+> > After merging the bpf-next tree, today's linux-next build (powerpc
+> > pseries_le_defconfig) produced these runtime warnings in my qemu boot
+> > tests: =20
+>=20
+> le - little endian?
+
+Yes.
+
+> Do you see this on other architectures or powerpr_le only?
+
+I only do qemu boot tests on powerpc le, sorry.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/q69lYkRZLZHjA3cPQ7CUxDU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW7Il8ACgkQAVBC80lX
+0GySmgf/es4uAQiBgmiHmyiELu8GssMwzoSJ/D3tvPYhcNymcUWsbHAtGlUL7t/M
+lWibW4wmfmT7MK16C+J9Okr524vqGYoQkTIgdYdFYDXIDifADd4uNvGCjpwtwd8A
+kL+OFWZIFqnAa7BZaGBCPRt6CTta/DHOCeam0qfJkOyoK9RsC84k6PoZhTkH8tvQ
+HA0NbLBuWp+0I1fEPFhEqK+9Jlv+mKoOGeMvPEMDLbKetC3XM8EAliNuZRJMOvPn
+tnwW7snK8bzlbXJCEmE+bzISCjIJid9sg6CfP7qdk3ubwc8iGgytcJ2YTH/vAc30
+HXGaq8K59I5lECw8F729H9ac0gX//Q==
+=ixwz
+-----END PGP SIGNATURE-----
+
+--Sig_/q69lYkRZLZHjA3cPQ7CUxDU--
 

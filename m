@@ -1,124 +1,125 @@
-Return-Path: <linux-next+bounces-943-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-944-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D3DB8450AE
-	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 06:26:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE4D08450B5
+	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 06:31:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37713B22536
-	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 05:26:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02DB31C21DB0
+	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 05:31:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8AAA3C48E;
-	Thu,  1 Feb 2024 05:26:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B093C697;
+	Thu,  1 Feb 2024 05:31:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="BBRxnRA2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="prQsizSH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895C13C48D;
-	Thu,  1 Feb 2024 05:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1093C47C;
+	Thu,  1 Feb 2024 05:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706765191; cv=none; b=FM9UonLNhHy//1aeHmFMkIhsaoUtAHlTVMH379sZ/f0xaAjY8uNBsn/wBTlnp7SJycBsKuUwcLifzgZbmAzPfW+O61XXN3GK7uVTj+oUrAMZMiGcQeXaDqSnSPZWf9FzhBqObRU5LxoILEsSzwP2mcNN56sb1mKfqcKQNnOV5X0=
+	t=1706765517; cv=none; b=QLlXY60EkcXbzr3nj1aWvgyIkpjWGWnm2Nu8aYNVGtSafTw8f7Vcs2zG7hxilmT7A2oaeykmSBdlndW7DHf/djWu8qalJ0dUr5fkCfdxNh0xHVS/BBJM70sn0w1YtTSbiDPdlFzk5Cp8Mbb9JlYNp/jUC0hwGIuH53QTx+XGUpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706765191; c=relaxed/simple;
-	bh=JMh6u4SheanmdzGxarK7jSTab60QQ2yWVfcOhV0YnSM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Tz9os9wAYKOA6nl1d2gH1BjsUcG5tE10dQcHnOiFu7DxK8ngDoIkkVoJsi72YlxM1pu3EWTFXfQaTa5vXoC08iiJjo6SOOIhkqRQSIlAj+qNL/ERX5A2msE/gESTO9wgHLoeltRVRx7N1jJTfaQuJEK8BQ46PnHyQlf86o7wIXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=BBRxnRA2; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [192.168.7.187] ([73.202.249.128])
-	(authenticated bits=0)
-	by mail.zytor.com (8.17.2/8.17.1) with ESMTPSA id 4115PilR3808446
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 31 Jan 2024 21:25:45 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 4115PilR3808446
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024011201; t=1706765146;
-	bh=r1Iqv6cnbCQa3sxh+vPP8wkKkcfxa6/xNtNlwkoNnPI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BBRxnRA2+g/H4X50W9EMgM+V+4QrFUvYElbl9d9C3s5H8yRgSEbNaDAlJcoIOR0av
-	 KGGCxUSjDtynFEDNFHHaxmvaQqMCMgZmgO75c+ul+5R9LV3N1bpk8ztVTzXBZUiV0e
-	 ZPQrtKlk+cWwOxXcWzg7nsD0tr7wnX5e9CznOLy54l7LVBMXlCjC2T7qryZi67QWrh
-	 mpr2+CExdroGN22a5hdc55PwulPkut3YjD0IckriH4iGG+PYvstTf08VA7kGu8Gooz
-	 kZDD6dhFaU6Q2EDTBoiK/Du3XA1Xm0FuVikF92BAQ5CfDYGfx83Twp0uO/1yuw2euN
-	 RTpH+tlQ9KWIA==
-Message-ID: <2b2d6108-21c5-4661-b03d-80d06ec46fa7@zytor.com>
-Date: Wed, 31 Jan 2024 21:25:42 -0800
+	s=arc-20240116; t=1706765517; c=relaxed/simple;
+	bh=WHpCOZePbBwBglVW5QS+vkPT0PP9bu8zGm2jCuH0QLE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rROPxI+/fYCnjW3JWhk2zVUHptrZrWrajlfHpxL+8WbezOkxA2oBzv34p0aNxIoPxdDbXCsKIyQbfjkExjlqb0Wxqb6L4ezEeADi8Te2dWAigtSRLbElUYnKU9CO0AVaQBQSBRbD+fhUNK2OUa6H2pZKFYIVRxOZNJ9UZwahmu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=prQsizSH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1706765511;
+	bh=Wq0OX9iGYMKibk/yBWk9PuT0P3GOtaz4/wfWoStPuyw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=prQsizSHB4wI7s7V/lWkXuWATRv8tET3RHgQM+ydf7ao3/Hno1dOQt/m7QDNIPsOd
+	 A5MXTbViJMu/hIsZUmbGOl2cPTpzJJUZBkLjnwPlzshDm9KZpOS6D/N2pPHU+cQ2/2
+	 fv8ZH15ztXs5JpsdeXko041lKX7bFU55AmqZp0JPhAIgkizSHh/2/qpLFX7PQE+4cK
+	 GciEv/t+jDMCoOpCqw7n/FsLXGrzAKDVjzWM8oC7J8Rcu7dQzfFSsmErN31mMgBhOT
+	 exgLgpsggmw5kLKCM8eoR3qwb5GhXGI8WatA84FNxsQsXMWbi9tNz08oNBW/zvUUnT
+	 I9qruzEoN7KSQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TQSFg0DYSz4wp0;
+	Thu,  1 Feb 2024 16:31:50 +1100 (AEDT)
+Date: Thu, 1 Feb 2024 16:31:49 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Xu <dxu@dxuuu.xyz>, Daniel Borkmann <daniel@iogearbox.net>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: runtime warnings after merge of the bpf-next tree
+Message-ID: <20240201163149.0d02fe46@canb.auug.org.au>
+In-Reply-To: <CAADnVQJT8nOiiX90g3Pm7Ud0hzBBjBOQmPtPV1iwUYKMcuBFig@mail.gmail.com>
+References: <20240201142348.38ac52d5@canb.auug.org.au>
+	<yeujnwul3nd6vhk2pidnh72l5lx4zp4sgup4qzgbe2fpex42yf@2wtt67dvl7s3>
+	<CAADnVQJT8nOiiX90g3Pm7Ud0hzBBjBOQmPtPV1iwUYKMcuBFig@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warning after merge of the tip tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc: "Borislav Petkov (AMD)" <bp@alien8.de>, Xin Li <xin3.li@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240201111453.0ee3beff@canb.auug.org.au>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <20240201111453.0ee3beff@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/rVS2M8ZBg49XUBcG0i+RcMC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 1/31/2024 4:14 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> produced this warning:
-> 
-> vmlinux.o: warning: objtool: fred_extint+0x1c: call to array_index_mask_nospec.constprop.0() leaves .noinstr.text section
-> 
-> Probably introduced by commit
-> 
->    6786137bf8fd ("x86/fred: FRED entry/exit and dispatch code")
-> 
+--Sig_/rVS2M8ZBg49XUBcG0i+RcMC
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for reporting, I will take care of it.
-     Xin
+Hi all,
 
+On Wed, 31 Jan 2024 20:02:28 -0800 Alexei Starovoitov <alexei.starovoitov@g=
+mail.com> wrote:
+>
+> On Wed, Jan 31, 2024 at 7:55=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> >
+> > diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+> > index 0fe4f1cd1918..e24aabfe8ecc 100644
+> > --- a/include/linux/btf_ids.h
+> > +++ b/include/linux/btf_ids.h
+> > @@ -227,7 +227,7 @@ BTF_SET8_END(name)
+> >  #define BTF_SET_END(name)
+> >  #define BTF_SET8_START(name) static struct btf_id_set8 __maybe_unused =
+name =3D { 0 };
+> >  #define BTF_SET8_END(name)
+> > -#define BTF_KFUNCS_START(name) static struct btf_id_set8 __maybe_unuse=
+d name =3D { 0 };
+> > +#define BTF_KFUNCS_START(name) static struct btf_id_set8 __maybe_unuse=
+d name =3D { .flags =3D BTF_SET8_KFUNCS };
+> >  #define BTF_KFUNCS_END(name) =20
+>=20
+> Most likely you're correct.
+> Force pushed bpf-next with this fix.
+
+That fixed it for me, thanks.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/rVS2M8ZBg49XUBcG0i+RcMC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW7LMUACgkQAVBC80lX
+0Gw6AAgAkhhWhoh7Zm7eJDkxPh29fNJUDPJEluw2WsNh1n2+2xwMBS6Mrsh4f8/d
++lI8AiEvf7G0zr8QHCUbV0oGIeF5ziKkO8zZ7B2MJSQfZerG2LbCjqasjB2on2o5
+gWaQrX/PaYN/oox1MAtgEyLWAEnwgDQNM1xXVMACfRyERAdERJC6wKqYqrJPQ44g
+GQ8wmaTpXRXFhQc9yni3ZrX0JQEkl97nqyzUvly0Lu2E7fM3okXtvIFRQHlafnmn
+z2O/NYTaXMSx7UV35Mg+bJjshOMPeJsp/EhNfbTBtDogo3IGTGk1CNsyIabtMXdN
+3qVGz+M514bhN9gXtdqpSOaaqJF9jA==
+=GtH/
+-----END PGP SIGNATURE-----
+
+--Sig_/rVS2M8ZBg49XUBcG0i+RcMC--
 

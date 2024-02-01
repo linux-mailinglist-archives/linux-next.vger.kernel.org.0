@@ -1,81 +1,104 @@
-Return-Path: <linux-next+bounces-932-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-933-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F07E6844A5C
-	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 22:49:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FFD2844DAB
+	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 01:15:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A58951F21B45
-	for <lists+linux-next@lfdr.de>; Wed, 31 Jan 2024 21:49:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2E2B1C258B6
+	for <lists+linux-next@lfdr.de>; Thu,  1 Feb 2024 00:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B237E39AC7;
-	Wed, 31 Jan 2024 21:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D3BC810;
+	Thu,  1 Feb 2024 00:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGjgx3Gz"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lW96T7wT"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5DB39AD7
-	for <linux-next@vger.kernel.org>; Wed, 31 Jan 2024 21:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C964637A;
+	Thu,  1 Feb 2024 00:15:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706737753; cv=none; b=udIadjnmes8S8b9oIQ2KyrC3P2iCn5CyegpCwIdRhMO/k9P9skEg+ljbIIIH61ZsHbiZYLCB2u9UxAnCt7zQsFISyHme1M1ZUpK33aA8GfkekgyWGWM1Ba2dlHZ4jomawruPNMhPQmUfg8RZP+HoYZOqo6jtWatXWAcDjUplSfk=
+	t=1706746511; cv=none; b=hUCnzkQR8rvnEMkrw2wzISo0aRFs1DBRg9gWpzmSGAyvi6f0wJrFFjgVaGnE58D+x1+lVcc/Jcb7D2cOQOxZBIUshpRYrvuGbZRQnld1If6olmvjhGbGawhohdnoKOooWe3CT7HQXMx4gr1JD6fLoo0RHDzQoeoVOqr6I349eJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706737753; c=relaxed/simple;
-	bh=Rkx3SI++5WgBpXN1FZD0sNTrJ1XmYsk0llRCozkGgK8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a9HprE5z98/T2ztihef1xzZeBCTVyAp6doyPqSFZlgKqnpBRpDuK+9VIKTlys1CzxYC8Be9W48dpyO0kmSskICJCE8IWyI445mTmhu5b1gY0WS3phRFR99xQZUNuWeXjWm5g+x7fdbS+vkN1k73CvMJ9br5NhUYuwNKvG/onbDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGjgx3Gz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD8CC433C7;
-	Wed, 31 Jan 2024 21:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706737753;
-	bh=Rkx3SI++5WgBpXN1FZD0sNTrJ1XmYsk0llRCozkGgK8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aGjgx3GzyOy8iXpo3o/aCowbrgOXwdnr9p/Mhx8ZEKbh0HRZCQkQNjLY26dBN1xRq
-	 KoazCpN9AeqlcitG/A3DTeTdnLzJ1WthH3UgRtkrVT/ERZAXZ6aOZ5CkOug8zZiFkM
-	 kbzA6BQLtqXr947Psfap9mWM3Wc4zDgdcxUbAJ1MD46ItVjcU7KoYv2c+4H4micL4k
-	 Tb00wXbjXEFLm6r6gvwGXNxoqkFqIO0bLU97yUc0FBSfDMpSXtu0KWBo3H7gMMal/e
-	 9z/TckVh4zvYZMqhj+YiYxe/sfnLR1De3wQ/jLcQvrye64gukt/o3GBxIco9e2LGMH
-	 d9Jtz/bC4Y+ug==
-Date: Wed, 31 Jan 2024 22:49:09 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>, 
-	linux-next <linux-next@vger.kernel.org>
-Subject: Re: Request for i2c re-inclusion in linux-next
-Message-ID: <nmrjm4edxqh4e7bzmktjbpmz5al4wv47aew52f2dwzh4pgbeip@n4bddtmsb6pb>
-References: <sripk25leahdjiziacby4ql45kspw5cd3ic5vj23lctsawc2lm@be4sg32fjilu>
- <20240128142804.21d49045@canb.auug.org.au>
- <xewyobkwecyhluztyrpwzhnuv3f25eq56iwkh3obfzxgqghe7p@2agb275csehd>
- <20240201075605.5db74042@canb.auug.org.au>
+	s=arc-20240116; t=1706746511; c=relaxed/simple;
+	bh=2LBQU3W1CBLmlUwbEx11B9z4juEyOikn6gFpNGoqVpM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ENiOmixwKU4LylyD41lrvkUIZbD6S5AuixTPkazAEOcjsYqVg0AlT/KlM13REiPZrJ85gVQYURHVf709qPJZjpA4WI6s32hNx2CKdc0P3hozRcW6yif/2CMEFfbSXxUkxyRoFuh1pzWuy/Mk1Vwz4/ZgOOueJ1VzuHswP97BGEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lW96T7wT; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1706746498;
+	bh=Mo8m4XGUMpy4yRQ1ibGzCKYA2icyGepWszobc6YR624=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lW96T7wTKrMzs2UhmxdiIAbJCkuzNdM789lrbyNzzo+NwkIFB/HqVd5dEBEOJnrMi
+	 TVTdS821bloRRfKXX6865BzbqFb4NQxb81dOZ6w8CX6u33E4G2+bmSMFyuuDqk/C5u
+	 3Hr5GR7B1RNQ/zuuJZ+gI2mGushbOWWogiw+8vR2A3yF6N3CpgmF6BNwBSa+Hiqnho
+	 wuQ4oBgsthb2YU1KimTJb2anuXrrNA4Ncb2sDqm5wKriBVl9jWm6nxxmQZrfP9ySbY
+	 QJH64Sx0MqfB2iJyqnN6sme0MiCD8tb2rfDgzxsDcygVo1kMd+FHSFO2jU/SIN/wTR
+	 HSevI9vnbszgQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TQKCz2nH6z4wcK;
+	Thu,  1 Feb 2024 11:14:55 +1100 (AEDT)
+Date: Thu, 1 Feb 2024 11:14:53 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: "Borislav Petkov (AMD)" <bp@alien8.de>, Xin Li <xin3.li@intel.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the tip tree
+Message-ID: <20240201111453.0ee3beff@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240201075605.5db74042@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/B2SPw3IlrpIXX89W7FH1BqJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Stephen,
+--Sig_/B2SPw3IlrpIXX89W7FH1BqJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 01, 2024 at 07:56:05AM +1100, Stephen Rothwell wrote:
-> Hi Andi,
-> 
-> On Tue, 30 Jan 2024 13:35:35 +0100 Andi Shyti <andi.shyti@kernel.org> wrote:
-> >
-> > Thanks! I have renamed them in my repo as i2c-host and
-> > i2c-host-fixes to be aligned with your naming. I'll keep both
-> > naming for a while until you decide to update.
-> 
-> I have updated my end.
+Hi all,
 
-Thanks!
+After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+produced this warning:
 
-Andi
+vmlinux.o: warning: objtool: fred_extint+0x1c: call to array_index_mask_nos=
+pec.constprop.0() leaves .noinstr.text section
+
+Probably introduced by commit
+
+  6786137bf8fd ("x86/fred: FRED entry/exit and dispatch code")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/B2SPw3IlrpIXX89W7FH1BqJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW64n0ACgkQAVBC80lX
+0Gyt8wf+IRxrB3za5wezZkKqUwIJPJTpk6TG0zNayczGLql0Ss2sCHLnH72+TNEb
+xs3d61xiS7TV91gDP9Xx/6/TcglsYJaHBok34DL1lxB0NRxp/jgb41nzGWqP4KuC
+DGkzSHnlJozPJIXlsgwWCK4AzdK7zG9p2oYIFSfZGPlSrLsgZ/ett2VGmaD6lhmS
+pivRxENbC9Z1LWmlAJ2CJGs9yNxAcbmvnRa9cGRWYDfuuuWv1MAywCiX8JnbRRAy
+Ga2Qk726XFuZ8o0wGe7cf7UceQIfKS8DUeS+9x3s2g0AFg/hNuGKiRjP0Brl/mAF
+ZlXAhRxTUYT56y2Cg21W7v9A2EDWDQ==
+=Z0mm
+-----END PGP SIGNATURE-----
+
+--Sig_/B2SPw3IlrpIXX89W7FH1BqJ--
 

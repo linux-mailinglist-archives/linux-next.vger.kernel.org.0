@@ -1,145 +1,138 @@
-Return-Path: <linux-next+bounces-958-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-959-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C470F84653A
-	for <lists+linux-next@lfdr.de>; Fri,  2 Feb 2024 02:03:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AAEB84653D
+	for <lists+linux-next@lfdr.de>; Fri,  2 Feb 2024 02:04:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D42D288165
-	for <lists+linux-next@lfdr.de>; Fri,  2 Feb 2024 01:03:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6A8D1F25BDD
+	for <lists+linux-next@lfdr.de>; Fri,  2 Feb 2024 01:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9D05678;
-	Fri,  2 Feb 2024 01:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F0C6D514;
+	Fri,  2 Feb 2024 01:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Vb+sH+tb"
+	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="NgO5f9Oe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="q+Tf598b"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B595666;
-	Fri,  2 Feb 2024 01:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4008D308;
+	Fri,  2 Feb 2024 01:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706835832; cv=none; b=DDY7xSA0pvFEoNlPrRZtFeq3ahed1t0S/Pi8ulvvBk1PE29uqeSrABK/01vXJOrq310korYOI+l2Go8Z6MsTh9Joq41szh/BUPU9cUKuIlZLZIDWmr8+F585N1k2W87btMbw3A0dbsifHk2fpNY26biKl6vFXV4c4VOLXTGQ17M=
+	t=1706835878; cv=none; b=OFdj/xmGS2yLYsSmx6kFVZVZ66o64j1H6bbW2og8bQySGNSwJgFjyojMNgakTRzGqVCmGkRotaQjRezk8nhRhSyRPUbDP/1F9LILkqh6kRxHg1iplPMfnAJRb6x2tt6yC0dcJh+cZ/AqJs92i8hFAS0LtB4oGT0VLnNrEE8P78c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706835832; c=relaxed/simple;
-	bh=C76J7VnYrHbxDAtavB76M49Hhhhr517HYZ3UN1nxrBw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=bUhlbWpIK28htnb3mFVyzCqTAD0lTAJMFnCOSycS002V/9bh/+oU9QVp7zfmP736GMZNC9/TOkuQ5O0nmJT37p7Hu51jZWtxWMRazSNHHKpvMAj+LBS97RdK+d1d3j8hnn5RXwEdIt7t6E3p4TbgG8Y9b3r6HIa0CJv5P2vkGqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Vb+sH+tb; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1706835827;
-	bh=+9oIBTPwFPPTq6RPogiDs9fLnmSouioIt56H2oSIXsc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Vb+sH+tb3qoSTA0RSw0tISle7LB+BeLGae8vVYJul3sIFooJq14lTuDKeAQ1J6eP6
-	 Xo+FwjcZSZO2tfG8muEkStxOEveVA1fQL++32/N7/CSDZljNmRe1WS7Sw8ajkzLnem
-	 3F3AdSOW5ielZxDUsJZnBB2PoffWaRH9yJ/6hpKRG8Z0bsRaNgD9hfFk3G3lyUjrFe
-	 CTK9LIM5kM3H2l2ZQfa5yuc7jik952RRWoMLG4yQZg25VzO0dbfUgrByZU7xLkOeK/
-	 RgBka42MghysW8a4e5HswfK8Fc/Rl0V1V35NeFS9WZm2pTn6yjbs/SlhILFu/fBkak
-	 l0rJ2MyUWwXPA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TQyFv4Mcwz4wcT;
-	Fri,  2 Feb 2024 12:03:47 +1100 (AEDT)
-Date: Fri, 2 Feb 2024 12:03:46 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the modules tree
-Message-ID: <20240202120346.06e88db3@canb.auug.org.au>
+	s=arc-20240116; t=1706835878; c=relaxed/simple;
+	bh=VsGcaBj2+DVUKNNWLzh2v7rvDdhx1Vhnha3Ztw0+ZGs=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=mBaroJ2MWLCnmb4QtWxqXYRe5pOENtIw6ORpP7sM/rdANK3e4xDJdfNBohPboeBv4zZik+zge9kjX3V3WGNPj6xkKsi+SRVY1hdwnWljGo7zrcO+S/SW3ddrhPGPUKI1e7vvKqAWjf62IVwVuPEhixD15wKl3XQ4LPcJ37HMgJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=NgO5f9Oe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=q+Tf598b; arc=none smtp.client-ip=66.111.4.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 91ED45C015E;
+	Thu,  1 Feb 2024 20:04:34 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Thu, 01 Feb 2024 20:04:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1706835874; x=
+	1706922274; bh=GIGLcKpOqgSFtDtF20FwBeWhNJabIQLZaNxjZseleos=; b=N
+	gO5f9Oe/8mxQCf8Zaban9cEk62KEDE7Aske1nUe/zUJDN/kg5YY/akgCaQwb4O0j
+	m9eWvSBpJEh9zedXV9+sI2OLs2BFFYyXX0tVS29dJk0MbEM45Aybhl30oZ3MwlaC
+	2Kb0bcn81LxR6SgsiFMHeRbJQm2IsK08WrU1mbxyVKL566Ibswbnlde5qMqw8Vjo
+	IjQJoRTYFtmWcIV88fy5yor0660awbAwC77BDfcx8xrizgK0IiFsJzvZiQo5MxuX
+	1WV+uVopvCazyzzIynRV5jsP21QHxIzCp84Otx/YTnSk/ZbTVJoigVzHToATQrMd
+	nmCNGs9mR8lC7GEQjppuA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1706835874; x=1706922274; bh=GIGLcKpOqgSFtDtF20FwBeWhNJab
+	IQLZaNxjZseleos=; b=q+Tf598bVqDN5xHd7UVg+Z1/t+B0VNNJVf+9Yo3uA3Es
+	vqox50GNDEwYsGowvQTwvgaR/67lOBEDUuYXlIEcH4UHeKie/scQo2HuN5y4HLh2
+	4zXRa1xv6jMmlB9bttvcvx7QruaTfIbJGdewdREUWzuy8XOEdGEaK1Nxk/RoS8zy
+	5LAMEnuaAzrUbyLEfYYewCYNxEwTu5M/xVlb4p9lo3GZdufv0iq+rf9CY9V4bKXo
+	p5DbadGWrwJ4rYoBMbH2t8KmgQC8/hFrQO4DUap2dCH3IViBMvKOYSrz+DtMkE7n
+	5RvZI0zv0ozEaQcvDe57jTSifHNXGRDkoDHPYx65EA==
+X-ME-Sender: <xms:oj-8Zbm73Bl162_5SNlPYUNFveGZch85U5sKvabU8v-vL5T-w4ENIg>
+    <xme:oj-8Ze0_Jhh9dGdfbhQ_b2-l9Kv6l4PPdgHsQAx_hHbWilWkvFSYyelUKuR48WL-Q
+    WwW53Y48avL23scQqw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfeduvddgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfvfgr
+    khgrshhhihcuufgrkhgrmhhothhofdcuoehoqdhtrghkrghshhhisehsrghkrghmohgttg
+    hhihdrjhhpqeenucggtffrrghtthgvrhhnpeelfedvveevveetjeeikedtgefghfeigfek
+    leefkeekieehiedviefghfeltdehkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:oj-8ZRp-lBFUwq61DvI8xrIPOiJjE7Ek5mZ76tYzsqLCUglYt4dsDg>
+    <xmx:oj-8ZTl5YPY8SbzEu4O-eyxb3JtoWDdgWNz6KSrD4MXeS_9K1mcsbg>
+    <xmx:oj-8ZZ2XzP4Wb0SdKrBQyxH1gHee9rtSoSTc314TTsGX8bCmDkQgXQ>
+    <xmx:oj-8Za8STrUwsPTQwtL19_3v2RU978ns-6Ykk0PD3kj7MOyObstZSQ>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 363CB36A0076; Thu,  1 Feb 2024 20:04:34 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-144-ge5821d614e-fm-20240125.002-ge5821d61
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/I+/Cyk47OiCzuBaDtllxRGL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Message-Id: <96ef2869-ad72-478f-aa09-691752ce5b81@app.fastmail.com>
+In-Reply-To: <20240202111602.6f6e2c1a@canb.auug.org.au>
+References: <20240202111602.6f6e2c1a@canb.auug.org.au>
+Date: Fri, 02 Feb 2024 10:04:12 +0900
+From: "Takashi Sakamoto" <o-takashi@sakamocchi.jp>
+To: "Stephen Rothwell" <sfr@canb.auug.org.au>
+Cc: "Li Zhijian" <lizhijian@fujitsu.com>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ "Linux Next Mailing List" <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the ieee1394 tree
+Content-Type: text/plain
 
---Sig_/I+/Cyk47OiCzuBaDtllxRGL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+I'm sorry for the build failure. Indeed, It is my fault to merge
+some fixes for v3.8-rc3 ahead. (I just checked merge conflict
+between the issued commits...)
 
-After merging the modules tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+However, I'm out until next Tuesday. Let you cancel merging
+ieee1394 tree in the next few days. I'm sorry to trouble you...
 
-Segmentation fault
-make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:56: lib/tests/m=
-odule/test_kallsyms_d.ko] Error 139
-make[3]: *** Deleting file 'lib/tests/module/test_kallsyms_d.ko'
-
-Caused by commit
-
-  6336b7d9a520 ("selftests: add new kallsyms selftests")
-
-These new tests spend a long time just linking the modules (especially
-test_kallsyms_c.ko and test_kallsyms_d.ko) and then the linker segfaults
-before finishing test_kallsyms_d.ko.  Maybe your stress tests need to be a =
-little less stressful :-)
-
-The build machine does not run out of memory (it has 30-40GB free).
-
-$ x86_64-linux-gnu-gcc --version
-x86_64-linux-gnu-gcc (Debian 13.2.0-7) 13.2.0
-$ x86_64-linux-gnu-ld --version
-GNU ld (GNU Binutils for Debian) 2.41
-
-I have applied the following patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 2 Feb 2024 11:57:59 +1100
-Subject: [PATCH] selftests: disable TEST_KALLSYMS_D for now
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- lib/Kconfig.debug | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index dcb1bd7c6d9d..152128d63d8d 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2853,7 +2853,7 @@ config TEST_KALLSYMS
- 	select TEST_KALLSYMS_A
- 	select TEST_KALLSYMS_B
- 	select TEST_KALLSYMS_C
--	select TEST_KALLSYMS_D
-+#	select TEST_KALLSYMS_D
- 	help
- 	  This allows us to stress test find_symbol() through the kallsyms
- 	  used to place symbols on the kernel ELF kallsyms and modules kallsyms
---=20
-2.43.0
-
-
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/I+/Cyk47OiCzuBaDtllxRGL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmW8P3IACgkQAVBC80lX
-0Gy2MAf+O/P367kS9yacuSz2Fp7/iYxJpH+9U6B24+Q9l1Nj2UEMjR6kwyvnLsoy
-Y3/udOyvGJlK6it7M2/b48EB3dOosSynzJ/EYMBJlsE1ssr8gdgzUXIAGAJLkC7h
-iUSJyul2C0+mRkg/b07sGhq2hDHLr3YTMPvBw+29J2etz2Jsx6BQStvfHeW+Sqn6
-Dije4Ol0/0DDUU6daunOakl03VPo9AmI7hn4J5jId+Ucqmj34veg5Tp8tKzg6a4u
-usTlkVYClBXdk8DB5QQHwRv8ApK6sfp+4GIaZoaQ/xvu1M/tlMcIvTM8q4+/ZBNh
-4NEDGbVYVFLfGYGQrtYkCp/4tWXAhQ==
-=+cN4
------END PGP SIGNATURE-----
-
---Sig_/I+/Cyk47OiCzuBaDtllxRGL--
+On Fri, Feb 2, 2024, at 09:16, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the ieee1394 tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/firewire/core-device.c: In function 'show_text_leaf':
+> drivers/firewire/core-device.c:369:48: error: 'bufsize' undeclared 
+> (first use in this function); did you mean 'ksize'?
+>   369 |                                                bufsize);
+>       |                                                ^~~~~~~
+>       |                                                ksize
+>
+> Caused by commit
+>
+>   67a5a58c0443 ("firewire: Kill unnecessary buf check in device_attribute.show")
+>
+> interacting with commit
+>
+>   47dc55181dcb ("firewire: core: search descriptor leaf just after 
+> vendor directory entry in root directory")
+>
+> from Linus' tree (v6.8-rc2 - that the ieee1394 tree has just been rebased on
+> top of).  I have dropped the ieee1394 tree for today.
+>
+> -- 
+> Cheers,
+> Stephen Rothwell
 

@@ -1,161 +1,116 @@
-Return-Path: <linux-next+bounces-986-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-987-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B127C849328
-	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 06:09:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B08884933B
+	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 06:14:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABCD41C215F2
-	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 05:09:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34919281D92
+	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 05:14:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06621B645;
-	Mon,  5 Feb 2024 05:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6542B645;
+	Mon,  5 Feb 2024 05:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ejj1ZYyu"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="QLMiXJGY"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A3CB654;
-	Mon,  5 Feb 2024 05:09:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7704B664;
+	Mon,  5 Feb 2024 05:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707109753; cv=none; b=E7tV4aBAyDmsRjEtMwdPA5eh5hzk4TE96S36B871ro1lij7Bb6XtO6UNIauZIK7IWlACGu7707EcnQnF3ZxV3V0IMs2uN5bM6E9QL5hOYBvOx8EwexACTClzzcX0Lt9tDhdH23sKOC0vZuy1Bv9ESJQuE3lBx52pDtYrrdVTr/8=
+	t=1707110091; cv=none; b=roD5PUfiEF9ixXG1tug3QnkHNG7P1c8K6QbELrDhOVAykH7dc+MYKFM6xWoL64fsXm0xkVT6jIyHE7AnFDUKWZcrydrBNd/FukjCdMmguVc8icUjDsWCx8MonMg8t6gAMOfiUC5jHaXJDXw69FdSqAkK1py9qkVMSSIP8wPlTQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707109753; c=relaxed/simple;
-	bh=q/Xi4KajUWwxdMCzbdgmwEu3T3xuWQSeqmorusa2PNI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=G5tlLE+j7qORRD6wmXp2/reSLrPZRJItPtcLzcdrqcHKu5EKdHuSnlp2riX8jSXNHzdeeN4gM2Z7KDCnJ/hsiPJRVMQNWVP24Du0TcfMKm2fshuIpmD8qILy34conIRoMlRWhxW4zNolj0s5Xb0G5sbbrKSguOFGVdLRy8PGptM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ejj1ZYyu; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1707110091; c=relaxed/simple;
+	bh=tp6SLwifN4RPSLuHIMPpI6UiqP88IsrExmfNpqGx7RA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kUl4shpFO961R1e8GrMDRtUgRnH16wzUfZbH0jzpyjWMXkjuB76v4NdRRLlWLYwfnL9w3QyczOj1nQsflHGNXjc7puToXNcMS62OZY1d7VdpxEU4M/upmVOGi2Ub2MphaWeeR380Fb4iXA1ihgl99tJun4t7/zBObi5EllqyNnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=QLMiXJGY; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707109749;
-	bh=PO3qNj2W3pYd8+HqYALOny12mvC6LogSBw4N8EJjxGw=;
+	s=201702; t=1707110087;
+	bh=rAdaRc9JP0OEshPFdIF4PD04JxE2lYcY5cYz/Kr1fCY=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ejj1ZYyuTWXvuXDuJlscxjxbmcLaw7tSkdzPho8NtPkPFDMT3//QiC55k98giHZsP
-	 2EN/c2rvxOeCTxsDZPYqgNcSwIFbQOvkcrDFtgqiSDwE9b/yRvHG7fffvy35Q+0Opw
-	 BxmYP/gX07pJByGmWeMy+EE0MB3tGr8Fl1D1ES7GAH+Rii/4Kh3ClUA63fjypW8QdT
-	 LeRJsVkNyAI2Va194u9ABbSykqF+0AAMCa7fTaWboMugqm9lZVvOIhZ4oxhpqaBNBc
-	 vE1+jDVuqdiErAsfS4urcrd59CoIXkhOSHbucDbnUQddYwUl59PMqhj8uL0JO7Uot+
-	 lMAORoj+80dxg==
+	b=QLMiXJGYEYjBGr/Uv/bWCtNpej8QSZt1kCo77ywAqzymYyOPYyA30iMDLyTwOH3e6
+	 Wg8eK1UngXmo3x99cCRHtibCs6gmb251286ffZAlFHVI4tVJBTKl9UMNDkmI/ps7Cx
+	 U7CvU1Vn3Y0MC8hLuTDq2a9fZZ0S5X/lxiiG5AMmesily+0Rk5KxllSn3aC63CBGr8
+	 PsdlpKNvD8iyjQDLbmZHpEoowqb86amGZAdAM5iKAXYgT5E61IbP/F1z/SNDZWJ16S
+	 QP3B4og2QFXpuSITdM+Oesa/ALg4sfFpyvEn9neNHUBTf/JbtpAOwAosFDop4L3oTO
+	 tWK6RpP5AXeEg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TSvYc5hJ1z4wcb;
-	Mon,  5 Feb 2024 16:09:08 +1100 (AEDT)
-Date: Mon, 5 Feb 2024 16:09:08 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TSvh70bKSz4wp3;
+	Mon,  5 Feb 2024 16:14:46 +1100 (AEDT)
+Date: Mon, 5 Feb 2024 16:14:46 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
- <kw@linux.com>
-Cc: Philipp Stanner <pstanner@redhat.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the pci tree
-Message-ID: <20240205160908.6df5e790@canb.auug.org.au>
+To: Kees Cook <keescook@chromium.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the kspp tree
+Message-ID: <20240205161446.4b0c90fb@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xs0peBkEdPQ67sRY5VnqT6s";
+Content-Type: multipart/signed; boundary="Sig_/5dR3Gpcut7u1rPWjpNWb_rX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/xs0peBkEdPQ67sRY5VnqT6s
+--Sig_/5dR3Gpcut7u1rPWjpNWb_rX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pci tree, today's linux-next build (htmldocs) produced
+After merging the kspp tree, today's linux-next build (htmldocs) produced
 these warnings:
 
-Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:27.
-Declaration is '.. c:function:: void __iomem *pci_iomap_range(struct pci_de=
-v *dev, int bar, unsigned long offset, unsigned long maxlen)'.
-Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:27.
-Declaration is '.. c:None:: struct pci_dev *dev'.
-Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:27.
-Declaration is '.. c:None:: int bar'.
-Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:27.
-Declaration is '.. c:None:: unsigned long offset'.
-Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:27.
-Declaration is '.. c:None:: unsigned long maxlen'.
-Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:67.
-Declaration is '.. c:function:: void __iomem *pci_iomap_wc_range(struct pci=
-_dev *dev, int bar, unsigned long offset, unsigned long maxlen)'.
-Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:67.
-Declaration is '.. c:None:: struct pci_dev *dev'.
-Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:67.
-Declaration is '.. c:None:: int bar'.
-Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:67.
-Declaration is '.. c:None:: unsigned long offset'.
-Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
-also defined at driver-api/device-io:67.
-Declaration is '.. c:None:: unsigned long maxlen'.
-Documentation/driver-api/pci/pci.rst:110: WARNING: Duplicate C declaration,=
- also defined at driver-api/device-io:110.
-Declaration is '.. c:function:: void __iomem *pci_iomap(struct pci_dev *dev=
-, int bar, unsigned long maxlen)'.
-Documentation/driver-api/pci/pci.rst:110: WARNING: Duplicate C declaration,=
- also defined at driver-api/device-io:110.
-Declaration is '.. c:None:: struct pci_dev *dev'.
-Documentation/driver-api/pci/pci.rst:110: WARNING: Duplicate C declaration,=
- also defined at driver-api/device-io:110.
-Declaration is '.. c:None:: int bar'.
-Documentation/driver-api/pci/pci.rst:110: WARNING: Duplicate C declaration,=
- also defined at driver-api/device-io:110.
-Declaration is '.. c:None:: unsigned long maxlen'.
-Documentation/driver-api/pci/pci.rst:131: WARNING: Duplicate C declaration,=
- also defined at driver-api/device-io:131.
-Declaration is '.. c:function:: void __iomem *pci_iomap_wc(struct pci_dev *=
-dev, int bar, unsigned long maxlen)'.
-Documentation/driver-api/pci/pci.rst:131: WARNING: Duplicate C declaration,=
- also defined at driver-api/device-io:131.
-Declaration is '.. c:None:: struct pci_dev *dev'.
-Documentation/driver-api/pci/pci.rst:131: WARNING: Duplicate C declaration,=
- also defined at driver-api/device-io:131.
-Declaration is '.. c:None:: int bar'.
-Documentation/driver-api/pci/pci.rst:131: WARNING: Duplicate C declaration,=
- also defined at driver-api/device-io:131.
-Declaration is '.. c:None:: unsigned long maxlen'.
+include/linux/overflow.h:97: warning: Function parameter or struct member '=
+var' not described in 'inc_wrap'
+include/linux/overflow.h:97: warning: Function parameter or struct member '=
+offset' not described in 'inc_wrap'
+include/linux/overflow.h:97: warning: Excess function parameter 'a' descrip=
+tion in 'inc_wrap'
+include/linux/overflow.h:97: warning: Excess function parameter 'b' descrip=
+tion in 'inc_wrap'
+include/linux/overflow.h:142: warning: Function parameter or struct member =
+'var' not described in 'dec_wrap'
+include/linux/overflow.h:142: warning: Function parameter or struct member =
+'offset' not described in 'dec_wrap'
+include/linux/overflow.h:142: warning: Excess function parameter 'a' descri=
+ption in 'dec_wrap'
+include/linux/overflow.h:142: warning: Excess function parameter 'b' descri=
+ption in 'dec_wrap'
 
 Introduced by commit
 
-  fbcc7d7f7948 ("PCI: Move pci_iomap.c to drivers/pci/")
+  6ad835d8849c ("overflow: Introduce inc_wrap() and dec_wrap()")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/xs0peBkEdPQ67sRY5VnqT6s
+--Sig_/5dR3Gpcut7u1rPWjpNWb_rX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXAbXQACgkQAVBC80lX
-0GwWLwf+J9Q4CeucQguko/ZL35eDyh6TPcV1WNRuDTcElyYIFKuWQ9B8aTzhBzDm
-zsZ3W2sr0Oj61Eqyy5DA7wnjQbK/w+lDQNtRlO8qt7oaX+QokXduN6RzARdTADY0
-HFGnGjbhFArSsVmnI9Iq0cgAaTs1TLwJyaQZqf8S9nU1Vqy24yC0lh2fdPqOxtai
-IrPLWEhZyxgYNpZAzu/jNmlDBEn7b2Z4Tph8ehtBuwYwB057TeZevLE0VfGXKGO+
-jVPNb4Z2xm3u60e70Y1m7t0j4XHdIjJyoBQBZgKaTUgbNqozD0qQDCeS/W+2Li+0
-B9tv/KG5v/gouYcY6iHf1roPaM994A==
-=5MD9
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXAbsYACgkQAVBC80lX
+0GwD7wf/U7GR9q8gmIyuuoiw/1zUabOPD7ZG/NMDLOxzB5TcIIze7zsuzKbiYStc
+kl3MXqRLo4l4DyR3b+CrIrcpgfrfqeY0IILjFQ/sVsk7vBzw13nlRk0n5SmWsNWm
+00sVY5XF8mcqYINeN3GmVV05fTS6KDMO4lmG6J0wOpNbr5XlShxMcyIWnnZUV9nV
+tSKKwLflB0tmJZZwYEpehpOp5fzpWqBDOLsCLj+hJiQLaOpf64A05YWzKhNBuv3U
+Ad7gC5L8iVC2UAkuCwiwURalfllHHyudyn89ID2Dp1aIQpoWTQaNEvNfMKU9FcpK
+tKSuq1KcWtiZS91i9b/pORg8aVSELw==
+=Yq8i
 -----END PGP SIGNATURE-----
 
---Sig_/xs0peBkEdPQ67sRY5VnqT6s--
+--Sig_/5dR3Gpcut7u1rPWjpNWb_rX--
 

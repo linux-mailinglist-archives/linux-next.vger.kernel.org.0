@@ -1,118 +1,109 @@
-Return-Path: <linux-next+bounces-996-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-997-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78D4584A13A
-	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 18:46:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2BD784A8F2
+	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 23:16:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8654B23E6C
-	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 17:46:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15E6A1C244D3
+	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 22:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92678481BD;
-	Mon,  5 Feb 2024 17:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBF660875;
+	Mon,  5 Feb 2024 22:03:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KV5sY6cN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kb2s0+q4"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B9C47F53;
-	Mon,  5 Feb 2024 17:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D6A60878;
+	Mon,  5 Feb 2024 22:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707155158; cv=none; b=uLtmoCvk9EXkEkLJODkj1PeMKw5TpPTRV6L9ycYXNDdQX1UJ9Ay/c0RsGj4BhD3acQqELOlUblSBmIvzMJvuMs9jibd1c7IxyOiX+9kWt5DuzyvpOs8OxrPRJkBUzVnH5if0LdDk/oCEGeywDSOtoJwMDw5jUPDgPGBU+1y46oU=
+	t=1707170639; cv=none; b=ojElExxaZN/BX57EaJHD+LRcl6XOfikjje02geBTpWSeoJb93MD17jupw92VThqI0m/9iReV+ZP5Rf4dTfzODOPzz8XtheBt8YVjebOSxa5Rd8Zs0fh6KZOkUc7Ax39ewZr95M9yz8H2V76GfllPGoQMCeJRXIrEzxdSscXfv0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707155158; c=relaxed/simple;
-	bh=wfjuJDCo9ikop915DTLcUPjxvweOFqYhpNnxU+fUtKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mZhI1z8UfNjlICU5Awbe/sQau1R5zwEkCeAXWNHdAbAhlNAV7CHN1rxnuzKARW7/ymgLeIXupeoOxKOrtz4pxkf0rcJDX6sb/htKfyruRq29OrWI31PLjZlVpJUtlQMFP0J0A7nu0S2Kb8KCWB/fOz/6ey+qYgSOBXfmZw1B0k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KV5sY6cN; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-29685114bc3so918653a91.3;
-        Mon, 05 Feb 2024 09:45:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707155156; x=1707759956; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tWpkA0adWfJg/N96ugMkWhlTX4/Zx12uY2WHwPaeRnA=;
-        b=KV5sY6cNWaCCNRShIkvNPAO0T8x+prCIilt1FNV9S8N262Oq7jgMyoyd40QwZrfAWF
-         Mz/6LHIh59F27KGxaPomrn+TZD2nB7let5nMRtR3xLd3pBb47odc7E+0Dds79IE55+GJ
-         CfPrRzH3UHnEXaZRnYQTU6AzlgfHw9SnSm+iLQsMxPqnnjguNR/tIAl9wbvN/W2guxiU
-         RTmbIkhSWa9TObXSweooQUVQsFT8Swg96t0xoTPnR8IKbNm3XWyu9jttHoDAbIYQeSyo
-         lvS8xP1Z9RumNEA+FsldaWTHAtkJGw34eWK01rrCw/etlaD6DvUFUMMD+yDd65tiqfzx
-         E4yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707155156; x=1707759956;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tWpkA0adWfJg/N96ugMkWhlTX4/Zx12uY2WHwPaeRnA=;
-        b=THGyNCckFp9VGCGDHFFSt61hybo2HhzITs9PqItDhYHNiFO23SGYW1WO89JdAFdSTF
-         apfw3n63VRQ5D51NBmeVt7+dZ+0ueoRiIwSLN07Udh9mwsqE0poIf8KAFWlK0szwr1Vj
-         TR1Ay0jAcfgZnnCvACzmPegqQ3MiZNft7FOTvZCDLcY0UJnpTvTcN9ytLU2gOrUYWqgY
-         flrI7tlOEEvq6bVR66pTxD9sqjLsjNZyBMn6nvPCwVNYZ5u7rqlxuBrudX76fFWvX1ro
-         0vQdopQvfG17xiaUapEb5d9XBLc7uF7rsmAmdI/KVE0NImP45pDyn3TTllTsXlmB0hKf
-         gASw==
-X-Gm-Message-State: AOJu0Ywp+LJq5iTV82+NWmasEjlu4z8a8LDy++VVvwZxjDEznU7ih7MJ
-	vatINLJyWBIh43DYoehGYxH6gD1aNdyHCh7ukZkqqfUPNSmypzXO
-X-Google-Smtp-Source: AGHT+IEqEmWKxapPmLXYmOp2uW9MmgZudDXICGNoo85jUNcxH4rxgZoagf5UZXbl3QwCCMxY73PBsw==
-X-Received: by 2002:a17:90b:3647:b0:296:3a5:6fb8 with SMTP id nh7-20020a17090b364700b0029603a56fb8mr140155pjb.25.1707155156241;
-        Mon, 05 Feb 2024 09:45:56 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUUTj4d9BneUR8TZxAaWCjiW0qPu4NyC9O0WiMqD0EHnQyDK/qEVa141FY7qkYuJnDqIDgdelFh/eE6OODkrU1xkP6MwGo1Rt4S8atEe92QUmNAC4qwcKL6NjLrhFpAbdAtuF4tZ0iSPFhZcNJvztJ+Oif6QDoKQP+woOxB+gNeACViotwAWvKQ0yEAcmkFw6aRy0M9Ahg5aX4o4dnA7tXBTiZpTGFAGhd8wEkpw6VdnFx9tIorsXqvjsSZM3byxJdSkfgWlHNoa2Rt7mZHKCmZd8B0Rl3ygArty1j/RFdt8876/3tNc2YGX3rrQMJvrU0/rpAaTe9J7N8PErxAllclAaSxa8IWv3bbiamB+yG6CkYt8W/2bY/qXRTgYWOTC7IJNdON29VtTP5MmAeDIzalabi2qUF44plo4wSA44LtuJfXkg==
-Received: from localhost (dhcp-141-239-144-21.hawaiiantel.net. [141.239.144.21])
-        by smtp.gmail.com with ESMTPSA id lc4-20020a170902fa8400b001d8e41b3f95sm141669plb.51.2024.02.05.09.45.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Feb 2024 09:45:55 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Mon, 5 Feb 2024 07:45:54 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-	"linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-	jiangshanlai@gmail.com,
-	"abdhalee@linux.vnet.ibm.com" <abdhalee@linux.vnet.ibm.com>,
-	"mputtash@linux.vnet.com" <mputtash@linux.vnet.com>,
-	"sachinp@linux.vnet.com" <sachinp@linux.vnet.com>,
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [Bisected] [commit dd6c3c544126] [linux-next] [6.8.0-rc2] Task
- hungs for infinite time call traces
-Message-ID: <ZcEe0q8Bg5zca1nA@slm.duckdns.org>
-References: <a95f5bcd-3c49-4ebd-b1b3-a688c5b6727c@linux.vnet.ibm.com>
+	s=arc-20240116; t=1707170639; c=relaxed/simple;
+	bh=ZuIgEWXDaw78xMqOUOadpO2rhYAyUJFjADvXdH32uAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gI7swz9UNwndiDU0Qv5KLTPGeMwdxinQLiYN4vSThYr7UFsS8AZmYjATQR5iOKFV96NrfAIHaWj1KBlc98+wi4azaTrngogBCmu14tLtB8wfGiLwD1KrYJq5gzsukn3J6tSjcPCq1i715QA+7UEfkJRabu7izmwvs8Y+rWTpai8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kb2s0+q4; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1707170627;
+	bh=3tNkv4NP/NzAdkSDGC1/j5xdukaM3oAMcY4wpku783c=;
+	h=Date:From:To:Cc:Subject:From;
+	b=kb2s0+q4UIGTdyNXuieGcMjiaVlC5+JBn+lQhqfXzK4flyHPlY5Ew2rtl9QICUb0B
+	 72UYe34OA8UNkoRfVBfPO296uG79YeiET4PiBcfTE7Zd7x7CnvntOvbiDASKuJ/M7U
+	 yfyOT9NHmgNq6U3GEnc7eIlb73ynoRfsZqM+a6ua1f8pCYkwadkmpMKAVEypWNcUKU
+	 6VY0fdmzAq1Qek2hUY6QvWeH8agcLsd8SO/iTJxZqavHqb46rhj/itACmbdLAsPw6y
+	 p29x0wacHB8IV8sPEfejbY/BXlHlPR0rWIq+6Hx9EPGtcCOW2dmspFsnH8ibyApGAb
+	 IlznFTLxIUPqQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TTL4M0ndzz4wp3;
+	Tue,  6 Feb 2024 09:03:47 +1100 (AEDT)
+Date: Tue, 6 Feb 2024 09:03:45 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Doug Ledford <dledford@redhat.com>, Jason Gunthorpe <jgg@mellanox.com>
+Cc: Mustafa Ismail <mustafa.ismail@intel.com>, Shiraz Saleem
+ <shiraz.saleem@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the rdma-fixes tree
+Message-ID: <20240206090345.210c2760@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a95f5bcd-3c49-4ebd-b1b3-a688c5b6727c@linux.vnet.ibm.com>
+Content-Type: multipart/signed; boundary="Sig_/FJNTYA+DxP+IJTwzo4_yk.t";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hello,
+--Sig_/FJNTYA+DxP+IJTwzo4_yk.t
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 05, 2024 at 03:24:17PM +0530, Tasmiya Nalatwad wrote:
-> Greetings,
-> 
-> [Linux-next] [6.8.0-rc2-next-20240130] [FC / XFS] Task hangs for infinite
-> time while running bonnie test XFS filesystem
-> 
-> Bisected the issue. Git bisect points to the below commit
-> commit dd6c3c5441263723305a9c52c5ccc899a4653000
->           workqueue: Move pwq_dec_nr_in_flight() to the end of work item
-> handling
+Hi all,
 
-This should be fixed by c70e1779b73a ("Fix pwq->nr_in_flight corruption in
-try_to_grab_pending()").
+In commit
 
-Thanks.
+  772e5fb38843 ("RDMA/irdma: Add AE for too many RNRS")
 
--- 
-tejun
+Fixes tag
+
+  Fixes: b48c24c ("RDMA/irdma: Implement device supported verb APIs")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/FJNTYA+DxP+IJTwzo4_yk.t
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXBW0EACgkQAVBC80lX
+0GyR3ggAjqp27dSUgB6ctfW8hMVl5B26NtJE+EAtRZCpuZgWzx3lAT1+MGj1Ex1b
+eOjgLl7l6kqzLm9KFeKcR/TVga3bDKnvlcE+qrJR2pBfyMLYM6yt4fjdz2BpLUXJ
+iz6b+qkGj5gRJARpV0tQ+bzPYphvybn8Gy1KEfgSDHgXO+Ehsxs3xRwInG+ekxij
+a14B4LUaAc34t5zvH3TZCW6SChsoEn4jw/cYXbIoziAVmkN/k4LMrursUUUTpk8S
+mJ+WOyxCOeKzGBH4ouhnoGez6bIft3sgNkHzbZWkqi++O9VZmHJGhHqux4Nimiro
+rsGtqE1hLW4rMCURtqXzp5/Pc+6bLg==
+=aPAU
+-----END PGP SIGNATURE-----
+
+--Sig_/FJNTYA+DxP+IJTwzo4_yk.t--
 

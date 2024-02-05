@@ -1,109 +1,161 @@
-Return-Path: <linux-next+bounces-985-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-986-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0480784931F
-	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 06:00:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B127C849328
+	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 06:09:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 360571C20C24
-	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 05:00:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABCD41C215F2
+	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 05:09:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E4BBE4A;
-	Mon,  5 Feb 2024 05:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06621B645;
+	Mon,  5 Feb 2024 05:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SuiX3Tz/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ejj1ZYyu"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E845BE62;
-	Mon,  5 Feb 2024 05:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A3CB654;
+	Mon,  5 Feb 2024 05:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707109248; cv=none; b=O3ImWz3eX0Y+34D41rRflUOYiNWR7c2kB8qWwvvLOfEcUmZ18yIAiDK4pFPTDnNScZivsarM2FG3v4pNVXEea0YrFne28MsSmcNvRkh5PWgg1gch7GoDEY8Yt7Up4SzLhtMRtBr+h5CY2lcZHGYV08KHGKCHXHMaKvGCrdFc9aI=
+	t=1707109753; cv=none; b=E7tV4aBAyDmsRjEtMwdPA5eh5hzk4TE96S36B871ro1lij7Bb6XtO6UNIauZIK7IWlACGu7707EcnQnF3ZxV3V0IMs2uN5bM6E9QL5hOYBvOx8EwexACTClzzcX0Lt9tDhdH23sKOC0vZuy1Bv9ESJQuE3lBx52pDtYrrdVTr/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707109248; c=relaxed/simple;
-	bh=l9w/yA8U4vmZadw1HoePjP3jfyoZVoTbiYmxwvyIlzs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=X0BG2o7kgrlnRiPXWTVlaHHG1tEUtKYuJ3AFpqu32Un5i81YSscYJB1lQZWjbcGMv8rCytN/swno2RNu+RYQ/ME2Ca3emtwQMy6FydR9+M5Mhk1liD0gJ5RMc2LFeWsoUylsMxjijVH+RSTn0/AIzFr46K5UUCoHnYKed1D+RWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SuiX3Tz/; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1707109753; c=relaxed/simple;
+	bh=q/Xi4KajUWwxdMCzbdgmwEu3T3xuWQSeqmorusa2PNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=G5tlLE+j7qORRD6wmXp2/reSLrPZRJItPtcLzcdrqcHKu5EKdHuSnlp2riX8jSXNHzdeeN4gM2Z7KDCnJ/hsiPJRVMQNWVP24Du0TcfMKm2fshuIpmD8qILy34conIRoMlRWhxW4zNolj0s5Xb0G5sbbrKSguOFGVdLRy8PGptM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ejj1ZYyu; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707109244;
-	bh=/ccN937hD6XYNaNyOJszgCTqpZ42hgDndlG8P/4T2Zo=;
+	s=201702; t=1707109749;
+	bh=PO3qNj2W3pYd8+HqYALOny12mvC6LogSBw4N8EJjxGw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=SuiX3Tz/OmIFzfnd1OpbDM4+lMk2YArd6+tb4lJsWRvGnTjtw2Jy4X3kVOfUBOP7s
-	 JarcuSVKXLEpmZYLWvllxiDX9I+ajcfhv+diD3H8ou4hz+5VXFV6W/C8+qfO99RTZJ
-	 VHQYaIG+NgGdMlJFrppy2s6qNC3b25HOHCkK29nDI68iaKaVG570XD0NmCFTRINfyL
-	 QtKedy55H3PbILe+dxmHvXjDIqJdIGYm7nCgJOkR56HQAbZ2fvQHPDkCaaiPv6VTRA
-	 Ligej/tx6EZOQZ0aVimT8dz54wPu9wC6kbqeI4NmfdyUZ8R6azZ0o9GcEbPUZ+mx4H
-	 4mN7EzOOLOsjw==
+	b=ejj1ZYyuTWXvuXDuJlscxjxbmcLaw7tSkdzPho8NtPkPFDMT3//QiC55k98giHZsP
+	 2EN/c2rvxOeCTxsDZPYqgNcSwIFbQOvkcrDFtgqiSDwE9b/yRvHG7fffvy35Q+0Opw
+	 BxmYP/gX07pJByGmWeMy+EE0MB3tGr8Fl1D1ES7GAH+Rii/4Kh3ClUA63fjypW8QdT
+	 LeRJsVkNyAI2Va194u9ABbSykqF+0AAMCa7fTaWboMugqm9lZVvOIhZ4oxhpqaBNBc
+	 vE1+jDVuqdiErAsfS4urcrd59CoIXkhOSHbucDbnUQddYwUl59PMqhj8uL0JO7Uot+
+	 lMAORoj+80dxg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TSvMv5d0pz4wxZ;
-	Mon,  5 Feb 2024 16:00:43 +1100 (AEDT)
-Date: Mon, 5 Feb 2024 16:00:42 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TSvYc5hJ1z4wcb;
+	Mon,  5 Feb 2024 16:09:08 +1100 (AEDT)
+Date: Mon, 5 Feb 2024 16:09:08 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Meng Li <li.meng@amd.com>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, Linux Kernel Mailing List
+To: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
+ <kw@linux.com>
+Cc: Philipp Stanner <pstanner@redhat.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the pm tree
-Message-ID: <20240205160042.2e1cffb5@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the pci tree
+Message-ID: <20240205160908.6df5e790@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FTAiijfYv=UT2h.K8j+sLlG";
+Content-Type: multipart/signed; boundary="Sig_/xs0peBkEdPQ67sRY5VnqT6s";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/FTAiijfYv=UT2h.K8j+sLlG
+--Sig_/xs0peBkEdPQ67sRY5VnqT6s
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pm tree, today's linux-next build (htmldocs) produced
-this warning:
+After merging the pci tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-Documentation/admin-guide/pm/amd-pstate.rst:384: WARNING: Title underline t=
-oo short.
-
-``amd-pstate`` Preferred Core Switch
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
+Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:27.
+Declaration is '.. c:function:: void __iomem *pci_iomap_range(struct pci_de=
+v *dev, int bar, unsigned long offset, unsigned long maxlen)'.
+Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:27.
+Declaration is '.. c:None:: struct pci_dev *dev'.
+Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:27.
+Declaration is '.. c:None:: int bar'.
+Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:27.
+Declaration is '.. c:None:: unsigned long offset'.
+Documentation/driver-api/pci/pci.rst:27: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:27.
+Declaration is '.. c:None:: unsigned long maxlen'.
+Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:67.
+Declaration is '.. c:function:: void __iomem *pci_iomap_wc_range(struct pci=
+_dev *dev, int bar, unsigned long offset, unsigned long maxlen)'.
+Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:67.
+Declaration is '.. c:None:: struct pci_dev *dev'.
+Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:67.
+Declaration is '.. c:None:: int bar'.
+Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:67.
+Declaration is '.. c:None:: unsigned long offset'.
+Documentation/driver-api/pci/pci.rst:67: WARNING: Duplicate C declaration, =
+also defined at driver-api/device-io:67.
+Declaration is '.. c:None:: unsigned long maxlen'.
+Documentation/driver-api/pci/pci.rst:110: WARNING: Duplicate C declaration,=
+ also defined at driver-api/device-io:110.
+Declaration is '.. c:function:: void __iomem *pci_iomap(struct pci_dev *dev=
+, int bar, unsigned long maxlen)'.
+Documentation/driver-api/pci/pci.rst:110: WARNING: Duplicate C declaration,=
+ also defined at driver-api/device-io:110.
+Declaration is '.. c:None:: struct pci_dev *dev'.
+Documentation/driver-api/pci/pci.rst:110: WARNING: Duplicate C declaration,=
+ also defined at driver-api/device-io:110.
+Declaration is '.. c:None:: int bar'.
+Documentation/driver-api/pci/pci.rst:110: WARNING: Duplicate C declaration,=
+ also defined at driver-api/device-io:110.
+Declaration is '.. c:None:: unsigned long maxlen'.
+Documentation/driver-api/pci/pci.rst:131: WARNING: Duplicate C declaration,=
+ also defined at driver-api/device-io:131.
+Declaration is '.. c:function:: void __iomem *pci_iomap_wc(struct pci_dev *=
+dev, int bar, unsigned long maxlen)'.
+Documentation/driver-api/pci/pci.rst:131: WARNING: Duplicate C declaration,=
+ also defined at driver-api/device-io:131.
+Declaration is '.. c:None:: struct pci_dev *dev'.
+Documentation/driver-api/pci/pci.rst:131: WARNING: Duplicate C declaration,=
+ also defined at driver-api/device-io:131.
+Declaration is '.. c:None:: int bar'.
+Documentation/driver-api/pci/pci.rst:131: WARNING: Duplicate C declaration,=
+ also defined at driver-api/device-io:131.
+Declaration is '.. c:None:: unsigned long maxlen'.
 
 Introduced by commit
 
-  3a004e1fee4b ("Documentation: amd-pstate: introduce amd-pstate preferred =
-core")
+  fbcc7d7f7948 ("PCI: Move pci_iomap.c to drivers/pci/")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/FTAiijfYv=UT2h.K8j+sLlG
+--Sig_/xs0peBkEdPQ67sRY5VnqT6s
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXAa3oACgkQAVBC80lX
-0GzOmQf/ZopHn7aeW37mCHA81xMojTBJXQH254J8w9JwyTyQtJPEd5RfCpRYGoeB
-kOYsgEokmFdmRMeErand4aMjcKGy/fY5dt8JcAnjjSvWHxl/IEHAHfCCk7u6tfio
-HOsd2z7HZKDUBGdY3aNqTua0tyL+VjhTqk9JNUsEceOGgR4QxzY7TJSly1fgr/Kn
-RBBzudkke5ArS9Gukzk04OUiRWIHgHeyaD0dGexLv9VvE6SWoh3+xfOuC5G9R1d6
-gAz0o7Hkp3HnShXfyL83FZVd4qTTbaA+EBSxcqtsPFXetFACpLGT7ZTCMlr5DAOj
-NEdRpEFBTv6TpflVpQjsqO5pIahDRQ==
-=golh
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXAbXQACgkQAVBC80lX
+0GwWLwf+J9Q4CeucQguko/ZL35eDyh6TPcV1WNRuDTcElyYIFKuWQ9B8aTzhBzDm
+zsZ3W2sr0Oj61Eqyy5DA7wnjQbK/w+lDQNtRlO8qt7oaX+QokXduN6RzARdTADY0
+HFGnGjbhFArSsVmnI9Iq0cgAaTs1TLwJyaQZqf8S9nU1Vqy24yC0lh2fdPqOxtai
+IrPLWEhZyxgYNpZAzu/jNmlDBEn7b2Z4Tph8ehtBuwYwB057TeZevLE0VfGXKGO+
+jVPNb4Z2xm3u60e70Y1m7t0j4XHdIjJyoBQBZgKaTUgbNqozD0qQDCeS/W+2Li+0
+B9tv/KG5v/gouYcY6iHf1roPaM994A==
+=5MD9
 -----END PGP SIGNATURE-----
 
---Sig_/FTAiijfYv=UT2h.K8j+sLlG--
+--Sig_/xs0peBkEdPQ67sRY5VnqT6s--
 

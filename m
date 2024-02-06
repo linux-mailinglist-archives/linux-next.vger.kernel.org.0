@@ -1,168 +1,202 @@
-Return-Path: <linux-next+bounces-1020-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1021-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A00084B54B
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 13:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BCE6284B56E
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 13:39:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EFB51C24DE4
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 12:34:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E02EC1C250E9
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 12:39:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DAE4134CE7;
-	Tue,  6 Feb 2024 12:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6299312FF99;
+	Tue,  6 Feb 2024 12:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xVwxyley";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="gmpDayKH";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="jkYDM+nz";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="30hSAi4b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dQTc/9j5"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DE2134CEA;
-	Tue,  6 Feb 2024 12:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2030D5677B;
+	Tue,  6 Feb 2024 12:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707222541; cv=none; b=e/ZnRvzDP54TNP/YbQDIrQGpXcvZwZXnEGt1dnAnRciWVJXX5vD98CK0+u/GLpx/H5/tbOpCzYmBJ76aChS71es1gCu1n48ljnmhsFaexujh7cYPdubRjhW4gLgcUYvQuOpOW7HU0NcTu7QiW45h2uCvrMBXhHPtaRwXxXFNw0Y=
+	t=1707223179; cv=none; b=XzyTQtBpFrGe2VdezVgo+J/WqxaE5MWATa8VPxl4J4IyWrIzK80/iR3ojUNyz9lWWKVrcETgNbDf0kquUcPpYspZ2AnnpsOKN7gfm/GiIfNmAxIgDGE/m+7kY66e/u9e5CSzRXcucbzfGmO3yzjBERuTEZkw0orrhQrW5miM3wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707222541; c=relaxed/simple;
-	bh=VBjZ4iAnpOC5YshUblel7Q7ms9brJlgx8tDTc5vjioo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rKwm9CDiAO64Xamfuwa16abTBMGIGSWCYqeDBtLwJTPOXa04wpYmwN0OZDFgiU5qWr/wzViKdzycc6pirnYbL226dMATSZ6ft/ntlHBTRT5cERIQW0DYtOr3tl5YSF3ziCuH5oidL/LFnZfQ6KJM6MWf68kM+RHPJeLBPZFA/7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xVwxyley; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=gmpDayKH; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=jkYDM+nz; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=30hSAi4b; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id D9E2521FF4;
-	Tue,  6 Feb 2024 12:28:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1707222538; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=97XujLeKB/pzSnxqeV5jx2ZlV1MqcFgYnkGqFctpKng=;
-	b=xVwxyleyVo1Yr5goTDT5pTdCj7Fch+5PsTkM6MeYIoCGtkdZzZHUOBDFEMmK9E718SQmYC
-	ptOO0FLXjhbrIMvT6A2W/ZxhKccQ70pkYAummk5hjfiAcM4XSGuTy3X+lEzPqlvPL8uxEU
-	0yFvzOlTJyEu/ZspQEffR8G/BXpr0to=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1707222538;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=97XujLeKB/pzSnxqeV5jx2ZlV1MqcFgYnkGqFctpKng=;
-	b=gmpDayKH/P05ZNAs6pYJ/W7/Ez+gHadWsOIQaGMIdngQwGRR90eDvRSAlqmz4wDXZqB8PQ
-	Tl78H5UF8BYj+DCw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1707222537; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=97XujLeKB/pzSnxqeV5jx2ZlV1MqcFgYnkGqFctpKng=;
-	b=jkYDM+nzzguoj/27Jwngnu7L5Oa5WG7vQ3ETb8RKiCBza5CiMvw/u3+kpx1QVb734dJwyP
-	eQsSbiqHmneO9SNLmY0YjAXzZ69OENzUp7Rwkb1mT5emxyfWekeJH/NV0O8BXVyEDpm6rR
-	48gd4WCNV2pQVLxucVhvhHNI45/en6M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1707222537;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=97XujLeKB/pzSnxqeV5jx2ZlV1MqcFgYnkGqFctpKng=;
-	b=30hSAi4bhWv7QWAy6tnPo3DAVBDkUPStsrRiyu3OIJXGRL3FproexVoXpVWKOhF5mOVvfg
-	NUzUAWdeOi84vPDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C343D139D8;
-	Tue,  6 Feb 2024 12:28:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id nMepLwkmwmXnKAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Tue, 06 Feb 2024 12:28:57 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 5886AA0809; Tue,  6 Feb 2024 13:28:57 +0100 (CET)
-Date: Tue, 6 Feb 2024 13:28:57 +0100
-From: Jan Kara <jack@suse.cz>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Jan Kara <jack@suse.cz>, linux-block <linux-block@vger.kernel.org>,
-	Linux-Next Mailing List <linux-next@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Linux Regressions <regressions@lists.linux.dev>,
-	linux-fsdevel@vger.kernel.org, lkft-triage@lists.linaro.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: next: /dev/root: Can't open blockdev
-Message-ID: <20240206122857.svm2ptz2hsvk4sco@quack3>
-References: <CA+G9fYttTwsbFuVq10igbSvP5xC6bf_XijM=mpUqrJV=uvUirQ@mail.gmail.com>
- <20240206101529.orwe3ofwwcaghqvz@quack3>
- <CA+G9fYup=QzTAhV2Bh_p8tujUGYNzGYKBHXkcW7jhhG6QFUo_g@mail.gmail.com>
+	s=arc-20240116; t=1707223179; c=relaxed/simple;
+	bh=ra/xUfbSKYDM5fd6fzYePv8MQqb5eTjtRhASrDYHMgk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=olhJvE6Q3ssjZM2480qKTo8lsUJZgZ8BIUx1vJCwoeiZAIpvbhroVigWdq2bMTHoMdb7ngSu2CuvJbcH0QkCCk7omRspiwzOmOPGLnyD0xjh3N9p/zAYUzkTNSF5dPcil+GIvbCPU6OWSFOMhw4h3nykhA8KHVGI2DfH20vQ6sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dQTc/9j5; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707223178; x=1738759178;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=ra/xUfbSKYDM5fd6fzYePv8MQqb5eTjtRhASrDYHMgk=;
+  b=dQTc/9j50YDcvjXXky6gOZ/FUWIFlaMymZrGybN7GFTloApLclfvdUjL
+   R/hoS5AtRL8hx3btLExd/GtXZ/LRQ6W01e60MLuQ+5BQe9PPAan89Riiu
+   85fC/AujA1SAT+3uOQEoBtxD2KsK8X7wZmcVXWub4tbqSwPKDfe2itleA
+   ciE5ZueCUWBYOzL8jgpqZYgPPn+4OJFFw2CQeaKkA12rmR8Eulpl6n6Op
+   DpeZHM+5Fy8IGxLuSZxX8Fmc87dP7okkwNEekBo5D5XTYWuUA3D5n5DSQ
+   bML4sj89rXlfoVExyZHvTr5355bIbr5NVFoZxDK6fWaKr8ini3q0RvCkm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="900870"
+X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
+   d="scan'208";a="900870"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 04:39:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
+   d="scan'208";a="5631089"
+Received: from mstribae-mobl.ger.corp.intel.com (HELO [10.249.254.52]) ([10.249.254.52])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 04:39:31 -0800
+Message-ID: <f9a027765a3c65c69c2d49cf2964fe1155e914f4.camel@linux.intel.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+From: Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Vetter
+	 <daniel.vetter@ffwll.ch>
+Cc: Matthew Brost <matthew.brost@intel.com>, Rodrigo Vivi
+ <rodrigo.vivi@intel.com>, Christian =?ISO-8859-1?Q?K=F6nig?=
+ <christian.koenig@amd.com>, Somalapuram Amaranath
+ <Amaranath.Somalapuram@amd.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>, 
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Date: Tue, 06 Feb 2024 13:39:28 +0100
+In-Reply-To: <20240206122822.12a2df89@canb.auug.org.au>
+References: <20240206122822.12a2df89@canb.auug.org.au>
+Autocrypt: addr=thomas.hellstrom@linux.intel.com; prefer-encrypt=mutual;
+ keydata=mDMEZaWU6xYJKwYBBAHaRw8BAQdAj/We1UBCIrAm9H5t5Z7+elYJowdlhiYE8zUXgxcFz360SFRob21hcyBIZWxsc3Ryw7ZtIChJbnRlbCBMaW51eCBlbWFpbCkgPHRob21hcy5oZWxsc3Ryb21AbGludXguaW50ZWwuY29tPoiTBBMWCgA7FiEEbJFDO8NaBua8diGTuBaTVQrGBr8FAmWllOsCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQuBaTVQrGBr/yQAD/Z1B+Kzy2JTuIy9LsKfC9FJmt1K/4qgaVeZMIKCAxf2UBAJhmZ5jmkDIf6YghfINZlYq6ixyWnOkWMuSLmELwOsgPuDgEZaWU6xIKKwYBBAGXVQEFAQEHQF9v/LNGegctctMWGHvmV/6oKOWWf/vd4MeqoSYTxVBTAwEIB4h4BBgWCgAgFiEEbJFDO8NaBua8diGTuBaTVQrGBr8FAmWllOsCGwwACgkQuBaTVQrGBr/P2QD9Gts6Ee91w3SzOelNjsus/DcCTBb3fRugJoqcfxjKU0gBAKIFVMvVUGbhlEi6EFTZmBZ0QIZEIzOOVfkaIgWelFEH
+Organization: Intel Sweden AB, Registration Number: 556189-6027
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYup=QzTAhV2Bh_p8tujUGYNzGYKBHXkcW7jhhG6QFUo_g@mail.gmail.com>
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spamd-Result: default: False [0.40 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[12];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-0.00)[36.26%]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: 0.40
 
-On Tue 06-02-24 15:53:34, Naresh Kamboju wrote:
-> On Tue, 6 Feb 2024 at 15:45, Jan Kara <jack@suse.cz> wrote:
-> >
-> > On Tue 06-02-24 14:41:17, Naresh Kamboju wrote:
-> > > All qemu's mount rootfs failed on Linux next-20230206 tag due to the following
-> > > kernel crash.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > Crash log:
-> > > ---------
-> > > <3>[    3.257960] /dev/root: Can't open blockdev
-> > > <4>[    3.258940] VFS: Cannot open root device "/dev/sda" or
-> > > unknown-block(8,0): error -16
-> >
-> > Uhuh, -16 is EBUSY so it seems Christian's block device opening changes are
-> > suspect? Do you have some sample kconfig available somewhere?
-> 
-> All build information is in this url,
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2byqguFVp7MYAEjKo6nJGba2FcP/
+Hi
 
-Thanks! So for record the config has:
+On Tue, 2024-02-06 at 12:28 +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the drm-misc tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+>=20
+> Caused by commit
+>=20
+> =C2=A0 a78a8da51b36 ("drm/ttm: replace busy placement with flags v6")
+>=20
+> interacting with commit
+>=20
+> =C2=A0 dd08ebf6c352 ("drm/xe: Introduce a new DRM driver for Intel GPUs")
+>=20
+> (and maybe others) from Linus' tree (v6.8-rc1).
+>=20
+> I have applied the following merge fix patch for today.=C2=A0 This makes
+> it build,
+> but more is likely needed ...
 
-CONFIG_BLK_DEV_WRITE_MOUNTED=y
+There was a manual fixup for the drm-misc-next merge into drm-tip that
+did the right thing here.
 
-So we are not hitting any weird corner case with blocking writes to mounted
-filesystems. It must be something else.
+How do we ensure these are included into the linux-next builds?
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Thanks,
+Thomas
+
+
+
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 6 Feb 2024 12:21:07 +1100
+> Subject: [PATCH] fix up for "drm/ttm: replace busy placement with
+> flags v6"
+>=20
+> interacting with commit
+>=20
+> =C2=A0 dd08ebf6c352 ("drm/xe: Introduce a new DRM driver for Intel GPUs")
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+> =C2=A0drivers/gpu/drm/xe/xe_bo.c | 11 -----------
+> =C2=A01 file changed, 11 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/xe/xe_bo.c b/drivers/gpu/drm/xe/xe_bo.c
+> index 0b0e262e2166..280dbda8ae5a 100644
+> --- a/drivers/gpu/drm/xe/xe_bo.c
+> +++ b/drivers/gpu/drm/xe/xe_bo.c
+> @@ -38,8 +38,6 @@ static const struct ttm_place sys_placement_flags =3D
+> {
+> =C2=A0static struct ttm_placement sys_placement =3D {
+> =C2=A0	.num_placement =3D 1,
+> =C2=A0	.placement =3D &sys_placement_flags,
+> -	.num_busy_placement =3D 1,
+> -	.busy_placement =3D &sys_placement_flags,
+> =C2=A0};
+> =C2=A0
+> =C2=A0static const struct ttm_place tt_placement_flags =3D {
+> @@ -52,8 +50,6 @@ static const struct ttm_place tt_placement_flags =3D
+> {
+> =C2=A0static struct ttm_placement tt_placement =3D {
+> =C2=A0	.num_placement =3D 1,
+> =C2=A0	.placement =3D &tt_placement_flags,
+> -	.num_busy_placement =3D 1,
+> -	.busy_placement =3D &sys_placement_flags,
+> =C2=A0};
+> =C2=A0
+> =C2=A0bool mem_type_is_vram(u32 mem_type)
+> @@ -230,8 +226,6 @@ static int __xe_bo_placement_for_flags(struct
+> xe_device *xe, struct xe_bo *bo,
+> =C2=A0	bo->placement =3D (struct ttm_placement) {
+> =C2=A0		.num_placement =3D c,
+> =C2=A0		.placement =3D bo->placements,
+> -		.num_busy_placement =3D c,
+> -		.busy_placement =3D bo->placements,
+> =C2=A0	};
+> =C2=A0
+> =C2=A0	return 0;
+> @@ -251,7 +245,6 @@ static void xe_evict_flags(struct
+> ttm_buffer_object *tbo,
+> =C2=A0		/* Don't handle scatter gather BOs */
+> =C2=A0		if (tbo->type =3D=3D ttm_bo_type_sg) {
+> =C2=A0			placement->num_placement =3D 0;
+> -			placement->num_busy_placement =3D 0;
+> =C2=A0			return;
+> =C2=A0		}
+> =C2=A0
+> @@ -1353,8 +1346,6 @@ static int __xe_bo_fixed_placement(struct
+> xe_device *xe,
+> =C2=A0	bo->placement =3D (struct ttm_placement) {
+> =C2=A0		.num_placement =3D 1,
+> =C2=A0		.placement =3D place,
+> -		.num_busy_placement =3D 1,
+> -		.busy_placement =3D place,
+> =C2=A0	};
+> =C2=A0
+> =C2=A0	return 0;
+> @@ -2112,9 +2103,7 @@ int xe_bo_migrate(struct xe_bo *bo, u32
+> mem_type)
+> =C2=A0
+> =C2=A0	xe_place_from_ttm_type(mem_type, &requested);
+> =C2=A0	placement.num_placement =3D 1;
+> -	placement.num_busy_placement =3D 1;
+> =C2=A0	placement.placement =3D &requested;
+> -	placement.busy_placement =3D &requested;
+> =C2=A0
+> =C2=A0	/*
+> =C2=A0	 * Stolen needs to be handled like below VRAM handling if we
+> ever need
+> --=20
+> 2.43.0
+>=20
+
 

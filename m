@@ -1,192 +1,109 @@
-Return-Path: <linux-next+bounces-1036-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1037-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5365C84C099
-	for <lists+linux-next@lfdr.de>; Wed,  7 Feb 2024 00:05:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A9EA84C0FC
+	for <lists+linux-next@lfdr.de>; Wed,  7 Feb 2024 00:40:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC62D1F24D03
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 23:05:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A51161C21713
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 23:40:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB2F91C69A;
-	Tue,  6 Feb 2024 23:05:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B771C6A8;
+	Tue,  6 Feb 2024 23:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="pfa8rj8d"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dJveVRbb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D841C694
-	for <linux-next@vger.kernel.org>; Tue,  6 Feb 2024 23:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C761C691;
+	Tue,  6 Feb 2024 23:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707260717; cv=none; b=YVDdm3MM8k+1fNCIQpU+SqsXJrZNB/c5gruFBNaMd4oRfoYrU9z2cSbjmB6e5dkoFiumIiHR0J+r76YQuEDMOhPMS0eq7z0oAnGUwYicTkl2X6V366D9vb2GczyZJQtcAiL9enJpUh3DK41oFOXwIjMcDRRe6L/wTKdFkm045XM=
+	t=1707262807; cv=none; b=p3d/lDqiutR+ByWBY1En/CHm9d+TxyrO3CsLQdAcJmB5BwoBqt3+zyd8nbNDpZt0slUyLl0Zk6EqdsXQIOyjQTOQGr3GDhIX/XxrQnL/zdbGzEe9yYsiNEH1x1gWOW5SkglKy48wC8Sm1yx0IXTun95a/UEIRcVzPjVIZstdvtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707260717; c=relaxed/simple;
-	bh=7QPoO7PifBqJV8sy2/s5zmKco4E+SsITAiGa1p+M0P0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=hbNRTssKhz8/G9+Yu0b/4TSR8hnxAFoPnfAm19ugeIZ6hV08k30iU8NmwTLNu7iFA9tVxvaTwPS5sbRzHQ+tpWGXt/LK4iddQf5T76bxBAZ8M25v2m/yowPPhNNHh8TIM5LSzIX7DpXpi3Avt+LjdtKpPrwS97n6IyNgSLrvmnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=pfa8rj8d; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240206230506euoutp01b77732538f8b2f66a8d867cc4204aa39~xaJFG_BB42551425514euoutp01U
-	for <linux-next@vger.kernel.org>; Tue,  6 Feb 2024 23:05:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240206230506euoutp01b77732538f8b2f66a8d867cc4204aa39~xaJFG_BB42551425514euoutp01U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1707260706;
-	bh=D4NpkGWJwWN6KnAZDRStVR1XHUjwfMp1ZAHQ8qzkVao=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=pfa8rj8dbIwzK+cyaHBQw651DYw0zn2wQAB/v0T+a20uPePX/SoOAUoNUQn4TOOp7
-	 GcvKTqjxKF4+5H33n9gNoCnw/yfnJ9zBgkeiadTha7oweTqpsiOlgZYr0ioy564/6e
-	 p++ptNojMCe55bYb4oR7n86XHWS92BIDMoDluoxQ=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20240206230505eucas1p2ca96067cf9ce25b9432df241865ccfeb~xaJD59HbV1545315453eucas1p2D;
-	Tue,  6 Feb 2024 23:05:05 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id E0.3A.09539.12BB2C56; Tue,  6
-	Feb 2024 23:05:05 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240206230505eucas1p1b952da8c57de5dea32339b22e3c98b94~xaJDfaVsD1596415964eucas1p1l;
-	Tue,  6 Feb 2024 23:05:05 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240206230505eusmtrp1b65b0d431452d003e4821a4d574ce28b~xaJDe1ijJ0618706187eusmtrp1W;
-	Tue,  6 Feb 2024 23:05:05 +0000 (GMT)
-X-AuditID: cbfec7f2-515ff70000002543-f8-65c2bb219805
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 0B.A7.10702.02BB2C56; Tue,  6
-	Feb 2024 23:05:05 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240206230504eusmtip1e06c0fdfbc890e18793aae24260a5951~xaJCxAlLA1460514605eusmtip1h;
-	Tue,  6 Feb 2024 23:05:04 +0000 (GMT)
-Message-ID: <65bedd1f-2dd4-49e3-8865-0e6082129e78@samsung.com>
-Date: Wed, 7 Feb 2024 00:05:03 +0100
+	s=arc-20240116; t=1707262807; c=relaxed/simple;
+	bh=kC4HEKcherQTH9APDWQEGrUJPkCM85Qz70jzRLglUIU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lf2TA64+s4JqXXLw/c8Q5PjxAZ6F+CGwjPRAiwZqqT6BBQOaLUEPGoUvCrGk/q1MbQbI5a+NlCJI1EsbTrPpPXPQvY8Ah1GtRbncXqWJ1QG0qO5weeG56YBQdw15XJ9GJrMP6WEpXdRnDMqjFGAg1iH1K4RaNIq+9UpOZ+3Wp/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dJveVRbb; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1707262801;
+	bh=xb7CcD9AjvI8TrkcjBFIrC+paFho9/OcaytUo9CJn+4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=dJveVRbbIA4+/4zV2Uq65d4e4cPnb2LPSXzAymKcd9qFOsO3di/gViG9riVcv4iLf
+	 DSKtK2i42m5RGtvmHQK31ARwW+cWzG/rcCPrDSna11vGzy2oRC+frY1Mc+hBRMDTZv
+	 pghCugFQbF2R2yFbxoLnr7f1c80fAZiYrMX1Ho/LpLN1VFDQgqYYmvnqyt3iBM2wBe
+	 4fBjB7Rn90jRyfbYjsIfa+vbZQXjgX80Rztlc8NSjiT23wSuLNGOutLi+fG4eQxyUi
+	 alo9jdvcnRBrcLIbdgc75sqVP7LPsn1w1qQWIZa2bq79JVlS6h0pxFskMC4eI2iPhq
+	 l7op0sYRh1L5Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TV08x4SSwz4wcB;
+	Wed,  7 Feb 2024 10:40:01 +1100 (AEDT)
+Date: Wed, 7 Feb 2024 10:40:00 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
+ <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the perf tree
+Message-ID: <20240207104000.40367799@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: next: /dev/root: Can't open blockdev
-Content-Language: en-US
-To: Christian Brauner <brauner@kernel.org>, Naresh Kamboju
-	<naresh.kamboju@linaro.org>
-Cc: Jan Kara <jack@suse.cz>, linux-block <linux-block@vger.kernel.org>,
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, open list
-	<linux-kernel@vger.kernel.org>, Linux Regressions
-	<regressions@lists.linux.dev>, linux-fsdevel@vger.kernel.org,
-	lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>, Dan Carpenter
-	<dan.carpenter@linaro.org>, Al Viro <viro@zeniv.linux.org.uk>, Anders Roxell
-	<anders.roxell@linaro.org>
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20240206-haarpracht-teehaus-8c3d56b411ea@brauner>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJKsWRmVeSWpSXmKPExsWy7djP87qKuw+lGtz8L2dxa8pvJou/k46x
-	W7w+/InR4sO8VnaL2dObmSz23tK22LP3JIvF5V1z2CwOLmxjtNh6bxq7xa1P/BYb33awW5z/
-	e5zVgdfj969JjB6bVnWyedy5tofN4/a/x8weLzbPZPQ4s+AIu8fnTXIem568ZQrgiOKySUnN
-	ySxLLdK3S+DK+L9+JkvBbZ6K9bcusjQw/ubqYuTkkBAwkfh3+xtTFyMXh5DACkaJbbP62SGc
-	L4wSy47vgMp8ZpS4emQ5I0zLulnLWSASyxklfv2+wgbhfGSUmNL3iQmkilfATuJF3z12EJtF
-	QEWiY+kCdoi4oMTJmU9YQGxRAXmJ+7dmgMWFBQwltrbNArOZBcQlbj2ZDzZHRCBCYvaFRYwg
-	C5gFtjFLfD7fwgaSYANq6HrbBWZzCthLfG9+zQTRLC/RvHU2M8Sp8zklPl8NhbBdJB48eQ/1
-	grDEq+Nb2CFsGYnTk3vA3pEQaGeUWPD7PhOEM4FRouH5LagOa4k7534BbeMA2qApsX6XPogp
-	IeAo8fCrI4TJJ3HjrSDECXwSk7ZNZ4YI80p0tAlBzFCTmHV8HdzWgxcuMU9gVJqFFCqzkHw/
-	C8kzsxDWLmBkWcUonlpanJueWmyYl1quV5yYW1yal66XnJ+7iRGY2k7/O/5pB+PcVx/1DjEy
-	cTAeYpTgYFYS4TXbcSBViDclsbIqtSg/vqg0J7X4EKM0B4uSOK9qinyqkEB6YklqdmpqQWoR
-	TJaJg1OqgclS2aglZlHwSr7PC07r1WSrBhvnZ594aaSSLjPzbHnJv+8/vz1cbbOLPf1Yjpi4
-	D7OO6THLb34Xpq/Mq3xsdGvar/rthonvcxLc5JNf7FPd6uQcX+UUfdbVuyb67vWy7vsr1+X9
-	fz9jwrfd90TD5+pHTVkq/vHBrEc5BvOsLhp8X6gTq73yO9vtRYeqnwoeCvDb2BngfsjMTPXH
-	xhkcC4Mb91wRmH3slvXRxx2OvwrDDdh5GvSnzXt54WdZ5r1gExvuon/zTu6rvzVN/Y70Z5tg
-	D+ULRatattw52yLzqoepKIdvudTqRfcmX/5SLp0mfWzX9r2lTSsmMDTvPBB+6+3nur05mabP
-	RPfk1vy//kxWiaU4I9FQi7moOBEA3ElHgNwDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsVy+t/xu7qKuw+lGrQdZrK4NeU3k8XfScfY
-	LV4f/sRo8WFeK7vF7OnNTBZ7b2lb7Nl7ksXi8q45bBYHF7YxWmy9N43d4tYnfouNbzvYLc7/
-	Pc7qwOvx+9ckRo9NqzrZPO5c28PmcfvfY2aPF5tnMnqcWXCE3ePzJjmPTU/eMgVwROnZFOWX
-	lqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8daGZkq6dvZpKTmZJalFunbJehl/F8/k6XgNk/F
-	+lsXWRoYf3N1MXJySAiYSKybtZwFxBYSWMooMX2JMkRcRuLktAZWCFtY4s+1LrYuRi6gmveM
-	EmenHwBL8ArYSbzou8cOYrMIqEh0LF3ADhEXlDg58wnYUFEBeYn7t2aAxYUFDCW2ts0Cs5kF
-	xCVuPZnPBGKLCERIdM06zQqygFlgG7PEqsZ/TBDbZjFLzLkxC2wbG1B311uQMzg5OAXsJb43
-	v2aCmGQm0bW1ixHClpdo3jqbeQKj0Cwkh8xCsnAWkpZZSFoWMLKsYhRJLS3OTc8tNtIrTswt
-	Ls1L10vOz93ECIzmbcd+btnBuPLVR71DjEwcjIcYJTiYlUR4zXYcSBXiTUmsrEotyo8vKs1J
-	LT7EaAoMjYnMUqLJ+cB0klcSb2hmYGpoYmZpYGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fE
-	wSnVwFS4u2nehjPxZUdVX3uWVvJvszr0hsljk+HPv7LfthWFt19vnLCSIWM127f253PFz/id
-	b5h5Y7ra1D3uB2xObn6cmdr9/tp+XV+dg/yvOU0iupj+PdkXE6Tx62+V/sSAGq6phtcuXr05
-	02DPuo5diWGW0TyKrKfmaRpPFlmivUDlxK5rGxN6RAWWLT9ccflqQ95684C83reHU9W/Su0T
-	UFGxDmC6fcbR2bNxsd/a05KqPLOOnon7PKHuxmFjt1dVO10WM67myM2b+tZ3KlOa55YvOYkP
-	lAWva2q1Ndl+2hfjK7G+YmJS4SRjyblM4kHG7MzM515f158WaNWnXFQyb9fFyMlfnRlddNNE
-	meR/vFBiKc5INNRiLipOBAB/HpkRbwMAAA==
-X-CMS-MailID: 20240206230505eucas1p1b952da8c57de5dea32339b22e3c98b94
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240206230505eucas1p1b952da8c57de5dea32339b22e3c98b94
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240206230505eucas1p1b952da8c57de5dea32339b22e3c98b94
-References: <CA+G9fYttTwsbFuVq10igbSvP5xC6bf_XijM=mpUqrJV=uvUirQ@mail.gmail.com>
-	<20240206101529.orwe3ofwwcaghqvz@quack3>
-	<CA+G9fYup=QzTAhV2Bh_p8tujUGYNzGYKBHXkcW7jhhG6QFUo_g@mail.gmail.com>
-	<20240206122857.svm2ptz2hsvk4sco@quack3>
-	<CA+G9fYvKfeRHfY3d_Df+9V+4tE_ZcvMGVJ-acewmgfjxb1qtpg@mail.gmail.com>
-	<20240206-ahnen-abnahmen-73999e173927@brauner>
-	<20240206-haarpracht-teehaus-8c3d56b411ea@brauner>
-	<CGME20240206230505eucas1p1b952da8c57de5dea32339b22e3c98b94@eucas1p1.samsung.com>
+Content-Type: multipart/signed; boundary="Sig_/yP6/0_5_zjAgwZFMEA/.5GW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Christian,
+--Sig_/yP6/0_5_zjAgwZFMEA/.5GW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 06.02.2024 16:53, Christian Brauner wrote:
->> On it.
-> Ok, can you try:
-> git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.super.debug
-> please?
+Hi all,
 
+After merging the perf tree, today's linux-next build (native perf)
+failed like this:
 
-I've also encountered this issue during my linux-next daily tests and I 
-confirm that the above branch works fine.
+arch/powerpc/util/kvm-stat.c: In function 'is_tracepoint_available':
+arch/powerpc/util/kvm-stat.c:117:16: error: 'struct parse_events_error' has=
+ no member named 'str'
+  117 |         if (err.str)
+      |                ^
 
+Caused by commit
 
-I've applied the diff between e3bfad989976^2 and the above branch 
-(bc7cb6c829e2), which looks following:
+  fd7b8e8fb20f ("perf parse-events: Print all errors")
 
-diff --git a/init/do_mounts.c b/init/do_mounts.c
-index 279ad28bf4fb..d8ea839463a5 100644
---- a/init/do_mounts.c
-+++ b/init/do_mounts.c
-@@ -19,6 +19,7 @@
-  #include <linux/ramfs.h>
-  #include <linux/shmem_fs.h>
-  #include <linux/ktime.h>
-+#include <linux/task_work.h>
+I have used the perf tree from next-20240206 for today.
 
-  #include <linux/nfs_fs.h>
-  #include <linux/nfs_fs_sb.h>
-@@ -208,6 +209,10 @@ void __init mount_root_generic(char *name, char 
-*pretty_name, int flags)
-                                 goto out;
-                         case -EACCES:
-                         case -EINVAL:
-+#ifdef CONFIG_BLOCK
-+                               flush_delayed_fput();
-+                               task_work_run();
-+#endif
-                                 continue;
-                 }
-                 /*
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/yP6/0_5_zjAgwZFMEA/.5GW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-onto next-20240206 and it fixed all boot problems I've observed on my 
-test farm. :)
+-----BEGIN PGP SIGNATURE-----
 
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXCw1AACgkQAVBC80lX
+0GwV2gf/YNnxmeS1myqb5LqhOP9D2XJdXL9bslIcm2zWm226/bZDGwaIQe9wABAX
+VyyyQWICPWuaIAGG3UK/pJWb9a1Nu5dFZBV6fMQ6Bzx+ntHvewVTSdyqczRwP4/F
+8HLCe2H8rT6xDjDjTsShg3sHFerX2S/vFpaZImAgkgzm7BJH/8/9qPUo73EdTvuy
+rFvh8+3jmavJB71dL6FW4DSR12ZEIv09kk3+sQdFoZgGMU1R89eRUkhNy6HNJ1oR
+JmvYGqLNmFegpU6NAYNUhlq3OXnfWt4aYluONuEDDVt9cLEiD4+TvIsjRyt6HZIG
+SheyD8bl0/qSsC5O0OqDejDgJcmnCw==
+=sXbi
+-----END PGP SIGNATURE-----
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+--Sig_/yP6/0_5_zjAgwZFMEA/.5GW--
 

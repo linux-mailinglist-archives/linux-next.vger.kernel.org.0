@@ -1,109 +1,136 @@
-Return-Path: <linux-next+bounces-997-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-998-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2BD784A8F2
-	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 23:16:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84F7284AB55
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 02:00:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15E6A1C244D3
-	for <lists+linux-next@lfdr.de>; Mon,  5 Feb 2024 22:16:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2CBD288B23
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 01:00:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBF660875;
-	Mon,  5 Feb 2024 22:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9785611B;
+	Tue,  6 Feb 2024 01:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kb2s0+q4"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MF8CPSuC"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D6A60878;
-	Mon,  5 Feb 2024 22:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4FC539A;
+	Tue,  6 Feb 2024 01:00:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707170639; cv=none; b=ojElExxaZN/BX57EaJHD+LRcl6XOfikjje02geBTpWSeoJb93MD17jupw92VThqI0m/9iReV+ZP5Rf4dTfzODOPzz8XtheBt8YVjebOSxa5Rd8Zs0fh6KZOkUc7Ax39ewZr95M9yz8H2V76GfllPGoQMCeJRXIrEzxdSscXfv0o=
+	t=1707181204; cv=none; b=FmW40wnjqlcrr6RnaWp+NaP2R1NBRfZu58hNk8NTH/5ilsTXEFr3Z0dAEvMIkD0Y6HGQkh0rSjt94x3w2LJJ6QZmcTjwTvCFZTvilVeFmh2wOb1dpy4ufxPqkRmCOt75pj7vm59ixRD326WMxFMvk59ErA8W5M4mp61Q5dSN4As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707170639; c=relaxed/simple;
-	bh=ZuIgEWXDaw78xMqOUOadpO2rhYAyUJFjADvXdH32uAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gI7swz9UNwndiDU0Qv5KLTPGeMwdxinQLiYN4vSThYr7UFsS8AZmYjATQR5iOKFV96NrfAIHaWj1KBlc98+wi4azaTrngogBCmu14tLtB8wfGiLwD1KrYJq5gzsukn3J6tSjcPCq1i715QA+7UEfkJRabu7izmwvs8Y+rWTpai8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kb2s0+q4; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1707181204; c=relaxed/simple;
+	bh=pvr9OkLDytfZuT3AyoRYzRgHcW9tIdCf2sKbD8K4j+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=i2x0Mqw3c8jwo6DCfkGvOob/MFEKISCLHfW7P/LuQu1kCRsXTbduBAppxLct6P7pYWFSQbQB2axZYZosg7YnfCSUWsuEXc7x8Fs0KY74oG3DZfLIo1kwmuhOrWLjRtfRt1HM0dLUyNaHlV/X14cv9n0lxqDvYLXffbAZjakDM5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=MF8CPSuC; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707170627;
-	bh=3tNkv4NP/NzAdkSDGC1/j5xdukaM3oAMcY4wpku783c=;
+	s=201702; t=1707181198;
+	bh=mcAAzoOAVGZzLS4NHfKVIUOk1ulVMJKUzquzS0Sq5Ck=;
 	h=Date:From:To:Cc:Subject:From;
-	b=kb2s0+q4UIGTdyNXuieGcMjiaVlC5+JBn+lQhqfXzK4flyHPlY5Ew2rtl9QICUb0B
-	 72UYe34OA8UNkoRfVBfPO296uG79YeiET4PiBcfTE7Zd7x7CnvntOvbiDASKuJ/M7U
-	 yfyOT9NHmgNq6U3GEnc7eIlb73ynoRfsZqM+a6ua1f8pCYkwadkmpMKAVEypWNcUKU
-	 6VY0fdmzAq1Qek2hUY6QvWeH8agcLsd8SO/iTJxZqavHqb46rhj/itACmbdLAsPw6y
-	 p29x0wacHB8IV8sPEfejbY/BXlHlPR0rWIq+6Hx9EPGtcCOW2dmspFsnH8ibyApGAb
-	 IlznFTLxIUPqQ==
+	b=MF8CPSuCd68GJjC8r+H8/Bmx9jzNzZwz7Hx15htJt5eohVABMsur7DU+1pWb1Ls92
+	 J7Yun2ixb7rQTOqsXnglA/kJgVZQMykfaB5PFwt5pMMNLMrzvcDqkLjRqAL4x3Qcz6
+	 J0jofEtekEB5U/k9DOnQUcHXnESaT6hjjweQnsKp0l4Ub4tPk5I4zLmGj8xIAa55Aw
+	 TXtImetwMyvp5+geBN6Q49MsHCCwjupJXL45ZFkuiU+ZY/QdkW0ZcqxqW4NiyIEkQ4
+	 3z/QkFM7wEeaGQMY9hQ6yXEVnZF5LHRbHVLyjjhELCEGmKwr4jLHCCAKpARx9bzrLS
+	 vZg+uVlA7KFzw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TTL4M0ndzz4wp3;
-	Tue,  6 Feb 2024 09:03:47 +1100 (AEDT)
-Date: Tue, 6 Feb 2024 09:03:45 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TTPzd3NNVz4wp3;
+	Tue,  6 Feb 2024 11:59:57 +1100 (AEDT)
+Date: Tue, 6 Feb 2024 11:59:56 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Doug Ledford <dledford@redhat.com>, Jason Gunthorpe <jgg@mellanox.com>
-Cc: Mustafa Ismail <mustafa.ismail@intel.com>, Shiraz Saleem
- <shiraz.saleem@intel.com>, Linux Kernel Mailing List
+To: Daniel Vetter <daniel.vetter@ffwll.ch>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>, Inki Dae
+ <inki.dae@samsung.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the rdma-fixes tree
-Message-ID: <20240206090345.210c2760@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Michael Trimarchi
+ <michael@amarulasolutions.com>, Michael Walle <mwalle@kernel.org>, Robert
+ Foss <rfoss@kernel.org>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20240206115956.4570e9b1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FJNTYA+DxP+IJTwzo4_yk.t";
+Content-Type: multipart/signed; boundary="Sig_/tPTwWSbcHW7JIIhlh82ZBYM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/FJNTYA+DxP+IJTwzo4_yk.t
+--Sig_/tPTwWSbcHW7JIIhlh82ZBYM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Today's linux-next merge of the drm-misc tree got a conflict in:
 
-  772e5fb38843 ("RDMA/irdma: Add AE for too many RNRS")
+  drivers/gpu/drm/bridge/samsung-dsim.c
 
-Fixes tag
+between commit:
 
-  Fixes: b48c24c ("RDMA/irdma: Implement device supported verb APIs")
+  ff3d5d04db07 ("drm: bridge: samsung-dsim: Don't use FORCE_STOP_STATE")
 
-has these problem(s):
+from Linus' tree and commit:
 
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
+  b2fe2292624a ("drm: bridge: samsung-dsim: enter display mode in the enabl=
+e() callback")
+
+from the drm-misc tree.
+
+I fixed it up (see below, please check) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/FJNTYA+DxP+IJTwzo4_yk.t
+diff --cc drivers/gpu/drm/bridge/samsung-dsim.c
+index 6a10aa5c85f5,f9d85fe1df7e..000000000000
+--- a/drivers/gpu/drm/bridge/samsung-dsim.c
++++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+@@@ -1498,6 -1526,11 +1503,8 @@@ static void samsung_dsim_atomic_disable
+  	if (!(dsi->state & DSIM_STATE_ENABLED))
+  		return;
+ =20
+ -	if (!samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type))
+ -		samsung_dsim_set_stop_state(dsi, true);
+ -
++ 	samsung_dsim_set_display_enable(dsi, false);
++=20
+  	dsi->state &=3D ~DSIM_STATE_VIDOUT_AVAILABLE;
+  }
+ =20
+
+--Sig_/tPTwWSbcHW7JIIhlh82ZBYM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXBW0EACgkQAVBC80lX
-0GyR3ggAjqp27dSUgB6ctfW8hMVl5B26NtJE+EAtRZCpuZgWzx3lAT1+MGj1Ex1b
-eOjgLl7l6kqzLm9KFeKcR/TVga3bDKnvlcE+qrJR2pBfyMLYM6yt4fjdz2BpLUXJ
-iz6b+qkGj5gRJARpV0tQ+bzPYphvybn8Gy1KEfgSDHgXO+Ehsxs3xRwInG+ekxij
-a14B4LUaAc34t5zvH3TZCW6SChsoEn4jw/cYXbIoziAVmkN/k4LMrursUUUTpk8S
-mJ+WOyxCOeKzGBH4ouhnoGez6bIft3sgNkHzbZWkqi++O9VZmHJGhHqux4Nimiro
-rsGtqE1hLW4rMCURtqXzp5/Pc+6bLg==
-=aPAU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXBhIwACgkQAVBC80lX
+0GzXoAgAjOU5PMyBhdNjxCGyusGWHf/88xGF2bb6y76E2cLHxWZmxOv/ayFBxgL9
+2Sbbt44esyXM5DqMjeVXV8BxlOHKgXho2e4IwjQWSYqRL5sgv/ht2p3/4mD19KMM
+jZ44WmMPe+j9O1AYhrgqVLspl/81Jw+WvvEbuAHdNO4BrFTqrl3Ukwep6d1Vqc4v
+Ea6lci6qf+daL2U+ESCA6nHhNHM6Yn7kE0xliG7rQSX81u2MEAJVzdZou4RYhqzI
+xYP/mU1oIVFiZkz4P1xUK/2uggpbt6F0a1OHzxyDEPQwCveaPAmwsbh1P21IJB0u
+Ykh4PJBWNwddUdEtUwy1sncIOnausw==
+=gUMH
 -----END PGP SIGNATURE-----
 
---Sig_/FJNTYA+DxP+IJTwzo4_yk.t--
+--Sig_/tPTwWSbcHW7JIIhlh82ZBYM--
 

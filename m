@@ -1,109 +1,175 @@
-Return-Path: <linux-next+bounces-1014-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1015-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D755884B271
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 11:23:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6724384B2C5
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 11:52:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 476C1B25B7E
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 10:23:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AB891C221C8
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 10:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AFB12E1F8;
-	Tue,  6 Feb 2024 10:23:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F36537FA;
+	Tue,  6 Feb 2024 10:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AfwUCx/D"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NJkjoNDI";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RdMXmhk8";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NJkjoNDI";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RdMXmhk8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230F612E1EA
-	for <linux-next@vger.kernel.org>; Tue,  6 Feb 2024 10:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B72E1EA6E;
+	Tue,  6 Feb 2024 10:51:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707215029; cv=none; b=F4l+i6v6XpwYwIB+JLQSGS6dRObDhuX8QQ47CPRDcQjbRCE4Z3yx+wptld3t2N9mUz9Ece8ACAQ091gVc2USKUT2BkSlijoUR6zD+B0Ie+Lk7/CJC88Im2FatDft6/2JQyCvz7w9buu3l0lPEVaZGYZ1gFz+DKDGfa2uYa+zxZo=
+	t=1707216718; cv=none; b=Kp+2PsC7CyGQ3cCe8LTo+2Lor5kIrgu9j5TFBRmaXF1Argnk23vZvOBlU+DPyr52osOcs//L/vnpNEgcLom4e9KZeY8VisULY/07Qloykn6SsWed4+sFexvockSOQeZj7rlKQ7sgZw9266tQ04pHBDfm4Vose7bJ1zekaruxxLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707215029; c=relaxed/simple;
-	bh=JQc7I9dtacgIh6dzApcTtL71VyIWn4aWCD9+Rsus/uU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vADDFbd5zqAnp4M1Huj2KCjgsFUz/xvYsN64g7GUQ4c0qVCQYCWXDviDzyhSYGP9XXE/fixgKnQQYDprIgy1CWBEVVpUwottDL8QKRShZJhEzLpBgBWRyb7EBJgUAOewBmeve09cW8YgCRegP9XJvjFgsIg+i+h+o4U+DpA6AZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AfwUCx/D; arc=none smtp.client-ip=209.85.221.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-4c033928deaso299010e0c.0
-        for <linux-next@vger.kernel.org>; Tue, 06 Feb 2024 02:23:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707215026; x=1707819826; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DvZiY9ihexG/Lq+UzYShBWDLaHBQcaLwobbBS4o9zoI=;
-        b=AfwUCx/DJRNaiaKS1iipnlPsd5rZMmrz3I0s+8EEhKEvO4fZfrHxyhbJE3BovUA43g
-         9tpanRMVnVovsVs3uMjdIu3BWWQRlDzKwCEQa8NaLkKDHYmX+l4DiEJscEkTeSynMpdq
-         OOoiFliI+RBOdL6G2hSQpVC9qiI8wPPo+sNZeHE5Ebp+V5AiUEcHGcFQXl8dJylkzs2l
-         Gogs5RDRwN09qnCUXn9vG32/kXPxcO78z+ipLk8WsqQvi9Knni5kArfFxxxWkndCrdDH
-         Ugju7rBdGrXx5U4xXLXZPUydxBc27pQKhw1DvuXULYMuTlmqPVLF/DG+A+3lo7CJ0Cuh
-         rf6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707215026; x=1707819826;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DvZiY9ihexG/Lq+UzYShBWDLaHBQcaLwobbBS4o9zoI=;
-        b=Lw6IxAs8ucPQPsioAR/0eRfejeTMREXYjZlmWcXWyyNooPgC4JhIMRRybuCR4niPht
-         3qs1M5oiXbuvhqLTb89o1e7k7fSGgjI+y5ElUykS/9wkmxjJh0vdL4yMPqDgwrEQXHoq
-         hPzkStfuTsgPVAcp9X0EXGI8wGjSR1O1ObmeJpZPjf3SATk2YMBNdNuh4jxGq/pxuILW
-         02avuEh6DD1JeWkltnLZbTEKSQ9kQim3ThI7K1eVVQUg9s0jYEs1NAfg/PNttPBVK/ZM
-         eNzznnmLfLAJO3EuvcZYmUaF/LwGhD8FiqLHS4QCwg0wJjs69iNaU9cKtizOGg/L/nHd
-         TG/A==
-X-Gm-Message-State: AOJu0YxR8wrefJ8/xS5w3sm2PZ/ecaCLsEBvIkDwWQdVXZsxANNKiinG
-	fYp2JqIMGcKRSQ8r+0wt9Db20crqlx3GDidYOYcoJrKs7VRIUavOr+YhhXNzB7o4xMTF/Md3R0q
-	UJTe9Z2+Niok+xLqWAZgAxEL8YIKL3gC69+ILxg==
-X-Google-Smtp-Source: AGHT+IGfDOnd2EhP4TWByrQOkcid9KL+1EpEAi8LxcA+nJejScdKhoTZckC004/fc+VBarRks/cvEIzLg7CHcNC2TZ8=
-X-Received: by 2002:a05:6122:17a8:b0:4b9:e8bd:3b2 with SMTP id
- o40-20020a05612217a800b004b9e8bd03b2mr1876525vkf.2.1707215025681; Tue, 06 Feb
- 2024 02:23:45 -0800 (PST)
+	s=arc-20240116; t=1707216718; c=relaxed/simple;
+	bh=i69KZPWZUZzRRoaXYbJqSaOZh4hwQA5j1UC+OGY2k7Y=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RWJsz5+JPHKXkbnHucerTLH1S4iitfUEBSq3ADwuXbH+QiUXeTBooApWfguaEfbosbpKQFo6tnNghhYS0HA6q9N+lO72rSTo6wACDdM2v40kMs/QHpeQGvUW5OoS0CxFcr9jWsCV+3qlEgaKFf6eT9euxW/pwx79a72Zx2ZUiwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NJkjoNDI; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RdMXmhk8; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NJkjoNDI; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RdMXmhk8; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 0248C21EC3;
+	Tue,  6 Feb 2024 10:51:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707216715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K7byREWdKUM5PPHM09jDyPBZW0eUc0SM8ZnqWwduAmI=;
+	b=NJkjoNDIf6YjlOHKIF17pgJkpXAODQa6WagiYj4av8pcCL4BayjU/Iza+QWpvEhpAXDGnP
+	d7nSbAPUGdOgXjE0H8e6Uklp+q/msrdQOwNQcchihijiYudLl6M1I36fMiAYFMQqZA2QgA
+	AUDB85fjHRpiyApFsVhk0Rr+2BKb8A4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707216715;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K7byREWdKUM5PPHM09jDyPBZW0eUc0SM8ZnqWwduAmI=;
+	b=RdMXmhk8VtJz1K9k9owMceEAHxT/Vhp2c/wSkLEiys3pu4AbrRm4pczMU8KZ8sW1lgMhna
+	T/7Ve/wT4ibDPRAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707216715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K7byREWdKUM5PPHM09jDyPBZW0eUc0SM8ZnqWwduAmI=;
+	b=NJkjoNDIf6YjlOHKIF17pgJkpXAODQa6WagiYj4av8pcCL4BayjU/Iza+QWpvEhpAXDGnP
+	d7nSbAPUGdOgXjE0H8e6Uklp+q/msrdQOwNQcchihijiYudLl6M1I36fMiAYFMQqZA2QgA
+	AUDB85fjHRpiyApFsVhk0Rr+2BKb8A4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707216715;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K7byREWdKUM5PPHM09jDyPBZW0eUc0SM8ZnqWwduAmI=;
+	b=RdMXmhk8VtJz1K9k9owMceEAHxT/Vhp2c/wSkLEiys3pu4AbrRm4pczMU8KZ8sW1lgMhna
+	T/7Ve/wT4ibDPRAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 44D66139D8;
+	Tue,  6 Feb 2024 10:51:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id iosMCkkPwmVdCQAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Tue, 06 Feb 2024 10:51:53 +0000
+Message-ID: <d5e68f29d6c835848295c10bac964da7a57f1bfe.camel@suse.de>
+Subject: Re: linux-next: trees being removed
+From: Jean Delvare <jdelvare@suse.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Linux Next Mailing List
+	 <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, David Miller
+ <davem@davemloft.net>, "Eric W. Biederman" <ebiederm@xmission.com>, Florian
+ Fainelli <f.fainelli@gmail.com>, Hector Martin <marcan@marcan.st>, "Jason
+ A. Donenfeld" <Jason@zx2c4.com>, Lee Jones <lee@kernel.org>, Micah Morton
+ <mortonm@chromium.org>,  Mike Marshall <hubcap@omnibond.com>, Pavel Machek
+ <pavel@ucw.cz>, Theodore Ts'o <tytso@mit.edu>
+Date: Tue, 06 Feb 2024 11:50:44 +0100
+In-Reply-To: <20240124130101.428c09a3@canb.auug.org.au>
+References: <20240124130101.428c09a3@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYttTwsbFuVq10igbSvP5xC6bf_XijM=mpUqrJV=uvUirQ@mail.gmail.com>
- <20240206101529.orwe3ofwwcaghqvz@quack3>
-In-Reply-To: <20240206101529.orwe3ofwwcaghqvz@quack3>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 6 Feb 2024 15:53:34 +0530
-Message-ID: <CA+G9fYup=QzTAhV2Bh_p8tujUGYNzGYKBHXkcW7jhhG6QFUo_g@mail.gmail.com>
-Subject: Re: next: /dev/root: Can't open blockdev
-To: Jan Kara <jack@suse.cz>
-Cc: linux-block <linux-block@vger.kernel.org>, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	Linux Regressions <regressions@lists.linux.dev>, linux-fsdevel@vger.kernel.org, 
-	lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=NJkjoNDI;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=RdMXmhk8
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-2.01 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 TO_DN_ALL(0.00)[];
+	 DKIM_TRACE(0.00)[suse.de:+];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 BAYES_HAM(-0.00)[42.12%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 FROM_HAS_DN(0.00)[];
+	 DWL_DNSWL_MED(-2.00)[suse.de:dkim];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 RCPT_COUNT_TWELVE(0.00)[13];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FREEMAIL_CC(0.00)[vger.kernel.org,davemloft.net,xmission.com,gmail.com,marcan.st,zx2c4.com,kernel.org,chromium.org,omnibond.com,ucw.cz,mit.edu];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Score: -2.01
+X-Rspamd-Queue-Id: 0248C21EC3
+X-Spam-Flag: NO
 
-On Tue, 6 Feb 2024 at 15:45, Jan Kara <jack@suse.cz> wrote:
->
-> On Tue 06-02-24 14:41:17, Naresh Kamboju wrote:
-> > All qemu's mount rootfs failed on Linux next-20230206 tag due to the following
-> > kernel crash.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Crash log:
-> > ---------
-> > <3>[    3.257960] /dev/root: Can't open blockdev
-> > <4>[    3.258940] VFS: Cannot open root device "/dev/sda" or
-> > unknown-block(8,0): error -16
->
-> Uhuh, -16 is EBUSY so it seems Christian's block device opening changes are
-> suspect? Do you have some sample kconfig available somewhere?
+Hi Stephen,
 
-All build information is in this url,
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2byqguFVp7MYAEjKo6nJGba2FcP/
+On Wed, 2024-01-24 at 13:01 +1100, Stephen Rothwell wrote:
+> The following trees are going to be removed from linux-next because they
+> have not been updated in more than a year.  If you want a tree restored,
+> just let me know (and update its branch).
+> 
+> Tree                    Last commit date
+>   URL
+>   commits (if any)
+> -----------------------------------------
+> (...)
+> dmi                     2022-09-23 14:53:14 +0200
+>   git://git.kernel.org/pub/scm/linux/kernel/git/jdelvare/staging.git#dmi-for-next
 
-- Naresh
+This is still where I would put updates to the DMI subsystem, but it
+turns out there haven't been any for some time now, and I'm not aware
+of any pending issue.
+
+Out of curiosity, why do inactive branches bother you?
+
+I can certainly update that branch if it makes your life easier.
+
+-- 
+Jean Delvare
+SUSE L3 Support
 

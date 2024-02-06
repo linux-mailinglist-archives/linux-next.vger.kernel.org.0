@@ -1,129 +1,143 @@
-Return-Path: <linux-next+bounces-1005-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1006-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5CF884AD51
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 05:14:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CBA384AD6E
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 05:29:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 785F61F24917
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 04:14:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11CED1F24AC9
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 04:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70D53768E7;
-	Tue,  6 Feb 2024 04:13:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F035174E01;
+	Tue,  6 Feb 2024 04:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Tzwbc3RG"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="nrVR97I6"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0DF73188;
-	Tue,  6 Feb 2024 04:13:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6228B74E06;
+	Tue,  6 Feb 2024 04:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707192835; cv=none; b=N6ntmQPOxb0g5y0x7uU0GhW7SB6pXLGjbd9OfJmGWzAMM82t1QUA0GVqowy29gT80OJcbDHD6ZdKyqa23LC4DjLS7nrmhQuYWIi+GWV4fxMi5y3Jsm0XR0Rr/7VFtPNm4pqM4uJP1zV0t9rJGRVgLmUb3zsooQ53WrEKjSN4Cgk=
+	t=1707193739; cv=none; b=UJqbVPEg9m43FENsmv9PFxyU6OO18We/wVg6vUh8Jz9Hoi/0Tayq5HS0ocEf10FFw3b14pdYves+KfJb1KM+XSVCRyrh9jJN0onaG9bDiCqsThVFhWTYA2EvC0swcW+OMevmGpHozti/sTFIwEmxuJHfgiUpcN7gB3uSCBULHY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707192835; c=relaxed/simple;
-	bh=MkpjDqEoEKy/sPAWP3i2g+8+gO9pM6DMBdORSM2lfAU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SkBsy6Tumk2QJuoZqkiOxxQSv86xS4/wxWic38wmH7YhF96/iAhGWL7F9Fhx2lne3M5fG7mBI//ve5/gtB7N3g+p/4gK7XdODuC/bdg99mn4ta/Tfrh+BmJmaVbHPblJfw6bYfCA9f0o73FfYGZJMJit7c01KPlf22VAzqIW8z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Tzwbc3RG; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1707193739; c=relaxed/simple;
+	bh=Zy0GF+e5VWhkJg3CITxJZKjoEMKdDZ/8GzFJf7bPyeI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XOMBuDXgwZ3kopbEPHDI8TPrYVx8+2RykrHahpwbiggzftheoHO5A9jEhgB3rcn3iq6h3zdLJr2KJzgz/COO0OrNZboBbqOSOsnxQmSEfq+FSXmo0GXyx3lTpl1Q6nSWzy9Vd2Q1Bkg9s0T00347J0gYUr4OZAbbwIrpbiVhQxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=nrVR97I6; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707192829;
-	bh=G4367yS/igy6jo8f7kZFngEk0gxBayjC0JnVD/0nhIc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Tzwbc3RGjaQr+sGzsNbrHps3VrngckNmL1OOWr4r+CeO7HhjQunvAAIlzT7ELCiLZ
-	 5Qaj2xICd8IZU46/cezcjynYB3KegcnV/sBLV+Quo1EmB3dEPQxy7j1/mRHgBvCKI+
-	 YuqMlXyOLJa8NGxcmrsBJSM11SPuw2MnO8ZXSnMH1bOq/FeaHVMT4Aq00yBmeisRvu
-	 0tOG/X5uGbQZ8Jkc7R7cL5ZPQ9C8hJogBoA4GkBNymKWvJ8OBqzbzg8Gnm8XN4iUbV
-	 PBrEOZ4EZXBAAn5esTjF2Q6e4yCHyHL16XZff/ve1H7NFHD0VrsXj1FOAVXGluZ0Ul
-	 gyz1THjOICusw==
+	s=201702; t=1707193733;
+	bh=dnMjULAeQjKUoGmPRhe1coGuGskZaD6h8z3MIPfgPs8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=nrVR97I6Ea2OifH65kdK3jSc8ubBFbjquHicHDGHI4TXr5CbSa+P84H03RuJ30ILS
+	 OZITWgA7quRjZL/ld+8mqUB2U4r1mqoJ2+W3NzbpPys0Z0Fq8hC+CqUNIyCAQATlIj
+	 kG3QY+I0wNckDkDvNq0qaTvHms6Faq2ysNnYZ6DUF0PK3diLRuN49C4C7BQHgxYFsF
+	 QEbWbKqo8W9VH+zW32pRgODvCZ8N5NvMzJCz3Hn5mXexLdMNYiCNHArSRV4juaiktx
+	 kJp4xKR4fMbe7aOUAgMAZ3QSOOZZEbNap7BxMP2KorgoKXrTxc+D2jsLtVqKMoma9H
+	 3FMHLMtM1etRA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TTVHK0lYwz4wcC;
-	Tue,  6 Feb 2024 15:13:48 +1100 (AEDT)
-Date: Tue, 6 Feb 2024 15:13:46 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TTVch6nrBz4wcC;
+	Tue,  6 Feb 2024 15:28:52 +1100 (AEDT)
+Date: Tue, 6 Feb 2024 15:28:50 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+To: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Somalapuram
+ Amaranath <Amaranath.Somalapuram@amd.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the block tree
-Message-ID: <20240206151346.1945cbdf@canb.auug.org.au>
-In-Reply-To: <20240206131050.0e86d882@canb.auug.org.au>
-References: <20240206131050.0e86d882@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20240206152850.333f620d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/h_lBjqgYGdBgBoGROW9kFc_";
+Content-Type: multipart/signed; boundary="Sig_/3Y6MoHeU/vcVg9/l.X7hCZH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/h_lBjqgYGdBgBoGROW9kFc_
+--Sig_/3Y6MoHeU/vcVg9/l.X7hCZH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 6 Feb 2024 13:10:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the block tree, today's linux-next build (arm
-> multi_v7_defconfig) produced these warnings:
->=20
-> In file included from /home/sfr/next/next/include/linux/bits.h:6,
->                  from /home/sfr/next/next/include/linux/bitops.h:6,
->                  from /home/sfr/next/next/include/linux/kernel.h:23,
->                  from /home/sfr/next/next/io_uring/nop.c:2:
-> /home/sfr/next/next/include/vdso/bits.h:7:40: warning: left shift count >=
-=3D width of type [-Wshift-count-overflow]
->     7 | #define BIT(nr)                 (UL(1) << (nr))
->       |                                        ^~
-> /home/sfr/next/next/include/linux/io_uring_types.h:538:35: note: in expan=
-sion of macro 'BIT'
->   538 |         REQ_F_CAN_POLL          =3D BIT(REQ_F_CAN_POLL_BIT),
->       |                                   ^~~
->=20
-> (and mny more similar)
->=20
-> Introduced by commit
->=20
->   d964e8440442 ("io_uring: add io_file_can_poll() helper")
->=20
-> REQ_F_CAN_POLL_BIT is 32.
+After merging the drm-misc tree, today's linux-next build (i386 defconfig)
+failed like this:
 
-This became a build failure in the i386 defconfig build, so I reverted comm=
-it
+In function 'i915_ttm_placement_from_obj',
+    inlined from 'i915_ttm_get_pages' at drivers/gpu/drm/i915/gem/i915_gem_=
+ttm.c:847:2:
+drivers/gpu/drm/i915/gem/i915_gem_ttm.c:165:18: error: 'places[0].flags' is=
+ used uninitialized [-Werror=3Duninitialized]
+  165 |         places[0].flags |=3D TTM_PL_FLAG_DESIRED;
+      |         ~~~~~~~~~^~~~~~
+drivers/gpu/drm/i915/gem/i915_gem_ttm.c: In function 'i915_ttm_get_pages':
+drivers/gpu/drm/i915/gem/i915_gem_ttm.c:837:26: note: 'places' declared here
+  837 |         struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1];
+      |                          ^~~~~~
 
-  efaf6760976d ("Merge branch 'for-6.9/io_uring' into for-next")
+Caused by commit
 
-i.e. the merge of the whole topic branch.
+  a78a8da51b36 ("drm/ttm: replace busy placement with flags v6")
+
+I applied the following hack for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 6 Feb 2024 15:17:54 +1100
+Subject: [PATCH] drm/ttm: initialise places
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915=
+/gem/i915_gem_ttm.c
+index 80c6cafc8887..34e699e67c25 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+@@ -834,7 +834,7 @@ static int __i915_ttm_get_pages(struct drm_i915_gem_obj=
+ect *obj,
+=20
+ static int i915_ttm_get_pages(struct drm_i915_gem_object *obj)
+ {
+-	struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1];
++	struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1] =3D {};
+ 	struct ttm_placement placement;
+=20
+ 	/* restricted by sg_alloc_table */
+--=20
+2.43.0
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/h_lBjqgYGdBgBoGROW9kFc_
+--Sig_/3Y6MoHeU/vcVg9/l.X7hCZH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXBsfoACgkQAVBC80lX
-0Gxhdwf9Fh0qCYJP/4v0A2DTwUUors6KeaYmP0iwRml5+bfrlkGx2onm8/n1Gqpd
-I34HF+WaNtzrTWGM+G0Yu9quOSLXgrfjGxgBCrYQwPP7TsOgEaQpN7hviyn22v04
-pDDDQpUii9lre8tpT+xUrh6fbgzD50rN7L/1qUoP3F4pWED2K1F6HsdMAF3fRVb4
-1bH9uRr4dqZ7e5PSeQ/rEi2jKd87nh+++TLrF+/nu+NJdehrKJKAqKyxKZS8Ub5g
-SdUd/NTP+3qQegVUHdIkK3OJbZGgbHDCttx7BQPB98uMJSu1+yXtNPARPPcxGFbm
-y0BI+kI3wEDc1e0yh5n48sIxnGWQFg==
-=9nWc
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXBtYIACgkQAVBC80lX
+0GxSHwf7B3D9Ebe7H+C1S84E/g/hlQwxf+jo8X+m4cEWbMKvzTuloTlIBADoL93W
+E4SolMFUwtAQtuAPTJIfJPfCwFGxPBUbqpY3cTzA6rBM6XHvLMjQLPubfeZoX6oB
+u0YtbT36l7g+26YUvQdz6FtFlA+X5A+bpVnX0KP1+sw6yhTNqRZEFjxoEvIeIMt+
+EUOkKoSO6lcokZTcWVWQxiBDPGHFXW+jyzj9JcEI0i0FbcEmvYbUz25NXDSeU6PJ
+3xAxI06Fe2ONdboipZyjWMnZNUO3iy24Wsp4RQ3eYLoL5QWYP8tgrTesTTaA8eyY
+WSqEqGwjt8cAeuR5aDcEoeSW116FbA==
+=rfsv
 -----END PGP SIGNATURE-----
 
---Sig_/h_lBjqgYGdBgBoGROW9kFc_--
+--Sig_/3Y6MoHeU/vcVg9/l.X7hCZH--
 

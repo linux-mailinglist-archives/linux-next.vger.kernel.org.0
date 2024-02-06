@@ -1,192 +1,202 @@
-Return-Path: <linux-next+bounces-1000-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1001-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CBFC84AB8D
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 02:28:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A78484ABC4
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 02:49:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D9141C23868
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 01:28:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 366D71F22EB4
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 01:49:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA85CEDF;
-	Tue,  6 Feb 2024 01:28:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C8A56756;
+	Tue,  6 Feb 2024 01:49:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="p3Xvi+hM"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BPUcxvTJ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F242C1109;
-	Tue,  6 Feb 2024 01:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0254756757;
+	Tue,  6 Feb 2024 01:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707182911; cv=none; b=irpQVRRkL4H0YR5EHIuu0EbX27rs4nOJJVYeukTN3n/OSDPB28gGQW2o4Eu6ShbWKI4Z4PxYtJxV+MZNIqd6fL4AwLLXRmw9Me/80GD0mjDvQ9aGos4mlxjBJvPwY6sMnIza3tcLOxvDksMwW0NA0qjUARsu/W/YphE9KKH4+h0=
+	t=1707184140; cv=none; b=RSl1udqDZMmmMvNyXBvz9dxf3NAF9fZ7HFVvP3SZMt5Hmlvo+dkyTj8GvYsttv8Y3AYC2TTdzP2aGxCrx5V1mGxhRUWdzsq9guuPYVamEmhJkamLSCwjzGQj30Nddbm7PjDf85BuyGeL0CbSzozcM/U1pVo4V3raqCroKySIRus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707182911; c=relaxed/simple;
-	bh=FK0LAAXd0iQ5ZyxzXGxUaI+ge6k/xBudQVnCEI9DX5k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ht1lzo7JDumPg0EUWtQ0c05G1yZAUZpn1PPpVY+6MF7n3YD7kV9V+XJZtCnZmT9DkaGovjWtTuNETY1axabaOnrAGquuBhSpFLLej6Mt5lHg99tW1Tc1BLUQiudEyxkq0pcZ3eluGFL/LDwvR/nNob5/DqijSHDrvQaIgRomWIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=p3Xvi+hM; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1707184140; c=relaxed/simple;
+	bh=hqIHF8ItYDKFpuclvDRmaeWoAmrK3v+Ya7wiLubCuSg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iUgV0CZ/hI+eNOfjXRxKCYZO/pFLvViz1erlsmEnJuSwszHnWMdxR0y9b/rWJyQDqlmg7XR4Mk+f/EH9BpHC8FJGvFtItyvrcAOv7y3l7Whv39RlP5hl5jVL69S0V0POaB8/DTKeslLcBHBpCtM2Zci9XK1z7BaNRAXlARtR4gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BPUcxvTJ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707182905;
-	bh=zKY0CiN5eVCwjR4J5nAX4GlXw1p1JS0IYgVBmlyJXhU=;
+	s=201702; t=1707184135;
+	bh=WzsXiNNKB4NmRGTpIGfaSGaM5x0AzChJVK0ybEpCxf8=;
 	h=Date:From:To:Cc:Subject:From;
-	b=p3Xvi+hMgs/tLQ65WhXY7emQZorkU4vGyAiUEQbvWBp1E981nzdmSgyKCCXXuf7Na
-	 blaobyUTeSuF1zEg0PR5GrBjvuOgKjy+D+XB/AiawYhwC1Z6Z4DdVUJZezpvl/6OkZ
-	 +xplFY/nIQV5Bfu0dUqTUlnEHdEAKoDBrpBC9lUCkRNrbZjuqDlDCrpfXj2Ir4BOLA
-	 CkrTYUobEbgY0e7DYRsUUkc2xxG7MgDjbIP95NJsY8diIbX7AyAxgj5mMu86Ml/lv4
-	 BWk5g1OMgbHjtRIuOAmzM14lqUw1KD6LP9KbDI8AT5ev+rJN9Fn+SxH5mk5RpQLEnw
-	 fBfhei6CorH1w==
+	b=BPUcxvTJUIvzT83R3FGTemqP99Be6WAIdWVx3vnqxdD77Hm3+vZHWCFwG9pCc6U01
+	 RSVufkuBFlHSysLoeMaHxhD7dR6haoDgZ4YjFtUFjH0WeXOv7Z0AgouBlSEpWAa4vU
+	 AHLICBLtPkMGRgTGlkSyDN5z1Fr7dGhheZyD5hz3mhvvPlzvS3nFMgYa74rcS0DBR9
+	 zFunwZGiiV9Ck03Sj+d3ipNNdWHPodasmvUJOCf+aeoyNlccbczbM5EI/iADKiVg0F
+	 vLogMpbw6o8Y5qrUoKG/BuBVrgdCfuU+CsKC2c2QfRF/uyem8OprL+Y5vVP03cmv+B
+	 vMMf3ogPinfPg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TTQcR1p92z4wcJ;
-	Tue,  6 Feb 2024 12:28:23 +1100 (AEDT)
-Date: Tue, 6 Feb 2024 12:28:22 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TTR466s9mz4wcJ;
+	Tue,  6 Feb 2024 12:48:54 +1100 (AEDT)
+Date: Tue, 6 Feb 2024 12:48:52 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Matthew Brost <matthew.brost@intel.com>, Rodrigo Vivi
- <rodrigo.vivi@intel.com>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Somalapuram Amaranath
- <Amaranath.Somalapuram@amd.com>, Intel Graphics
- <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+To: Jens Axboe <axboe@kernel.dk>, Christian Brauner <brauner@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20240206122822.12a2df89@canb.auug.org.au>
+Subject: linux-next: manual merge of the block tree with the vfs-brauner
+ tree
+Message-ID: <20240206124852.6183d0f7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qoofQSLe6__zbq+lF9FrpkO";
+Content-Type: multipart/signed; boundary="Sig_/D7oW_TMfIZT0RDgaGKQjVSc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/qoofQSLe6__zbq+lF9FrpkO
+--Sig_/D7oW_TMfIZT0RDgaGKQjVSc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the drm-misc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the block tree got a conflict in:
 
+  block/blk.h
 
-Caused by commit
+between commits:
 
-  a78a8da51b36 ("drm/ttm: replace busy placement with flags v6")
+  19db932fd2b0 ("bdev: make bdev_{release, open_by_dev}() private to block =
+layer")
+  09f8289e1b74 ("bdev: make struct bdev_handle private to the block layer")
+  d75140abba91 ("bdev: remove bdev pointer from struct bdev_handle")
 
-interacting with commit
+from the vfs-brauner tree and commits:
 
-  dd08ebf6c352 ("drm/xe: Introduce a new DRM driver for Intel GPUs")
+  c4e47bbb00da ("block: move cgroup time handling code into blk.h")
+  08420cf70cfb ("block: add blk_time_get_ns() and blk_time_get() helpers")
+  da4c8c3d0975 ("block: cache current nsec time in struct blk_plug")
+  06b23f92af87 ("block: update cached timestamp post schedule/preemption")
 
-(and maybe others) from Linus' tree (v6.8-rc1).
+from the block tree.
 
-I have applied the following merge fix patch for today.  This makes it buil=
-d,
-but more is likely needed ...
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 6 Feb 2024 12:21:07 +1100
-Subject: [PATCH] fix up for "drm/ttm: replace busy placement with flags v6"
-
-interacting with commit
-
-  dd08ebf6c352 ("drm/xe: Introduce a new DRM driver for Intel GPUs")
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/xe/xe_bo.c | 11 -----------
- 1 file changed, 11 deletions(-)
-
-diff --git a/drivers/gpu/drm/xe/xe_bo.c b/drivers/gpu/drm/xe/xe_bo.c
-index 0b0e262e2166..280dbda8ae5a 100644
---- a/drivers/gpu/drm/xe/xe_bo.c
-+++ b/drivers/gpu/drm/xe/xe_bo.c
-@@ -38,8 +38,6 @@ static const struct ttm_place sys_placement_flags =3D {
- static struct ttm_placement sys_placement =3D {
- 	.num_placement =3D 1,
- 	.placement =3D &sys_placement_flags,
--	.num_busy_placement =3D 1,
--	.busy_placement =3D &sys_placement_flags,
- };
-=20
- static const struct ttm_place tt_placement_flags =3D {
-@@ -52,8 +50,6 @@ static const struct ttm_place tt_placement_flags =3D {
- static struct ttm_placement tt_placement =3D {
- 	.num_placement =3D 1,
- 	.placement =3D &tt_placement_flags,
--	.num_busy_placement =3D 1,
--	.busy_placement =3D &sys_placement_flags,
- };
-=20
- bool mem_type_is_vram(u32 mem_type)
-@@ -230,8 +226,6 @@ static int __xe_bo_placement_for_flags(struct xe_device=
- *xe, struct xe_bo *bo,
- 	bo->placement =3D (struct ttm_placement) {
- 		.num_placement =3D c,
- 		.placement =3D bo->placements,
--		.num_busy_placement =3D c,
--		.busy_placement =3D bo->placements,
- 	};
-=20
- 	return 0;
-@@ -251,7 +245,6 @@ static void xe_evict_flags(struct ttm_buffer_object *tb=
-o,
- 		/* Don't handle scatter gather BOs */
- 		if (tbo->type =3D=3D ttm_bo_type_sg) {
- 			placement->num_placement =3D 0;
--			placement->num_busy_placement =3D 0;
- 			return;
- 		}
-=20
-@@ -1353,8 +1346,6 @@ static int __xe_bo_fixed_placement(struct xe_device *=
-xe,
- 	bo->placement =3D (struct ttm_placement) {
- 		.num_placement =3D 1,
- 		.placement =3D place,
--		.num_busy_placement =3D 1,
--		.busy_placement =3D place,
- 	};
-=20
- 	return 0;
-@@ -2112,9 +2103,7 @@ int xe_bo_migrate(struct xe_bo *bo, u32 mem_type)
-=20
- 	xe_place_from_ttm_type(mem_type, &requested);
- 	placement.num_placement =3D 1;
--	placement.num_busy_placement =3D 1;
- 	placement.placement =3D &requested;
--	placement.busy_placement =3D &requested;
-=20
- 	/*
- 	 * Stolen needs to be handled like below VRAM handling if we ever need
---=20
-2.43.0
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/qoofQSLe6__zbq+lF9FrpkO
+diff --cc block/blk.h
+index f02b25f22e8b,913c93838a01..000000000000
+--- a/block/blk.h
++++ b/block/blk.h
+@@@ -516,8 -517,70 +517,75 @@@ static inline int req_ref_read(struct r
+  	return atomic_read(&req->ref);
+  }
+ =20
+ +void bdev_release(struct file *bdev_file);
+ +int bdev_open(struct block_device *bdev, blk_mode_t mode, void *holder,
+ +	      const struct blk_holder_ops *hops, struct file *bdev_file);
+ +int bdev_permission(dev_t dev, blk_mode_t mode, void *holder);
+++
++ static inline u64 blk_time_get_ns(void)
++ {
++ 	struct blk_plug *plug =3D current->plug;
++=20
++ 	if (!plug)
++ 		return ktime_get_ns();
++=20
++ 	/*
++ 	 * 0 could very well be a valid time, but rather than flag "this is
++ 	 * a valid timestamp" separately, just accept that we'll do an extra
++ 	 * ktime_get_ns() if we just happen to get 0 as the current time.
++ 	 */
++ 	if (!plug->cur_ktime) {
++ 		plug->cur_ktime =3D ktime_get_ns();
++ 		current->flags |=3D PF_BLOCK_TS;
++ 	}
++ 	return plug->cur_ktime;
++ }
++=20
++ static inline ktime_t blk_time_get(void)
++ {
++ 	return ns_to_ktime(blk_time_get_ns());
++ }
++=20
++ /*
++  * From most significant bit:
++  * 1 bit: reserved for other usage, see below
++  * 12 bits: original size of bio
++  * 51 bits: issue time of bio
++  */
++ #define BIO_ISSUE_RES_BITS      1
++ #define BIO_ISSUE_SIZE_BITS     12
++ #define BIO_ISSUE_RES_SHIFT     (64 - BIO_ISSUE_RES_BITS)
++ #define BIO_ISSUE_SIZE_SHIFT    (BIO_ISSUE_RES_SHIFT - BIO_ISSUE_SIZE_BIT=
+S)
++ #define BIO_ISSUE_TIME_MASK     ((1ULL << BIO_ISSUE_SIZE_SHIFT) - 1)
++ #define BIO_ISSUE_SIZE_MASK     \
++ 	(((1ULL << BIO_ISSUE_SIZE_BITS) - 1) << BIO_ISSUE_SIZE_SHIFT)
++ #define BIO_ISSUE_RES_MASK      (~((1ULL << BIO_ISSUE_RES_SHIFT) - 1))
++=20
++ /* Reserved bit for blk-throtl */
++ #define BIO_ISSUE_THROTL_SKIP_LATENCY (1ULL << 63)
++=20
++ static inline u64 __bio_issue_time(u64 time)
++ {
++ 	return time & BIO_ISSUE_TIME_MASK;
++ }
++=20
++ static inline u64 bio_issue_time(struct bio_issue *issue)
++ {
++ 	return __bio_issue_time(issue->value);
++ }
++=20
++ static inline sector_t bio_issue_size(struct bio_issue *issue)
++ {
++ 	return ((issue->value & BIO_ISSUE_SIZE_MASK) >> BIO_ISSUE_SIZE_SHIFT);
++ }
++=20
++ static inline void bio_issue_init(struct bio_issue *issue,
++ 				       sector_t size)
++ {
++ 	size &=3D (1ULL << BIO_ISSUE_SIZE_BITS) - 1;
++ 	issue->value =3D ((issue->value & BIO_ISSUE_RES_MASK) |
++ 			(blk_time_get_ns() & BIO_ISSUE_TIME_MASK) |
++ 			((u64)size << BIO_ISSUE_SIZE_SHIFT));
++ }
++=20
+  #endif /* BLK_INTERNAL_H */
+
+--Sig_/D7oW_TMfIZT0RDgaGKQjVSc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXBizYACgkQAVBC80lX
-0GyAJgf9Hild1zSurCMflzSa/SDNJVx/KSmIxojPE0TyUGi7s03D5gM99mKXR30J
-yRSZ1KM8B41FEGlmQRMoNHBnkUk8tYz7aajNjxnhIXXcIxU8xiGqgsjQ+bJ2kimg
-+xkn/SB7HMKW761o4k3ETBJKDUmOw9lUEGW4KCpmzM446mxF8Lc2RoqHWWSzggfS
-9nVAH9NcStDpFWT6vCYY19fmd1g8S+LSAYE0Z5wFu088tJd+8liM/8l/+NBihDRV
-n0cR9Gec6OmN2YTozZrqRnVgRi/Cd90NzTdA9c2VHb2x4dK3/GlA3qZfnl1DEXjF
-1Rg3OYiVjN3JObhHkODbJgQNsLJZDQ==
-=xKqJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXBkAQACgkQAVBC80lX
+0Gx3xgf9FzFvrp2EHNuPlUAmZYojBfQsvvBLXLYI1FCh0Z7o5I6rEG4PYB50bwEe
+1EjnNAd966blP1Z3rZhBrbrSnS5Vy7E62BLz+qQN5NMZoUcr2IOGWGtrfLAcvRx4
+DHYHzdfuH/SCK2LEMyCeO/056aVd+PYLDnVO/0WiQXPmmeCOiDvLci//1DAwcMjp
+2jm2xQTYGc2BKOC+V6fOewaiT51Qinm50y0MHZ9vVtRtPrLA3s5QfNQi//3wEnq3
+SqLw6KvlXGE+H+qVNKEbM5apc50+Tl4mSDvk8q7XG0wSn03e9jP6aoq5v/lHcLy2
+o7OQ+PrPHofGObews9yrfnhcjfhvvQ==
+=1eWX
 -----END PGP SIGNATURE-----
 
---Sig_/qoofQSLe6__zbq+lF9FrpkO--
+--Sig_/D7oW_TMfIZT0RDgaGKQjVSc--
 

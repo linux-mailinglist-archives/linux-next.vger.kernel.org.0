@@ -1,124 +1,119 @@
-Return-Path: <linux-next+bounces-1016-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1017-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D2EF84B33C
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 12:15:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B44D84B373
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 12:29:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E46C11F2515E
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 11:15:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A381D1F23D1B
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 11:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47D512FF86;
-	Tue,  6 Feb 2024 11:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F9412EBE5;
+	Tue,  6 Feb 2024 11:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsryKiel"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4006DCF7;
-	Tue,  6 Feb 2024 11:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B63812E1DD;
+	Tue,  6 Feb 2024 11:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707217972; cv=none; b=LBKDR93b+fc0So7EhruAfqw4lHVkzIuOqm61kO49Pu8v24WobqHYTq/9Jfdjd6yYgoyGTejbRMv+yeSzukP3+FDqz1Pqm2sZmNmppdzupM52uN3hWxJUhu/98PHZI9ZMIlZfwlEZ3psikEULm+4sMVsOoJZIIHUjtU9X7ounl6c=
+	t=1707218943; cv=none; b=QhuHb46Rz+ymEpIsBWzsdzoWSSF/6bfSUmoHx85T+21ISqgwHHy4OJwBrGYBq6k6hxbPaaoXeMv5kCJ9OZq22bYNZ/aYq/X7Dbu2ru53hNWL6yjrORGbE2KzF/MxQKnk2xCudHG80ihYzgV/dARMNsAJMk/J2EhO870acZZClfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707217972; c=relaxed/simple;
-	bh=xLsUrWAF94DFAah13mIxpHx4xGej5buoLWWu3kHIIuA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Pgyg27h9Y/MVfRdZO1EDJKMtaDxfkiMkS80/rPivSYM9Rd2tc9MIdT0xnvxJLwg+j9CvxefCLs22rrOu3f1JlfDiknu9ynRtguCo+IXW22iGfiNfk/mBVLD6VGY//Euu6GX//LArCjX5K8HrG8/1DnnvfTwRNWQvVu9RYnst3qQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-60412f65124so50328727b3.3;
-        Tue, 06 Feb 2024 03:12:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707217969; x=1707822769;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m8fQrZ9bDID7Tr4RFzpi8NTxLyF9LrFzXifM+3Heoz0=;
-        b=ZnW7njt3Qk0NpsL3pOtOhKYH2ShgZmkOarfPvt9p+nMAsuGIgWz0Nn+z2AOZlZ/9DA
-         Bp/q7rfUdAJrswzdgBmk6lCl9oBdWHwAurmqWt6HfAVYXHnwLVJFKArhN40C3BtjBrnE
-         l9LHkwbme2TY4xgnWOJPuJIG+WfkwXtduaocPD/HhEceh64do9jF6QOVKprtdwwJJ0kS
-         2mfj1JIkN1lh4k4Ak+T/Dcl7uftEvfdO7HueCDYVh5g3l2t28hAx5fij2bTPKB9BZmGR
-         poWtS/OcOoeDi4T7cyUa0P8NA7rSLhPCCmOkZ6C6rNS/4NG8j6M8qtf4BHRe2t2Ra5vx
-         jEKw==
-X-Gm-Message-State: AOJu0YwjvTtybBZVZe2DeSKGFzSiLbslncF1QU4S/s7JhvczrglKVnFV
-	KnlaFONgz79TxS1aSKKVx1+o6jg00Z3sKeP+rcito1K+4lWP3/6JntHxrWgXLAo=
-X-Google-Smtp-Source: AGHT+IF6UNKTDJ5HQAXbkqL/RGf2jTZ8oKvmExoMjbYS8CvqOSsyteqaGwKD0a/19JNUuos30y6/ww==
-X-Received: by 2002:a81:ed03:0:b0:5ee:a910:107 with SMTP id k3-20020a81ed03000000b005eea9100107mr1379968ywm.21.1707217969102;
-        Tue, 06 Feb 2024 03:12:49 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVbLaxEdSyUjrxYAZHBYgMUAOsP23xov8DDpMe6UDjv+GmwiMIPDscIrM1DKdCxRBeDcIkDitCL1rnUS7ePeY955OXY8qNllhKLWkratu1KiJ7a6CU4swJSe5E9NHehIse3myF+gfCOPg==
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id p206-20020a8198d7000000b0060480a0e282sm125934ywg.60.2024.02.06.03.12.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Feb 2024 03:12:48 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dc6d8f19ab3so5450495276.3;
-        Tue, 06 Feb 2024 03:12:48 -0800 (PST)
-X-Received: by 2002:a5b:991:0:b0:dc2:2654:5139 with SMTP id
- c17-20020a5b0991000000b00dc226545139mr1313669ybq.15.1707217968613; Tue, 06
- Feb 2024 03:12:48 -0800 (PST)
+	s=arc-20240116; t=1707218943; c=relaxed/simple;
+	bh=xItSGKOsHY3nXC2qGy9xvtt+bnUbZopMnd876K04tjk=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=KjOpcMZYTjX4k9ug96m5A1daqv5Y+YTkNnSqI7+AHOh/0F6TKhWAUho5diFeBtkH42BQ9jqZLNbXflTykdRFEXj4BOCpbgHuAReHphbvHkAud8a4BtzcX8D55V6T3kKQbAbiI+RQEVykEuXYskuySFS5WmViXm0l4D5DZXDOoNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsryKiel; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A18D0C433C7;
+	Tue,  6 Feb 2024 11:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707218942;
+	bh=xItSGKOsHY3nXC2qGy9xvtt+bnUbZopMnd876K04tjk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EsryKielTwcYBcVxuAxMAD0zvVmbPIbLkTrIBNpyeEXJDILMUGxe5VwThjhAPGnyO
+	 rLKJuiVoAMk877bcSrF8uDICB52XvtgnldywkMDYIUPLZfloZfAi3SBNlqPkVA5eMU
+	 rtW7cjWZGmSUlCxcZT3OUAe1pwiQ1NEcz1OoSMpGOOP/MQVUe9ovK2gd20aO9bMxUc
+	 7F6rVhcCMrxY0Lj0hbNT1tJTo6qegUW6e2CN95Dy8UeQd1tfvVavKRMi3A2Rafq7dY
+	 lxatORJk8dJTp3fusXqMAzr6uJHu5gTp95RSwtKKAotz7xRo64bafcCmGPZI/JkC+R
+	 4KjRAVWhH6ezw==
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240206131050.0e86d882@canb.auug.org.au>
-In-Reply-To: <20240206131050.0e86d882@canb.auug.org.au>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 6 Feb 2024 12:12:36 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWjAKbt_bne8Mjpg3N_7R8TcKvAoVV8T4VrwTC2apAr_g@mail.gmail.com>
-Message-ID: <CAMuHMdWjAKbt_bne8Mjpg3N_7R8TcKvAoVV8T4VrwTC2apAr_g@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the block tree
+Date: Tue, 06 Feb 2024 12:28:58 +0100
+From: Michael Walle <mwalle@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Jens Axboe <axboe@kernel.dk>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>, Inki Dae
+ <inki.dae@samsung.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Michael Trimarchi
+ <michael@amarulasolutions.com>, Robert Foss <rfoss@kernel.org>
+Subject: Re: linux-next: manual merge of the drm-misc tree with Linus' tree
+In-Reply-To: <20240206120643.1d30764c@canb.auug.org.au>
+References: <20240206115956.4570e9b1@canb.auug.org.au>
+ <20240206120643.1d30764c@canb.auug.org.au>
+Message-ID: <fe0b21360178348543e662e9d620af9c@kernel.org>
+X-Sender: mwalle@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 6, 2024 at 3:11=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
-> After merging the block tree, today's linux-next build (arm
-> multi_v7_defconfig) produced these warnings:
->
-> In file included from /home/sfr/next/next/include/linux/bits.h:6,
->                  from /home/sfr/next/next/include/linux/bitops.h:6,
->                  from /home/sfr/next/next/include/linux/kernel.h:23,
->                  from /home/sfr/next/next/io_uring/nop.c:2:
-> /home/sfr/next/next/include/vdso/bits.h:7:40: warning: left shift count >=
-=3D width of type [-Wshift-count-overflow]
->     7 | #define BIT(nr)                 (UL(1) << (nr))
->       |                                        ^~
-> /home/sfr/next/next/include/linux/io_uring_types.h:538:35: note: in expan=
-sion of macro 'BIT'
->   538 |         REQ_F_CAN_POLL          =3D BIT(REQ_F_CAN_POLL_BIT),
->       |                                   ^~~
->
-> (and mny more similar)
->
-> Introduced by commit
->
->   d964e8440442 ("io_uring: add io_file_can_poll() helper")
->
-> REQ_F_CAN_POLL_BIT is 32.
+Hi Stephen and all,
 
-All of these BIT() have to be changed to BIT_ULL().
-And let's hope all variables used for storing these flags have been
-changed from unsigned long to u64...
+>> Today's linux-next merge of the drm-misc tree got a conflict in:
+>> 
+>>   drivers/gpu/drm/bridge/samsung-dsim.c
+>> 
+>> between commit:
+>> 
+>>   ff3d5d04db07 ("drm: bridge: samsung-dsim: Don't use 
+>> FORCE_STOP_STATE")
+>> 
+>> from Linus' tree and commit:
+>> 
+>>   b2fe2292624a ("drm: bridge: samsung-dsim: enter display mode in the 
+>> enable() callback")
+>> 
+>> from the drm-misc tree.
+>> 
+>> I fixed it up (see below, please check) and can carry the fix as
+>> necessary. This is now fixed as far as linux-next is concerned, but 
+>> any
+>> non trivial conflicts should be mentioned to your upstream maintainer
+>> when your tree is submitted for merging.  You may also want to 
+>> consider
+>> cooperating with the maintainer of the conflicting tree to minimise 
+>> any
+>> particularly complex conflicts.
+> 
+> I changed my mind and just used the latter version of this file.
 
-Gr{oetje,eeting}s,
+Bug wise, this is the wrong solution. Because it will reintroduce the
+faulty FORCE_STOP_STATE. Also keep in mind, my fixes commit is/was 
+already
+backported to the stable series.
 
-                        Geert
+See also the discussion at [1]. Unfortunately, there was no conculusion 
+yet.
+I think [2] is the proper resolution, at least for the commit 
+b2fe2292624a
+("drm: bridge: samsung-dsim: enter display mode in the enable() 
+callback")
+I'm not sure in what state the drm-misc tree is.
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+-michael
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+[1] 
+https://lore.kernel.org/dri-devel/CAPM=9tytMB9frxNeD08hu1qsusY=wEE3bJOFmUgA1rSpabwDpg@mail.gmail.com/
+[2] 
+https://lore.kernel.org/dri-devel/31e1a38a1d012a32d6f7bc8372b6360e@kernel.org/
 

@@ -1,76 +1,52 @@
-Return-Path: <linux-next+bounces-1009-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1010-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9FFF84ADC7
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 06:09:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6964184AE2D
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 06:53:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2364B285544
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 05:09:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20CF2285F72
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 05:53:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45968745D1;
-	Tue,  6 Feb 2024 05:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF4CC7F461;
+	Tue,  6 Feb 2024 05:53:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wuk8tsHK"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="yWtPDNoN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFBE7C091;
-	Tue,  6 Feb 2024 05:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC64077F00;
+	Tue,  6 Feb 2024 05:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707196144; cv=none; b=LxTIuh7zvrEp4TpBcVJ5Rr9elYxHkkgFgTtbPar0aDhwQHFij5BfTHf+t1qzb8b/wG3L57YMphqQaCrQcXZy8PZGZx2HZq42DfQ1Ek9aCRCE0ZA86xINncC1M9TTdx3CMJNNwub7AF7Ht4X61nIVbHpA7+4vD//0sTAGOpPAI3U=
+	t=1707198790; cv=none; b=K+/vuUfxQOAVKc852TWQewxAhTts12lh8DKXMFO03/tZ0UA0AzW6xsFYZcPxhyGj4AEhpWB00XZmwxOOUdNxzZ8a6AOcpuoZNtGlOaN97Uv/FcvgsE7vYOd3Fs+9j20GsAkDn3kSc3Kg3twJhEtO0Ig4jkExwnJ5Oz4Sm1cELUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707196144; c=relaxed/simple;
-	bh=ZTT5m/IX3TNbZOaxSQ+tLxdE8fI1k0j4w+WcQjlHf2U=;
+	s=arc-20240116; t=1707198790; c=relaxed/simple;
+	bh=z3pnyMy6CWb5booVEHbYu24GXOgyrWVlLFTfAlV0gmc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q/GuijQOEmLYfx0dw5rKCfVJpkBnAxUHmduOzHcziHlzKlXiPk60mogz5V57eeIbMpA8w1wsc2D1s0toy6T0ZQnAU6gTs69oIysqE5gADHNZpNNC7+mnWxLThr9CbFG3zYhJzySVgyPrT1t3aS8lLyMgPYTiP9iUG3KNR1GOhQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wuk8tsHK; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-296c58a11d0so358385a91.3;
-        Mon, 05 Feb 2024 21:09:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707196141; x=1707800941; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=BuUyVlhbTFHxTO6HW8puQbBLaQR24GM9REYAp5aa2Eo=;
-        b=Wuk8tsHKxw9XoHg0cigJMu7i1hFY8DbV1dHV6jvKy3H9CKIG+LP0QwhJCE6fiRNmh4
-         A037gaQQsgj4itcpySRgjgIvLqz5bxKvHvvDW62CjXUrB1jc1l+vJGIChqOHEBanZOnL
-         kGQrwBAU+FFT18H8SN80aMQMjP2S6U07gM+0WiBa//DIUon3i5o47DLqUIW1aTJS713Y
-         LdNSBTBPAXHst/BIS9CzRMz+DVa/fl6BKHX849ZveoZ/YFwALoFxaDAjG96WGTzVj8tB
-         tNsZCCL3cpngfoDZc4T5B85zD/XcOWCRsjK/s6iUAt054cx4Tw3KJmG3TxoCJM2Zrb0o
-         rQUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707196142; x=1707800942;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BuUyVlhbTFHxTO6HW8puQbBLaQR24GM9REYAp5aa2Eo=;
-        b=qby+i/s/vcZ8h4ZaEva1YWzi9D6WOdsYxiZMmdMA5d0+9opXXrT2T4g7N5QYRg6nRX
-         0NvcLNZwqXyYQNG/heHbWOaMNyzHW8fmL8Q6G6kpvCDBVEgefLpnZebrxIne98i+2Fxz
-         xPeTQQL1Y1FibPEuD9oHVagbAdIY2Tiwxx9stbGCjmC4hAsI5eMAK4IHyhoJMQMyhGqj
-         Krk/xmIDdJpNxuhv03reXO3LoSnNQvD5/vOXURNqxb5SYwVMGhde+6L5gnhp2X6dUkix
-         wKEc9dqb1bLkXg6w4rzFjhr4Lf/hNLQvfP+o6EFvzt7/TSGUMsl0v6QbkBfZQTURVLG6
-         Pt4A==
-X-Gm-Message-State: AOJu0YyoVjXZKVBSyk6YMEIYI37R+yNZ+u43yIJBaV0loGemVebeDjuE
-	RdAJO/bUk2RbinvTlzUKz0yfxedhoDchlDNJvYYRuOE2OFv8ytTa
-X-Google-Smtp-Source: AGHT+IEFGg/WBad1bpM9KSiaeLqhsLZxafZH/XxyBel3KUNMY1m4GdbiZf/eu9e21OqkD0PYBpTHqg==
-X-Received: by 2002:a05:6a20:2c91:b0:19c:a696:32c8 with SMTP id g17-20020a056a202c9100b0019ca69632c8mr360860pzj.41.1707196141634;
-        Mon, 05 Feb 2024 21:09:01 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXmGTTqpcnu8NICbLtMoSDt8orL7iH6xeIaLPFiN1/lpO3pznHqyYIvZ5ODGuXvlXBKdHvCSWb4htm/YwQZV7TmiXS6qRU+NnzNV0qVCwB32H+rm+r+gSZjVpnhTz88O4PZLDlK9cfoSZ4yhsdchqhO94R1C6b10NJnFjj4L9M3TA571U2dA44rfhpT2ksp3DMgSjEp0I3pD6JwMbmFig+e9wbGpiZG9uNsiBkhJD7RDDSNxepc00f/9Kx6qA==
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ji9-20020a170903324900b001d5b93560c3sm806775plb.167.2024.02.05.21.09.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Feb 2024 21:09:01 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <44a3a06e-646e-4f76-b4a4-73906e22595b@roeck-us.net>
-Date: Mon, 5 Feb 2024 21:08:59 -0800
+	 In-Reply-To:Content-Type; b=DaoI84aeUGPrpRhg83jT3cyqHtCrA2/7+/9vtuA2bDrHRutIC1tHO9MvuIIPs14zd5BKbWRCqLCIJVTNaPtjlljtT+G7Y8v0hzUA5GUMlffUCwm08Y2M0BaoMPqNwkdX2aDqTMxXC6fBzlMyh4TsDFtcE4ccWIdC69BdHP1TqxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=yWtPDNoN; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=w3Q42N/e2eCew/j8uEMfyElkzHhqrTXgEIBh4kRIFbk=; b=yWtPDNoN5tJ5DYCV9E0cJbndTg
+	SwomS3W/+jZdg3CoGSYr41fxanlYFkt7NXd0Z/Hq5DFyn9lyKxXS/hUtEBTi6fXb28L3NZ5XKHhGM
+	BJRUc9RzGxK0qnMI5LXW2p0CKXmY6q8M390rtXsbYyGsNWQasIF+BkCPIzDZzvpeEIbOlspQYLaI1
+	wnUvTVgu87H6eE475HMRPxEMjsa9B+AhT3UKtDABS9zzCSQJGBYB3C0MB2epLIEu1oIn4Cyrbs75o
+	6P3mm5BNXqlr7HOQDeGZb0P4r2xN7bckWmlAMPQmZ29/yHOBG7HfWe3IxgWTqIaCXHIbPqQNT7BJZ
+	7OZ7v/Pw==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rXEOI-000000069rh-2Xul;
+	Tue, 06 Feb 2024 05:53:06 +0000
+Message-ID: <1b36c0aa-8a41-48e1-b21b-65f0ad521bcb@infradead.org>
+Date: Mon, 5 Feb 2024 21:53:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -78,85 +54,95 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Feb 5 [drivers/hwmon/surface_fan.ko]
+Subject: Re: linux-next: Tree for Feb 6 (gpu/drm/amd/display/ kernel-doc
+ warnings)
 Content-Language: en-US
-To: Randy Dunlap <rdunlap@infradead.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
  Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-hwmon@vger.kernel.org, Maximilian Luz <luzmaximilian@gmail.com>,
- Ivor Wanders <ivor@iwanders.net>, Jean Delvare <jdelvare@suse.com>
-References: <20240205162653.32ca0d08@canb.auug.org.au>
- <15794bc3-7c6c-45f7-95da-a18f3d45834b@infradead.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <15794bc3-7c6c-45f7-95da-a18f3d45834b@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+ amd-gfx list <amd-gfx@lists.freedesktop.org>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+References: <20240206154329.6a8464fd@canb.auug.org.au>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240206154329.6a8464fd@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2/5/24 20:11, Randy Dunlap wrote:
+
+
+On 2/5/24 20:43, Stephen Rothwell wrote:
+> Hi all,
 > 
-> 
-> On 2/4/24 21:26, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20240202:
->>
-> 
-> on i386:
-> 
-> ERROR: modpost: "__ssam_device_driver_register" [drivers/hwmon/surface_fan.ko] undefined!
-> ERROR: modpost: "ssam_device_driver_unregister" [drivers/hwmon/surface_fan.ko] undefined!
-> 
-> 
-> Full randconfig file is attached.
+> Changes since 20240205:
 > 
 
-Should (hopefully) be fixed in next-20240206. Sorry, the dependencies are
-a bit more complicated than I expected.
+Hi Rodrigo,
 
-Guenter
+Are you aware of these kernel-doc warnings?
+I think they are due to
 
+commit b8c1c3a82e75
+Author: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Date:   Mon Jan 22 14:24:57 2024 -0700
+    Documentation/gpu: Add kernel doc entry for MPC
+
+
+
+../drivers/gpu/drm/amd/display/dc/inc/hw/hubp.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/inc/hw/hubp.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/inc/hw/hubp.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/inc/hw/hubp.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/inc/hw/hubp.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/inc/hw/hubp.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/inc/hw/opp.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/inc/hw/opp.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/link/hwss/link_hwss_dio.h:1: warning: no structured comments found
+../drivers/gpu/drm/amd/display/dc/link/hwss/link_hwss_dio.h:1: warning: no structured comments found
+
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of kernel-doc format:          * @@overlap_only: Whether overlapping of different planes is allowed.
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of kernel-doc format:          * @@overlap_only: Whether overlapping of different planes is allowed.
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of kernel-doc format:          * @@overlap_only: Whether overlapping of different planes is allowed.
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:162: warning: Function parameter or struct member 'pre_multiplied_alpha' not described in 'mpcc_blnd_cfg'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:162: warning: Function parameter or struct member 'overlap_only' not described in 'mpcc_blnd_cfg'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'read_mpcc_state' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'mpc_init_single_inst' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'get_mpcc_for_dpp_from_secondary' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'get_mpcc_for_dpp' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'wait_for_idle' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'assert_mpcc_idle_before_connect' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'init_mpcc_list_from_hw' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_denorm' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_denorm_clamp' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_output_csc' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_ocsc_default' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_output_gamma' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'power_on_mpc_mem_pwr' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_dwb_mux' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'disable_dwb_mux' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'is_dwb_idle' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_out_rate_control' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_gamut_remap' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'program_1dlut' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'program_shaper' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'acquire_rmu' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'program_3dlut' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'release_rmu' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'get_mpc_out_mux' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_bg_color' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:548: warning: Function parameter or struct member 'set_mpc_mem_lp_mode' not described in 'mpc_funcs'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of kernel-doc format:          * @@overlap_only: Whether overlapping of different planes is allowed.
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:162: warning: Function parameter or struct member 'pre_multiplied_alpha' not described in 'mpcc_blnd_cfg'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:162: warning: Function parameter or struct member 'overlap_only' not described in 'mpcc_blnd_cfg'
+../drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:132: warning: Incorrect use of kernel-doc format:          * @@overlap_only: Whether overlapping of different planes is allowed.
+
+
+
+Can you address these, please?
+
+Thanks.
+
+-- 
+#Randy
 

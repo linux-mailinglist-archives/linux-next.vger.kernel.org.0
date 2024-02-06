@@ -1,78 +1,205 @@
-Return-Path: <linux-next+bounces-1012-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1013-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C44484B1F7
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 11:08:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE46D84B242
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 11:15:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED77A28712D
-	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 10:08:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33F621F2550D
+	for <lists+linux-next@lfdr.de>; Tue,  6 Feb 2024 10:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7429212D74F;
-	Tue,  6 Feb 2024 10:08:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B41E112DDBA;
+	Tue,  6 Feb 2024 10:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MfJoUFmO"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cLr5Zriv";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="N0fL3MlR";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cLr5Zriv";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="N0fL3MlR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4571112D749;
-	Tue,  6 Feb 2024 10:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81CF12DD99;
+	Tue,  6 Feb 2024 10:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707214109; cv=none; b=jzqLXvrAYZKXmKJWodIJuipj9MwRMeMION7eaUaTUVuBVbrD0KHm4WIfkI5fg3zc7csGkNauANDEFQq79v5YC8Dzzu89nxc/6dIEErLettZTuP9opsp83lb99HKkHDW78xxSmT9+4ADn3WA6DqhVC6T0JdacwQbOJeIhVGVe3fU=
+	t=1707214533; cv=none; b=cNCfFPu4Tfp0NxKJkODHO12913b2/gRyMDiL+mG066uFLosIpAvH0Fz2MjvJXDEfNWov/qdpRoIGNLrEWMuTTrJXYRdcz0puqfqIJaTO7EOITJWARW0MjqYQ5YP+mFBrrRfSLWvjufockqZBF2uUCsHFuTC5zgbzvZ/LcqrBexg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707214109; c=relaxed/simple;
-	bh=DgHtCUiW6ZsBt2sAYyOKbE+8rBUgi6bTVLDkiRHKlUg=;
-	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=dWQoHchpGb+fDdZz6HIQ2fniNnC21mUFhxlDLHBx1xVm+ofiQ4wtTROaPrXNeV/udxj3+ELWPCwkkfnNXVIvsMilCcnddKn3+V7oBcqk1PVXz8Vdi5qUSrnnyGU+7txzuk58xsj17EH5tGQxLX5W0AJFM4Y4/GKBGJd3UtPpQ1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MfJoUFmO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AEDC43390;
-	Tue,  6 Feb 2024 10:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707214108;
-	bh=DgHtCUiW6ZsBt2sAYyOKbE+8rBUgi6bTVLDkiRHKlUg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=MfJoUFmOXFeaOhUTa7247CzftLkeWIE46aHpDWfK7f7Vh7JFfyuDlSg01fd/SFIek
-	 JuR3oEioLyJmjzXH4UyFHSHqn2CBmEzyyQ8JH3gjYLUoKaL1eBll9K6M62KuWZa1TJ
-	 0JX6R3YAifNFB9p/ZebuT8XyghdJjGmBNt9PjC2HkcxoyiL/Mtjcd59B2n1BXo6jO2
-	 e8n4cuCwJFGS5y9c2QUmvlfiyHBXIG0w6u7kRC5EFlA55InxuCWSygbxKcZk0R3qSZ
-	 UKzy8LrxYtZiRA8oCHw9MRK4ZPWjvaftE8ld1KDgAJFTPuO+bFeg2vMCb6p4l/J4Wb
-	 Pv/KGtp48mV+g==
-Message-ID: <00a81be6-7dd7-4959-b1dc-eb94022bf0e5@kernel.org>
-Date: Tue, 6 Feb 2024 11:08:25 +0100
+	s=arc-20240116; t=1707214533; c=relaxed/simple;
+	bh=aWSrDqqDDbZkz1Gknzn9ILdQdVypW8uzLLkdALeBdGs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sVr3AGHY4T7Uj656XwKw8edot8ghFEJHsek8bsZI571f5klczWrGNOSY9w56a2bGOF9Wt76zQgEW78hAq/fYGqKRJET3TvyT+8iAPic5A16ixSL2SL2s+TtHWUpYDEfP4IBH1G0tC8r8HQxMBbA37K7bqmbAeECUi61aEdLeoWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cLr5Zriv; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=N0fL3MlR; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cLr5Zriv; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=N0fL3MlR; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id F3BBD22052;
+	Tue,  6 Feb 2024 10:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1707214530; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I89zPPIlshU+AsbUcqX21NyfDIWTi39UwY/r6vWLmBY=;
+	b=cLr5ZrivQTac81QBO8MsenXbHgYwuYexWpkRSBetxYOcA1aIN7frsDQoVhtMan3OKxAz6Q
+	MEafbebmIrPsm25ofvMqiaMN39tCvm/RosvpCc2+hNmaSJ2JHEUDYhlVngOQTY1oca5sDh
+	w8+4IddoRyo0UFnTOyLPpYs/lZDLyi0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1707214530;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I89zPPIlshU+AsbUcqX21NyfDIWTi39UwY/r6vWLmBY=;
+	b=N0fL3MlRuQhsyY0Q9DZFYda4RuuWUr6Lf+O27aMxOwYukQyOdELGFyGqOtpUSsMQXKMPpY
+	wXXlY1IuUwTsIADQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1707214530; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I89zPPIlshU+AsbUcqX21NyfDIWTi39UwY/r6vWLmBY=;
+	b=cLr5ZrivQTac81QBO8MsenXbHgYwuYexWpkRSBetxYOcA1aIN7frsDQoVhtMan3OKxAz6Q
+	MEafbebmIrPsm25ofvMqiaMN39tCvm/RosvpCc2+hNmaSJ2JHEUDYhlVngOQTY1oca5sDh
+	w8+4IddoRyo0UFnTOyLPpYs/lZDLyi0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1707214530;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I89zPPIlshU+AsbUcqX21NyfDIWTi39UwY/r6vWLmBY=;
+	b=N0fL3MlRuQhsyY0Q9DZFYda4RuuWUr6Lf+O27aMxOwYukQyOdELGFyGqOtpUSsMQXKMPpY
+	wXXlY1IuUwTsIADQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DA2A913A3A;
+	Tue,  6 Feb 2024 10:15:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HoFANcEGwmWMfAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 06 Feb 2024 10:15:29 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 843FDA0809; Tue,  6 Feb 2024 11:15:29 +0100 (CET)
+Date: Tue, 6 Feb 2024 11:15:29 +0100
+From: Jan Kara <jack@suse.cz>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: linux-block <linux-block@vger.kernel.org>,
+	Linux-Next Mailing List <linux-next@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Linux Regressions <regressions@lists.linux.dev>,
+	linux-fsdevel@vger.kernel.org, lkft-triage@lists.linaro.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>
+Subject: Re: next: /dev/root: Can't open blockdev
+Message-ID: <20240206101529.orwe3ofwwcaghqvz@quack3>
+References: <CA+G9fYttTwsbFuVq10igbSvP5xC6bf_XijM=mpUqrJV=uvUirQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@kernel.org>
-Content-Language: en-US
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>
-Subject: MediaTek for-next: Replace matthias.bgg tree with mediatek
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYttTwsbFuVq10igbSvP5xC6bf_XijM=mpUqrJV=uvUirQ@mail.gmail.com>
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spamd-Result: default: False [0.40 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 RCPT_COUNT_TWELVE(0.00)[12];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,linaro.org:url,suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.00)[33.55%]
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spam-Score: 0.40
 
-Hello Stephen,
+On Tue 06-02-24 14:41:17, Naresh Kamboju wrote:
+> All qemu's mount rootfs failed on Linux next-20230206 tag due to the following
+> kernel crash.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Crash log:
+> ---------
+> <3>[    3.257960] /dev/root: Can't open blockdev
+> <4>[    3.258940] VFS: Cannot open root device "/dev/sda" or
+> unknown-block(8,0): error -16
 
-A while ago we migrated the MediaTek SoC trees from Matthias' GIT repo to the new
-MediaTek collaborative one. I just noticed that the linux-next branch didn't get
-replaced (we didn't tell you anything about it, so that's our bad!).
+Uhuh, -16 is EBUSY so it seems Christian's block device opening changes are
+suspect? Do you have some sample kconfig available somewhere?
 
-Can you please replace the tracked for-next branch?
+								Honza
 
-...The old one, to remove, is:
-git://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git#for-next
-
-...the new one, to add, is:
-git://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git#for-next
-
-Thanks!
-Angelo
+> <4>[    3.259704] Please append a correct "root=" boot option; here
+> are the available partitions:
+> <4>[    3.261088] 0800         2500336 sda
+> <4>[    3.261186]  driver: sd
+> <4>[    3.262260] 0b00         1048575 sr0
+> <4>[    3.262409]  driver: sr
+> <3>[    3.263022] List of all bdev filesystems:
+> <3>[    3.263553]  ext3
+> <3>[    3.263708]  ext2
+> <3>[    3.263994]  ext4
+> <3>[    3.264160]  vfat
+> <3>[    3.264419]  msdos
+> <3>[    3.264589]  iso9660
+> <3>[    3.264773]
+> <0>[    3.265665] Kernel panic - not syncing: VFS: Unable to mount
+> root fs on unknown-block(8,0)
+> <4>[    3.266991] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+> 6.8.0-rc3-next-20240206 #1
+> <4>[    3.267593] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+> BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> <4>[    3.268937] Call Trace:
+> <4>[    3.269316]  <TASK>
+> <4>[    3.270113]  dump_stack_lvl+0x71/0xb0
+> <4>[    3.271837]  dump_stack+0x14/0x20
+> <4>[    3.272128]  panic+0x12f/0x2f0
+> <4>[    3.272812]  ? _printk+0x5d/0x80
+> <4>[    3.273097]  mount_root_generic+0x26e/0x2b0
+> <4>[    3.273941]  mount_block_root+0x3f/0x50
+> <4>[    3.274212]  mount_root+0x60/0x80
+> <4>[    3.274610]  prepare_namespace+0x7a/0xb0
+> <4>[    3.276008]  kernel_init_freeable+0x137/0x180
+> <4>[    3.276285]  ? __pfx_kernel_init+0x10/0x10
+> <4>[    3.276563]  kernel_init+0x1e/0x1a0
+> <4>[    3.276837]  ret_from_fork+0x45/0x50
+> <4>[    3.277319]  ? __pfx_kernel_init+0x10/0x10
+> <4>[    3.278176]  ret_from_fork_asm+0x1a/0x30
+> <4>[    3.278560]  </TASK>
+> <0>[    3.280750] Kernel Offset: 0x1a800000 from 0xffffffff81000000
+> (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> <0>[    3.281985] ---[ end Kernel panic - not syncing: VFS: Unable to
+> mount root fs on unknown-block(8,0) ]---
+> 
+> 
+> Links:
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240206/testrun/22547673/suite/log-parser-test/test/check-kernel-panic/log
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240206/testrun/22547673/suite/log-parser-test/tests/
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 

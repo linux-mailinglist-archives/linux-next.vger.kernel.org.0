@@ -1,227 +1,130 @@
-Return-Path: <linux-next+bounces-1041-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1042-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A727F84C29B
-	for <lists+linux-next@lfdr.de>; Wed,  7 Feb 2024 03:46:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B177684C333
+	for <lists+linux-next@lfdr.de>; Wed,  7 Feb 2024 04:41:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BB872820C6
-	for <lists+linux-next@lfdr.de>; Wed,  7 Feb 2024 02:46:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AAC3283BE4
+	for <lists+linux-next@lfdr.de>; Wed,  7 Feb 2024 03:41:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 367D31CD19;
-	Wed,  7 Feb 2024 02:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC5B1094E;
+	Wed,  7 Feb 2024 03:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oOx4/ocs"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="T5iId62f"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF331CD1B;
-	Wed,  7 Feb 2024 02:46:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E512510940;
+	Wed,  7 Feb 2024 03:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707273971; cv=none; b=aYmWRN832KVCyG+N08xdsO9MIxUhxVGHVcIbuddZz+d3wQ4KD54DlNlENTlsFn+fIs07sqhWknTwgJyib7ZG/WPUAJj4JkbVBOP0r1QKFM7pPHnfHAuxgHaY/FPVqKfuUZxjWgIOS0QoMtYFBqg7++nsKPjTMBjVU5fGVGQAHeY=
+	t=1707277261; cv=none; b=QlovSppfm7TSL/ms8zNAGvoDkWDuHRqIle/w7azJgLJP4areudPdW6CRxfQMojBuE216uHsKE37ijxVaW7IKAVRCpVs+r9cmCOl8WlxCcoV8gF7ODCmP2IhH02vlVO+k6GgZ7vszX8kVIxHWmKdCMpRtPZXerSTOxGIgJIwnkec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707273971; c=relaxed/simple;
-	bh=ZnVcTN40JzNoOsOtf2qwDdITExDSdDJm8AwzlIj5vWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tDdBBhLTwMjf4xO88otb3zgZoetff+G8hQuF/yziphJS73/t9akd7q2QjB0KNdWHiosF3Kzu3CoKgAsmCUb3DBFwZ+MSpXvv+QRaNSJDC0SY1H8jVuYeG+Pd/+g2qKJeyQ0/pwfRBF8dK7QbWrD28AYFzWqNwUeopyXeWExJUXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oOx4/ocs; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1707277261; c=relaxed/simple;
+	bh=LxANWH1vYw6dX5u5kdpD6briQQ/+vl5yKirDmVoDrTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=abtzxg7sLeCl0IeXw8UMr07/sQItOye0BACro8MSBOlpJToOykAF6t+bt7l7d6XmdIrEyNAJKfvFau8rVJEe5lzbK1kDvFmbZMMqKHMOoTLOTq8McY4XRygOJLdRwve9/6pKf4uLF5/A3kOuG7D/PWfeb6dridgvH3WyANcfanY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=T5iId62f; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707273963;
-	bh=m2IP95JMxveFFleg+ObudlZMqaQ8gm6KHoaDb35aFKI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=oOx4/ocs8S0lWgpb3QhHNdFts+H21JtLfPIcuExLd/OXS4tM25Sa6zNHlxuGhrsp5
-	 nRBoA132+HaKTuZTX1plfj4v3R4946hkF7X9xnFVCVPGcjU7J7YIWTv4k9wW6mCNBS
-	 PdJq/lHsIvBAscyROOTICm3vGmN9NTBPmU0kLLGK9ttnCQTK1hbNvUhFIj32y9YWcX
-	 aK/uMPXr8DhCReWnIv4lsUkHVPGyGLi0t3oNuM345KH6L0QhwnqvAUMF6vnJWp3G8J
-	 sVJqlQwUhyqMVjuNy2yqFSMnPYOmnO56qe+XDpmeMYYMhPDLimFj1STh7yst0m/GO0
-	 2QFfmEpzbnaIQ==
+	s=201702; t=1707277255;
+	bh=Qhl9kvhzen4AmOWDzyusKX6ZmfZojpYJrrISVsS44IY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=T5iId62fKtASAwGo8WF7Cmv8j8bF4l2Xw5yEWxvcKNPd+AlqnmGklaOaLTSeZM6aE
+	 xXdwNveYOQzXMRq6O9KTzCtlLtsdym5/MbLmcpWwryJhEm3cWBdoP3hzmD2nlmnSp+
+	 iUR7qYs9dedSG02ULzmzH7kzDXHEiYlH8mD4uNtuwWJEu2zKP/Rh2tZDc840/hFEnd
+	 CzasDVWOFPva1R3UHhJRw/N/m355CApyf2kqNBjiQIxSFCDorRhZQRExQvRkgRNity
+	 T9+u7dZcWY3Pdg6zK/akup+l9S5rSlhDi4h+kN+3Uc4G67gZ4hcdJOmqELoLFtVWjI
+	 5DI0TZKlcMKrw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TV4HZ6lWPz4wcC;
-	Wed,  7 Feb 2024 13:46:02 +1100 (AEDT)
-Date: Wed, 7 Feb 2024 13:46:00 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TV5Vt5Bq7z4wb0;
+	Wed,  7 Feb 2024 14:40:54 +1100 (AEDT)
+Date: Wed, 7 Feb 2024 14:40:53 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Matthew Brost <matthew.brost@intel.com>, Rodrigo Vivi
- <rodrigo.vivi@intel.com>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Somalapuram Amaranath
- <Amaranath.Somalapuram@amd.com>, Intel Graphics
- <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20240207134600.5ab91ba8@canb.auug.org.au>
-In-Reply-To: <20240206122822.12a2df89@canb.auug.org.au>
-References: <20240206122822.12a2df89@canb.auug.org.au>
+To: Alasdair G Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>
+Cc: Hongyu Jin <hongyu.jin@unisoc.com>, "J. corwin Coburn"
+ <corwin@hurlbutnet.net>, John Wiele <jwiele@redhat.com>, Matthew Sakai
+ <msakai@redhat.com>, Michael Sclafani <vdo-devel@redhat.com>, Thomas
+ Jaskiewicz <tom@jaskiewicz.us>, Yibin Ding <yibin.ding@unisoc.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the device-mapper tree
+Message-ID: <20240207144053.1285b3e2@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//rg3B1F4UH/_d07_M7NfKGO";
+Content-Type: multipart/signed; boundary="Sig_/ockraJ+9.X3g.iZe0NhrfV.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_//rg3B1F4UH/_d07_M7NfKGO
+--Sig_/ockraJ+9.X3g.iZe0NhrfV.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 6 Feb 2024 12:28:22 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the drm-misc tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+After merging the device-mapper tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-drivers/gpu/drm/xe/xe_bo.c:41:10: error: 'struct ttm_placement' has no memb=
-er named 'num_busy_placement'; did you mean 'num_placement'?
-   41 |         .num_busy_placement =3D 1,
-      |          ^~~~~~~~~~~~~~~~~~
-      |          num_placement
-drivers/gpu/drm/xe/xe_bo.c:41:31: error: excess elements in struct initiali=
-zer [-Werror]
-   41 |         .num_busy_placement =3D 1,
-      |                               ^
-drivers/gpu/drm/xe/xe_bo.c:41:31: note: (near initialization for 'sys_place=
-ment')
-drivers/gpu/drm/xe/xe_bo.c:42:10: error: 'struct ttm_placement' has no memb=
-er named 'busy_placement'; did you mean 'num_placement'?
-   42 |         .busy_placement =3D &sys_placement_flags,
-      |          ^~~~~~~~~~~~~~
-      |          num_placement
-drivers/gpu/drm/xe/xe_bo.c:42:27: error: excess elements in struct initiali=
-zer [-Werror]
-   42 |         .busy_placement =3D &sys_placement_flags,
-      |                           ^
-drivers/gpu/drm/xe/xe_bo.c:42:27: note: (near initialization for 'sys_place=
-ment')
-drivers/gpu/drm/xe/xe_bo.c:55:10: error: 'struct ttm_placement' has no memb=
-er named 'num_busy_placement'; did you mean 'num_placement'?
-   55 |         .num_busy_placement =3D 1,
-      |          ^~~~~~~~~~~~~~~~~~
-      |          num_placement
-drivers/gpu/drm/xe/xe_bo.c:55:31: error: excess elements in struct initiali=
-zer [-Werror]
-   55 |         .num_busy_placement =3D 1,
-      |                               ^
-drivers/gpu/drm/xe/xe_bo.c:55:31: note: (near initialization for 'tt_placem=
-ent')
-drivers/gpu/drm/xe/xe_bo.c:56:10: error: 'struct ttm_placement' has no memb=
-er named 'busy_placement'; did you mean 'num_placement'?
-   56 |         .busy_placement =3D &sys_placement_flags,
-      |          ^~~~~~~~~~~~~~
-      |          num_placement
-drivers/gpu/drm/xe/xe_bo.c:56:27: error: excess elements in struct initiali=
-zer [-Werror]
-   56 |         .busy_placement =3D &sys_placement_flags,
-      |                           ^
-drivers/gpu/drm/xe/xe_bo.c:56:27: note: (near initialization for 'tt_placem=
-ent')
-drivers/gpu/drm/xe/xe_bo.c: In function '__xe_bo_placement_for_flags':
-drivers/gpu/drm/xe/xe_bo.c:233:18: error: 'struct ttm_placement' has no mem=
-ber named 'num_busy_placement'; did you mean 'num_placement'?
-  233 |                 .num_busy_placement =3D c,
-      |                  ^~~~~~~~~~~~~~~~~~
-      |                  num_placement
-drivers/gpu/drm/xe/xe_bo.c:233:39: error: excess elements in struct initial=
-izer [-Werror]
-  233 |                 .num_busy_placement =3D c,
-      |                                       ^
-drivers/gpu/drm/xe/xe_bo.c:233:39: note: (near initialization for '(anonymo=
-us)')
-drivers/gpu/drm/xe/xe_bo.c:234:18: error: 'struct ttm_placement' has no mem=
-ber named 'busy_placement'; did you mean 'num_placement'?
-  234 |                 .busy_placement =3D bo->placements,
-      |                  ^~~~~~~~~~~~~~
-      |                  num_placement
-drivers/gpu/drm/xe/xe_bo.c:234:35: error: excess elements in struct initial=
-izer [-Werror]
-  234 |                 .busy_placement =3D bo->placements,
-      |                                   ^~
-drivers/gpu/drm/xe/xe_bo.c:234:35: note: (near initialization for '(anonymo=
-us)')
-drivers/gpu/drm/xe/xe_bo.c: In function 'xe_evict_flags':
-drivers/gpu/drm/xe/xe_bo.c:254:36: error: 'struct ttm_placement' has no mem=
-ber named 'num_busy_placement'; did you mean 'num_placement'?
-  254 |                         placement->num_busy_placement =3D 0;
-      |                                    ^~~~~~~~~~~~~~~~~~
-      |                                    num_placement
-drivers/gpu/drm/xe/xe_bo.c: In function '__xe_bo_fixed_placement':
-drivers/gpu/drm/xe/xe_bo.c:1356:18: error: 'struct ttm_placement' has no me=
-mber named 'num_busy_placement'; did you mean 'num_placement'?
- 1356 |                 .num_busy_placement =3D 1,
-      |                  ^~~~~~~~~~~~~~~~~~
-      |                  num_placement
-drivers/gpu/drm/xe/xe_bo.c:1356:39: error: excess elements in struct initia=
-lizer [-Werror]
- 1356 |                 .num_busy_placement =3D 1,
-      |                                       ^
-drivers/gpu/drm/xe/xe_bo.c:1356:39: note: (near initialization for '(anonym=
-ous)')
-drivers/gpu/drm/xe/xe_bo.c:1357:18: error: 'struct ttm_placement' has no me=
-mber named 'busy_placement'; did you mean 'num_placement'?
- 1357 |                 .busy_placement =3D place,
-      |                  ^~~~~~~~~~~~~~
-      |                  num_placement
-drivers/gpu/drm/xe/xe_bo.c:1357:35: error: excess elements in struct initia=
-lizer [-Werror]
- 1357 |                 .busy_placement =3D place,
-      |                                   ^~~~~
-drivers/gpu/drm/xe/xe_bo.c:1357:35: note: (near initialization for '(anonym=
-ous)')
-drivers/gpu/drm/xe/xe_bo.c: In function 'xe_bo_migrate':
-drivers/gpu/drm/xe/xe_bo.c:2115:19: error: 'struct ttm_placement' has no me=
-mber named 'num_busy_placement'; did you mean 'num_placement'?
- 2115 |         placement.num_busy_placement =3D 1;
-      |                   ^~~~~~~~~~~~~~~~~~
-      |                   num_placement
-drivers/gpu/drm/xe/xe_bo.c:2117:19: error: 'struct ttm_placement' has no me=
-mber named 'busy_placement'; did you mean 'num_placement'?
- 2117 |         placement.busy_placement =3D &requested;
-      |                   ^~~~~~~~~~~~~~
-      |                   num_placement
+drivers/md/dm-vdo/io-factory.c: In function 'read_ahead':
+drivers/md/dm-vdo/io-factory.c:118:17: error: too few arguments to function=
+ 'dm_bufio_prefetch'
+  118 |                 dm_bufio_prefetch(reader->client, block_number, rea=
+d_ahead);
+      |                 ^~~~~~~~~~~~~~~~~
+In file included from drivers/md/dm-vdo/io-factory.h:9,
+                 from drivers/md/dm-vdo/io-factory.c:6:
+include/linux/dm-bufio.h:86:6: note: declared here
+   86 | void dm_bufio_prefetch(struct dm_bufio_client *c,
+      |      ^~~~~~~~~~~~~~~~~
+drivers/md/dm-vdo/io-factory.c: In function 'position_reader':
+drivers/md/dm-vdo/io-factory.c:182:24: error: too few arguments to function=
+ 'dm_bufio_read'
+  182 |                 data =3D dm_bufio_read(reader->client, block_number=
+, &buffer);
+      |                        ^~~~~~~~~~~~~
+include/linux/dm-bufio.h:64:7: note: declared here
+   64 | void *dm_bufio_read(struct dm_bufio_client *c, sector_t block,
+      |       ^~~~~~~~~~~~~
 
-> Caused by commit
->=20
->   a78a8da51b36 ("drm/ttm: replace busy placement with flags v6")
->=20
-> interacting with commit
->=20
->   dd08ebf6c352 ("drm/xe: Introduce a new DRM driver for Intel GPUs")
->=20
-> (and maybe others) from Linus' tree (v6.8-rc1).
+Caused by commit
 
-Given that the latter above commit(s) are also in the drm-misc tree, I
-have just used the drm-misc tree from next-20240205 for today.
+  82da73bac1ee ("dm vdo: add deduplication index storage interface")
+
+interacting with commit
+
+  3be93545346e ("dm bufio: Support IO priority")
+
+I have used the device-mapper tree from next-20240206 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//rg3B1F4UH/_d07_M7NfKGO
+--Sig_/ockraJ+9.X3g.iZe0NhrfV.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXC7ugACgkQAVBC80lX
-0GxCKQf/dFGRZp+POtnOvcJVZCr2J0Ev71DeNEa2uRbyt3MxCeKKbYhn3C8OwzHn
-6U68cQh+3dotTrMBYUS8cqIAmS6gRPiav+sD5jtHhcY+sDExezR++zA+qnYIaMTB
-23qjm8jjRgxu9uh5I/vdV+PvZmS3ladqi31zhpGRa0ZRKPoWrNE4vGUE/PNX71i4
-K+aHusdr3cISIsDbX/Rzvo8pUmIOG44+L8LJtVeKlnhQho8WqOqvaR/wdSsKptNl
-NbzCT/BM2jN3R1CGPzcWtxKCCKHNnQRLLIHI1RN9imujD2Ri6MvMEE9sxi0lfRHL
-QyjSsEqhWGT2dovnMsrzkWj1sqLebw==
-=nAVV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXC+8UACgkQAVBC80lX
+0GyE6Af9G3vxUowmQfD72icXaP4q1hZbiuTAVfxmav3iu1bwQsjIt/lLZu3/uwyP
+JDFTqCwhmC/i8nb+if8iX/7DLSZNLdTOLQymSjaQWvwqr8kBgjcz6aFeVjp5yO+N
+IzRNT68TXszvy6BREleZCjZ2DK4DEYES3EbxUBHD9UJQwYDFCiKPaP12cqgTUUld
+f2YVdkcf73lhGrMaNOZFLK/kdM4UglsXJaapFpfvjDJWTtqe5aV+MNR7Ln+V7cjm
+3vIByNYRw9S0tjPrxzn+sDlvishTLumaEsogPsFjGhyAuqYzzXQy754Jw2wzD5fM
+8++mV3pIBpzyk4XAQZOg1le6zJhqjg==
+=WV7u
 -----END PGP SIGNATURE-----
 
---Sig_//rg3B1F4UH/_d07_M7NfKGO--
+--Sig_/ockraJ+9.X3g.iZe0NhrfV.--
 

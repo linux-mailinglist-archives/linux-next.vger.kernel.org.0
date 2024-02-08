@@ -1,137 +1,106 @@
-Return-Path: <linux-next+bounces-1072-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1073-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B4DF84D90D
-	for <lists+linux-next@lfdr.de>; Thu,  8 Feb 2024 04:42:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BACA84D919
+	for <lists+linux-next@lfdr.de>; Thu,  8 Feb 2024 04:48:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BB141F2263A
-	for <lists+linux-next@lfdr.de>; Thu,  8 Feb 2024 03:42:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67B791C22E66
+	for <lists+linux-next@lfdr.de>; Thu,  8 Feb 2024 03:48:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D7B21107;
-	Thu,  8 Feb 2024 03:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB27C2C1A2;
+	Thu,  8 Feb 2024 03:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tVqWo7a5"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AfDpeJ1+"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA9220311;
-	Thu,  8 Feb 2024 03:42:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F0D2C1A6;
+	Thu,  8 Feb 2024 03:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707363750; cv=none; b=G4tFp06zttipj+8gBeANP02kIcYxQt4ta7XdxCQhqlsgrnaiqw29GGr/Uy/Q46ueGgR86AcjJ7ITjqRRzBR5J6ioY4w3ymCn7x+AdHXSBZOeOeJt+eo+MeXHGN6PvizFlFD5/9co5K3ZeA7ssAIibJxDdQ7YczCeWm+VNboYv10=
+	t=1707364127; cv=none; b=QsgmCIVwB0Pc9levfC07wIANuq1ycO17wkBamkpe4y3ms5XZF4rhC0lqZ1hq22YFWMKT3mS1N5E/q6LN2xuiRnEjsc1zMZx1OWmnZqJcT4vAtg/4FMtSKWKFOociHipy0MzGBXxgCZLfA8XgIa+Pyie08fuXabSM5c0Ro8ckeB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707363750; c=relaxed/simple;
-	bh=lzBBRC9iLhPy2bcYVby6zuMRE3b2v79SRR4z0QBuHtc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OMR+8mTwUmVfDl+88cYdnMBrSQk6EY9kxfjCexXakFmLoAmaNxtxF0FEtWHnLZc5f7uXXDCsBv+BZjqcDD+0qKzieEkwJM7bdA+mPFbcffozrHeG/hBICvncE3TuSeQD5iQeaCkMNomJcFwBTr+g9ROuZpiU5sK82vD2ziZvMfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tVqWo7a5; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1707364127; c=relaxed/simple;
+	bh=ZKD/zWkDhl3AWxCXsgOa6OUcviNSO50RJYFcCr29aSc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hjrffHukSDLy0aJ86XzDGmMIbNUF26ACQngBKkkZLIIosx1wWG5bgPEA0uFp9+wfmU2lqPzK584Fh5F2BsnxLH8h5mutgEKnv22Af4shasJ8evXLhXXBbZbNwklVWgE564xfdqxe6CZjnGjZ42uWkGKFcsGoW6Sf3u0KH20O/Ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AfDpeJ1+; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707363746;
-	bh=/ricgX3YbeLiF9GHdwbG+o/omDAnntZIhXV429DZHx4=;
+	s=201702; t=1707364123;
+	bh=tnPkbVE/yhWz2btyQ1CuW/no010rXjF6bycJ3xoU2Rs=;
 	h=Date:From:To:Cc:Subject:From;
-	b=tVqWo7a5kdbPiIP5y6gZcCXEa8IvlTxD6iXWMUivYFz7Bc/Kk4NgXYP4Np7izfQFV
-	 ikTQk8Ns++T3jWgKoyo6Sid0r7YWYWxpv6f6WHEnBwHyVYUblJNOAe5HM1zX+8WKAH
-	 0So9UzYRZtWQcR7qqXUkff5n0tLsn2vaNEFT5yKb7IYZS1csKc64WrIsuDAXpSWeDu
-	 bqG9fZgLHouPNo0ne0LO9l3JPZdQoU9dYTSF3nOYhye/2RAOWKZ13aelRpdvi2OoSC
-	 jBMVnc+kprGm1zn6y8RFAkJbRT/hT+VNlR/8bJJYaTenFocFLmgDH8jqJ1uVWVyoUE
-	 gGldNgNhyq1iQ==
+	b=AfDpeJ1+dtM89fV1xNNIseisUioa/EpDdg9F0Gz1dD3h0pytIJg8VpZ8eDwGXe8iW
+	 jTM4FxZsGatYNFk746/3eF2Ki06ox3cI47TNRk/VE1fl85xRuTZf7sb8wfJ3h5hlBU
+	 cWdWtQGTOlxqrdCfY88nOE+kjVKVt22CzwoWlIUPpD9TTma8iiC46M20Mv2J0KhY9d
+	 iKR+3GlFU3D4n4odwFRyFAVQtO5Fwd193mlmyuLy86DffMtwvZjWhhW+MK0sYh3xyN
+	 0h7kOPP3bcLrfB9UeBV11UsZHtlWJURNDZO1EJxT0EZkq+FJSqxSxBADNUBxFkA4n/
+	 z6hTthVCe/Acw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TVjVB0lTPz4wcV;
-	Thu,  8 Feb 2024 14:42:25 +1100 (AEDT)
-Date: Thu, 8 Feb 2024 14:42:25 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TVjdR5Bk1z4wcB;
+	Thu,  8 Feb 2024 14:48:43 +1100 (AEDT)
+Date: Thu, 8 Feb 2024 14:48:42 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Mario Limonciello <mario.limonciello@amd.com>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pm tree
-Message-ID: <20240208144225.3bc09ff2@canb.auug.org.au>
+To: Kees Cook <keescook@chromium.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the kspp tree
+Message-ID: <20240208144842.5491303d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jFrHdLcLHIbHv2/M5avlCgK";
+Content-Type: multipart/signed; boundary="Sig_/n+2TIRG6e3rkaGd=AkqovsA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/jFrHdLcLHIbHv2/M5avlCgK
+--Sig_/n+2TIRG6e3rkaGd=AkqovsA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pm tree, today's linux-next build (i386 defconfig)
-failed like this:
+After merging the kspp tree, today's linux-next build (htmldocs) produced
+this warning:
 
-In file included from include/linux/i2c.h:13,
-                 from include/uapi/linux/fb.h:6,
-                 from include/linux/fb.h:7,
-                 from include/linux/backlight.h:13,
-                 from drivers/acpi/acpi_video.c:19:
-drivers/acpi/acpi_video.c: In function 'acpi_video_device_EDID':
-drivers/acpi/acpi_video.c:643:34: error: format '%ld' expects argument of t=
-ype 'long int', but argument 4 has type 'ssize_t' {aka 'int'} [-Werror=3Dfo=
-rmat=3D]
-  643 |                                  "Invalid _DDC data for length %ld\=
-n", length);
-      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~  ~~~~~~
-      |                                                                    =
-    |
-      |                                                                    =
-    ssize_t {aka int}
-include/linux/acpi.h:1224:56: note: in definition of macro 'acpi_handle_deb=
-ug'
- 1224 |                 acpi_handle_printk(KERN_DEBUG, handle, fmt, ##__VA_=
-ARGS__); \
-      |                                                        ^~~
-drivers/acpi/acpi_video.c:643:66: note: format string is defined here
-  643 |                                  "Invalid _DDC data for length %ld\=
-n", length);
-      |                                                                ~~^
-      |                                                                  |
-      |                                                                  lo=
-ng int
-      |                                                                %d
+include/linux/string.h:142: warning: Function parameter or struct member 'd=
+st' not described in 'strscpy_pad'
+include/linux/string.h:142: warning: Excess function parameter 'dest' descr=
+iption in 'strscpy_pad'
+include/linux/string.h:142: warning: Excess function parameter 'count' desc=
+ription in 'strscpy_pad'
 
-Caused by commit
+Introduced by commit
 
-  9e9c41c069ce ("ACPI: video: Handle fetching EDID that is longer than 256 =
-bytes")
-
-Presumably it should be %zd.
-
-I have reverted that commit for today.
+  0bf7961afff1 ("string: Allow 2-argument strscpy_pad()")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/jFrHdLcLHIbHv2/M5avlCgK
+--Sig_/n+2TIRG6e3rkaGd=AkqovsA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXETaEACgkQAVBC80lX
-0Gy1Jwf6AhBae1ebz1pfK2INgS/4GDPVvNuloqRi111vCAnZ3LaST0XAUow7JMy2
-DjX0PvyMDA+XART9UY4b2wsQqKg+9AqJPicvV+ENg6O+SHwMe7ioBS8B1PS5fOiC
-pDzb30nvZWhqdidV+4h8BUI11FPELVQVbGM1XI17nLN6GhwAtfMu6QLv/goKgnJ2
-7sPTuXj2zQ23xg6+4MZ6+UwHNr9WHS1d/ZV4S+kbACrhjLnw7QzlwXPTfxos1ZWt
-OPxkCHa9Ni46m36O/I+ujawQKhsFchRQHPUAN8tMA6Ldh1cQhkAOPtpQdpRl1X2L
-egnHMBNCoZrt770QxTXA3D/VWTLDiw==
-=jUx8
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXETxoACgkQAVBC80lX
+0GxVdAf9HLCvUQKhPDV60HxMQTJ+MaASH6www3LvS7Hngl1wi/G7blEOvrD2Mv6c
+9dAQ5AkybLHUKvT1E3EdAuwnBZmMCeKRcd/NqkhKmF2Ong8UXV32qAp5koHdut5y
+tUlcPlD92KVXGdKjQ9HbfubSnJTKdebxZalZRnCQaBa0pSaHekiGZjq6W39Gas0v
+x6qx8m/IeILE4rxljbCbqaZ3SiqN3m2SzUYSXzgiyrv1vbojLotrpQ1qs64oBlAf
+nZCkXjNF/wkQT/l1xyhfUz6XxDu8y3ETBlYL/11viUhfqZ5nBAViJeyHihHizFRQ
+fLZKsqD6rPfry+suO5GO7ZBCBm7KBA==
+=S768
 -----END PGP SIGNATURE-----
 
---Sig_/jFrHdLcLHIbHv2/M5avlCgK--
+--Sig_/n+2TIRG6e3rkaGd=AkqovsA--
 

@@ -1,112 +1,97 @@
-Return-Path: <linux-next+bounces-1076-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1077-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D86784D970
-	for <lists+linux-next@lfdr.de>; Thu,  8 Feb 2024 05:57:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A25E84DB00
+	for <lists+linux-next@lfdr.de>; Thu,  8 Feb 2024 09:07:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DFFB286C91
-	for <lists+linux-next@lfdr.de>; Thu,  8 Feb 2024 04:57:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 11443B2237E
+	for <lists+linux-next@lfdr.de>; Thu,  8 Feb 2024 08:07:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 454E91E89D;
-	Thu,  8 Feb 2024 04:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="amrWG92i"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB85269E11;
+	Thu,  8 Feb 2024 08:07:19 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp2-kfki.kfki.hu (smtp2-kfki.kfki.hu [148.6.0.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44D967A04;
-	Thu,  8 Feb 2024 04:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5D26A00D;
+	Thu,  8 Feb 2024 08:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.6.0.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707368271; cv=none; b=lNg8HNO146O/K9VBHBHJK9Lg1mY6YV0yiDo/BI6eOCylsDrYaHPi2ySoyugA/PTP/MWxtK5AVxD/IeA4bi+0ncXIgROu5nspcMX1SYlOLrI2WFYfTkrxgrDEHv2INF/9WAWOp9aDxXtHY3MIkuQM26wkiIhVngcT5ay7/YyaFv8=
+	t=1707379639; cv=none; b=aWxX2U5nhK2hK2vFqK3qFnpDY4ai4LSqxdryddbTlWinonrgL/O10GEQq001dQMANRUQ88YMt9xa/+Imfe8xXMbFIdAtW7kD9Z7Ysa9RR7fAPtS9clYucmSGALUDOYrQOBbv2+mnwDJ+W0PchvEYhhx5MjjzyN8lKRKxp0MNef0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707368271; c=relaxed/simple;
-	bh=3xd/FsavCQp4ZAHKSWb0gXBlZa+yZLHJ7oBTMzMS+os=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=X2cB5XVU2TNwraFt4ZAIR2bAJ1C4Rcx+xyupUF59Wi7ifOwAqO0sH+qPYGV+uceSpP+D4U7PKR+F3S67vFh8gSV9oEAnoy0K0FhZl5FqwI8bkqcSH2F/vcQUro77T4iYHmZnkzwXrHSot4ptUy3wLvehyLH8OMvjW3byLNoc09s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=amrWG92i; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707368263;
-	bh=u6NBGY84qWqGe0BXRfvuoMWXqSTDLCHF4kDelqZIKU0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=amrWG92iJbv4jHSEc0MX+nCrZbe+of0Fe8wRMcz6mmvx8aG0Y7BI+vDsV+q7lJR4j
-	 uWg2Wipfoiqn6vOctFT9+eoTipMpg7ep1sR7FoffMUHDxawSJvGqHxY7rKKT9KJjH/
-	 v4h2daxym1vKO/2IBS6Uxm/JXQwod5QmHMSU8wqZIy4qYvwVUBHYQE5XJVrF8x4QaL
-	 Hke9MHdeQ3a/jA7kGGpE6mZkrckfHjnVDjk4IMAi39WVguz4qLLehnT4Oe3GZlTF54
-	 GWbttkrAAPr7bcDbfj4cOVyn+EBzyYzJdrdRVSPpLBN6Ow/qDjW2H50PTs3onQT40w
-	 wmeprIuhv2rYw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TVl931Wq2z4wcJ;
-	Thu,  8 Feb 2024 15:57:42 +1100 (AEDT)
-Date: Thu, 8 Feb 2024 15:57:40 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Pablo Neira Ayuso <pablo@netfilter.org>, NetFilter
- <netfilter-devel@vger.kernel.org>
-Cc: Jozsef Kadlecsik <kadlec@netfilter.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the netfilter tree
-Message-ID: <20240208155740.24c6ada7@canb.auug.org.au>
+	s=arc-20240116; t=1707379639; c=relaxed/simple;
+	bh=V4Bw8Qj+uqtX499d2ys+i3DQhkzLLfT/SECS4cP3Tv0=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=sjG4whi4e5Fqx5t/99zphdZw8aH+I2dG24sW0WUNWhfuLageEZeepcU2r/lYtT1v/LJ29WX9h3CXvWdtLVz44WkTkcnDCxoabRIwoOYfJh5ZTwjl4A0uJe23TC/xXZb+aexgnPQ09b+Y+GO5yss8wG9RVk86dxOhcchywQwil0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org; spf=pass smtp.mailfrom=netfilter.org; arc=none smtp.client-ip=148.6.0.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netfilter.org
+Received: from localhost (localhost [127.0.0.1])
+	by smtp2.kfki.hu (Postfix) with ESMTP id 2AE45CC02CD;
+	Thu,  8 Feb 2024 09:07:06 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at smtp2.kfki.hu
+Received: from smtp2.kfki.hu ([127.0.0.1])
+	by localhost (smtp2.kfki.hu [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP; Thu,  8 Feb 2024 09:07:04 +0100 (CET)
+Received: from blackhole.kfki.hu (blackhole.szhk.kfki.hu [148.6.240.2])
+	by smtp2.kfki.hu (Postfix) with ESMTP id DDD5CCC0102;
+	Thu,  8 Feb 2024 09:07:02 +0100 (CET)
+Received: by blackhole.kfki.hu (Postfix, from userid 1000)
+	id DDD53343167; Thu,  8 Feb 2024 09:07:02 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by blackhole.kfki.hu (Postfix) with ESMTP id DBAFE343166;
+	Thu,  8 Feb 2024 09:07:02 +0100 (CET)
+Date: Thu, 8 Feb 2024 09:07:02 +0100 (CET)
+From: Jozsef Kadlecsik <kadlec@netfilter.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+cc: Pablo Neira Ayuso <pablo@netfilter.org>, 
+    NetFilter <netfilter-devel@vger.kernel.org>, 
+    Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+    Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the netfilter tree
+In-Reply-To: <20240208155740.24c6ada7@canb.auug.org.au>
+Message-ID: <73b75396-dd59-13eb-cee5-e77c4068ea02@netfilter.org>
+References: <20240208155740.24c6ada7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rVS5Vb4RTPE5xqVfSHwkEww";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/rVS5Vb4RTPE5xqVfSHwkEww
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi,
 
-In commit
+On Thu, 8 Feb 2024, Stephen Rothwell wrote:
 
-  6099505cd2a2 ("netfilter: ipset: Missing gc cancellations fixed")
+> In commit
+> 
+>   6099505cd2a2 ("netfilter: ipset: Missing gc cancellations fixed")
+> 
+> Fixes tag
+> 
+>   Fixes: fdb8e12cc2cc ("netfilter: ipset: fix performance regression in swap operation")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant:
+> 
+> Fixes: 97f7cf1cd80e ("netfilter: ipset: fix performance regression in swap operation")
 
-Fixes tag
+Yes, exactly. Accidentally I used the tag from my git tree and that caused 
+the incorrect tag value. If that's OK, I'll send a fix for the nf-next 
+tree when the patch reaches it.
 
-  Fixes: fdb8e12cc2cc ("netfilter: ipset: fix performance regression in swa=
-p operation")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant:
-
-Fixes: 97f7cf1cd80e ("netfilter: ipset: fix performance regression in swap =
-operation")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/rVS5Vb4RTPE5xqVfSHwkEww
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXEX0QACgkQAVBC80lX
-0Gykvgf/URSkBdOLpsC5GItUb2aNdQ0a6eWMgUYZ88fRAOCr2KSK0vspxzBh0yaL
-k7BzaxTU8X8Z+cA4b19OWc38QoTMAvokhsVC0UUouC1YOqL++KDB9Et/uMWJwod/
-cuHvcJ3zT5bDRlwkNx0NpRmS48Gdf3ww/kznGLJ0rXZe0j5RPIaihnpILkb6Efkm
-ao+Yly0JsIfs+l0h92M2x0USUqYKBRnZq7P80rX/3LX/GtsZOcV72iuMWpWZiO1P
-dGysbwwU3lDS6bwmBFAa5yXTfGoL6zEMQS2HQ+jiMgycbMmXFOPTHAsbkOCYmUt0
-Ins8Fi4ZHbE47OUh5aUBVkCAYunhWg==
-=PZHG
------END PGP SIGNATURE-----
-
---Sig_/rVS5Vb4RTPE5xqVfSHwkEww--
+Best regards,
+Jozsef
+-- 
+E-mail  : kadlec@blackhole.kfki.hu, kadlecsik.jozsef@wigner.hu
+PGP key : https://wigner.hu/~kadlec/pgp_public_key.txt
+Address : Wigner Research Centre for Physics
+          H-1525 Budapest 114, POB. 49, Hungary
 

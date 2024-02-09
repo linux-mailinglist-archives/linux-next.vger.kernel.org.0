@@ -1,86 +1,135 @@
-Return-Path: <linux-next+bounces-1103-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1104-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 864F884F0A0
-	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 08:07:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FE1E84F131
+	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 09:03:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B66F1F2691C
-	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 07:07:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71DBA1C22546
+	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 08:03:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2F19657BA;
-	Fri,  9 Feb 2024 07:07:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EC1E65BAD;
+	Fri,  9 Feb 2024 08:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="xU9MCXow"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iImVKs7u"
 X-Original-To: linux-next@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E436657AB;
-	Fri,  9 Feb 2024 07:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561BE65BA7;
+	Fri,  9 Feb 2024 08:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707462421; cv=none; b=ER6jbbPlvA2oEQDUa7dYUBT40Up5EGdaf2VmcaXPiH6dafYwmu7cmil0k1nhhsI8fV9e/4xBWpW/Hooix8M1S94jPGclcfvF8i0Cljmx7TYw1rmGNZJWXoiXbcMLSgJuQY4sKllF8DZopuED5QSKwhHFhCnlChgNF4I1/C3xTKY=
+	t=1707465782; cv=none; b=PHoaL6jWF62fkQuTUOBpKdOxRkOzPlFaXoOQFOufhkmzhm8MOwm5g/5wNeyy77w6FRJgDXjjQH8WrsPTRjKIPhD9c59Wdm5ayg5GGxFKtxKVKHhKTVsDCrZbZJ/WrIENz/KOJrBpuMmtvuX3bjparDVo5sP4ev0xA+ayn83flC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707462421; c=relaxed/simple;
-	bh=iyE+8IowZHpUWq55kut4No1c3UML2iBHavqLeO0WYZ8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Bt6mUM1ChZLJoia4+MFiI6H5ntyyIvn9bkKYLhc+fnHyGEg8HOmNAXOKfWnpUQiszc0WG48+3uu6cAZcYE/4SG9mm37hJ+aOSKtIQdnwnjRZJ1qVib0S6hGke69HlJ/UHiGZEgQEKrBKXTn72uaA7kNYh5nBbZ18kFIXGlGgJSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=xU9MCXow; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=iyE+8IowZHpUWq55kut4No1c3UML2iBHavqLeO0WYZ8=;
-	t=1707462420; x=1708672020; b=xU9MCXow8wkd91k5kWKAeTiBcjqCGdGbJ3IN/rEqkw26yDW
-	oWxCkp8JHHfihnkZ5o+S815tv7LZE4IDfwJ8pcec/HEEC2VbmDI6gEZx/81CQuAMnhb0uk6JNbXJK
-	WyuPmOQi6PKOtseuoh82z1NArakfD3n73w+MK3TzzCCVnll4+gwCDT9ec0CPnGjNVOutUltR3FE+m
-	zBgX8FnpgrqW/wxLJicU8Fw1UTan2rfSEunVgfwh2ZHMfPFE7fe4hoqUjQ+hs43ElbisQSc+2PKJx
-	HqbMVs0DAveK3ljlbqskp6JWeL+OrI/Zd9xo5gIV7g+Chz2PpcGKMHGSRw+v9ghg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1rYKyN-00000000xkK-2UYa;
-	Fri, 09 Feb 2024 08:06:55 +0100
-Message-ID: <5a549dc1cc586e86206394519fe430236ff9de42.camel@sipsolutions.net>
-Subject: Re: linux-next: build warning after merge of the wireless-next tree
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Kalle Valo <kvalo@kernel.org>
-Cc: Wireless <linux-wireless@vger.kernel.org>, Linux Kernel Mailing List
-	 <linux-kernel@vger.kernel.org>, Linux Next Mailing List
-	 <linux-next@vger.kernel.org>
-Date: Fri, 09 Feb 2024 08:06:54 +0100
-In-Reply-To: <20240209142950.703eca9b@canb.auug.org.au>
-References: <20240209142950.703eca9b@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	s=arc-20240116; t=1707465782; c=relaxed/simple;
+	bh=2Muc/VDBOnFkSv5EltSjHZ4YlzxsFKvyis0GCBtGEZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SByO9LPOEnMRhJ8m5ZxLYSHNHDDxVm2+g3/jjZx5fr8N5hiCesYBZsCG1HmQT2BGHb5ROdkRiu519Hb5Te4NGEosLMXLv4QaAiUNWe9H6SIKqkcnzQZ8LDOQrQccJfrNdSGUEYHPnHUQLErpF/cZQptfMnEb/ZvHcGbemCNCl8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iImVKs7u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F27C433C7;
+	Fri,  9 Feb 2024 08:03:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707465781;
+	bh=2Muc/VDBOnFkSv5EltSjHZ4YlzxsFKvyis0GCBtGEZM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iImVKs7ueeAUGAvDStMU3SsSM++eyZXLb70Zs5PYcPJbZ8a/LTHN3gYhZIVGwdzCs
+	 uH9Hce6KsdPiyjuh3Ny7zALVcKhAfCko9kf8mE7ypN7WpzRl/dIEOszNMrk3vD8lco
+	 lX6KDUNxkzO1IyTZg4WOFhQgnDBzjy8+L1UiXt/s83wqjNQ8cZ8qbF3bJXyf+0x+/9
+	 hWPiwUVNDHb8HCjxsNmTL0emBXGI7pul/Sb1fyC+EiF4bEVaDa2aF0ZiPJhCVmVc5U
+	 ZpCDGZ6AqdnILuY8ohFUROgby+dEB1/N8zdRNBuJSoS33bL5NfLi9gbGaID57+eGAF
+	 d1Cw733cVFzgA==
+Date: Fri, 9 Feb 2024 08:02:57 +0000
+From: Lee Jones <lee@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Florian Eckert <fe@dev.tdt.de>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the leds-lj tree
+Message-ID: <20240209080257.GI689448@google.com>
+References: <20240105173352.6ce1a546@canb.auug.org.au>
+ <17b4305d9fe1fbed3e39597f0767f7bd@dev.tdt.de>
+ <20240109222031.6ce4aecc@canb.auug.org.au>
+ <87wmreee6j.fsf@meer.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87wmreee6j.fsf@meer.lwn.net>
 
-On Fri, 2024-02-09 at 14:29 +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the wireless-next tree, today's linux-next build (htmldocs)
-> produced this warning:
->=20
-> include/net/cfg80211.h:1067: warning: expecting prototype for cfg80211_ch=
-andef_primary_freq(). Prototype was for cfg80211_chandef_primary() instead
->=20
+On Thu, 08 Feb 2024, Jonathan Corbet wrote:
 
-Strangely enough, I have a deja vu now, as if I'd fixed this before
-somewhere. Oh well.
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> 
+> > Hi Florian,
+> >
+> > On Mon, 08 Jan 2024 08:47:07 +0100 Florian Eckert <fe@dev.tdt.de> wrote:
+> >>
+> >> Hello Stephen,
+> >> 
+> >> thanks for your hint
+> >> 
+> >> On 2024-01-05 07:33, Stephen Rothwell wrote:
+> >> > Hi all,
+> >> > 
+> >> > After merging the leds-lj tree, today's linux-next build (htmldocs)
+> >> > produced this warning:
+> >> > 
+> >> > Warning: /sys/class/leds/<led>/rx is defined 2 times:
+> >> > Documentation/ABI/testing/sysfs-class-led-trigger-tty:7
+> >> > Documentation/ABI/testing/sysfs-class-led-trigger-netdev:49
+> >> > Warning: /sys/class/leds/<led>/tx is defined 2 times:
+> >> > Documentation/ABI/testing/sysfs-class-led-trigger-tty:15
+> >> > Documentation/ABI/testing/sysfs-class-led-trigger-netdev:34  
+> >> 
+> >> The behavior of the tty trigger can be controlled via the Rx and Tx file.
+> >> If a value is set in Rx or Tx, the LED flashes when data is transmitted in
+> >> this direction. The same behavior is used for the netdev trigger.
+> >> I have therefore used the same pattern for the new tty trigger as well.
+> >> 
+> >> I didn't know that the names have to be unique!
+> >> 
+> >> I'm a bit at a loss as to what to do now. Should I put a prefix "tty_"
+> >> in front of the names so that we have "tty_rx", "tty_tx"?
+> >> 
+> >> If we do it this way, however, the general question arises as to whether
+> >> we do have to use a prefix everywhere! If new triggers are added, then the
+> >> names for a config file are already used up and anyone who then wants to use
+> >> the same name for an other trigger with the same config file because it describe
+> >> the same function must then work with a prefix!
+> >
+> > I think this is only a problem with the documentation system, not the
+> > actual sysfs file naming.  Maybe just adding a uniquifying bit to the
+> > "<led>" part will solve it.  Or maybe we need the tooling to be taught
+> > about placeholders in sysfs names (or maybe there is already a way).
+> 
+> So I finally remembered to look at this when I had a chance to...  yes,
+> it wants each ABI entry to be unique, and the ones listed here are not.
+> I *think* the easiest answer is to take a line like:
+> 
+>   What:		/sys/class/leds/<led>/rx
+> 
+> and turn it into something like:
+> 
+>   What:		/sys/class/leds/<netdev-led>/rx
+> 
+> ...that makes the warning go away and, I think, conveys the information
+> just as well.  A bit kludgy, perhaps, but I don't really see anything
+> else there that could be used to disambiguate the names automatically.
 
-Thanks for the report, now fixed!
+Thanks Jon.
 
-johannes
+Please see:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/commit/?h=for-leds-next&id=4694dcab92cf0e78ff65978888ae14a6373f1ceb
+
+-- 
+Lee Jones [李琼斯]
 

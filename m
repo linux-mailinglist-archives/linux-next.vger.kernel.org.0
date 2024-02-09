@@ -1,104 +1,122 @@
-Return-Path: <linux-next+bounces-1097-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1098-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6ECD84EF66
-	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 04:30:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F34F84EF77
+	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 04:45:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A5661F24C8D
-	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 03:30:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 991021C23FAB
+	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 03:45:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C656525E;
-	Fri,  9 Feb 2024 03:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B57F7525D;
+	Fri,  9 Feb 2024 03:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TLZK5XZC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Md4fTCu/"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 004005221;
-	Fri,  9 Feb 2024 03:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5D95226
+	for <linux-next@vger.kernel.org>; Fri,  9 Feb 2024 03:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707449397; cv=none; b=A7tdijWRa5f5ZrG/mXfbkb81+QL5NOk7f7lKhAO8luEG78ZCK8bL6h19z3Qlm1k6w372K9a1rwNjpnxo8ex/xjEaj1g6mDK/OO756GmhxwuI0HKQf4yqO9Dz0zMa+zb3LkWPbKCQk7Ka2VKVVXHkb5ALphmf66DCu9eufK63CSo=
+	t=1707450353; cv=none; b=M8FaZiBBwrfhpsvX7eZqMTxHicpsb6wdb4X12BRIb6sf+u1kjzqUQuYOrq+v6NNKjSwOzM4lQRUuq/ileF4O4KetnxhCdVYDUdSLUnQstj3Qv0An9Poyp+NKv2ujcQ/gFU/jTwl0KUrYLkOvY1Podw2RZWkg82TOZKLnBnRLHvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707449397; c=relaxed/simple;
-	bh=aEjuYK57JV00RgqKhkXxxSVib+YM+81Zs1wKu6j2OwU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=amilKV+qmUCoGoaw6R8SEodh7Az02Q7/dPkvWzbMrglBGQT+n4tInRm4SOmtiCPx+ifK4VcDA+MzhhVOW8sJw8loTuVsCVGF/irTUbfCINqn14jl5n4f8aP3BKKsDdVfzp/wzKZGUndmNDSa2wP1VeFG3kiRVXkKHuEerZdJBjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TLZK5XZC; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707449393;
-	bh=hVlvcab28mm7oJHV3nyyIC1q5542oDiRfCk+alo0clY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=TLZK5XZC+qM3gCrvcW5QaZNNqXvR7dRzbiwtnHEi52A1FbvUXqNdr+055IJhb/l5T
-	 RKgOiFzWox8CQvXNacNnDr1aJKybd0X71f3gnvICzenH8bAeayGikHJELb/1jk0eTe
-	 nBavEZXjTCPrth7yi5Ugwy9IQPglive5ewPK3MFkCLh86ge7dRR72z/DvhzbcV80sL
-	 T2jKSJjurl+Gsi326bVaZ5vmsMZ/IHc2Larrmnj5h3LhMCHEBBgo+/uSv/qzo1LSW2
-	 waXL2vBU2JfUIxUXWmzPPHIirUeujzLus7j1CKRNevjfnNpG45xOOMrh2TiiWTQ2+z
-	 W2hEzzEMIjj5Q==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	s=arc-20240116; t=1707450353; c=relaxed/simple;
+	bh=KYXq3vsFg9agxeweIpZT8Hkb1gjVOc3XU0BDt7CEye4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NUWNgfMQ9kA+6/LQnGV4WVjaB0zV3uS7N6U6YtQP6zPn3FrWMSuFHlCMtqywOmo4pQZUtxmojuZgBKQDYfzIe5xlSx6qclxl6VVtGZXfPvOSee7v38bysCIwid8XL+Q8Lnc3YO7XzxBlJA2xwvKpt1h4SDqcaFrQJag/CeJLN6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Md4fTCu/; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707450350;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=en4CRu6uro7HIccHAz5xaJYPbyqAmpdG3f5ewbgFR/4=;
+	b=Md4fTCu/mG9B+DOm7UQarC8OZS/5aaL9miDIJouvdr05ejwqVDzIzYhsQQvuomVBPl1KYs
+	t1mCRaEgacfeDkU1juPUIZLAlKX9RsMTnTUw+w2ORl2S7KOCJdpj8MuSm0pCDmJyaJcGlJ
+	t/ezigbRFb1BteRsmmEg5+MUvXE0Pcc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-541-zfXdj_9sNpWk3gvZOpAftQ-1; Thu, 08 Feb 2024 22:45:46 -0500
+X-MC-Unique: zfXdj_9sNpWk3gvZOpAftQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TWK9C6w2lz4wcn;
-	Fri,  9 Feb 2024 14:29:51 +1100 (AEDT)
-Date: Fri, 9 Feb 2024 14:29:50 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kalle Valo <kvalo@kernel.org>, Johannes Berg <johannes@sipsolutions.net>
-Cc: Wireless <linux-wireless@vger.kernel.org>, Johannes Berg
- <johannes.berg@intel.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the wireless-next tree
-Message-ID: <20240209142950.703eca9b@canb.auug.org.au>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FD7785A58C;
+	Fri,  9 Feb 2024 03:45:46 +0000 (UTC)
+Received: from [10.22.8.4] (unknown [10.22.8.4])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DACF32166B32;
+	Fri,  9 Feb 2024 03:45:45 +0000 (UTC)
+Message-ID: <45d11189-3ca2-422f-89dc-d33f6ee33f7d@redhat.com>
+Date: Thu, 8 Feb 2024 22:45:45 -0500
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hbmDQp./E6WiNTxV7WTGqWS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warning after merge of the workqueues tree
+Content-Language: en-US
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Tejun Heo <tj@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20240209142432.05acc1b2@canb.auug.org.au>
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20240209142432.05acc1b2@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
---Sig_/hbmDQp./E6WiNTxV7WTGqWS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/8/24 22:24, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the workqueues tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> Documentation/core-api/workqueue:778: kernel/workqueue.c:1801: WARNING: Line block ends without a blank line.
+> Documentation/core-api/workqueue:778: kernel/workqueue.c:1804: WARNING: Line block ends without a blank line.
+>
+> Introduced by commit
+>
+>    4c065dbce1e8 ("workqueue: Enable unbound cpumask update on ordered workqueues")
 
-Hi all,
+That warning is likely by the following function comment:
 
-After merging the wireless-next tree, today's linux-next build (htmldocs)
-produced this warning:
+/**
+  * unplug_oldest_pwq - restart an oldest plugged pool_workqueue
+  * @wq: workqueue_struct to be restarted
+  *
+  * pwq's are linked into wq->pwqs with the oldest first. For ordered
+  * workqueues, only the oldest pwq is unplugged, the others are plugged to
+  * suspend execution until the oldest one is drained. When this 
+happens, the
+  * next oldest one (first plugged pwq in iteration) will be unplugged to
+  * restart work item execution to ensure proper work item ordering.
+  *
+  *    dfl_pwq --------------+     [P] - plugged
+  *                          |
+  *                          v
+  *    pwqs -> A -> B [P] -> C [P] (newest)
+  *            |    |        |
+  *            1    3        5
+  *            |    |        |
+  *            2    4        6
+  */
 
-include/net/cfg80211.h:1067: warning: expecting prototype for cfg80211_chan=
-def_primary_freq(). Prototype was for cfg80211_chandef_primary() instead
+One possible solution is to take out one '*' of the leading "/**" so 
+that it is not regarded as an inline documentation block. Any other 
+suggestion is welcome.
 
-Introduced by commit
-
-  b82730bf57b5 ("wifi: cfg80211/mac80211: move puncturing into chandef")
-
---=20
 Cheers,
-Stephen Rothwell
+Longman
 
---Sig_/hbmDQp./E6WiNTxV7WTGqWS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXFnC4ACgkQAVBC80lX
-0GxmkAf/aQ96UE4nadoI0OsRscNwIKzvY0qZgr/tFwoS/Io21ubjazcSbBg3TLff
-22tzNQGYnUHfL4kaKQgNlYktIPKmShHVO+nxGN4X2bCDU+VqVqRhPlMyK0veqirh
-rQ4UMj8FLNXgn6p0VnCFpA0DEpJ2XwsOEAE67JFIuTx1tEpi0EqixJoURMwKRIgh
-3h50otzW5uiQGDfOcKSK+iUhGsVnA553XgDoq4IO4xUQfekOQxWQ+egkgkMspENd
-rgPU2NfOzxnVphO2pCeRcPhcGMXQnm6sxz6xMINyBNNk/6eYkXAiwd9pyTZlZaS8
-UGGMYhndqKsVjH/kl3jtfa3EFjwygg==
-=/yHM
------END PGP SIGNATURE-----
-
---Sig_/hbmDQp./E6WiNTxV7WTGqWS--
 

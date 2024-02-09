@@ -1,358 +1,151 @@
-Return-Path: <linux-next+bounces-1099-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1100-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF68D84EF7A
-	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 04:58:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1F0D84EFD4
+	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 06:08:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5A301C23A31
-	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 03:58:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B9E0288227
+	for <lists+linux-next@lfdr.de>; Fri,  9 Feb 2024 05:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 169EE525D;
-	Fri,  9 Feb 2024 03:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 284BB56B85;
+	Fri,  9 Feb 2024 05:07:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="sM5w0Au9"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pS6kbBZa"
 X-Original-To: linux-next@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0575226;
-	Fri,  9 Feb 2024 03:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707451123; cv=fail; b=FJyLOuzklkewVDHzO8MswGt6D0E0nej7TD45jl7I2yCWfn3QOZwbIw6aOHnfIichN0HFnuE7nkc/qX6YHQc21KiBQiG7FD6eIIa/Y8QWuuil8+9fMktxMI88gbu5XhDvXd4FXgLoV/1p1G+oGa4TcOAX2C8YqQYv0EROi6UgnUQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707451123; c=relaxed/simple;
-	bh=gR0cAV7bdeudI/2e5U+wCGwoziH737TCRS4+ZIzhC0M=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=UqGZWqUlcQNCGfLERKqiV4x40RcWgKKZRIG3pJf/PdynofQW0+295k5SMjoXRl6mJbv71t4MKbeGe5GDN1V8yoSsxnceqkfaKwoLJ3P3kA/aUO+ZX63NxM0kBPPL8Bgj6I32bYm5WAuNkTrOPh+G/h0JbfNpF6ZmCr0fryjSUWY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=sM5w0Au9; arc=fail smtp.client-ip=40.107.243.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SJKb3QoVQVaZ1CzF/YO2SFyB6B12DEPq/BmuEI+uC6TP1YkPqomWorctAy7WTwVdR+/CItcWcO9ins5wZL0zG4NKEmqXUXoJlCT1IKF2uTNWT+aAajZnBVr00pPCfiYo/XOt+d9exi6e87j1yAUgN/khJsKFveOgU8tzQ9/WkbagTllKTI4O398wupEAoqK0b5tDoDXuEfO0Q13eDCu7w7PaSnPGkl3y/FM88fnLFm+fXBJMg2gGQaDJirCeeDYUZHeT95swLh2X9BtepDliWDY3xF4oUZIg2RfRVaIWWsDz3wp/svD0OA5khe5r+exhsyryXBbJNWuFEHbL3i0IvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YFgEiOMO/2f33Ir7/AwYIFp81Yxas9rZMtrC30uh6IQ=;
- b=g+gvHKaLc/EBD1+97e48fKUeMQXriaXDeez2lGA/YrpMQv7H0Ki4kwjpOzAqDCmPLmG4SuXwkBY2e9efw5E4i/owRc13gSdt1aPK1nS7rPmDx61pMmfkLEN5X1SIkCQJKJqAWosy0haLtotzLZ163Ncf/NFoSizd+Ue4vGhdIVlY7hr+XmiM6M1RnMvQ2eAtDcs+LyIz2Ge9vVp8cgjkLkTsPUrWKtzV1yGLJO0QjVbqlROwNzfV7MJlAVJMmjG+dlELvqr909ALBdXKMEp7aL/vW+WBBctOLM0ijWb1HLV2bMH/DlLgo4xBtPrF4ccht7Vf7CuGZQyPYFhVIRFIZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YFgEiOMO/2f33Ir7/AwYIFp81Yxas9rZMtrC30uh6IQ=;
- b=sM5w0Au9DO7mfjlWM/6YsnVwosXij4Ed8AfQKLq1pLZvisR6kRUa39pSPi69R9N3l6r2on3s9lAcPTtrhhVA3+Loua7wqGZwpp7tVo+bFR5azB1JrgHRHxM/6k8I+thByGjlPU7wZuNjVw+7k/ZtgzSZYRiGDe0OcbZUxpnXOaE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from IA1PR12MB6460.namprd12.prod.outlook.com (2603:10b6:208:3a8::13)
- by DS0PR12MB8070.namprd12.prod.outlook.com (2603:10b6:8:dc::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.12; Fri, 9 Feb
- 2024 03:58:36 +0000
-Received: from IA1PR12MB6460.namprd12.prod.outlook.com
- ([fe80::f16c:d6e8:91e8:f856]) by IA1PR12MB6460.namprd12.prod.outlook.com
- ([fe80::f16c:d6e8:91e8:f856%7]) with mapi id 15.20.7270.012; Fri, 9 Feb 2024
- 03:58:36 +0000
-Message-ID: <266a5ecd-30f8-4450-ab9a-e4f239ad640d@amd.com>
-Date: Fri, 9 Feb 2024 09:28:29 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next20240208: tg3 driver nw interfaces not getting
- configured
-To: Heiner Kallweit <hkallweit1@gmail.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>, andrew@lunn.ch,
- Jakub Kicinski <kuba@kernel.org>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
- Linux Regressions <regressions@lists.linux.dev>,
- open list <linux-kernel@vger.kernel.org>
-References: <20240208155740.24c6ada7@canb.auug.org.au>
- <ce7150b7-b6f1-4635-ba5f-fdfda84a6e2f@amd.com>
- <fd72544a-f3ed-44bb-86e3-bdfa4fca720e@gmail.com>
- <8a59f072-4a71-4662-bfde-308b81e4ce88@amd.com>
- <47987433-7d56-483e-a0fc-38140cc17448@gmail.com>
- <11baa678-8cbe-4a9a-af09-381d649d648c@amd.com>
- <aa9a3495-22fd-4fac-abb0-afedf1b4d8ec@gmail.com>
-Content-Language: en-US
-From: "Aithal, Srikanth" <sraithal@amd.com>
-In-Reply-To: <aa9a3495-22fd-4fac-abb0-afedf1b4d8ec@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0240.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:eb::17) To IA1PR12MB6460.namprd12.prod.outlook.com
- (2603:10b6:208:3a8::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57B156B6C;
+	Fri,  9 Feb 2024 05:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707455226; cv=none; b=ItfIjpn8Gis0EbTDkVR7yToC/aophEksQgmxeIYfikT5QYSenxfXuYfmc+e++EZYdrCk2UHs32iRxd4JSZYsLMlJeFmTfRv121h/XxmesM3GE9XAh22tMUnpu/bGZz6H+a/4wY5DcsX0NQEjXwlsWvFIzzvkV+i9BvxZIASGfOM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707455226; c=relaxed/simple;
+	bh=aO7a1MtLTm/+G5RHnZp+yc9I1B+xUuzNZB+DJOKkcgQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MgZcK+WaosUpG1axAl9kYL26SDzgEWN8Sc6UKJ2DIEyrZHkTYgB3weWpplPb2BNtPlmYi4Sd5zcYSrQ9gZdswsO1xS/LsWGbPrZq6ts1/RJUN51W/HLLqh3ebf6cuhr76DJ0OCp/KATCyamf3n1T480LO/rPD/Us9kFuO8gSEV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pS6kbBZa; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1707455217;
+	bh=EJlvcOxUW9ur/kZ60Z9zEPUQXIamDEP1ReVFJZqCWHo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=pS6kbBZapVeSVPFi0eE6AzNKuYZVmNKl5iFzvFGTZ7CYPMzz1/yjQ8Yx130YvCwlt
+	 cGDM53kBV8oPdridtuoRqBpC29NJVmNteTtEnio66ZQhyWfaIz4k/yq3DaMcNvkqGZ
+	 kBJC7a4/FzXeGRhVNVT0rZO215oFgM59pwuDbUd2ES4yx5lRkyZiMTUsENxWXb2gxy
+	 Q+Ikc7uwuwEzgwGZJdUUDquGYV0gxrE6K43WyMwhpL/eDzFWHStFyM5lKELdHAtkGx
+	 gxQQfenlX4Y++tqGWZLSvz4WHfPf2dy/7byLC9miwS/tV2IHV8GA6ovdv87C7hRqnc
+	 z1bXXe7kd0fhQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TWMKD63Xxz4wys;
+	Fri,  9 Feb 2024 16:06:56 +1100 (AEDT)
+Date: Fri, 9 Feb 2024 16:06:54 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Sourav Panda <souravpanda@google.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: boot failure after merge of the mm tree
+Message-ID: <20240209160654.498f39b5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6460:EE_|DS0PR12MB8070:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb0eb352-2b51-436f-f1a7-08dc292363e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	/Z/oG3O8Q2x0JcNW+V5sLEDHnJ9H5iLt/+rw5I7mvbIZt9SGxKGLltI2jlLsuZQpg62LfvqaheZQ56l3fxHmxC6KH7loYD00J2AS5jAkhdxPIJjS/UqPmLq06RzJnNrnwoS4+qhOEkBAhDofLoZWutsXGdv1r+Ep8CdwS9Of84Czd0fKXJXIkalrOvAxObst+wSQkFcYI/UBE7I8Z7EWlfMd5a0qsmO6i3NKntHaMKhNj2QX/6Yh/Q+wKPJtUToPespz0FiUP190sGfv585wUEjszh1WOQln/Nm+iJkrrx1UM9s3UFgQA94zmrTpdDzMT4s507QIU6Vt2MXh8UlB47VPZtI6rX9kBXD3N48meVbmwZjjdDFLzAyt6SKpN9ve5iFDgxEkyA/yl2V9URHqJC8hhfguUx3ccGpxrxkFvnnufzCKGx9QapbU7PvlMHwkoNIWkuCXpcVvUCun+MDVUX+ZdiwWRpLFNeSpcsGIRDBYmatfj4h1DVAoy6eMGCTCV/Pk9whny3ZBKfeBQmeBGiGOFGZU+VhwA+N8gLdV3NM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6460.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(39860400002)(366004)(346002)(376002)(230922051799003)(64100799003)(1800799012)(451199024)(186009)(53546011)(41300700001)(2616005)(966005)(6486002)(6506007)(6512007)(478600001)(31686004)(2906002)(5660300002)(66556008)(4326008)(66946007)(8676002)(8936002)(66476007)(316002)(6666004)(110136005)(54906003)(26005)(83380400001)(36756003)(31696002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?KzZWMFNqQU1LNWFjWDIrRDNmZElvNHN2MndLT2VjMTZUcEU0QUZSNUpXcDdQ?=
- =?utf-8?B?dDlKTXRYSXpNN1pXYzdpRkRhMVEzNUpnbzhQZjVsZENHLzEvS1R2V0hNL2RO?=
- =?utf-8?B?UFFTTms3bXA0SlFhMUpuenRaYUlpc01EZjE5MmNYa2VqWHk0ait2WVhZdzMr?=
- =?utf-8?B?dE51eE55STJJbjFsVnFKd2lmTWRTWlJ4aERJQnc0UGdmdkVRbnltbDJmYUJr?=
- =?utf-8?B?ekxOMVlRSnlwTnJKVVp0Q0JtenFTN3o3Sm8xdSs0MThIc05BNTlZZHdlTSsz?=
- =?utf-8?B?NWVZY2R2Qlo3SCsvVGlPbHlsMGFkV0JFY1VTc1o2N2lUZkQyU2RRTGIweHBZ?=
- =?utf-8?B?c01jSlRuYk0yL3RLeDhyTnl5dXhkTTRxemZ6WDhYVVhyKzFtLzRhaXVRTDl0?=
- =?utf-8?B?UnlGM3ZwSU1WWlM0emw2VjJJZzFuUk4vR3NKM3d4NVE5dHc2MmpnUUVVNVNN?=
- =?utf-8?B?QUgvUSt0c2hmTGI3TVd1dFltTTNoK1pZS24wOFNnNkp1T2R6UFgwODhpWmlD?=
- =?utf-8?B?eGE1eHkvVjg2TFBCemhxbHNGSCtSUjhwcEtkTmh6eDBwdTdKdVlQbDBXRnUx?=
- =?utf-8?B?THcxMFhUYXpqMWlsK2cyS3gyTDMvRWdLUmp0OWFrRlN6TFR6b1VxTWdELzc2?=
- =?utf-8?B?cnVRMFYydlJlem1JN201bERrWGI0ZXZ2UmY4ZFEwTTdaR0svanZ6STFhNnlo?=
- =?utf-8?B?MWVMTWcxQW85L1JzeXM4Ym9hUmtLTzcza25zb0RhQXlsa0phVkdqYkxzc251?=
- =?utf-8?B?Q0xweHBXR3VtUmVTb0FlYlVZeXdyTnVVWkJxdVJ0RGRyTFMzb3N5RkE2UlU1?=
- =?utf-8?B?c0d6RytYSHRNUmFubndBcnZ3SDFsVk85Sm1EbGRqRDRtdzZVckU2V1V5WDI5?=
- =?utf-8?B?VEhIcGVFYjFnLzJWMHFtL081TFZpZVhXY0Y1OUg1SWtlb2xYRlNvVklSSnR5?=
- =?utf-8?B?NzlsclhkOWlGcW5Hd1BOZWZRYjJUbGJMSVpuT2VPRzZmc2JEOHhheWFOa1pC?=
- =?utf-8?B?Y2lnZklhK0FXTm1Qamp4ZjRFd2IxcW9na1JYMTlvSXJnRlNzNFZpREc3WVhy?=
- =?utf-8?B?WU9VRnUvK05nZzB6bTV3MExEanlkVysranZZcVhZeWVJT2xEME1RY1FhVDM1?=
- =?utf-8?B?TFU3Unl2NlVvcW92NUo0MEFEMndZYXVNaUM5NmJ2bVd5dFhmVnhQOEIyREtQ?=
- =?utf-8?B?SndlYzdSSlpBK3NTVE54NTlPbkRnbU1TanJHWVBOaFhSUFJKZ1VxazIybXpp?=
- =?utf-8?B?aGgxTUlwclBDYURFR3RKc1c3ME5VNENlNUlVb0VmVXBMN3lUQnZyalJtT3g2?=
- =?utf-8?B?MHpNY0hCTGc2VGQzWVhSNWpxdGt1c1FBODlpTVhNc2hsKzVPYjJNZ1E1aDFT?=
- =?utf-8?B?bEc4a0ZNVWtlZHFkelpTSkhxekNqM2M1VjRBVk9ndUhPNmtDNCtJdUh5dGZx?=
- =?utf-8?B?ZXowcEJ5OGIzRTdBc1EvZ243RktQT1dQMWVTOEJYcTJ2QUhZbmxZUmE4WVRZ?=
- =?utf-8?B?cTVEZ1dRZTMrR0o5VG42RVBwamtMTWorbEl4Qnh0cUZDVkhEY21vYlRtWkU2?=
- =?utf-8?B?dW1ycWxISUw3Yy9wTnFnSFdlR2trdjdCUHZmdFN3bFl5M0hHQkRzZWpjU04z?=
- =?utf-8?B?aHpmcnY1WkNIemtZcFhvcVAzQ0hMbHk3cnlBb2wrb0JvVVFrR3g3TFIyWDdw?=
- =?utf-8?B?L1g0bXFGWkEyRkxRNHYvZUxEc21icEtodFVWQ3cyY3ZHNVRsRmpSV0F2dXl6?=
- =?utf-8?B?TzhmYjQxQXo5TVl2SW9sVmoxVTdJcDVvcnRpOXliem93a3lFTlNQcVZNeVlV?=
- =?utf-8?B?ZnRJeEdBOEV5Zk93T3plNWZQRFgvelFXWTZ0WDRJL09Ec2UxcHFhTlRmMk51?=
- =?utf-8?B?QmxRKzQwOXVVdEZ0Nzdua2xZemtMSnVIdmdVcnQ3emdTaTlSQ0FiNlo2WVNE?=
- =?utf-8?B?YlU4ZWdmUGdjYUFPUSszcERmZDZ2NkNHV3cxQnJSYzdDaGZSMjhIUlZSbmRp?=
- =?utf-8?B?RUlJV002WmlXakJZTDd6aEtkaS9IakR4UXZpd1h2QmkybkRXMUlRRlpsWWp6?=
- =?utf-8?B?bEtYTkJyZHRIb2RuTEpQS3VaVFJseTJHcXgyMXhCaCtpUEMvU1k0WjF3aUxh?=
- =?utf-8?Q?59IrZHCu8zNk84pGXNIo999FG?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb0eb352-2b51-436f-f1a7-08dc292363e8
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6460.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2024 03:58:35.9562
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: k23zALlYwvNX+uV4mKSdxl2g2DXjEq8OD+xUWqlL+dgX06O+PF+ZvHxDPFN7iRP+xt8bgyO9lZA07T4HdQtvnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8070
+Content-Type: multipart/signed; boundary="Sig_/Tiozr0emFyu5ajXK1ul1jC7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 2/9/2024 3:48 AM, Heiner Kallweit wrote:
-> On 08.02.2024 16:28, Aithal, Srikanth wrote:
->> On 2/8/2024 7:32 PM, Heiner Kallweit wrote:
->>> On 08.02.2024 12:05, Aithal, Srikanth wrote:
->>>> On 2/8/2024 4:16 PM, Heiner Kallweit wrote:
->>>>> On 08.02.2024 09:30, Aithal, Srikanth wrote:
->>>>>> Hi,
->>>>>>
->>>>>> On 6.8.0-rc3-next-20240208, the network interfaces are not getting configured.
->>>>>>
->>>>> Thanks for the report. Could you please elaborate on what "not getting
->>>>> configured" means in detail?
->>>>> - Any error in any log?
->>>>> - Any other error message?
->>>>> - Interface doesn't come up or which specific configuration are you missing?
->>>>>
->>>> I am not seeing any errors in the dmesg,
->>>>
->>>> [    4.019383] tg3 0000:c1:00.0 eth0: Tigon3 [partno(BCM95720) rev 5720000] (PCI Express) MAC address d0:8e:79:bb:95:90
->>>> [    4.019391] tg3 0000:c1:00.0 eth0: attached PHY is 5720C (10/100/1000Base-T Ethernet) (WireSpeed[1], EEE[1])
->>>> [    4.019394] tg3 0000:c1:00.0 eth0: RXcsums[1] LinkChgREG[0] MIirq[0] ASF[1] TSOcap[1]
->>>> [    4.019397] tg3 0000:c1:00.0 eth0: dma_rwctrl[00000001] dma_mask[64-bit]
->>>> [    4.041082] tg3 0000:c1:00.1 eth1: Tigon3 [partno(BCM95720) rev 5720000] (PCI Express) MAC address d0:8e:79:bb:95:91
->>>> [    4.041087] tg3 0000:c1:00.1 eth1: attached PHY is 5720C (10/100/1000Base-T Ethernet) (WireSpeed[1], EEE[1])
->>>> [    4.041090] tg3 0000:c1:00.1 eth1: RXcsums[1] LinkChgREG[0] MIirq[0] ASF[1] TSOcap[1]
->>>> [    4.041092] tg3 0000:c1:00.1 eth1: dma_rwctrl[00000001] dma_mask[64-bit]
->>>> [    4.077483] tg3 0000:c1:00.1 eno8403: renamed from eth1
->>>> [    4.124657] tg3 0000:c1:00.0 eno8303: renamed from eth0
->>>>
->>>> nmcli says interfaces are disconnected:
->>>>
->>>> [root@localhost ~]# nmcli
->>>> eno8303: disconnected
->>>>           "Broadcom and subsidiaries NetXtreme BCM5720"
->>>>           ethernet (tg3), D0:8E:79:BB:95:90, hw, mtu 1500
->>>>
->>>> eno8403: disconnected
->>>>           "Broadcom and subsidiaries NetXtreme BCM5720"
->>>>           ethernet (tg3), D0:8E:79:BB:95:91, hw, mtu 1500
->>>>
->>>> I am attaching host dmesg.
->>>>
->>>
->>> Thanks. dmesg lists no error. Please send output from the following commands.
->>>
->>> ip link
->> 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
->>      link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
->> 2: eno8303: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DEFAULT group default qlen 1000
->>      link/ether d0:8e:79:bb:95:90 brd ff:ff:ff:ff:ff:ff
->>      altname enp193s0f0
->> 3: eno8403: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DEFAULT group default qlen 1000
->>      link/ether d0:8e:79:bb:95:91 brd ff:ff:ff:ff:ff:ff
->>      altname enp193s0f1
->>
->>> ethtool <if>
->> Settings for eno8303:
->>          Supported ports: [ TP ]
->>          Supported link modes:   10baseT/Half 10baseT/Full
->>                                  100baseT/Half 100baseT/Full
->>                                  1000baseT/Half 1000baseT/Full
->>          Supported pause frame use: No
->>          Supports auto-negotiation: Yes
->>          Supported FEC modes: Not reported
->>          Advertised link modes:  10baseT/Half 10baseT/Full
->>                                  100baseT/Half 100baseT/Full
->>                                  1000baseT/Half 1000baseT/Full
->>          Advertised pause frame use: No
->>          Advertised auto-negotiation: Yes
->>          Advertised FEC modes: Not reported
->>          Speed: Unknown!
->>          Duplex: Unknown! (255)
->>          Auto-negotiation: on
->>          Port: Twisted Pair
->>          PHYAD: 1
->>          Transceiver: internal
->>          MDI-X: Unknown
->>          Supports Wake-on: g
->>          Wake-on: d
->>          Current message level: 0x000000ff (255)
->>                                 drv probe link timer ifdown ifup rx_err tx_err
->>          Link detected: no
->>
->> Settings for eno8403:
->>          Supported ports: [ TP ]
->>          Supported link modes:   10baseT/Half 10baseT/Full
->>                                  100baseT/Half 100baseT/Full
->>                                  1000baseT/Half 1000baseT/Full
->>          Supported pause frame use: No
->>          Supports auto-negotiation: Yes
->>          Supported FEC modes: Not reported
->>          Advertised link modes:  10baseT/Half 10baseT/Full
->>                                  100baseT/Half 100baseT/Full
->>                                  1000baseT/Half 1000baseT/Full
->>          Advertised pause frame use: No
->>          Advertised auto-negotiation: Yes
->>          Advertised FEC modes: Not reported
->>          Speed: Unknown!
->>          Duplex: Unknown! (255)
->>          Auto-negotiation: on
->>          Port: Twisted Pair
->>          PHYAD: 2
->>          Transceiver: internal
->>          MDI-X: Unknown
->>          Supports Wake-on: g
->>          Wake-on: d
->>          Current message level: 0x000000ff (255)
->>                                 drv probe link timer ifdown ifup rx_err tx_err
->>          Link detected: no
->>
->>> ethtool --show-eee <if>
->> EEE settings for eno8403:
->>          EEE status: enabled - inactive
->>          Tx LPI: 2047 (us)
->>          Supported EEE link modes:  100baseT/Full
->>                                     1000baseT/Full
->>          Advertised EEE link modes:  100baseT/Full
->>                                      1000baseT/Full
->>          Link partner advertised EEE link modes:  Not reported
->>
->> EEE settings for eno8303:
->>          EEE status: enabled - inactive
->>          Tx LPI: 2047 (us)
->>          Supported EEE link modes:  100baseT/Full
->>                                     1000baseT/Full
->>          Advertised EEE link modes:  100baseT/Full
->>                                      1000baseT/Full
->>          Link partner advertised EEE link modes:  Not reported
->>
->>>
->>> If the interfaces aren't up, please try to bring them up manually and see what happens.
->>> ip link set <if> up
->> Nothing happens.
->> [root@localhost ~]# ip link set eno8303 up
->> [root@localhost ~]# ip link set eno8403 up
->> [root@localhost ~]# ip link
->> 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
->>      link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
->> 2: eno8303: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DEFAULT group default qlen 1000
->>      link/ether d0:8e:79:bb:95:90 brd ff:ff:ff:ff:ff:ff
->>      altname enp193s0f0
->> 3: eno8403: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DEFAULT group default qlen 1000
->>      link/ether d0:8e:79:bb:95:91 brd ff:ff:ff:ff:ff:ff
->>      altname enp193s0f1
->>
->>>
->>>
->>>>>> I have 'NetXtreme BCM5720 Gigabit Ethernet PCIe'
->>>>>>           configuration: autonegotiation=on broadcast=yes driver=tg3
->>>>>>
->>>>>> If I revert below commit I am able to get back the interfaces mentioned.
->>>>>>
->>>>>> commit 9bc791341bc9a5c22b94889aa37993bb69faa317
->>>>>> Author: Heiner Kallweit <hkallweit1@gmail.com>
->>>>>> Date:   Sat Feb 3 22:12:50 2024 +0100
->>>>>>
->>>>>>        tg3: convert EEE handling to use linkmode bitmaps
->>>>>>
->>>>>>        Convert EEE handling to use linkmode bitmaps. This prepares for
->>>>>>        removing the legacy bitmaps from struct ethtool_keee.
->>>>>>        No functional change intended.
->>>>>>
->>>>>>        Note: The change to mii_eee_cap1_mod_linkmode_t(tp->eee.advertised, val)
->>>>>>        in tg3_phy_autoneg_cfg() isn't completely obvious, but it doesn't change
->>>>>>        the current functionality.
->>>>>>
->>>>>>        Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->>>>>>        Reviewed-by: Andrew Lunn <andrew@lunn.ch>
->>>>>>        Link: https://lore.kernel.org/r/0652b910-6bcc-421f-8769-38f7dae5037e@gmail.com
->>>>>>        Signed-off-by: Jakub Kicinski <kuba@kernel.org>
->>>>>>
->>>>>>
->>>>>> The same works fine on 6.8.0-rc3-next-20240207.
->>>>>>
->>>>>> Thanks,
->>>>>> Srikanth Aithal
->>>>>> sraithal@amd.com
->>>>> Heiner
->>>
->>
-> 
-> Could you please test whether the following fixes the issue for you?
-> 
-> The uninitialized struct ethtool_keee causes the bug because
-> mii_eee_cap1_mod_linkmode_t() leaves unknown bits as-is.
-> 
-> ---
->   drivers/net/ethernet/broadcom/tg3.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/broadcom/tg3.c b/drivers/net/ethernet/broadcom/tg3.c
-> index 50f674031..7d0a2f5f3 100644
-> --- a/drivers/net/ethernet/broadcom/tg3.c
-> +++ b/drivers/net/ethernet/broadcom/tg3.c
-> @@ -4616,7 +4616,7 @@ static int tg3_init_5401phy_dsp(struct tg3 *tp)
->   
->   static bool tg3_phy_eee_config_ok(struct tg3 *tp)
->   {
-> -	struct ethtool_keee eee;
-> +	struct ethtool_keee eee = {};
->   
->   	if (!(tp->phy_flags & TG3_PHYFLG_EEE_CAP))
->   		return true;
+--Sig_/Tiozr0emFyu5ajXK1ul1jC7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This fix on top of next20240208 resolves the issue. Thank you.
+Hi all,
 
-Tested-by: Srikanth Aithal <sraithal@amd.com>
+After merging the mm tree, today's linux-next boot (powerpc
+pseries_le_defconfig) failed like this:
+
+numa:   NODE_DATA [mem 0x7ffd8800-0x7ffdffff]
+BUG: Kernel NULL pointer dereference at 0x00000030
+Faulting instruction address: 0xc00000000045322c
+Oops: Kernel access of bad area, sig: 11 [#1]
+LE PAGE_SIZE=3D64K MMU=3DHash SMP NR_CPUS=3D2048 NUMA pSeries
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper Not tainted 6.8.0-rc3-05899-ga19e02faed6b #1
+Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf0000=
+04 of:SLOF,HEAD pSeries
+NIP:  c00000000045322c LR: c00000000045332c CTR: c0000000000e72c0
+REGS: c00000000292f8e0 TRAP: 0380   Not tainted  (6.8.0-rc3-05899-ga19e02fa=
+ed6b)
+MSR:  8000000000001033 <SF,ME,IR,DR,RI,LE>  CR: 48004888  XER: 20000000
+CFAR: c000000000453328 IRQMASK: 1=20
+GPR00: c0000000011d4688 c00000000292fb80 c0000000015c9900 c00000007ffd8800=
+=20
+GPR04: 000000000000002f 0000000000000001 40066bdea7000015 0000000000000000=
+=20
+GPR08: 0000000000000000 0000000000000030 0000000000000030 0000000000004000=
+=20
+GPR12: c00000000292f968 c000000002b60000 0000000080000000 0000000000000004=
+=20
+GPR16: 0000000000000004 0000000000000060 0000000000000002 00000000017d2358=
+=20
+GPR20: 0000000000000000 0000000000000000 0000000008000000 c00c000000004000=
+=20
+GPR24: 0000000000000000 c0000000029d0260 0000000000000000 0000000000000000=
+=20
+GPR28: c00c000000000000 0000000000000000 0000000000004000 0000000000000001=
+=20
+NIP [c00000000045322c] __mod_node_page_state+0x30/0x100
+LR [c00000000045332c] mod_node_page_state+0x30/0x50
+Call Trace:
+[c00000000292fb80] [c00c000000000000] 0xc00c000000000000 (unreliable)
+[c00000000292fbb0] [c0000000011d4688] __populate_section_memmap+0x10c/0x1b4
+[c00000000292fc20] [c000000002060e20] sparse_init_nid+0x210/0x7e0
+[c00000000292fcf0] [c0000000020618d4] sparse_init+0x3c4/0x5f0
+[c00000000292fdc0] [c00000000202185c] initmem_init+0x1d4/0x278
+[c00000000292fea0] [c00000000200d774] setup_arch+0x4fc/0x618
+[c00000000292ff30] [c000000002004ee0] start_kernel+0x9c/0x8cc
+[c00000000292ffe0] [c00000000000e99c] start_here_common+0x1c/0x20
+Code: 3c4c0117 38426704 60000000 60000000 e9037600 3924fffb 28090001 394800=
+01 7d4a2214 40810040 e8ed0030 7d495378 <7d2748ae> 7d0740ae 7d290774 7d08077=
+4=20
+---[ end trace 0000000000000000 ]---
+
+Kernel panic - not syncing: Attempted to kill the idle task!
+
+Bisected to commit
+
+  a1a91b2f3883 ("mm: report per-page metadata information")
+
+=46rom the mm-unstable branch of the mm tree.
+
+I reverted that commit for today.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Tiozr0emFyu5ajXK1ul1jC7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXFsu4ACgkQAVBC80lX
+0GwfFgf/eAVD2x3Jbmy7Fb5XYnE7N6MMQ4yFgynJkNewpQkgVWh1ZhyBh828dTDV
+Nd4SJn2Aau604NeRx9X79mh2vclhyISbV9gMXfNK0T+qqUsw6pg+0DgxxGlSKH9a
+EPF2XWW/2eYctmabD700fLlmUGy/0YkWzUEHu1EHg/Pwbd05GRvi5tH6IMi5hIZv
+EM2fPY5DwbdZAsJPI7MMcPq6NJLGbw+q7QJNEbXKg35Y59SKwj+jFjGuirB2FyrR
+cgCy9ubGvjSDX6VsCKlmW1DQqU+uVQ6i1NpMs6d1jWNeMb/Sr00eedCmBDjrVyz2
+Dll0lujAwNd269fmE47KU9Jk8/V/Lg==
+=bD+j
+-----END PGP SIGNATURE-----
+
+--Sig_/Tiozr0emFyu5ajXK1ul1jC7--
 

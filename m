@@ -1,120 +1,114 @@
-Return-Path: <linux-next+bounces-1111-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1112-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1B01850C66
-	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 00:52:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B971850C6B
+	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 00:55:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A5962826F6
-	for <lists+linux-next@lfdr.de>; Sun, 11 Feb 2024 23:52:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8C09B21228
+	for <lists+linux-next@lfdr.de>; Sun, 11 Feb 2024 23:55:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CECB179A8;
-	Sun, 11 Feb 2024 23:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F35E1755A;
+	Sun, 11 Feb 2024 23:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oVHgtheW"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Vx26p7eX"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41721799D;
-	Sun, 11 Feb 2024 23:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5531755B;
+	Sun, 11 Feb 2024 23:54:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707695564; cv=none; b=CRfhjkBMrl7sar/QSqxz9HxcsNe6Mj0jNOwtoWFcyNaC8p4EFQBggwLvPD7Qnx18ftTxzObKpsKJYhmxFh1gVYxCAFE4su2lx3KlB64KXc3ckxXNn0c3IX6AfjNQogEXSPQ06yUhLnYdL3r29Hq5H5KkCxGnZoGfA/3WEfY1n/g=
+	t=1707695701; cv=none; b=ZY0w4JMx4RZFTRpYRu+poW2tyugx8w/ybUvDY51Ac28VfsEGTDVavf8LlobMyN2vtTvqcwGDvdc3fp426u+QNON/dRJlUoSKenCbge6WjmqmmGYWJLURPry59ds6jOJv1brLzQZ/gbuDioMnO5gs62hlgzcWtMlxxdlL7UeNSMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707695564; c=relaxed/simple;
-	bh=JQXFAnoO4YA2Ogt6hiOhYeOgJwanEtxRjZrzG3hDdas=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=nTEcuMIkzjNf53xyduVnnvHk+8gXnTBLFa4sSlZLFFRNfVwWlMG8zyqrgHtBI2Hspslj8nBjeyKrWPmF5kYrDTLplkrf47bCiVXK+E1MS+pTDabdp+rzkE8Tmp3oH4qEAH6vTZmkewdAoMrnpSHpEGtnFHh3aWrItp4bPUacPhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oVHgtheW; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1707695701; c=relaxed/simple;
+	bh=TGKmZ6VjU4vjoCEKe4rT9rXGa5QRictjL84CwzDtqMY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jqMiqWhLPcSV/uR1dG6T30TCGSrhyR6H1fAQdPXPxPrc/3ovEloymSGg33nS2UO7+sDuTeXE7gnXVy3yj58RvbH7Ku6MYNwaaWKLb1eZsiyZL13yNsOJw4bX6Y13RwcJrOkbTbaXBc9MK7YGEIFxtQKsqCp+rEPHVIZ5QTNDMbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Vx26p7eX; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707695559;
-	bh=vxJzZFESSgxmpG0isEn0cmRDeJHyk97FZp1YJrOe3Qk=;
+	s=201702; t=1707695697;
+	bh=xz+WlTQ3sspcuVyVHB+D9lW4mLZVRoNLwGnolwIAwZk=;
 	h=Date:From:To:Cc:Subject:From;
-	b=oVHgtheWMNglRc5Gq0Gi3RWxk+FXlnKbG7QbwBT5YF3I19zvK1skTFs+NFyqUuYxK
-	 ERu8qAaSW7idLZISazKfQ+dHN08j5Z+zmAOcQX+qOuZtBaakxj1tE1o6qZpwSWMa1Y
-	 YqoWKh4wAt8gN/JpOEC0CPk8SGPjq6jpn0ucNWx6SCf2Oxk8vwIL0dxg8k9HccC0M2
-	 T4v6JwILooPgClK2qnbpFJFYHliZ8Gjg56Fs7zj2+EqNGXRdnEjlYsUf4pDxvPvf+i
-	 i0F0lkHHYRtcdU9Rzgz5LY+yXmi6tG/t7q6aeSBEUcOwiB8O63k+mda8wkSchJfeER
-	 MaLDwfyGL1kyg==
+	b=Vx26p7eXsNdDJgPGvLRQcRE9qtg0mUaqJUDQzNFZOnpWjS5fAvYSDya3joAueuD3V
+	 ZCSpsohSQZJHRS394DTun08brVOf7ZgNUW5YfM3ryJzo3Xi3oZLYZkgnA9a7tPRO+r
+	 95W8mgu8FzLpC6gCG68qrGfJCX6YFVQqZhr2IOckDHAA1FN3FchjyH8LVi9i+jDEX/
+	 oyzajjdsW5V5Y3ebnVAkCMiteDm5SL/KDebtNz5Sc2GirjxwO3tG8FxFDL/nmy8ukR
+	 ADtPi+5yewGkvLB5U8oYwSVWuT46jzPvFhF99D68n3UGNuOw6a+wa9NMSKTgmJddE3
+	 Qdvf9h30TtUCw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TY4CC17fkz4wcM;
-	Mon, 12 Feb 2024 10:52:39 +1100 (AEDT)
-Date: Mon, 12 Feb 2024 10:52:37 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TY4Fr6l8Tz4wcM;
+	Mon, 12 Feb 2024 10:54:56 +1100 (AEDT)
+Date: Mon, 12 Feb 2024 10:54:56 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20240212105237.674e6fcb@canb.auug.org.au>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bcachefs tree
+Message-ID: <20240212105456.65194f29@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e7Wj8RxO4hgSjuzIgwMC=U=";
+Content-Type: multipart/signed; boundary="Sig_/xkRiBedOAwkrQi6CLDTZGW/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/e7Wj8RxO4hgSjuzIgwMC=U=
+--Sig_/xkRiBedOAwkrQi6CLDTZGW/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the vfs-brauner tree, today's linux-next build (x86_64
+After merging the bcachefs tree, today's linux-next build (x86_64
 allmodconfig) failed like this:
 
-In file included from include/linux/highmem.h:5,
-                 from include/linux/bvec.h:10,
-                 from include/linux/blk_types.h:10,
-                 from include/linux/blkdev.h:9,
-                 from fs/btrfs/super.c:6:
-include/linux/fs.h: In function 'super_set_sysfs_name_generic':
-include/linux/fs.h:2597:9: error: function 'super_set_sysfs_name_generic' m=
-ight be a candidate for 'gnu_printf' format attribute [-Werror=3Dsuggest-at=
-tribute=3Dformat]
- 2597 |         vsnprintf(sb->s_sysfs_name, sizeof(sb->s_sysfs_name), fmt, =
-args);
-      |         ^~~~~~~~~
-cc1: all warnings being treated as errors
-
-and many more similar.
+ERROR: modpost: missing MODULE_LICENSE() in lib/thread_with_file.o
+ERROR: modpost: "stdio_redirect_vprintf" [fs/bcachefs/bcachefs.ko] undefine=
+d!
+ERROR: modpost: "thread_with_file_exit" [fs/bcachefs/bcachefs.ko] undefined!
+ERROR: modpost: "run_thread_with_stdio" [fs/bcachefs/bcachefs.ko] undefined!
+ERROR: modpost: "__darray_resize_slowpath" [fs/bcachefs/bcachefs.ko] undefi=
+ned!
+ERROR: modpost: "stdio_redirect_readline" [fs/bcachefs/bcachefs.ko] undefin=
+ed!
+ERROR: modpost: "run_thread_with_file" [fs/bcachefs/bcachefs.ko] undefined!
+ERROR: modpost: "__darray_resize_slowpath" [lib/thread_with_file.ko] undefi=
+ned!
 
 Caused by commit
 
-  eeea5d25d4a7 ("fs: add FS_IOC_GETFSSYSFSPATH")
+  f894f9e5f0ad ("thread_with_file: Lift from bcachefs")
 
-This new finction is not used anywhere, so just remove it for now?
-
-I have used the vfs-brauner tree from next-20240209 for today.
+I have used the version of bcachefs from next-20240206 again.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/e7Wj8RxO4hgSjuzIgwMC=U=
+--Sig_/xkRiBedOAwkrQi6CLDTZGW/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXJXcUACgkQAVBC80lX
-0Gxe0wgAo5b6n5uWR8n7W7Tz/W9QganNVeeQnF2frZJR8ufXYnDceIgCJ9Ea9AJI
-uvuS/hlOjJ1UGS3u7pHt09qsOHr5+jtIYvslUtWAHtqU3MRD4b7E4eecOQ+5vTd6
-+EzlYPeZp5ZR9Rya7fKduC0EJAhhP033dkMFeZvULmIwox43IJbWbIhLaA3AumMX
-+/QiiRXEmSqgv1hXbl5tsepihFH4iJ2SVqLTmaua5lnEnN1FvsKy9oYp0njHULNJ
-MwkWm/fBy7aF+xM8uJfMUzyFe/rzbX8ruJWzfAN0vRKSKINv3OCBAsNIBiwNsV96
-Wja8xn+G1aB/Y0VxxW450nWeoj3XBg==
-=WTax
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXJXlAACgkQAVBC80lX
+0GyrcAgAgBEn7qZjc8zhqubPjYcuX5SmOacwtzJGFE1nHoqZKrvxbmaDhTtxmhHN
+MaWdEbFyzzUJo8hPEpoGpu8MOVNiT2NOHqjN3xMjFxgRijMbgj3SHwOa5j55rkBy
+bXnFkFWKB/P9H3ZT+N1py1JvXvUEEr5q0cJaK/38XprJCyAUztwNpx4JZvL3/7RP
+vGxmQi9h0nm0GMMrCqD+Bmm7l0qQfAImjN9jMOM81L3VgzCt5Wg1ZRvDVISPb2fY
+fjMvODzUSIB53Zd7nzYI3T8df5L+ZQV/JAKAWk1VvHRQ7Xeant1+xe8Tm3+Tiido
+juDsyctbALi/edvT/R4v6KQHJv2Nkw==
+=AIUo
 -----END PGP SIGNATURE-----
 
---Sig_/e7Wj8RxO4hgSjuzIgwMC=U=--
+--Sig_/xkRiBedOAwkrQi6CLDTZGW/--
 

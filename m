@@ -1,103 +1,171 @@
-Return-Path: <linux-next+bounces-1109-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1110-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA71E8502C7
-	for <lists+linux-next@lfdr.de>; Sat, 10 Feb 2024 07:44:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 371FA850C17
+	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 00:04:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 040D81F22265
-	for <lists+linux-next@lfdr.de>; Sat, 10 Feb 2024 06:44:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 620851C20AE8
+	for <lists+linux-next@lfdr.de>; Sun, 11 Feb 2024 23:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB8FC171B1;
-	Sat, 10 Feb 2024 06:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD112FBF0;
+	Sun, 11 Feb 2024 23:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="N560i041"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LBheBiLl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7722016439
-	for <linux-next@vger.kernel.org>; Sat, 10 Feb 2024 06:44:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C914015C3;
+	Sun, 11 Feb 2024 23:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707547451; cv=none; b=qAnwBYhbcT/5omebdFONuiIrHs76MVY2GIU0TuD7vG2uj6uf9WiVERB8XE0W/9LbD7HDx5EMPT4TO597QlcfDz+ffvO8D/WcPwPFt2TMKAz6zN2gesGSwSYnkUf5aIgfLRQWyMyEBUlyuCAN1dVd9ZSyH8A4Pn49HyWeLdCpyCA=
+	t=1707692653; cv=none; b=kw3qXSjL7d05nniYmoCSTd4P2M1+59NCS/dXP701sJusTvt3TSKtGDnnz9A7iubBha2OQ/WcEFKtFfmEE/NLDxAh10FODttYrT9f/hlnsuPci4FWYJ1ocMLzo5XXNB2QjM+Z+yADIo6gweBkiT/gA2ApauajW94wwK5zHbg2QGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707547451; c=relaxed/simple;
-	bh=rVJjCi3N8tFMrvczpodogpdGzRK8ypIs28YYsOP9OUU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=an+V70wSig1NMtGyV+wcMjO/KrDQSxzQN2ju2+fVom/mIPVNGRwubYFDiAMD7lRZ7HvQznge++jISUYpvUkOmD6BZNlbY8qXRuA1HTlVbCT3fbM41wbXkeyioP3YykGvGceuFvCziZbI0qNriXIJlsJfe/WSaNtPIlHAZn4saWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=N560i041; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1d8ef977f1eso14329575ad.0
-        for <linux-next@vger.kernel.org>; Fri, 09 Feb 2024 22:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707547450; x=1708152250; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nzzRqglaHu6KYBZMYaRVn/OJnKTukB5u8vObEjsjaYY=;
-        b=N560i041ETqWrrczx6n/aVllaGIG41Lis4bIEx57eZnZ8FNcoX7Qm+Ws2IetXfVv+C
-         61SMH/IB7YdXu2rynUfozZO1/M53ebL+CrWjnuE2Hk+OM0uNcesq4zlCgV9tapbcup72
-         vt0yYmWthK5v7H2x1KqJt4kAkgieH13aVfI6c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707547450; x=1708152250;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nzzRqglaHu6KYBZMYaRVn/OJnKTukB5u8vObEjsjaYY=;
-        b=QTq2qbAMj/nej4+0unj68uuReG/73aU2MiV4qDSDdyMzCGTttvT9JkK3js69fv/C8T
-         KlI7no+OKcqCXh5WABGyhW1/PfcqQ4oScV9l6TjlhbGJBMDcTQ9iKK3KKX8PjiTF8E4z
-         Z51TCBLJzJqiTi2s2c8yRvXB1Fl0VMySIeqQNROWC5tzyhfhU8dOnoJ1zJvAG8OM+jVP
-         4kHJ405R2+z87ZVoUSUPKWSpEWSKfef9YfXcaDgD/30NgJeBq+RDmLUXBExHLZrqk91m
-         dECelxWlVOsSrIom9YT4RYc+B/QYO8ZBKwrbAJlNPMePcgwXUlhuih+klqqcg5sFrMyX
-         AW9g==
-X-Forwarded-Encrypted: i=1; AJvYcCWSTEsvCbo/oo7nyJ9wblvIJo+jI3idAUiUs+36Akinx4awEt+Mr2NIvBXMB9URM6tKw9Nb8hoYslQkkQ2p7ID0pPa13OuK+n9cVA==
-X-Gm-Message-State: AOJu0YwSYNYMSEk9LNmRn1czWDaIBIXn6qav7EimbpDHtGLAgk18e/XZ
-	IIp46aMpKpL4MzGXE2+HtJ41tDhJ+91yXjdQD5k7AGrEEhmQC/xdlzPAVBdr9Q==
-X-Google-Smtp-Source: AGHT+IF/n9LddPfvqJcL7BuYnk/5KgvC1XuhGYDU21J2sba5hxtRpCu1IMoaSwUmtvIDuYhc9EieoA==
-X-Received: by 2002:a17:902:ee55:b0:1d8:b2f4:28ce with SMTP id 21-20020a170902ee5500b001d8b2f428cemr1318074plo.42.1707547449837;
-        Fri, 09 Feb 2024 22:44:09 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU1A8ml7120+1/TEaeBtijUSyOdzgTpH0u9DZ3YRPOgxeyZdHo3JDDaJrApPemRkdzvxM0f/YGknM0F4J/5caaKrSSUQKywSTQ4Bg==
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id s13-20020a17090330cd00b001d9c0c321c6sm2465613plc.67.2024.02.09.22.44.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Feb 2024 22:44:09 -0800 (PST)
-Date: Fri, 9 Feb 2024 22:44:08 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the kspp tree
-Message-ID: <202402092243.D04BE3C@keescook>
-References: <20240208144842.5491303d@canb.auug.org.au>
+	s=arc-20240116; t=1707692653; c=relaxed/simple;
+	bh=kMRLFb0103x5yMVxBy6sPonpF2CtIuDQztGmbWLySJI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=rZmntkzFAAiB0ItYg4uC4TsWyspKLdy+y9K6FdOMfqzOajWvLhRcmlzfEd9oOoJ7PluAYlJIzEVyOWpfoCzoqE2P069dh4qwBleXDvlFIuVIsmzotE6dT6v56qFTrET5RWc17dcXvksWlGCCRzg0pEiaqI52nQsUzcQ6jLSgRAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LBheBiLl; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1707692127;
+	bh=09zokI+nVMpltLJOhPeuRiCSxk2FWPngUU/BG+OkZJw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=LBheBiLlxfXowln9CLZvr+G9/aMuQv4QymQ0VlYazz9f+KpudaLm2Vc5pYkPEe5Ci
+	 wwbVCqw+hoiYMwBVt8+A9Ix8xHkZomxpKtCqqWgtSTk8RWmu6EcQgeB+Gdrv6eAw3A
+	 lFM0o4CdLexv4MSJs6LiBIAzjXzxqLA0GU20vIzlflZzyRuhz0WUFb9ZBatEquDnKw
+	 ULAlG2wg2xM7ocHv5ZXWqY+rcqV31Z2TFnilBc8UGl3Gwun5JG7/YeSC8eHut+Yh0T
+	 m6uBIlqiu2gbI4EsMepjEVH0TH6DQf4oZNJMSmziFtnwHTUvYyJG7s7ZQ3sdJ6MQjE
+	 DF5TSrHeROyrw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TY2x95GPlz4wcK;
+	Mon, 12 Feb 2024 09:55:25 +1100 (AEDT)
+Date: Mon, 12 Feb 2024 09:55:23 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Palmer Dabbelt <palmer@rivosinc.com>, Xiao
+ Wang <xiao.w.wang@intel.com>
+Subject: linux-next: manual merge of the risc-v tree with Linus' tree
+Message-ID: <20240212095523.21f0579b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240208144842.5491303d@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/c16UwBLhyXrpFWjYjtE6z2o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Feb 08, 2024 at 02:48:42PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the kspp tree, today's linux-next build (htmldocs) produced
-> this warning:
-> 
-> include/linux/string.h:142: warning: Function parameter or struct member 'dst' not described in 'strscpy_pad'
-> include/linux/string.h:142: warning: Excess function parameter 'dest' description in 'strscpy_pad'
-> include/linux/string.h:142: warning: Excess function parameter 'count' description in 'strscpy_pad'
-> 
-> Introduced by commit
-> 
->   0bf7961afff1 ("string: Allow 2-argument strscpy_pad()")
+--Sig_/c16UwBLhyXrpFWjYjtE6z2o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks! This is fixed now.
+Hi all,
 
--- 
-Kees Cook
+Today's linux-next merge of the risc-v tree got a conflict in:
+
+  arch/riscv/include/asm/bitops.h
+
+between commit:
+
+  4356e9f841f7 ("work around gcc bugs with 'asm goto' with outputs")
+
+from Linus' tree and commit:
+
+  cb4ede926134 ("riscv: Avoid code duplication with generic bitops implemen=
+tation")
+
+from the risc-v tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/riscv/include/asm/bitops.h
+index 329d8244a9b3,c4c2173dfe99..000000000000
+--- a/arch/riscv/include/asm/bitops.h
++++ b/arch/riscv/include/asm/bitops.h
+@@@ -37,9 -47,7 +47,7 @@@
+ =20
+  static __always_inline unsigned long variable__ffs(unsigned long word)
+  {
+- 	int num;
+-=20
+ -	asm_volatile_goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+ +	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+  				      RISCV_ISA_EXT_ZBB, 1)
+  			  : : : : legacy);
+ =20
+@@@ -93,9 -76,7 +76,7 @@@ legacy
+ =20
+  static __always_inline unsigned long variable__fls(unsigned long word)
+  {
+- 	int num;
+-=20
+ -	asm_volatile_goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+ +	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+  				      RISCV_ISA_EXT_ZBB, 1)
+  			  : : : : legacy);
+ =20
+@@@ -149,12 -105,7 +105,7 @@@ legacy
+ =20
+  static __always_inline int variable_ffs(int x)
+  {
+- 	int r;
+-=20
+- 	if (!x)
+- 		return 0;
+-=20
+ -	asm_volatile_goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+ +	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+  				      RISCV_ISA_EXT_ZBB, 1)
+  			  : : : : legacy);
+ =20
+@@@ -204,12 -137,7 +137,7 @@@ legacy
+ =20
+  static __always_inline int variable_fls(unsigned int x)
+  {
+- 	int r;
+-=20
+- 	if (!x)
+- 		return 0;
+-=20
+ -	asm_volatile_goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+ +	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+  				      RISCV_ISA_EXT_ZBB, 1)
+  			  : : : : legacy);
+ =20
+
+--Sig_/c16UwBLhyXrpFWjYjtE6z2o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXJUFsACgkQAVBC80lX
+0GyZpQf/Yfg7Yx830HhqCBnPuJAHLCaTOH8r+WQe4Hpo0e79ifm+WlPAyilTTJAV
+yAXw432SMICT5lrQSQHe/rghgeDtzi6dm+ywQI3niz7n6lwRs6AhUI1c8370HBg4
+8R9kMCd/Ee3kkE5cqrBPhpA4lqqC6E874j2AeYfsmIBmePbbRLVj93NrEDtEqFWW
+BeQbb0n94V+1MV4EhCQK6shoVLfNLfOKbHU1u4uuSJPxVPkWRtsocXwWa/9kL7L2
+0FVPW0NYGWSG5GIwVxyX+QEWvSAYa9X9omMX5vqr2ffuOX9D7CB6WPKyquIfGCZP
+8bGR0rHyn5pZmYQsh6TAvd93hwjN2g==
+=YZtF
+-----END PGP SIGNATURE-----
+
+--Sig_/c16UwBLhyXrpFWjYjtE6z2o--
 

@@ -1,110 +1,114 @@
-Return-Path: <linux-next+bounces-1124-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1125-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4111385140D
-	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 14:05:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 427EF851422
+	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 14:10:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECFBC2868E7
-	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 13:05:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 757901C212D1
+	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 13:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 672953A1AB;
-	Mon, 12 Feb 2024 13:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 205613A1B4;
+	Mon, 12 Feb 2024 13:10:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ugbnwtqm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SD7O2Yv0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC1E3A1A0;
-	Mon, 12 Feb 2024 13:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C83E2EB0E;
+	Mon, 12 Feb 2024 13:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707743147; cv=none; b=XtRMQzjY/l6AJIseKGY9zD3EaXdLA/jAfaWtO6a0YiVwAToQBnT8OMN6cxllnzudgdwFH3hcZcy7dlB5ga110yx/iWqUWNvxL0MVrWuJwHkJEd1drkVGkBkUrpBYASu4xAsg2KeP3fKsMQa7YsJGIb0gm4C/hiLwH/GE0o0IiZc=
+	t=1707743400; cv=none; b=dzbvVa0MyVpEe19w5ZUaPVCTH5ze10A15QjBcOd8O+2sWH6hJZAgmbsI0jkNsc6rd25pU/HgFg9Y9IMP4XfTkG4c3R7gicJODiZlTzoWBRrs6+CZRvn8t6ISH9mupiyCt89JyVKdtmfuwV+x6dexcgyC/6uAAAqXyEOYViStzgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707743147; c=relaxed/simple;
-	bh=TBXApfwK8hbONStkVoXVydtssWRk/QH7CP5R59ri3vs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uYap+wuCs2aLEapS/9PHsLtKaT9dTynFWPzUIhWFw6m9zEsa83Mhtebl9YbFa4s2EI7srAfn3i/WKmSds7MIFs2ZH9entBx/t9xvwAkPNf2qdQxO0rBQT8ockP07s2yifS6aq5aQW86FF+jqRXxPbtm4HHgzamF2l341WOoGNyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ugbnwtqm; arc=none smtp.client-ip=134.134.136.20
+	s=arc-20240116; t=1707743400; c=relaxed/simple;
+	bh=Wz8lmJrhPbGk6Ex3bZLvYi7zbdejWd4g60mupDQBJGI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=uO3GIf33JN6K6mkTSw9qIITRNeOhv+MYZg9NjYDTZMMG2JA6gtyEJoCEN0yRQH1fGcjyq25mX3JNdB0Bdtw3+iOAU3KO6kH9t+JyZMOBpiMPrBbnaJW/fMJLW+EfHqVR4oN5u3f8XdI/QD3u7D4Kzc8l+HarKlThH3rv6YN7GKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SD7O2Yv0; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707743145; x=1739279145;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TBXApfwK8hbONStkVoXVydtssWRk/QH7CP5R59ri3vs=;
-  b=Ugbnwtqmyjko1CsS58fFHo4DA2sZm3xIfqfQEfZiE5E01sYwyiVajL6u
-   6ldaI9iJUkS6C2lJtMVvEx0qsLtBdbai39m/ck1xJnSZV4euQCQeOh2Zq
-   Xl2Zj1GDQTqrdKCdtPtgtuUI4jl4a22x0LN6KMtZd+pnWnrjjkVy6FKTm
-   L4OBJ6KTTE2YqpANcmyr8tuQL3cIJt+vxU0894M5GZXnEg4YqE8E39W/+
-   KWd2TRb5VNpXphI5QYdh2xOiED4nC4cCTnc2TmrWkQ6T7Mt1AQgj1GGa+
-   4RdsDdQXu/6vyieUI7jtKoeGn4LYPPzOIYRVoaaOQ34WGFyPjR/qpZzlM
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="396152022"
+  t=1707743398; x=1739279398;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=Wz8lmJrhPbGk6Ex3bZLvYi7zbdejWd4g60mupDQBJGI=;
+  b=SD7O2Yv06QEcTHYBEOXK1qCkpt3vOCSBdTzZOOKQUIEMQfqN7hxA+8wH
+   NsrjytafXSIbaZQM6hcrw25xZIE0RU22BJu2qvwFAnYbNJCu6ttIwVMny
+   UZgYbugXtmh4b2TGmBag3aFzKAdcFAWbnd5y5YTPysXcyYkdIEl2nJdCJ
+   Bso7pxIy6WsgxffqFS0UzHEgSYD0Z+vyvpqNp2Uh2w11n9xyJdTrgdYTe
+   3nJEfZP0R3goao5wD1qWl4Rq0LQKSIzuiYH2YZLCgj+NwbXIyUC1RsQS/
+   NP41LaEdisEN3D1OIfheJE3Gk3XReJ8uCPF7RY5/1u/Y00/OVxUmFWxXG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="1840459"
 X-IronPort-AV: E=Sophos;i="6.06,263,1705392000"; 
-   d="scan'208";a="396152022"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 05:05:43 -0800
+   d="scan'208";a="1840459"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 05:09:58 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,263,1705392000"; 
-   d="scan'208";a="33654468"
-Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314.ger.corp.intel.com) ([10.237.222.216])
-  by fmviesa001.fm.intel.com with ESMTP; 12 Feb 2024 05:05:41 -0800
-From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-To: herbert@gondor.apana.org.au
-Cc: linux-crypto@vger.kernel.org,
-	qat-linux@intel.com,
-	sfr@canb.auug.org.au,
-	damian.muszynski@intel.com,
-	mun.chun.yep@intel.com,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Subject: [PATCH] Documentation: qat: fix auto_reset section
-Date: Mon, 12 Feb 2024 13:05:09 +0000
-Message-ID: <20240212130532.50350-1-giovanni.cabiddu@intel.com>
-X-Mailer: git-send-email 2.43.0
+   d="scan'208";a="2977475"
+Received: from belyakov-mobl.ccr.corp.intel.com (HELO localhost) ([10.252.63.91])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 05:09:55 -0800
+From: Jani Nikula <jani.nikula@intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Vetter
+ <daniel.vetter@ffwll.ch>
+Cc: Dave Airlie <airlied@redhat.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+In-Reply-To: <87le7q9hb9.fsf@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240212122652.0961dc7c@canb.auug.org.au>
+ <87le7q9hb9.fsf@intel.com>
+Date: Mon, 12 Feb 2024 15:09:51 +0200
+Message-ID: <871q9hakww.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 - Collinstown Industrial Park, Leixlip, County Kildare - Ireland
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Remove unneeded colon in the auto_reset section.
+On Mon, 12 Feb 2024, Jani Nikula <jani.nikula@intel.com> wrote:
+> On Mon, 12 Feb 2024, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>> Hi all,
+>>
+>> After merging the drm-misc tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> drivers/gpu/drm/tests/drm_mm_test.c: In function 'drm_test_mm_debug':
+>> drivers/gpu/drm/tests/drm_mm_test.c:191:32: error: implicit declaration of function 'drm_debug_printer'; did you mean 'drm_dbg_printer'? [-Werror=implicit-function-declaration]
+>>   191 |         struct drm_printer p = drm_debug_printer(test->name);
+>>       |                                ^~~~~~~~~~~~~~~~~
+>>       |                                drm_dbg_printer
+>> drivers/gpu/drm/tests/drm_mm_test.c:191:32: error: invalid initializer
+>> cc1: all warnings being treated as errors
+>>
+>> Caused by commit
+>>
+>>   e154c4fc7bf2 ("drm: remove drm_debug_printer in favor of drm_dbg_printer")
+>>
+>> I have used the drm-misc tree from next-20240209 for today.
+>
+> Fix at [1].
 
-This resolves the following errors when building the documentation:
+Commit 826eafebf68b ("drm/tests: mm: Convert to drm_dbg_printer") in
+drm-misc-next.
 
-    Documentation/ABI/testing/sysfs-driver-qat:146: ERROR: Unexpected indentation.
-    Documentation/ABI/testing/sysfs-driver-qat:146: WARNING: Block quote ends without a blank line; unexpected unindent.
+>
+> BR,
+> Jani.
+>
+>
+> [1] https://lore.kernel.org/r/20240209140818.106685-1-michal.winiarski@intel.com
 
-Fixes: f5419a4239af ("crypto: qat - add auto reset on error")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/linux-kernel/20240212144830.70495d07@canb.auug.org.au/T/
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
----
- Documentation/ABI/testing/sysfs-driver-qat | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-driver-qat b/Documentation/ABI/testing/sysfs-driver-qat
-index 6778f1fea874..96020fb051c3 100644
---- a/Documentation/ABI/testing/sysfs-driver-qat
-+++ b/Documentation/ABI/testing/sysfs-driver-qat
-@@ -153,7 +153,7 @@ Description:	(RW) Reports the current state of the autoreset feature
- 
- 		Device auto reset is disabled by default.
- 
--		The values are::
-+		The values are:
- 
- 		* 1/Yy/on: auto reset enabled. If the device encounters an
- 		  unrecoverable error, it will be reset automatically.
 -- 
-2.43.0
-
+Jani Nikula, Intel
 

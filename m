@@ -1,133 +1,137 @@
-Return-Path: <linux-next+bounces-1129-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1130-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13E0C851F4A
-	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 22:13:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51B17852244
+	for <lists+linux-next@lfdr.de>; Tue, 13 Feb 2024 00:05:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A749B1F22C8D
-	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 21:13:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05BC01F230A5
+	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 23:05:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291104C634;
-	Mon, 12 Feb 2024 21:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4644F88D;
+	Mon, 12 Feb 2024 23:05:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kyi0Bic3"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="thg/0U7R"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDCA4C61F;
-	Mon, 12 Feb 2024 21:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2A34F885;
+	Mon, 12 Feb 2024 23:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707772431; cv=none; b=AP9N1SGDAPoK1I1pG4ROW2deAdEbfNGFqjDRNvlPlT+9u8LIdVNK1ZU4PbyvvRIjKbKlOB5bLN+DQNuBGgZBFb/Lo8HGb9t/RLl+eFOtHAoNjZyoG2SwgYrgVJpm7AKlmQ8xlMZLXZRWvoeViTvDkQbVfzeEDA+8PbkvU/BfQSE=
+	t=1707779107; cv=none; b=O/lvKzpnI56Pc7A/Ls9REU45tJ7TTYGxYlsE05W+SuwvJqCJwtFKMeD5iJsN6UF4T5YuEBBiyHUd5+e0Ez3fTabcZbjO4H/RKloScrCq1NlaQMDWkDzX+OmhE9qXKFoZsDWP9I8gXs7qbemANJLuucrT3B9pVlpifxTYzyyOnQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707772431; c=relaxed/simple;
-	bh=Tqh7OZHSz6fAN3kYNXxAMjdIAb78IYAc9VLmRUQtngo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G6skmyGQQve8h9pFclqQPSiZSYzp2hQ2u0ymnSU0Gz8/GKnv0sCP93IuBH5Nh9Qcv8H4IC3M7tZqOiMZ4QErgBfcqjBesV1mJ8BPOuu5daIgahMcJpxBEyB61KoPRnn9gD0GWG2P3GiCU4fJiCoUqyBnQnv1T5u1XaSiuuif6T8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kyi0Bic3; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1707779107; c=relaxed/simple;
+	bh=ktd9h9qlvN0UnUZCeYB3SASIwovngcWwR2R8apaMxQ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=HDUVDe4s3C4wYNq8eA7Vvi+oEbBgJi/6WG6nwJ09ByJVUFJkzlYs1EUkZxkD0o6R+NtMonyB5djFq6mTb5A36Maa9XSfrcBORkOXkA6/FGkAiNkRyERFtkXChFLJodyyvF9hiDzGXulY+rw2ki3T3DOsd+GBgu+H9fJnWF2Uiew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=thg/0U7R; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707772427;
-	bh=yEvLWTPr0LqGWhlLjoaAQiYwHFzQnZvpJW4CZQANQm4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=kyi0Bic3YAJaDss26kfd/8UJrvaZQ3YSVGMuPX7GoottCIvIBDMA9a1wXXstPX2fF
-	 auKKxBvZP5luN2wm7lvDctlt/J+va7kknf8giKnkZutstNeGvl0dHraM8Z1Osd194w
-	 pJhxP24ePkMiyVL0cGwhP55VnH38GYicHzzLU8x3WajEy5AKPPJQwj8tLcy2FfNmUP
-	 nH6TnCH5QgYD86nPApMQZY3XAVBGXeLNKlGmOamtFOwu7K+FCiEC+0q1Fzj9AGjO+6
-	 3xckzFLYfOrZMceWVe9FWvWEwqLhsSqD06wUSR/SY86kmjqlPjeot51unTZxSgPw37
-	 xmy309epKcmkA==
+	s=201702; t=1707779097;
+	bh=Eq4c4CTqsb904CNVrto0W+3RppC+ap2MIeph085cVZI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=thg/0U7RaOeHsJnGHVczSuCbmZ7WGVRJVHbL3ftNvsahjXyn6W6UbGHHEuIaJ1LLG
+	 MCqyzJCJlj2VWgcLCTvHn/PMu2sHKociAgWLp9H6Lb8el8vxap3xkZAMQpKW+CrA6N
+	 6fgpj6CwwwDSaev0AG3DB4ojzcbm+1DRxLAj7hHEKimJDiltYlPFkz92XEmc68z5rr
+	 981wdJHJbGPkANSOrWOuqojGyQwjPM49ObRidxJOrl2xLDRBS1u7EJ9GXcsDDGDRr5
+	 N0QErv0yiGd4FFJUX768xruEdc/X9v2QrP7ikqpVms91BW+Naw+YQC/m99IGn6n36E
+	 mjQMsJGB1aZhw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TYcdP0jWWz4wcb;
-	Tue, 13 Feb 2024 08:13:45 +1100 (AEDT)
-Date: Tue, 13 Feb 2024 08:13:44 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TYg5j22y7z4wcM;
+	Tue, 13 Feb 2024 10:04:57 +1100 (AEDT)
+Date: Tue, 13 Feb 2024 10:04:55 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alasdair G Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, "open list:LOONGARCH"
- <loongarch@lists.linux.dev>, Huacai Chen <chenhuacai@kernel.org>, Xuerui
- Wang <kernel@xen0n.name>, dm-devel@lists.linux.dev, Matthew Sakai
- <msakai@redhat.com>, "J. corwin Coburn" <corwin@hurlbutnet.net>, Thomas
- Jaskiewicz <tom@jaskiewicz.us>, Bruce Johnston <bjohnsto@redhat.com>, Ken
- Raeburn <raeburn@redhat.com>
-Subject: Re: linux-next: Tree for Feb 12
- (drivers/md/dm-vdo/thread-registry.c on arch/loongarch/)
-Message-ID: <20240213081344.5e80d898@canb.auug.org.au>
-In-Reply-To: <ea0554f6-e0f6-44eb-b98a-d25772273f6e@infradead.org>
-References: <20240212153137.2c37f7e6@canb.auug.org.au>
-	<ea0554f6-e0f6-44eb-b98a-d25772273f6e@infradead.org>
+To: Christian Brauner <brauner@kernel.org>, Kent Overstreet
+ <kent.overstreet@linux.dev>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Su Yue <glass.su@suse.com>
+Subject: linux-next: manual merge of the vfs-brauner tree with the bcachefs
+ tree
+Message-ID: <20240213100455.07e181c8@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dDfWQ+Zn0XM4tHQuoUT5JSr";
+Content-Type: multipart/signed; boundary="Sig_/H0EfUVqgf5.7zwqJumzUvD/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/dDfWQ+Zn0XM4tHQuoUT5JSr
+--Sig_/H0EfUVqgf5.7zwqJumzUvD/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 12 Feb 2024 12:33:08 -0800 Randy Dunlap <rdunlap@infradead.org> wro=
-te:
->
-> on loongarch:
->=20
-> ../drivers/md/dm-vdo/thread-registry.c: In function 'vdo_register_thread':
-> ../drivers/md/dm-vdo/thread-registry.c:32:28: error: 'current' undeclared=
- (first use in this function)
->    32 |         new_thread->task =3D current;
->       |                            ^~~~~~~
-> ../drivers/md/dm-vdo/thread-registry.c:32:28: note: each undeclared ident=
-ifier is reported only once for each function it appears in
-> ../drivers/md/dm-vdo/thread-registry.c: In function 'vdo_unregister_threa=
-d':
-> ../drivers/md/dm-vdo/thread-registry.c:61:37: error: 'current' undeclared=
- (first use in this function)
->    61 |                 if (thread->task =3D=3D current) {
->       |                                     ^~~~~~~
-> ../drivers/md/dm-vdo/thread-registry.c: In function 'vdo_lookup_thread':
-> ../drivers/md/dm-vdo/thread-registry.c:84:37: error: 'current' undeclared=
- (first use in this function)
->    84 |                 if (thread->task =3D=3D current) {
->       |                                     ^~~~~~~
+Today's linux-next merge of the vfs-brauner tree got a conflict in:
 
-Caused by commit
+  fs/bcachefs/super-io.c
 
-  bf28b754d024 ("dm vdo: add thread and synchronization utilities")
+between commit:
 
-from the device-mapper tree.
+  7dcfb87af973 ("bcachefs: fix kmemleak in __bch2_read_super error handling=
+ path")
+
+from the bcachefs tree and commit:
+
+  1df39a40e912 ("bcachefs: port block device access to file")
+
+from the vfs-brauner tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/dDfWQ+Zn0XM4tHQuoUT5JSr
+diff --cc fs/bcachefs/super-io.c
+index 36988add581f,ce8cf2d91f84..000000000000
+--- a/fs/bcachefs/super-io.c
++++ b/fs/bcachefs/super-io.c
+@@@ -715,11 -715,11 +715,11 @@@ retry
+  			opt_set(*opts, nochanges, true);
+  	}
+ =20
+- 	if (IS_ERR(sb->bdev_handle)) {
+- 		ret =3D PTR_ERR(sb->bdev_handle);
++ 	if (IS_ERR(sb->s_bdev_file)) {
++ 		ret =3D PTR_ERR(sb->s_bdev_file);
+ -		goto out;
+ +		goto err;
+  	}
+- 	sb->bdev =3D sb->bdev_handle->bdev;
++ 	sb->bdev =3D file_bdev(sb->s_bdev_file);
+ =20
+  	ret =3D bch2_sb_realloc(sb, 0);
+  	if (ret) {
+
+--Sig_/H0EfUVqgf5.7zwqJumzUvD/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXKiggACgkQAVBC80lX
-0GzSJAf7BwW0B5X4fJLFTv3mfUFzaedq4PNloK8E7F8roeGBZJ5KyvRUzItV+dP2
-ein1Swgq4mtxTg/9DSR3Oqu924EejTwFRuSjP+J3W+eNUht8Sd9GnBXl45ErRNpB
-NrThW8fwt0IcsSi0aFEzW+sd1Upv4lM9E/BF0oOOQTv0Q+ohRWKlBeH8GQy0ZgPp
-L0RsB/18LKm3/+dmwbyk/0FC8UIpE6b7pwVfpr+p+mRiPBjE8qrKIc7zo+9oqysR
-1B4ZDEMcdWC8o5MdWKWNvbeCHvBy4HNjLTDRmDEHe9eD/dccnOfcQW4JAG0zRSsz
-QkkxWuLgnE85igUrBdCKtGTB7o4m4w==
-=lZ5G
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXKpBcACgkQAVBC80lX
+0Gzx+wf6An58J97tEuatYeYEIt8pk1bEdS9bSUaYQ8Snn3y9gsGi2ipO7w+sjS5s
+h57DFCILTvyM0IkpPMUzxkjeZMkoudQyGR0Xib5tvHb9FmYN8jSGln/5XLdOoATK
+aPJ3UP/la8W+I1IVsZVjiE13p+6xTw1XxT7uIJocoowuWMfB7CqZ5j2DF9/W/Non
+mgr5ADxt8e0tn9060ad6bpgBo1usE0iYezXOiGFleipDEPNnrqNyow8/2UjrbS8r
+XtxXR2z96LbotYx1aVwmzwxwu6mrb/pEaXtk1+ZualT5XiSHgFuo3V8W+T+p73Qb
+EQo98cOpiaioRVD5dSkdI+UrFezMcQ==
+=DFQ6
 -----END PGP SIGNATURE-----
 
---Sig_/dDfWQ+Zn0XM4tHQuoUT5JSr--
+--Sig_/H0EfUVqgf5.7zwqJumzUvD/--
 

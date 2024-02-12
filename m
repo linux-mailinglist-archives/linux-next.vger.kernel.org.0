@@ -1,135 +1,137 @@
-Return-Path: <linux-next+bounces-1126-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1127-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59154851522
-	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 14:30:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C53EE851D57
+	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 19:52:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C16B1C2112F
-	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 13:30:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63499B25AC0
+	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 18:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E65EE54BC7;
-	Mon, 12 Feb 2024 13:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86C0D41775;
+	Mon, 12 Feb 2024 18:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MUkunyN2"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LZc6u6+M"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5655467C;
-	Mon, 12 Feb 2024 13:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B1D41206
+	for <linux-next@vger.kernel.org>; Mon, 12 Feb 2024 18:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707743767; cv=none; b=nus7+om8b0u6483hk8k4sLEXbSA0dJyJM8GpTpyR9XresfIyUs2JE/ezMOZA2dPyEy1tqS5Esu16uHoMyD5XLNQsJUgqXc8p1thoj6kcfvGxWRE2aOvdFMPi721I0LZpRCmzK4vsmQOLyNYMGtor5j2uhXZny5rnNphscD09YrY=
+	t=1707763913; cv=none; b=JW30T9iQSGMIOrQHTLfD4dl+4azZ3iMTFOiXMFnR65viTfuoE9KjXdCuQjB9kiXs3ESGt0PjWydTfuYLV4xsDdiHMUHOPoz1n9L7iTRl9fUyndVadqielJC7QmG+D+iQ/Zq8A3IoCG4JKf/yR0PnhqDGCL8Qo9BxxW8pY/zuO0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707743767; c=relaxed/simple;
-	bh=PP6/AXI8N1ZB7uTahkyJ97Bokj8Vg9DEe3iPYyte3eE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=udeHYmXufhsUM7HjzIh5FjCbYufJ75//dQoJOgDD/8nuRsnS0Qmm45UHcV88GSrelxYH4yk8DIZT8uymXfNUYQIXXoX4cZr9Xi0D68TCkgZ1z6cPQgll77D6vznVzLVDBrMI5ND0kbEr0QBwWBgyeEoAFLHGKHRgxD/pSk/a3a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MUkunyN2; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707743764; x=1739279764;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=PP6/AXI8N1ZB7uTahkyJ97Bokj8Vg9DEe3iPYyte3eE=;
-  b=MUkunyN2sOSRhhjrc2mxlMgL/ET8FzZBx1ZGFI8prOAZeQ7IvcfYURAt
-   /IBBjXuZ5EUFvfL7K0V8nGXcsHpFgMhMOfRhy0SiRTT1SYnu2FOQcAiaq
-   5JGm8SeOjb5qbjE3kNKl7VNWdpmJbdl8frMDJaDi6HXcaAW+c8GkeW4Bu
-   36CIj395WZOycWgPBFMrvMmADuviH6X3kuPwe0jDnLyC83LYSc0BLQBWY
-   vqIis7hiRLV01XlSQnD/JCthDYbXoEEGjgh77VE19EHNDi04P0DgV3oCk
-   JV7EZTN0Alkb89SMNyBO1NMv6dLmc93OjvAnwk8Z4SK2D8ZKRptTn6UsD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="13092578"
-X-IronPort-AV: E=Sophos;i="6.06,263,1705392000"; 
-   d="scan'208";a="13092578"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 05:16:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,263,1705392000"; 
-   d="scan'208";a="2561132"
-Received: from belyakov-mobl.ccr.corp.intel.com (HELO localhost) ([10.252.63.91])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 05:15:59 -0800
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Vetter
- <daniel.vetter@ffwll.ch>
-Cc: Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>, Somalapuram
- Amaranath
- <Amaranath.Somalapuram@amd.com>, Intel Graphics
- <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, zack.rusin@broadcom.com,
- tzimmermann@suse.de, thomas.hellstrom@linux.intel.com, Joonas Lahtinen
- <joonas.lahtinen@linux.intel.com>, Tvrtko Ursulin
- <tvrtko.ursulin@linux.intel.com>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-In-Reply-To: <20240206152850.333f620d@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20240206152850.333f620d@canb.auug.org.au>
-Date: Mon, 12 Feb 2024 15:15:54 +0200
-Message-ID: <87y1bp962d.fsf@intel.com>
+	s=arc-20240116; t=1707763913; c=relaxed/simple;
+	bh=GTS3knEn3U37SHf/wqemlrktyAqbrDzvlYNJt5L8bzg=;
+	h=From:Date:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mPrpheDDQJRe/XqILp+tFTb4uNBTPKzcxqpdsurVEC4j2CtlpkLlEcpmAtClREqWDLfspK8fYG5rcfeHok8i524O6k4NH8K4W3SAcfXNGzHhSue9CoWBgCn4EzJismkWPWojkVUhJlH4w0vl7S2Hl7qc7Kxe7gbg19BfjK7f3rA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LZc6u6+M; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5cddc5455aeso2470614a12.1
+        for <linux-next@vger.kernel.org>; Mon, 12 Feb 2024 10:51:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1707763911; x=1708368711; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mPGSiRqCPFqmFEWSJFO1d43GTTlaRz0f+e2eVAoQklI=;
+        b=LZc6u6+M3QXmf+mklCLv4nvYl4cE4F8WthRQeV0lG699Fm3xSLuFBJiSy7JFa6zeI9
+         +L1GWeahScedXT5h+2MY86yMXaPRXfnlghV0+BeSputyWoF83Rhiqrg1RJjazZ4dmw3R
+         Pghs2IEr54xMsGevUqsjmPkccrysWHMzatiYU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707763911; x=1708368711;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mPGSiRqCPFqmFEWSJFO1d43GTTlaRz0f+e2eVAoQklI=;
+        b=oczfXUgY+oscN13f/Z5IWhUiFuq2UsXzJxNfTXqTYVzAhDNq+LTdaNQbm4kK4J4Ppi
+         qhzgHT79oELCBV/GmncVZIArXiTSlU9jRf6cOLVFWg50QCS64PW65xZ0SRn+AdrL6cWh
+         9k1RZSRit8ACY6Ka6bfS7+bZ/1UBX2BBHxoX97DptDf7t1+SCsweQtslfOWrl9JVEwp4
+         w1RwE9WtzLYr9T5aS23oe23ltYGb6EPV3JUhrJxxTrpkcY/aMteEjHx2jIMkLehN6yIj
+         da1j9akKczMdpEb4r8G5JMeZ9Jl4cCxgpRtWsXiyT3qQmh389IbL7fnnR2xYAdBuY0GU
+         eRZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUqC1GyyJZlZRzVV15EnN+gk7EEHe8ZuaReO2hDI+Fe188Uf7hcC2opWxBC04+EPFv5sncKmOOBB+jxU2IrMo6rMlPHYg9xKwX/YA==
+X-Gm-Message-State: AOJu0YwlaVgXEHxhQqnH8spEZPAuJX02l5MET8A7eZgv+9DLlZu9xK4J
+	MfZRpK4tSi2Dyihcm6q3Iamp7WLs2OCnmM2RmBbsCKj5iL3fetfEpWn+ohyAYA==
+X-Google-Smtp-Source: AGHT+IFiP4XqEVFPUe0AQ5sfHfutAVORBuy6ctbchagD56aaWb7k8kuXps4xMsVwiJ9ZHG46ydaEYA==
+X-Received: by 2002:a17:902:e5c7:b0:1d9:a647:5579 with SMTP id u7-20020a170902e5c700b001d9a6475579mr5817557plf.1.1707763911196;
+        Mon, 12 Feb 2024 10:51:51 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWVMXpMNIhotAYcYiqvNVCkUE02lF5spebU9llp4fc83Uutkz2jejMC03XmEIikgbWSldV5H3FNfAtE/6Jgii8cDrbgJCUgH3FC06zl/KgIj9f0r9uzQf62jhBRN7BKOi1tZOnRyWmjtO7PY6+GSekpCARKo/B9UBpkn+azS/Cmmzi9TXICwENuOXYbDsVLW+aNl5BNyMY3j4f4tfwfGghjhJcNsUZ6UbcCDRZwnBmZD5vN27Xpt2chVq15/1Tj6eg7VCkbJz8orDtPaf0/GidfJtGvk+NZZPo9yUI35lJxR138j6xF646MPyb2DcV92qgf2IShUDlLrbaOWviiuXiOzIENe3ZZ1bXgGWRrVUEl1L12s9CLURo4SeY620eR/lcDl2m//IprO4DY6HkY9R14CW6xhIJkrV47ecHxKR84yndQsDXM3NJqMcpiu4M6Y+P8kbk2+ZWg8t1RBE4uXWXtDWTxFaVA9585IKWuec4srYj5WnES1gkpMYxVgbudrRnPzxYH+H7a4hODicJw9+ImmaeqZYgOPYsAmQk=
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170903308b00b001d9fa58f5a4sm675012plc.48.2024.02.12.10.51.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Feb 2024 10:51:50 -0800 (PST)
+From: coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date: Mon, 12 Feb 2024 10:51:50 -0800
+To: Anton Yakovlev <anton.yakovlev@opensynergy.com>
+Cc: Jason Wang <jasowang@redhat.com>, Takashi Iwai <tiwai@suse.de>,
+	Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, Jaroslav Kysela <perex@perex.cz>,
+	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
+	Aiswarya Cyriac <aiswarya.cyriac@opensynergy.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: virtsnd_kctl_tlv_op(): Uninitialized variables
+Message-ID: <202402121051.B091CCC4B@keescook>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 06 Feb 2024, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
->
-> After merging the drm-misc tree, today's linux-next build (i386 defconfig)
-> failed like this:
->
-> In function 'i915_ttm_placement_from_obj',
->     inlined from 'i915_ttm_get_pages' at drivers/gpu/drm/i915/gem/i915_gem_ttm.c:847:2:
-> drivers/gpu/drm/i915/gem/i915_gem_ttm.c:165:18: error: 'places[0].flags' is used uninitialized [-Werror=uninitialized]
->   165 |         places[0].flags |= TTM_PL_FLAG_DESIRED;
->       |         ~~~~~~~~~^~~~~~
-> drivers/gpu/drm/i915/gem/i915_gem_ttm.c: In function 'i915_ttm_get_pages':
-> drivers/gpu/drm/i915/gem/i915_gem_ttm.c:837:26: note: 'places' declared here
->   837 |         struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1];
->       |                          ^~~~~~
->
-> Caused by commit
->
->   a78a8da51b36 ("drm/ttm: replace busy placement with flags v6")
+Hello!
 
-Cc: more people.
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20240212 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
->
-> I applied the following hack for today:
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 6 Feb 2024 15:17:54 +1100
-> Subject: [PATCH] drm/ttm: initialise places
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> index 80c6cafc8887..34e699e67c25 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> @@ -834,7 +834,7 @@ static int __i915_ttm_get_pages(struct drm_i915_gem_object *obj,
->  
->  static int i915_ttm_get_pages(struct drm_i915_gem_object *obj)
->  {
-> -	struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1];
-> +	struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1] = {};
->  	struct ttm_placement placement;
->  
->  	/* restricted by sg_alloc_table */
-> -- 
-> 2.43.0
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
+
+  Fri Feb 9 14:01:15 2024 +0100
+    d6568e3de42d ("ALSA: virtio: add support for audio controls")
+
+Coverity reported the following:
+
+*** CID 1583619:  Uninitialized variables  (UNINIT)
+sound/virtio/virtio_kctl.c:294 in virtsnd_kctl_tlv_op()
+288
+289     		break;
+290     	}
+291
+292     	kfree(tlv);
+293
+vvv     CID 1583619:  Uninitialized variables  (UNINIT)
+vvv     Using uninitialized value "rc".
+294     	return rc;
+295     }
+296
+297     /**
+298      * virtsnd_kctl_get_enum_items() - Query items for the ENUMERATED element type.
+299      * @snd: VirtIO sound device.
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1583619 ("Uninitialized variables")
+Fixes: d6568e3de42d ("ALSA: virtio: add support for audio controls")
+
+Thanks for your attention!
+
+(Human comment: looks like there's no "default" case in the switch
+statement.)
 
 -- 
-Jani Nikula, Intel
+Coverity-bot
 

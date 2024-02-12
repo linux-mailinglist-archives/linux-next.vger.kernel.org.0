@@ -1,111 +1,152 @@
-Return-Path: <linux-next+bounces-1113-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1114-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC744850C7C
-	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 01:36:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB8CB850C91
+	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 02:25:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 637A42821C8
-	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 00:36:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1246D1C20DE2
+	for <lists+linux-next@lfdr.de>; Mon, 12 Feb 2024 01:25:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6444622;
-	Mon, 12 Feb 2024 00:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055C510E6;
+	Mon, 12 Feb 2024 01:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uEf+bQOG"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="n1Af6FLm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5451A35
-	for <linux-next@vger.kernel.org>; Mon, 12 Feb 2024 00:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D4010E3;
+	Mon, 12 Feb 2024 01:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707698205; cv=none; b=dVnJdz9QZTJGjJ+mi9K3RFzNDPegaAEVVogxxK33KTVelvpsjciPAsNs9mG2tEwCP++5YgYy7XTfII0oA6z85T8xP+X+RoswgMdsRECAgWOL6GbHBIvp363FZIJ3DSluFrtq6IK+5uY5VBFOywQvrzZxqxFxIR7xlMqzPzIvDV4=
+	t=1707701123; cv=none; b=BjG3t+TWz1XIhTmiref34VatfhHIKEy9azyy5bscrVe4urKPBQXE9lbqIKq0EBu7rrSYMV11F236g5k6FLKBuFt02cuI/6foiQTbRCrosuw6oY4Y4gE3BkkWUsCDGVqY0ETjOYMIM01x+LjrVijUmJ0aI5Mgw8YCYFgrlcs7GLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707698205; c=relaxed/simple;
-	bh=g649aErR/2B0RxY+2/m+NkPBYwEtXoTNpmSXe9Zerqs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DzOqGdIkV9XJxgZdSnWRlaI0PcNOh0TPeX5XlmI42IkZWgCALvzV0za0ys6XCizUvm2fnuclErdGc4ZdRmUoMyS6H6F19YLyGfZivuMDkIe98wJ4+WBMI6m6jkclRMk4aRFXUtnztKNL0+vcfua0pR5gRwS3W4/vu5dGo0iLpQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uEf+bQOG; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Sun, 11 Feb 2024 19:36:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1707698200;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kxCWW4/t2o4u58TNsbaiigtWHWeIl8inY0YU8ADFLOA=;
-	b=uEf+bQOGQH2hry9IKEdbIU1wp7u9xQ5M2nWnAPZtDcsVdc/5fhFaovF0JN4hukFASQ46e5
-	b7qLDRv9q6roKlfGZBkBsqL+3fzOC2pq54ZFLlhiBJoq/xjVr4kHiZAJMYUzomZJjYJX+w
-	grPt2va8YBNlc3GwKZ0YlBFk2XNl1lU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <fu2jp7i7sdu6dwe3nsc647dtm2ejblf3j2yelgrpkzukfufegy@4krvb7wqpv4y>
-References: <20240212105237.674e6fcb@canb.auug.org.au>
+	s=arc-20240116; t=1707701123; c=relaxed/simple;
+	bh=XWNyd93WGKR8pqpLsqtc9/H4L8OIHtDNT7L+k/zJ0dg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cdSa1OQNsBmhgbewo42SiIJ+u+msUI1YfpbCdiXZY+E5TOfvKsfPbnLUuHMj0ZjBk4ZX26+g+NJrxgvT+xwAuGoUCGjT8Ni7Ukn4ihJANwLSFq8w+MjPfTRE6RwPy0ymMMYqaFVdJFUB1B0XDh7AiCbQG6wrDOiAAqGhgM+zBN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=n1Af6FLm; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1707701116;
+	bh=OWesm9ZaPP1Ioi7rhwLGfscD4uWjzx5qKU5sLm4C0BU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=n1Af6FLmpP5iUjXjnwQj9zU0gwLvuidHJ1gB2y5cYiGTabr+qRn5yWzmoEO2guwVL
+	 HQu3rSc/BIMZsif+RMDGOcE6eE5Ph8U2BsNlBeM+fprVdW/87UzA+xMvG2vCrA+/zH
+	 a3ACJLgcrDYW2u+2tLYkjsNQt22QS2Q1ZUxor9vORzI5+dBvVCeEmwOdUpQK9YU1Gy
+	 E51+yhMhtCiHK3EqzovlxuSXMJoroFhaCwKXabXlyD6fJL21GOl/8VWd4wXs/oEzNd
+	 6cpv0LX1wdCrDQnJQDCU+dJgeKWVeH2S7D230gUJ7pBPO3brtMH2YPp5W7PxS/xfIV
+	 kNXFF7L3PSrRg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TY6G32QKhz4wcY;
+	Mon, 12 Feb 2024 12:25:15 +1100 (AEDT)
+Date: Mon, 12 Feb 2024 12:25:13 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Somalapuram
+ Amaranath <Amaranath.Somalapuram@amd.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Dave Airlie <airlied@redhat.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20240212122513.062a3b35@canb.auug.org.au>
+In-Reply-To: <20240206152850.333f620d@canb.auug.org.au>
+References: <20240206152850.333f620d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240212105237.674e6fcb@canb.auug.org.au>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; boundary="Sig_/x585PivuSvMebdPb5YpnyzL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, Feb 12, 2024 at 10:52:37AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the vfs-brauner tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/highmem.h:5,
->                  from include/linux/bvec.h:10,
->                  from include/linux/blk_types.h:10,
->                  from include/linux/blkdev.h:9,
->                  from fs/btrfs/super.c:6:
-> include/linux/fs.h: In function 'super_set_sysfs_name_generic':
-> include/linux/fs.h:2597:9: error: function 'super_set_sysfs_name_generic' might be a candidate for 'gnu_printf' format attribute [-Werror=suggest-attribute=format]
->  2597 |         vsnprintf(sb->s_sysfs_name, sizeof(sb->s_sysfs_name), fmt, args);
->       |         ^~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> and many more similar.
-> 
+--Sig_/x585PivuSvMebdPb5YpnyzL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Tue, 6 Feb 2024 15:28:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the drm-misc tree, today's linux-next build (i386 defconfig)
+> failed like this:
+>=20
+> In function 'i915_ttm_placement_from_obj',
+>     inlined from 'i915_ttm_get_pages' at drivers/gpu/drm/i915/gem/i915_ge=
+m_ttm.c:847:2:
+> drivers/gpu/drm/i915/gem/i915_gem_ttm.c:165:18: error: 'places[0].flags' =
+is used uninitialized [-Werror=3Duninitialized]
+>   165 |         places[0].flags |=3D TTM_PL_FLAG_DESIRED;
+>       |         ~~~~~~~~~^~~~~~
+> drivers/gpu/drm/i915/gem/i915_gem_ttm.c: In function 'i915_ttm_get_pages':
+> drivers/gpu/drm/i915/gem/i915_gem_ttm.c:837:26: note: 'places' declared h=
+ere
+>   837 |         struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1];
+>       |                          ^~~~~~
+>=20
 > Caused by commit
-> 
->   eeea5d25d4a7 ("fs: add FS_IOC_GETFSSYSFSPATH")
-> 
-> This new finction is not used anywhere, so just remove it for now?
+>=20
+>   a78a8da51b36 ("drm/ttm: replace busy placement with flags v6")
+>=20
+> I applied the following hack for today:
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 6 Feb 2024 15:17:54 +1100
+> Subject: [PATCH] drm/ttm: initialise places
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i9=
+15/gem/i915_gem_ttm.c
+> index 80c6cafc8887..34e699e67c25 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> @@ -834,7 +834,7 @@ static int __i915_ttm_get_pages(struct drm_i915_gem_o=
+bject *obj,
+> =20
+>  static int i915_ttm_get_pages(struct drm_i915_gem_object *obj)
+>  {
+> -	struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1];
+> +	struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1] =3D {};
+>  	struct ttm_placement placement;
+> =20
+>  	/* restricted by sg_alloc_table */
+> --=20
+> 2.43.0
 
-Let's not drop it; people adding support for other filesystems will
-probably want it. Here's a fixup patch:
+I am still applying the above patch :-(
 
--- >8 --
+--=20
+Cheers,
+Stephen Rothwell
 
-From baf60243a686b0dca9236110491694bd03378063 Mon Sep 17 00:00:00 2001
-From: Kent Overstreet <kent.overstreet@linux.dev>
-Date: Sun, 11 Feb 2024 19:34:56 -0500
-Subject: [PATCH] fixup! fs: FS_IOC_GETSYSFSPATH
+--Sig_/x585PivuSvMebdPb5YpnyzL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index fb003d9d05af..c6d9e1b7032c 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2574,6 +2574,7 @@ static inline void super_set_sysfs_name_id(struct super_block *sb)
- }
- 
- /* try to use something standard before you use this */
-+__printf(2, 3)
- static inline void super_set_sysfs_name_generic(struct super_block *sb, const char *fmt, ...)
- {
- 	va_list args;
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXJc3kACgkQAVBC80lX
+0GzyWQf8DEwy3D9cj8T/rxk2jdAB76rQVtp4C8LU3BXNWH9jjryjtoepjKDPtkcW
+txcB8O417p3T5fX/UHxamm0B/rWKYqIzdMWxwUpFb0s1MAIt3BxAGrdlH3TaS9BN
+u6OrWNQo/3W7ixjuGT5jJJwuEPnGVGPOSlDRswUPON711II3epDR7zuEX/isqByJ
+HjXh2DK8vJR4TFX559KwJfM7i7yhOKaleGks1I1t2+iE4zEInibmaCbXAKVYG4i9
+OccXLh2o18szdq6feUSts4BzZAIav+tZp9BdcvM9XGphJZvLMbwwqpy8sZcTrAJl
+I8cfLQdibIufuKx9+v6vwhQlySWBsw==
+=dfOJ
+-----END PGP SIGNATURE-----
+
+--Sig_/x585PivuSvMebdPb5YpnyzL--
 

@@ -1,103 +1,100 @@
-Return-Path: <linux-next+bounces-1137-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1138-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B78985280E
-	for <lists+linux-next@lfdr.de>; Tue, 13 Feb 2024 05:49:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77722852B0F
+	for <lists+linux-next@lfdr.de>; Tue, 13 Feb 2024 09:26:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1899B28196A
-	for <lists+linux-next@lfdr.de>; Tue, 13 Feb 2024 04:49:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 134CA1F212D2
+	for <lists+linux-next@lfdr.de>; Tue, 13 Feb 2024 08:26:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5843111AC;
-	Tue, 13 Feb 2024 04:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEC3F1B298;
+	Tue, 13 Feb 2024 08:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pK0tkVky"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="s7XnIvt7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C6C111A8;
-	Tue, 13 Feb 2024 04:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BACD1AAD0;
+	Tue, 13 Feb 2024 08:25:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707799765; cv=none; b=lSwaq1+8KOXyGMNrxObaFXIyxo5UQqfnJ3gA7xLKF8vzehTodNHS1t9aglEsU+5d/dzVF2G0QNJZJjoDAUIGJGhLgHuNMXgva4NPBGT4DdRmM1Q+QA8ighL5KgR+cAVOF/5E3C6bGOjkPF88eWmoA1s6Erfu4sQuMiEpQLPV9ZM=
+	t=1707812752; cv=none; b=uIrlEWxA0eSBIH2CR9w+5FiJI3quEn3OqWViudUWIdyDek8u33W2DlwllfzUZBIIG8zoBpLUHoG2Wj7YjplyQgFIrLFSHAC6+MPk8dU/IurTJK5koz3nTMA/HVQyJLlsDYSo39orfnSQCBED+is1qLxsf4qIpHrnixn9lJHM1R0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707799765; c=relaxed/simple;
-	bh=TALgT7aSoIQP78sl0GtaQ1oWhVItTFTc+ox6sTQD41o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Mm0zTmDOozWdXFFlGUmioiQdbS2NlJHwGxYcZC/Tsev3hDaHZ7fWeXka3/X9t+sOdO1r3JdkQ4g+MKLdaB9fd3TJaMQbsqWGdQsendfX+tfTJzSXuEUKYh6PhJgXxsFNYaBmu7INZtcYwrWt+wzDxBha3cPHJlfnxfG1RDqMWKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pK0tkVky; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707799758;
-	bh=IHYwzgJ2UeK0c9Ln15n91swWkHRee7UO8KszCl6sh+k=;
-	h=Date:From:To:Cc:Subject:From;
-	b=pK0tkVkyY4SwmF6xgxwzW1Ay0dYLB/B6uavUkqAAN2O0GC1r1A6UR8/OJDfyk56OQ
-	 G32wM0+K20BAx3xlIYRV6+WzT2AsLl0KQ9Tricjidmc83Y04Fg+6zYqo7BIpxaqRgR
-	 EA529SxCo8Mxoa/GQI+G1ScyiVbDM1MDVQP6zpp2d65rGIISp0koShKz84im6b8+jb
-	 YVMIXr61ETM3denAdal/kwVrq0D811bZN3uC92iVf3iuNhMb40wQc5Vx/Z1TrfscpO
-	 /QcXK+Q3seoopNPJnfo8DDFrltPjWQyvhI9OwXM6CIABVXdyanv/eNnNfcsaowsN7T
-	 CI4m7Yt1zWWfw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TYpl20Xh5z4wcH;
-	Tue, 13 Feb 2024 15:49:17 +1100 (AEDT)
-Date: Tue, 13 Feb 2024 15:49:16 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jonathan Corbet <corbet@lwn.net>
+	s=arc-20240116; t=1707812752; c=relaxed/simple;
+	bh=Y4swPSmixwDlCf3VeNMrCDbgnEXkgQhDCBMQSZgB5ws=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MlALvEuYFA5Iq8AuSb+Qnc8hlgCWXkr51Uz7kB7zmtjU1t/3NvmLGAncN/AN7vJH98azjWZM6eXV+gt41mE2ey0w+BlXMNdvzTvlFLr2nXuKWRDFuX2HP7TLIGIjCOwr70j8TVNcGlZlq4T/HNX5kPS+4jsivdCobfWv209dGM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=s7XnIvt7; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=wntTEVWdVna6Y2qQjgbm6YvNDEH/qFCUkWGzNzGVbT8=;
+	t=1707812750; x=1709022350; b=s7XnIvt74Ka+w3UuMLOuCQRvItaATetbHxDkrfLoGx/6kg/
+	H7KKeT2Xrvwv4IJp1x7fNyfC7l36jpYkojzgm3rZSO0d8vx8T2NNVHJjrDjDUYjqQvPY/kZgEy5TN
+	/Dy2rLM7fIjM8buKBsz0uGS8+UPK5s/h+Olfpu+aXUBxHgAkLNbaolF98LTMGHcUmZnnZNmpaw4Dd
+	1mQ5noDtqI8SLp3BxVXziPx9JHYvqHiMRXkwxK8/d9+8sEvADye91itvDsJfQa2P5vig0mdBswd4W
+	BWkVnlC5/NidCDZXq1JDSoGtgP5scXRYGvEO164JyJzJSTJ7vCYC0DXzNCdoxZyQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.97)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1rZo6q-00000007XZF-2GDC;
+	Tue, 13 Feb 2024 09:25:44 +0100
+Message-ID: <4044e07e87af766f643f89f839b332973819e048.camel@sipsolutions.net>
+Subject: Re: linux-next: manual merge of the wireless-next tree with the pm
+ tree
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Kalle Valo <kvalo@kernel.org>, 
+ Wireless <linux-wireless@vger.kernel.org>, "Rafael J. Wysocki"
+ <rjw@rjwysocki.net>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the jc_docs tree
-Message-ID: <20240213154916.39f70814@canb.auug.org.au>
+ Mailing List <linux-next@vger.kernel.org>, Miri Korenblit
+ <miriam.rachel.korenblit@intel.com>, "Rafael J. Wysocki"
+ <rafael.j.wysocki@intel.com>
+Date: Tue, 13 Feb 2024 09:25:43 +0100
+In-Reply-To: <20240213110852.51524899@canb.auug.org.au>
+References: <20240213110852.51524899@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T1_U8_AvpOqvZU35jbTwUGx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-malware-bazaar: not-scanned
 
---Sig_/T1_U8_AvpOqvZU35jbTwUGx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 2024-02-13 at 11:08 +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the wireless-next tree got a conflict in:
+>=20
+>   drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
+>=20
+> between commit:
+>=20
+>   2e171a57c312 ("iwlwifi: mvm: Drop unused fw_trips_index[] from iwl_mvm_=
+thermal_device")
+>=20
+> from the pm tree and commit:
+>=20
+>   8cb3a308ceb1 ("wifi: iwlwifi: mvm: fix thermal kernel-doc")
+>=20
+> from the wireless-next tree.
 
-Hi all,
+Hah, sorry about that. I told Rafael this was likely not going to
+conflict, but didn't see the doc changes ...
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+I guess we'll have to live with this conflict, unless Rafael you have a
+feature branch for this I could pull in and resolve?
 
-  b37c416b28ed ("docs: kernel_feat.py: fix build error for missing files")
+johannes
 
-This is commit
-
-  c23de7ceae59 ("docs: kernel_feat.py: fix build error for missing files")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/T1_U8_AvpOqvZU35jbTwUGx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXK9MwACgkQAVBC80lX
-0GyiKgf/UwrXZl0tjD22C6dJQhzBvNdR5RgkecVFmN8rlOwTjiVn/22/0L06H4lL
-0hsMVJYgbUEyhaYpOMtBgur0vanXA+QWsx/UJAsgaWchJr7uijpFJnUzHVrb9tvL
-PFv8qt0dhby9bVROO6/rq2qZvKwrLORNKjl5hMar0HGMgfjs/OasTIACVnHoAFkM
-QuZKvKCP7MZCpxAImhCQL2p5TIpOhHNUWdxCxCCX/rZsrfCrHXq2U7UcyhQ5yzgI
-sKrIRBPccIrISbFRNAP73cEEdDDAx9XcvYce/o7ZMQEyAmYld1J7AR6E7VVZByHK
-urVxXR+B0bxnW1CFIos73SACMJ7TkQ==
-=4nOx
------END PGP SIGNATURE-----
-
---Sig_/T1_U8_AvpOqvZU35jbTwUGx--
 

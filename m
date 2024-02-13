@@ -1,98 +1,106 @@
-Return-Path: <linux-next+bounces-1144-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1145-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 546868536EE
-	for <lists+linux-next@lfdr.de>; Tue, 13 Feb 2024 18:14:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56A13853840
+	for <lists+linux-next@lfdr.de>; Tue, 13 Feb 2024 18:34:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E527F1F26B51
-	for <lists+linux-next@lfdr.de>; Tue, 13 Feb 2024 17:14:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11F3228C909
+	for <lists+linux-next@lfdr.de>; Tue, 13 Feb 2024 17:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145585FBB1;
-	Tue, 13 Feb 2024 17:14:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="miI7WoeS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E57C6025A;
+	Tue, 13 Feb 2024 17:34:40 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2055FB86;
-	Tue, 13 Feb 2024 17:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC0F60279;
+	Tue, 13 Feb 2024 17:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707844452; cv=none; b=bkPbiXFeK+yz/2L4T/vmsjH7xOxJFQNKxRb6leu19tKQ9b59xU/k8t4vcWZ5o5jvgsxNCCErQ6DLPnvdiTrNmhcq3Id1XuVrX5w5b/oRxJ960dYbb/AifyySP3E0DsT6cgM3esi+aVpez1YIBBERlHSOSSIexEm5aJ/B+ZDemBs=
+	t=1707845680; cv=none; b=Af73xbG1F6q3XRDCWsVIEUQvUMKYojNfYpCx4pEKa+o4+Io1ZruG3dnULTxaKw61tkacWT0kAvdJaaZmebtuoMJP4V9cSNKDpV1pgpzTGwKHTR9voWZFfWF84fkkhGRphaRCThyqMtB9eSyY4VIwB3jcm2r1jp6qpdmA/VF7A8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707844452; c=relaxed/simple;
-	bh=Gy7C4I6z7AT0zGaXz9VQounxugoEpPbmpJ5GMuEODFA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dnPyevWoV9ni+B9Iw2t0KEGJS+++AHIsMH3KfMbeRXtQT/Ekl1QTIb1e5oj2/4SN0bOtej0MzSstJf86hTE8bQuHNu1ym3o9VIJj/u/Sa9jS6/cCrEtbsKLvJtrYL/rj2z3l39H9wbfIeftLFYy+ygVm6rJMxD0gVBgEjpX94SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=miI7WoeS; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=Dmp6vyT5JrL+eTyZVDd+aIs2asoct4AJGRKHR/LXHLw=;
-	t=1707844448; x=1709054048; b=miI7WoeSDg0kwq9yVr1KicLooEkI4mH9llUQ0P8EAjQxMTw
-	nIv/hfn4UyiUkWEiak6B44A+l1nVSOq7hnEzznmRSg3JNZnAWQ19VCfsvFj26onwe5SvJAWhEzWFF
-	5G5mIrn8EScPYg/MyYZ5KTFfKdpEnfhdLhbtAqWtKas81D6W47MJHvnR9tJNEFNdi2Ew3e4065D65
-	lNc5AxAqjJmKPoT0z5Z6vNELiyOhUvv9RLf+VLc/O0Xe/mdQkt3TGKB4ee3iNpc0xg/jFdopdbE9M
-	id+ZIDAzJNgewK81062AEcIwis9dypwbzxrYVkj92is3FQOQFTSt6ivO2zB21k9Q==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1rZwM2-00000007rTN-1xmS;
-	Tue, 13 Feb 2024 18:13:58 +0100
-Message-ID: <82e78ebf5f84314e3fc1e6b8b1a76f948c9aeb22.camel@sipsolutions.net>
-Subject: Re: linux-next: manual merge of the wireless-next tree with the pm
- tree
-From: Johannes Berg <johannes@sipsolutions.net>
-To: "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>, Stephen Rothwell
-	 <sfr@canb.auug.org.au>, Kalle Valo <kvalo@kernel.org>, Wireless
-	 <linux-wireless@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Miri Korenblit
- <miriam.rachel.korenblit@intel.com>, "Rafael J. Wysocki"
- <rjw@rjwysocki.net>, "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 13 Feb 2024 18:13:57 +0100
-In-Reply-To: <e15b25c2-2ced-4f79-b541-61980a31f947@intel.com>
-References: <20240213110852.51524899@canb.auug.org.au>
-	 <4044e07e87af766f643f89f839b332973819e048.camel@sipsolutions.net>
-	 <e15b25c2-2ced-4f79-b541-61980a31f947@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	s=arc-20240116; t=1707845680; c=relaxed/simple;
+	bh=c/Wt2cl1adrqn+y+VTiixGgANJnxyMDGcXhZX+95cxc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EVqjHL2zZjJorn64Zv/Mi38PDZQU/zITy4OKYQHKx6JUEryMYelq/n/mZwP9l9e4cd8oaC8728mfQTlOkzwFJC4J+t29SjWwUkVX3O3oMb8WKWGVtrI+3IcPF2Jr+J1T10PWjBcg/5vs68o1Mw9ol8Yc/HUBxMRgW2pvEL6uljI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6e2f3e863fbso140378a34.0;
+        Tue, 13 Feb 2024 09:34:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707845677; x=1708450477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PYZycCqXO/IvtV9fFldFSK4bZ9WbpBQtgeMSSvaaULI=;
+        b=rv94fFZxiK+htj67bp7uv9vtyDs/MTr2WSfxH3lEoUWqeuHnqtq8JBFZx1fKnHidZN
+         WdHN2m+UlW+Z3XX6tcassRjFM7AmlOZvPyCfmrVdrvClpowDd6DR/Vg+nOdov+ajrURn
+         oV2HjE493qwtnzKFWGYB07Ec7TPvOxrJuFIQJr7pyKwAJLGJVgA3nDeKly0Vt6AgTKD3
+         FwRh2pTU5kyMMPotNj/RpxcK6DDhb1rFRSAQhM3L/dfQTtIqCW37MHIyg3vHAa+QZkad
+         AXTjvbna+FHWtPhrdxmv3VXyqqUGXR58AzS/xZG2iC5xiuEQ56t1dbm3wwAr7vPmx+yC
+         aMyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUyi9UGMp1eWa6dXCQg5Dii0eIa+nKKrfrgYkgLC7QGgquJVM2yQ2XYRO/eV6x3UF0YEPeNj2yQ/SZZp8kDeJatrEH8guhBEWn27avoH96NMIbL7UAYil6wcTzx9HGMeeYNyVTCQwy0oSPqJnjqxvaBtJ05GfD7QvkdlTG42JshcNs1ybUyjbvi
+X-Gm-Message-State: AOJu0YxnS7ZVGOEls2A1oajkSeudpkJstdxXGbBjor0Z2cumSa+LRuIa
+	L2wkzy7yYIviLlbiZ2Wj1mCMX/9ta8oDHbyWV+FoWlzZ6NfJK2ppYHozPAnlu7hXYTrmRziLK2I
+	W+lWnPDkMhudSW7q4FIcwS+mPlgk=
+X-Google-Smtp-Source: AGHT+IE7YPlABGYgUznc1VZQ7aeKs1A0NW+/lpUob1WKX1anoeFXMQ8UT1MjF+3O5wIEcr4FfxzxODOCqbuAiFyMh10=
+X-Received: by 2002:a4a:e9ba:0:b0:599:fbcc:1c75 with SMTP id
+ t26-20020a4ae9ba000000b00599fbcc1c75mr376859ood.0.1707845677204; Tue, 13 Feb
+ 2024 09:34:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+References: <20240213110852.51524899@canb.auug.org.au> <4044e07e87af766f643f89f839b332973819e048.camel@sipsolutions.net>
+ <e15b25c2-2ced-4f79-b541-61980a31f947@intel.com> <82e78ebf5f84314e3fc1e6b8b1a76f948c9aeb22.camel@sipsolutions.net>
+In-Reply-To: <82e78ebf5f84314e3fc1e6b8b1a76f948c9aeb22.camel@sipsolutions.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 13 Feb 2024 18:34:25 +0100
+Message-ID: <CAJZ5v0iQvOnO0FffGHVzTOrTVdfAB6jaFYgsKL1ep7BnOz0m9A@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the wireless-next tree with the pm tree
+To: Johannes Berg <johannes@sipsolutions.net>
+Cc: "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Kalle Valo <kvalo@kernel.org>, Wireless <linux-wireless@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-02-13 at 18:03 +0100, Wysocki, Rafael J wrote:
-> > >=20
-> > >    2e171a57c312 ("iwlwifi: mvm: Drop unused fw_trips_index[] from iwl=
-_mvm_thermal_device")
-> > >=20
-> > > from the pm tree
+On Tue, Feb 13, 2024 at 6:14=E2=80=AFPM Johannes Berg <johannes@sipsolution=
+s.net> wrote:
+>
+> On Tue, 2024-02-13 at 18:03 +0100, Wysocki, Rafael J wrote:
+> > > >
+> > > >    2e171a57c312 ("iwlwifi: mvm: Drop unused fw_trips_index[] from i=
+wl_mvm_thermal_device")
+> > > >
+> > > > from the pm tree
+>
+> > > I guess we'll have to live with this conflict, unless Rafael you have=
+ a
+> > > feature branch for this I could pull in and resolve?
+> >
+> > Well, not yet, but I can add one if that helps.
+> >
+>
+> Well if you have a branch that has the above commit and not too much
+> else, then I could pull it into wireless ... but chances are the common
+> base that we have is divergent enough that'd pull a whole bunch of other
+> things into the tree so that'd not be great.
 
-> > I guess we'll have to live with this conflict, unless Rafael you have a
-> > feature branch for this I could pull in and resolve?
->=20
-> Well, not yet, but I can add one if that helps.
->=20
+On top of 6.8-rc2, there are 3 unrelated commits that you'd need to
+merge along with the wireless ones.  Your call. :-)
 
-Well if you have a branch that has the above commit and not too much
-else, then I could pull it into wireless ... but chances are the common
-base that we have is divergent enough that'd pull a whole bunch of other
-things into the tree so that'd not be great.
+> Pretty sure even if the conflict survives to the end Linus could figure
+> it out? :)
 
-Pretty sure even if the conflict survives to the end Linus could figure
-it out? :)
-
-johannes
+Agreed.
 

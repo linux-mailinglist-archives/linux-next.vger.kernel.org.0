@@ -1,136 +1,111 @@
-Return-Path: <linux-next+bounces-1155-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1156-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E132C8540D1
-	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 01:25:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01B318540D8
+	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 01:29:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95B151F2A2F0
-	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 00:25:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93826B23F4D
+	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 00:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E74F944D;
-	Wed, 14 Feb 2024 00:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3BC238C;
+	Wed, 14 Feb 2024 00:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IwxEmGvy"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A7o9oOwc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0899449;
-	Wed, 14 Feb 2024 00:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5531F385
+	for <linux-next@vger.kernel.org>; Wed, 14 Feb 2024 00:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707870329; cv=none; b=e7DxbqWbG0KGAik2g6idsoheNgdYqoXAXCgpVsrOPRFF/Shf5OZGEy1OfqORTYIJqky598jDX7f2ZuEeU+jz9OiiqE3lSF1v4lYnmwjiHEYiZnZoKbLn6LmzSoBfTrMTbBnRFE6uxisiUtNIo6jq6lC/8pj8Dn6Ou3AFgmFwWqM=
+	t=1707870582; cv=none; b=WK7vO+T6msWLnBf9gKGVQnuR54FTWrEhh0SpCq+UafwGDEv/uw7drKW84TfamD1BD+jd5/tlLWpGWSqRIh/levKy4rv0kASZUd1kkOQmqy5TWRdyB4bcMHWNIsQgVKjO9nViqevscvwoVIIbScCXVLpPHhYJKghd4NAqyYsqE9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707870329; c=relaxed/simple;
-	bh=ZYz52E5UpZ22syPUWwTv63Zl55ZRM/Eb3jbRBRiXYFg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=C7ncQ5nbN/6I420jr0OdYrZanVj1PuTd7FVc4o8pvI2g1hfPJMwI6w1SrpjVxz6Nav4ZtVtc+G19cb/QZaZ+Aar7VitAOjZ/WKLZcK6NuZS2Zw9FvmS55WWWkujhZxk/Jy/ZWjRMwe5JO27icFruEd5dFPRNfemOt1NmSkUyEZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IwxEmGvy; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1707870321;
-	bh=T9rHeq/WjASCf4FMqrpZrCbxQNqDKMlgq3tzgKIB91I=;
-	h=Date:From:To:Cc:Subject:From;
-	b=IwxEmGvySQgBt4zTPvnibksanFVd3+ymF8wR5Bsnoo04QBHevmnkzrxILLFyUgsuo
-	 fL+kQI/XpHo7uCtYtfJR9Sp0p/5AgHbRRzC+NqO30bXFrgPwmmB55wyHfAyg6L9gDc
-	 L+WPVExXdJWXHQl/B5xD8w/THKBmmtOt7k1viPFg32Gj3Ak1RshZSwOzfVC+vCL9Ak
-	 7bi4xY6t1hasNv0zSPlGZedDbEYp/u60jLROtj+jjuySILNn5mZlk3B++Qd0U4bhxD
-	 wcGOVH3LoirgULptEYHClPJOiSFpo9Oy0AAYI7U5lzJ+S39fN6nGzwQfL8VYqjRin9
-	 5AoSAzEDrjrYA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TZJr10B39z4wcr;
-	Wed, 14 Feb 2024 11:25:20 +1100 (AEDT)
-Date: Wed, 14 Feb 2024 11:25:19 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jens Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Vlastimil Babka <vbabka@suse.cz>
-Subject: linux-next: manual merge of the block tree with the mm tree
-Message-ID: <20240214112519.153c8480@canb.auug.org.au>
+	s=arc-20240116; t=1707870582; c=relaxed/simple;
+	bh=rXuw7s6WvFKQGoq551oldTwuYldo5BeFRsshFQZ4pFA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KUcvQoxxCjKY050hcsZSdWL0mpEWBDG4Vom6fkC5P1cThnqmRV22XMHDRHEFDs+XE8XPqkUX9K7+Ad+ADhi1HJdqakaJabdFR2aRat5J7rhxhbFVZ2128sHeKrQCk7/K+SV3ftE0LzuAiGFirtih4mmEavGIeVuc3akwQ3Cja2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A7o9oOwc; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Tue, 13 Feb 2024 19:29:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1707870578;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8RErxcJZwveQ+zI7kZ+ENeWs343mFPuU1/yMk17d5IE=;
+	b=A7o9oOwchLJpbMYbSpZQABMPotBWdqfgFut2M7eavhAiKbaNtRZzMK9vuGI3+EdsYxtubi
+	hKQuBS6DHAeUm7AgCi7e8vK1b751c+LtFjbfPX46FXvwHKaTyzRpktS8aOR832gsd6c0NN
+	tuhZoCyB/GkV4QfFuG/THvVrB9r9/oc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Kees Cook <keescook@chromium.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	"Darrick J. Wong" <djwong@kernel.org>
+Subject: Re: linux-next: build failure after merge of the bcachefs tree
+Message-ID: <u6z6hyxhpjecbaw5zhevsd4hco253ec2pobijidj5bsd5ojbrw@mbu2r4o67nad>
+References: <20240212105456.65194f29@canb.auug.org.au>
+ <202402131606.A70D5347F3@keescook>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_N=Ct6hGFsdkTL7zn6nUMH6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202402131606.A70D5347F3@keescook>
+X-Migadu-Flow: FLOW_OUT
 
---Sig_/_N=Ct6hGFsdkTL7zn6nUMH6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Feb 13, 2024 at 04:16:34PM -0800, Kees Cook wrote:
+> On Mon, Feb 12, 2024 at 10:54:56AM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the bcachefs tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> > 
+> > ERROR: modpost: missing MODULE_LICENSE() in lib/thread_with_file.o
+> > ERROR: modpost: "stdio_redirect_vprintf" [fs/bcachefs/bcachefs.ko] undefined!
+> > ERROR: modpost: "thread_with_file_exit" [fs/bcachefs/bcachefs.ko] undefined!
+> > ERROR: modpost: "run_thread_with_stdio" [fs/bcachefs/bcachefs.ko] undefined!
+> > ERROR: modpost: "__darray_resize_slowpath" [fs/bcachefs/bcachefs.ko] undefined!
+> > ERROR: modpost: "stdio_redirect_readline" [fs/bcachefs/bcachefs.ko] undefined!
+> > ERROR: modpost: "run_thread_with_file" [fs/bcachefs/bcachefs.ko] undefined!
+> > ERROR: modpost: "__darray_resize_slowpath" [lib/thread_with_file.ko] undefined!
+> > 
+> > Caused by commit
+> > 
+> >   f894f9e5f0ad ("thread_with_file: Lift from bcachefs")
+> > 
+> > I have used the version of bcachefs from next-20240206 again.
+> 
+> I've mentioned this before, but this patch (and I assume others) was not
+> posted to any mailing list before it appeared in -next. This process
+> failure really needs to be fixed. Please post _everything_ going into
+> your tree to at least linux-bcachefs mailing list, and for things that
+> toss stuff into lib/ it really needs to go to lkml too and CCed to some
+> subset of people who have touched lib/Kconfig, etc last.
 
-Hi all,
+thread_wih_file definitely was; the patch moving it to lib/ might not
+have, I'd have to check.
 
-Today's linux-next merge of the block tree got a conflict in:
+We're having ongoing discussions among us fs developers about how to do
+patch review, and the emerging consensus seems to be that we actually
+don't want to spam the list with every patch (because not every patch is
+interesting!) - we don't want the human-to-human interaction to be
+drowned out on the list.
 
-  include/linux/sched.h
+That doesn't mean we're not doing code review, though! We're
+experimenting with different workflows, there's different thoughts out
+there right now.
 
-between commit:
-
-  d9233ee073c9 ("mm: document memalloc_noreclaim_save() and memalloc_pin_sa=
-ve()")
-
-from the mm-unstable branch of the mm tree and commit:
-
-  06b23f92af87 ("block: update cached timestamp post schedule/preemption")
-
-from the block tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/sched.h
-index 5b27a548d863,15b7cb478d16..000000000000
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@@ -1642,9 -1641,8 +1642,9 @@@ extern struct pid *cad_pid
-  #define PF__HOLE__02000000	0x02000000
-  #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle=
- with cpus_mask */
-  #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process polic=
-y */
- -#define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained to =
-zones which allow long term pinning. */
- +#define PF_MEMALLOC_PIN		0x10000000	/* Allocations constrained to zones w=
-hich allow long term pinning.
- +						 * See memalloc_pin_save() */
-- #define PF__HOLE__20000000	0x20000000
-+ #define PF_BLOCK_TS		0x20000000	/* plug has ts that needs updating */
-  #define PF__HOLE__40000000	0x40000000
-  #define PF_SUSPEND_TASK		0x80000000      /* This thread called freeze_pro=
-cesses() and should not be frozen */
- =20
-
---Sig_/_N=Ct6hGFsdkTL7zn6nUMH6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXMCG8ACgkQAVBC80lX
-0Gx2lwf+N0sZkkSiCq720HgLquFLPnRiIuegcVxgskirDnCNO0iM6BpAoL/Fu+7S
-dxz4k4SFwGvSlLk7Mhkvft4Ari2hvYyBTOtQn+u2L/iL6xGcJsCxvI7UT8bxFy9q
-p4R0qaKZ45jYFCIt5zCR6J63tzDg7IpfR0ltzz4Yu95rffRAhpOgXehet6LvWoyy
-Op4zgetnQxKGOmB51uz4oF/bK4ZKhWCg7j5SyJHXMz/Mhhj6ox2FMn7GN3caItSG
-n5k5eQIYeQparVem/F/iKFtY1rf4W1ziyAo05nLp6EFIofFG6goX7aLUkB8matBU
-HHV4xHjhLrU5RdeYoJr1Kb9nnerZ4g==
-=UH5Z
------END PGP SIGNATURE-----
-
---Sig_/_N=Ct6hGFsdkTL7zn6nUMH6--
+Regarding CCing people who have touched lib/Kconfig - you sure that's
+the best way to get interested parties who'll do real review? I would
+think review from the people actively working with and using that code
+would be more valuable - that's Darrick, in this instance.
 

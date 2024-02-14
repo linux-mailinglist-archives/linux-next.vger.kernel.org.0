@@ -1,209 +1,136 @@
-Return-Path: <linux-next+bounces-1154-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1155-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D6718540C8
-	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 01:18:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E132C8540D1
+	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 01:25:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 57BB2B20D23
-	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 00:18:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95B151F2A2F0
+	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 00:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8806F7F;
-	Wed, 14 Feb 2024 00:18:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E74F944D;
+	Wed, 14 Feb 2024 00:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tycho.pizza header.i=@tycho.pizza header.b="YBHSZrOm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="T9PAm2m+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IwxEmGvy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from wflow7-smtp.messagingengine.com (wflow7-smtp.messagingengine.com [64.147.123.142])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D55A191;
-	Wed, 14 Feb 2024 00:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0899449;
+	Wed, 14 Feb 2024 00:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707869892; cv=none; b=gLQemPv5Yn3JBSqvhFGHW15Uh57fDWTXGiRB0b3NcyDrVmYSYpdkzAoO3UmCRMCcdGVMrnqa4ADcDBM6q3x/nUkPS37YeZedsZdIEMA6SZuYw0g0PqaqA6BpaKEsscDisQYuDdMKfwuJacZw0Ai0Uln1n8l9OkufQ6UdbWca6ao=
+	t=1707870329; cv=none; b=e7DxbqWbG0KGAik2g6idsoheNgdYqoXAXCgpVsrOPRFF/Shf5OZGEy1OfqORTYIJqky598jDX7f2ZuEeU+jz9OiiqE3lSF1v4lYnmwjiHEYiZnZoKbLn6LmzSoBfTrMTbBnRFE6uxisiUtNIo6jq6lC/8pj8Dn6Ou3AFgmFwWqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707869892; c=relaxed/simple;
-	bh=gEf+mkmtwOGXura5Rt/DicCA9CrNFAQFmPRLVIIUT6M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TMw8DpqyVOCtXz3SwU7ewK1VibLBuswjuJ1qNPf/HDQxjt5DVPTXXjqUKdBe3cCYnDpqjjTTKFmNaLS6QZlPoCWKkmTw0t0gW7sUF9hCjMXqavimeDVuso3lo0FszgJM5ovAptE3zTTqPjMgnp0WgljOTC0Fec1yc1LRWRczLr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tycho.pizza; spf=pass smtp.mailfrom=tycho.pizza; dkim=pass (2048-bit key) header.d=tycho.pizza header.i=@tycho.pizza header.b=YBHSZrOm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=T9PAm2m+; arc=none smtp.client-ip=64.147.123.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tycho.pizza
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tycho.pizza
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailflow.west.internal (Postfix) with ESMTP id 951832CC0489;
-	Tue, 13 Feb 2024 19:18:07 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 13 Feb 2024 19:18:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1707869887; x=1707877087; bh=+YWq+i5wkg
-	LUyMl08epmILv+GcdTX//gtb/mupi/CfA=; b=YBHSZrOmvx6+CcLrFo4GSsKEJp
-	gYRIU2YOOAfK/RfQBK+Kq1R4BpofODQ108VkVwJ/LJJ93gRD2uJN7K7t+/Msrtgk
-	0gKVBbqs1YHRKhCO/5q3KUR3c/kb5eZX1QusyUcT9Q6eWBks5zO2VdDmG0cSZusA
-	yBguFhzrl2F4aLgWWB9IsEA7A/nsQLuCs4zwXhK/hhGNiNBoDXEuayy2dGEGs0g+
-	BFMqutX51g3c/HM/9+/nsuZKMOhnKVF11/aWTc6I59D3/UpkCx9HBF/LtCCElZ9M
-	xnDLZoSq4HPd2x0rx6NWlrpOFZp7+CQmcyU7ilnTWmjLMQXmsRd4dnDweesg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1707869887; x=1707877087; bh=+YWq+i5wkgLUyMl08epmILv+GcdT
-	X//gtb/mupi/CfA=; b=T9PAm2m+adehj020mz5sR7uTZydpYbiI9iATyNzY6cza
-	C7vQTlD+UX6kCZ6AThUb4IWG76SVdZc/R5/XZGvzwFEld85CYyym/z96V/ds/Qt9
-	0S64IbLTUlhGjP9O4W/N25OqXApifx3e+SbIaRvA73sBUO1S8vp4F/V27kety90B
-	ko27YzD8y3NW9IMxkdrnJ5RKTIG6HTzX588wURXkZmje57NPjGaDIDZHyY8eJnx6
-	jcXogG7sueI8rr/6CUJYd5ko9SFM8CIbTTQqVQFGaJ+UKokNZUYbHCWTOh+w6yzd
-	ascXflD6S2c6EpbY8XeolsZdm55i5R23HS5sBLY8/A==
-X-ME-Sender: <xms:vgbMZch1IAdnL0dgQHNZ6-1lqe3RRsMXCgzMcsww43kfPpdea__EjA>
-    <xme:vgbMZVDy-X5mJwkQKPc4_DOjT0Z-08ZIm45yIUYajYmm9c4urwxzNBAQWCwE2Yf-6
-    cBchoc0YUkZ3qg1eug>
-X-ME-Received: <xmr:vgbMZUFkQFkX2qI5cHyFpgMCo-L1K82uLQc_9scDZScAR77CV-JNLXxaDcs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudeigddvudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhigthhho
-    ucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtffrrg
-    htthgvrhhnpeevkefhudeffeetgeeggfevvdeuueefueegueeghffffedulefggfetieel
-    iedutdenucffohhmrghinheptghovhgvrhhithihrdgtohhmnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepthihtghhohesthihtghhohdrphhi
-    iiiirg
-X-ME-Proxy: <xmx:vgbMZdSBTOmiwn0hCO6_Hs260tMk7exTnodgg9C5_qJ4ZvRybYAxyA>
-    <xmx:vgbMZZyD69W23Gk2t7gGfQs_6TN4CXt92brQq9raeY766Ffmtw5fGw>
-    <xmx:vgbMZb7NO8pU7mdSO1WWghxEqzVcZeOwirIgHT7Ad0SOSQOjwJQ0gQ>
-    <xmx:vwbMZez0Lzk2Vsjvp2O799s8CEOzPlAvzX0sE9cEulMWVQu_gk7km4K-zzV3zzTx>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Feb 2024 19:18:03 -0500 (EST)
-Date: Tue, 13 Feb 2024 17:18:01 -0700
-From: Tycho Andersen <tycho@tycho.pizza>
-To: coverity-bot <keescook@chromium.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Christian Brauner <brauner@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Peng Zhang <zhangpeng.00@bytedance.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Tycho Andersen <tandersen@netflix.com>,
-	Mike Christie <michael.christie@oracle.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: __do_sys_pidfd_send_signal(): UNINIT
-Message-ID: <ZcwGua3a9Z8nJXVq@tycho.pizza>
-References: <202402131559.B76A34B@keescook>
+	s=arc-20240116; t=1707870329; c=relaxed/simple;
+	bh=ZYz52E5UpZ22syPUWwTv63Zl55ZRM/Eb3jbRBRiXYFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=C7ncQ5nbN/6I420jr0OdYrZanVj1PuTd7FVc4o8pvI2g1hfPJMwI6w1SrpjVxz6Nav4ZtVtc+G19cb/QZaZ+Aar7VitAOjZ/WKLZcK6NuZS2Zw9FvmS55WWWkujhZxk/Jy/ZWjRMwe5JO27icFruEd5dFPRNfemOt1NmSkUyEZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IwxEmGvy; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1707870321;
+	bh=T9rHeq/WjASCf4FMqrpZrCbxQNqDKMlgq3tzgKIB91I=;
+	h=Date:From:To:Cc:Subject:From;
+	b=IwxEmGvySQgBt4zTPvnibksanFVd3+ymF8wR5Bsnoo04QBHevmnkzrxILLFyUgsuo
+	 fL+kQI/XpHo7uCtYtfJR9Sp0p/5AgHbRRzC+NqO30bXFrgPwmmB55wyHfAyg6L9gDc
+	 L+WPVExXdJWXHQl/B5xD8w/THKBmmtOt7k1viPFg32Gj3Ak1RshZSwOzfVC+vCL9Ak
+	 7bi4xY6t1hasNv0zSPlGZedDbEYp/u60jLROtj+jjuySILNn5mZlk3B++Qd0U4bhxD
+	 wcGOVH3LoirgULptEYHClPJOiSFpo9Oy0AAYI7U5lzJ+S39fN6nGzwQfL8VYqjRin9
+	 5AoSAzEDrjrYA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TZJr10B39z4wcr;
+	Wed, 14 Feb 2024 11:25:20 +1100 (AEDT)
+Date: Wed, 14 Feb 2024 11:25:19 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jens Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+Subject: linux-next: manual merge of the block tree with the mm tree
+Message-ID: <20240214112519.153c8480@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202402131559.B76A34B@keescook>
+Content-Type: multipart/signed; boundary="Sig_/_N=Ct6hGFsdkTL7zn6nUMH6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Feb 13, 2024 at 03:59:37PM -0800, coverity-bot wrote:
-> Hello!
-> 
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20240213 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
-> 
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
-> 
->   Sat Feb 10 22:37:25 2024 +0100
->     3f643cd23510 ("pidfd: allow to override signal scope in pidfd_send_signal()")
->   Sat Feb 10 22:37:23 2024 +0100
->     81b9d8ac0640 ("pidfd: change pidfd_send_signal() to respect PIDFD_THREAD")
-> 
-> Coverity reported the following:
-> 
-> *** CID 1583637:    (UNINIT)
-> kernel/signal.c:3963 in __do_sys_pidfd_send_signal()
-> 3957     		/* Only allow sending arbitrary signals to yourself. */
-> 3958     		ret = -EPERM;
-> 3959     		if ((task_pid(current) != pid) &&
-> 3960     		    (kinfo.si_code >= 0 || kinfo.si_code == SI_TKILL))
-> 3961     			goto err;
-> 3962     	} else {
-> vvv     CID 1583637:    (UNINIT)
-> vvv     Using uninitialized value "type" when calling "prepare_kill_siginfo".
-> 3963     		prepare_kill_siginfo(sig, &kinfo, type);
-> 3964     	}
-> 3965
-> 3966     	if (type == PIDTYPE_PGID)
-> 3967     		ret = kill_pgrp_info(sig, &kinfo, pid);
-> 3968     	else
-> kernel/signal.c:3966 in __do_sys_pidfd_send_signal()
-> 3960     		    (kinfo.si_code >= 0 || kinfo.si_code == SI_TKILL))
-> 3961     			goto err;
-> 3962     	} else {
-> 3963     		prepare_kill_siginfo(sig, &kinfo, type);
-> 3964     	}
-> 3965
-> vvv     CID 1583637:    (UNINIT)
-> vvv     Using uninitialized value "type".
-> 3966     	if (type == PIDTYPE_PGID)
-> 3967     		ret = kill_pgrp_info(sig, &kinfo, pid);
-> 3968     	else
-> 3969     		ret = kill_pid_info_type(sig, &kinfo, pid, type);
-> 3970     err:
-> 3971     	fdput(f);
-> 
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
+--Sig_/_N=Ct6hGFsdkTL7zn6nUMH6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think this is a false positive, we have:
+Hi all,
 
-        /* Enforce flags be set to 0 until we add an extension. */
-        if (flags & ~PIDFD_SEND_SIGNAL_FLAGS)
-                return -EINVAL;
+Today's linux-next merge of the block tree got a conflict in:
 
-        /* Ensure that only a single signal scope determining flag is set. */
-        if (hweight32(flags & PIDFD_SEND_SIGNAL_FLAGS) > 1)
-                return -EINVAL;
+  include/linux/sched.h
 
-which should enforce that at most one bit is set, and there's a case
-statement for each of these bits in the later switch,
+between commit:
 
-        switch (flags) {
-        case 0:
-                /* Infer scope from the type of pidfd. */
-                if (f.file->f_flags & PIDFD_THREAD)
-                        type = PIDTYPE_PID;
-                else
-                        type = PIDTYPE_TGID;
-                break;
-        case PIDFD_SIGNAL_THREAD:
-                type = PIDTYPE_PID;
-                break;
-        case PIDFD_SIGNAL_THREAD_GROUP:
-                type = PIDTYPE_TGID;
-                break;
-        case PIDFD_SIGNAL_PROCESS_GROUP:
-                type = PIDTYPE_PGID;
-                break;
-        }
+  d9233ee073c9 ("mm: document memalloc_noreclaim_save() and memalloc_pin_sa=
+ve()")
 
-That said, a default case wouldn't hurt, and we should fix the first
-comment anyways, since now we have extensions.
+from the mm-unstable branch of the mm tree and commit:
 
-I'm happy to send a patch or maybe it's better for Christian to fix it
-in-tree.
+  06b23f92af87 ("block: update cached timestamp post schedule/preemption")
 
-Tycho
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/sched.h
+index 5b27a548d863,15b7cb478d16..000000000000
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@@ -1642,9 -1641,8 +1642,9 @@@ extern struct pid *cad_pid
+  #define PF__HOLE__02000000	0x02000000
+  #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle=
+ with cpus_mask */
+  #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process polic=
+y */
+ -#define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained to =
+zones which allow long term pinning. */
+ +#define PF_MEMALLOC_PIN		0x10000000	/* Allocations constrained to zones w=
+hich allow long term pinning.
+ +						 * See memalloc_pin_save() */
+- #define PF__HOLE__20000000	0x20000000
++ #define PF_BLOCK_TS		0x20000000	/* plug has ts that needs updating */
+  #define PF__HOLE__40000000	0x40000000
+  #define PF_SUSPEND_TASK		0x80000000      /* This thread called freeze_pro=
+cesses() and should not be frozen */
+ =20
+
+--Sig_/_N=Ct6hGFsdkTL7zn6nUMH6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXMCG8ACgkQAVBC80lX
+0Gx2lwf+N0sZkkSiCq720HgLquFLPnRiIuegcVxgskirDnCNO0iM6BpAoL/Fu+7S
+dxz4k4SFwGvSlLk7Mhkvft4Ari2hvYyBTOtQn+u2L/iL6xGcJsCxvI7UT8bxFy9q
+p4R0qaKZ45jYFCIt5zCR6J63tzDg7IpfR0ltzz4Yu95rffRAhpOgXehet6LvWoyy
+Op4zgetnQxKGOmB51uz4oF/bK4ZKhWCg7j5SyJHXMz/Mhhj6ox2FMn7GN3caItSG
+n5k5eQIYeQparVem/F/iKFtY1rf4W1ziyAo05nLp6EFIofFG6goX7aLUkB8matBU
+HHV4xHjhLrU5RdeYoJr1Kb9nnerZ4g==
+=UH5Z
+-----END PGP SIGNATURE-----
+
+--Sig_/_N=Ct6hGFsdkTL7zn6nUMH6--
 

@@ -1,80 +1,79 @@
-Return-Path: <linux-next+bounces-1152-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1153-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98C458540A2
-	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 01:04:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 264198540C1
+	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 01:16:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4621E1F2320D
-	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 00:04:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B98A31F246B9
+	for <lists+linux-next@lfdr.de>; Wed, 14 Feb 2024 00:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C0A947A;
-	Wed, 14 Feb 2024 00:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2842664A;
+	Wed, 14 Feb 2024 00:16:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="djCBOE2y"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DQR/6kvK"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6D86127
-	for <linux-next@vger.kernel.org>; Wed, 14 Feb 2024 00:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947847F
+	for <linux-next@vger.kernel.org>; Wed, 14 Feb 2024 00:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707869020; cv=none; b=uPF8cwDw+51JE7sAl8Pi6fKr/Yk8T2w3nSZ6u6oUbjam4aNroKGoH/lRtSQgv4SOrbnaYeJf+p1+jrT9CQqHLhKhn3a5iVEXJ2ZdYeVP0LoZHrh9K0+//BmCA0NpWLJ311y762AXgwqQbYqEmguCM8wK3ispsYmpKxmKmXDkojM=
+	t=1707869798; cv=none; b=aMTjIkKszA4Pj7/lkacYvYsSHFjqRaFrWcr0pv+j58N60H5m7nfEVAjjBGEQsDiLFwNt2LLkTTX1e0fTJoymk9j3OZ0BDp3I4FmrC3xrWPXMIEUV5u6PHCTnI4in9W1N82orZLG/kpaButqLTOTvOxJa1QdU0m790sht2u41I18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707869020; c=relaxed/simple;
-	bh=8hhjJArGuTrb01w9KR7VfGFjTK+QM8XbPfc5O1BlDNQ=;
-	h=From:Date:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GD+WyrznRIEYUmtTuR5csX9kCvvFfoY/B7vh41w8wv2oPcnimj/VL03qynl3YkoI1CIKWzrgIn9R7cnTWRayLDRzLk3YOa3nS3VgscKQU13yPuu73tWQpdEujSsZtVkQUqFo+r1QNChISO26tqKLm/ip0ixkFUOA2cjJGmZ0shc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=djCBOE2y; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1707869798; c=relaxed/simple;
+	bh=Jj2mI4+z893fkI7KcAWGdICx7F+XHBksLBKFmFLUy3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k0u0qtqp0LhJNZv+fWGrmI20jIU8iE6BbJDLspr/gmaLit7hskHy49cDiB5UpZm9REOx+ihwGK/YebuB2ky/+iXYWZYKW0MU0XMrF0PkhyhF/dMJU5yToHhGhe0qJDYKnCe6bbiBeuhbJg0saMU/FYfY8r6Ti7yOaIXAyNDs6qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DQR/6kvK; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1d51ba18e1bso48192135ad.0
-        for <linux-next@vger.kernel.org>; Tue, 13 Feb 2024 16:03:38 -0800 (PST)
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5dbf7b74402so3326873a12.0
+        for <linux-next@vger.kernel.org>; Tue, 13 Feb 2024 16:16:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707869018; x=1708473818; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S5KvIIxgHED0qUD38JtNJLqQBOi5mdYPuXDuUCUlxsI=;
-        b=djCBOE2yZfChkl4BK4rM9eukCOAbfAMTqZoHl8Ee2TTxj/2lv8BiQZtqIpkaEygHqS
-         fuodi6w+OO4qRosBH/JiHz4fAmiLc02TEsldoR7cJwZMTne7sjWrpbFd4ELFLeQH4yh9
-         aAlI/ZU+3DtVMnNc0HGkr+FcY0xLCHNmdbfmY=
+        d=chromium.org; s=google; t=1707869796; x=1708474596; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dE2UETRpvF16U4f37LAirje/SMvTyMmWDk49s8xZgAg=;
+        b=DQR/6kvKRhG3VOKSsna9gIdKQwZ5q4nmS9eTt3+7pPuN5gBOV7mD7V9i8qDqKxvwGv
+         YdUaj3H+7rDOGaQO5ngKJoTNC/eTyWwlPZdn4z83ahZ86d52OQ3+fQg0PDeOrRfx66CB
+         U7WaxlRie7K50nqt4D7odNIzlCS9XdHds5BKY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707869018; x=1708473818;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S5KvIIxgHED0qUD38JtNJLqQBOi5mdYPuXDuUCUlxsI=;
-        b=NatkZFmZJ+qLiWcvRhNydpSkEpaEfo/ClPbB0fCk6p8/ztwQNbs/VnhoobF93oCQJ7
-         14EjFloR0L2nUdfAdvjmHREKPEJinHh52w9cAiQtaGYx8fK2rw6zvhyckDrmR+gX8iAA
-         xXowWDwqvi2hNWfq+7dXJKq25hQvmA+PkY1Tzv6AaQkHkDrU6NEtwouidAu2srdtd1s2
-         M9L+ruwG5QRR8jmyug27gkiCWbXhGMiGdV/sM6MXcrF5nR29YRLCle+YktxSbba63YlK
-         76zhaHHgmmIOyvZ7UZSuPg+Q/LOOwIIfqGpuz1JmuQRihEVV5D1Gg8yJepSGQ2Uu/DGe
-         z+Zg==
-X-Forwarded-Encrypted: i=1; AJvYcCUimqXJNSm06hfZjAPgGnDSHPmm2l0jdL98Xt2n6fTWUHhYcnwwtwU86if7bVRhdCtxZeTSRNoxUclz2JD7vcF3NzZC3wozeyyBvg==
-X-Gm-Message-State: AOJu0YynfMZD1NnugmxJPOHmok2vsj6ggVt3vkzHzE6wWGvMIA2ClRPA
-	tfK00H3i4dRa2ERlXPs924/P17uiwR29spFsC2fgf7HsR1ur+gh4o/GiZn+Olw==
-X-Google-Smtp-Source: AGHT+IGvii1pz5Qtbml0HlPO4mlvNOppuYUgtORJaUe6oE/++e0grTswYB62DSIZ5RJkmOTD6odEsg==
-X-Received: by 2002:a17:903:2289:b0:1db:4c8d:9135 with SMTP id b9-20020a170903228900b001db4c8d9135mr1097758plh.8.1707869018377;
-        Tue, 13 Feb 2024 16:03:38 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUGNfPy6SBtkiwYFx7mxAkHk5NefCYdhE0oFJsirFxOlvy154DJNYLhH8iNKcCbgDLM8tQwSpkD4vDYiOTVn6kKmS9xgT9f2tGxoZr3nZDpeKGifhQ+wfiE/R3kDoMripDcGmBiOFr9HHNwjeTUpKLjOtfzV9mwPjJ1UAfpf/QajoJehd80y7lIIu2p4W3w7KbpbI1iw/wrtu6YYXbEpxPBJhsZfW8Eta/S49d+dvSHaWx1OEGHkju4c+nFG7cJnZ6j6zuuEG3ZEOmoJygJ8yiUCA8aV5NLcjiY3QmvnxKkRJv07FH0weKDu0CTyjmJfAYyuLN7fj3Q70x/tQaJCAsgFZYR6DzjRA==
+        d=1e100.net; s=20230601; t=1707869796; x=1708474596;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dE2UETRpvF16U4f37LAirje/SMvTyMmWDk49s8xZgAg=;
+        b=l+qMFptHNn9cWGNCSS4Cm+EpmlPjkLEq4OnPZDrPahuVof05qiLTYRZQZ/owwPiW1G
+         fPyaEb1MJ1fF1liqb2+Cd8Y2MDIwHxFeJQphnC9CFHwTR8dd8DWKDZRFlx3b2b3Ju4Ev
+         qEfyRVo/H+rKKdeoy+PwyiPxE9S6awN0MswcohrROugUQgfXvstBXGVupko9an1WlRYF
+         nKNURZLO9sY0AcoB4kBoiUALk+F5WsHOeqYYTh7qAHaatTNujgEa2ru1fP/7SAukw3Ci
+         2hX49XtalU97qcyKUkbMX3ev2qUv0rgkD/3OUVer/VVXLNCCHvaM11JPDZ6vH6E6ypG2
+         tfxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWJnNNYCVB5AnyMjQh74hHaylpZ9/naccgGv1GwSoAE8oxhlTJLXb6A+HwMMgq0j88SBU5nBi0AhjCxhGO+dDRfHuWa0KSh8P5ZcQ==
+X-Gm-Message-State: AOJu0YzzBpJrazIExeFWx5ehYw0KNbkFIRPfZWYDIx+lb8Shm2v1P2Hm
+	3FB8sWA75SqySwBhTgJjiLqfr03Qo+CGIatOyrcyzzcJiGZL2Vk6P+qgdvEPJk8wzJMDNpXP1HU
+	=
+X-Google-Smtp-Source: AGHT+IHJ3aKj7O5FlP5mKnfwqC79okKRRwEuTt+rqMdH8uJz0AMpS6OJQxYmzpXh58S4wjq5eJmd6A==
+X-Received: by 2002:a05:6a21:3a82:b0:19c:b3ea:27ba with SMTP id zv2-20020a056a213a8200b0019cb3ea27bamr1504063pzb.52.1707869795891;
+        Tue, 13 Feb 2024 16:16:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW64+jpFz5kXUa2KhvOrCzbDEq5uznF5TpVCY2bOmO8UHb2gn6CiMR/L7UFPMxYd9IitCIRuFYuR7pbFjS5bGbXXcn8wstyaVxFXAZLO3FcpZ+l/4BJh4TZmt8k+x8DxT4Y0P0vOQ==
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id kd12-20020a17090313cc00b001d706e373a9sm178448plb.292.2024.02.13.16.03.37
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a0023cf00b006e08f07f0d1sm8011934pfc.169.2024.02.13.16.16.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 16:03:38 -0800 (PST)
-From: coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date: Tue, 13 Feb 2024 16:03:37 -0800
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: linux-bcachefs@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brian Foster <bfoster@redhat.com>,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: darray_vprintf(): API usage errors
-Message-ID: <202402131603.E953E2CF@keescook>
+        Tue, 13 Feb 2024 16:16:35 -0800 (PST)
+Date: Tue, 13 Feb 2024 16:16:34 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bcachefs tree
+Message-ID: <202402131606.A70D5347F3@keescook>
+References: <20240212105456.65194f29@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -83,49 +82,44 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240212105456.65194f29@canb.auug.org.au>
 
-Hello!
+On Mon, Feb 12, 2024 at 10:54:56AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the bcachefs tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> ERROR: modpost: missing MODULE_LICENSE() in lib/thread_with_file.o
+> ERROR: modpost: "stdio_redirect_vprintf" [fs/bcachefs/bcachefs.ko] undefined!
+> ERROR: modpost: "thread_with_file_exit" [fs/bcachefs/bcachefs.ko] undefined!
+> ERROR: modpost: "run_thread_with_stdio" [fs/bcachefs/bcachefs.ko] undefined!
+> ERROR: modpost: "__darray_resize_slowpath" [fs/bcachefs/bcachefs.ko] undefined!
+> ERROR: modpost: "stdio_redirect_readline" [fs/bcachefs/bcachefs.ko] undefined!
+> ERROR: modpost: "run_thread_with_file" [fs/bcachefs/bcachefs.ko] undefined!
+> ERROR: modpost: "__darray_resize_slowpath" [lib/thread_with_file.ko] undefined!
+> 
+> Caused by commit
+> 
+>   f894f9e5f0ad ("thread_with_file: Lift from bcachefs")
+> 
+> I have used the version of bcachefs from next-20240206 again.
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20240213 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+I've mentioned this before, but this patch (and I assume others) was not
+posted to any mailing list before it appeared in -next. This process
+failure really needs to be fixed. Please post _everything_ going into
+your tree to at least linux-bcachefs mailing list, and for things that
+toss stuff into lib/ it really needs to go to lkml too and CCed to some
+subset of people who have touched lib/Kconfig, etc last.
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+And, as mentioned before, checkpatch.pl absolutely screams about this
+commit. Lots of code style issues (unnamed arguments in declarations,
+variables defined in the middle of function bodies, etc). Please adjust
+these things so it's easier for other maintainers to work with and on
+this code. :)
 
-  Mon Feb 12 13:55:16 2024 -0500
-    ead021e0fe5b ("thread_with_file: Lift from bcachefs")
-
-Coverity reported the following:
-
-*** CID 1583634:  API usage errors  (VARARGS)
-lib/thread_with_file.c:123 in darray_vprintf()
-117     		va_copy(args2, args);
-118
-119     		len = vsnprintf(out->data + out->nr, darray_room(*out), fmt, args2);
-120     	} while (len + 1 > darray_room(*out) && !darray_make_room_gfp(out, len + 1, gfp));
-121
-122     	out->nr += min(len, darray_room(*out));
-vvv     CID 1583634:  API usage errors  (VARARGS)
-vvv     "va_end" was not called for "args2".
-123     }
-124
-125     void stdio_redirect_vprintf(struct stdio_redirect *stdio, bool nonblocking,
-126     			    const char *fmt, va_list args)
-127     {
-128     	struct stdio_buf *buf = &stdio->output;
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1583634 ("API usage errors")
-Fixes: ead021e0fe5b ("thread_with_file: Lift from bcachefs")
-
-Thanks for your attention!
+-Kees
 
 -- 
-Coverity-bot
+Kees Cook
 

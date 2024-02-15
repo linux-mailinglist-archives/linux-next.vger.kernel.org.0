@@ -1,91 +1,150 @@
-Return-Path: <linux-next+bounces-1178-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1179-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C66E855984
-	for <lists+linux-next@lfdr.de>; Thu, 15 Feb 2024 04:36:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F1DD85598D
+	for <lists+linux-next@lfdr.de>; Thu, 15 Feb 2024 04:47:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE2B91F2A1D0
-	for <lists+linux-next@lfdr.de>; Thu, 15 Feb 2024 03:36:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE9421F25277
+	for <lists+linux-next@lfdr.de>; Thu, 15 Feb 2024 03:47:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9AEEB675;
-	Thu, 15 Feb 2024 03:36:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 159D83C17;
+	Thu, 15 Feb 2024 03:47:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="cjQTs2Lu"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZXtLaCrj"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710BEB660;
-	Thu, 15 Feb 2024 03:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E946FAF;
+	Thu, 15 Feb 2024 03:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707968207; cv=none; b=TC5mlZK/dxGqTS3XVDz0X7Byou/wSvvh64hWSMEFdgV0aEn9siVUUM4R1DLdSzna9yCsqplhUsHMx7YeQnG6STArF6PXR/y0TUs28awKvKrMRbV9gYEJw7eZl59gPbqy1S39UHkYHL93Wx0mR7LuUG2N3vIAcZIVvobCwD1X65Y=
+	t=1707968865; cv=none; b=XykLgDPXqZcrD34eaTlHmAhammUcntZaZpaumGw5nJ8WTHNLtXXYailuMyJq3Rnc4B1MH+Jv05v0e1rvVGcZMSGIsPJo4yJgs5XdGHWw/AbuVL6QejqmqsNx6YTb2KQicRF/rTHRE1VXq1bxCq6ZUkMoP0UtJB+HPA++lQuShUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707968207; c=relaxed/simple;
-	bh=uBVWc3WnQiSE73f2SM93QqQjzcXOnbEklnqmtdVl140=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=vFQs7DwV811fojiNUFEhtoj9zBYczat34D0tvmd4utnihjw6TwRowX3m0f3I9FnqIVpjKMe3/c5wQmCens8fhoLhcCR2nAq9BWyMWcKU90dt224EORFlDaCM/Vk0huU8l4xqUE8nCXOQOV7Q6DHBKYhq1qcVcyyI/ghaVoj5p94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=cjQTs2Lu; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1707968201;
-	bh=s71VglVzXMHExQHV0flXdlMkL0Er5JOLuJrclNyZ2YU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=cjQTs2LumNQvps0w1v9ahJISdsxPzj0e6mQz9zzTwySFqnU8I+6KL4Q/lm609CWco
-	 /71QVSEkdXue7HIPavkyUqbFSTskV3H32oYe8Fw2xFlwSe/8gdtDf3QidhKtPwVqz5
-	 DQjGPi8tRyygya1FfuaPpxDs2N4v2Lgu9ulVOOHzx/F2UrpaZEN+NIgHkoq5Vz7Zs0
-	 J2566AhsAZOR0kre8HKjn1OxEOmd8Y7iniRdfcWfTQ4ED30GRX/iW+iXM/4OMavMyp
-	 HKwobuQXiN8IxYHYIy7GpK1P9NCb6plTcoPwXYTog8Nb2IG3+r+MnBXk4RXbCu+iRj
-	 Fg10tpZIFsqxA==
+	s=arc-20240116; t=1707968865; c=relaxed/simple;
+	bh=d9JIEffC0Ru+l8d00ZWYMJ6rCCcbMiSITba4JL8uUnY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TID/hX78ZlG0tZ3gDt9Uj8Fvax5mGthRsSyS/hnwmmZ/2Di0pMqY6gqn7VOnBs75IrBsbVO0FNrafaHKuJjLLvCWbtJ8hd5VKWWbiS6nj9CMNuwd2Fjq1r6XlKvATH1JS/+QPOeI1kQT/DVRTQPXeIb3vwWcqnXGmH4Dvl3WDDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZXtLaCrj; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1707968858;
+	bh=vnImonB9giYOEiEgQMk/p1YJhq0VELghflUVqAoT0fk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZXtLaCrjjq9Pl+M+KwkfK++aDL2/mmyeIvjACQv60D10Mmrd2IHz7u4j/4hGDgzWA
+	 8ToDr+tineodnZsKle0McJ+XYukjlAqVj/pX+CfUt8BWV4m4kjVqYdT6oL834RzNMm
+	 5rk6lRMJSH7Zm+vY9bG6hTBxtKEKseTYjnwRNHcx1QzkRBpv772+WtyUlEaXLWZmGl
+	 lbddf7bbxp4wIsvR0Pomol6VuoUZIVg1+VkPO+PsPeygtcQgwrdGUUiCQvJGo+209d
+	 hT9VWhg6Tiq4hVkAMw/7mqRWXRRy6VhJGOPA2d9lYZE1VVztYyDs+b1e83C3UjuXAw
+	 zW++byOCzh5Mg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tb12K1Jrjz4wcN;
-	Thu, 15 Feb 2024 14:36:41 +1100 (AEDT)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Randy Dunlap <rdunlap@infradead.org>, Stephen Rothwell
- <sfr@canb.auug.org.au>, Linux Next Mailing List
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tb1Gy2grwz4wyt;
+	Thu, 15 Feb 2024 14:47:38 +1100 (AEDT)
+Date: Thu, 15 Feb 2024 14:47:36 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oscar Salvador <osalvador@suse.de>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Gaurav Batra
- <gbatra@linux.ibm.com>, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: linux-next: Tree for Feb 14
- (arch/powerpc/platforms/pseries/pci_dlpar.o)
-In-Reply-To: <c501ff0a-170b-42a8-a5b7-623ebb6c7fba@infradead.org>
-References: <20240214151426.0a398cf0@canb.auug.org.au>
- <c501ff0a-170b-42a8-a5b7-623ebb6c7fba@infradead.org>
-Date: Thu, 15 Feb 2024 14:36:41 +1100
-Message-ID: <8734tu760m.fsf@mail.lhotse>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <20240215144736.21e8c19f@canb.auug.org.au>
+In-Reply-To: <20240214071938.f8ca072c08e618b483bae1c7@linux-foundation.org>
+References: <20240214145719.1cc4f320@canb.auug.org.au>
+	<20240214071938.f8ca072c08e618b483bae1c7@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/KDdd4i5c=QStkA6TAQbhr9v";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Randy Dunlap <rdunlap@infradead.org> writes:
-> On 2/13/24 20:14, Stephen Rothwell wrote:
->> Hi all,
->> 
->> Changes since 20240213:
->> 
->
-> on powerpc64:
-> when CONFIG_IOMMU_API is not set.
->
->
-> powerpc64-linux-ld: arch/powerpc/platforms/pseries/pci_dlpar.o: in function `init_phb_dynamic':
-> pci_dlpar.c:(.text+0xc4): undefined reference to `ppc_iommu_register_device'
-> powerpc64-linux-ld: arch/powerpc/platforms/pseries/pci_dlpar.o: in function `remove_phb_dynamic':
-> pci_dlpar.c:(.text+0x248): undefined reference to `ppc_iommu_unregister_device'
+--Sig_/KDdd4i5c=QStkA6TAQbhr9v
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'm pretty sure I reverted the commit causing that, the revert will be
-in today's linux-next.
+Hi Andrew,
 
-cheers
+On Wed, 14 Feb 2024 07:19:38 -0800 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
+>
+> On Wed, 14 Feb 2024 14:57:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+>=20
+> > After merging the mm tree, today's linux-next build (sparc defconfig)
+> > failed like this:
+> >=20
+> > In file included from include/linux/page_ext.h:7,
+> >                  from include/linux/mm.h:22,
+> >                  from fs/sysfs/file.c:18:
+> > include/linux/stackdepot.h:59:39: error: 'CONFIG_STACKDEPOT_MAX_FRAMES'=
+ undeclared here (not in a function)
+> >    59 |                 unsigned long entries[CONFIG_STACKDEPOT_MAX_FRA=
+MES];    /* Frames */
+> >       |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~
+> >=20
+> > (and many more)
+> >=20
+> > Caused by commit
+> >=20
+> >   18d4230bb372 ("lib/stackdepot: move stack_record struct definition in=
+to the header") =20
+>=20
+> Thanks, I'll try this.
+>=20
+>=20
+> --- a/include/linux/stackdepot.h~lib-stackdepot-move-stack_record-struct-=
+definition-into-the-header-fix
+> +++ a/include/linux/stackdepot.h
+> @@ -39,6 +39,7 @@ typedef u32 depot_stack_handle_t;
+>  #define DEPOT_POOL_INDEX_BITS (DEPOT_HANDLE_BITS - DEPOT_OFFSET_BITS - \
+>  			       STACK_DEPOT_EXTRA_BITS)
+> =20
+> +#ifdef CONFIG_STACKDEPOT
+>  /* Compact structure that stores a reference to a stack. */
+>  union handle_parts {
+>  	depot_stack_handle_t handle;
+> @@ -73,6 +74,7 @@ struct stack_record {
+>  		};
+>  	};
+>  };
+> +#endif
+> =20
+>  typedef u32 depot_flags_t;
+> =20
+> _
+>=20
+
+Works for me.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/KDdd4i5c=QStkA6TAQbhr9v
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXNiVgACgkQAVBC80lX
+0GxrVgf7B3HdXv1Cvhvc8iVm301x25+WCxOcamW3CCVVZLLdWO0xuuJutjqXNwdU
+wQ9zecGtrsKz2GU4CmNrthDTzSqCkvLOiFhfArd47GlOX9exzrUQ9IiwWD71bjps
+6aNin3cbTQ2kZFF5U1hBMLzdMJyWYrLK8eOHeIwCIaL9rw68SfcNFBAhpmLVIhd8
+14LeyV2RSxCRt94tVbFxXOYQhuIl4euFMtLlkEcUiyGZ1U43UdIk1U1swZ7XgtKV
+NwMgkf3Hh7HZC/cacs55jzD6lQAEfKyNfOOSa5NiijrUmmjNfIHziPkmepMXN58b
+wtAH73G9UUjllelV5mLx+pllOJHByg==
+=l3Fb
+-----END PGP SIGNATURE-----
+
+--Sig_/KDdd4i5c=QStkA6TAQbhr9v--
 

@@ -1,100 +1,99 @@
-Return-Path: <linux-next+bounces-1199-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1200-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D07D9857CC4
-	for <lists+linux-next@lfdr.de>; Fri, 16 Feb 2024 13:38:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C5DA859984
+	for <lists+linux-next@lfdr.de>; Sun, 18 Feb 2024 22:24:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFB6F2894BD
-	for <lists+linux-next@lfdr.de>; Fri, 16 Feb 2024 12:38:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33D4DB20C24
+	for <lists+linux-next@lfdr.de>; Sun, 18 Feb 2024 21:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7E67E784;
-	Fri, 16 Feb 2024 12:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC3073184;
+	Sun, 18 Feb 2024 21:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPrTM/h+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="eCK6XYva"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205CB2E641;
-	Fri, 16 Feb 2024 12:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162D84B5C1;
+	Sun, 18 Feb 2024 21:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708087079; cv=none; b=kGph4YGgJxQKSAvdYvDI2xoSF0hcPH7lGKGCbtXFO4xHc5eXUcJBRyA8RyMQHXsIdZ+kTrIsGLdafAkVbseT1MMV0Ax20KVcZV43eV7vFlM1ltdU4IJ1vhK1R5WFREgNKTB4/ClHIiSRAlMHS9GLpu4MRtUYE1RyNP/Jb/aRwSw=
+	t=1708291455; cv=none; b=K5nw5naAs4s3UTCmJETG4WmEKRIjIotI6fMABey5ardK0yk68zRFZuq0+x3tUAHFd3GCVpIkmoZ+Gj7+c7T5Xp/bCuVNrGfD7ZZItgaLE8kxdxXyEBsmtrXHJR4i2g1yF/aiMjioad9ieqBwJGp0KZcnSTFwgfHH0oibAPOQT1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708087079; c=relaxed/simple;
-	bh=z1sBY58BDg/3llEaa4HysrUIoaHtRN+Da+kU9maVq48=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VmlPG4RDObaPlet77EoU+Sw1ZQI4OAjm0FpFg0YFZMd8RbpUGvBBU6omrrpefNvyykHhcCeAelKXm/OCfGAMnpdUmEEaoRhJQbb2QqqYbPM9ELfXBiZn/Xdo+MUGxYoCz51+/HieSOxYEktoVEzC4EYkg2e1GXSWPmovuTW9V1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPrTM/h+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3AACC433F1;
-	Fri, 16 Feb 2024 12:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708087079;
-	bh=z1sBY58BDg/3llEaa4HysrUIoaHtRN+Da+kU9maVq48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CPrTM/h+yr8xHtfln0FuJIAOEyKLdIc8Pf6BJzUa7cQooTPgF0aJEFzC6XSjxVPlb
-	 mHuQmcq0xfvHyR+XEEaYrxlfzssxTD7a/ZKH4l5E2+EHGe85jItdgc6JDGqzuifSCG
-	 D8bcspXsoxuyXEK3qqs7/nIEe0i85QGO/T1bqDBp/58WujNP45Wi5/dD+xs0N2HGuR
-	 pOTEqfa6kwSB3VUQfTxDcPw5IOAaNY3eQ7wGndWUEaXiulaZdWgoRqGNfjVDBNk9hf
-	 Dq2zMJMXEsungzU2tUGcyzxRDD7WSVfSQcgmxQ7eS+vOsOZgcUm3UDEDVf0hZSLRp7
-	 8X22tPYqaK9Cw==
-Date: Fri, 16 Feb 2024 13:37:49 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Tycho Andersen <tycho@tycho.pizza>, 
-	coverity-bot <keescook@chromium.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Peng Zhang <zhangpeng.00@bytedance.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Mateusz Guzik <mjguzik@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Tycho Andersen <tandersen@netflix.com>, Mike Christie <michael.christie@oracle.com>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org, 
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>, linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: __do_sys_pidfd_send_signal(): UNINIT
-Message-ID: <20240216-polster-stopfen-7fafe753180f@brauner>
-References: <202402131559.B76A34B@keescook>
- <ZcwGua3a9Z8nJXVq@tycho.pizza>
- <20240214090332.GA14017@redhat.com>
- <20240214090640.GB14017@redhat.com>
- <ZczLyDCN+zG6imTd@tycho.pizza>
- <20240214175555.GC16265@redhat.com>
- <Zc0Ca5te+QFBZ1U6@tycho.pizza>
- <20240214191801.GA27799@redhat.com>
+	s=arc-20240116; t=1708291455; c=relaxed/simple;
+	bh=dkuDWU2rpKLPBu6sUlNnSpN7G8NhmP+Q1s4Y0D9IX0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Q1qug93lgbRRtBfJtfGZ+sNotCiZWmRuCU4khcPwMv8Tv3xomyO4ALy/02B6Ds7Y/S6m1SKmp0nwUnaPxMD5hdrASOq+aY5kqa7mAjCF8topgCQtlUqVAYmqwaJ5/SPV233kMl74+WMM8OTCsXktImGtKW45u8YV4fmr29QobQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=eCK6XYva; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1708291449;
+	bh=uuizwE4pCsH1kdWmspnjb47O4PazP7eoSsZzVwGnZ9Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=eCK6XYvaH/6CUywp2ZY6JwHHA9SfnGE7OLyFosfwAcl1wwoHJmcfXJZdN3jQB0lWW
+	 BYPs5ewt6JGCvIQtVn89HitPyyk8nYB9+CGIBvyJ8Ro6CwOrBRv2AfHSAaj4cFG3oa
+	 /uh/v8Sny0uwAOM00EOGcAk4k3g0vXBQNLSTRlR0tdDUhkw8mD+Et8G64doX1Ojb34
+	 aM+i8dutwdvBBV2lQDzTFSwjAgGi3yyJusEr5aIxU80VfYA35Y64yUEUcdJ8NHP+O3
+	 BwqXnwZRy19iP7vtpNlTffLjgRAT1WlxooG2QwpbE5oaftpPzLa1jvAwMMPq/pkEwO
+	 YwlNpfzqWPS8A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TdJZd0vpSz4wcB;
+	Mon, 19 Feb 2024 08:24:09 +1100 (AEDT)
+Date: Mon, 19 Feb 2024 08:23:44 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the i2c-host-fixes tree
+Message-ID: <20240219082344.267d1a2a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240214191801.GA27799@redhat.com>
+Content-Type: multipart/signed; boundary="Sig_/7rbdQ1+zIH9L6CcET=viwmH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, Feb 14, 2024 at 08:18:01PM +0100, Oleg Nesterov wrote:
-> On 02/14, Tycho Andersen wrote:
-> >
-> > On Wed, Feb 14, 2024 at 06:55:55PM +0100, Oleg Nesterov wrote:
-> > >
-> > > We want to check the "flags" argument at the start, we do not want to
-> > > delay the "case 0:" check until we have f.file (so that we can check
-> > > f.file->f_flags).
-> >
-> > Fair point. I was thinking delaying it would make it simpler, but then
-> > you have to free the file and it's less fast in the EINVAL case.
-> 
-> plus we do not want to return, say, -EBADF if the "flags" argument is wrong.
-> 
-> > I also don't have a strong opinion here.
-> 
-> Neither me.
+--Sig_/7rbdQ1+zIH9L6CcET=viwmH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Or you know, we just don't care about this. ;)
-In any case since tis is a false positive it's not urgent in any way. If
-either of you cares enough about this then please just send me patch that
-reorders the checks to please that tool. The specific way doesn't matter
-to me as well as long as we don't pointlessly fdget()/fdput().
+Hi all,
+
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
+
+  32e9b680de4b ("i2c: i2c-qcom-geni: Correct I2C TRE sequence")
+  3fab8a74c71a ("i2c: pasemi: split driver into two separate modules")
+  eb9f7f654f25 ("i2c: i801: Fix block process call transactions")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7rbdQ1+zIH9L6CcET=viwmH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXSdWAACgkQAVBC80lX
+0GzvKAf/anjiRx9S+EyVoBvlLwdgbyl6v2qNx3YLdJW/aAm4yZtjFoQX7W/LwFGS
+acA6NaCDggp9EoN49+J5YYejnEIH7RyAzveoylDJX/5LCLoorEWf1GSp09bY33uB
+KLQ6wHuhtEI8cYtRl5EEbqeNf4D7KdeE08wt1rUM4tEMtVUZXbaXJJaPjuchZht0
+J+MJevlCS9hX7Lqhx5hFqiVMyM33cE6rtHG1YXyyL/do6Npcyj3VqWqYiY9K5giM
+oOx89Q7RmpZt2eoz8ZlRbRfF5DxID8JnITctvOMNvhi1QJ7kmL43nHpgQwgwLByV
+KeS0eWniXs+eeRIJIoyoDmlZ9lumyg==
+=sYFA
+-----END PGP SIGNATURE-----
+
+--Sig_/7rbdQ1+zIH9L6CcET=viwmH--
 

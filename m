@@ -1,90 +1,87 @@
-Return-Path: <linux-next+bounces-1205-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1206-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC93B859ADD
-	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 03:58:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FBF3859B14
+	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 04:40:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A8461C2117C
-	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 02:58:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2DBEB2171D
+	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 03:40:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5CFA20F1;
-	Mon, 19 Feb 2024 02:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8845D297;
+	Mon, 19 Feb 2024 03:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tirE7gwQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qcvh9G49"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8BB1FC8;
-	Mon, 19 Feb 2024 02:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F387C15A;
+	Mon, 19 Feb 2024 03:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708311493; cv=none; b=MW3ZY9eA4I5SCIzmCIB5Zky5+LlV1adP9IRtqSNVNDIpb+ZDZrMjYcUnPxo6yJTW1+MDvCme1QFGjn6/ec/vNvxoGjX3noLLYq6EDaaf8pvCkFgFECjMoFb9eD9tnZyumWRHCMnF4Re37PHLMV6Ehixx9pOefZRB2Vk3y5CQW7s=
+	t=1708313992; cv=none; b=XaK+/OXGPzatee6LumX0xkw2N4cPoZ0yIVplM3Wl8HDDxUx6pgFpmLWpgrOe/x2E5PKKrTDgCAWHdWLMIAQm4NU9EuGyOe82kibfhC5UbUc+R9O/5V83LOLm+WJv2aaSIg7LTneuANNO+fyxnbCV854lodZWns2yG0kDoqToxe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708311493; c=relaxed/simple;
-	bh=gctggYPLGlntgRouCIS1Y5xS9wy4M1dICUmfSMUaA2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VUdRpB3+kBR4sPJZ0/TJKQniuevH6zkE/dSzj26apPVGudwUaimCP+/sR+pK+euUAQbx1WQuudd2HecO7PLtnmrOFWDuWVP6maMLG7P5sBohVZijs19BSW5MSOxlhLEhRVI8opf3Olpg/FhSNgkGJfZDT+2ZfUTeOjvJ5OTOViM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tirE7gwQ; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708313992; c=relaxed/simple;
+	bh=fxhi+GqlErvj/43tcOJamSImC1DKThuSTHYdimhH9l0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aa2darkmF2+uF1gXR1/VdAXAB+l5GKYjSPWOvKxfstS4abH8novAilTgHUS+ITC5BbptWwkRdj2BVEzGhsle0QS3ZpdznWRoyveMMOXIRVt1oSmh5QU11svHIQQeQ29wTZIYSO2LXR/9/Ajmw66BIdwA+mkhj8J0rHwdCoXX5I0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qcvh9G49; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708311488;
-	bh=7XaKWVD9KB3AwSX0RxGYmJEUX1mxEDnJZN5p2hnu4+o=;
+	s=201702; t=1708313987;
+	bh=TBNt9NsUlQ6Z+jk7YwoAOPS6chuqkcUdtoSLrtBERHs=;
 	h=Date:From:To:Cc:Subject:From;
-	b=tirE7gwQkigdBfOiXJLEWoOdlMv7xicMQ+bb8KwBI0l75izAOwmj+ROEHmIl/ZKdE
-	 hqlrvppMFDuW4rCs5n+diq7qeGSS5nyfTnXfaWoYgMxcNP8NHtklGzy8TgftO41Kxz
-	 GmKWlt82Uah4fykXuWZnuAbHPHm4zad8eXEkl4irt4d8KzzYBUZAlcljnEdDBKrFZH
-	 7vFI1hyIlGaSeaHZwtUXZejUlA5uHfb+b02iyDUI1i2YKSxR4ZqWQFMN3ZRt1WN2Dv
-	 4pnT030y9o2LJS1YKqltYqSCwv03x+mXrfXwl93nnRsB5mLtOPTnKWWRiRUKdVVqmH
-	 k0CuP4d9znDXw==
+	b=qcvh9G49iWJ6vri1aZVNujcfSuhdLYDD4AfCGl0gtLDQal85rPvOgJfiCnpfGFL3d
+	 UfdUxZDOKCQ9NWShfUxF501nSpT23hPdNYYP5HT8vuUa6iXpLJ5Km9gj82yWSO69ia
+	 JuGgTMDUalJJJMbeH/cvD6XtlMR8UntC9sBUwI+LC47QUK/W//AovHtCbpaHR88ftO
+	 Lcff0HV945m/M/WS4SCppNhpEHDa1WzBqn0oZ5BZI5+mYAe+KiVBsb0/tDNg7ZtO3r
+	 a4tCj/InbA4WP4Dd24Sf+9y+iBH0BQQJIpCbkpIZFAp6pCeW1tjScbaYm7kh+wubdj
+	 bLNQjgbO0PSjQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TdRzz2BrNz4wcK;
-	Mon, 19 Feb 2024 13:58:06 +1100 (AEDT)
-Date: Mon, 19 Feb 2024 13:58:05 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TdSw30zm5z4wcK;
+	Mon, 19 Feb 2024 14:39:46 +1100 (AEDT)
+Date: Mon, 19 Feb 2024 14:39:45 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Oliver Upton <oliver.upton@linux.dev>
-Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-Message-ID: <20240219135805.1c4138a3@canb.auug.org.au>
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Nuno Sa <nuno.sa@analog.com>,
+ Olivier Moysan <olivier.moysan@foss.st.com>, Rob Herring <robh@kernel.org>
+Subject: linux-next: manual merge of the iio tree with Linus' tree
+Message-ID: <20240219143945.1460f25f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0lq+TnyNw/r+bgBwPDvE7v7";
+Content-Type: multipart/signed; boundary="Sig_/tXUY7csCIFfpbDRm+l9Nm2f";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/0lq+TnyNw/r+bgBwPDvE7v7
+--Sig_/tXUY7csCIFfpbDRm+l9Nm2f
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+Today's linux-next merge of the iio tree got a conflict in:
 
-  arch/arm64/kernel/cpufeature.c
+  drivers/of/property.c
 
-between commits:
+between commit:
 
-  9cce9c6c2c3b ("arm64: mm: Handle LVA support as a CPU feature")
-  352b0395b505 ("arm64: Enable 52-bit virtual addressing for 4k and 16k gra=
-nule configs")
+  8f7e91790738 ("of: property: fix typo in io-channels")
 
-from the arm64 tree and commit:
+from Linus' tree and commit:
 
-  da9af5071b25 ("arm64: cpufeature: Detect HCR_EL2.NV1 being RES0")
+  fd4464d218d5 ("of: property: add device link support for io-backends")
 
-from the kvm-arm tree.
+from the iio tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -97,84 +94,36 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm64/kernel/cpufeature.c
-index 0be9296e9253,f309fd542c20..000000000000
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@@ -721,13 -754,12 +756,14 @@@ static const struct __ftr_reg_entry=20
-  			       &id_aa64isar2_override),
- =20
-  	/* Op1 =3D 0, CRn =3D 0, CRm =3D 7 */
- -	ARM64_FTR_REG(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0),
- +	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0,
- +			       &id_aa64mmfr0_override),
-  	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64MMFR1_EL1, ftr_id_aa64mmfr1,
-  			       &id_aa64mmfr1_override),
- -	ARM64_FTR_REG(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2),
- +	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2,
- +			       &id_aa64mmfr2_override),
-  	ARM64_FTR_REG(SYS_ID_AA64MMFR3_EL1, ftr_id_aa64mmfr3),
-+ 	ARM64_FTR_REG(SYS_ID_AA64MMFR4_EL1, ftr_id_aa64mmfr4),
- =20
-  	/* Op1 =3D 1, CRn =3D 0, CRm =3D 0 */
-  	ARM64_FTR_REG(SYS_GMID_EL1, ftr_gmid),
-@@@ -2701,33 -2817,13 +2779,40 @@@ static const struct arm64_cpu_capabilit
-  		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
-  		.matches =3D has_lpa2,
-  	},
- +#ifdef CONFIG_ARM64_VA_BITS_52
- +	{
- +		.capability =3D ARM64_HAS_VA52,
- +		.type =3D ARM64_CPUCAP_BOOT_CPU_FEATURE,
- +		.matches =3D has_cpuid_feature,
- +		.field_width =3D 4,
- +#ifdef CONFIG_ARM64_64K_PAGES
- +		.desc =3D "52-bit Virtual Addressing (LVA)",
- +		.sign =3D FTR_SIGNED,
- +		.sys_reg =3D SYS_ID_AA64MMFR2_EL1,
- +		.field_pos =3D ID_AA64MMFR2_EL1_VARange_SHIFT,
- +		.min_field_value =3D ID_AA64MMFR2_EL1_VARange_52,
- +#else
- +		.desc =3D "52-bit Virtual Addressing (LPA2)",
- +		.sys_reg =3D SYS_ID_AA64MMFR0_EL1,
- +#ifdef CONFIG_ARM64_4K_PAGES
- +		.sign =3D FTR_SIGNED,
- +		.field_pos =3D ID_AA64MMFR0_EL1_TGRAN4_SHIFT,
- +		.min_field_value =3D ID_AA64MMFR0_EL1_TGRAN4_52_BIT,
- +#else
- +		.sign =3D FTR_UNSIGNED,
- +		.field_pos =3D ID_AA64MMFR0_EL1_TGRAN16_SHIFT,
- +		.min_field_value =3D ID_AA64MMFR0_EL1_TGRAN16_52_BIT,
- +#endif
- +#endif
- +	},
- +#endif
-+ 	{
-+ 		.desc =3D "NV1",
-+ 		.capability =3D ARM64_HAS_HCR_NV1,
-+ 		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
-+ 		.matches =3D has_nv1,
-+ 		ARM64_CPUID_FIELDS_NEG(ID_AA64MMFR4_EL1, E2H0, NI_NV1)
-+ 	},
-  	{},
-  };
- =20
+diff --cc drivers/of/property.c
+index a4f11b2f4ff0,ec914e4516d7..000000000000
+--- a/drivers/of/property.c
++++ b/drivers/of/property.c
+@@@ -1222,7 -1244,8 +1222,8 @@@ DEFINE_SIMPLE_PROP(clocks, "clocks", "#
+  DEFINE_SIMPLE_PROP(interconnects, "interconnects", "#interconnect-cells")
+  DEFINE_SIMPLE_PROP(iommus, "iommus", "#iommu-cells")
+  DEFINE_SIMPLE_PROP(mboxes, "mboxes", "#mbox-cells")
+ -DEFINE_SIMPLE_PROP(io_channels, "io-channel", "#io-channel-cells")
+ +DEFINE_SIMPLE_PROP(io_channels, "io-channels", "#io-channel-cells")
++ DEFINE_SIMPLE_PROP(io_backends, "io-backends", "#io-backend-cells")
+  DEFINE_SIMPLE_PROP(interrupt_parent, "interrupt-parent", NULL)
+  DEFINE_SIMPLE_PROP(dmas, "dmas", "#dma-cells")
+  DEFINE_SIMPLE_PROP(power_domains, "power-domains", "#power-domain-cells")
 
---Sig_/0lq+TnyNw/r+bgBwPDvE7v7
+--Sig_/tXUY7csCIFfpbDRm+l9Nm2f
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXSw70ACgkQAVBC80lX
-0GyVwgf/ZHEO28wMM8fAb+rIwWzYhYPmN/J+oY9/fOCQugZk145/bDic7aowxLIi
-6wakG6HC7l1e7fD2ZMCFXX3q01wQzxPe5WxOyu9p/F1t5kDoLTUuXvsFZGA+D0CT
-wrJysenGrAQ1QGQzY2Xb1oWX2r15PTfAsXbo1XteyWRxPXxgp0XeMT1tN0CbyPws
-G1mh1COBaUb/dekFfTKYQKwO6Aulr/R5sQp+ECozBE78Agoo5hedwDssMMjPdW3e
-BszpUSPcs19HbyUVfCC9blfV4/XvqSc7tJqlJYhgbdRZoedyl3/fI+0dzPpcA98X
-pAHQU/INbAOYfPsPULnrCtrEsuSurQ==
-=1mRN
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXSzYEACgkQAVBC80lX
+0Gxrqwf+LFEm+rBw+Cy1ERMoexncey7Vz4sKhU2GMtIO7+QqSJVyz4PN3eoPG3JN
+687ngTCQdvbWSGWtvdAiijYF9PK145d8p6s0yFRydJdBl7o74M15WnFah08CMEf9
+W8rWAQssHK0cWYtcODKIGQQJZuSXvql4wnFcfGIDTRgqMUuYlp2T5s4bIarF3wtq
+30uiKte8N08Wn1ZwIYc/2MId5Msx8wxG/62o8kVaNIHgxCTl7GZdBc80A/sce+f4
+qYdOW7InP89hJp0LOZWLUxN8dltsKtQ3ZmSMZG6BREg9ZG5iVS9QinlzFagczXWk
+/xj/v5+LsLEJ8aTlu1zx3qNg625pTQ==
+=4GOt
 -----END PGP SIGNATURE-----
 
---Sig_/0lq+TnyNw/r+bgBwPDvE7v7--
+--Sig_/tXUY7csCIFfpbDRm+l9Nm2f--
 

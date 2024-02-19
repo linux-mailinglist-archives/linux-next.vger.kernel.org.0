@@ -1,78 +1,111 @@
-Return-Path: <linux-next+bounces-1224-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1225-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D475485A94B
-	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 17:49:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C7FD85ADF1
+	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 22:44:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 130D61C21B94
-	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 16:49:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDFCC1C21A44
+	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 21:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA78641C7F;
-	Mon, 19 Feb 2024 16:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6F6537E9;
+	Mon, 19 Feb 2024 21:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IrHUTMmE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECF741C7D;
-	Mon, 19 Feb 2024 16:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40BC44373;
+	Mon, 19 Feb 2024 21:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708361361; cv=none; b=fi2oFL1BGqDo6ZIFD/1Rn1Gi9AOFTs4vBD+yq67qnh+9ZRL8zz944KbuD91vAKpGandeq9jL/v+HcuZGNaD/2mVa1ugTybSCFDZ7FcdJhsSUbV/62I4zodQYgdmfqM596PB95UEGzGxt7sXcWQaJKVeoVcjTAeMym/6l5Jq3QLI=
+	t=1708379069; cv=none; b=netjmtrXEEZFbMrObpcSotTYWly+7Bcifg7140d5SzWidS0ibyv4HmCw8+eZ1Ojy2d94FZ9REzpGT2hLxiHx8WAVpyETZj0gZLRh9irWU4P7HJb/3v2+q09c7xiHMyhGDdE99SOA9rIpcy6SGYZdo+7K15o4ZESs1FYBi5d6OoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708361361; c=relaxed/simple;
-	bh=1Dg7pxDMbg8XS4tLmwzr2u4mMw8LyERdAhO8F+8W8eU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qaD+qqMuA+2ft8YFfdIdgySktw97ly7pSnsqcXVfF6NaeJLCQm9AkTYPZMB9WBpUltJkl5Uk7j5C4IYUNzWcP5jpxy8hFUnouK/qxC93rqD8f+SmAXf9pToLJNPdlTlG3ls1p+O1eoDumXBSobVM4rekhNqYKybIEB3rd027E9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 302C4C433F1;
-	Mon, 19 Feb 2024 16:49:18 +0000 (UTC)
-Date: Mon, 19 Feb 2024 16:49:16 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Christoffer Dall <cdall@cs.columbia.edu>,
-	Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-Message-ID: <ZdOGjPfnJMoF1LH0@arm.com>
-References: <20240219135805.1c4138a3@canb.auug.org.au>
- <ZdNGGrUDWfvqCudV@arm.com>
- <86bk8c4gyh.wl-maz@kernel.org>
+	s=arc-20240116; t=1708379069; c=relaxed/simple;
+	bh=CMKNuT9xAOB4ffFRG1cxkswslqUwbubaJTppV6ZvWVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GYJ6RmwMhGRSvolO5FLj27KBqpqctZpxYRCNLpsKMbTdOkF1ZjXalwNPpYTGM8R/4oB2q7KrghuZdDIBmGsgB9nSIqQL1s+Wnz7aS3iOrb9O6uCNwcAHqWLSCdRoUbzicPOhC1FxT+FmTdHvogILZ42/ptm+5Cn5LNnjdummRJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IrHUTMmE; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1708379062;
+	bh=HiDvpuw71J/LlDSovkEA8FqT7rHN1nxG+faFW3XghE4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=IrHUTMmExTdNVWTN+gBgDb3h7oK691uutyReFTEHLxnZkcE6nj+BevK3pljaSBWlD
+	 VRzmSd/3f32YlwE2JqKwWdb9gJrZQy+vnsRbsd36tZj24dkl6iUR3HyGfVjivZQXAr
+	 y2QWggKn7yol2Ol6Pw+/Wt+aAKYlaoFG2oDGJ3olHCgyB+mRSoy7QduTHfeFFhasWF
+	 2emw+WNTaPAPKsnTATyMKAzlEgD+woEsc1/YTrgQ6TTHfZhUNlKNxmrf7fc1ADFxvo
+	 AZpT/PwrCtuF7bTQw5XlVyWMO1QPzzLF/YXTALqz4cghGkcojducP1aXgvAJ8NHqG0
+	 Q4EpbKGw4RIug==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TdwzS6pxxz4wcQ;
+	Tue, 20 Feb 2024 08:44:20 +1100 (AEDT)
+Date: Tue, 20 Feb 2024 08:44:19 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the spi tree
+Message-ID: <20240220084419.599716ce@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86bk8c4gyh.wl-maz@kernel.org>
+Content-Type: multipart/signed; boundary="Sig_/fP6Xa0VrptTYGa/O+Kv4QjS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, Feb 19, 2024 at 03:22:14PM +0000, Marc Zyngier wrote:
-> From f24638a5f41424faf47f3d9035e6dcbd3800fcb6 Mon Sep 17 00:00:00 2001
-> From: Marc Zyngier <maz@kernel.org>
-> Date: Mon, 19 Feb 2024 15:13:22 +0000
-> Subject: [PATCH] arm64: Use Signed/Unsigned enums for TGRAN{4,16,64} and
->  VARange
-> 
-> Open-coding the feature matching parameters for LVA/LVA2 leads to
-> issues with upcoming changes to the cpufeature code.
-> 
-> By making TGRAN{4,16,64} and VARange signed/unsigned as per the
-> architecture, we can use the existing macros, making the feature
-> match robust against those changes.
-> 
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
+--Sig_/fP6Xa0VrptTYGa/O+Kv4QjS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Marc. I applied it on top of the arm64 for-next/stage1-lpa2
-branch.
+Hi all,
 
--- 
-Catalin
+In commit
+
+  afd2a4ae296d ("spi: spi-summary.rst: fix underline length")
+
+Fixes tag
+
+  Fixes: hash ("spi: Update the "master/slave" terminology in documentation=
+")
+
+has these problem(s):
+
+  - No SHA1 recognised
+
+Maybe you meant
+
+Fixes: 99769a52464d ("spi: Update the "master/slave" terminology in documen=
+tation")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fP6Xa0VrptTYGa/O+Kv4QjS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXTy7MACgkQAVBC80lX
+0GyEwwgAn9n2LbtpWNcOPeUE0kIG6CQUElRnxIXDW32APgumWUr3BJfvnGk+PH7Z
+XN1HBvxRczQ/eMtxTH2U1RpA99XEldJiivgEQQKiP2gBLikeFJQv3E1Ci3JiwxAm
+Q8lkC5CWTZsN5owQQgLskYFzQdq0Gqer8C0BbZCxudEbcoEPmT/u9u+sirtenvnl
+cx2K9pdrd7bWUI50hUzZLAYY2qazho0EzMaEWkKecHefeDFkbynA7ZKG/JcjRlFy
+MzL0Rh82pLbTU8FSYjbf7yZygjv1L5WtIfCxOnCdnNHWMElXkS6xVnAfpFoAIeLU
+fjHKDlcy7bW46uzUdYnOOt93az2DsA==
+=0fVg
+-----END PGP SIGNATURE-----
+
+--Sig_/fP6Xa0VrptTYGa/O+Kv4QjS--
 

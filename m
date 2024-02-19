@@ -1,145 +1,180 @@
-Return-Path: <linux-next+bounces-1204-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1205-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D95DD859A34
-	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 00:45:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC93B859ADD
+	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 03:58:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 061EE1C20B07
-	for <lists+linux-next@lfdr.de>; Sun, 18 Feb 2024 23:45:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A8461C2117C
+	for <lists+linux-next@lfdr.de>; Mon, 19 Feb 2024 02:58:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063766F074;
-	Sun, 18 Feb 2024 23:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5CFA20F1;
+	Mon, 19 Feb 2024 02:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Ad6yUwTs"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tirE7gwQ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFE4568A;
-	Sun, 18 Feb 2024 23:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8BB1FC8;
+	Mon, 19 Feb 2024 02:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708299898; cv=none; b=W2+/8dpm2vOMiG0oUbHyEnwu1wnv/QlbupheHLgAhOPf7PD1x+tPubqJzWzgoluVs+/snmSZAtwUUN/nrif9XcJszQbXTm+rn4Uitn6CHR4sdDBLI79WTNLN87rcdBUf86T1L2BQu/u/9NhFXyajgrYTNUPJiCygGZplXVgNnTA=
+	t=1708311493; cv=none; b=MW3ZY9eA4I5SCIzmCIB5Zky5+LlV1adP9IRtqSNVNDIpb+ZDZrMjYcUnPxo6yJTW1+MDvCme1QFGjn6/ec/vNvxoGjX3noLLYq6EDaaf8pvCkFgFECjMoFb9eD9tnZyumWRHCMnF4Re37PHLMV6Ehixx9pOefZRB2Vk3y5CQW7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708299898; c=relaxed/simple;
-	bh=LhCl34C9hj/Y8w39M4PNhKCSJEojxdK1Ro+Y8hrc2Dw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ihgLQf1CKq27/a49R5evAD8/Z2dP3oyOZ1b69adFRJu4NcyFc36uCuSCTC+sxWDbfr+SlWXvvgN/74KUZMsPu5g1YSeDUYqMyTExHp9O81XlOpY2IKQimgatOhGChTzTFCx1ASZ5FvAK/QRiHbb5H6zQzIbAXF8598Di2NwSZrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Ad6yUwTs; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708311493; c=relaxed/simple;
+	bh=gctggYPLGlntgRouCIS1Y5xS9wy4M1dICUmfSMUaA2g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VUdRpB3+kBR4sPJZ0/TJKQniuevH6zkE/dSzj26apPVGudwUaimCP+/sR+pK+euUAQbx1WQuudd2HecO7PLtnmrOFWDuWVP6maMLG7P5sBohVZijs19BSW5MSOxlhLEhRVI8opf3Olpg/FhSNgkGJfZDT+2ZfUTeOjvJ5OTOViM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tirE7gwQ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708299892;
-	bh=WFT8QfbCVr4EX+FVsMZB/8KLZUlyEl2vXdvcq9T3a2U=;
+	s=201702; t=1708311488;
+	bh=7XaKWVD9KB3AwSX0RxGYmJEUX1mxEDnJZN5p2hnu4+o=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Ad6yUwTsiYgGVOn7U4f5/phoBJOG+1+j/OwIDdhD2eqBrQdDKsIeW8u/L3GMpH2XX
-	 Rz0O0imp0UHz5wnELKXCdsOp4ajcOKTX3vOZ/hVOvF31Q8QzdbWSg+1JGPzj680MHt
-	 G3jzFt6D+EFOCHvUuOsAcM4jaq4ZcZXXqy/dz54M9vYkeLaBnNCRWP51P3oCAJf2ES
-	 1h1AZMzR8Lw8+TXz6oaIQvume8W0VaP3yazEOT7fUiVDfHJfO9XnKTYcz7CPqIrA8y
-	 XSj+aqVaKGEKTjI/XfdUnZIExywE3z9s7QD/NG1w0hGjSGaLafLT/BP5ORImpwl4oc
-	 b6op0e2WH+TJw==
+	b=tirE7gwQkigdBfOiXJLEWoOdlMv7xicMQ+bb8KwBI0l75izAOwmj+ROEHmIl/ZKdE
+	 hqlrvppMFDuW4rCs5n+diq7qeGSS5nyfTnXfaWoYgMxcNP8NHtklGzy8TgftO41Kxz
+	 GmKWlt82Uah4fykXuWZnuAbHPHm4zad8eXEkl4irt4d8KzzYBUZAlcljnEdDBKrFZH
+	 7vFI1hyIlGaSeaHZwtUXZejUlA5uHfb+b02iyDUI1i2YKSxR4ZqWQFMN3ZRt1WN2Dv
+	 4pnT030y9o2LJS1YKqltYqSCwv03x+mXrfXwl93nnRsB5mLtOPTnKWWRiRUKdVVqmH
+	 k0CuP4d9znDXw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TdMj02pbXz4wc7;
-	Mon, 19 Feb 2024 10:44:52 +1100 (AEDT)
-Date: Mon, 19 Feb 2024 10:44:50 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TdRzz2BrNz4wcK;
+	Mon, 19 Feb 2024 13:58:06 +1100 (AEDT)
+Date: Mon, 19 Feb 2024 13:58:05 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Chuck Lever <chuck.lever@oracle.com>, Dai Ngo <dai.ngo@oracle.com>, Jeff
- Layton <jlayton@kernel.org>, Linux Kernel Mailing List
+To: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20240219104450.4d258995@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Oliver Upton <oliver.upton@linux.dev>
+Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <20240219135805.1c4138a3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1Cq8K.VyR_cYtpA2rtC1AAV";
+Content-Type: multipart/signed; boundary="Sig_/0lq+TnyNw/r+bgBwPDvE7v7";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/1Cq8K.VyR_cYtpA2rtC1AAV
+--Sig_/0lq+TnyNw/r+bgBwPDvE7v7
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the vfs-brauner tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-fs/nfsd/nfs4state.c: In function 'nfsd4_deleg_getattr_conflict':
-fs/nfsd/nfs4state.c:8845:32: error: 'struct file_lease' has no member named=
- 'fl_owner'
- 8845 |                         dp =3D fl->fl_owner;
-      |                                ^~
+  arch/arm64/kernel/cpufeature.c
 
-Caused by commits
+between commits:
 
-  a69ce85ec9af ("filelock: split common fields into struct file_lock_core")
-  282c30f320ba ("filelock: remove temporary compatibility macros")
+  9cce9c6c2c3b ("arm64: mm: Handle LVA support as a CPU feature")
+  352b0395b505 ("arm64: Enable 52-bit virtual addressing for 4k and 16k gra=
+nule configs")
 
-interacting with commit
+from the arm64 tree and commit:
 
-  b9b89fb3e0b6 ("NFSD: handle GETATTR conflict with write delegation")
+  da9af5071b25 ("arm64: cpufeature: Detect HCR_EL2.NV1 being RES0")
 
-from the nfsd tree.
+from the kvm-arm tree.
 
-I have applied the following merge resolution patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 19 Feb 2024 10:38:26 +1100
-Subject: [PATCH] fixup for "filelock: split common fields into struct
- file_lock_core"
-
-interacting with "NFSD: handle GETATTR conflict with write delegation"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- fs/nfsd/nfs4state.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
-index 3545125c8b73..71bb0ee57cf8 100644
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -8842,7 +8842,7 @@ nfsd4_deleg_getattr_conflict(struct svc_rqst *rqstp, =
-struct inode *inode,
- 			}
- break_lease:
- 			nfsd_stats_wdeleg_getattr_inc(nn);
--			dp =3D fl->fl_owner;
-+			dp =3D fl->c.flc_owner;
- 			ncf =3D &dp->dl_cb_fattr;
- 			nfs4_cb_getattr(&dp->dl_cb_fattr);
- 			spin_unlock(&ctx->flc_lock);
---=20
-2.43.0
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/1Cq8K.VyR_cYtpA2rtC1AAV
+diff --cc arch/arm64/kernel/cpufeature.c
+index 0be9296e9253,f309fd542c20..000000000000
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@@ -721,13 -754,12 +756,14 @@@ static const struct __ftr_reg_entry=20
+  			       &id_aa64isar2_override),
+ =20
+  	/* Op1 =3D 0, CRn =3D 0, CRm =3D 7 */
+ -	ARM64_FTR_REG(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0),
+ +	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0,
+ +			       &id_aa64mmfr0_override),
+  	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64MMFR1_EL1, ftr_id_aa64mmfr1,
+  			       &id_aa64mmfr1_override),
+ -	ARM64_FTR_REG(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2),
+ +	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2,
+ +			       &id_aa64mmfr2_override),
+  	ARM64_FTR_REG(SYS_ID_AA64MMFR3_EL1, ftr_id_aa64mmfr3),
++ 	ARM64_FTR_REG(SYS_ID_AA64MMFR4_EL1, ftr_id_aa64mmfr4),
+ =20
+  	/* Op1 =3D 1, CRn =3D 0, CRm =3D 0 */
+  	ARM64_FTR_REG(SYS_GMID_EL1, ftr_gmid),
+@@@ -2701,33 -2817,13 +2779,40 @@@ static const struct arm64_cpu_capabilit
+  		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
+  		.matches =3D has_lpa2,
+  	},
+ +#ifdef CONFIG_ARM64_VA_BITS_52
+ +	{
+ +		.capability =3D ARM64_HAS_VA52,
+ +		.type =3D ARM64_CPUCAP_BOOT_CPU_FEATURE,
+ +		.matches =3D has_cpuid_feature,
+ +		.field_width =3D 4,
+ +#ifdef CONFIG_ARM64_64K_PAGES
+ +		.desc =3D "52-bit Virtual Addressing (LVA)",
+ +		.sign =3D FTR_SIGNED,
+ +		.sys_reg =3D SYS_ID_AA64MMFR2_EL1,
+ +		.field_pos =3D ID_AA64MMFR2_EL1_VARange_SHIFT,
+ +		.min_field_value =3D ID_AA64MMFR2_EL1_VARange_52,
+ +#else
+ +		.desc =3D "52-bit Virtual Addressing (LPA2)",
+ +		.sys_reg =3D SYS_ID_AA64MMFR0_EL1,
+ +#ifdef CONFIG_ARM64_4K_PAGES
+ +		.sign =3D FTR_SIGNED,
+ +		.field_pos =3D ID_AA64MMFR0_EL1_TGRAN4_SHIFT,
+ +		.min_field_value =3D ID_AA64MMFR0_EL1_TGRAN4_52_BIT,
+ +#else
+ +		.sign =3D FTR_UNSIGNED,
+ +		.field_pos =3D ID_AA64MMFR0_EL1_TGRAN16_SHIFT,
+ +		.min_field_value =3D ID_AA64MMFR0_EL1_TGRAN16_52_BIT,
+ +#endif
+ +#endif
+ +	},
+ +#endif
++ 	{
++ 		.desc =3D "NV1",
++ 		.capability =3D ARM64_HAS_HCR_NV1,
++ 		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
++ 		.matches =3D has_nv1,
++ 		ARM64_CPUID_FIELDS_NEG(ID_AA64MMFR4_EL1, E2H0, NI_NV1)
++ 	},
+  	{},
+  };
+ =20
+
+--Sig_/0lq+TnyNw/r+bgBwPDvE7v7
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXSlnIACgkQAVBC80lX
-0GwNGAf/Rwy5pN54PVBC7Npq/Yn+Sp60o4LwqP/7EvqgbU4QW8Di0G76K4iLOnAN
-o0Mhrfkir35BE43xhN794Ugj9wniGzBVS6denihoF2zdD22WI4D53EluPSa5ivSH
-oKt6IPwe6P+JXj+Pueuz7ihyI+V6dAwsUSKVKhAn6vTrylaJ9QRQgtOAUGEuvA9n
-E3+Omo4LMjn7zhOY4VQPu8J7Hx3nA+DtcxqkQUaU7b6N3ZmBZMhoX9VEl1Dj/Gp1
-DeEF1MX/dEvfE3z8SclZyiXZdQSr9UAZtPYeDj4CfY92WT0AfobBVgb+LIhvGCk3
-eHhjM+v229GK/usHXNGh9G9c9bO4Pw==
-=WMsd
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXSw70ACgkQAVBC80lX
+0GyVwgf/ZHEO28wMM8fAb+rIwWzYhYPmN/J+oY9/fOCQugZk145/bDic7aowxLIi
+6wakG6HC7l1e7fD2ZMCFXX3q01wQzxPe5WxOyu9p/F1t5kDoLTUuXvsFZGA+D0CT
+wrJysenGrAQ1QGQzY2Xb1oWX2r15PTfAsXbo1XteyWRxPXxgp0XeMT1tN0CbyPws
+G1mh1COBaUb/dekFfTKYQKwO6Aulr/R5sQp+ECozBE78Agoo5hedwDssMMjPdW3e
+BszpUSPcs19HbyUVfCC9blfV4/XvqSc7tJqlJYhgbdRZoedyl3/fI+0dzPpcA98X
+pAHQU/INbAOYfPsPULnrCtrEsuSurQ==
+=1mRN
 -----END PGP SIGNATURE-----
 
---Sig_/1Cq8K.VyR_cYtpA2rtC1AAV--
+--Sig_/0lq+TnyNw/r+bgBwPDvE7v7--
 

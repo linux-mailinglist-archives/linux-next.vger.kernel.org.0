@@ -1,91 +1,94 @@
-Return-Path: <linux-next+bounces-1231-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1232-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96C8685B02C
-	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 02:01:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0316F85B0D6
+	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 03:22:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69653B20B82
-	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 01:01:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2C43283B03
+	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 02:22:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97CB9DDB6;
-	Tue, 20 Feb 2024 01:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5700535B9;
+	Tue, 20 Feb 2024 02:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kFH28boZ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cBtJV6JS"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28778F5A;
-	Tue, 20 Feb 2024 01:01:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E209535B4;
+	Tue, 20 Feb 2024 02:22:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708390887; cv=none; b=ZMA+hl76BXm9VRtwKJUEUpxapSkURvCUdRPQEhkPGzxGUsH4lEA42ARJHgG5s52GWC0zJste9/ZwsxTa0a5eqLhHEYh+TpeXtOGBFc4+eeTI2YwwMh7QLjKl2KsIgaAjR9jRPgagde0CmGdd61MZPvKIpSIOf05US0NuX+4QRKU=
+	t=1708395731; cv=none; b=dAxWKc38V4uNr64Uohllfv3mR3WuRtHxUvaJ5JOyPmAZHrkBt17Z5KCY/x4wjZ+jViHu5jsEor92mcan8EciQS5ufuP0D1zaZIXmdIpum8a1Ltkj7YK2N7r6jFpcQRRxWj7BRyM+5JCpBq56iaHpwJKYLsoGwJsHJEe9t5upQw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708390887; c=relaxed/simple;
-	bh=3aq2fG9f3nGwD78W3+sZWhZmMz+P5W0q49/GZ7VZqtE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=N1IuYQv0F6V1z4HeGFR8UAnZ28hje/rOq9aDWGD6ohFY3wYR5wUcnvbb15BOnp9/e3EOs4B5tHIKCb9jaVZInUcCE3D4xH6eLD26Ic0oS6mSu3Zj3IoaTbKCOD03cmLE2zceuxxYdh2QYE88+hS4FW28+2VChTjZqcgHAum3z6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kFH28boZ; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708395731; c=relaxed/simple;
+	bh=F3rppOqCnmwBMyrITBdJnjZPj97LNyry9Dr4MDGrUL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sCFf4dOrMr5IliYCKHGUz3tozFXw2Be5vQVMZB8ox6a6sHNiNU9eGZsc9PrmLpTqYybL9RxJToWpERSrNVZ1OXqP1hkqIO4UdG3t6X9hpLQTEXFnqR9rKF8zqRxdWqjCfJqDEzXoVNIyXMJqd2jNlYN0FehN1lyjPgZGx0Z3FTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cBtJV6JS; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708390880;
-	bh=/QnbAA4UFZibDJNMm9t2mwl+yycC9dhq5zbaE88Sa8E=;
+	s=201702; t=1708395720;
+	bh=o+QmmCu0VyeDAnMMY+kJjUw92FzrmY//tfzHi3lE+x8=;
 	h=Date:From:To:Cc:Subject:From;
-	b=kFH28boZbH/wdO38XVlkSkKOGuR9vjhV5pMfL3m5+i5IsvOu8QMcU+oEe/1kuCXbt
-	 XBDyme+LFyfbsmtwGZHClqJT6GFzwQo5SxOZXhet4hBtcKbPDroy657+AS49KEW9K5
-	 0d66ISl+V6v53Hwab6HHbv/daW8iiJ9D6pXjSf5YkYXHO7NiS2q0pdWulMD40dTjEk
-	 FObd86f1crvR+Y4TW+MweoHbBNqz/5hFHFvc7y+Exq37daupeJzoP1TN6UaMLvh7Lz
-	 ya+TvCgURGUcQnQL594ilm8Bb+sldFLuTRKmW6yb9JywpmuncSMYD4Uoo7gj8TmHBS
-	 RXg7we2mr6FoA==
+	b=cBtJV6JSiKBmolQq/q2/XK1M3cCx9XmCYcTw6wN/WajGZdXrT3BimhTgGi1SWKyxK
+	 2E3MrwgujIrKS7RJH0QN4HWXKXvIMD9KiRP5OTw7iArI2Xad8K6XMILAGrxyFQDo0w
+	 HnwQgt5fMcYwOVChdDWcGDWPuuDaf8A0GLXytR4QAMzneaojX4ihonX5XoioutjqeH
+	 TICXoEBoX+M/YwtLRD44OCsfuwnuzlXoGg1ppqv5IXqYaedLlYWmvMBnX9KC0qCdjR
+	 2DHOK9/gGjVMa7l7emSiblCWCqqHBjJknQc5L6SjUMWaydYksARktsnmuRGhUfho8H
+	 y//Od34W++TIA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tf1Ll30c1z4wby;
-	Tue, 20 Feb 2024 12:01:19 +1100 (AEDT)
-Date: Tue, 20 Feb 2024 12:01:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tf37q1QgGz4wc7;
+	Tue, 20 Feb 2024 13:21:58 +1100 (AEDT)
+Date: Tue, 20 Feb 2024 13:21:57 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Ulf Hansson <ulf.hansson@linaro.org>, Jens Axboe <axboe@kernel.dk>
-Cc: Christoph Hellwig <hch@lst.de>, Linus Walleij
- <linus.walleij@linaro.org>, Linux Kernel Mailing List
+To: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the mmc tree with the block tree
-Message-ID: <20240220120117.15188a66@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Oliver Upton <oliver.upton@linux.dev>
+Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <20240220132157.6d3cd5dd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e0IN+NzY_zOnSLZlol0gDPe";
+Content-Type: multipart/signed; boundary="Sig_/eG3kAavMA3SDAFnHuHGkKlN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/e0IN+NzY_zOnSLZlol0gDPe
+--Sig_/eG3kAavMA3SDAFnHuHGkKlN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mmc tree got a conflict in:
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-  drivers/mmc/core/queue.c
+  arch/arm64/kernel/cpufeature.c
 
-between commit:
+between commits:
 
-  616f87661792 ("mmc: pass queue_limits to blk_mq_alloc_disk")
+  352b0395b505 ("arm64: Enable 52-bit virtual addressing for 4k and 16k gra=
+nule configs")
+  2aea7b77aabc ("arm64: Use Signed/Unsigned enums for TGRAN{4,16,64} and VA=
+Range")
 
-from the block tree and commit:
+from the arm64 tree and commit:
 
-  069279d6fef5 ("mmc: core Drop BLK_BOUNCE_HIGH")
+  da9af5071b25 ("arm64: cpufeature: Detect HCR_EL2.NV1 being RES0")
 
-from the mmc tree.
+from the kvm-arm tree.
 
-I fixed it up (I think - see below) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
 conflicts should be mentioned to your upstream maintainer when your tree
 is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
@@ -95,80 +98,75 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/mmc/core/queue.c
-index 2ae60d208cdf,316415588a77..000000000000
---- a/drivers/mmc/core/queue.c
-+++ b/drivers/mmc/core/queue.c
-@@@ -343,50 -341,10 +343,47 @@@ static const struct blk_mq_ops mmc_mq_o
-  	.timeout	=3D mmc_mq_timed_out,
+diff --cc arch/arm64/kernel/cpufeature.c
+index d380ae783b73,f309fd542c20..000000000000
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@@ -721,13 -754,12 +756,14 @@@ static const struct __ftr_reg_entry=20
+  			       &id_aa64isar2_override),
+ =20
+  	/* Op1 =3D 0, CRn =3D 0, CRm =3D 7 */
+ -	ARM64_FTR_REG(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0),
+ +	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0,
+ +			       &id_aa64mmfr0_override),
+  	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64MMFR1_EL1, ftr_id_aa64mmfr1,
+  			       &id_aa64mmfr1_override),
+ -	ARM64_FTR_REG(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2),
+ +	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2,
+ +			       &id_aa64mmfr2_override),
+  	ARM64_FTR_REG(SYS_ID_AA64MMFR3_EL1, ftr_id_aa64mmfr3),
++ 	ARM64_FTR_REG(SYS_ID_AA64MMFR4_EL1, ftr_id_aa64mmfr4),
+ =20
+  	/* Op1 =3D 1, CRn =3D 0, CRm =3D 0 */
+  	ARM64_FTR_REG(SYS_GMID_EL1, ftr_gmid),
+@@@ -2701,24 -2817,13 +2779,31 @@@ static const struct arm64_cpu_capabilit
+  		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
+  		.matches =3D has_lpa2,
+  	},
+ +#ifdef CONFIG_ARM64_VA_BITS_52
+ +	{
+ +		.capability =3D ARM64_HAS_VA52,
+ +		.type =3D ARM64_CPUCAP_BOOT_CPU_FEATURE,
+ +		.matches =3D has_cpuid_feature,
+ +#ifdef CONFIG_ARM64_64K_PAGES
+ +		.desc =3D "52-bit Virtual Addressing (LVA)",
+ +		ARM64_CPUID_FIELDS(ID_AA64MMFR2_EL1, VARange, 52)
+ +#else
+ +		.desc =3D "52-bit Virtual Addressing (LPA2)",
+ +#ifdef CONFIG_ARM64_4K_PAGES
+ +		ARM64_CPUID_FIELDS(ID_AA64MMFR0_EL1, TGRAN4, 52_BIT)
+ +#else
+ +		ARM64_CPUID_FIELDS(ID_AA64MMFR0_EL1, TGRAN16, 52_BIT)
+ +#endif
+ +#endif
+ +	},
+ +#endif
++ 	{
++ 		.desc =3D "NV1",
++ 		.capability =3D ARM64_HAS_HCR_NV1,
++ 		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
++ 		.matches =3D has_nv1,
++ 		ARM64_CPUID_FIELDS_NEG(ID_AA64MMFR4_EL1, E2H0, NI_NV1)
++ 	},
+  	{},
   };
  =20
- -static void mmc_setup_queue(struct mmc_queue *mq, struct mmc_card *card)
- +static struct gendisk *mmc_alloc_disk(struct mmc_queue *mq,
- +		struct mmc_card *card)
-  {
-  	struct mmc_host *host =3D card->host;
- -	unsigned block_size =3D 512;
- +	struct queue_limits lim =3D { };
- +	struct gendisk *disk;
- +
- +	if (mmc_can_erase(card))
- +		mmc_queue_setup_discard(card, &lim);
- +
-- 	if (!mmc_dev(host)->dma_mask || !*mmc_dev(host)->dma_mask)
-- 		lim.bounce =3D BLK_BOUNCE_HIGH;
--=20
- +	lim.max_hw_sectors =3D min(host->max_blk_count, host->max_req_size / 512=
-);
- +
- +	if (mmc_card_mmc(card) && card->ext_csd.data_sector_size)
- +		lim.logical_block_size =3D card->ext_csd.data_sector_size;
- +	else
- +		lim.logical_block_size =3D 512;
- +
- +	WARN_ON_ONCE(lim.logical_block_size !=3D 512 &&
- +		     lim.logical_block_size !=3D 4096);
- +
- +	/*
- +	 * Setting a virt_boundary implicity sets a max_segment_size, so try
- +	 * to set the hardware one here.
- +	 */
- +	if (host->can_dma_map_merge) {
- +		lim.virt_boundary_mask =3D dma_get_merge_boundary(mmc_dev(host));
- +		lim.max_segments =3D MMC_DMA_MAP_MERGE_SEGMENTS;
- +	} else {
- +		lim.max_segment_size =3D
- +			round_down(host->max_seg_size, lim.logical_block_size);
- +		lim.max_segments =3D host->max_segs;
- +	}
- +
- +	disk =3D blk_mq_alloc_disk(&mq->tag_set, &lim, mq);
- +	if (IS_ERR(disk))
- +		return disk;
- +	mq->queue =3D disk->queue;
- +
- +	if (mmc_host_is_spi(host) && host->use_spi_crc)
- +		blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, mq->queue);
- +	blk_queue_rq_timeout(mq->queue, 60 * HZ);
- =20
-  	blk_queue_flag_set(QUEUE_FLAG_NONROT, mq->queue);
-  	blk_queue_flag_clear(QUEUE_FLAG_ADD_RANDOM, mq->queue);
 
---Sig_/e0IN+NzY_zOnSLZlol0gDPe
+--Sig_/eG3kAavMA3SDAFnHuHGkKlN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXT+d0ACgkQAVBC80lX
-0GwSfQgAgVC/E7k+USeeFPFDDx//0VWoqW9KH5gnJil7zZdGqOrmxKhCkJYwa2g6
-5OpHhSoqi4YH3A1du6ZrjzSRU2kVxuV0GPh2lcMqEB0nGTgsFHOaPvcm/3JZg7n9
-JRMIYTRUT0K4UBL5ei+t3NQwokBul4bj2a4gRnlW6/9MxMZ2ETTZ+YqDsVHLLm/q
-hXsTpg7MTmpWehWOwjOSjDdfSoglAcbBeg9JbWupwxpP8I+9EsP5j7FA5+FGG4Iw
-gy8swEZA97/WrcvJia8ZRo+1+u4YyoSGFec+73TEPm8nxVaxYfEy0fkouB7FlAGG
-PdVvbT3ahsBfKd6PyfQ7BcOXiAVlgQ==
-=j7sO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXUDMUACgkQAVBC80lX
+0GyEOggAocPVcrTQ+1gwQz+9bsoGgLOguazJKKRyzv+O0acFpanTDUQQ1QX9OgfF
+uaw7kPfuMhUsjB4Mv/56OyLK2EGg7TAG6pqxaG6yo9KWXzPqCCyJUzJRuWUin3O1
+z9GQk8jR33YDBAuMMeS/eSoOYrmklbQ13xlCELU+K3E5bVSkThzScqOLWyeFGl6h
+LX/ljXfYNfMzT3vIYMQBynrWhA3sYwq8bZYE7KFk5utdNiV5kAgd3Keeh9Y9xE98
+keOlLvp40QI+LUc3H7ndntgkl0/YRP6rvFxwmHv0oMU8xIE5Tu+VahaXnXtq7zo2
+l3AqoBnH9l4tKFA2+V1AH4NqQgUO1w==
+=BPwg
 -----END PGP SIGNATURE-----
 
---Sig_/e0IN+NzY_zOnSLZlol0gDPe--
+--Sig_/eG3kAavMA3SDAFnHuHGkKlN--
 

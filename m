@@ -1,129 +1,107 @@
-Return-Path: <linux-next+bounces-1239-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1240-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE08B85B4C1
-	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 09:18:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1201785BFFE
+	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 16:33:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B591282A68
-	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 08:18:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB0231F24871
+	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 15:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35FA05C5F2;
-	Tue, 20 Feb 2024 08:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 240F77603B;
+	Tue, 20 Feb 2024 15:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="J1Ey4bzc";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E/uyVOSQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3cpdQCDy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from wfout5-smtp.messagingengine.com (wfout5-smtp.messagingengine.com [64.147.123.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909E85C5EC;
-	Tue, 20 Feb 2024 08:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BE076031
+	for <linux-next@vger.kernel.org>; Tue, 20 Feb 2024 15:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708417114; cv=none; b=BvS/EHQxvnGYBmj2qZkq71lx36AvMRitwb1/7POgW0HwiCsE37P9rQAApk2MTiiJ150sQfICg+9UdQ98VsHj7smnJn3KjHdbAdQ7d5cOkaJQuDZGWYFvLsqDbxFCHs916PbJcqT4NFson8LK0YK52IVIsI0ZXCPtFZCf8vQjRKA=
+	t=1708443225; cv=none; b=sAeNm18o4+bDC9sJTbZSYz+HBbhUUBGqiah9lLXopDaH6mpvJHomNsOrifBoh9txRyVTrmkPgjxFatwbQTd5w87lMtlowsZzW6ub1u9VW0vaDwyiiqMlv+jMT0cgz86xF6NJlnl+UqrgHntwsTHINnKJ92P5Cwu+fYX3beSPoCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708417114; c=relaxed/simple;
-	bh=44KeRkZzH8u0JWb+rtwwt50cYvGw2jgAcwk1Xl0K62k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CjTtN9r8DXID/L0G8vdJ/8Jgs8UFnpFqSJ5Gv7YXTfV2jElxf0rzbHycoVQsjhFHJnF5UoPnLrC/wwrHWeOGCWZQecsxFS/FLHUb2oeNWGvdkOQjzNIrzg7bOGavtnso31sKK+kb2LNifpby/mIqmo2Pwp2yzDlKoM90MOyMvjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=J1Ey4bzc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E/uyVOSQ; arc=none smtp.client-ip=64.147.123.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailfout.west.internal (Postfix) with ESMTP id 1F0D11C000B7;
-	Tue, 20 Feb 2024 03:18:30 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 20 Feb 2024 03:18:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1708417109; x=1708503509; bh=+COxqRrpOa
-	1q8DtKChWbtLiCltNvTLR+rShGMGaFue0=; b=J1Ey4bzcTQfhrh2poaEmtdg3NO
-	yWEpM5lif/Ru5N/nQm9SirU0t+ElgAzx7YCbSvETUGWvPuk7bjWWtWFzF5mWmwcZ
-	5D0iYApzceWE6H9gyXXRb/xIynEJVSBNjh5VbVZQ5rKX2gTLM6vCignUHime0W61
-	jlis/oIwbGTt1SvEqYB0a1HYYksmWX+95XDBuYSxkIa9cLq7wrCOV6XhCRg8jbOq
-	kthWB12UaIhzMCRzsu2GXEdTHDUM3pNl7mWaXIoXt6gsmOTaIL5xUpOgUJpfkwPJ
-	WHgo0fVBwdGw2ibwsWHNF+0cLsApaUecRWZBwEpTLaZ9W3CitMa+670pmyGQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1708417109; x=1708503509; bh=+COxqRrpOa1q8DtKChWbtLiCltNv
-	TLR+rShGMGaFue0=; b=E/uyVOSQTUds7hg6U+jyZcQgnxCrD2d0p9WOMGvNPE9H
-	O41laAgFsyWNm2aSIzusG4IJXvTJTnekTR7wB/NOyvprtHMGtdUW82nRiZj+h9Td
-	DQTgw6zJ5ye/E55HCOy2pMkz4o/1QOYX7pScE31RtqGwEct1+xWrs8tk8ZmE3Qbf
-	tByppmx+sWiD9EMWeZhG8XGG4DcIoOdEWw/aUxr5hNKNP1WUov09afr3Webqq47r
-	EF+ooIqX5RvVqe2JSvs8O3mKH/d5KFGLe1+cYmhHEl20aaQWJX5DMfxndFO57DMu
-	GysMX9KoW1r+LJaFfxlxSRVLFNP28RE9AVxvBipZGA==
-X-ME-Sender: <xms:VWDUZR5I1JsIEzHUdqK-Tp-IZudJk45H5jgVTxPq7Nha2G8nMuJS6A>
-    <xme:VWDUZe7Ey9lZ8n2pSLD_idl03e0NaZcIylhmHAT-uuyRwvp3iSYtm8JjX8ncje8SW
-    uaWQseg-oVd2Q>
-X-ME-Received: <xmr:VWDUZYcFebVhWHe7d3RJwBR23njZCC6Jw79ObCsdL7iWpgweZ9doOp6_6wvoD-aGsYMq2zJZLzt1x5emDViRHBKTCoyS19JQ7Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdelgdduudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:VWDUZaIQ1m7_RB_TKse0Sau2EaU5l_sYjVCk6sfnfmnAp596Tb2BTg>
-    <xmx:VWDUZVJlspFJAeFO5pwnwITeHhTpRk83LZzeNDdvqxt_D2Ga6_O6rg>
-    <xmx:VWDUZTxse1SAVkSGIHe4_D3t_paa-WjKE6DuAS2PnTrfU1cY49tzQQ>
-    <xmx:VWDUZXh1wpv0fbygKY3oGiaT3eMqnbPU3AGKZL7PRqeChkXE9ZTokmEVNBM>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Feb 2024 03:18:28 -0500 (EST)
-Date: Tue, 20 Feb 2024 09:18:27 +0100
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Danila Tikhonov <danila@jiaxyga.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the usb tree with the regulator tree
-Message-ID: <2024022016-unmanned-devouring-603c@gregkh>
-References: <20240220143142.540fe132@canb.auug.org.au>
+	s=arc-20240116; t=1708443225; c=relaxed/simple;
+	bh=7D7kf8p8aX2ZzflAMDnkhBwWgiUvsRg8uan55wPtdeo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=H0DUe3yxUVL51qhQhn8EkVgQs40VP7leL9rpRmit3zSWBWw60GEp7hhPxdIm1aTmbO0bZgjkqwEc5hlFWQKrBYWRp0NcJJuGY5mAwr34pLnvdCvpMWb1S35ZUZGrN2jmlUOdiQ8hBUAEYPJ2VWf7e634yWA2Bsp3JwckPm9j1/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3cpdQCDy; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-607e8e8c2f1so87211847b3.3
+        for <linux-next@vger.kernel.org>; Tue, 20 Feb 2024 07:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708443222; x=1709048022; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1fzOe/J4kuriO/maOGNH55dN19fVKQtEmyIcU4m9sns=;
+        b=3cpdQCDyg0mp5DZW2QTFvCcek4NqeDX7/LxCgHwuElM503dUoBSO7gIT1zXFtIJoJk
+         Eqrfn3tQlO17zTIzFUB5Da0CpBVfAvgOvjTuzPeLRyqGkd3rW5zKtdM6laTGO/dw3B5u
+         EcKxClAj1BrDglpYlG9x8rSdRLTNcFa+vPjHpaDq2PG7n8LWl0/PRern/zFiBMyNvxsk
+         hgWsLiCYmfUMjvmN5Hsedn3k1BFFML47uUqPRqS6ntAraoVtSVWuWqLXNCIKV0npv5vX
+         2jVBdx7V5bsKNZ01R9eOsrIa5l7iHQ0RSqopNvC/mfGngYDFlJ/WDHPyyVZLo/g5VPHR
+         u6bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708443222; x=1709048022;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1fzOe/J4kuriO/maOGNH55dN19fVKQtEmyIcU4m9sns=;
+        b=Qa4Fh2W+1tTaX9ZHJNT09ndbKvt+yfYKKyrFFv6J8qtVQRJSnfTdxX8BSYaO7cba/S
+         yx7G+ASsTdXOKDHVwKSWbqqM9KAZjCaLASet825keR5h+fT6DW6/alJNTobOILwqG2IV
+         qBroiX1y9+RJ2qygyYKibuDoF3a0QWDqBKwDdWPU2o7QRAlT2c3AJjKF6uG+HMCU1BcY
+         oDOipIkxCqaBH9/QAxac27EN3KydzhhRgnpzLSk4Gl95N1ntgTdLhkqj52EdCpqPutBc
+         WoCjAkkaniGNGKjJIxXDwjNWk4RKEqXv14UHzoTs9YWuxFMUTfxwK3wyio8hpvdnNshx
+         4ClA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5q9fM7fFUOl3Rrb0JfKlcxfYKep+OHOL85QLEQQXEDKgHpKiFpIILT8NqXNKsGLp/tk+IgXL7ZrgFDKM81hNAenud3htdIPhgGw==
+X-Gm-Message-State: AOJu0YzmaryNr+ZeN2loh+ZYdnVBrreAG5tSZu2/VDM8jAdJHzD7a49k
+	6VImUmDO2XMInghNJ1WFcuAtBY5gK2djAX1GBGRkvFUk4Irpg4ZXDV5IaIkwUqMpbH3H0AMtIpI
+	8xw==
+X-Google-Smtp-Source: AGHT+IHV2QTvanF7VyH48/qvRHmtqg+UWhaoc+cyGK8cObSo3PadCiUndGKk4nt1DLGsJf5NFU55wseFcsE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:4f83:0:b0:608:6c70:8d6 with SMTP id
+ d125-20020a814f83000000b006086c7008d6mr178184ywb.2.1708443222505; Tue, 20 Feb
+ 2024 07:33:42 -0800 (PST)
+Date: Tue, 20 Feb 2024 07:33:40 -0800
+In-Reply-To: <20240220134800.40efe653@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240220143142.540fe132@canb.auug.org.au>
+Mime-Version: 1.0
+References: <20240220134800.40efe653@canb.auug.org.au>
+Message-ID: <ZdTGRQJIO0Te8zF8@google.com>
+Subject: Re: linux-next: manual merge of the kvm-x86 tree with the kvm tree
+From: Sean Christopherson <seanjc@google.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Paul Durrant <pdurrant@amazon.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Feb 20, 2024 at 02:31:42PM +1100, Stephen Rothwell wrote:
+On Tue, Feb 20, 2024, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the usb tree got a conflict in:
+> Today's linux-next merge of the kvm-x86 tree got a conflict in:
 > 
->   Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+>   include/uapi/linux/kvm.h
 > 
 > between commit:
 > 
->   ec29a4d9b7c7 ("dt-bindings: regulator: qcom,usb-vbus-regulator: Add PM6150 compatible")
+>   bcac0477277e ("KVM: x86: move x86-specific structs to uapi/asm/kvm.h")
 > 
-> from the regulator tree and commit:
+> from the kvm tree and commits:
 > 
->   ef6035d2f1f4 ("dt-bindings: regulator: qcom,usb-vbus-regulator: add support for PMI632")
+>   01a871852b11 ("KVM: x86/xen: allow shared_info to be mapped by fixed HVA")
+>   3a0c9c41959d ("KVM: x86/xen: allow vcpu_info to be mapped by fixed HVA")
 > 
-> from the usb tree.
-> 
-> I fixed it up (I have no idea if this is correct - see below) and can
-> carry the fix as necessary. This is now fixed as far as linux-next is
-> concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+> from the kvm-x86 tree.
 
-Looks correct, thanks!
+/facepalm
 
-greg k-h
+I asked Paolo for a topic branch specifically to avoid this conflict, and then
+managed to forget about it.  I'll rebase the xen patches and force push.
 

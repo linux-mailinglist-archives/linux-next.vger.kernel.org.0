@@ -1,72 +1,70 @@
-Return-Path: <linux-next+bounces-1234-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1235-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0231C85B17A
-	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 04:32:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C35B285B185
+	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 04:39:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 354AE1C21409
-	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 03:31:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72D461F2155C
+	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 03:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34BD447F4B;
-	Tue, 20 Feb 2024 03:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B3742A88;
+	Tue, 20 Feb 2024 03:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GMJB2Ur/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZY0niVGy"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66DF4597A;
-	Tue, 20 Feb 2024 03:31:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D09833CF1;
+	Tue, 20 Feb 2024 03:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708399912; cv=none; b=HX40tM0rh49MfVGBPhG7iNH1laQApvatOveTFL3dhJCkA1KovH8xwXM7F7JMDJ9hzGY8MdYwC6kijBHWcN/v2ZcStgvWrEBK8WYWSI3X1yAfOMlb17P9Ikr+VVrr16XBHkTUQ6tMqWhcH2ubkQSQDxu3W9ERMlvgeik39PPb7G0=
+	t=1708400364; cv=none; b=h9j1fy+RV+74ayz2YWP5oPXXz8MUNDw5Ovyp98xLR49RM7FQoiBQWTpHzdTLtqfxWONLJNtImA6HhMvJpJVu2j0B5rwG+5caEwtRFAOKNpUnxmLqN10NMNbBLS658Q8PfmBHND2BMoDxe9FzaQ8c2k4jb/lJND+Qb5vWKjluwmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708399912; c=relaxed/simple;
-	bh=cIDbGSIveSzcFeROhmIIsKDFhOQPG4wJw615tBNccO4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=HD0Rwf+LTS/sxh1nOMI/MpBKFyjMwcbVRxkDB4aUgcpM4Ryz8deXDz5zM/vjt12qjuWJtTdI13UrqiGarT14znj6OUwYSpOrtsbJZYteK40Rr4uvwHrnZcgVL73xboBf9OZ/8x3XQIyY4mkbXwep8Hg1wgDOBZZ2XhGqCvessEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GMJB2Ur/; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708400364; c=relaxed/simple;
+	bh=7Y2sELjhel+6UxDpWMq0yReaC59tBmcYHAmG1877bbU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=E8ICyvuzEBjtVt+DmMzMm1hfsSHYCjJVLvP71Pb70yUk6REjOPYqczSrDgD9FnPjpVVDjN9/WoOD465zisX/9PxT/tVHia4W6SdvWYklC2Wegfc3xb0Y49OLJIDSp32vHN3XcsVdcAWyU/i5CMWjVonTbeqdA6/ViZWUegBc3E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZY0niVGy; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708399906;
-	bh=MVwR52auKQDDtwN5f0V07528Ab2MGJqFJAwOewE/2EQ=;
+	s=201702; t=1708400360;
+	bh=pcOAcbKO6ZfnI423BMyfLs6/TkEfSl8q4nsCTKKF2sk=;
 	h=Date:From:To:Cc:Subject:From;
-	b=GMJB2Ur/HUlYTEf7FmcrCtgXgnq05UtokVw4dxyKDvtsLtL83ahHT4AVq0MqMHmjL
-	 q/+lhKQpTe1+Pl8W9FeTlqGdrOP1tvg/enGv8hRWkxBt/lVb/ZM2+EncAestOOg0JP
-	 8j3N8bfadoQDlcUnK3jnSJo6pABy+Jbzw6a6AV3Z+l7hlmEVb+qwmy8+FaZhFE1pSJ
-	 4v3tbwFEpHPu2ABYl2fIY6/kscwzUB+nl2kRfjJ8jxpJkl7NFvqtSN07e4JzuPS0SA
-	 wJbKsXnmxAZCIDZ7Az+gzGnYcPtMLcK10ZMsXTnWfx2Pqad0zou0CAP2x+T136bvO/
-	 SZye1uNitHb/g==
+	b=ZY0niVGyjPW6TKiUMTjTm6asv4znW2vuz0lGHcu7cEZWkbYNj3x7QGOXZ+IIwhtul
+	 6D+w8H9TFo7q7zjE6XvGAq1nc3pWN0AtNfHpQM+lXaBlWrFA2cZR7U24z3cj39R8K+
+	 rzPU4U6QFv9famAKXky293jt3ZKDerlHgYKgFRGx/IfVGICjuN2Z9cV+/3OGE8HvwW
+	 4QZOWAOg8Se17tNfIOjvjIP3+u6/IAz1ssY32W4sJRB6JEdPgINAq4/nRYnN5l2zzQ
+	 broXmxyuBZS9Bbvm2WKnwuxeUIrj8SV536xL9YlrIjt6GNhzaGTzUB1r+kjm5TYCd8
+	 6oM4US9o//DXQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tf4hJ6q7wz4wcL;
-	Tue, 20 Feb 2024 14:31:44 +1100 (AEDT)
-Date: Tue, 20 Feb 2024 14:31:42 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tf4s36R6jz4wc1;
+	Tue, 20 Feb 2024 14:39:19 +1100 (AEDT)
+Date: Tue, 20 Feb 2024 14:39:19 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>, Mark Brown <broonie@kernel.org>, Liam Girdwood
- <lgirdwood@gmail.com>
-Cc: Danila Tikhonov <danila@jiaxyga.com>, Dmitry Baryshkov
- <dmitry.baryshkov@linaro.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Linux Kernel Mailing List
+To: Greg KH <greg@kroah.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Heikki Krogerus
+ <heikki.krogerus@linux.intel.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the regulator tree
-Message-ID: <20240220143142.540fe132@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Xu Yang <xu.yang_2@nxp.com>
+Subject: linux-next: manual merge of the usb tree with the usb.current tree
+Message-ID: <20240220143919.40257e7b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ETKXXR08IR_gx9/thtEQ_mE";
+Content-Type: multipart/signed; boundary="Sig_/vjSNruKW=5aAeRpaXByyGmo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/ETKXXR08IR_gx9/thtEQ_mE
+--Sig_/vjSNruKW=5aAeRpaXByyGmo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -74,63 +72,82 @@ Hi all,
 
 Today's linux-next merge of the usb tree got a conflict in:
 
-  Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+  drivers/usb/roles/class.c
 
 between commit:
 
-  ec29a4d9b7c7 ("dt-bindings: regulator: qcom,usb-vbus-regulator: Add PM615=
-0 compatible")
+  b787a3e78175 ("usb: roles: don't get/set_role() when usb_role_switch is u=
+nregistered")
 
-from the regulator tree and commit:
+from the usb.current tree and commit:
 
-  ef6035d2f1f4 ("dt-bindings: regulator: qcom,usb-vbus-regulator: add suppo=
-rt for PMI632")
+  9a270ec7bfb0 ("usb: roles: Link the switch to its connector")
 
 from the usb tree.
 
-I fixed it up (I have no idea if this is correct - see below) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulat=
-or.yaml
-index bf6336850be6,66dcd5ce03e6..000000000000
---- a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.y=
-aml
-+++ b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.y=
-aml
-@@@ -24,7 -24,7 +24,8 @@@ properties
-            - qcom,pm8150b-vbus-reg
-        - items:
-            - enum:
- +              - qcom,pm6150-vbus-reg
-+               - qcom,pmi632-vbus-reg
-            - const: qcom,pm8150b-vbus-reg
+diff --cc drivers/usb/roles/class.c
+index 70165dd86b5d,4ad03c93c17f..000000000000
+--- a/drivers/usb/roles/class.c
++++ b/drivers/usb/roles/class.c
+@@@ -361,8 -379,12 +388,14 @@@ usb_role_switch_register(struct device=20
+  		return ERR_PTR(ret);
+  	}
  =20
-    reg:
++ 	if (dev_fwnode(&sw->dev)) {
++ 		ret =3D component_add(&sw->dev, &connector_ops);
++ 		if (ret)
++ 			dev_warn(&sw->dev, "failed to add component\n");
++ 	}
++=20
+ +	sw->registered =3D true;
+ +
+  	/* TODO: Symlinks for the host port and the device controller. */
+ =20
+  	return sw;
+@@@ -377,10 -399,11 +410,12 @@@ EXPORT_SYMBOL_GPL(usb_role_switch_regis
+   */
+  void usb_role_switch_unregister(struct usb_role_switch *sw)
+  {
+- 	if (!IS_ERR_OR_NULL(sw)) {
+- 		sw->registered =3D false;
+- 		device_unregister(&sw->dev);
+- 	}
++ 	if (IS_ERR_OR_NULL(sw))
++ 		return;
+++	sw->registered =3D false;
++ 	if (dev_fwnode(&sw->dev))
++ 		component_del(&sw->dev, &connector_ops);
++ 	device_unregister(&sw->dev);
+  }
+  EXPORT_SYMBOL_GPL(usb_role_switch_unregister);
+ =20
 
---Sig_/ETKXXR08IR_gx9/thtEQ_mE
+--Sig_/vjSNruKW=5aAeRpaXByyGmo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXUHR4ACgkQAVBC80lX
-0Gy5JAf/WM3e5honpOpti+zmKIMCKE+Or/GLaOc2n4ioEV67p/dg5dhB9zK3vhD2
-EJ1UuieRhkE9RgYwTbBMnXEjBpnyBcRBvwShSl4D1tiWAtEmTzg2atUlfFILMr/M
-8VZeTmPitaDR23VtJiYpeXfr0mxwt7HURK0HlpYViZhblx/WnBhvzjncw3/hRjDn
-FilIXs+xN6g8UoLwLF6hDCJEblS+zu/gtt2AyhIJ0ZZqa5lh8/QYbWdEwQ73g8wM
-DSwHrVo7hln7AxtJBR81yxiDrlc1Q9hIn5KkEg4OH7HEZAB7oe/0URf4Hu2NHvcX
-s1aUzU09DvbdZR+5vPxzPFmi43j9ew==
-=t0aV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXUHucACgkQAVBC80lX
+0GynJggAgp2c1SBbsndc4wTiwdd2na4docb9SNOcYSCZaHqGzrUtJEVqhvBF0G7M
+O11/zmiEjFRFluIRCuFKWvdijXPBTgjHuRf6ulLz7wYNEu/3jUmLN9RH7f30U6EI
+HEqEuNF2tsZygAZC0+lVJqDqh0z1EAZnk/i3Bq5NzjmjIt9IXdurpQsyNX4iWpjD
+RatLKmYTq7iSQaxQF4Jg1uvqpYUn/GExpah0wXsgWMPcvPI7/T3gsij1LlG5Vg1n
+mVV939/96K5ztHkPFHtLOmvILkMJYB2LcAVNwlko3f2Tfx7VUqxu8BlpetAZw28C
+Pdpe1KtKTapHMMC+g+3Qmac5cvpqFg==
+=dl5s
 -----END PGP SIGNATURE-----
 
---Sig_/ETKXXR08IR_gx9/thtEQ_mE--
+--Sig_/vjSNruKW=5aAeRpaXByyGmo--
 

@@ -1,107 +1,160 @@
-Return-Path: <linux-next+bounces-1240-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1241-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1201785BFFE
-	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 16:33:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0F2F85C025
+	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 16:38:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB0231F24871
-	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 15:33:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CDDC284FEB
+	for <lists+linux-next@lfdr.de>; Tue, 20 Feb 2024 15:38:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 240F77603B;
-	Tue, 20 Feb 2024 15:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4385762FC;
+	Tue, 20 Feb 2024 15:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3cpdQCDy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xt87XlPg"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BE076031
-	for <linux-next@vger.kernel.org>; Tue, 20 Feb 2024 15:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3A7762F5;
+	Tue, 20 Feb 2024 15:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708443225; cv=none; b=sAeNm18o4+bDC9sJTbZSYz+HBbhUUBGqiah9lLXopDaH6mpvJHomNsOrifBoh9txRyVTrmkPgjxFatwbQTd5w87lMtlowsZzW6ub1u9VW0vaDwyiiqMlv+jMT0cgz86xF6NJlnl+UqrgHntwsTHINnKJ92P5Cwu+fYX3beSPoCE=
+	t=1708443378; cv=none; b=AYeWnLs+hplupcjEH8X0u7GK+j7Rh5dqSrrjOE+6E6DoyRQCXtq8iXHBkos3LZZCOabgqRv2w1aXqQyDUtLXah9RG/qk9GaSQ178WqDRi1m6i0MjOhGU1F27RmdxnnK5//SnEDjLIudFuLgjZPvSHp57WsxuzguQgne7iVIZ36E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708443225; c=relaxed/simple;
-	bh=7D7kf8p8aX2ZzflAMDnkhBwWgiUvsRg8uan55wPtdeo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=H0DUe3yxUVL51qhQhn8EkVgQs40VP7leL9rpRmit3zSWBWw60GEp7hhPxdIm1aTmbO0bZgjkqwEc5hlFWQKrBYWRp0NcJJuGY5mAwr34pLnvdCvpMWb1S35ZUZGrN2jmlUOdiQ8hBUAEYPJ2VWf7e634yWA2Bsp3JwckPm9j1/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3cpdQCDy; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-607e8e8c2f1so87211847b3.3
-        for <linux-next@vger.kernel.org>; Tue, 20 Feb 2024 07:33:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708443222; x=1709048022; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1fzOe/J4kuriO/maOGNH55dN19fVKQtEmyIcU4m9sns=;
-        b=3cpdQCDyg0mp5DZW2QTFvCcek4NqeDX7/LxCgHwuElM503dUoBSO7gIT1zXFtIJoJk
-         Eqrfn3tQlO17zTIzFUB5Da0CpBVfAvgOvjTuzPeLRyqGkd3rW5zKtdM6laTGO/dw3B5u
-         EcKxClAj1BrDglpYlG9x8rSdRLTNcFa+vPjHpaDq2PG7n8LWl0/PRern/zFiBMyNvxsk
-         hgWsLiCYmfUMjvmN5Hsedn3k1BFFML47uUqPRqS6ntAraoVtSVWuWqLXNCIKV0npv5vX
-         2jVBdx7V5bsKNZ01R9eOsrIa5l7iHQ0RSqopNvC/mfGngYDFlJ/WDHPyyVZLo/g5VPHR
-         u6bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708443222; x=1709048022;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1fzOe/J4kuriO/maOGNH55dN19fVKQtEmyIcU4m9sns=;
-        b=Qa4Fh2W+1tTaX9ZHJNT09ndbKvt+yfYKKyrFFv6J8qtVQRJSnfTdxX8BSYaO7cba/S
-         yx7G+ASsTdXOKDHVwKSWbqqM9KAZjCaLASet825keR5h+fT6DW6/alJNTobOILwqG2IV
-         qBroiX1y9+RJ2qygyYKibuDoF3a0QWDqBKwDdWPU2o7QRAlT2c3AJjKF6uG+HMCU1BcY
-         oDOipIkxCqaBH9/QAxac27EN3KydzhhRgnpzLSk4Gl95N1ntgTdLhkqj52EdCpqPutBc
-         WoCjAkkaniGNGKjJIxXDwjNWk4RKEqXv14UHzoTs9YWuxFMUTfxwK3wyio8hpvdnNshx
-         4ClA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5q9fM7fFUOl3Rrb0JfKlcxfYKep+OHOL85QLEQQXEDKgHpKiFpIILT8NqXNKsGLp/tk+IgXL7ZrgFDKM81hNAenud3htdIPhgGw==
-X-Gm-Message-State: AOJu0YzmaryNr+ZeN2loh+ZYdnVBrreAG5tSZu2/VDM8jAdJHzD7a49k
-	6VImUmDO2XMInghNJ1WFcuAtBY5gK2djAX1GBGRkvFUk4Irpg4ZXDV5IaIkwUqMpbH3H0AMtIpI
-	8xw==
-X-Google-Smtp-Source: AGHT+IHV2QTvanF7VyH48/qvRHmtqg+UWhaoc+cyGK8cObSo3PadCiUndGKk4nt1DLGsJf5NFU55wseFcsE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:4f83:0:b0:608:6c70:8d6 with SMTP id
- d125-20020a814f83000000b006086c7008d6mr178184ywb.2.1708443222505; Tue, 20 Feb
- 2024 07:33:42 -0800 (PST)
-Date: Tue, 20 Feb 2024 07:33:40 -0800
-In-Reply-To: <20240220134800.40efe653@canb.auug.org.au>
+	s=arc-20240116; t=1708443378; c=relaxed/simple;
+	bh=91doaSK1OA6gFTh8JNp1z7riF9y+l3+n/Ojx52n96AE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=D2jq/H4QH8URjYkWz8EccMDLvxPk/OzbW0qxaOdbSTRSTtaqOFCqbS5+QlHxdQqFYYkCVjLQc405hfBHjijkC2lw8YawbZK03xFxmYW3qhEfvC+5TNfFz4wHACRImuYOTzxIOgBrlg28wFrbUEosGCticl0kakoeP1JfIY/PgxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xt87XlPg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D2FC433F1;
+	Tue, 20 Feb 2024 15:36:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708443378;
+	bh=91doaSK1OA6gFTh8JNp1z7riF9y+l3+n/Ojx52n96AE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=Xt87XlPg+sBVe/zFZQCf4sXMZurtA7DkT5+P1M9iXF6H7MkHXOCIc96L8nToM/aB1
+	 XTBI8Fjko4VDW6TMgoLavbmY02zoFHGL1fyC0X9mAOIXxtcccMto//W06TAQR4zYQ7
+	 00gjltz55RDh93J/d2WlzSbzGe/TGoS5MZT0ySkAbtpBdmMR2ltKVU1HGzoXw3FJS7
+	 r5g3aNP4LZd7JkN6Modqhwx8cFGaVnEweIUFABx7JO8AM0q1qhPOQpBy8pUBRSsRKG
+	 tCaL0H51IaS2708iFrkXTylC6CxfG9DKZe100gmxZbM1nrRkhCiosXZeEH4+Aggk7t
+	 Hhw9+VxL47IUQ==
+Date: Tue, 20 Feb 2024 09:36:16 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: linux-next: manual merge of the pm tree with the pci-current tree
+Message-ID: <20240220153616.GA1481509@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240220134800.40efe653@canb.auug.org.au>
-Message-ID: <ZdTGRQJIO0Te8zF8@google.com>
-Subject: Re: linux-next: manual merge of the kvm-x86 tree with the kvm tree
-From: Sean Christopherson <seanjc@google.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Paul Durrant <pdurrant@amazon.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240214103008.0bb12069@canb.auug.org.au>
 
-On Tue, Feb 20, 2024, Stephen Rothwell wrote:
+On Wed, Feb 14, 2024 at 10:30:08AM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the kvm-x86 tree got a conflict in:
+> Today's linux-next merge of the pm tree got a conflict in:
 > 
->   include/uapi/linux/kvm.h
+>   drivers/pci/pci.c
 > 
 > between commit:
 > 
->   bcac0477277e ("KVM: x86: move x86-specific structs to uapi/asm/kvm.h")
+>   41044d536068 ("PCI: Fix active state requirement in PME polling")
 > 
-> from the kvm tree and commits:
+> from the pci-current tree and commit:
 > 
->   01a871852b11 ("KVM: x86/xen: allow shared_info to be mapped by fixed HVA")
->   3a0c9c41959d ("KVM: x86/xen: allow vcpu_info to be mapped by fixed HVA")
+>   c0ef3df8dbae ("PM: runtime: Simplify pm_runtime_get_if_active() usage")
 > 
-> from the kvm-x86 tree.
+> from the pm tree.
 
-/facepalm
+Just FYI, 41044d536068 is now upstream for v6.8, so the conflict will
+be between upstream and the pm tree:
 
-I asked Paolo for a topic branch specifically to avoid this conflict, and then
-managed to forget about it.  I'll rebase the xen patches and force push.
+https://git.kernel.org/linus/41044d536068
+
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/pci/pci.c
+> index a532bf597e57,cb51c4079013..000000000000
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@@ -2361,36 -2522,29 +2361,36 @@@ static void pci_pme_list_scan(struct wo
+>   		if (pdev->pme_poll) {
+>   			struct pci_dev *bridge = pdev->bus->self;
+>   			struct device *dev = &pdev->dev;
+>  -			int pm_status;
+>  +			struct device *bdev = bridge ? &bridge->dev : NULL;
+>  +			int bref = 0;
+>   
+>   			/*
+>  -			 * If bridge is in low power state, the
+>  -			 * configuration space of subordinate devices
+>  -			 * may be not accessible
+>  +			 * If we have a bridge, it should be in an active/D0
+>  +			 * state or the configuration space of subordinate
+>  +			 * devices may not be accessible or stable over the
+>  +			 * course of the call.
+>   			 */
+>  -			if (bridge && bridge->current_state != PCI_D0)
+>  -				continue;
+>  +			if (bdev) {
+> - 				bref = pm_runtime_get_if_active(bdev, true);
+> ++				bref = pm_runtime_get_if_active(bdev);
+>  +				if (!bref)
+>  +					continue;
+>  +
+>  +				if (bridge->current_state != PCI_D0)
+>  +					goto put_bridge;
+>  +			}
+>   
+>   			/*
+>  -			 * If the device is in a low power state it
+>  -			 * should not be polled either.
+>  +			 * The device itself should be suspended but config
+>  +			 * space must be accessible, therefore it cannot be in
+>  +			 * D3cold.
+>   			 */
+>  -			pm_status = pm_runtime_get_if_active(dev);
+>  -			if (!pm_status)
+>  -				continue;
+>  -
+>  -			if (pdev->current_state != PCI_D3cold)
+>  +			if (pm_runtime_suspended(dev) &&
+>  +			    pdev->current_state != PCI_D3cold)
+>   				pci_pme_wakeup(pdev, NULL);
+>   
+>  -			if (pm_status > 0)
+>  -				pm_runtime_put(dev);
+>  +put_bridge:
+>  +			if (bref > 0)
+>  +				pm_runtime_put(bdev);
+>   		} else {
+>   			list_del(&pme_dev->list);
+>   			kfree(pme_dev);
+
+
 

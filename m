@@ -1,97 +1,104 @@
-Return-Path: <linux-next+bounces-1268-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1269-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BC7485E41B
-	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 18:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A64B285EBD4
+	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 23:31:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43C5628579C
-	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 17:12:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6186F283330
+	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 22:31:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F23839F9;
-	Wed, 21 Feb 2024 17:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2E217FBC2;
+	Wed, 21 Feb 2024 22:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k/BrxkNi"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="txGPLxMt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9D333F7;
-	Wed, 21 Feb 2024 17:12:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 029D112A166;
+	Wed, 21 Feb 2024 22:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708535563; cv=none; b=AEhyNyKOz8B3ZwAwXeY94Ep99AKcuo0bEgbxpSDHCIb/BZHp1SKBkNipgzAuho77vVk67new6zf+w2p3T0Tu7CRuYhp8fcPfggPS5OEA54oHn4tjbvygSNNsc3HqTXTxsX0DgR+ohvT/SQ/Euf5/9PenbyY3yu/eUEq5+APYjq4=
+	t=1708554640; cv=none; b=Z9NAylI/8LjSp1fbQ2IXixqtFT2G79gEBT1zDfgIGa3HX+LHMhBRd7PTsFaR/SikkVqeaRB/ZY7WK38UclslFHEbLRyAKYTt3rb4GrMDpMyRgcb+y1Q+J7uHPUQpJDg/E6kgIMfCBq6+h3jlQUJ8fW+SJkycvf8M0Q0loZhm7hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708535563; c=relaxed/simple;
-	bh=3cF0hRg56ey3XRtvjCjE/Ic1fV37b1kLU7pCfhtoO70=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WruCJ01yGaWVRYTDQVAEjVpBzlAbUywm6S/nleP0TpXySsxpVqjvzaamPnA4M9//hwLrWh+se1HFJJziu6n2rFO6Lw7Q8L6ij+rhB3thjPIt/w1cOsln+yXsN7K0JkRelcptzp4jBR0CRqh+Hf59kqGWYq4CKLY5iZTR+nnM4As=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k/BrxkNi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D465CC433C7;
-	Wed, 21 Feb 2024 17:12:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708535563;
-	bh=3cF0hRg56ey3XRtvjCjE/Ic1fV37b1kLU7pCfhtoO70=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=k/BrxkNihtwQQtUeea/ap70cG2lB+Lp1ay+916sE2U97a+BUeCfy7K65/V2HibWeN
-	 osntBmWEGwdPPehz3vNWJMz7r0DLZ2/BmMhMRpVu9IyjmjXX7c4bwW+hONt1hzaGcq
-	 vWSf5aySZ3ZXWsA2KsOgZfzttKb9TlpmnTD+tZqYGgSUZVGXL27ylQ5nU1JHy4CwMk
-	 l9Q0tndvycMpJ3PSdanL++IkWVokCKiroFVyUFMbj+2YOqwnf9V577TA88ABkvnsjp
-	 xLSNprHSmJDsGw8lb+KyMpumrOsZf36bRhUXTd++NLamSiQvUfHDN7ArfsE6MSiQON
-	 pLkR5Dvs34KYg==
-From: SeongJae Park <sj@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	SeongJae Park <sj@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the mm tree
-Date: Wed, 21 Feb 2024 09:12:41 -0800
-Message-Id: <20240221171241.55658-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240221162745.4332955c@canb.auug.org.au>
-References: 
+	s=arc-20240116; t=1708554640; c=relaxed/simple;
+	bh=bdS2FtnKbYxNW7PTSlxKVXVXWf6E45YksDvwx67f+vg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=V4ARh/x1HfvluGuuOw0+5/NepsLFQotbo7VsYx74AzjBgqleNp/FMJenjx2M0PFf559Xw9I1c7RhODdn/JcgxQgeUfcetzfFVMzTbEWJzXW5Gt2Fxjo0tVDgBHbpHPflbzwOTciZ3pX+GVxOhUF07LW5kj5WYmnjDX/OnL9doow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=txGPLxMt; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1708554627;
+	bh=gh7laZzC56uFD3fUawV8vNFQ6cB/qxDm6SbST2hms60=;
+	h=Date:From:To:Cc:Subject:From;
+	b=txGPLxMt/jqcaEme21KUI7A+PMHMNAhU6CkN/jDmuWHS0zAY4tMUwKnwviZLsZ4is
+	 qIpeChfjC35tk+pW3+8SJxteCT0V24ZiCu/Hq+pk/GHZ4Zy/RL8GQXcZZvDwkIMxYm
+	 Hq4vUJpq7q7fRM+DGU/P9UUE4diH4Hcdj7G/AoGrj880imSvpXo/p2t39fGyi25hTl
+	 YS8vz4xTUmCfThxueqfVWSnknQn8FqqDB/7J0EXDUUNrR2qGU175ops5wECROY6nv6
+	 nBs0oC0PlIgSbUC1KyV42V+c4rsGuRgh1kCfeJrteaL35smHgyFqUTbxnbrsX98tRQ
+	 SPqpl3Z2PDinA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tg9vl0Krjz4wcF;
+	Thu, 22 Feb 2024 09:30:26 +1100 (AEDT)
+Date: Thu, 22 Feb 2024 09:30:25 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Greg KH <greg@kroah.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the risc-v-fixes tree
+Message-ID: <20240222093025.5f9d9ad5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/ChZT8gv=IAY_ctlKzVP5U2M";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, 21 Feb 2024 16:27:45 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/ChZT8gv=IAY_ctlKzVP5U2M
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> --Sig_/rZSz2XyBy4/Li.uOi0DLWDM
-> Content-Type: text/plain; charset=US-ASCII
-> Content-Transfer-Encoding: quoted-printable
-> 
-> Hi all,
-> 
-> After merging the mm tree, today's linux-next build (htmldocs) produced
-> these warnings:
-> 
-> Documentation/admin-guide/mm/damon/usage.rst:186: WARNING: undefined label:
->  'damon_design_confiurable_operations_set'
-> Documentation/admin-guide/mm/damon/usage.rst:369: WARNING: undefined label:
->  'damon_design_damos_quota_auto_tuning'
-> 
-> Introduced by commits
-> 
->   afc858f0e6db ("Docs/mm/damon: move DAMON operation sets list from the usage
-> to the design document")
->   d50e871bd78b ("Docs/admin-guide/mm/damon/usage: document quota goal metric
-> file")
-> 
-> from the mm-unstable branch of the mm tree.
+Hi all,
 
-Thank you for this nice report.  Just sent fixes:
-https://lore.kernel.org/damon/20240221170852.55529-1-sj@kernel.org/
+The following commit is also in the tty.current tree as a different commit
+(but the same patch):
 
+  481860974faa ("tty: hvc: Don't enable the RISC-V SBI console by default")
 
-Thanks,
-SJ
+This is commit
 
-[...]
+  8b79d4e99407 ("tty: hvc: Don't enable the RISC-V SBI console by default")
+
+in the tty-current tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ChZT8gv=IAY_ctlKzVP5U2M
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXWeYEACgkQAVBC80lX
+0GzCaAf9EtdjZ8KatCxNJ6rWg349gp95tf+2+8mfOObGuSDZ5LdFEj2kssg9BImd
+a0YMHKEpL73SjVdvCtiNJrH8pqxOstKYAWU3BVjlUxWgAxRCefV40DdRAJp/uNgF
+rJyqV6mH0IBEnLngmz44KrTyJqXMnvyLrFVbpOn7Zbcq7LkTgrmOa9n2nuYhBFSU
+NOopSesQvM52rUcsfOgmk11uqfmLHKJVfIY/u2MeLEnnJok5q7MPx1VBC0XzIjS4
+Iv3bsuItgHvtQ5BGea80oSQiNkaDHJjQ0D6QHDuZpJ7ai0Z7r0e5mgIBuuucFee1
+zGN/kseChuRwwFhU182eTkSARn430Q==
+=u13X
+-----END PGP SIGNATURE-----
+
+--Sig_/ChZT8gv=IAY_ctlKzVP5U2M--
 

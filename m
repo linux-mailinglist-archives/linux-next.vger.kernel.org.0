@@ -1,116 +1,105 @@
-Return-Path: <linux-next+bounces-1270-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1271-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3779D85EC87
-	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 00:07:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E55F85EC8C
+	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 00:08:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73D17B2123F
-	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 23:07:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F0C21C21A26
+	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 23:08:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C2381ABA;
-	Wed, 21 Feb 2024 23:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA6F81726;
+	Wed, 21 Feb 2024 23:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NFKEE333"
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="SYprxqwU"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBD1EC5;
-	Wed, 21 Feb 2024 23:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93BD7FBC2
+	for <linux-next@vger.kernel.org>; Wed, 21 Feb 2024 23:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708556823; cv=none; b=usu6pgn/u1SQUKNhxw0lgQErgyPjKFrwBJRlO0t9FUhWkPyl+ePZBzkQ1IijdZwaZXOzboDhm9ASGt+fBshAMdWtkGM5xzBxhdDhnvDEZb9DAiSDe65EdT6zpNQw1Rh0tPqbkloXoEKZEcSO/8chIb4V6eSBEFXNHLjo+X8+PqE=
+	t=1708556924; cv=none; b=L0w8guJaTos2yCgllBO1khzgYehMrwcbZ9aogvsLJB25sn/GolY7K2QnoG1AS/7yTzp6M3RJCmqt8VZ0yPgTGhqinu+EH0n83vL3rvL+TyNZNuYGwDk/hY2vTjWpSJeYsdpqQygi1GJ4LtwwU3dno3xGDNLmVWfZoJnc9j1Z5i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708556823; c=relaxed/simple;
-	bh=Gwpylj/sT4sjUiniryxyurq72mhwJX0hnZbtxFhHT5c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=T3OChJOHXeif824FkDVkfNEHS/FR7N1p/Pilq2VWzs6NUE+sHu9uBeo+dpYOpPYOMIBozAyXpXwiKX6dQHq99QzvguIXSbVfzE2GRJcSHF3e9HuJLeQ81RZ9MqDj5bdyKT1PQTnoGVkMd4bj2P53S2CI0TLZDNVqXaq/PrnRsT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=NFKEE333; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708556818;
-	bh=Ib2C9zjSUcH4lTi6XWnBc7cedDQvZTeIr7QOPZ60WaI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=NFKEE333dJztxDGs2KTQ/u76F64STOXw5KpJKZBSgZfc/iPjvhKnEUcSNkSf7Oq8O
-	 yWWwTR/C19undrzJz5cLOtfyrzTmU8qUNNmLj8dhFP6UBkWpUS1VloXLumGUHXKoJt
-	 yTupGrdlrYo59xeo1q0DZ7+D5QJOEDZ5hfy79itrn1BvAdeYrVtgSwjlrxYqBCRjwf
-	 dFS+B3tQWZVsepBBR1hOLhDbMMhxXgdFwxMOkylCsJWkII7eqpGOXlQLSCb/RnOFPZ
-	 dH0FlROCYggJhZSizWw6b+iGEGwErEy+maPlOxdvCEf2TfhGo/rEzBtuTM8aYsVrEk
-	 zOgFF2vK85DJg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgBjt2Ybqz4wcF;
-	Thu, 22 Feb 2024 10:06:58 +1100 (AEDT)
-Date: Thu, 22 Feb 2024 10:06:56 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
- <namhyung@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo
- <acme@redhat.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the perf tree
-Message-ID: <20240222100656.0a644254@canb.auug.org.au>
+	s=arc-20240116; t=1708556924; c=relaxed/simple;
+	bh=ubWxMaDgQA7aCLDJJnk56SO9zudn89gqBTa6kQPbUZI=;
+	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
+	 Content-Type; b=fQslLWHoFbXs0VbfdOJoZWwoVvrNS47VWN24+NBRq1uGlUKmjnIINxjboYUa6cYcXIGMZuqb7NTK6jdA8NGlsgl9M3XIbHBZMvghj+7r2DiGSirpxWLCIKzrRAeQ76YiRGzu2PB6q9SVt2fvRaIdSIkhmMZTX98FXc3KQNuSlPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=SYprxqwU; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5dbd519bde6so6057233a12.1
+        for <linux-next@vger.kernel.org>; Wed, 21 Feb 2024 15:08:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1708556922; x=1709161722; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UyIdnrPvkMs2AU+vw/nEPIW+QxndqyTNQEwIk71io1o=;
+        b=SYprxqwUT6HKzA3P3l8z0BmVIICC5JFM3ziQFzAfWyvPNbcX5r9SJTu0mac4SJgAbY
+         oLCFdmHG+FzC6DGV1L1eLHqcVp4tOgJUcCMhtXSkgn6MfCofyiPGxgM/9AEpaMYP5ix6
+         zgna/S/AYzPjoKqMomjnRvlGS9HmrKHK6HKm5zoFFIwmG77Ky3ma6z+RAw80R317Q8sZ
+         h6JhvRRnuJqFiJZ3+nFrXISXuq3I+ocz3PAlRpOIQKpYOVr/O9ITyPuQejfMZ8aViE8R
+         T9S4KcT33FLqR0O/iAuOznF1/Q8aSrPpe+8KYi03MqYqWJ/pu8H6lJ5Vu8kVYEQ8z3FW
+         +mTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708556922; x=1709161722;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UyIdnrPvkMs2AU+vw/nEPIW+QxndqyTNQEwIk71io1o=;
+        b=S1C7x3AKpvdyLOHmYUgvRp/diY26Nfjx3qD6C/azDmHgGYxl85Dq8tRXb9JrFVXOYT
+         Lq3WoAVaqO+JO/xmXkp2n3fDJ3JLBXay8pAuoQL2JhjB7UYSuvD8lL+1hCmJGRRf/JTV
+         cv4I/w4DEzxhYgJkFP/xHt8aUh/ZC/jRUPUFo2+csJEXSwjsavdbDR2o3kcSKee8sNmT
+         ERJuUIswKBlg1HnOVzKeTrhIh5JMgrUiV9YoX0gaTE1LpQeIaxIlL6HlS1xcLD8IR2I8
+         1r6+L8fZ6A1SWPgGDZLC/JbMushfETP9wspT32zI2cHi02e5WpbSVqGY25TwxDMvd9/k
+         CXVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVwcB2PHZmqmcdQ5L/o0sU+JyP6P1R/U6quPXviyNWr0ddVDPeRLTso2XBGAs0ilIp/4NtcM5avxskaPF8wZU/gfT4LflEj/nrsEQ==
+X-Gm-Message-State: AOJu0YwR5um/RdDx5OlfhTs4nSEy0PzhwToFahepVs6s2Q+rSo4wow8h
+	zrFDs/FxXoCM9GqnS2xEZ0hMxFEcJCziRm8cj9a2kPxotPkGXOsZlXdbnMEuNFo=
+X-Google-Smtp-Source: AGHT+IHThDor4vbSwCGzgqxbkS1L4FAjcJEeNqRKW6q1pX8qIRUqKbsUqTEftPikKBnSg4ZOCItd1Q==
+X-Received: by 2002:a17:90a:604e:b0:299:3f2a:4309 with SMTP id h14-20020a17090a604e00b002993f2a4309mr12544246pjm.18.1708556921732;
+        Wed, 21 Feb 2024 15:08:41 -0800 (PST)
+Received: from localhost ([50.213.54.97])
+        by smtp.gmail.com with ESMTPSA id qj15-20020a17090b28cf00b002961a383303sm2420580pjb.14.2024.02.21.15.08.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 15:08:40 -0800 (PST)
+Date: Wed, 21 Feb 2024 15:08:40 -0800 (PST)
+X-Google-Original-Date: Wed, 21 Feb 2024 15:08:39 PST (-0800)
+Subject:     Re: linux-next: duplicate patch in the risc-v-fixes tree
+In-Reply-To: <20240222093025.5f9d9ad5@canb.auug.org.au>
+CC: Paul Walmsley <paul.walmsley@sifive.com>, greg@kroah.com,
+  linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Message-ID: <mhng-57f0dff8-c22c-4e94-be94-376c833e3b1f@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6je1p2tIlVil2AvLIAwL2g.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---Sig_/6je1p2tIlVil2AvLIAwL2g.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 21 Feb 2024 14:30:25 PST (-0800), Stephen Rothwell wrote:
+> Hi all,
+>
+> The following commit is also in the tty.current tree as a different commit
+> (but the same patch):
+>
+>   481860974faa ("tty: hvc: Don't enable the RISC-V SBI console by default")
+>
+> This is commit
+>
+>   8b79d4e99407 ("tty: hvc: Don't enable the RISC-V SBI console by default")
+>
+> in the tty-current tree.
 
-Hi all,
-
-After merging the perf tree, today's linux-next build (native perf)
-failed like this:
-
-util/bpf_skel/augmented_raw_syscalls.bpf.c:329:15: error: invalid applicati=
-on of 'sizeof' to an incomplete type 'struct timespec64'
-        __u32 size =3D sizeof(struct timespec64);
-                     ^     ~~~~~~~~~~~~~~~~~~~
-util/bpf_skel/augmented_raw_syscalls.bpf.c:329:29: note: forward declaratio=
-n of 'struct timespec64'
-        __u32 size =3D sizeof(struct timespec64);
-                                   ^
-
-Caused by commit
-
-  29d16de26df1 ("perf augmented_raw_syscalls.bpf: Move 'struct timespec64' =
-to vmlinux.h")
-
-This is a ppc64 le build.
-
-I have used the perf tree from next-20240221 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/6je1p2tIlVil2AvLIAwL2g.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXWghAACgkQAVBC80lX
-0GxBZwgAk3Mk1RF4oYH8dHKJ8Jx3P2OTDVSDJrM8/7t44RElOZosaDiNv94jTzBq
-JWo161cFkbFi0+xAy12juOsvptiq83+f9/PiaGhlOVjVKNtwSD4MLnK6TiRDudd4
-0tedfNYDOZfXeDCHHej2+Kns29QHjtCorladyyNvrC6GZ+NGgev2L3N3djVk3ZP3
-JSRTZM0LhFy8SDcAhnHReoRkBSQs3vLTuHgw5aCefpiY1G07F7IEQ7FBB4DFH2yA
-tleEYzfjsuN9R47HipYEtokRSZhPNRZvQhdmk6MXEtkRmbinv0FOEFA8PUXSp/NF
-+VLhkZT6lUf4E/GyMLVR5JH8ncnHAw==
-=ewK4
------END PGP SIGNATURE-----
-
---Sig_/6je1p2tIlVil2AvLIAwL2g.--
+Ah, sorry about that.  I'd been trying to figure out why my tester was 
+broken and forgot to check if someone else had picked this up.  Should 
+be gone now.
 

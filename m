@@ -1,167 +1,135 @@
-Return-Path: <linux-next+bounces-1264-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1265-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81CFC85E027
-	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 15:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D72D985E04F
+	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 15:53:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8022DB28E26
-	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 14:43:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04FFCB274A2
+	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 14:52:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 131BE8003F;
-	Wed, 21 Feb 2024 14:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="Tyx+Lg7G"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064F47FBB7;
+	Wed, 21 Feb 2024 14:52:06 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650AD7C098;
-	Wed, 21 Feb 2024 14:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF20B3D393;
+	Wed, 21 Feb 2024 14:52:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708526526; cv=none; b=PgN42h3Qo7NSF2prmq73azTy8LgAvzQZYNFUP2ptDTFxqYqT0AimS9asYabkLGFDxe4s/xknsCibr9YjcJ70Hgr3i/MmCy80f/t1i/0ImPcyO2+wv6735g0xOr0uNrOBUyDGz/awepPnr3Skf2CnmOT2p2kZEDW1n4OIM0sskBE=
+	t=1708527125; cv=none; b=LMKdXBpneo2+pzJ/w/THpqPYAdjNOQ4agoOcPCXFkn88pZ21ivtjc0o16TJzG91ESr/wilgac3MvUyXAbNvrPRyOVF/NCA/UUva0MToHtosHiYbJk9qdKX8e1r6bjXet3BH8l5Yk9j/twx9Q3Ram59IEyDCrLJq6hLi85rI/sb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708526526; c=relaxed/simple;
-	bh=qfmyZSJgxNHQKChzfs713W6+r1H1kW/lMOe8B8MNPuo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D5dnCK/Uc2KshSfrAbiHjJzLXy05E4s/yHDN99in4Zih1Gpi13tkezXuCSD6Oe6Qvn3v/MQTMYSDyMbDcMhjPmDMhpbDXr1xvmRO1QaohTzU+wXHaZ7503vANLZjDCfUpu7eIXxE/UZWVQYs0ZPdcXegmfIzK2g0Pr+ONAbMbBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=Tyx+Lg7G; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1708526523; x=1740062523;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FZAuBeWNVe7S926YYHfB+88G6fnv3frBjDDyTaf2+Wc=;
-  b=Tyx+Lg7GPmAtAvz+XVYIAZeQgMCIWh6X957kunGrrBUNWYqewfJvb4Ss
-   Yqh+hZcnwaMZVOj8TuKsqNvCJIMgREVx8NTcE8s0R4JCh9FQpih6+RfbK
-   J7IOl6XbE/eE5JuLnJo1IWiURlGm0l4eshkh6KdxAfF49gh03Bs6CV36i
-   z96qN6uZUS24I0D6dOIE2nBMYUXlbVrbROO0ndY/EjRrlIryXyaZ8cJDl
-   55+noFaxohXylgyJYA8skSamyFnRe4IDyM2xuj7jiLTqj7wfjbkorulkd
-   FAQYmoWlNGD9wTB08J8F5Fj3FFrg/tjDgVNpN6QmIWKiuhwErI5cOJLxO
-   g==;
-X-IronPort-AV: E=Sophos;i="6.06,175,1705359600"; 
-   d="scan'208";a="35525870"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 21 Feb 2024 15:42:01 +0100
-Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1400B280075;
-	Wed, 21 Feb 2024 15:42:01 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Rob Herring <robh@kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the arm-soc-fixes tree
-Date: Wed, 21 Feb 2024 15:42:00 +0100
-Message-ID: <13457561.uLZWGnKmhe@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <CAL_Jsq+2ri0JsmuU184YGj=p53jSxn+8EZq_FuBbMjsVyNLvtw@mail.gmail.com>
-References: <20240221092826.748e70c4@canb.auug.org.au> <20240221163010.5f81813a@canb.auug.org.au> <CAL_Jsq+2ri0JsmuU184YGj=p53jSxn+8EZq_FuBbMjsVyNLvtw@mail.gmail.com>
+	s=arc-20240116; t=1708527125; c=relaxed/simple;
+	bh=dYqhxvGpBkoLMh7laZ8Pp5bbExsdnPPFLjMXeaKuTl8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UZpLx9B8J0k9V+2CrpGBukI7dSWpq3CUZMswyxB5REAuT9K1+UcIsuq0j0i1GfzRwY/Y/F+SVAAEZffnU7MJ07NXKDsjNXLHGDbNf2j6FRqDI+fuuTEaBvBGlS4L32W3TEk4zb34GFficj0Zn4JZkKgr6fNtiYimmNNjxXj0u5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-607f94d0b7cso57919727b3.3;
+        Wed, 21 Feb 2024 06:52:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708527122; x=1709131922;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/uN11UFtAgBpi/BZo2e/MPjOkd4Zyv9OPcg+zAzU/+s=;
+        b=d5y6E1AT8yXgNomJ1sH1IBB6gA1/mEt/UV8KCvvIi4X+QD8yNa3jvrOlX0rK5fy/2z
+         RydsMi82uhOKY99imr6zclwBLdlzhqvMOd+Bo2jPSW9oVyqXqBOVdoPsk650zdPdiFeO
+         0UtqU4gx8HmzbLocTvdbTpSVH1XzsYCzVAdpkGk57VDnCRoIWEwWCw62onBi5CSookN0
+         Re81yziMY0KQ7lZFd9ECNjFzfSZY4a+kD1yH01gJ8Qt0yVTWYkZKN7nWAlEOLGWTAF6w
+         nPRb0pkphhCF94J1smQGgKb/Q35b1yaaVYUtFGUVqliEX14Md78xRlJuS2RG1HGdDiFI
+         9a/g==
+X-Forwarded-Encrypted: i=1; AJvYcCXp/0jcWjh8zafF2CMuqkXk1I4+9EphQQbVunVP2+kDaKAGOmnJjPjCy96QB+UuBnbAxsuAKfe+P8jOG6JdKRyDlaqvxITV8V7L1nnpf/aGAOezGex1qurgY3EiIWx3OMgiGZQKqkltGQ==
+X-Gm-Message-State: AOJu0Yyqrv3uwiXIFpJzZrJfhU1yPFUF4Zd6KlwoeNuR2Dt8Tl4oJSU5
+	V1l2YIZAfwGOZbZccZO+FDLa/wC+skCaNHAjr2spKZ+QtdAsycVNyx9B4Q6yA2A=
+X-Google-Smtp-Source: AGHT+IG6zbYRcaLR4tw2JSlpBvD5t6q92s4vA1aW1JKhoO/6/Jkh45aWS9e1YW65V7s0cN+3zII9Dw==
+X-Received: by 2002:a81:b71b:0:b0:604:3ee2:f258 with SMTP id v27-20020a81b71b000000b006043ee2f258mr16776988ywh.45.1708527122575;
+        Wed, 21 Feb 2024 06:52:02 -0800 (PST)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id w71-20020a0dd44a000000b0060885da5f54sm198194ywd.121.2024.02.21.06.52.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Feb 2024 06:52:02 -0800 (PST)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dcc80d6006aso5620386276.0;
+        Wed, 21 Feb 2024 06:52:02 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXlmLn3QICsDt+OcH1i1UtObBGjJFQaBSZ582zrc63QICFJavW35oJTIdZRdcU1kPQ6OyO/XgkFufI8zH9qr2E1X2Gs3M3Iwse8rHW3sBW1Yx9AVh3hCJekYx36gzp++ooHceqe7mGCPQ==
+X-Received: by 2002:a25:ae1a:0:b0:dcc:8aaa:3ed3 with SMTP id
+ a26-20020a25ae1a000000b00dcc8aaa3ed3mr16385906ybj.16.1708527121854; Wed, 21
+ Feb 2024 06:52:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20240221092826.748e70c4@canb.auug.org.au> <CAL_JsqKw9OXb=aOMni1qprzeWDBgmjdJef-6VAjwx0R--D+URw@mail.gmail.com>
+ <ac9ddf79-6bc9-4daf-a271-82f8b3bca988@app.fastmail.com> <CAL_Jsq+L7uPimQfATs14EWCbqRO1vxDUmPie7=cChTLCf2od2g@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+L7uPimQfATs14EWCbqRO1vxDUmPie7=cChTLCf2od2g@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 21 Feb 2024 15:51:50 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXNyU0eBcMe3EhhfahcRo2KtXzwdr+d_6AC-2529R3bmQ@mail.gmail.com>
+Message-ID: <CAMuHMdXNyU0eBcMe3EhhfahcRo2KtXzwdr+d_6AC-2529R3bmQ@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the arm-soc-fixes tree
+To: Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Olof Johansson <olof@lixom.net>, ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-next <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Rob,
+Hi Rob, Arnd,
 
-Am Mittwoch, 21. Februar 2024, 14:58:32 CET schrieb Rob Herring:
-> On Tue, Feb 20, 2024 at 10:30=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.=
-org.au> wrote:
-> >
-> > Hi all,
-> >
-> > On Wed, 21 Feb 2024 09:28:26 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
-> > >
-> > > After merging the arm-soc-fixes tree, today's linux-next build (arm
-> > > multi_v7_defconfig) produced this warning:
-> > >
-> > > arch/arm/boot/dts/renesas/r8a7790-lager.dts:444.11-458.5: Warning (in=
-terrupt_provider): /i2c-mux4/pmic@58: Missing '#interrupt-cells' in interru=
-pt provider
-> > > arch/arm/boot/dts/renesas/r8a7790-lager.dtb: Warning (interrupt_map):=
+On Wed, Feb 21, 2024 at 3:27=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
+> On Wed, Feb 21, 2024 at 7:00=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wro=
+te:
+> > On Wed, Feb 21, 2024, at 14:53, Rob Herring wrote:
+> > > On Tue, Feb 20, 2024 at 3:28=E2=80=AFPM Stephen Rothwell <sfr@canb.au=
+ug.org.au> wrote:
+> > >> arch/arm/boot/dts/renesas/r8a7793-gose.dtb: Warning (interrupt_map):=
  Failed prerequisite 'interrupt_provider'
-> > > arch/arm/boot/dts/renesas/r8a7792-blanche.dts:376.10-392.4: Warning (=
-interrupt_provider): /soc/i2c@e60b0000/pmic@58: Missing '#interrupt-cells' =
-in interrupt provider
-> > > arch/arm/boot/dts/renesas/r8a7792-blanche.dtb: Warning (interrupt_map=
-): Failed prerequisite 'interrupt_provider'
-> > > arch/arm/boot/dts/renesas/r8a7790-stout.dts:344.10-362.4: Warning (in=
-terrupt_provider): /soc/i2c@e60b0000/pmic@58: Missing '#interrupt-cells' in=
- interrupt provider
-> > > arch/arm/boot/dts/renesas/r8a7790-stout.dtb: Warning (interrupt_map):=
- Failed prerequisite 'interrupt_provider'
-> > > arch/arm/boot/dts/renesas/r8a7791-koelsch.dts:816.10-830.4: Warning (=
-interrupt_provider): /soc/i2c@e60b0000/pmic@58: Missing '#interrupt-cells' =
-in interrupt provider
-> > > arch/arm/boot/dts/renesas/r8a7791-koelsch.dtb: Warning (interrupt_map=
-): Failed prerequisite 'interrupt_provider'
-> > > arch/arm/boot/dts/renesas/r8a7791-porter.dts:410.10-420.4: Warning (i=
-nterrupt_provider): /soc/i2c@e60b0000/pmic@5a: Missing '#interrupt-cells' i=
-n interrupt provider
-> > > arch/arm/boot/dts/renesas/r8a7791-porter.dtb: Warning (interrupt_map)=
-: Failed prerequisite 'interrupt_provider'
-> > > arch/arm/boot/dts/renesas/r8a7794-alt.dts:450.10-464.4: Warning (inte=
-rrupt_provider): /soc/i2c@e6510000/pmic@58: Missing '#interrupt-cells' in i=
-nterrupt provider
-> > > arch/arm/boot/dts/renesas/r8a7794-alt.dtb: Warning (interrupt_map): F=
-ailed prerequisite 'interrupt_provider'
-> > > arch/arm/boot/dts/renesas/r8a7794-silk.dts:436.10-454.4: Warning (int=
-errupt_provider): /soc/i2c@e6510000/pmic@58: Missing '#interrupt-cells' in =
-interrupt provider
-> > > arch/arm/boot/dts/renesas/r8a7794-silk.dtb: Warning (interrupt_map): =
-=46ailed prerequisite 'interrupt_provider'
-> > > arch/arm/boot/dts/renesas/r8a7793-gose.dts:756.10-770.4: Warning (int=
-errupt_provider): /soc/i2c@e60b0000/pmic@58: Missing '#interrupt-cells' in =
-interrupt provider
-> > > arch/arm/boot/dts/renesas/r8a7793-gose.dtb: Warning (interrupt_map): =
-=46ailed prerequisite 'interrupt_provider'
+> > >>
+> > >> Introduced/exposed by commit
+> > >>
+> > >>   78b6f8e7379b ("dtc: Enable dtc interrupt_provider check")
+> > >>
+> > >> I guess you missed some :-(
 > > >
-> > > Introduced/exposed by commit
-> > >
-> > >   78b6f8e7379b ("dtc: Enable dtc interrupt_provider check")
-> > >
-> > > I guess you missed some :-(
+> > > No, Geert separately posted fixes for already.
 > >
-> > Also these from the arm64 defconfig build:
+> > I did make the mistake of applying the final patch "dtc:
+> > Enable dtc interrupt_provider check" to the arm/fixes branch
+> > for 6.8 along with the other fixes.
 > >
-> > arch/arm64/boot/dts/freescale/mba8xx.dtsi:233.20-249.4: Warning (interr=
-upt_provider): /bus@5a000000/i2c@5a810000/gpio@70: Missing '#interrupt-cell=
-s' in interrupt provider
-> > arch/arm64/boot/dts/freescale/imx8dxp-tqma8xdp-mba8xx.dtb: Warning (int=
-errupt_map): Failed prerequisite 'interrupt_provider'
-> > arch/arm64/boot/dts/freescale/mba8xx.dtsi:233.20-249.4: Warning (interr=
-upt_provider): /bus@5a000000/i2c@5a810000/gpio@70: Missing '#interrupt-cell=
-s' in interrupt provider
-> > arch/arm64/boot/dts/freescale/imx8qxp-tqma8xqp-mba8xx.dtb: Warning (int=
-errupt_map): Failed prerequisite 'interrupt_provider'
->=20
-> Looks like a new platform in next.
->=20
-> Alexander, Can you fix these?
+> > Clearly that should be separate and only go into mainline
+> > after there are no more regressions, but now I'm unsure
+> > about the other patches -- did you intend the dts fixes
+> > for 6.8 or for the coming merge window?
+>
+> Either is fine with me. My intent was the whole series plus the
+> Renesas fix to be applied together. Anything new that crops up we can
+> fix on top.
 
-Thanks for reminding me. This was already fixed on my queue.
-Just send the patch, you are on CC as well.
+If you want me to move commit b4f97d1b5aeb6166 ("ARM: dts: renesas:
+rcar-gen2: Add missing #interrupt-cells to DA9063 nodes") to
+renesas-fixes, please tell me.
 
-Thanks and best regards,
-Alexander
-=2D-=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-http://www.tq-group.com/
+Thanks!
 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 

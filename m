@@ -1,98 +1,87 @@
-Return-Path: <linux-next+bounces-1284-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1285-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4772F85F2EA
-	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 09:29:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F13B85F301
+	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 09:32:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B04A91F24BCF
-	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 08:29:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3DB7B23001
+	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 08:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15E519478;
-	Thu, 22 Feb 2024 08:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C4C2260B;
+	Thu, 22 Feb 2024 08:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F8dz2Yh8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9893117F3;
-	Thu, 22 Feb 2024 08:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86183225CE;
+	Thu, 22 Feb 2024 08:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708590561; cv=none; b=TG2R3igHeL8roR2v2rqKemcwalLd9AxfxSeb/5ieekQZjYTsVVP8uh8pn07b5JnWQcODT3bsWftoxFEgGN7urpwGyH/2aLj88me74bd5cVHaZ6wsJlDXnJwTfb8/a2hgn9gEXqhnPyPqEMSwsSslwJNcZOOtesIMA7HrHhn1spA=
+	t=1708590732; cv=none; b=JxFiUDQLEGumF+6H06RQvmcY7j8E7UveswHVTl8l2m+7z/sP3HUxD7aBYOdxyMjgstTeLt+nHl4XKHBdWbQCFiC5L1BSge8ivtWx1yNegROzeWxMH6m1X49T7Y/UIOYe9D4QfPYXU8ihYa4hxdSvOhwZ2JmS32bm1MhASUsU7WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708590561; c=relaxed/simple;
-	bh=5mjPQkEkMqV4tvrQqZa3eUo6bLhvA/Eax+OBmTANIps=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oLn4xXK2VEzPNzSjELActtmryRK70t8Y6sk3TqnGnBPQy6RRMUHwjn7qMSKNONc3YHKtwYClWP5ZW1KK260QgURAJrvdoYHfbfAAYgV7WK5KuOXRPgtQShbBccZzdy2wIJsd4sBqnAWmId+y6OekBU4bxI47Bb6NVru3VWcYdpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-607e60d01b2so34295477b3.1;
-        Thu, 22 Feb 2024 00:29:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708590558; x=1709195358;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3E80Fr+PQHplyVIuytgLvVqlKEcgK1zfDCm4lydbgb8=;
-        b=bXB3Ivu1QhbGJ+LqJTX/+6po8ho0uh+NaJgeDHvd74z2WleFOM+F/S/e0yVJGyjLGT
-         cftaeWjG5+hPX2yZjt/HuUCUbNU1F65qb+7ZWQxU6ky6V4Gd9Ia1u9QSuzBiVFbOuzfY
-         UFftF16HzpRK2uo3epcPimNLUMboLICFVDmyBvGsJDR0BzJBr0pKGih5ZAgtTAJPU8Dr
-         ib91q2YsTNfri+xCsCjswF51kStwb6mBqHT3uStz39nDfarnVuAztbCtnUcQFKLM7Qdq
-         8ytNVdeS+vvbU45rMO7IgDfp1M4C+tujAZwJwp+uQcNY3b+KJYzb2GOAEXc+SRuQ9Qt1
-         fsWw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2l7YHiZvSqwU6vz8hiALjtrsqJP12nzAGxfynwyb0pc5W++ZIIP7e+JjZJVmjy4sHDTw5LdUHYTJ32lx7qSwlEXDkqBPWpDvIfDwXOyyPBSBgJvlBrVkJ1J0erdn83WS2NZLbJqKe4Q==
-X-Gm-Message-State: AOJu0YyZigsDWu9mlRn0xPcEpYVvQ00TtyoLDFX7UNIRIdnvQAcqDW2p
-	wlvpAi16WiLqvE6RT/yFhE+XsNG47v8JQfQ1eOS1iQICtfZeGQtgvCX+4XaRy6w=
-X-Google-Smtp-Source: AGHT+IEaf9m52rkqAwSwbyA9KZsEw9SeHzIBg6FcoeD3eMSarcMRvaZcGU8KwDfJyC42Aj51GuhH2g==
-X-Received: by 2002:a25:8292:0:b0:dc2:1dd0:1d1b with SMTP id r18-20020a258292000000b00dc21dd01d1bmr1715388ybk.19.1708590557664;
-        Thu, 22 Feb 2024 00:29:17 -0800 (PST)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id v40-20020a25abab000000b00dce0f2db9acsm2705951ybi.34.2024.02.22.00.29.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 00:29:16 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6085b652fc8so32585667b3.2;
-        Thu, 22 Feb 2024 00:29:16 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX2XrZ6tZe0afzDUYPxNmo06RWwliozLbQVdjNFcuFwXdI2hoCXaamm9hl/76fi+rQXcJKvXZwWVFAuk9XRrBMlcevCGYMTIvVgJ/S8mm8zvrhrcVfbk4VaWH+Db1W8C0px2fXS/6gzqg==
-X-Received: by 2002:a05:690c:714:b0:608:98d:6f77 with SMTP id
- bs20-20020a05690c071400b00608098d6f77mr12592435ywb.0.1708590556168; Thu, 22
- Feb 2024 00:29:16 -0800 (PST)
+	s=arc-20240116; t=1708590732; c=relaxed/simple;
+	bh=N7a5IF82ize/+pzYCn6kEa3/rgM3v7OL3ujPEwZlvg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TS4JR5XnlnfYVu2lGISdz4fa58gfBQ6VVmO0ZxSlwoQ8XnA9XlwlwUxoQDVXxniRrCbC0h4jtDZo6YybSEYfNKZptXk6hhJwqkbyv67LARQfbKMpkA8OyE6efC0KFaVRkErv7uU0nUs/QhQt13KLDXwX58PyoI/XpAHQsAIgxGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F8dz2Yh8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C776AC433C7;
+	Thu, 22 Feb 2024 08:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708590732;
+	bh=N7a5IF82ize/+pzYCn6kEa3/rgM3v7OL3ujPEwZlvg8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F8dz2Yh8UDjroLtHv0F9r3QcElMUbyQi+Y1f9K48WIJjH0DM7VWXyWr6NBgBE4kVx
+	 yUv8+iKVg02/jHN029nS3NsIwpi2qGin7BZuGxBsF6BT/P9WiTCQW7niaAuWJkf9hN
+	 r5g2DsWl7+53idn3FLJ4xMx1dd+uqZIC5boLQTRmoyRWkiTf9yTDC87IKLuo0BIyH5
+	 2wFn/ljKYkZhjV65XsYnRRmNhGJst7R6znw64oeB/qiBWhgjPSECUicSYSn1GZPKoa
+	 MHyDfYFyoeQt3LUENvnhPx8y04eXRsKWlxqkmiHD7V0a9jfF8pfjtf1qncVr4eMhpW
+	 2EBRboHk9q+ow==
+Date: Thu, 22 Feb 2024 09:32:09 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Daniel Vetter <daniel.vetter@ffwll.ch>, Intel Graphics <intel-gfx@lists.freedesktop.org>, 
+	DRI <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <4hdbpzyab7djy7gxsn6qjhgmr3qczstfgwhefgar4nuxohajdq@5hn6m3b4m64n>
+References: <20240222124610.383e1ce3@canb.auug.org.au>
+ <TYCPR01MB11269B83A59650E230F4DD97F86562@TYCPR01MB11269.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240222124610.383e1ce3@canb.auug.org.au> <TYCPR01MB11269B83A59650E230F4DD97F86562@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="27unys4ydult4g2a"
+Content-Disposition: inline
 In-Reply-To: <TYCPR01MB11269B83A59650E230F4DD97F86562@TYCPR01MB11269.jpnprd01.prod.outlook.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 22 Feb 2024 09:29:04 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV0nftTZ6WuEkcS9h0d1bx_haR==roB1gwbaS2fzooO_A@mail.gmail.com>
-Message-ID: <CAMuHMdV0nftTZ6WuEkcS9h0d1bx_haR==roB1gwbaS2fzooO_A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Vetter <daniel.vetter@ffwll.ch>, 
-	Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>, 
-	Maxime Ripard <mripard@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+
+
+--27unys4ydult4g2a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi Biju,
 
-On Thu, Feb 22, 2024 at 9:14=E2=80=AFAM Biju Das <biju.das.jz@bp.renesas.co=
-m> wrote:
+On Thu, Feb 22, 2024 at 08:14:14AM +0000, Biju Das wrote:
 > > -----Original Message-----
 > > From: Stephen Rothwell <sfr@canb.auug.org.au>
 > > Sent: Thursday, February 22, 2024 1:46 AM
 > > Subject: linux-next: build failure after merge of the drm-misc tree
-> >
+> >=20
+> > Hi all,
+> >=20
 > > After merging the drm-misc tree, today's linux-next build (x86_64
 > > allmodconfig) failed like this:
-> >
+> >=20
 > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c:47:6: error: redefinition =
 of
 > > 'rzg2l_du_vsp_enable'
@@ -101,8 +90,7 @@ of
 > > In file included from drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.h:18,
 > >                  from drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c:30:
 > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h:72:20: note: previous
-> > definition of 'rzg2l_du_vsp_enable' with type 'void(struct rzg2l_du_crt=
-c
+> > definition of 'rzg2l_du_vsp_enable' with type 'void(struct rzg2l_du_crtc
 > > *)'
 > >    72 | static inline void rzg2l_du_vsp_enable(struct rzg2l_du_crtc *cr=
 tc)
@@ -159,32 +147,30 @@ ode
 > >    66 | static inline int rzg2l_du_vsp_init(struct rzg2l_du_vsp *vsp,
 > > struct device_node *np,
 > >       |                   ^~~~~~~~~~~~~~~~~
-> >
+> >=20
 > > Caused by commit
-> >
+> >=20
 > >   768e9e61b3b9 ("drm: renesas: Add RZ/G2L DU Support")
-> >
+> >=20
 > > I have used the drm-misc tree from next-20240221 for today.
->
+>=20
 > I will send an incremental patch to fix this build error with x86 on drm-=
 next.
->
-> I need to use the macro #if IS_ENABLED(CONFIG_VIDEO_RENESAS_VSP1)
-> in drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h to fix this error.
 
-Looks like you're also missing an EXPORT_SYMBOL_GPL(rzg2l_du_vsp_enable)?
+Any chance you can do it today? We need to send the drm-misc-next PR.
 
-Gr{oetje,eeting}s,
+Maxime
 
-                        Geert
+--27unys4ydult4g2a
+Content-Type: application/pgp-signature; name="signature.asc"
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZdcGiAAKCRDj7w1vZxhR
+xeWEAQDsnNF+oM0G4cjC34BmXGz+r23Jn7SE6VAbXNQULFhk2QD9FOJWgAdMVDMF
+iQ8KOfo32ZmEWCJgyT0sNdl2ytAtVwI=
+=zRxw
+-----END PGP SIGNATURE-----
+
+--27unys4ydult4g2a--
 

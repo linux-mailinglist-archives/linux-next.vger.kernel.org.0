@@ -1,149 +1,104 @@
-Return-Path: <linux-next+bounces-1278-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1279-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3F5285F105
-	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 06:41:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E00485F12A
+	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 06:56:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D589B1C21703
-	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 05:41:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34116B22550
+	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 05:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C6308C11;
-	Thu, 22 Feb 2024 05:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0212315AF6;
+	Thu, 22 Feb 2024 05:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Ny5T3Ugo"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oqTbNApA"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C76E79FE;
-	Thu, 22 Feb 2024 05:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B362B12E4F;
+	Thu, 22 Feb 2024 05:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708580483; cv=none; b=kKI8/upmIWcz5WlcV2h3BrLtBPxiQdHcuaXAOx1YykjnUXfWKc20423+CaB6ZiH1VxsKNHBhe6T0kqJq1PwYbOjgZjqcmy4pjBMesAWD3OsjmI13j64ZTHoFJIY123Nc+bZyo9qGY+gMOYBEQp9k5rBRT22Kh5xr5MpfZFp4WsY=
+	t=1708581402; cv=none; b=hUD5BuJH1E2Myk04AqGUUkCHpOWr78ifGwtdrvfWvCi60UlSaC4JT5iLD1sJejdzqFD3XgBz6c8gOAW71PFmT+DO1CVU1NWjJmj0MwJStnELoTpKQdiR1FqOFYI9aeo5ZhxHVZSAf/3Zfn93uy6EqCi+QFr4Vu6mFZfFnZ7XPuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708580483; c=relaxed/simple;
-	bh=CyFF8u437hi+0IEu6LKGKSPe89Imahej+9Wfm+1JmhQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gm259MEdSyg9r4l8z79oobit7knl0t9A4wWx4891fl0U2BA/4K1ss+e+rU2/Ts6atkgNddIKqhO01XWFz2U7szf+FZpechmZ/7JgkVnDCTPWUsKkfmchUJ7Smjon9iQ37vXAZh/wi0+WGOXjaom75XbwqnCKH2MyxODU4i1+4Ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Ny5T3Ugo; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708581402; c=relaxed/simple;
+	bh=igvdT3OW8iB13zNtn88d6z8rm2yodrqF6L3B5TbaL5o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YUZdJmZ5+/tqMSurSv6aB/xCroH5DF2A8uvMatdggrU+PvXX1jVX4N31tkmqh8il7q+8JTxVgT3sdMZZ4loZODE7FTTfDZsVsi/KUlhZZC44hZhqmn1DyJdFq814gytG1YSPIFsr0cZo8jabk4xD4wEFyyGr0w/4cr91O+dGf6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oqTbNApA; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708580475;
-	bh=l/mQIp7cq83y6qmgj8qMJwfolXmHqJjsdTvnn/kBjYc=;
+	s=201702; t=1708581395;
+	bh=A8bs9/nh2+Pun4s3PfS5o+wVH+viQgRLUCoSctg7lss=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Ny5T3UgobztFLCvGTXCKB1F1R6hclLrwGyx89t/67Zw+rD4V1FEAl07O1Eu5kJmZm
-	 OZFxHBeEZ488liOik84ZmOoxOnCQGxrHT25aXKpy+A4m+jae/5EZ+ugoxtCxX4FddJ
-	 Pn+X9m9Ht/Kk3hdcLtkDCicJD6J1G2SyEsX+Az45mNJR3Eu8WVwDpfbopHIGcEdn9n
-	 18tSe1KK0jHQYqGvfjxTIvC3Mju4jU/aF+XkillHse0QknGTmep+ZYa9pgsgb3Hzl3
-	 9klSuPlhT+HDH8WekL2P2Muh+lgrRQbmLD4gETUSVnta/CWESW0m7us+nUCJhcTEuP
-	 0+wwqOrRx9+Qw==
+	b=oqTbNApAeMcdsnsekVtpz7CVwKlryIBwbD59X3BzTfSYOHuU1r1xz/07BVTfURvbF
+	 p75QqjA9syOKY7aUX+b65HM72TFF7aTdLHQR+M2pXWr+aR+6YNZBhdvEKjPCau0eDs
+	 xVYFfYU2EWnKiBkx75ci/o3/s/iU60934133UCIVNZWYogxVOVcmoB/HjEmZbh7lnq
+	 /2fPkYzvZ5osL0QcezK9v07+Tf/Zp04NWfeuiKiiG4uneVlTkzkdukIiAgkDBEZnyx
+	 dXxQ7yBtYpHFDd+nA1MIceSbfI+Bo1eTESpNC+EDl1fmSxWwK2I+eRRv8XIuTb9Vha
+	 U730EJqSjZL8w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgMSq1BLWz4wcq;
-	Thu, 22 Feb 2024 16:41:14 +1100 (AEDT)
-Date: Thu, 22 Feb 2024 16:41:12 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgMpW5RRFz4wcR;
+	Thu, 22 Feb 2024 16:56:35 +1100 (AEDT)
+Date: Thu, 22 Feb 2024 16:56:35 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kees Cook <keescook@chromium.org>, Andrew Morton
- <akpm@linux-foundation.org>
+To: Kees Cook <keescook@chromium.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kspp tree with the mm tree
-Message-ID: <20240222164112.20c5646e@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the kspp tree
+Message-ID: <20240222165635.3dbfad02@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/in8Tuk7waFON2ccEBaZB8ct";
+Content-Type: multipart/signed; boundary="Sig_/AU3eQiveujyOPJWsYNlEQ8h";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/in8Tuk7waFON2ccEBaZB8ct
+--Sig_/AU3eQiveujyOPJWsYNlEQ8h
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kspp tree got conflicts in:
+After merging the kspp tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-  scripts/Makefile.lib
-  scripts/Makefile.ubsan
+arch/arm/boot/compressed/misc.c:157:6: warning: no previous prototype for '=
+__fortify_panic' [-Wmissing-prototypes]
+  157 | void __fortify_panic(const u8 reason, size_t avail, size_t size)
+      |      ^~~~~~~~~~~~~~~
 
-between commit:
+Introduced by commit
 
-  1a75e5856b3b ("ubsan: reintroduce signed overflow sanitizer")
-
-from the mm-unstable branch of the mm tree and commit:
-
-  557f8c582a9b ("ubsan: Reintroduce signed overflow sanitizer")
-
-from the kspp tree.
-
-So, the conflicts looked like this:
-
-scripts/Makefile.lib:
-
-ifeq ($(CONFIG_UBSAN),y)
-_c_flags +=3D $(if $(patsubst n%,, \
-		$(UBSAN_SANITIZE_$(basetarget).o)$(UBSAN_SANITIZE)y), \
-		$(CFLAGS_UBSAN))
-_c_flags +=3D $(if $(patsubst n%,, \
-<<<<<<< HEAD
-		$(UBSAN_WRAP_SIGNED_$(basetarget).o)$(UBSAN_SANITIZE_$(basetarget).o)$(UB=
-SAN_WRAP_SIGNED)$(UBSAN_SANITIZE)y), \
-		$(CFLAGS_UBSAN_WRAP_SIGNED))
-=3D=3D=3D=3D=3D=3D=3D
-		$(UBSAN_SIGNED_WRAP_$(basetarget).o)$(UBSAN_SANITIZE_$(basetarget).o)$(UB=
-SAN_SIGNED_WRAP)$(UBSAN_SANITIZE)y), \
-		$(CFLAGS_UBSAN_SIGNED_WRAP))
->>>>>>> kspp/for-next/kspp
-endif
-
-scripts/Makefile.ubsan:
-
-export CFLAGS_UBSAN :=3D $(ubsan-cflags-y)
-
-<<<<<<< HEAD
-ubsan-wrap-signed-cflags-$(CONFIG_UBSAN_SIGNED_WRAP)     +=3D -fsanitize=3D=
-signed-integer-overflow
-export CFLAGS_UBSAN_WRAP_SIGNED :=3D $(ubsan-wrap-signed-cflags-y)
-=3D=3D=3D=3D=3D=3D=3D
-ubsan-signed-wrap-cflags-$(CONFIG_UBSAN_SIGNED_WRAP)     +=3D -fsanitize=3D=
-signed-integer-overflow
-export CFLAGS_UBSAN_SIGNED_WRAP :=3D $(ubsan-signed-wrap-cflags-y)
->>>>>>> kspp/for-next/kspp
-
-I fixed it up (I just used the kspp tree version (arbitrarily)) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+  0f4459080884 ("fortify: Split reporting and avoid passing string pointer")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/in8Tuk7waFON2ccEBaZB8ct
+--Sig_/AU3eQiveujyOPJWsYNlEQ8h
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXW3ngACgkQAVBC80lX
-0GyOswf/XEl9X5KzBmMth0TvJJXb7T39WjMe40xE27GYDIPeUNnq0cYk3UekKhzo
-1b/xlH2rcQhK24ZBE8ua6vZs6FjwIwuDoQBzxucv3+oz6o+D2XJ8lRNV0c5Lpq2Q
-vHhH3YmJSpRAwYZpSXJ8ysD6UKhyLHVgWv4WBHaUfZR2gt/JkWAlleC/ZDYRmbPa
-cW+9xVFXCQM7/vLDkoWHTzq7mFKkigK6/uEPpinzN1NDU3TnJHkEuZxNKJSKoJWj
-yR+zEMHjADF6jM+AtvMgES7kgvsVRYQpmDD+nYgdJrUanS5LSQEWjbuliCsdheRQ
-xYMeFzkdHnIdBahzauOeZhe8S5COdA==
-=IkEk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXW4hMACgkQAVBC80lX
+0GzF+Af+K8otmvDsrNokGTZE+0H9N45+z4KWWtTfJFSm/oIVL9rtNey+V3I2tWvJ
+KCAV0wu4vFlhHM4gUhUDudEljfOJfS4x5n2ofAfHO1Id1XHFCLZL2QeU17IE0MEz
+eK7LFQ7bDLqayP2KUBlFOG/czCCCW1GewTKZPa5RU3kgx9eV9h66vZ5QKSn72MAr
+y2oosJDCTD3DksQQFkauR0LRh6/18uS32XCwz1ZtKpOGKZw3xqrK+ibe8GxuV34n
+Ptumxe9783C1C5A08uEZxzyDw877fsGsYGFayg618boNMDKSOsksiI2cGUDBOxra
+0WYqOlX1LISzZcZlseL62sRR4khHYg==
+=6U6F
 -----END PGP SIGNATURE-----
 
---Sig_/in8Tuk7waFON2ccEBaZB8ct--
+--Sig_/AU3eQiveujyOPJWsYNlEQ8h--
 

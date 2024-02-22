@@ -1,105 +1,156 @@
-Return-Path: <linux-next+bounces-1271-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1272-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E55F85EC8C
-	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 00:08:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C73F85EEBF
+	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 02:46:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F0C21C21A26
-	for <lists+linux-next@lfdr.de>; Wed, 21 Feb 2024 23:08:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8227284AA1
+	for <lists+linux-next@lfdr.de>; Thu, 22 Feb 2024 01:46:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA6F81726;
-	Wed, 21 Feb 2024 23:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF06C111A1;
+	Thu, 22 Feb 2024 01:46:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="SYprxqwU"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="p9xfLe9y"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93BD7FBC2
-	for <linux-next@vger.kernel.org>; Wed, 21 Feb 2024 23:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD72680C;
+	Thu, 22 Feb 2024 01:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708556924; cv=none; b=L0w8guJaTos2yCgllBO1khzgYehMrwcbZ9aogvsLJB25sn/GolY7K2QnoG1AS/7yTzp6M3RJCmqt8VZ0yPgTGhqinu+EH0n83vL3rvL+TyNZNuYGwDk/hY2vTjWpSJeYsdpqQygi1GJ4LtwwU3dno3xGDNLmVWfZoJnc9j1Z5i8=
+	t=1708566377; cv=none; b=Hlrl6lK5YMfr/dr7jj4M5OAXiUI8vT+tS0JTTjKGzCS0MfFQml/XxFKIMhIALEhuee7jbsHzQecvNkVTU80ot143Y/5mmiydhvWMJYqeAvSftCRgbR+z1ibyTNQSmVq26Se3Pu5nZV+GJiWIZjPmdjhTpD4spxf5uTITuhZimPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708556924; c=relaxed/simple;
-	bh=ubWxMaDgQA7aCLDJJnk56SO9zudn89gqBTa6kQPbUZI=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=fQslLWHoFbXs0VbfdOJoZWwoVvrNS47VWN24+NBRq1uGlUKmjnIINxjboYUa6cYcXIGMZuqb7NTK6jdA8NGlsgl9M3XIbHBZMvghj+7r2DiGSirpxWLCIKzrRAeQ76YiRGzu2PB6q9SVt2fvRaIdSIkhmMZTX98FXc3KQNuSlPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=SYprxqwU; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5dbd519bde6so6057233a12.1
-        for <linux-next@vger.kernel.org>; Wed, 21 Feb 2024 15:08:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1708556922; x=1709161722; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UyIdnrPvkMs2AU+vw/nEPIW+QxndqyTNQEwIk71io1o=;
-        b=SYprxqwUT6HKzA3P3l8z0BmVIICC5JFM3ziQFzAfWyvPNbcX5r9SJTu0mac4SJgAbY
-         oLCFdmHG+FzC6DGV1L1eLHqcVp4tOgJUcCMhtXSkgn6MfCofyiPGxgM/9AEpaMYP5ix6
-         zgna/S/AYzPjoKqMomjnRvlGS9HmrKHK6HKm5zoFFIwmG77Ky3ma6z+RAw80R317Q8sZ
-         h6JhvRRnuJqFiJZ3+nFrXISXuq3I+ocz3PAlRpOIQKpYOVr/O9ITyPuQejfMZ8aViE8R
-         T9S4KcT33FLqR0O/iAuOznF1/Q8aSrPpe+8KYi03MqYqWJ/pu8H6lJ5Vu8kVYEQ8z3FW
-         +mTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708556922; x=1709161722;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UyIdnrPvkMs2AU+vw/nEPIW+QxndqyTNQEwIk71io1o=;
-        b=S1C7x3AKpvdyLOHmYUgvRp/diY26Nfjx3qD6C/azDmHgGYxl85Dq8tRXb9JrFVXOYT
-         Lq3WoAVaqO+JO/xmXkp2n3fDJ3JLBXay8pAuoQL2JhjB7UYSuvD8lL+1hCmJGRRf/JTV
-         cv4I/w4DEzxhYgJkFP/xHt8aUh/ZC/jRUPUFo2+csJEXSwjsavdbDR2o3kcSKee8sNmT
-         ERJuUIswKBlg1HnOVzKeTrhIh5JMgrUiV9YoX0gaTE1LpQeIaxIlL6HlS1xcLD8IR2I8
-         1r6+L8fZ6A1SWPgGDZLC/JbMushfETP9wspT32zI2cHi02e5WpbSVqGY25TwxDMvd9/k
-         CXVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVwcB2PHZmqmcdQ5L/o0sU+JyP6P1R/U6quPXviyNWr0ddVDPeRLTso2XBGAs0ilIp/4NtcM5avxskaPF8wZU/gfT4LflEj/nrsEQ==
-X-Gm-Message-State: AOJu0YwR5um/RdDx5OlfhTs4nSEy0PzhwToFahepVs6s2Q+rSo4wow8h
-	zrFDs/FxXoCM9GqnS2xEZ0hMxFEcJCziRm8cj9a2kPxotPkGXOsZlXdbnMEuNFo=
-X-Google-Smtp-Source: AGHT+IHThDor4vbSwCGzgqxbkS1L4FAjcJEeNqRKW6q1pX8qIRUqKbsUqTEftPikKBnSg4ZOCItd1Q==
-X-Received: by 2002:a17:90a:604e:b0:299:3f2a:4309 with SMTP id h14-20020a17090a604e00b002993f2a4309mr12544246pjm.18.1708556921732;
-        Wed, 21 Feb 2024 15:08:41 -0800 (PST)
-Received: from localhost ([50.213.54.97])
-        by smtp.gmail.com with ESMTPSA id qj15-20020a17090b28cf00b002961a383303sm2420580pjb.14.2024.02.21.15.08.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 15:08:40 -0800 (PST)
-Date: Wed, 21 Feb 2024 15:08:40 -0800 (PST)
-X-Google-Original-Date: Wed, 21 Feb 2024 15:08:39 PST (-0800)
-Subject:     Re: linux-next: duplicate patch in the risc-v-fixes tree
-In-Reply-To: <20240222093025.5f9d9ad5@canb.auug.org.au>
-CC: Paul Walmsley <paul.walmsley@sifive.com>, greg@kroah.com,
-  linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Message-ID: <mhng-57f0dff8-c22c-4e94-be94-376c833e3b1f@palmer-ri-x1c9a>
+	s=arc-20240116; t=1708566377; c=relaxed/simple;
+	bh=wx/YYFJ6Nz20w+eWoeK9PIMy4WJ+Qy4rrohodQ62y4Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Q2unyH0BzpNTKsBVKtmHxrvL/mtm0+nip7fYZ6luBp1hHd7HT4hWV3M69NnkyYo1MMoS/G78opSz4DoWqV66RW2zj+3cArTArsJNC23cTmUDPQoo1pzCFX5gD/grtI2TB72XYGXER7/pBIy9xeZl5Q9stVtJFvrPSGAhmn1JSQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=p9xfLe9y; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1708566373;
+	bh=kVrGOOZuytddGaVDzynxhTBC+xSsBONQgK1rFjcI04M=;
+	h=Date:From:To:Cc:Subject:From;
+	b=p9xfLe9y7O7o0L6JZJQ5hAr2E99eXt+g6UpwFee0zcavelR1U27Ab9wUvsmaKKl59
+	 FbKmXLlvHNonmahWbvcR2/LaifvRYgXsytCBd8qIsVZVV6Y/yJM2VQFxhvhgxV8QHc
+	 Z3vFZxaS4uEADvVKzzjrE/S2Oi6IspQprrwbMFrTTQGSH8ek8HAkg5tiLKDw8xyMrg
+	 oW+RF6MIM2qtJ7M86ZCzfUdR8TFK5CUkLLTdfp51YRBsdm0cvQrCB2hQJnHSpONbtJ
+	 LDpWqIHzldxOk705KDX8LENUsQ3/n3DLqW9sxcNFKOZiRflsMFi/NW4vWxKqbIEibV
+	 Y7Ody1d1q0Tpw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgGFc1GpTz4wb2;
+	Thu, 22 Feb 2024 12:46:11 +1100 (AEDT)
+Date: Thu, 22 Feb 2024 12:46:10 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
+ <dri-devel@lists.freedesktop.org>, Biju Das <biju.das.jz@bp.renesas.com>,
+ Maxime Ripard <mripard@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20240222124610.383e1ce3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/E=U/0=a4mO7C/s62y_fF+mJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, 21 Feb 2024 14:30:25 PST (-0800), Stephen Rothwell wrote:
-> Hi all,
->
-> The following commit is also in the tty.current tree as a different commit
-> (but the same patch):
->
->   481860974faa ("tty: hvc: Don't enable the RISC-V SBI console by default")
->
-> This is commit
->
->   8b79d4e99407 ("tty: hvc: Don't enable the RISC-V SBI console by default")
->
-> in the tty-current tree.
+--Sig_/E=U/0=a4mO7C/s62y_fF+mJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ah, sorry about that.  I'd been trying to figure out why my tester was 
-broken and forgot to check if someone else had picked this up.  Should 
-be gone now.
+Hi all,
+
+After merging the drm-misc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c:47:6: error: redefinition of '=
+rzg2l_du_vsp_enable'
+   47 | void rzg2l_du_vsp_enable(struct rzg2l_du_crtc *crtc)
+      |      ^~~~~~~~~~~~~~~~~~~
+In file included from drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.h:18,
+                 from drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c:30:
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h:72:20: note: previous definiti=
+on of 'rzg2l_du_vsp_enable' with type 'void(struct rzg2l_du_crtc *)'
+   72 | static inline void rzg2l_du_vsp_enable(struct rzg2l_du_crtc *crtc) =
+{ };
+      |                    ^~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c:61:6: error: redefinition of '=
+rzg2l_du_vsp_disable'
+   61 | void rzg2l_du_vsp_disable(struct rzg2l_du_crtc *crtc)
+      |      ^~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h:73:20: note: previous definiti=
+on of 'rzg2l_du_vsp_disable' with type 'void(struct rzg2l_du_crtc *)'
+   73 | static inline void rzg2l_du_vsp_disable(struct rzg2l_du_crtc *crtc)=
+ { };
+      |                    ^~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c:66:6: error: redefinition of '=
+rzg2l_du_vsp_atomic_flush'
+   66 | void rzg2l_du_vsp_atomic_flush(struct rzg2l_du_crtc *crtc)
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h:74:20: note: previous definiti=
+on of 'rzg2l_du_vsp_atomic_flush' with type 'void(struct rzg2l_du_crtc *)'
+   74 | static inline void rzg2l_du_vsp_atomic_flush(struct rzg2l_du_crtc *=
+crtc) { };
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c:76:19: error: redefinition of =
+'rzg2l_du_vsp_get_drm_plane'
+   76 | struct drm_plane *rzg2l_du_vsp_get_drm_plane(struct rzg2l_du_crtc *=
+crtc,
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h:75:33: note: previous definiti=
+on of 'rzg2l_du_vsp_get_drm_plane' with type 'struct drm_plane *(struct rzg=
+2l_du_crtc *, unsigned int)'
+   75 | static inline struct drm_plane *rzg2l_du_vsp_get_drm_plane(struct r=
+zg2l_du_crtc *crtc,
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c:302:5: error: redefinition of =
+'rzg2l_du_vsp_init'
+  302 | int rzg2l_du_vsp_init(struct rzg2l_du_vsp *vsp, struct device_node =
+*np,
+      |     ^~~~~~~~~~~~~~~~~
+drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h:66:19: note: previous definiti=
+on of 'rzg2l_du_vsp_init' with type 'int(struct rzg2l_du_vsp *, struct devi=
+ce_node *, unsigned int)'
+   66 | static inline int rzg2l_du_vsp_init(struct rzg2l_du_vsp *vsp, struc=
+t device_node *np,
+      |                   ^~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  768e9e61b3b9 ("drm: renesas: Add RZ/G2L DU Support")
+
+I have used the drm-misc tree from next-20240221 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/E=U/0=a4mO7C/s62y_fF+mJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXWp2IACgkQAVBC80lX
+0GxnZwf/arzy84++smzTe8LIY0swpYvN291/uBVHEhzoDCRQ+Nca/CjO6K5G9k5k
+5ZUGFiePuEDX98lphTb9l/98ftUtXwSOzx93YGuvM9yDK0Fec6F3fhuYnbp8L0/a
+iLbZbIs1l+0W+Xodk+uUyiI/fCFmD3lmZEa0e1La2i//5do/nGdB95lOm71HJPG7
+24+Xx046XUBMqXX1TC7bE7D0qx0ZJgoMEj7vNWCf4a6SQ1gr4KcjxkoUFrZo18XK
+goLTS8Ytg9jiIE3uCOkr+kMjbP9WrhcC1AqJVK6TbgzhpFN4zqyDkaorXFol2ha3
+pwy/IyslkvihfNBmKIkqoDSwAPBk3A==
+=28hk
+-----END PGP SIGNATURE-----
+
+--Sig_/E=U/0=a4mO7C/s62y_fF+mJ--
 

@@ -1,107 +1,112 @@
-Return-Path: <linux-next+bounces-1306-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1307-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27C1786095C
-	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 04:26:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F387086096C
+	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 04:33:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A416FB22E06
-	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 03:26:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91A601F257D0
+	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 03:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5443610971;
-	Fri, 23 Feb 2024 03:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 342A1D2E6;
+	Fri, 23 Feb 2024 03:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fFDPhNdW"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZMOtw45n"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C67D26D;
-	Fri, 23 Feb 2024 03:25:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE06B67F;
+	Fri, 23 Feb 2024 03:33:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708658754; cv=none; b=sEZ0Taf6XpwMjIpgBFf2KC7VGAK9Y4Re/4+wE23VDPohzz4IHMWomfcThu21liqS08k3c+3hvkCxpSO4Xel43RndIYSUuvfE47vYKsdxSXGYJuiIjM/qcvK4EWm1QU5Y5pguN2zaXJTlCl/H86150j8MaSFAi0iUG/vBhgOB328=
+	t=1708659195; cv=none; b=mKB5EjrpYGNunUD8HhpobvXkBo7I+lJlqB7uGckSDSIjJJEQ0neRZBAEn/v+nJxv2VU4hs0lYbYbJsYxkAXK54Ni5yWLAVNEr6deKgQ8lggc3MOIFmDR4zJochsbss/4nOs4KahHCXFcKweKmcg/Py34qn2Whw7kg+o0dbtefSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708658754; c=relaxed/simple;
-	bh=n4qpbgJ8v7GPZVfT9Z7r1oiTnMQmcWKFfKrBz37hriw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=F4of1I/noMGxTIKvSuMbKUtn987gdGMpXsxloeSr4agKwFVSzK6oVPLRoPI1fBR6pAUcR3iDX8wlFgWiliTAU70NJlhksXRZrZI23nfOhC0q7SeveC7sFDgKt9KlnAm/+fS8+hxgK65fjEI1pINKidr8S0P2fK0zi5l0KH3/XJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fFDPhNdW; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708659195; c=relaxed/simple;
+	bh=tWAGTc1sj+bW1+gUOMYV4gIl1YOcRggBiI0zrK948KI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iDEzzaFnqDXyORQqwaxt6Rv20FAQTqInp9onIM458NbYXg5clraPLT4V47aGbaTgdJBxOndVT7C9ju5MLsl7z373YMfDt4PYSscLmZgdUsIyNnjBnMXAW1X297Uu6FSNRAv3HW6Vb6vQS7s55aDV3Y/wEIeMqmm4zMBhsgerTA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZMOtw45n; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708658748;
-	bh=VPIjp5+R9X3jqT9MsfV+RShmi4vdvyr2GGYCyeKsN/Y=;
+	s=201702; t=1708659190;
+	bh=KP/g7IExG+k7npC9abXBrLdnTrONXf2kd6NHpXGDeIk=;
 	h=Date:From:To:Cc:Subject:From;
-	b=fFDPhNdWyCg9kOgSngASEqst2YWGbQ5tJVIS6DOkHo9srR0Gw4lpmss5U2VWXfIbM
-	 GC3zWyxWtmdfeDZhsnlNqhR5LDQHsiLPZJ9jtLDWcVLQ6DLvQENOfKxqgn9EuQ2ATD
-	 uhWqWryMxKN3q6JoCtDGNQe1bxD3jNEWQvQVpfEjVuWnGLNsCmS1XELDCi3CML7ZyS
-	 UyaTB1YVOOLrX0qmKMAgHz2bF3Dr783JGS3J/i0cUcxeEp4aPWYBvsgmtsEucSCtDa
-	 k/48DJU3EYewv/8wolG491vcdNx8kC4U/UEd0yjXQZtc9fgFWF9X45+rSB6x1zZED0
-	 8y86I9XlxsyXw==
+	b=ZMOtw45nuKFODK9Z4xgCY6GB3xtHBia3yl6zx22YyIlNsVjok8bJh2e1t4CdrzJF5
+	 I/40wAAt4oty//Lh03SDsPHTpV3YDhuqvFu+yJNEkOCT1w9UFVKlhnFVoYORTIBWvk
+	 /MRn/CllZnPr1BQRoNJW+RblNzJSxTlWjM9MsIHJ6AX51AoYtUf0SjzGkPp1bscKKF
+	 mHtQuBQDNHJFONYn7j46BbDVbeaCrvQ7EHZ0fJihm0MKy4a5ds/6toqtvGURwdxnRG
+	 rYStWz9yLiTU0qOAbIJOESumfmLmH0++dFjHdEMjBgntAXWkgtjSDXxT9jc7489HEW
+	 zbk7p5TBTGIBA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgwQ36p7gz4wcb;
-	Fri, 23 Feb 2024 14:25:47 +1100 (AEDT)
-Date: Fri, 23 Feb 2024 14:25:46 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgwZZ47RNz4wcR;
+	Fri, 23 Feb 2024 14:33:10 +1100 (AEDT)
+Date: Fri, 23 Feb 2024 14:33:09 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Michael S. Tsirkin" <mst@redhat.com>, Herbert Xu
- <herbert@gondor.apana.org.au>
-Cc: Linux Crypto List <linux-crypto@vger.kernel.org>, Li RongQing
- <lirongqing@baidu.com>, Linux Kernel Mailing List
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>, Bartosz Golaszewski
+ <bartosz.golaszewski@linaro.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the vhost tree
-Message-ID: <20240223142546.073f7c21@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the gpio-brgl tree
+Message-ID: <20240223143309.5ec298ec@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PHhm.IMMHBE0tJ_.+tM7ruv";
+Content-Type: multipart/signed; boundary="Sig_/LkkLNsTm9d9nf/G44sbL.jR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/PHhm.IMMHBE0tJ_.+tM7ruv
+--Sig_/LkkLNsTm9d9nf/G44sbL.jR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the crypto tree as a different commit
-(but the same patch):
+After merging the gpio-brgl tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  2374ca8f6556 ("virtio_crypto: remove duplicate check if queue is broken")
+x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_write64':
+gpio-mmio.c:(.text+0x1489427): undefined reference to `iowrite64'
+x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_read64':
+gpio-mmio.c:(.text+0x14894a0): undefined reference to `ioread64'
+x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_write64be':
+gpio-mmio.c:(.text+0x1489527): undefined reference to `iowrite64be'
+x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_read64be':
+gpio-mmio.c:(.text+0x14895a0): undefined reference to `ioread64be'
 
-This is commit
+Caused by commit
 
-  633eeefab69e ("crypto: virtio - remove duplicate check if queue is broken=
-")
+  36e44186e0ba ("gpio: mmio: Support 64-bit BE access")
 
-in the crypto tree.
+I have used the gpio-brgl from next-20240222 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/PHhm.IMMHBE0tJ_.+tM7ruv
+--Sig_/LkkLNsTm9d9nf/G44sbL.jR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXYEDoACgkQAVBC80lX
-0GxKpwf/R0i3r/NTejhG1yI3fIJFZcWxrZbWmh5zYcpAvkAyVpND6guw1wj/47zy
-3FkCHMTEAJN4QPIRtumR1WNLvWTnLjnS2uBPpcD4lMMoZOqV3Zh7m0Q/NJhVHPOZ
-Yt/sbP3JqNIQtTBOG0sARzRb6uAfaopif5DvisjTaMjSxcO8AZ6tYZ1YVjVLAG9N
-/jJtKtFgTLSGO1gazKPVe9OlmaJN9nov6dC9ErpqkMUmRMONDltIjbcEPO7R7K+j
-XRyPbQ76ik/3OWMhnjFGI0lNclWV8704ZfT0brMDKfM6RBMgs0zYyG+JZCp3/LZf
-7xRC/07yhGE78uDxwoTjhSh1NmUn1Q==
-=PhEO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXYEfUACgkQAVBC80lX
+0GwTxgf+Nuao5gGjnI8ON0FpdBxPtzJ88ezlJiWLmSMopEQoQWIUpZvtxTMuk2kK
+kLTcDbQVWyUXU52bxC/28RwWUP9MGl2Obtf8hdMGapaPqV4OeVvHAZUclEGt3GDg
+7iC8dDlsWFarsATu9ufbky21rN3KbBQbEF+mepTnPnh10ZOAeEasmcxuLtR6/SLf
+pbJpVHvOtfwX54HmIt96E640xoKUCnEusLgOjS9/dqjEHHUUxmxMF9dO0xUVtL6Y
+R2AJCojKJPhZXDHIjvwVe8ejq9sXQbk9DgBClb+B0mE0hX3y9Ov59DIw/8azrEVQ
+DCDXHTulV/K4hkmrgMaGbAnOM2GVVQ==
+=h4mh
 -----END PGP SIGNATURE-----
 
---Sig_/PHhm.IMMHBE0tJ_.+tM7ruv--
+--Sig_/LkkLNsTm9d9nf/G44sbL.jR--
 

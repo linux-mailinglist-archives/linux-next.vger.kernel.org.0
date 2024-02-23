@@ -1,212 +1,135 @@
-Return-Path: <linux-next+bounces-1304-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1305-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9307186087F
-	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 02:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CE19860920
+	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 04:03:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51A362837EA
-	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 01:50:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0FA8285B94
+	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 03:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7BC9B653;
-	Fri, 23 Feb 2024 01:50:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB4ABE5D;
+	Fri, 23 Feb 2024 03:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="mxoq4V5j"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IGVhEWfj"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847C9AD53;
-	Fri, 23 Feb 2024 01:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B08BE66;
+	Fri, 23 Feb 2024 03:03:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708653035; cv=none; b=mzLXK4+1+0REivRmVXwgPGcLQt9MbG7G9zk/yNe0wyv2yzihbLIpFDVtTJdcuVxN5005UqVQ+Qn+A6lo3tv2X09c4EqwWy+QyItstMWlTf+8p/btE8KiI5vp9krmPO8oOCpXspy/EKWT7kahzU/7uAcWKcu1Tdj4t4A05PLRUBk=
+	t=1708657416; cv=none; b=AtUn0NwtWkImqZanzsXbw9c5jZXN3kQbKzB78SMXxYkVs3cX/xeafxP8s1LgWzBw+HXaclMJgSZhovRRKuEiO+FFpAOdEq7BZWtDsDtu2Lz5TeVW5ipQl1/4BeBkc6PRaflcpGo7BCV/t/D6ANMwGw3yfTeBqwz9IZUkQQ4rKcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708653035; c=relaxed/simple;
-	bh=TO9aSmC1qF+2Vi3+58lvCecuRJcGdfmPoYzFPgBvLh4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=q1t8CyXQ50BldY2evLRmo3v5Bt5OK9GnLTwIppo3wED/LCSq7l2vcMHxmLmXHZ9r0JEE4k+hmlceWXlwB1X9xQOno/hvCVXo7Oi8H8gvRyFnovRgFiLPp9Nrk6O5Kz+mdnloc5ZcgEPvTbFXxXsWH/4JyKD8O0E5Pq5t6D1dRLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=mxoq4V5j; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708657416; c=relaxed/simple;
+	bh=+u2q9LTg8q2yQwkOYebvqRkTz5ifi/E94qTDt8gE0js=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lSRi0vzrfYHasRRI/19iA991QO3ZzVRkVThAe45RYvtx/ChOY7rtM533OA3XKXe5/rNLWwhvoX6KaDwWz1wS1E0wXV7yJ9Q/46Lnq6LtBtVuNcwnP9UXwx53b0RkVK4w/s1c0u1HYnNWuFKDShUSYAIff/Y9gN6ksq/I/drS/N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IGVhEWfj; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708653030;
-	bh=uuyXxSqtakaPAQV/y8aASUxaDXqmMJlArJZheVqoNb8=;
+	s=201702; t=1708657410;
+	bh=aHXZ7hyWfBWjkcFvg5uVCooNUuzR8bqzQTO/wjmanjc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=mxoq4V5jTdP6nBNw+E4kSJ9rHS3+MpHGdPnIoFB9bD6agKfzDCui49GfiwtRTagus
-	 xEZrYpNlIhH8r/t5pNDB5ShAuvWQUC7dn/qtY1u+zmaIpLRMly1FW4i0VCLNwU2ViU
-	 m1rYKh9CPNfXaIxgxfFyeP00jG/mb13xNHmID+1mcfflgQwbadZbl0attRpicaG7JG
-	 6GD/T9lTESKCQziAoqY79SHDWf9lj3nZPJdPmhGydMFwy0KWUjW/kYeQujwnX4X7VD
-	 JD8F0v60VWPqxV/97wk/DDVsnU7reF3VXKAh6PDwYmdK1aF5z1b7SA9DbbAk2n3hjr
-	 r/aROdV2W1FIA==
+	b=IGVhEWfjPc30DoWk5F5+009u7bo2c7A/LNkMuiQZi8DYWhr0RhakiXleTGbVYjmEe
+	 Vz5fZCGT0N9/CKQk2/RC8G+OfS79F138NBMnAOGLUGR/E0ddOubiTmGgjhIaTMvgqI
+	 3CIWFVxbC47BHC90qzX1ds08HYbEgxnB6uqW/yLPxeeq1sedtyNR5Tb0PCEHIBgsO2
+	 873jouXPbagXWSKujQsx70i46Es3JreQIiMfp/v0O0jvuEqEDl4Edo5pXrjGQbKIwA
+	 6s4vxbgT+boXCvPVnYaNiJH/gVCvbCrlKTPE7VxNsdShWJgtQim9C0Df1moLV5LCWd
+	 1YBsoS8mzOVTQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgtJ55hQbz4wcR;
-	Fri, 23 Feb 2024 12:50:29 +1100 (AEDT)
-Date: Fri, 23 Feb 2024 12:50:27 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgvwJ1jlSz4wc4;
+	Fri, 23 Feb 2024 14:03:28 +1100 (AEDT)
+Date: Fri, 23 Feb 2024 14:03:25 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Paul Moore <paul@paul-moore.com>, David Miller <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Ondrej Mosnacek <omosnace@redhat.com>
-Subject: linux-next: manual merge of the security tree with the net-next
- tree
-Message-ID: <20240223125027.1c9f4f07@canb.auug.org.au>
+To: Alex Williamson <alex.williamson@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>
+Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vfio tree with the jc_docs tree
+Message-ID: <20240223140325.345a9cdb@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//dCjoofoYCR0aUn90YdCSxX";
+Content-Type: multipart/signed; boundary="Sig_/S2./Dz8CBO1pnuco5fTUJrJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_//dCjoofoYCR0aUn90YdCSxX
+--Sig_/S2./Dz8CBO1pnuco5fTUJrJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the security tree got a conflict in:
+Today's linux-next merge of the vfio tree got a conflict in:
 
-  security/security.c
+  MAINTAINERS
 
-between commits:
+between commit:
 
-  1b67772e4e3f ("bpf,lsm: Refactor bpf_prog_alloc/bpf_prog_free LSM hooks")
-  a2431c7eabcf ("bpf,lsm: Refactor bpf_map_alloc/bpf_map_free LSM hooks")
-  f568a3d49af9 ("bpf,lsm: Add BPF token LSM hooks")
+  27103dddc2da ("Documentation: update mailing list addresses")
 
-from the net-next tree and commit:
+from the jc_docs tree and commit:
 
-  260017f31a8c ("lsm: use default hook return value in call_int_hook()")
+  05f3a0bd094c ("MAINTAINERS: Re-alphabetize VFIO")
 
-from the security tree.
+from the vfio tree.
 
-I fixed it up (I think, see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc security/security.c
-index aef69632d0a9,b95772333d05..000000000000
---- a/security/security.c
-+++ b/security/security.c
-@@@ -5458,10 -5436,9 +5439,10 @@@ int security_bpf_prog(struct bpf_prog *
-   *
-   * Return: Returns 0 on success, error on failure.
-   */
- -int security_bpf_map_alloc(struct bpf_map *map)
- +int security_bpf_map_create(struct bpf_map *map, union bpf_attr *attr,
- +			    struct bpf_token *token)
-  {
-- 	return call_int_hook(bpf_map_create, 0, map, attr, token);
- -	return call_int_hook(bpf_map_alloc_security, map);
-++	return call_int_hook(bpf_map_create, map, attr, token);
-  }
+diff --cc MAINTAINERS
+index 818041f70659,7625911ec2f1..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -23241,6 -23118,13 +23240,13 @@@ L:	kvm@vger.kernel.or
+  S:	Maintained
+  F:	drivers/vfio/platform/
  =20
-  /**
-@@@ -5476,59 -5449,9 +5457,59 @@@
-   *
-   * Return: Returns 0 on success, error on failure.
-   */
- -int security_bpf_prog_alloc(struct bpf_prog_aux *aux)
- +int security_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *attr,
- +			   struct bpf_token *token)
-  {
-- 	return call_int_hook(bpf_prog_load, 0, prog, attr, token);
- -	return call_int_hook(bpf_prog_alloc_security, aux);
-++	return call_int_hook(bpf_prog_load, prog, attr, token);
- +}
- +
- +/**
- + * security_bpf_token_create() - Check if creating of BPF token is allowed
- + * @token: BPF token object
- + * @attr: BPF syscall attributes used to create BPF token
- + * @path: path pointing to BPF FS mount point from which BPF token is cre=
-ated
- + *
- + * Do a check when the kernel instantiates a new BPF token object from BP=
-F FS
- + * instance. This is also the point where LSM blob can be allocated for L=
-SMs.
- + *
- + * Return: Returns 0 on success, error on failure.
- + */
- +int security_bpf_token_create(struct bpf_token *token, union bpf_attr *at=
-tr,
- +			      struct path *path)
- +{
-- 	return call_int_hook(bpf_token_create, 0, token, attr, path);
-++	return call_int_hook(bpf_token_create, token, attr, path);
- +}
- +
- +/**
- + * security_bpf_token_cmd() - Check if BPF token is allowed to delegate
- + * requested BPF syscall command
- + * @token: BPF token object
- + * @cmd: BPF syscall command requested to be delegated by BPF token
- + *
- + * Do a check when the kernel decides whether provided BPF token should a=
-llow
- + * delegation of requested BPF syscall command.
- + *
- + * Return: Returns 0 on success, error on failure.
- + */
- +int security_bpf_token_cmd(const struct bpf_token *token, enum bpf_cmd cm=
-d)
- +{
-- 	return call_int_hook(bpf_token_cmd, 0, token, cmd);
-++	return call_int_hook(bpf_token_cmd, token, cmd);
- +}
- +
- +/**
- + * security_bpf_token_capable() - Check if BPF token is allowed to delega=
-te
- + * requested BPF-related capability
- + * @token: BPF token object
- + * @cap: capabilities requested to be delegated by BPF token
- + *
- + * Do a check when the kernel decides whether provided BPF token should a=
-llow
- + * delegation of requested BPF-related capabilities.
- + *
- + * Return: Returns 0 on success, error on failure.
- + */
- +int security_bpf_token_capable(const struct bpf_token *token, int cap)
- +{
-- 	return call_int_hook(bpf_token_capable, 0, token, cap);
-++	return call_int_hook(bpf_token_capable, token, cap);
-  }
- =20
-  /**
++ VFIO VIRTIO PCI DRIVER
++ M:	Yishai Hadas <yishaih@nvidia.com>
++ L:	kvm@vger.kernel.org
+ -L:	virtualization@lists.linux-foundation.org
+++L:	virtualization@lists.linux.dev
++ S:	Maintained
++ F:	drivers/vfio/pci/virtio
++=20
+  VGA_SWITCHEROO
+  R:	Lukas Wunner <lukas@wunner.de>
+  S:	Maintained
 
---Sig_//dCjoofoYCR0aUn90YdCSxX
+--Sig_/S2./Dz8CBO1pnuco5fTUJrJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXX+eMACgkQAVBC80lX
-0GyEuQf/fzW8pQqhRLV/LNjkPuQR42gLeAwWk3S5MB02eF0x5Rtjob5uUAFyZZRs
-j8d9rWhqoi5yQLzGEbcpIfZfUKjQOzzXRqCWj0q6r6HtsF9hDcLGrHoDoWBiyHjf
-/tASthmG100GLPol1xgbiWAIKV+tFIJOWZ6+j0WaUwYM2WsmeeCYtt3uuYfKD2GG
-RRJkPjrr7JnHfKrD57uosARQKHTal5JHdo0wiZsS/vX76YXCzqtvqubFBw0YalDf
-lQthV7SnrXux7wxglMjEQfKvJQyRntjsjRRRt2mfx6scfn2WKmFLG+HlkmXEcGrb
-lqF7Hfhr4oGHpXaAxACKYTMsZ4ojQg==
-=yQjI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXYCv0ACgkQAVBC80lX
+0GxtBwf+JFBx8yU68PKvfvb4Zp9ChPWvTf1/ipyKhGGNRtGV/0WxoY1Ol8De2B2+
+OCCu4fUQZsjLxWqKVFwqtS0gS8/0SXXT6mbZ7Q1BSmMtVCpm13cTb69POxXp3OLD
+tIbBMRo8nbHCicReAqhvpXYow/U6HOHxW5SFSl0XutYplgknIeMjppg2N/MeSJb/
+5M4x+b+N5R8kRHDdUJeNwscAoaHnKsvPPTmGNL86OILbuoVY1CkPjPutRlTLBen+
++YTVtgmfy4vrvJqnDtvbgyahStW7nsdJifAWVG4nfXKbcsoYpb5O6Vdzk44lYNXb
+nr34rIw76wra5V8QhwSoBWSu+kVC8w==
+=ed1Q
 -----END PGP SIGNATURE-----
 
---Sig_//dCjoofoYCR0aUn90YdCSxX--
+--Sig_/S2./Dz8CBO1pnuco5fTUJrJ--
 

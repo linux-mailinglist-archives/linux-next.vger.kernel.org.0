@@ -1,126 +1,72 @@
-Return-Path: <linux-next+bounces-1317-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1318-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D646B86117E
-	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 13:30:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48A34861399
+	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 15:06:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E2C1B23B17
-	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 12:30:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFBF41F21B44
+	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 14:06:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6501973F0A;
-	Fri, 23 Feb 2024 12:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z2pTz4qB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE617F7CE;
+	Fri, 23 Feb 2024 14:06:28 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC357A70F;
-	Fri, 23 Feb 2024 12:30:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFE07E798;
+	Fri, 23 Feb 2024 14:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708691421; cv=none; b=H3jg6AqTzdqQXeRHBvqASi+CgMWuiZxiF91x0r6RkcEleje7fcL2PpMh6mgK6079eTVK/wYXFP5tm2WUhtkLztEUtADVatweKrj5TOiD0HtseCifevX333M5yh6xSQ0gEy4Ne4ygQA6WGBiCQfg8SgOhbSk7ZxWDj3/U70saqNk=
+	t=1708697188; cv=none; b=VniMxR1ZHzBqzfM5SZKT1gVVGMbPae1OoUWgRL8ggoZQa0OR35ElcSjEovpo4vnM1Z2vvTlM5zxYDxkymmitU5e06AB9rfMp/Y4vBWa7wg3GDCnvf2Hk15BrxxyrXp8nHf2i1+giRLfHxHlYebjTd9Mlof+Gwbiz/kB1kTdZ7f8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708691421; c=relaxed/simple;
-	bh=amyiBnlJbCnQhUudB+E+DN+Qey4LsTCqv0Y+x8SV0Yw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cn5ZfI21jY9BzV/8fYWbaW8mvDIXoPc0oxbFvoFgcPqjMueKqsH0iFV0WEgQPdEknASIf9bX5Tdnfvp2Dh6oULkT9dBG2bllDomUjj2i/yx9tQTbkNmXkSDRJ/84QYKbQWdopao3OnxNtfw+tEUCBQfBB0ssXvM8PVml+NDhKkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z2pTz4qB; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a3eafbcb1c5so99897766b.0;
-        Fri, 23 Feb 2024 04:30:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708691418; x=1709296218; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z+sEM8TBzFwF52b1ptT4m8wa0TY+pHXRQ9G4oc6DYXE=;
-        b=Z2pTz4qBo0tSQMSeKuCMhDeBq2MNAEcmpqjLkwzbJMFXxb9rMJ7G0txWJqIPvMIc6s
-         x7PCE9gqASF45wKECrksOXkmjJVvMZnVy2z8gGs5LClJwLh3SsHOyvGIwDYRyyurE9pU
-         lPnrJBUOBQ6MjV6YBddjUle0lmpD71glsHa8KRolU9To+7LXv7wjxd6PzTYEQ2TIFVTX
-         nHrLiTof+q/BRbtfIKhBKtdBx9EUIhjJ4r3Ki4ViTH4WqeGGDPq5zBik69znrq7Fzk2+
-         YRmLDSB92tzMxlqOoas6KyE1+KUE+ne8hlFz6OZtBSxcMod43fKNCzrRMFGCNhgwcXk1
-         XRoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708691418; x=1709296218;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z+sEM8TBzFwF52b1ptT4m8wa0TY+pHXRQ9G4oc6DYXE=;
-        b=l/CAxxYLqxQehAIBuVtHy8NwCU3uXw1LW+L3Z75qKUub+OQBYdFbM5JsSTWmxvi2nq
-         II/L02pPx/GudBdZZH1r0+ZGzwIW8KjXYqq64BDA64a8YixK+qZLPMxdSbeKIdRL5Fpp
-         gdJoceFZvLpC9cR/ZbTZOI0q9KunmWU2FWiyL7dSjf6lwkeDoO94oOlo2vsWGjUP5vtd
-         l/MP30mZbgQVeg2UW8jib2um0MRfe/4gW/sz8u0qbkFqZS1ajQ1DJZ7V80VXX/mFIEVd
-         yqoEDjsDZe2i3f59K5P+xAG8aehsuRQx+46LcTFI980983EIzc6LH4JTQQhsxWWEFYfV
-         P/hA==
-X-Forwarded-Encrypted: i=1; AJvYcCVbE6n7NGrZIU9xbpaHt6NBJ+yrh3sTwWIhxX9zLrLGq7ECoKQ8xART3lx0Nf6Yx2thEvUWTA35B6Kk75HZJX4ysaoxey/FhFqgEbkZX3WSOFiLg/uXdezpYls0oc/deKCafMtGFqwXwg==
-X-Gm-Message-State: AOJu0YzYogIZGeHPMIgb/FqdkIDPMEZ26unRZjL7XwAwZbZ+T8rS4tuJ
-	4MjSl0y40LLrDoZA7Q/vx7L52PwRcDMPN/5yfKN0pT6ECwxUTdd844MoRkY/9yC1XSedwCy1rK1
-	9EA5qxat3BQyXRpcUUW6oQndRAIpxD7ziLfA=
-X-Google-Smtp-Source: AGHT+IGiezhcE/l+7DGjerhjscIkDU3wydPXg0uO3yekZ/O0X37aEVlx8Sy5K9Zu4NEQgK6LIwNzdQS3MJuuLg9aw8U=
-X-Received: by 2002:a17:906:71da:b0:a3f:7e2:84cc with SMTP id
- i26-20020a17090671da00b00a3f07e284ccmr1470771ejk.6.1708691417557; Fri, 23 Feb
- 2024 04:30:17 -0800 (PST)
+	s=arc-20240116; t=1708697188; c=relaxed/simple;
+	bh=ScmL4w1XqacZnSkmwlBukyRTREwi2zf+jpOuAt0hDgw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cymVkypTiqtbZfOxuea8/QhbX+cJnEAnMcdf0ogcEmUWgMVgoD1ImJBHiBWaO+BApcsE7dOWNfhbs44vSjpWbLGxeeM4v4Yd1ZoHQd7ML8JxHDV6iE1AQyE23mkP9B8+fTvXxtSVLG9GjnLt2PZ7ZkkNxoNX5AN4aorGomIXUPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 6410468B05; Fri, 23 Feb 2024 15:06:19 +0100 (CET)
+Date: Fri, 23 Feb 2024 15:06:19 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, Stephen Rothwell <sfr@canb.auug.org.au>,
+	"Darrick J. Wong" <djwong@kernel.org>,
+	David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
+	Chandan Babu R <chandanbabu@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Subject: Re: linux-next: build warning after merge of the xfs tree
+Message-ID: <20240223140619.GA30519@lst.de>
+References: <20240223153636.41358be5@canb.auug.org.au> <20240223063554.GA10956@lst.de> <20240223095509.29024d9d@coco.lan>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240223143309.5ec298ec@canb.auug.org.au> <CACMJSevZxCiqa8uz+XU36psCa5T_rQGi5tVkMejpZj22Bj1k3Q@mail.gmail.com>
-In-Reply-To: <CACMJSevZxCiqa8uz+XU36psCa5T_rQGi5tVkMejpZj22Bj1k3Q@mail.gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 23 Feb 2024 14:29:40 +0200
-Message-ID: <CAHp75Vf4=huDQ6211zY4aQem_BX3px4YwhfsA+YXcbGCJSV6Tg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
-To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240223095509.29024d9d@coco.lan>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Fri, Feb 23, 2024 at 9:51=E2=80=AFAM Bartosz Golaszewski
-<bartosz.golaszewski@linaro.org> wrote:
-> On Fri, 23 Feb 2024 at 04:33, Stephen Rothwell <sfr@canb.auug.org.au> wro=
-te:
+On Fri, Feb 23, 2024 at 09:55:09AM +0100, Mauro Carvalho Chehab wrote:
+> but it is very weird for the ones reading the text file. So, what
+> we do instead for pointers is to escape the entire declaration, like:
+> 
+> 	``*inode``
+> 	``struct inode *inode``
+> 
+> I hope that helps.
 
-> > After merging the gpio-brgl tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >
-> > x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_write64':
-> > gpio-mmio.c:(.text+0x1489427): undefined reference to `iowrite64'
-> > x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_read64':
-> > gpio-mmio.c:(.text+0x14894a0): undefined reference to `ioread64'
-> > x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_write64be':
-> > gpio-mmio.c:(.text+0x1489527): undefined reference to `iowrite64be'
-> > x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_read64be':
-> > gpio-mmio.c:(.text+0x14895a0): undefined reference to `ioread64be'
-> >
-> > Caused by commit
-> >
-> >   36e44186e0ba ("gpio: mmio: Support 64-bit BE access")
-> >
-> > I have used the gpio-brgl from next-20240222 for today.
+In this case it says *foliop for an argument that is a double pointer
+and the comment refers to what it point to.  I'll see what I can do
+there, but the whole italic and bold thing seems entirely pointless
+for kerneldoc..
 
-> I'm not seeing this issue with allmodconfig on x86_64, could you give
-> me some more information on the build environment?
->
-> Andy: Could it be that the ifdefs you added should depend on
-> CONFIG_64BIT and not only on the BITS_PER_LONG value?
-
-If so, it will be the old issue as I just used what is currently done
-for LE 64-bit accessors in the same file.
-I think the problem here is different, i.e. io*64*() are not available
-on all (64-bit) architectures in comparison to readq()/writeq().
-I'll look at this later today.
-
-
---=20
-With Best Regards,
-Andy Shevchenko
 

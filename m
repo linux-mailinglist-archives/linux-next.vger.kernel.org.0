@@ -1,135 +1,107 @@
-Return-Path: <linux-next+bounces-1305-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1306-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CE19860920
-	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 04:03:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27C1786095C
+	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 04:26:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0FA8285B94
-	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 03:03:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A416FB22E06
+	for <lists+linux-next@lfdr.de>; Fri, 23 Feb 2024 03:26:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB4ABE5D;
-	Fri, 23 Feb 2024 03:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5443610971;
+	Fri, 23 Feb 2024 03:25:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IGVhEWfj"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fFDPhNdW"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B08BE66;
-	Fri, 23 Feb 2024 03:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C67D26D;
+	Fri, 23 Feb 2024 03:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708657416; cv=none; b=AtUn0NwtWkImqZanzsXbw9c5jZXN3kQbKzB78SMXxYkVs3cX/xeafxP8s1LgWzBw+HXaclMJgSZhovRRKuEiO+FFpAOdEq7BZWtDsDtu2Lz5TeVW5ipQl1/4BeBkc6PRaflcpGo7BCV/t/D6ANMwGw3yfTeBqwz9IZUkQQ4rKcs=
+	t=1708658754; cv=none; b=sEZ0Taf6XpwMjIpgBFf2KC7VGAK9Y4Re/4+wE23VDPohzz4IHMWomfcThu21liqS08k3c+3hvkCxpSO4Xel43RndIYSUuvfE47vYKsdxSXGYJuiIjM/qcvK4EWm1QU5Y5pguN2zaXJTlCl/H86150j8MaSFAi0iUG/vBhgOB328=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708657416; c=relaxed/simple;
-	bh=+u2q9LTg8q2yQwkOYebvqRkTz5ifi/E94qTDt8gE0js=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lSRi0vzrfYHasRRI/19iA991QO3ZzVRkVThAe45RYvtx/ChOY7rtM533OA3XKXe5/rNLWwhvoX6KaDwWz1wS1E0wXV7yJ9Q/46Lnq6LtBtVuNcwnP9UXwx53b0RkVK4w/s1c0u1HYnNWuFKDShUSYAIff/Y9gN6ksq/I/drS/N8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IGVhEWfj; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708658754; c=relaxed/simple;
+	bh=n4qpbgJ8v7GPZVfT9Z7r1oiTnMQmcWKFfKrBz37hriw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=F4of1I/noMGxTIKvSuMbKUtn987gdGMpXsxloeSr4agKwFVSzK6oVPLRoPI1fBR6pAUcR3iDX8wlFgWiliTAU70NJlhksXRZrZI23nfOhC0q7SeveC7sFDgKt9KlnAm/+fS8+hxgK65fjEI1pINKidr8S0P2fK0zi5l0KH3/XJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fFDPhNdW; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708657410;
-	bh=aHXZ7hyWfBWjkcFvg5uVCooNUuzR8bqzQTO/wjmanjc=;
+	s=201702; t=1708658748;
+	bh=VPIjp5+R9X3jqT9MsfV+RShmi4vdvyr2GGYCyeKsN/Y=;
 	h=Date:From:To:Cc:Subject:From;
-	b=IGVhEWfjPc30DoWk5F5+009u7bo2c7A/LNkMuiQZi8DYWhr0RhakiXleTGbVYjmEe
-	 Vz5fZCGT0N9/CKQk2/RC8G+OfS79F138NBMnAOGLUGR/E0ddOubiTmGgjhIaTMvgqI
-	 3CIWFVxbC47BHC90qzX1ds08HYbEgxnB6uqW/yLPxeeq1sedtyNR5Tb0PCEHIBgsO2
-	 873jouXPbagXWSKujQsx70i46Es3JreQIiMfp/v0O0jvuEqEDl4Edo5pXrjGQbKIwA
-	 6s4vxbgT+boXCvPVnYaNiJH/gVCvbCrlKTPE7VxNsdShWJgtQim9C0Df1moLV5LCWd
-	 1YBsoS8mzOVTQ==
+	b=fFDPhNdWyCg9kOgSngASEqst2YWGbQ5tJVIS6DOkHo9srR0Gw4lpmss5U2VWXfIbM
+	 GC3zWyxWtmdfeDZhsnlNqhR5LDQHsiLPZJ9jtLDWcVLQ6DLvQENOfKxqgn9EuQ2ATD
+	 uhWqWryMxKN3q6JoCtDGNQe1bxD3jNEWQvQVpfEjVuWnGLNsCmS1XELDCi3CML7ZyS
+	 UyaTB1YVOOLrX0qmKMAgHz2bF3Dr783JGS3J/i0cUcxeEp4aPWYBvsgmtsEucSCtDa
+	 k/48DJU3EYewv/8wolG491vcdNx8kC4U/UEd0yjXQZtc9fgFWF9X45+rSB6x1zZED0
+	 8y86I9XlxsyXw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgvwJ1jlSz4wc4;
-	Fri, 23 Feb 2024 14:03:28 +1100 (AEDT)
-Date: Fri, 23 Feb 2024 14:03:25 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TgwQ36p7gz4wcb;
+	Fri, 23 Feb 2024 14:25:47 +1100 (AEDT)
+Date: Fri, 23 Feb 2024 14:25:46 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Williamson <alex.williamson@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>
-Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: "Michael S. Tsirkin" <mst@redhat.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>
+Cc: Linux Crypto List <linux-crypto@vger.kernel.org>, Li RongQing
+ <lirongqing@baidu.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfio tree with the jc_docs tree
-Message-ID: <20240223140325.345a9cdb@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the vhost tree
+Message-ID: <20240223142546.073f7c21@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S2./Dz8CBO1pnuco5fTUJrJ";
+Content-Type: multipart/signed; boundary="Sig_/PHhm.IMMHBE0tJ_.+tM7ruv";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/S2./Dz8CBO1pnuco5fTUJrJ
+--Sig_/PHhm.IMMHBE0tJ_.+tM7ruv
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfio tree got a conflict in:
+The following commit is also in the crypto tree as a different commit
+(but the same patch):
 
-  MAINTAINERS
+  2374ca8f6556 ("virtio_crypto: remove duplicate check if queue is broken")
 
-between commit:
+This is commit
 
-  27103dddc2da ("Documentation: update mailing list addresses")
+  633eeefab69e ("crypto: virtio - remove duplicate check if queue is broken=
+")
 
-from the jc_docs tree and commit:
-
-  05f3a0bd094c ("MAINTAINERS: Re-alphabetize VFIO")
-
-from the vfio tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+in the crypto tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index 818041f70659,7625911ec2f1..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -23241,6 -23118,13 +23240,13 @@@ L:	kvm@vger.kernel.or
-  S:	Maintained
-  F:	drivers/vfio/platform/
- =20
-+ VFIO VIRTIO PCI DRIVER
-+ M:	Yishai Hadas <yishaih@nvidia.com>
-+ L:	kvm@vger.kernel.org
- -L:	virtualization@lists.linux-foundation.org
-++L:	virtualization@lists.linux.dev
-+ S:	Maintained
-+ F:	drivers/vfio/pci/virtio
-+=20
-  VGA_SWITCHEROO
-  R:	Lukas Wunner <lukas@wunner.de>
-  S:	Maintained
-
---Sig_/S2./Dz8CBO1pnuco5fTUJrJ
+--Sig_/PHhm.IMMHBE0tJ_.+tM7ruv
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXYCv0ACgkQAVBC80lX
-0GxtBwf+JFBx8yU68PKvfvb4Zp9ChPWvTf1/ipyKhGGNRtGV/0WxoY1Ol8De2B2+
-OCCu4fUQZsjLxWqKVFwqtS0gS8/0SXXT6mbZ7Q1BSmMtVCpm13cTb69POxXp3OLD
-tIbBMRo8nbHCicReAqhvpXYow/U6HOHxW5SFSl0XutYplgknIeMjppg2N/MeSJb/
-5M4x+b+N5R8kRHDdUJeNwscAoaHnKsvPPTmGNL86OILbuoVY1CkPjPutRlTLBen+
-+YTVtgmfy4vrvJqnDtvbgyahStW7nsdJifAWVG4nfXKbcsoYpb5O6Vdzk44lYNXb
-nr34rIw76wra5V8QhwSoBWSu+kVC8w==
-=ed1Q
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXYEDoACgkQAVBC80lX
+0GxKpwf/R0i3r/NTejhG1yI3fIJFZcWxrZbWmh5zYcpAvkAyVpND6guw1wj/47zy
+3FkCHMTEAJN4QPIRtumR1WNLvWTnLjnS2uBPpcD4lMMoZOqV3Zh7m0Q/NJhVHPOZ
+Yt/sbP3JqNIQtTBOG0sARzRb6uAfaopif5DvisjTaMjSxcO8AZ6tYZ1YVjVLAG9N
+/jJtKtFgTLSGO1gazKPVe9OlmaJN9nov6dC9ErpqkMUmRMONDltIjbcEPO7R7K+j
+XRyPbQ76ik/3OWMhnjFGI0lNclWV8704ZfT0brMDKfM6RBMgs0zYyG+JZCp3/LZf
+7xRC/07yhGE78uDxwoTjhSh1NmUn1Q==
+=PhEO
 -----END PGP SIGNATURE-----
 
---Sig_/S2./Dz8CBO1pnuco5fTUJrJ--
+--Sig_/PHhm.IMMHBE0tJ_.+tM7ruv--
 

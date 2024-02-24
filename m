@@ -1,164 +1,174 @@
-Return-Path: <linux-next+bounces-1326-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1327-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B76078623B2
-	for <lists+linux-next@lfdr.de>; Sat, 24 Feb 2024 10:08:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE9958625B0
+	for <lists+linux-next@lfdr.de>; Sat, 24 Feb 2024 16:05:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E88431C224D6
-	for <lists+linux-next@lfdr.de>; Sat, 24 Feb 2024 09:08:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63082282314
+	for <lists+linux-next@lfdr.de>; Sat, 24 Feb 2024 15:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 815161BDC8;
-	Sat, 24 Feb 2024 09:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 822653398B;
+	Sat, 24 Feb 2024 15:05:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PbITO3gj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dJXs5p2l"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA99C17579;
-	Sat, 24 Feb 2024 09:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596BE24B54;
+	Sat, 24 Feb 2024 15:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708765651; cv=none; b=ILCG1Pulj90fTox692EZYFf/8RxRdXJ6UbJD363bCECUHWi90/s+8hJ8WXBLn9uWKROdK/an8mx/EQRBgweY1vYVpGG44CZqi5TUmU0/d6WLLfdvuSph0W2V4Y1c1tFeg8alf2+a8b9OmX5nSA4khojozT5XOVDX9r55iJizQqo=
+	t=1708787128; cv=none; b=bCcOB+Y3mB7qSwAxeDDMhvaFTHxveXPye6I8tkpbt/ihGX91W594ijitTcuJ6aif0bz9qILEzFVpHDP+6bpy33gqlFGuo/soa0asoo+WgBMmDlaFkEc3gDKJeKdOLd1Lfwnz6jXsWLYmOvvQ6Ec7hUfVEEfC0ijHVZC5YqG/FQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708765651; c=relaxed/simple;
-	bh=4M+bZKyaz20xTlf7slVV/NGOumHE1bHwkyKsYwOdURE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=G0jyXTlJ5/stwih55y+SpJQs590grnjVzRKVuC8m3LNg4oGQZYkHvILmMAFPHVFbSD90HKb9suE/Gy3tz2WLcEfE13Ut49u7U3IZ7QFSV5UWy39cllDLt17io4LsmfEksEjVNc1JHwrn70MBDxs6Yw3qMNk34fcZOSVNLPGUGik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PbITO3gj; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso1375198a12.3;
-        Sat, 24 Feb 2024 01:07:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708765649; x=1709370449; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4PdV2VKaPys/RwV9Ux4lRb/Xv8a//cmZyvpKpBTO+ZE=;
-        b=PbITO3gjq0sljbLl9ieVotphLUQXr+zQ0SeQ/nFqT/jBedSSePQUN3qC3gjarqXoVw
-         guy11pZEyvYtEcEDe3B7adpGkXHK7iahDN5Nevu6X8tOkfhxj5WNYPK3v+68XDsugzIj
-         rQ/xKarwKYCr5t9N3JSqOZ4dfeN7O4zsJb3OgaziGMK5qGbfyj8p9WM01YWrIVXq101q
-         RZIM+hnEsd7tl6fWbbIrqjTxkpY2ahyd7YXL1hBB+DB8DgAHTGuC+v3emeAvCR4wpK02
-         le8sIZ6PCmujtGboKcpzu9xf2HfYULeNl2nPDy0OJJjWEzdeJ9lx+QBpl9MFXoe81fsc
-         v0Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708765649; x=1709370449;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4PdV2VKaPys/RwV9Ux4lRb/Xv8a//cmZyvpKpBTO+ZE=;
-        b=QT9H/o2qc40fI/c9fCa+F6XYeRkndY/xa2C0UkbBuf0dxD5/ipWTJbnFFKjoR3H530
-         cSrZtFWuA7FyYFODLAa1a0a5iTUa31KgPMJWzDSPiQY1Ls4Q+lHBBTYv2BTAzk9AXolT
-         DhsXdEmDiThCCToUGLqxy9XZw+9chs3Et7jTHLjXonyWTuPXBATxSddgF/tGnCeC5/y4
-         +8v3M2+ilIkZDB/8ZJ7NuX6E1oYRs3/9SlHfP35eWVYVZchPU/tMQkKlfDosZ3IwNS3y
-         yIOl+rY/zoAUuZ9rxUsfJel8S0BkeOM4RjGjEsPS7jGXMC3YBikJ+/Im4CpVv+2+qXFV
-         ZRqg==
-X-Forwarded-Encrypted: i=1; AJvYcCW3bhmjZJngE1l61io4tQ8gNwnDijZPzMe+oUl1bjp80HLb0csLTJJAKkyOL02nlO8SsCS/9kA6gW4fbPkptwF/4u3OeBMHaWNf7xIHgxUF1cLnaP00YLfl/XOQvad0zoZZJ03VzQU49PYGC2I5Ybjf+CZ0s8P579wpKXzHyXFVAEnHrQ==
-X-Gm-Message-State: AOJu0YxBE7dO3bVRVHgpFjoCQBhWBa1ZIe2RC9L0JbzheDHHTGj6F2Z+
-	CpHtK5aiED2vk2hOEy+Ly9ypkcU4MnvgMvRSTHsRnqf0/ml2dY2/5mT9Hb1I
-X-Google-Smtp-Source: AGHT+IHlffaot7kk6mKJc3F2NLJoUKnYQyBLp+zO6mSMscVzXiOV/ygy7I2JnwzeUfjzdPJnRhic2g==
-X-Received: by 2002:a05:6a20:c791:b0:1a0:9ab5:1e83 with SMTP id hk17-20020a056a20c79100b001a09ab51e83mr3221512pzb.24.1708765649023;
-        Sat, 24 Feb 2024 01:07:29 -0800 (PST)
-Received: from [10.0.2.15] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id c2-20020a63a402000000b005e45b337b34sm728127pgf.0.2024.02.24.01.07.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Feb 2024 01:07:28 -0800 (PST)
-Message-ID: <22187737-e0ad-4cc4-98fd-5e43ebc5ecee@gmail.com>
-Date: Sat, 24 Feb 2024 18:07:28 +0900
+	s=arc-20240116; t=1708787128; c=relaxed/simple;
+	bh=oC+819alsBsCF37dz60vdeaMt67VeJuCkAD2RtMidss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DsXs3UyARUx625UQkJPgcIZkla32mzgbckZjmi8qN/To/UF8haKWmXTn7zo+UKKVIRi8I5yIHL7bFJ7R4qLIbtOT8MfiRaEHScQBxhvlGf9Nuse1xcYsRapG2HBBMe7lEqzCNPYWQcX15HcAMzIk5ZaQr6Lihmty8NrqyppIAKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dJXs5p2l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC64BC433F1;
+	Sat, 24 Feb 2024 15:05:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708787128;
+	bh=oC+819alsBsCF37dz60vdeaMt67VeJuCkAD2RtMidss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dJXs5p2lPsA++XKQWmL0YkfkWSlzoIOywXQchJiIrYKG90l0zDG4Mwr2IoHpKkXs/
+	 gfV2+PBDH6R/g4nceJSBYotXoOW/Cxa+PGM0zL5lc1o1qJ71X7c7jL8Jnef7Pw9+8d
+	 vi6jhwHaPPkwFfNWWrQxcsEirCdKv3Qt6q+l7w9dP5pVTLv6WL+AnXQ6LfRrjN/7z9
+	 T9L66jdVhMbPvUjN1/4ePXzCYrkeUvZc6lczj7S1i6Bd/rSQ/StNajCaDFgZrwa0L7
+	 5uguXiiQMtbNbFFHnGyQhTHGwiyp4di8ozhvDxVoZzjJG7BT5mkSGZsFH4RFtNY5mx
+	 ESNnSJoxNjv0g==
+Date: Sat, 24 Feb 2024 12:05:24 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Ian Rogers <irogers@google.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [solved] Re: linux-next: build failure after merge of the perf
+ tree
+Message-ID: <ZdoFtNnivIONTNtg@x1>
+References: <20240222100656.0a644254@canb.auug.org.au>
+ <Zdj3FyPjE5ezyfsM@x1>
+ <Zdj74Zo10vYTZNMl@x1>
+ <CAM9d7ciaj80QZL0AS_T2HNBdMOyS-j1wBHQSYs=U3kHQimY1mQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: linux-next: build warning after merge of the xfs tree
-To: hch@lst.de
-Cc: chandanbabu@kernel.org, corbet@lwn.net, david@fromorbit.com,
- djwong@kernel.org, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
- linux-xfs@vger.kernel.org, mchehab@kernel.org, sfr@canb.auug.org.au,
- Akira Yokosawa <akiyks@gmail.com>
-References: <20240223140619.GA30519@lst.de>
-Content-Language: en-US
-In-Reply-To: <20240223140619.GA30519@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM9d7ciaj80QZL0AS_T2HNBdMOyS-j1wBHQSYs=U3kHQimY1mQ@mail.gmail.com>
 
-Hi,
-
-On Fri, 23 Feb 2024 15:06:19 +0100, Christoph Hellwig wrote:
-> On Fri, Feb 23, 2024 at 09:55:09AM +0100, Mauro Carvalho Chehab wrote:
->> but it is very weird for the ones reading the text file. So, what
->> we do instead for pointers is to escape the entire declaration, like:
->> 
->> 	``*inode``
->> 	``struct inode *inode``
->> 
->> I hope that helps.
+On Fri, Feb 23, 2024 at 12:34:40PM -0800, Namhyung Kim wrote:
+> Hi Arnaldo,
 > 
-> In this case it says *foliop for an argument that is a double pointer
-> and the comment refers to what it point to.  I'll see what I can do
-> there, but the whole italic and bold thing seems entirely pointless
-> for kerneldoc..
+> On Fri, Feb 23, 2024 at 12:11 PM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > On Fri, Feb 23, 2024 at 04:50:47PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > On Thu, Feb 22, 2024 at 10:06:56AM +1100, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > >
+> > > > After merging the perf tree, today's linux-next build (native perf)
+> > > > failed like this:
+> > > >
+> > > > util/bpf_skel/augmented_raw_syscalls.bpf.c:329:15: error: invalid application of 'sizeof' to an incomplete type 'struct timespec64'
+> > > >         __u32 size = sizeof(struct timespec64);
+> > > >                      ^     ~~~~~~~~~~~~~~~~~~~
+> > > > util/bpf_skel/augmented_raw_syscalls.bpf.c:329:29: note: forward declaration of 'struct timespec64'
+> > > >         __u32 size = sizeof(struct timespec64);
+> > > >                                    ^
+> > > >
+> > > > Caused by commit
+> > > >
+> > > >   29d16de26df1 ("perf augmented_raw_syscalls.bpf: Move 'struct timespec64' to vmlinux.h")
+> > > >
+> > > > This is a ppc64 le build.
+> > > >
+> > > > I have used the perf tree from next-20240221 for today.
+> > >
+> > > Ok, finally I managed to secure a ppc64 machine to test this and
+> > > sometimes I reproduce just like you reported, but sometimes I can't do
+> > > it, didn't manage to isolate what is that makes it fail sometimes, make
+> > > -C tools/perf clean, nuking the O= target directory, etc, when I
+> > > reproduce it:
+> >
+> > So I think I see the problem, I now left the build directory with a
+> > previous build from torvalds/master, then switched to the
+> > perf-tools-branch and tried to build from there, without first removing
+> > the old build, it fails:
+> >
+> >   CLANG   /tmp/build/perf-tools-next/util/bpf_skel/.tmp/augmented_raw_syscalls.bpf.o
+> > util/bpf_skel/augmented_raw_syscalls.bpf.c:329:15: error: invalid application of 'sizeof' to an incomplete type 'struct timespec64'
+> >   329 |         __u32 size = sizeof(struct timespec64);
+> >       |                      ^     ~~~~~~~~~~~~~~~~~~~
+> > util/bpf_skel/augmented_raw_syscalls.bpf.c:329:29: note: forward declaration of 'struct timespec64'
+> >   329 |         __u32 size = sizeof(struct timespec64);
+> >       |                                    ^
+> > 1 error generated.
+> > make[2]: *** [Makefile.perf:1161: /tmp/build/perf-tools-next/util/bpf_skel/.tmp/augmented_raw_syscalls.bpf.o] Error 1
+> > make[1]: *** [Makefile.perf:264: sub-make] Error 2
+> >
+> >
+> > Because it will use what was installed before in the build dir:
+> >
+> > [acme@ibm-p9z-16-lp5 perf-tools-next]$ ls -la /tmp/build/perf-tools-next/util/bpf_skel/vmlinux.h
+> > -rw-r--r--. 1 acme acme 4319 Feb 23 14:59 /tmp/build/perf-tools-next/util/bpf_skel/vmlinux.h
+> > [acme@ibm-p9z-16-lp5 perf-tools-next]$
+> >
+> > And that one doesn't have 'struct timespec64':
+> >
+> > [acme@ibm-p9z-16-lp5 perf-tools-next]$ grep timespec64 /tmp/build/perf-tools-next/util/bpf_skel/vmlinux.h
+> > [acme@ibm-p9z-16-lp5 perf-tools-next]$
+> >
+> > If I remove that directory contents:
+> >
+> > [acme@ibm-p9z-16-lp5 perf-tools-next]$ rm -rf /tmp/build/perf-tools-next/
+> > [acme@ibm-p9z-16-lp5 perf-tools-next]$ mkdir /tmp/build/perf-tools-next/
+> > [acme@ibm-p9z-16-lp5 perf-tools-next]$
+> >
+> > And then try to build again:
+> >
+> > make -k O=/tmp/build/perf-tools-next/ -C tools/perf install-bin
+> >
+> > It works.
+> >
+> > I reproduced the problem on x86_64, so, on this transition period, the
+> > problem happens, probably we need to robustify the installation of
+> > tools/perf/util/bpf_skel/vmlinux/vmlinux.h in the O= target directory,
+> > but if you just make sure the build directory is clean before trying to
+> > build it, this time, it should work, wdyt?
+> 
+> Can we add a dependency to the minimal vmlinux.h?
 
-Indeed.
+That fixes it, I'll submit a formal patch
 
-How about teaching kernel-doc unary "*" on param?
-
-Substitution would look like:
-
-   (kernel-doc)       (RST)
-   *@param     ->  ***param**
-
-Sphinx detects double asterisk, starts strong emphasis, waits for
-another double asterisk to appear, and stops strong emphasis.
-Hence you would get boldface "*param" in pretty printed docs.
-
-Diff below (against docs-next) should add a rule for param_deref
-(only for RST).
-
-diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index 136104804375..bdd6f3b489cc 100755
---- a/scripts/kernel-doc
-+++ b/scripts/kernel-doc
-@@ -65,7 +65,7 @@ my $type_constant = '\b``([^\`]+)``\b';
- my $type_constant2 = '\%([-_\*\w]+)';
- my $type_func = '(\w+)\(\)';
- my $type_param = '\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
--my $type_param_ref = '([\!~]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
-+my $type_param_ref = '([\!~\*]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
- my $type_fp_param = '\@(\w+)\(\)';  # Special RST handling for func ptr params
- my $type_fp_param2 = '\@(\w+->\S+)\(\)';  # Special RST handling for structs with func ptr params
- my $type_env = '(\$\w+)';
--- 
-
-And you would be able to write the kernel-doc comment in question
-as follows:
-
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 750ab1dcae27..0aad0d9a621b 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2152,8 +2152,8 @@ static int shmem_get_folio_gfp(struct inode *inode, pgoff_t index,
-  * There is no need to reserve space before calling folio_mark_dirty().
-  *
-  * When no folio is found, the behavior depends on @sgp:
-- *  - for SGP_READ, *foliop is %NULL and 0 is returned
-- *  - for SGP_NOALLOC, *foliop is %NULL and -ENOENT is returned
-+ *  - for SGP_READ, *@foliop is %NULL and 0 is returned
-+ *  - for SGP_NOALLOC, *@foliop is %NULL and -ENOENT is returned
-  *  - for all other flags a new folio is allocated, inserted into the
-  *    page cache and returned locked in @foliop.
-  *
--- 
-
-How does this approach sound to you? 
-
-        Thanks, Akira
-
+- Arnaldo
+ 
+> Thanks,
+> Namhyung
+> 
+> ---8<---
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index 3cecd51b2397..33621114135e 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -1147,7 +1147,7 @@ ifeq ($(VMLINUX_H),)
+>    endif
+>  endif
+> 
+> -$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
+> +$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) $(VMLINUX_H)
+>  ifeq ($(VMLINUX_H),)
+>         $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
+>  else
 

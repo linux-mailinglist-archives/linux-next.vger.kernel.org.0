@@ -1,174 +1,131 @@
-Return-Path: <linux-next+bounces-1327-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1328-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE9958625B0
-	for <lists+linux-next@lfdr.de>; Sat, 24 Feb 2024 16:05:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB01C8628C1
+	for <lists+linux-next@lfdr.de>; Sun, 25 Feb 2024 02:58:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63082282314
-	for <lists+linux-next@lfdr.de>; Sat, 24 Feb 2024 15:05:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15340B214B7
+	for <lists+linux-next@lfdr.de>; Sun, 25 Feb 2024 01:58:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 822653398B;
-	Sat, 24 Feb 2024 15:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 111A8139D;
+	Sun, 25 Feb 2024 01:58:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dJXs5p2l"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UnXDsXWH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596BE24B54;
-	Sat, 24 Feb 2024 15:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A3C1361;
+	Sun, 25 Feb 2024 01:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708787128; cv=none; b=bCcOB+Y3mB7qSwAxeDDMhvaFTHxveXPye6I8tkpbt/ihGX91W594ijitTcuJ6aif0bz9qILEzFVpHDP+6bpy33gqlFGuo/soa0asoo+WgBMmDlaFkEc3gDKJeKdOLd1Lfwnz6jXsWLYmOvvQ6Ec7hUfVEEfC0ijHVZC5YqG/FQ0=
+	t=1708826306; cv=none; b=lj/Sbgp7IZ4MpyluNv2e6xHR12CMUoeUNTcXyhK/4xr3Ar62Zh5XRGG2DjfHk7pH48ln6oHcifC2ZOxQKB/bjCzPDv1vhxPFH9kl5WBXaiZ7+DaAayQzAQtqGInK6usArKFH4LvHRcTcgl+jqwZcZKMmiW7+wl4CMcrXxlx6oPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708787128; c=relaxed/simple;
-	bh=oC+819alsBsCF37dz60vdeaMt67VeJuCkAD2RtMidss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DsXs3UyARUx625UQkJPgcIZkla32mzgbckZjmi8qN/To/UF8haKWmXTn7zo+UKKVIRi8I5yIHL7bFJ7R4qLIbtOT8MfiRaEHScQBxhvlGf9Nuse1xcYsRapG2HBBMe7lEqzCNPYWQcX15HcAMzIk5ZaQr6Lihmty8NrqyppIAKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dJXs5p2l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC64BC433F1;
-	Sat, 24 Feb 2024 15:05:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708787128;
-	bh=oC+819alsBsCF37dz60vdeaMt67VeJuCkAD2RtMidss=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dJXs5p2lPsA++XKQWmL0YkfkWSlzoIOywXQchJiIrYKG90l0zDG4Mwr2IoHpKkXs/
-	 gfV2+PBDH6R/g4nceJSBYotXoOW/Cxa+PGM0zL5lc1o1qJ71X7c7jL8Jnef7Pw9+8d
-	 vi6jhwHaPPkwFfNWWrQxcsEirCdKv3Qt6q+l7w9dP5pVTLv6WL+AnXQ6LfRrjN/7z9
-	 T9L66jdVhMbPvUjN1/4ePXzCYrkeUvZc6lczj7S1i6Bd/rSQ/StNajCaDFgZrwa0L7
-	 5uguXiiQMtbNbFFHnGyQhTHGwiyp4di8ozhvDxVoZzjJG7BT5mkSGZsFH4RFtNY5mx
-	 ESNnSJoxNjv0g==
-Date: Sat, 24 Feb 2024 12:05:24 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Ian Rogers <irogers@google.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [solved] Re: linux-next: build failure after merge of the perf
- tree
-Message-ID: <ZdoFtNnivIONTNtg@x1>
-References: <20240222100656.0a644254@canb.auug.org.au>
- <Zdj3FyPjE5ezyfsM@x1>
- <Zdj74Zo10vYTZNMl@x1>
- <CAM9d7ciaj80QZL0AS_T2HNBdMOyS-j1wBHQSYs=U3kHQimY1mQ@mail.gmail.com>
+	s=arc-20240116; t=1708826306; c=relaxed/simple;
+	bh=PaibG9Kr5hC/Yxh0f0Wtfyu/0mfRBH2bYljJy5nD5kI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ps+sXkXKTl8Z28QtQGsSNq3sGbOEnXVJTV3F6KiBSLBRb9Tmt3fGbva2jCdyfy34zaH3IxOjpQWRod2QKh0K7sAFZP/XdxcR5iQ8a0xEo+mUdRte/KRbMC0o+nbKymECOIeQ/5GaONG8koarOihQ1wb95/ql5QGjRGCROqkLH50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UnXDsXWH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1708826299;
+	bh=fUsB35Fy9mjfHzF1qnj45WCCbKBxbtbf0PIHDIzX2Yw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UnXDsXWHYebm4UfzuaFBVg4MaVNJRroOMGf06W42waax3RAxdPCtfl8uAG2zKRi0p
+	 8fSp4OLVW5YnfLLFy50FHDYkaxa5oI9BtStlZ6UVods2ox23rIcFGWonLidTGI3kyj
+	 tvRq96PPHsKRC7qzlySMR+CYMv65y9SNxCmA2DKgj4p350il12cAcNiZKzvs+pjTr1
+	 uCdT+Cp78it6roCix3O3q7FUHDzHLeJulZ05O4hAgG6Gzbn6yNFYT+NFrqDYu+LD1i
+	 TCVuq6kehZsyUvO9Rg5ugISomNPWqXem8exf/VAE3MxScDFBbYIGpcLOnaQWJONhdB
+	 MPVaGh8splDnQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tj6NC00Lgz4wc1;
+	Sun, 25 Feb 2024 12:58:18 +1100 (AEDT)
+Date: Sun, 25 Feb 2024 12:58:15 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko
+ <andy.shevchenko@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
+Message-ID: <20240225125815.2704bb3d@canb.auug.org.au>
+In-Reply-To: <CACMJSevZxCiqa8uz+XU36psCa5T_rQGi5tVkMejpZj22Bj1k3Q@mail.gmail.com>
+References: <20240223143309.5ec298ec@canb.auug.org.au>
+ <CACMJSevZxCiqa8uz+XU36psCa5T_rQGi5tVkMejpZj22Bj1k3Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM9d7ciaj80QZL0AS_T2HNBdMOyS-j1wBHQSYs=U3kHQimY1mQ@mail.gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/HaJtlbJjYxY0BnlCQBHfFfv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Feb 23, 2024 at 12:34:40PM -0800, Namhyung Kim wrote:
-> Hi Arnaldo,
-> 
-> On Fri, Feb 23, 2024 at 12:11 PM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > On Fri, Feb 23, 2024 at 04:50:47PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > On Thu, Feb 22, 2024 at 10:06:56AM +1100, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > >
-> > > > After merging the perf tree, today's linux-next build (native perf)
-> > > > failed like this:
-> > > >
-> > > > util/bpf_skel/augmented_raw_syscalls.bpf.c:329:15: error: invalid application of 'sizeof' to an incomplete type 'struct timespec64'
-> > > >         __u32 size = sizeof(struct timespec64);
-> > > >                      ^     ~~~~~~~~~~~~~~~~~~~
-> > > > util/bpf_skel/augmented_raw_syscalls.bpf.c:329:29: note: forward declaration of 'struct timespec64'
-> > > >         __u32 size = sizeof(struct timespec64);
-> > > >                                    ^
-> > > >
-> > > > Caused by commit
-> > > >
-> > > >   29d16de26df1 ("perf augmented_raw_syscalls.bpf: Move 'struct timespec64' to vmlinux.h")
-> > > >
-> > > > This is a ppc64 le build.
-> > > >
-> > > > I have used the perf tree from next-20240221 for today.
-> > >
-> > > Ok, finally I managed to secure a ppc64 machine to test this and
-> > > sometimes I reproduce just like you reported, but sometimes I can't do
-> > > it, didn't manage to isolate what is that makes it fail sometimes, make
-> > > -C tools/perf clean, nuking the O= target directory, etc, when I
-> > > reproduce it:
-> >
-> > So I think I see the problem, I now left the build directory with a
-> > previous build from torvalds/master, then switched to the
-> > perf-tools-branch and tried to build from there, without first removing
-> > the old build, it fails:
-> >
-> >   CLANG   /tmp/build/perf-tools-next/util/bpf_skel/.tmp/augmented_raw_syscalls.bpf.o
-> > util/bpf_skel/augmented_raw_syscalls.bpf.c:329:15: error: invalid application of 'sizeof' to an incomplete type 'struct timespec64'
-> >   329 |         __u32 size = sizeof(struct timespec64);
-> >       |                      ^     ~~~~~~~~~~~~~~~~~~~
-> > util/bpf_skel/augmented_raw_syscalls.bpf.c:329:29: note: forward declaration of 'struct timespec64'
-> >   329 |         __u32 size = sizeof(struct timespec64);
-> >       |                                    ^
-> > 1 error generated.
-> > make[2]: *** [Makefile.perf:1161: /tmp/build/perf-tools-next/util/bpf_skel/.tmp/augmented_raw_syscalls.bpf.o] Error 1
-> > make[1]: *** [Makefile.perf:264: sub-make] Error 2
-> >
-> >
-> > Because it will use what was installed before in the build dir:
-> >
-> > [acme@ibm-p9z-16-lp5 perf-tools-next]$ ls -la /tmp/build/perf-tools-next/util/bpf_skel/vmlinux.h
-> > -rw-r--r--. 1 acme acme 4319 Feb 23 14:59 /tmp/build/perf-tools-next/util/bpf_skel/vmlinux.h
-> > [acme@ibm-p9z-16-lp5 perf-tools-next]$
-> >
-> > And that one doesn't have 'struct timespec64':
-> >
-> > [acme@ibm-p9z-16-lp5 perf-tools-next]$ grep timespec64 /tmp/build/perf-tools-next/util/bpf_skel/vmlinux.h
-> > [acme@ibm-p9z-16-lp5 perf-tools-next]$
-> >
-> > If I remove that directory contents:
-> >
-> > [acme@ibm-p9z-16-lp5 perf-tools-next]$ rm -rf /tmp/build/perf-tools-next/
-> > [acme@ibm-p9z-16-lp5 perf-tools-next]$ mkdir /tmp/build/perf-tools-next/
-> > [acme@ibm-p9z-16-lp5 perf-tools-next]$
-> >
-> > And then try to build again:
-> >
-> > make -k O=/tmp/build/perf-tools-next/ -C tools/perf install-bin
-> >
-> > It works.
-> >
-> > I reproduced the problem on x86_64, so, on this transition period, the
-> > problem happens, probably we need to robustify the installation of
-> > tools/perf/util/bpf_skel/vmlinux/vmlinux.h in the O= target directory,
-> > but if you just make sure the build directory is clean before trying to
-> > build it, this time, it should work, wdyt?
-> 
-> Can we add a dependency to the minimal vmlinux.h?
+--Sig_/HaJtlbJjYxY0BnlCQBHfFfv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-That fixes it, I'll submit a formal patch
+Hi Bartosz,
 
-- Arnaldo
- 
-> Thanks,
-> Namhyung
-> 
-> ---8<---
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 3cecd51b2397..33621114135e 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -1147,7 +1147,7 @@ ifeq ($(VMLINUX_H),)
->    endif
->  endif
-> 
-> -$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
-> +$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) $(VMLINUX_H)
->  ifeq ($(VMLINUX_H),)
->         $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
->  else
+On Fri, 23 Feb 2024 08:51:10 +0100 Bartosz Golaszewski <bartosz.golaszewski=
+@linaro.org> wrote:
+>
+> On Fri, 23 Feb 2024 at 04:33, Stephen Rothwell <sfr@canb.auug.org.au> wro=
+te:
+> >
+> > After merging the gpio-brgl tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >
+> > x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_write64':
+> > gpio-mmio.c:(.text+0x1489427): undefined reference to `iowrite64'
+> > x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_read64':
+> > gpio-mmio.c:(.text+0x14894a0): undefined reference to `ioread64'
+> > x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_write64be':
+> > gpio-mmio.c:(.text+0x1489527): undefined reference to `iowrite64be'
+> > x86_64-linux-gnu-ld: vmlinux.o: in function `bgpio_read64be':
+> > gpio-mmio.c:(.text+0x14895a0): undefined reference to `ioread64be'
+> >
+> > Caused by commit
+> >
+> >   36e44186e0ba ("gpio: mmio: Support 64-bit BE access")
+>=20
+> I'm not seeing this issue with allmodconfig on x86_64, could you give
+> me some more information on the build environment?
+
+These builds are cross builds using Debian's cross compilers on a ppc64le h=
+ost.
+
+$ x86_64-linux-gnu-gcc --version
+x86_64-linux-gnu-gcc (Debian 13.2.0-7) 13.2.0
+$ x86_64-linux-gnu-ld --version
+GNU ld (GNU Binutils for Debian) 2.41
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/HaJtlbJjYxY0BnlCQBHfFfv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXanrcACgkQAVBC80lX
+0Gzhlwf+NRN66KQYhF+qUDdFcZJ/DobDc0wFrdvlKcn2PPC7D+EjL7/1H2u0Y7Rl
+4Z82T4RGuPMnq77trPQXgIG2RYOjUXO2RZvgvXUHl4SM3OE4Sw5hDfIzuaLXJpdS
+kWASpkIo7ohEYcz8f0tOxBIj5JC1BjL6+dsWDZaTTaSHfsB33/aaF1i6HU9pXfEz
+wDVHhvEQkskf3hKOq0YIfWErQ8foBl7TdV2RcQmt68JvrXU6w18s2soMyRD+F8cF
+Co1/bo+4gzBd5wG76p2QULEdGWDnPbkv2HksyopkQdU2Gho721m9wTvHszwid8x6
+QIZlwtUEpQRFeXi/4sHEKp8DPI4QEg==
+=HBAq
+-----END PGP SIGNATURE-----
+
+--Sig_/HaJtlbJjYxY0BnlCQBHfFfv--
 

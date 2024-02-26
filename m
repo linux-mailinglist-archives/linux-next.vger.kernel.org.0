@@ -1,91 +1,89 @@
-Return-Path: <linux-next+bounces-1346-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1347-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75B3886685C
-	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 03:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E4EF7866867
+	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 03:57:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AD0E1F21DCE
-	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 02:54:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A6B51F221B2
+	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 02:57:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587D7F9C3;
-	Mon, 26 Feb 2024 02:54:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36CF1804E;
+	Mon, 26 Feb 2024 02:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gnV1TqM1"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="izpYQFOR"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3BB4C84;
-	Mon, 26 Feb 2024 02:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0504E17BB9;
+	Mon, 26 Feb 2024 02:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708916046; cv=none; b=JpdX+o5JAs+71P81XfXUnVhqXgvJPJPK8QmOqXRPIanDV6vcRVJ6vsF7Fzehr5iBBJIwb5U9s1u5aAyiLES5NBfVra6I0eDR06YK8KoY+srQvUuT+dPZLxqOwTlXZryzrTA9aPoUDcm2aoakjCcp8pQ0PH1H4PoDy7AGazNepyc=
+	t=1708916270; cv=none; b=Ys+K/Jg//kN5lS/r2i3xRnrwomeif5kEg+iTjt5mcocqebf+Oq1+wXB30LOjlHTG8gvE9ZXTYMzFvak1dkWmkSySgtZZRfShFbaw0HpGgL7TjpDOEsDidfP4xWO7Yuqr3+a+DyYVF5yhOHKUjDLM2IhwPV8jNuAB/E++LEDke7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708916046; c=relaxed/simple;
-	bh=ziDPUZ9sKbOLhrgxQX1/6HtN48N+pARDVpqIFpsLSTs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tBrpoRrdRwXS4dlW83pdd7OMwMjdwDCMuIZcEtNHfz0Cym/7U1/Z2VPlIEwv9Ttl1gtbIX7/AWlr1U0payk0Ukm+ZM3hoeeG81R1IGrnlYJacFu3x/2TkEgFOE3ZOh50nTKrVnWQjCT+j/Rt+W/4xCAnq6zlVxU+tpOY/xkiSNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=gnV1TqM1; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708916270; c=relaxed/simple;
+	bh=sf0KuPewUZdF8qwi9t9dgOKKjG4aN33ww+ZjUC4PqeY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=nAeG55bi21dPts44COTL3hk6UGz86wvjQA/yVLUWmbuF5+BBMUiYGU8bmYvB5aZ/xrCbRT9wWiD+dmQQ+ETzBPiKquDln1+0evssuZxSaR6B44L8snjW1CZqi4tc15P5O0c6flpc75KEY+OS5sZSsccf8PLWuNZnYRUMvA9CnXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=izpYQFOR; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708916040;
-	bh=tyx+IVS66RM0qtOBOj8rXQvkKnD2WQxqXMUHmV+Tkcw=;
+	s=201702; t=1708916266;
+	bh=MIBBx6GI1McT+ipBiqM/URogFUQRYQ2StmjJeyQkKFY=;
 	h=Date:From:To:Cc:Subject:From;
-	b=gnV1TqM1rQwD1FWJt8+iyOz33OJ07fe9Hfz7FxchuYa4pkQAzS816i3E9Hg/89wVI
-	 A7A0KeDKCXiI6rY1PLflRRRtzIUbCGOhH285XdCcv/qDKZb2wfkTrTovUpDO01R5wW
-	 p/OzBps8zqbNSOJCOCmTXIwiEILvIgYjNj90G+oe0ov11n0LdxWyAaV26jYi+CxpOo
-	 fo86MiM9pAOwJ2U6VL2IyiDpSRemzyWKkOeJKruHv5qGC1Qweytg7Dn4izFIMAyl/9
-	 Fw8f4PQMdGhtAJn+f+QhlVALQz4xHudObDzJfGw/1Tl6dPLIsCsIHEu402Vi5ZZc71
-	 9jKZf6gPSlYLQ==
+	b=izpYQFOR/IbI+5PtE9V9CKOrVm6RblRIfkkXotuQjU/i2BmOVeprc1T+32SVa1wf2
+	 Icb/zi4ezbwpAAz83Ox6yykn0ZPeQXO4Mmtv70RbVezkGCulxgs7W/qojwyZa2Qep6
+	 35H3ws7KguLHWE74KhZ6bKWgo6vYUa2zPkgQAoBTJ4dyi9tei24d9ipP8IwIHClZNb
+	 cLJHVv1Vsb+yCFu1zBoxxuqeJe+wWIQEVSRauXVDpexK7kyxRLgiWsU4pVjTS9JrH8
+	 kbWhXVORO/jAV7TXRaDvtw6dZHmiknRu5zYmplhRr6h0KMYRTeSzrlI6x6eB2f1KvZ
+	 yEbv8C5bwEtoA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TjlYz3kqZz4wc8;
-	Mon, 26 Feb 2024 13:53:59 +1100 (AEDT)
-Date: Mon, 26 Feb 2024 13:53:57 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TjlfK69tlz4wcC;
+	Mon, 26 Feb 2024 13:57:45 +1100 (AEDT)
+Date: Mon, 26 Feb 2024 13:57:45 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Tejun Heo <tj@kernel.org>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>, Leonardo Bras
- <leobras@redhat.com>, Linux Kernel Mailing List
+To: "Paul E. McKenney" <paulmck@kernel.org>, "Rafael J. Wysocki"
+ <rjw@rjwysocki.net>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tip tree with the workqueues tree
-Message-ID: <20240226135357.29ebadf0@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Nikhil V <quic_nprakash@quicinc.com>
+Subject: linux-next: manual merge of the rcu tree with the pm tree
+Message-ID: <20240226135745.12ac854d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2_F7J9oi_gN1uQDw37VMJPH";
+Content-Type: multipart/signed; boundary="Sig_/4gv1_Pr=DbHejtL+I7uOn.=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/2_F7J9oi_gN1uQDw37VMJPH
+--Sig_/4gv1_Pr=DbHejtL+I7uOn.=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+Today's linux-next merge of the rcu tree got a conflict in:
 
-  kernel/workqueue.c
+  Documentation/admin-guide/kernel-parameters.txt
 
 between commit:
 
-  aae17ebb53cd ("workqueue: Avoid using isolated cpus' timers on queue_dela=
-yed_work")
+  3fec6e5961b7 ("PM: hibernate: Support to select compression algorithm")
 
-from the workqueues tree and commit:
+from the pm tree and commit:
 
-  c0e8c5b59949 ("workqueue: Use global variant for add_timer()")
+  600716592a3a ("doc: Add EARLY flag to early-parsed kernel boot parameters=
+")
 
-from the tip tree.
+from the rcu tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -98,49 +96,47 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc kernel/workqueue.c
-index 65a27be81452,78eaea2e5d72..000000000000
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@@ -2545,18 -1958,10 +2545,18 @@@ static void __queue_delayed_work(int cp
-  	dwork->cpu =3D cpu;
-  	timer->expires =3D jiffies + delay;
+diff --cc Documentation/admin-guide/kernel-parameters.txt
+index c503770e8f0b,3f894fbb4916..000000000000
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@@ -1753,18 -1749,7 +1754,18 @@@
+  				(that will set all pages holding image data
+  				during restoration read-only).
  =20
- -	if (unlikely(cpu !=3D WORK_CPU_UNBOUND))
- +	if (housekeeping_enabled(HK_TYPE_TIMER)) {
- +		/* If the current cpu is a housekeeping cpu, use it. */
- +		cpu =3D smp_processor_id();
- +		if (!housekeeping_test_cpu(cpu, HK_TYPE_TIMER))
- +			cpu =3D housekeeping_any_cpu(HK_TYPE_TIMER);
-  		add_timer_on(timer, cpu);
- -	else
- -		add_timer_global(timer);
- +	} else {
- +		if (likely(cpu =3D=3D WORK_CPU_UNBOUND))
-- 			add_timer(timer);
-++			add_timer_global(timer);
- +		else
- +			add_timer_on(timer, cpu);
- +	}
-  }
- =20
-  /**
+ +	hibernate.compressor=3D 	[HIBERNATION] Compression algorithm to be
+ +				used with hibernation.
+ +				Format: { lzo | lz4 }
+ +				Default: lzo
+ +
+ +				lzo: Select LZO compression algorithm to
+ +				compress/decompress hibernation image.
+ +
+ +				lz4: Select LZ4 compression algorithm to
+ +				compress/decompress hibernation image.
+ +
+- 	highmem=3Dnn[KMG]	[KNL,BOOT] forces the highmem zone to have an exact
++ 	highmem=3Dnn[KMG]	[KNL,BOOT,EARLY] forces the highmem zone to have an ex=
+act
+  			size of <nn>. This works even on boxes that have no
+  			highmem otherwise. This also works to reduce highmem
+  			size on bigger boxes.
 
---Sig_/2_F7J9oi_gN1uQDw37VMJPH
+--Sig_/4gv1_Pr=DbHejtL+I7uOn.=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXb/UUACgkQAVBC80lX
-0GzrJAgAkdLl0SzaagaYHZA1abwu1d8ZoGOk+YhSXWESByQMWQAZMnu8R6uAYxIY
-AGod47N3uzCYiOHcLG13YIBqRoKl4v+gb97IUpr46L6vUpyUu7WPGGo0sARUueDA
-UDIXtXWTMqBjwMFOHhg1yY3nk71SAcgJBqzMho2WTR+zQ9WvANksJWu37vcbh8im
-wVNus5cHj8hfiF+CVYwbWrjxIf67N/f7y0K3m8igr6PAMOm8sYl53xpQVW+uGc8U
-0fJQDPKbVSDv/ubY1n8P/7AIwIvtsbEiKWJF1hRlh0bUcRz++NLqpYiX0M4DEOd6
-NLmlWypeOd7Eg7kLURWWWxE+c4bBXQ==
-=hPa/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXb/ikACgkQAVBC80lX
+0GwQWAf7B+7G0prf44SGgzsLu+Bb6kk3pV+R6mR573pVFBIZnBuySykCFvucCeGR
+hbBpdNKOQA6wG9C7Dm/HqnYGdJZb0NrxYJyMR/4rH2giAbpROE6Okyy8QmT/C82E
+Taf4rXpOiacEIfuy5FhtDN0NF8BbeznMq3MaOc1shWzHbn0VuA5dNrIfJIJE6MSm
+5hQ9h+DGnGI2jzvAJTxNqXMXbw/VUPfYLUFxOTOlcdTu20x7uziIqPXjf2V9j+Md
+z6lnRjwxPwNz5tybZQ81eMvG6xVauEWjMTOF8d5LSrj01PnVwuvLcAkmHTYiMG8W
+MuEnHX7vKIvAtqRNg18v7tSV5c5CVA==
+=fcfT
 -----END PGP SIGNATURE-----
 
---Sig_/2_F7J9oi_gN1uQDw37VMJPH--
+--Sig_/4gv1_Pr=DbHejtL+I7uOn.=--
 

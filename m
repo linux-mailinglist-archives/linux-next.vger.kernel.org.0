@@ -1,428 +1,217 @@
-Return-Path: <linux-next+bounces-1359-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1360-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED85E867526
-	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 13:37:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 865DE8675FB
+	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 14:06:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E29C3B2871F
-	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 12:35:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E394B2CCA1
+	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 12:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50AD67EEE6;
-	Mon, 26 Feb 2024 12:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 718E77FBCC;
+	Mon, 26 Feb 2024 12:56:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="D6cfEPg2"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="bmiiWaGV"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4238973162
-	for <linux-next@vger.kernel.org>; Mon, 26 Feb 2024 12:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708950907; cv=none; b=LnzuVmGgciinoI3M6VgobF2ud0KorESjjDbgzhHVyf5p1/01+d5cUnPk61NHG5/cyRysq9HxMN3egrE6xib98b6w207s73RzblvpD6t49Xp02mlowhfccqkon/qCoz1LJ0wSKhytEXue1EFbgvXQaE8rjwE418oLEUA04c0PkxU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708950907; c=relaxed/simple;
-	bh=Mx3KJyXMHMpXjrlzIWnFuILBF3DPXgRmsaU1y+yskDU=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=oSdQz0oK5f/Z2m2xdk9F6+IWNZSQsN/IoprlYzCBPprLQQrAyWDKMtnrhgI6uRelw8RYjhsZsHsdeigwqsSeUT/OnJYAMDfroOHG/sy4FUKuJPro8w1/BtxXRHDbytcbDgF8YRhN1gW51GceidT0wQ6y69fKLMJq5fOS9FSPTrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=D6cfEPg2; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5ce2aada130so2749924a12.1
-        for <linux-next@vger.kernel.org>; Mon, 26 Feb 2024 04:35:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708950904; x=1709555704; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=0bsmnmYR6GDDFCJ2ieFDxOBLUZYHtYhcJhVQcnA3K9o=;
-        b=D6cfEPg22I+boAM0JdFkFiZEjT5z3t8WcKHwOGy7+IVj1Hd+ESdPUb7txnkET1r2n5
-         nP3bi8VAttqGa1tH4oT4uYJdhBidJi8PEmQkxrmJYz2FCWdxx4usJY1264yci9Gufb8Q
-         KJlCHvadRzkcnC1bMilCqtuYQpj5vKCJVvLhg3sg5rJHX0x5Xxkoh7z0BCFNmUFelpWw
-         K7kjCExtI4TjSDgSFNh/xXMFWqfdDSVOa8GTVzYmhSN+qgwnCzXSaiwlGMSCHizBm734
-         8s/iYJttMX+hyFXewrDHoQnGe1lBJOJca2j3ugcpQ4+APWkQ0ohGchkppEw2LnDOyRI8
-         BR+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708950904; x=1709555704;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0bsmnmYR6GDDFCJ2ieFDxOBLUZYHtYhcJhVQcnA3K9o=;
-        b=Nj25jrjAlFd0YDeMr7ZTGsgij/n0dUwOc1IL6ro8AJsvEIzrnDbPmgHJrr1DC8oNPD
-         BWSIceu03gn7TPvabtFsAype7GGBYGtD24BfmoxWpu9kmgyRw+MpJ12K1FCD87zET5nE
-         UXhFhKs1HRku89qoqzvfPK4c52mC4TWYZhQ/bblcn6iMbPe1MJZrucsnI4ZW9XfZD6un
-         S3Gt7ejwFPO3C57mjV2OgTr88rt6TuYlAmjLgoI9ArLvjftI1GC6e8OA9oklbJS7KOsh
-         K1wnRugZQm7GkTjCSRLaSmH2TPmiN8re/02qgrFhORGgp4tqRo3O5i1q1gr7ZbYtvRZZ
-         oVWw==
-X-Gm-Message-State: AOJu0Yw52KNSJMSRAh4Ju0w5hTRA0q3vOX79ngJRh/ShteuC1ps8mzoI
-	HLQXG1APPLtzh5ku1ND5pPCW9WbtPTDRCawQ/JTnR+NIXWDxy68e+vXnmR047Wnk8kHKtWTl4B+
-	Y
-X-Google-Smtp-Source: AGHT+IEFHaZdVI149HeH4fNpQLBaPcrp6izlrLO3l7ZB7tOpZoT+wJvZfZfrUVBT0JQ3FGOxuRgFzA==
-X-Received: by 2002:a05:6a21:9988:b0:19c:9eea:e731 with SMTP id ve8-20020a056a21998800b0019c9eeae731mr6121822pzb.40.1708950903933;
-        Mon, 26 Feb 2024 04:35:03 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id q17-20020a639811000000b005dc4f9cecdcsm3738961pgd.86.2024.02.26.04.35.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Feb 2024 04:35:03 -0800 (PST)
-Message-ID: <65dc8577.630a0220.abe90.90cc@mx.google.com>
-Date: Mon, 26 Feb 2024 04:35:03 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EDA7F46F;
+	Mon, 26 Feb 2024 12:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708952194; cv=fail; b=l7WTUmUCyCYXI1L3a83mxzi5lxPTPvd0hs2Z6P/53roBlBPhRiZO1OukwQLmxOGyGWKpk7xg2rONQpgZ2K4P/swhrV7jDkZCNTXrb90o2rxkwTCurwiwpoJq0RVB1ZFRdeD7iZbH0LEkEVmw4Gpw6GQ7Wm47DRHGob5rtxyD08w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708952194; c=relaxed/simple;
+	bh=RISwSIppONst1r39Qo9csS8r5a4/6DXAJgsAxZWRzr4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=bsM7J3IfSFY4O8PRmxe0rTtd8FN+cr2pIyPom2hmFS93EF5RAGzJ6tpfJcgJeDpDqA0Ja51FooypSbeiYlGN225EfGapyEI2ucQQRWQcqqvmC1oXoY1XU4zH+PXqTdrzoz0KS0apjf3cCpT3XTCT/FhdTJEaUnnb58ZhpxLiH+Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=bmiiWaGV; arc=fail smtp.client-ip=40.107.236.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GGZmhQ+OR9r7hbFF7vZKdeFC3ZQP1b8DsFICjZTAMKfnpiSMMKklbf2t87+qZbIA1objXBIYg7zqgL0uef6krB3c6tWz+rNrVIliXbll9+zGbYYDmUgoNf1pVgvi4SkwATbJR9Xmg58k/hTeLPPwntD4pDli/TL3BU3QfM9nn2rsSiAxG5H23Nxa9LBt+UUS3BJ/n5kRvuXSIw/dql/yJHzV//nHK5fu5KFTtIok90kh8lGrvzzsvO+Fvzj7Csfo4NSpah0M8TXHDPzbo17AthGX/Y8JXSA0lTCb+LzGyHrTc8D2SEXgUle+XsiNUlzX4F7vRqTAXbvUTqSggZkxqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y3Erolc2rOIk8SMl7pN/DETK51Zipakj39GbXHvFRmM=;
+ b=jv5mTnRy7NTmC8zUX+9xbCRAoxyXh/zXx1MXioA3VnmRyhiAn+ec9i96zl+Dv1xLhj01oigNlVopvhbisYfO8k8oEldDV03WkAgjGlTvo/ke2Nb4OIhD7x9R/xXXEBNoVLHj4ThqSOWlfP2ww50MiCaQePQkiQGNHHmQ4adWnLQyjTRGFpyKivkEanI3k2Xlenr0Uyv9wtie/DehOziI3wADov1FInlXzCJVYdRTmgZ4tIrSkP1yEqWGoK5iFarJAHlcAsPr2n0hiYYadCnlseyKFOdUPj/6oX8iASgZp5Lbbp/715X6IAhMnZqGnwch8A+WptNKwwJV+VBbbt0t5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y3Erolc2rOIk8SMl7pN/DETK51Zipakj39GbXHvFRmM=;
+ b=bmiiWaGVwV9qRivtmLxBKUSPrNyo9IkaLUOh5DTbRQT3dOz8inqTc3eG/QdmsjNPRYBuAHjE8gKie4uohd0eRjnk5yxtjjm5rJ4JvC+6+MQFTmBMub1ezmO5eXbh3INuRUdNoY8CZtqQO8AiLpWiI5suIhhyxlTYmWV571lvQS0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by DM4PR12MB7670.namprd12.prod.outlook.com (2603:10b6:8:105::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.31; Mon, 26 Feb
+ 2024 12:56:28 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::f2b6:1034:76e8:f15a]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::f2b6:1034:76e8:f15a%6]) with mapi id 15.20.7316.031; Mon, 26 Feb 2024
+ 12:56:28 +0000
+Message-ID: <ab7bd677-e5e1-425f-8b13-301ae712a662@amd.com>
+Date: Mon, 26 Feb 2024 13:56:21 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Content-Language: en-US
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+ Intel Graphics <intel-gfx@lists.freedesktop.org>,
+ DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ zack.rusin@broadcom.com, tzimmermann@suse.de,
+ thomas.hellstrom@linux.intel.com,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ Dave Airlie <airlied@redhat.com>
+References: <20240206152850.333f620d@canb.auug.org.au>
+ <87y1bp962d.fsf@intel.com> <20240220084821.1c852736@canb.auug.org.au>
+ <20240226084116.4a41527d@canb.auug.org.au>
+ <20240226084741.2df4d18b@canb.auug.org.au>
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20240226084741.2df4d18b@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0040.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:48::11) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v6.8-rc5-540-g06497c30d7ac5
-X-Kernelci-Report-Type: test
-Subject: next/pending-fixes baseline: 81 runs,
- 10 regressions (v6.8-rc5-540-g06497c30d7ac5)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|DM4PR12MB7670:EE_
+X-MS-Office365-Filtering-Correlation-Id: 93094a3d-9c13-4cb4-cab2-08dc36ca5922
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	5VRgJ+rSEWA7ZFL/kDv06AVCQt7huK8w3H9mIFiHiArYTxzpUFrh6cImztHSeBnbGtusKr8P9bpFChzqmG6Nx6YwcfVg9a0CBhC/38R2TKXCkoh7mPYMCGxqBJ509KIgiL+ifxt0xGBhkXY6+NLlGtM6mmOBYryXbMZgx8vGqZEn1mj8YqNTQa7JvotrGXItQdalzPGznLBMTHTIRoi2MTAD92fN6kRsLejyp+Acyj4xuPdeN1M8C/DmkLuL1eiZNtFMqQJxRuajuAPVvz8izVfRvUlZWMfdLt9AUTwLE1pr8HDVWuW+iZqH6QtiJHIByjHWqSAzgOGRzYRsPXeXcXitDIvC8HsFONkPKALo/EU7Pj1Xjg9PpCAFCh5N6dGyP8tN6FOg+BIxAIs7cswESLM1Ecq/GR470C0NY4p6uJMmSqCkSHIFClLicMwDzmN0EWVWQV1RpZsXs7QoOYgRMdOR+iZfziz8N6OYvbD4c8uogdAKSmcxxIeMuZLhg12voH1hBdhKxlCn1E/fyre72LK0xVR5kOCW29ejpA2DU5Fjq6TRW1cBO1WFj7PnN0773/aEZWhFfnX96wZxUYa7soAYW6Wpp0KAHiy12Zj4Sq0jBFdDiOe/GyR7Hlh8jLL0
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dVZRbnl1RDdWczUwMHV6SFN0RVh5emRPUjRmVlJQUVIyV081azZLN0JCSXA4?=
+ =?utf-8?B?UER5bU9FbncrOTdaR2lNMElFMW1nRWJRMndEMm03OTd4WHBOS2E0RTJlUnoy?=
+ =?utf-8?B?bCtpYXI1OUJ2aERwNWI5bFFRU3Zyb1BKc3UwZnREcmNVdXcvRWtUVmdwTDl5?=
+ =?utf-8?B?ckV5VEZnaUM3NXNDOXNVeDMzL2dGajdLaXdPZWlMZUVEb0ZGaTk2bWk2K3l5?=
+ =?utf-8?B?NUliVVQ3dXhhUnlpUi9UYjZta05kZG9tc2JyVEhrT29vY3YzMmFaS25LeVhD?=
+ =?utf-8?B?bTV5Ym52SENkNDNZbWFheVlrQVVkaDdtNThOWDBnUzZsTDVYVWRJQ1lHUklO?=
+ =?utf-8?B?aTJLOHMxMHBEOE1kVml2OFBGZFI5UUdINDZYNVlrUVhXYXNnWGtxUkFDTTkv?=
+ =?utf-8?B?UjhDbzQzWnlyN2NkUGp5M0k4S0ljUlZSZU81VW5nQUN5TUNYWXkyNGZSbHh6?=
+ =?utf-8?B?a1FMQTJoaHdhR1JHUndDVWpmQTJCcUhBTHJOUUp5ekhDYXMxRHRoWlFYRmc4?=
+ =?utf-8?B?WDFla0xjOStLWUVwU0Evb2J1TGRRQUh0RWZPWUtMTmRhS0R1L0twZ1RGUlNQ?=
+ =?utf-8?B?N0hPUkI4SFBEZll2YkgrWlFRbG5ydU83RkNWREVWc1VtelJaY21obTZDUnA5?=
+ =?utf-8?B?cmt0aDR0WGtDZC9NcDd2UXVRVG9XK3Nhbk9TUnUzeDdobWE0cFdDVGhqK0ZE?=
+ =?utf-8?B?WHhDQWVGVk5FZWlSRjRyY1I5VHh1V3hXVEV1TWc1eWZxNWNSemFoeGEyRHBQ?=
+ =?utf-8?B?bCt0SjJCdE5BYUFUTndUMXV2QlBSY3pXTXNZa2FxWHl5N3E1VTFLTHo5U0E3?=
+ =?utf-8?B?Sk9qUG1oOVBmdjY4WVZLREE3ZEJQTGFvSjdZcEhVQmVmemliaWxJVjFXcU8y?=
+ =?utf-8?B?MVdzY3ZDa3NpYXdnU1hHYXhWZ1ZvTHQvSE8zNFpUN1dKaWw4WEpJNXR4WElL?=
+ =?utf-8?B?emM0d0F3QjBBTGdtZTBTR1BsaVpONEJ1SE5TMG96ZXZiaXFPN3JzajFZRUFF?=
+ =?utf-8?B?b2hGRXg0cnlOL2pxUitZbFV4Q0o3ZzNkOWZTZStyaE1TSHFYZVlMVFJ0c01i?=
+ =?utf-8?B?My9ZSVJLUkpuc1ZaM3dCMVVVQUdDWDZCTHhXRVBOSVFURDlqMjhUc0VSSU9z?=
+ =?utf-8?B?aE53aGVGUG1aVjQrZkNYZVliM0E5RkFBajQ0NHdaaTY0MFBQME1nVDdpZFhl?=
+ =?utf-8?B?T2FuWGNGT2I0SFVWcWI1S21WSEovM2VHMmtQdmtLbTJjbExvS2lXUmd4WHdQ?=
+ =?utf-8?B?NitSTUV5Nm9pRmJNU2gvaEswV2JCL3Ztc2JnYXRzZGtVR3RoNFl6SW11aUsv?=
+ =?utf-8?B?T3VYSUtKSVJzUk5DS2YzT2pVWTRRVG5VanlMYnpqUXBWRmRxNjZ1ZFZrWFFi?=
+ =?utf-8?B?VFlINEVndEVqU0htbno1d2VPRjRSV2JaZUVRei9adkNUKzNzT0VxTE1nOGRK?=
+ =?utf-8?B?MHFGL0svU0NkWVd4ckxKb3RLNzFsWmVqUFd6dWIzZS8zbHMxdFA3czVBdmFs?=
+ =?utf-8?B?ejBFZWI4dHdiUzRlZkJoR0IxV2F4REo0WnJPbCs2ZkJhNmtxM1hNZEY0R2Zp?=
+ =?utf-8?B?SUhIeDZqSGRHTVV6ODZwMURYWUFrN0JQblF0SW9PZ3R2MG5qenEwUmhzWjkr?=
+ =?utf-8?B?TisxOWlsQk8vTnNQTGw4aDlWc3Q0QTYwYW9NcjZuUlA0eFAzTzdjY0pWYWxU?=
+ =?utf-8?B?eEFvRlhLSDBma2FDeHBNTlJhcVhjMVNEbkpQbWRFTHBQUEd2c3VJSnZYcFBW?=
+ =?utf-8?B?bWNIMXBJSWVjdVBFcVhUd0hnNG1LU09TVzd0dFhJSUxTSEVrSUUveFlqejFU?=
+ =?utf-8?B?RjJodFRvZEpWaWxVQXB2amkyY1cyR2tYSWVDejB5cXFkcC9VQlFWbHpzZmZ0?=
+ =?utf-8?B?Mm8rZFRzZ1lsSXJpRDhiZGl5UjhHelA3czBySFMzRDR1V1U5NEpmcVAvelox?=
+ =?utf-8?B?Q2Y4eVZEc1NQNEVZbW9tL1U0OXJwN1hDWnkyNno2WE9mT1kyZ3p1WlFWdWZY?=
+ =?utf-8?B?YVdPdW9DSm8zZ015aDhpZVJ0eW1xSE9iY0xOUUJ6UzZzajdxU0JZNWNTNGtX?=
+ =?utf-8?B?a1pZb1NTdGQvTCs4SERoUEhMK3ZYM0NySlQ4Sld5VHJhN3NlcXRWTFBCSHhw?=
+ =?utf-8?Q?hnTeOaKD3SseJv9CWZNv0DXz4?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93094a3d-9c13-4cb4-cab2-08dc36ca5922
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2024 12:56:28.7905
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YCh+njYBGbRlPues6hepyue4OGf5u6sXBdsfTAhxVBefNIsWf8C1L4iU+6PUERyz
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7670
+
+Am 25.02.24 um 22:47 schrieb Stephen Rothwell:
+> Hi all,
+>
+> On Mon, 26 Feb 2024 08:41:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>> On Tue, 20 Feb 2024 08:48:21 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>> On Mon, 12 Feb 2024 15:15:54 +0200 Jani Nikula <jani.nikula@linux.intel.com> wrote:
+>>>> On Tue, 06 Feb 2024, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>>>> After merging the drm-misc tree, today's linux-next build (i386 defconfig)
+>>>>> failed like this:
+>>>>>
+>>>>> In function 'i915_ttm_placement_from_obj',
+>>>>>      inlined from 'i915_ttm_get_pages' at drivers/gpu/drm/i915/gem/i915_gem_ttm.c:847:2:
+>>>>> drivers/gpu/drm/i915/gem/i915_gem_ttm.c:165:18: error: 'places[0].flags' is used uninitialized [-Werror=uninitialized]
+>>>>>    165 |         places[0].flags |= TTM_PL_FLAG_DESIRED;
+>>>>>        |         ~~~~~~~~~^~~~~~
+>>>>> drivers/gpu/drm/i915/gem/i915_gem_ttm.c: In function 'i915_ttm_get_pages':
+>>>>> drivers/gpu/drm/i915/gem/i915_gem_ttm.c:837:26: note: 'places' declared here
+>>>>>    837 |         struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1];
+>>>>>        |                          ^~~~~~
+>>>>>
+>>>>> Caused by commit
+>>>>>
+>>>>>    a78a8da51b36 ("drm/ttm: replace busy placement with flags v6")
+>>>> Cc: more people.
+>>>>      
+>>>>> I applied the following hack for today:
+>>>>>
+>>>>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>>>>> Date: Tue, 6 Feb 2024 15:17:54 +1100
+>>>>> Subject: [PATCH] drm/ttm: initialise places
+>>>>>
+>>>>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>>>>> ---
+>>>>>   drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 2 +-
+>>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+>>>>> index 80c6cafc8887..34e699e67c25 100644
+>>>>> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+>>>>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+>>>>> @@ -834,7 +834,7 @@ static int __i915_ttm_get_pages(struct drm_i915_gem_object *obj,
+>>>>>   
+>>>>>   static int i915_ttm_get_pages(struct drm_i915_gem_object *obj)
+>>>>>   {
+>>>>> -	struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1];
+>>>>> +	struct ttm_place places[I915_TTM_MAX_PLACEMENTS + 1] = {};
+>>>>>   	struct ttm_placement placement;
+>>>>>   
+>>>>>   	/* restricted by sg_alloc_table */
+>>>>> -- 
+>>>>> 2.43.0
+>>> I am still applying the above patch ...
+>> Any progress?
+> And this commit is now in the drm tree.
+
+Sorry for the delay. Oring in the flag needs to come after the call and 
+not before it.
+
+Going to fix this.
+
+Thanks,
+Christian.
 
-next/pending-fixes baseline: 81 runs, 10 regressions (v6.8-rc5-540-g06497c3=
-0d7ac5)
-
-Regressions Summary
--------------------
-
-platform                 | arch  | lab             | compiler | defconfig  =
-        | regressions
--------------------------+-------+-----------------+----------+------------=
---------+------------
-imx53-qsrb               | arm   | lab-pengutronix | gcc-10   | multi_v7_de=
-fconfig | 1          =
-
-imx6dl-riotboard         | arm   | lab-pengutronix | gcc-10   | multi_v7_de=
-fconfig | 1          =
-
-imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig  =
-        | 1          =
-
-kontron-kbox-a-230-ls    | arm64 | lab-kontron     | gcc-10   | defconfig  =
-        | 5          =
-
-kontron-sl28-var3-ads2   | arm64 | lab-kontron     | gcc-10   | defconfig  =
-        | 2          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.8-rc5-540-g06497c30d7ac5/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.8-rc5-540-g06497c30d7ac5
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      06497c30d7ac5a726d6beea51c4f441b917b420c =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                 | arch  | lab             | compiler | defconfig  =
-        | regressions
--------------------------+-------+-----------------+----------+------------=
---------+------------
-imx53-qsrb               | arm   | lab-pengutronix | gcc-10   | multi_v7_de=
-fconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65dc547d11ca410f5c637018
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx=
-53-qsrb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx=
-53-qsrb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65dc547d11ca410f5c63701d
-        failing since 392 days (last pass: v6.1-rc8-128-gc530a9add07c, firs=
-t fail: v6.2-rc6-199-g0a49732f057b)
-
-    2024-02-26T09:05:40.972380  + set +x
-    2024-02-26T09:05:40.972525  [   13.509685] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-1029069_1.5.2.3.1>
-    2024-02-26T09:05:41.080018  / # #
-    2024-02-26T09:05:41.180962  export SHELL=3D/bin/sh
-    2024-02-26T09:05:41.181370  #
-    2024-02-26T09:05:41.282062  / # export SHELL=3D/bin/sh. /lava-1029069/e=
-nvironment
-    2024-02-26T09:05:41.282429  =
-
-    2024-02-26T09:05:41.383117  / # . /lava-1029069/environment/lava-102906=
-9/bin/lava-test-runner /lava-1029069/1
-    2024-02-26T09:05:41.383595  =
-
-    2024-02-26T09:05:41.386939  / # /lava-1029069/bin/lava-test-runner /lav=
-a-1029069/1 =
-
-    ... (13 line(s) more)  =
-
- =
-
-
-
-platform                 | arch  | lab             | compiler | defconfig  =
-        | regressions
--------------------------+-------+-----------------+----------+------------=
---------+------------
-imx6dl-riotboard         | arm   | lab-pengutronix | gcc-10   | multi_v7_de=
-fconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65dc547e80ff2809f963702c
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx=
-6dl-riotboard.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx=
-6dl-riotboard.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65dc547e80ff2809f9637031
-        new failure (last pass: v6.8-rc5-389-gbf23699d860e0)
-
-    2024-02-26T09:05:42.977649  + set[   15.065579] <LAVA_SIGNAL_ENDRUN 0_d=
-mesg 1029070_1.5.2.3.1>
-    2024-02-26T09:05:42.977951   +x
-    2024-02-26T09:05:43.084179  / # #
-    2024-02-26T09:05:43.185248  export SHELL=3D/bin/sh
-    2024-02-26T09:05:43.185650  #
-    2024-02-26T09:05:43.286399  / # export SHELL=3D/bin/sh. /lava-1029070/e=
-nvironment
-    2024-02-26T09:05:43.286803  =
-
-    2024-02-26T09:05:43.387701  / # . /lava-1029070/environment/lava-102907=
-0/bin/lava-test-runner /lava-1029070/1
-    2024-02-26T09:05:43.388222  =
-
-    2024-02-26T09:05:43.391404  / # /lava-1029070/bin/lava-test-runner /lav=
-a-1029070/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                 | arch  | lab             | compiler | defconfig  =
-        | regressions
--------------------------+-------+-----------------+----------+------------=
---------+------------
-imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig  =
-        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65dc53dbabaa7b9c6e637012
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-inn=
-ocomm-wb15-evk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-inn=
-ocomm-wb15-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65dc53dbabaa7b9c6e637=
-013
-        new failure (last pass: v6.8-rc5-389-gbf23699d860e0) =
-
- =
-
-
-
-platform                 | arch  | lab             | compiler | defconfig  =
-        | regressions
--------------------------+-------+-----------------+----------+------------=
---------+------------
-kontron-kbox-a-230-ls    | arm64 | lab-kontron     | gcc-10   | defconfig  =
-        | 5          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65dc54204eb2b823da63709e
-
-  Results:     90 PASS, 5 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a=
--230-ls.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a=
--230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65dc54204eb2b823da6370a5
-        failing since 38 days (last pass: v6.7-10708-g52db520a0959c, first =
-fail: v6.7-12142-g865a3df089bf)
-
-    2024-02-26T09:04:01.377438  + <8>[   20.221468] <LAVA_SIGNAL_ENDRUN 0_d=
-mesg 435266_1.5.2.4.1>
-    2024-02-26T09:04:01.377702  set +x
-    2024-02-26T09:04:01.482500  / # #
-    2024-02-26T09:04:01.584445  export SHELL=3D/bin/sh
-    2024-02-26T09:04:01.585160  #
-    2024-02-26T09:04:01.686433  / # export SHELL=3D/bin/sh. /lava-435266/en=
-vironment
-    2024-02-26T09:04:01.687076  =
-
-    2024-02-26T09:04:01.788506  / # . /lava-435266/environment/lava-435266/=
-bin/lava-test-runner /lava-435266/1
-    2024-02-26T09:04:01.789681  =
-
-    2024-02-26T09:04:01.808534  / # /lava-435266/bin/lava-test-runner /lava=
--435266/1 =
-
-    ... (19 line(s) more)  =
-
-
-  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
-/id/65dc54204eb2b823da6370a9
-        failing since 38 days (last pass: v6.7-10708-g52db520a0959c, first =
-fail: v6.7-12142-g865a3df089bf)
-
-    2024-02-26T09:04:03.957177  /lava-435266/1/../bin/lava-test-case
-    2024-02-26T09:04:03.957602  <8>[   22.785066] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
-    2024-02-26T09:04:03.958070  /lava-435266/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/65=
-dc54204eb2b823da6370ab
-        failing since 38 days (last pass: v6.7-10708-g52db520a0959c, first =
-fail: v6.7-12142-g865a3df089bf)
-
-    2024-02-26T09:04:05.015357  /lava-435266/1/../bin/lava-test-case
-    2024-02-26T09:04:05.015766  <8>[   23.822766] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
-/id/65dc54204eb2b823da6370b0
-        failing since 38 days (last pass: v6.7-10708-g52db520a0959c, first =
-fail: v6.7-12142-g865a3df089bf)
-
-    2024-02-26T09:04:06.096078  /lava-435266/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
-/id/65dc54204eb2b823da6370b1
-        failing since 38 days (last pass: v6.7-10708-g52db520a0959c, first =
-fail: v6.7-12142-g865a3df089bf)
-
-    2024-02-26T09:04:06.099390  <8>[   24.939658] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
-    2024-02-26T09:04:07.158287  /lava-435266/1/../bin/lava-test-case
-    2024-02-26T09:04:07.158745  <8>[   25.961313] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
-    2024-02-26T09:04:07.159049  /lava-435266/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform                 | arch  | lab             | compiler | defconfig  =
-        | regressions
--------------------------+-------+-----------------+----------+------------=
---------+------------
-kontron-sl28-var3-ads2   | arm64 | lab-kontron     | gcc-10   | defconfig  =
-        | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65dc53a8ff8c08e01363707f
-
-  Results:     101 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-v=
-ar3-ads2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.8-rc5-54=
-0-g06497c30d7ac5/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-v=
-ar3-ads2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65dc53a8ff8c08e013637086
-        failing since 38 days (last pass: v6.7-10708-g52db520a0959c, first =
-fail: v6.7-12142-g865a3df089bf)
-
-    2024-02-26T09:02:21.702095  / # #
-    2024-02-26T09:02:21.804218  export SHELL=3D/bin/sh
-    2024-02-26T09:02:21.804920  #
-    2024-02-26T09:02:21.906447  / # export SHELL=3D/bin/sh. /lava-435267/en=
-vironment
-    2024-02-26T09:02:21.907145  =
-
-    2024-02-26T09:02:22.008576  / # . /lava-435267/environment/lava-435267/=
-bin/lava-test-runner /lava-435267/1
-    2024-02-26T09:02:22.009781  =
-
-    2024-02-26T09:02:22.029429  / # /lava-435267/bin/lava-test-runner /lava=
--435267/1
-    2024-02-26T09:02:22.082273  + export 'TESTRUN_ID=3D1_bootrr'
-    2024-02-26T09:02:22.082697  + <8>[   20.923932] <LAVA_SIGNAL_STARTRUN 1=
-_bootrr 435267_1.5.2.4.5> =
-
-    ... (12 line(s) more)  =
-
-
-  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
-/id/65dc53a8ff8c08e013637099
-        failing since 38 days (last pass: v6.7-10708-g52db520a0959c, first =
-fail: v6.7-12142-g865a3df089bf)
-
-    2024-02-26T09:02:23.459771  <8>[   22.326737] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-driver-present RESULT=3Dpass>
-    2024-02-26T09:02:24.520572  /lava-435267/1/../bin/lava-test-case
-    2024-02-26T09:02:24.521032  <8>[   23.348178] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
-    2024-02-26T09:02:24.521319  /lava-435267/1/../bin/lava-test-case   =
-
- =20
 

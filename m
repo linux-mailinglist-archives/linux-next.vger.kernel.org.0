@@ -1,71 +1,70 @@
-Return-Path: <linux-next+bounces-1343-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1344-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78E3C866712
-	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 01:03:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E465C866744
+	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 01:13:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A787F1C20AF1
-	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 00:03:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CE98281797
+	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 00:13:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8E07EF;
-	Mon, 26 Feb 2024 00:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA9110FD;
+	Mon, 26 Feb 2024 00:13:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="QJOXE1g/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="m36aK9SA"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274FB173;
-	Mon, 26 Feb 2024 00:03:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF9C173;
+	Mon, 26 Feb 2024 00:13:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708905828; cv=none; b=ZaFPbCjdvdLF4qj1pgGHVeevtb1Vg0dj7BntTyxrv8PXqMtSewxLravEEPn2HshuS3qJxs7L3XJIuXxj6VLl11G/dOjTDY7zPd4GI1/zALNh1ZVm/8cItInO+HpykNILpwGY0+t/Sxy5RxoyX7tPYljnWEJRPSW6XxWx+tvlj3A=
+	t=1708906384; cv=none; b=Oy6BdbxvXoeR+Bao/5VgGPKt8hLzlYfU4lnjIBaOERWIeJ81veJADG2PWL6KpY7ZaxGp4jtM/HrdqoSnsvSE42gvKoScj7vN+8mdFpHqZHckBEri5D8+Baay6sWp4H8vMYE5WHYK0VbXxOcJj4fyiTX3g8V0DUPBTiM9KGP8jK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708905828; c=relaxed/simple;
-	bh=fnEvOrO1k5JWNVipLI8U/c/k/XQR9Ok+LP4dmL8s0Ac=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=nbUxp9IVcmlOXZGZL15f5pPOgtoKCIa21c48j2kamoLz3H5zVpHmtARhsaKW5hRMvGEhoG4TLJzom8142NgClLhtGrxS8+99ubSUTesofY86TR/+nf1FU6aeKA3oKypaVBmujnBiuckmR/nGWVfAeZvDqmECVwaTqTesp5ohtsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=QJOXE1g/; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1708906384; c=relaxed/simple;
+	bh=8G2GQFgqT5J6j9f2iJiXqAPWrET+M9EJYZquGHpRgbE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cnkAqFC+Ib18Bcp9aSqFmmIkqZsqcTJl+MEcnwybeszGKtgUeUh7JaHEkvVqC8wwVAh0eVpSM92Dz5+D4OKR3rYAS+WU6lFVkQ1/sRiJ1od6CxFlM0KYjt9+uj1krCabwybjLmaHnb5gcMffmNp8C/+M5cHZ5B1SoF2n04e6oqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=m36aK9SA; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708905824;
-	bh=1fAQ2/PKsEagwRfg9sC2E9Bl6mn8gmCy2OfiKeNgfi8=;
+	s=201702; t=1708906379;
+	bh=8FVLuN+HvufdQO1z5NwgyTOTi7uQpBZaAL6oAV1JjYw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=QJOXE1g/K4bhGQnk/NYbLOB5HAA1A1Sa36fbEb8MAIPguMk7o9O9xJAr+zrkN2Lc5
-	 gVebqt71q69rDd0LW54xNYPxeRCnt9dJvGIOYqUw9srlTMA/m+Jfl/CuBiyXczf4+j
-	 YZ5PU4F79vdW6xn8scntX4tX2Sb2egxjoQUa/oPAmVdtZ9XTjDX0p1iatClv+sGeCF
-	 uzbBQc8fWirQT+o0r0aW7dbpalCyOfsAD1v2qvbTQp5VO6wa59KodCyX+/OFiZ1RVn
-	 EnLwSMs+N5OaKkCUiWMDcnr74vD9sT3ZT/Jp0SUQQVikGbQ0JNRzpK8Fbj/3tuq1DR
-	 2UQU4wgO3b0AQ==
+	b=m36aK9SAT6KL5sG7YjZF83CrODkAG1y3SH0eU/IyJwbk7dSqiVGRjJeLf070Aml7K
+	 aBDNA1yaytRaXIWSUHZ6c4sb6RhU5yVO9lJYeYD7YAXVw5U8P3HwihqzAsjpHWMySr
+	 s1f40z3eIfHPbwuN3Skuuq+EH0lyQFY2Vm9X2MYukbx0LV7kArecu1zF8zeT9KjDUm
+	 waDGyedRP8Q7NIMWCHEUSrOPT4pd2xJwTW7+Tr8GC1DS+anqwwDDMbBi4vQbmQP3Qg
+	 4l7yI4TZra9mughbFcu7YhiTj2h87w/z/O2C6YTBuLrcwu1g8vCDqXbKAC0AyXeuc4
+	 YnQ5BHz/9pNUw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TjgnX1ZBYz4wc8;
-	Mon, 26 Feb 2024 11:03:44 +1100 (AEDT)
-Date: Mon, 26 Feb 2024 11:03:43 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tjh0C14TBz4wc8;
+	Mon, 26 Feb 2024 11:12:59 +1100 (AEDT)
+Date: Mon, 26 Feb 2024 11:12:57 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Steve French
- <smfrench@gmail.com>
-Cc: David Howells <dhowells@redhat.com>, Jeff Layton <jlayton@kernel.org>,
- CIFS <linux-cifs@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Steve French <stfrench@microsoft.com>
-Subject: linux-next: manual merge of the vfs-brauner tree with the cifs tree
-Message-ID: <20240226110343.28e340eb@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>, Kent Overstreet
+ <kent.overstreet@linux.dev>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vfs-brauner tree with the bcachefs
+ tree
+Message-ID: <20240226111257.2784c310@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qI5ugzFz2F5LCxVdGo=J9Ul";
+Content-Type: multipart/signed; boundary="Sig_/FvBqIVN51gPF3Kh4_DJXSW4";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/qI5ugzFz2F5LCxVdGo=J9Ul
+--Sig_/FvBqIVN51gPF3Kh4_DJXSW4
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -73,46 +72,65 @@ Hi all,
 
 Today's linux-next merge of the vfs-brauner tree got a conflict in:
 
-  fs/smb/client/file.c
+  fs/bcachefs/super-io.c
 
 between commit:
 
-  d7e87923939a ("cifs: Fix writeback data corruption")
+  2881c58d14b6 ("bcachefs: bch2_print_opts()")
 
-from the cifs tree and commit:
+from the bcachefs tree and commit:
 
-  a69ce85ec9af ("filelock: split common fields into struct file_lock_core")
+  9f2f767f5ef8 ("bcachefs: port block device access to file")
 
 from the vfs-brauner tree.
 
-Please do not do unrelated white space cleanups ...
-
-I fixed it up (I used the former version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/qI5ugzFz2F5LCxVdGo=J9Ul
+diff --cc fs/bcachefs/super-io.c
+index 38a5073202c5,bd64eb68e84a..000000000000
+--- a/fs/bcachefs/super-io.c
++++ b/fs/bcachefs/super-io.c
+@@@ -715,12 -715,11 +715,12 @@@ retry
+  			opt_set(*opts, nochanges, true);
+  	}
+ =20
+- 	if (IS_ERR(sb->bdev_handle)) {
+- 		ret =3D PTR_ERR(sb->bdev_handle);
++ 	if (IS_ERR(sb->s_bdev_file)) {
++ 		ret =3D PTR_ERR(sb->s_bdev_file);
+ +		prt_printf(&err, "error opening %s: %s", path, bch2_err_str(ret));
+  		goto err;
+  	}
+- 	sb->bdev =3D sb->bdev_handle->bdev;
++ 	sb->bdev =3D file_bdev(sb->s_bdev_file);
+ =20
+  	ret =3D bch2_sb_realloc(sb, 0);
+  	if (ret) {
+
+--Sig_/FvBqIVN51gPF3Kh4_DJXSW4
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXb1V8ACgkQAVBC80lX
-0GwUmwf/am9zWAuEqziEydqmjGDaawepn69ZqkkZRw+Xo6PLS25lKY8UbvL1ozZj
-bOrTe+Pxj49Tlh9DPmhnxQxGb4kUDANJp7WeP3Uts6zEPbiCkceqdDYbFkjzFMQ3
-CZPeRZZ2urX5WOsjCDhWch5yQDYCeVammx+YnEgTYu4ZqF1qw0zqAqpiGvM5+Tvn
-sm7He1Fw7phJwVDo2fJsXfDMRD7PHWYvec3A5Unv3O82qf+UEGcDIcYYS933VrPz
-iHyj0iMHgvXvz7L6QUBVzxZd2ewJVUtN/h3msws4dhuH+4AcyXo58KcnoC1ANRcw
-z2ovBoRbOj5zQQMOWcp+N4EcmF5Lyg==
-=eT63
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXb14kACgkQAVBC80lX
+0GxGLwf/VasNqJLG2gFU6NLzcOAQsarVv4NieTIW1V8HCCWR7M/s5ATTlVY0t0AZ
+cpwl2dGNSiNK5UzyzZm2LjTGxy2DTl1s3+wp7S0gwuzaSVQR0N3jgjCofeMHkvA7
+abLIOJjnnQB5Fb2hGe2fsjc6p5x1SLoaxn6WGYiQd6dzDAMRQsgTLLNrxlUv0ukd
+ewEKvtoGeYDOzpz+RLeSExewOmEHOm5Fh8/X8VvC1iBovvWThs7qhp63xkPG665c
+p6JGa515xm2w7/9JyGYyj6/1lHY8XTcmodzXOynnGxx4gQ6y6vtrQuNqHZI6GPoW
++7r1FNEldJpUztP9k7e9I0goparVOw==
+=0J84
 -----END PGP SIGNATURE-----
 
---Sig_/qI5ugzFz2F5LCxVdGo=J9Ul--
+--Sig_/FvBqIVN51gPF3Kh4_DJXSW4--
 

@@ -1,52 +1,52 @@
-Return-Path: <linux-next+bounces-1370-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1371-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27CBE868566
-	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 02:01:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8197A86857A
+	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 02:04:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2D561F22535
-	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 01:01:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35346287252
+	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 01:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B05B4689;
-	Tue, 27 Feb 2024 01:01:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 995D34A21;
+	Tue, 27 Feb 2024 01:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VVr8QJQl"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="W3B52p5r"
 X-Original-To: linux-next@vger.kernel.org
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1384431;
-	Tue, 27 Feb 2024 01:01:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A09E4A0A;
+	Tue, 27 Feb 2024 01:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708995701; cv=none; b=hWHunrvyf0KXnbhBdbqVW5LAmzX8fxjAmifmBE2TirHO/GGzeDBwO++ktcoU/LyTCe6R9c86nFpTyieIJuzYjIVdGRJJW5GYlMeTWL/Y46focaHhKAEPFArGcCVkHsBZ8ajB45dVEVL758hjO2cAjfkwWzfizEtaa6eMwbpP73I=
+	t=1708995846; cv=none; b=L4TM3dT+5YsWQfZrGzEsSpVv8xqvqU4DXkxduaRfauYTBIvLNkpCEVIVkSvOezM85RhlFhjHkt925fKgllYFn/P5ezJpI0tEFrDTLm2IdVZqzJXzGjCOEGPpwALHyIQs4omW8OFN/CPhhz1PYIJjFKNR8AY/hUb3Rq32BSuWIvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708995701; c=relaxed/simple;
-	bh=chz2G2oYg/GX+LoMzJsjN1GkgXA/I1MuwZnEeKWl34M=;
+	s=arc-20240116; t=1708995846; c=relaxed/simple;
+	bh=4BTA21RCMV1i4P9pEyAxk3Awr2viSqjmI/Pdmb6nk6g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pMB2akXdlOfIfbDAJtG0YpOsIUSOnVotMeGvDXv7y+Py4sz4zvibQEm1PJ41467tahNfevtRXbOMUKp9w3ksmI8eGGwQLCfnHfYLDQ8NINA4TEC9MK5rxJL6i8UQ2k8hlq3tmLreVnQJQBlriafXC46E5JGnnN70+k3i+iUVfOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VVr8QJQl; arc=none smtp.client-ip=198.137.202.133
+	 In-Reply-To:Content-Type; b=cvM5y2Lpwq/Vq3Mc4U5MYeZAaNKM4XMHd1fxZ3oysS39yxC7kOSjK4QZkwQ50hUgG5LNmo3JRbqv8Tv9uBVsvSBCz6WeVkxm0DlQNTe1zzwnyg3Cxl2zMNImZhrimGvtc/tvHikJJJcAxBi1H5BzlR79XBfdSR1GTa6i0r1txUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=W3B52p5r; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
 	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
 	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=aLQRtORwn4Z81DREHqNz24hlSef2b4j4QvU3yCEIhKY=; b=VVr8QJQlihNLmjOT/2km2vBGWa
-	R3JnIR4ZWoGdicDd5fkRXfUOmmxc1eO6sCOprGxy7tI5AbwR4AkAvzR1lRTc5Jb1j+5DnxMdDMF3E
-	e+ii78DqCuy2e2vBI+M855cU8j/tg4YzwofgnL89c4YfnzS3Jwy6ehBsMyRHjOBO3SYXZPrz12HnI
-	C2vo9aac8yojLOm7vjg5EOF8XXs4nDzp323afGeRuKkkwGW+ExA0jaZgbbxVrk963I8lW1qyD72hK
-	8EsvRpRxepJ+F/SWbwKlb1tpL3ky35AmGEWWvJkbIJybTIL9c953EWE71N/P01zRPZR99wd4EUAdu
-	A6A/F9Pw==;
+	bh=RVftSLZVJrorIFus3RabCSPKATUQtwl5EIiqBrEipvw=; b=W3B52p5rkWx27A4Lch5cd/W3XE
+	CQzIIB0ZeiYi3nNcKYxtf7lSJz75VbIih+2o2567cQH38ClJ82qNVUhPaiqInGBX3FSogPuWcHDoz
+	yTCc70jLDRXyxHPghUARld7Eampuhrruh5ZlEsZkO9KJ+DDYYXHsND0hN6vl992YJdvzOS+NZhcQr
+	e2HFkWFyZGf2hgGB+MTcBy9K14+qB0zxLQKn34kmdnSedR0jXmjTT66z+9B1In8Ky0pCorJxYDy2C
+	McNS5v/m+hqQigS5j2uQNlyCdr30L16vVbAJwbEIkpzTnaHGctBOi4qFdcXSfiR7pjJOt9vkE8aHY
+	Bnxcn6qw==;
 Received: from [50.53.50.0] (helo=[192.168.254.15])
 	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1relqg-00000003CFy-1MIV;
-	Tue, 27 Feb 2024 01:01:34 +0000
-Message-ID: <81c5b68d-90ca-4599-9cc8-a1d737750aaa@infradead.org>
-Date: Mon, 26 Feb 2024 17:01:33 -0800
+	id 1relt6-00000003CmL-1pZM;
+	Tue, 27 Feb 2024 01:04:04 +0000
+Message-ID: <ca59236d-4f5c-4605-b443-8f62d71da643@infradead.org>
+Date: Mon, 26 Feb 2024 17:04:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -54,13 +54,13 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Feb 26 (fs/fuse/virtio_fs.c)
+Subject: Re: linux-next: Tree for Feb 26 (drivers/gpu/drm/xe)
 Content-Language: en-US
 To: Stephen Rothwell <sfr@canb.auug.org.au>,
  Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
- Stefan Hajnoczi <stefanha@redhat.com>, Miklos Szeredi <miklos@szeredi.hu>
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org
 References: <20240226175509.37fa57da@canb.auug.org.au>
 From: Randy Dunlap <rdunlap@infradead.org>
 In-Reply-To: <20240226175509.37fa57da@canb.auug.org.au>
@@ -75,15 +75,13 @@ On 2/25/24 22:55, Stephen Rothwell wrote:
 > Changes since 20240223:
 > 
 
-on 20 randconfig builds (arm64, loongarch, riscv32, riscv64, i386, and x86_64):
+on powerpc32 or i386:
 
-WARNING: modpost: fs/fuse/virtiofs: section mismatch in reference: virtio_fs_init+0xf9 (section: .init.text) -> virtio_fs_sysfs_exit (section: .exit.text)
-
-For
-static void __exit virtio_fs_sysfs_exit(void)
-
-probably just s/__exit// since it is called from both
-__init and __ext code.
+../drivers/gpu/drm/xe/xe_ggtt.c: In function 'xe_ggtt_set_pte':
+../drivers/gpu/drm/xe/xe_ggtt.c:78:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+   78 |         writeq(pte, &ggtt->gsm[addr >> XE_PTE_SHIFT]);
+      |         ^~~~~~
+      |         writel
 
 
 -- 

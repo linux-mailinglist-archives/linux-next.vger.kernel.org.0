@@ -1,52 +1,52 @@
-Return-Path: <linux-next+bounces-1371-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1372-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8197A86857A
-	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 02:04:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8249868590
+	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 02:10:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35346287252
-	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 01:04:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EACD1F22C45
+	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 01:10:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 995D34A21;
-	Tue, 27 Feb 2024 01:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF9D25695;
+	Tue, 27 Feb 2024 01:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="W3B52p5r"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="FgCAthic"
 X-Original-To: linux-next@vger.kernel.org
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A09E4A0A;
-	Tue, 27 Feb 2024 01:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF5F5667;
+	Tue, 27 Feb 2024 01:10:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708995846; cv=none; b=L4TM3dT+5YsWQfZrGzEsSpVv8xqvqU4DXkxduaRfauYTBIvLNkpCEVIVkSvOezM85RhlFhjHkt925fKgllYFn/P5ezJpI0tEFrDTLm2IdVZqzJXzGjCOEGPpwALHyIQs4omW8OFN/CPhhz1PYIJjFKNR8AY/hUb3Rq32BSuWIvI=
+	t=1708996201; cv=none; b=EyqAWqVxcpa9rW2lmOpbtcriRQipJMw/72qOBl5xPWoLMcsFBFkGlU6p43E8LlR8/kiHsQNnUJHExQm+Ipa1UEtM1kaObOzi1r55jSWfy+CFHWqAOrCllgwVduzMmFCoUR51f3D6GsPyaibcEswsNwSIy2YevX59SBTLf54OL8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708995846; c=relaxed/simple;
-	bh=4BTA21RCMV1i4P9pEyAxk3Awr2viSqjmI/Pdmb6nk6g=;
+	s=arc-20240116; t=1708996201; c=relaxed/simple;
+	bh=u3pF9IuPzcNrvYdAT+1cDQgD9k9JyQ4Z1midFjBg6YQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cvM5y2Lpwq/Vq3Mc4U5MYeZAaNKM4XMHd1fxZ3oysS39yxC7kOSjK4QZkwQ50hUgG5LNmo3JRbqv8Tv9uBVsvSBCz6WeVkxm0DlQNTe1zzwnyg3Cxl2zMNImZhrimGvtc/tvHikJJJcAxBi1H5BzlR79XBfdSR1GTa6i0r1txUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=W3B52p5r; arc=none smtp.client-ip=198.137.202.133
+	 In-Reply-To:Content-Type; b=hkTnduhKZwG1yyI3JAd5LQ65Y+9gDBT/u/VmKlAp80iYdljaUIRVbeA38KteJ9OEKpSDXAqzJLsIN3DVvXF291YKEQ/2kUiJtUZTNRs/jr6J/Z7Vu8nDS/LqRsTK/UnaRw8lO1sDO/LS9keBMebW021HbCLF6QqS/FDft0ceuTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=FgCAthic; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
 	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
 	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=RVftSLZVJrorIFus3RabCSPKATUQtwl5EIiqBrEipvw=; b=W3B52p5rkWx27A4Lch5cd/W3XE
-	CQzIIB0ZeiYi3nNcKYxtf7lSJz75VbIih+2o2567cQH38ClJ82qNVUhPaiqInGBX3FSogPuWcHDoz
-	yTCc70jLDRXyxHPghUARld7Eampuhrruh5ZlEsZkO9KJ+DDYYXHsND0hN6vl992YJdvzOS+NZhcQr
-	e2HFkWFyZGf2hgGB+MTcBy9K14+qB0zxLQKn34kmdnSedR0jXmjTT66z+9B1In8Ky0pCorJxYDy2C
-	McNS5v/m+hqQigS5j2uQNlyCdr30L16vVbAJwbEIkpzTnaHGctBOi4qFdcXSfiR7pjJOt9vkE8aHY
-	Bnxcn6qw==;
+	bh=gwiXT85stAdWTOUd6txuILwVivp2eGJBqmUEFcS5o58=; b=FgCAthicwmPNlQ+DMbEELBmK/I
+	qUAzdjuLcWA2Bys4HwHthcbpwBzlNPwaS/tovAfOoew9JrEZFYjESxt+zGf8GkFapHxP9/SO/esq9
+	bHcF/VwthH48hoKJXxy0LWHTdE9TbOnF3bJGbQkXPrKGnVbI83gQmS7rAZ+UCvS+MTjuKDVqPWq7L
+	6H023rd4HQlenEZ+ZGEIPQvCzTnNks64kjPFKDR1Fk3MSf2LLPo/wY2dO1IMuuj+Ffy/jw98te5qy
+	uxfagMnu+cQOjpgWnSf3CSb/QQb3G83xIV4aotv3un7jMKOheFwwVwCguDPGSOq/EvcNaNR/DoSr6
+	eX/RJ77w==;
 Received: from [50.53.50.0] (helo=[192.168.254.15])
 	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1relt6-00000003CmL-1pZM;
-	Tue, 27 Feb 2024 01:04:04 +0000
-Message-ID: <ca59236d-4f5c-4605-b443-8f62d71da643@infradead.org>
-Date: Mon, 26 Feb 2024 17:04:04 -0800
+	id 1relyf-00000003Dq6-1hGA;
+	Tue, 27 Feb 2024 01:09:59 +0000
+Message-ID: <7624c14e-0f5c-435c-9f6e-3d59b4e27aa2@infradead.org>
+Date: Mon, 26 Feb 2024 17:09:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -54,13 +54,12 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Feb 26 (drivers/gpu/drm/xe)
+Subject: Re: linux-next: Tree for Feb 26 (drivers/mtd/ubi/nvmem.c)
 Content-Language: en-US
 To: Stephen Rothwell <sfr@canb.auug.org.au>,
  Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org
+ linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, linux-mtd@lists.infradead.org
 References: <20240226175509.37fa57da@canb.auug.org.au>
 From: Randy Dunlap <rdunlap@infradead.org>
 In-Reply-To: <20240226175509.37fa57da@canb.auug.org.au>
@@ -75,13 +74,59 @@ On 2/25/24 22:55, Stephen Rothwell wrote:
 > Changes since 20240223:
 > 
 
-on powerpc32 or i386:
+on powerpc32:
 
-../drivers/gpu/drm/xe/xe_ggtt.c: In function 'xe_ggtt_set_pte':
-../drivers/gpu/drm/xe/xe_ggtt.c:78:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
-   78 |         writeq(pte, &ggtt->gsm[addr >> XE_PTE_SHIFT]);
-      |         ^~~~~~
-      |         writel
+In file included from ./arch/powerpc/include/generated/asm/div64.h:1,
+                 from ../include/linux/math.h:6,
+                 from ../include/linux/kernel.h:27,
+                 from ../arch/powerpc/include/asm/page.h:11,
+                 from ../arch/powerpc/include/asm/thread_info.h:13,
+                 from ../include/linux/thread_info.h:60,
+                 from ../arch/powerpc/include/asm/ptrace.h:342,
+                 from ../arch/powerpc/include/asm/hw_irq.h:12,
+                 from ../arch/powerpc/include/asm/irqflags.h:12,
+                 from ../include/linux/irqflags.h:18,
+                 from ../include/asm-generic/cmpxchg-local.h:6,
+                 from ../arch/powerpc/include/asm/cmpxchg.h:755,
+                 from ../arch/powerpc/include/asm/atomic.h:11,
+                 from ../include/linux/atomic.h:7,
+                 from ../include/linux/rcupdate.h:25,
+                 from ../include/linux/rbtree.h:24,
+                 from ../drivers/mtd/ubi/ubi.h:14,
+                 from ../drivers/mtd/ubi/nvmem.c:7:
+../drivers/mtd/ubi/nvmem.c: In function 'ubi_nvmem_reg_read':
+../include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
+  222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+      |                                   ^~
+../drivers/mtd/ubi/nvmem.c:34:16: note: in expansion of macro 'do_div'
+   34 |         offs = do_div(lnum, unv->usable_leb_size);
+      |                ^~~~~~
+In file included from ../include/linux/build_bug.h:5,
+                 from ../include/linux/container_of.h:5,
+                 from ../include/linux/list.h:5,
+                 from ../drivers/mtd/ubi/ubi.h:13:
+../include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
+  234 |         } else if (likely(((n) >> 32) == 0)) {          \
+      |                                ^~
+../include/linux/compiler.h:76:45: note: in definition of macro 'likely'
+   76 | # define likely(x)      __builtin_expect(!!(x), 1)
+      |                                             ^
+../drivers/mtd/ubi/nvmem.c:34:16: note: in expansion of macro 'do_div'
+   34 |         offs = do_div(lnum, unv->usable_leb_size);
+      |                ^~~~~~
+../include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
+  238 |                 __rem = __div64_32(&(n), __base);       \
+      |                                    ^~~~
+      |                                    |
+      |                                    int *
+../drivers/mtd/ubi/nvmem.c:34:16: note: in expansion of macro 'do_div'
+   34 |         offs = do_div(lnum, unv->usable_leb_size);
+      |                ^~~~~~
+../include/asm-generic/div64.h:213:38: note: expected 'uint64_t *' {aka 'long long unsigned int *'} but argument is of type 'int *'
+  213 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
+      |                            ~~~~~~~~~~^~~~~~~~
+
+
 
 
 -- 

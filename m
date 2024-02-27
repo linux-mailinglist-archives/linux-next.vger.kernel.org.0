@@ -1,162 +1,91 @@
-Return-Path: <linux-next+bounces-1369-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1370-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5A48868498
-	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 00:28:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27CBE868566
+	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 02:01:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74F1F286F7B
-	for <lists+linux-next@lfdr.de>; Mon, 26 Feb 2024 23:28:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2D561F22535
+	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 01:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CE9713541E;
-	Mon, 26 Feb 2024 23:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B05B4689;
+	Tue, 27 Feb 2024 01:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MCwtZwGa"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VVr8QJQl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B5A13541B;
-	Mon, 26 Feb 2024 23:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1384431;
+	Tue, 27 Feb 2024 01:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708990114; cv=none; b=EtMAEFNYkGfe+0Pn3jy6v0N2Z0MUNll96TlU2A8LWZynDuypozqfqp/VtbXg4n1rF287fKAE66eUfTBtVj7iK3Jn5efC+xvTYexhUqmGW6epQdZxox56YTStjLAPrYuMPwtscVSkg9RQqNHkkpMYq8cGGw1pzk6RFGtvOnqeCcU=
+	t=1708995701; cv=none; b=hWHunrvyf0KXnbhBdbqVW5LAmzX8fxjAmifmBE2TirHO/GGzeDBwO++ktcoU/LyTCe6R9c86nFpTyieIJuzYjIVdGRJJW5GYlMeTWL/Y46focaHhKAEPFArGcCVkHsBZ8ajB45dVEVL758hjO2cAjfkwWzfizEtaa6eMwbpP73I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708990114; c=relaxed/simple;
-	bh=vpnQdb+6rc5A4iBkipWUZqFQkOPYet+kLGEWv6NTJ4U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=S3DO/VXeg4UGS0+HJzbvHcwErRgTVRHW4IV1/RjqAndrc4WKSgUWK00nOOrQ3ko5nTqvpWoqg3HKjnKwVb4gmjxgL3cTvYguob2PGaGopA0plg9IfniZeD9yrS/EaR/jYoYC4fXP/Sn5CdMK2oRim/S6EQ9MlNP1qIXYPotbjWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=MCwtZwGa; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1708990108;
-	bh=7/s82SZsxC7vPzBKKfBkGYTuP9xvJQUaq4CPgmdV56c=;
-	h=Date:From:To:Cc:Subject:From;
-	b=MCwtZwGaX48rjnIvqpbI546NJeYqWMA2DuG4VFwG7vtceyrx7N8O97G9b0gf6CQmz
-	 r6JMkAFBT32KjrOAs7DYkOZg3GCK3ABN9WEhSbq7lRCFeb/EoWC0sJB414J/2tRLqj
-	 8mVVi7sEOsjfTaGk/NPg9MV+VsUjp5lH8LKS+LqR/MI9Ug23URenlrtymskpJOHzOO
-	 gmR1cgcIGxXWhjuAAXBRt7ZSIhG8tzkIWr7V+Lza6PGIt26ZXQE9/N0k6gMakNIIiz
-	 5DXodFRRBloosIbnfWx7aprGeiVqh2j4boyU2et+fS1lYhOY5Y/55Ss/0BYOjvfjen
-	 jK4LIYHkGViOQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TkGyM6Tslz4wc1;
-	Tue, 27 Feb 2024 10:28:27 +1100 (AEDT)
-Date: Tue, 27 Feb 2024 10:28:27 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, "Darrick J. Wong"
- <djwong@kernel.org>, David Chinner <david@fromorbit.com>
-Cc: <linux-xfs@vger.kernel.org>, Chandan Babu R <chandanbabu@kernel.org>,
- Dave Chinner <dchinner@redhat.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs-brauner tree with the xfs tree
-Message-ID: <20240227102827.313113cd@canb.auug.org.au>
+	s=arc-20240116; t=1708995701; c=relaxed/simple;
+	bh=chz2G2oYg/GX+LoMzJsjN1GkgXA/I1MuwZnEeKWl34M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pMB2akXdlOfIfbDAJtG0YpOsIUSOnVotMeGvDXv7y+Py4sz4zvibQEm1PJ41467tahNfevtRXbOMUKp9w3ksmI8eGGwQLCfnHfYLDQ8NINA4TEC9MK5rxJL6i8UQ2k8hlq3tmLreVnQJQBlriafXC46E5JGnnN70+k3i+iUVfOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VVr8QJQl; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=aLQRtORwn4Z81DREHqNz24hlSef2b4j4QvU3yCEIhKY=; b=VVr8QJQlihNLmjOT/2km2vBGWa
+	R3JnIR4ZWoGdicDd5fkRXfUOmmxc1eO6sCOprGxy7tI5AbwR4AkAvzR1lRTc5Jb1j+5DnxMdDMF3E
+	e+ii78DqCuy2e2vBI+M855cU8j/tg4YzwofgnL89c4YfnzS3Jwy6ehBsMyRHjOBO3SYXZPrz12HnI
+	C2vo9aac8yojLOm7vjg5EOF8XXs4nDzp323afGeRuKkkwGW+ExA0jaZgbbxVrk963I8lW1qyD72hK
+	8EsvRpRxepJ+F/SWbwKlb1tpL3ky35AmGEWWvJkbIJybTIL9c953EWE71N/P01zRPZR99wd4EUAdu
+	A6A/F9Pw==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1relqg-00000003CFy-1MIV;
+	Tue, 27 Feb 2024 01:01:34 +0000
+Message-ID: <81c5b68d-90ca-4599-9cc8-a1d737750aaa@infradead.org>
+Date: Mon, 26 Feb 2024 17:01:33 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zMghNRgdfH=5PkYXoN51Xav";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Feb 26 (fs/fuse/virtio_fs.c)
+Content-Language: en-US
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+ Stefan Hajnoczi <stefanha@redhat.com>, Miklos Szeredi <miklos@szeredi.hu>
+References: <20240226175509.37fa57da@canb.auug.org.au>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240226175509.37fa57da@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/zMghNRgdfH=5PkYXoN51Xav
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
+On 2/25/24 22:55, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20240223:
+> 
 
-  fs/xfs/xfs_buf.c
+on 20 randconfig builds (arm64, loongarch, riscv32, riscv64, i386, and x86_64):
 
-between commits:
+WARNING: modpost: fs/fuse/virtiofs: section mismatch in reference: virtio_fs_init+0xf9 (section: .init.text) -> virtio_fs_sysfs_exit (section: .exit.text)
 
-  d4c75a1b40cd ("xfs: convert remaining kmem_free() to kfree()")
-  5076a6040ca1 ("xfs: support in-memory buffer cache targets")
+For
+static void __exit virtio_fs_sysfs_exit(void)
 
-from the xfs tree and commit:
+probably just s/__exit// since it is called from both
+__init and __ext code.
 
-  1b9e2d90141c ("xfs: port block device access to files")
 
-from the vfs-brauner tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/xfs/xfs_buf.c
-index 7fc26e64368d,01b41fabbe3c..000000000000
---- a/fs/xfs/xfs_buf.c
-+++ b/fs/xfs/xfs_buf.c
-@@@ -2030,8 -1951,9 +2030,8 @@@ xfs_free_buftarg
-  	fs_put_dax(btp->bt_daxdev, btp->bt_mount);
-  	/* the main block device is closed by kill_block_super */
-  	if (btp->bt_bdev !=3D btp->bt_mount->m_super->s_bdev)
-- 		bdev_release(btp->bt_bdev_handle);
-+ 		fput(btp->bt_bdev_file);
- -
- -	kmem_free(btp);
- +	kfree(btp);
-  }
- =20
-  int
-@@@ -2095,20 -1994,20 +2095,20 @@@ out_destroy_lru
-  struct xfs_buftarg *
-  xfs_alloc_buftarg(
-  	struct xfs_mount	*mp,
-- 	struct bdev_handle	*bdev_handle)
-+ 	struct file		*bdev_file)
-  {
- -	xfs_buftarg_t		*btp;
- +	struct xfs_buftarg	*btp;
-  	const struct dax_holder_operations *ops =3D NULL;
- =20
-  #if defined(CONFIG_FS_DAX) && defined(CONFIG_MEMORY_FAILURE)
-  	ops =3D &xfs_dax_holder_operations;
-  #endif
- -	btp =3D kmem_zalloc(sizeof(*btp), KM_NOFS);
- +	btp =3D kzalloc(sizeof(*btp), GFP_KERNEL | __GFP_NOFAIL);
- =20
-  	btp->bt_mount =3D mp;
-- 	btp->bt_bdev_handle =3D bdev_handle;
-- 	btp->bt_dev =3D bdev_handle->bdev->bd_dev;
-- 	btp->bt_bdev =3D bdev_handle->bdev;
-+ 	btp->bt_bdev_file =3D bdev_file;
-+ 	btp->bt_bdev =3D file_bdev(bdev_file);
-+ 	btp->bt_dev =3D btp->bt_bdev->bd_dev;
-  	btp->bt_daxdev =3D fs_dax_get_by_bdev(btp->bt_bdev, &btp->bt_dax_part_of=
-f,
-  					    mp, ops);
- =20
-
---Sig_/zMghNRgdfH=5PkYXoN51Xav
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXdHpsACgkQAVBC80lX
-0GxrnggAkx3gftIJ07lW96LpqENWFh7RzH4cT5vUQTE2bBbRGNBXCGc/aVwwXrjm
-Y/iZcJE8C1Nj/iw7aFVqHrAia0ua5aI/KmjLvGPIMzhS7AAorZEqpfNj9Hpv6ZHh
-hfla0emge+q2g1vH91aFmr24BAEdpjsjNspmbjsZ+sg2pEljcuF0L61Miqpu8AUd
-YA0apU4pthA+3M9f5EaX6XRmhLxLeYZ73if4a586rldUr/TmF6hgugNY/PbFvVHx
-g3Js19WVLoiHWOLUxM2HB9JjihIasPmka17Dsrn3GVWtv6tU2EMEqvg1OpCPaw+S
-Y9ugshaujilSFahd0skL67Y6A4Rsjg==
-=oNoD
------END PGP SIGNATURE-----
-
---Sig_/zMghNRgdfH=5PkYXoN51Xav--
+-- 
+#Randy
 

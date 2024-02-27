@@ -1,111 +1,111 @@
-Return-Path: <linux-next+bounces-1386-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1387-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCBAC86A15C
-	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 22:11:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 978DB86A288
+	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 23:32:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48BF6B2F095
-	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 21:03:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E0E61F26DF1
+	for <lists+linux-next@lfdr.de>; Tue, 27 Feb 2024 22:32:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F3214E2C8;
-	Tue, 27 Feb 2024 21:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2D6E5576D;
+	Tue, 27 Feb 2024 22:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="In8IxSv1"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DpKC7Wy7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB4914E2C6;
-	Tue, 27 Feb 2024 21:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC7C1DFEB;
+	Tue, 27 Feb 2024 22:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709067804; cv=none; b=jDdRiiBYXj3wyF0FMZr2RCIbAeZ7NOZL9+JTbxSHpvejzaxAJak1GcVqrc0lPFh1Vt4ILBuzHW/lhojZk9xSpnzdEqoKV8gbvJRXAzTU4aSFoLJt1oGfoY6KxX5uh9yzWllNfc9sTd5rD/AQ/zkvveofYsPZz2vAbzlFbOt4isM=
+	t=1709073067; cv=none; b=BZX78yuuWPb3lgcbumCdRGZM1n//cDhNaKGvW/1uMGYy+s6J93AGtECwhOV1znzciq3LV4KPlEm7PhmF2OHbvbJ5dzNB/BHrRdJQKn5eqsqKmJtGbd0RwWBAtccYGlz5ijqAB2ThAwe+EDmbV2l5Z8cDz4wuQJXU8MnPreKqhYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709067804; c=relaxed/simple;
-	bh=OPlJx50tQm0vtIktxMp7JM6rjPx7VNp/6/GPYllOp/0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=T/FcNW0bx80jaerXJ3VOIBs+SOo8WpmgVDoIAB2gUhX7ODhGzSVfHg3je94bfJgnB5X3hk6JNenyJrTIQOe/7Tx5jOx3rRWAazmkfC8pDM7MmIP7Els2FavyVHbxsV1Y89GWVODFtbhR7VoolUKfsD1OkAkXi3CIeLvIiKEORvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=In8IxSv1; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1709067797;
-	bh=2mTESaB92galiU5WXgr0fjzlCtiOxdAmEFvyUlXRpwk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=In8IxSv1mx6W4LC2kvhYDC1tZBqP2s6B5RxCPqtDOqMUT/y0LklaYqP/k67SiLHRj
-	 O178+7KkLqOqgeP/edOjITiKg2kGIG7umAXV+6t7XR0jDmaqhqrNOSgIPZSTJlk4TO
-	 4WiLN9weaRrg8YuMy4LBQSf0jcW4mIk6XJ1Zwn7rValE0JVOTWEsNaqfTV5iqT7r+I
-	 gup3Jf4twA4RixTO/l9BTx/zCjt4kSKUuTn5Cx5OVMOWhRw/b0c2yDOWdnGkhBWpGv
-	 NczQ/JQoq+YwCXORkzh8oXokokyyeqARMCIl9LuZN8XVn6M8Bj9Fp+lvzXv3BC0G2d
-	 NvZobaiXv6RaQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TkqhN64FPz4wb2;
-	Wed, 28 Feb 2024 08:03:16 +1100 (AEDT)
-Date: Wed, 28 Feb 2024 08:03:15 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Anup Patel <apatel@ventanamicro.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the tip tree
-Message-ID: <20240228080315.2cc34760@canb.auug.org.au>
+	s=arc-20240116; t=1709073067; c=relaxed/simple;
+	bh=7VheXxNDxS8MFKLz3E8RjAWOSAjmZcXMl7dt1NYjLro=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rneYnQtKkxFQTDoByARbeU/sm/NDoZC0/uxoka5zZew0YL87kg6pDHs6JTALIO3+5qF2EChmIDqdg6ThN8WOiUTolnojRxfIrML1Fl8prYbWJDt2FJVqEfhY38rFDgOcnSxLzpxSJkyjl2yBaCoi/aLzPuQbXNtXlFKNuSNSKNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DpKC7Wy7; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=kwg2IJB+Y/BmUDu9vsrqObv3GKLJgEX/yI6sN3Hoj6Y=; b=DpKC7Wy71ZsYHg1/AW+9BNKzYc
+	Mj2yjaXjKl5RUYwHMupqYjtdOrOQOpFpAghXMWdZcROviVILOt829QiW0wp6dJuYDEcynOFusMjE+
+	pkXmlRd1vss8/WLrlOR5PfqcNmOWMVK1tA1P90m1vjlC2SiACbxd7f4rl/HWCDz7lWZpm0zjtYmcp
+	STGILdgqPaqON21Bj3XZdMaNA5mD4ZaMX44taVYzlbQ9pj2xn+MiqUEMlkZm5ZnqBSXEJ3LCk5JQP
+	TWYuZSwWkzad8vzYN8m1TvKuuDIsWEpHQYKrjUNiX3JWbIZ/Z7oR/uWwBdYIodKH8Dgqzl8gxOnNB
+	xrfwlFdQ==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rf5ya-0000000750d-0EAs;
+	Tue, 27 Feb 2024 22:31:04 +0000
+Message-ID: <aa41ac4e-c29d-4025-b1c3-8cdc9830b5f7@infradead.org>
+Date: Tue, 27 Feb 2024 14:31:03 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Gt9sRXK8qVpqdyG_z0INwlE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] virtiofs: drop __exit from virtio_fs_sysfs_exit()
+Content-Language: en-US
+To: Stefan Hajnoczi <stefanha@redhat.com>, Miklos Szeredi <miklos@szeredi.hu>
+Cc: Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ kernel test robot <lkp@intel.com>
+References: <20240227155756.420944-1-stefanha@redhat.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240227155756.420944-1-stefanha@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/Gt9sRXK8qVpqdyG_z0INwlE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-In commit
+On 2/27/24 07:57, Stefan Hajnoczi wrote:
+> virtio_fs_sysfs_exit() is called by:
+> - static int __init virtio_fs_init(void)
+> - static void __exit virtio_fs_exit(void)
+> 
+> Remove __exit from virtio_fs_sysfs_exit() since virtio_fs_init() is not
+> an __exit function.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202402270649.GYjNX0yw-lkp@intel.com/
+> Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
 
-  1abea7339b40 ("irqchip/riscv-intc: Fix low-level interrupt handler setup =
-for AIA")
 
-Fixes tag
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-  Fixes: c1be2ae5987a ("irqchip/riscv-intc: Add support for RISC-V AIA")
+Thanks.
 
-has these problem(s):
+> ---
+>  fs/fuse/virtio_fs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
+> index 62a44603740c..948b49c2460d 100644
+> --- a/fs/fuse/virtio_fs.c
+> +++ b/fs/fuse/virtio_fs.c
+> @@ -1588,7 +1588,7 @@ static int __init virtio_fs_sysfs_init(void)
+>  	return 0;
+>  }
+>  
+> -static void __exit virtio_fs_sysfs_exit(void)
+> +static void virtio_fs_sysfs_exit(void)
+>  {
+>  	kset_unregister(virtio_fs_kset);
+>  	virtio_fs_kset = NULL;
 
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 3c46fc5b5507 ("irqchip/riscv-intc: Add support for RISC-V AIA")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Gt9sRXK8qVpqdyG_z0INwlE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXeThMACgkQAVBC80lX
-0Gy6Mgf+IBq057BEYRFrEsdv9G9crYwSheTHoSSkZ8VKIL/5F48HQ8v5O7AkolJH
-Vfk+dCcDJNFqGiMKvtOf3k72t/XV9XWt3Pu+nv3yiG6zvKdkgJhzvEgQE3tp4BW8
-buAZ+8qJN62o+w560FpOaWSnUURVuVkrEOrkzuQWvt9X9QcReGITvw6BPKpMilek
-cMSnZh/N7LQ/9JFoNUMIUvAIhiKDxEJ17+vOD8QeUe16wRVbhR53iB7iiCmbfQFT
-3ksFWLbXOJlvuORSHS9GIDx1tRpXajo2dqUU2l7NrRv2w2gMokDFDG3VB01BVX+8
-jxq/zSMFaXjXYrtNivLf974p7Wdsfw==
-=nnEW
------END PGP SIGNATURE-----
-
---Sig_/Gt9sRXK8qVpqdyG_z0INwlE--
+-- 
+#Randy
 

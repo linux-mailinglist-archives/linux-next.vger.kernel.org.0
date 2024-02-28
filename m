@@ -1,60 +1,62 @@
-Return-Path: <linux-next+bounces-1391-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1392-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CEB386A4E2
-	for <lists+linux-next@lfdr.de>; Wed, 28 Feb 2024 02:20:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6FA986A4FD
+	for <lists+linux-next@lfdr.de>; Wed, 28 Feb 2024 02:27:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37B64286351
-	for <lists+linux-next@lfdr.de>; Wed, 28 Feb 2024 01:20:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AFB41F27A5A
+	for <lists+linux-next@lfdr.de>; Wed, 28 Feb 2024 01:27:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191A84C90;
-	Wed, 28 Feb 2024 01:20:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E0F91CD1C;
+	Wed, 28 Feb 2024 01:26:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s38fWbvg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CAlVEy1e"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5CFF4C81;
-	Wed, 28 Feb 2024 01:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83B81CD0A;
+	Wed, 28 Feb 2024 01:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709083235; cv=none; b=BK4S08+md1JQoRShH7uXDU3WmqJ6pMoFz9lsrLdJ5NeTeCJUl1yi3YxGb1bRXQNFGxpruAE7FXZtOo/55KFlWB/hrtl58PDG/ZBY6j5zhKWHd0w3KiCkydCJ31N2z7gH0SXpmtp436amOhVICZKvGJ92BI/o1+IpuIbEr2+enQU=
+	t=1709083617; cv=none; b=LHEEqlWiHG0803xHml+UZHzYTWpeDDKOb3YRAR9ncSv87MuldVO53i0BIpIaUCrCvMfU5wibUnfoVnrO8VnOLeUtzlMH1ccB8m0gOL2Np4BdXWf1rGsGH+G6oyAJLjBbWSMXXqfr1gXPia6bPDV8UwRFOi9cy5oNYisKtq0vtps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709083235; c=relaxed/simple;
-	bh=p42blfqp+LF2vrYwaNNmhZcdp50VSJg4XnVgPU0nQSc=;
+	s=arc-20240116; t=1709083617; c=relaxed/simple;
+	bh=jfvtXPgUX/JEsGKhrw+3n0AvLdJo0qAYlqV0uQNpfa8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ctixS8QzcnqpgR55PAxPuvZrBFfcjYYV602xWlfIgs3RPY/K0YeXaqUYizPcJBguVsgdrx8TFP/6TOVmTiqUSD8/DS0LV9gCzHGVDN7JwhneSJ+dK4XMlv5C2dKVbInsCMmAGLEIyLTzfroNJBCo6O60c3ovG6dFIlAHdyFi6Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s38fWbvg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A428C43399;
-	Wed, 28 Feb 2024 01:20:34 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lrx9ARresnq/h6Ty3F6EklXcmQ73gbGGLdrDPWrCkW/x8JBNrUWIjOoaQx0cjomq4+bWKS91WOCdCXYuR+I7S0KneFmOduykU9u4p+gK+4SRyh8Z2aZaRcRybA3JraYhhPJDsaHPzLhxXsy4aXfvLIp0JcFb66W3GGS6VEnWYL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CAlVEy1e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3957BC433F1;
+	Wed, 28 Feb 2024 01:26:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709083234;
-	bh=p42blfqp+LF2vrYwaNNmhZcdp50VSJg4XnVgPU0nQSc=;
+	s=k20201202; t=1709083617;
+	bh=jfvtXPgUX/JEsGKhrw+3n0AvLdJo0qAYlqV0uQNpfa8=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=s38fWbvgq4T1e18j9P4oue1PBACWecYEF8j7BUFY7QJG/SOsP7WnRFbcew5r1U9Ir
-	 Sips2ZAWPWiiC93/8EDzhJVhBadYmb3bzS8L6ijqPLvBY5HRLfyQlR0WwCCb23AWIV
-	 Lq9812vQFsrcumy0I57tHL5Ommk7150qUJMUy+pQfoF1sUtjXvuYgs8YRccRSj8ZoX
-	 q5WQBAZ9JJACQc1pjVZ/nciC718zs3hLqpM9SAK9U3W6IjJLj7kCypsLkP274n5ZvJ
-	 q/G5JEllCNXlNgAiyTwYVcu/r5LgeL2UwRTLykom8RSj/7Gh3BLTHEoFSd6H5LcB3i
-	 v+LBTRUcGa/mQ==
+	b=CAlVEy1eVtZgVS8tjEsadAFmuoMrx+IVdzp4i2c9TJ1mne9p1SI9LG55q4Op6he25
+	 0HKro4bIRTW1oLORWcHHL7pJcHSgiItqyzSZV46rTyjcUf5Rp8X57BOQe5Qc+0k9eD
+	 MK8Q4m3WINZbq46nc5PFmmjsMkunlK12W55oQG9e49midOSgCvYDys9LsiuXsiSiS1
+	 UgWmkGZXIa8KintALXSbtH7f0rJq1HG7RpdT2sxIWMKTqo00hHSNepMoPbVwuyRVP3
+	 zHyqj6fVPfw4IHmYfQOJ1lZAnjVjR/UDllla223TmUL7FxxcwFgLC8xVuZZYwDqeb2
+	 BpFh8grTo9Veg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 259D5CE098C; Tue, 27 Feb 2024 17:20:34 -0800 (PST)
-Date: Tue, 27 Feb 2024 17:20:34 -0800
+	id C5DF0CE098C; Tue, 27 Feb 2024 17:26:56 -0800 (PST)
+Date: Tue, 27 Feb 2024 17:26:56 -0800
 From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Ingo Molnar <mingo@redhat.com>,
 	"H. Peter Anvin" <hpa@zytor.com>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	x86@kernel.org
 Subject: Re: linux-next: duplicate patch in the rcu tree
-Message-ID: <23c3ec9c-2b8d-4739-a7b4-f41c29f7d8d1@paulmck-laptop>
+Message-ID: <f95f6787-ed54-4b4d-afbc-30ed25bbf31f@paulmck-laptop>
 Reply-To: paulmck@kernel.org
 References: <20240228120610.0fdd20af@canb.auug.org.au>
+ <87jzmp8k1a.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -63,27 +65,30 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240228120610.0fdd20af@canb.auug.org.au>
+In-Reply-To: <87jzmp8k1a.ffs@tglx>
 
-On Wed, Feb 28, 2024 at 12:06:10PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Wed, Feb 28, 2024 at 02:17:05AM +0100, Thomas Gleixner wrote:
+> On Wed, Feb 28 2024 at 12:06, Stephen Rothwell wrote:
+> > The following commit is also in the tip tree as a different commit
+> > (but the same patch):
+> >
+> >   020eee167cca ("x86/nmi: Fix "in NMI handler" check")
+> >
+> > This is commit
+> >
+> >   d54e56f31a34 ("x86/nmi: Fix the inverse "in NMI handler" check")
+> >
+> > in the tip tree.
 > 
-> The following commit is also in the tip tree as a different commit
-> (but the same patch):
+> And why the heck is the RCU tree carrying x86 specific stuff which has
+> absolutely nothing to do with RCU?
 > 
->   020eee167cca ("x86/nmi: Fix "in NMI handler" check")
-> 
-> This is commit
-> 
->   d54e56f31a34 ("x86/nmi: Fix the inverse "in NMI handler" check")
-> 
-> in the tip tree.
+> Just because, right?
 
-Earlier today, I pulled it out of the range of -rcu patches that are
-sent to -next.  If overnight testing goes well, you will not see the
-copy from -rcu starting tomorrow.
+So I could test it.
 
-Thank you for calling it out, though!
+In the future, I will keep such commits out of the portion of -rcu that
+is sent to -next.  Apologies for slipping up this time.
 
 							Thanx, Paul
 

@@ -1,115 +1,102 @@
-Return-Path: <linux-next+bounces-1396-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1397-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E107F86A730
-	for <lists+linux-next@lfdr.de>; Wed, 28 Feb 2024 04:27:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3DB886A758
+	for <lists+linux-next@lfdr.de>; Wed, 28 Feb 2024 04:51:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10EEA1C23A39
-	for <lists+linux-next@lfdr.de>; Wed, 28 Feb 2024 03:27:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 297761F2369F
+	for <lists+linux-next@lfdr.de>; Wed, 28 Feb 2024 03:51:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED3B7208C0;
-	Wed, 28 Feb 2024 03:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C687920322;
+	Wed, 28 Feb 2024 03:51:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KxZPePBs"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VOV2co6s"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB14208B2
-	for <linux-next@vger.kernel.org>; Wed, 28 Feb 2024 03:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34991F94D;
+	Wed, 28 Feb 2024 03:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709090818; cv=none; b=bGkjewjRO9tiVafybSq/k9NW6Ku08XwO8LWet2BxqM38keN7KFgAA9ZH9yEV6DhqySjgxEyc7OA9txt11bD/FLbsRIadvK9IN8MLL0GYVE86L0qONQswQqLey6tH/rOJX2h76hlmammcuV/XWQmucELgnCC+r6wRZ6ZeGAGrVMc=
+	t=1709092304; cv=none; b=BixuWzVmE13Q0rqgjRjE4AhpL8kEhziK1MkeOkz1McDujw59wQGjlbECgP/Y/z5gj9eKF7OK/ayeNZZFmU8s6ZAhrFxpIF3SMA9xjwNV/diJqZ8r2V3tVtNIeLR5ey7ydXP0io2n5t6BBJ8b1ry4BgkHGfX+hZuAmIWW1dcQA8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709090818; c=relaxed/simple;
-	bh=9sgBLMSmPHbQ6S/7FR8Z40PMJ1wgvAaZxVC6zH0FcJU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hh+tZqVJQKvBZgsHoywNq0IWdQnbJ7gf+D08aio8JBbsbRB5oFGk5dwJgT7/DwhR88Zpjbq9eUEZ+0WRO00jwUY3vfZ7mBgx6bjaxcOhzWfA2Fe3Da2c14sDl9MeJVuyl/Wjv+ITLEk6Fe6lxfN11RT2QSuDWzCUbZc71Sa22F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KxZPePBs; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6e495e7d697so1008427a34.1
-        for <linux-next@vger.kernel.org>; Tue, 27 Feb 2024 19:26:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1709090816; x=1709695616; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qmklizh5oLx0m7Lfl3aZkWW1kWh8OoR2QwqrAY+bquw=;
-        b=KxZPePBsUxcSHPb+h0g+RZ1BeQGrHLToD+Hnf1ospGETW9UovXrNDVn6OVHfT0H5Xm
-         HxaDFC5JUwk6ouiW86B7r/eEiESuNmPz/u3NtuCe5KrpWUZtdpqcGBv4VxN3KHD01s6s
-         E8y31A+axwMZ26DLdxGMcCqbiHcg/tzT4k+Fw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709090816; x=1709695616;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qmklizh5oLx0m7Lfl3aZkWW1kWh8OoR2QwqrAY+bquw=;
-        b=olifjtuLKgBUsTzEgk+FjDkmX4TH959Ka3TyZrua3m8oZS2pUc9fwTx3CyAge1tdjR
-         fiIDt37lgiSfnWwwRVidQ6PYDzMhKOD0rdsup8XrTUHSf2irPpk3GjWla3m4WoJaGcvZ
-         2By8sKgb5swlP0+0N0V93bQrDGRjlwJ5NnowpPeZYgfgq5bWqjZlCixFgrgSKFxyXwTh
-         JrlhAyTp5eEUDMW58koFy0zvxpHOszY1pkw2lc1znFJhNi4iT4fO1/oyAhR0z+G0GvAe
-         nI0y0t8z5g65CSk1PXzUWobi+zAxXejHSiUb7oNmlvpeKd8TkKuL0wXT493qKvupkM1l
-         LwbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXk881vz9imqHRe1v6VBbNMKPuOQbsK74jiPTZFPOZvELIlxW8YUTuJuafqEqpFetxLh8utk8AXt0t7bOjyS0hXA1aGO5DaHu5t7Q==
-X-Gm-Message-State: AOJu0YwVNg6ixHiHQoeH41zWl+suRhzonyDx8o13DbCEAT5gqP4KgX1T
-	XAH3It3kIIvnQ0uG7eyN6SfNDi8gWQOs3OZpBs0qIbkWzHXRGgvVq7U67cRnLDk=
-X-Google-Smtp-Source: AGHT+IGnHFbb1so2f7aoWSa1l04J123hGVtY9lQXTx7D+iBuFHn7258UTIDSgMfZ/We2JkEJbW8AQQ==
-X-Received: by 2002:a9d:618a:0:b0:6d9:d582:1970 with SMTP id g10-20020a9d618a000000b006d9d5821970mr11885403otk.2.1709090816345;
-        Tue, 27 Feb 2024 19:26:56 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id t25-20020a05683014d900b006e49357f639sm1531000otq.77.2024.02.27.19.26.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 19:26:56 -0800 (PST)
-Message-ID: <4eb24c55-6a8b-49bb-a54a-59f00b05b3a0@linuxfoundation.org>
-Date: Tue, 27 Feb 2024 20:26:55 -0700
+	s=arc-20240116; t=1709092304; c=relaxed/simple;
+	bh=8MVLVlrqD4j9HSuUdXtNL4OD++UUSJ32JL2smhWfInU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=F/RZ6ckOG0ANNcGPrseToz+29Zq/GqoUH9VnT3RmWSh06n49cVCIyLlnRwXF/o/jBhV3Cvpq6VjVyK5sUQ/PaowEbuHETaor7IPeeaK5vGgO012Z59KpmK3rd7841VlWu36/dIcJ37KSW8cd+4EiqAyQPatYg4XS/Ue1abF/AnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VOV2co6s; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1709092297;
+	bh=NJnamOiEuScuE3OfMKj/+x9Mr4ZVQY3hwB3v5cD2PEA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=VOV2co6sN94QPfX4kbPRCUP6cBB8OA4/8ciXubEZwLqDK3BqeJUGHGRYHxSqR1q92
+	 xS30UDpFZDFEaAzhcWpV2fsFT0fY5f+F9Sfz7VppruXG5/fiUUaY7W1WFfoLwb12Yq
+	 99ME8jwZNzehDoh0BaoOUtLIYW9eY/12sIypYvrqSPAcQP9uU8k9wuMF0D0uD+Adw1
+	 DJTTwf+cbb786EK2mf9UE/Fptb4T6WThQXwMbSHyfr0D6shH6e3pr0LjTX/cWYKPpo
+	 TgST8uQ3phO/ELlZwFPmB/clKrOEX0zPFTYPUvYp1tOVk48bOxHnRKrnLVtwIj1Srx
+	 1eujNEt72YWbg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tl0lX6dKzz4wc6;
+	Wed, 28 Feb 2024 14:51:36 +1100 (AEDT)
+Date: Wed, 28 Feb 2024 14:51:34 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: Ramona Gradinariu <ramona.gradinariu@analog.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the iio tree
+Message-ID: <20240228145134.03283c42@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the kunit-next tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Brendan Higgins <brendanhiggins@google.com>
-Cc: David Gow <davidgow@google.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240228134818.7b6134dc@canb.auug.org.au>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240228134818.7b6134dc@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/gi9v==n2V+dx.5Nq7v=D=qJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 2/27/24 19:48, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the kunit-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
+--Sig_/gi9v==n2V+dx.5Nq7v=D=qJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Caused by commit
-> 
->    e00c5a9fa617 ("kunit: Annotate _MSG assertion variants with gnu printf specifiers")
-> 
-> Please fix all the current problems before applying a patch to warn
-> about them.
-> 
-> I have used the kunit-next tree from next-20240227 for today.
+Hi all,
 
-This is my bad. I should have dropped this patch when I couldn't
-apply the patch that fixed the drivers/gpu/drm/tests/drm_buddy_test.c
+After merging the iio tree, today's linux-next build (htmldocs) produced
+this warning:
 
-It is fixed now. I dropped the problem commit
+Documentation/iio/adis16475.rst:317: ERROR: Unexpected indentation.
 
-e00c5a9fa617 ("kunit: Annotate _MSG assertion variants with gnu printf specifiers")
+Introduced by commit
 
-thanks,
--- Shuah
+  38033fdf3b09 ("docs: iio: add documentation for adis16475 driver")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gi9v==n2V+dx.5Nq7v=D=qJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXercYACgkQAVBC80lX
+0Gxz6wgAg2MVx6Z4x6NvdH3m83bSGdyhpbU8A1mSTSxlVcJL3qWGFpYnbhe3n2QE
+DAJNrGnXZ5p1Z4hIZMTvIhaVc/pq5LWnVlK2SC7e/vQIgaGYcbvYelBADQotb8Yj
+Bhn0jJKhsP7PWUZ/9qKcv7IE/ozi7H1AC3Ay8W5sfViQGY7IoowdVgH/Pcc1kH3c
+QpDBZC2MSLbMEnnFC5ewO9XXFmyPbUXWgCmu/hNBifbpq51ePii7hvpAE2GUyL1l
+Vg1APMjf7dhldmcBYGvqzEOAf+d5cPqmIF+0727FsGco4eCLR54AQ3GGi7COdk00
+2h5EqFHMhh3ndssK6NLRFT5vGWuyVA==
+=WIIU
+-----END PGP SIGNATURE-----
+
+--Sig_/gi9v==n2V+dx.5Nq7v=D=qJ--
 

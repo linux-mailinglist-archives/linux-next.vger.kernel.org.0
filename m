@@ -1,91 +1,180 @@
-Return-Path: <linux-next+bounces-1408-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1409-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 603DA86BFBB
-	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 05:02:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D038286BFE0
+	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 05:27:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91B5B1C230A2
-	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 04:02:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58A47B23283
+	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 04:27:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C95C376F1;
-	Thu, 29 Feb 2024 04:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EAB53771E;
+	Thu, 29 Feb 2024 04:27:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="iUryPJt+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cUb0E7wi"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F25D376E1;
-	Thu, 29 Feb 2024 04:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7A71C3E;
+	Thu, 29 Feb 2024 04:26:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709179347; cv=none; b=FBXN7cI2vigU9HWToyuOfE5CB/R5zskdX9d9FH1Nkl1/Kn8hFzaRfwRahplOw2JR/Makmo9kipdZCBHeNEr2Xk/Q3F/UlOsliZPI3ZA/gJ3tXYgmCjYP8LJuz+jixT/kVBzj+lrkBmXMSbqqm/FC3OgBzYNGHnQKCUsfdMdYmmo=
+	t=1709180821; cv=none; b=k7Dc/SzSuR+cdlBF8fORdIa81xVKPmaWOgm0g3/z6XrICfPEVfR9/Sm+clrBQMbCoDrni9cFcam3NRsE07hYQEvawMqEH0sHIVpA0aVrV/dhhbU7kpKD1EO9BGFzrzRXM0qHon9qEFQLW2nUjq5JS4ypvaMiKq20KNooOdC0oYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709179347; c=relaxed/simple;
-	bh=SNJwfg1tCer5bwynJe0otSI9bMprHgn4ovdKCtXmcfQ=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=uHmF/kSqNg/jThTW7hSceF6QtyxsvTzB0sURio6/jpC0Q4gz59jgDpKuLT4F70FXk5npNYzJeVbKkKpTz9U7fP2QtU+a9LMQxZ6sTFR4TJcK7ILFdyqR6oLmw3h/dnfwpjV/1XmV62IZTalxI9v6ux69Ye3Em1na6d/AiFN4J8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=iUryPJt+; arc=none smtp.client-ip=115.124.30.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1709179341; h=Message-ID:Subject:Date:From:To;
-	bh=qddl43JU3SFmVs7NY1GN/mCezcwGFQMX8A60Zl2vNvw=;
-	b=iUryPJt+YDBFPS2TqqlJjzZmy0q9ikdoXvHnh3EpRVLFErGwiZhOuz2xLB65PD2RfTJvfDI8KNBLcBu0+ZjRyyuffb9S03+QJOxZ+WQSIRXpekUUSHq/KTK1Hsb70jrkQ5NfyipJvt5tI4+NlxosDiBNFJi3391f6Kq1/uEYvhM=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0W1Rdkwc_1709179340;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W1Rdkwc_1709179340)
-          by smtp.aliyun-inc.com;
-          Thu, 29 Feb 2024 12:02:21 +0800
-Message-ID: <1709179304.522055-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: linux-next: build failure after merge of the vhost tree
-Date: Thu, 29 Feb 2024 12:01:44 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- "Michael S. Tsirkin" <mst@redhat.com>
-References: <20240229145531.7f7369cb@canb.auug.org.au>
-In-Reply-To: <20240229145531.7f7369cb@canb.auug.org.au>
+	s=arc-20240116; t=1709180821; c=relaxed/simple;
+	bh=h/5G9NNcnkDMRKX6jAh2VhWg9yz8dbicS7iS1TG4GEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aFMcdCUQT35FSRKXo+4QlSI3DFGSk1uItjnVTDwFDGJqX8Hdy1xJTOvhr1oMdp7gLJK/zLxq9lVg4XPeGo7AncSbmv1loX73w2nIjraLVVPU/BS+4hYPmOx+oxB+m/z7kHITeUXEtJAAQuaH8BRzo24KlIhsmIv/65npHHbRiwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cUb0E7wi; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1709180816;
+	bh=QaXdlZBTDkaeRTH8hHnwNLiN9wYY0RBx9cffFy2xxTY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=cUb0E7wikUlJVhjdOXFk2VhHo6L77CY4RAI8kbgSVZD5gUezItbMSRukwH/J5kLoZ
+	 Wliods/NRVA3AS6gaaAQW/hRlqBcVktuZkBTdycHviV+3C/TL7b98rTx/iNVJIke7s
+	 XOx81m+TvDfmqVkLLSKWGvpGDySTzKesoc5tbH4LCeeRQfcb7nGYPyGVkwURcujJcx
+	 37BBQ3kAkHDIJtw8UNfx+EY6VVcD8DovNaVzPlS1Wjp3DEvFKTdPcjUH6QvP+MjzaV
+	 NfMWJSkDGwQsoCLYwR/M6kptbB9ZXdCJoqn5mPKki4WcoYZJnQfZda1J8v8t8rjilW
+	 uTgru97baqrEA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TldTp2Glyz4wbQ;
+	Thu, 29 Feb 2024 15:26:54 +1100 (AEDT)
+Date: Thu, 29 Feb 2024 15:26:53 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Shuah Khan <skhan@linuxfoundation.org>, Brendan Higgins
+ <brendanhiggins@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
+ <dri-devel@lists.freedesktop.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Matthew Auld <matthew.auld@intel.com>, David
+ Gow <davidgow@google.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the kunit-next tree
+Message-ID: <20240229152653.09ecf771@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/aI6337UaqxBnHRtmTs_90Hu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, 29 Feb 2024 14:55:31 +1100, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
->
-> After merging the vhost tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->
-> drivers/virtio/virtio_pci_modern.c: In function 'vp_modern_create_avq':
-> drivers/virtio/virtio_pci_modern.c:755:34: warning: passing argument 5 of 'vp_dev->setup_vq' makes integer from pointer without a cast [-Wint-conversion]
->   755 |                               avq->name, NULL, VIRTIO_MSI_NO_VECTOR);
->       |                               ~~~^~~~~~
->       |                                  |
->       |                                  char *
-> drivers/virtio/virtio_pci_modern.c:755:34: note: expected 'u16' {aka 'short unsigned int'} but argument is of type 'char *'
-> drivers/virtio/virtio_pci_modern.c:754:14: error: too many arguments to function 'vp_dev->setup_vq'
->   754 |         vq = vp_dev->setup_vq(vp_dev, &vp_dev->admin_vq.info, avq->vq_index, NULL,
->       |              ^~~~~~
->
-> Caused by commit
->
->   4cceb2591a87 ("virtio: find_vqs: pass struct instead of multi parameters")
->
-> I have used the vhost tree from next-20240228 for today.
+--Sig_/aI6337UaqxBnHRtmTs_90Hu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I will post new version for powerpc soon.
+Hi all,
 
-Thanks.
+After merging the kunit-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+In file included from drivers/gpu/drm/tests/drm_buddy_test.c:7:
+drivers/gpu/drm/tests/drm_buddy_test.c: In function 'drm_test_buddy_alloc_r=
+ange_bias':
+drivers/gpu/drm/tests/drm_buddy_test.c:191:40: error: format '%u' expects a=
+ matching 'unsigned int' argument [-Werror=3Dformat=3D]
+  191 |                                        "buddy_alloc failed with bia=
+s(%x-%x), size=3D%u, ps=3D%u\n",
+      |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/kunit/test.h:597:37: note: in definition of macro '_KUNIT_FAILED'
+  597 |                                     fmt,                           =
+            \
+      |                                     ^~~
+include/kunit/test.h:662:9: note: in expansion of macro 'KUNIT_UNARY_ASSERT=
+ION'
+  662 |         KUNIT_UNARY_ASSERTION(test,                                =
+            \
+      |         ^~~~~~~~~~~~~~~~~~~~~
+include/kunit/test.h:1233:9: note: in expansion of macro 'KUNIT_FALSE_MSG_A=
+SSERTION'
+ 1233 |         KUNIT_FALSE_MSG_ASSERTION(test,                            =
+            \
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/tests/drm_buddy_test.c:186:17: note: in expansion of macro =
+'KUNIT_ASSERT_FALSE_MSG'
+  186 |                 KUNIT_ASSERT_FALSE_MSG(test,
+      |                 ^~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/tests/drm_buddy_test.c:191:91: note: format string is defin=
+ed here
+  191 |                                        "buddy_alloc failed with bia=
+s(%x-%x), size=3D%u, ps=3D%u\n",
+      |                                                                    =
+                      ~^
+      |                                                                    =
+                       |
+      |                                                                    =
+                       unsigned int
+cc1: all warnings being treated as errors
 
->
-> --
-> Cheers,
-> Stephen Rothwell
->
+Caused by commit
+
+  806cb2270237 ("kunit: Annotate _MSG assertion variants with gnu printf sp=
+ecifiers")
+
+interacting with commit
+
+  c70703320e55 ("drm/tests/drm_buddy: add alloc_range_bias test")
+
+from the drm-misc-fixes tree.
+
+I have applied the following patch for today (this should probably
+actually be fixed in the drm-misc-fixes tree).
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 29 Feb 2024 15:18:36 +1100
+Subject: [PATCH] fix up for "drm/tests/drm_buddy: add alloc_range_bias test"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/tests/drm_buddy_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests=
+/drm_buddy_test.c
+index 1e73e3f0d278..369edf587b44 100644
+--- a/drivers/gpu/drm/tests/drm_buddy_test.c
++++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+@@ -188,7 +188,7 @@ static void drm_test_buddy_alloc_range_bias(struct kuni=
+t *test)
+ 							      bias_end, size, ps,
+ 							      &allocated,
+ 							      DRM_BUDDY_RANGE_ALLOCATION),
+-				       "buddy_alloc failed with bias(%x-%x), size=3D%u, ps=3D%u\n",
++				       "buddy_alloc failed with bias(%x-%x), size=3D%u\n",
+ 				       bias_start, bias_end, size);
+ 		bias_rem -=3D size;
+=20
+--=20
+2.43.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/aI6337UaqxBnHRtmTs_90Hu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXgB40ACgkQAVBC80lX
+0GzV/wf/RGYkdSH7g7RogpotZFFU0jh3bvcrzQu1LG3uAQQ4RIVtdXEu6go1saxk
+oWUTLPLqo7xLcVi66WQQM9+3hx0q5742+2tjiwaQKCgJndfXaYMwIhoBDL3MOZE6
+5XW5BrfqatrkMEODrq3beZ1sgPEYdfL/9n58o6VnimPb9f2YbinPyookSkwMFxZS
+pZzpHAJuNhHbmyHjhDPvxsKe/9Hqd62amt/vXQW2QQ4UKssmqUrPcCVMzVuf0IhM
+oaG3+nbnN9yTWlsO1o28Ogp90fZfXijAoG6PBS24ieS1Uf+05CNSdp6KUhFqkT1P
+7CvwJa94RlkPeUpOiBMpsvHBjrq+tA==
+=73Tp
+-----END PGP SIGNATURE-----
+
+--Sig_/aI6337UaqxBnHRtmTs_90Hu--
 

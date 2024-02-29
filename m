@@ -1,180 +1,204 @@
-Return-Path: <linux-next+bounces-1409-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1410-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D038286BFE0
-	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 05:27:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEF1A86C00C
+	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 05:59:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58A47B23283
-	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 04:27:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 856F1287E51
+	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 04:59:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EAB53771E;
-	Thu, 29 Feb 2024 04:27:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C62038DED;
+	Thu, 29 Feb 2024 04:59:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cUb0E7wi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jyc+f1P+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7A71C3E;
-	Thu, 29 Feb 2024 04:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927092E415;
+	Thu, 29 Feb 2024 04:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709180821; cv=none; b=k7Dc/SzSuR+cdlBF8fORdIa81xVKPmaWOgm0g3/z6XrICfPEVfR9/Sm+clrBQMbCoDrni9cFcam3NRsE07hYQEvawMqEH0sHIVpA0aVrV/dhhbU7kpKD1EO9BGFzrzRXM0qHon9qEFQLW2nUjq5JS4ypvaMiKq20KNooOdC0oYU=
+	t=1709182766; cv=none; b=aMpW+xiMQxGZhAxZwgugo/1EfFGUgD9bTTAgQrtxpSGBkZAcXM+OrHpKtGjQUeb1tkEe8QzSQF6SghSzcaX8SzjzDjoCWgoqgBazmb9+m/MkEx9uoy9cOXkQBuLHtonwbr8bsq6hK1jTecZF3J+vv3nHCMC2aO5n5vSmRnNNV3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709180821; c=relaxed/simple;
-	bh=h/5G9NNcnkDMRKX6jAh2VhWg9yz8dbicS7iS1TG4GEY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aFMcdCUQT35FSRKXo+4QlSI3DFGSk1uItjnVTDwFDGJqX8Hdy1xJTOvhr1oMdp7gLJK/zLxq9lVg4XPeGo7AncSbmv1loX73w2nIjraLVVPU/BS+4hYPmOx+oxB+m/z7kHITeUXEtJAAQuaH8BRzo24KlIhsmIv/65npHHbRiwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cUb0E7wi; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1709180816;
-	bh=QaXdlZBTDkaeRTH8hHnwNLiN9wYY0RBx9cffFy2xxTY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=cUb0E7wikUlJVhjdOXFk2VhHo6L77CY4RAI8kbgSVZD5gUezItbMSRukwH/J5kLoZ
-	 Wliods/NRVA3AS6gaaAQW/hRlqBcVktuZkBTdycHviV+3C/TL7b98rTx/iNVJIke7s
-	 XOx81m+TvDfmqVkLLSKWGvpGDySTzKesoc5tbH4LCeeRQfcb7nGYPyGVkwURcujJcx
-	 37BBQ3kAkHDIJtw8UNfx+EY6VVcD8DovNaVzPlS1Wjp3DEvFKTdPcjUH6QvP+MjzaV
-	 NfMWJSkDGwQsoCLYwR/M6kptbB9ZXdCJoqn5mPKki4WcoYZJnQfZda1J8v8t8rjilW
-	 uTgru97baqrEA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TldTp2Glyz4wbQ;
-	Thu, 29 Feb 2024 15:26:54 +1100 (AEDT)
-Date: Thu, 29 Feb 2024 15:26:53 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Shuah Khan <skhan@linuxfoundation.org>, Brendan Higgins
- <brendanhiggins@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
- <dri-devel@lists.freedesktop.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Matthew Auld <matthew.auld@intel.com>, David
- Gow <davidgow@google.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kunit-next tree
-Message-ID: <20240229152653.09ecf771@canb.auug.org.au>
+	s=arc-20240116; t=1709182766; c=relaxed/simple;
+	bh=LEJMaC1gxEsmiBbx7I2iVFrPGxeJ2sGR0TCSwaXBt48=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kld92mB3c5KVpswq44hGaxl5/1cR3pfRtnc6/Q3wBDQstvvK/EOWV3wn3kvFqVq2Drx9P692h758VCE9Yr9XhXCkbBf//00AFAF0VaBHyCN5ioJ1K54vT/IktMzbgtZgcAz4mzIr52y3QDvWtQKbZ66MVLTNJi7XtC7BWjM119k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jyc+f1P+; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-787b5c68253so26100685a.2;
+        Wed, 28 Feb 2024 20:59:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709182763; x=1709787563; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ln8ih9ys+HkjNsKguuawbY2jpQF93RZW6fsCYu3AHtU=;
+        b=Jyc+f1P+JeeFUt62sDk21FQwGJiqEKkuEsgo+WUd/RBkbz7qSp+KvyksuRxsH+k3mc
+         Wzq1Ej8Wyg0gPXXGqVm1/x7fIpWRYSI3L8A1JPPr5U0wJ/BLXUlHqmOVg8SMPg4Z7ZEx
+         3J8NsDp/ElcHDRogRzQjjrF+e9ikZERLhd6evQHd5ib6srHxdBoA1yqZetj15YeUBU+T
+         3kVnqEH39l9PzqE57vSczo0O39+NalPHVf0/UKhWP9VqAK1T5zjmOEJxn53TtzrFu1dZ
+         4s1u/0XQNvJZWsedaTRoNXcMNRLlTEoVva9daq9ViVDDJXTMrffgkMnDGOxKZsFezTFm
+         z75A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709182763; x=1709787563;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ln8ih9ys+HkjNsKguuawbY2jpQF93RZW6fsCYu3AHtU=;
+        b=DkRKaxRIUSrfkwlzR27vZ6C0gy8RMUrKYkhTAVSJgfRk49HeqMzN7OjQC5JRHvW0XU
+         vAUhOSQtAPFQU9DvyijavYWb41v412cDEBIs1WHHxfrA7zbtq7StEltEK1kFfwlgUq4D
+         Db3u2FcOohGHrd98AtiwWHFSH8gnfihk1/h6mQGMM2soa4MdbHjgYA/xefAujcVlEJui
+         3Gj40//wwUCnnQvX1GOFSt/5ZNq+a1YbPQLALnW12mH6dcxpABejRdUi0fQt6I5aRC8L
+         wOxll7DV56f25PI6lgXjIdZYRpt4CmIAw0JwYg5kWXbTBFdF3utX3bLOz0xFOSdCH0CV
+         SgOg==
+X-Forwarded-Encrypted: i=1; AJvYcCX9d7kj1ze5HOR/b4RSviUa+7u/lUrRzpZ5yig5lgM9CKM1AbK7EHIcRpggwOzh+POHAjt1LEPXAlVoNtyCHp01+z4tLuGANvp52diLMipJ3T8IMycyGZ6g5wxm92BX6tCJYRVj9fUBjg==
+X-Gm-Message-State: AOJu0Yyk25neWJ4yxQ0BITNX+wQ8e/fYeo2EdZpF0AFsFoCAOhjw5i2C
+	ahU6u8kLQPHR1TbBZEvTijTT1IeiS57Jx6SV15El0TNMc5H90PEF
+X-Google-Smtp-Source: AGHT+IH5EGqQke3S+1CI+MmbUruz8ZZK+JzIbyyCIsFQO2rwOg3IMuvm4r2pxdlAbncmy9S0OBtTXA==
+X-Received: by 2002:ac8:7f8d:0:b0:42e:a06b:415c with SMTP id z13-20020ac87f8d000000b0042ea06b415cmr1265815qtj.15.1709182763448;
+        Wed, 28 Feb 2024 20:59:23 -0800 (PST)
+Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05622a1a0e00b0042e1950d591sm349502qtb.70.2024.02.28.20.59.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Feb 2024 20:59:22 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 0C27C1200043;
+	Wed, 28 Feb 2024 23:59:22 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 28 Feb 2024 23:59:22 -0500
+X-ME-Sender: <xms:KQ_gZbANjRN3IoJ575Vf-WHNiuRqMGCWiA1Pu_DpyGdWLica66Upcw>
+    <xme:KQ_gZRgQkZNQa1cXWIELHO-qBgsdDyFyKn0Rsrm27OgvZIfFARJib4OHL0MRHYnUq
+    fAWz1fuh_voxWUABA>
+X-ME-Received: <xmr:KQ_gZWnCucaO-27ZIJuQWKYEcRM-kqCJ-D-hEqkiNdm89mBMCAqnlTHPug>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrgeekgdejhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhepgfeivdeugeeujeduuedvueeuvdeuieekudejieehgfejvedtgefhleejtddu
+    vdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
+    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
+    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
+    hmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:KQ_gZdyIcQ2afB0rNU3V90wNC2mPWN2rX1ReH2tp6CQVq3jMvCdBxw>
+    <xmx:KQ_gZQSyYOkZxYmejKR6uDccwoLdO7cKjllytjTxdqMChmAvLZ36SQ>
+    <xmx:KQ_gZQYAslJ6ng6RO2cZBlOgFiJrFkZmSHT8w3jY_fyQjWCRZ1t8yw>
+    <xmx:Kg_gZfE-GfDOkB-QzjasOHSkz-anfg1T6af3BOycb8L2HTJ_KFEhnz7BPJw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 28 Feb 2024 23:59:21 -0500 (EST)
+Date: Wed, 28 Feb 2024 20:59:17 -0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Nikhil V <quic_nprakash@quicinc.com>
+Subject: Re: linux-next: manual merge of the rcu tree with the pm tree
+Message-ID: <ZeAPJYPfgc6q2tpu@tardis>
+References: <20240226135745.12ac854d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aI6337UaqxBnHRtmTs_90Hu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="XJyYbvL4ZSs4ZkVx"
+Content-Disposition: inline
+In-Reply-To: <20240226135745.12ac854d@canb.auug.org.au>
 
---Sig_/aI6337UaqxBnHRtmTs_90Hu
-Content-Type: text/plain; charset=US-ASCII
+
+--XJyYbvL4ZSs4ZkVx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Mon, Feb 26, 2024 at 01:57:45PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the rcu tree got a conflict in:
+>=20
+>   Documentation/admin-guide/kernel-parameters.txt
+>=20
+> between commit:
+>=20
+>   3fec6e5961b7 ("PM: hibernate: Support to select compression algorithm")
+>=20
+> from the pm tree and commit:
+>=20
+>   600716592a3a ("doc: Add EARLY flag to early-parsed kernel boot paramete=
+rs")
+>=20
+> from the rcu tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
 
-After merging the kunit-next tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Thanks! The below looks good to me ;-)
 
-In file included from drivers/gpu/drm/tests/drm_buddy_test.c:7:
-drivers/gpu/drm/tests/drm_buddy_test.c: In function 'drm_test_buddy_alloc_r=
-ange_bias':
-drivers/gpu/drm/tests/drm_buddy_test.c:191:40: error: format '%u' expects a=
- matching 'unsigned int' argument [-Werror=3Dformat=3D]
-  191 |                                        "buddy_alloc failed with bia=
-s(%x-%x), size=3D%u, ps=3D%u\n",
-      |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/kunit/test.h:597:37: note: in definition of macro '_KUNIT_FAILED'
-  597 |                                     fmt,                           =
-            \
-      |                                     ^~~
-include/kunit/test.h:662:9: note: in expansion of macro 'KUNIT_UNARY_ASSERT=
-ION'
-  662 |         KUNIT_UNARY_ASSERTION(test,                                =
-            \
-      |         ^~~~~~~~~~~~~~~~~~~~~
-include/kunit/test.h:1233:9: note: in expansion of macro 'KUNIT_FALSE_MSG_A=
-SSERTION'
- 1233 |         KUNIT_FALSE_MSG_ASSERTION(test,                            =
-            \
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/tests/drm_buddy_test.c:186:17: note: in expansion of macro =
-'KUNIT_ASSERT_FALSE_MSG'
-  186 |                 KUNIT_ASSERT_FALSE_MSG(test,
-      |                 ^~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/tests/drm_buddy_test.c:191:91: note: format string is defin=
-ed here
-  191 |                                        "buddy_alloc failed with bia=
-s(%x-%x), size=3D%u, ps=3D%u\n",
-      |                                                                    =
-                      ~^
-      |                                                                    =
-                       |
-      |                                                                    =
-                       unsigned int
-cc1: all warnings being treated as errors
+Regards,
+Boqun
 
-Caused by commit
 
-  806cb2270237 ("kunit: Annotate _MSG assertion variants with gnu printf sp=
-ecifiers")
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc Documentation/admin-guide/kernel-parameters.txt
+> index c503770e8f0b,3f894fbb4916..000000000000
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@@ -1753,18 -1749,7 +1754,18 @@@
+>   				(that will set all pages holding image data
+>   				during restoration read-only).
+>  =20
+>  +	hibernate.compressor=3D 	[HIBERNATION] Compression algorithm to be
+>  +				used with hibernation.
+>  +				Format: { lzo | lz4 }
+>  +				Default: lzo
+>  +
+>  +				lzo: Select LZO compression algorithm to
+>  +				compress/decompress hibernation image.
+>  +
+>  +				lz4: Select LZ4 compression algorithm to
+>  +				compress/decompress hibernation image.
+>  +
+> - 	highmem=3Dnn[KMG]	[KNL,BOOT] forces the highmem zone to have an exact
+> + 	highmem=3Dnn[KMG]	[KNL,BOOT,EARLY] forces the highmem zone to have an =
+exact
+>   			size of <nn>. This works even on boxes that have no
+>   			highmem otherwise. This also works to reduce highmem
+>   			size on bigger boxes.
 
-interacting with commit
 
-  c70703320e55 ("drm/tests/drm_buddy: add alloc_range_bias test")
 
-from the drm-misc-fixes tree.
-
-I have applied the following patch for today (this should probably
-actually be fixed in the drm-misc-fixes tree).
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 29 Feb 2024 15:18:36 +1100
-Subject: [PATCH] fix up for "drm/tests/drm_buddy: add alloc_range_bias test"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/tests/drm_buddy_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests=
-/drm_buddy_test.c
-index 1e73e3f0d278..369edf587b44 100644
---- a/drivers/gpu/drm/tests/drm_buddy_test.c
-+++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-@@ -188,7 +188,7 @@ static void drm_test_buddy_alloc_range_bias(struct kuni=
-t *test)
- 							      bias_end, size, ps,
- 							      &allocated,
- 							      DRM_BUDDY_RANGE_ALLOCATION),
--				       "buddy_alloc failed with bias(%x-%x), size=3D%u, ps=3D%u\n",
-+				       "buddy_alloc failed with bias(%x-%x), size=3D%u\n",
- 				       bias_start, bias_end, size);
- 		bias_rem -=3D size;
-=20
---=20
-2.43.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/aI6337UaqxBnHRtmTs_90Hu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--XJyYbvL4ZSs4ZkVx
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXgB40ACgkQAVBC80lX
-0GzV/wf/RGYkdSH7g7RogpotZFFU0jh3bvcrzQu1LG3uAQQ4RIVtdXEu6go1saxk
-oWUTLPLqo7xLcVi66WQQM9+3hx0q5742+2tjiwaQKCgJndfXaYMwIhoBDL3MOZE6
-5XW5BrfqatrkMEODrq3beZ1sgPEYdfL/9n58o6VnimPb9f2YbinPyookSkwMFxZS
-pZzpHAJuNhHbmyHjhDPvxsKe/9Hqd62amt/vXQW2QQ4UKssmqUrPcCVMzVuf0IhM
-oaG3+nbnN9yTWlsO1o28Ogp90fZfXijAoG6PBS24ieS1Uf+05CNSdp6KUhFqkT1P
-7CvwJa94RlkPeUpOiBMpsvHBjrq+tA==
-=73Tp
+iQEzBAABCAAdFiEEj5IosQTPz8XU1wRHSXnow7UH+rgFAmXgDx8ACgkQSXnow7UH
++rh7sggApIMmADJfpEBuhu4yI0YxPVeG9zTgQbfWM+QuWH9fr6SnGyqsHumxER8D
+kdKD7h8xK3ZzFc4Fl/MjRu+/GrBLDKbH16kayjiCkiOkVVjFbpHw5nlZdFlXL3Ps
+h0WzOHY5URZuyXsy/eB4F5QElWNNHoCfQdS+c2JyWMagkRMwVGmhM2ZcyR4crzdK
+R93WLv5lJE3xY2auuUqMEqKQUyeg+rsH/dCXv2crDeMTcM4OVbshcD7OBPQka7VM
+lxkgDe7h6tp3+FioA5oVvp0YlNmXHMy85Mk2nPg7fJ9lZM4//NS4YJFFG2Gnwil4
+dYvQQMIyuqLqtYSowH6GsdK8k++GBw==
+=vVL1
 -----END PGP SIGNATURE-----
 
---Sig_/aI6337UaqxBnHRtmTs_90Hu--
+--XJyYbvL4ZSs4ZkVx--
 

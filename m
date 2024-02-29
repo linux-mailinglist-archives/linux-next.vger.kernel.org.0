@@ -1,174 +1,114 @@
-Return-Path: <linux-next+bounces-1418-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1419-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D29786CC5B
-	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 16:07:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C99186D045
+	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 18:13:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E455D284615
-	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 15:07:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1132F1F223EC
+	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 17:13:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C097D137C3A;
-	Thu, 29 Feb 2024 15:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6366CBED;
+	Thu, 29 Feb 2024 17:13:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YLcnSk4B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZjZmI5ib"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F188967C71
-	for <linux-next@vger.kernel.org>; Thu, 29 Feb 2024 15:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E106CBE8;
+	Thu, 29 Feb 2024 17:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709219235; cv=none; b=IaQlZBXxhg3jf4WplzTMYJtJFJ3i1z9EI0V7R00oRngUlnp4PNPGgtZOphONomOfnZgL0ecmo4t8u0jbhB9He3szE65vdF7GBeD9QKTKkZ0Ft52qvudSGbog05o5K3SCwl+2CQyBi93gtS5z5pnRzfnKVs+MpyXt3PS+HNMkv50=
+	t=1709226810; cv=none; b=YfkltG60bw73jhkxK+wiJChswvMzHuKxwa+2kWmLlkQYvRzVQ3O5DGE1OWf+37oI+aJ86ebb3BqdpnF31JkbzKT72K/nQK5RJtfTM3Fa7JIDw0qw4Ik3OVqurxS017B4gSmzuyRIhI+/3zz6ALQi8i+PyEdyvYNBapCaOJzfzZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709219235; c=relaxed/simple;
-	bh=eQoYcoWIrFj7gRUjrrGk3RBO7jWfySCV0Qbg3y5bQck=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oF8aVZo7rxMVR6aRx/rcbCrt8yb3LkLz4/jbWyy/R31aF9C+71WgywN6dG+6/pkY/CHUKHj12+9yXyhZyQ31RAkcDbVUD5HmOj/S5GCuNoWk0+rijoioIhl/5syoidNXS0MmI80i+pOd4H4eoyxuVccoXvhG+zgs30G8HG6R5E8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YLcnSk4B; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3651ee59db4so1056705ab.0
-        for <linux-next@vger.kernel.org>; Thu, 29 Feb 2024 07:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1709219232; x=1709824032; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lUr9WwPm1bDr07bGVGyHcZBKICuYFoD9+zTSPH1u+LA=;
-        b=YLcnSk4Bkqf+xK4M7Z0Fu/4wyMjkRvC+iSXz0JP2E56T1gksz21Vrqwhtr9wdK3xdZ
-         jv8bu135TvSwWt8LHo0tZH/lHqWfn52lLGb9LfhXjftKMJo4WkOjsWc6ycTJ3FbyAHN2
-         v6MOsGTrUWM7/B32QcbmZNX0+tcxovms/yr2U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709219232; x=1709824032;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lUr9WwPm1bDr07bGVGyHcZBKICuYFoD9+zTSPH1u+LA=;
-        b=ClzWx0QpjU3oCvZG8HVuo2Dub51QwmpbLdmkxJmLQRH7EppnhLVGaIMXF/rFvMQYFv
-         l1d9kBdmyB7hHQNX++X0BjIPpT83A1mqZ113yATzsYIXB76jD4tVi19cR22TuDi0Hhf4
-         sfxD0Uw4xGgI6MIrtU7l3JxGEq8j88EQ+y6G7qElEF12fq+h8XVHbMvzJ/1zsvjwI6RU
-         TTDxQ7rrEUKhP2HKFWONhn1cIxbUq/PxSfS0PY+1jKtW/YlOb5AIYDZLYwcolBYEvVx9
-         UWB2P1vcAzEmDjIxcb/YiQtKYMG9yIPVkQIYkEGhdy2mwfLTD8l0zaR8ZBQrub8NWEYa
-         8GEA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAQOuYkzIsqzNTHAifobhnh74MN4aXOmVl++iVwTdznUSBOAigdDWwMfPeujGSiOIfnQL5m0U/EGcRd8iqJxFzBsmh8g2Rnu/KrQ==
-X-Gm-Message-State: AOJu0YwxBxoNgEWLBdORlP2SUBhwl4j785GYFVhai2MMFvmgvnKRz2nV
-	huf/GzImpkFC04WPG1vAd5S5ltsWNcSMIxxFUQmClvsAYdp24twi7EI3ggyM9w0=
-X-Google-Smtp-Source: AGHT+IGnBv7cnuB5+Ygx0Spp8dOixJyI7HqA7kTIXE4S9xFxwubQmYW37F+sI4cGzNH5Sqb9chjpgg==
-X-Received: by 2002:a05:6e02:1a27:b0:365:2bd4:2f74 with SMTP id g7-20020a056e021a2700b003652bd42f74mr2811151ile.0.1709219232030;
-        Thu, 29 Feb 2024 07:07:12 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id m15-20020a02c88f000000b004745b40ba6fsm346477jao.164.2024.02.29.07.07.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Feb 2024 07:07:11 -0800 (PST)
-Message-ID: <be2e812c-3898-4be8-8a9d-e221acb837c3@linuxfoundation.org>
-Date: Thu, 29 Feb 2024 08:07:10 -0700
+	s=arc-20240116; t=1709226810; c=relaxed/simple;
+	bh=2kq4Z9/onssYZXVjNKlfGgKvZyNQFKd2YaHR3Zxh2vc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K0vUVPfLVdsWP6y8b4qVv4VcCPv/NSwj3AQHqITlCMCdSeOgJa+BEmmNSBAynvPgxT0tmM8GhEm9cgzTdoiNInTWvydfj52TsEVty+HtAQSniY1BVn8XXsvkc7/BFQ/ZC8nqolBTiuLJjdgHTvJBij4ZXkZ9wbhx8sZwY8QNDtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZjZmI5ib; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC86C433F1;
+	Thu, 29 Feb 2024 17:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709226809;
+	bh=2kq4Z9/onssYZXVjNKlfGgKvZyNQFKd2YaHR3Zxh2vc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZjZmI5ibYkdCDOqygq7BLfUBtrDw/xZNdkEoIJkm83cVkOUdGwE1hsZXYuHohViex
+	 y7ksxXim6PlWxXXXfpiabJ4K9oKVPhptTTDXNuuNtAGMWekk6MSTdXtsoJLo4ajoXP
+	 /vke0zm0CmQMlwCiKmtipKAwbKiRmCkm/QNN3WMFjzond4WnAUNJYMOFZzflCTGzmL
+	 bAaTUGgCUzAGFkeyweh3ULE/KS8j+Iekix+/tSmdbI3LUIZBDcruXAyOD1J/zKSbGd
+	 dEuipll8lawvQtSyF1wqBjxGch+1N4ODZRm+NtOnWTDC7ZEMEnCv5uXyCbfBytUJAc
+	 2Ga3By+LDs8ag==
+Date: Thu, 29 Feb 2024 09:13:28 -0800
+From: Jaegeuk Kim <jaegeuk@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christian Brauner <brauner@kernel.org>, Chao Yu <chao@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the f2fs
+ tree
+Message-ID: <ZeC7OEA4Onoi-mED@google.com>
+References: <20240229104140.2927da29@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the kunit-next tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Brendan Higgins <brendanhiggins@google.com>,
- Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Intel Graphics <intel-gfx@lists.freedesktop.org>,
- DRI <dri-devel@lists.freedesktop.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Matthew Auld <matthew.auld@intel.com>, David Gow <davidgow@google.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240229152653.09ecf771@canb.auug.org.au>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240229152653.09ecf771@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240229104140.2927da29@canb.auug.org.au>
 
-Hi Stephen,
-
-On 2/28/24 21:26, Stephen Rothwell wrote:
+On 02/29, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the kunit-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> Today's linux-next merge of the vfs-brauner tree got a conflict in:
 > 
-> In file included from drivers/gpu/drm/tests/drm_buddy_test.c:7:
-> drivers/gpu/drm/tests/drm_buddy_test.c: In function 'drm_test_buddy_alloc_range_bias':
-> drivers/gpu/drm/tests/drm_buddy_test.c:191:40: error: format '%u' expects a matching 'unsigned int' argument [-Werror=format=]
->    191 |                                        "buddy_alloc failed with bias(%x-%x), size=%u, ps=%u\n",
->        |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/kunit/test.h:597:37: note: in definition of macro '_KUNIT_FAILED'
->    597 |                                     fmt,                                       \
->        |                                     ^~~
-> include/kunit/test.h:662:9: note: in expansion of macro 'KUNIT_UNARY_ASSERTION'
->    662 |         KUNIT_UNARY_ASSERTION(test,                                            \
->        |         ^~~~~~~~~~~~~~~~~~~~~
-> include/kunit/test.h:1233:9: note: in expansion of macro 'KUNIT_FALSE_MSG_ASSERTION'
->   1233 |         KUNIT_FALSE_MSG_ASSERTION(test,                                        \
->        |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/tests/drm_buddy_test.c:186:17: note: in expansion of macro 'KUNIT_ASSERT_FALSE_MSG'
->    186 |                 KUNIT_ASSERT_FALSE_MSG(test,
->        |                 ^~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/tests/drm_buddy_test.c:191:91: note: format string is defined here
->    191 |                                        "buddy_alloc failed with bias(%x-%x), size=%u, ps=%u\n",
->        |                                                                                          ~^
->        |                                                                                           |
->        |                                                                                           unsigned int
-> cc1: all warnings being treated as errors
+>   fs/f2fs/super.c
 > 
-> Caused by commit
+> between commit:
 > 
->    806cb2270237 ("kunit: Annotate _MSG assertion variants with gnu printf specifiers")
-> 
+>   5fa6a97d2784 ("f2fs: introduce SEGS_TO_BLKS/BLKS_TO_SEGS for cleanup")
 
-Thank you. I did allmodconfig build on kselftest kunit branch to make
-sure all is well, before I pushed the commits.
+fyi; I dropped the above commit in -dev.
 
-> interacting with commit
 > 
->    c70703320e55 ("drm/tests/drm_buddy: add alloc_range_bias test")
-  > 
-> from the drm-misc-fixes tree.
+> from the f2fs tree and commit:
 > 
-> I have applied the following patch for today (this should probably
-> actually be fixed in the drm-misc-fixes tree).
+>   512383ae4910 ("f2fs: port block device access to files")
 > 
+> from the vfs-brauner tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc fs/f2fs/super.c
+> index 09ffdd554f9c,09e82624eff5..000000000000
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@@ -4206,9 -4265,9 +4206,9 @@@ static int f2fs_scan_devices(struct f2f
+>   			} else {
+>   				FDEV(i).start_blk = FDEV(i - 1).end_blk + 1;
+>   				FDEV(i).end_blk = FDEV(i).start_blk +
+>  -					(FDEV(i).total_segments <<
+>  -					sbi->log_blocks_per_seg) - 1;
+>  +						SEGS_TO_BLKS(sbi,
+>  +						FDEV(i).total_segments) - 1;
+> - 				FDEV(i).bdev_handle = bdev_open_by_path(
+> + 				FDEV(i).bdev_file = bdev_file_open_by_path(
+>   					FDEV(i).path, mode, sbi->sb, NULL);
+>   			}
+>   		}
 
-Danial, David,
 
-I can carry the fix through kselftest kunit if it works
-for all.
-
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 29 Feb 2024 15:18:36 +1100
-> Subject: [PATCH] fix up for "drm/tests/drm_buddy: add alloc_range_bias test"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->   drivers/gpu/drm/tests/drm_buddy_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-> index 1e73e3f0d278..369edf587b44 100644
-> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
-> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-> @@ -188,7 +188,7 @@ static void drm_test_buddy_alloc_range_bias(struct kunit *test)
->   							      bias_end, size, ps,
->   							      &allocated,
->   							      DRM_BUDDY_RANGE_ALLOCATION),
-> -				       "buddy_alloc failed with bias(%x-%x), size=%u, ps=%u\n",
-> +				       "buddy_alloc failed with bias(%x-%x), size=%u\n",
->   				       bias_start, bias_end, size);
->   		bias_rem -= size;
->   
-
-thanks,
--- Shuah
 

@@ -1,118 +1,142 @@
-Return-Path: <linux-next+bounces-1420-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1421-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74AC486D6D2
-	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 23:26:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03F5386D888
+	for <lists+linux-next@lfdr.de>; Fri,  1 Mar 2024 02:11:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB1F62849D3
-	for <lists+linux-next@lfdr.de>; Thu, 29 Feb 2024 22:26:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE5A7B223AA
+	for <lists+linux-next@lfdr.de>; Fri,  1 Mar 2024 01:11:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E9A74C06;
-	Thu, 29 Feb 2024 22:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E08FC2B9A8;
+	Fri,  1 Mar 2024 01:11:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jd3ijOUY"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="sV3sXs//"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339446D53D;
-	Thu, 29 Feb 2024 22:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11D9101EB;
+	Fri,  1 Mar 2024 01:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709245567; cv=none; b=CsMwGrgXoyvBSsvmncjqHxIt+b2Dr105siuxYuN65i1Kh+/WwA0nrH3EwROnLX4j0PAvTwjtoDtUa1uxNm3m/26IydXn6E3PL9/5EsJhjAi/iitbwHZA02wUxKON0iPWW6LrcrUZmGDZhXVR1VsE7TCGruGiQsPN/qytoniPffI=
+	t=1709255476; cv=none; b=es0YoL6rxHwOpm4nFOx17Pp20zB2gZsiiNvej+6m9jVLBdu5sILnfpG4bi210+7jajX1A+yEFDikg42yLKanOAGt6WjNk96EJZGkaF2wrtyIbvrDw3dad2pifyhC7Uy9sUmi1JSAHqM7L/rljz22bv7bF83w2xPZc4hwH3hlUw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709245567; c=relaxed/simple;
-	bh=E9m6Zo8Uif+WnkraC5S4fEqqz9edJTPoUmJDKqarSS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=j5Kr3ScZSlvupXwJ0IFbr1Hj+qR5tjdXfZZKmwahs1/52AYvTcGq49G4NrXmLoLPG8rPegOZHTLbacfjVB+NNkhurZazwaWW5JBJ/LTPJI0UEo0oSaqjE9VNXt0EDDNAnJuntmFeh0KUIMF+m02nZNKibbU6aR+0KYoKP2IEqGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jd3ijOUY; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1709255476; c=relaxed/simple;
+	bh=h++OtKFqGmFFfi9llnEE4L1VD8vuWEltExm9TiJQL1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sW9reypdV4TYFE+aNtcuTjIO7582lYhDsVvaPYFBlET02Io0LaFjQpWQPPEjpzDNOrbYwTdPqxC0vh2UfEnNmiU7UKkqC8qMCw6d23dfQqOb3UaAg0TQv32iNSa7R6tjnGep1wDLOCo6eswcKbJWcXWQHM4p3A80/2ZDbCScb48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=sV3sXs//; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1709245560;
-	bh=0n1bA5SiHK2wBetkmMJKfRWf3uRLRYvi88heuEZlT08=;
+	s=201702; t=1709255470;
+	bh=mBRQuaFS1jC5CvQAtw82OFJoQClesQDOW9qI9XMCInA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=jd3ijOUYM0tpU3c9banalfBj3YK62CzhRQjD4wm1mUARbBD65ir1BzSVHiRiv9W5u
-	 z6EgOpsXdlN4wJIvSyi5vw6Eak25zjNT0L2oogZjQTxL4fcUzs7f2/5ZEOFDzu4sZY
-	 RVKhQsWZwgm5iPpOJMd6VjVm5YpkirWzjXLH9pixyMIl/t0zJUTQpcHUpOlLefvUms
-	 +/IrbIhccYJiRl8iv3RnNIHItfcLDhLnr+41IqK++m9uCPyf2r6mSg4ePmsZ2KUDEK
-	 3XNZOiUdFW9T02b6AGqQHd4rK5xyswDKFlG3cXflOjUy+nuJ686yd8KB9S3DWzeZ4N
-	 P0IJZszdaVmMw==
+	b=sV3sXs//4SvdsoMqJart9b1jU7NLxsMyVDH6itqqwnTGtEg5mMz7zvIL+GNN6Qqr0
+	 7K1XKvHsWOrZMfUPKo/PimTJd8b54o9Y3edNANcQsFPWnuaYlE/1lSOUDgMOEe8T8t
+	 yXl8Qg/0XhpE2u0obM+axdW4aysecNOdtWTEe48GLbpkuLSABOfNwJG3Guu7UKOA+V
+	 tgLjoLn8x/VpKupOe3HdtNVGBiS08BOzU9MRfhTtE+QoFt1BuC+O8Kn7eifzcr/LQD
+	 WokQO/XhuaDkPvvKcWz8iWlTBBqldZvsi7A5zWMXxzoCcFpyPbZJHs3OREJLaZ2rzQ
+	 7aFcnmfD+9x+A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tm5Qw3v78z4wc6;
-	Fri,  1 Mar 2024 09:26:00 +1100 (AEDT)
-Date: Fri, 1 Mar 2024 09:25:39 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tm95V38Hnz4wck;
+	Fri,  1 Mar 2024 12:11:09 +1100 (AEDT)
+Date: Fri, 1 Mar 2024 12:11:08 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
- <johan.hedberg@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20240301092539.584c26b7@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>, Jiri Pirko <jiri@nvidia.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20240301121108.5d39e4f9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fz6vq1oknyxue1rEE73yG/l";
+Content-Type: multipart/signed; boundary="Sig_/T0XkoVTyb0nAwXHzF50yHeg";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/fz6vq1oknyxue1rEE73yG/l
+--Sig_/T0XkoVTyb0nAwXHzF50yHeg
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+After merging the net-next tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-  2d958ee64d5e ("Bluetooth: qca: Fix triggering coredump implementation")
-  30a746ee2438 ("Bluetooth: Enforce validation on max value of connection i=
-nterval")
-  464f888b0534 ("Bluetooth: hci_sync: Check the correct flag before startin=
-g a scan")
-  5197b25a3803 ("Bluetooth: hci_sync: Fix accept_list when attempting to su=
-spend")
-  51fda2df0c7a ("Bluetooth: mgmt: Fix limited discoverable off timeout")
-  571dd44ebd09 ("Bluetooth: hci_event: Fix wrongly recorded wakeup BD_ADDR")
-  5befbb8e4260 ("Bluetooth: hci_event: Fix handling of HCI_EV_IO_CAPA_REQUE=
-ST")
-  83fd7383955f ("Bluetooth: hci_bcm4377: do not mark valid bd_addr as inval=
-id")
-  b44647f271b1 ("Bluetooth: Avoid potential use-after-free in hci_error_res=
-et")
-  c64e95bdf43b ("Bluetooth: rfcomm: Fix null-ptr-deref in rfcomm_check_secu=
-rity")
-  dae9093faed4 ("Bluetooth: qca: Fix wrong event type for patch config comm=
-and")
-  e8aacc745769 ("Bluetooth: hci_qca: Set BDA quirk bit if fwnode exists in =
-DT")
+In file included from <command-line>:
+In function 'tcp_struct_check',
+    inlined from 'tcp_init' at net/ipv4/tcp.c:4700:2:
+include/linux/compiler_types.h:442:45: error: call to '__compiletime_assert=
+_940' declared with attribute error: BUILD_BUG_ON failed: offsetof(struct t=
+cp_sock, __cacheline_group_end__tcp_sock_write_rx) - offsetofend(struct tcp=
+_sock, __cacheline_group_begin__tcp_sock_write_rx) > 99
+  442 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |                                             ^
+include/linux/compiler_types.h:423:25: note: in definition of macro '__comp=
+iletime_assert'
+  423 |                         prefix ## suffix();                        =
+     \
+      |                         ^~~~~~
+include/linux/compiler_types.h:442:9: note: in expansion of macro '_compile=
+time_assert'
+  442 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_a=
+ssert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_M=
+SG'
+   50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condit=
+ion)
+      |         ^~~~~~~~~~~~~~~~
+include/linux/cache.h:108:9: note: in expansion of macro 'BUILD_BUG_ON'
+  108 |         BUILD_BUG_ON(offsetof(TYPE, __cacheline_group_end__##GROUP)=
+ - \
+      |         ^~~~~~~~~~~~
+net/ipv4/tcp.c:4687:9: note: in expansion of macro 'CACHELINE_ASSERT_GROUP_=
+SIZE'
+ 4687 |         CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock, tcp_sock_write=
+_rx, 99);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  99123622050f ("tcp: remove some holes in struct tcp_sock")
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/fz6vq1oknyxue1rEE73yG/l
+--Sig_/T0XkoVTyb0nAwXHzF50yHeg
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXhBGMACgkQAVBC80lX
-0GzhywgAlsozYk9dDmcDsEh+LYKKxM2GkRHJGK0NyHhvZyycJncgy5S6dc5BjNNC
-Dg1t2msAJhJrCkroVoSTNjEGuH1HZl3PQvtZ0Hj41SC67oV4DIFTHi29ddWZrfAs
-5XKz/BvyXWKlDHR4lGZU5JOnEuYCdgefLIjkQJYuVsXfT9AeubETmtVVi36anNXx
-WpsH40u+2lXqbQEmpzkCk5r0QMM22rMHQ9trx2WjKQ3xGQ8Ola8STq14EBxA9nXa
-aGDt/o72ZnN1hHnrmIozO0JsjH15VKNp1MF7HcQ2v8d2wSS6LVnEL+IRWDr2Mirl
-nTDw3doGUzcrmIa7oCRM9+iVxdEAmA==
-=/tlo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXhKywACgkQAVBC80lX
+0Gy/EggAi4WvLCkErXXayhJ7TSDsuuU8J3zHF4pdCSZsaqtV+Ahb1EdIbO2IF310
+HwA2Cl1f6W0MKw+B0sRpISC4rZvvWJfbP7BC8hSk9glWRlE1O8rnLYOwKBoI8fuf
+yGJ4Gavc5/CoZCqQQW96il2MvvEwbT8PRk/CZqmawXmW/0PsPWuTfTRcA9n3/8rQ
+twGz7JZ0ISx6z7mlUI1+IaCuRq4CtRVQ8sLModrrgptBqZer/4rlIn/fim16+odp
++zDjK1atKGeIdl4r27KYymZMgTw0TE15lJ1Xx/sTvqa57woHuOg6QbNEKI6X6x+3
+okW0Pbt0sqUAqCTe1ykVmNkkqmcRUg==
+=FMBw
 -----END PGP SIGNATURE-----
 
---Sig_/fz6vq1oknyxue1rEE73yG/l--
+--Sig_/T0XkoVTyb0nAwXHzF50yHeg--
 

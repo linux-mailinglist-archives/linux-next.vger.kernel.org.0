@@ -1,176 +1,97 @@
-Return-Path: <linux-next+bounces-1433-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1434-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AD5D86DDE2
-	for <lists+linux-next@lfdr.de>; Fri,  1 Mar 2024 10:10:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F06C86DE7E
+	for <lists+linux-next@lfdr.de>; Fri,  1 Mar 2024 10:43:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F19FB21290
-	for <lists+linux-next@lfdr.de>; Fri,  1 Mar 2024 09:10:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B94521F21DC2
+	for <lists+linux-next@lfdr.de>; Fri,  1 Mar 2024 09:43:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E01BF69D28;
-	Fri,  1 Mar 2024 09:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7F6D6A354;
+	Fri,  1 Mar 2024 09:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dV58ST0I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lym7PwvR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F63F6996B
-	for <linux-next@vger.kernel.org>; Fri,  1 Mar 2024 09:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C3423BD;
+	Fri,  1 Mar 2024 09:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709284203; cv=none; b=ZocCpQrwvwpJ98D/6CBN8ZzGzybHbxYtd163u7imy7UAqHoZlQ+w2Ym5UKfhlDznwCki+Wc8Ecd9My+2aaj82YLQrcw0xoo2HI5ZKTnLpQwaMRqn63kkL0TYPYeHOTObdTCmMWPVZJ1/7X7NlZYB0h8QA/3ILIi/HVx4Mws4XQM=
+	t=1709286175; cv=none; b=Gfp4mSsRgAyCw8UGXinvHUjTKclm4BceO48zahkWIotU813QXtkjNirPXJJmT/Oz0pWi4+pbU/sDuoNSNaHN18LRJrR1mJIRqXRHnB111XeIu0bzYZTqcYNxTioS478K2AMilqLCaR2r/ST3zH0sKgV+6LvhDp2P0K9z9CP7E/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709284203; c=relaxed/simple;
-	bh=mDeYp+/K2UzyizRtuI3W4E0SyYsHEQtnhLJ81m99uoM=;
+	s=arc-20240116; t=1709286175; c=relaxed/simple;
+	bh=GheA9YkRjWROmqg+lVjcKOm6fIRi4kXVh6dbszWjll4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IdPNf4o5gv/vZTdDZrO43+NK0wiaAgQbOXk2LN81RQ7wm3inI6175tGuH7QB8I9FXAMZ+1YqBgI8lVpgtom2NywQ3pWQvRv+UDjhrnp1cqk38jb5l2kGtCRASDoYK1MqtH6WqcgIeBxlXFzD6nM/nPHywif5ky+WR9YI35fYH/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dV58ST0I; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-412a9f272f4so62765e9.0
-        for <linux-next@vger.kernel.org>; Fri, 01 Mar 2024 01:10:01 -0800 (PST)
+	 To:Cc:Content-Type; b=jY/+93lWtbi9TPVHOkpdzlX7d99Jg+QxO/muagPjKKKh+CE665UE6ou5AqIgbbMYmVjZdCWEOjEd4wphm2e+fxDdLLwyGr+abL1CC9Dg5dfgYBmr5yiTsHEQrrnbJpNXdA0xQprX1316KKmbvAaAgiCNgCNMts89aHdZrsFyAaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lym7PwvR; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-29b2a5e1726so86056a91.0;
+        Fri, 01 Mar 2024 01:42:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709284200; x=1709889000; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709286174; x=1709890974; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r/ANMr+3cEZ0ZNfgil/L+4To+nT1xIFH5lCy/naCOjA=;
-        b=dV58ST0Icdi5amXIv94VWU5NSj+zzkGmaNd8ZUfVVws+y0iS4RP7nFbKN9HB3iWVam
-         EX1vYP16Zb42DS5CWZTsx7xZ4eHOQtIDZmLwRIUCusHb5Jg14AxSJy1gI4xZVq4ZSq31
-         zLSjy/sIeEsKP0rNpXmHxyIOGLUy5OOJAEBiBfWPNYBdlhIYG+I6hP6IlvSx8C49nyOs
-         HjBlP8nE7MW+ptwShVPK8wuhjpWjeMBj0g0Vwg03hfkI5gHkPlTb2EgJmW2cD9uKZR5K
-         zSj8wf0YzUuorJDjVAnJEYgzeqq/p6A1q5L8kQ2VBP18WCuxdxjD1+hHYmbuJQn1POYM
-         CVHg==
+        bh=GheA9YkRjWROmqg+lVjcKOm6fIRi4kXVh6dbszWjll4=;
+        b=lym7PwvR46odGVrKo+bZUuW338aBrT7fsC5cMaZPqX4t6zj80diZ41IYZd4p40En/e
+         /yhCwD0YPg7pYX6Sw5wtE9rrVjsIuoz01UasCAOmoWd0tNc9qNMpIfr/7eElpeGL9rIB
+         0dxmZBqBm8HFJ6JO/YkskeiAhq7auYRoS8Gz3uTn+Fa8zHx89P0gSDDXsyVg6RW6SRwX
+         9+FZQO8PZ1R9KJs3JIPk9EXIpZNNHmkn4wjehK7iIAD5iwQBCaibNQFMlyGdaD5GSbOH
+         R/o2lMa7BGOhDW/Q47Ja0sZRmJmptR0sM6HsJPiAQQ788jDExplFtuNKy4fxKZh+MYHB
+         Fjfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709284200; x=1709889000;
+        d=1e100.net; s=20230601; t=1709286174; x=1709890974;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=r/ANMr+3cEZ0ZNfgil/L+4To+nT1xIFH5lCy/naCOjA=;
-        b=Th6ZexQu8kpnbnWO07C//9kZLSmoAuDHDal+cLDdUYvhJerVIOA7S852YhfH9RSVdF
-         6wmKc0H8cUCN/+7wHAcrgiAEZlLe0MqvMr1byL9eY4UfNz/zRGQ8xeGt/xW7Rv173tv9
-         7l0+7yndcXBgiYiqecRZl5nAZKintyR526Zd0defhL00sDznj+cd1rUlOId/RKnzPFkn
-         MFp7AKYbXPcMokzRBNDJOeITXG6CkNT/dOpwYRIEJ6S73lqq3eu6mT3YjqPDx08clqgj
-         YjKE+rpm/qzfLfb6IqLfHkEgm1C/rLkXpbA/PhtTbV0k+OOqPfEi9sa8E2yttQf21UL+
-         AgKA==
-X-Forwarded-Encrypted: i=1; AJvYcCX870Wlwp/4A7eUzo3EkKhx2AmO3LWTRRnNU4Kn1e9+uEfm/6zIDGCbCGGLWEfx4YTD855we2qJ3ZbCQdemV63cmjFOtxYWG333Lg==
-X-Gm-Message-State: AOJu0YyBVCkTC+b4nuajzrvoOmbjmzmzlBScm/UoSinssRVs2Tc4oM3G
-	N3bXQbIk/vA4yB1GBiC2Xgp3isdMoAbW4QBJ+iCaxQmJHf4RPPAjCDIjVxD/DF//WwykWHLTBa9
-	NzyrHxZVLctEZrdzAOtP6luMK2A168BEJydVB
-X-Google-Smtp-Source: AGHT+IG0r3zRJ6YjzCctr3gWX3Rox3vswBptriUgnXzxYzsyJh67YHrS1JihMP5dxjTnoPKebA9b7afZP3LHMY2ozrU=
-X-Received: by 2002:a05:600c:3b20:b0:412:c810:ff9c with SMTP id
- m32-20020a05600c3b2000b00412c810ff9cmr48399wms.1.1709284200186; Fri, 01 Mar
- 2024 01:10:00 -0800 (PST)
+        bh=GheA9YkRjWROmqg+lVjcKOm6fIRi4kXVh6dbszWjll4=;
+        b=bpaa1D2Q1iCVYGGO8qeex8GuT223KnRBpVWnNn23uWZ/eKrZgqyc91Yw5NSp0z2VXO
+         VQD7aAaLAyj9lL85Ge/Oe17gCxJA2IcBINoUp9l4yFssqGrAvHO19yQHl5tWioE4xr4g
+         4Ph5q12+l1sYfX1JKZRyzOYbzqUF7eUF+nOYiPLPbteuCgxnKrQ53z4pBj1h+yVB9j9j
+         4PfVsvJ5M9YK3Sd/DpZm4T2lvzUUf3Zpqp82zNbXlCrUApTiN/pfXi1z6G5mYNpi0QIP
+         MjBJeIj1SCoDMILrJMjm7hiZd5Qgz8Oui489i4r/RNYDpl/v0ltZGDHRJNDq+cRoLlhC
+         5UIw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAicBTnKn7ARGccID2bdbXEW7b/hLkJsp4LpD1ArGAmq7frp3LvuYU0vm/ySCLo7/kNfOquJDYljLXpalRJ5oL99C5m/LZgEcUqHwXS2Tpzb4SnuLadCD9UbOHItJ2dITw4cnDkQ0SYw==
+X-Gm-Message-State: AOJu0YzG46+d4gZB0o8P8PO/ccBOCFwdMuq41GlGl3AzbvOCGAwq393H
+	HKGVTds71+G+2o1o8H5yWHbPOy+P7WYOgD7+gV0RQbRHv+p8Sg3DdxFppgqyrYt+zgXENKigAjy
+	Mtg2FZzQEckSMPfx6tTOkkiPEh1pZ8/grMqyNVw==
+X-Google-Smtp-Source: AGHT+IHsGmgAGusC1c4MKByGLQca8Om4uRqYIeRuPtqzqBdpcp0b3V6rIiEIYPPYSQidp5LHt9BbkDV8+wkwvI86N3A=
+X-Received: by 2002:a17:90b:103:b0:29a:e097:50b4 with SMTP id
+ p3-20020a17090b010300b0029ae09750b4mr939480pjz.46.1709286173681; Fri, 01 Mar
+ 2024 01:42:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240301121108.5d39e4f9@canb.auug.org.au>
-In-Reply-To: <20240301121108.5d39e4f9@canb.auug.org.au>
-From: Eric Dumazet <edumazet@google.com>
-Date: Fri, 1 Mar 2024 10:09:45 +0100
-Message-ID: <CANn89iKpsHTQ9Zqz4cbCGOuj8sp5CCYGHe3Wvk2cyQL4HPADkw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
+References: <20240301153347.3b909702@canb.auug.org.au>
+In-Reply-To: <20240301153347.3b909702@canb.auug.org.au>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 1 Mar 2024 10:42:41 +0100
+Message-ID: <CANiq72=q+aFCRw_76dGYNr2EGp+Rm3ri_hs9+PzOAFZ-FLcBmA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the
+ mm-nonmm-stable tree
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>, Jiri Pirko <jiri@nvidia.com>, 
+Cc: Miguel Ojeda <ojeda@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 1, 2024 at 2:11=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org.=
+On Fri, Mar 1, 2024 at 5:33=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org.=
 au> wrote:
 >
-> Hi all,
->
-> After merging the net-next tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->
-> In file included from <command-line>:
-> In function 'tcp_struct_check',
->     inlined from 'tcp_init' at net/ipv4/tcp.c:4700:2:
-> include/linux/compiler_types.h:442:45: error: call to '__compiletime_asse=
-rt_940' declared with attribute error: BUILD_BUG_ON failed: offsetof(struct=
- tcp_sock, __cacheline_group_end__tcp_sock_write_rx) - offsetofend(struct t=
-cp_sock, __cacheline_group_begin__tcp_sock_write_rx) > 99
->   442 |         _compiletime_assert(condition, msg, __compiletime_assert_=
-, __COUNTER__)
->       |                                             ^
-> include/linux/compiler_types.h:423:25: note: in definition of macro '__co=
-mpiletime_assert'
->   423 |                         prefix ## suffix();                      =
-       \
->       |                         ^~~~~~
-> include/linux/compiler_types.h:442:9: note: in expansion of macro '_compi=
-letime_assert'
->   442 |         _compiletime_assert(condition, msg, __compiletime_assert_=
-, __COUNTER__)
->       |         ^~~~~~~~~~~~~~~~~~~
-> include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime=
-_assert'
->    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), m=
-sg)
->       |                                     ^~~~~~~~~~~~~~~~~~
-> include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON=
-_MSG'
->    50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #cond=
-ition)
->       |         ^~~~~~~~~~~~~~~~
-> include/linux/cache.h:108:9: note: in expansion of macro 'BUILD_BUG_ON'
->   108 |         BUILD_BUG_ON(offsetof(TYPE, __cacheline_group_end__##GROU=
-P) - \
->       |         ^~~~~~~~~~~~
-> net/ipv4/tcp.c:4687:9: note: in expansion of macro 'CACHELINE_ASSERT_GROU=
-P_SIZE'
->  4687 |         CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock, tcp_sock_wri=
-te_rx, 99);
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> Caused by commit
->
->   99123622050f ("tcp: remove some holes in struct tcp_sock")
->
-> I have reverted that commit for today.
->
+> I fixed it up (see below) and can carry the fix as necessary. This
 
-I have no idea. Maybe this arch has some unusual alignments on
-u64/u32/u16 fields ?
+The resolution looks good -- thanks!
 
-The patch should not have changed tcp_sock_write_rx group...
-
-My patch reduced tcp_sock_write_tx on x86_64 from 113 to 105 bytes but
-I did not bother changing the assert,
-because the assertion triggers if the size of the group is bigger than
-the numerical value.
-
-So I could have added the following, but really did not bother.
-
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index c82dc42f57c65df112f79080ff407cd98d11ce68..7e1b848398d04f2da2a91c3af97=
-b1e2e3895b8ee
-100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4651,7 +4651,7 @@ static void __init tcp_struct_check(void)
-        CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock,
-tcp_sock_write_tx, tsorted_sent_queue);
-        CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock,
-tcp_sock_write_tx, highest_sack);
-        CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock,
-tcp_sock_write_tx, ecn_flags);
--       CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock, tcp_sock_write_tx, 113=
-);
-+       CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock, tcp_sock_write_tx, 105=
-);
-
-        /* TXRX read-write hotpath cache lines */
-        CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock,
-tcp_sock_write_txrx, pred_flags);
+Cheers,
+Miguel
 

@@ -1,109 +1,106 @@
-Return-Path: <linux-next+bounces-1457-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1458-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A391887077B
-	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 17:47:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 590EB8710DB
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 00:04:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D523B1C212DD
-	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 16:47:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDA931F22221
+	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 23:04:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 011514D9F5;
-	Mon,  4 Mar 2024 16:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A512E7C0B5;
+	Mon,  4 Mar 2024 23:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="xRN9fOS6"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kaTeYXXR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD799495F0;
-	Mon,  4 Mar 2024 16:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E37C7B3FA;
+	Mon,  4 Mar 2024 23:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709570869; cv=none; b=nY+fo8O2uVsfO9EtUvSTnDtIJ8HQXAbE/5ET3vpjnc2DRAyTamylPYM3j0G60hYkUyENmjnWIJ+XVARBC+u67ijYd/pjQUiNWHbaOcG8Ye4Yf1CHjIFSReEhilM8m42qadUJEXuIZWb3onlvLTe9fviLREJCpc8ieB4K9B9dy6E=
+	t=1709593466; cv=none; b=d+SSp4oa5Ajk0JmY32uUi1eDemXh+yelkWDibMouwaNwhrPBcydRdR01tIZuELZc3Czb/rOVGS26kPj9XeFoFcXmkbYWE/O6mOxyFarFdcOMr1mXw8k6vfZE2aIkIqtFoUj+FEmfNk1KQKbd9Gm+ZAt0SMGkOFMIriV/XDHq0FU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709570869; c=relaxed/simple;
-	bh=vqaCs6mYffPI4elLE9hYWmT1AKYqmXutoymuIOPZcqs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=g18I7JNW/BSQ+Nr4iRLDdJ5SBcbwouVEYoVjoQKQYVD7CFls9nKOj6ZlOvRcWt7Z4y/q1bsJ2TZd4h0JQ2GMarDMe6bEC5D1qDSgtwXdtv6bDdANNuCG5PrMLdHC8VcNxrQLTIUITkDQydMiMCbY34AwrhNFi/uGDSnw0IRSs74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=xRN9fOS6; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-	bh=7bG+hQSw2tqOeEGkJrcSkS7HC1Vmfa8Jpar1AvYkw14=; b=xRN9fOS6DqHoknrHLLGcINz4Zr
-	npNQ1RWxwvOowQwre5eHRLhnChgbIX5YQYmi6IoEClvlPyfZyqNlvi2ioUuvVp6cB/Bu25sIKMen6
-	VcLPtxaf1g60wsrHqxh9XebsN+77vhbsEJP4Yxl6uFVOYPSed3PeqMBFFXCMvwU4jBT4NA4tmDvsu
-	5xZ6+NtwxkpL36iuWruYYApoUG5ElF3wautokUDz+Zuo3TpK/bdc9+6zpAMKlc27T0IiHCNPkEH70
-	2ZsBdXcloKdswWgqDdhq5NiPtUw34Pv004yIMLuZP1JVRxUGujPCnpAzIWxoeS+4VpHjyHfdQ+uu7
-	ocVXxKzA==;
-Received: from [50.53.50.0] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rhBTe-00000009sto-12Ks;
-	Mon, 04 Mar 2024 16:47:46 +0000
-Message-ID: <b7f3fb0c-6c26-42c7-858c-231f4982a761@infradead.org>
-Date: Mon, 4 Mar 2024 08:47:43 -0800
+	s=arc-20240116; t=1709593466; c=relaxed/simple;
+	bh=3fizgap9kRHwdYFmCKbypLQTKC6lhALk+RWt1ErVW7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZtVKK6aMHzEp4YnDUaEQnq8LP7flKh9PDYnSxy48nlh0XU7gbyoqGah70/x03OIiUSB7C8nGKTgmO7ZuhgpXTEVAKSONVIzDoZhg7ekisDyKB6lkIrIXGYyFq20pMHabHfoWyyfS8pjr4MLya+ZasuvI8iYjknsGSEn3M0/UDVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kaTeYXXR; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1709593456;
+	bh=yeJtJRmkh6lrE1U0nPq5HZKG+k3TaMbjaD+Va9qkN0U=;
+	h=Date:From:To:Cc:Subject:From;
+	b=kaTeYXXRPqYAuiAn1Pthe6Ab24CWIZpN1hQkutIqppgCiiQ7RMNxpqmuo2vrT21yc
+	 gmYTBEkXHqUjwHs/t6nI1kBe49YgqwIsILHK2pcMrXV098UHqR1x6BJxpjzCvCDVQQ
+	 y5tN84G7YBbI19UVrc4y5h7VIkTgPqb6kVjo1/38OclZ47AaxoNsMtRlrsaDXsaNN0
+	 vT5XAgR8WlvI6J5Q9ILlwsLYVcVMS6ubhp9hDaj3bZsn2tYHz4Y+vdmsSaLqbd2K9b
+	 S9mNixKKZrE4yE2slPwfgE5Eqh5RcQBRj6MDrmJhdOFhPP2TYU+KYF1t+TLX98gmx8
+	 P8jNKi5AB12gA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TpZ5B4lkhz4wc9;
+	Tue,  5 Mar 2024 10:04:14 +1100 (AEDT)
+Date: Tue, 5 Mar 2024 10:03:40 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Olof Johansson
+ <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the samsung-krzk tree
+Message-ID: <20240305100340.6abe706c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] riscv: Fix compilation error with FAST_GUP and rv32
-Content-Language: en-US
-To: Alexandre Ghiti <alexghiti@rivosinc.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20240304080247.387710-1-alexghiti@rivosinc.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20240304080247.387710-1-alexghiti@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/uaBpdjfb0E5xAXH7PyhgiEh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/uaBpdjfb0E5xAXH7PyhgiEh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 3/4/24 00:02, Alexandre Ghiti wrote:
-> By surrounding the definition of pte_leaf_size() with a ifdef napot as
-> it should have been.
-> 
-> Fixes: e0fe5ab4192c ("riscv: Fix pte_leaf_size() for NAPOT")
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+The following commits are also in the arm-soc tree as different
+commits (but the same patches):
 
+  213b755e42e2 ("ARM: defconfig: enable STMicroelectronics accelerometer an=
+d gyro for Exynos")
+  5fb1252944fc ("ARM: dts: samsung: exynos4412: decrease memory to account =
+for unusable region")
+  b43b68935124 ("ARM: dts: samsung: exynos4412: decrease memory to account =
+for unusable region")
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+These last two are also identical to each other.
 
-Thanks.
+--=20
+Cheers,
+Stephen Rothwell
 
-> ---
->  arch/riscv/include/asm/pgtable.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 25ca14f6942c..54d26a07fa63 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -439,9 +439,11 @@ static inline pte_t pte_mkhuge(pte_t pte)
->  	return pte;
->  }
->  
-> +#ifdef CONFIG_RISCV_ISA_SVNAPOT
->  #define pte_leaf_size(pte)	(pte_napot(pte) ?				\
->  					napot_cont_size(napot_cont_order(pte)) :\
->  					PAGE_SIZE)
-> +#endif
->  
->  #ifdef CONFIG_NUMA_BALANCING
->  /*
+--Sig_/uaBpdjfb0E5xAXH7PyhgiEh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-#Randy
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXmU0wACgkQAVBC80lX
+0GxSGQf/RCeJtjTazpjgGOenDQnQeYXNSgGCUQ4Uru7TlNarhz8QuEzqEPaO+yLF
+v07yx/tTc9REpT3PtBhnOu/42zNM0UH2KI+5+RfnI2TA7IB4CFkzfuaS5UUx1ObJ
+SF4Y4M+VwZ21BYhFa+nS6vyw9p7qJfNHDGOaqZdYovuL2dEanoyuD9pjsMR2rx46
+leiB3VyZtiAMAnScoBvWIYJjiyIm9MEnVde4H61rMif4FrYiLIdLWKC2tUj5h3W0
+MrRXVlh6TMLsvRYFjXuQCNdNUEkoca6EBu9vA25BtGkppmWQqn2ZmA0fXwMgrQjh
+weLOgPmo9Dppjnxf7fDMeXsAWGg5nA==
+=dTH/
+-----END PGP SIGNATURE-----
+
+--Sig_/uaBpdjfb0E5xAXH7PyhgiEh--
 

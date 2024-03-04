@@ -1,108 +1,115 @@
-Return-Path: <linux-next+bounces-1454-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1455-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2181E86FB51
-	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 09:08:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3AE486FD1C
+	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 10:21:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC85D1F228F9
-	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 08:08:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 110BB1C2090F
+	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 09:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066C1171A3;
-	Mon,  4 Mar 2024 08:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D082A1BC3D;
+	Mon,  4 Mar 2024 09:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PCG5E6xp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7653E171AF;
-	Mon,  4 Mar 2024 08:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA39C12E73;
+	Mon,  4 Mar 2024 09:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709539725; cv=none; b=PLLMEz1Xgq8sA5y0356pwtaR6Nhj+Re0vUnZiAwS0ioS7pz3asqWf/QEK5K4waFaTWlENQKrftb+cJYSl7oAYqxNQqhFZRD5kzMbaWSEIL1kTyJdEA1pd4sjXLWcUS+qJqn+eWCI6iMNn+hl3qmN8o1dJ134Cm9SS1OT+gg1TFQ=
+	t=1709544078; cv=none; b=Ozhpf8DsmoOi3B+tAa4RjXYrByaxf3Dq9lBRCoZjF9PmJ4RN/Xv586CIZRPa6O3OkuvZZIvFCcpXHp6jHEYeTHFEuhGPvjweshivHYTfGCHo+smnqtD9AnLw2Fcj4u1kwSXCMRlUB1Bj8e5n1D2UpALH79fEx1CE5gqYRbbNSB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709539725; c=relaxed/simple;
-	bh=yHwqB2Upd50z2cFRBEvqAhh9bCUpbHfzPJX7IFAjoPk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uWym2f9jizo9OgmgpauVBQJXe94OS+8fIxI7cGkNX5l/hCByY58Ldz+eePYiiHofuHBUw6njqn6qEdRHRANNmDIsR0wCl2MlKsCfxancRe2io5hz4dZYIUFRpfhMWzfeMeOlbZj9vkYIx3qezOAzgGYnyx6uijrze/PIFgNxY1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D51CE0002;
-	Mon,  4 Mar 2024 08:08:32 +0000 (UTC)
-Message-ID: <79b41dfc-004e-4939-b045-0c320037e584@ghiti.fr>
-Date: Mon, 4 Mar 2024 09:08:32 +0100
+	s=arc-20240116; t=1709544078; c=relaxed/simple;
+	bh=qRumvw5r0fBe4cXijShx0jyie3b5Thf1Qym7Ach5dco=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U9ZnPwnwakI7ib+vmpkg7J5a0gQ+QamGRuW4gqRVrpAORwx7dDqE9UnDtEpSa1E7zfYU1kn/fMHx3yGzOwghOWbqdPOsuFSPMdw29M/ZblUE+cIzFMkkU2cdK5H7LHyriuntpFuvPrEww9Tknx5QxA3KRyYAY5/DCi54onw1ugQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PCG5E6xp; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-56454c695e6so6982706a12.0;
+        Mon, 04 Mar 2024 01:21:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709544075; x=1710148875; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LQ3u5q2nv0ZE5qO0688fu4cC+VQcvGJyrmp0bnKgjzQ=;
+        b=PCG5E6xpH2frePv9C9aBinp54qqx9HRZtfxa8eNOD0kDkEhKH0K/2wlLmvlwIFQioh
+         n02dAqqPpIJ4P/c3K4st3gwdl0+zhLBpz1MfatUzYSHcPaPg0MVVtSNULkMs2KmNgUth
+         Il2Wa0twMq83n0RNehUS/sXLwsiL9CU0Y7Z6nF9992b1FNolawU/aIE/LPEhhzuNsPJp
+         /Xh617BVgCXi1sT7qRjXDnU/JYZfMzIRJaCZyjFaw+Y2/VN7sWYi9E1wgN0dlV0ztjFq
+         F62INg5+U80TuzBB8GSzpXWe2QP7gxybGry9SeLN3Gm1bW170MBYucMcGR98L9SOvAJU
+         lWeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709544075; x=1710148875;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LQ3u5q2nv0ZE5qO0688fu4cC+VQcvGJyrmp0bnKgjzQ=;
+        b=NwkzF+daS63ah4ojJ+zVmpYECPIfe0XcMQI0RAWzAgRlh5J6+IRNodBHJA7qqCMDWo
+         +E1ckg0uJQpu3qA4vtLGUn41RUqetcE1jrw9YWMcYY26Qz87sjAHOVcltKgE3D8iZR4G
+         QFJIrArLYzjeklQDCP0JFd5EDsuBacS7Y8mDcffRd3CaVGlvukXivWe1NErtzr12xc1Q
+         H8xfQrSbc/8TqTx1cuCI5D47rGlImiNqeS+tzo4EpRGt7Ol3XpFyj4+f1RDMMaFhdT3d
+         1Eubwr7q4MYJrZMeM+cHWegjOjiT3s4MVC9p5iqipCHo2F96uBqH0F9YdaLRC/3mWozA
+         1xNg==
+X-Forwarded-Encrypted: i=1; AJvYcCUpYpQxbORNVsXm8H/Tufg7eikgZ9PcxgbaZtL228t0eJh54gF4awIqhLenfLPNz++fhwNTKVgRy1SRYNvc75Cy5Bs1Qph/yzLb6rsi/FiE1W6+DcVGPMLr55jIiN/0y7dBvZZzkhJUMw==
+X-Gm-Message-State: AOJu0YzbMybb9rxHB3kmQzvFivkmIeebZ7yRWPrZE69fLPPhmtpgl26X
+	27BIlLkvbPIVpqOuSXHxiEdSKZ6Tb07Hwnk4OV6Czlo1pSZk12R4
+X-Google-Smtp-Source: AGHT+IEelsGlsw0Kh3DhH6d/QbArK0mkW5NdrPbf1vYlzlDJBMAGVF44/JYRgXkX3kBj57E4njT8aQ==
+X-Received: by 2002:a50:8d8b:0:b0:566:624a:9e3f with SMTP id r11-20020a508d8b000000b00566624a9e3fmr7710597edh.3.1709544075006;
+        Mon, 04 Mar 2024 01:21:15 -0800 (PST)
+Received: from gmail.com (1F2EF13F.nat.pool.telekom.hu. [31.46.241.63])
+        by smtp.gmail.com with ESMTPSA id m13-20020aa7d34d000000b0056486eaa669sm4374872edr.50.2024.03.04.01.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Mar 2024 01:21:14 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Mon, 4 Mar 2024 10:21:12 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>
+Subject: Re: linux-next: duplicate patches in the tip tree
+Message-ID: <ZeWSiIKiL+8H2LqO@gmail.com>
+References: <20240304092140.0adb0f26@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Mar 1 (riscv 32-bit)
-Content-Language: en-US
-To: Randy Dunlap <rdunlap@infradead.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-riscv <linux-riscv@lists.infradead.org>
-References: <20240301165705.07d9b52c@canb.auug.org.au>
- <e111f031-1015-4c35-b89b-263f7174431c@infradead.org>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <e111f031-1015-4c35-b89b-263f7174431c@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240304092140.0adb0f26@canb.auug.org.au>
 
-Hi Randy,
 
-On 02/03/2024 06:37, Randy Dunlap wrote:
->
-> On 2/29/24 21:57, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20240229:
->>
-> on riscv 32-bit:
->
-> In file included from ../arch/riscv/include/asm/uaccess.h:12,
->                   from ../include/linux/uaccess.h:11,
->                   from ../include/linux/sched/task.h:13,
->                   from ../include/linux/sched/signal.h:9,
->                   from ../include/linux/rcuwait.h:6,
->                   from ../include/linux/percpu-rwsem.h:7,
->                   from ../include/linux/fs.h:33,
->                   from ../kernel/events/core.c:11:
-> ../kernel/events/core.c: In function 'perf_get_pgtable_size':
-> ../arch/riscv/include/asm/pgtable.h:443:41: error: implicit declaration of function 'napot_cont_size' [-Werror=implicit-function-declaration]
->    443 |                                         napot_cont_size(napot_cont_order(pte)) :\
->        |                                         ^~~~~~~~~~~~~~~
-> ../kernel/events/core.c:7588:24: note: in expansion of macro 'pte_leaf_size'
->   7588 |                 size = pte_leaf_size(pte);
->        |                        ^~~~~~~~~~~~~
-> ../arch/riscv/include/asm/pgtable.h:443:57: error: implicit declaration of function 'napot_cont_order'; did you mean 'get_count_order'? [-Werror=implicit-function-declaration]
->    443 |                                         napot_cont_size(napot_cont_order(pte)) :\
->        |                                                         ^~~~~~~~~~~~~~~~
-> ../kernel/events/core.c:7588:24: note: in expansion of macro 'pte_leaf_size'
->   7588 |                 size = pte_leaf_size(pte);
->        |                        ^~~~~~~~~~~~~
->
->
-> Full randconfig file is attached.
->
+* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-I missed it because this patch interacts with FAST_GUP support merged in 
-for-next. But what this means is that the fix I sent for 6.8-rc7 was not 
-needed at all...my bad, sorry.
+> Hi all,
+> 
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
+> 
+>   9e1daa3bfccc ("x86/e820: Don't reserve SETUP_RNG_SEED in e820")
+> 
+> This is commit
+> 
+>   7fd817c90650 ("x86/e820: Don't reserve SETUP_RNG_SEED in e820")
+> 
+> in Linus' tree.
 
-I have just sent a fix here: 
-https://lore.kernel.org/linux-riscv/20240304080247.387710-1-alexghiti@rivosinc.com/T/#u
+This was only temporary, should be resolved in the next -next integration.
 
 Thanks,
 
-Alex
-
-
-
+	Ingo
 

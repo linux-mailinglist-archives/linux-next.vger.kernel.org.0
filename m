@@ -1,118 +1,108 @@
-Return-Path: <linux-next+bounces-1453-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1454-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 915F986FB42
-	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 09:02:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2181E86FB51
+	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 09:08:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12CDE28228E
-	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 08:02:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC85D1F228F9
+	for <lists+linux-next@lfdr.de>; Mon,  4 Mar 2024 08:08:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2CED168BC;
-	Mon,  4 Mar 2024 08:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="a47X/CRM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066C1171A3;
+	Mon,  4 Mar 2024 08:08:46 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715D2134D1
-	for <linux-next@vger.kernel.org>; Mon,  4 Mar 2024 08:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7653E171AF;
+	Mon,  4 Mar 2024 08:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709539373; cv=none; b=fMyDM47KHSYglVIYXyPZlZuKGEFbtnc13a8UZgoehfy0KMDTWFT0j1soRg7UyCcGrQk8IgpNLmdf3NFHzpXPgrWvUWS432u7BPykHaC2HGpWZmVdz4ybDFMsWGM33rRXZd3wnYUlZxiSezaidB/rHXZET7kRziHsq1Ial3jgF0c=
+	t=1709539725; cv=none; b=PLLMEz1Xgq8sA5y0356pwtaR6Nhj+Re0vUnZiAwS0ioS7pz3asqWf/QEK5K4waFaTWlENQKrftb+cJYSl7oAYqxNQqhFZRD5kzMbaWSEIL1kTyJdEA1pd4sjXLWcUS+qJqn+eWCI6iMNn+hl3qmN8o1dJ134Cm9SS1OT+gg1TFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709539373; c=relaxed/simple;
-	bh=dKwN8A7GUBExPlqO9KJL6ingVu5qBoz2pvjqaMOQanc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ct9xdU/SAx5GGuUU3HeikLw4N1mvdwY/37WYrOLT44GCM84ZWvFKtlcCcSetIuePutcaZvKz/FknQ2vOBPL6XUHyhwGO8cbU8YCRYI2nimasfqAeZvnUKnE31bWYfwyyoZvNeH0J+GvEKN7ZOu0ArlJLFNBXCgVK0+wjfiUaqRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=a47X/CRM; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d24a727f78so50248701fa.0
-        for <linux-next@vger.kernel.org>; Mon, 04 Mar 2024 00:02:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1709539369; x=1710144169; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gtlvrgqpZklQkEKYnLjgHRVt/fow+xyugZpWWHGtqds=;
-        b=a47X/CRMe1pwSH3l8D0X5us3ht9a0zWRkiQEQ2HaODeydmcTp7I4j4BTwFjMRYwWhp
-         r2iurDox9mt+qv1v354sbpRjCZNMOJEF6uwPlx6grTouGduuCRwljFT5hUzQ/i2/5YiT
-         QHNMkzkGKTG7ipn8zYcrQERiAzcapuFTqdHXXTVzcvfMin18CZLnyzmHvPDQ/d7ILDd/
-         8fS6awIQDy/7cFbTS6UPA2xyeF0J2BR5viDoIbNB2JPvSJYEkr10G1rmqa0CxJDSe06W
-         1Vv5YQFtI4kBuHFFn4zbbGr5XGXEkoY3JxMHda5C1ubi1DYmCf6ttAmeqRS/pbgsyyXb
-         phyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709539369; x=1710144169;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gtlvrgqpZklQkEKYnLjgHRVt/fow+xyugZpWWHGtqds=;
-        b=g83Lymt0SqTSGavS50ylotaeazPToobjPL1nZsBYVsIpOz17eaFPpA+2zbyRZlu9Af
-         oYv96VrFhPBSqkxsWHQceontTUtpY1+u3/AOPJeT6RL4LFZDnl9hywhyYrqViJJn0IH7
-         TCQaQ1AOMppFhFo3fVyjaEve5exsgoyp6EDL6N884vb9U+LK47VIAr3P7mKBkIyIhZEB
-         Lqx+ggKojNTR42+KgpC/LI7OqkAcpFkJmM5o49444Tp4A06/lttrCs/kTZ+B9AblZMoB
-         aDHr5ZqY3CPO5vGyydklTdZpkaOFFPMem67NUb9EcQEuCpi7ADPlLNpmrenwl5vn+x41
-         q5nw==
-X-Forwarded-Encrypted: i=1; AJvYcCWBuXwGbscBQNtmrSrCjUmOoYDtlCvT6fVvrIH5x9ih4BixCA1EtUmbHJ/1zkfsVqMt/r6V4UHUKWcCtNe40j7CWJSSVYkQDT6GTA==
-X-Gm-Message-State: AOJu0Yxtg2aitNaqAjcTsKYKaJTWKYciCciAtZNbTk4+qAXKKoUpBDfY
-	OowJQKOTfTjiKuLaydvxKyTReQ5U0cF6dYEGvdmsFag5Oy4hQOrAoYV/8egxHbQ=
-X-Google-Smtp-Source: AGHT+IFED/yYEBIF1j8I6CFBLLSnSkchoxI3Bvz64nJ6NMI0b0uSnfEaPsXBLlJrn8oZCubMvR0sfA==
-X-Received: by 2002:a2e:958b:0:b0:2d2:7e19:f6 with SMTP id w11-20020a2e958b000000b002d27e1900f6mr6052452ljh.23.1709539369591;
-        Mon, 04 Mar 2024 00:02:49 -0800 (PST)
-Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id p3-20020a5d4583000000b0033b47ee01f1sm11442472wrq.49.2024.03.04.00.02.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Mar 2024 00:02:49 -0800 (PST)
-From: Alexandre Ghiti <alexghiti@rivosinc.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH] riscv: Fix compilation error with FAST_GUP and rv32
-Date: Mon,  4 Mar 2024 09:02:47 +0100
-Message-Id: <20240304080247.387710-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1709539725; c=relaxed/simple;
+	bh=yHwqB2Upd50z2cFRBEvqAhh9bCUpbHfzPJX7IFAjoPk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uWym2f9jizo9OgmgpauVBQJXe94OS+8fIxI7cGkNX5l/hCByY58Ldz+eePYiiHofuHBUw6njqn6qEdRHRANNmDIsR0wCl2MlKsCfxancRe2io5hz4dZYIUFRpfhMWzfeMeOlbZj9vkYIx3qezOAzgGYnyx6uijrze/PIFgNxY1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D51CE0002;
+	Mon,  4 Mar 2024 08:08:32 +0000 (UTC)
+Message-ID: <79b41dfc-004e-4939-b045-0c320037e584@ghiti.fr>
+Date: Mon, 4 Mar 2024 09:08:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Mar 1 (riscv 32-bit)
+Content-Language: en-US
+To: Randy Dunlap <rdunlap@infradead.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-riscv <linux-riscv@lists.infradead.org>
+References: <20240301165705.07d9b52c@canb.auug.org.au>
+ <e111f031-1015-4c35-b89b-263f7174431c@infradead.org>
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <e111f031-1015-4c35-b89b-263f7174431c@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: alex@ghiti.fr
 
-By surrounding the definition of pte_leaf_size() with a ifdef napot as
-it should have been.
+Hi Randy,
 
-Fixes: e0fe5ab4192c ("riscv: Fix pte_leaf_size() for NAPOT")
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
- arch/riscv/include/asm/pgtable.h | 2 ++
- 1 file changed, 2 insertions(+)
+On 02/03/2024 06:37, Randy Dunlap wrote:
+>
+> On 2/29/24 21:57, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20240229:
+>>
+> on riscv 32-bit:
+>
+> In file included from ../arch/riscv/include/asm/uaccess.h:12,
+>                   from ../include/linux/uaccess.h:11,
+>                   from ../include/linux/sched/task.h:13,
+>                   from ../include/linux/sched/signal.h:9,
+>                   from ../include/linux/rcuwait.h:6,
+>                   from ../include/linux/percpu-rwsem.h:7,
+>                   from ../include/linux/fs.h:33,
+>                   from ../kernel/events/core.c:11:
+> ../kernel/events/core.c: In function 'perf_get_pgtable_size':
+> ../arch/riscv/include/asm/pgtable.h:443:41: error: implicit declaration of function 'napot_cont_size' [-Werror=implicit-function-declaration]
+>    443 |                                         napot_cont_size(napot_cont_order(pte)) :\
+>        |                                         ^~~~~~~~~~~~~~~
+> ../kernel/events/core.c:7588:24: note: in expansion of macro 'pte_leaf_size'
+>   7588 |                 size = pte_leaf_size(pte);
+>        |                        ^~~~~~~~~~~~~
+> ../arch/riscv/include/asm/pgtable.h:443:57: error: implicit declaration of function 'napot_cont_order'; did you mean 'get_count_order'? [-Werror=implicit-function-declaration]
+>    443 |                                         napot_cont_size(napot_cont_order(pte)) :\
+>        |                                                         ^~~~~~~~~~~~~~~~
+> ../kernel/events/core.c:7588:24: note: in expansion of macro 'pte_leaf_size'
+>   7588 |                 size = pte_leaf_size(pte);
+>        |                        ^~~~~~~~~~~~~
+>
+>
+> Full randconfig file is attached.
+>
 
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 25ca14f6942c..54d26a07fa63 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -439,9 +439,11 @@ static inline pte_t pte_mkhuge(pte_t pte)
- 	return pte;
- }
- 
-+#ifdef CONFIG_RISCV_ISA_SVNAPOT
- #define pte_leaf_size(pte)	(pte_napot(pte) ?				\
- 					napot_cont_size(napot_cont_order(pte)) :\
- 					PAGE_SIZE)
-+#endif
- 
- #ifdef CONFIG_NUMA_BALANCING
- /*
--- 
-2.39.2
+I missed it because this patch interacts with FAST_GUP support merged in 
+for-next. But what this means is that the fix I sent for 6.8-rc7 was not 
+needed at all...my bad, sorry.
+
+I have just sent a fix here: 
+https://lore.kernel.org/linux-riscv/20240304080247.387710-1-alexghiti@rivosinc.com/T/#u
+
+Thanks,
+
+Alex
+
+
 
 

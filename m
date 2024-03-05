@@ -1,112 +1,81 @@
-Return-Path: <linux-next+bounces-1479-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1480-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7C33871C68
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 11:58:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED563871E7D
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 13:03:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59751285475
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 10:58:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A4861C23E2D
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 12:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7A2A5C8E4;
-	Tue,  5 Mar 2024 10:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 629935676D;
+	Tue,  5 Mar 2024 12:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="v8CyoauD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJaYYVJm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB52E5C8E0;
-	Tue,  5 Mar 2024 10:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BEFF56472;
+	Tue,  5 Mar 2024 12:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709635974; cv=none; b=u8lyePg1BNBFeVzXBdL6NL1zugG9cYUnldaxBhixBxHwS1yuwyV6bguCh632oNqQ4TC8FyJbQ4Eh2WEnfu/655+7+Gto+uqZkLNnsE0jqvigvC+sFqDGUJAo5cjBPcNXUeKlSo9VH0YhX6bjd53tk4Jk/ilAjMOX+nAaX+yYDEA=
+	t=1709640217; cv=none; b=lSuoWYGiLBXmYL9LX9DG4McIwBApt+T6/njMxw4EIbMqwk3UsJLxXdRrJn3CjHLUgq+X/ei7JJAcAEapUw6VBylhFLGKqyfVbyF9SAWm6ceyFks28OQ2DqQfg9ohvk0Ge8mmDxLneTK3L5uozHiQxCY89Uye9sp1zgIGd9cmeh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709635974; c=relaxed/simple;
-	bh=w+dzZ9SEn7tNT1Gh8wYoSCpe+IryaeeidHzbyNkP7R8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ukzYJ6ukUNjr87hZg3QdhZuauosmX5BLh28z+bLy+kmEdFD8ZWJ+8JQ/Bq98BJ7nWjC9yOtrcJRZbR6LIPGJqMm72RdzXFmicro2PvhOTpNqs9y5oREy/pFbqd2zwBICgOHL65v+gDfgOgeTucscR7HpgpQrkuUESGkXXZp5fiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=v8CyoauD; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 479f57587ba60efd; Tue, 5 Mar 2024 11:52:49 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id E84CD66AA16;
-	Tue,  5 Mar 2024 11:52:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1709635969;
-	bh=w+dzZ9SEn7tNT1Gh8wYoSCpe+IryaeeidHzbyNkP7R8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=v8CyoauDU8ZpynYuaBRbQtMVQY4vxX7UkOSK/3KNruxCLZtSCXy2r82yRb29bkITt
-	 l9kqVMPyBAG/qFk7EfczirDfnRL5BtOEDc6KULz/4grnLJ0W1I5atc/GejFHymQ5sC
-	 Hkm4RAKzD8DdQS+DbM05dD5lLy5IY636+8ZpfyqHXt1rKE4iNK8k/H9t9nbvuBWYrS
-	 1kuYBXF9nJ1O2xkaYJO7TlCZgWu0BEGcHT1m+YHAlNKaQXkzSg4bGAo2Cekh8DSOw/
-	 2aF7jtMJOQqkpyqdJTIVM8aq6xY/eoUgFYtXrtlO0SfOfZolEpHrl+fM2zykVToQcD
-	 PD+Jq2Mwdk5AA==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+	s=arc-20240116; t=1709640217; c=relaxed/simple;
+	bh=jfljaek+m3Ap9dl376hPV7PcXvPEZz52T/u690ABKQM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TffidkYIPKHwVQvKeewtemYs+65C1BbBXNE/Z9Jw/jXnWKOIZgRzWNppSTfrWTq2a96RQcrWltbXfokH27rRMiOODKAJ9A5/4jEKWNaketllfNWdBK4BqOZNFciV8AB3NjQE0eFTaRdHBRrw3aEd2C59hQUBwzPKgULCPu42PiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJaYYVJm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DE9C433F1;
+	Tue,  5 Mar 2024 12:03:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709640216;
+	bh=jfljaek+m3Ap9dl376hPV7PcXvPEZz52T/u690ABKQM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LJaYYVJmd+BQI90hCE5IGOQx3mNuwtL19HHj8s9WHQtoNbUw76JdRHh2UAVm2CcnK
+	 rOs0gM9oJ/6UblDDB7jvpCn+0CARwSZQDn92RceNcXPEPd6P0BHV2+gFdVPe/uGNe4
+	 LO1R9f7+eCALo9vGr1El2dFgrJZ2D0sSRj+Jv3XRvCF/u7Sk5QYuKlWdDf+5ofKvz9
+	 UCW8Kt2DUU1Lb/Y3KJwlRpGGx4LRebhRN15z/XRubQ2PJ/BsRSRZyboOr9rPIYNWuB
+	 OVWrs9nsCLpQERhZTu81cGXZPhiVQSHP600vIxCUIHpS11vali3+uK8IsA2dfq2dj4
+	 zJMk6tzbGPFZg==
+Date: Tue, 5 Mar 2024 12:03:32 +0000
+From: Will Deacon <will@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>,
- Alex Elder <elder@linaro.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the pm tree
-Date: Tue, 05 Mar 2024 11:52:48 +0100
-Message-ID: <4903748.31r3eYUQgx@kreacher>
-In-Reply-To: <20240305112641.6248c6fd@canb.auug.org.au>
-References: <20240305112641.6248c6fd@canb.auug.org.au>
+Cc: Junhao He <hejunhao3@huawei.com>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the arm-perf tree
+Message-ID: <20240305120331.GA22097@willie-the-truck>
+References: <20240305151035.22c6f7bd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrheelgddukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
- ohepvghluggvrheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240305151035.22c6f7bd@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Stephen,
-
-On Tuesday, March 5, 2024 1:26:41 AM CET Stephen Rothwell wrote:
+On Tue, Mar 05, 2024 at 03:10:35PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the net-next tree got a conflict in:
+> After merging the arm-perf tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
->   drivers/net/ipa/ipa_smp2p.c
+> Documentation/admin-guide/perf/hisi-pcie-pmu.rst:48: ERROR: Unexpected indentation.
+> Documentation/admin-guide/perf/hisi-pcie-pmu.rst:49: WARNING: Block quote ends without a blank line; unexpected unindent.
 > 
-> between commit:
+> Introduced by commit
 > 
->   c0ef3df8dbae ("PM: runtime: Simplify pm_runtime_get_if_active() usage")
-> 
-> from the pm tree and commit:
-> 
->   5245f4fd28d1 ("net: ipa: don't save the platform device")
-> 
-> from the net-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>   89a032923d4b ("docs: perf: Update usage for target filter of hisi-pcie-pmu")
 
-The conflict resolution looks good to me, thank you!
+Thanks, Stephen. I'll fix that up.
 
-
-
+Will
 

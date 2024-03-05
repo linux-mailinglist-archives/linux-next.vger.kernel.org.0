@@ -1,109 +1,112 @@
-Return-Path: <linux-next+bounces-1478-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1479-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 352DF871A05
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 10:55:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7C33871C68
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 11:58:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF1BF1F21B97
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 09:55:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59751285475
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 10:58:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2D6537E6;
-	Tue,  5 Mar 2024 09:54:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7A2A5C8E4;
+	Tue,  5 Mar 2024 10:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WDSLeQKN"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="v8CyoauD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85CD535D6
-	for <linux-next@vger.kernel.org>; Tue,  5 Mar 2024 09:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB52E5C8E0;
+	Tue,  5 Mar 2024 10:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709632494; cv=none; b=cgYZ8HRVGenjbFh9dF945tSdwf1N3a//jXNs0QGSfgvTi96bqcMTML42FBRDbBwS+w8gqEIQRGgV7rX5jHGVtyXCYuy3j+xc9DY54Uc3dj/v25g3+3b8l51tsjrSEj2lDAgWOzfzULugWHmn+ygtdIhRLamZsyzwUE2VQO9vvoA=
+	t=1709635974; cv=none; b=u8lyePg1BNBFeVzXBdL6NL1zugG9cYUnldaxBhixBxHwS1yuwyV6bguCh632oNqQ4TC8FyJbQ4Eh2WEnfu/655+7+Gto+uqZkLNnsE0jqvigvC+sFqDGUJAo5cjBPcNXUeKlSo9VH0YhX6bjd53tk4Jk/ilAjMOX+nAaX+yYDEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709632494; c=relaxed/simple;
-	bh=FzZFZgyknEs4e3j86cGsSsHpKR/7l45G9iBLLSVc8AY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ehGAlv9/sp2j/bMup4BIAxVgJ2eFXw82f4cOV5xNeLGn/tQO9RifJpYQ0D6tRIwtgjwRD7jvCS6q/NFBPrNQImS8itPLt+QOd/XAZGXfQpp6KOSyCejD+KG128I7Pj2ymlFwM7753fc7/gAjsGRCRPce1jmymwnHjK7tRINfYb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WDSLeQKN; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so5009328a12.0
-        for <linux-next@vger.kernel.org>; Tue, 05 Mar 2024 01:54:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1709632492; x=1710237292; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WaxZu8cu5F/ocXV2z6I3xNk7GCsZx8449ky6SPWxlQ=;
-        b=WDSLeQKN5lQbnyACdsSmpxmXliSWb+A32mMTReGML0+oDJgysyP7YXZPIY/Zag6JTr
-         II0+wkBnXFYfx2xWMzLqSbu8+yhtzV8AOONtVeV+8oWuHimObnjX2d/Yi5tfcZvY02nz
-         j+Fnig+jAt7O89IF0nNcfwtuRS1WisJ9UmUd0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709632492; x=1710237292;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2WaxZu8cu5F/ocXV2z6I3xNk7GCsZx8449ky6SPWxlQ=;
-        b=p8NfN7nOuOHELJduMqTIOntWM53cFSp0Hoc/Rkhba5GF27zu/bFXY7N2iJXC+zCStI
-         zS+OT/TD4YgVrJ3YIFRUW6U0svo3r3KhzW6kfSDo11vb2AHy2HVVQc9nkXKjKTe1NgoY
-         kALdYfj8+XY6i9z1qF+i0IDXDQItBpVIff5X/0k0Crl1CrykLlJUmntogVcEbRh7gXNr
-         DwD34To9xABib4fk3pFfTnZJ485Bk++ifSp+8mqHE7FYfQOH7adfBy2P1KtMNocCWsjt
-         N7LeZy3th8yzsrIgtvh7oFjufa2IDea14Bga3NALRQffmX2ofwXPdP5iRHBRo8idkCAf
-         WZIw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxFq3wQQaxX29mKzEbXHczTOOxmD8H0RZArV/3vBxTeMWCGWsbxwZY4U3nWk5SIxscjMCCZzqdQ2BXwONWALlxZ97CBgpYRs5Cgw==
-X-Gm-Message-State: AOJu0YygQ3RMeQie4kiGfETxgnGz9k7hh48dzFmaA0gEK8ILTtuCSWat
-	NmKL+r9bDRWmlIMVUmuyBjvsOuIr+MDDF/tOtq1273rxq5mtmftG40AtNIFqu8/5aGVbVkWaJWI
-	=
-X-Google-Smtp-Source: AGHT+IF8R2lPQE1BAnZGj0uGjIgyHQJOfW9Km2P3yA0Lw0k0iHZ/gvHtO6acTtaCb/1N1sMxfuQfLg==
-X-Received: by 2002:a05:6a20:394a:b0:1a1:41a3:9b54 with SMTP id r10-20020a056a20394a00b001a141a39b54mr1311201pzg.32.1709632491974;
-        Tue, 05 Mar 2024 01:54:51 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a3-20020aa78643000000b006e0debc1b75sm8753970pfo.90.2024.03.05.01.54.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 01:54:51 -0800 (PST)
-Date: Tue, 5 Mar 2024 01:54:50 -0800
-From: Kees Cook <keescook@chromium.org>
+	s=arc-20240116; t=1709635974; c=relaxed/simple;
+	bh=w+dzZ9SEn7tNT1Gh8wYoSCpe+IryaeeidHzbyNkP7R8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ukzYJ6ukUNjr87hZg3QdhZuauosmX5BLh28z+bLy+kmEdFD8ZWJ+8JQ/Bq98BJ7nWjC9yOtrcJRZbR6LIPGJqMm72RdzXFmicro2PvhOTpNqs9y5oREy/pFbqd2zwBICgOHL65v+gDfgOgeTucscR7HpgpQrkuUESGkXXZp5fiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=v8CyoauD; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 479f57587ba60efd; Tue, 5 Mar 2024 11:52:49 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id E84CD66AA16;
+	Tue,  5 Mar 2024 11:52:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1709635969;
+	bh=w+dzZ9SEn7tNT1Gh8wYoSCpe+IryaeeidHzbyNkP7R8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=v8CyoauDU8ZpynYuaBRbQtMVQY4vxX7UkOSK/3KNruxCLZtSCXy2r82yRb29bkITt
+	 l9kqVMPyBAG/qFk7EfczirDfnRL5BtOEDc6KULz/4grnLJ0W1I5atc/GejFHymQ5sC
+	 Hkm4RAKzD8DdQS+DbM05dD5lLy5IY636+8ZpfyqHXt1rKE4iNK8k/H9t9nbvuBWYrS
+	 1kuYBXF9nJ1O2xkaYJO7TlCZgWu0BEGcHT1m+YHAlNKaQXkzSg4bGAo2Cekh8DSOw/
+	 2aF7jtMJOQqkpyqdJTIVM8aq6xY/eoUgFYtXrtlO0SfOfZolEpHrl+fM2zykVToQcD
+	 PD+Jq2Mwdk5AA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202403050153.07D12B800@keescook>
-References: <20240305145018.39b4e37b@canb.auug.org.au>
+Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>,
+ Alex Elder <elder@linaro.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: linux-next: manual merge of the net-next tree with the pm tree
+Date: Tue, 05 Mar 2024 11:52:48 +0100
+Message-ID: <4903748.31r3eYUQgx@kreacher>
+In-Reply-To: <20240305112641.6248c6fd@canb.auug.org.au>
+References: <20240305112641.6248c6fd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305145018.39b4e37b@canb.auug.org.au>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrheelgddukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
+ ohepvghluggvrheslhhinhgrrhhordhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
 
-On Tue, Mar 05, 2024 at 02:50:18PM +1100, Stephen Rothwell wrote:
+Hi Stephen,
+
+On Tuesday, March 5, 2024 1:26:41 AM CET Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the kspp tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> Today's linux-next merge of the net-next tree got a conflict in:
 > 
-> In file included from lib/string_kunit.c:8:
-> lib/string_kunit.c: In function 'test_strspn':
-> lib/string_kunit.c:176:25: error: format '%d' expects argument of type 'int', but argument 7 has type 'size_t' {aka 'long unsigned int'} [-Werror=format=]
->   176 |                         "i:%d", i);
->       |                         ^~~~~~  ~
->       |                                 |
->       |                                 size_t {aka long unsigned int}
+>   drivers/net/ipa/ipa_smp2p.c
+> 
+> between commit:
+> 
+>   c0ef3df8dbae ("PM: runtime: Simplify pm_runtime_get_if_active() usage")
+> 
+> from the pm tree and commit:
+> 
+>   5245f4fd28d1 ("net: ipa: don't save the platform device")
+> 
+> from the net-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-I was really scratching my head on this one. I didn't see the warning on
-my end because this is actually a result of the merge, namely KUnit
-becoming correctly stricter about format strings:
+The conflict resolution looks good to me, thank you!
 
-806cb2270237 ("kunit: Annotate _MSG assertion variants with gnu printf specifiers")
 
-I will fix the format string! :)
 
--- 
-Kees Cook
 

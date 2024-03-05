@@ -1,93 +1,136 @@
-Return-Path: <linux-next+bounces-1487-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1488-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CC8B87255B
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 18:11:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E0CC872A7A
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 23:55:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F36B1C261B0
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 17:11:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0193B23280
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 22:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43B0212E7E;
-	Tue,  5 Mar 2024 17:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F51012D1F1;
+	Tue,  5 Mar 2024 22:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+6vrw1G"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="H9IaqC1j"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18868DDA0;
-	Tue,  5 Mar 2024 17:10:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34A01EB33;
+	Tue,  5 Mar 2024 22:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709658628; cv=none; b=iC3Pb055h4Yhox2i4FcvY0eR8zXnr8OSmOXuzkJkhR9XijbPZh3KnmhnjbnbSKnUICJ4l7AGKdGtNK3nFY9pWgNzcDe91xhek6SowU1imChDZgO9h+7pXn6mLljtIGoNq3kTU38yogMf75UZkeSHLl+Q0FrUZq7gJwtHQ81Hb2s=
+	t=1709679347; cv=none; b=I7FA37ZxLD/FXfFosV/BvYlU8au5LX77K4njf4G/ybBi5pwqPTmu8s4lzg0lVi2vHxb5sXESa5xbRmeMMCSxn6yjMD8pY3ITh9fVvIGaM5+7fXiLfydRnybKLGdoLYlISZrR02OETznh5pKyLrkbbNfcGpQ53tZ1Ih3xth1UgxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709658628; c=relaxed/simple;
-	bh=pIdQm7zAKFtcIPONl6+fNNpS399eUnrjMwrdEDgruSo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LpeJWaNTn3uJY6UoAo2eGSXleX7RTEY/KXVz1nv/kFUS4tpJwfGrIr+PM1/vmjjlvuxxY+7q+fpBeB0W5SKvdbIaRV4PbAVfa32JMqQLOzYZYIBQQoDKVBR+tt+maNScZknHJ2/zRUTXZU2dmMdUtEQ/d4nj8zMz1lMxI1PDyQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+6vrw1G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F9EC433C7;
-	Tue,  5 Mar 2024 17:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709658627;
-	bh=pIdQm7zAKFtcIPONl6+fNNpS399eUnrjMwrdEDgruSo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C+6vrw1GLd+dxAlMQtRdyylL1fM3z7MV4HuGQEs9UhlLzb+FS1xbNgkpnJ92VVTo0
-	 8nkyvklcZb5st9j8t4LQWNHDM/snzE35WWmo6k9rtG+wfNOFxZQegqnG1WOz3LzTs/
-	 fY40qF5KUIDmq650Gtt2WXUT3xFrm3/n+ecQ64lHClU+0AxJR8iRjtvn8DYMiFf1sD
-	 mpAW74xhcOGOr/FozaCH6/K31S+2kEk5Qvbr+aktcniD4GmmeZEzW1kdHD/He4CsNp
-	 T92czomb34VQFDIL0BVnY9m3H9rm7+GoM7wxZ9ZtSZpthhtXjRo9QgTBIG9Q450DsL
-	 Ti/fJl7ZBZOvg==
-From: Will Deacon <will@kernel.org>
-To: sfr@canb.auug.org.au,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	Yicong Yang <yangyicong@huawei.com>
-Cc: catalin.marinas@arm.com,
-	kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	hejunhao3@huawei.com,
-	yangyicong@hisilicon.com
-Subject: Re: [PATCH -next v2] docs: perf: Fix build warning of hisi-pcie-pmu.rst
-Date: Tue,  5 Mar 2024 17:10:20 +0000
-Message-Id: <170964615106.2486967.12243064113209079072.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20240305122517.12179-1-yangyicong@huawei.com>
-References: <20240305122517.12179-1-yangyicong@huawei.com>
+	s=arc-20240116; t=1709679347; c=relaxed/simple;
+	bh=QKM3YMngCbu7nFuUu6jfK9gIuihRTijKWZtbkOvvipE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aZR+S3f2m0lGoProCgVxDZxm2oGWcl1lLNICyeTBayGuzDNHnUsSbE2QqkfFM8f4JvPg7+IWUlzTEwirSOkoEJjePZL8zZgUfI97XcRKxiJmt6BqPjcL9hiDzwyVKQEWNp9292NWxT+u2O+oBWRZ5twnIKY/cXCZdX9AN2M05po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=H9IaqC1j; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1709679341;
+	bh=VkrIjl0vhWafhAzUcWT3t54lRsEQJ+z7KSOEVYEquqc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=H9IaqC1jzxgPJ1ZKOoOpZyHXjLaKka5jBcNOfFDz2yhxgHkJj+2pWBeFXcpgkKObO
+	 2zztPN8ZoJgBn+Qs9v5N73fJbSFmEdFvfY5WPYXJZ1iptBCZvT1v2nQq7+VOBt2UXR
+	 U0gcDCHStHD1tjP34yLoglyIir6zlC3kpTxC5avEo7xZXrIEMUPjCxYPVOlYk/AU7I
+	 q+h6tu/sCqYn+yMgUvPjpLxq5Bzys96tvVxYFf3giDjPJa0YDNpFwAEIkmRi97cSKG
+	 48KShZGlxXFlu08lDbVY6x1R1GYiCw9WFnCeOaCBRZwWYZC2xUFN33z6OmPqazGaqj
+	 YURf8L8XVaJTQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tq9rr5K4Jz4wcD;
+	Wed,  6 Mar 2024 09:55:40 +1100 (AEDT)
+Date: Wed, 6 Mar 2024 09:55:39 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Lee Jones <lee@kernel.org>
+Cc: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje.mihanovic@skole.hr>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the backlight tree
+Message-ID: <20240306095539.0da4e342@canb.auug.org.au>
+In-Reply-To: <20240305091737.GB5206@google.com>
+References: <20240226132828.7524baec@canb.auug.org.au>
+	<20240305111634.57e84398@canb.auug.org.au>
+	<20240305091737.GB5206@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/9vXR_ao69_KeVYq+j3VzeXr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, 05 Mar 2024 20:25:17 +0800, Yicong Yang wrote:
-> `make htmldocs SPHINXDIRS="admin-guide"` shows below warnings:
-> Documentation/admin-guide/perf/hisi-pcie-pmu.rst:48: ERROR: Unexpected indentation.
-> Documentation/admin-guide/perf/hisi-pcie-pmu.rst:49: WARNING: Block quote ends without a blank line; unexpected unindent.
-> 
-> Fix this.
-> 
-> 
-> [...]
+--Sig_/9vXR_ao69_KeVYq+j3VzeXr
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you, this is much better than the kludge I had put together myself.
+Hi Lee,
 
-Applied to will (for-next/perf), thanks!
+On Tue, 5 Mar 2024 09:17:37 +0000 Lee Jones <lee@kernel.org> wrote:
+> On Tue, 05 Mar 2024, Stephen Rothwell wrote:
+> > On Mon, 26 Feb 2024 13:28:28 +1100 Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote: =20
+> > >
+> > > After merging the backlight tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > >=20
+> > > drivers/video/backlight/ktd2801-backlight.c:8:10: fatal error: linux/=
+leds-expresswire.h: No such file or directory
+> > >     8 | #include <linux/leds-expresswire.h>
+> > >       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >=20
+> > > Caused by commit
+> > >=20
+> > >   48749e2f14e3 ("backlight: Add Kinetic KTD2801 backlight support")
+> > >=20
+> > > I have used the backlight tree from next-20240223 for today. =20
+> >=20
+> > I am still getting this failure. =20
+>=20
+> I just pushed a bunch of patches.
 
-[1/1] docs: perf: Fix build warning of hisi-pcie-pmu.rst
-      https://git.kernel.org/will/c/b037e40a6af2
+I saw only 3 new ones (forgot to push?) none of which addressed this
+problem.
 
+> Please let me know if this is still an issue tomorrow.
+
+The problem is that after Feb 23, you rebased your tree and dropped commit
+
+  25ae5f5f4168 ("leds: Introduce ExpressWire library")
+
+which (added the leds-expresswire.h header), but kept commit
+
+  48749e2f14e3 ("backlight: Add Kinetic KTD2801 backlight support")
+
+which uses it.
+
+--=20
 Cheers,
--- 
-Will
+Stephen Rothwell
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+--Sig_/9vXR_ao69_KeVYq+j3VzeXr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXnousACgkQAVBC80lX
+0GzvpQf+LpW0f+pPYZGMDwa9MVRZzaUhvS3XxC+acND+xC7mZ8LAY+Bcj+1MAOIW
+T6xquxtXWQ+pc0RVP01HujbcbmaKj53EZC4VkbjSpytUkucuMY7/omqJ7NExvHDr
+T8EvnPbL83L2Xv3vfnr6CfbuapCQG/LzZuwCYM75/sJpGOqNWY4BcX22FQ+VGRtS
+CJHLBb8hmPbW5q/eN3Sk0vGRo2Zqn/pkPDcE7wdB78AYeX7VEe3dBFgd4ICKNkzk
+fS4kWXjx78QaaUn2q4J0JsDwaL8mucaREezOZV97A3RP9XD/V4gKxTc9xd1ATuM8
+5Zl2U7JhKFA1AcG8h2FqM2prUXQ4Vw==
+=2YMI
+-----END PGP SIGNATURE-----
+
+--Sig_/9vXR_ao69_KeVYq+j3VzeXr--
 

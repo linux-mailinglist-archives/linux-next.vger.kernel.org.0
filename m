@@ -1,110 +1,115 @@
-Return-Path: <linux-next+bounces-1460-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1461-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46A1587116B
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 01:09:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B546787117C
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 01:16:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0111B286989
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 00:09:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E78AB1C21776
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 00:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E47838F;
-	Tue,  5 Mar 2024 00:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B5F1113;
+	Tue,  5 Mar 2024 00:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lRff0L6b"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="b71JBGCz"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D25910F4;
-	Tue,  5 Mar 2024 00:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6F010E4;
+	Tue,  5 Mar 2024 00:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709597363; cv=none; b=BLdXXT75vt3As0naY7kz+tEqvJNQvKzc+a7adHQRJ2C4HKa/cpU1ueSIG3fp8vhCZTT1NylQh5JMcWcBoQM1AHl4KLHphB72QCEvERa29ZBen26CNKoInILl1FlyxJVEfxfg75KVafi1SOiv80dXFRkxfKMMoK3XZB2IL/aICyk=
+	t=1709597799; cv=none; b=siwnRhe8WEFlAlGw06WIiTV2yOaZzAPuu7L4PhYpPn87NerOxtS2x//HWtXlBW52sc8Wd4wfCPCoZXOSLkPUtfT58bbFkJIUh039Mi5sWxLT8BQX3wgC3LJuCk6Ra+Nrryu0a8Uc1ZkofOY3UEpoO4Ry53E1Mh8MqNtbJ5iTw7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709597363; c=relaxed/simple;
-	bh=sjmEfT0ohCbqVdzgG/LkzqVruSg79A1GrsikQf/PbHk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=UxLmEtnsSqYPLJrzmVwQ+7yH2avUfgsoRr6Zes/1joXDtMcHxI+ZAOTiIwKWBck80XqNNre7eEsExgAQkWEQPSUbkpXwjSqJpnVRStXmbdW/ODBKWi/hmMOG2lq9h0xZEJTe8Aw8+9CKJ6J441eM8oOfAiRMzp+csFp1W/qvBpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lRff0L6b; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1709597799; c=relaxed/simple;
+	bh=9g4elZyS7t+ZdtDfIMwy46fPX3MhNp6jb87re7cBkKY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LjzjQHP/6mOJRSeiG6JEU+mH8xi1Im0/EiWWRptF4vk8s1F7sboW/2yNT5x/QO7ZvVQDrzlO3jKVKjPIsYX1ba9yuEbS6/IXIjpBKt5Tz8JpMjvBmBaH92csxv68Xog/ZARh9RKYrrAf6H1EwT7G/DoyLwMxiv8ycCZM7+kVI38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=b71JBGCz; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1709597356;
-	bh=BhjGIujTBJ/bC8q+bjzT0Md5JgyiFQtwGr+hC8HKjZM=;
-	h=Date:From:To:Cc:Subject:From;
-	b=lRff0L6bcEqeNvLEkyINxqnvMBPvLnI1e023dhZ0VhmKfe5Bm5jnrNbQb5LJPS/D/
-	 o3mXhovFHffNkkn2HyhoUds1V7ARuFh5Xm3IaQWjcdI3hYjFhxkxoDj0ZfJ3Vtz7wn
-	 ehPt7E4OqPRWaOiOhdDvSiAxqm9NKHztEBUq6GIMkwkKq7lAyzYJaM8m4RGVUk/xK2
-	 VnPubfHdV+wsyBmCAFkpZj2K8cFJYFEhC70Ny9jY1yVEMS5+vHiCHQmJI+tfpNRS/8
-	 MtcJEfKcaxWK+SyseKYbWqMx83di9myIlkqVK7xnVpCil/cVXMHuW6nqWU98q6XbNW
-	 fn/x6KslRoQIw==
+	s=201702; t=1709597795;
+	bh=4sEqwP8v2Pe+YO/5GaRVCftFMQfgnoX7jzUKfZAJ9Zg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=b71JBGCzpgdhYRkGYZIXDPW7VuYDER5Ug8EuABtZ3hSAWXDjOtMV1ZGdVwuElz9pN
+	 esAzVBM1C5LZwgA2nTDKYmsm8m2PcJD9+WouN4ilLOrCgOkz27xjnOo4sUysKCjaa0
+	 87taZOhn874p0phkRI0RiFePSuTty/+4O606RTw8WOCwSZV/+CDQSdWCKOoqjg1iEt
+	 pcnqvN6GMy0CwvHVFLTQz2gfisDvIcJyojJhnscUP+dxVZ0ZmSbx0ZIEvLxIWINM5n
+	 dAG02POouS90xl8n8FHtzeYz7Bt/CRQPtKjEEOKCMLW9JL3lbajvAeIK5Wbgadz6J5
+	 6UnjgY+XWB4sg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TpbXD2MX2z4wbr;
-	Tue,  5 Mar 2024 11:09:16 +1100 (AEDT)
-Date: Tue, 5 Mar 2024 11:09:14 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tpbhf6tZWz4wcF;
+	Tue,  5 Mar 2024 11:16:34 +1100 (AEDT)
+Date: Tue, 5 Mar 2024 11:16:34 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Lee Jones <lee@kernel.org>
+Cc: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje.mihanovic@skole.hr>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the cpufreq-arm tree
-Message-ID: <20240305110914.69ed133b@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the backlight tree
+Message-ID: <20240305111634.57e84398@canb.auug.org.au>
+In-Reply-To: <20240226132828.7524baec@canb.auug.org.au>
+References: <20240226132828.7524baec@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3hKRnjVnUrb.Xw_eJ5OjhzB";
+Content-Type: multipart/signed; boundary="Sig_/IPQcpFq//f6HOfV8vnIEoT6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/3hKRnjVnUrb.Xw_eJ5OjhzB
+--Sig_/IPQcpFq//f6HOfV8vnIEoT6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the cpufreq-arm tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+On Mon, 26 Feb 2024 13:28:28 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the backlight tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/video/backlight/ktd2801-backlight.c:8:10: fatal error: linux/leds=
+-expresswire.h: No such file or directory
+>     8 | #include <linux/leds-expresswire.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> Caused by commit
+>=20
+>   48749e2f14e3 ("backlight: Add Kinetic KTD2801 backlight support")
+>=20
+> I have used the backlight tree from next-20240223 for today.
 
-drivers/cpufreq/qcom-cpufreq-nvmem.c: In function 'qcom_cpufreq_kryo_name_v=
-ersion':
-drivers/cpufreq/qcom-cpufreq-nvmem.c:194:14: error: 'QCOM_ID_IPQ5321' undec=
-lared (first use in this function); did you mean 'QCOM_ID_IPQ5312'?
-  194 |         case QCOM_ID_IPQ5321:
-      |              ^~~~~~~~~~~~~~~
-      |              QCOM_ID_IPQ5312
-
-Caused by commit
-
-  006af7c6958e ("cpufreq: qcom-nvmem: add support for IPQ5321")
-
-I have used the cpufreq-arm tree from next-20240304 for today.
+I am still getting this failure.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3hKRnjVnUrb.Xw_eJ5OjhzB
+--Sig_/IPQcpFq//f6HOfV8vnIEoT6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXmYqoACgkQAVBC80lX
-0GwOkQgAjoctt69MIVitPcFzcUhVHr2EhFPxJY5eiUbZrKdbzS4371ddSv3AMPcg
-IXUU01dYoPeJFHeDkHjHwyK2EM8xU8/Mg5rj0RQ4FqW//6AEtqIxhjL+BUKodkMV
-ykinaA6iC/KjhxRyMYsOKWL+P8yQst2vwTYlL5Yl9BB5zzI5ir372aazfVH+VmDT
-4Cq4MAEaetnxdsEL7iX8+m1zZQOMHKCWkceuAbSFuBjaM5CFIPtguJlyqHyXzenS
-moDE3fHqeuA+LmOMRDq2rzun9GS8ILet6sMyXpgeMyG88VP3yfVb6Xl5NxI9ahOD
-ix8F2gPtIe2ChCGXW6wW5Lb0CvhVog==
-=yOe7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXmZGIACgkQAVBC80lX
+0Gwfswf/X8SSkHsb1g7gPrn3/LI8fF+pdVdsaUxh7R7A8OWcUtj2dogu+aB6SqH+
+840ES5lrTb/puJXtwq0yEj1luMjuTWwrogs4iImU4Ka3tmCEX/zKtOu8Dc92sNVV
+D5/TiUbC+wXCwBd31FHwIcWvW+iq75N/cVVoSETusviV6PqC+HOXeBN8XtHyHMT/
+/abgnkv4UBWwRJLf1Esh6gpRCff8DOtm9JFN3PzTre1Mmw8E9ABRvIGVz6HEDBEp
+6UEj5ieHygftXCLhgfHOGmjedKrx1iFRV8uhj6SvBlkI13YTGMEVMJwqEKHO+xDl
+nV1aECWfVAHrGdYOMXSNF9EOlgIVFw==
+=fBKv
 -----END PGP SIGNATURE-----
 
---Sig_/3hKRnjVnUrb.Xw_eJ5OjhzB--
+--Sig_/IPQcpFq//f6HOfV8vnIEoT6--
 

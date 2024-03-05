@@ -1,167 +1,107 @@
-Return-Path: <linux-next+bounces-1466-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1467-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 013F087146A
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 04:50:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1FD987148E
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 05:10:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0E59283BB5
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 03:50:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97D821F230C6
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 04:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C8E029CF3;
-	Tue,  5 Mar 2024 03:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768213B193;
+	Tue,  5 Mar 2024 04:10:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Td3JBYSJ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LTYjrk6H"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E182127441;
-	Tue,  5 Mar 2024 03:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304A638FAA;
+	Tue,  5 Mar 2024 04:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709610628; cv=none; b=OjTSi6LV8Fp2KYxTw+A2OTMufciwLFjtbNoKZIeShAOvsX/5pEQKWsvLAGj0bZfE0ib/qAv8kmnVtbvGpVsPDyDpAFODaruzKIUi39Hm2DH4GSk3ABhwY9OZqQHpGVxVlPMFkvfQBhqV16upPDX6KqfD0X/FZOGotFnhxoYLrzw=
+	t=1709611845; cv=none; b=hRclLoki509ofMfhpJpI2rNbkmJZv4msWrBcaLR3L9kzPhcRYn3IKpxkiHzhU0DFIh7ePJi64ZGeaPuoTE0s80RhltqXfTTMIzH8ZZn/Qb3EiWZrAyl20VlxIsIQgDTFk+uEIDSHqIYLQ9jja2BUocZkkyvGp5x1C5DvnAxTC1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709610628; c=relaxed/simple;
-	bh=f99pSG9e3jGKgzOIrVAMv4aCJ2h7KN2dHvQZyf+Ow8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=R0H9zsC3FFh7B9q6RsPS9l+gviX8lZwK1ZiEC3DOShJtHA6a5hAxXYd5WZPqa8/XROKVfh1ZpgpFbLDdb+8i9CxdQVg8L0TpQBptBzzOWOIUOccJlo9Vi/RjfoiFQygX6+Ba0nK913pqeWTkLCVhV/5kUdfmkn5nIWp1QhLdUoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Td3JBYSJ; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1709611845; c=relaxed/simple;
+	bh=9BP+RoVOQM9THe6YGmUi2qXQvQapskZCoZZSjCTLFBI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=W3PDn1BOEBnfVaGBYTtX6OKV2oQCiRvmz25g97vc/0cF4eSMieMUCN98m6rMIPqD8Q8Zjb7slO7dD3CwrYEZOi1S/nPhHQsfvHgXBNuGhiUDvQV7QvaSb40mu2t5n+0QsI2o2O1VmKKBr4r+0bOlPNBrmzLMgAJ6jOIupvN/AEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LTYjrk6H; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1709610620;
-	bh=p5nq/vS4hepQGj6OkRNK6qaC4A03OnfOu2ZWVKhR0ys=;
+	s=201702; t=1709611840;
+	bh=gSiozb6PQGK7Fp4ID/IgbPNGTIJ+GNcpWmuRh8xN9C0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Td3JBYSJaW7qtzCCxrGfh85E93TfzUi6hQQ3s9JjrX0BJ8J06vUMPuCjKwKOLZ1el
-	 VZBzIG4r9zKvyUDVYpmbYVB80x3EPdpwu5qKKn4pwSaV7zFUbe5jz/cfOWx/zOMJMv
-	 LJtSaeNjVTPDIL6VP7TALETdg35t0D/fR9LghpXt5Q4ZvuswlUqltruW2k2jt1wWiz
-	 melwH0WtGpiHHEisi0hyhjveOmxl7tyvYIv2XiDvf/punW6+0BJF6IeR/8wFBMoDph
-	 NFF24+hgMDdH6aURxDWK57rmJeKZ2wMUqpQJ3IhyVThBT9E4P2CSdzK3Eqe1prt1qW
-	 RXgHhYmXDNfTA==
+	b=LTYjrk6H7eY57V/pEy1pYMKULDojyZChrCxclws16xFel7s1ZN+8llk1yuVEraMG2
+	 v/k50Q2OrvfeYy3PldPzvpOmsy2tceom713XtmerILxqBV4UpdphwAO1Zao0ywx3Pf
+	 cM2VNQ88w1MHUaIUazrB4WqPneUsdrIUeYdkeJQWmpWb9DJ2eWWqjHpQB9U3t0pR7T
+	 y/aZjyjAeNIWVvNgN17pc8IPz4QR/JtV4bAGSlzR3mMVbBYnCbnMQMXi5QbvLMC7R9
+	 rtL4+6ibyEmvOtP8TLlyotAi3sUgmLa2DnEliFVW4j1n1k3MYfUQCikFMyzfAm2GDR
+	 M2Vm1QPiKl+Sg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TphRJ15vrz4wbQ;
-	Tue,  5 Mar 2024 14:50:20 +1100 (AEDT)
-Date: Tue, 5 Mar 2024 14:50:18 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tphth66P1z4wcF;
+	Tue,  5 Mar 2024 15:10:36 +1100 (AEDT)
+Date: Tue, 5 Mar 2024 15:10:35 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kees Cook <keescook@chromium.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kspp tree
-Message-ID: <20240305145018.39b4e37b@canb.auug.org.au>
+To: Will Deacon <will@kernel.org>
+Cc: Junhao He <hejunhao3@huawei.com>, Yicong Yang
+ <yangyicong@hisilicon.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the arm-perf tree
+Message-ID: <20240305151035.22c6f7bd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CBOPn6795ITC_4s+x5t90QX";
+Content-Type: multipart/signed; boundary="Sig_/R4N+0gN8uIFRNbmELpKZwV7";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/CBOPn6795ITC_4s+x5t90QX
+--Sig_/R4N+0gN8uIFRNbmELpKZwV7
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the kspp tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+After merging the arm-perf tree, today's linux-next build (htmldocs)
+produced this warning:
 
-In file included from lib/string_kunit.c:8:
-lib/string_kunit.c: In function 'test_strspn':
-lib/string_kunit.c:176:25: error: format '%d' expects argument of type 'int=
-', but argument 7 has type 'size_t' {aka 'long unsigned int'} [-Werror=3Dfo=
-rmat=3D]
-  176 |                         "i:%d", i);
-      |                         ^~~~~~  ~
-      |                                 |
-      |                                 size_t {aka long unsigned int}
-include/kunit/test.h:597:37: note: in definition of macro '_KUNIT_FAILED'
-  597 |                                     fmt,                           =
-            \
-      |                                     ^~~
-include/kunit/test.h:722:9: note: in expansion of macro 'KUNIT_BASE_BINARY_=
-ASSERTION'
-  722 |         KUNIT_BASE_BINARY_ASSERTION(test,                          =
-            \
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/kunit/test.h:1253:9: note: in expansion of macro 'KUNIT_BINARY_INT_=
-ASSERTION'
- 1253 |         KUNIT_BINARY_INT_ASSERTION(test,                           =
-            \
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-lib/string_kunit.c:175:17: note: in expansion of macro 'KUNIT_ASSERT_EQ_MSG'
-  175 |                 KUNIT_ASSERT_EQ_MSG(test, s->a, strspn(s->str, s->a=
-ccept),
-      |                 ^~~~~~~~~~~~~~~~~~~
-lib/string_kunit.c:176:29: note: format string is defined here
-  176 |                         "i:%d", i);
-      |                            ~^
-      |                             |
-      |                             int
-      |                            %ld
-lib/string_kunit.c:178:25: error: format '%d' expects argument of type 'int=
-', but argument 7 has type 'size_t' {aka 'long unsigned int'} [-Werror=3Dfo=
-rmat=3D]
-  178 |                         "i:%d", i);
-      |                         ^~~~~~  ~
-      |                                 |
-      |                                 size_t {aka long unsigned int}
-include/kunit/test.h:597:37: note: in definition of macro '_KUNIT_FAILED'
-  597 |                                     fmt,                           =
-            \
-      |                                     ^~~
-include/kunit/test.h:722:9: note: in expansion of macro 'KUNIT_BASE_BINARY_=
-ASSERTION'
-  722 |         KUNIT_BASE_BINARY_ASSERTION(test,                          =
-            \
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/kunit/test.h:1253:9: note: in expansion of macro 'KUNIT_BINARY_INT_=
-ASSERTION'
- 1253 |         KUNIT_BINARY_INT_ASSERTION(test,                           =
-            \
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-lib/string_kunit.c:177:17: note: in expansion of macro 'KUNIT_ASSERT_EQ_MSG'
-  177 |                 KUNIT_ASSERT_EQ_MSG(test, s->r, strcspn(s->str, s->=
-reject),
-      |                 ^~~~~~~~~~~~~~~~~~~
-lib/string_kunit.c:178:29: note: format string is defined here
-  178 |                         "i:%d", i);
-      |                            ~^
-      |                             |
-      |                             int
-      |                            %ld
-cc1: all warnings being treated as errors
+Documentation/admin-guide/perf/hisi-pcie-pmu.rst:48: ERROR: Unexpected inde=
+ntation.
+Documentation/admin-guide/perf/hisi-pcie-pmu.rst:49: WARNING: Block quote e=
+nds without a blank line; unexpected unindent.
 
-Caused by commit
+Introduced by commit
 
-  578914ebade8 ("string: Convert selftest to KUnit")
-
-I have used the kspp tree from next-20240304 for today.
+  89a032923d4b ("docs: perf: Update usage for target filter of hisi-pcie-pm=
+u")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/CBOPn6795ITC_4s+x5t90QX
+--Sig_/R4N+0gN8uIFRNbmELpKZwV7
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXmlnoACgkQAVBC80lX
-0GwkpwgAi2r4Y6+e6S8lbyZjW+etIihrOL0m3+c8Iu7o+kVfWKjCSSYhEZDoPWAf
-LPY3wXFWU31JJeRB5OQp738DtKoagyaIO/Mai7nC/FlaI56S1iop7HrXDbkUVFuU
-HhAlL4qgCPQpPtSdA1sRi/7xGwEh+WZSL2A56cUlARjYfCIo9d+hAC0RgYjMH18J
-Dv4wjl0+dUW6Dz5Gi/9p07nFQm/KQbYJvldeLXLErVnXmru64pwAgHvnBHhIlunr
-OOg6A8PwKjMhzkaIB+pUAb08ICxsyqL3UiNcL87BCIgZKQCcTsC/WeEx70fkzn9N
-WM1gTWYGGcMxDmifkh62wMZzJMSJMw==
-=C3fS
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXmmzsACgkQAVBC80lX
+0GxWDgf+J1d46ibjTsQ5if9apeMUiR1v9HlciQZaEWO512izG4kdtaOz73joSxnU
+hyuieQt3kEZ4I1uEGg87S8QtZqU1L14Kn0xMx+CIYw2mkgJKmYtZbXJpKVMMsy2x
+KGfgFLtmoQqgub5uMeZ1g3cdt7L5BTKjS1bzVR9Mbe1V9xxq2YjOBbWS7249kE+Y
+btO+tE6vLmAjOJxQU9+X1Bippo6mZtwtnOzgx3KRLX2E1F7lHLHqDAdJP9nyD3nf
+O4qYJbiu1IMjmXQQDRdGSFTTOhfwvAKHCAy1rwJRlBZr/AIq3XrZowcTXLqqTvKd
+uMF1Nv9NsbAnxtuze48HVkwEqc7giA==
+=ZR8P
 -----END PGP SIGNATURE-----
 
---Sig_/CBOPn6795ITC_4s+x5t90QX--
+--Sig_/R4N+0gN8uIFRNbmELpKZwV7--
 

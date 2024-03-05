@@ -1,81 +1,90 @@
-Return-Path: <linux-next+bounces-1480-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1481-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED563871E7D
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 13:03:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22057871EBE
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 13:15:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A4861C23E2D
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 12:03:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D28FF285A14
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 12:15:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 629935676D;
-	Tue,  5 Mar 2024 12:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJaYYVJm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 400B25A119;
+	Tue,  5 Mar 2024 12:14:56 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BEFF56472;
-	Tue,  5 Mar 2024 12:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A167C5917C;
+	Tue,  5 Mar 2024 12:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709640217; cv=none; b=lSuoWYGiLBXmYL9LX9DG4McIwBApt+T6/njMxw4EIbMqwk3UsJLxXdRrJn3CjHLUgq+X/ei7JJAcAEapUw6VBylhFLGKqyfVbyF9SAWm6ceyFks28OQ2DqQfg9ohvk0Ge8mmDxLneTK3L5uozHiQxCY89Uye9sp1zgIGd9cmeh0=
+	t=1709640896; cv=none; b=kP1zfkbxi4BmK7W8eNj0aCNQysWNHit++BJZOiiokZyYA4yFQgJTKF0iL2Yxzgqi6ieFyj1MY6Vnp8nAoo7+3LmyjIjAXBgCseAHcr3NF8vJjRYntl/VaHGiix7lSgt1EHrjedFtTV6csC/yNTQ1GblMlwErGh+OVhkliB3CPVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709640217; c=relaxed/simple;
-	bh=jfljaek+m3Ap9dl376hPV7PcXvPEZz52T/u690ABKQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TffidkYIPKHwVQvKeewtemYs+65C1BbBXNE/Z9Jw/jXnWKOIZgRzWNppSTfrWTq2a96RQcrWltbXfokH27rRMiOODKAJ9A5/4jEKWNaketllfNWdBK4BqOZNFciV8AB3NjQE0eFTaRdHBRrw3aEd2C59hQUBwzPKgULCPu42PiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJaYYVJm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DE9C433F1;
-	Tue,  5 Mar 2024 12:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709640216;
-	bh=jfljaek+m3Ap9dl376hPV7PcXvPEZz52T/u690ABKQM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LJaYYVJmd+BQI90hCE5IGOQx3mNuwtL19HHj8s9WHQtoNbUw76JdRHh2UAVm2CcnK
-	 rOs0gM9oJ/6UblDDB7jvpCn+0CARwSZQDn92RceNcXPEPd6P0BHV2+gFdVPe/uGNe4
-	 LO1R9f7+eCALo9vGr1El2dFgrJZ2D0sSRj+Jv3XRvCF/u7Sk5QYuKlWdDf+5ofKvz9
-	 UCW8Kt2DUU1Lb/Y3KJwlRpGGx4LRebhRN15z/XRubQ2PJ/BsRSRZyboOr9rPIYNWuB
-	 OVWrs9nsCLpQERhZTu81cGXZPhiVQSHP600vIxCUIHpS11vali3+uK8IsA2dfq2dj4
-	 zJMk6tzbGPFZg==
-Date: Tue, 5 Mar 2024 12:03:32 +0000
-From: Will Deacon <will@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Junhao He <hejunhao3@huawei.com>,
-	Yicong Yang <yangyicong@hisilicon.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the arm-perf tree
-Message-ID: <20240305120331.GA22097@willie-the-truck>
-References: <20240305151035.22c6f7bd@canb.auug.org.au>
+	s=arc-20240116; t=1709640896; c=relaxed/simple;
+	bh=nB8UHD/mOQx9Sfo+EICVGTqA+L3BRilRmav32T6/HAk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VBitB6IqrwsD0aaeUOZ69opQZpssFYKNVj3Hz7hdZTZ+VvrJjFOK0g4bPOjYiDIn5LB4/2UiVXUPghA0rfVVYwGtO8Uclpim/CuzPxVBpWmO2BldA6tGWKF2zbC4ND2jSGtJm+PAG8k0Jp3ZNR3TeXdULjxEGaRi02hGkll6/Ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4TpvZk5W2Qz2BfKf;
+	Tue,  5 Mar 2024 20:12:30 +0800 (CST)
+Received: from canpemm500009.china.huawei.com (unknown [7.192.105.203])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1C9B61404F3;
+	Tue,  5 Mar 2024 20:14:36 +0800 (CST)
+Received: from localhost.localdomain (10.50.165.33) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 5 Mar 2024 20:14:30 +0800
+From: Yicong Yang <yangyicong@huawei.com>
+To: <will@kernel.org>, <sfr@canb.auug.org.au>, <linux-kernel@vger.kernel.org>,
+	<linux-next@vger.kernel.org>
+CC: <hejunhao3@huawei.com>, <yangyicong@hisilicon.com>
+Subject: [PATCH -next] drivers/perf: hisi: Fix build warning of hisi-pcie-pmu.rst
+Date: Tue, 5 Mar 2024 20:10:03 +0800
+Message-ID: <20240305121003.4497-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305151035.22c6f7bd@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
 
-On Tue, Mar 05, 2024 at 03:10:35PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the arm-perf tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> Documentation/admin-guide/perf/hisi-pcie-pmu.rst:48: ERROR: Unexpected indentation.
-> Documentation/admin-guide/perf/hisi-pcie-pmu.rst:49: WARNING: Block quote ends without a blank line; unexpected unindent.
-> 
-> Introduced by commit
-> 
->   89a032923d4b ("docs: perf: Update usage for target filter of hisi-pcie-pmu")
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-Thanks, Stephen. I'll fix that up.
+`make htmldocs SPHINXDIRS="admin-guide"` shows below warnings:
+Documentation/admin-guide/perf/hisi-pcie-pmu.rst:48: ERROR: Unexpected indentation.
+Documentation/admin-guide/perf/hisi-pcie-pmu.rst:49: WARNING: Block quote ends without a blank line; unexpected unindent.
 
-Will
+Fix this.
+
+Closes: https://lore.kernel.org/lkml/20231011172250.5a6498e5@canb.auug.org.au/
+Fixes: 89a032923d4b ("docs: perf: Update usage for target filter of hisi-pcie-pmu")
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+---
+ Documentation/admin-guide/perf/hisi-pcie-pmu.rst | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
+index 678d3865560c..5541ff40e06a 100644
+--- a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
++++ b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
+@@ -44,6 +44,7 @@ The related events usually used to calculate the bandwidth, latency or others.
+ They need to start and end counting at the same time, therefore related events
+ are best used in the same event group to get the expected value. There are two
+ ways to know if they are related events:
++
+ a) By event name, such as the latency events "xxx_latency, xxx_cnt" or
+    bandwidth events "xxx_flux, xxx_time".
+ b) By event type, such as "event=0xXXXX, event=0x1XXXX".
+-- 
+2.24.0
+
 

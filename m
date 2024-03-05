@@ -1,136 +1,137 @@
-Return-Path: <linux-next+bounces-1488-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1489-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E0CC872A7A
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 23:55:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF0E872B2E
+	for <lists+linux-next@lfdr.de>; Wed,  6 Mar 2024 00:37:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0193B23280
-	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 22:55:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C48661C23252
+	for <lists+linux-next@lfdr.de>; Tue,  5 Mar 2024 23:37:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F51012D1F1;
-	Tue,  5 Mar 2024 22:55:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CDE7137918;
+	Tue,  5 Mar 2024 23:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="H9IaqC1j"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HiQQC/Bw"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34A01EB33;
-	Tue,  5 Mar 2024 22:55:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1383C13443C;
+	Tue,  5 Mar 2024 23:34:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709679347; cv=none; b=I7FA37ZxLD/FXfFosV/BvYlU8au5LX77K4njf4G/ybBi5pwqPTmu8s4lzg0lVi2vHxb5sXESa5xbRmeMMCSxn6yjMD8pY3ITh9fVvIGaM5+7fXiLfydRnybKLGdoLYlISZrR02OETznh5pKyLrkbbNfcGpQ53tZ1Ih3xth1UgxU=
+	t=1709681694; cv=none; b=VXm1W/SjHVywqmuiGsS9TuQowDNa+m4WNouiOXhSklmHDJ0oXEa7Khss3VtE/Vk7M+m9NA+YoCxQFfxjfo1xY8bZDaCv3gETKeohdnI9DqXwtzaOxU6x0WUNoazND7xwsuuILNnrNaoYT1rhGkVoBtr+99rd5A2l7Ls010zhBIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709679347; c=relaxed/simple;
-	bh=QKM3YMngCbu7nFuUu6jfK9gIuihRTijKWZtbkOvvipE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aZR+S3f2m0lGoProCgVxDZxm2oGWcl1lLNICyeTBayGuzDNHnUsSbE2QqkfFM8f4JvPg7+IWUlzTEwirSOkoEJjePZL8zZgUfI97XcRKxiJmt6BqPjcL9hiDzwyVKQEWNp9292NWxT+u2O+oBWRZ5twnIKY/cXCZdX9AN2M05po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=H9IaqC1j; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1709681694; c=relaxed/simple;
+	bh=CgccsEajkJX3rGr/KEv9kEGO8zCtuDqpv508JqCMKs4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YnXGrHOL4GRVYEdaKxV/PsumhgxQ+o+HSPlkno28ZUVCbu0NxohEi0a1KP7gJl5DEl6H/2kXkGYN/aQrsq4iB5fNmxBqL9iMao+lBcErOIhcAB1EjJERAx9vJCpb0cLqu/37TKwR0wPr6BuI6hn4Kjyu38HQsPAOF8TfD1vO8r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HiQQC/Bw; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1709679341;
-	bh=VkrIjl0vhWafhAzUcWT3t54lRsEQJ+z7KSOEVYEquqc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=H9IaqC1jzxgPJ1ZKOoOpZyHXjLaKka5jBcNOfFDz2yhxgHkJj+2pWBeFXcpgkKObO
-	 2zztPN8ZoJgBn+Qs9v5N73fJbSFmEdFvfY5WPYXJZ1iptBCZvT1v2nQq7+VOBt2UXR
-	 U0gcDCHStHD1tjP34yLoglyIir6zlC3kpTxC5avEo7xZXrIEMUPjCxYPVOlYk/AU7I
-	 q+h6tu/sCqYn+yMgUvPjpLxq5Bzys96tvVxYFf3giDjPJa0YDNpFwAEIkmRi97cSKG
-	 48KShZGlxXFlu08lDbVY6x1R1GYiCw9WFnCeOaCBRZwWYZC2xUFN33z6OmPqazGaqj
-	 YURf8L8XVaJTQ==
+	s=201702; t=1709681682;
+	bh=AOh366utPLpjWO/Ipym/f07WE+ie0PHRov9sGyieLuc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=HiQQC/Bw2k+NByUfW7F8V8qm5NS7sTxD3st9VRY/xmTMAe+WiYvUMIRcYLpNUdn3A
+	 vE9HnVtgVRbfGGEvWgLLSvxHHU4tNVTdpEpZkdBW3x7e+xgHcUxczoYeaz4Gmw7qJu
+	 iof4JQr3cxG39e7UXBnMgJpCFnFYioXdPFzGJna6wSjMCFJTSDI0SxLALU2sIYHZH4
+	 fTDjMVXBAyoVIjaocnzQ0ybHUBAmIDYyFeVeMyoJJZgfUbpkNG1DRhjgDV9f82D5Mn
+	 DZu4okzfBjpBhcdkCbSFPcNy20tEJVRqhVKMK/+SBI6ZHLj3CKxhOSzX4k7arTLR4a
+	 cC4b5kHqz2eZA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tq9rr5K4Jz4wcD;
-	Wed,  6 Mar 2024 09:55:40 +1100 (AEDT)
-Date: Wed, 6 Mar 2024 09:55:39 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TqBjs01kpz4wc7;
+	Wed,  6 Mar 2024 10:34:40 +1100 (AEDT)
+Date: Wed, 6 Mar 2024 10:34:38 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Lee Jones <lee@kernel.org>
-Cc: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje.mihanovic@skole.hr>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the backlight tree
-Message-ID: <20240306095539.0da4e342@canb.auug.org.au>
-In-Reply-To: <20240305091737.GB5206@google.com>
-References: <20240226132828.7524baec@canb.auug.org.au>
-	<20240305111634.57e84398@canb.auug.org.au>
-	<20240305091737.GB5206@google.com>
+To: Miklos Szeredi <miklos@szeredi.hu>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Alessio Balsini
+ <balsini@android.com>, Amir Goldstein <amir73il@gmail.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Miklos Szeredi <mszeredi@redhat.com>
+Subject: linux-next: manual merge of the fuse tree with Linus' tree
+Message-ID: <20240306103438.2c0a6f44@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9vXR_ao69_KeVYq+j3VzeXr";
+Content-Type: multipart/signed; boundary="Sig_/LkBvSJcC./c/m5YCppuATU5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/9vXR_ao69_KeVYq+j3VzeXr
+--Sig_/LkBvSJcC./c/m5YCppuATU5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Lee,
+Hi all,
 
-On Tue, 5 Mar 2024 09:17:37 +0000 Lee Jones <lee@kernel.org> wrote:
-> On Tue, 05 Mar 2024, Stephen Rothwell wrote:
-> > On Mon, 26 Feb 2024 13:28:28 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > After merging the backlight tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >=20
-> > > drivers/video/backlight/ktd2801-backlight.c:8:10: fatal error: linux/=
-leds-expresswire.h: No such file or directory
-> > >     8 | #include <linux/leds-expresswire.h>
-> > >       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >=20
-> > > Caused by commit
-> > >=20
-> > >   48749e2f14e3 ("backlight: Add Kinetic KTD2801 backlight support")
-> > >=20
-> > > I have used the backlight tree from next-20240223 for today. =20
-> >=20
-> > I am still getting this failure. =20
->=20
-> I just pushed a bunch of patches.
+Today's linux-next merge of the fuse tree got a conflict in:
 
-I saw only 3 new ones (forgot to push?) none of which addressed this
-problem.
+  fs/fuse/inode.c
 
-> Please let me know if this is still an issue tomorrow.
+between commit:
 
-The problem is that after Feb 23, you rebased your tree and dropped commit
+  053fc4f755ad ("fuse: fix UAF in rcu pathwalks")
 
-  25ae5f5f4168 ("leds: Introduce ExpressWire library")
+from Linus' tree and commit:
 
-which (added the leds-expresswire.h header), but kept commit
+  44350256ab94 ("fuse: implement ioctls to manage backing files")
 
-  48749e2f14e3 ("backlight: Add Kinetic KTD2801 backlight support")
+from the fuse tree.
 
-which uses it.
+I fixed it up (I think? see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/9vXR_ao69_KeVYq+j3VzeXr
+diff --cc fs/fuse/inode.c
+index 516ea2979a90,02869edf72f3..000000000000
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@@ -930,14 -942,6 +942,16 @@@ void fuse_conn_init(struct fuse_conn *f
+  }
+  EXPORT_SYMBOL_GPL(fuse_conn_init);
+ =20
+ +static void delayed_release(struct rcu_head *p)
+ +{
+ +	struct fuse_conn *fc =3D container_of(p, struct fuse_conn, rcu);
+ +
+ +	put_user_ns(fc->user_ns);
+++	if (IS_ENABLED(CONFIG_FUSE_PASSTHROUGH))
+++		fuse_backing_files_free(fc);
+ +	fc->release(fc);
+ +}
+ +
+  void fuse_conn_put(struct fuse_conn *fc)
+  {
+  	if (refcount_dec_and_test(&fc->count)) {
+
+--Sig_/LkBvSJcC./c/m5YCppuATU5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXnousACgkQAVBC80lX
-0GzvpQf+LpW0f+pPYZGMDwa9MVRZzaUhvS3XxC+acND+xC7mZ8LAY+Bcj+1MAOIW
-T6xquxtXWQ+pc0RVP01HujbcbmaKj53EZC4VkbjSpytUkucuMY7/omqJ7NExvHDr
-T8EvnPbL83L2Xv3vfnr6CfbuapCQG/LzZuwCYM75/sJpGOqNWY4BcX22FQ+VGRtS
-CJHLBb8hmPbW5q/eN3Sk0vGRo2Zqn/pkPDcE7wdB78AYeX7VEe3dBFgd4ICKNkzk
-fS4kWXjx78QaaUn2q4J0JsDwaL8mucaREezOZV97A3RP9XD/V4gKxTc9xd1ATuM8
-5Zl2U7JhKFA1AcG8h2FqM2prUXQ4Vw==
-=2YMI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXnrA4ACgkQAVBC80lX
+0Gy2Nwf7BIw0m7aawt3swN1ahcp9amUY30AMU9AT44OzzPpdAZN/KVNfSor7Vbx4
+/r4pSuPKPvINYPWtrDmLCu69aIDbHH1EAD5eziFGOVFjaam/z7fepkG2ZLpcg5cH
+DJtIa48uojDQiFZk4LiFamFY23Up39Df8Xxjw1HCbAA5vHsC0DgMeRpZ6zxxPE5t
+27o+jR/mwLijGVmfTGx7HuGdOta0VGpTgkZbo4jYaplEwkzDvxLMJd71ZwJBBYFB
+HAfGGSpqkrG4A+EhsO7KrSB1VSUMrqgMTAgkM0E3HBx2Mh25BXnR0M4Ibz0+5Sna
+xQPm7V57gGMyVGlQIynIVrgLgt/O/g==
+=cECx
 -----END PGP SIGNATURE-----
 
---Sig_/9vXR_ao69_KeVYq+j3VzeXr--
+--Sig_/LkBvSJcC./c/m5YCppuATU5--
 

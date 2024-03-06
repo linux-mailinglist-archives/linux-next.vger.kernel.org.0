@@ -1,122 +1,149 @@
-Return-Path: <linux-next+bounces-1491-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1492-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6B85872CFB
-	for <lists+linux-next@lfdr.de>; Wed,  6 Mar 2024 03:48:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DEF6872D38
+	for <lists+linux-next@lfdr.de>; Wed,  6 Mar 2024 04:04:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8593E1F28887
-	for <lists+linux-next@lfdr.de>; Wed,  6 Mar 2024 02:48:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE40528E585
+	for <lists+linux-next@lfdr.de>; Wed,  6 Mar 2024 03:04:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A52ED53C;
-	Wed,  6 Mar 2024 02:48:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1704BDDD8;
+	Wed,  6 Mar 2024 03:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XiC+SUB4"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LMj7DqoL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF65D51E
-	for <linux-next@vger.kernel.org>; Wed,  6 Mar 2024 02:48:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA406FBD;
+	Wed,  6 Mar 2024 03:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709693331; cv=none; b=sh64UwUEoDcdCn/kQBDcCOzhYuxjd2HcqqeVPseGVn3MAnW8HSo2g1IRHp/1BMNOXLPWaeUETjJs9FeV0ou9slNBkfJG0zCxahsqU4MtOqEvBaAROtrFVD7qcRrcaXx96kllfKQmWEElcA+s1WLVc2A/bKHhxVRj2gPEvdDNuLE=
+	t=1709694276; cv=none; b=kNMq36JRo0kjV0NqM/PANpJBhv3TO+fqzlyArA+AginSHN/emtnXXAHXe522+1duyiN0l9mtiUOuAXuvO/dF5Ly3BKq8edv/G1o50fK2ETzzU/s4j/OMFuv8RZm87zIEG32+H50drSLamzqRC5gGmjJLLxCcH3jPn9IQZ77bUUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709693331; c=relaxed/simple;
-	bh=u7eC58xUF/Q9U1FgZ3onEFjqy4ZYgGtENUDsCVzs/c4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l8gqQtDMcONQpaGmjSwmVFAQlPhj2Pk+TgNhOi1qEwmtBr3HZzTy0Rd3g+zjefa5uF2pDv4V+e4iWl5jgbOo8ScfRMPvQsb/PwS9xC7QxRD+3wI2EyRgJKpH+PvOpPBt00czfTomc949hl7ntAzFu6P8+HlJWE3QcaM+LLoMKRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=XiC+SUB4; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a3122b70439so179865866b.3
-        for <linux-next@vger.kernel.org>; Tue, 05 Mar 2024 18:48:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1709693327; x=1710298127; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+KUQWhEvCJCpfREgFwyV70EN2GKCk/GEezppyY5IN3M=;
-        b=XiC+SUB4XoQpA8SyU5v/1EiUUtvrpjYEMbntdX1Wu3yviupI4zShiZ43OFCSGvXjmW
-         l0NgmTisVOIs2QnF8IDbUeBuBvO6EWnt0C5aDFJ8WyFCj68BvunKGjnpdZOQKSdcDYts
-         pmSEab9PYI2xiFre+pNJmF2KYedzvKT/aR1qo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709693327; x=1710298127;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+KUQWhEvCJCpfREgFwyV70EN2GKCk/GEezppyY5IN3M=;
-        b=ZxitjhuXD4yK/+QgbD2GYfc7ItKcEPHrpzvTtOdN9OcnfKaxBePGWMMl1qCvluwPIZ
-         6gr1nT+06iYGxwFEDTf7ZWROLP4RwaYG9eq8VS1hA6TWldKiKZincaimA1LmgTLIDp2k
-         PKrMvq6ipFU8MO0zHzbJ3KowdbPz4tdRmPpQvtn92pCUuAxPw2blJuUGmMpZZP/pmYQc
-         s2dVl/ghj7stGWz2rnBj1SiTjqPIMxwV+93BNHks1GHP945ttSVheyuaBbnf531idTTi
-         pXz7hatDdBaRn27eyTuXnrmXdi5BBjzmEUPLRqNfwBtVNPUOj3WNKdHFb4mKi4lTEFem
-         45Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCXMF/jhLvzEUjHu4iI752CYGX9HJQMDD398Iq54WEx//FocyhHpL5oXT4/VTIVz53M9V49WJmQ6wf6Sj/HmBxrKjgNa1BJXoyQ4bg==
-X-Gm-Message-State: AOJu0YzfPheJunx3CEQ2bpnCYsslYo3I1dGw0BIaVw2JId9j7AD6GQtq
-	6id8Udvm7S6P/2D9Uikn77VFmVMP9EDQLVdGKE8F8qAfZ9B9cvBjxKkO1iHSFBvdOKBQOIYa0Wa
-	MGzJkGw==
-X-Google-Smtp-Source: AGHT+IHR2jBvcuWHQiOEKZplrosGY4qfvQZg5KI1XCrGvfpDHbtAwPR8zXWHvPEqGLOIsPqwoiUjtQ==
-X-Received: by 2002:a17:906:4081:b0:a44:c7ed:e53c with SMTP id u1-20020a170906408100b00a44c7ede53cmr7948976ejj.68.1709693327260;
-        Tue, 05 Mar 2024 18:48:47 -0800 (PST)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
-        by smtp.gmail.com with ESMTPSA id fi7-20020a170906da0700b00a44a859fd9dsm5284948ejb.174.2024.03.05.18.48.46
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Mar 2024 18:48:46 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-564fd9eea75so1812395a12.3
-        for <linux-next@vger.kernel.org>; Tue, 05 Mar 2024 18:48:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV9C/4J1CnJfrCb37h6QASWEGx0YsyRfGuuTBNdTDPxhtSBAqSCzJqCg8fnZxRfezIFpSJLIItLZ3KI4koNd4C2q1573/lFWK9U1A==
-X-Received: by 2002:a17:906:f10d:b0:a45:3792:fac4 with SMTP id
- gv13-20020a170906f10d00b00a453792fac4mr5217404ejb.69.1709693326381; Tue, 05
- Mar 2024 18:48:46 -0800 (PST)
+	s=arc-20240116; t=1709694276; c=relaxed/simple;
+	bh=JyjzSJUGaqbxeBl1jQ/EmcWgAHdNKg9nJ33oHJMgwoE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=enWzbEDAeV/P5dQXJXNP6bz4aKTPiDrPoza/+e7eJ7Nr6f7/lnxB2sbn4D9Qc7fUT8D2+GgQbwRpgnQ4OXfvGCxN/AK09Tw5JButyyqyYwPeADZq+czFDIvKugmimSoXmgGx5blIAK4vHrSJPa2DZUK9Az5hlKnIdZwsjJyQ3TQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LMj7DqoL; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1709694269;
+	bh=hpRAoziea5celHY51DssOfuNt9b12/CZ7msR4eZfA6g=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LMj7DqoLN9pGCtTB3iVdPDtKoI5B/FpVnYMOw4/X1LaKEiq9lR01jjzplbS9AT/Bi
+	 aaE3/xoo/+VYdxTDTom5tu87QPrk77SzWYHkd60dcsGC17DqCXe9n8C7SY3QvQdkLA
+	 fRvTvIyxpp8C7alfxuiBhkBdNZvS9A6w+wJ7Z08YU5S15EhYLm0v1DsayrbE2vu19F
+	 uYfZY5xJsf5mFoWGJ+NJwuc/vXlgy0aSQpUw53T47ewqbrQqZ4w84jJgNFtLPBpwaf
+	 Pr/IAiAhmjrjkmz9YsjRR+su7r0ZDDIms2BG8LkE1DPrPkXz23sEWhZGefS4qvYbic
+	 jbD4N55YA6/0w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TqHMw4n7Lz4wcD;
+	Wed,  6 Mar 2024 14:04:28 +1100 (AEDT)
+Date: Wed, 6 Mar 2024 14:04:27 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Lee Jones <lee@kernel.org>
+Cc: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje.mihanovic@skole.hr>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the backlight tree
+Message-ID: <20240306140427.4cb24a5e@canb.auug.org.au>
+In-Reply-To: <20240306095539.0da4e342@canb.auug.org.au>
+References: <20240226132828.7524baec@canb.auug.org.au>
+	<20240305111634.57e84398@canb.auug.org.au>
+	<20240305091737.GB5206@google.com>
+	<20240306095539.0da4e342@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306105150.06a456da@canb.auug.org.au>
-In-Reply-To: <20240306105150.06a456da@canb.auug.org.au>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 5 Mar 2024 18:48:30 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whdTCEDaUPTMHUQXPQHuM8dhBi8yWbNAL11yE_ODqR_uA@mail.gmail.com>
-Message-ID: <CAHk-=whdTCEDaUPTMHUQXPQHuM8dhBi8yWbNAL11yE_ODqR_uA@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the vfs-brauner tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Christian Brauner <brauner@kernel.org>, Tong Tiangen <tongtiangen@huawei.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/GOAK+gnWa=diFn7z7lIQnuw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, 5 Mar 2024 at 15:51, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/GOAK+gnWa=diFn7z7lIQnuw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Lee,
+
+On Wed, 6 Mar 2024 09:55:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> fs/coredump.c: In function 'dump_user_range':
-> fs/coredump.c:923:40: warning: left-hand operand of comma expression has no effect [-Wunused-value]
->   923 | #define dump_page_copy(src, dst) ((dst), (src))
->       |                                        ^
-> fs/coredump.c:948:58: note: in expansion of macro 'dump_page_copy'
->   948 |                         int stop = !dump_emit_page(cprm, dump_page_copy(page, dump_page));
->       |                                                          ^~~~~~~~~~~~~~
->
-> Introduced by commit
->
->   4630f2caafcd ("coredump: get machine check errors early rather than during iov_iter")
+> On Tue, 5 Mar 2024 09:17:37 +0000 Lee Jones <lee@kernel.org> wrote:
+> > On Tue, 05 Mar 2024, Stephen Rothwell wrote: =20
+> > > On Mon, 26 Feb 2024 13:28:28 +1100 Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:   =20
+> > > >
+> > > > After merging the backlight tree, today's linux-next build (x86_64
+> > > > allmodconfig) failed like this:
+> > > >=20
+> > > > drivers/video/backlight/ktd2801-backlight.c:8:10: fatal error: linu=
+x/leds-expresswire.h: No such file or directory
+> > > >     8 | #include <linux/leds-expresswire.h>
+> > > >       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >=20
+> > > > Caused by commit
+> > > >=20
+> > > >   48749e2f14e3 ("backlight: Add Kinetic KTD2801 backlight support")
+> > > >=20
+> > > > I have used the backlight tree from next-20240223 for today.   =20
+> > >=20
+> > > I am still getting this failure.   =20
+> >=20
+> > I just pushed a bunch of patches. =20
+>=20
+> I saw only 3 new ones (forgot to push?) none of which addressed this
+> problem.
+>=20
+> > Please let me know if this is still an issue tomorrow. =20
+>=20
+> The problem is that after Feb 23, you rebased your tree and dropped commit
+>=20
+>   25ae5f5f4168 ("leds: Introduce ExpressWire library")
+>=20
+> which (added the leds-expresswire.h header), but kept commit
+>=20
+>   48749e2f14e3 ("backlight: Add Kinetic KTD2801 backlight support")
+>=20
+> which uses it.
 
-Bah. If comes from that
+Now I see what happened.  I have 2 trees from you, the backlight tree
+(git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git#for-backli=
+ght-next)
+and the leds-lj tree
+(git://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git#for-leds-next)
+and the former implicitly depends on the latter (and I merge the
+backlight tree first).  You should make that dependency explicit by
+merging (part of) the latter into the former (or something).
 
-  #define dump_page_copy(src,dst) ((dst),(src))
+--=20
+Cheers,
+Stephen Rothwell
 
-and I did it that way because I wanted to avoid *another* warning,
-namely the "dst not used" thing.
+--Sig_/GOAK+gnWa=diFn7z7lIQnuw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-But it would have probably been better to either make it an inline
-function, or maybe an explicit cast, eg
+-----BEGIN PGP SIGNATURE-----
 
-  #define dump_page_copy(src,dst) ((void)(dst),(src))
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXn3TsACgkQAVBC80lX
+0GzRbAf/VnPnRbwDaIyeXQcpSxo0mfy1eM/FQqsOSCrvZU+frg6aVH97QX2b17hy
+VyKXb6clQHhrFmPnqv5AgrH9KkY39/TliPmYrv0dH3ihV2e3tL8GgYA8KngtqDVv
+e6WJUlRlwZlfVklxXVA5c+8qFsntcVHrRn1idjmNMNwPP0DeOpxJNpBaskPGshu8
+ausC8VpV+qq01D1wCzokw+OrRDvOH1nIpgYe5lksZ/A61E8b9VEKSjj/Q56eh2xX
+jssDLDyg4eHEqSsEoMA1AeTcdOsqonp2cOPv/XLWONHMw+dpDR8Y9BSSWStnsSqF
+VBdo6SfJy4VbCbUpQ+G13iPu413asg==
+=BL6z
+-----END PGP SIGNATURE-----
 
-or whatever.
-
-                   Linus
+--Sig_/GOAK+gnWa=diFn7z7lIQnuw--
 

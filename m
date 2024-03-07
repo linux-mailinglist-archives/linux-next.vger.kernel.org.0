@@ -1,134 +1,131 @@
-Return-Path: <linux-next+bounces-1524-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1525-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37E6D874994
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 09:27:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 005C5874A4C
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 10:04:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7677282993
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 08:27:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95F351F23175
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 09:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDAFB63108;
-	Thu,  7 Mar 2024 08:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 050DF8286B;
+	Thu,  7 Mar 2024 09:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YBd2WnFW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sQppM3LC"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159E16306D;
-	Thu,  7 Mar 2024 08:27:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2D41C2A3;
+	Thu,  7 Mar 2024 09:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709800060; cv=none; b=dgQzx9eFh0eFPc0jTEZM/F6b/R7xwEWu/js03s+jt/h7+8VNOyom+X+tznJ84LjFdNRlnDdNANZIkTU9H/yUz8+dt8lRxVEPv1oYn9uJEqX8D/7btMNIGv0+7nX2P53HmGyzlTiW0IM/QpSQnqYu3j/0Ua2J63ePz4dc7scJCMc=
+	t=1709802290; cv=none; b=AJ/Y52+iRqABC1kLPcozYDzrZs+ZCd027KJA+egR1ErtH58B2LSQ6C5cfWaz8SwupYpQMWJUuDmrE/GJVmvJmI2c7KLKjN7WR5G+pZkwU830+dd4b1JLjDMOvA/UxsTK3EovupuR7fPyCfAVUJvqsOGm7AqUderdWILXOLMQa64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709800060; c=relaxed/simple;
-	bh=ulYlFZq32K9jOmqyoqOs/Z5jeTVGLC6Oth42YMlqJT4=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:To:Subject:From:
-	 Cc:Message-ID:Date; b=IWNRs241cLjG2U9ruDj06vqBLquC5PTbDnRdkBakqBaP7+loThRdCd2mlNlZfD1BMLYrascePq2cjwEjSJqzGZnDUE/cSPShQrb0dbYA3Ih7xDeC1Kosrrm8hyEluY92h0jXjKJ+f26P8IHADS0CbVNHCbdXwmgV5pXSwo8+ydg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YBd2WnFW; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709800059; x=1741336059;
-  h=mime-version:content-transfer-encoding:in-reply-to:
-   references:to:subject:from:cc:message-id:date;
-  bh=ulYlFZq32K9jOmqyoqOs/Z5jeTVGLC6Oth42YMlqJT4=;
-  b=YBd2WnFWfeeQuqyAPBMXSXaeUksN3MCptiYQ4Lml9rVzBd1VO/nlFnUa
-   krRtBkAQ85UPZeF7AZrVAnU01qgbzBELgIiSSupJIwYhhM2ogcaLE4s4D
-   ox12NgrQCCcSHaGUia1FFLRQwQW9WNY5LGeWOLDeqCD0WP7NS5zsdvTx5
-   YC264dE0McEvnCMop0NFke0Pe8yFwGq67IAFGGxAhK/yt4yxsCdI+3wFx
-   KK9pW7RBp3aLjA+D86/UCMvEa2JwLHi9kFKLTRnefAqweELT6Orzq2JUH
-   14RfVA5rWp6ac2JSjMXPi2hYWQuB4OA6h3kG2O1/+BuI+NPcq/ka55Wel
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="26930911"
-X-IronPort-AV: E=Sophos;i="6.06,210,1705392000"; 
-   d="scan'208";a="26930911"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 00:27:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,210,1705392000"; 
-   d="scan'208";a="33192969"
-Received: from unknown (HELO localhost) ([10.245.244.162])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 00:27:35 -0800
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1709802290; c=relaxed/simple;
+	bh=7Yji0o3NVUzIXyOFT2xjyabX+IqmMEuwdBDirjUWeJE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V6RHVHXPlZv5HUReDLvY2t5ulhuDhjqdeNQJP/VKk0bB2X+04sFGHtceVkwO+qmZWfUzpnFdJ3JxOiZ12wvPWEgMFc9IwCHoyA+Hn5JswlTF3qvfXU4b8UvKpWgJvcM657KwEfoWOO7cBuPSZbH7rGRZY15vQzTOtO0dWonuEFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sQppM3LC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 448F9C433C7;
+	Thu,  7 Mar 2024 09:04:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709802290;
+	bh=7Yji0o3NVUzIXyOFT2xjyabX+IqmMEuwdBDirjUWeJE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sQppM3LC+YIFuYdCh5Vtp0RUy8krGlgFz1Qa1ccrisXAI2vdJT7tQSLwEisDX+NVK
+	 1jG6hLfCnT8HoboiBJQncvN/uNZUXYMhk9GfJWuftGeDWzANE+ZUuRDRN3//Y8qsjY
+	 OMWT1XrOfg34Ft2ts3zEoYMmeS5TwwRxXmbPo2azpcckrMukHtsp7XCNSzOi+STymq
+	 XjCNUIcOWBQ9WS+UMzsNI+OGiKqxQmHhf37M7eUlt1ADJmPlboA0I0zMDi1vWOgiE7
+	 UbQU6tGBNlhEyFEAgvI48KZ9gM8Pb0tLx4A4i12hd1GaO2sWOTe0nuNucvBWYFfmCT
+	 3Gkabcf4sudGg==
+Date: Thu, 7 Mar 2024 09:04:46 +0000
+From: Lee Jones <lee@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the backlight tree
+Message-ID: <20240307090446.GL86322@google.com>
+References: <20240226132828.7524baec@canb.auug.org.au>
+ <20240305111634.57e84398@canb.auug.org.au>
+ <20240305091737.GB5206@google.com>
+ <20240306095539.0da4e342@canb.auug.org.au>
+ <20240306140427.4cb24a5e@canb.auug.org.au>
+ <20240307082445.GK86322@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240307131027.66be2266@canb.auug.org.au>
-References: <20240307131027.66be2266@canb.auug.org.au>
-To: Daniel Vetter <daniel.vetter@ffwll.ch>, Dave Airlie <airlied@redhat.com>, Jani Nikula <jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: linux-next: manual merge of the drm tree with the drm-intel-fixes tree
-From: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>, Animesh Manna <animesh.manna@intel.com>, Imre Deak <imre.deak@intel.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Message-ID: <170980005216.6042.11359885960417882116@jlahtine-mobl.ger.corp.intel.com>
-User-Agent: alot/0.8.1
-Date: Thu, 07 Mar 2024 10:27:32 +0200
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240307082445.GK86322@google.com>
 
-Quoting Stephen Rothwell (2024-03-07 04:10:27)
-> Hi all,
->=20
-> Today's linux-next merge of the drm tree got a conflict in:
->=20
->   drivers/gpu/drm/i915/display/intel_dp.c
->=20
-> between commit:
->=20
->   984318aaf7b6 ("drm/i915/panelreplay: Move out psr_init_dpcd() from init=
-_connector()")
->=20
-> from the drm-intel-fixes tree and commit:
->=20
->   e60cff453b82 ("drm/i915/dp: Enable DP tunnel BW allocation mode")
->=20
-> from the drm tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc drivers/gpu/drm/i915/display/intel_dp.c
-> index 94d2a15d8444,6ece2c563c7a..000000000000
-> --- a/drivers/gpu/drm/i915/display/intel_dp.c
-> +++ b/drivers/gpu/drm/i915/display/intel_dp.c
-> @@@ -5699,9 -5702,13 +5702,16 @@@ intel_dp_detect(struct drm_connector *c
->                 goto out;
->         }
->  =20
-> +       ret =3D intel_dp_tunnel_detect(intel_dp, ctx);
-> +       if (ret =3D=3D -EDEADLK)
-> +               return ret;
-> +=20
-> +       if (ret =3D=3D 1)
-> +               intel_connector->base.epoch_counter++;
-> +=20
->  +      if (!intel_dp_is_edp(intel_dp))
->  +              intel_psr_init_dpcd(intel_dp);
->  +
+On Thu, 07 Mar 2024, Lee Jones wrote:
 
-Hi,
+> On Wed, 06 Mar 2024, Stephen Rothwell wrote:
+> 
+> > Hi Lee,
+> > 
+> > On Wed, 6 Mar 2024 09:55:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > On Tue, 5 Mar 2024 09:17:37 +0000 Lee Jones <lee@kernel.org> wrote:
+> > > > On Tue, 05 Mar 2024, Stephen Rothwell wrote:  
+> > > > > On Mon, 26 Feb 2024 13:28:28 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:    
+> > > > > >
+> > > > > > After merging the backlight tree, today's linux-next build (x86_64
+> > > > > > allmodconfig) failed like this:
+> > > > > > 
+> > > > > > drivers/video/backlight/ktd2801-backlight.c:8:10: fatal error: linux/leds-expresswire.h: No such file or directory
+> > > > > >     8 | #include <linux/leds-expresswire.h>
+> > > > > >       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > 
+> > > > > > Caused by commit
+> > > > > > 
+> > > > > >   48749e2f14e3 ("backlight: Add Kinetic KTD2801 backlight support")
+> > > > > > 
+> > > > > > I have used the backlight tree from next-20240223 for today.    
+> > > > > 
+> > > > > I am still getting this failure.    
+> > > > 
+> > > > I just pushed a bunch of patches.  
+> > > 
+> > > I saw only 3 new ones (forgot to push?) none of which addressed this
+> > > problem.
+> > > 
+> > > > Please let me know if this is still an issue tomorrow.  
+> > > 
+> > > The problem is that after Feb 23, you rebased your tree and dropped commit
+> > > 
+> > >   25ae5f5f4168 ("leds: Introduce ExpressWire library")
+> > > 
+> > > which (added the leds-expresswire.h header), but kept commit
+> > > 
+> > >   48749e2f14e3 ("backlight: Add Kinetic KTD2801 backlight support")
+> > > 
+> > > which uses it.
+> > 
+> > Now I see what happened.  I have 2 trees from you, the backlight tree
+> > (git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git#for-backlight-next)
+> > and the leds-lj tree
+> > (git://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git#for-leds-next)
+> > and the former implicitly depends on the latter (and I merge the
+> > backlight tree first).  You should make that dependency explicit by
+> > merging (part of) the latter into the former (or something).
+> 
+> Right.  So you build each tree as its merged?
+> 
+> My assumption was that all things come together in -next?
 
-This is the right resolution, should be cleared up shortly once the
-drm-intel-fixes PR is pulled.
+Okay, all patches are now shared between both branches.
 
-Regards, Joonas
+Let me know if there is still an issue.
 
->         intel_dp_detect_dsc_caps(intel_dp, intel_connector);
->  =20
->         intel_dp_configure_mst(intel_dp);
+-- 
+Lee Jones [李琼斯]
 

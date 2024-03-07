@@ -1,73 +1,71 @@
-Return-Path: <linux-next+bounces-1510-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1511-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE6878745B2
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 02:36:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDB618745BB
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 02:40:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C84621C23331
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 01:36:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46CE81F22238
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 01:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D31D4C8B;
-	Thu,  7 Mar 2024 01:36:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4DC54C7C;
+	Thu,  7 Mar 2024 01:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rrTElCvX"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IrSkWBj7"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DCF4C6C;
-	Thu,  7 Mar 2024 01:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FD6320E;
+	Thu,  7 Mar 2024 01:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709775388; cv=none; b=CDTcqaqTuiDih3QbFA6F2nEi8w3qRVWQ9ydNRO1GQB6xgsbVIuy9yQ8JSWm6ZuCiclg6WROfe67b4Yj7KUbh9PS8fjRUXUWqkbYVERyNrjJmem5SJGZ3vr9D9TlvwcKpUlAWM5mMsktVwq2NLzEk7Fa3TOs8EtGniyCSzQ9K2go=
+	t=1709775644; cv=none; b=tbRKTqMODgwXQ1ZppvCWDWki86KtVo1Psu/ZImRBBDVa/pKveH51+/XrvEYFPLJTG0KTDoW2/XbVsHf4JdThDgWRfdkL8hcBzIhlOPzxiOYhqZ83R+rP8OW80Wm0MKctIp7SBIHmRISUE/NcXcqi6JY33R41tSrjhKOTqFt3fGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709775388; c=relaxed/simple;
-	bh=DGvZGr1IjTXNmLu/v0BjlBPqV6VOcPWZhaTsHSCk+tQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dA00CP7q8KDf5N8Lv+fmdulCr4nLO/iZNt7TTimaYZ9foIUnuqH20M+ge+DDweexT9vbp4gvPARmtU7qe2nErKpBpgFKXATL6Rcm24G5uYehhSJc/2u6y9E337ub9Kzu5XUb4VwAiDWzl5bfIOKwyhpcOqbwVIGkW+pZO0oDp44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rrTElCvX; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1709775644; c=relaxed/simple;
+	bh=Lo9iz+n9edm3o53h72vU/6OxtqAKFhQ+PPqRU6+UL/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DE0Qc2mm0BuWPK2RljHTqQuvDcFLRzCeGJdzHn4sl7Ie9N8kf/360jpXMDd3801rC0+P06kowe5uhTbeKDsar3xxtAdOv1IUri2I+dpYpOQ2k+o2En7g9F4x6pJ5toufyKono2GP3t0BZunhEDry0WjdsGOtZSGWfAJVa3wkyM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IrSkWBj7; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1709775383;
-	bh=uRHTG0L933W49rR7eLKbmUyiReuzr8JXVYf13P4Er+Q=;
+	s=201702; t=1709775641;
+	bh=T/j2tECYmvWyYhRQzO6iM6NxszqMwlNlx0r9oi+lhHA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=rrTElCvXas/WiNo+f1N65FbgNlU7mB11ugnVirlWtEHb3B4xgr5r/O2gPm1/2FzZl
-	 FrzXBlkf38spshsYkA+1L87m0S7rK3Ol68f7phITkwXauziCqkfJrtKdqt8NljcP7u
-	 GDGn7IVpXXQB54yHSzFvW7kh+X4JR+Su4zMl4ubdOwNJWm2Wf9GQrpzWykOIgOuHyu
-	 YqQ4HRmLsl4XyEqIZ62v5iq4E4ulJKUqBk5USreOKLwALUshSwXlK2lV9LBUIuXzyB
-	 v95RNmInFJVRPSWDqE8kdA1T1/w3YcY3mDqTy7nJHGPf6DWiRYm2SyR1o2q2Jbfz1+
-	 BmaWdSgG8d2fg==
+	b=IrSkWBj7sq6MnNLa1BtDPXvkU7O/2wn8lp1Bj0avzfsosMzV5MhEa1ORbGbYdlWS5
+	 VOxZS9llx7QWnI65QFqxFGdY0ZtIQsTWG9hax2uwNxGdAl3WQ+PQcEmHfqf8DCd14Q
+	 4HZs7/d1qO8y4++WBGfMyHlhh29YVQo0+HN4A/ApBJ8arWDfCsF0xSkSyB4iriSeIt
+	 /xwutvofqnw0AMG7cJG2jffYOwp/Envrvqi1Uligbtoxabo9FME4qHJ4CX6pSO314d
+	 lIsQZQlH7mL9VzeZVKkTsPMjUAdJpR624n8/OtCzEKPqxWhfdobImX4ImAMYs8k5s1
+	 pVvnHyL+LmJrA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TqsMp2znkz4wc7;
-	Thu,  7 Mar 2024 12:36:22 +1100 (AEDT)
-Date: Thu, 7 Mar 2024 12:36:19 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TqsSm59d9z4wcK;
+	Thu,  7 Mar 2024 12:40:40 +1100 (AEDT)
+Date: Thu, 7 Mar 2024 12:40:40 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf
- <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, "Uladzislau Rezki (Sony)"
- <urezki@gmail.com>
-Subject: linux-next: manual merge of the bpf-next tree with the mm-stable
- tree
-Message-ID: <20240307123619.159f1c4c@canb.auug.org.au>
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Eduard
+ Zingerman <eddyz87@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <20240307124040.1a177b71@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0XTsu3vubCij2IEjsa0+JF6";
+Content-Type: multipart/signed; boundary="Sig_/I9j87X6ApN8PS6sC_1mfoKA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/0XTsu3vubCij2IEjsa0+JF6
+--Sig_/I9j87X6ApN8PS6sC_1mfoKA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -75,20 +73,21 @@ Hi all,
 
 Today's linux-next merge of the bpf-next tree got a conflict in:
 
-  mm/vmalloc.c
+  tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
 
 between commit:
 
-  8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo")
+  5c2bc5e2f81d ("selftests/bpf: test case for callback_depth states pruning=
+ logic")
 
-from the mm-stable tree and commit:
+from the bpf tree and commit:
 
-  e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().")
+  0c8bbf990bdd ("selftests/bpf: Test may_goto")
 
 from the bpf-next tree.
 
-I fixed it up (I think - see below) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
 conflicts should be mentioned to your upstream maintainer when your tree
 is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
@@ -98,156 +97,200 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc mm/vmalloc.c
-index 25a8df497255,e5b8c70950bc..000000000000
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@@ -4755,81 -4423,70 +4820,84 @@@ static void show_numa_info(struct seq_f
+diff --cc tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+index a955a6358206,04cdbce4652f..000000000000
+--- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
++++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+@@@ -239,74 -237,103 +237,173 @@@ int bpf_loop_iter_limit_nested(void *un
+  	return 1000 * a + b + c;
+  }
  =20
-  static void show_purge_info(struct seq_file *m)
-  {
- +	struct vmap_node *vn;
-  	struct vmap_area *va;
- +	int i;
- =20
- -	spin_lock(&purge_vmap_area_lock);
- -	list_for_each_entry(va, &purge_vmap_area_list, list) {
- -		seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
- -			(void *)va->va_start, (void *)va->va_end,
- -			va->va_end - va->va_start);
- -	}
- -	spin_unlock(&purge_vmap_area_lock);
- -}
- +	for (i =3D 0; i < nr_vmap_nodes; i++) {
- +		vn =3D &vmap_nodes[i];
- =20
- -static int s_show(struct seq_file *m, void *p)
- -{
- -	struct vmap_area *va;
- -	struct vm_struct *v;
- -
- -	va =3D list_entry(p, struct vmap_area, list);
- -
- -	if (!va->vm) {
- -		if (va->flags & VMAP_RAM)
- -			seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
- +		spin_lock(&vn->lazy.lock);
- +		list_for_each_entry(va, &vn->lazy.head, list) {
- +			seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
-  				(void *)va->va_start, (void *)va->va_end,
-  				va->va_end - va->va_start);
- -
- -		goto final;
- +		}
- +		spin_unlock(&vn->lazy.lock);
-  	}
- +}
- =20
- -	v =3D va->vm;
- +static int vmalloc_info_show(struct seq_file *m, void *p)
+ +struct iter_limit_bug_ctx {
+ +	__u64 a;
+ +	__u64 b;
+ +	__u64 c;
+ +};
+ +
+ +static __naked void iter_limit_bug_cb(void)
  +{
- +	struct vmap_node *vn;
- +	struct vmap_area *va;
- +	struct vm_struct *v;
- +	int i;
- =20
- -	seq_printf(m, "0x%pK-0x%pK %7ld",
- -		v->addr, v->addr + v->size, v->size);
- +	for (i =3D 0; i < nr_vmap_nodes; i++) {
- +		vn =3D &vmap_nodes[i];
- =20
- -	if (v->caller)
- -		seq_printf(m, " %pS", v->caller);
- +		spin_lock(&vn->busy.lock);
- +		list_for_each_entry(va, &vn->busy.head, list) {
- +			if (!va->vm) {
- +				if (va->flags & VMAP_RAM)
- +					seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
- +						(void *)va->va_start, (void *)va->va_end,
- +						va->va_end - va->va_start);
- =20
- -	if (v->nr_pages)
- -		seq_printf(m, " pages=3D%d", v->nr_pages);
- +				continue;
- +			}
- =20
- -	if (v->phys_addr)
- -		seq_printf(m, " phys=3D%pa", &v->phys_addr);
- +			v =3D va->vm;
- =20
- -	if (v->flags & VM_IOREMAP)
- -		seq_puts(m, " ioremap");
- +			seq_printf(m, "0x%pK-0x%pK %7ld",
- +				v->addr, v->addr + v->size, v->size);
- =20
- -	if (v->flags & VM_SPARSE)
- -		seq_puts(m, " sparse");
- +			if (v->caller)
- +				seq_printf(m, " %pS", v->caller);
- =20
- -	if (v->flags & VM_ALLOC)
- -		seq_puts(m, " vmalloc");
- +			if (v->nr_pages)
- +				seq_printf(m, " pages=3D%d", v->nr_pages);
- =20
- -	if (v->flags & VM_MAP)
- -		seq_puts(m, " vmap");
- +			if (v->phys_addr)
- +				seq_printf(m, " phys=3D%pa", &v->phys_addr);
- =20
- -	if (v->flags & VM_USERMAP)
- -		seq_puts(m, " user");
- +			if (v->flags & VM_IOREMAP)
- +				seq_puts(m, " ioremap");
- =20
- -	if (v->flags & VM_DMA_COHERENT)
- -		seq_puts(m, " dma-coherent");
-++			if (v->flags & VM_SPARSE)
-++				seq_puts(m, " sparse");
+ +	/* This is the same as C code below, but written
+ +	 * in assembly to control which branches are fall-through.
+ +	 *
+ +	 *   switch (bpf_get_prandom_u32()) {
+ +	 *   case 1:  ctx->a =3D 42; break;
+ +	 *   case 2:  ctx->b =3D 42; break;
+ +	 *   default: ctx->c =3D 42; break;
+ +	 *   }
+ +	 */
+ +	asm volatile (
+ +	"r9 =3D r2;"
+ +	"call %[bpf_get_prandom_u32];"
+ +	"r1 =3D r0;"
+ +	"r2 =3D 42;"
+ +	"r0 =3D 0;"
+ +	"if r1 =3D=3D 0x1 goto 1f;"
+ +	"if r1 =3D=3D 0x2 goto 2f;"
+ +	"*(u64 *)(r9 + 16) =3D r2;"
+ +	"exit;"
+ +	"1: *(u64 *)(r9 + 0) =3D r2;"
+ +	"exit;"
+ +	"2: *(u64 *)(r9 + 8) =3D r2;"
+ +	"exit;"
+ +	:
+ +	: __imm(bpf_get_prandom_u32)
+ +	: __clobber_all
+ +	);
+ +}
+ +
+ +SEC("tc")
+ +__failure
+ +__flag(BPF_F_TEST_STATE_FREQ)
+ +int iter_limit_bug(struct __sk_buff *skb)
+ +{
+ +	struct iter_limit_bug_ctx ctx =3D { 7, 7, 7 };
+ +
+ +	bpf_loop(2, iter_limit_bug_cb, &ctx, 0);
+ +
+ +	/* This is the same as C code below,
+ +	 * written in assembly to guarantee checks order.
+ +	 *
+ +	 *   if (ctx.a =3D=3D 42 && ctx.b =3D=3D 42 && ctx.c =3D=3D 7)
+ +	 *     asm volatile("r1 /=3D 0;":::"r1");
+ +	 */
+ +	asm volatile (
+ +	"r1 =3D *(u64 *)%[ctx_a];"
+ +	"if r1 !=3D 42 goto 1f;"
+ +	"r1 =3D *(u64 *)%[ctx_b];"
+ +	"if r1 !=3D 42 goto 1f;"
+ +	"r1 =3D *(u64 *)%[ctx_c];"
+ +	"if r1 !=3D 7 goto 1f;"
+ +	"r1 /=3D 0;"
+ +	"1:"
+ +	:
+ +	: [ctx_a]"m"(ctx.a),
+ +	  [ctx_b]"m"(ctx.b),
+ +	  [ctx_c]"m"(ctx.c)
+ +	: "r1"
+ +	);
+ +	return 0;
+ +}
+ +
++ #define ARR_SZ 1000000
++ int zero;
++ char arr[ARR_SZ];
 +=20
- -	if (is_vmalloc_addr(v->pages))
- -		seq_puts(m, " vpages");
- +			if (v->flags & VM_ALLOC)
- +				seq_puts(m, " vmalloc");
- =20
- -	show_numa_info(m, v);
- -	seq_putc(m, '\n');
- +			if (v->flags & VM_MAP)
- +				seq_puts(m, " vmap");
- +
- +			if (v->flags & VM_USERMAP)
- +				seq_puts(m, " user");
- +
- +			if (v->flags & VM_DMA_COHERENT)
- +				seq_puts(m, " dma-coherent");
- +
- +			if (is_vmalloc_addr(v->pages))
- +				seq_puts(m, " vpages");
- +
- +			show_numa_info(m, v);
- +			seq_putc(m, '\n');
- +		}
- +		spin_unlock(&vn->busy.lock);
- +	}
- =20
-  	/*
-  	 * As a final step, dump "unpurged" areas.
++ SEC("socket")
++ __success __retval(0xd495cdc0)
++ int cond_break1(const void *ctx)
++ {
++ 	unsigned long i;
++ 	unsigned int sum =3D 0;
++=20
++ 	for (i =3D zero; i < ARR_SZ; cond_break, i++)
++ 		sum +=3D i;
++ 	for (i =3D zero; i < ARR_SZ; i++) {
++ 		barrier_var(i);
++ 		sum +=3D i + arr[i];
++ 		cond_break;
++ 	}
++=20
++ 	return sum;
++ }
++=20
++ SEC("socket")
++ __success __retval(999000000)
++ int cond_break2(const void *ctx)
++ {
++ 	int i, j;
++ 	int sum =3D 0;
++=20
++ 	for (i =3D zero; i < 1000; cond_break, i++)
++ 		for (j =3D zero; j < 1000; j++) {
++ 			sum +=3D i + j;
++ 			cond_break;
++ 		}
++=20
++ 	return sum;
++ }
++=20
++ static __noinline int loop(void)
++ {
++ 	int i, sum =3D 0;
++=20
++ 	for (i =3D zero; i <=3D 1000000; i++, cond_break)
++ 		sum +=3D i;
++=20
++ 	return sum;
++ }
++=20
++ SEC("socket")
++ __success __retval(0x6a5a2920)
++ int cond_break3(const void *ctx)
++ {
++ 	return loop();
++ }
++=20
++ SEC("socket")
++ __success __retval(1)
++ int cond_break4(const void *ctx)
++ {
++ 	int cnt =3D zero;
++=20
++ 	for (;;) {
++ 		/* should eventually break out of the loop */
++ 		cond_break;
++ 		cnt++;
++ 	}
++ 	/* if we looped a bit, it's a success */
++ 	return cnt > 1 ? 1 : 0;
++ }
++=20
++ static __noinline int static_subprog(void)
++ {
++ 	int cnt =3D zero;
++=20
++ 	for (;;) {
++ 		cond_break;
++ 		cnt++;
++ 	}
++=20
++ 	return cnt;
++ }
++=20
++ SEC("socket")
++ __success __retval(1)
++ int cond_break5(const void *ctx)
++ {
++ 	int cnt1 =3D zero, cnt2;
++=20
++ 	for (;;) {
++ 		cond_break;
++ 		cnt1++;
++ 	}
++=20
++ 	cnt2 =3D static_subprog();
++=20
++ 	/* main and subprog have to loop a bit */
++ 	return cnt1 > 1 && cnt2 > 1 ? 1 : 0;
++ }
++=20
+  char _license[] SEC("license") =3D "GPL";
 
---Sig_/0XTsu3vubCij2IEjsa0+JF6
+--Sig_/I9j87X6ApN8PS6sC_1mfoKA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXpGhMACgkQAVBC80lX
-0GyulQf/cE1To1a/iTynPNiIw/MuF/ez+0lLzyXqxJCfduHst/Bz0PRYwaJm85tH
-I2KEy153199aJrR5nbgdaeY7EDYvuijcImpDE3uKT4dIVBr193DRBmul7fQX9uTm
-541NS/iDRJ6x/xOsEUvBaud/LRvOSixTdb1jiypaFL1MBbtOHPDgq9oShgqFOsAB
-o3TgqXV8SyUJiDtwD8aUWTjtbEAfi1IeDekJPvb2oZZf1hSvLu2hKYAgyTcd7f6j
-ctYZMJfzKhYugPT7mdS35q2XmybnP/B7Dk4WXu/4W1dJGk/O9BLbATra+XpwPH58
-K+k/PR7THaX+tNTyMYBYWeTqCcCfJw==
-=U7Ep
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXpGxgACgkQAVBC80lX
+0GyK+wf9GeKO29jQCn5GcUD1Y0Q9Ea6t3msOMQzBJh7hfCFniqOSxb08dYLj2uVc
+hLfU2MUZUTh1C5YDcU/DB7LGVfILtTmSev44Pjm1DzPFyKdv4fHSFofPR3xbd/VN
+S5HN7NxADM6vBGdEHOiWvXK5w0YmFthTpf/U3CHXuzhGJ7FZ7IhHIPkTeoEDsv9g
+muxjtMv4pok3Idzi9HJwBpiEYYgRvOO67gj92cJEFHv157swkQ9b9geoMVqqJbmy
+i2u0yY3KRwpu0r5t9GinXbfdtOQk6gVj/a1Pe1uF0pOp4Tlj5yXl1NGJVJa1vZQQ
+7ADXFlIzPTSUoMmV9M1HbwQ4xydJ7g==
+=HtY4
 -----END PGP SIGNATURE-----
 
---Sig_/0XTsu3vubCij2IEjsa0+JF6--
+--Sig_/I9j87X6ApN8PS6sC_1mfoKA--
 

@@ -1,134 +1,151 @@
-Return-Path: <linux-next+bounces-1514-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1515-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E656D8746AE
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 04:20:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66FFC8746FD
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 04:54:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 117EA1C2101A
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 03:20:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E979A2859B8
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 03:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D5D0DDC9;
-	Thu,  7 Mar 2024 03:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B479C11CAF;
+	Thu,  7 Mar 2024 03:54:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XZ2Wm8Q7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BKoxBLRk"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48283E576;
-	Thu,  7 Mar 2024 03:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729FC10A34;
+	Thu,  7 Mar 2024 03:54:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709781634; cv=none; b=dkf9rtLYuj0ps8GbpyUVG1hxX3BUiyow5AVy4o3Th7HWb2nenbfY466HGyOj4Etn5SPDqJr9xfxhqt3AAX1gkvel0Q23X+fITOl3P6RI1BnUIMvyh0MMp978KJxsRcHzVm02e2b+6mQ3rtw5U2QvN8/kwF6+m8x9Tg8jWIWDNHs=
+	t=1709783669; cv=none; b=gWDAgXvmB59b6IoRzAeEvnvXkJQY4z6280JutHqGI6F1b02nvoIdHmY3ZeH8OQLA3M+DLsut01llgUzgcmGKqcGreU1shZ98In+zihouM9gPeqIo32neGIxxiRLxbdIgCRI5aQxIACUGk+5Y45hFkexYpKr+iSKFwZPCFuGzYBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709781634; c=relaxed/simple;
-	bh=Ti6YAh/NMgGQsnsVPl5LkxAkyP+ZOzDYD3+Aqwls+Fg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ddl7aPBXrA6oKdsulsNHwXqGZZYo8HPkFW1DH6TJuIJOON+aA4RwXOP1BBsStyAX4jlfedTrMeSb7GEArsGQaD/0UI4hoty5pWWwAUGi2GGTRUbeGJRyvGncZB+nI6RHi5oPomaZqGMKs1UJLbI+Wb1JqnfG5lWgtEwBV5a7sq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XZ2Wm8Q7; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33e122c8598so175362f8f.1;
-        Wed, 06 Mar 2024 19:20:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709781630; x=1710386430; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=08ZvxkU8o27HBaf+3etQV0wPvLqge6KNPGX713iuBK8=;
-        b=XZ2Wm8Q7VcruMaGFm5oy5wbv7NBKD3/50G49ys5PEh5dcVBNF2fdtW5C3V8ZU0bJH6
-         ZtEHUf2SPqhyZ1tHZzTrHl4HXzMrwNZoM9bJTc9aBZBVrmCsB/iB2fvKb8t4mEv9VIzS
-         rmu5Y66a3Lm2O+QX60ARSqdEZ+Hmpe+/RBOoxdVLKYsfoDxT5S0bH8ggU+Uh0cpxSpKx
-         S4vWSs7rSZVJOEo//DPd3zJ649oRiIpZE26J4RW89lFQ/cFuKCE9ASp7FTGVJr1gS3no
-         NjKNHTUbTk2UMDdPVnmqnbyIxsJ6NGJO+/trLLeufVeV0ugH/sEbRlknBZPPYIUe3EJJ
-         dCcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709781630; x=1710386430;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=08ZvxkU8o27HBaf+3etQV0wPvLqge6KNPGX713iuBK8=;
-        b=WK/EscbNUGyCwdz6ANeBtmrfqlRXHXghXDr4FPntKGjWsjwC12GrqSt0bgnnKKqKK9
-         dGylglCetK6zi28AzHpcGejVyzef2gTqt6yyMxWUfV8T2MiyyP9oK4pKyAD1xRsT3mVP
-         EtjgkUtW2ci8Tyypx1MP/w0Fb9Bs/YihJMP1UFdRvS4pUnZKnDWRhNCDybtBj/ZSkQmZ
-         2Vx0RfpPIOmHNfckLa5gWfwEHasQw49/c+BYuE1NDsF3BwTnC5rhgKkEXvthv/NfGjVC
-         4SfGPFMWRxBnY1FgNRFFQQKJ/TAYoOxmefD7NsB6mkCANUJksv3qhNUMkh1w7ZlazWa/
-         txeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUzAVSrwv1AjpbJYwzuSS1tV65g2rISQPhNppilU2aP6N2V4oy0p8YJpNaRGljiv77fj9lBT3sffyZyp7PikFRKljGvciCImDViU8GhJzDqynDwy/hLSqWAa24PlPUJZJdHzhQWtQHssejAlNi1JJ6kbfFW/jEiYxXXviJInm8kd5pcDlnSeyEVKFg6SeFO1K0QZKGnhw==
-X-Gm-Message-State: AOJu0YwRRu+KF5XYOnM64+Svn0cmn0D1Ue/5kUayufVwW2FcJtCBJJQR
-	IFAJcjo8BvEaKSNvtKVnlXjO+vfYuydJ4I77WdSZnXaBq4Ruiw6T6NN76MLQb9PSLjGR0S3PNwF
-	LadhFMOjuUtNc4K2SV0+i6MzBzB/wvoct
-X-Google-Smtp-Source: AGHT+IFjaP2GBdB8DtmUnLCZsfrF61QII3WlzmZDWuRLmnC1wDfvWJwkerifgTREyQcvLifYGD6e/slTjJWDNkjIPMA=
-X-Received: by 2002:adf:b643:0:b0:33d:7385:d929 with SMTP id
- i3-20020adfb643000000b0033d7385d929mr14853839wre.0.1709781630370; Wed, 06 Mar
- 2024 19:20:30 -0800 (PST)
+	s=arc-20240116; t=1709783669; c=relaxed/simple;
+	bh=qNi91CWOqVKhggynDhBOv3fa1Kp5Iq79QEjC8p3C1gI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eqmZxNAUA8LGLhx3tibumNrU4AQYmjpIk9gQYPMeSby1ipUIJiMk1WSHPfrphOFTTL3oK7Szy+XUEp6TJk0ofmXfc7KupaavmiyJmOf69JFlL5FrbTy9gvpyr1uD+LUrUgiSbqzj5m7FO/Bqei+W1JpcYNpsAoUPrCQTiGCfRVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BKoxBLRk; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1709783664;
+	bh=W0LESQ9VQRAvUyGzI8xRmeOzSdHn7kffUo4AxhmfFoc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=BKoxBLRkHTELq74eBdnFk1eBb0P2eaO7zGQsBs1au3DmKjeNf9Tn2g1w4B6JVc6gz
+	 tEH4Bl15WfY0/nSot3tGdO24oDkkQQfyNTwmb5GGyEyQCZy6zjNGd6XeR7qzxfRkkO
+	 Q6CmmlJ6aDCyA0R9/K5cXLiTrYt9z1qJIj+GMD4Hv5AB5mq14Jhv7XkTXRofYYTz7i
+	 HmkUaaaeeZWwdusREa7YHJvSIrQ8VMCixOe1oK8Oew07HekTTk8wtzJK7jRwio5NHY
+	 6y1OBUa2TktH7Q8F0VvMvpKl1nYmYOlS+UTlbT/7yc/XjRlJhE+65dnIUUVHXes6/G
+	 rZHBXG7Thtz3Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TqwR41067z4wb2;
+	Thu,  7 Mar 2024 14:54:23 +1100 (AEDT)
+Date: Thu, 7 Mar 2024 14:54:22 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Anup Patel <anup@brainfault.org>, Arnaldo Carvalho de Melo
+ <arnaldo.melo@gmail.com>, Namhyung Kim <namhyung@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
+Subject: linux-next: manual merge of the kvm-riscv tree with the perf tree
+Message-ID: <20240307145422.0de43782@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240307123619.159f1c4c@canb.auug.org.au>
-In-Reply-To: <20240307123619.159f1c4c@canb.auug.org.au>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 6 Mar 2024 19:20:19 -0800
-Message-ID: <CAADnVQKy848BOi42kJh5dDpFsVuyktAgFds3byptANGpOkbXZw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the mm-stable tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Gx32OxjYXRynYks=V_TAuA_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/Gx32OxjYXRynYks=V_TAuA_
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 5:36=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the bpf-next tree got a conflict in:
->
->   mm/vmalloc.c
->
-> between commit:
->
->   8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo")
->
-> from the mm-stable tree and commit:
->
->   e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages()=
-.")
->
-> from the bpf-next tree.
->
-> I fixed it up (I think - see below) and can carry the fix as necessary.
-> This is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Hi all,
 
-...
+Today's linux-next merge of the kvm-riscv tree got a conflict in:
 
->
->  -      if (v->flags & VM_USERMAP)
->  -              seq_puts(m, " user");
->  +                      if (v->flags & VM_IOREMAP)
->  +                              seq_puts(m, " ioremap");
->
->  -      if (v->flags & VM_DMA_COHERENT)
->  -              seq_puts(m, " dma-coherent");
-> ++                      if (v->flags & VM_SPARSE)
-> ++                              seq_puts(m, " sparse");
-> +
+  tools/testing/selftests/kvm/Makefile
 
-Indent change across the loop makes the conflict look big,
-but it's actually trivial and resolution looks correct.
+between commit:
 
-Thanks!
+  c2bd08ba20a5 ("treewide: remove meaningless assignments in Makefiles")
+
+from the perf tree and commit:
+
+  2c5af1c84603 ("selftests/kvm: Fix issues with $(SPLIT_TESTS)")
+
+from the kvm-riscv tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/kvm/Makefile
+index 14684aeb4b55,426f85798aea..000000000000
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@@ -267,10 -270,13 +270,13 @@@ TEST_GEN_OBJ =3D $(patsubst %, %.o, $(TES
+  TEST_GEN_OBJ +=3D $(patsubst %, %.o, $(TEST_GEN_PROGS_EXTENDED))
+  TEST_DEP_FILES =3D $(patsubst %.o, %.d, $(TEST_GEN_OBJ))
+  TEST_DEP_FILES +=3D $(patsubst %.o, %.d, $(LIBKVM_OBJS))
+- TEST_DEP_FILES +=3D $(patsubst %.o, %.d, $(SPLIT_TESTS_OBJS))
++ TEST_DEP_FILES +=3D $(patsubst %.o, %.d, $(SPLIT_TEST_GEN_OBJ))
+  -include $(TEST_DEP_FILES)
+ =20
+- $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
+ -x :=3D $(shell mkdir -p $(sort $(OUTPUT)/$(ARCH_DIR) $(dir $(LIBKVM_C_OBJ=
+) $(LIBKVM_S_OBJ))))
+++$(shell mkdir -p $(sort $(OUTPUT)/$(ARCH_DIR) $(dir $(LIBKVM_C_OBJ) $(LIB=
+KVM_S_OBJ))))
++=20
++ $(filter-out $(SPLIT_TEST_GEN_PROGS), $(TEST_GEN_PROGS)) \
++ $(TEST_GEN_PROGS_EXTENDED): %: %.o
+  	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) =
+$(LDLIBS) -o $@
+  $(TEST_GEN_OBJ): $(OUTPUT)/%.o: %.c
+  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+@@@ -298,8 -305,8 +305,8 @@@ $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(G
+  $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
+  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
+ =20
+ -x :=3D $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+ +$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+- $(SPLIT_TESTS_OBJS): $(GEN_HDRS)
++ $(SPLIT_TEST_GEN_OBJ): $(GEN_HDRS)
+  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
+  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
+  $(TEST_GEN_OBJ): $(GEN_HDRS)
+
+--Sig_/Gx32OxjYXRynYks=V_TAuA_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXpOm4ACgkQAVBC80lX
+0GxEbwf+KsrAfopZtcpVF/CpQQPrYkgw/+fsv10bCa21klhtPpJRDhWMpcAtIFEt
+auCGzr5NGjFVgCCub4QdkaJErQNlDJpRjnUlH9279D8+ua4BJ1h5A8NeJCcXNYr1
+lv1/wUzmKpX6RHhgQhWge/H+D8EImyShZ+ik1Uh9K8MpWitoeB4W4GfC7QDV0sw8
+ulp08rcdjt9szraibkzbNLTvQTaTJh3aqyM4NdvxuZNKdWTmNx0K2m7n8/bU27An
+q/pF/0PhwJ5rOiYzuAlZivwhp1iZEkiogqeELWkV3f/kWAJy8YqCwpWS8ScrK+fl
+niQ9iJLaJNkwnTLPUIa4tSgub0p+6A==
+=Ij9J
+-----END PGP SIGNATURE-----
+
+--Sig_/Gx32OxjYXRynYks=V_TAuA_--
 

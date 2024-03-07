@@ -1,108 +1,124 @@
-Return-Path: <linux-next+bounces-1533-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1534-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3920A875626
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 19:34:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CD00875686
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 20:02:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E74D4287FB2
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 18:34:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A8EE1C20CBC
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 19:02:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BE6812F5A5;
-	Thu,  7 Mar 2024 18:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DBFC135A45;
+	Thu,  7 Mar 2024 19:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OJb3VQHU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mFXdypb+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3493725763;
-	Thu,  7 Mar 2024 18:34:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC651CABF;
+	Thu,  7 Mar 2024 19:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709836448; cv=none; b=am/X3uMoVBetaEkYhPbM5ocv/rTgey2hmDDBFK7RnnSF85uOYDx3jtIiUUzGgX4/iq3UkyxCUCuqJVX7LlwgTnaUWM66sOVYIEdbKdyXIGGi5gnVJ9FnBKdX0Z/QrWSFLyY+lgkPoYmGYoNNwy9Wa/Loycj8cnlmTiMfjzzfsEA=
+	t=1709838174; cv=none; b=PcQTNYMB0GqkxU205Hx9Aoks0HnCfI67r08AQo1qE2QNqQzY7BJUDZ6DRfcFJVLYc5E0r5YjVIcqd3JzecLAuijNA70UyXGIzgWkA9DVGP0zatnwXfTb9h3e/oEGJ7C5H53NU4enmb/aa8w+2eo2u8FzxlxPauFnR7VB+2IdGVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709836448; c=relaxed/simple;
-	bh=+lK/F0XbMKqREwpvsr+3Km9spePaRTSr3KsnOH0vBmY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=phDgsufvzXyPYZNtJPCUT+YhFzEMyeCBIHIWkHUTRGXUVKohqKD+JVrIbHsdlUb8rrbPjqvmHP75U7XAb1HU2pHni1Sp95FfWquskHIjAiw8Rw7X6ZY82v/wEthZNlNYbOk42uqonB1E2YStwnopDBthAnS5rlGkQntpUnn0d0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OJb3VQHU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76836C433F1;
-	Thu,  7 Mar 2024 18:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709836447;
-	bh=+lK/F0XbMKqREwpvsr+3Km9spePaRTSr3KsnOH0vBmY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OJb3VQHUgU/aaG83shdGPgIcWjq0buY/JZxBL1peZ9dXE/PSvrEsIFyopnq5lBeoN
-	 dDH/smhwPpo9zoI3ZhzU94PhtVJJBM2SuDXsjvJZGC4L/fxr0M3rmLCtPT7/yRBNN0
-	 ZiJtgiMMhgKgIYVV/bEgYCTwED04y6K3VTsi18ReqOFxmjKTJ2IuSNXHRi1scgRfTi
-	 qLzp7Pr8IQ4lBtPsIzb9Y4ocZKpWzJQ+tVqjtXxKKI/o+Kf0sftUUZVMV9ydAdK4pO
-	 fsFGf7h/gK2LLCP4vvucH9nKy8/9P+WpMk/t72uoiwBmJGe6kNSwf/Nxi341K8uROW
-	 M17EsUjPSL4Xg==
-Date: Thu, 7 Mar 2024 18:34:02 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Song Liu <song@kernel.org>
-Cc: Puranjay Mohan <puranjay12@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>, Will Deacon <will@kernel.org>,
-	kernelci-results@groups.io, bot@kernelci.org,
-	linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-	bpf@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: next/master bisection: baseline.login on
- qemu_arm64-virt-gicv3-uefi
-Message-ID: <4ce67bde-3bd4-4a59-bce7-4a2764445783@sirena.org.uk>
-References: <65e9e748.a70a0220.606f7.53c0@mx.google.com>
- <7e216c88-77ee-47b8-becc-a0f780868d3c@sirena.org.uk>
- <CAPhsuW7c+OgFcZ9qWF7nes3SbaQdf5GYZZA+jyHAOzJ5omuZ8g@mail.gmail.com>
+	s=arc-20240116; t=1709838174; c=relaxed/simple;
+	bh=Z6To9HnP03DphJYrGWEIqIAjfjWhrFUPrtKc0ABJuFI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OdNrjdRdOijiF+rrPi8aKG6Y8lBqHSZMv5pCcUP6ydQ6uJBXoZznjzxaiU0F1kQ1bG1LNv9mxUMPBVOF8051gAF5mmLhv/cS3Kl21TNOB3/n7of48dmLXYKRDeWpASlRdyG5qAQzLU0nh6WE6NmOz8DxyQBQYvyQAKwyHoPCRt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mFXdypb+; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d309a23d76so21153001fa.1;
+        Thu, 07 Mar 2024 11:02:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709838170; x=1710442970; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z6To9HnP03DphJYrGWEIqIAjfjWhrFUPrtKc0ABJuFI=;
+        b=mFXdypb+H3eVzVVQ77zNNQXsiGCsjk1y1g4lP9QRc9/3sizYahBv3/ncdoRvZdSr9A
+         OxO6lbL1ViZCvI7Lo05V9Fmnm3aCZrjwiokuDYDkVItDq37Nvnli7RKDfacf5ZiUyY3m
+         GdnnOVBNiy5WEVYZ+1ByXk+oNI8fJ2Og1SJHIN+n8lGzAg+BMBkLgeb93Qv9HpuAbPv1
+         KYoXcypb2fWNMsQLXtCW+RZGhmjUz97uZbwYZd+kgq85SamMX2DqCXeflU02QI9uRC7+
+         mdmsgVHp1/AvfA8ZVrP/A1QpXFokvnoFwIyzimmWr56yzaSpybFk3lK1OrSaTVSkX/9G
+         TR1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709838170; x=1710442970;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z6To9HnP03DphJYrGWEIqIAjfjWhrFUPrtKc0ABJuFI=;
+        b=UVY/brpKvL+N1y6fPr5RrrQlbDwUAFiXBcugOsC3yyvTkb+9tMAhN+XBrqpiNRKJLE
+         VxBFyI22ipvJSKkoZ+SECwJViwbb0l1a4OuuP2iDv00iduRgMmty0I5n8XPNCqLRLk3V
+         8Sags8kREdiFJ2HBVJy+q08wXaDKQaPZBOf9J54AuYNy/jdek5QK26sbR43e+kydcVvQ
+         9AR0kdD2qupaxKXOv1FTUdPV37LaYLGcG2kouMEahcvylfJbH2oUaXmYHzQoJR70Ya7y
+         EaCviJOHtUD0sLNYYzb1vw6z3OWQ9Jl0Di+DHAfxQ5X3UMBBB4vESa8n91nIBJp6ublh
+         udCA==
+X-Forwarded-Encrypted: i=1; AJvYcCXPFgylVfWAXrSGabI5Z7ZbrNC3xcEdozoZ/DnYKYbKf+oUZIa9qASTThvsr0Ms19o+gG/3hEq46Jgul+N9tPKzNzvjwdINu6HNMUcftH1Gq3x7KPRwkyQ3H0O48Sbi6w==
+X-Gm-Message-State: AOJu0YxiWTuQbbX8KXx+cOLzqfjTPJXaBWqY/CVLIkO4Qx2gfgLgmU3L
+	eKDeEUMSnMynmHW5a2I8+0hSOfI+aSCVYuhUZtx4O884dXwzCABn1+A5/TEkTLtqTY06uKa/jxO
+	C8C+PDEZrLgUe26M4OW+r+lYKnxw=
+X-Google-Smtp-Source: AGHT+IFOnenNV2ioydjlYq7svwlQ6sb5pSsdTZrS8h+5e87pENNyMrtVQt9tYWWqO0Gck2mzMMnTkH5ftYTgVE8xwOo=
+X-Received: by 2002:a19:e003:0:b0:513:1cad:c83c with SMTP id
+ x3-20020a19e003000000b005131cadc83cmr402506lfg.11.1709838170049; Thu, 07 Mar
+ 2024 11:02:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="RHFExNBtP0kQZN/i"
-Content-Disposition: inline
-In-Reply-To: <CAPhsuW7c+OgFcZ9qWF7nes3SbaQdf5GYZZA+jyHAOzJ5omuZ8g@mail.gmail.com>
-X-Cookie: Been Transferred Lately?
-
-
---RHFExNBtP0kQZN/i
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <65e9e748.a70a0220.606f7.53c0@mx.google.com> <7e216c88-77ee-47b8-becc-a0f780868d3c@sirena.org.uk>
+ <CAPhsuW7c+OgFcZ9qWF7nes3SbaQdf5GYZZA+jyHAOzJ5omuZ8g@mail.gmail.com> <4ce67bde-3bd4-4a59-bce7-4a2764445783@sirena.org.uk>
+In-Reply-To: <4ce67bde-3bd4-4a59-bce7-4a2764445783@sirena.org.uk>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Thu, 7 Mar 2024 20:02:38 +0100
+Message-ID: <CANk7y0gBRgJQqeqXZmTXygKREUWn4OQ2cbTYqh5P9gN3ZSV2sQ@mail.gmail.com>
+Subject: Re: next/master bisection: baseline.login on qemu_arm64-virt-gicv3-uefi
+To: Mark Brown <broonie@kernel.org>
+Cc: Song Liu <song@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Will Deacon <will@kernel.org>, kernelci-results@groups.io, 
+	bot@kernelci.org, linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org, 
+	bpf@vger.kernel.org, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 07, 2024 at 10:16:21AM -0800, Song Liu wrote:
-> On Thu, Mar 7, 2024 at 8:36=E2=80=AFAM Mark Brown <broonie@kernel.org> wr=
-ote:
+On Thu, Mar 7, 2024 at 7:34=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
+e:
+>
+> On Thu, Mar 07, 2024 at 10:16:21AM -0800, Song Liu wrote:
+> > On Thu, Mar 7, 2024 at 8:36=E2=80=AFAM Mark Brown <broonie@kernel.org> =
+wrote:
+>
+> > > The KernelCI bisection bot found a boot regression n today's -next on
+> > > qemu arm64 UEFI platforms with 64K pages which was bisected to commit
+> > > 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management").
+> > > We OOM quite early in boot:
+>
+> > IIUC, 64kB pages means 512MB PMD. I think that's indeed too big. We
+> > will need some logic to limit such cases.
 
-> > The KernelCI bisection bot found a boot regression n today's -next on
-> > qemu arm64 UEFI platforms with 64K pages which was bisected to commit
-> > 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management").
-> > We OOM quite early in boot:
+As far as I understand, we need the prog pack to be PMD sized so it is
+allocated as a huge page
+and if we limit this then vmalloc() will not allocate a huge page and
+the performance benefit will be lost.
 
-> IIUC, 64kB pages means 512MB PMD. I think that's indeed too big. We
-> will need some logic to limit such cases.
+>
+> These qemu instances are only configured with 1G of RAM so that's rather
+> large indeed.
 
-These qemu instances are only configured with 1G of RAM so that's rather
-large indeed.
+I was able to reproduce this without UEFI as well, I used 600MB in
+place of 1G. Prog pack tries to
+allocate 512 MB and this causes the OOM panic.
 
---RHFExNBtP0kQZN/i
-Content-Type: application/pgp-signature; name="signature.asc"
+Can we implement this in a way where if the memory can't be allocated
+then we fallback to allocating less
+memory rather than panicking. I don't know enough memory management to
+know how it would be done.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXqCJkACgkQJNaLcl1U
-h9BiNQf/W8sMW+TR5iJXPtmx/iSXx9Vc3oIzw3d/05nquehFKCiPnQSBP3G6hBeE
-xSYtWC/vpQRJGlkjb9wVVQIQ0fvHRILCWxRXLAr4eFIFFB2GXR34b8rfCooexQ2C
-jpBO6FaMmlGpPZO73okfWeLM/uFF06Rk5O+3bbfElmuBUisrp3fnjrHojyPpbcuE
-g0GDpiGkvqGZETacXOGVfmWZJ5IqeLmuN4TlVx3iw3Mi4fc7LvH+ikbQnJpn19IY
-cYxM8F9T5hY60VsvDUEVeO8RH4m6UPZXmTk7eMhngtAlYK2+tCAp9B3MOUNXvFvq
-mRRRaFOMa48N+El0WdtbP9+Uo0eqNQ==
-=x/8f
------END PGP SIGNATURE-----
-
---RHFExNBtP0kQZN/i--
+Thanks,
+Puranjay
 

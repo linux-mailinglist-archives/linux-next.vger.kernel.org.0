@@ -1,132 +1,253 @@
-Return-Path: <linux-next+bounces-1509-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1510-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0D89874501
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 01:07:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE6878745B2
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 02:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B8C0284872
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 00:07:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C84621C23331
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 01:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0844360;
-	Thu,  7 Mar 2024 00:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D31D4C8B;
+	Thu,  7 Mar 2024 01:36:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="T9mxWMTe"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rrTElCvX"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C0F161;
-	Thu,  7 Mar 2024 00:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DCF4C6C;
+	Thu,  7 Mar 2024 01:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709770044; cv=none; b=qifvx7eaSWUzbW/sHlQhaOd57tPQ1IyPcWr39GVHghCg7Ws6xDz5ZwicafEMFUzyFrxqkVBYECC6nWQfz8y6Ep/ob2+HdtbTnDnBbnsBgG5vUV/eVg9BokPxBpP4Osc3CYBdv2m/PpzQ0UypEhIBUaFt6eAgu1Zpz9MK6u76598=
+	t=1709775388; cv=none; b=CDTcqaqTuiDih3QbFA6F2nEi8w3qRVWQ9ydNRO1GQB6xgsbVIuy9yQ8JSWm6ZuCiclg6WROfe67b4Yj7KUbh9PS8fjRUXUWqkbYVERyNrjJmem5SJGZ3vr9D9TlvwcKpUlAWM5mMsktVwq2NLzEk7Fa3TOs8EtGniyCSzQ9K2go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709770044; c=relaxed/simple;
-	bh=QTUOXYdMlWgpt+KAVLtO+n1L0FFFbX4fZZbEK/5E49A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Lf+7SFLhbZ4rgYx/vFN75qW9Gnoe3JzKCvyeFRxHS5Adp4LPUYk33Ko066DIUDwAMPfXyfMqNqI2rZJfbIddjwDEx8kkGeId9FHou1T8DxVfNC8tauTp6fsq1JvHizyQYcTG6wBTNsMZLp0pMH4MqzJHkch16+GNTHbQbrb7sm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=T9mxWMTe; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1709775388; c=relaxed/simple;
+	bh=DGvZGr1IjTXNmLu/v0BjlBPqV6VOcPWZhaTsHSCk+tQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dA00CP7q8KDf5N8Lv+fmdulCr4nLO/iZNt7TTimaYZ9foIUnuqH20M+ge+DDweexT9vbp4gvPARmtU7qe2nErKpBpgFKXATL6Rcm24G5uYehhSJc/2u6y9E337ub9Kzu5XUb4VwAiDWzl5bfIOKwyhpcOqbwVIGkW+pZO0oDp44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rrTElCvX; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1709770039;
-	bh=3PmXNVGn7XjFoSa3vjVFtQO58cni7AWVMPU81KTSwhY=;
+	s=201702; t=1709775383;
+	bh=uRHTG0L933W49rR7eLKbmUyiReuzr8JXVYf13P4Er+Q=;
 	h=Date:From:To:Cc:Subject:From;
-	b=T9mxWMTejuEvsuUQ/AoOL5WAyEOgE7M0T0Qe9cmI3sISHMNEcQCJgsfjdqGZwDk0W
-	 mHdZkWkjak5cbMgclMb2ewCd1ZMZur+peczJAsZ7J4PH2wz/t5i6xeYL03Odctj3YD
-	 RPuN1oW79WTNvSdKdmnZ2yBBqAdt523Y8LFduSJl8EhPP3Ci1TxiaHdp5ogrmRegFA
-	 mqRFXbKzr2SGM91mJdDiRAcq3RxMFl8nIItuPz6d4mPno2oEzHLlipt4B1DHmbWXwu
-	 6jQy2ZabSyrk2CmgiubrH3XNDRR1SSwGGrXCZ/hBCIJ6ojvJRkvbk/KzB5eexzkM5O
-	 wxGpCpp9GX+dg==
+	b=rrTElCvXas/WiNo+f1N65FbgNlU7mB11ugnVirlWtEHb3B4xgr5r/O2gPm1/2FzZl
+	 FrzXBlkf38spshsYkA+1L87m0S7rK3Ol68f7phITkwXauziCqkfJrtKdqt8NljcP7u
+	 GDGn7IVpXXQB54yHSzFvW7kh+X4JR+Su4zMl4ubdOwNJWm2Wf9GQrpzWykOIgOuHyu
+	 YqQ4HRmLsl4XyEqIZ62v5iq4E4ulJKUqBk5USreOKLwALUshSwXlK2lV9LBUIuXzyB
+	 v95RNmInFJVRPSWDqE8kdA1T1/w3YcY3mDqTy7nJHGPf6DWiRYm2SyR1o2q2Jbfz1+
+	 BmaWdSgG8d2fg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TqqP25c27z4wcC;
-	Thu,  7 Mar 2024 11:07:18 +1100 (AEDT)
-Date: Thu, 7 Mar 2024 11:07:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TqsMp2znkz4wc7;
+	Thu,  7 Mar 2024 12:36:22 +1100 (AEDT)
+Date: Thu, 7 Mar 2024 12:36:19 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jan Kara <jack@suse.cz>
-Cc: Winston Wen <wentao@uniontech.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the ext3 tree
-Message-ID: <20240307110717.50b64fe9@canb.auug.org.au>
+To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf
+ <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, "Uladzislau Rezki (Sony)"
+ <urezki@gmail.com>
+Subject: linux-next: manual merge of the bpf-next tree with the mm-stable
+ tree
+Message-ID: <20240307123619.159f1c4c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YV2kPiMrovNC6.nKsM.9alL";
+Content-Type: multipart/signed; boundary="Sig_/0XTsu3vubCij2IEjsa0+JF6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/YV2kPiMrovNC6.nKsM.9alL
+--Sig_/0XTsu3vubCij2IEjsa0+JF6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the ext3 tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-In file included from include/linux/sysctl.h:27,
-                 from include/linux/fanotify.h:5,
-                 from fs/notify/fanotify/fanotify.c:2:
-fs/notify/fanotify/fanotify.c: In function 'fanotify_get_response':
-fs/notify/fanotify/fanotify.c:233:48: error: suggest parentheses around ari=
-thmetic in operand of '|' [-Werror=3Dparentheses]
-  233 |                                   TASK_KILLABLE|TASK_FREEZABLE);
-      |                                                ^
-include/linux/wait.h:283:11: note: in definition of macro '___wait_is_inter=
-ruptible'
-  283 |          (state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)))
-      |           ^~~~~
-include/linux/wait.h:935:9: note: in expansion of macro '___wait_event'
-  935 |         ___wait_event(wq, condition, state, 0, 0, schedule())
-      |         ^~~~~~~~~~~~~
-include/linux/wait.h:958:25: note: in expansion of macro '__wait_event_stat=
-e'
-  958 |                 __ret =3D __wait_event_state(wq_head, condition, st=
-ate);          \
-      |                         ^~~~~~~~~~~~~~~~~~
-fs/notify/fanotify/fanotify.c:231:15: note: in expansion of macro 'wait_eve=
-nt_state'
-  231 |         ret =3D wait_event_state(group->fanotify_data.access_waitq,
-      |               ^~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+  mm/vmalloc.c
 
-Caused by commit
+between commit:
 
-  3440e7e55ced ("fanotify: allow freeze when waiting response for permissio=
-n events")
+  8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo")
 
-Though, I guess, you could argue that the ___wait_is_interruptible macro
-should parenthesise the use of its "state" argument.
+from the mm-stable tree and commit:
 
-I have used the ext3 tree from next-20240306 for today.
+  e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().")
+
+from the bpf-next tree.
+
+I fixed it up (I think - see below) and can carry the fix as necessary.
+This is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/YV2kPiMrovNC6.nKsM.9alL
+diff --cc mm/vmalloc.c
+index 25a8df497255,e5b8c70950bc..000000000000
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@@ -4755,81 -4423,70 +4820,84 @@@ static void show_numa_info(struct seq_f
+ =20
+  static void show_purge_info(struct seq_file *m)
+  {
+ +	struct vmap_node *vn;
+  	struct vmap_area *va;
+ +	int i;
+ =20
+ -	spin_lock(&purge_vmap_area_lock);
+ -	list_for_each_entry(va, &purge_vmap_area_list, list) {
+ -		seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
+ -			(void *)va->va_start, (void *)va->va_end,
+ -			va->va_end - va->va_start);
+ -	}
+ -	spin_unlock(&purge_vmap_area_lock);
+ -}
+ +	for (i =3D 0; i < nr_vmap_nodes; i++) {
+ +		vn =3D &vmap_nodes[i];
+ =20
+ -static int s_show(struct seq_file *m, void *p)
+ -{
+ -	struct vmap_area *va;
+ -	struct vm_struct *v;
+ -
+ -	va =3D list_entry(p, struct vmap_area, list);
+ -
+ -	if (!va->vm) {
+ -		if (va->flags & VMAP_RAM)
+ -			seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
+ +		spin_lock(&vn->lazy.lock);
+ +		list_for_each_entry(va, &vn->lazy.head, list) {
+ +			seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
+  				(void *)va->va_start, (void *)va->va_end,
+  				va->va_end - va->va_start);
+ -
+ -		goto final;
+ +		}
+ +		spin_unlock(&vn->lazy.lock);
+  	}
+ +}
+ =20
+ -	v =3D va->vm;
+ +static int vmalloc_info_show(struct seq_file *m, void *p)
+ +{
+ +	struct vmap_node *vn;
+ +	struct vmap_area *va;
+ +	struct vm_struct *v;
+ +	int i;
+ =20
+ -	seq_printf(m, "0x%pK-0x%pK %7ld",
+ -		v->addr, v->addr + v->size, v->size);
+ +	for (i =3D 0; i < nr_vmap_nodes; i++) {
+ +		vn =3D &vmap_nodes[i];
+ =20
+ -	if (v->caller)
+ -		seq_printf(m, " %pS", v->caller);
+ +		spin_lock(&vn->busy.lock);
+ +		list_for_each_entry(va, &vn->busy.head, list) {
+ +			if (!va->vm) {
+ +				if (va->flags & VMAP_RAM)
+ +					seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
+ +						(void *)va->va_start, (void *)va->va_end,
+ +						va->va_end - va->va_start);
+ =20
+ -	if (v->nr_pages)
+ -		seq_printf(m, " pages=3D%d", v->nr_pages);
+ +				continue;
+ +			}
+ =20
+ -	if (v->phys_addr)
+ -		seq_printf(m, " phys=3D%pa", &v->phys_addr);
+ +			v =3D va->vm;
+ =20
+ -	if (v->flags & VM_IOREMAP)
+ -		seq_puts(m, " ioremap");
+ +			seq_printf(m, "0x%pK-0x%pK %7ld",
+ +				v->addr, v->addr + v->size, v->size);
+ =20
+ -	if (v->flags & VM_SPARSE)
+ -		seq_puts(m, " sparse");
+ +			if (v->caller)
+ +				seq_printf(m, " %pS", v->caller);
+ =20
+ -	if (v->flags & VM_ALLOC)
+ -		seq_puts(m, " vmalloc");
+ +			if (v->nr_pages)
+ +				seq_printf(m, " pages=3D%d", v->nr_pages);
+ =20
+ -	if (v->flags & VM_MAP)
+ -		seq_puts(m, " vmap");
+ +			if (v->phys_addr)
+ +				seq_printf(m, " phys=3D%pa", &v->phys_addr);
+ =20
+ -	if (v->flags & VM_USERMAP)
+ -		seq_puts(m, " user");
+ +			if (v->flags & VM_IOREMAP)
+ +				seq_puts(m, " ioremap");
+ =20
+ -	if (v->flags & VM_DMA_COHERENT)
+ -		seq_puts(m, " dma-coherent");
+++			if (v->flags & VM_SPARSE)
+++				seq_puts(m, " sparse");
++=20
+ -	if (is_vmalloc_addr(v->pages))
+ -		seq_puts(m, " vpages");
+ +			if (v->flags & VM_ALLOC)
+ +				seq_puts(m, " vmalloc");
+ =20
+ -	show_numa_info(m, v);
+ -	seq_putc(m, '\n');
+ +			if (v->flags & VM_MAP)
+ +				seq_puts(m, " vmap");
+ +
+ +			if (v->flags & VM_USERMAP)
+ +				seq_puts(m, " user");
+ +
+ +			if (v->flags & VM_DMA_COHERENT)
+ +				seq_puts(m, " dma-coherent");
+ +
+ +			if (is_vmalloc_addr(v->pages))
+ +				seq_puts(m, " vpages");
+ +
+ +			show_numa_info(m, v);
+ +			seq_putc(m, '\n');
+ +		}
+ +		spin_unlock(&vn->busy.lock);
+ +	}
+ =20
+  	/*
+  	 * As a final step, dump "unpurged" areas.
+
+--Sig_/0XTsu3vubCij2IEjsa0+JF6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXpBTUACgkQAVBC80lX
-0GyIJgf9EiEsM3leOBeFVLdvpuIv3h7+e66I/TcA2ap4Olkbu4nJq/xLWNjzKBxJ
-AB9+3MLZP51VbsYwaugAPaNwusYakvrLGf3Fywp8tUoMC+xgsc45CTxuHEeB4Aio
-Zj6Qdg4nSOQImUOz6ZJ22sTEs7K9gOHG4PP9L/nG+ztFiH3PsUzl++ZzctOmFHmF
-g9xuVGMzwu4CQ+mhnPwbejMqCjIt3lCjHFEMMiYAafqPXzUD6dScyKMdWA9fp/Qe
-1Q14JefgecpzfmUFZv7jezwTRMzZP8GS22Ri5V7p4CEuq9/2hdfTeTaD8KFjfCkP
-zEQugtbf66R5KxWngQd+vj9Wb1Smww==
-=F2PT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXpGhMACgkQAVBC80lX
+0GyulQf/cE1To1a/iTynPNiIw/MuF/ez+0lLzyXqxJCfduHst/Bz0PRYwaJm85tH
+I2KEy153199aJrR5nbgdaeY7EDYvuijcImpDE3uKT4dIVBr193DRBmul7fQX9uTm
+541NS/iDRJ6x/xOsEUvBaud/LRvOSixTdb1jiypaFL1MBbtOHPDgq9oShgqFOsAB
+o3TgqXV8SyUJiDtwD8aUWTjtbEAfi1IeDekJPvb2oZZf1hSvLu2hKYAgyTcd7f6j
+ctYZMJfzKhYugPT7mdS35q2XmybnP/B7Dk4WXu/4W1dJGk/O9BLbATra+XpwPH58
+K+k/PR7THaX+tNTyMYBYWeTqCcCfJw==
+=U7Ep
 -----END PGP SIGNATURE-----
 
---Sig_/YV2kPiMrovNC6.nKsM.9alL--
+--Sig_/0XTsu3vubCij2IEjsa0+JF6--
 

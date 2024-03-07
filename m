@@ -1,127 +1,133 @@
-Return-Path: <linux-next+bounces-1537-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1538-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1E6A87572C
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 20:30:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1571875744
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 20:32:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AA2128500A
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 19:30:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B037D1F23042
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 19:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE2D1369B8;
-	Thu,  7 Mar 2024 19:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15CEF137922;
+	Thu,  7 Mar 2024 19:32:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="joI7hlY5"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="H35LTl9r"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882A8136663;
-	Thu,  7 Mar 2024 19:30:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789B5136666
+	for <linux-next@vger.kernel.org>; Thu,  7 Mar 2024 19:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709839809; cv=none; b=Hyv5vBaIp379G7ZXYLcPVrOMc3TcNeMt1JAoKPXUc4Au7SN8qwjxOwso8tUYMPCbq16BjJumBEJ+SJxJlgSKybmNXSPx3l+QlGAh9HM0YPhthv2ZlZXBxIalmH63zLoUnDGvZJ7MXXLqDMI/YMCd3OeV1LlUE4L0bnD6kQwsWLg=
+	t=1709839948; cv=none; b=KPbmTaOcoF1mf9FNXrkIaNOrCDDPKO/gaGjIAfIFGM4b83cq9ImkCNuN4f8dXyBggEB6SszTzyQURUEUsImtWi+g9sqtXzTyn6aSrHRhgOfhn67TTZgEG6y7Kb1xEDo6Xld/scLwwtmn5klTlNATCCKNDqzzdhUXq709+QIo6E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709839809; c=relaxed/simple;
-	bh=wJoLaJdq1Fv/+NS7SCjh0EtYhm+UXGFTcT8iVAiiskg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KK/8UAA3Hv/WCL1veFFZKdClVxIEFI599/6Iek37L7yTKs/ADBsZvsDGCAEygG5lONwSh+JYSxeIrVIJa3rBiow/eMZpSVTy45NkZaUP3TOU7STlwgTrunf/15J67I+mqWsAgZJs0BWd/AiNqrNxyf4LA9NChbezE544HOGXZwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=joI7hlY5; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1709839802;
-	bh=KU1bwxtkE3rw1Wal8O/VUosRk7rAUURNofEw+ycqLs8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=joI7hlY5qTGLILCxDgxT1cqU6PgjE+e7+sqoHp6LGqLtjkszUykRXWKcAdWp6l7J2
-	 pL8KcL20g0LwmRiQgaUGEgbKHYv2dGUlfoRLqIRymlC2DUBO9yiKLhuD423kQu/DgX
-	 5FvRikEC8Yfs/c15JFNJtqlPRLK67ZKP8Df2qi0V2/Ah/RCxziFuS9krBBMArQpS4X
-	 kMAe2nFyUax+bKJTZzSx+QM7Yv+6Ib0dcfLlG0cVWahv3nb9yxF+upM3GhsfQlq/WX
-	 8U0mZBJPrxJV8ptxY+jzTYrKAMaXKzqIkBzlU5XccyZk572/M4lsmGigvQPRApsFAm
-	 /uI1ZL6knyEaw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TrKBd4bs8z4wby;
-	Fri,  8 Mar 2024 06:30:01 +1100 (AEDT)
-Date: Fri, 8 Mar 2024 06:30:00 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Lee Jones <lee@kernel.org>
-Cc: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje.mihanovic@skole.hr>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the backlight tree
-Message-ID: <20240308063000.6fdce0e5@canb.auug.org.au>
-In-Reply-To: <20240307090446.GL86322@google.com>
-References: <20240226132828.7524baec@canb.auug.org.au>
-	<20240305111634.57e84398@canb.auug.org.au>
-	<20240305091737.GB5206@google.com>
-	<20240306095539.0da4e342@canb.auug.org.au>
-	<20240306140427.4cb24a5e@canb.auug.org.au>
-	<20240307082445.GK86322@google.com>
-	<20240307090446.GL86322@google.com>
+	s=arc-20240116; t=1709839948; c=relaxed/simple;
+	bh=7GcxakZLq2oKSdXj+ofXzEBmRC7bzIxUkfqgxs8FG00=;
+	h=From:Date:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EcHs/qPJ+2GL8geBCrseoJDc6EIcrKwjbHuNHZLZpiVW/9HBPP/ahznl9xG67lK6cCzWblBvIj8ix3/WVTIxNeEIGRRydKHoM3/aTxokdEfB4xMQ+c2pV4A7wIvHV6FRK1yj+h7nPbD6/fEAa9heJHkocp8aUGkMjHIRDpHNyfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=H35LTl9r; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso1027042a12.2
+        for <linux-next@vger.kernel.org>; Thu, 07 Mar 2024 11:32:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709839946; x=1710444746; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N9qoSXzYZPN9ruMFhEGa01LS4BMnI7rAvWb4nFTzmXc=;
+        b=H35LTl9rrbmwdPzJ9BEr5gsW4yRvPb0B1ueFvVOAbbFCM1oOUGvMzXBIBjTaInzwOZ
+         p1FgntUUc1QUgw45r9wD1UyX3tBagKyGJDc7/EqCUuAgNBWsLfkyFwlJiabT7weDLDb+
+         NjOG3U5WmJKpZcGN2Mft/gDtzpUx7IA18poQE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709839946; x=1710444746;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N9qoSXzYZPN9ruMFhEGa01LS4BMnI7rAvWb4nFTzmXc=;
+        b=cgJ4bH2OVrSXTuyuIUgG8KHx30V/nt+q0Gcg4KNEtN4WdfjEmgzwwx2KWKB9B6hQgS
+         6TFWEa7nfiu/oy7TouidHiLfGJ0+PcItIfZKKwNkZYmYy3mssF5KT4whept4XMjGPhXz
+         VS8b/SjhzdPM4sYqMZCpqv/wcjunzxfzCZEuI1LFnedjhNpzZzpRFpdYOcOINfYAXXyQ
+         NJzZElZXo86FkXFj78WSBhGGdkJLQvpWgdleLxQUVsE0jIt6fZuXmgatVG2E+lFbXsqT
+         sgSWVzzQGIYxGjQmQemskX1GmS0pyfrrjTlo8aJYCCJBd6CYrQR1/McgquWJkNJz60+A
+         g/fg==
+X-Forwarded-Encrypted: i=1; AJvYcCUwl8dOeJsTPzuR+1qyaVLCaGVxijCjkujHGJfeNv1fVOg4jLZ1m0Dv/JFxfTU0hErjurnDM7ZYlU7fE3zRVh0ZF/lGpGw4+6E/Xg==
+X-Gm-Message-State: AOJu0YxSmAsy9QA3wnu86SKe87KeNHGc14+aVlY2zV7UGc5mFKQjswiE
+	LS3U3aII3g37hKEbZkimKFuAocXULGKiohYBNjgCIu0h7CQdRH+u0dj6O1IZAw==
+X-Google-Smtp-Source: AGHT+IGOLBi4Qz9QnVx9qVdy304kZfGTtm1ed+Ruod8ne2tyM8cAlmd20ukwkMkoXTBqPPYmDqQq1w==
+X-Received: by 2002:a17:90b:24d:b0:29b:9c8f:5ea2 with SMTP id fz13-20020a17090b024d00b0029b9c8f5ea2mr1766760pjb.40.1709839945732;
+        Thu, 07 Mar 2024 11:32:25 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id h24-20020a17090adb9800b0029a849e7268sm1908119pjv.28.2024.03.07.11.32.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Mar 2024 11:32:25 -0800 (PST)
+From: coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date: Thu, 7 Mar 2024 11:32:24 -0800
+To: Edward Adam Davis <eadavis@qq.com>
+Cc: linux-rdma@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	syzbot+d4faee732755bba9838e@syzkaller.appspotmail.com,
+	"David S. Miller" <davem@davemloft.net>,
+	Allison Henderson <allison.henderson@oracle.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	rds-devel@oss.oracle.com,
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: __rds_rdma_map(): Null pointer dereferences
+Message-ID: <202403071132.37BBF46E@keescook>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/z59s+w1zqDcFC_IrEq9uYSO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---Sig_/z59s+w1zqDcFC_IrEq9uYSO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello!
 
-Hi Lee,
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20240307 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-On Thu, 7 Mar 2024 09:04:46 +0000 Lee Jones <lee@kernel.org> wrote:
->
-> On Thu, 07 Mar 2024, Lee Jones wrote:
->=20
-> > Right.  So you build each tree as its merged?
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
 
-More or less.  I do some batches of merges (since otherwise it just
-takes way to long).
+  Wed Mar 6 11:58:42 2024 +0000
+    c055fc00c07b ("net/rds: fix WARNING in rds_conn_connect_if_down")
 
-> > My assumption was that all things come together in -next?=20
+Coverity reported the following:
 
-This is from my daily summary report:
+*** CID 1584247:  Null pointer dereferences  (FORWARD_NULL)
+net/rds/rdma.c:306 in __rds_rdma_map()
+300     			unpin_user_pages(pages, nr_pages);
+301     			kfree(sg);
+302     		}
+303     		ret = PTR_ERR(trans_private);
+304     		/* Trigger connection so that its ready for the next retry */
+305     		if (ret == -ENODEV)
+vvv     CID 1584247:  Null pointer dereferences  (FORWARD_NULL)
+vvv     Dereferencing null pointer "cp".
+306     			rds_conn_connect_if_down(cp->cp_conn);
+307     		goto out;
+308     	}
+309
+310     	mr->r_trans_private = trans_private;
+311
 
-"Between each merge, the tree was built with a ppc64_defconfig
-for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf."
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
 
-> Okay, all patches are now shared between both branches.
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1584247 ("Null pointer dereferences")
+Fixes: c055fc00c07b ("net/rds: fix WARNING in rds_conn_connect_if_down")
 
-Thanks.
+Thanks for your attention!
 
-> Let me know if there is still an issue.
-
-Will do.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/z59s+w1zqDcFC_IrEq9uYSO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXqFbgACgkQAVBC80lX
-0Gx4TQf/eoxlAZAPSxJNNF3CCPHMg8OORBKeTG0zw1E9IU5iIv4li3KbRtlo2hib
-45aDpV294lWqAIl3h81khVmkqx0YjD3GHF99tP1KRsua3gbBldCBGJ5keokHu8fo
-CWtxT+tH7knr1PuOkirj5RFmpnpzYvJFGZ3cOvUncdHNtjKrePHBBSbv7TCofisk
-cyCGeskyR3jxm4PWCv5umwKb0GJ5ix0ye63nqGfuDHCJyK1YaFgslNU0C+41VT+C
-1clRt+Jss87rZ5QshWoCCsiRy3kInrRlex5yh9RImeDI/aU/aDhllPpUT6ljDxQ+
-vneleEFLMheYOyGNZZEVWJ0KnbZ2aA==
-=Jobu
------END PGP SIGNATURE-----
-
---Sig_/z59s+w1zqDcFC_IrEq9uYSO--
+-- 
+Coverity-bot
 

@@ -1,105 +1,109 @@
-Return-Path: <linux-next+bounces-1546-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1547-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8544C8759F7
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 23:08:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11B40875A45
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 23:28:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6CB71C21F7E
-	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 22:08:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4703B2168E
+	for <lists+linux-next@lfdr.de>; Thu,  7 Mar 2024 22:28:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F9A13B2BD;
-	Thu,  7 Mar 2024 22:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ECCB13EFE9;
+	Thu,  7 Mar 2024 22:28:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Omh5KtsS"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WPG5Dn2D"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CD3135A5C
-	for <linux-next@vger.kernel.org>; Thu,  7 Mar 2024 22:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F4913E7F4;
+	Thu,  7 Mar 2024 22:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709849311; cv=none; b=Xpbi7q9TTL/fRExL46xfonY61PU29/XDWRIZk8+LmR/y/gDEq7eX2Ec+3g/ODuVECgXipaZRXXygr9CeKZga0HkkeX4JURl3kXmp7Iq2Dt2KEdz05l77mW/IQC5Ul0zoKWmuMme2PTKrUg4gi6m8r5lRnZbl+90N3R7mIcB3t0w=
+	t=1709850507; cv=none; b=YKGKrXcUDlAGflnwqXOPHMMs+kgPJBTFDwlgCLCr2ftzwv993bwIqeOLUXgMnCguszZvUB1XHwzjjIgOua5Js3kB4J7N36A0nBoYquZZtCkFpKsImjGGyD1FyW+I5ijXkoc7/gk/mQiIzPUuD4BxXxeevyq6AeTyeIpOpYqKWno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709849311; c=relaxed/simple;
-	bh=rtNR3Kl4BKEEG0W7kNlGz0E5gqmBtrXYCOUWYhzI/rs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GSZnq8aTwPfuS0JWNLB5HANArMH9U0SpS2BTeFlZGCc/8iTcrJVhjIXk+m36SpOiekqvXV4DqaJtPAc3bvHaXauRhJwztTSVFNRWfb8CPwBg98wf7o2g9s604DnyeZKntmJwnEs7NgAs9jsKjonU/WGRXRUgRd/09eTYJaJ30zQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Omh5KtsS; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dc74e33fe1bso1452212276.0
-        for <linux-next@vger.kernel.org>; Thu, 07 Mar 2024 14:08:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709849309; x=1710454109; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1PUH/PGVq+mmDqUvMpUQ1WEtnhkQe+DNBNHfPK6gnis=;
-        b=Omh5KtsSICECbhS0YeU7+p0y8aQO+0/0xH31irGbbdfuGQmkgXaibmwGTnHtqKhi+E
-         OgTlnkz0hOLzLSO9hTiSh3pHDtlz88TpEKxSXDCCgTlwohAeEqmLweB1Ks5qmPVbUuhq
-         aFO6vEQkfhiSIeHjUaUN27ocfavybfu0QvPJPvdXtoB/cxkA1kbWlmO7xKY3Xz44iiQT
-         4URSEDmdpAKqy51Ebg0EwW/YmkbLqFNPcxyNRu2XEJpZeSXaucqACqpcBE0urEDDFZen
-         Zf3GPoRh/aM4ueEh64XR88EFdYrx6niS2BphPkouhQL5YAPxWiglsMzslS/0Ve30IAY2
-         3Jxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709849309; x=1710454109;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1PUH/PGVq+mmDqUvMpUQ1WEtnhkQe+DNBNHfPK6gnis=;
-        b=jBWYV4Hira93+M+pnvlJEHF6ZB2bazwPewVtvkddC6eT6vrRDGg6ocYngnrDuaH0YJ
-         t+FoXQfRWL+R6TUQ0sF/4LgXZW1vvDucq6hcTuN2JyO2764WcjAsKG0lYmPwKBX/7RGy
-         jjWV6m29YVaASsCJr9fMGTL9Gpg3rOhMpEDmP28+YG9Iyh3vmrd/OZOx63CNQ/gCqakH
-         QlWuxwaCzNxPPA/kYL5jqI+C+2UW/Gh1r4EGTZBg0abzsFCHUjzpFM4aQKCytQBSXLT7
-         ZnDcmMXUDNG1oJbeGOSfm8oacJUUQYobFYrFMv+0oO5hN6wV8A5k3TkTFMoS9BZaa36U
-         2dcA==
-X-Forwarded-Encrypted: i=1; AJvYcCVf8qVXx1EvP9JonJHYeLVbUaDxKKxgtgLJVu8oF4PhZKQkvtbTpyAs8DtFyH7D7bAn8eLfazcGcxXXtKWmHe50Zo3T1v2LOPnuBQ==
-X-Gm-Message-State: AOJu0YwUdo+QiN57FDHcDD182szyOH+uDXHT5WKIiJ5BdejWMxzSw2hF
-	BkcsO8HuWkIfOIdBATLg57z4X8pzJFdvqWN9pYCWJuUFNI8HgvrjMG8cTusYSMhKOWNNsPXQCqT
-	bezW1aHIxEB+1eIV0BAGgnWflgNi4TGFUJ0qvgQ==
-X-Google-Smtp-Source: AGHT+IEN0rSzP52l7NWiioBCC0gXpR6uj2GlvcT3TFGi0fSnPSWOqqVKLL3E819yGzNIL0KHUEn9baN/EfSz8tuiXfY=
-X-Received: by 2002:a25:aa63:0:b0:dc6:7247:5d94 with SMTP id
- s90-20020a25aa63000000b00dc672475d94mr13465419ybi.55.1709849309083; Thu, 07
- Mar 2024 14:08:29 -0800 (PST)
+	s=arc-20240116; t=1709850507; c=relaxed/simple;
+	bh=J9FEIZAiQRYpqVR9jQeQqKUfSTyvGjGYfIQ2qkWqTOs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OmY2wG9HbnL1+wxpXGOmwqbUYItj/x4lrVVV8FyCz+zYzgkjnTerW3Y72Xa/+5Re3oQ+QnASMa+A0ENQATfuO9Dlyi3woIvyzh9DWB9WNApXN/JBW+108XZlm8o8A6J/Uwmuv9yjHf8e41DOhuoTizFb+EinOH4YKTKp511rnNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=WPG5Dn2D; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1709850500;
+	bh=akk+btCwoxJ2i1b9Y4ERZO/n4LLCkDJ+4Jq5W3BfLtE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=WPG5Dn2DrZEQaXfyv8Tej562JOi0v5eQX97UOqEsnRVIx+9kKT+hA3C5ARSJ+1dF9
+	 jGCoNazkiOO8rBYmxPwuI51ItyOFy+iMDulJJ5rjL+zJV+2rFIzSA//h0SXhLthbvf
+	 Vm9HaAtQ1KFCuOMYqoLIRUYf2w4Rr0TtBSOGv26xyavrfCFlxMYB7aYe1j1jaoRkil
+	 ZMjy6ExOo44MHkHEy+N0lom/k1lwgsVo5jAUswDuU0EceQuD5CL3CRlBCxZnTokW51
+	 mRKkwPdZNeYzY5cKbxrx/Thc5pR6arlx0HG/WGV80eIy0U4y/CMIT3eBVqNHMd/med
+	 UUais9ilBAghQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TrP8N55vGz4wc9;
+	Fri,  8 Mar 2024 09:28:20 +1100 (AEDT)
+Date: Fri, 8 Mar 2024 09:28:19 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Trond Myklebust <trondmy@gmail.com>
+Cc: Dave Wysochanski <dwysocha@redhat.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the nfs tree
+Message-ID: <20240308092819.1575e5d2@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240308082039.600be106@canb.auug.org.au>
-In-Reply-To: <20240308082039.600be106@canb.auug.org.au>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 7 Mar 2024 23:08:17 +0100
-Message-ID: <CACRpkdY7RXZvWq8Vji5TCYd-947R0NDChrnLsA2wwaXm0RNRLA@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the pinctrl tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Ac7UpYZ/8WLiSQE9ze=YBX/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/Ac7UpYZ/8WLiSQE9ze=YBX/
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 7, 2024 at 10:20=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
+Hi all,
 
->   Fixes: a4f15a8d4c82 ("pinctrl: Add driver for Awinic AW9523/B I2C GPIO =
-Expander")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
->
-> Maybe you meant
->
-> Fixes: 576623d70661 ("pinctrl: Add driver for Awinic AW9523/B I2C GPIO Ex=
-pander")
+In commit
 
-Fixed it up, thanks Stephen!
+  7b676e697cdc ("NFS: Fix nfs_netfs_issue_read() xarray locking for writeba=
+ck interrupt")
 
-Yours,
-Linus Walleij
+Fixes tag
+
+  Fixes: 000dbe0bec05 ("NFS: Convert buffered read paths to use netfs when
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Ac7UpYZ/8WLiSQE9ze=YBX/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXqP4MACgkQAVBC80lX
+0GyTWQf/WfESUrwJYK6U0m/O4JPBL/fMVtgpcFBrcFxMA3vMriu/7mTyMMUwQFfQ
+6xFY1wfPMAJBY3Q9V9I/ySLuUvO2O1AW/hBLqedbn3+9aSQ3zjNdbRD9KOi/1hgo
+4l7pwOHMmxD7MhPvxKpoMun1wQE22DaUncjzhYmn9bX5+MZzq3eNB9GNK43u7h0J
+NcqL/h0E7nrJ3Lp+djsMqN2spEPXKmbe2NPt6YCgFtKsKfkDDxuCa0ezyeLnchVX
+VbIcEgGzGYa42NoQCLePx6to2uZyWpICy3lGuEirAdJulAB0XXesJF3w8eXoHuY4
+REnKYd9jFQDCSGLq7FQ6eUExEBIIIA==
+=vmVD
+-----END PGP SIGNATURE-----
+
+--Sig_/Ac7UpYZ/8WLiSQE9ze=YBX/--
 

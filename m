@@ -1,197 +1,121 @@
-Return-Path: <linux-next+bounces-1565-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1566-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 844BC876D48
-	for <lists+linux-next@lfdr.de>; Fri,  8 Mar 2024 23:43:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 224D487701C
+	for <lists+linux-next@lfdr.de>; Sat,  9 Mar 2024 10:47:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDC761F223AF
-	for <lists+linux-next@lfdr.de>; Fri,  8 Mar 2024 22:43:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ECA7281E50
+	for <lists+linux-next@lfdr.de>; Sat,  9 Mar 2024 09:47:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC4A2747F;
-	Fri,  8 Mar 2024 22:43:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86988381B0;
+	Sat,  9 Mar 2024 09:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="iGBZQQO8"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="TtNOuUnH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2059.outbound.protection.outlook.com [40.107.94.59])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6BD15AF;
-	Fri,  8 Mar 2024 22:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709937812; cv=fail; b=ZcqP+vDTZXlz7PzcOw4bhKD+dpoLfqP2uws1+QqwNe5eEZA87SoL0QRjQYzs9o9ciRJraBRknUjZS6vZ3TSAywsqjcOOO5qdLxN/HdYTi46nmVkoKPESpKafSobuWPrBfXzf3OFT7cjpydGzpF8DmgsiAWtL8wPj8D5yOqHnQI8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709937812; c=relaxed/simple;
-	bh=eYnEri9ZzkN3eIEtFUlh7eKqW1Of/8un5Nt9JzkAx08=;
-	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=OLp8j9Ll5VxMKFMdnRIk3fnVViEnqhzj4XiGoQHBamgaWUiY1SonLwVQI0sYY97Qt+3pqPAWiPKV8VjFv2cIE8F45KCXTpSAoEqFjmY1dgRFAiqPdcuCifEFQ00V9xLGTvNYh+owqjWvliNlmrs+pgOExujMmKQNw+3gHNDC3m0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=iGBZQQO8; arc=fail smtp.client-ip=40.107.94.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hqh/TN2h37Ge2Wdj28hkkVg6UKCJg6KYvowKKmyDNGl5TC2qfijc70LbnFLVwqVQtfTgEFlTOQyvh8ok+izT6Zb+haRsRaH7BH7/xn81d1gbgmxf6LI8Qm7Yy2KHo+dUDXAdizoo89DriFZZjcC4ebX9k08HFRGXQmhUUo70vKz3JtNQgO2jIqHlrcRaLTWGUYZ7uMf7QdgwQT4L/0dvUkQbv066W1uH+9R+LfVlU5pDi3iQGB7zuBAHKl5sgVcVbX98TgajMOTxbkbn2s2evav6YKSsENDzIwCDNfxC4SyaUuNWkiVgvMGYQUxgH6JXiAxMO4M6jxxCmJLHN7e/AA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bg2eFnAyMOYUwG6GAXviDvX4uw1U8417FBaM0k12hoU=;
- b=APTwcAuuUJo8oks4ndayqukf0EXsMdvLLyqoILpxk+wgoIPw+fOjHkmi8hfUZaXLIkiEHLL0F1wQkEe/SyEVh29mEnuBZq/DOh9COrsFlK20srbnXbjnuL6418Ne86LuruhfmBhHdEfO/+Sy+zlXMNxdubtecctrUee6tJhMfJUY4pD8a4corUepAmv1IOVKPq0FobzJ8Xpq33INGDXAzM0Gvq+7YrpVzUxlizoJ7fmUzxdUONEt/KkhXgfcJ7OzazcjH+3z7cdJy5ihm+woiea3l+5RJffCD82R9uG1au+ikw4z8Lpe2Prs7NJXoh1DkbBRQhDvfzQW9Z/Zxh2SZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bg2eFnAyMOYUwG6GAXviDvX4uw1U8417FBaM0k12hoU=;
- b=iGBZQQO8MU2hnFMpE9tCKq4TC8fH0U53uzjty1uFVgNcpaYPoe35BOvDTflZKtSf7ptudTiwKpXhLdIy/a2go0mfbFnxH7F+YWsGcz47LBb62scboV9rkZdaFxV5akzeSvKaCX0hq/HS0ZIjzmn2wMTndepSS2LClWWi5k5EmA8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3109.namprd12.prod.outlook.com (2603:10b6:a03:db::17)
- by SA1PR12MB5616.namprd12.prod.outlook.com (2603:10b6:806:22a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.26; Fri, 8 Mar
- 2024 22:43:28 +0000
-Received: from BYAPR12MB3109.namprd12.prod.outlook.com
- ([fe80::3278:b63e:55dc:d1a4]) by BYAPR12MB3109.namprd12.prod.outlook.com
- ([fe80::3278:b63e:55dc:d1a4%4]) with mapi id 15.20.7339.035; Fri, 8 Mar 2024
- 22:43:28 +0000
-Message-ID: <e367a4ad-3431-4cf8-9c0c-1205e00b907c@amd.com>
-Date: Fri, 8 Mar 2024 17:43:26 -0500
-User-Agent: Mozilla Thunderbird
-From: Yazen Ghannam <yazen.ghannam@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0ED825753;
+	Sat,  9 Mar 2024 09:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709977637; cv=none; b=YWC4MpKEajRaOodbEqsNxY3klvazUJGfB8vbZNjfwIbPP9oIcEv3VHFdTyo3T6MfOCdYZdMT0BD2Nc9fCPrQ0baD35zo91GlmAWlAE6Y0duWUS7As6wSOasOIvpNexSlOfWxHEc6xhyqfSRixncmpr4dkoPAiwt5prl3Hq0S+BY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709977637; c=relaxed/simple;
+	bh=8S4GFzaUJHNg2/WWALOLoslf/3xIAy84IF8wP1HxgP0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F4mhHEWpR5jWNh+FqQTmWAbaJTfe6AIxW7rUw2wneEL/O8Xp3aJY5T6ziGUktsyvpUmCO8MH+cDuQKVI43vU5C46t+ADmiMhbUhVKSOmkSIk/mt/zandxU82HsPVsVEjGuTUxFoO9JcgL0AZ16dPJop4nes5K/Z0sNSEZaiIpz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=TtNOuUnH; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 08C5A40E0185;
+	Sat,  9 Mar 2024 09:47:11 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id UK9Ug4byV7Cy; Sat,  9 Mar 2024 09:47:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1709977628; bh=Xg4pJSiMmCpObnqE7m8qOc6nGo6ypCyaFUcMIKmd5Io=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TtNOuUnHswA2QlZ8Xoo1IMaUy3mlWBc0xc9PogzYypz2myUHYwTlf+60RWHoULhPA
+	 ta/0ioRUrq2NDtKaglMdbqV+u22ml2/jbVAvYfuI7x0jubK7UAgsdm5r6b9imQ/Hzk
+	 2/iUy42Qb961ZXmhwguWNxAbPZSmQeZ9A/q5CSGCQedQXUhxulDvxoY4WZEiari1US
+	 0gSCW0e4u4KaCcVbx9TCvHgn7H3bNwOaA1vJ2uvJ5MH20xgNQFCiGckMf8ogcqh7dt
+	 vPV5jvHjbhkpv2O+yoIU85nMoFaE8zWhTWEvIWuy8XQx9X5+mKMq1ZJfkxOZAG3Iqw
+	 wHUAWsKxht/yqladKv5GbtbIlhmVKujdSLYcrG/slB/riSBXfvyzLAy5F0sGpK6YmS
+	 kYdkVfMZyX5cdoH3S/582z2hlRq+DNW4eM9GLy901oBFPGTxoT7fEXLByhbB8n6hA/
+	 mcSzCTkbfB020MOA7kl6qUNaeQUGB6pbJAJgFjhiMuxMUbLYioQGgsqjnr6E8bw9Mt
+	 /IfJbcOPEq9JOPJgBhwVN5qPWmt2BfwP/wrB+30oOkMqhUn2536bfh3ZTNPC7jT/XK
+	 Rpiq0tiQoApVslvNcbPObWazppYyA//WitjxqLGcKAyvAmbEkEBrCL/aCDxso2WjVo
+	 99ivT3VKd6fxGRMCiXgLYUfs=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AB17A40E0173;
+	Sat,  9 Mar 2024 09:46:58 +0000 (UTC)
+Date: Sat, 9 Mar 2024 10:46:51 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+	Tony Luck <tony.luck@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the edac tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: yazen.ghannam@amd.com,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
+Message-ID: <20240309094651.GAZewwC3u3U7DhXBdo@fat_crate.local>
 References: <20240227134352.6deda860@canb.auug.org.au>
-Content-Language: en-US
-In-Reply-To: <20240227134352.6deda860@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9P221CA0011.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:408:10a::31) To BYAPR12MB3109.namprd12.prod.outlook.com
- (2603:10b6:a03:db::17)
+ <e367a4ad-3431-4cf8-9c0c-1205e00b907c@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3109:EE_|SA1PR12MB5616:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99f72c82-7a5d-4021-a91e-08dc3fc12c00
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	3CdYaUrSg+2OM0roQDd0zGsjSTWtWG/i6JtRGA2wu2W+l17t339qBiNOsyM9iyfJ1gx83sUcIb+8EHF64mmm3LEXkm35cbHjR4VWFvXz1Kbr8h5kadMGfMbjdgqgZkh9e7XZYuKrH0is+LXIJ0WFnB413+6nxUBDbG96Wtxvl7+6Fj5IP2CrsQLqtco0RGgnkm6f3GXt1Kn7R4NaRoy3WBnQr9txkUD5lNL2mucvJd01kBxP6OUWCI3YcFKkJFECCcxP0TVJ4UjEjfGYDrzAigoye2DKSnqMNMmwNJGSLWtJYGwpNIosaKztOCE11ZSy9J+7r2Xx7ZNvu3MAEqe8k/XnvcljkhYld0a0uQ5bIeJuyYvIsT3NB9sXR11Roi1mPrRA8T777O8bhY1PaGeU14LMbjVT3OZvFXWUV8ovX76uYtP4ZjXRrlHwqcROyCDOkn5MRLeyKIceahnO1KdupuDgDr6Q1RUg+hJpJdWwEIPY5zfiGpJlFH6bJ83elM8vVzXA2/BFfD7lRxVfCbu4sEBUnSbTDDHFkXjQpkcBYJzZyalQdkFWXRWPbhWyWzjJgwgKXbi/is8BrrWK3RsTbeoEOW0E85yqIFtEKMAU3uma+fBsishBZcM+ZjXU5pO5QO2EGMq7Wt/AmxCiv70syadCGVmG4XEEKtsZ/rEAkBo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eWliRy9scDFpNll3amF3eUJLTmxpZmhRcXJMN2x4K24wZnFCTUZoeFhVY0VG?=
- =?utf-8?B?TGFOZG1kT3RJN1g1U1FrQ1FwR3VCQ1UvTjQ3cmcvb3VDOTNSTlhvOW91QmNY?=
- =?utf-8?B?cVZIZDMycjdCR0JTT0tVQUJuUWczMXo5MCtreFE2VkF2SFp2VnhtWEhBWEN0?=
- =?utf-8?B?ZDBwZ0NyQS9OSUFNVmxGM21UVEU4eGZGN1FVM1RTWlRnSTdYQUcyeFo1bDFQ?=
- =?utf-8?B?NGNENlNGK3UyNUYxeFVnYVVnUTkyaFBhMkNCMlhuRXJzQlFCVkxnNTE1L1Y1?=
- =?utf-8?B?VVNoOTNwRVhPRGQ0MW1GcDM2YUx2N2NudDNQa2szUDBFTS9EQTlZbkluZ2Ro?=
- =?utf-8?B?dU1EbW93aDdUT1liTHdOemVpYWdtd0trRnZVSDhHemRyMVNGZFA1cklMMVFi?=
- =?utf-8?B?VDBrQ0hrSzJRd3RIVGZoQ2Y2VENadHF5cU9IQkpNTEh4bHkxSkY2c3RFMjd4?=
- =?utf-8?B?SXlLNXNFck1ONXc5YVp3OUFzSStnbkpKQlVTYkVzYWt6Q3k4bGM5d1FzbWY2?=
- =?utf-8?B?U1NhYS9oMlJ5SFBzVitGU2VmSXFydkxKNW0vRWhZUm9HWmFhUjZDRWlFQWVw?=
- =?utf-8?B?NW91aTZkaDBaWWVQQ25GeERzRDhmeTkrcWk5aXZnRHhsbjN1Ry9DV0x6VHV3?=
- =?utf-8?B?QUpHeUgxTVVqcG5IY3VmbDQvaTZXcUN1S3RaeFN6VUJBNG91VEtMVkNIdUZq?=
- =?utf-8?B?ZlhPR1Fod2VYYzhjRjJ4YTJiZS9nTksxVWtwZ29EKzh3dTJ6UTJ5anVaekw0?=
- =?utf-8?B?UjNERzRPSW5lYjVxMEQ1UUIzSDByOEMvYTlubGRzR0ZtU1U5QWcyK0E1UVN0?=
- =?utf-8?B?ZnpCbGN2cldrQ0Q1MURLY0VMdEVLdzQ3aTlNMVJyLzQ1ZDlsd2dxTEJyMUQx?=
- =?utf-8?B?a2ZJMVlkN1BpdWNNT2JyblFjTkFybVo2K0swbWsxbGZlVVNWWXNPTTUrRk5T?=
- =?utf-8?B?UWtueHAraXNTbThjTlN6SWYxM1lQUFVBRHZ0QXNKb2xKZGJXWDYybFhkRjlu?=
- =?utf-8?B?eUpINVZRdlMxM3pySmlTWGM3bnNtZkNvU2xQL2tHbzV5ak85ZG0vNUdzMHFD?=
- =?utf-8?B?TW5vQmVsNXo2WWtwRDlJYlBvTXZzTmVLVi9kQTVTcVBlTVN0a2hkMmxncDQz?=
- =?utf-8?B?aUloaGVsRUt5RnJScnU0UWV0NkV5Uit6TEI3U3laRjZxemdtbmxNeFNhcmYz?=
- =?utf-8?B?N2dhWTd2M2VvZVcxN3RCNWk2S0c1UEV5NUFnNjQvNjR4em1pVktYS3I2L0FW?=
- =?utf-8?B?U3EvbHpFTkwyNFVNaXJldU52UXVnd3pCREd4STBzRjBVWGF6S2R2QVBCQlZn?=
- =?utf-8?B?dFRwS3JCcG92dVd5dTNxVFBSUCs5V1Z6cTFvT3hJQXg5eXpqTEx0bDduOHo1?=
- =?utf-8?B?dDR5N3ZIOWRtVWNIY0lTakl2SWMyZkRVT0lqeEx0MTNsVzA5Y0ppcXFPMjBm?=
- =?utf-8?B?Q1NsWVFCSnZFMkRSMTlCNVIwVUZFUk1YSjgxSHpkZk1HZ0lBVlh6TEVnT3Ar?=
- =?utf-8?B?TklKeitxb2c0WUNUcWFsVHhxL1Z1MDJjYUtNcllOWVNjUGlvcmxtdU9uS2NE?=
- =?utf-8?B?NW1BNWgrOTBMcVBWMldLbWJNd2xEcExUSmFVTW1zTGlJL0ZVUlAzcTZjZUpy?=
- =?utf-8?B?TkRGYnFEb1pyZHBDUTVTZHlPOFJxd2lTL1V6Z2d0MTNyWmh1YmRUUTZvajR2?=
- =?utf-8?B?V0VpNjdDTTdiTm1nb1lOZXp5ekx4enJqc096YmVoeUsyY2xaQ3U4WVJ4UG1R?=
- =?utf-8?B?MjBhaG1ReFQyY0xvYzhQdzlSV2wycmxFV3ZmdWovaFRuKzhmRWcwZzZKY2tB?=
- =?utf-8?B?eklRdjdXSWNJL3RkdjNlUW4xK1A1b1JvalJaZ1J3U2pZbnpRSDBIZ0p5cTd0?=
- =?utf-8?B?V1pUaG84YmxrYUxEVU93MUE2azFGOEkvVG9TMUJXek81ZGhmazlyMENiRGtn?=
- =?utf-8?B?Qjk5RUhnREg3NjlFY2k5M3hxa01zTDQ3VDllSFhTZlJUM2x6MnpVY0JHbXhy?=
- =?utf-8?B?VWtlNE5SbkFrd05rK0RJN0NraENWekI0a2xJNEtTeGhreTJTblc3dnVrc0h3?=
- =?utf-8?B?YmJRdUpJMkxsbCtYM1dibFVuUzBFOGJVWUpPMzRpOTc0T3ZER0hVdmNuTGQx?=
- =?utf-8?Q?qpWKlsl3iqKP07lkPjxenR6DX?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99f72c82-7a5d-4021-a91e-08dc3fc12c00
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3109.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2024 22:43:28.1359
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bx4hbb86aoO+Tcs36iVgg3uq7Vg6chvf69kdGE3BAqlve8Uu0u6MQHGdObiuKuuuewbeADKV3EY0eBpv4X9TQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5616
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e367a4ad-3431-4cf8-9c0c-1205e00b907c@amd.com>
 
-On 2/26/2024 9:43 PM, Stephen Rothwell wrote:
-> Hi all,
+On Fri, Mar 08, 2024 at 05:43:26PM -0500, Yazen Ghannam wrote:
+> > diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
+> > index 08c6dbd44c62..65a0ab651ee2 100644
+> > --- a/drivers/ras/amd/atl/umc.c
+> > +++ b/drivers/ras/amd/atl/umc.c
+> > @@ -315,7 +315,7 @@ static u8 get_die_id(struct atl_err *err)
+> >   	 * For CPUs, this is the AMD Node ID modulo the number
+> >   	 * of AMD Nodes per socket.
+> >   	 */
+> > -	return topology_die_id(err->cpu) % amd_get_nodes_per_socket();
+> > +	return topology_die_id(err->cpu) % topology_amd_nodes_per_pkg();
 > 
-> After merging the edac tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/ras/amd/atl/umc.c: In function 'get_die_id':
-> drivers/ras/amd/atl/umc.c:318:44: error: implicit declaration of function 'amd_get_nodes_per_socket' [-Werror=implicit-function-declaration]
->    318 |         return topology_die_id(err->cpu) % amd_get_nodes_per_socket();
->        |                                            ^~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->    3f3174996be6 ("RAS: Introduce AMD Address Translation Library")
-> 
-> interacting with commit
-> 
->    c749ce393b8f ("x86/cpu: Use common topology code for AMD")
-> 
-> from the tip tree.
-> 
-> I applied the following merge resolution patch.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 27 Feb 2024 13:22:56 +1100
-> Subject: [PATCH] fix up for "RAS: Introduce AMD Address Translation Library"
-> 
-> interacting with "x86/cpu: Use common topology code for AMD"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->   drivers/ras/amd/atl/umc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
-> index 08c6dbd44c62..65a0ab651ee2 100644
-> --- a/drivers/ras/amd/atl/umc.c
-> +++ b/drivers/ras/amd/atl/umc.c
-> @@ -315,7 +315,7 @@ static u8 get_die_id(struct atl_err *err)
->   	 * For CPUs, this is the AMD Node ID modulo the number
->   	 * of AMD Nodes per socket.
->   	 */
-> -	return topology_die_id(err->cpu) % amd_get_nodes_per_socket();
-> +	return topology_die_id(err->cpu) % topology_amd_nodes_per_pkg();
+> "topology_die_id -> topology_amd_node_id" is also needed.
 
-"topology_die_id -> topology_amd_node_id" is also needed.
+Are you saying topology_die_id() was already wrong?
 
-Does this need to be fixed up in the RAS tree?
+Because even before the topo rewrite, this was
 
-Thanks,
-Yazen
+  - cpuinfo_x86.topo.die_id:
+
+    The physical ID of the die. This information is retrieved via CPUID.
+
+while this code talks about the AMD node thing.
+
+> Does this need to be fixed up in the RAS tree?
+
+I'll give a diff to Linus when I send the pull request.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 

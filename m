@@ -1,94 +1,94 @@
-Return-Path: <linux-next+bounces-1572-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1573-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C4D7878A3A
-	for <lists+linux-next@lfdr.de>; Mon, 11 Mar 2024 22:53:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EEC8878A3D
+	for <lists+linux-next@lfdr.de>; Mon, 11 Mar 2024 22:54:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73395B20CA2
-	for <lists+linux-next@lfdr.de>; Mon, 11 Mar 2024 21:53:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E91E71F21B1D
+	for <lists+linux-next@lfdr.de>; Mon, 11 Mar 2024 21:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56CFC56B7F;
-	Mon, 11 Mar 2024 21:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87DC456B88;
+	Mon, 11 Mar 2024 21:54:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fJtL0kAs"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="D+Rxwz68"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D38954FA3;
-	Mon, 11 Mar 2024 21:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D544D56B6A;
+	Mon, 11 Mar 2024 21:54:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710193987; cv=none; b=RanAtnm4ugL0aoFDFuYZMtp8SATveqRiSjazot8nL6UIXTl9WB/+Qp0i2+/skNdwU5rGA0tXy21aEipSEus+iR02V96zturuTDBlcThP4kix9WGaBn4BYtTcf05UI9e5TvIu0MrD9pmvsRQtfZmfmNtekChzukCQc1L0JoKEebg=
+	t=1710194077; cv=none; b=Y0eSbe1GhveAyIEN7tCCejdpjqLq06LEg8yE/fygUEXJi1aVoI6grZeA5KIApMI3vbjdJ8TmaYsl/vCOd0k/NJitPmRxuKWrEJVT0xosWSmjQ9erzjPKqcsrI36VIsPSbO8bPpDTp9urBIyMPBEVnvssk1xwv8eHMW04wbXs6FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710193987; c=relaxed/simple;
-	bh=TEbZeeq0clAFzFr8sJBQjy0R1YDwtydGn/bR0N7ihtk=;
+	s=arc-20240116; t=1710194077; c=relaxed/simple;
+	bh=qKOCBiRdT7ONIMPrX5An2YO9OtQTJjkEdoD2DYEw3RU=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hYkKMEkOTEvgd8tJWmwfW7ISKSks8a6ndfV8tSQUc+tA5/nJ2E7Xz2Y+A7dx0cm20vYNccya2jhEPuunfwKA0AIQvN5XDDnOCqf44ukOT9qk4Kioa3gJvhaScyBvz7snOA88HrhWZP2gVKvIUFubLt+Y+nFk88NBF3JhsnE2wvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fJtL0kAs; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=W1BO20dIXvdKr+zqR1rwG69Px/dlGFYGrn2+8fLFWWcyaxHlXHKRA1xwBVOUNw6dOBJRPIsG+wB5Mvvd+arHWXzon7i+ANu9tW2AV5NhugpL3F3iCKKTSRob7eNbHBAyjAXsuPE+EBOZf1r4l0d6kSA03mU2/3WhyrivhVnHVy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=D+Rxwz68; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1710193982;
-	bh=vaJGZhR9qPd/L0aYICX0fyHav/PoQko1EdlrEY0dVpk=;
+	s=201702; t=1710194073;
+	bh=RUmKkEb0MJyRI0HMKJM0OFW6Ocq9ArGyg20ZV6sGG0Q=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=fJtL0kAsCqmQzFsOkFdhiriv4UBCPTio2mIlr9O0BiqAth/wsGzYIczIzCIqIOBhF
-	 TIO42VPbqH6u+bDb6L5bZi9FybuJ9gPKCcB5EsLw1IsvTjUD1zfoCI8wqrASiWPk7A
-	 Cxc3LBFcegZ/acXGGNptlB1mPu/rSVqBc7YzxbLPNzWPfdK/PsCL79IS09sNznCzix
-	 JeAXgD2tS+R1X7CX81udm97de/BW5E59KBHYK3KMMDHkGjjWFhT1UiLLWuUq4lCTIX
-	 NYwZSyB34lJqhlEzbcnWHZLdX52mSWCAQW12swdaeZb5XD3azNs85ilmgw0iOUAy9v
-	 pCx0qumFKSmnw==
+	b=D+Rxwz68Q18EtsmongkmEUVp2m0FQHrlrgc9+F/Zah+MVI3sDnd89+pC6FZ9sSO1e
+	 ZXnVoYcnnFBQWozd1Okj/eGlgrhi0YCLo120HAJW9Lz+tUMyDb4iVw+7GITUNWzqM2
+	 HJCZ5PDJ1WTCb531brlW3KWRG4ZfuwrHYYIqk9E4Og6nG7jSyC3zbxIDKhEQaWavhd
+	 dMPm5s9IHOAFIuey/jlQCThudLzWJuHeIaVgfvWOoVZtsr/GpoR/CD8OfywqJQ++ap
+	 PgsjL7nhk6m42lyZuwbP5B2JHy1w7pVF8IeSrQ7dCL5UuvecnTpq90GlVF5g5RFKAT
+	 gOaZjMd1QTg9g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ttr9p23S1z4wyy;
-	Tue, 12 Mar 2024 08:53:02 +1100 (AEDT)
-Date: Tue, 12 Mar 2024 08:53:01 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TtrCX2z9hz4wyy;
+	Tue, 12 Mar 2024 08:54:31 +1100 (AEDT)
+Date: Tue, 12 Mar 2024 08:54:31 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Linux Kernel Mailing List
+Cc: Jens Axboe <axboe@kernel.dk>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: linux-next: manual merge of the rust tree with the mm tree
-Message-ID: <20240312085301.66009b5f@canb.auug.org.au>
-In-Reply-To: <20240129133352.25a3ee19@canb.auug.org.au>
-References: <20240129133352.25a3ee19@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: linux-next: manual merge of the block tree with the mm tree
+Message-ID: <20240312085431.19a66507@canb.auug.org.au>
+In-Reply-To: <20240214112519.153c8480@canb.auug.org.au>
+References: <20240214112519.153c8480@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0EeIemxenT6BELO.q6Mw7g5";
+Content-Type: multipart/signed; boundary="Sig_/uwa=wNrVgQ0bNBNVNM0J=gu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/0EeIemxenT6BELO.q6Mw7g5
+--Sig_/uwa=wNrVgQ0bNBNVNM0J=gu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 29 Jan 2024 13:33:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Wed, 14 Feb 2024 11:25:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the rust tree got a conflict in:
+> Today's linux-next merge of the block tree got a conflict in:
 >=20
->   Documentation/process/changes.rst
+>   include/linux/sched.h
 >=20
 > between commit:
 >=20
->   3d21fad38152 ("kbuild: raise the minimum supported version of LLVM to 1=
-3.0.1")
+>   d9233ee073c9 ("mm: document memalloc_noreclaim_save() and memalloc_pin_=
+save()")
 >=20
-> from the mm-non-mm-unstable branch of the mm tree and commit:
+> from the mm-unstable branch of the mm tree and commit:
 >=20
->   c5fed8ce6549 ("rust: upgrade to Rust 1.75.0")
+>   06b23f92af87 ("block: update cached timestamp post schedule/preemption")
 >=20
-> from the rust tree.
+> from the block tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -101,47 +101,49 @@ wrote:
 > Cheers,
 > Stephen Rothwell
 >=20
-> diff --cc Documentation/process/changes.rst
-> index d7306b8cad13,eab7e2f8c196..000000000000
-> --- a/Documentation/process/changes.rst
-> +++ b/Documentation/process/changes.rst
-> @@@ -30,8 -30,8 +30,8 @@@ you probably needn't concern yourself w
->           Program        Minimal version       Command to check the versi=
-on
->   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
->   GNU C                  5.1              gcc --version
->  -Clang/LLVM (optional)  11.0.0           clang --version
->  +Clang/LLVM (optional)  13.0.1           clang --version
-> - Rust (optional)        1.74.1           rustc --version
-> + Rust (optional)        1.75.0           rustc --version
->   bindgen (optional)     0.65.1           bindgen --version
->   GNU make               3.82             make --version
->   bash                   4.2              bash --version
+> diff --cc include/linux/sched.h
+> index 5b27a548d863,15b7cb478d16..000000000000
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@@ -1642,9 -1641,8 +1642,9 @@@ extern struct pid *cad_pid
+>   #define PF__HOLE__02000000	0x02000000
+>   #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to medd=
+le with cpus_mask */
+>   #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process pol=
+icy */
+>  -#define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained t=
+o zones which allow long term pinning. */
+>  +#define PF_MEMALLOC_PIN		0x10000000	/* Allocations constrained to zones=
+ which allow long term pinning.
+>  +						 * See memalloc_pin_save() */
+> - #define PF__HOLE__20000000	0x20000000
+> + #define PF_BLOCK_TS		0x20000000	/* plug has ts that needs updating */
+>   #define PF__HOLE__40000000	0x40000000
+>   #define PF_SUSPEND_TASK		0x80000000      /* This thread called freeze_p=
+rocesses() and should not be frozen */
+>  =20
 
-This is now a conflict between the mm-nonmm-stable tree and Linus' tree.
+This is now a conflict between the mm-stable tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/0EeIemxenT6BELO.q6Mw7g5
+--Sig_/uwa=wNrVgQ0bNBNVNM0J=gu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXvfT0ACgkQAVBC80lX
-0Gyc/Qf+MrjrfMBCrce+EE0iuAjie/dz822tB9IcGEYvQXbIiwRH9pyehHvT2Gyv
-Em7z04I9vVZFaVLyAeYwPRMcjdTpYt/yXnnSkrs1MYVxvm23yEfM6k7Ge6cqPMLK
-77Po/q3shq7Sp+y+Ekv1VR2EMQLMjdEBXZcGAeI8Bo4dCtNLN4uedVQUSVsnn0aQ
-XVsXTIkbmNvBdTVoq1XI/D9BultgY+Z2yfCg6JRjeX9TeriWSMYOP1hEuYcX4+Ep
-J+OWYKRMWV+lxlTrAD37bYFMhXaLSJKEVQ2ffATev2IDxTWpDv71EUvjYVrlBXd3
-HDx1j0oHRxnqYnXZFAR4R+qvaBHb9g==
-=RmQv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXvfZcACgkQAVBC80lX
+0Gwl4wf/W7kbtcjKWDx0I+da/JKoTRRMGI860y/nieM+Mdj7ynVPg300jREifuom
+4SBgjQn4UoHNIut34nPCtG2vkw530e8RgFVr9RpvD3SVWR+VHzyydmBJk3v89srq
+THPBKY9DXxdEzCqSYFTpAJ61AxIqcIuQ9Q7wcBCc/tEoQTZhAx0L44GGPp/RcQ0y
+CRaxbH3PJaDBeS2MxjveBtsGBPF+9sugN8SRyjPIc6sC6xexj+VR0AtcvZyybAdA
+CmicjhAuleFBPQI5YWoRP8VCgH7sp+kQdbSplqK3TCnNdeZlYNKPFuBN+QmFs413
+vAElabw3mHQAzDFI1lrJYbUt2I7dgw==
+=hGfe
 -----END PGP SIGNATURE-----
 
---Sig_/0EeIemxenT6BELO.q6Mw7g5--
+--Sig_/uwa=wNrVgQ0bNBNVNM0J=gu--
 

@@ -1,109 +1,117 @@
-Return-Path: <linux-next+bounces-1581-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1582-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A719878DC3
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 05:18:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BB58878DDA
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 05:31:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB08B1C214C7
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 04:18:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01C9128227F
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 04:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C63B673;
-	Tue, 12 Mar 2024 04:18:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60FF15CB0;
+	Tue, 12 Mar 2024 04:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ua6qTmuI"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="vCzNUmYl"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E7CB664;
-	Tue, 12 Mar 2024 04:18:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 207117462;
+	Tue, 12 Mar 2024 04:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710217093; cv=none; b=nLMTkUhWcGipPcgexjVNfA+cCd9/6HpgWgq/TDdDJ4ZY3WHpixV84JK+6n8kXEkzw+JWGFgv/7Y0l0aKG/eUPzEO5JHFgtU2PDWa8i64W0hCDQ2bICxlbrTjP7lZTOLqWbfKXTpDyagsUiDoQMQKwyKNnDHkd1swXSOwPvpy3QQ=
+	t=1710217867; cv=none; b=q/8UrsteJsAjfkYBq31CWRTugbn2Kc1t3z1bYOj7Pg251orB1+pr30t3UqbVg/auR24nxoJ7MwFpAw7ixRMl1hdwKngPtirmQw2bltS8eVCLtlomFZvBDNZ3h5RocJNyRo2GpLEsF2tsh0N9pSif8+vF3bQoWjPiRcc1Uof6MBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710217093; c=relaxed/simple;
-	bh=67KsywSeBnA4HTsQSTCm+nlNA0yqUyueJPuLjaB1n70=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TAXZ2cfpzKFLOnO7wdWWrH7jt5ZhvD2wJdD9apiY/386ABb5n85VC9+9lFH/0dZHRw4oWYpnSNwB1gqcqFfpY5trh2jNdBgdDp/lhu8uesVp02w7dECoNRlc8P1kzI9AintYgoeFIyorqZ5bKxGfLX6ZRFoNVI9fg6krnQj3SCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ua6qTmuI; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1710217867; c=relaxed/simple;
+	bh=UcoVuVXIvJNMYpRj2dxEDV0HJoxnJrVc39BSSg07IpU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=FyZGza4RvXyYgHVcHY1kqzLsQhOE0Sv1yNlHcPF3hs43pAvITTDsrLYeQB3apU/ka4VWad4D6a77MeiS35zUhWEJ4AZQ0fTvgrtrKkAN9Lys8DkKLY/0tXpY1BCitwYrcKQxbuWENQmIf6i+uZENshwG+2AvppY9RhLs22bsYGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=vCzNUmYl; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1710217088;
-	bh=9TvvWnAfPR3GqDnwETa657mhuumzJIgbVqn/uYZ9sjA=;
+	s=201702; t=1710217862;
+	bh=PYxa1gcg/P1IMNpKblcjvzUUqPcYHk7yF3FHukIGJ0c=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ua6qTmuIHrj2pMCdfYmkSduM/1FXSTNAxoMQzt4Eno/zX6qQ+GiTUrUEmaecGTZ6l
-	 l1eCqJX2H37xadDTIDON5PDDIUVVV50TcqORAUZvyroTZGW5akrt6LPvb2IYw5oWR2
-	 9veqvK7V1/tavkCuVkQSyDm/Q9xJKIFuF5rHqZZI29XsKFWq9EixI3auawJNjCT31G
-	 PuqXjfDfausdLykIZEVfP6FK8xqxXS8rQHXNEZO9a0cdoX2doadLy1OtjgRiCJWcr5
-	 Ba/xAe0BiECFvaobaEyMGc36PVWQ1t+YCtsgcAXUhg/OEE0EViDNhxQ/2aAoOpWStx
-	 nxYNlTMCEW36w==
+	b=vCzNUmYlqKfV5hAGeWy3ca9qTOzEvX0+I0GnVsZY169zZSTqonN2/rtoOj6rBtYuF
+	 6cPAFVkuIqFV5zDg94Uc98qW4B68aiC9g/gbH+wS3K9J+9rEfgmLROroRMVtwU5a3K
+	 rn7C3uSbY6YwKIylOA0fhyTKYBeIXWo5tjulSsjZ1KleCV7JjO0BUi1GbBMMpu0rqX
+	 236oSUuIER5pEShqCK6GJOTsHUF6ArghaY1xP/jt2bN84Ke8OnC/3LfH/s5fNMCkJz
+	 31S3Nzoj3BEHJEgVZLeAGXBhptPaLarGQzrO9qbfr1csf1kWNb29LSyQFz4od4xNbb
+	 lP/U7JtS3MYpg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tv0k81Kwbz4wb2;
-	Tue, 12 Mar 2024 15:18:08 +1100 (AEDT)
-Date: Tue, 12 Mar 2024 15:18:07 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tv1110mcyz4wb2;
+	Tue, 12 Mar 2024 15:31:00 +1100 (AEDT)
+Date: Tue, 12 Mar 2024 15:30:59 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Wei Liu <wei.liu@kernel.org>
-Cc: Nuno Das Neves <nunodasneves@linux.microsoft.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Herve Codina
+ <herve.codina@bootlin.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the hyperv tree
-Message-ID: <20240312151807.52478738@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the net-next tree
+Message-ID: <20240312153059.3ffde1b7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=EPy4Pepr7P67gHlSpSx8Sz";
+Content-Type: multipart/signed; boundary="Sig_/7i5b5TOny_nD7GXG9_orHsY";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/=EPy4Pepr7P67gHlSpSx8Sz
+--Sig_/7i5b5TOny_nD7GXG9_orHsY
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the hyperv tree, today's linux-next build (i386 defconfig)
-failed like this:
+After merging the net-next tree, today's linux-next build (htmldocs)
+produced this warning:
 
-arch/x86/kernel/cpu/mshyperv.c:355:5: error: no previous prototype for 'hv_=
-get_hypervisor_version' [-Werror=3Dmissing-prototypes]
-  355 | int hv_get_hypervisor_version(union hv_hypervisor_version_info *inf=
-o)
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+Documentation/core-api/kernel-api:90: include/linux/bitmap.h:524: ERROR: Un=
+expected indentation.
+Documentation/core-api/kernel-api:90: include/linux/bitmap.h:524: CRITICAL:=
+ Unexpected section title or transition.
 
-Caused by commit
+||||||
+WARNING: kernel-doc 'scripts/kernel-doc -rst -enable-lineno -sphinx-version=
+ 7.2.6 -internal include/linux/bitmap.h' processing failed with: Documentat=
+ion/core-api/kernel-api:90: include/linux/bitmap.h:524: (SEVERE/4) Unexpect=
+ed section title or transition.
 
-  1634df06ea12 ("mshyperv: Introduce hv_get_hypervisor_version function")
+||||||
 
-I have reverted that commit for today.
+Introduced by commit
+
+  de5f84338970 ("lib/bitmap: Introduce bitmap_scatter() and bitmap_gather()=
+ helpers")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/=EPy4Pepr7P67gHlSpSx8Sz
+--Sig_/7i5b5TOny_nD7GXG9_orHsY
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXv138ACgkQAVBC80lX
-0GwwhQf/Vtj0UmGnlX3ApN0WWVsXI5guGkshSbgZt5KffUQxchbeqpYM3P1bVXwP
-NjxGIzeCPGtkpVDDlhC6J0aJb7TDR2faaXQOv0lt2VKm/DZUV9hryIBMmuz6TIE/
-s4/23yoIlmcgEPjeezN5o3V8DjhRwIOTuxAY4EmJEtJpEm4yb3PwIVRKU/xOY3m9
-9kzfvxKQRlwBKVJ646xv1I1HaVBqM33ggBJ/Ka53RaPvI72YU5JSTESA/bJsDHNz
-Pbe715jOqCkLxxj0JH2ppkWF0dLyY8cjNN3SDkJEIXB9iJyYpWhfShttmludlrc+
-l1P4HC6Uwt0yFlcxX7K4bY35/a9WAQ==
-=LFWH
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXv2oMACgkQAVBC80lX
+0GxVaggAlY2t8o+n1kGdKRCEnxNLyRQq/51McVdfevk45GlfWh+xHl7ojzS6sI06
+dJcN+5y9t0fz2ZZycTdJvxLYeVNtMvfPcAdp/LvYJPR9PO+IMPNQunPSiPqMlRII
+Z9PEG5Xkc7nDX65V9CYxerS1Ck7U4SBkSFka+b2P02IiSG8rWghyUXK4GWXeDYRL
+q7bVq70rma//bJbK1CDc+vz4ZRvSKYDD0nSc7vbXZUqRWK2c7RleXR5v2Pb6QQ/y
+yDveExbJoCySbgKRWzGDTuExnh2iUHiA3iELjF+oXaWBVIt1441DHj7/CnSAQPtX
+Mgo9SbEv+sNAqWFHmHIZzFYWH4nRKQ==
+=IVq9
 -----END PGP SIGNATURE-----
 
---Sig_/=EPy4Pepr7P67gHlSpSx8Sz--
+--Sig_/7i5b5TOny_nD7GXG9_orHsY--
 

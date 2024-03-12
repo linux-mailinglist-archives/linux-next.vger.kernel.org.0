@@ -1,92 +1,80 @@
-Return-Path: <linux-next+bounces-1587-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1588-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A7E7878F2E
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 08:48:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9DFD879250
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 11:42:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BD56B20ED6
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 07:47:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E5D91F22851
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 10:42:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE936995F;
-	Tue, 12 Mar 2024 07:47:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB6358AD6;
+	Tue, 12 Mar 2024 10:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TEfXXzEw"
 X-Original-To: linux-next@vger.kernel.org
-Received: from pokefinder.org (pokefinder.org [135.181.139.117])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963AFBA28;
-	Tue, 12 Mar 2024 07:47:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.181.139.117
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A315955E73;
+	Tue, 12 Mar 2024 10:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710229673; cv=none; b=nvdHRRMJnb7a44kcRwteezwr6L+h6LjY7XJJATdsGR3K3jNlRvUUCQ3HqpUPLh/BykwVEG+GqZj0TZctdObtteRIWDJVZ7mxc0uesE6YGGQX2cQUDXD0A044Cvc6xwlkJCIOrRD5vbjj+ZBK5iYQqd9ygz9/CGpdjbZpn+7aEno=
+	t=1710240164; cv=none; b=DyxU+WdrBk87nHuR9auvELbecff6BhVlCC4XbKlHbBx7uS9TtY0jCejZa3yOdG31pfpUSvOq7juGjuAfuSOeZj6gCS7MEdlpWMqp+jkz4+h/nc30gqQj2eRUCOIDmibzlCXaI75dwZK/ETH7CInESajMJpwRg24RRjf1CEgu38w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710229673; c=relaxed/simple;
-	bh=oIqiDPiPQjAOu+2nWRzhyZ8eSXBMKofBJu3J/+vtOow=;
+	s=arc-20240116; t=1710240164; c=relaxed/simple;
+	bh=3Hm/MYg22uTG/hGFgFvZ24Uyx08CNOOkluWrBAt/nsY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ncVhynmxqDt699nJ/PL99xWwQM+JfLcjmQiDYRSAN4qk4L/YwzJl24nkxY+YMkEwq4cudAETewi/yi+IzqXr6hn+OU09IWK1F312Mf9eN51j0IPdBwIRrTS2rz0tDz635vq3vwM0p962fSW0C0HXNuPA3OvGzkBBAO1JefSKwRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de; spf=pass smtp.mailfrom=the-dreams.de; arc=none smtp.client-ip=135.181.139.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=the-dreams.de
-Received: from localhost (p5486c5e3.dip0.t-ipconnect.de [84.134.197.227])
-	by pokefinder.org (Postfix) with ESMTPSA id CF67EA40475;
-	Tue, 12 Mar 2024 08:40:09 +0100 (CET)
-Date: Tue, 12 Mar 2024 08:40:09 +0100
-From: Wolfram Sang <wsa@the-dreams.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=A9JF6JXudd5F9vap89u9aYl4LgnVkLRGJv2SHJWvqBVv8snVjNX4yjJtENqXKmkYisyiasTwE2LUDcb8sEqZQzWR59T0p+fVMjQMvtSvb8vjjKe2CAkxG4DVtTcdJWdvYVHgbHqOWG/xIFNM/7odLFunzWaT8fgiabz2ubUvp3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TEfXXzEw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E13FC433C7;
+	Tue, 12 Mar 2024 10:42:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710240164;
+	bh=3Hm/MYg22uTG/hGFgFvZ24Uyx08CNOOkluWrBAt/nsY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TEfXXzEwiPC1ZZEFMmekKYkXFixj7tq6ibOLE2X+dQvgA+K30zIsMFY7fh7DBFCTu
+	 u/OHpQmN3tSAN+o1+fZX0mNeDAt12VcnxD+2qAyp/ZiVdKYlTr4azUGy+o6llC/f5b
+	 0qwElm9mj67qFjy80VYleTSf+DsDYDAXKBa/VdJRYAlzX1E+WTxFpv6P5APddw1cOW
+	 chhxB8DgYkSiD8wWi4+nYmpC8HoiSWNJ4FBGmzQ22akCm88pCBht7hnXZUK3hfVF+v
+	 tsxT0BheWdXku6lgcJktc3RUuIwC824/0nDCAzugRTXJmt7u8mRTqAXy4T2XgQ3Hox
+	 1YBmWAK/GeBUA==
+Date: Tue, 12 Mar 2024 11:42:39 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the i2c tree
-Message-ID: <ZfAG2RFkL5dDZLKz@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240312081933.64de63c0@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patches in the i2c-host-fixes tree
+Message-ID: <eswu6tcsrk4gusitf7wnfnjajpagusuz4sl7ylubjtejd667ps@ixucxjzc4sdn>
+References: <20240312081558.014deb45@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="otwQC4KmlFK+GLut"
-Content-Disposition: inline
-In-Reply-To: <20240312081933.64de63c0@canb.auug.org.au>
-
-
---otwQC4KmlFK+GLut
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240312081558.014deb45@canb.auug.org.au>
 
+Hi Stephen,
 
->   f58418edf0cf ("i2c: aspeed: Fix the dummy irq expected print")
->=20
-> is missing a Signed-off-by from its committer.
+On Tue, Mar 12, 2024 at 08:15:58AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
+> 
+>   1f78f0901011 ("i2c: aspeed: Fix the dummy irq expected print")
+>   7c16cfd69d51 ("i2c: i801: Avoid potential double call to gpiod_remove_lookup_table")
+>   ace9dc1d1251 ("i2c: wmt: Fix an error handling path in wmt_i2c_probe()")
+>   b60b86b55400 ("i2c: i801: Fix using mux_pdev before it's set")
 
-Hmmm, looks like I overlooked something in my scripts when merging
-Andi's new branches. I will have a look today. Thanks for the report!
+we've had quite a few in the past release in i2c... will fix it
+from the next release.
 
-
---otwQC4KmlFK+GLut
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXwBtUACgkQFA3kzBSg
-KbYx8A//dl6uMUQ7ox9b/tNWvAWY1azIXaPU1ck7q8vMbZp/aRwVmH4gbB6W3V8C
-3AzdomUwDXecr89HPE623e7Z6fsrFozwGgt4VKf7xfA4DA2mdsC3qu7xaUsfJLuC
-N6y0AYDAk8QLns++qZ0dQiiUF1FgHGNCgbJoNAg8w1z+HbmIqVLDI+Dhu23l1Bdq
-K7eG187w+pG6X275U/5kZaGP8tJLTIWKt2AZOqy6seOYJYGy/EfLiY++tmLL22l9
-kMnEn2CXykip/gF4prSRx2QuUxSZnWlySidU8GgJrIaE40k7EJ7cfO1gZb1Jaxgo
-nURdS4RLY7gnnwpdh2372POi/CoMCZqUgVJ+3CO/8EqJm8E7O6p/DjaHbhTT1h9d
-eB5kSpSVWqyE3uPDVUaGzpCZsot0Y5INHprW2Z0kWUvUTVjan6oUyb/g3a+cL5/j
-rcNotj7wgSG15LpTFqqPtB++mb08lgzn4Niooy3bh4cgkECcbYlRWd5HlRKNxaYi
-YIw79eCIAeUAc33qcx7nNK6LHjHd43qkIQ5PVxuGzbniYcXvPY4N3kxNipsa+cMO
-xC4rNoh+Moy/0GAkDNFDh3gqCc3AMB9ueqk6+YubJ2sJ3/6dqAqYj91r4dyiBD0h
-JphTrwhXA3PphAWgHOK6fyMaQNWAmrqZ2KJQXhUe6GE4Hg8UcvU=
-=EF6O
------END PGP SIGNATURE-----
-
---otwQC4KmlFK+GLut--
+Thanks,
+Andi
 

@@ -1,141 +1,109 @@
-Return-Path: <linux-next+bounces-1580-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1581-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D3B8878DB8
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 05:02:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A719878DC3
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 05:18:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0C18281FD1
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 04:02:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB08B1C214C7
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 04:18:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3EB5B669;
-	Tue, 12 Mar 2024 04:02:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C63B673;
+	Tue, 12 Mar 2024 04:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="utHMcUDo"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ua6qTmuI"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C48D16FF2B;
-	Tue, 12 Mar 2024 04:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E7CB664;
+	Tue, 12 Mar 2024 04:18:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710216153; cv=none; b=FKNYM6myVlsuWoIPfDdfSs88BOMVA1L+nHTnGPjdTsZqC2HoM1J0nYIJqk3ZjOwWfWCaUCGbDjRsft8uHxLxjX/KkjKMx+o2qFNzx3KhxOarNqHdtJeeV3wKHNz+2leOw6Q0gprmhN8V/ZWXmYQmTnyLhB4c3JmVq9FaEf6TvqY=
+	t=1710217093; cv=none; b=nLMTkUhWcGipPcgexjVNfA+cCd9/6HpgWgq/TDdDJ4ZY3WHpixV84JK+6n8kXEkzw+JWGFgv/7Y0l0aKG/eUPzEO5JHFgtU2PDWa8i64W0hCDQ2bICxlbrTjP7lZTOLqWbfKXTpDyagsUiDoQMQKwyKNnDHkd1swXSOwPvpy3QQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710216153; c=relaxed/simple;
-	bh=7Lpi3zRSX3+XjOy2RJIFHZfKHQGjDfsjho8arA+oqrg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SNypRMwXyG3pLlrWc8rfoy6D0raMZqZbTvMoiVH8egV597+EN/BT0WuBwkHkxHkEB1WqEQGjERT7tCZQaMd64nM5bwRPaTuM25/NXfkttHbSaQlargBoYgSFNcpMfrUf82rA+STsPn08KV2t8nlshOf3p9ybpwyTp7cJYq78nuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=utHMcUDo; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1710217093; c=relaxed/simple;
+	bh=67KsywSeBnA4HTsQSTCm+nlNA0yqUyueJPuLjaB1n70=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TAXZ2cfpzKFLOnO7wdWWrH7jt5ZhvD2wJdD9apiY/386ABb5n85VC9+9lFH/0dZHRw4oWYpnSNwB1gqcqFfpY5trh2jNdBgdDp/lhu8uesVp02w7dECoNRlc8P1kzI9AintYgoeFIyorqZ5bKxGfLX6ZRFoNVI9fg6krnQj3SCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ua6qTmuI; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1710216149;
-	bh=uOUe4BCyHFHmDX7eGTeEvemo/yakiIcj/f9yFYq2KTI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=utHMcUDoCvgXSVq8aXiKSou//3l/Rwbai/U+7CNS6uHW9eQwRk1pInDPnPQkbhTKB
-	 E6KenBT0xVEaZErw2OBI+MFNalNfqrKsmB4d2lM006/za+YJXdCKFx09DxwvjCAyx8
-	 zfiEVIhZq4/eewEey6LSYJkMhqq72uPKGGYKVsYFWc4Cq0ChtSBtkQCRc/yDmqonbt
-	 5I6DLIHBpWE8n2mia656yU/k8MF5QDkEyf20ScvtmFXd3aCff55KWMUF3HZOWeDtUb
-	 U4fxxSUBMAbAj9Q/Zsi5zYJ2/VdHP1TFVYJK4hSgGot13P9gMoipg+zrtmFzXQSStd
-	 eFvTW1ZIS0MuA==
+	s=201702; t=1710217088;
+	bh=9TvvWnAfPR3GqDnwETa657mhuumzJIgbVqn/uYZ9sjA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ua6qTmuIHrj2pMCdfYmkSduM/1FXSTNAxoMQzt4Eno/zX6qQ+GiTUrUEmaecGTZ6l
+	 l1eCqJX2H37xadDTIDON5PDDIUVVV50TcqORAUZvyroTZGW5akrt6LPvb2IYw5oWR2
+	 9veqvK7V1/tavkCuVkQSyDm/Q9xJKIFuF5rHqZZI29XsKFWq9EixI3auawJNjCT31G
+	 PuqXjfDfausdLykIZEVfP6FK8xqxXS8rQHXNEZO9a0cdoX2doadLy1OtjgRiCJWcr5
+	 Ba/xAe0BiECFvaobaEyMGc36PVWQ1t+YCtsgcAXUhg/OEE0EViDNhxQ/2aAoOpWStx
+	 nxYNlTMCEW36w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tv0N46gvDz4wcq;
-	Tue, 12 Mar 2024 15:02:28 +1100 (AEDT)
-Date: Tue, 12 Mar 2024 15:02:28 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tv0k81Kwbz4wb2;
+	Tue, 12 Mar 2024 15:18:08 +1100 (AEDT)
+Date: Tue, 12 Mar 2024 15:18:07 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc: Chao Yu <chao@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Wei Liu <wei.liu@kernel.org>
+Cc: Nuno Das Neves <nunodasneves@linux.microsoft.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the vfs-brauner tree with the f2fs
- tree
-Message-ID: <20240312150228.31190b3c@canb.auug.org.au>
-In-Reply-To: <20240229104140.2927da29@canb.auug.org.au>
-References: <20240229104140.2927da29@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the hyperv tree
+Message-ID: <20240312151807.52478738@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pFeyoMquibdqUJ=FIlQlIiY";
+Content-Type: multipart/signed; boundary="Sig_/=EPy4Pepr7P67gHlSpSx8Sz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/pFeyoMquibdqUJ=FIlQlIiY
+--Sig_/=EPy4Pepr7P67gHlSpSx8Sz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 29 Feb 2024 10:41:40 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the vfs-brauner tree got a conflict in:
->=20
->   fs/f2fs/super.c
->=20
-> between commit:
->=20
->   5fa6a97d2784 ("f2fs: introduce SEGS_TO_BLKS/BLKS_TO_SEGS for cleanup")
->=20
-> from the f2fs tree and commit:
->=20
->   512383ae4910 ("f2fs: port block device access to files")
->=20
-> from the vfs-brauner tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc fs/f2fs/super.c
-> index 09ffdd554f9c,09e82624eff5..000000000000
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@@ -4206,9 -4265,9 +4206,9 @@@ static int f2fs_scan_devices(struct f2f
->   			} else {
->   				FDEV(i).start_blk =3D FDEV(i - 1).end_blk + 1;
->   				FDEV(i).end_blk =3D FDEV(i).start_blk +
->  -					(FDEV(i).total_segments <<
->  -					sbi->log_blocks_per_seg) - 1;
->  +						SEGS_TO_BLKS(sbi,
->  +						FDEV(i).total_segments) - 1;
-> - 				FDEV(i).bdev_handle =3D bdev_open_by_path(
-> + 				FDEV(i).bdev_file =3D bdev_file_open_by_path(
->   					FDEV(i).path, mode, sbi->sb, NULL);
->   			}
->   		}
+After merging the hyperv tree, today's linux-next build (i386 defconfig)
+failed like this:
 
-This is now a conflict between the f2fs tree and Linus' tree.
+arch/x86/kernel/cpu/mshyperv.c:355:5: error: no previous prototype for 'hv_=
+get_hypervisor_version' [-Werror=3Dmissing-prototypes]
+  355 | int hv_get_hypervisor_version(union hv_hypervisor_version_info *inf=
+o)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+Caused by commit
+
+  1634df06ea12 ("mshyperv: Introduce hv_get_hypervisor_version function")
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/pFeyoMquibdqUJ=FIlQlIiY
+--Sig_/=EPy4Pepr7P67gHlSpSx8Sz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXv09QACgkQAVBC80lX
-0GxTMQf/ZOA3yXMwPh52RY76VAhqrcGgY7TSrfDmLEbKOGZp9dLEV7D27bTzdpaQ
-mLjd/J/CXTBJ8lGNn5CTIT7XhLNplJRj65pWQk/yW2VewWgveQdOETKBFQPrd0Ak
-rPhYFOGyMLXxW7l7dwpTOkceXgzir4vSjYhMJJykDQabmziN5vAhJNFB1TOR8C08
-vmUBNrpfBCoNzgYPLInF8BdnX5VO6AS+4r2kOtyjxJtH92jiJonFFIdnfFG9RfKb
-1TCJpjscC1jVkwX/R5Fp+RMIPrCQjkJbVHh5xi6koQnSnSgfrfZJG5xm9VenuOga
-b9NXeh2BGXpFRXUas8CMKspUKjcSfA==
-=rMU4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXv138ACgkQAVBC80lX
+0GwwhQf/Vtj0UmGnlX3ApN0WWVsXI5guGkshSbgZt5KffUQxchbeqpYM3P1bVXwP
+NjxGIzeCPGtkpVDDlhC6J0aJb7TDR2faaXQOv0lt2VKm/DZUV9hryIBMmuz6TIE/
+s4/23yoIlmcgEPjeezN5o3V8DjhRwIOTuxAY4EmJEtJpEm4yb3PwIVRKU/xOY3m9
+9kzfvxKQRlwBKVJ646xv1I1HaVBqM33ggBJ/Ka53RaPvI72YU5JSTESA/bJsDHNz
+Pbe715jOqCkLxxj0JH2ppkWF0dLyY8cjNN3SDkJEIXB9iJyYpWhfShttmludlrc+
+l1P4HC6Uwt0yFlcxX7K4bY35/a9WAQ==
+=LFWH
 -----END PGP SIGNATURE-----
 
---Sig_/pFeyoMquibdqUJ=FIlQlIiY--
+--Sig_/=EPy4Pepr7P67gHlSpSx8Sz--
 

@@ -1,142 +1,154 @@
-Return-Path: <linux-next+bounces-1600-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1602-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 946C1879F8E
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 00:15:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAAC6879FBD
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 00:42:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43D0B1F2282D
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 23:15:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F75283250
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 23:42:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23E3946447;
-	Tue, 12 Mar 2024 23:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00A246421;
+	Tue, 12 Mar 2024 23:42:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UuhkqJ3f"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pQs+2XKK"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690CB14293;
-	Tue, 12 Mar 2024 23:15:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956A726286;
+	Tue, 12 Mar 2024 23:42:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710285323; cv=none; b=m+rneIgzULj6cA3UvGGf0SghHBK8FhHPUQzRFi05EKmwDn+9znEbdHmNqcJPwCjEBlS03bsJcTPyygCfkjEBLmysMHtkwmUX2QVD3Mfkz+KhFvE7bJLS+DlIN+EBghIBCQ5uhrpQThueqaUfkeszG/mBuN3qf2UP0D8/rcSVNb4=
+	t=1710286925; cv=none; b=KIZZu9W2l6f1HLly/STJi3JzcecDTYcAr0kv3Z0lGboRNDofCU/mvbgM5gtobescMzFporlN5RRZUiyjsQYWpfjRrPJb7G8AVIshlBajF2rCUqUhoaqpHcsh9EET50MrsH+/AI2kCC6xB4DDPBjk8go7Gz31XxyZV+4HTDarAqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710285323; c=relaxed/simple;
-	bh=YMumfy62LMbpDVBMh+X3bB7Gji5ZfK1CU4I9f8SM+fg=;
+	s=arc-20240116; t=1710286925; c=relaxed/simple;
+	bh=Ht/vgGvTfP6q+zutj4Q4xwtp2EYZWw9H/nQfpl+nkDo=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JbfPeq8OUOYaRTfZTAIhXgWjWTI2gd+AGQ2G0I76Rf03E22r7qOqwhwW9bW9Mf723ckqoryZlQvio4CFCW2J17GvTVpPTuNToN7E+Xeqm+Yv9qtpFrT6r98yTCSEYAc5mnaIOeYGqONc5XTW9e2/qLIllL4xthdwQjmFcG178M8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UuhkqJ3f; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=iHgkpAZ/OyGi1V4v1FtdTthQZvXnOREit4hEks5+wFmndWPtlS5pQy/ZS3xxiz9IL1cSBLGPu0vQ70OX0NMm6gICXNKKfbtltQq+XBelXXy2pRn699LXOculbvpDiZiI/FtpX6tB/m4L1PVDTK3uek4l3AJ8cMp6u6Rj64UfWoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pQs+2XKK; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1710285318;
-	bh=B+4KN1xkYdkrc/Uo268JWRZW4K2hj/u546GnWtrEepc=;
+	s=201702; t=1710286920;
+	bh=M7wqUR1uMhwgn2qeeoDQh7iUiljE4XKlKtAM47Rzd2I=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UuhkqJ3fnxWE6E7hcXRo2tfacrwA6vMFJjE3JZ/fRomCOHnqa5QxokDkdPMcYn4rh
-	 MNuin9bdqc+LBCu3H9f0JvHDPt1pezt6NjXVQSbScPwdSiBepmFF7CW7EMafQlI6o9
-	 vvklIWxspA33h0RBS4S9BoOZ3tlgSI3Kjn24jLTaoEFEwZ6DJLzP8gNAnu+W16OXJ5
-	 m3SdA09n6CIHsBuSdYo45nRSdwBCJ2fP9yPe/0sJ89hAK+I0tujyBr0/6KDR22Dmk/
-	 nHPB+lnXzcJ8QjAI2T66pVIQEU6Tjqz1fpVXKOg/c3/TxCZ8z8rbz8rOOBmJ7HbqIz
-	 uHRgb6W8jHchg==
+	b=pQs+2XKKCTYqB7tmyy89+/4Txiqd6SwHDGlVBpci2+TZymPbAvFEQMzbsl5oSH/jX
+	 vSITjwswJ2n1B4tRNmwRJ13FSoUEqcnS18GrrploxN2HeM/UNUOi6qr7biKBHYwAjL
+	 vU16EQIRfAM3gERWEpJu9H84D2KT15GxlwfUK2foFiFlHImytrnKB8XGnKeFwl212J
+	 iwum/lO6TRuKFdQyGu4AF0GLmHBoVDHcyXkqA4+4XXrjfBDFcByFR5TcE9n9ReqK7h
+	 5fcWh4r6RJa+HLlNR/a2jucA5iMv+w/WANaGleFXVY3Lnx6Pf3epICfUygfTP14oXM
+	 DHCISxIqkQ6XQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TvTyF3fSVz4wqN;
-	Wed, 13 Mar 2024 10:15:17 +1100 (AEDT)
-Date: Wed, 13 Mar 2024 10:15:16 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TvVY373nXz4wqN;
+	Wed, 13 Mar 2024 10:41:59 +1100 (AEDT)
+Date: Wed, 13 Mar 2024 10:41:58 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>, Borislav Petkov
- <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, Carlos Bilbao
- <carlos.bilbao@amd.com>, Linux Kernel Mailing List
+To: Chuck Lever <chuck.lever@oracle.com>
+Cc: Christian Brauner <brauner@kernel.org>, Dai Ngo <dai.ngo@oracle.com>,
+ Jeff Layton <jlayton@kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: linux-next: manual merge of the edac tree with the jc_docs tree
-Message-ID: <20240313101516.25300dcf@canb.auug.org.au>
-In-Reply-To: <20240222142041.34342553@canb.auug.org.au>
-References: <20240222142041.34342553@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
+Message-ID: <20240313104158.5649190c@canb.auug.org.au>
+In-Reply-To: <20240219104450.4d258995@canb.auug.org.au>
+References: <20240219104450.4d258995@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/R85v+ca_wCej8xuWD0EzUH0";
+Content-Type: multipart/signed; boundary="Sig_/Zd.4RUrtd4Rx6L=dpQzjrfL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/R85v+ca_wCej8xuWD0EzUH0
+--Sig_/Zd.4RUrtd4Rx6L=dpQzjrfL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 22 Feb 2024 14:20:41 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 19 Feb 2024 10:44:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the edac tree got a conflict in:
+> After merging the vfs-brauner tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
 >=20
->   Documentation/index.rst
+> fs/nfsd/nfs4state.c: In function 'nfsd4_deleg_getattr_conflict':
+> fs/nfsd/nfs4state.c:8845:32: error: 'struct file_lease' has no member nam=
+ed 'fl_owner'
+>  8845 |                         dp =3D fl->fl_owner;
+>       |                                ^~
 >=20
-> between commit:
+> Caused by commits
 >=20
->   9ee367809c67 ("docs: Include simplified link titles in main index")
+>   a69ce85ec9af ("filelock: split common fields into struct file_lock_core=
+")
+>   282c30f320ba ("filelock: remove temporary compatibility macros")
 >=20
-> from the jc_docs tree and commits:
+> interacting with commit
 >=20
->   1289c431641f ("Documentation: RAS: Add index and address translation se=
-ction")
->   0e4fd816b08e ("Documentation: Move RAS section to admin-guide")
+>   b9b89fb3e0b6 ("NFSD: handle GETATTR conflict with write delegation")
 >=20
-> from the edac tree.
+> from the nfsd tree.
 >=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> I have applied the following merge resolution patch.
 >=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 19 Feb 2024 10:38:26 +1100
+> Subject: [PATCH] fixup for "filelock: split common fields into struct
+>  file_lock_core"
 >=20
-> diff --cc Documentation/index.rst
-> index 429a407470c8,9dfdc826618c..000000000000
-> --- a/Documentation/index.rst
-> +++ b/Documentation/index.rst
-> @@@ -112,8 -112,7 +112,7 @@@ to ReStructured Text format, or are sim
->   .. toctree::
->      :maxdepth: 1
->  =20
->  -   staging/index
->  +   Unsorted documentation <staging/index>
-> -    RAS/ras
->  =20
->  =20
->   Translations
+> interacting with "NFSD: handle GETATTR conflict with write delegation"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  fs/nfsd/nfs4state.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
+> index 3545125c8b73..71bb0ee57cf8 100644
+> --- a/fs/nfsd/nfs4state.c
+> +++ b/fs/nfsd/nfs4state.c
+> @@ -8842,7 +8842,7 @@ nfsd4_deleg_getattr_conflict(struct svc_rqst *rqstp=
+, struct inode *inode,
+>  			}
+>  break_lease:
+>  			nfsd_stats_wdeleg_getattr_inc(nn);
+> -			dp =3D fl->fl_owner;
+> +			dp =3D fl->c.flc_owner;
+>  			ncf =3D &dp->dl_cb_fattr;
+>  			nfs4_cb_getattr(&dp->dl_cb_fattr);
+>  			spin_unlock(&ctx->flc_lock);
+> --=20
+> 2.43.0
 
-This is now a conflict between the jc_docs tree and Linus' tree.
+This is now required in the merge of the nfsd tree with Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/R85v+ca_wCej8xuWD0EzUH0
+--Sig_/Zd.4RUrtd4Rx6L=dpQzjrfL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXw4gQACgkQAVBC80lX
-0Gz7nAf9FufwkHzfM+WC64ASx0Ul6vPlouOO+49atpEvLejLnmGSXEJcEuqc6tld
-DlRwZsB257UAaO7gfHqQfmwwOMeXZ8rKOVolW2ffjTSxJcMr1SZl4zSrgujzSSKM
-1I8BmfMVhCFEGWQCsOn5PFJSFM2Sv4xhkyxB3EuhXrgOEYlA301Oyv26a7rZHTXQ
-G3qq59mWLpi5B9LBa8xNaNq2+it/r8B/qrydbOOxCU/Q1YBNK4gEZh7EKDCJpYzM
-o0fb/N7333eIGR561qO1dQsE9tQrI0jLlXBXTo+2diZNJnWXSpx7mvmZVW3QEoCx
-QX6lztTmO3N2q/RbYU0lsNnAfVyl/g==
-=38Lq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXw6EYACgkQAVBC80lX
+0GxuEQgAmwdzCg+Z+okkA3vPask4kdQH2VbxyPkHgZcdng66p4LFz88T0OOpbz2x
+skOW9PnMKUVVd9hUTM/YknEWbaUZgxEWFhn7Z1M5xLv9bSVByJOBYxoXNwPT6cBt
+O4hphar7sDhNhrzLFv5D0jYYMNVtHKhN6d4+4Xu67ypS5jNnpTne5cEWixn9wqD1
+z4BG/D6KdFA02u8Cv2ZejqweGW0v9plMKkgJW8yS3cNixQiK7lcfNj157oEGcX38
+uG0yBwq4pO54xa1Upvxt93ELooe0DvlsOJ9Vk1CtekgBmLedOSDoQAz9QDw8AcNX
+83j7AUmjy5Jfwcbs3sV4w0DID8YiVg==
+=zFGI
 -----END PGP SIGNATURE-----
 
---Sig_/R85v+ca_wCej8xuWD0EzUH0--
+--Sig_/Zd.4RUrtd4Rx6L=dpQzjrfL--
 

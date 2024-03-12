@@ -1,117 +1,112 @@
-Return-Path: <linux-next+bounces-1598-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1599-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AA61879D5A
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 22:14:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28A63879DE3
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 22:51:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CA211C20C16
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 21:14:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD2651F2218C
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 21:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58D6143725;
-	Tue, 12 Mar 2024 21:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A770143740;
+	Tue, 12 Mar 2024 21:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tf7z2+dF"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GBTcO4cd"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB7C3FE4B;
-	Tue, 12 Mar 2024 21:14:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4696B4AEEB;
+	Tue, 12 Mar 2024 21:51:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710278072; cv=none; b=IqgrJIpdMz2++ubv+5zkXrYSLCNboUhFkXvemcRttCO0n+C/KO+fuB+yJKxQittErh0WsG5sWjrAef1m9bIXzP7F200haECZ//M+KDnAr6HUd2OgU0IzrDwqMhv5NP371cyhC9jgSwBnCCSPe+9UUM7ECitX9DOaGsr3B1/VmC8=
+	t=1710280303; cv=none; b=GXhlKAr9BGF0rYelmDY+601s9Cc/NPrS7XsXrAkawywQWzc+VMdAQMUFZyv7VriP0Nv375Os4cOteB72reIvltZWY452hrMShUXz5Zv3CzdHSytI0vKcG0Ijko0al6rSN18J/+k7TothrnQFsxJ9jqNL71dTh7qZr51irETfp9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710278072; c=relaxed/simple;
-	bh=vAxk2waN+sYqtbztEH/nA2je6c7kmeSt1OZ0Aejr3ck=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YHc6gLgf/VWpn6H6QQkiLKyfqIjsf+c5DW9khcbqH9hbVNJBw/JGOiKG0NawZ3yeXMrgilXP1W+aSu0kMwUUSqE7tUkaoJSEjhXqpGIpqaYoMjYW57opnUyn5SbaPtg9LjUOEzI1/mhjORvrhGqgLHMlLCPqE7YJ+O1Mgols08s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tf7z2+dF; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1710280303; c=relaxed/simple;
+	bh=7NqfT9TdaICSlrZte0UgCg2l9YA4Ye8LMG1y7vQ4YSQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jDYseYLXiMpn0jJMdctTwtNvZc3deePXUBCS16N1OXzt9oJAvk2U134bw1cGX+n2NqWYJF0jK0SiDEBUip00+JbD+HgLW13A6gaMB0OTmSVZcDw9AfB1pcb3sklR1Wvwkq/RQPKSpfUCc3uyOzof6Elr0+Z+pO7ICL6aSE+5Whw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GBTcO4cd; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1710278068;
-	bh=wEGQV5QIaqEZ6hE3isP0MS3DIrgiN1kCQL0kkaGLXUA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=tf7z2+dFcVb3u4FnpAcmb0wLn+HH1bMYTTw2cOGKRjaDOZiFNskfQlRVBR9qgGB5V
-	 AlWEk39uQrVGWT/gfFUzGQTQ0rf8cMA6hXD+SLzvQr0VDHFTWXMlTHWhXwg/h9sH8z
-	 bA1VNwXDRxDSA2hrHpm9zc0w9n2YYcn+JPmvUNSBzoYOg8KQhQZ1ZwI6p3c3PXJhlO
-	 eft4/rYW4eVW+TdibZsfa74/qa/M66W8tczWKPPd+NcuMjWdEqIdQCkuXS+RK3R4ID
-	 X8dAHIrfYyuJnCLti2J2wYKKBsWqNpmTPxGUNDX+TisX8S3HfE4bZHTxP2LV3iNkou
-	 U9mNRUcVPvEFg==
+	s=201702; t=1710280297;
+	bh=NfQLoHYJ5DClXcTQfww+2SzYHTQ8VCi5zsfEcgF2NkY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=GBTcO4cd5pIoA8qLzrR58SF7RhnjftJttvDke11txK/Q2jXKz49wT+nF0MFV/D3hP
+	 SdP3nfqdn8YLexcjTX2mLSbEF+NaGmiDxCFih4O7qjP7wNvQqEcjqeAc+nlz1SC5OY
+	 00ydZW0BQIOT/jre7HYlbh3G5j1MX1SV3dq2q0UpJ2aRYF6ByiSug//3iHKmypYweA
+	 dXxnaKF4kvaH1VaAzWmpboR7qVTjQuBpLcGl+Uqf+tNd7tOxjPpFDm1LwjnhVMcmxe
+	 xAzqMUi3HETLhjFDyGRcQFSb0BlzMxbefoIpwUCuyn4/fahAyy5tPZYES4xMIqgUpN
+	 fKnJdIjePcknw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TvRGq66qfz4wcT;
-	Wed, 13 Mar 2024 08:14:27 +1100 (AEDT)
-Date: Wed, 13 Mar 2024 08:14:26 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TvS5j1GfHz4wcT;
+	Wed, 13 Mar 2024 08:51:36 +1100 (AEDT)
+Date: Wed, 13 Mar 2024 08:51:36 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: David Miller <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
- Networking <netdev@vger.kernel.org>, Saeed Mahameed <saeedm@nvidia.com>,
- Tariq Toukan <tariqt@nvidia.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Johan Carlsson <johan.carlsson@teenage.engineering>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the net-next tree
-Message-ID: <20240313081426.44f1c755@canb.auug.org.au>
-In-Reply-To: <20240312074537.2c327a9d@kernel.org>
-References: <20240312153304.0ef1b78e@canb.auug.org.au>
-	<20240312074537.2c327a9d@kernel.org>
+Subject: linux-next: build failure after merge of the sound-current tree
+Message-ID: <20240313085136.056eaf24@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MS.Ywcd3R4P0HlkwfmH7M4k";
+Content-Type: multipart/signed; boundary="Sig_/yuQLNtLuXwX5yCCUtDYktAx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/MS.Ywcd3R4P0HlkwfmH7M4k
+--Sig_/yuQLNtLuXwX5yCCUtDYktAx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jakub,
+Hi all,
 
-On Tue, 12 Mar 2024 07:45:37 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Tue, 12 Mar 2024 15:33:04 +1100 Stephen Rothwell wrote:
-> > After merging the net-next tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> >=20
-> > Documentation/networking/multi-pf-netdev.rst:94: ERROR: Unexpected inde=
-ntation.
-> > Documentation/networking/multi-pf-netdev.rst:106: ERROR: Unexpected ind=
-entation. =20
->=20
-> Sorry to ask basic questions during the merge window, but what version
-> of sphinx do you use?  The warnings generated seem to depend rather
-> heavily on the version :(
+After merging the sound-current tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-Currently I am using version 7.2.6.  I update it occasionally when a
-new version appears in Debian Testing.
+sound/usb/stream.c: In function 'convert_chmap':
+sound/usb/stream.c:306:34: error: 'chmaps' undeclared (first use in this fu=
+nction); did you mean 'chmap'?
+  306 |                         if (c =3D=3D chmaps->channels)
+      |                                  ^~~~~~
+      |                                  chmap
+sound/usb/stream.c:306:34: note: each undeclared identifier is reported onl=
+y once for each function it appears in
+
+Caused by commit
+
+  a94566ace3ca ("ALSA: usb-audio: Stop parsing channels bits when all chann=
+els are found.")
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/MS.Ywcd3R4P0HlkwfmH7M4k
+--Sig_/yuQLNtLuXwX5yCCUtDYktAx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXwxbIACgkQAVBC80lX
-0GzzTwf6AinMMCHWzI3YHUeQ7NxUYmLrj42C0E/sgXVnMfNLtpj58J6hQanKdu+J
-60vcIarcUO7zRqZy3qLqz8OeqtY4M9wpVr/qjE1I8cZ+eMLW+6P5+S77US/b64kN
-rQ6aH4sYPH0k59AEm2BSdJfh4a6rDjwgTaK132V5u+qo1rBNowPKKkRLPexubxM0
-ESlhMRWOPsC3WTFY+ZCH+y3xJqs6xt0tEg3edrxnOfgdYZcZBeE768GUr2k384Nx
-QeBsztLV4fJhrGrNetdsZQxzq8rVX3EUcX5VvxCHc/3UVYjMtQ74paE3pNCNaPWR
-7op8PQmoQJS0EP8fpk35RZbKnZQS1g==
-=Cozv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXwzmgACgkQAVBC80lX
+0GwscwgAlXVVuvuaUyEQ7JabKXohY1sAKqXask288JoeLabO9BQ5FituhwvBLjgH
+p/n5SZgijHJTgajQlnHduxalnsTwCqqg1CR4nNvhzRoizcfrJuF94FU9LgWq9fQ/
+mGPE8ijMAT4LJzu6nP3Q8q8+hAgI3NR/S3zItb/7qmaO+kqWWDhYUklnOBG+j9Lx
+ODPpP9icVTGqdrC4fqmGtRSHdrFqLxVZkT9RmJ9hcuglw6IcTMds6nJZLSEe7yeZ
+l0cTQYhRbivIY90Hc1caZMNyN4YHd52+0rdvt2xPmLie9kYBecEEyt986Xe6Zaqz
+3FEQblwf0FNVLczFDGmzlZRFKBoBQg==
+=W1PY
 -----END PGP SIGNATURE-----
 
---Sig_/MS.Ywcd3R4P0HlkwfmH7M4k--
+--Sig_/yuQLNtLuXwX5yCCUtDYktAx--
 

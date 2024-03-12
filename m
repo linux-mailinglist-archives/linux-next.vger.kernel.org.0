@@ -1,105 +1,103 @@
-Return-Path: <linux-next+bounces-1585-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1586-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0847F878E29
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 06:26:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95C9C878E5A
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 06:58:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C8D5B21644
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 05:26:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 362991F22CDF
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 05:58:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88219D310;
-	Tue, 12 Mar 2024 05:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6F2220304;
+	Tue, 12 Mar 2024 05:58:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TCZvuQiK"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C09D2FF;
-	Tue, 12 Mar 2024 05:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9F11CD33;
+	Tue, 12 Mar 2024 05:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710221154; cv=none; b=gBqdjhmorl4M4yDqmtyPhSpfSvrGf96CjzULBY/Z77oAx8LHwfDDKHS7KACHcJjSZEibY7byldppZDZ7jTv4o1jswNVHNqki9DgfldKmiY+l5xBVAZphcZhlZhWeox06HRaCPxKgaTJhRRWvM5LMuPakVtaUvSX/FnsSGmrptII=
+	t=1710223118; cv=none; b=auhp+IGiYKLcDp2+Cgm/D3bNq26lB1g09paguayoy/G2vhDQb1BYfmO5ivu5elAczrU6yCEZFL0bNmOaBrVO2EbYjAQ8MAYjVzb1VWJXNfMNF/dBeFaraLU5BH+vxpV7WC3tdg1SkK/3btEsSTREV86W6G7C76lbEogiadhVi8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710221154; c=relaxed/simple;
-	bh=Hazu1tEC4Y2MS8UuFwLiTUKOQXGrWe8Yzjy8Qnrk6MI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WBLDlRkAb7HJOZ86Ok0XmBuoQ/eeYKewg/C0JuymvKxUJOUq1WwcavJYA055rH+l8n2PWzHoM5ex85bLH/OS16dKHf53vXfWnVlTzi7fosRMSB+OQlqStA2Z7qnWB1dtlYFv+3fvESkGSVo+MTa6oUtGxU7mMDdN85bj8oQxUT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1dca3951ad9so41848335ad.3;
-        Mon, 11 Mar 2024 22:25:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710221152; x=1710825952;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q1fE9AhFdNbC/vl7YPR7mQwT/um2fblt6Kg4fbbzsik=;
-        b=CTseT7uOu6Mtuqv8j06NjZS9QSFp0tvJjMQJ4SAmGFyIcIYjxTUskOeVMnpQSNGAKp
-         B39jDONm4d9S3UDPTWVOYsuuDVHk98/B5yjBi5cYEwLt5uuMe8KJLn5Vi8xEDE4MFS6u
-         ZKmWCMfRJ7vcDtjKd2RC2T/UaqpOaKjrK7O7r5pPW6waDegBJkt6nHURBDKh0AtM0L8x
-         vrboU3Y+39kKuNF3K38fNDSllidwN58bd7qKJv7RWyTyRx4zpntX+sXS59aXW27mtHS7
-         b0rL1acMKuNEYZ/LEyWQNfL9+X3lRGtWqObHQlFVUrAFE66MFGBog2vFHhZEZDO6TWxG
-         5r6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW6Yi+LkgAgBYDSN8I/YISh6MbQEpRbk7Jrtsnr5wKYvC0t69g8MgDOOe8hSvu1o7TDMpTzBWy50MOOSzu2qsXQnBqKFL5j4An7PgwdfbMfyfzS+NxpeolanSqDyIVqLKT5T+FglSODsw==
-X-Gm-Message-State: AOJu0YxND4gQwjhOU4CBT25s7ZItAS4iAr9kYNEJ94LML0lw+yope2bw
-	KTpBJDY4sK/gTBkN/7E07JIZn1bHcVWC88wH2BLA7V64rP2msdYQw9HScZsL
-X-Google-Smtp-Source: AGHT+IH3UAG1jO0o7VckutcAI64rmksF670270RMsb3Fw1nWltq/q4+fsnkvTRo1I7gGRpaDFeAy9g==
-X-Received: by 2002:a17:902:ec8f:b0:1dd:a314:7351 with SMTP id x15-20020a170902ec8f00b001dda3147351mr5714762plg.57.1710221152360;
-        Mon, 11 Mar 2024 22:25:52 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id p1-20020a1709027ec100b001ddbdd14872sm162608plb.112.2024.03.11.22.25.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 22:25:51 -0700 (PDT)
-Date: Tue, 12 Mar 2024 05:25:46 +0000
-From: Wei Liu <wei.liu@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Wei Liu <wei.liu@kernel.org>,
-	Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the hyperv tree
-Message-ID: <Ze_nWnzKvw4kI_l5@liuwe-devbox-debian-v2>
-References: <20240312151807.52478738@canb.auug.org.au>
+	s=arc-20240116; t=1710223118; c=relaxed/simple;
+	bh=IIvM0V7g6Ms8cToE8B4Y4PpsRM/o/h8xtV8EbSf3q9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=rf8AwQ1U9aoxY7bE5PWzzfXyj6Slbn5hflOS6upox9qBrf9FdP8VXWg70fD5gM6CByzs2ilwCaenYu8033gH98+RsT0k5IpBScI6HYyz6srC3/DEVxTN3M+XgeyaBsFxern+Px66b+hWO/FAKyZUvf1M/YpDolGJMGAohOHlXdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TCZvuQiK; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1710223110;
+	bh=ShNF3LSRbKIdHoAqT7jf6MJhsSfAHiRF+M1zS/RWuQU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=TCZvuQiKZkDT8Ia2oLxxXh+kglvJuffKpObR9hXsqSMQOYGbomVsflWr3CIr3v7dy
+	 980XXt9RcgXIwA8CLMoLqZN+znNkJWNUdFfHG5+uhIwX0okKuVpgP91c9Kb3tLahUD
+	 QeE2Ux1r2iVkLGM1wlPBYT0pS+f298hndTIC7RRsqEcmz+HEndnpJnxgdpKhP01208
+	 nvBPMqvkdTQr8b9D2hjEWWiFg8DFrxwNZIlY+dNKKtqKa0OS9oT7KK6cPKghMtGohs
+	 64OJ6tj8QLN1ObrdcMEwVsm8Y6g3RMw2n5lohpR3mABEdWmpyKTQ29PpSEI2KeyAD8
+	 FMEODFgUzPamA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tv2xy44dJz4wqN;
+	Tue, 12 Mar 2024 16:58:30 +1100 (AEDT)
+Date: Tue, 12 Mar 2024 16:58:28 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the mm-nonmm-stable tree
+Message-ID: <20240312165828.25386176@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240312151807.52478738@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/pmohdFeZMQS4nqrzHga_eyQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Mar 12, 2024 at 03:18:07PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the hyperv tree, today's linux-next build (i386 defconfig)
-> failed like this:
-> 
-> arch/x86/kernel/cpu/mshyperv.c:355:5: error: no previous prototype for 'hv_get_hypervisor_version' [-Werror=missing-prototypes]
->   355 | int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
->       |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+--Sig_/pmohdFeZMQS4nqrzHga_eyQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-We noticed this as well.  A fix has been sent out. I will update the tree
-shortly.
+Hi all,
 
-Thanks,
-Wei.
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
-> 
-> Caused by commit
-> 
->   1634df06ea12 ("mshyperv: Introduce hv_get_hypervisor_version function")
-> 
-> I have reverted that commit for today.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+  022b973a3de9 ("smp: make __smp_processor_id() 0-argument macro")
 
+This is commit
 
+  b57b4126dd3b ("smp: Make __smp_processor_id() 0-argument macro")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/pmohdFeZMQS4nqrzHga_eyQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXv7wQACgkQAVBC80lX
+0Gz56QgAm6K+a5yRbtHI4gSnoze1gBJ5oS9ZoEK5FyiMwM8kKpG9L9qUA7qaGDd1
++1/a9AN6BjWV19WzOj85uLZobPTLWD6c1HxxTzeocjjL43h7p7JRFctqY8U2Jsuq
+zo8hCHZQ2BDBSXJ/1peZ07EqCY7INkKaANQEV6b5sr+0fw7KmVQ+r2XKqLUs7PBU
+KBjmAIFEud1zOM9w2wgGAiCJD0yyHInv963yK5FpJtv56jG1iCGLCFF/W5gPLz6i
+HVeR6MeizC6dGZmmWDTJ2yhr2/XDsrq+bqKZb3PrgoQVeUxoA3GN4hGF1vShHSQI
+pef0ERQle8bkbGigYHVfR+eqNc056w==
+=DgcD
+-----END PGP SIGNATURE-----
+
+--Sig_/pmohdFeZMQS4nqrzHga_eyQ--
 

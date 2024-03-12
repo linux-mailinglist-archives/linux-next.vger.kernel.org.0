@@ -1,54 +1,55 @@
-Return-Path: <linux-next+bounces-1588-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1589-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9DFD879250
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 11:42:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 612CC87925B
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 11:45:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E5D91F22851
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 10:42:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0BBBB20C3A
+	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 10:45:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB6358AD6;
-	Tue, 12 Mar 2024 10:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E738159160;
+	Tue, 12 Mar 2024 10:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TEfXXzEw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fi++c9Vq"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A315955E73;
-	Tue, 12 Mar 2024 10:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE77959147;
+	Tue, 12 Mar 2024 10:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710240164; cv=none; b=DyxU+WdrBk87nHuR9auvELbecff6BhVlCC4XbKlHbBx7uS9TtY0jCejZa3yOdG31pfpUSvOq7juGjuAfuSOeZj6gCS7MEdlpWMqp+jkz4+h/nc30gqQj2eRUCOIDmibzlCXaI75dwZK/ETH7CInESajMJpwRg24RRjf1CEgu38w=
+	t=1710240303; cv=none; b=NBteDvkcpIKIFjn1kWAgWdqGrWdzcMbJmArsJgeIEr8Fv7y/rTIsoC+gPDPlD7Z5cUKBtnIILF8TupkU9O0NGXkJharl+pxdhIIlhZYmxdHZ0KAlofqgIWIH4dwwmRvFCjyakdKVjlCC39g1BPQXGxcLnTNxT75hWdxpWrLikO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710240164; c=relaxed/simple;
-	bh=3Hm/MYg22uTG/hGFgFvZ24Uyx08CNOOkluWrBAt/nsY=;
+	s=arc-20240116; t=1710240303; c=relaxed/simple;
+	bh=FsPCYcZaKzqSZ2us0EWfKrjuJpzBgnJIjOqeITPr6SE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A9JF6JXudd5F9vap89u9aYl4LgnVkLRGJv2SHJWvqBVv8snVjNX4yjJtENqXKmkYisyiasTwE2LUDcb8sEqZQzWR59T0p+fVMjQMvtSvb8vjjKe2CAkxG4DVtTcdJWdvYVHgbHqOWG/xIFNM/7odLFunzWaT8fgiabz2ubUvp3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TEfXXzEw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E13FC433C7;
-	Tue, 12 Mar 2024 10:42:43 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=iB+kZ0zRCtXxSOLmMYxwTIFg6Fc4Y2S5WCiJ7zeM8t5pcYKnNselnUM9t7hapii+gRUAjMkpabNONNr4GlHVshmjim67+5wZFgCwe8RjNOWyAAvU3XCq9FsAhleNgfUGHwIW+A1WlpoWX8+/JhQl0YB2YQWC7BZKTKli3X/ZpB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fi++c9Vq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C44C5C433F1;
+	Tue, 12 Mar 2024 10:45:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710240164;
-	bh=3Hm/MYg22uTG/hGFgFvZ24Uyx08CNOOkluWrBAt/nsY=;
+	s=k20201202; t=1710240302;
+	bh=FsPCYcZaKzqSZ2us0EWfKrjuJpzBgnJIjOqeITPr6SE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TEfXXzEwiPC1ZZEFMmekKYkXFixj7tq6ibOLE2X+dQvgA+K30zIsMFY7fh7DBFCTu
-	 u/OHpQmN3tSAN+o1+fZX0mNeDAt12VcnxD+2qAyp/ZiVdKYlTr4azUGy+o6llC/f5b
-	 0qwElm9mj67qFjy80VYleTSf+DsDYDAXKBa/VdJRYAlzX1E+WTxFpv6P5APddw1cOW
-	 chhxB8DgYkSiD8wWi4+nYmpC8HoiSWNJ4FBGmzQ22akCm88pCBht7hnXZUK3hfVF+v
-	 tsxT0BheWdXku6lgcJktc3RUuIwC824/0nDCAzugRTXJmt7u8mRTqAXy4T2XgQ3Hox
-	 1YBmWAK/GeBUA==
-Date: Tue, 12 Mar 2024 11:42:39 +0100
+	b=Fi++c9VqMMvO6hQeEG7Gx+JJWNa+ISYp5gul7DkdLKxAtK8iIPnY16n14L1zby2rF
+	 nvIQ4p6ymU/3dbISEvFoYvjTM2FDGDSxJvp26KN+Y4vQo4q6Ra6J/C782KkclySJiV
+	 6ZN2cZX8OgBfHZiLutS/S/MZfZL67wkqO5laVBn+/hh8Vc+86QdHaCITx1tU2ujXQK
+	 iJ6KPb9Krj7R01vUYTeqkisFr6o8BAvGkHhZTtmQDwDvxJK/TFZW4UXaIlEDuF07I9
+	 wydFTRdhHnY11z5dhMpoHqrdlS844JQFIvAXRdOnU5vsaJ18TQe1sCyoSiYkTy7Xhl
+	 wTGZFXIQiFlKw==
+Date: Tue, 12 Mar 2024 11:44:57 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, 
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the i2c-host-fixes tree
-Message-ID: <eswu6tcsrk4gusitf7wnfnjajpagusuz4sl7ylubjtejd667ps@ixucxjzc4sdn>
-References: <20240312081558.014deb45@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the i2c-host tree
+Message-ID: <yb2yieqtfot2vzjrr4xihartlz7gmlmrv5r3y7kk66pr3unonq@mzhhakwmiaja>
+References: <20240312104127.3fb5e650@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -57,23 +58,20 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240312081558.014deb45@canb.auug.org.au>
+In-Reply-To: <20240312104127.3fb5e650@canb.auug.org.au>
 
 Hi Stephen,
 
-On Tue, Mar 12, 2024 at 08:15:58AM +1100, Stephen Rothwell wrote:
-> Hi all,
+> After merging the i2c-host tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
-> 
->   1f78f0901011 ("i2c: aspeed: Fix the dummy irq expected print")
->   7c16cfd69d51 ("i2c: i801: Avoid potential double call to gpiod_remove_lookup_table")
->   ace9dc1d1251 ("i2c: wmt: Fix an error handling path in wmt_i2c_probe()")
->   b60b86b55400 ("i2c: i801: Fix using mux_pdev before it's set")
+> drivers/i2c/busses/i2c-qcom-geni.c: In function 'i2c_gpi_cb_result':
+> drivers/i2c/busses/i2c-qcom-geni.c:493:18: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+>   493 |         status = FIELD_GET(I2C_DMA_TX_IRQ_MASK, i2c_res->status);
+>       |                  ^~~~~~~~~
+> cc1: all warnings being treated as errors
 
-we've had quite a few in the past release in i2c... will fix it
-from the next release.
+sorry about that, will remove it.
 
 Thanks,
 Andi

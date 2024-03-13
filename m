@@ -1,169 +1,103 @@
-Return-Path: <linux-next+bounces-1622-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1623-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B3C387B344
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 22:12:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8404687B39E
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 22:41:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D5CF1C2235A
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 21:12:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19432284112
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 21:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52B0C53E03;
-	Wed, 13 Mar 2024 21:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52EDF58AA4;
+	Wed, 13 Mar 2024 21:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iJ88g9MY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BC752F7A
-	for <linux-next@vger.kernel.org>; Wed, 13 Mar 2024 21:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2C95787D;
+	Wed, 13 Mar 2024 21:40:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710364319; cv=none; b=f5mFEvfh+IPt9EjATazcQ/7pESPOvaRsSziPI54msU1uRehR0pItk/+BkJD5JPuNsU7KlyPVgoYTInCubFdemUpX5IZtvESuHHHQwSiTelvVUgip3hU/BueeZrWZ2OZbgu5sAIuoEgbPyV5b6fsGhDepIZi6N5AcnlSi4KDf888=
+	t=1710366062; cv=none; b=G970h5xWew6LXuw6ZTUklrCOUmlQw5mF8Mem+kjbi6FPU3PnaWs4D1oypwGFICxy+FYeoKzGpBDnS2znr58R1XuBG3yJlqU5CTLx6ksZsgn1UxNXIiuERlMIZA1BM+WXRQw4lTlz+X8f7E3rGa8W8MUQs51plxLnrcbyqrF3ojg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710364319; c=relaxed/simple;
-	bh=CkirnxgDJ9p88nkJiU6T7q9Q3jBG6nH3fti0p+W0f+s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XExleMNMckXM7/9hU+J2vLh3h/zR157t3mdZD1XchOr/87B5V2t+nYkZD/4SdyGQe2XAmjZ4M1xVsdqYnaMuAQMRYrm+djZylNnxF4n5aJjUNFWOSnUn7CjZGDCkNs/PPxZaWIvI29g0st3nZTEXiiTiSjAL7VTuLd+OtGUtOZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rkVt3-0005sS-9o; Wed, 13 Mar 2024 22:11:45 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rkVt1-006BMA-Ob; Wed, 13 Mar 2024 22:11:43 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rkVt1-005frL-2B;
-	Wed, 13 Mar 2024 22:11:43 +0100
-Date: Wed, 13 Mar 2024 22:11:38 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	linux-kbuild@vger.kernel.org
-Subject: Re: linux-next: build warning after merge of the mm tree
-Message-ID: <gegwogwbrigfaqjoymgndji6wmllqgkhs2mmgvpksqzsil64zr@pimmxvvvgbqz>
-References: <20240313150728.12e20208@canb.auug.org.au>
- <psaj3nztnhcxiwjnie3bbpsn7efcsxp3yx3mh54uello22773v@fw5qpqs4gh2i>
- <CAK7LNASa-KedA_CTww6unckAGkJCQTctdbk0d-MUsN7wQpM=kQ@mail.gmail.com>
+	s=arc-20240116; t=1710366062; c=relaxed/simple;
+	bh=SxqjRWGD7n9bBE3YoVgb8xa4tnyqzh6D/786Rf7k8zg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Vw0zvTKb+z9vtfN8+ef3kxqoKA4x6zBoJxv+wF6o1zkNihzuF2vjyZADXlcKs4G5TaM8X9t0IU9JgZehheAtPfEv+1RQB56PRircOFequ5lwQqweutodxWsyPJOluOsfDyH1pc8qipH0H9tAFDYC+vVm18PBlUB/oWVDCmvSDU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iJ88g9MY; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1710366052;
+	bh=lN5s0tY5NPrhuMY9w//wlduHfMOojKurZ/wQGoi4/qA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=iJ88g9MYtWPNZT3FzVM2JeTaLbKHR1w7y3V/BgfGnVvycef5QgDOT0InPbJO7nZ5x
+	 R4sS2b6rck6WPj4jMjjCagofl9PwfelfuSM0o1YdB6Nq/mjN9OidnrDp6cb5GxrhU5
+	 LcG2xpop6aCSvx53B9rkETbiaWzxGj+vAXnyPnoyh+E4vi/ii4/b87JMBW5vU5/gDH
+	 ugkXwAtsRZfOcBVqRuh9Z5PWwxtHxVdskJa34tMCBFWo7P9UDVngD6crIQgWBxr74P
+	 fUSksAGWm/qxyUX+q1z0OEUTIa3wKViiAWyhhglnsFKza6Z6Trp9WzofKisT15rY2E
+	 DpSetuyPLcUBg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tw3pr1jYFz4wcR;
+	Thu, 14 Mar 2024 08:40:52 +1100 (AEDT)
+Date: Thu, 14 Mar 2024 08:40:50 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alasdair G Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the device-mapper tree
+Message-ID: <20240314084050.2fe3eb9f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="h3yhzmapyppypztu"
-Content-Disposition: inline
-In-Reply-To: <CAK7LNASa-KedA_CTww6unckAGkJCQTctdbk0d-MUsN7wQpM=kQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
+Content-Type: multipart/signed; boundary="Sig_/pJoU3O.5n/8y8gkNX+fwP/D";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-
---h3yhzmapyppypztu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--Sig_/pJoU3O.5n/8y8gkNX+fwP/D
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hello Masahiro,
+Hi all,
 
-On Thu, Mar 14, 2024 at 12:22:46AM +0900, Masahiro Yamada wrote:
-> On Wed, Mar 13, 2024 at 6:01=E2=80=AFPM Uwe Kleine-K=C3=B6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > On Wed, Mar 13, 2024 at 03:07:28PM +1100, Stephen Rothwell wrote:
-> > > Hi all,
-> > >
-> > > After merging the mm tree, today's linux-next build (powerpc allyesco=
-nfig)
-> > > produced this warning:
-> > >
-> > > Use of uninitialized value $ENV{"abs_srctree"} in concatenation (.) o=
-r string at /home/sfr/next/next/lib/build_OID_registry line 38.
-> > >
-> > > Introduced by commit
-> > >
-> > >   325f7b0aaea6 ("lib/build_OID_registry: Don't mention the full path =
-of the script in output")
-> > >
-> > > from the mm-nonmm-unstable branch of the mm tree.
-> >
-> > Actually the warning doesn't happen on 325f7b0aaea6. The commit is only
-> > problematic in combination with commit
-> >
-> >         e2bad142bb3d ("kbuild: unexport abs_srctree and abs_objtree")
-> >
-> > . This commit suggests to use $(abspath ) or $(realpath ) instead, but I
-> > fail to apply this suggestion here.
-> >
-> > Obviously
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 5e09b53b4850..f73a73a125e0 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -39,7 +39,7 @@ __all:
-> >  # prepare rule.
-> >
-> >  this-makefile :=3D $(lastword $(MAKEFILE_LIST))
-> > -abs_srctree :=3D $(realpath $(dir $(this-makefile)))
-> > +export abs_srctree :=3D $(realpath $(dir $(this-makefile)))
-> >  abs_objtree :=3D $(CURDIR)
-> >
-> >  ifneq ($(sub_make_done),1)
-> >
-> > would help.
-> >
-> > Any ideas how to properly handle that? Would the export be ok?
->=20
-> Oh well, you are making a lot of effort just for a C comment line.
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
-I don't care much either. Given that now I know how to somewhat keep the
-originally intended information, the effort between a fixed string and
-a dynamically generated one isn't very relevant.
-=20
-> use Cwd qw(abs_path);
->=20
-> my $abs_srctree =3D abs_path($ENV{'srctree'});
+  2da6b3c1317e ("Revert "dm: use queue_limits_set"")
 
-Ah, I missed that srctree is an exported variable. Thanks, will prepare
-a v2. akpm already dropped my initial patch from his queue.
+This is commit
 
-Thanks for your input.
+  bff4b74625fe ("Revert "dm: use queue_limits_set"")
 
-Best regards
-Uwe
+in Linus' tree.
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Cheers,
+Stephen Rothwell
 
---h3yhzmapyppypztu
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/pJoU3O.5n/8y8gkNX+fwP/D
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXyFooACgkQj4D7WH0S
-/k6YbQf+NO7nuOlyfJUNH/EzC39lZjopqSOniArTPILTVBheThlnsa8fo+zR76W7
-U84Mr3LmKdDQ8zyABuQHA6Ok7Q080/XrJnASkY5D9/gOXX6RbMzY0P5cOv67Xexm
-UVGYJnasHwz0y9iNRuKnrWbmVaQPjQui+iB4IeLweckki8TenaSUctBeK8A9w7wv
-LjjGC3Xz0MFbf70waskLDTFMGHRM3lZQ+ilSrsSlib2OoqYHPMyaL8anjr6m82mI
-WKbwu+o027cB/2zkMY4Bc5pF+COeObjrA/ATmbXVRLduv/ATSF3z4w0A7eyLgyKL
-w2N6oV32GTQS8cp0f6/3NliEIZQQNg==
-=pHxQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXyHWIACgkQAVBC80lX
+0GxB9AgAlXOG0hFLt94qOV3Bk3GvL5y95/zN0VKxRnyAPwgJkSI2i/LAPe7osIu1
+JWOsM0a7ALIhnmrKuYeyy+/uW2mzX0UTTXW4QWrEtv2sOTfdYC7HL68AG7nNMloS
+P9axZWrNvoSdAU16Q2H61LOK9HoRhGPnSpcy54iAW+Q+zW7PQ5HZUNQiTBrlZP87
+7nsiv5OGHZNaxapkqtYA9H9i3Lr64jHoN6zg852/U2hmyfOKZFzFE22zivFgkQwg
+IL7dHccYvq2ZLEPJvhFTZECtJAlqSiAhS+T1O5IEJihbsaYjdpEtV7JsJd7qcBwC
+AT596DyRI8o3GuhE963MLsjnQ4F3GQ==
+=kuwA
 -----END PGP SIGNATURE-----
 
---h3yhzmapyppypztu--
+--Sig_/pJoU3O.5n/8y8gkNX+fwP/D--
 

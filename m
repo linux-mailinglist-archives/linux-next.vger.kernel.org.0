@@ -1,49 +1,41 @@
-Return-Path: <linux-next+bounces-1613-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1614-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7100987A19D
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 03:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82E4A87A1AB
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 03:36:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F27DD2838B5
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 02:29:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0873F283FFF
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 02:36:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C64FBE4C;
-	Wed, 13 Mar 2024 02:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k5jVH3Wi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604A8BA2D;
+	Wed, 13 Mar 2024 02:36:45 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3976FCB;
-	Wed, 13 Mar 2024 02:29:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5D68BE0;
+	Wed, 13 Mar 2024 02:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710296955; cv=none; b=n/yw2HA3yqScjiqGBH7xYRYNClMjb/NKIdIG8C9uOqbKtH2b1L91LoIzJyRNVn07RqrajFdVVtkp/mkS+38BHLCmmozGmLyompHGOqdSTq1rWWYNlbAaA6EKgWPTRyihS3+c+W+HH58R+ikm2Pb2Si7Uab0LLG9YBAzpus+fCNs=
+	t=1710297405; cv=none; b=WPgEKfhHCVx0yK8xr5oSX/2fQhXF1j5/rEkjZH/90Yy5q+kRW5wfoVO8wgI0Kf7aiLt3N7vQyZ3GNcx0XU+7go0zAeIqmNj7qaKThL+BnaTpeN8xCgO9CrBnQ6CAcUJJlPYSqUm9Fp3Bl5J7+3v5P8RI9Fcor3y1kxhYd2Ghib4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710296955; c=relaxed/simple;
-	bh=4rGwAcnJt85Pg1C0n0uYVRoLE6oWycRlJ1Rp3ygQ5Tg=;
+	s=arc-20240116; t=1710297405; c=relaxed/simple;
+	bh=vToj1SDcQ5FWOlZxXSiSLuJoDPYHXowSsrEx30s2VNQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c8WEtGdIJMylwJ4+milh6ETvffHIiyDkvw5gM7wDkp7YvFzwKnsSwJpMl2D5BABzj/rNIWSCk7nIqaiw1PJ9/sevy/4NdT+rfIPt7nUeRWsUDiJKdHlfXS1L9UpBrQ1NNNwA4T48lyGJmnqSQx4YBBGUmYKrYEsnmYc7ye0aaew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k5jVH3Wi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D897C433F1;
-	Wed, 13 Mar 2024 02:29:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710296954;
-	bh=4rGwAcnJt85Pg1C0n0uYVRoLE6oWycRlJ1Rp3ygQ5Tg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k5jVH3WiDcJCklPgdkYPN1JtWt3j0xGIXX4EQPw5qldiPwkKuL3ocpct5ZdVoOP5T
-	 5RmNtnnCNmaQlUuDOFK84Qc/y6Rf768wMjAEvfYjYS/EZ5xm+w08lSNgJycoU68uPu
-	 MGdI3DpvVOKp6UkSPg0YQi1Htu7eN82YRK4yQCImWzJECE4dsz1O8l8ial3IPV/5Op
-	 g/A2AKYd6Fj+zkVh2M6wWoVlpQNvj2o46P2ehVyYHIt6co9R+7Ndq38gj0nbRv/P+2
-	 EYP5vsBltW5Dybs4Rc8VsC54uyqXWred/IukXaGiwollcYKrg1MGcJrAYE/djLbVtC
-	 H8DpQqS//1myA==
-Date: Tue, 12 Mar 2024 19:29:12 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Herbert Xu <herbert@gondor.apana.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rt60yLPa5uYYDEBrINufA4qqkV5Xk/bDbmOB3pchw0EZUx+NsGlXCYGhDK/x6c8PhiezknrpuVDRg0TchEHYPmoB578aabamjfDKYefGiyxjoEV0I29E7pyO8hndqi0ycaBuxdQd7ym9PrYfxvaq5xDipMX4XAbQKznJNiRDH2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+	id 1rkETn-006Lnk-HI; Wed, 13 Mar 2024 10:36:32 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 13 Mar 2024 10:36:47 +0800
+Date: Wed, 13 Mar 2024 10:36:47 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Eric Biggers <ebiggers@kernel.org>
 Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Barry Song <v-songbaohua@oppo.com>,
@@ -51,12 +43,13 @@ Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the crypto tree
-Message-ID: <20240313022912.GD1148@sol.localdomain>
+Message-ID: <ZfERP1LK8q+CsoSo@gondor.apana.org.au>
 References: <20240313115751.36b01158@canb.auug.org.au>
  <ZfEE2GDznBOZDXs4@gondor.apana.org.au>
  <ZfEFKxl8/42oXv0i@gondor.apana.org.au>
  <20240313020112.GB1148@sol.localdomain>
  <ZfEJrBefjrvPxaIg@gondor.apana.org.au>
+ <20240313022912.GD1148@sol.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -65,31 +58,27 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZfEJrBefjrvPxaIg@gondor.apana.org.au>
+In-Reply-To: <20240313022912.GD1148@sol.localdomain>
 
-On Wed, Mar 13, 2024 at 10:04:28AM +0800, Herbert Xu wrote:
-> On Tue, Mar 12, 2024 at 07:01:12PM -0700, Eric Biggers wrote:
-> >
-> > The only user of comp_alg_common was the crypto stats, and it was introduced by
-> > a refactoring of the crypto stats (commit 0a742389bcc0, "crypto: acomp - Count
-> > error stats differently"), so it seems appropriate to remove it for now.
-> > 
-> > If you could go through my patch and explain what other unused code related to
-> > the crypto stats you might consider to be "infrastructure" that should not be
-> > removed, that would be helpful.
+On Tue, Mar 12, 2024 at 07:29:12PM -0700, Eric Biggers wrote:
 > 
-> The first patch should only remove code directly related to
-> STATS.  Any removal of code that is rendered useless should
-> be done in one or more subsequent patches.
-> 
-> Thanks,
+> comp_alg_common was part of the implementation of STATS.
 
-comp_alg_common was part of the implementation of STATS.
+I understand that comp_alg_common becomes trivial without stats,
+but it is still something that is useful in the API because for
+a given acomp tfm, we don't know whether it's an acomp_alg or
+scomp_alg.
 
-I'll do the best I can to interpret your request, but if you could actually
-review my original patch and let me know if there are any other specific changes
-you'd like besides keeping comp_alg_common, that would be helpful as then maybe
-the next version won't get reverted.
+> I'll do the best I can to interpret your request, but if you could actually
+> review my original patch and let me know if there are any other specific changes
+> you'd like besides keeping comp_alg_common, that would be helpful as then maybe
+> the next version won't get reverted.
 
-- Eric
+I think comp_alg_common is the only part that should be excised.
+
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 

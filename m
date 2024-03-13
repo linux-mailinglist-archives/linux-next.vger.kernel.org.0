@@ -1,84 +1,108 @@
-Return-Path: <linux-next+bounces-1614-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1615-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82E4A87A1AB
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 03:36:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5236F87A1CF
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 04:10:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0873F283FFF
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 02:36:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BE221F22E4A
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 03:10:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604A8BA2D;
-	Wed, 13 Mar 2024 02:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 628D5D26D;
+	Wed, 13 Mar 2024 03:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="KJhzz6fR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5D68BE0;
-	Wed, 13 Mar 2024 02:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B5BC13D;
+	Wed, 13 Mar 2024 03:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710297405; cv=none; b=WPgEKfhHCVx0yK8xr5oSX/2fQhXF1j5/rEkjZH/90Yy5q+kRW5wfoVO8wgI0Kf7aiLt3N7vQyZ3GNcx0XU+7go0zAeIqmNj7qaKThL+BnaTpeN8xCgO9CrBnQ6CAcUJJlPYSqUm9Fp3Bl5J7+3v5P8RI9Fcor3y1kxhYd2Ghib4=
+	t=1710299416; cv=none; b=DggDZXmfbNqBtxD0X2LmMHhin3agvn997b2VC4XHtCpglirgKd0Y9v/sOAyaCCj3DILwmBgPA0CupDvGFALZ70a4+zVrBxJY0elkwK4Xm3j58u11dkOCO1wdCI13FsSKOmzQTPqx6hEKOo9AHv0tTFbkj5/LX3TZn2HY30b9kQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710297405; c=relaxed/simple;
-	bh=vToj1SDcQ5FWOlZxXSiSLuJoDPYHXowSsrEx30s2VNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rt60yLPa5uYYDEBrINufA4qqkV5Xk/bDbmOB3pchw0EZUx+NsGlXCYGhDK/x6c8PhiezknrpuVDRg0TchEHYPmoB578aabamjfDKYefGiyxjoEV0I29E7pyO8hndqi0ycaBuxdQd7ym9PrYfxvaq5xDipMX4XAbQKznJNiRDH2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-	id 1rkETn-006Lnk-HI; Wed, 13 Mar 2024 10:36:32 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 13 Mar 2024 10:36:47 +0800
-Date: Wed, 13 Mar 2024 10:36:47 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Barry Song <v-songbaohua@oppo.com>,
-	Linux Crypto List <linux-crypto@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the crypto tree
-Message-ID: <ZfERP1LK8q+CsoSo@gondor.apana.org.au>
-References: <20240313115751.36b01158@canb.auug.org.au>
- <ZfEE2GDznBOZDXs4@gondor.apana.org.au>
- <ZfEFKxl8/42oXv0i@gondor.apana.org.au>
- <20240313020112.GB1148@sol.localdomain>
- <ZfEJrBefjrvPxaIg@gondor.apana.org.au>
- <20240313022912.GD1148@sol.localdomain>
+	s=arc-20240116; t=1710299416; c=relaxed/simple;
+	bh=3ln4/GnBIP4oV2h2oSRmTzxT3ghcHRohR0dDGm7KsQE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YRsiUzZxSWp3u/5+2Sy4xl1CMJ8I/5gPXpIjB4FSZOH6lE0JFgtAeAk0Src1RzNzAjZlkRPXW6oBGvZHveGr1w1Uf0V2vdi+x0i9vmP+1WNSI7XykWGXOqhItmEDTmMhwM1nERhX4pSLw1yKUPLvk3dcQ4T44Ra76uoY7LvK2DM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=KJhzz6fR; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1710299410;
+	bh=Emukq/0z7fFdOeR5l3w0urGSC0/F+i7oAy4ECKFxgt4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KJhzz6fRBmd6//UuYsHapNN0S+TdNJ82IW+XOMqJ4sfmll2gkoneKRks56oeIbRWb
+	 cg4+x3moZf9qJl1vHR18IvwNMyArbaPMw2UPWyGvdp1Av0BxD5alH1YJ0ktZu+EOKO
+	 Ra7KNGIuHcsSweBAjqRQ5qCuGpSY3cupOWqzhhQ5mUgEyor0qBRMfT8SgrwDnI3kys
+	 8F1PQFM3OEy0yJKEvJVDojwy6ZdmfL3mUmFuTLVccIxcl6QlPtJsuJdKegAtLRnCBC
+	 epfCWbuQ2to+U+4RUqCqYlUsFXnJyBcQ71NMoriMpo3cX4QNdBoEASHwYlcuJSJhpU
+	 kSLLyef/iSFOg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tvb9G2BZNz4wcR;
+	Wed, 13 Mar 2024 14:10:10 +1100 (AEDT)
+Date: Wed, 13 Mar 2024 14:10:08 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Chuck Lever III <chuck.lever@oracle.com>
+Cc: Christian Brauner <brauner@kernel.org>, Dai Ngo <dai.ngo@oracle.com>,
+ Jeff Layton <jlayton@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
+Message-ID: <20240313141008.1ed845d7@canb.auug.org.au>
+In-Reply-To: <EDA79CE3-E8F1-4E86-9A2F-857F533BC8FF@oracle.com>
+References: <20240219104450.4d258995@canb.auug.org.au>
+	<20240313104158.5649190c@canb.auug.org.au>
+	<EDA79CE3-E8F1-4E86-9A2F-857F533BC8FF@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240313022912.GD1148@sol.localdomain>
+Content-Type: multipart/signed; boundary="Sig_/A+PdbQiqrwKabCJ5rgUs0rC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Mar 12, 2024 at 07:29:12PM -0700, Eric Biggers wrote:
-> 
-> comp_alg_common was part of the implementation of STATS.
+--Sig_/A+PdbQiqrwKabCJ5rgUs0rC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I understand that comp_alg_common becomes trivial without stats,
-but it is still something that is useful in the API because for
-a given acomp tfm, we don't know whether it's an acomp_alg or
-scomp_alg.
+Hi Chuck,
 
-> I'll do the best I can to interpret your request, but if you could actually
-> review my original patch and let me know if there are any other specific changes
-> you'd like besides keeping comp_alg_common, that would be helpful as then maybe
-> the next version won't get reverted.
+On Tue, 12 Mar 2024 23:45:23 +0000 Chuck Lever III <chuck.lever@oracle.com>=
+ wrote:
+>
+> Sorry, I thought Linus was going to address this when he merged
+> nfsd-next today. What's the preferred resolution?
 
-I think comp_alg_common is the only part that should be excised.
+I started this morning before Linus merged your tree.  It's all good
+now, thanks.
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/A+PdbQiqrwKabCJ5rgUs0rC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXxGRAACgkQAVBC80lX
+0GyfOQf+L8ZeBAge+Cq0ps49wZw8s78Ol9VEWpcDfVrcT1p2T4xtV6WF3IjBKVCC
+eNkSeM0h+QQAwPLkZL7Jj09tEdMJCIYs3SYFgWnFoV9BURgB3cK8ynGy1DUleV/P
+EPGYna9RGEN7C7gV84NhREaLjJmC1HijS4jjiRCaA8cHVDsxZJIk263HG4F5C2gG
+J/Ece2r97bqKTwocanmLiMAGua5Yv7sZEHIQn2foHS4cLp3YNPffcpPB5tg8w31C
+/mj6JpvD9IYr4ZU737kpDADn/Ua74POpBGMLSeP4OEKvmZVRCKCQ2DEdHs4TGBoD
+VkBwhvyXF6kLM4iR63PeiV8CVH1CNQ==
+=ZYOW
+-----END PGP SIGNATURE-----
+
+--Sig_/A+PdbQiqrwKabCJ5rgUs0rC--
 

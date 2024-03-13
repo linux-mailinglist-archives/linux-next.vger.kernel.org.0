@@ -1,57 +1,62 @@
-Return-Path: <linux-next+bounces-1612-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1613-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB07487A194
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 03:22:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7100987A19D
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 03:29:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7558D282DA4
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 02:22:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F27DD2838B5
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 02:29:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ECBC10965;
-	Wed, 13 Mar 2024 02:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C64FBE4C;
+	Wed, 13 Mar 2024 02:29:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="liAzHQE5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k5jVH3Wi"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1DE310799;
-	Wed, 13 Mar 2024 02:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3976FCB;
+	Wed, 13 Mar 2024 02:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710296541; cv=none; b=NxLMjZAztBJq4Mn5CJWZnJ9P/Mp6M4r6xM26ZCnViuo+ideBSjfcg2rtjLg271dLEGkSfwJLDYjS3l04lzmgfVgD3yDEv/BFPigRIFMsLO4rp+cuf1m+P2v/tw80OofDO1nUJ7PDDxpubm1nWRtqw4l4ekJhn8rr+7OaNLuFhzg=
+	t=1710296955; cv=none; b=n/yw2HA3yqScjiqGBH7xYRYNClMjb/NKIdIG8C9uOqbKtH2b1L91LoIzJyRNVn07RqrajFdVVtkp/mkS+38BHLCmmozGmLyompHGOqdSTq1rWWYNlbAaA6EKgWPTRyihS3+c+W+HH58R+ikm2Pb2Si7Uab0LLG9YBAzpus+fCNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710296541; c=relaxed/simple;
-	bh=ldxtKrJbu43kvG/V9Bf8pls357tbK/PUoqfJe1t2P6g=;
+	s=arc-20240116; t=1710296955; c=relaxed/simple;
+	bh=4rGwAcnJt85Pg1C0n0uYVRoLE6oWycRlJ1Rp3ygQ5Tg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZC6KlawnLnMFCWpAol6LdcpdSZjqio2YyE3yB8IUq+98ciQT5jdUCzm2qZEJdQ3lW3ZGvVxfHudnZpCtfUAFgXSW6x7pqyMDJ13DR1SUJu1AGlK66RmQ0xQ1X9VYjD8JPceZ3NQX3FWcPxzHedTU+DqkJ0acF2qpWmQOBHq2cxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=liAzHQE5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C785C433C7;
-	Wed, 13 Mar 2024 02:22:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=c8WEtGdIJMylwJ4+milh6ETvffHIiyDkvw5gM7wDkp7YvFzwKnsSwJpMl2D5BABzj/rNIWSCk7nIqaiw1PJ9/sevy/4NdT+rfIPt7nUeRWsUDiJKdHlfXS1L9UpBrQ1NNNwA4T48lyGJmnqSQx4YBBGUmYKrYEsnmYc7ye0aaew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k5jVH3Wi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D897C433F1;
+	Wed, 13 Mar 2024 02:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710296541;
-	bh=ldxtKrJbu43kvG/V9Bf8pls357tbK/PUoqfJe1t2P6g=;
+	s=k20201202; t=1710296954;
+	bh=4rGwAcnJt85Pg1C0n0uYVRoLE6oWycRlJ1Rp3ygQ5Tg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=liAzHQE54Rz+aSx7a9I8TQV7mNbI8P1U07aetWwefTj+5SPWcsE5r5BFva4oUiP3L
-	 52W923SBPP/8Y8tSOP9Rg0oAu8e+Zdr6rCNYnaiSuhI1q1cbBCpp1dEs7W1bDHSJQC
-	 kpy2TeYC4UDgGKks6hq8M4vt6p/+pxV8aqes+6/hoQG7PDjKk9NGtaiLbCFLxiSRZ3
-	 6wuwMm4WCCTmAHO/FLfFniUG7WDHJwuo9FQ1G14ENjTXmUvvIHJQeFw6uh2OrVJrc+
-	 ejNtxsVDyj27wATJ6lG3/8xhdEtvSEEzW4nk4lBiEPJZo5miTbIjbJ5CH07nsJ0gpI
-	 qaEuEsDXvqkCg==
-Date: Tue, 12 Mar 2024 19:22:19 -0700
+	b=k5jVH3WiDcJCklPgdkYPN1JtWt3j0xGIXX4EQPw5qldiPwkKuL3ocpct5ZdVoOP5T
+	 5RmNtnnCNmaQlUuDOFK84Qc/y6Rf768wMjAEvfYjYS/EZ5xm+w08lSNgJycoU68uPu
+	 MGdI3DpvVOKp6UkSPg0YQi1Htu7eN82YRK4yQCImWzJECE4dsz1O8l8ial3IPV/5Op
+	 g/A2AKYd6Fj+zkVh2M6wWoVlpQNvj2o46P2ehVyYHIt6co9R+7Ndq38gj0nbRv/P+2
+	 EYP5vsBltW5Dybs4Rc8VsC54uyqXWred/IukXaGiwollcYKrg1MGcJrAYE/djLbVtC
+	 H8DpQqS//1myA==
+Date: Tue, 12 Mar 2024 19:29:12 -0700
 From: Eric Biggers <ebiggers@kernel.org>
-To: Barry Song <21cnbao@gmail.com>
-Cc: akpm@linux-foundation.org, herbert@gondor.apana.org.au,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-	v-songbaohua@oppo.com
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Barry Song <v-songbaohua@oppo.com>,
+	Linux Crypto List <linux-crypto@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the crypto tree
-Message-ID: <20240313022219.GC1148@sol.localdomain>
-References: <20240313020112.GB1148@sol.localdomain>
- <20240313021211.47293-1-21cnbao@gmail.com>
+Message-ID: <20240313022912.GD1148@sol.localdomain>
+References: <20240313115751.36b01158@canb.auug.org.au>
+ <ZfEE2GDznBOZDXs4@gondor.apana.org.au>
+ <ZfEFKxl8/42oXv0i@gondor.apana.org.au>
+ <20240313020112.GB1148@sol.localdomain>
+ <ZfEJrBefjrvPxaIg@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -60,9 +65,11 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240313021211.47293-1-21cnbao@gmail.com>
+In-Reply-To: <ZfEJrBefjrvPxaIg@gondor.apana.org.au>
 
-On Wed, Mar 13, 2024 at 03:12:11PM +1300, Barry Song wrote:
+On Wed, Mar 13, 2024 at 10:04:28AM +0800, Herbert Xu wrote:
+> On Tue, Mar 12, 2024 at 07:01:12PM -0700, Eric Biggers wrote:
+> >
 > > The only user of comp_alg_common was the crypto stats, and it was introduced by
 > > a refactoring of the crypto stats (commit 0a742389bcc0, "crypto: acomp - Count
 > > error stats differently"), so it seems appropriate to remove it for now.
@@ -71,16 +78,18 @@ On Wed, Mar 13, 2024 at 03:12:11PM +1300, Barry Song wrote:
 > > the crypto stats you might consider to be "infrastructure" that should not be
 > > removed, that would be helpful.
 > 
-> Hi Eric,
-> that user is mm/zswap [1], apologize it was not in crypto tree. I guess you might
-> just need a new version to keep that one :-)
+> The first patch should only remove code directly related to
+> STATS.  Any removal of code that is rendered useless should
+> be done in one or more subsequent patches.
 > 
-> [1] https://lore.kernel.org/linux-mm/20240222081135.173040-2-21cnbao@gmail.com/ 
-> 
+> Thanks,
 
-That code is just reading the algorithm flags, which exist regardless of whether
-struct comp_alg_common does or not.  The exact way to get at those flags just
-changes slightly.
+comp_alg_common was part of the implementation of STATS.
+
+I'll do the best I can to interpret your request, but if you could actually
+review my original patch and let me know if there are any other specific changes
+you'd like besides keeping comp_alg_common, that would be helpful as then maybe
+the next version won't get reverted.
 
 - Eric
 

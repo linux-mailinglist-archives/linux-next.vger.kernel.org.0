@@ -1,264 +1,135 @@
-Return-Path: <linux-next+bounces-1604-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1605-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BB05879FDA
-	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 00:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DBB5C87A074
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 01:58:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDE0C1F22327
-	for <lists+linux-next@lfdr.de>; Tue, 12 Mar 2024 23:51:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87B761F22E84
+	for <lists+linux-next@lfdr.de>; Wed, 13 Mar 2024 00:58:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C299647F5D;
-	Tue, 12 Mar 2024 23:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1643B8F59;
+	Wed, 13 Mar 2024 00:58:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="bYEbldRC"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fdZhuLf6"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB66E47A52;
-	Tue, 12 Mar 2024 23:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8058F61;
+	Wed, 13 Mar 2024 00:57:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710287483; cv=none; b=s8/BqeLUKrLdPugBBX9urQ+wChjV7gMNJujsEPUFO5LcNoX0nQdNX/zNEQChM5dXhbr5bBPhZDR3z5oI6uetGkZm7aCakX/aT25anCPxLdtOuLmCNQIYsE4B2xdX8NpcEAH+8PdlB3YAhHEszvzs2CHu1ec7qt9PB4EcIpQ5eiI=
+	t=1710291481; cv=none; b=ZyHY7YmPpJaukZeBzMjl6RnFPHVtncl96Fasc5n6P+QrOhaFR7lxBQ9uNpd05tdqXXQM9z6uvh5GkbcQnpE4thEIGc+6UdI+0jYkIh6zzHTosjaUM37aXa0yD/RRA75Qgl9XAz+N31f6aJoIYaTjsaxlBlUP+AicoG/VvM8SLAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710287483; c=relaxed/simple;
-	bh=X7Pm5RoAdj55evPiJMvqxK1W5YPJTErKGzSKaroow58=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pF+QJyyU9/DSCgfXZNOCnVNh1vZz7GJGtihZfEA4mrPM1FYY6j0P93xD7iU8h32Vo6Q0oTzk0w6y+HBDkBs3jZ15h5v74eiPEqgSnfxiywYZSLguFlJs07bcbf/jHHiR2Mbq6VYZ4pYYZd64lAMOR9Vwq1O83A33Nuv6/eYdP1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=bYEbldRC; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1710291481; c=relaxed/simple;
+	bh=z8YYzN2gZCm6QRJjFH2HLsqFoMBdgH4m1IlqLZ7rCS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ExaF9k7SBboN2fG2znfW/1wq2WqsBB8+bUGwR9xUJttu22lAP6bGAKYw0DCAiXKC6Yo8uK+aPDUvqoPyd92xdtEjAoIXYhIK+jZSbgu3cGZWZphvtyYDcsdScQCfDGMYxcTCiPgTTEXlc9Tls3NN1TWaCFIllbLia0YmM1pidAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fdZhuLf6; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1710287479;
-	bh=UodvkJ5UEPNHTE1gtYxLGz+q1xnZJ07gSgPcwxaWF9c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bYEbldRCdLIt6oYNRPPF8TYvU+vJr/g49398b/QE5R+asPhOYeT/wQ377CZwVhjVZ
-	 4o3EwmKCXZd87SILQ6mNGSNVEd4icyqmTFFq8KWzVt1FxbMUhycBwvzXd7RFIuP6yy
-	 BzJn8yRcIb5T8Ym1OGTKlrATz0yO++vgiSGjFvjFEDBYxoGlrYYEAYzsrHACwLednn
-	 ggaSp7qgM2FdavlBYipLsURqyRq7lFDpoCGCeuNPMp+pEpUaa42uhBvBWwW3L8N0Uc
-	 0r3pAu56QedBToNWym5rohNm3w5pHv031FN7a7AxBjwQmltWF0r3n4RfTd+GNzloTW
-	 FWkdJ7U36T3ZA==
+	s=201702; t=1710291474;
+	bh=u+UT7fns9W2mUZzIbsCdXkJaDwtFBocLMd9qUaNKNK0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=fdZhuLf6d2QbhreshmuVSnbKlEAc7xQKQeOx+pJh2KPzE7igJosoNf2BdfxJDmCgX
+	 nI5TFgpq5LmGv6O37BzeKi1waEqonZJStYGSIBL9xUgC/foiVtJyledpZ0gE5+V+VR
+	 WQtxVAwxppcqoEHpRZCEfyd6Ejliub7yu4URV5kD18Deq3oDVbXbfbmQSLqc1wklqv
+	 Kez4kVhsmUkSLszOb70Qz1IFqzXzBacEL/aOxWZQ2FZ153qGUqWKrwZeLTNhTk5bel
+	 w142D8gAzHL0KcEc/MRhtEkQut9AqC8lKZRCaFMht0Hu8vetWqfhPPylee4ACMPqSC
+	 n6B0AWm4aP+MQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TvVlp0bKyz4wcJ;
-	Wed, 13 Mar 2024 10:51:17 +1100 (AEDT)
-Date: Wed, 13 Mar 2024 10:51:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TvXDd1g6Mz4wx5;
+	Wed, 13 Mar 2024 11:57:52 +1100 (AEDT)
+Date: Wed, 13 Mar 2024 11:57:51 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Networking <netdev@vger.kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, David Miller <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf
- <bpf@vger.kernel.org>, Linux Kernel Mailing List
+To: Herbert Xu <herbert@gondor.apana.org.au>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Eric Biggers <ebiggers@google.com>, Barry Song <v-songbaohua@oppo.com>,
+ Linux Crypto List <linux-crypto@vger.kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the
- mm-stable tree
-Message-ID: <20240313105117.699dc720@canb.auug.org.au>
-In-Reply-To: <20240307123619.159f1c4c@canb.auug.org.au>
-References: <20240307123619.159f1c4c@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the crypto tree
+Message-ID: <20240313115751.36b01158@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yT0EdgRsoNW8+yPN=MLDvoO";
+Content-Type: multipart/signed; boundary="Sig_/pEpBEmTvEMreNxq9yb47kWI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/yT0EdgRsoNW8+yPN=MLDvoO
+--Sig_/pEpBEmTvEMreNxq9yb47kWI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 7 Mar 2024 12:36:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->=20
-> Today's linux-next merge of the bpf-next tree got a conflict in:
->=20
->   mm/vmalloc.c
->=20
-> between commit:
->=20
->   8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo")
->=20
-> from the mm-stable tree and commit:
->=20
->   e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages()=
-.")
->=20
-> from the bpf-next tree.
->=20
-> I fixed it up (I think - see below) and can carry the fix as necessary.
-> This is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc mm/vmalloc.c
-> index 25a8df497255,e5b8c70950bc..000000000000
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@@ -4755,81 -4423,70 +4820,84 @@@ static void show_numa_info(struct seq_f
->  =20
->   static void show_purge_info(struct seq_file *m)
->   {
->  +	struct vmap_node *vn;
->   	struct vmap_area *va;
->  +	int i;
->  =20
->  -	spin_lock(&purge_vmap_area_lock);
->  -	list_for_each_entry(va, &purge_vmap_area_list, list) {
->  -		seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
->  -			(void *)va->va_start, (void *)va->va_end,
->  -			va->va_end - va->va_start);
->  -	}
->  -	spin_unlock(&purge_vmap_area_lock);
->  -}
->  +	for (i =3D 0; i < nr_vmap_nodes; i++) {
->  +		vn =3D &vmap_nodes[i];
->  =20
->  -static int s_show(struct seq_file *m, void *p)
->  -{
->  -	struct vmap_area *va;
->  -	struct vm_struct *v;
->  -
->  -	va =3D list_entry(p, struct vmap_area, list);
->  -
->  -	if (!va->vm) {
->  -		if (va->flags & VMAP_RAM)
->  -			seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
->  +		spin_lock(&vn->lazy.lock);
->  +		list_for_each_entry(va, &vn->lazy.head, list) {
->  +			seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
->   				(void *)va->va_start, (void *)va->va_end,
->   				va->va_end - va->va_start);
->  -
->  -		goto final;
->  +		}
->  +		spin_unlock(&vn->lazy.lock);
->   	}
->  +}
->  =20
->  -	v =3D va->vm;
->  +static int vmalloc_info_show(struct seq_file *m, void *p)
->  +{
->  +	struct vmap_node *vn;
->  +	struct vmap_area *va;
->  +	struct vm_struct *v;
->  +	int i;
->  =20
->  -	seq_printf(m, "0x%pK-0x%pK %7ld",
->  -		v->addr, v->addr + v->size, v->size);
->  +	for (i =3D 0; i < nr_vmap_nodes; i++) {
->  +		vn =3D &vmap_nodes[i];
->  =20
->  -	if (v->caller)
->  -		seq_printf(m, " %pS", v->caller);
->  +		spin_lock(&vn->busy.lock);
->  +		list_for_each_entry(va, &vn->busy.head, list) {
->  +			if (!va->vm) {
->  +				if (va->flags & VMAP_RAM)
->  +					seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
->  +						(void *)va->va_start, (void *)va->va_end,
->  +						va->va_end - va->va_start);
->  =20
->  -	if (v->nr_pages)
->  -		seq_printf(m, " pages=3D%d", v->nr_pages);
->  +				continue;
->  +			}
->  =20
->  -	if (v->phys_addr)
->  -		seq_printf(m, " phys=3D%pa", &v->phys_addr);
->  +			v =3D va->vm;
->  =20
->  -	if (v->flags & VM_IOREMAP)
->  -		seq_puts(m, " ioremap");
->  +			seq_printf(m, "0x%pK-0x%pK %7ld",
->  +				v->addr, v->addr + v->size, v->size);
->  =20
->  -	if (v->flags & VM_SPARSE)
->  -		seq_puts(m, " sparse");
->  +			if (v->caller)
->  +				seq_printf(m, " %pS", v->caller);
->  =20
->  -	if (v->flags & VM_ALLOC)
->  -		seq_puts(m, " vmalloc");
->  +			if (v->nr_pages)
->  +				seq_printf(m, " pages=3D%d", v->nr_pages);
->  =20
->  -	if (v->flags & VM_MAP)
->  -		seq_puts(m, " vmap");
->  +			if (v->phys_addr)
->  +				seq_printf(m, " phys=3D%pa", &v->phys_addr);
->  =20
->  -	if (v->flags & VM_USERMAP)
->  -		seq_puts(m, " user");
->  +			if (v->flags & VM_IOREMAP)
->  +				seq_puts(m, " ioremap");
->  =20
->  -	if (v->flags & VM_DMA_COHERENT)
->  -		seq_puts(m, " dma-coherent");
-> ++			if (v->flags & VM_SPARSE)
-> ++				seq_puts(m, " sparse");
-> +=20
->  -	if (is_vmalloc_addr(v->pages))
->  -		seq_puts(m, " vpages");
->  +			if (v->flags & VM_ALLOC)
->  +				seq_puts(m, " vmalloc");
->  =20
->  -	show_numa_info(m, v);
->  -	seq_putc(m, '\n');
->  +			if (v->flags & VM_MAP)
->  +				seq_puts(m, " vmap");
->  +
->  +			if (v->flags & VM_USERMAP)
->  +				seq_puts(m, " user");
->  +
->  +			if (v->flags & VM_DMA_COHERENT)
->  +				seq_puts(m, " dma-coherent");
->  +
->  +			if (is_vmalloc_addr(v->pages))
->  +				seq_puts(m, " vpages");
->  +
->  +			show_numa_info(m, v);
->  +			seq_putc(m, '\n');
->  +		}
->  +		spin_unlock(&vn->busy.lock);
->  +	}
->  =20
->   	/*
->   	 * As a final step, dump "unpurged" areas.
+After merging the crypto tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-This is now a conflict between the net-next tree and the mm-stable tree.
+In file included from mm/zswap.c:30:
+include/crypto/acompress.h: In function 'acomp_is_async':
+include/crypto/acompress.h:124:16: error: implicit declaration of function =
+'crypto_comp_alg_common'; did you mean 'crypto_tfm_alg_name'? [-Werror=3Dim=
+plicit-function-declaration]
+  124 |         return crypto_comp_alg_common(tfm)->base.cra_flags &
+      |                ^~~~~~~~~~~~~~~~~~~~~~
+      |                crypto_tfm_alg_name
+include/crypto/acompress.h:124:43: error: invalid type argument of '->' (ha=
+ve 'int')
+  124 |         return crypto_comp_alg_common(tfm)->base.cra_flags &
+      |                                           ^~
+include/crypto/acompress.h:126:1: error: control reaches end of non-void fu=
+nction [-Werror=3Dreturn-type]
+  126 | }
+      | ^
+cc1: some warnings being treated as errors
+
+Caused by commit
+
+  86464db929ca ("crypto: introduce: acomp_is_async to expose if comp driver=
+s might sleep")
+
+from the mm-unstable branch of the mm tree interacting with commit
+
+  2beb81fbf0c0 ("crypto: remove CONFIG_CRYPTO_STATS")
+
+from the crypto tree.
+
+I have reverted these commits from the mm-unstable branch for today:
+
+  86464db929ca ("crypto: introduce: acomp_is_async to expose if comp driver=
+s might sleep")
+  791f798331bc ("mm/zswap: remove the memcpy if acomp is not sleepable")
+
+I will stop merging the -unstable parts of the mm tree from tomorrow.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/yT0EdgRsoNW8+yPN=MLDvoO
+--Sig_/pEpBEmTvEMreNxq9yb47kWI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXw6nUACgkQAVBC80lX
-0Gya7Af/eanjo0KqtUdKrpWYcPSmSO1QHXGP9/SE4P3qCeVYHvN19R2jZLzaou9a
-fGAjvSvop62RTF22Fz4qHDee9W7Lv/fIWb8ZP6Qf+z9heyPqLHl848oRFK7iIOzb
-f9Z3AnUz7iwg8aBxn42HNA1i+wHXH/r/QdNtKLLDnIhQTGeH17Cv1TJRx32hWlOj
-4yPWa8QtzZLIq1fwaWY487mXIjALPrFC6lIZ4gbtZpQ/AxT3+lfZbi515nIm6kMk
-F68Qb61VEuwWHW120bsVzogE0ZSKxGrNHQchW6CEOfC8QEYh+8eaKD8RT/Kuduro
-ufS2iZdqvtdej+4JXPBQhj+QTH4eNw==
-=4mUn
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXw+g8ACgkQAVBC80lX
+0GwN1gf/Z9bhPozr10QDiOQn/NmWbZAocaJhHllkJWsK3mjoWahO4JnFhpfwqmo0
+hVfizUv2KIB8cwXtNoNrJD5LwjeCRw+GjVtNqARxm89DRuj3M6XGnFal0wXj1hqu
+UWGNJZHWwUchnaVr+/pEiU5FPkb2wGps236A9YIvl8Fsw45LTNr1pDs7XLOx8MhU
+1xusarOJfkM/Xv2kEM8sZTC5xJ6/9HuCh5PuwRW//Hyl3RZSiRgisBfJmAmrp8Oj
+3tt+AnD+7SsHlQPak8SjIZci6zrGu2dusH0bzsEC01RHJfQ7XTEzPOHlhv5y1ygc
+Io4bc7vs1fJPcTFdaZPMenqe8zpxpA==
+=0+3t
 -----END PGP SIGNATURE-----
 
---Sig_/yT0EdgRsoNW8+yPN=MLDvoO--
+--Sig_/pEpBEmTvEMreNxq9yb47kWI--
 

@@ -1,116 +1,155 @@
-Return-Path: <linux-next+bounces-1639-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1640-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2736487C555
-	for <lists+linux-next@lfdr.de>; Thu, 14 Mar 2024 23:47:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EC0387C676
+	for <lists+linux-next@lfdr.de>; Fri, 15 Mar 2024 00:37:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B95B81F21C7F
-	for <lists+linux-next@lfdr.de>; Thu, 14 Mar 2024 22:47:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA879B22CE2
+	for <lists+linux-next@lfdr.de>; Thu, 14 Mar 2024 23:37:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A64DDDA;
-	Thu, 14 Mar 2024 22:47:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF9261079D;
+	Thu, 14 Mar 2024 23:31:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ico5OFea"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rj6V2IbB"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74819DDAD;
-	Thu, 14 Mar 2024 22:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84100FC12;
+	Thu, 14 Mar 2024 23:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710456435; cv=none; b=HzBjxwTdukOlmIAU4P2iJo7b0iARG8XhsWGad81hVyEB+JPHt2koqkZ10JHakZJnewl2ucYLQpCXcmdIgJA5lX1MEOyBPzOlQEsd3NGBsmdIp1GSJhabc7r+i9t5zsUKsses6yc06YiDSivO2vNwCVaOQDxpMhMWjLf7FhYyuZw=
+	t=1710459119; cv=none; b=UlXvprpfMY56wRHfUhPMmR26p1SuHTVJXSTzmK3tIWaFgrEFKrMnhg1D/ykz+ePG/8ev1h70WIdJJt6e2cKBWMBKHb3vNwkQqrC0hgvaag0PNaV7WfZNxqLynS95TgCEqke8WX4GVYx6Cs65jxsF1XGt4ZaKRa5Ycvjem7IJbaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710456435; c=relaxed/simple;
-	bh=WjBAPqc1vq76SVrT9NPWgfjORWlj275pVD1YZVe4ta4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=C6rJPOzUetEowfcHRVSesP07l69H7gw69Cryou/dkgyq3LB2U/5V+/3pBRIBRfOCeCkKMtFtb7Ed+e6mvDSRb6EO8WWE1dZv7UGmh4Y0HHboyKE9OHlgdzFjMrGTB7OMVZrmfVWDRZK8588T1RGmAEPfafO+JWEx8EblLZlJ8uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ico5OFea; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1710459119; c=relaxed/simple;
+	bh=/Nxif6wGy3TdqcKi0V6sODJjV6iwo1AjewdOxFWtHpc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Bt8Fms0/qoyjboZ/rX6UGYJEyOIp8FnbRibHzquV+eV46FxU9MkOaJuU+cpgj/FEXDbWDbQ6uPmaD784AhMyxKYowB7SPhSkjkpC4lndMJa6TC6MzKYLfNo3I+2s+JzbJLErqGBIORItQJ9XxntqC7FRO1s+KANbY+ZrhXcVrVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rj6V2IbB; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1710456429;
-	bh=vMdM2ltcOpLtm4zZFPIYIVCDdMBMuhhE6c13htgeBrg=;
+	s=201702; t=1710459112;
+	bh=OsxHWr7icc+V61IambhZDA5GJm7mXenCqBWEO974Dxo=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ico5OFeaBMNme5CaIcWI+0hCJbAafSWT6Yjko391Pm76ijCmtUNCuSt+yQmdyhElY
-	 H14N8Qfpk3UGe9ZbPhdyWHMuY+r4bS2OazIFjoaYPSQeuRMWveH88dorseIfN/udIt
-	 D3Riulj4X2L5cq5aZpOpcx+bn+JNGiXx5hBJpXZJZO7gZzx2gSzAuVPYWo3dKtc+XB
-	 +WXbUFclw8EwMufkZPe761KVf+BiGZzHkeBz/VmYBags6zeLIOFPh/NrDGA5FcT36L
-	 6fXOwvlhM6FmP3XucVKPj4TGf6NLcTL+2k8NyETua8/VAvOi0loCuiOmjG8j7W8VoQ
-	 bMW2Vbo1MXtdA==
+	b=rj6V2IbBsDcQiHd42yhkJDEHLzlDREQK+jDBvpuYifhvIzLeUs1XgLYEDyyRPjJ+k
+	 Mh/NBxRr/9pNErqSc2NC+rqMGsPe7bfYG8ChHn/tDIo1FafcjXAUbuqcN7LobMyAgi
+	 a0RbfRtkFMebBIFZ9kuImjUjglxG+6950Mv0Ucqmh15zoHvg/AAq6maoo59XMm8AT0
+	 lSr96BFBb+w9KA8B/HFfYhA/2jUPPUtnUTDBGWkoMTrB6arykvayAx7/+aq2SNl0Bn
+	 1EF4Jv68fsUuois0p9U/bIg4ugSHATZEEPC2E/yNo8bnv18QnRo7uvcPH4HqLrYveX
+	 koFjhYNYFAdvw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TwjDs1v7jz4wc1;
-	Fri, 15 Mar 2024 09:47:09 +1100 (AEDT)
-Date: Fri, 15 Mar 2024 09:46:49 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TwkDN3Mqkz4wcR;
+	Fri, 15 Mar 2024 10:31:48 +1100 (AEDT)
+Date: Fri, 15 Mar 2024 10:31:46 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Chengming Zhou <zhouchengming@bytedance.com>, Linus Torvalds
- <torvalds@linux-foundation.org>, Linux Kernel Mailing List
+To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the mm-nonmm-stable tree with Linus'
- tree
-Message-ID: <20240315094649.7088cf6a@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Locus Wei-Han Chen <locus84@andestech.com>,
+ Palmer Dabbelt <palmer@rivosinc.com>, Yu Chien Peter Lin
+ <peterlin@andestech.com>
+Subject: linux-next: manual merge of the risc-v tree with the arm64 tree
+Message-ID: <20240315103146.225b653b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3G0SivKbntfHjNGNO+NVY8G";
+Content-Type: multipart/signed; boundary="Sig_/gIl4xHy/dJKTUfoTHBkA85/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/3G0SivKbntfHjNGNO+NVY8G
+--Sig_/gIl4xHy/dJKTUfoTHBkA85/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mm-nonmm-stable tree got a conflict in:
+Today's linux-next merge of the risc-v tree got a conflict in:
 
-  fs/ocfs2/super.c
+  drivers/perf/Kconfig
 
-between commit:
+between commits:
 
-  f88c3fb81c4b ("mm, slab: remove last vestiges of SLAB_MEM_SPREAD")
+  c2b24812f7bc ("perf: starfive: Add StarLink PMU support")
+  f0dbc6d0de38 ("perf: starfive: Only allow COMPILE_TEST for 64-bit archite=
+ctures")
 
-from Linus' tree and commit:
+from the arm64 tree and commit:
 
-  46bd9449464a ("ocfs2: remove SLAB_MEM_SPREAD flag usage")
+  bc969d6cc96a ("perf: RISC-V: Introduce Andes PMU to support perf event sa=
+mpling")
 
-from the mm-nonmm-stable tree.
+from the risc-v tree.
 
-I fixed it up (I just used the former) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3G0SivKbntfHjNGNO+NVY8G
+diff --cc drivers/perf/Kconfig
+index 004d86230aa6,564e813d8c69..000000000000
+--- a/drivers/perf/Kconfig
++++ b/drivers/perf/Kconfig
+@@@ -86,15 -86,20 +86,29 @@@ config RISCV_PMU_SB
+  	  full perf feature support i.e. counter overflow, privilege mode
+  	  filtering, counter configuration.
+ =20
+ +config STARFIVE_STARLINK_PMU
+ +	depends on ARCH_STARFIVE || (COMPILE_TEST && 64BIT)
+ +	bool "StarFive StarLink PMU"
+ +	help
+ +	   Provide support for StarLink Performance Monitor Unit.
+ +	   StarLink Performance Monitor Unit integrates one or more cores with
+ +	   an L3 memory system. The L3 cache events are added into perf event
+ +	   subsystem, allowing monitoring of various L3 cache perf events.
+ +
++ config ANDES_CUSTOM_PMU
++ 	bool "Andes custom PMU support"
++ 	depends on ARCH_RENESAS && RISCV_ALTERNATIVE && RISCV_PMU_SBI
++ 	default y
++ 	help
++ 	  The Andes cores implement the PMU overflow extension very
++ 	  similar to the standard Sscofpmf and Smcntrpmf extension.
++=20
++ 	  This will patch the overflow and pending CSRs and handle the
++ 	  non-standard behaviour via the regular SBI PMU driver and
++ 	  interface.
++=20
++ 	  If you don't know what to do here, say "Y".
++=20
+  config ARM_PMU_ACPI
+  	depends on ARM_PMU && ACPI
+  	def_bool y
+
+--Sig_/gIl4xHy/dJKTUfoTHBkA85/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXzflkACgkQAVBC80lX
-0Gw3Rwf+MkEFiSAuflUxYEe+J+7KuR/i7lf/4MWX/dOg7pbd4pV7c2m1okdcGC+o
-pHro9JcDDqT8oa0hnLMDBiSKCsnw+3pxlbOQU/LcNL4mZWtS4RoIG5c8rIzM2aLr
-BJ9quxdybzsan5i8bKfZd166/nT3bZ3c6U7CdWKI45eIT6nkGl4r6eawLgmHaFzn
-KUspAAfPojTe3fuzIsfh+XNMcLRiiJuQDgmi+KgfOhWLPHt6QC2/ino2HJWaK/MF
-sA75+0OfCPA8so5N0UUONE2guXiXasw6D2iMzFjEv+F7ubCGrxt8Z2Cx4eyX4pyO
-wKMkguK/B8WvnSb/CusyLL9eq8aCkg==
-=FwfU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmXziOIACgkQAVBC80lX
+0GzVjAgAn1ru/3poCYZFZ2tb7LNWXVfVrvHM1ggEk7g6NnxF8l7EzluWG8lrD5VZ
+jhlGWtzCR6lPG+c6o267JwZfhAtuQy2XKFq6NYV7RUZR+WVXOgBlF0hA8EtcBNj/
+2Jc1QVJk/xqhUoFfTvEZKqXahB3DKonlAEhs1moDi61TNP8w714B7UN66Wx+WP9l
+zhJwJEmxETxjQ4kHOCrQlNIKuK8Q48a7RDsnNKLki7PlRvw4kBDOFrjrxqvtuJdt
+xjBFkYGxxZdt3Win4gJXKdQ0aHjj1iEnBLH4xNBrFx4//et6aArU7GD0ooolog8g
+2IOJifoq05RTTGNmVjbbwvqeNwIctw==
+=sbyV
 -----END PGP SIGNATURE-----
 
---Sig_/3G0SivKbntfHjNGNO+NVY8G--
+--Sig_/gIl4xHy/dJKTUfoTHBkA85/--
 

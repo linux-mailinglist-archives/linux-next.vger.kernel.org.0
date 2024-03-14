@@ -1,315 +1,2223 @@
-Return-Path: <linux-next+bounces-1634-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1635-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89F4887BA86
-	for <lists+linux-next@lfdr.de>; Thu, 14 Mar 2024 10:35:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57F8387BAFA
+	for <lists+linux-next@lfdr.de>; Thu, 14 Mar 2024 11:09:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBF5B1F23310
-	for <lists+linux-next@lfdr.de>; Thu, 14 Mar 2024 09:35:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6EA97B211DA
+	for <lists+linux-next@lfdr.de>; Thu, 14 Mar 2024 10:09:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 046B36CDC7;
-	Thu, 14 Mar 2024 09:34:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE6EB6CDD7;
+	Thu, 14 Mar 2024 10:08:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WcW+0gAd"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="qFnn3g6M"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15CF6CDB9;
-	Thu, 14 Mar 2024 09:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E996D1BC
+	for <linux-next@vger.kernel.org>; Thu, 14 Mar 2024 10:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710408860; cv=none; b=AIbMq84zrFTR96n4F3goU0peOrCcoRPUXhNBV13jzSFQ2YnUOMeB3k374auZb1yhsoOrlk+E7rSnJyVhbPHvuWl95A3AzOn0BNqZJfwZ5DI2ULMEatBN/zHAftw+hz4j3BI9REGtm7ut7vm/caG7yKyl3e3SelwapED4BO0bQNo=
+	t=1710410936; cv=none; b=dqz7pN5uhcZ53fm+4MW7dO9owgqhD/y4TtqpQLKUYV95mosMlJHrcMrHP93fXWWFZQJVYnBJiLaIWWrKCc/m8SEfOdgAvzXBrQrbpCyu64/mcHolCnCHnaZPH/0LYs7FjoC5e3mLXRK9vhZVY0SNAqQ8WD88ZJGVghWmEx5I/eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710408860; c=relaxed/simple;
-	bh=TtKloTKt+vs+msYtMieSZFtif9thqlkEzEJDwxV3fD4=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EGOxhAk+9Aec4w8zUVAJW0rUORewTlAZZQGH5J/Qhb5VvcnoQMgl95pgM6U+5B37/cgQhg9Xy36ombUMykJwMr81CZlvaEVImxURL8bsmheVHzXwN9W8U1La7eDoLixLWp+KBXg5/AqO2IUfa+XJyuV4AnWaX1ll8j0JhVZE098=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WcW+0gAd; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-563bb51c36eso920942a12.2;
-        Thu, 14 Mar 2024 02:34:18 -0700 (PDT)
+	s=arc-20240116; t=1710410936; c=relaxed/simple;
+	bh=ajFx+g+mkzQ8fZT1wQOvUrfGJY40G8gT9aYCrX67+I8=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=CW90a63gBP7TmRdIyO4lABKqDniCSR0tDm/TLMG9gebQQb5jHpzHgpoDjPC4zNLQArP0xggnMfHQq5Gi4t0+rQ2WpJ8/TySm6UR5ok8l3qX/QUp8uihF8nwu81G7ZDlVUG9QxBKp4TNBdNNo51jGvde5gueN0ODGSrURsGu38qY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=qFnn3g6M; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e6cb0f782bso491589b3a.1
+        for <linux-next@vger.kernel.org>; Thu, 14 Mar 2024 03:08:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710408857; x=1711013657; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ILGaGiWtB+vOVzUENmPA1Ty/XwZ6Aazho4HgWe5ZzyU=;
-        b=WcW+0gAdi8Rvzr+iBcbNs6kSqpDXzqp3FkBEEtq+iU9ySlJSK/WFSXd5W+UkGmeNY/
-         8zU0OriN50s2dHUoYJV+AWym30cd5LV1Y2wYRrBCKg/LGAiBMOsMlnuPx9fjaKAIWU0p
-         1zXbAmD6ZUm4vMpwOBNCYVo6c4iXSrzHWzNzh2g1JXakZFvR2jwlwwPLorcIzUtXoGZZ
-         0ppbbfjxuAfwU4L1ar0XSRZooQgUcp3AK1rmRlxFJivlpL9SvBO6Q6B3bn1UWor9SOdW
-         oOPw4Gv+a9KVzRJbl/1VJV+qt+AV7nBccjI86DDcNeGRwdVS640ZtGaQFlFeqhT9RpyU
-         IdrA==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1710410931; x=1711015731; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=g/4Jegv/s0WKtTQFOhgnA1gMpT5nv68lT8D5t9+mplo=;
+        b=qFnn3g6M5SVrPhUx2gTEMfC0+Kb1tr3pMBUfyZG1lihL/5HxeRtLREXtaPXuNPtHhi
+         gO7AbDOCQyYJ6of3tf9sq0BkM1xPxH0noBnBHwhCp240kK2j/c510gwqAM9MpI1RtXFF
+         +1EcuQ4Sxp07nCj3lse8x8FZwrwjgvK1qvfbak5uCYZvq2qMRSiPWQijj8qQ/g/Z1WRW
+         lPqSSDY7aynuh9Z4MLed9LZ3EwabTMui4fHltjwntc2/hGsBKURf5C0zFdu7kwxjrQr2
+         0RLJ5RDSxcrK7ULf5t/OW9jrAu9vJUhd8BvZUPDkSBnH/cKAxIP+7YbiVKZsh56Vkc+D
+         J2Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710408857; x=1711013657;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ILGaGiWtB+vOVzUENmPA1Ty/XwZ6Aazho4HgWe5ZzyU=;
-        b=UuKoeCjmQ3D/pzHpmf2GkuA+JnLf/QMtZW8J0uFXRsx7CYGzGYeYL2ZmgHS56lDYR0
-         DS44TmYRLoW0a8LswtJSrMI2vWFHLPcVMO4LzCNdHSMVN9IMXNGcBOgUmpWkxeoiO2qf
-         YK3XU+v817vAe/D4Ao8T85mlJkokbYM9YhZy/CslcuXCQmMQD5oO+OhPvDej4NG1Pwhc
-         MfAHXfqbuhrpWD1ryYzbz+L8Xg9+UHbmR6Bs5c7wOJNffj4llyviHkdr99CaiIoUOazx
-         J0ZUBbpRQTq4uZ96tu1S3t+EVNtZR8RojuTm+L62dzYK2rCiy+M4j8KB9b/myvPSNSDX
-         8T0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVd7rzmpUiZWPpwcQIBZtLXIYcoHT7Mf2M7xe5QjRNuSmglvgjeZp3KwyG/IpvpCuV5mnG47ryckAbjYP3xAFvRzXrGT0TtkuVf3agiGVBJ3yA3DeLH8bF/a62Exv/yGGxSBzsqd4YTp/PJhst4IcZWU8xmu0wYYrJ2S5cZ50PkDyQEbAV9Cr1incj/oIXdJc4au0SY6w==
-X-Gm-Message-State: AOJu0Yxok9vGQ6ep5kh9Y2XAo3OxP6drIn/oTu9HREwx85KbJbPL8u2j
-	GI2lNsRLiQh5MMj31FR7UHdWyRPqaJ9wcWuEwFDosSG2K9NAtrKW
-X-Google-Smtp-Source: AGHT+IGeBKAZGfED4yLU+s/SkX31e8txpco9w0bZDKwjtjSw0/E6W4u0ke9VKjBtP2eTZfLI2egvNg==
-X-Received: by 2002:a05:6402:1f13:b0:567:564f:5bd8 with SMTP id b19-20020a0564021f1300b00567564f5bd8mr633655edb.32.1710408857084;
-        Thu, 14 Mar 2024 02:34:17 -0700 (PDT)
-Received: from pc636 (host-87-9-234-71.retail.telecomitalia.it. [87.9.234.71])
-        by smtp.gmail.com with ESMTPSA id 6-20020a0564021f4600b005682a0e915fsm521510edz.76.2024.03.14.02.34.16
+        d=1e100.net; s=20230601; t=1710410931; x=1711015731;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g/4Jegv/s0WKtTQFOhgnA1gMpT5nv68lT8D5t9+mplo=;
+        b=FimVsFUmNCEiZ6S15St94V+s/4ikaWBkKT5L9G7rXG2o7qiUB4GYZFKMM5t6hYf0H7
+         JrjLibYjhSzwOGAVyM0kbaKzDU4QTRckgdS1Q8tnYlgobtbTHQ9lNDQIoleuNW3s7N8w
+         q9FnLVWuRoqteQWoOGvq2SmoCBhoEgkGbZCO5dkZuLG5J3Znb7xwEFWNNtrhWEbqTMNS
+         mNPBTDWxnIIlByLBmaJAtx9nZsO7wVY2WYyUVPrzYiNym8veOFdds0r23QWsX7vEpxlT
+         tUVx2LG0D/qHOlzCC/WX/yOXCIsI2ne+IG+2c0IM1N6XZvfKsD+sA1v6zPsEnYj/ESEL
+         wFkw==
+X-Gm-Message-State: AOJu0Yw878dtHOTOCwXpzL+HGHoKcsJ9HHA7V1+yxCcNZL5BiNYxYhyp
+	BMj29A3++xkqKQmfAENzfgfKuU691RuPCmtJawDsVcWIjE+4PPjsSxPkzf+9cRRz3QdVvlPwGUG
+	E
+X-Google-Smtp-Source: AGHT+IHT6odwtzLPaz9I2O1hvflykFQ+pCiaPs9Y/4ryJsSjZFy0dPKBqzKsbVJv4DbVirPld08yuQ==
+X-Received: by 2002:a05:6a00:1395:b0:6e4:68fa:7e10 with SMTP id t21-20020a056a00139500b006e468fa7e10mr1761877pfg.9.1710410928833;
+        Thu, 14 Mar 2024 03:08:48 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id x9-20020a056a00270900b006e6b4613de1sm1093902pfv.104.2024.03.14.03.08.47
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Mar 2024 02:34:16 -0700 (PDT)
-From: Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date: Thu, 14 Mar 2024 10:34:14 +0100
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Networking <netdev@vger.kernel.org>,
-	David Miller <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	"Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the mm-stable
- tree
-Message-ID: <ZfLElrAT3RMLuWdB@pc636>
-References: <20240307123619.159f1c4c@canb.auug.org.au>
- <20240313105117.699dc720@canb.auug.org.au>
- <20240314093012.3dba692a@canb.auug.org.au>
+        Thu, 14 Mar 2024 03:08:48 -0700 (PDT)
+Message-ID: <65f2ccb0.050a0220.7b65c.2939@mx.google.com>
+Date: Thu, 14 Mar 2024 03:08:48 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240314093012.3dba692a@canb.auug.org.au>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20240314
+X-Kernelci-Report-Type: build
+Subject: next/master build: 168 builds: 10 failed, 158 passed, 10 errors,
+ 288 warnings (next-20240314)
+To: linux-next@vger.kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-> Hi all,
-> 
-> On Wed, 13 Mar 2024 10:51:17 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > On Thu, 7 Mar 2024 12:36:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > 
-> > > Today's linux-next merge of the bpf-next tree got a conflict in:
-> > > 
-> > >   mm/vmalloc.c
-> > > 
-> > > between commit:
-> > > 
-> > >   8e1d743f2c26 ("mm: vmalloc: support multiple nodes in vmallocinfo")
-> > > 
-> > > from the mm-stable tree and commit:
-> > > 
-> > >   e6f798225a31 ("mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().")
-> > > 
-> > > from the bpf-next tree.
-> > > 
-> > > I fixed it up (I think - see below) and can carry the fix as necessary.
-> > > This is now fixed as far as linux-next is concerned, but any non trivial
-> > > conflicts should be mentioned to your upstream maintainer when your tree
-> > > is submitted for merging.  You may also want to consider cooperating
-> > > with the maintainer of the conflicting tree to minimise any particularly
-> > > complex conflicts.
-> > > 
-> > > 
-> > > diff --cc mm/vmalloc.c
-> > > index 25a8df497255,e5b8c70950bc..000000000000
-> > > --- a/mm/vmalloc.c
-> > > +++ b/mm/vmalloc.c
-> > > @@@ -4755,81 -4423,70 +4820,84 @@@ static void show_numa_info(struct seq_f
-> > >   
-> > >   static void show_purge_info(struct seq_file *m)
-> > >   {
-> > >  +	struct vmap_node *vn;
-> > >   	struct vmap_area *va;
-> > >  +	int i;
-> > >   
-> > >  -	spin_lock(&purge_vmap_area_lock);
-> > >  -	list_for_each_entry(va, &purge_vmap_area_list, list) {
-> > >  -		seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
-> > >  -			(void *)va->va_start, (void *)va->va_end,
-> > >  -			va->va_end - va->va_start);
-> > >  -	}
-> > >  -	spin_unlock(&purge_vmap_area_lock);
-> > >  -}
-> > >  +	for (i = 0; i < nr_vmap_nodes; i++) {
-> > >  +		vn = &vmap_nodes[i];
-> > >   
-> > >  -static int s_show(struct seq_file *m, void *p)
-> > >  -{
-> > >  -	struct vmap_area *va;
-> > >  -	struct vm_struct *v;
-> > >  -
-> > >  -	va = list_entry(p, struct vmap_area, list);
-> > >  -
-> > >  -	if (!va->vm) {
-> > >  -		if (va->flags & VMAP_RAM)
-> > >  -			seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
-> > >  +		spin_lock(&vn->lazy.lock);
-> > >  +		list_for_each_entry(va, &vn->lazy.head, list) {
-> > >  +			seq_printf(m, "0x%pK-0x%pK %7ld unpurged vm_area\n",
-> > >   				(void *)va->va_start, (void *)va->va_end,
-> > >   				va->va_end - va->va_start);
-> > >  -
-> > >  -		goto final;
-> > >  +		}
-> > >  +		spin_unlock(&vn->lazy.lock);
-> > >   	}
-> > >  +}
-> > >   
-> > >  -	v = va->vm;
-> > >  +static int vmalloc_info_show(struct seq_file *m, void *p)
-> > >  +{
-> > >  +	struct vmap_node *vn;
-> > >  +	struct vmap_area *va;
-> > >  +	struct vm_struct *v;
-> > >  +	int i;
-> > >   
-> > >  -	seq_printf(m, "0x%pK-0x%pK %7ld",
-> > >  -		v->addr, v->addr + v->size, v->size);
-> > >  +	for (i = 0; i < nr_vmap_nodes; i++) {
-> > >  +		vn = &vmap_nodes[i];
-> > >   
-> > >  -	if (v->caller)
-> > >  -		seq_printf(m, " %pS", v->caller);
-> > >  +		spin_lock(&vn->busy.lock);
-> > >  +		list_for_each_entry(va, &vn->busy.head, list) {
-> > >  +			if (!va->vm) {
-> > >  +				if (va->flags & VMAP_RAM)
-> > >  +					seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
-> > >  +						(void *)va->va_start, (void *)va->va_end,
-> > >  +						va->va_end - va->va_start);
-> > >   
-> > >  -	if (v->nr_pages)
-> > >  -		seq_printf(m, " pages=%d", v->nr_pages);
-> > >  +				continue;
-> > >  +			}
-> > >   
-> > >  -	if (v->phys_addr)
-> > >  -		seq_printf(m, " phys=%pa", &v->phys_addr);
-> > >  +			v = va->vm;
-> > >   
-> > >  -	if (v->flags & VM_IOREMAP)
-> > >  -		seq_puts(m, " ioremap");
-> > >  +			seq_printf(m, "0x%pK-0x%pK %7ld",
-> > >  +				v->addr, v->addr + v->size, v->size);
-> > >   
-> > >  -	if (v->flags & VM_SPARSE)
-> > >  -		seq_puts(m, " sparse");
-> > >  +			if (v->caller)
-> > >  +				seq_printf(m, " %pS", v->caller);
-> > >   
-> > >  -	if (v->flags & VM_ALLOC)
-> > >  -		seq_puts(m, " vmalloc");
-> > >  +			if (v->nr_pages)
-> > >  +				seq_printf(m, " pages=%d", v->nr_pages);
-> > >   
-> > >  -	if (v->flags & VM_MAP)
-> > >  -		seq_puts(m, " vmap");
-> > >  +			if (v->phys_addr)
-> > >  +				seq_printf(m, " phys=%pa", &v->phys_addr);
-> > >   
-> > >  -	if (v->flags & VM_USERMAP)
-> > >  -		seq_puts(m, " user");
-> > >  +			if (v->flags & VM_IOREMAP)
-> > >  +				seq_puts(m, " ioremap");
-> > >   
-> > >  -	if (v->flags & VM_DMA_COHERENT)
-> > >  -		seq_puts(m, " dma-coherent");
-> > > ++			if (v->flags & VM_SPARSE)
-> > > ++				seq_puts(m, " sparse");
-> > > + 
-> > >  -	if (is_vmalloc_addr(v->pages))
-> > >  -		seq_puts(m, " vpages");
-> > >  +			if (v->flags & VM_ALLOC)
-> > >  +				seq_puts(m, " vmalloc");
-> > >   
-> > >  -	show_numa_info(m, v);
-> > >  -	seq_putc(m, '\n');
-> > >  +			if (v->flags & VM_MAP)
-> > >  +				seq_puts(m, " vmap");
-> > >  +
-> > >  +			if (v->flags & VM_USERMAP)
-> > >  +				seq_puts(m, " user");
-> > >  +
-> > >  +			if (v->flags & VM_DMA_COHERENT)
-> > >  +				seq_puts(m, " dma-coherent");
-> > >  +
-> > >  +			if (is_vmalloc_addr(v->pages))
-> > >  +				seq_puts(m, " vpages");
-> > >  +
-> > >  +			show_numa_info(m, v);
-> > >  +			seq_putc(m, '\n');
-> > >  +		}
-> > >  +		spin_unlock(&vn->busy.lock);
-> > >  +	}
-> > >   
-> > >   	/*
-> > >   	 * As a final step, dump "unpurged" areas.  
-> > 
-> > This is now a conflict between the net-next tree and the mm-stable tree.
-> 
->  ... and now a conflict between te mm-stable tree and Linus' tree.
->
-If you need some help with resolving conflicts i can help. The problem
-to me looks like:
+next/master build: 168 builds: 10 failed, 158 passed, 10 errors, 288 warnin=
+gs (next-20240314)
 
-<snip>
-commit d7bca9199a27b8690ae1c71dc11f825154af7234
-Author: Alexei Starovoitov <ast@kernel.org>
-Date:   Fri Mar 8 09:12:54 2024 -0800
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20240314/
 
-    mm: Introduce vmap_page_range() to map pages in PCI address space
+Tree: next
+Branch: master
+Git Describe: next-20240314
+Git Commit: 9bb9b28d0568991b1d63e66fe75afa5f97ad1156
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-commit e6f798225a31485e47a6e4f6aa07ee9fdf80c2cb
-Author: Alexei Starovoitov <ast@kernel.org>
-Date:   Mon Mar 4 19:05:16 2024 -0800
+Build Failures Detected:
 
-    mm: Introduce VM_SPARSE kind and vm_area_[un]map_pages().
+arm:
+    multi_v7_defconfig: (clang-17) FAIL
+    multi_v7_defconfig: (gcc-10) FAIL
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy: (gcc-10) FAIL
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy: (gcc-10) FAIL
+    multi_v7_defconfig+CONFIG_SMP=3Dn: (gcc-10) FAIL
+    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy: (gcc-10) FAIL
+    multi_v7_defconfig+debug: (gcc-10) FAIL
+    multi_v7_defconfig+kselftest: (gcc-10) FAIL
+    sunxi_defconfig: (gcc-10) FAIL
 
-commit 3e49a866c9dcbd8173e4f3e491293619a9e81fa4
-Author: Alexei Starovoitov <ast@kernel.org>
-Date:   Mon Mar 4 19:05:15 2024 -0800
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
 
-    mm: Enforce VM_IOREMAP flag and range in ioremap_page_range.
-<snip>
+Errors and Warnings Detected:
 
-those three patches were not based on linux-next and are currently
-in the Linus tree(bypassing mm-tree?). Whereas below work:
+arc:
+    allnoconfig (gcc-10): 1 warning
+    axs103_defconfig (gcc-10): 4 warnings
+    axs103_smp_defconfig (gcc-10): 4 warnings
+    haps_hs_defconfig (gcc-10): 3 warnings
+    haps_hs_smp_defconfig (gcc-10): 4 warnings
+    haps_hs_smp_defconfig+debug (gcc-10): 4 warnings
+    hsdk_defconfig (gcc-10): 3 warnings
+    nsimosci_hs_defconfig (gcc-10): 4 warnings
+    nsimosci_hs_smp_defconfig (gcc-10): 4 warnings
+    tinyconfig (gcc-10): 1 warning
+    vdk_hs38_defconfig (gcc-10): 3 warnings
+    vdk_hs38_smp_defconfig (gcc-10): 3 warnings
 
-mm: vmalloc: refactor vmalloc_dump_obj() function
-mm: vmalloc: improve description of vmap node layer
-mm: vmalloc: add a shrinker to drain vmap pools
-mm: vmalloc: set nr_nodes based on CPUs in a system
-mm: vmalloc: support multiple nodes in vmallocinfo
-mm: vmalloc: support multiple nodes in vread_iter
-mm: vmalloc: add a scan area of VA only once
-mm: vmalloc: offload free_vmap_area_lock lock
-mm: vmalloc: remove global purge_vmap_area_root rb-tree
-mm/vmalloc: remove vmap_area_list
-mm: vmalloc: remove global vmap_area_root rb-tree
-mm: vmalloc: move vmap_init_free_space() down in vmalloc.c
-mm: vmalloc: rename adjust_va_to_fit_type() function
-mm: vmalloc: add va_alloc() helper
+arm64:
 
-now should be based on Alexei Starovoitov base in order to resolve
-a small conflict.
+arm:
+    collie_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig (clang-17): 1 error
+    multi_v7_defconfig (gcc-10): 1 error
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 error
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 1 error
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 1 error
+    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 1 error
+    multi_v7_defconfig+debug (gcc-10): 1 error
+    multi_v7_defconfig+kselftest (gcc-10): 1 error
+    mxs_defconfig (gcc-10): 1 warning
+    sunxi_defconfig (gcc-10): 2 errors
 
-But you better know how to proceed. Just in case, if you need some
-support please let me know i can help with conflict resolving.
+i386:
 
---
-Uladzislau Rezki
+mips:
+    32r2el_defconfig (gcc-10): 3 warnings
+    32r2el_defconfig+debug (gcc-10): 3 warnings
+    ath79_defconfig (gcc-10): 3 warnings
+    bigsur_defconfig (gcc-10): 15 warnings
+    cavium_octeon_defconfig (gcc-10): 12 warnings
+    db1xxx_defconfig (gcc-10): 21 warnings
+    decstation_64_defconfig (gcc-10): 9 warnings
+    decstation_defconfig (gcc-10): 9 warnings
+    decstation_r4k_defconfig (gcc-10): 9 warnings
+    fuloong2e_defconfig (gcc-10): 1 warning
+    gpr_defconfig (gcc-10): 1 warning
+    ip22_defconfig (gcc-10): 6 warnings
+    ip28_defconfig (gcc-10): 8 warnings
+    ip32_defconfig (gcc-10): 1 warning
+    jazz_defconfig (gcc-10): 5 warnings
+    lemote2f_defconfig (gcc-10): 22 warnings
+    loongson1b_defconfig (gcc-10): 1 warning
+    loongson1c_defconfig (gcc-10): 1 warning
+    loongson2k_defconfig (gcc-10): 12 warnings
+    loongson3_defconfig (gcc-10): 13 warnings
+    maltaaprp_defconfig (gcc-10): 4 warnings
+    maltaup_xpa_defconfig (gcc-10): 1 warning
+    omega2p_defconfig (gcc-10): 2 warnings
+    pic32mzda_defconfig (gcc-10): 1 warning
+    rb532_defconfig (gcc-10): 3 warnings
+    rm200_defconfig (gcc-10): 8 warnings
+    rt305x_defconfig (gcc-10): 2 warnings
+    sb1250_swarm_defconfig (gcc-10): 16 warnings
+    vocore2_defconfig (gcc-10): 2 warnings
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 26 warnings
+    sparc64_defconfig+debug (gcc-10): 24 warnings
+    tinyconfig (gcc-10): 1 warning
+
+x86_64:
+
+Errors summary:
+
+    8    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/sun4i/sun4i-dr=
+m-hdmi.ko] undefined!
+    1    sun4i_hdmi_enc.c:(.text+0x380): undefined reference to `__aeabi_ul=
+divmod'
+    1    sun4i_hdmi_enc.c:(.text+0x138): undefined reference to `__aeabi_ul=
+divmod'
+
+Warnings summary:
+
+    12   arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
+r 'syscall_trace_enter' [-Wmissing-prototypes]
+    8    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    4    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (in=
+terrupt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, bu=
+t node is not an interrupt provider
+    4    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
+or 'arc_kprobe_handler' [-Wmissing-prototypes]
+    3    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =
+=E2=80=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =
+=E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototyp=
+e for =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototyp=
+e for =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous protot=
+ype for =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =
+=E2=80=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =
+=E2=80=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =
+=E2=80=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =
+=E2=80=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =
+=E2=80=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype fo=
+r =E2=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
+    2    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =
+=E2=80=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
+    2    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous =
+prototype for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
+=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    2    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    2    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    2    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    2    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
+=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
+r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
+ =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
+ for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
+ for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
+e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
+ypes]
+    2    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
+e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
+ for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
+e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
+pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
+or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
+for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
+for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototyp=
+e for =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous=
+ prototype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previou=
+s prototype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous=
+ prototype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous pr=
+ototype for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous p=
+rototype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous pr=
+ototype for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sgi-ip22/ip22-time.c:119:18: warning: no previous protot=
+ype for =E2=80=98indy_8254timer_irq=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sgi-ip22/ip22-gio.c:398:12: warning: no previous prototy=
+pe for =E2=80=98ip22_gio_init=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sgi-ip22/ip22-gio.c:249:6: warning: no previous prototyp=
+e for =E2=80=98ip22_gio_set_64bit=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for=
+ =E2=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/loongson64/pm.c:67:13: warning: no previous prototype fo=
+r =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/loongson64/pm.c:63:13: warning: no previous prototype fo=
+r =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/loongson64/pm.c:59:13: warning: no previous prototype fo=
+r =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/loongson64/dma.c:25:13: warning: no previous prototype f=
+or =E2=80=98plat_swiotlb_setup=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/loongson32/common/platform.c:71:5: warning: no previous =
+prototype for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previou=
+s prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-protot=
+ypes]
+    2    arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dts:32.31-40.4:=
+ Warning (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missi=
+ng '#interrupt-cells' in interrupt provider
+    2    arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dtb: Warning (i=
+nterrupt_map): Failed prerequisite 'interrupt_provider'
+    2    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dts:28.31-36.4:=
+ Warning (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missi=
+ng '#interrupt-cells' in interrupt provider
+    2    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dtb: Warning (i=
+nterrupt_map): Failed prerequisite 'interrupt_provider'
+    2    arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dtb: Warning (=
+interrupt_map): Failed prerequisite 'interrupt_provider'
+    2    arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi:116.16-297.5: W=
+arning (interrupt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells'=
+ found, but node is not an interrupt provider
+    2    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
+ls' found, but node is not an interrupt provider
+    2    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
+ is not an interrupt provider
+    2    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    2    arch/arc/boot/dts/vdk_axs10x_mb.dtsi:36.18-47.5: Warning (interrup=
+t_provider): /axs10x_mb_vdk/ethernet@18000: '#interrupt-cells' found, but n=
+ode is not an interrupt provider
+    2    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    2    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    drivers/watchdog/octeon-wdt-main.c:210:6: warning: no previous pro=
+totype for =E2=80=98octeon_wdt_nmi_stage3=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:565:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_drv_resume=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:548:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_drv_suspend=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:523:6: warning: no previous prototy=
+pe for =E2=80=98au1100fb_drv_remove=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:341:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_fb_mmap=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:294:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_fb_pan_display=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:235:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_fb_setcolreg=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:138:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_setmode=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/uio/uio.c:795:9: warning: cast to pointer from integer of =
+different size [-Wint-to-pointer-cast]
+    1    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous protot=
+ype for =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/net/ethernet/sgi/meth.c:271:5: warning: no previous protot=
+ype for =E2=80=98meth_reset=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/irqchip/irq-pic32-evic.c:164:5: warning: no previous proto=
+type for =E2=80=98pic32_irq_domain_xlate=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/irqchip/irq-mxs.c:133:39: warning: no previous prototype f=
+or =E2=80=98icoll_handle_irq=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/irqchip/irq-ath79-misc.c:26:5: warning: no previous protot=
+ype for =E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/irqchip/irq-ath79-misc.c:181:13: warning: no previous prot=
+otype for =E2=80=98ath79_misc_irq_init=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/irqchip/irq-ath79-cpu.c:89:13: warning: no previous protot=
+ype for =E2=80=98ath79_cpu_irq_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/rm200.c:428:6: warning: no previous prototype for =
+=E2=80=98disable_rm200_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/rm200.c:387:13: warning: no previous prototype for =
+=E2=80=98sni_rm200_i8259_irqs=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/rm200.c:331:6: warning: no previous prototype for =
+=E2=80=98sni_rm200_init_8259A=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/rm200.c:211:6: warning: no previous prototype for =
+=E2=80=98sni_rm200_mask_and_ack_8259A=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/reset.c:45:6: warning: no previous prototype for =E2=
+=80=98sni_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/reset.c:28:6: warning: no previous prototype for =E2=
+=80=98sni_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/pcit.c:168:6: warning: no previous prototype for =E2=
+=80=98disable_pcit_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/pcimt.c:206:6: warning: no previous prototype for =
+=E2=80=98disable_pcimt_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/time.c:10:13: warning: no previous prototy=
+pe for =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/smp.c:38:6: warning: no previous prototype=
+ for =E2=80=98sb1250_smp_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/smp.c:147:6: warning: no previous prototyp=
+e for =E2=80=98sb1250_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/setup.c:79:5: warning: no previous prototy=
+pe for =E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/setup.c:168:13: warning: no previous proto=
+type for =E2=80=98sb1250_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/irq.c:182:13: warning: no previous prototy=
+pe for =E2=80=98init_sb1250_irqs=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/time.c:10:13: warning: no previous protot=
+ype for =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/smp.c:49:6: warning: no previous prototyp=
+e for =E2=80=98bcm1480_smp_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/smp.c:158:6: warning: no previous prototy=
+pe for =E2=80=98bcm1480_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/setup.c:104:13: warning: no previous prot=
+otype for =E2=80=98bcm1480_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/irq.c:200:13: warning: no previous protot=
+ype for =E2=80=98init_bcm1480_irqs=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sgi-ip22/ip28-berr.c:474:5: warning: no previous prototy=
+pe for =E2=80=98ip28_show_be_info=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sgi-ip22/ip28-berr.c:469:13: warning: no previous protot=
+ype for =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sgi-ip22/ip28-berr.c:440:6: warning: no previous prototy=
+pe for =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sgi-ip22/ip22-eisa.c:95:12: warning: no previous prototy=
+pe for =E2=80=98ip22_eisa_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sgi-ip22/ip22-berr.c:89:6: warning: no previous prototyp=
+e for =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sgi-ip22/ip22-berr.c:113:13: warning: no previous protot=
+ype for =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/rb532/serial.c:48:12: warning: no previous prototype for=
+ =E2=80=98setup_serial_port=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/rb532/prom.c:49:13: warning: no previous prototype for =
+=E2=80=98prom_setup_cmdline=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/rb532/gpio.c:200:12: warning: no previous prototype for =
+=E2=80=98rb532_gpio_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/pci/pcie-octeon.c:1465:5: warning: no previous prototype=
+ for =E2=80=98octeon_pcie_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/pci/pci-octeon.c:234:12: warning: no previous prototype =
+for =E2=80=98octeon_pci_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/pci/msi-octeon.c:343:12: warning: no previous prototype =
+for =E2=80=98octeon_msi_initialize=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/mm/c-octeon.c:351:17: warning: no previous prototype for=
+ =E2=80=98cache_parity_error_octeon_non_recoverable=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/mm/c-octeon.c:342:17: warning: no previous prototype for=
+ =E2=80=98cache_parity_error_octeon_recoverable=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/mips/mm/c-octeon.c:303:5: warning: no previous prototype for =
+=E2=80=98unregister_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/mm/c-octeon.c:297:5: warning: no previous prototype for =
+=E2=80=98register_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/pm.c:90:5: warning: no previous pr=
+ototype for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/pm.c:52:6: warning: no previous pr=
+ototype for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/pm.c:142:13: warning: no previous =
+prototype for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/pm.c:137:13: warning: no previous =
+prototype for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/machtype.c:10:13: warning: no prev=
+ious prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/loongson2ef/common/pm.c:66:12: warning: no previous prot=
+otype for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/common/pm.c:59:13: warning: no previous prot=
+otype for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/common/pm.c:118:13: warning: no previous pro=
+totype for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/common/pm.c:114:13: warning: no previous pro=
+totype for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:70:5: warning: n=
+o previous prototype for =E2=80=98pci_ohci_read_reg=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:15:6: warning: n=
+o previous prototype for =E2=80=98pci_ohci_write_reg=E2=80=99 [-Wmissing-pr=
+ototypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:84:6: warning: no=
+ previous prototype for =E2=80=98pci_isa_write_bar=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:228:5: warning: n=
+o previous prototype for =E2=80=98pci_isa_read_reg=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:134:6: warning: n=
+o previous prototype for =E2=80=98pci_isa_write_reg=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:110:5: warning: n=
+o previous prototype for =E2=80=98pci_isa_read_bar=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: warning: no=
+ previous prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Wmissing-proto=
+types]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: warning: no=
+ previous prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:75:5: warning: n=
+o previous prototype for =E2=80=98pci_ehci_read_reg=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:15:6: warning: n=
+o previous prototype for =E2=80=98pci_ehci_write_reg=E2=80=99 [-Wmissing-pr=
+ototypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:62:5: warning: no=
+ previous prototype for =E2=80=98pci_acc_read_reg=E2=80=99 [-Wmissing-proto=
+types]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:15:6: warning: no=
+ previous prototype for =E2=80=98pci_acc_write_reg=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/kvm/loongson_ipi.c:190:6: warning: no previous prototype=
+ for =E2=80=98kvm_init_loongson_ipi=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/vpe-mt.c:226:5: warning: no previous prototype fo=
+r =E2=80=98vpe_free=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/vpe-mt.c:205:5: warning: no previous prototype fo=
+r =E2=80=98vpe_stop=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/vpe-mt.c:195:5: warning: no previous prototype fo=
+r =E2=80=98vpe_start=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/vpe-mt.c:177:7: warning: no previous prototype fo=
+r =E2=80=98vpe_alloc=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/csrc-sb1250.c:53:13: warning: no previous prototy=
+pe for =E2=80=98sb1250_clocksource_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/csrc-bcm1480.c:37:13: warning: no previous protot=
+ype for =E2=80=98sb1480_clocksource_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/cevt-sb1250.c:95:6: warning: no previous prototyp=
+e for =E2=80=98sb1250_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/cevt-bcm1480.c:96:6: warning: no previous prototy=
+pe for =E2=80=98sb1480_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/setup.c:54:13: warning: no previous prototype for =
+=E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/reset.c:49:6: warning: no previous prototype for =
+=E2=80=98jazz_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/irq.c:55:13: warning: no previous prototype for =E2=
+=80=98init_r4030_ints=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/irq.c:38:6: warning: no previous prototype for =E2=
+=80=98disable_r4030_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/irq.c:128:13: warning: no previous prototype for =
+=E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/cavium-octeon/smp.c:100:6: warning: no previous prototyp=
+e for =E2=80=98octeon_send_ipi_single=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/cavium-octeon/octeon-platform.c:701:13: warning: no prev=
+ious prototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: w=
+arning: no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en=
+_enable=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/cavium-octeon/executive/cvmx-helper-errata.c:49:6: warni=
+ng: no previous prototype for =E2=80=98__cvmx_helper_errata_qlm_disable_2nd=
+_order_cdr=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/platform.c:68:12: warning: no previous=
+ prototype for =E2=80=98db1x_register_pcmcia_socket=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/alchemy/devboards/platform.c:152:12: warning: no previou=
+s prototype for =E2=80=98db1x_register_norflash=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/mips/alchemy/devboards/db1xxx.c:52:13: warning: no previous p=
+rototype for =E2=80=98get_system_type=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1550.c:582:12: warning: no previous =
+prototype for =E2=80=98db1550_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1550.c:56:12: warning: no previous p=
+rototype for =E2=80=98db1550_board_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1550.c:501:12: warning: no previous =
+prototype for =E2=80=98db1550_pci_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1300.c:855:12: warning: no previous =
+prototype for =E2=80=98db1300_board_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1300.c:786:12: warning: no previous =
+prototype for =E2=80=98db1300_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1200.c:799:12: warning: no previous =
+prototype for =E2=80=98db1200_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1200.c:116:12: warning: no previous =
+prototype for =E2=80=98db1200_board_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1000.c:93:12: warning: no previous p=
+rototype for =E2=80=98db1500_pci_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1000.c:451:12: warning: no previous =
+prototype for =E2=80=98db1000_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1000.c:35:12: warning: no previous p=
+rototype for =E2=80=98db1000_board_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/arc/boot/dts/vdk_hs38_smp.dtb: Warning (interrupt_map): Faile=
+d prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/vdk_hs38.dtb: Warning (interrupt_map): Failed pr=
+erequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/nsimosci_hs_idu.dts:92.16-96.5: Warning (interru=
+pt_provider): /fpga/pct: '#interrupt-cells' found, but node is not an inter=
+rupt provider
+    1    arch/arc/boot/dts/nsimosci_hs_idu.dtb: Warning (interrupt_map): Fa=
+iled prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/nsimosci_hs.dts:84.16-88.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/nsimosci_hs.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/hsdk.dts:207.23-235.5: Warning (interrupt_provid=
+er): /soc/ethernet@8000: '#interrupt-cells' found, but node is not an inter=
+rupt provider
+    1    arch/arc/boot/dts/hsdk.dtb: Warning (interrupt_map): Failed prereq=
+uisite 'interrupt_provider'
+    1    arch/arc/boot/dts/haps_hs.dts:63.16-67.5: Warning (interrupt_provi=
+der): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt pro=
+vider
+    1    arch/arc/boot/dts/haps_hs.dtb: Warning (interrupt_map): Failed pre=
+requisite 'interrupt_provider'
+    1    arch/arc/boot/dts/axs103_idu.dtb: Warning (interrupt_map): Failed =
+prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/axs103.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+    1    arch/arc/boot/dts/axc003_idu.dtsi:92.16-97.5: Warning (interrupt_p=
+rovider): /cpu_card/pct: '#interrupt-cells' found, but node is not an inter=
+rupt provider
+    1    arch/arc/boot/dts/axc003_idu.dtsi:109.18-111.5: Warning (interrupt=
+_provider): /axs10x_mb/ethernet@18000: '#interrupt-cells' found, but node i=
+s not an interrupt provider
+    1    arch/arc/boot/dts/axc003.dtsi:85.16-90.5: Warning (interrupt_provi=
+der): /cpu_card/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/axc003.dtsi:102.18-104.5: Warning (interrupt_pro=
+vider): /axs10x_mb/ethernet@18000: '#interrupt-cells' found, but node is no=
+t an interrupt provider
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
+ 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    drivers/irqchip/irq-ath79-cpu.c:89:13: warning: no previous prototype f=
+or =E2=80=98ath79_cpu_irq_init=E2=80=99 [-Wmissing-prototypes]
+    drivers/irqchip/irq-ath79-misc.c:26:5: warning: no previous prototype f=
+or =E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    drivers/irqchip/irq-ath79-misc.c:181:13: warning: no previous prototype=
+ for =E2=80=98ath79_misc_irq_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arc/boot/dts/axc003.dtsi:85.16-90.5: Warning (interrupt_provider):=
+ /cpu_card/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/axc003.dtsi:102.18-104.5: Warning (interrupt_provider=
+): /axs10x_mb/ethernet@18000: '#interrupt-cells' found, but node is not an =
+interrupt provider
+    arch/arc/boot/dts/axs103.dtb: Warning (interrupt_map): Failed prerequis=
+ite 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arc/boot/dts/axc003_idu.dtsi:92.16-97.5: Warning (interrupt_provid=
+er): /cpu_card/pct: '#interrupt-cells' found, but node is not an interrupt =
+provider
+    arch/arc/boot/dts/axc003_idu.dtsi:109.18-111.5: Warning (interrupt_prov=
+ider): /axs10x_mb/ethernet@18000: '#interrupt-cells' found, but node is not=
+ an interrupt provider
+    arch/arc/boot/dts/axs103_idu.dtb: Warning (interrupt_map): Failed prere=
+quisite 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 15 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/mips/sibyte/bcm1480/setup.c:104:13: warning: no previous prototype=
+ for =E2=80=98bcm1480_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/bcm1480/irq.c:200:13: warning: no previous prototype f=
+or =E2=80=98init_bcm1480_irqs=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/bcm1480/time.c:10:13: warning: no previous prototype f=
+or =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/bcm1480/smp.c:49:6: warning: no previous prototype for=
+ =E2=80=98bcm1480_smp_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/bcm1480/smp.c:158:6: warning: no previous prototype fo=
+r =E2=80=98bcm1480_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototype for=
+ =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous prot=
+otype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previous pro=
+totype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous prot=
+otype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous prototy=
+pe for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous protot=
+ype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous prototy=
+pe for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-bcm1480.c:96:6: warning: no previous prototype fo=
+r =E2=80=98sb1480_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/csrc-bcm1480.c:37:13: warning: no previous prototype f=
+or =E2=80=98sb1480_clocksource_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for =E2=
+=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 12 warning=
+s, 0 section mismatches
+
+Warnings:
+    arch/mips/cavium-octeon/octeon-platform.c:701:13: warning: no previous =
+prototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: warnin=
+g: no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en_enab=
+le=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/cavium-octeon/executive/cvmx-helper-errata.c:49:6: warning: n=
+o previous prototype for =E2=80=98__cvmx_helper_errata_qlm_disable_2nd_orde=
+r_cdr=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/cavium-octeon/smp.c:100:6: warning: no previous prototype for=
+ =E2=80=98octeon_send_ipi_single=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/c-octeon.c:297:5: warning: no previous prototype for =E2=
+=80=98register_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/c-octeon.c:303:5: warning: no previous prototype for =E2=
+=80=98unregister_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/c-octeon.c:342:17: warning: no previous prototype for =E2=
+=80=98cache_parity_error_octeon_recoverable=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/c-octeon.c:351:17: warning: no previous prototype for =E2=
+=80=98cache_parity_error_octeon_non_recoverable=E2=80=99 [-Wmissing-prototy=
+pes]
+    arch/mips/pci/pci-octeon.c:234:12: warning: no previous prototype for =
+=E2=80=98octeon_pci_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/pci/pcie-octeon.c:1465:5: warning: no previous prototype for =
+=E2=80=98octeon_pcie_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/pci/msi-octeon.c:343:12: warning: no previous prototype for =
+=E2=80=98octeon_msi_initialize=E2=80=99 [-Wmissing-prototypes]
+    drivers/watchdog/octeon-wdt-main.c:210:6: warning: no previous prototyp=
+e for =E2=80=98octeon_wdt_nmi_stage3=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype f=
+or =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 21 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/mips/alchemy/devboards/platform.c:68:12: warning: no previous prot=
+otype for =E2=80=98db1x_register_pcmcia_socket=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/alchemy/devboards/platform.c:152:12: warning: no previous pro=
+totype for =E2=80=98db1x_register_norflash=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1000.c:35:12: warning: no previous protot=
+ype for =E2=80=98db1000_board_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1000.c:93:12: warning: no previous protot=
+ype for =E2=80=98db1500_pci_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1000.c:451:12: warning: no previous proto=
+type for =E2=80=98db1000_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1200.c:116:12: warning: no previous proto=
+type for =E2=80=98db1200_board_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1200.c:799:12: warning: no previous proto=
+type for =E2=80=98db1200_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1300.c:786:12: warning: no previous proto=
+type for =E2=80=98db1300_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1300.c:855:12: warning: no previous proto=
+type for =E2=80=98db1300_board_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1550.c:56:12: warning: no previous protot=
+ype for =E2=80=98db1550_board_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1550.c:501:12: warning: no previous proto=
+type for =E2=80=98db1550_pci_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1550.c:582:12: warning: no previous proto=
+type for =E2=80=98db1550_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1xxx.c:52:13: warning: no previous protot=
+ype for =E2=80=98get_system_type=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:138:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_setmode=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:235:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_fb_setcolreg=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:294:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_fb_pan_display=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:341:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_fb_mmap=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:523:6: warning: no previous prototype fo=
+r =E2=80=98au1100fb_drv_remove=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:548:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_drv_suspend=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:565:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_drv_resume=E2=80=99 [-Wmissing-prototypes]
+    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous proto=
+type for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 9 warnings=
+, 0 section mismatches
+
+Warnings:
+    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
+=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
+=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
+=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
+=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
+=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
+ =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
+ =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
+or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
+=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
+=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
+=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
+=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
+=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
+=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
+ =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
+ =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
+or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
+=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warning=
+s, 0 section mismatches
+
+Warnings:
+    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
+=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
+=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
+=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
+=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
+=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
+ =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
+ =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
+or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
+=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+eyeq5_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previous pro=
+totype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous proto=
+type for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs.dts:63.16-67.5: Warning (interrupt_provider):=
+ /fpga/pct: '#interrupt-cells' found, but node is not an interrupt provider
+    arch/arc/boot/dts/haps_hs.dtb: Warning (interrupt_map): Failed prerequi=
+site 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arc/boot/dts/hsdk.dts:207.23-235.5: Warning (interrupt_provider): =
+/soc/ethernet@8000: '#interrupt-cells' found, but node is not an interrupt =
+provider
+    arch/arc/boot/dts/hsdk.dtb: Warning (interrupt_map): Failed prerequisit=
+e 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/sgi-ip22/ip22-time.c:119:18: warning: no previous prototype f=
+or =E2=80=98indy_8254timer_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip22-gio.c:249:6: warning: no previous prototype for=
+ =E2=80=98ip22_gio_set_64bit=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip22-gio.c:398:12: warning: no previous prototype fo=
+r =E2=80=98ip22_gio_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip22-berr.c:89:6: warning: no previous prototype for=
+ =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip22-berr.c:113:13: warning: no previous prototype f=
+or =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
+    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =E2=80=
+=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/sgi-ip22/ip22-time.c:119:18: warning: no previous prototype f=
+or =E2=80=98indy_8254timer_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip22-gio.c:249:6: warning: no previous prototype for=
+ =E2=80=98ip22_gio_set_64bit=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip22-gio.c:398:12: warning: no previous prototype fo=
+r =E2=80=98ip22_gio_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip28-berr.c:440:6: warning: no previous prototype fo=
+r =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip28-berr.c:469:13: warning: no previous prototype f=
+or =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip28-berr.c:474:5: warning: no previous prototype fo=
+r =E2=80=98ip28_show_be_info=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip22-eisa.c:95:12: warning: no previous prototype fo=
+r =E2=80=98ip22_eisa_init=E2=80=99 [-Wmissing-prototypes]
+    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =E2=80=
+=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/net/ethernet/sgi/meth.c:271:5: warning: no previous prototype f=
+or =E2=80=98meth_reset=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/jazz/irq.c:38:6: warning: no previous prototype for =E2=80=98=
+disable_r4030_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/jazz/irq.c:55:13: warning: no previous prototype for =E2=80=
+=98init_r4030_ints=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/jazz/irq.c:128:13: warning: no previous prototype for =E2=80=
+=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/jazz/reset.c:49:6: warning: no previous prototype for =E2=80=
+=98jazz_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/jazz/setup.c:54:13: warning: no previous prototype for =E2=80=
+=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 22 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: warning: no prev=
+ious prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: warning: no prev=
+ious prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:15:6: warning: no prev=
+ious prototype for =E2=80=98pci_acc_write_reg=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:62:5: warning: no prev=
+ious prototype for =E2=80=98pci_acc_read_reg=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:15:6: warning: no pre=
+vious prototype for =E2=80=98pci_ohci_write_reg=E2=80=99 [-Wmissing-prototy=
+pes]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:70:5: warning: no pre=
+vious prototype for =E2=80=98pci_ohci_read_reg=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:84:6: warning: no prev=
+ious prototype for =E2=80=98pci_isa_write_bar=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:110:5: warning: no pre=
+vious prototype for =E2=80=98pci_isa_read_bar=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:134:6: warning: no pre=
+vious prototype for =E2=80=98pci_isa_write_reg=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:228:5: warning: no pre=
+vious prototype for =E2=80=98pci_isa_read_reg=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:15:6: warning: no pre=
+vious prototype for =E2=80=98pci_ehci_write_reg=E2=80=99 [-Wmissing-prototy=
+pes]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:75:5: warning: no pre=
+vious prototype for =E2=80=98pci_ehci_read_reg=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/loongson2ef/lemote-2f/machtype.c:10:13: warning: no previous =
+prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/loongson2ef/lemote-2f/pm.c:52:6: warning: no previous prototy=
+pe for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/lemote-2f/pm.c:90:5: warning: no previous prototy=
+pe for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/lemote-2f/pm.c:137:13: warning: no previous proto=
+type for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/lemote-2f/pm.c:142:13: warning: no previous proto=
+type for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previous pro=
+totype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/pm.c:59:13: warning: no previous prototype=
+ for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/pm.c:66:12: warning: no previous prototype=
+ for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/pm.c:114:13: warning: no previous prototyp=
+e for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/pm.c:118:13: warning: no previous prototyp=
+e for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/loongson32/common/platform.c:71:5: warning: no previous proto=
+type for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/loongson32/common/platform.c:71:5: warning: no previous proto=
+type for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 12 warnings, =
+0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi:116.16-297.5: Warnin=
+g (interrupt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' foun=
+d, but node is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dtb: Warning (inter=
+rupt_map): Failed prerequisite 'interrupt_provider'
+    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (interru=
+pt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, but nod=
+e is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dts:28.31-36.4: Warn=
+ing (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missing '#=
+interrupt-cells' in interrupt provider
+    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dtb: Warning (interr=
+upt_map): Failed prerequisite 'interrupt_provider'
+    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (interru=
+pt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, but nod=
+e is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dts:32.31-40.4: Warn=
+ing (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missing '#=
+interrupt-cells' in interrupt provider
+    arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dtb: Warning (interr=
+upt_map): Failed prerequisite 'interrupt_provider'
+    arch/mips/loongson64/dma.c:25:13: warning: no previous prototype for =
+=E2=80=98plat_swiotlb_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson64/pm.c:59:13: warning: no previous prototype for =E2=
+=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson64/pm.c:63:13: warning: no previous prototype for =E2=
+=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson64/pm.c:67:13: warning: no previous prototype for =E2=
+=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 13 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi:116.16-297.5: Warnin=
+g (interrupt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' foun=
+d, but node is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dtb: Warning (inter=
+rupt_map): Failed prerequisite 'interrupt_provider'
+    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (interru=
+pt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, but nod=
+e is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dts:28.31-36.4: Warn=
+ing (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missing '#=
+interrupt-cells' in interrupt provider
+    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dtb: Warning (interr=
+upt_map): Failed prerequisite 'interrupt_provider'
+    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (interru=
+pt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, but nod=
+e is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dts:32.31-40.4: Warn=
+ing (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missing '#=
+interrupt-cells' in interrupt provider
+    arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dtb: Warning (interr=
+upt_map): Failed prerequisite 'interrupt_provider'
+    arch/mips/loongson64/dma.c:25:13: warning: no previous prototype for =
+=E2=80=98plat_swiotlb_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson64/pm.c:59:13: warning: no previous prototype for =E2=
+=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson64/pm.c:63:13: warning: no previous prototype for =E2=
+=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson64/pm.c:67:13: warning: no previous prototype for =E2=
+=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kvm/loongson_ipi.c:190:6: warning: no previous prototype for =
+=E2=80=98kvm_init_loongson_ipi=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/kernel/vpe-mt.c:177:7: warning: no previous prototype for =E2=
+=80=98vpe_alloc=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/vpe-mt.c:195:5: warning: no previous prototype for =E2=
+=80=98vpe_start=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/vpe-mt.c:205:5: warning: no previous prototype for =E2=
+=80=98vpe_stop=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/vpe-mt.c:226:5: warning: no previous prototype for =E2=
+=80=98vpe_free=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    drivers/uio/uio.c:795:9: warning: cast to pointer from integer of diffe=
+rent size [-Wint-to-pointer-cast]
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/sun4i/sun4i-drm-hdm=
+i.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/sun4i/sun4i-drm-hdm=
+i.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 FAIL, =
+1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/sun4i/sun4i-drm-hdm=
+i.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/sun4i/sun4i-drm-hdm=
+i.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 =
+warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/sun4i/sun4i-drm-hdm=
+i.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 FAIL, 1=
+ error, 0 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/sun4i/sun4i-drm-hdm=
+i.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/sun4i/sun4i-drm-hdm=
+i.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warni=
+ngs, 0 section mismatches
+
+Errors:
+    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/sun4i/sun4i-drm-hdm=
+i.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    drivers/irqchip/irq-mxs.c:133:39: warning: no previous prototype for =
+=E2=80=98icoll_handle_irq=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/nsimosci_hs.dts:84.16-88.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/nsimosci_hs.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warning=
+s, 0 section mismatches
+
+Warnings:
+    arch/arc/boot/dts/nsimosci_hs_idu.dts:92.16-96.5: Warning (interrupt_pr=
+ovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt =
+provider
+    arch/arc/boot/dts/nsimosci_hs_idu.dtb: Warning (interrupt_map): Failed =
+prerequisite 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
+=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
+=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    drivers/irqchip/irq-pic32-evic.c:164:5: warning: no previous prototype =
+for =E2=80=98pic32_irq_domain_xlate=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/rb532/serial.c:48:12: warning: no previous prototype for =E2=
+=80=98setup_serial_port=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/rb532/prom.c:49:13: warning: no previous prototype for =E2=80=
+=98prom_setup_cmdline=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/rb532/gpio.c:200:12: warning: no previous prototype for =E2=
+=80=98rb532_gpio_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/sni/reset.c:28:6: warning: no previous prototype for =E2=80=
+=98sni_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/reset.c:45:6: warning: no previous prototype for =E2=80=
+=98sni_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/rm200.c:211:6: warning: no previous prototype for =E2=80=
+=98sni_rm200_mask_and_ack_8259A=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/rm200.c:331:6: warning: no previous prototype for =E2=80=
+=98sni_rm200_init_8259A=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/rm200.c:387:13: warning: no previous prototype for =E2=80=
+=98sni_rm200_i8259_irqs=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/rm200.c:428:6: warning: no previous prototype for =E2=80=
+=98disable_rm200_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/pcimt.c:206:6: warning: no previous prototype for =E2=80=
+=98disable_pcimt_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/pcit.c:168:6: warning: no previous prototype for =E2=80=
+=98disable_pcit_irq=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
+=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
+=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 16 warnings=
+, 0 section mismatches
+
+Warnings:
+    arch/mips/sibyte/sb1250/setup.c:79:5: warning: no previous prototype fo=
+r =E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/setup.c:168:13: warning: no previous prototype =
+for =E2=80=98sb1250_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/irq.c:182:13: warning: no previous prototype fo=
+r =E2=80=98init_sb1250_irqs=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/time.c:10:13: warning: no previous prototype fo=
+r =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/smp.c:38:6: warning: no previous prototype for =
+=E2=80=98sb1250_smp_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/smp.c:147:6: warning: no previous prototype for=
+ =E2=80=98sb1250_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototype for=
+ =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous prot=
+otype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previous pro=
+totype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous prot=
+otype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous prototy=
+pe for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous protot=
+ype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous prototy=
+pe for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for =E2=
+=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-sb1250.c:95:6: warning: no previous prototype for=
+ =E2=80=98sb1250_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/csrc-sb1250.c:53:13: warning: no previous prototype fo=
+r =E2=80=98sb1250_clocksource_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
+=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
+ =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
+ =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
+ =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
+=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
+=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
+=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
+=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
+r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
+=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
+=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
+=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 24 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
+=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
+ =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
+ =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
+ =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
+=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
+=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
+=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
+=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
+r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
+=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
+=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
+=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    sun4i_hdmi_enc.c:(.text+0x138): undefined reference to `__aeabi_uldivmo=
+d'
+    sun4i_hdmi_enc.c:(.text+0x380): undefined reference to `__aeabi_uldivmo=
+d'
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arc/boot/dts/vdk_axs10x_mb.dtsi:36.18-47.5: Warning (interrupt_pro=
+vider): /axs10x_mb_vdk/ethernet@18000: '#interrupt-cells' found, but node i=
+s not an interrupt provider
+    arch/arc/boot/dts/vdk_hs38.dtb: Warning (interrupt_map): Failed prerequ=
+isite 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, =
+0 section mismatches
+
+Warnings:
+    arch/arc/boot/dts/vdk_axs10x_mb.dtsi:36.18-47.5: Warning (interrupt_pro=
+vider): /axs10x_mb_vdk/ethernet@18000: '#interrupt-cells' found, but node i=
+s not an interrupt provider
+    arch/arc/boot/dts/vdk_hs38_smp.dtb: Warning (interrupt_map): Failed pre=
+requisite 'interrupt_provider'
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
+=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
+=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-board (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
 

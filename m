@@ -1,79 +1,54 @@
-Return-Path: <linux-next+bounces-1690-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1691-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D4D6886416
-	for <lists+linux-next@lfdr.de>; Fri, 22 Mar 2024 00:47:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49D1E886418
+	for <lists+linux-next@lfdr.de>; Fri, 22 Mar 2024 00:49:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 294332841AD
-	for <lists+linux-next@lfdr.de>; Thu, 21 Mar 2024 23:47:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C1C51C21714
+	for <lists+linux-next@lfdr.de>; Thu, 21 Mar 2024 23:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191DD1DFCF;
-	Thu, 21 Mar 2024 23:47:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B091DFD6;
+	Thu, 21 Mar 2024 23:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HjhjhBrt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YAM/R0Et"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BAC1DDDB;
-	Thu, 21 Mar 2024 23:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB821DFCF;
+	Thu, 21 Mar 2024 23:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711064872; cv=none; b=beWWKdffOZNlisWUHxmykuWm1oh6aZ9i4ZtBnnNxpCwVwl5yDKGQhXdxn1Ong6Ay73cGjDJNsQJmceYcvb0+mu9RA1RUAt5Qs51muavs7sw+RSFcbNYJYAzQcWrXDlP2ljEyTvm+MLi7sdReYINXt6sVO77AQY4cewm+43zSVrc=
+	t=1711064939; cv=none; b=esT9O4LSD4EABO6ejXMDl3f8SoekjfEy+Et+xUNH/geBTgJOVBe8OQbxbMmTFLFeyjfOtsEYwXFQT063MBQ2//bZwNIyYFNjyokxcDDj3gpxhstXQIW2jGeRzSxMvbifdRFCQXQpy4FZSolGUOEs5fbAxSzGN7DJjzOUibWwQPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711064872; c=relaxed/simple;
-	bh=faRVErYt8G5qNQLWd1m+LPMGBy4BwrP+Drj5J/gyN4w=;
-	h=From:Date:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XSEQ2hV4aP5bGhg5ssDupJFppV36YqMABB8TlrZ1aj5YMbDbB43y97zhrjNlrKe+wm72G48mJug3eskoznAXeeNpQHEjpEN4nSoUXuaLjL0Ax7RtZU0gzs7gUXEcPF8aWEJXkCXTgB4VoJ5CdVxGNaki2iHfXhpwC4gyFNsbcmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HjhjhBrt; arc=none smtp.client-ip=209.85.160.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-221816e3ab9so724613fac.2;
-        Thu, 21 Mar 2024 16:47:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711064869; x=1711669669; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ytKgvW58PsSJu3xpljogczDg2wQaBHBKuWrvcBzPeM=;
-        b=HjhjhBrt7Ed7UtZBmQr3Ny/3mme6wTKFWNNltzfcK/puqQeXlvtXpJBqxNqy4tWgyx
-         jeIclNnMEs3XHfw4UfCWUhr3f9AWbb4DT2DlAU9D9E3NccVc7tnFLWrAlTUFEF7Cm2MK
-         gFqbcakzHV0cztoa94sONEQZ41zv/33knAgOqkLCG7rx9nig6Z+FKPp17cu8gJWGNkhh
-         sqTdC50Jy5ngJcAWF8G2i17kOuRTizskeA/DXJ8StaQu7UM2Ta0Rc8aEltk13JgOtF2Z
-         pbYMPdUUr8EjPOh456RBnOwKlsxxzAVya+UbIRTCbMvUfYVYry81523ez/VHJfzdFHii
-         075w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711064869; x=1711669669;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9ytKgvW58PsSJu3xpljogczDg2wQaBHBKuWrvcBzPeM=;
-        b=As5JNHKFGAHFBynByUDKAHCiRrqCMrCirxZjaHjoyYOwii37dAG+/mZhoj8keGyQB2
-         PyBZNtKrN3hqrS8XemVr3wMXifgAf6QlmW6EwHWRPDyDmDG2bFmox5uvEtGIGKKYPiyh
-         fno7yb1yS5xKv0AkGl3x9/Ppd62EhcyG/ULewKVtVwviu8LKAmPdYxcPkBpdvG2RK26s
-         OsGj2LjMwgGK5xEM9riKxVK52YadnmQqGBf9R2VypA6aCiUi9GgN/GqbYaspEul4BXTw
-         w2XqrEHsE2F5MGWv1AJ+0oy4gyFqk2y1Qc1sUvVOULZwl3J9z2FthX19XBUgPYT1RqW/
-         dOcw==
-X-Forwarded-Encrypted: i=1; AJvYcCXYGHdI4QrzVzwvG2hElzlTQt4QNIh9NtxB4rbedb+BTFbE4A04YPPRoY5aDGyea5TetQLRUgDo9Bs1CDZSFDVwQc1SSeiaQtggLksrN9k2+uy4sJVzuHMzNwXC6/HiopkyCfF9uup3TA==
-X-Gm-Message-State: AOJu0Ywz1FVHG2Mif0PMcjajmN7vuUsW66JXzTDQSjl1Xc80U6aCpbbg
-	g0drBt8Ds5H0It1dNQwZdUuQyXwb7Or+KNiLx63kZ3gxBIQEIL7Hzp4W8F58
-X-Google-Smtp-Source: AGHT+IFgks42I/VWGJfBMCxEwZHDGNfOpG1w49iQQGKkprKCpyXNQzghz0QMgyV5Fy5/sbA741urZg==
-X-Received: by 2002:a05:6a20:8f1a:b0:1a3:67cd:bed5 with SMTP id b26-20020a056a208f1a00b001a367cdbed5mr1307883pzk.36.1711064463180;
-        Thu, 21 Mar 2024 16:41:03 -0700 (PDT)
-Received: from localhost ([187.19.173.237])
-        by smtp.gmail.com with ESMTPSA id a10-20020aa780ca000000b006e68b422850sm402876pfn.81.2024.03.21.16.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Mar 2024 16:41:02 -0700 (PDT)
-From: arnaldo.melo@gmail.com
-Date: Thu, 21 Mar 2024 20:40:59 -0300
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	Namhyung Kim <namhyung@kernel.org>,
+	s=arc-20240116; t=1711064939; c=relaxed/simple;
+	bh=seeqnGTcDLz4a/rppsPc92YSU07db1oeeNuwzgP8j1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ghxgagp75YO/riFwt2dvb6I17gd2SlWRmpISi2OLSInoDxGq9ABNIHtH7Vos/uochbqz5n+PaMNjv95S3+vp2FUVBADMKkNFhReYZ4LxIqLWHE1yZKBZSAWyHbwyIVWpvZuWPzYXgICDwfRCD2fx2zW+4e2SuIJVH8sJtV6ihpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YAM/R0Et; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547A5C433C7;
+	Thu, 21 Mar 2024 23:48:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711064938;
+	bh=seeqnGTcDLz4a/rppsPc92YSU07db1oeeNuwzgP8j1A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YAM/R0EtWOxziSlUjp9h0jUxc+Z0ON16vuV1pEuheS9ugJyJ8oYr2r0CFEE33Z7Yf
+	 TMts9heNV+RsLG3lPOZy0Q0jUoNMffCFLdOjmD/CK6NtHknvO9Q0aF+1NWJzxdMgPR
+	 cRnQh8kVsjVKivjUsBNczuJVnyeEoQhWHcDLyY/y+qr6K2eFz9laqj8klWbzdWkCnK
+	 g/67InuVea3h0Q4Jr4LUPPuKLZbmEJviKpCTH5xU7WrEZDN56OJV5gP3hHn+VUzvJG
+	 nqM39/lgISTR5hcgp0lUzrtzYIVUgCbBLqyUnR4d/LpKfphYJyZqQthkSx7E48yqTl
+	 uOvLLA2TResiA==
+Date: Thu, 21 Mar 2024 20:48:55 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Namhyung Kim <namhyung@kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <ZfzFiyKWAZqTovT7@x1>
+Message-ID: <ZfzHZzk524biyKKv@x1>
 References: <20240322084131.2316eb8f@canb.auug.org.au>
  <ZfzAKMlYY7IkWXUg@x1>
  <20240322103636.020aa9d2@canb.auug.org.au>
@@ -96,27 +71,16 @@ On Fri, Mar 22, 2024 at 10:36:36AM +1100, Stephen Rothwell wrote:
 > 
 > Yeah.
 
-Ok, I'm rewinding perf-tools-next to the point where Linus merged
-Namhyung's first, and only so far, pull request, sorry for the noise.
- 
-> > For this merge window I think Namhyung is switching to perf-tools,
-> > right?
- 
-> Hopefully.  That branch is for bugs fixes, I think.
+Ok, I got it back to:
 
-Right, that will start at rc1, ok.
+acme@x1:~/git/perf-tools-next$ git log --oneline -3 perf-tools-next/perf-tools-next
+1bbeaf83dd7b5e36 (perf-tools-next/perf-tools-next) Merge tag 'perf-tools-for-v6.9-2024-03-13' of git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools
+63bd30f249dcf0a7 Merge tag 'trace-ring-buffer-v6.8-rc7-2' of git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace
+01732755ee30f086 Merge tag 'probes-v6.9' of git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace
+acme@x1:~/git/perf-tools-next$
  
-> > From your reaction I think I made a mistake and should have opened
-> > perf-tools-next for v6.10 stuff only when the v6.9-rc1 gets released...
-> 
-> The top of my daily linux-next release report says
-> 
-> "Please do not add any v6.10 material to your linux-next included branches
-> until after v6.9-rc1 has been released."
-> 
-> (I did forget this message for few days this merge window, sorry).
-
-Ok,
+Sorry for the noise, I'll move to perf-tools-next when -rc1 gets
+released, I'm acumulating new stuff on a different branch.
 
 - Arnaldo
 

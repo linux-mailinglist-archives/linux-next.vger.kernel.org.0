@@ -1,110 +1,90 @@
-Return-Path: <linux-next+bounces-1685-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1686-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED66E8862A5
-	for <lists+linux-next@lfdr.de>; Thu, 21 Mar 2024 22:41:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BAA58863E5
+	for <lists+linux-next@lfdr.de>; Fri, 22 Mar 2024 00:18:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A90BB2832D1
-	for <lists+linux-next@lfdr.de>; Thu, 21 Mar 2024 21:41:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 792B61C21D74
+	for <lists+linux-next@lfdr.de>; Thu, 21 Mar 2024 23:18:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE8513665C;
-	Thu, 21 Mar 2024 21:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07636FBE;
+	Thu, 21 Mar 2024 23:18:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="njR39MX6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o+z2xijF"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C7F136650;
-	Thu, 21 Mar 2024 21:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8738929A9;
+	Thu, 21 Mar 2024 23:18:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711057297; cv=none; b=lyvxAI2bCkgrwfr1+nggqNS7tr+/ckkE9PnPOzcafvYgSfmd3bcxGOEErbnwuYDlswcZPVXExotQcnJMkdnd19D7YIMfncc8Hd0p8fmsxysThRN7UkkUcNYd4LoQ/9vM+ikYH6rxel8wVeHzjOkuTUbfRy0CaNnMswean0/QaYA=
+	t=1711063083; cv=none; b=fpgAVXSYhc09AMJxElFr7hyFjUEwY0GRh3if63Q42bKjWBmidj+3DMqwKw/viwL6pA480VtgKO8f23n/SJ+mmEUjIW3grJ9i1suarzvqh/Re6R3RZH9mMSF2mCl0iHhXPPyCAl5MvevJX3WLUgd8rEwDgqA1znOxDqqwdNrDLVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711057297; c=relaxed/simple;
-	bh=JdPEm22Hh8sbaqGiixRHF8Xt920mtir7nG+16AGKZXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pXevSJdIUScoUH/6QxkUtuGmLSIH8dn0rD4YBioUgao7VrP17n6n20GdllmVDIlA/BJMZpHTvOb3WRDR2WBQeNwfBiHCYA8Ou+RezVR/vmh7N2iNwKOGKhFC5AiQnYFH11KgrFbwcUeIS2X1a3KoIEZLOoc4jWt+uy8p5npnfEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=njR39MX6; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1711057292;
-	bh=Cf8ctmfRqrbNmiZtV2ydOn9bY9RE833VbbvakcOLYYM=;
-	h=Date:From:To:Cc:Subject:From;
-	b=njR39MX69cO7u/CSk4aJkLSkb9hXyv6B3By+xc5UfvV402KadcVvsptV/FbQeZUTg
-	 5yiQ8DoyN84Pa/1ZUZ6PVzLtdr5cBgroEe4hClEZWys83I0uI7K4APqyg838xkFFsT
-	 ZfFM3TkGjSkL9sUjiX3LDPZh4NLqMU56YKaS39iZ4ZBVMb2OMHXwFZA2/W/leZ3VoV
-	 9O3JAXnehk0IHyge5WJ4l5uF5LZF2gs64jyB9KKleHlXai51O/nfUqtD62dcW9/jqf
-	 ZS+Rbcf139oI780hlVrXfqTPL6F04a7mwdX8x+IKHIm0z2ySk1a4TxS1utFVJrH6Aw
-	 wUll3KTuV67BA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V0zRw285hz4wby;
-	Fri, 22 Mar 2024 08:41:32 +1100 (AEDT)
-Date: Fri, 22 Mar 2024 08:41:31 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
- <namhyung@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the perf tree
-Message-ID: <20240322084131.2316eb8f@canb.auug.org.au>
+	s=arc-20240116; t=1711063083; c=relaxed/simple;
+	bh=ZoOkFJsh+uSSpKYXxzFr4KIhoY4cpuANvOnEsGOE1TU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UqGQE7rjzKqywZpU1/l5UOTDnlEy2Mtvmmj4fvq5ktqbIPboUxHwLtiNB1nwBYPJuiV9JeTfjf054JsxPIK3f83IBQEIwUpwYFabb3RFer5iRGFAG8eSCy3RMH5wZ9IEkAJPJxGZeElmXE5gw5p1h+zSapa6C59DQpZDAv0DMEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o+z2xijF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3227C433C7;
+	Thu, 21 Mar 2024 23:18:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711063083;
+	bh=ZoOkFJsh+uSSpKYXxzFr4KIhoY4cpuANvOnEsGOE1TU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o+z2xijFTomwPiOET33PGAmxnIXIDkslIUIJF325ALk9fgQU0becdXZHk5JeAPtSd
+	 Y4qlajUsDco2WuRCSrsB9R0K9MwtZJhW0dz6zkIQTnPr7dGeFmQwGg4p+Q+Urg8Vu/
+	 yPwHEaLVYa4uhBgGNI6CrBjpI0TIC15xl3MmmLxs7bUjyWhp8mTYMgy7IEQ9Wz3Zxr
+	 vAJvpllC14h3boNMIGhIksJMPMHMmHgWE+RBpm/Ia6jIgHa6M4JsZl6P/j7T+ulBDd
+	 eGvuPUVKKI7FpFylG361YZEjo10vnrWGmDt8KbZmGVEZJ5ZWCJ2aA6oEwzbyvdw+dC
+	 sn1vzbITDybZw==
+Date: Thu, 21 Mar 2024 20:18:00 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the perf tree
+Message-ID: <ZfzAKMlYY7IkWXUg@x1>
+References: <20240322084131.2316eb8f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8BPb5yxUks2R1ilO_+6I79h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240322084131.2316eb8f@canb.auug.org.au>
 
---Sig_/8BPb5yxUks2R1ilO_+6I79h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Mar 22, 2024 at 08:41:31AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the perf tree, today's linux-next build (native perf)
+> failed like this:
+> 
+> make[3]: *** No rule to make target '/home/sfr/next/next/tools/include/uapi/linux/stat.h', needed by '/home/sfr/next/perf/libbpf/staticobjs/libbpf.o'.  Stop.
+> 
+> Caused by commit
+> 
+>   f122b3d6d179 ("perf beauty: Introduce scrape script for the 'statx' syscall 'mask' argument")
+> 
+> Are all these new commits today really destined for the current merge
+> window?
+> 
+> I have used the perf tree from next-20240321 for today.
 
-Hi all,
+Ok, maybe I opened perf-tools-next for the next merge window too early?
 
-After merging the perf tree, today's linux-next build (native perf)
-failed like this:
+For this merge window I think Namhyung is switching to perf-tools,
+right?
 
-make[3]: *** No rule to make target '/home/sfr/next/next/tools/include/uapi=
-/linux/stat.h', needed by '/home/sfr/next/perf/libbpf/staticobjs/libbpf.o'.=
-  Stop.
+From your reaction I think I made a mistake and should have opened
+perf-tools-next for v6.10 stuff only when the v6.9-rc1 gets released...
 
-Caused by commit
-
-  f122b3d6d179 ("perf beauty: Introduce scrape script for the 'statx' sysca=
-ll 'mask' argument")
-
-Are all these new commits today really destined for the current merge
-window?
-
-I have used the perf tree from next-20240321 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/8BPb5yxUks2R1ilO_+6I79h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmX8qYsACgkQAVBC80lX
-0GzlhQf/bX7vcWdvxn+SGwPBBPMFVowfrtcN1MKZPnKDH5wkVchOfORORrA8WTGE
-JX+WAOIPdcP6+Kp8dTfh9sdfCcoiOoPLm25HdmVy9C87ZMsz4EN2UKqPpDAaT9EA
-RDqmwAE7lcUDIo6ekzL8KhuY7fRh1Schqk1m19XxZr7rg0KwRye+MzDYcXlSokr5
-3Osr0vHV4KmfVTs8HU+nMvD5pQg+mEqR4ENctj4SZcOABOGOt1r0MhDBAKKLh7Sn
-CfuqzFAWpbEAsrbRfyHCrlsPKQzroassENPxSI6P7/veWmMRWUWx51adUjs2Nb1K
-WEICVCW31QUfvDqzPW2UoDoeQk+wNQ==
-=Gaxt
------END PGP SIGNATURE-----
-
---Sig_/8BPb5yxUks2R1ilO_+6I79h--
+- Arnaldo
 

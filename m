@@ -1,99 +1,80 @@
-Return-Path: <linux-next+bounces-1706-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1707-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52278889E39
-	for <lists+linux-next@lfdr.de>; Mon, 25 Mar 2024 13:04:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAEF1889E77
+	for <lists+linux-next@lfdr.de>; Mon, 25 Mar 2024 13:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7866B44F79
-	for <lists+linux-next@lfdr.de>; Mon, 25 Mar 2024 10:19:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B3A31F37A7B
+	for <lists+linux-next@lfdr.de>; Mon, 25 Mar 2024 12:10:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D9F112BF12;
-	Mon, 25 Mar 2024 05:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455EA8526B;
+	Mon, 25 Mar 2024 07:31:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qd1pNuzJ"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Ojac9/me"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854C412BF05;
-	Mon, 25 Mar 2024 02:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2602120F24E;
+	Mon, 25 Mar 2024 02:54:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711332012; cv=none; b=dbzKs/B4l56gY1l7jftyTd8FpWABCdSnPgHWvILTEjDK1X2zEnQRcIDWp38H7d31bjaNtQYJ42DZSnmDbuBDkriEnVtDNdxbyoWorYEYWTWCQ2RBYjj3OJ+PDIUfXULRNrW2MAj5cEyoV1MTYsQM1HjK/OHMI3Y0+9qd7aNIB/g=
+	t=1711335277; cv=none; b=Cx+7lEWG3zEUn24ROYL/C/EQ+UJyQwvJGKyAv15frhWTTCoQUbBVFWeI9hAfETpPW5GVU4AL2IxWZHtuHxe6iB907I7UEEF3w2rOaEBDg3GhThoeYU1CTZK0ZgTMyASARORy+AMyRLZA1P0ENRJMxRVgtFXRoOCCeQGcDWdJXmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711332012; c=relaxed/simple;
-	bh=KoIL+5USzKnAWU5XAMXkfHQPnA0FSgKj//g3Wd9d8fA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=oprO/fu0Fm6WwEKZ/F8G5ARJvRXAFVeWIzJnQPUNMhZ1/ubmz5QC01qL5WNdQVsOvTg+LQkXAlH0aWI5Sp9vhaWGpt490RkmCuq2nW1w7dgizlprCD7D/7jCeCRNLZzYbWC1FyTR/fmm2VwyfN8zLKCxKCZ/xHAa0cO7X1qILuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qd1pNuzJ; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1711332007;
-	bh=GuEk/ADpGr81B7YHsE3SVEOslWEIQHwyWnsZdTkTtbA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=qd1pNuzJMJXisLmOwRPjnyp6QgZCPLuQkpYc3H1fb+BmcGT3U4jzyeXoELnEvLZ2S
-	 tidgKz5R1PXlDddZGCeiOKhtp1vAZLU7sBwRw8DGYtizDbiYHxSerly0dSPCMXTLrN
-	 8Lrxn6Y4Y4hl6OkrCwxzywZdSSa09a9bhZH4eVdVL5OrS9TNnbpbFAlCIXhLXSMZLt
-	 JXsnsMMPJSXQrnSaPj2/OHaN3zKSIFXat1PMayUFIL8wSS2Y2ZwdOszaHyYG5mPBJ2
-	 3eezLbb5AVmJFAdT2QR5l73a7dj6zYhdqT81f3Ij0+3uF9rSnkUHnL3UTaFkTLktZ5
-	 TajCaJDQlbU7A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V2x2v4vGPz4wZx;
-	Mon, 25 Mar 2024 13:00:07 +1100 (AEDT)
-Date: Mon, 25 Mar 2024 13:00:07 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Gao Xiang <xiang@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the erofs-fixes
- tree
-Message-ID: <20240325130007.2ed83dbb@canb.auug.org.au>
+	s=arc-20240116; t=1711335277; c=relaxed/simple;
+	bh=iaph6dzxbblkt8qoI/AOozNUOs1rsLBMBUXmR/qDgjg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EZoMuz1UKzFQVKn8nSAc2UL6xaGht6AebwXaZAIv/YeH0LPZYHk5IzC52FYd8FWsPUnBZ3M9fs/F7QAkYGjs7AO3TkinfKwelxKF4ihOx5Zk0mbaULMN5p00v4VBmLA6rWHbcLhk5Pxx/NcIPuB3E2SEdZ67GjKwzN9T5nxBNwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Ojac9/me; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1711335266; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=6hu5khovx8ax4ZNqLjRit7QknnfTLVkDtkeyr/hEzXY=;
+	b=Ojac9/meesKJx6WavVrOyFiO6D8EQli4wTaLkLGWTzNafCwRQ2QjTN/HWteddU5/83QzhGqu/xYa4UUCW9Em6BdDMmpRk9oo4m97jx/00GAZyIBF16k/ZVYCxMMv6y/4UkYeMdn+Txocx84lOcmYw2s+ysH3WlEWkrAgAzrLO00=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0W38Nam5_1711335265;
+Received: from 30.97.48.191(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0W38Nam5_1711335265)
+          by smtp.aliyun-inc.com;
+          Mon, 25 Mar 2024 10:54:26 +0800
+Message-ID: <7b30add0-0be6-4b79-9791-099bbec1e673@linux.alibaba.com>
+Date: Mon, 25 Mar 2024 10:54:24 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZiH5JGq97BdVWOSy9YHMX7q";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Signed-off-by missing for commit in the erofs-fixes
+ tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Gao Xiang <xiang@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20240325130007.2ed83dbb@canb.auug.org.au>
+From: Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20240325130007.2ed83dbb@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---Sig_/ZiH5JGq97BdVWOSy9YHMX7q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On 2024/3/25 10:00, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>    77720dfe2cf3 ("MAINTAINERS: erofs: add myself as reviewer")
+> 
+> is missing a Signed-off-by from its committer.
 
-Commit
+Thanks for reminder. I will fix this soon.
 
-  77720dfe2cf3 ("MAINTAINERS: erofs: add myself as reviewer")
+Thanks,
+Gao Xiang
 
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ZiH5JGq97BdVWOSy9YHMX7q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYA2qcACgkQAVBC80lX
-0Gz5XQf9Fo+VmcG3TIQTNpdWMpIFJITn7llufYrHZqXNFuq6iL2+Kz8Fjg02hmdr
-fnYrG0Trjt2MTJFgyvT0EsAs7oqyiNYoTKms89tDcpNshzQCaLsjBG/4Dk0nHT1Z
-MfNJjyXVWSOyh0+7IgBj4sLPUtsL4mR8LaAbngl9ZrDJCFkKSHgivRjODsaZQLiU
-b+7iJ66zhfhgFJMC2HLcWjjiKVF/NSylhSlB42Paj+Rsypo9gQtaO43Q61ed/MD7
-3sAADYW9T/mOsHOivYED8oKlxqUzE9flufYej+/tBRz7lyarZYhx893JN8GASdhi
-1iGfTGD1iooSIOsRpcGqNR18eVifaA==
-=ejQb
------END PGP SIGNATURE-----
-
---Sig_/ZiH5JGq97BdVWOSy9YHMX7q--
+> 
 

@@ -1,231 +1,206 @@
-Return-Path: <linux-next+bounces-1712-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1713-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A20F88A2E1
-	for <lists+linux-next@lfdr.de>; Mon, 25 Mar 2024 14:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4D3B88A642
+	for <lists+linux-next@lfdr.de>; Mon, 25 Mar 2024 16:21:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D4111C39476
-	for <lists+linux-next@lfdr.de>; Mon, 25 Mar 2024 13:48:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E79F91C3C8BD
+	for <lists+linux-next@lfdr.de>; Mon, 25 Mar 2024 15:21:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A6615E1ED;
-	Mon, 25 Mar 2024 10:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9A66FE20;
+	Mon, 25 Mar 2024 12:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YGiS7I5N"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="FQ/Aj9Ec"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2046.outbound.protection.outlook.com [40.107.223.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5403160872
-	for <linux-next@vger.kernel.org>; Mon, 25 Mar 2024 08:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711356995; cv=none; b=kxAXRsjABPGMRubHVzCEZeqg5uuMD2WqxvXE4hMB2Tvkh1Af0rb7pxvqE1R/6MvCiqRGjEJQaZlOitihR+iY4YTl2kSdqc5Ltsu8RbstF+2UzI7tIREoIJ3VIkChlSkTkJeFe/wMA0husWeAY8WFtcgUWSsTDFPg261pimD+Sg0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711356995; c=relaxed/simple;
-	bh=SeAU1jrjWtZUgQVReeR6U+iS4ui9QpW84hBQGpCga0c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TSRSjJFRBhV9nhcKGmyXra2Shznc+3+79rujEhldJLCSYpsFa0VoRBJJ3pR0ixkCNvX297brj0+Qui3Y34k6qI1oNDwM/H8UUdXGEo3AY+XxJqsczREqyhK0CQ4R2GGIhVlwRCeul2Ad9nevYmmb6QWMtrs4ZgiDVVManOVk2pY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YGiS7I5N; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711356992;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=VTiL9YgVP/MAE1QhsPxOonqe4MNQ1qaQe56fmMWAciI=;
-	b=YGiS7I5Npp7ew39gs8Hjhht7DXRE3N59B3dVObcfJ2b9NFagsShbrDrp7QkYr/MNsxqfJb
-	Xd/D7vwZPhoU4Cq/HdArRkic//pbZqqQ5ExjNH5c30nnYvPdKoMtPeujv3ltcVq57W6gYP
-	vpOSmLJucmUxMsRiBy2noVm+7Ureffo=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-647-fDVfNXuLM7iyzgJJS58yQg-1; Mon, 25 Mar 2024 04:56:30 -0400
-X-MC-Unique: fDVfNXuLM7iyzgJJS58yQg-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-33ed22facfeso2181177f8f.0
-        for <linux-next@vger.kernel.org>; Mon, 25 Mar 2024 01:56:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711356989; x=1711961789;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VTiL9YgVP/MAE1QhsPxOonqe4MNQ1qaQe56fmMWAciI=;
-        b=Tw4X/PviMX/SW6o/YDflZcMKqEEsMCuLKZWl0hAATyF+cQoqJFyUnr2dolG6PyqKhN
-         CffKTOeDg00beuG9Tvkbp/Rx3V7COMgkJL1wpcM961wXO41VXtniWlM/MIt3KyhkF+g4
-         2fFBPS5PQdx4G5LPrP9Wcyk1M3kuFZneLN2Qvc7ssbT+4BPb1WZbYDLh919XY+Qc978z
-         s+vhrJ2F9YXWEG34Zj1PAR2ukPi28AsbPRcdy8oXQ13/cOlvrWPjDHDBHBiI7qAQ3d/k
-         XNCeKRbRbXvHxiCxKjBMvmvkx2KLPVsiwCrO/USOZkb897Yt7Xhp8afx68xRF3yq2H3/
-         YDoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUacRvBauOY2SD4aro5AY/fUb6qOJu68qlJFTEW/JaV9mWpYNJ9HuNHwZsWVyIST1OuvoA+A8HQLLYsS5UfleHwJ55RdEGCUbbRHg==
-X-Gm-Message-State: AOJu0YwECLXQxOTHJYwsyBcDh20REGymF8a9fsG2jB1rf2WjYxMO2mbG
-	LykXAUMTTR74YIEuszRdbMPZ/5T2gDkFK3FWxny8DITsonR6eMhYjZKlFEXH81l35BCGJ1vqO3G
-	yXIp0GSZRO98n92TO3/krtI9MAdpcvbc/i4CUAOlz2fIEIph6T8OUuckn7HI=
-X-Received: by 2002:a05:600c:524c:b0:414:8abb:a96b with SMTP id fc12-20020a05600c524c00b004148abba96bmr611224wmb.34.1711356989308;
-        Mon, 25 Mar 2024 01:56:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFdx8qJrJqYTJj20nYwwryKiBqzCd80D5r5FkVUWwJopLPpsWro19Qh6ZlhaYvOH4johY6eNg==
-X-Received: by 2002:a05:600c:524c:b0:414:8abb:a96b with SMTP id fc12-20020a05600c524c00b004148abba96bmr611210wmb.34.1711356988913;
-        Mon, 25 Mar 2024 01:56:28 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c738:b400:6a82:1eac:2b5:8fca? (p200300cbc738b4006a821eac02b58fca.dip0.t-ipconnect.de. [2003:cb:c738:b400:6a82:1eac:2b5:8fca])
-        by smtp.gmail.com with ESMTPSA id k30-20020a05600c1c9e00b0041469869d11sm7763099wms.47.2024.03.25.01.56.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 01:56:28 -0700 (PDT)
-Message-ID: <074ff62c-1533-4566-9375-24e353b53712@redhat.com>
-Date: Mon, 25 Mar 2024 09:56:27 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA5B66B5E
+	for <linux-next@vger.kernel.org>; Mon, 25 Mar 2024 12:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711370426; cv=fail; b=CWlaGnDGQtVFDcMV3yWClpZ8MQZABgD6742evM4V6KhkzrvJuKMCbTpD/9mqTAaJSqWD2wlEh1ImpIa3Kx3cXIWwfYd1PO0Be7mlJFUkDfQ/ZiU0DpG7LADdJcJc18EfsHsK+qkoUWuR/TUgvc19KrK7PmmnpeRm2ra6sIIosqU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711370426; c=relaxed/simple;
+	bh=zlgLWmorzWNOk0hIcnjOWO5TzDBQdCiTDZPW6rxrPJM=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=SFDV7f0ScrnCwfMfJ6mRzwcuHkBBHkSX8UtjNRDI+FjDMvbW0v1M3UlHwxcqTbXyFnOLxqAKVyaBR9tU4Oc5zr9KFwwvoBwVoIkAR+UjyPyOo21z7xokg2AZYr1Ge+U+m8njIsVuuKrzRQmKVPQQwD3/ntQKHMa4ZNNcIHcVtd0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=FQ/Aj9Ec; arc=fail smtp.client-ip=40.107.223.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HnTDDgA3MrEbD86YiBtSCLHrjBbBk5O4//d4D4/INmeZ3wgSNLacgsqxYcWsJP1Gm7UeWLY+GLGzruO6Ah08E2ptPOR9f6Fd6rwrWUpHrCB1Ka0UBI9S8NgShvL7+c4OncnFLrpE/g2WWVD6xZhZ9sPy/DQg8rVNQd3IPDP+TuRawsozMyqqhvBSeKqCtcuY4EXNFJgY+Y+KkL2ClxEWWKBpsAooDeFbT2aEehbaIrNcc0GyI+9g+Fex2+LlkO9kKlEj7Omu23VrrAm8qZg6YuwWMZsuT2nOIuiCgxd9Bfz7sTK2+zPSFBO2RAdyt6xXUMHRzXJNpsoLc33fnairtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IppGx+yowIvPFLKDIHOmNvG9swTxKND90JOL6BLDxxY=;
+ b=F3LgRzfl8xxbsB3InrMv1QkcKdrg0x7aTxJY7KCGBXJ4j2/Qpuke3SEr0O20RN45Ia84U4vQDgWIrWh1J2CX9zv3cGLkTSay/MEzJvVMUVOu2jS6M3zCD8UHBFt0W0zA0nAQjXkJZcDrkNb1Ud0DI4S430WpEu/tbsV9K+SbGFsnmBGO5ZxEw01ck3uxiQUfmbnDKC5OdPfFZ3N8FxIVNcdEdFfg5AeOaG0PC/PRTVKhFWgCc5moyJJGK1Z9bLbay2tW/mpQZB0RpLVDbRrh5sTnApaD3Khtc+v3mr0uxJbuYShbDTpi6O5YJsWVrynIVvbcIlG7/UCJPs+Uq9AhBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IppGx+yowIvPFLKDIHOmNvG9swTxKND90JOL6BLDxxY=;
+ b=FQ/Aj9Ecf6Nkrh4MGj3lyxLQFn//HaLebp+45gxM04cQoJwMI/xmlyx1pUVld3DqnYmTAB8nhkj5jIiTC/wTXJb5pBYzHusIeAze35r6/7+rVpBHGypt5jU9fs7zcJ2LkM2x/vm2IRRBXAx7J3IYoYWh9zkUJ1Of106FL7/iBFQ=
+Received: from DM4PR12MB5086.namprd12.prod.outlook.com (2603:10b6:5:389::9) by
+ MN2PR12MB4333.namprd12.prod.outlook.com (2603:10b6:208:1d3::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.31; Mon, 25 Mar
+ 2024 12:40:20 +0000
+Received: from DM4PR12MB5086.namprd12.prod.outlook.com
+ ([fe80::225b:b65:a5c8:b069]) by DM4PR12MB5086.namprd12.prod.outlook.com
+ ([fe80::225b:b65:a5c8:b069%7]) with mapi id 15.20.7409.031; Mon, 25 Mar 2024
+ 12:40:20 +0000
+From: "V, Narasimhan" <Narasimhan.V@amd.com>
+To: "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>
+CC: "Aithal, Srikanth" <Srikanth.Aithal@amd.com>, "Petkov, Borislav"
+	<Borislav.Petkov@amd.com>
+Subject: Boot failure with kernel BUG at mm/usercopy.c on next-20240325
+Thread-Topic: Boot failure with kernel BUG at mm/usercopy.c on next-20240325
+Thread-Index: AQHafrFpTdzIz8FNRkK1oR1yu+crQA==
+Date: Mon, 25 Mar 2024 12:40:20 +0000
+Message-ID:
+ <DM4PR12MB5086E76CF24A39017DA8567189362@DM4PR12MB5086.namprd12.prod.outlook.com>
+Accept-Language: en-US, en-IN
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=True;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2024-03-25T12:40:20.295Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB5086:EE_|MN2PR12MB4333:EE_
+x-ms-office365-filtering-correlation-id: d7e423ef-be11-48ef-5690-08dc4cc8bba9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ gJwCIACSHyG6sdibsGZjJDFmLpYVPXRiyGXom4wWpUVEoNw5JUPiy35CRMmv9yBUnoxCbYIboOQM2U4kpWe/kUE6GYcyiQfvlbHmGPN+tqfvIEIJn4hIMnRYRhYBnDvPtG4ta7C2e5tyvYl2dqbRJBjiWXuafeWFxp+pW8Rdi878luRv8P29sLp6T6MCTn+bsoMHwiM8noXxkdbBxdjY8YkCQKDaNousZXr2izj3uz+xQQ6PLuZYEIZlT3LDNnLQ5ZpSs/kh2RBQ63TMAoxQ8/fzNnt/kT360GMNKjS5ncDYV0liBFVwFAqzuN4b8glucmecsqKnh7B6pE9s3R1AyhE0uPNilUW+58v22Za4L88Rm61QmEeMpWd7wmUZEw3Z6Rfuq997semAkAliZjHc4jPnsXzfQPpY+ROH96XvWmsxkDKBQK0WHudaNFzRSn4m+LRcRq9Z5quX0AgSm1jAJ+A2HZp6jVd5balhkd60fOdBVKnz64wf6m42t+CkOFLMlItDV0hirmIvlZBFXT/uxa8C897twqzKgpyTj1YhqFoPaBkI3HsxFIvrJhHncwauW2ptikUsj8Zmmaex9n0fzyBSiRhbk8GF30GKGLnrTs28/imgSaE8gp5vaErhlaoNnnMDiSL291+fs5M3ZuiE2iKBI4JKfTVHdw3vuHO2DWxp4d3p+BEpNA8ieSmpiUIGLETXFhzodwwz0AF2rDuRNxfHdr0cdlVigwBbAaAsGXs=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5086.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(376005)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?gd4xkWMRlBX3IS8keDODdExE9hYG0xlvqQ6aLSAg1fykLaplQNynLndrnB?=
+ =?iso-8859-1?Q?aI5iFQqZ7QAmbDJNeMFiET0zGLpNzR2jNeD78XD2jxygng+mi/laC5YETa?=
+ =?iso-8859-1?Q?FHTgZmgok/k76aZAo9xPRispQeT/y/xj0Dhxd6TKNVuk4J5+yTFgyyhHZJ?=
+ =?iso-8859-1?Q?tQiWn8XrRLynPbQIg2QAowUm0aW/aGNJIqDjNsq4KcpHqdU942ZxL51uqP?=
+ =?iso-8859-1?Q?a58xHcAuS2YZTUJjdo89f+tNRoSweyi+RGhHgnbsm+iaAyF+2wS0gkT3ZZ?=
+ =?iso-8859-1?Q?rGBPOgWd98U2Q3qGzW2tglF8WPWJKe5g5deiX6XVo6pKhyvr6j17OkQtlz?=
+ =?iso-8859-1?Q?v2i8P8NdY4HH+ik/We1Tbj6al9pAbb2GvINo1e9yyEL9X5UQIQ2zFSMYZZ?=
+ =?iso-8859-1?Q?cxzHh7UTw6dOAuNZMqLjD4eA4j/HA5oG5vdaEj4For5UuFZyS/+YoaefD6?=
+ =?iso-8859-1?Q?wSxvm93xDJhZQOUlJK5H4W+NoCn9OBfB++DdoOuxTt6C715UaO3UGa9Gh0?=
+ =?iso-8859-1?Q?TTX0+An4pjTbBIlw9VKRBUfrkfOybaV7rcUJd+4ku1U3OITh/SgvaI+5Sy?=
+ =?iso-8859-1?Q?8ummaXc+eYQ3rXng8jqAng4b9RjZuRmFCU6dqbfw81Vd+fqd4JZOmBwKIm?=
+ =?iso-8859-1?Q?dzbqYhqa/yvxk1oawk7vu0tb0z0oftd9joUVWTr62Hn/YnscoEoxoc3hs9?=
+ =?iso-8859-1?Q?NLnmVxeubcU/MSBU7dTn0CVXDQw54lHhQL9OynDxKfalmUXBJGMLAdD6pn?=
+ =?iso-8859-1?Q?1h1KD/7LAeO9iwYobdaSvd27OQpaOgd+0BhTRbS6hV4yKDbjyRhIDwLpAs?=
+ =?iso-8859-1?Q?Oof4EocWJWWrA4eIJbVhJgwWLHOuf7fm6f62S0mo6J7S+8JI0KjEL6YubW?=
+ =?iso-8859-1?Q?YaCFuycLjynF+/XPurf3iuhtCOoi1Yuyyv+24SZZ/gamFctd+2+9uYHoGn?=
+ =?iso-8859-1?Q?Iz3Gc/z5sCal30OggmERQ5zksCLFhGZK1pP3McMZAvMmJKkxqijzooyeAq?=
+ =?iso-8859-1?Q?bcIckJxAyDYQYsrXWNQX4iTzOp88tnHWFLxB2Jtayi8DWs8fhVn29n0CYB?=
+ =?iso-8859-1?Q?qf2PXarMwTf038vt+reqU2dCT+5Hv/4HqKmHKo2GrXXu1bhhkQLp6GeUC3?=
+ =?iso-8859-1?Q?8cbna1/6M2wD38QrOQ9YHQ/McGaoHl/b76bDzFMzb91BNfJS3dHBGFQjnw?=
+ =?iso-8859-1?Q?Zx+8o41j/whvlIHwz2yOlgS6tthdNRgbaFesirrOodtl7SEG006yT8nh5J?=
+ =?iso-8859-1?Q?VjylaTU9t8/b5BI/SEIvD8VU1xTOq1alebz/D/K/i883AiXgMWk40wlhUn?=
+ =?iso-8859-1?Q?V7A/jYPMxRkmaqXRS3tOl1LfELEuGHlelhJdzx3KCPYuI243qZmGFcaKPy?=
+ =?iso-8859-1?Q?UmWpsdbdVZdUUjnv8sj5aN9jWLu9vQbwJ0h0+SHm9EZ1o556e8WN8OdyfA?=
+ =?iso-8859-1?Q?uYcIQ+q+zqUpUGeX+NiiFtPouCzTN7jVYfsUPFqjUQXSkfJCSlMXijKw52?=
+ =?iso-8859-1?Q?Xs9RiOKia0BKIWb4Igcxztb8e+gJH8U4lW2QkqAPs5CtZSFdIWFi5DMpLS?=
+ =?iso-8859-1?Q?TuIpvvzB7CtL6sh/13iFSNHpkNfnwMMBYejo/jybOH08rl+4YGPwyTENrc?=
+ =?iso-8859-1?Q?U8g9pYZlZev/k=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warning after merge of the mm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240325122250.48128d5a@canb.auug.org.au>
-Content-Language: en-US
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20240325122250.48128d5a@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5086.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7e423ef-be11-48ef-5690-08dc4cc8bba9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2024 12:40:20.4838
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4GDJ0mabvPY1CL2x7hXpxVbM6Fuozzlte47kK3NyNbMA6v6PDY9SxpkHmvWglHxD7/hcUnWn0Du8GI8qarGxqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4333
 
-On 25.03.24 02:22, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the mm tree, today's linux-next build (htmldocs) produced
-> this warning:
-> 
-> Documentation/core-api/mm-api:112: include/linux/mm.h:2187: ERROR: Unexpected indentation.
-> Documentation/core-api/mm-api:112: include/linux/mm.h:2189: WARNING: Block quote ends without a blank line; unexpected unindent.
-> Documentation/core-api/mm-api:112: include/linux/mm.h:2199: ERROR: Unexpected indentation.
-> Documentation/core-api/mm-api:112: include/linux/mm.h:2200: WARNING: Block quote ends without a blank line; unexpected unindent.
-> 
-> Introduced by commit
-> 
->    08ec651d776e ("mm: convert folio_estimated_sharers() to folio_likely_mapped_shared()")
-> 
-> from the mm-unstable branch of the mm tree.
-> 
+[AMD Official Use Only - General]
 
-Seems like kerneldoc does not appreciate my lists+indentation. The following
-should get the job done:
-
- From 3e472636d266e3acba3755ed5712992adbc2151d Mon Sep 17 00:00:00 2001
-From: David Hildenbrand <david@redhat.com>
-Date: Mon, 25 Mar 2024 09:23:03 +0100
-Subject: [PATCH] folio_likely_mapped_shared() kerneldoc fixup
-
-Fixup "mm: convert folio_estimated_sharers() to
-folio_likely_mapped_shared()".
-
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-  include/linux/mm.h | 32 +++++++++++++++++---------------
-  1 file changed, 17 insertions(+), 15 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index afe27ff3fa94..fb3724723448 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2183,23 +2183,25 @@ static inline size_t folio_size(struct folio *folio)
-   * at most once into an MM, and they cannot be partially mapped.
-   *
-   * For other folios, the result can be fuzzy:
-- * (a) For partially-mappable large folios (THP), the return value can wrongly
-- *     indicate "mapped exclusively" (false negative) when the folio is
-- *     only partially mapped into at least one MM.
-- * (b) For pagecache folios (including hugetlb), the return value can wrongly
-- *     indicate "mapped shared" (false positive) when two VMAs in the same MM
-- *     cover the same file range.
-- * (c) For (small) KSM folios, the return value can wrongly indicate "mapped
-- *     shared" (false negative), when the folio is mapped multiple times into
-- *     the same MM.
-+ *    #. For partially-mappable large folios (THP), the return value can wrongly
-+ *       indicate "mapped exclusively" (false negative) when the folio is
-+ *       only partially mapped into at least one MM.
-+ *    #. For pagecache folios (including hugetlb), the return value can wrongly
-+ *       indicate "mapped shared" (false positive) when two VMAs in the same MM
-+ *       cover the same file range.
-+ *    #. For (small) KSM folios, the return value can wrongly indicate "mapped
-+ *       shared" (false negative), when the folio is mapped multiple times into
-+ *       the same MM.
-   *
-   * Further, this function only considers current page table mappings that
-- * are tracked using the folio mapcount(s). It does not consider:
-- * (1) If the folio might get mapped in the (near) future (e.g., swapcache,
-- *     pagecache, temporary unmapping for migration).
-- * (2) If the folio is mapped differently (VM_PFNMAP).
-- * (3) If hugetlb page table sharing applies. Callers might want to check
-- *     hugetlb_pmd_shared().
-+ * are tracked using the folio mapcount(s).
-+ *
-+ * This function does not consider:
-+ *    #. If the folio might get mapped in the (near) future (e.g., swapcache,
-+ *       pagecache, temporary unmapping for migration).
-+ *    #. If the folio is mapped differently (VM_PFNMAP).
-+ *    #. If hugetlb page table sharing applies. Callers might want to check
-+ *       hugetlb_pmd_shared().
-   *
-   * Return: Whether the folio is estimated to be mapped into more than one MM.
-   */
--- 
-2.43.2
+Hi,
+There is a boot failure as below.
+On bisecting, the bad commit is found to be 328c801335d5f7edf2a3c9c331ddf89=
+78f21e2a7.
+Boots fine if we revert the above bad commit.
 
 
--- 
-Cheers,
+kernel BUG at mm/usercopy.c:102!
+invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+CPU: 15 PID: 567 Comm: systemd-udevd Not tainted 6.9.0-rc1-next-20240325-17=
+11333827684 #1
+Hardware name: AMD Corporation Shale96/Shale96, BIOS RSH100BD 12/11/2023
+RIP: 0010:usercopy_abort+0x72/0x90
+Code: 4f f7 b8 50 48 c7 c2 31 a6 f4 b8 57 48 c7 c7 50 10 fe b8 48 0f 44 d6 =
+48 c7 c6 32 30 f5 b8 4c 89 d1 49 0f 44 f3 e8 5e 2b d1 ff <0f> 0b 49 c7 c1 1=
+c 60 f4 b8 4c 89 cf 4d 89 c8 eb a9 66 66 2e 0f 1f
+RSP: 0018:ff855d5641947e08 EFLAGS: 00010246
+RAX: 0000000000000060 RBX: 0000000000000000 RCX: ff44c5dccd9ff8a8
+RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000001
+RBP: ff855d5641947e20 R08: 0000000000000060 R09: 6c656e72654b203a
+R10: ffffffffba1edd60 R11: 657275736f707865 R12: 0000000000000008
+R13: ff44c5cd80037800 R14: 0000000000000001 R15: 0000000000000000
+FS:  00007fbc2be258c0(0000) GS:ff44c5dc86f80000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fbc2c459230 CR3: 0000000103f54004 CR4: 0000000000771ef0
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ ? show_regs+0x6d/0x80
+ ? die+0x3c/0xa0
+ ? do_trap+0xcf/0xf0
+ ? do_error_trap+0x75/0xa0
+ ? usercopy_abort+0x72/0x90
+ ? exc_invalid_op+0x57/0x80
+ ? usercopy_abort+0x72/0x90
+ ? asm_exc_invalid_op+0x1f/0x30
+ ? usercopy_abort+0x72/0x90
+ ? usercopy_abort+0x72/0x90
+ __check_heap_object+0xd6/0x110
+ __check_object_size+0x28a/0x2f0
+ ? srso_alias_return_thunk+0x5/0xfbef5
+ __x64_sys_sched_getaffinity+0xda/0x120
+ do_syscall_64+0x76/0x120
+ ? srso_alias_return_thunk+0x5/0xfbef5
+ ? do_syscall_64+0x85/0x120
+ ? srso_alias_return_thunk+0x5/0xfbef5
+ ? syscall_exit_to_user_mode+0x75/0x190
+ ? srso_alias_return_thunk+0x5/0xfbef5
+ ? do_syscall_64+0x85/0x120
+ entry_SYSCALL_64_after_hwframe+0x6c/0x74
+RIP: 0033:0x7fbc2c507d6a
+Code: d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 49 89 f0 =
+be ff ff ff 7f b8 cc 00 00 00 49 39 f0 49 0f 46 f0 0f 05 <48> 3d 00 f0 ff f=
+f 77 2e 41 89 c1 83 f8 ff 74 38 48 98 48 83 ec 08
+RSP: 002b:00007ffceab058d8 EFLAGS: 00000297 ORIG_RAX: 00000000000000cc
+RAX: ffffffffffffffda RBX: 0000000000000010 RCX: 00007fbc2c507d6a
+RDX: 000055b26dfa3040 RSI: 0000000000000008 RDI: 0000000000000000
+RBP: 000055b26dfa3040 R08: 0000000000000008 R09: 00000000ffffffff
+R10: 000055b26dfa3030 R11: 0000000000000297 R12: 0000000000000008
+R13: 000000000000003c R14: 00007ffceab05ac8 R15: 000055b258445078
+ </TASK>
+Modules linked in: aesni_intel crypto_simd cryptd
+---[ end trace 0000000000000000 ]---
 
-David / dhildenb
 
+--
+Regards
+Narasimhan V
 

@@ -1,101 +1,120 @@
-Return-Path: <linux-next+bounces-1739-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1740-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CA1488CDA0
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 20:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA30188D2AC
+	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 00:13:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48365322B2B
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 19:56:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9455A282782
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 23:13:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E86F13D26E;
-	Tue, 26 Mar 2024 19:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671D713DDAC;
+	Tue, 26 Mar 2024 23:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Z90uYUSz"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IFofPOxm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4544513D265;
-	Tue, 26 Mar 2024 19:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7052313DDAD;
+	Tue, 26 Mar 2024 23:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711482985; cv=none; b=PGnm1p1Cm0PWde67gR3DqwjQVqd2chYRHo6jgIFdi+OT92Zvgc6OpHvVSoQbieXhZnlhm2b4DDhJ1E9m/xQEGM5R8Xe6bNBpowrSfnGdIpeFyBhLycGkoagYmtXeRFc7zQERhb27Mvyl+a2wYfT+Du+odUzxMtgK0Yl0+vNpBA4=
+	t=1711494803; cv=none; b=prfy0m5nGvhzbpTANPF2uDoXkZI/zDuxpBc1siVT86rFk77j7hD01sRKg5OI7PqoBi8ua+JZ0MWZLzpsq28O29gQSV+UO6EPhjtykS6PiT3MwD0ZGeZE7LIPLKGao42yxKCAVVXvAOvYl30RMRfurbgPzVuiV2wyf2tQxY+8h6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711482985; c=relaxed/simple;
-	bh=x4np21dJ2uZ9vYBCKDq3W9rjAOMd4x0jIzHTs6BvC5k=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=pDARxrkmK3tHaZjp85LAJkWY+2yTEKAzPzhsAvuQyveapFuvynHPOWOgPHyZjrOMPsNmDNLKasJBByFeunXcPb+g4/SSTr6JUs1/EGmN3QLRfhCZQHO90DZWVrHuV/BVF+a3MukheMm8HjkrG/OPsJmfVkyatwTfekNzKoLB4bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Z90uYUSz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75610C433F1;
-	Tue, 26 Mar 2024 19:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1711482984;
-	bh=x4np21dJ2uZ9vYBCKDq3W9rjAOMd4x0jIzHTs6BvC5k=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Z90uYUSzH0W43TFs7w0PYTRMKh3kcbMy5/DQqV/i3rUAt2Lta9+TeWmnD9R5e06bq
-	 AZicyFf+T1IdalCf93SV0KeE5wAwVisxNS4ImEA3n4khQ4yxLQf0P8qUoIiaUpazv1
-	 d7Wa7tD0Y5EbgTWL2VCjbmr8L25VCZrXLJ3l4hoA=
-Date: Tue, 26 Mar 2024 12:56:23 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Feng Tang <feng.tang@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>, "V, Narasimhan" <Narasimhan.V@amd.com>,
- "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
- "linux-mm@kvack.org" <linux-mm@kvack.org>, "Aithal, Srikanth"
- <Srikanth.Aithal@amd.com>, Dawei Li <dawei.li@shingroup.cn>, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>, Rasmus Villemoes
- <linux@rasmusvillemoes.dk>, Yury Norov <yury.norov@gmail.com>, lkml
- <linux-kernel@vger.kernel.org>, Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: Boot failure with kernel BUG at mm/usercopy.c on next-20240325
-Message-Id: <20240326125623.266550b81bb36aafc9a2c613@linux-foundation.org>
-In-Reply-To: <ZgIzMqiZzqUmqEOZ@feng-clx.sh.intel.com>
-References: <DM4PR12MB5086E76CF24A39017DA8567189362@DM4PR12MB5086.namprd12.prod.outlook.com>
-	<20240325125017.GBZgFzCXVxeF50uGVE@fat_crate.local>
-	<20240325113433.e04c2b508ac325630cd113c8@linux-foundation.org>
-	<20240325203714.GJZgHgem2TR1aVAVlU@fat_crate.local>
-	<ZgIzMqiZzqUmqEOZ@feng-clx.sh.intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1711494803; c=relaxed/simple;
+	bh=UcvNeQayEhF72OWsw7JIXY3e7jKFPUq+mQ67sLPafTk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Q/SPMqnGqBP1yL6gtarTmcgFLxPnyQ3EHqQbNd6GhPJb8UlzYOJw9vhq9+cZK5eBYA75bmPiii0Hzt+EFknf4URICWVlHmRjOtWLylS6tl/Oqvlqrh6DkpWMAUT3dxRoQKLvK+iNgQubVSAKjgzruuGAQXh5+viBijxolrF7XEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IFofPOxm; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1711494793;
+	bh=iUsdc7cAw1OVLTLm6TB9hiPQC9EG3D2Ph/qXCcXdnNQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=IFofPOxm7IPqJMS1DkpQWAc8psnTQFGR2RtPCiIcvHrwU9y5h3pmoqD3XywHRxGfV
+	 zRKJ2/NVra0ImOAK6ho2SJbND9mnMhTjE8lgQM9zyXf/fFuRMpnfyb9kTEQpj+PVnS
+	 sGve4C9cNFP/cyuAruGvcMOUbV+nNbHkOGusDhbdqtaVmzUo3WeBiFY1OQaHxOkO/8
+	 wfDdTNG3XwUwj+LFQcvkDkS52XdQ/woLikyvzPEdMBa8tNzzAQfjTX5Rt02acdijXW
+	 ExWB3CdF164EU4jQwrco2Kv3TMkm+XaafBqmmebimM28m24IewYDyZWidT9aaryh10
+	 kazxTCg9q6kUQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V45FN2Dk5z4wcQ;
+	Wed, 27 Mar 2024 10:13:12 +1100 (AEDT)
+Date: Wed, 27 Mar 2024 10:13:09 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Alexandre
+ Belloni <alexandre.belloni@bootlin.com>, Eric Biggers
+ <ebiggers@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>, Jens Wiklander
+ <jens.wiklander@linaro.org>, Luis Chamberlain <mcgrof@kernel.org>, Richard
+ Weinberger <richard@nod.at>, Theodore Ts'o <tytso@mit.edu>, Tyler Hicks
+ <code@tyhicks.com>
+Subject: linux-next: trees being removed
+Message-ID: <20240327101309.4e7d04f3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/nYu57v3tWCtg6/tEBlLc1Kq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/nYu57v3tWCtg6/tEBlLc1Kq
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 26 Mar 2024 10:30:10 +0800 Feng Tang <feng.tang@intel.com> wrote:
+The following trees are going to be removed from linux-next because they
+have not been updated in more than a year.  If you want a tree restored,
+just let me know (and update its branch).
 
-> Add Vlastimil for slab related topic.
-> 
-> On Tue, Mar 26, 2024 at 04:37:14AM +0800, Borislav Petkov wrote:
-> > On Mon, Mar 25, 2024 at 11:34:33AM -0700, Andrew Morton wrote:
-> > > Thanks, I'll just drop the patch.  It didn't receive a very favorable
-> > > review reception anyway.
-> > 
-> > See here:
-> > 
-> > https://lore.kernel.org/all/DM4PR12MB5086B9BDBF32D53DF226CBF489362@DM4PR12MB5086.namprd12.prod.outlook.com/
-> > 
-> > folks still need to learn email. :-)
-> > 
-> > Anyway, apparently there's some fix there.
-> 
-> The original commit 328c801335d5 ("cpumask: create dedicated kmem
-> cache for cpumask var") has some benefit, that there are CPU numbers
-> which are not power of 8, like 144, 288 etc where it will save
-> some memory. 
-> 
-> And 'slabtop' on a qemu-VM with 16 cpus shows it is surprisingly
-> non-trivial and has the third largest number of objects: 
-> 
-> 22350   22350 100%    0.13K    745       30      2980K kernfs_node_cache
->  11172  10693   0%    0.19K    266       42      2128K dentry
->  10240   8222   0%    0.01K     20      512        80K cpumask
-> 
-> Andrew, if it is worth merging, you can folder my fix into the patch. 
+Tree			Last commit date
+  URL
+  comits (if any)
+----			----------------
+ecryptfs		2023-03-24 17:26:44 -0500
+  git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs.git#next
+  c1cc2db21607 ("ecryptfs: keystore: Fix typo 'the the' in comment")
+  a3d78fe3e1ae ("fs: ecryptfs: comment typo fix")
+fscrypt-current		2023-03-18 21:08:03 -0700
+  git://git.kernel.org/pub/scm/fs/fscrypt/linux.git#for-current
+fsverity-current	2023-03-15 22:50:41 -0700
+  git://git.kernel.org/pub/scm/fs/fsverity/linux.git#for-current
+modules-fixes		2023-02-06 08:45:55 -0800
+  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-li=
+nus
+rtc-fixes		2023-01-23 23:33:47 +0100
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git#rtc-fixes
+tee-fixes		2023-02-12 14:10:17 -0800
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git#fixes
+ubifs-fixes		2023-01-21 16:27:01 -0800
+  git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git#fixes
 
-I'll await a resend, please.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nYu57v3tWCtg6/tEBlLc1Kq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYDVoUACgkQAVBC80lX
+0Gw3kggAi+iGqCFfky/jPBw/e39ExzJTHr14StnfY7OrDqWXyhk14wPXDHJhDKqO
+DPfXrS4ysmNu29HlF6fBc1KXtMCgIdad7oLIUagWkZXTsEmCvmygd9x8kVUqmpfN
+AygUFt3/9OiQ+FVaLjW1Qav5XPAJkXHCvymDJaRNH+FBBEHR7TtYsRYsh7rEBNmb
+v+LxQKIY2DZZQrjqGQe6gVCsziJXrpIzICAe3UR8ZG3lwxzow3zqr+xG9P1czAV7
+s2AM0JfNF5A6TO1diQ7a25np8J2GXywU7ITW6/q/Fy7KmKuDFU07BWdkO2fGuW4c
+3cGwcbt0amgqNobPi1nECl9pXmUYoA==
+=O/ba
+-----END PGP SIGNATURE-----
+
+--Sig_/nYu57v3tWCtg6/tEBlLc1Kq--
 

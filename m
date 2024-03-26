@@ -1,104 +1,101 @@
-Return-Path: <linux-next+bounces-1738-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1739-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48AC588CA8A
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 18:16:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CA1488CDA0
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 20:56:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC5BD1F80DB3
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 17:16:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48365322B2B
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 19:56:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D611C697;
-	Tue, 26 Mar 2024 17:16:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E86F13D26E;
+	Tue, 26 Mar 2024 19:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NglBZgkx"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Z90uYUSz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDEF1C2AF;
-	Tue, 26 Mar 2024 17:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4544513D265;
+	Tue, 26 Mar 2024 19:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711473381; cv=none; b=nfczhX4M+n6wRvJpuu3FsEu92MDANMB5uQsh3y1MIkJO6Yqu069XXxxYL5UwxQ7Gc0bCuyZtIhzZZG0pA9OuRR593ewagc6dFAk5alAoS3NmR5e2FA/xWr/7yZBO9G+4GEokOo6ZDoqpVzb124kCNftgSW+yT5b6qQ3n/xGwUFQ=
+	t=1711482985; cv=none; b=PGnm1p1Cm0PWde67gR3DqwjQVqd2chYRHo6jgIFdi+OT92Zvgc6OpHvVSoQbieXhZnlhm2b4DDhJ1E9m/xQEGM5R8Xe6bNBpowrSfnGdIpeFyBhLycGkoagYmtXeRFc7zQERhb27Mvyl+a2wYfT+Du+odUzxMtgK0Yl0+vNpBA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711473381; c=relaxed/simple;
-	bh=o2EHSZ1pkNNwsVraQPR7FRdXvD9eeSKp4Seu6Q6Uanc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MxjjHQzvg69XrjYuGFDrCyiioww5/rVXLpDrKp0X304xU7pSAcI4mfBq+mw3J/VShs1JMB2C4mJUUFkFDPhE3gwtQWwOmLn3F/w8cLMqmXsZ37v0gKJDKbW2CBKcxBqFcrHdYO8JUR6n+22IBFklKXoxR5zU4zv5PHbDkKJubbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NglBZgkx; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=4Sv85FGjimXN6NzHHLB+VPfFSPQPE+zInd7evQBHyig=; b=NglBZgkxNAVisLL0m2NA8J0CyW
-	Hd0aBI3/ilxcg3ICww4bOxZC5uuH88f3nS/b0aSFwqlASNzoRSUMQ0DU2HTVR65e8iGlX5o/gzDV6
-	B3Tn327hF4KNtcKfUhrKrVz2gwM7N4+qeLJqv61U8gHK6QlNMkOKwuhJyYcQsQnKS6CokfPELHfbz
-	nc/FajqXsed7f8hYQP8vLy0k8mPC+rswoRFluAtgu0fWN5d/jikE6LVsAW7HBEu9YWGa4B9nWWsel
-	baUTrg6PrexhN7+n2z8QbB1CWf3hL3bl67R4AYBctUc8vQfiUCZv4pJeFreOixqXewoZt89DtfcF9
-	qgqL+QIw==;
-Received: from [50.53.2.121] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rpAPJ-00000005gbJ-21MC;
-	Tue, 26 Mar 2024 17:16:17 +0000
-Message-ID: <40fcf36e-3a60-474e-a7ef-1de874743828@infradead.org>
-Date: Tue, 26 Mar 2024 10:16:16 -0700
+	s=arc-20240116; t=1711482985; c=relaxed/simple;
+	bh=x4np21dJ2uZ9vYBCKDq3W9rjAOMd4x0jIzHTs6BvC5k=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=pDARxrkmK3tHaZjp85LAJkWY+2yTEKAzPzhsAvuQyveapFuvynHPOWOgPHyZjrOMPsNmDNLKasJBByFeunXcPb+g4/SSTr6JUs1/EGmN3QLRfhCZQHO90DZWVrHuV/BVF+a3MukheMm8HjkrG/OPsJmfVkyatwTfekNzKoLB4bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Z90uYUSz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75610C433F1;
+	Tue, 26 Mar 2024 19:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1711482984;
+	bh=x4np21dJ2uZ9vYBCKDq3W9rjAOMd4x0jIzHTs6BvC5k=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Z90uYUSzH0W43TFs7w0PYTRMKh3kcbMy5/DQqV/i3rUAt2Lta9+TeWmnD9R5e06bq
+	 AZicyFf+T1IdalCf93SV0KeE5wAwVisxNS4ImEA3n4khQ4yxLQf0P8qUoIiaUpazv1
+	 d7Wa7tD0Y5EbgTWL2VCjbmr8L25VCZrXLJ3l4hoA=
+Date: Tue, 26 Mar 2024 12:56:23 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Feng Tang <feng.tang@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>, "V, Narasimhan" <Narasimhan.V@amd.com>,
+ "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+ "linux-mm@kvack.org" <linux-mm@kvack.org>, "Aithal, Srikanth"
+ <Srikanth.Aithal@amd.com>, Dawei Li <dawei.li@shingroup.cn>, Andy
+ Shevchenko <andriy.shevchenko@linux.intel.com>, Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, Yury Norov <yury.norov@gmail.com>, lkml
+ <linux-kernel@vger.kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: Boot failure with kernel BUG at mm/usercopy.c on next-20240325
+Message-Id: <20240326125623.266550b81bb36aafc9a2c613@linux-foundation.org>
+In-Reply-To: <ZgIzMqiZzqUmqEOZ@feng-clx.sh.intel.com>
+References: <DM4PR12MB5086E76CF24A39017DA8567189362@DM4PR12MB5086.namprd12.prod.outlook.com>
+	<20240325125017.GBZgFzCXVxeF50uGVE@fat_crate.local>
+	<20240325113433.e04c2b508ac325630cd113c8@linux-foundation.org>
+	<20240325203714.GJZgHgem2TR1aVAVlU@fat_crate.local>
+	<ZgIzMqiZzqUmqEOZ@feng-clx.sh.intel.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] Documentation: fs/proc: fix allocinfo title
-Content-Language: en-US
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc: sfr@canb.auug.org.au, kent.overstreet@linux.dev,
- linux-doc@vger.kernel.org, linux-next@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240326073813.727090-1-surenb@google.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20240326073813.727090-1-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+On Tue, 26 Mar 2024 10:30:10 +0800 Feng Tang <feng.tang@intel.com> wrote:
 
-
-On 3/26/24 00:38, Suren Baghdasaryan wrote:
-> Fix "Title underline too short." warning in the documentation.
+> Add Vlastimil for slab related topic.
 > 
-> Fixes: d08b311b6d49 ("lib: add allocation tagging support for memory allocation profiling")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  Documentation/filesystems/proc.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Tue, Mar 26, 2024 at 04:37:14AM +0800, Borislav Petkov wrote:
+> > On Mon, Mar 25, 2024 at 11:34:33AM -0700, Andrew Morton wrote:
+> > > Thanks, I'll just drop the patch.  It didn't receive a very favorable
+> > > review reception anyway.
+> > 
+> > See here:
+> > 
+> > https://lore.kernel.org/all/DM4PR12MB5086B9BDBF32D53DF226CBF489362@DM4PR12MB5086.namprd12.prod.outlook.com/
+> > 
+> > folks still need to learn email. :-)
+> > 
+> > Anyway, apparently there's some fix there.
 > 
-> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> index 5d2fc58b5b1f..245269dd6e02 100644
-> --- a/Documentation/filesystems/proc.rst
-> +++ b/Documentation/filesystems/proc.rst
-> @@ -955,7 +955,7 @@ reclaimed to achieve this.
->  
->  
->  allocinfo
-> -~~~~~~~
-> +~~~~~~~~~
->  
->  Provides information about memory allocations at all locations in the code
->  base. Each allocation in the code is identified by its source file, line
+> The original commit 328c801335d5 ("cpumask: create dedicated kmem
+> cache for cpumask var") has some benefit, that there are CPU numbers
+> which are not power of 8, like 144, 288 etc where it will save
+> some memory. 
+> 
+> And 'slabtop' on a qemu-VM with 16 cpus shows it is surprisingly
+> non-trivial and has the third largest number of objects: 
+> 
+> 22350   22350 100%    0.13K    745       30      2980K kernfs_node_cache
+>  11172  10693   0%    0.19K    266       42      2128K dentry
+>  10240   8222   0%    0.01K     20      512        80K cpumask
+> 
+> Andrew, if it is worth merging, you can folder my fix into the patch. 
 
--- 
-#Randy
+I'll await a resend, please.
 

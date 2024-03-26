@@ -1,120 +1,106 @@
-Return-Path: <linux-next+bounces-1740-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1741-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA30188D2AC
-	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 00:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 30E0188D2DB
+	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 00:36:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9455A282782
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 23:13:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC68C306A20
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 23:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671D713DDAC;
-	Tue, 26 Mar 2024 23:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28CDA13D8A1;
+	Tue, 26 Mar 2024 23:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IFofPOxm"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NZ6262Kj"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7052313DDAD;
-	Tue, 26 Mar 2024 23:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01931C288;
+	Tue, 26 Mar 2024 23:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711494803; cv=none; b=prfy0m5nGvhzbpTANPF2uDoXkZI/zDuxpBc1siVT86rFk77j7hD01sRKg5OI7PqoBi8ua+JZ0MWZLzpsq28O29gQSV+UO6EPhjtykS6PiT3MwD0ZGeZE7LIPLKGao42yxKCAVVXvAOvYl30RMRfurbgPzVuiV2wyf2tQxY+8h6s=
+	t=1711496158; cv=none; b=iNlfVKfN080ZsB2SXwtIAdDM0XchHcXkSK1WXdkldhIObeCCg+KLMTlRaVnBAPPPZCUeKGGiwKmQsOdGWXDdYiCBaKf1CRsYKt0J3q4WyxBnZJmBBrKZiJPB0YVL7Jxc+9B8XS6lCyCDV8HXdAYSZeQyKJgO19Z24iUtRdH1xy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711494803; c=relaxed/simple;
-	bh=UcvNeQayEhF72OWsw7JIXY3e7jKFPUq+mQ67sLPafTk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Q/SPMqnGqBP1yL6gtarTmcgFLxPnyQ3EHqQbNd6GhPJb8UlzYOJw9vhq9+cZK5eBYA75bmPiii0Hzt+EFknf4URICWVlHmRjOtWLylS6tl/Oqvlqrh6DkpWMAUT3dxRoQKLvK+iNgQubVSAKjgzruuGAQXh5+viBijxolrF7XEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IFofPOxm; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1711496158; c=relaxed/simple;
+	bh=2kYHyEHjL8vZZ93MqEh/vWakgojswPv+9v7lJxFVHFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Taf1MOYc/dIfb5s3UUDbr6F3IseugtFySoLdgjtT6cIXrzpqm5FXqPl3s7YqociQLlqWF/09+K87DSIdHfDiaOXkNOxiMzemj69Qks8AXKlttcOT44kSMKW9znzkXJnGA97CmuwloeBjjUh3y6gb61wLi0UAmf6S0KIRvOmc4s0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=NZ6262Kj; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1711494793;
-	bh=iUsdc7cAw1OVLTLm6TB9hiPQC9EG3D2Ph/qXCcXdnNQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=IFofPOxm7IPqJMS1DkpQWAc8psnTQFGR2RtPCiIcvHrwU9y5h3pmoqD3XywHRxGfV
-	 zRKJ2/NVra0ImOAK6ho2SJbND9mnMhTjE8lgQM9zyXf/fFuRMpnfyb9kTEQpj+PVnS
-	 sGve4C9cNFP/cyuAruGvcMOUbV+nNbHkOGusDhbdqtaVmzUo3WeBiFY1OQaHxOkO/8
-	 wfDdTNG3XwUwj+LFQcvkDkS52XdQ/woLikyvzPEdMBa8tNzzAQfjTX5Rt02acdijXW
-	 ExWB3CdF164EU4jQwrco2Kv3TMkm+XaafBqmmebimM28m24IewYDyZWidT9aaryh10
-	 kazxTCg9q6kUQ==
+	s=201702; t=1711496152;
+	bh=2kYHyEHjL8vZZ93MqEh/vWakgojswPv+9v7lJxFVHFs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NZ6262Kj5XXUhR0E3X2YWJpmaC9m1zUbGtxoimTNTmPrbX88qALXmj45xalMwF+iH
+	 /g2juhHtjGA4sG1fUm+MwrpoOAAA8+jYsZBabHSLWWbUcMjDKVQ2vqfR6t9LbGOIAO
+	 kCGTKIAh0/z1lalNi9Ue55Jk2RZnXQ3Sxtil/mWZFOpX9nZwmxf/mMRPn8FmWfCu/o
+	 8PSQnEG89gu898KXVzbasvCPKmeFMthQ4yATx8XYrK93FqyT7qK+EeIY0FIV8R3Ust
+	 Pd0o9ABAsXIQzsCjJvZc/8DLZIH6B309o7mDuUdkLYZKuT+plMcVo27Gk3nv4sHznP
+	 VEBWvJuGMF4MQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V45FN2Dk5z4wcQ;
-	Wed, 27 Mar 2024 10:13:12 +1100 (AEDT)
-Date: Wed, 27 Mar 2024 10:13:09 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V45lX53hFz4wcQ;
+	Wed, 27 Mar 2024 10:35:52 +1100 (AEDT)
+Date: Wed, 27 Mar 2024 10:35:51 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Alexandre
- Belloni <alexandre.belloni@bootlin.com>, Eric Biggers
- <ebiggers@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>, Jens Wiklander
- <jens.wiklander@linaro.org>, Luis Chamberlain <mcgrof@kernel.org>, Richard
- Weinberger <richard@nod.at>, Theodore Ts'o <tytso@mit.edu>, Tyler Hicks
- <code@tyhicks.com>
-Subject: linux-next: trees being removed
-Message-ID: <20240327101309.4e7d04f3@canb.auug.org.au>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: error fetching the clockevents tree
+Message-ID: <20240327103551.392a1b87@canb.auug.org.au>
+In-Reply-To: <20240319093614.16d6eb11@canb.auug.org.au>
+References: <20240319093614.16d6eb11@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nYu57v3tWCtg6/tEBlLc1Kq";
+Content-Type: multipart/signed; boundary="Sig_/isLxSh+W9DLDD4TM98S8OuM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/nYu57v3tWCtg6/tEBlLc1Kq
+--Sig_/isLxSh+W9DLDD4TM98S8OuM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-The following trees are going to be removed from linux-next because they
-have not been updated in more than a year.  If you want a tree restored,
-just let me know (and update its branch).
+Hi all,
 
-Tree			Last commit date
-  URL
-  comits (if any)
-----			----------------
-ecryptfs		2023-03-24 17:26:44 -0500
-  git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs.git#next
-  c1cc2db21607 ("ecryptfs: keystore: Fix typo 'the the' in comment")
-  a3d78fe3e1ae ("fs: ecryptfs: comment typo fix")
-fscrypt-current		2023-03-18 21:08:03 -0700
-  git://git.kernel.org/pub/scm/fs/fscrypt/linux.git#for-current
-fsverity-current	2023-03-15 22:50:41 -0700
-  git://git.kernel.org/pub/scm/fs/fsverity/linux.git#for-current
-modules-fixes		2023-02-06 08:45:55 -0800
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-li=
-nus
-rtc-fixes		2023-01-23 23:33:47 +0100
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git#rtc-fixes
-tee-fixes		2023-02-12 14:10:17 -0800
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git#fixes
-ubifs-fixes		2023-01-21 16:27:01 -0800
-  git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git#fixes
+On Tue, 19 Mar 2024 09:36:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Fetching the clockevents tree produces this error:
+>=20
+> fatal: unable to connect to git.linaro.org:
+> git.linaro.org[0: 54.152.253.35]: errno=3DConnection refused
+
+OK, it looks like someone turned off the git daemon on git.linaro.org.
+I will switch to fetching over https.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/nYu57v3tWCtg6/tEBlLc1Kq
+--Sig_/isLxSh+W9DLDD4TM98S8OuM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYDVoUACgkQAVBC80lX
-0Gw3kggAi+iGqCFfky/jPBw/e39ExzJTHr14StnfY7OrDqWXyhk14wPXDHJhDKqO
-DPfXrS4ysmNu29HlF6fBc1KXtMCgIdad7oLIUagWkZXTsEmCvmygd9x8kVUqmpfN
-AygUFt3/9OiQ+FVaLjW1Qav5XPAJkXHCvymDJaRNH+FBBEHR7TtYsRYsh7rEBNmb
-v+LxQKIY2DZZQrjqGQe6gVCsziJXrpIzICAe3UR8ZG3lwxzow3zqr+xG9P1czAV7
-s2AM0JfNF5A6TO1diQ7a25np8J2GXywU7ITW6/q/Fy7KmKuDFU07BWdkO2fGuW4c
-3cGwcbt0amgqNobPi1nECl9pXmUYoA==
-=O/ba
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYDW9cACgkQAVBC80lX
+0GxlGQf/ZkBNqsFh6gdlH8EdYCDnggO5SvJQoVzc65vOTqbwtYJBbkbX/GFjyvcq
+zVzOjaU1w5mXpmXuwBLULj5+1iwCmcFcpYQz0fKaZz584UE965PpiouGWDSFgKhi
+96ztjhOEqqCAJ1prXsBbqvyeMWW8kw5/bt6bzlTDD6l+DEp7umZXiIhyOZWJghDT
+MRYq9GUJYG1R/AaOR+Kawz8H4TcG0l7IMdozs0vjSHdOivwNiRunxR9tskWd6T3B
+h5tDBw5NnVaz52HiguDfrAK1nbJ5hYVPH2AGVSSWNmBvMrceYNirn/5b++78ttuQ
+YfdIt/qSt9eHSLN9rL9KrbGi9dl2mQ==
+=GArU
 -----END PGP SIGNATURE-----
 
---Sig_/nYu57v3tWCtg6/tEBlLc1Kq--
+--Sig_/isLxSh+W9DLDD4TM98S8OuM--
 

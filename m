@@ -1,77 +1,104 @@
-Return-Path: <linux-next+bounces-1737-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1738-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7FCE88C894
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 17:08:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48AC588CA8A
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 18:16:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05E5F1C3CD89
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 16:08:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC5BD1F80DB3
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 17:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6363413C91A;
-	Tue, 26 Mar 2024 16:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D611C697;
+	Tue, 26 Mar 2024 17:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="M1jgghzv"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NglBZgkx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD7413C696;
-	Tue, 26 Mar 2024 16:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDEF1C2AF;
+	Tue, 26 Mar 2024 17:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711469297; cv=none; b=gSbETM6+sks8HWYpWJJS5eGKReRH5HStoP0lQ+4raI80b14rzhycckhJp6JkfImdPpp60gRvPpktTnwzkPPnqUqY+TEEYGbDnGGZjAFCajtoA36XjhxeFBWDf/dFqYnpBPVya+5cFj6/o9IvXaT2V06asO5TBvIb51YXVM9hq1g=
+	t=1711473381; cv=none; b=nfczhX4M+n6wRvJpuu3FsEu92MDANMB5uQsh3y1MIkJO6Yqu069XXxxYL5UwxQ7Gc0bCuyZtIhzZZG0pA9OuRR593ewagc6dFAk5alAoS3NmR5e2FA/xWr/7yZBO9G+4GEokOo6ZDoqpVzb124kCNftgSW+yT5b6qQ3n/xGwUFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711469297; c=relaxed/simple;
-	bh=1Iwp34WIXn/TPRJOcu6SUvQdBFGuAro05DI9cIwDPXU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QXddUUhM7Y4tpMV921FymKeAEjEYwXO8lLJiEbS9zuAy80y8t7k2aH2nQ1GzO3pZtD3Pw9FigoDZk9RsbrqWfFlHW2ia3Iq7qQxE0GFz1GCX/k20vReNCIuHOEzgeDQlEF9hX1QAnOuVVtw7sXDyKb72KVwYNTh9okPZajOZq9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=M1jgghzv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE23C43394;
-	Tue, 26 Mar 2024 16:08:16 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="M1jgghzv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1711469294;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1Iwp34WIXn/TPRJOcu6SUvQdBFGuAro05DI9cIwDPXU=;
-	b=M1jgghzvfVKreU0mBcGVGtzZHk2OV9tYb1tqg5CHRLMZPqsl38CPcUCaJjWy6GJQ4DxLK1
-	zGszGe0R5/4Nq9qpA59l0ViDlrdGkLOgeepIxAyfNmGgoIWk3SDuwcD6mC9Pl3rrIeIbwV
-	hJuzVrrBBjRWWKV38kl/gcxEv2NUa60=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bbfa59da (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Tue, 26 Mar 2024 16:08:13 +0000 (UTC)
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-430b74c17aaso41864931cf.3;
-        Tue, 26 Mar 2024 09:08:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV4X/86OSAZU5AhvWw7Mczpi17Dffp595NSeWeAa0rxRiF6ZgKymaqFLk7ns1bqIQARJ+iEFZhJGA4epgmfPyXyKHickWVzCc6WwPUnW7em0hrcSXnDwfO1R9KbfSUTZPWmmzLBOc7c5g==
-X-Gm-Message-State: AOJu0YzwdvDSUhwWb4RMlqOC0qPVAUASL1hp7dyvWKikTI6mMHgR/Tz/
-	Fwv58D7qmrGKfiAzNUEBPUKrNLTQN7pjDi3swzMSzejKIBaMhGGppNa7lHKSFxiB4CtttRBMw5s
-	FiEeXFDPIf93mrgmMPYCuEwsJWQs=
-X-Google-Smtp-Source: AGHT+IGmAOse6lO9ZTLZGNR+NBxnukkRLki5SveSBOkBWwhjzlU2hXu+7zFK8hA8ygh6wTckyG10wpjQOukzCv4ISfY=
-X-Received: by 2002:a05:6214:b63:b0:696:80b5:da5f with SMTP id
- ey3-20020a0562140b6300b0069680b5da5fmr72154qvb.38.1711469292642; Tue, 26 Mar
- 2024 09:08:12 -0700 (PDT)
+	s=arc-20240116; t=1711473381; c=relaxed/simple;
+	bh=o2EHSZ1pkNNwsVraQPR7FRdXvD9eeSKp4Seu6Q6Uanc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MxjjHQzvg69XrjYuGFDrCyiioww5/rVXLpDrKp0X304xU7pSAcI4mfBq+mw3J/VShs1JMB2C4mJUUFkFDPhE3gwtQWwOmLn3F/w8cLMqmXsZ37v0gKJDKbW2CBKcxBqFcrHdYO8JUR6n+22IBFklKXoxR5zU4zv5PHbDkKJubbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NglBZgkx; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=4Sv85FGjimXN6NzHHLB+VPfFSPQPE+zInd7evQBHyig=; b=NglBZgkxNAVisLL0m2NA8J0CyW
+	Hd0aBI3/ilxcg3ICww4bOxZC5uuH88f3nS/b0aSFwqlASNzoRSUMQ0DU2HTVR65e8iGlX5o/gzDV6
+	B3Tn327hF4KNtcKfUhrKrVz2gwM7N4+qeLJqv61U8gHK6QlNMkOKwuhJyYcQsQnKS6CokfPELHfbz
+	nc/FajqXsed7f8hYQP8vLy0k8mPC+rswoRFluAtgu0fWN5d/jikE6LVsAW7HBEu9YWGa4B9nWWsel
+	baUTrg6PrexhN7+n2z8QbB1CWf3hL3bl67R4AYBctUc8vQfiUCZv4pJeFreOixqXewoZt89DtfcF9
+	qgqL+QIw==;
+Received: from [50.53.2.121] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rpAPJ-00000005gbJ-21MC;
+	Tue, 26 Mar 2024 17:16:17 +0000
+Message-ID: <40fcf36e-3a60-474e-a7ef-1de874743828@infradead.org>
+Date: Tue, 26 Mar 2024 10:16:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325120122.4452a813@canb.auug.org.au>
-In-Reply-To: <20240325120122.4452a813@canb.auug.org.au>
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date: Tue, 26 Mar 2024 17:08:03 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pte7Uh4W0Hc8bjL1zTWwH452W3FqBJdJ+YZfGT=qDYQA@mail.gmail.com>
-Message-ID: <CAHmME9pte7Uh4W0Hc8bjL1zTWwH452W3FqBJdJ+YZfGT=qDYQA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the random tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: "Theodore Ts'o" <tytso@mit.edu>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] Documentation: fs/proc: fix allocinfo title
+Content-Language: en-US
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: sfr@canb.auug.org.au, kent.overstreet@linux.dev,
+ linux-doc@vger.kernel.org, linux-next@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240326073813.727090-1-surenb@google.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240326073813.727090-1-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Fixed.
+
+
+On 3/26/24 00:38, Suren Baghdasaryan wrote:
+> Fix "Title underline too short." warning in the documentation.
+> 
+> Fixes: d08b311b6d49 ("lib: add allocation tagging support for memory allocation profiling")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  Documentation/filesystems/proc.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> index 5d2fc58b5b1f..245269dd6e02 100644
+> --- a/Documentation/filesystems/proc.rst
+> +++ b/Documentation/filesystems/proc.rst
+> @@ -955,7 +955,7 @@ reclaimed to achieve this.
+>  
+>  
+>  allocinfo
+> -~~~~~~~
+> +~~~~~~~~~
+>  
+>  Provides information about memory allocations at all locations in the code
+>  base. Each allocation in the code is identified by its source file, line
+
+-- 
+#Randy
 

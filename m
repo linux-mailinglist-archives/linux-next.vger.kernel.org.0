@@ -1,124 +1,231 @@
-Return-Path: <linux-next+bounces-1730-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1731-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F153E88B9E7
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 06:44:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA1F288BA30
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 07:06:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC9612C54E5
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 05:44:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80D3A2E52A4
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 06:06:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A52612A173;
-	Tue, 26 Mar 2024 05:44:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B5E12AADE;
+	Tue, 26 Mar 2024 06:06:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="uxmAGfaz"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="C/E+3Shz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0B8446BA;
-	Tue, 26 Mar 2024 05:44:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5458612AAC7
+	for <linux-next@vger.kernel.org>; Tue, 26 Mar 2024 06:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711431850; cv=none; b=XkPdWXlHmHg1O9dSQt+ogU2U/BrihwY3smMulqvm0/i7fWxx/4zPnfknQ4BETORhsL2l7nHmKEBjaB+ioxgfNV5y9Ici4yOgYwH42jZeIdjQpmW/aiaFZ6fK3VAfg0SQvSpfYSJb/GnaDbMqEiKTxgysFhTT1Tuixe9HShTYYec=
+	t=1711433190; cv=none; b=IcywRLW7KMYaXSg1BgHllAzmhrY+5vcHyRALiCyGk9+xeU7pJ6svSDjHZmEw7VR5huJP1tSiR23lsa7zFBKOHzfJl7FcYdCVrDhq3gjb4kuU+utwOd4NXqdzmTxl9sowGr6pnK57pa9cOaECSZ875Wp1rH1K7Y8Il/U6ghfCyf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711431850; c=relaxed/simple;
-	bh=tvQqxPyvFgOefL6xeKRQZhrzxYEj/ITsWdt1PsilITA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d2NeZhUF6cDSeCxUQwrB5Bt18Y/3d7spJJbR8bKxY8VQJil+DGugCf5gXjomPM5RCw4QSZxtS28Ykqedyvdp6dDkn/9uc3CDKavehiEsMFX//4V92S3zX5yMLF1aXyIKEm+8vJ/F9+5uBl8QIf+iEVnNf+VqeNKjWhEuPifKTSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=uxmAGfaz; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=B7ubNl0s9pj4zKsixRowhvQt20MjA4ggloW4HBz7kcA=; b=uxmAGfazzOu06FH/R0g2JvhtUy
-	EGVJ26Drp9hC+U4EBwaKJ6uA7DDo403PCk9GxwZmaaslD/DXz4kHnooyCcsu9lkYlVKfD19QAaokw
-	55qKprqaeI15YsdybJUEfp+OTs1CWJ6goSmLmVk6DO7quABRMj1d4sHzKgX7olD2JSFKxSbUFbcG8
-	9F5V6C9IjsrjvfBEwEOuJ9BHemiJfg7NaR/O2YuE5/hassVAtrPAYGDWo0Cl9FOXbBLxR1RvVRKo5
-	abd4rkq+IU2Ec3+C3kavNPYfV+FXsWiX/ZFw8MvzLEOe+odwrUAyjTuCGatq7dL0ij3QXA0kK4MY4
-	hOXA+9tQ==;
-Received: from [50.53.2.121] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rozbT-00000003AWu-2Eob;
-	Tue, 26 Mar 2024 05:44:07 +0000
-Message-ID: <5e1321ca-0d46-4e9d-a6e5-0560d99f65ff@infradead.org>
-Date: Mon, 25 Mar 2024 22:44:06 -0700
+	s=arc-20240116; t=1711433190; c=relaxed/simple;
+	bh=kzhMSFJ0cxM0EUCSvKEd9Q2fmTQ7zCXtwnPYNUcV1sM=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=HNGkuiEs581wBqJjLXb2FldHb2dUpvQR/yL8hTydoHp0Z49Y8MsdPmnF2y9YL+G3Jf+elJX+0gJ45YUm6yv+EXb+5NSyoY58wZmpRkz1IbGvQ5W6QzaJttb2p0UMt/tPBdGGv+dHfFf/KplClud6NzN0gII/pi2ut06xm/pM1Hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=C/E+3Shz; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-29dee60302fso4178894a91.1
+        for <linux-next@vger.kernel.org>; Mon, 25 Mar 2024 23:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1711433187; x=1712037987; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ikcsZ05CjfL8wlf/F0X9f4vXJ4IzOQdKcLbhezZFhCY=;
+        b=C/E+3ShzTY5IiOnO7GBO40GjsQIkbSdN2SXgQ16m4Hq7rioZdDIuZ9n5TgPz/2/Pes
+         EKpFcWBK4Zn6jG7GXFsxCquPdL13uMZVSTtraFEPSTtJL7dWcqBYhdlKgNI6AqRibXyY
+         U7+l8hNhbUSNpoTMYhi7iw7TKkpMdRt9KTNBKdoywF7ZzEVbaebYF+veNzThu9m//j1z
+         fjO9rNTBLBXDVHIgHvSD71VLVq2otZ9P3RxutNVCgRhVzTLC9b6sEzoO9yBxf4b5Dn12
+         ru2G5lbVrA8hXoqGJHxQkzNu4N4/KC3IzLQ7pfoiLPTzRHf143jGeTODTKVGz7hFLlLr
+         FnzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711433187; x=1712037987;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ikcsZ05CjfL8wlf/F0X9f4vXJ4IzOQdKcLbhezZFhCY=;
+        b=dhdgELKLcoIzp+l3FX9+nzGA/ZOufJZX//Z8imnnj/0K/VeyZdLTT27ZmIfdQ+IhuE
+         jEPMS84DxjnnJobbjh+wcwPjBFQRACCYKLa3QEtdUG52vOQ+zsZaxX/72fvIzQXzv9+n
+         yf1tiISXyLzWSlyjpkuazTaDfMqvRuBSPqM21oCMjAqJn8w53HKRWN+GZz4rUlYPifhB
+         jlzI+Sal5sGgfAQFigUPBgvnOfL5GBm4tNq0ol0VDTUaC3glQOCVULCGOcXUfYfPGPzN
+         fUfVksWWSkaTV722rOiqpV7BnUA3kQ+20YbSz+C6NEUZYx+dTlbO0aC8qg3pVmdJFTgl
+         Dqvw==
+X-Gm-Message-State: AOJu0YwMGRgbN7gxOH0XQihPV6w+OcJcGImvou6GKMZBkYqK30mQXnFN
+	nOb42224VKWBxmba3Txa4MzpN/oE3lYSTkwl0cPhP/JZoTKXkNHWd5bRzize7aMiIdKoFKIZdXQ
+	3sdo=
+X-Google-Smtp-Source: AGHT+IH3b9Am8wRFr/92O1QVG0STDGRgE3xnS/qspQgVPh3ehcsQu4oSX6fD857WMRhB666jCeO7Aw==
+X-Received: by 2002:a17:90a:9bc3:b0:29f:b7ea:1896 with SMTP id b3-20020a17090a9bc300b0029fb7ea1896mr803591pjw.6.1711433186856;
+        Mon, 25 Mar 2024 23:06:26 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id m9-20020a17090ade0900b0029bc9c34a39sm11151384pjv.50.2024.03.25.23.06.26
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Mar 2024 23:06:26 -0700 (PDT)
+Message-ID: <660265e2.170a0220.67969.10f3@mx.google.com>
+Date: Mon, 25 Mar 2024 23:06:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warnings after merge of the mm tree
-Content-Language: en-US
-To: Suren Baghdasaryan <surenb@google.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Doc Mailing List <linux-doc@vger.kernel.org>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Kent Overstreet <kent.overstreet@linux.dev>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240325123603.1bdd6588@canb.auug.org.au>
- <CAJuCfpH4Ee00hM9+B7=mi5Dwjrhov8vUK-KwPuoO3wsD7iJSAQ@mail.gmail.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAJuCfpH4Ee00hM9+B7=mi5Dwjrhov8vUK-KwPuoO3wsD7iJSAQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v6.9-rc1-138-g1dd178de4965
+X-Kernelci-Report-Type: build
+Subject: next/pending-fixes build: 1 build: 0 failed, 1 passed,
+ 26 warnings (v6.9-rc1-138-g1dd178de4965)
+To: linux-next@vger.kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
+
+next/pending-fixes build: 1 build: 0 failed, 1 passed, 26 warnings (v6.9-rc=
+1-138-g1dd178de4965)
+
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.9-rc1-138-g1dd178de4965/
+
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.9-rc1-138-g1dd178de4965
+Git Commit: 1dd178de496596098b5a4002c791867d9d73c80a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 1 unique architecture
+
+Warnings Detected:
+
+sparc:
+    sparc64_defconfig (gcc-10): 26 warnings
 
 
+Warnings summary:
 
-On 3/25/24 19:19, Suren Baghdasaryan wrote:
-> On Sun, Mar 24, 2024 at 6:36 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Hi all,
->>
->> After merging the mm tree, today's linux-next build (htmldocs) produced
->> these warnings:
->>
->> include/linux/slab.h:545: warning: expecting prototype for kmem_cache_alloc(). Prototype was for kmem_cache_alloc_noprof() instead
->> include/linux/slab.h:652: warning: expecting prototype for kmalloc(). Prototype was for kmalloc_noprof() instead
->> include/linux/slab.h:692: warning: expecting prototype for kmalloc_array(). Prototype was for kmalloc_array_noprof() instead
->> include/linux/slab.h:714: warning: expecting prototype for krealloc_array(). Prototype was for krealloc_array_noprof() instead
->> include/linux/slab.h:730: warning: Function parameter or struct member '_n' not described in 'kcalloc'
->> include/linux/slab.h:730: warning: Function parameter or struct member '_size' not described in 'kcalloc'
->> include/linux/slab.h:730: warning: Function parameter or struct member '_flags' not described in 'kcalloc'
->> include/linux/slab.h:730: warning: Excess function parameter 'n' description in 'kcalloc'
->> include/linux/slab.h:730: warning: Excess function parameter 'size' description in 'kcalloc'
->> include/linux/slab.h:730: warning: Excess function parameter 'flags' description in 'kcalloc'
->> include/linux/slab.h:774: warning: expecting prototype for kzalloc(). Prototype was for kzalloc_noprof() instead
->> mm/slab_common.c:1217: warning: expecting prototype for krealloc(). Prototype was for krealloc_noprof() instead
->> mm/util.c:751: warning: expecting prototype for __vcalloc(). Prototype was for __vcalloc_noprof() instead
->> mm/vmalloc.c:3897: warning: expecting prototype for vmalloc(). Prototype was for vmalloc_noprof() instead
->> mm/vmalloc.c:3916: warning: expecting prototype for vmalloc_huge(). Prototype was for vmalloc_huge_noprof() instead
->> mm/vmalloc.c:3953: warning: expecting prototype for vmalloc_user(). Prototype was for vmalloc_user_noprof() instead
->> mm/mempool.c:245: warning: expecting prototype for mempool_init(). Prototype was for mempool_init_noprof() instead
->> mm/mempool.c:271: warning: Function parameter or struct member 'gfp_mask' not described in 'mempool_create_node_noprof'
->> mm/mempool.c:271: warning: Function parameter or struct member 'node_id' not described in 'mempool_create_node_noprof'
->> mm/mempool.c:271: warning: expecting prototype for mempool_create_node(). Prototype was for mempool_create_node_noprof() instead
->>
->> Introduced by commits
->>
->>   c64e38ed88d1 ("mm/slab: enable slab allocation tagging for kmalloc and friends")
->>   ea7b8933f21b ("mempool: hook up to memory allocation profiling")
->>   576477564ede ("mm: vmalloc: enable memory allocation profiling")
->>
->> from the mm-unstable branch of the mm tree.
-> 
-> Thanks for the report, Stephen!
-> Let us check with Randy Dunlap how we should handle these. I assume we
-> still want documentation to document kmalloc(), not kmalloc_noprof().
-> Maybe there is a way to mute these warnings.
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
+=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
+=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
+r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
+ =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
+ for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
+ for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
+e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
+e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
+ for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
+e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
+pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
+or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
+for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
+for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
 
-A proposed patch is here:
-  https://lore.kernel.org/lkml/20240326054149.2121-1-rdunlap@infradead.org/T/#u
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
+Detailed per-defconfig build reports:
 
--- 
-#Randy
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
+=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
+ =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
+ =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
+=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
+ =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
+=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
+=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
+=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
+=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
+=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
+r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
+=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---
+For more info write to <info@kernelci.org>
 

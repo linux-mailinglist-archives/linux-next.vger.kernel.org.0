@@ -1,171 +1,121 @@
-Return-Path: <linux-next+bounces-1732-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1733-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC14488BA51
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 07:17:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B0BF88BB6D
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 08:38:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A0751F32376
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 06:17:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF3B5B2163D
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 07:38:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C3F12AAFD;
-	Tue, 26 Mar 2024 06:17:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFEB512DDBA;
+	Tue, 26 Mar 2024 07:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T7dem5P3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SzBX6cyn"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AA033DF
-	for <linux-next@vger.kernel.org>; Tue, 26 Mar 2024 06:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5832C1804F
+	for <linux-next@vger.kernel.org>; Tue, 26 Mar 2024 07:37:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711433830; cv=none; b=JfVe19DKb//xx1dd+Q3iL05LxdakPxRytANdX1VOY1yBTMMz3t0PdhOo7UWyVIW9HNgQfsRrPAcxyuGOcc6tjTbG0i9a3t6j+r1XQiHPuiSc3XVbU5yDN363w635fyqf7BltptfgUYnkuKnGKiM5E8+wmne4UyIHCG7774bnOhA=
+	t=1711438678; cv=none; b=oeBd/rMydfJCtJon5ZqMG+jKNVL/BUMGF+02vNZnCRXl4xqDBGaxhF4XATiz4rduotV5lPvIgonul83XfFl1Tcx5bw+yud7gfVJAuzVym+YOJP2JT/ZhSJ9BJHLNoB7DtUpJmv5i4yx71DwWQM9ZikMLKVFse9dwKXsVEUBdyV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711433830; c=relaxed/simple;
-	bh=cjpYESOM7QMMIUabp8rtA0I+OebgB6BIhZxP8vFNojE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=an5sb16cYSGTBCi3RblhK4bEb0u1G/VReEaFXNub7VCgaZNfc9M5oaTZy4qFLqpREUcZ1amFvPLtLjbtKe+hA59m7EiSDRTBVubnK2AmCaeKF8f8JgK4v5EobpDhE9CqmunqhE7IdOmB7BmHafaU+lZqPeFTkX9Uy72j1EteL2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T7dem5P3; arc=none smtp.client-ip=209.85.219.172
+	s=arc-20240116; t=1711438678; c=relaxed/simple;
+	bh=KB+GwC/75TtI91xEhdpED2/ssvEu+EzqIjo+lj4Zexc=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=XuKaDaMpH7516HSHEZbKUtXDKh8X9z0SvkECKl1eRIFAXSd7KwMLtsxRfALI1nLyAZbo3ZjHAE/EAuXwJFpKma7KPyaA4fF2L65oMnidUGaGJNt0zFsQpZSS+WA2MWgVszNuVapV+GNrQ3c+gCjTkqKWimcrfwsC2Cp511+Oee4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SzBX6cyn; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dbed0710c74so4266700276.1
-        for <linux-next@vger.kernel.org>; Mon, 25 Mar 2024 23:17:08 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60a54004e9fso93780257b3.3
+        for <linux-next@vger.kernel.org>; Tue, 26 Mar 2024 00:37:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711433828; x=1712038628; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z496Fd73CRYseME+3jY6zyut4smUZ0eN3AIP9fOLqdk=;
-        b=T7dem5P31ZTUMamKiNjXX/VzUANyV9bvdtsleVMrndS24LM4lW0mApPWFmeFplgU5M
-         WUt6oeTSNzgYe+WcJuWZ1QOFMT11WPF7x8a8J+Fur3Thar7LTgJZXFa90rfqzPQ/qhRQ
-         Kt23puhb+bUhTQeM43DHeU9zuC9JN7VmHTebFKnh/vyvkLNUBuFYz6DpACbIuCfVtz4d
-         dKA3KqJof+sncu++9yyEgj8oX9qzJwzaynJwsrbyXZ2ZAU4zIblsNLMtIPtVFloL2aoh
-         c5lG3byFZZBuJ1ShR67Oty1U7caRgvPbcRto2PdA9lCwSaHjhPkGQY3ROVWHsCRZdEpL
-         pKCw==
+        d=google.com; s=20230601; t=1711438676; x=1712043476; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yYWj2Gn9osrAFD6FEND6e5qyKYrw3yLcAlVsmaICSiU=;
+        b=SzBX6cynoSTpgVdTZUXxhbTAg1NHt+japd5IL3WTlwnYGyU+Sxd+1cPjWPjBZ6vTXz
+         vtqdQ+CPP1fc3GxlOMMFAObyCytMUI+9xcJ6GuyaI+9ABv4kjGDNNmAIOOe72MTl5JqO
+         Z6dizp1Aujl9zckKJy022U37kYl7Cwwu3Gfr6MCuCkRRop2N0o+AtKvjjsLVPg3ZmvV6
+         BxtDdYRxkhnPVfQzW7/wMav2Y/BpPyAz0HM31osBxD5P9EkozDWP55dOEseimHDH0+Yn
+         MHi6FEm2AuSBUZHJGtu96nyFXDrNdBryu6HfwA5vTISA8WWCYoLsI37EMq/TC08oyYFf
+         0QiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711433828; x=1712038628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z496Fd73CRYseME+3jY6zyut4smUZ0eN3AIP9fOLqdk=;
-        b=rdzWcCtXUMNSvzmwMLuoPifvMJE6ViBzuFUNfOp6bTXLFMUU5RK5gsPBA+pOfzzGBP
-         sBTM1wC6Yq+hJDnraOH5deiK+KNlztdcjzJH57Nwa4zNNPt54r2mLmSI/lHtaXcS9rko
-         He6bq3KENzjLTUUtIh8AHENTq+K/Gjk9SofMPZpVKXPrwfOOWSdXSfsBPZwCqID+rv4Q
-         JUL+ZaBV1l2PBsR/FOdxeyKeHqZT9faz3xOSMIpVQHBP9TSPC4aSY+lbIkSSsLoBtpY0
-         QmoYzs9EbTRcQQHP/SlEQl71hxrazB5i8NsJ8xxZsS0UXZoPe3kZ++vyljGcPkFt8VAZ
-         iMMA==
-X-Forwarded-Encrypted: i=1; AJvYcCU31O5nq3sSamcI9N2xm7UyZxIQX87gmVW34QrULcXHHHEM4/BM3RAbUQD6UIyfT+AqZr4t9m9rl8CtZfM69cN5jwocrhxPlyVSrA==
-X-Gm-Message-State: AOJu0Yw1q30alFg+Ok8cWwnMJNllFprIfd/QWizlF5rj2mGL7PBkpcS6
-	lvPTiiEWVt1ltTOrVWxlxWakL2uCRHYJKOeATiAJqHAXjt48a2fsn8PxEbSMBb58dktpPhEd/e+
-	3Cppp9t4wCw8YZerZZQIxe7m/Xm2JwvZ+Z+8Lqj9wATMVIS8aQA==
-X-Google-Smtp-Source: AGHT+IEV/dFFov55V7o1ynkJrF4pIJ/0LJvsrOPx/JXXTb5VOpv/f8LDRkk8uJ5K2QGdEcgfMh/IK2JoU9tv+OldiI4=
-X-Received: by 2002:a25:c793:0:b0:dc7:3165:2db1 with SMTP id
- w141-20020a25c793000000b00dc731652db1mr7239261ybe.49.1711433827791; Mon, 25
- Mar 2024 23:17:07 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711438676; x=1712043476;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yYWj2Gn9osrAFD6FEND6e5qyKYrw3yLcAlVsmaICSiU=;
+        b=HcA8CqI7aMkSvSPHGnsUN3NGCAm1Ftz7mAw3IkpxM5tvvuzSlgFynpZRCeaB6gVf8Y
+         xMpbU8efAzjPXqMwLRmGWUXmglkosP5C9JoVkLCezWnyjf7HbMcBUB2T4Cn4jiZhzK0P
+         AWF0klVG6WFLsm6p49DAEUtN5i+xrrn54E5QKHM1WmOh4JmUyv8IAfOZErcv+V/BCcK8
+         0f3eMZNcqPCt6gY2WWOGNQM/JqPGQlmPhSm9IdgaZOmSOnbK6rnA+eZg/1Zc2TsvXaGB
+         gchC0/4pwsKJOUK31sn57MwRnkjvQMsb/rRnaSrRsPs2pcS6YsIqmtV8qzpo4D8ecfWE
+         TUaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWLWGkvSneUdMz6yzU2hevR11zrdDDcQi1hc67ck9lwYxMXr8ZVFUNyDtaDcYz6ngY8TfRhrMW6oXcXW+bsfsWq1azDeIfOB2K/Mg==
+X-Gm-Message-State: AOJu0Yyixb8sK4mOmWDP2uyTTPCqAIrv+qbGNewTUdhV2Vgo5vZ3f4XS
+	MwZwPQAnr1UVBNSR49Uu9Vpg1dBjjID4u1Q5oy/kr+aFctvQfB08VIKMVSnpyLVm0vfJY8z4bOa
+	XgQ==
+X-Google-Smtp-Source: AGHT+IGPHjQo87+r2zhqmR6kCCDNQTsYC+f2ZCJS3JAQtG++EJPcIBJevN+jcis5On9vmS24q4aOrBZ/Y3Y=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:f77:52ef:ebeb:2cec])
+ (user=surenb job=sendgmr) by 2002:a05:6902:100a:b0:dc6:ff2b:7e1b with SMTP id
+ w10-20020a056902100a00b00dc6ff2b7e1bmr2849789ybt.4.1711438676435; Tue, 26 Mar
+ 2024 00:37:56 -0700 (PDT)
+Date: Tue, 26 Mar 2024 00:37:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240325123603.1bdd6588@canb.auug.org.au> <CAJuCfpH4Ee00hM9+B7=mi5Dwjrhov8vUK-KwPuoO3wsD7iJSAQ@mail.gmail.com>
- <5e1321ca-0d46-4e9d-a6e5-0560d99f65ff@infradead.org>
-In-Reply-To: <5e1321ca-0d46-4e9d-a6e5-0560d99f65ff@infradead.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
+Message-ID: <20240326073750.726636-1-surenb@google.com>
+Subject: [PATCH 1/1] arch/um: fix forward declaration for vmalloc
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Mon, 25 Mar 2024 23:16:55 -0700
-Message-ID: <CAJuCfpFTOz8cNiJFiCU5tMM1u5L=wXRsXqxUhN9g-R0u77CyZw@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the mm tree
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Andrew Morton <akpm@linux-foundation.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
+To: akpm@linux-foundation.org
+Cc: sfr@canb.auug.org.au, kent.overstreet@linux.dev, sj@kernel.org, 
+	richard@nod.at, anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, 
+	surenb@google.com, linux-mm@kvack.org, linux-um@lists.infradead.org, 
+	linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 10:44=E2=80=AFPM Randy Dunlap <rdunlap@infradead.or=
-g> wrote:
->
->
->
-> On 3/25/24 19:19, Suren Baghdasaryan wrote:
-> > On Sun, Mar 24, 2024 at 6:36=E2=80=AFPM Stephen Rothwell <sfr@canb.auug=
-.org.au> wrote:
-> >>
-> >> Hi all,
-> >>
-> >> After merging the mm tree, today's linux-next build (htmldocs) produce=
-d
-> >> these warnings:
-> >>
-> >> include/linux/slab.h:545: warning: expecting prototype for kmem_cache_=
-alloc(). Prototype was for kmem_cache_alloc_noprof() instead
-> >> include/linux/slab.h:652: warning: expecting prototype for kmalloc(). =
-Prototype was for kmalloc_noprof() instead
-> >> include/linux/slab.h:692: warning: expecting prototype for kmalloc_arr=
-ay(). Prototype was for kmalloc_array_noprof() instead
-> >> include/linux/slab.h:714: warning: expecting prototype for krealloc_ar=
-ray(). Prototype was for krealloc_array_noprof() instead
-> >> include/linux/slab.h:730: warning: Function parameter or struct member=
- '_n' not described in 'kcalloc'
-> >> include/linux/slab.h:730: warning: Function parameter or struct member=
- '_size' not described in 'kcalloc'
-> >> include/linux/slab.h:730: warning: Function parameter or struct member=
- '_flags' not described in 'kcalloc'
-> >> include/linux/slab.h:730: warning: Excess function parameter 'n' descr=
-iption in 'kcalloc'
-> >> include/linux/slab.h:730: warning: Excess function parameter 'size' de=
-scription in 'kcalloc'
-> >> include/linux/slab.h:730: warning: Excess function parameter 'flags' d=
-escription in 'kcalloc'
-> >> include/linux/slab.h:774: warning: expecting prototype for kzalloc(). =
-Prototype was for kzalloc_noprof() instead
-> >> mm/slab_common.c:1217: warning: expecting prototype for krealloc(). Pr=
-ototype was for krealloc_noprof() instead
-> >> mm/util.c:751: warning: expecting prototype for __vcalloc(). Prototype=
- was for __vcalloc_noprof() instead
-> >> mm/vmalloc.c:3897: warning: expecting prototype for vmalloc(). Prototy=
-pe was for vmalloc_noprof() instead
-> >> mm/vmalloc.c:3916: warning: expecting prototype for vmalloc_huge(). Pr=
-ototype was for vmalloc_huge_noprof() instead
-> >> mm/vmalloc.c:3953: warning: expecting prototype for vmalloc_user(). Pr=
-ototype was for vmalloc_user_noprof() instead
-> >> mm/mempool.c:245: warning: expecting prototype for mempool_init(). Pro=
-totype was for mempool_init_noprof() instead
-> >> mm/mempool.c:271: warning: Function parameter or struct member 'gfp_ma=
-sk' not described in 'mempool_create_node_noprof'
-> >> mm/mempool.c:271: warning: Function parameter or struct member 'node_i=
-d' not described in 'mempool_create_node_noprof'
-> >> mm/mempool.c:271: warning: expecting prototype for mempool_create_node=
-(). Prototype was for mempool_create_node_noprof() instead
-> >>
-> >> Introduced by commits
-> >>
-> >>   c64e38ed88d1 ("mm/slab: enable slab allocation tagging for kmalloc a=
-nd friends")
-> >>   ea7b8933f21b ("mempool: hook up to memory allocation profiling")
-> >>   576477564ede ("mm: vmalloc: enable memory allocation profiling")
-> >>
-> >> from the mm-unstable branch of the mm tree.
-> >
-> > Thanks for the report, Stephen!
-> > Let us check with Randy Dunlap how we should handle these. I assume we
-> > still want documentation to document kmalloc(), not kmalloc_noprof().
-> > Maybe there is a way to mute these warnings.
->
-> A proposed patch is here:
->   https://lore.kernel.org/lkml/20240326054149.2121-1-rdunlap@infradead.or=
-g/T/#u
+Patch [1] replaced vmalloc() function with a new definition but it did
+not adjust the forward declaration used in UML architecture. Change it
+to act as before.
+Note that this prevents the vmalloc() allocations in __wrap_malloc()
+from being accounted. If accounting here is critical, we will have
+to remove this forward declaration and include vmalloc.h, however
+that would pull in more dependencies and would require introducing more
+architecture-specific headers, like asm/bug.h, asm/rwonce.h, etc.
+This is likely the reason why this forward declaration was introduced
+in the first place.
 
-Thanks! I'll change back all the instances in the documentation where
-we replaced original names with _noprof versions.
+[1] https://lore.kernel.org/all/20240321163705.3067592-31-surenb@google.com/
 
->
->
-> --
-> #Randy
+Fixes: 576477564ede ("mm: vmalloc: enable memory allocation profiling")
+Reported-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+---
+ arch/um/include/shared/um_malloc.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/um/include/shared/um_malloc.h b/arch/um/include/shared/um_malloc.h
+index 13da93284c2c..bf503658f08e 100644
+--- a/arch/um/include/shared/um_malloc.h
++++ b/arch/um/include/shared/um_malloc.h
+@@ -11,7 +11,8 @@
+ extern void *uml_kmalloc(int size, int flags);
+ extern void kfree(const void *ptr);
+ 
+-extern void *vmalloc(unsigned long size);
++extern void *vmalloc_noprof(unsigned long size);
++#define vmalloc(...)		vmalloc_noprof(__VA_ARGS__)
+ extern void vfree(void *ptr);
+ 
+ #endif /* __UM_MALLOC_H__ */
+-- 
+2.44.0.396.g6e790dbe36-goog
+
 

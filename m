@@ -1,120 +1,77 @@
-Return-Path: <linux-next+bounces-1736-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1737-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A76A888C781
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 16:41:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7FCE88C894
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 17:08:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA0C71C635AA
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 15:41:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05E5F1C3CD89
+	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 16:08:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18A2413D2AE;
-	Tue, 26 Mar 2024 15:37:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6363413C91A;
+	Tue, 26 Mar 2024 16:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kc4USQE7"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="M1jgghzv"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BF013C9A8;
-	Tue, 26 Mar 2024 15:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD7413C696;
+	Tue, 26 Mar 2024 16:08:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711467447; cv=none; b=c1qVWbhXzR4reMBS/NfOFY16dWI174Md4j15L9VYgKhWfxgLoxUpeZmFY1HCLHrz1nTm7nhz6DEzILHuc03JVBDP5T4K3vmjl8j8N2zWv0Yf0GiLfrgLN7vcXcyoWaTUYxLkIFIWmGtIKspWrO4uY3Xl6uwEgOi7r4xpPQN4dks=
+	t=1711469297; cv=none; b=gSbETM6+sks8HWYpWJJS5eGKReRH5HStoP0lQ+4raI80b14rzhycckhJp6JkfImdPpp60gRvPpktTnwzkPPnqUqY+TEEYGbDnGGZjAFCajtoA36XjhxeFBWDf/dFqYnpBPVya+5cFj6/o9IvXaT2V06asO5TBvIb51YXVM9hq1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711467447; c=relaxed/simple;
-	bh=Bl+BYidMPD6QYSFEUn9nKPp7BsOGv1w8t/Y35xkpOsU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dET89eQWqB6oDycs1ro+S+NQ/cLGvCk/AG50hAhmOwF/sciQMi3yHl1EBFxEU9zU/YtpLMuUCBv+WFeTh45U5iHgV1LhP1fCl+SiHAcMA4cDy3xa9F/HNFrqIzwD8uc6exknz3EPv2IcckR9VcOLifhZ580oZYqK2N0fauiK6KY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kc4USQE7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9198AC43394;
-	Tue, 26 Mar 2024 15:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711467446;
-	bh=Bl+BYidMPD6QYSFEUn9nKPp7BsOGv1w8t/Y35xkpOsU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Kc4USQE7pWStzRH38MPjUVOniBdEq5uyWMoUbz0gTjBmUbZKyomc3+N1bbVG9vdyk
-	 fESewTVbd3oBlMBpODGuKsQ7U0RrznUbpvGESpnHLrYY95vSEWQgt7tVJvhjBJ5E9g
-	 3U26IABZk/FvcbeOquNy1outnQxgYWJuJWEBjmsSiX5gN1vhK5A0AJdM+uF62HcZkt
-	 JM7Tmgbuh6+MlC7ySVap9O8c3uC1wgzwI2PHxvXCVL2g4cWD4KJDkHSxqCr0Hcrt2+
-	 5gjlARL8ooO+2pygBvdaL3daFfodtBbnJhsxwceWyyF1QkNhpCg/CRUxGVwPWvAfgK
-	 I+vFRiBXWES0g==
-From: SeongJae Park <sj@kernel.org>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	akpm@linux-foundation.org,
-	sfr@canb.auug.org.au,
-	kent.overstreet@linux.dev,
-	richard@nod.at,
-	anton.ivanov@cambridgegreys.com,
-	johannes@sipsolutions.net,
-	linux-mm@kvack.org,
-	linux-um@lists.infradead.org,
-	linux-next@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] arch/um: fix forward declaration for vmalloc
-Date: Tue, 26 Mar 2024 08:37:24 -0700
-Message-Id: <20240326153724.89126-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240326073750.726636-1-surenb@google.com>
-References: 
+	s=arc-20240116; t=1711469297; c=relaxed/simple;
+	bh=1Iwp34WIXn/TPRJOcu6SUvQdBFGuAro05DI9cIwDPXU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QXddUUhM7Y4tpMV921FymKeAEjEYwXO8lLJiEbS9zuAy80y8t7k2aH2nQ1GzO3pZtD3Pw9FigoDZk9RsbrqWfFlHW2ia3Iq7qQxE0GFz1GCX/k20vReNCIuHOEzgeDQlEF9hX1QAnOuVVtw7sXDyKb72KVwYNTh9okPZajOZq9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=M1jgghzv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE23C43394;
+	Tue, 26 Mar 2024 16:08:16 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="M1jgghzv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1711469294;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1Iwp34WIXn/TPRJOcu6SUvQdBFGuAro05DI9cIwDPXU=;
+	b=M1jgghzvfVKreU0mBcGVGtzZHk2OV9tYb1tqg5CHRLMZPqsl38CPcUCaJjWy6GJQ4DxLK1
+	zGszGe0R5/4Nq9qpA59l0ViDlrdGkLOgeepIxAyfNmGgoIWk3SDuwcD6mC9Pl3rrIeIbwV
+	hJuzVrrBBjRWWKV38kl/gcxEv2NUa60=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bbfa59da (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Tue, 26 Mar 2024 16:08:13 +0000 (UTC)
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-430b74c17aaso41864931cf.3;
+        Tue, 26 Mar 2024 09:08:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV4X/86OSAZU5AhvWw7Mczpi17Dffp595NSeWeAa0rxRiF6ZgKymaqFLk7ns1bqIQARJ+iEFZhJGA4epgmfPyXyKHickWVzCc6WwPUnW7em0hrcSXnDwfO1R9KbfSUTZPWmmzLBOc7c5g==
+X-Gm-Message-State: AOJu0YzwdvDSUhwWb4RMlqOC0qPVAUASL1hp7dyvWKikTI6mMHgR/Tz/
+	Fwv58D7qmrGKfiAzNUEBPUKrNLTQN7pjDi3swzMSzejKIBaMhGGppNa7lHKSFxiB4CtttRBMw5s
+	FiEeXFDPIf93mrgmMPYCuEwsJWQs=
+X-Google-Smtp-Source: AGHT+IGmAOse6lO9ZTLZGNR+NBxnukkRLki5SveSBOkBWwhjzlU2hXu+7zFK8hA8ygh6wTckyG10wpjQOukzCv4ISfY=
+X-Received: by 2002:a05:6214:b63:b0:696:80b5:da5f with SMTP id
+ ey3-20020a0562140b6300b0069680b5da5fmr72154qvb.38.1711469292642; Tue, 26 Mar
+ 2024 09:08:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240325120122.4452a813@canb.auug.org.au>
+In-Reply-To: <20240325120122.4452a813@canb.auug.org.au>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date: Tue, 26 Mar 2024 17:08:03 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pte7Uh4W0Hc8bjL1zTWwH452W3FqBJdJ+YZfGT=qDYQA@mail.gmail.com>
+Message-ID: <CAHmME9pte7Uh4W0Hc8bjL1zTWwH452W3FqBJdJ+YZfGT=qDYQA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the random tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: "Theodore Ts'o" <tytso@mit.edu>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 26 Mar 2024 00:37:50 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
-
-> Patch [1] replaced vmalloc() function with a new definition but it did
-> not adjust the forward declaration used in UML architecture. Change it
-> to act as before.
-> Note that this prevents the vmalloc() allocations in __wrap_malloc()
-> from being accounted. If accounting here is critical, we will have
-> to remove this forward declaration and include vmalloc.h, however
-> that would pull in more dependencies and would require introducing more
-> architecture-specific headers, like asm/bug.h, asm/rwonce.h, etc.
-> This is likely the reason why this forward declaration was introduced
-> in the first place.
-> 
-> [1] https://lore.kernel.org/all/20240321163705.3067592-31-surenb@google.com/
-> 
-> Fixes: 576477564ede ("mm: vmalloc: enable memory allocation profiling")
-> Reported-by: SeongJae Park <sj@kernel.org>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-
-Thank you for this fix, Suren.  I confirmed that this patch fixes the issue I
-reported.
-
-Closes: https://lore.kernel.org/all/20240323180506.195396-1-sj@kernel.org/
-Tested-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
-> ---
->  arch/um/include/shared/um_malloc.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/um/include/shared/um_malloc.h b/arch/um/include/shared/um_malloc.h
-> index 13da93284c2c..bf503658f08e 100644
-> --- a/arch/um/include/shared/um_malloc.h
-> +++ b/arch/um/include/shared/um_malloc.h
-> @@ -11,7 +11,8 @@
->  extern void *uml_kmalloc(int size, int flags);
->  extern void kfree(const void *ptr);
->  
-> -extern void *vmalloc(unsigned long size);
-> +extern void *vmalloc_noprof(unsigned long size);
-> +#define vmalloc(...)		vmalloc_noprof(__VA_ARGS__)
->  extern void vfree(void *ptr);
->  
->  #endif /* __UM_MALLOC_H__ */
-> -- 
-> 2.44.0.396.g6e790dbe36-goog
+Fixed.
 

@@ -1,135 +1,130 @@
-Return-Path: <linux-next+bounces-1742-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1743-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CBB388D361
-	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 01:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A4588D46F
+	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 03:11:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2515D1F3A341
-	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 00:29:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0CF71F3EA55
+	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 02:10:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB15BE541;
-	Wed, 27 Mar 2024 00:29:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F3D020314;
+	Wed, 27 Mar 2024 02:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="c7OTPha+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SvdTlF3y"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFAE2F50;
-	Wed, 27 Mar 2024 00:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20561F60A;
+	Wed, 27 Mar 2024 02:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711499357; cv=none; b=od6BNrrv6//UojVEpUBtKMplSMoTHdG1OXaXm5UjAB5oOKMSV454HbI6rt1OlOxG6zLaIDmJ9lhUGXTs48f/edkGdREyzYig6ipNtdX1sVMG3l3jKYsPg9Ue5z64Va+lR00wCnQRA/a9pY6Aal0wTiiGeEXgy6PcPyH8RLX7nKw=
+	t=1711505455; cv=none; b=o0q4NICrOlvRlbmpxYAoRJxzXWjhMfZi9pxpYLPA3vOOWAjy3wrMKbSkohXI67RMdEIW0O+6VN0wuDLm4GMlQCDqNWOnrgBbt3zdt0fC7qThvKOrF9TonRitMkp9gJYR+7TTFCXisdimCtX4cBK1/tUukGG+szwmIWW+9fQHtgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711499357; c=relaxed/simple;
-	bh=1j7b/9QOfiWV26BYUU5t+w4EZQiMQ8zLGxoOaBYPIWU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=oW3/ByPFqILhoEclI3o/bsWW00B4p41DsaNSL2zEVFQNuI6l5IGXKVwfwCxqIiv2o+HtCGxPPbH6E/pDunCePbL2dz2cEeCesGFzF9nBsZTyXZOfuIqf+rOYrLhnY69l9BImzeS9cYDbcOZv+i5v1zVH0e/uox4k6OwlQgLBaxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=c7OTPha+; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1711505455; c=relaxed/simple;
+	bh=yK1BWdP9fBBurO6TjZlMRJkzkDO6xJFUyXMX7xi/poM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EHd3YirQwqcqW1TDirBEiSTrwGVDkLQH7w+DedBE+CpWxzBV4O3KRDk0pVUiOgryyBpM7kzQFcIvGHkqA1FBkkZoPd4qJ8L5GJGFL5F2er3TYEjLH6TCS9UnJc5hikISS0MWoel+tEE7mKAzJJQr5Y4ZqQhDLRs5VfhH7X53E1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SvdTlF3y; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1711499350;
-	bh=KQ6k/J57X30/DQPmTSG0fUfoOiquKQ8alEoCBJWeExo=;
+	s=201702; t=1711505447;
+	bh=D8wBYTSFVO3Kwg+qqhaeqbpJi3hBXVAJOjaIUMpVxnc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=c7OTPha+DXyFX7K/gY8iKn2zVbLX3EKsV0OOpYISX33TSJVIU9zX4FWBW4Pa7MV+m
-	 d2s3CZNX5A7+ZYZLRd5Tp8BmAZzUUtUe1kzASD2ceGBqhh4fFR6/Fo9LFWWQHQDCyA
-	 tvcFv+rlRoFJoF1ZIAB1bEz2PYqfuKfh1CromOswcrXTDd2ZnHnsrF5WfLHwLkaSEu
-	 mc0j3gSyhooA8lSBJZKRu/MvF7OOAfhERYJlpp4lYvquPS1R/Nf/6lbn93LuyE6m+A
-	 RPJhF1NstzcX7sp891lKXvw7ld9Klyjf3WKDaUjHl2ZEfnrDxvhTm3nEAPSWk0uN+S
-	 JEpx6JXCz9gqA==
+	b=SvdTlF3yDAAB6CE2oE+292GRCaCmeKWZG4AGd/RfPBPCWiE+DRFj/XaD6YhQii6TP
+	 9Q/mp1M7vHvgq9b8EbNigqQC8o4t6QIlsZ4BFIoUDbdmb69IyINnz3VBaEMBe0CZjf
+	 G+SoJsNdcY0h+9l9bDE4N+R8JrxogLeJci54WQgupg2AWdXAXoS4vlLtSHegq16RK9
+	 OHcu4j5DbD81FjWvX9O0AUu3pl0n9/9Yhfch9hk9shDd0XnwOO6xPkNQFwi8s2icQD
+	 eGFERvJMJ+AkbVP+dzck7amuJoqL0eJ815UCLdZWZhaeZp+PgGXchnwN+P1RKewOWe
+	 UWYina0qtPoaQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V46x132Rbz4wcF;
-	Wed, 27 Mar 2024 11:29:09 +1100 (AEDT)
-Date: Wed, 27 Mar 2024 11:29:07 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V49BH44jLz4wc9;
+	Wed, 27 Mar 2024 13:10:47 +1100 (AEDT)
+Date: Wed, 27 Mar 2024 13:10:44 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Anup Patel <anup@brainfault.org>, Christoffer Dall
- <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>
-Cc: Colin Ian King <colin.i.king@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Oliver Upton <oliver.upton@linux.dev>, Sean
- Christopherson <seanjc@google.com>
-Subject: linux-next: manual merge of the kvm-riscv tree with the kvm-arm
- tree
-Message-ID: <20240327112907.33cd9bb1@canb.auug.org.au>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Christian =?UTF-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the selinux tree
+Message-ID: <20240327131044.2c629921@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Vvn7PGP=2RjBf5VVyLbFnIw";
+Content-Type: multipart/signed; boundary="Sig_/T4I06AC_GtqUxmW6wUhGgUe";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Vvn7PGP=2RjBf5VVyLbFnIw
+--Sig_/T4I06AC_GtqUxmW6wUhGgUe
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-riscv tree got a conflict in:
+After merging the selinux tree, today's linux-next build (i386 defconfig)
+failed like this:
 
-  tools/testing/selftests/kvm/aarch64/arch_timer.c
+In file included from include/linux/kernel.h:31,
+                 from security/selinux/ss/ebitmap.c:16:
+security/selinux/ss/ebitmap.c: In function 'ebitmap_read':
+include/linux/kern_levels.h:5:25: error: format '%ld' expects argument of t=
+ype 'long int', but argument 3 has type 'u32' {aka 'unsigned int'} [-Werror=
+=3Dformat=3D]
+    5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+      |                         ^~~~~~
+include/linux/printk.h:429:25: note: in definition of macro 'printk_index_w=
+rap'
+  429 |                 _p_func(_fmt, ##__VA_ARGS__);                      =
+     \
+      |                         ^~~~
+include/linux/printk.h:500:9: note: in expansion of macro 'printk'
+  500 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+      |         ^~~~~~
+include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+   11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+      |                         ^~~~~~~~
+include/linux/printk.h:500:16: note: in expansion of macro 'KERN_ERR'
+  500 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+      |                ^~~~~~~~
+security/selinux/ss/ebitmap.c:464:17: note: in expansion of macro 'pr_err'
+  464 |                 pr_err("SELinux: ebitmap: high bit %d is not equal =
+to the expected value %ld\n",
+      |                 ^~~~~~
+cc1: all warnings being treated as errors
 
-between commit:
+Caused by commit
 
-  29b0075ed61c ("KVM: selftests: Fix __GUEST_ASSERT() format warnings in AR=
-M's arch timer test")
+  0142c56682fb ("selinux: reject invalid ebitmaps")
 
-from the kvm-arm tree and commit:
-
-  5448d9282af5 ("KVM: selftests: Fix spelling mistake "trigged" -> "trigger=
-ed"")
-
-from the kvm-riscv tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/testing/selftests/kvm/aarch64/arch_timer.c
-index 93100b3f1312,16ac74d07d68..000000000000
---- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
-+++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
-@@@ -135,8 -135,8 +135,8 @@@ static void guest_run_stage(struct test
- =20
-  		irq_iter =3D READ_ONCE(shared_data->nr_iter);
-  		__GUEST_ASSERT(config_iter + 1 =3D=3D irq_iter,
- -				"config_iter + 1 =3D 0x%lx, irq_iter =3D 0x%lx.\n"
- +				"config_iter + 1 =3D 0x%x, irq_iter =3D 0x%x.\n"
-- 				"  Guest timer interrupt was not trigged within the specified\n"
-+ 				"  Guest timer interrupt was not triggered within the specified\n"
-  				"  interval, try to increase the error margin by [-e] option.\n",
-  				config_iter + 1, irq_iter);
-  	}
-
---Sig_/Vvn7PGP=2RjBf5VVyLbFnIw
+--Sig_/T4I06AC_GtqUxmW6wUhGgUe
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYDaFMACgkQAVBC80lX
-0Gxw1ggAinEtAG0d9NNLM1EX3ixxsy+EO6hgm0TP2h3HjWF6zVl9+K8fBsRriMkd
-SwPepJ9hjDLeL8AZD/l9nvpPh+uB9QzSz/JZdm7YST/bTDm5iSsoOvRvPexEUV9O
-oEnDWKexEc78YMzZ+xpdJqBTZgZCFn8ajBI3czK2NA2fVAxL9DoZfLUGlHpwjLXx
-kxECuQ7h8T1NxJ2M+ushNDV3OwOZ9/lMnuObhbPEX551BPfcGb8TWEcly1m+/CUm
-XzVCs4Mfo1KmbH9h381R91lroJcMUi682VdP7z0Bm8w31L58NrJBoYvsMFDpnDQ6
-PZxsbfm5D69Pk/Wk7QnTFmDWVG7FxA==
-=uLHq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYDgCQACgkQAVBC80lX
+0Gyx4wf7B5dPGQPLJCl1RyR5kh+l9b034doZnlG/gW0IP0joJUnjhqvZmzob7/OX
+AuTPqAvswvoioReqOFc96XyYLAJBWmpYDrT39q1iigSIYYuVxwYCAM+XO1bmPPoK
+qnQNf1s5T6ES22zO5eyzFGTQ+ZC6NLK7HXk5dmct+hSwPp1h0kQANf0uP1V7N91X
+rWtooI74UtJL1Yq5+B5TEVugnbM2bg6qA7ZNXgWFdt0I1RSXb4zuWUcCO8OLVEpv
+26XgRSqa5X2GsAOQzDqwR9kMkdQ4vYrYZw3CW3CzQrwc2v8EimDghdAC8GAVKqlQ
+bUlZQC+XH/OVG3aZ9GCdEI/TjFLwbA==
+=JvsM
 -----END PGP SIGNATURE-----
 
---Sig_/Vvn7PGP=2RjBf5VVyLbFnIw--
+--Sig_/T4I06AC_GtqUxmW6wUhGgUe--
 

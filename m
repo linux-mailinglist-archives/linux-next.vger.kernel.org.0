@@ -1,106 +1,135 @@
-Return-Path: <linux-next+bounces-1741-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1742-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30E0188D2DB
-	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 00:36:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CBB388D361
+	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 01:29:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC68C306A20
-	for <lists+linux-next@lfdr.de>; Tue, 26 Mar 2024 23:36:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2515D1F3A341
+	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 00:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28CDA13D8A1;
-	Tue, 26 Mar 2024 23:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB15BE541;
+	Wed, 27 Mar 2024 00:29:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NZ6262Kj"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="c7OTPha+"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01931C288;
-	Tue, 26 Mar 2024 23:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFAE2F50;
+	Wed, 27 Mar 2024 00:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711496158; cv=none; b=iNlfVKfN080ZsB2SXwtIAdDM0XchHcXkSK1WXdkldhIObeCCg+KLMTlRaVnBAPPPZCUeKGGiwKmQsOdGWXDdYiCBaKf1CRsYKt0J3q4WyxBnZJmBBrKZiJPB0YVL7Jxc+9B8XS6lCyCDV8HXdAYSZeQyKJgO19Z24iUtRdH1xy8=
+	t=1711499357; cv=none; b=od6BNrrv6//UojVEpUBtKMplSMoTHdG1OXaXm5UjAB5oOKMSV454HbI6rt1OlOxG6zLaIDmJ9lhUGXTs48f/edkGdREyzYig6ipNtdX1sVMG3l3jKYsPg9Ue5z64Va+lR00wCnQRA/a9pY6Aal0wTiiGeEXgy6PcPyH8RLX7nKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711496158; c=relaxed/simple;
-	bh=2kYHyEHjL8vZZ93MqEh/vWakgojswPv+9v7lJxFVHFs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Taf1MOYc/dIfb5s3UUDbr6F3IseugtFySoLdgjtT6cIXrzpqm5FXqPl3s7YqociQLlqWF/09+K87DSIdHfDiaOXkNOxiMzemj69Qks8AXKlttcOT44kSMKW9znzkXJnGA97CmuwloeBjjUh3y6gb61wLi0UAmf6S0KIRvOmc4s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=NZ6262Kj; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1711499357; c=relaxed/simple;
+	bh=1j7b/9QOfiWV26BYUU5t+w4EZQiMQ8zLGxoOaBYPIWU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=oW3/ByPFqILhoEclI3o/bsWW00B4p41DsaNSL2zEVFQNuI6l5IGXKVwfwCxqIiv2o+HtCGxPPbH6E/pDunCePbL2dz2cEeCesGFzF9nBsZTyXZOfuIqf+rOYrLhnY69l9BImzeS9cYDbcOZv+i5v1zVH0e/uox4k6OwlQgLBaxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=c7OTPha+; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1711496152;
-	bh=2kYHyEHjL8vZZ93MqEh/vWakgojswPv+9v7lJxFVHFs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NZ6262Kj5XXUhR0E3X2YWJpmaC9m1zUbGtxoimTNTmPrbX88qALXmj45xalMwF+iH
-	 /g2juhHtjGA4sG1fUm+MwrpoOAAA8+jYsZBabHSLWWbUcMjDKVQ2vqfR6t9LbGOIAO
-	 kCGTKIAh0/z1lalNi9Ue55Jk2RZnXQ3Sxtil/mWZFOpX9nZwmxf/mMRPn8FmWfCu/o
-	 8PSQnEG89gu898KXVzbasvCPKmeFMthQ4yATx8XYrK93FqyT7qK+EeIY0FIV8R3Ust
-	 Pd0o9ABAsXIQzsCjJvZc/8DLZIH6B309o7mDuUdkLYZKuT+plMcVo27Gk3nv4sHznP
-	 VEBWvJuGMF4MQ==
+	s=201702; t=1711499350;
+	bh=KQ6k/J57X30/DQPmTSG0fUfoOiquKQ8alEoCBJWeExo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=c7OTPha+DXyFX7K/gY8iKn2zVbLX3EKsV0OOpYISX33TSJVIU9zX4FWBW4Pa7MV+m
+	 d2s3CZNX5A7+ZYZLRd5Tp8BmAZzUUtUe1kzASD2ceGBqhh4fFR6/Fo9LFWWQHQDCyA
+	 tvcFv+rlRoFJoF1ZIAB1bEz2PYqfuKfh1CromOswcrXTDd2ZnHnsrF5WfLHwLkaSEu
+	 mc0j3gSyhooA8lSBJZKRu/MvF7OOAfhERYJlpp4lYvquPS1R/Nf/6lbn93LuyE6m+A
+	 RPJhF1NstzcX7sp891lKXvw7ld9Klyjf3WKDaUjHl2ZEfnrDxvhTm3nEAPSWk0uN+S
+	 JEpx6JXCz9gqA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V45lX53hFz4wcQ;
-	Wed, 27 Mar 2024 10:35:52 +1100 (AEDT)
-Date: Wed, 27 Mar 2024 10:35:51 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V46x132Rbz4wcF;
+	Wed, 27 Mar 2024 11:29:09 +1100 (AEDT)
+Date: Wed, 27 Mar 2024 11:29:07 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: error fetching the clockevents tree
-Message-ID: <20240327103551.392a1b87@canb.auug.org.au>
-In-Reply-To: <20240319093614.16d6eb11@canb.auug.org.au>
-References: <20240319093614.16d6eb11@canb.auug.org.au>
+To: Anup Patel <anup@brainfault.org>, Christoffer Dall
+ <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>
+Cc: Colin Ian King <colin.i.king@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Oliver Upton <oliver.upton@linux.dev>, Sean
+ Christopherson <seanjc@google.com>
+Subject: linux-next: manual merge of the kvm-riscv tree with the kvm-arm
+ tree
+Message-ID: <20240327112907.33cd9bb1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/isLxSh+W9DLDD4TM98S8OuM";
+Content-Type: multipart/signed; boundary="Sig_/Vvn7PGP=2RjBf5VVyLbFnIw";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/isLxSh+W9DLDD4TM98S8OuM
+--Sig_/Vvn7PGP=2RjBf5VVyLbFnIw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 19 Mar 2024 09:36:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Fetching the clockevents tree produces this error:
->=20
-> fatal: unable to connect to git.linaro.org:
-> git.linaro.org[0: 54.152.253.35]: errno=3DConnection refused
+Today's linux-next merge of the kvm-riscv tree got a conflict in:
 
-OK, it looks like someone turned off the git daemon on git.linaro.org.
-I will switch to fetching over https.
+  tools/testing/selftests/kvm/aarch64/arch_timer.c
+
+between commit:
+
+  29b0075ed61c ("KVM: selftests: Fix __GUEST_ASSERT() format warnings in AR=
+M's arch timer test")
+
+from the kvm-arm tree and commit:
+
+  5448d9282af5 ("KVM: selftests: Fix spelling mistake "trigged" -> "trigger=
+ed"")
+
+from the kvm-riscv tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/isLxSh+W9DLDD4TM98S8OuM
+diff --cc tools/testing/selftests/kvm/aarch64/arch_timer.c
+index 93100b3f1312,16ac74d07d68..000000000000
+--- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
++++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+@@@ -135,8 -135,8 +135,8 @@@ static void guest_run_stage(struct test
+ =20
+  		irq_iter =3D READ_ONCE(shared_data->nr_iter);
+  		__GUEST_ASSERT(config_iter + 1 =3D=3D irq_iter,
+ -				"config_iter + 1 =3D 0x%lx, irq_iter =3D 0x%lx.\n"
+ +				"config_iter + 1 =3D 0x%x, irq_iter =3D 0x%x.\n"
+- 				"  Guest timer interrupt was not trigged within the specified\n"
++ 				"  Guest timer interrupt was not triggered within the specified\n"
+  				"  interval, try to increase the error margin by [-e] option.\n",
+  				config_iter + 1, irq_iter);
+  	}
+
+--Sig_/Vvn7PGP=2RjBf5VVyLbFnIw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYDW9cACgkQAVBC80lX
-0GxlGQf/ZkBNqsFh6gdlH8EdYCDnggO5SvJQoVzc65vOTqbwtYJBbkbX/GFjyvcq
-zVzOjaU1w5mXpmXuwBLULj5+1iwCmcFcpYQz0fKaZz584UE965PpiouGWDSFgKhi
-96ztjhOEqqCAJ1prXsBbqvyeMWW8kw5/bt6bzlTDD6l+DEp7umZXiIhyOZWJghDT
-MRYq9GUJYG1R/AaOR+Kawz8H4TcG0l7IMdozs0vjSHdOivwNiRunxR9tskWd6T3B
-h5tDBw5NnVaz52HiguDfrAK1nbJ5hYVPH2AGVSSWNmBvMrceYNirn/5b++78ttuQ
-YfdIt/qSt9eHSLN9rL9KrbGi9dl2mQ==
-=GArU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYDaFMACgkQAVBC80lX
+0Gxw1ggAinEtAG0d9NNLM1EX3ixxsy+EO6hgm0TP2h3HjWF6zVl9+K8fBsRriMkd
+SwPepJ9hjDLeL8AZD/l9nvpPh+uB9QzSz/JZdm7YST/bTDm5iSsoOvRvPexEUV9O
+oEnDWKexEc78YMzZ+xpdJqBTZgZCFn8ajBI3czK2NA2fVAxL9DoZfLUGlHpwjLXx
+kxECuQ7h8T1NxJ2M+ushNDV3OwOZ9/lMnuObhbPEX551BPfcGb8TWEcly1m+/CUm
+XzVCs4Mfo1KmbH9h381R91lroJcMUi682VdP7z0Bm8w31L58NrJBoYvsMFDpnDQ6
+PZxsbfm5D69Pk/Wk7QnTFmDWVG7FxA==
+=uLHq
 -----END PGP SIGNATURE-----
 
---Sig_/isLxSh+W9DLDD4TM98S8OuM--
+--Sig_/Vvn7PGP=2RjBf5VVyLbFnIw--
 

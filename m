@@ -1,95 +1,136 @@
-Return-Path: <linux-next+bounces-1749-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1750-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43FBB88E5E7
-	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 15:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0754688E69C
+	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 15:40:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F09FC2899B0
-	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 14:28:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A80782C6986
+	for <lists+linux-next@lfdr.de>; Wed, 27 Mar 2024 14:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DAC21514C9;
-	Wed, 27 Mar 2024 12:46:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CFEA157E66;
+	Wed, 27 Mar 2024 13:12:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dW5sC5+l"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="E7MmN36g"
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7651C68BF;
-	Wed, 27 Mar 2024 12:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C7312F5BA
+	for <linux-next@vger.kernel.org>; Wed, 27 Mar 2024 13:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711543610; cv=none; b=NM2pHz4sf8pCovQxnz26Z+nISWNVultoSuEwhh9Ll8ixvxbWCBbBumVl5FsPuLaHnF/02RVFQnb2kT85ZfnUniszrI+Gjoe74C2AKCGyYHU6Qhuyy99kdGBnRip5dQ9ie6zu1T9P4oPCL4blTP/w7ZglVBPIGxuEEtlZDYYK1Xo=
+	t=1711545178; cv=none; b=irsVCqy6SFHrm5wJAs6oBVrhQ/dtDhKgbORl3Ec/h3CBwJpNtpu7ZIkarxT1SW+yPOUXHPpvPUf+TPHbJwX+ZSYm2OXn2wraP4ppW5t8oxwiHpStD4mVTStgEksuF1uVIqKu4kVSnmGS7Dt9Q25SLShsmsjUKnFEb0VKKkoMElo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711543610; c=relaxed/simple;
-	bh=0uZGm4eHXrSK7trr0xVtDc+aBAuqPicqVHf0Y0YhXrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=INc6PooMiqpDz1mirSR4rhMfUj+QeTx81otUvNfGAvAojEWMlsCfZjUcag0CzkmtvAFBiW6EUfV1fzLnwQSGW5La0f4jO3jsyKsuYPjaEzzZVJ7sP5Y1QtJOJfVQeprGZhCA5CBBlE9MUf/SMjQH2uaga/kddvz85Kao48jWmg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dW5sC5+l; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DCD87240002;
-	Wed, 27 Mar 2024 12:46:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1711543600;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wYbi+SG27cQyt835c3LcxP516IwaaFwqWpKWdziu/4c=;
-	b=dW5sC5+lOIlM/IkIeroEfKUkyPEgRh7+N0SZsGtJC57m/LlNz/4YyHRIOiwZCFJf+EFHi9
-	Y0vP6pjQYKo0tUZotQhx272L2u5E/Zub6lwrvAJ0UJaJYma1kfmF0wfdS2pQE39ckjGCKE
-	X6G607+PvrU03HT717z2yl4FkX2gZ/BM8UhHEDo+DTfzM9AP/lyHhsQjvDpQpeLuoKzeso
-	Ry1zkgV/yGDgEn1kCqeBRW91bjSxGU/NzctDgqC/Q/xM3qhA7kpI0Fws6R8NOSOu5DaMSZ
-	rz3yvOj2e3VsEHDet0PafLWNTolXyCTiZqX1/WOWROmCbJDs5x3RoyqzsWsPWA==
-Date: Wed, 27 Mar 2024 13:46:38 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Eric Biggers <ebiggers@kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Jaegeuk Kim <jaegeuk@kernel.org>,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Richard Weinberger <richard@nod.at>, Theodore Ts'o <tytso@mit.edu>,
-	Tyler Hicks <code@tyhicks.com>
-Subject: Re: linux-next: trees being removed
-Message-ID: <202403271246389692cfda@mail.local>
-References: <20240327101309.4e7d04f3@canb.auug.org.au>
- <20240327041653.GA35281@sol.localdomain>
- <20240327100421604167cd@mail.local>
- <20240327221819.70455754@canb.auug.org.au>
+	s=arc-20240116; t=1711545178; c=relaxed/simple;
+	bh=7jYGQE/Sq6zQQ7I/lci/AqG3dRtS+wbk4l5Iv9S3DkE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FHTUEoA1kZimP+EqZEz3fBTr5xWfVczdsoizdbMvmyUPzA2bNuBaiGRuJOEV4eHrrlnPklWO3h/efsWC/la6/QUpyqUvOP1kLUEpIsmIY5zBRu7guUTrljnt46WXxalBCk4ic52OY93NNr+77rP1ubzTaacpbxpzbdXzA70CX5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=E7MmN36g; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-60a0599f6e5so59834757b3.3
+        for <linux-next@vger.kernel.org>; Wed, 27 Mar 2024 06:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1711545176; x=1712149976; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cl8kc5DDzw1UCsj7H0OiwEAFqFJFC9LP/5UvI/M+Yjg=;
+        b=E7MmN36gG9eHassxEruVGT5a9SJ7HIN1ZupU6gnFwxmzFwmaBaPaTSJN47uwi1p74q
+         zhwmrRGdqAKH35L3Q5NtFonNWWWd/3W8F8W0TWdh0GwXB3HjWmizcCRZnKx/GsM43rGU
+         hwaHSx3TACrKeum21NSKTq4BQZ3Xs05CohfN37id/mOx2UnYnRfgLFTA/WenLTvPxTwr
+         Q0+zoMcUS/2MXMLCDcOqu6KNgsB6tnEAZz3hnAGDLa10wOs0GL2srUC2Gyul3h2jqESd
+         AQ7CGYSQuYkkmor3grdTdgym/L9aUc2tB9PPrCtwbhxkb7bRvhrbO62AotxDq42tMldj
+         Kk1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711545176; x=1712149976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cl8kc5DDzw1UCsj7H0OiwEAFqFJFC9LP/5UvI/M+Yjg=;
+        b=q0Crb3vAHyiaZdTDin5ry/L5T9KZcHGVko5gfyLWROC+NW2vCjGDZBkjCHXEIQTocc
+         bl0oZUiHrazZ9yW/QnWBD1UQYc0uXZIglf/ckhijW4eYKzakkSPaRTKVBMhcUGXD3YRg
+         58dQK+5r7dL5NtRrfwOLBAlfUQl1wRpkCBMTmJwHxJpKVOK+Mrpo1KjxES0sov4LoY1x
+         wdfS4i4i73b+K8BzSgAzFY9e41jXu+xbMbsEDJPZni9R51w0rckzb7/dv0XTO5ZZqPf7
+         pGUlzzlo80hIosrSVxfO8qM0H2N/0Tyt3Wx7iujb0qJtkL8pAZlUokYibaEiszrSvY43
+         iORA==
+X-Forwarded-Encrypted: i=1; AJvYcCVSFaX2o9qQCR5JEybCeugcm/GW4Mfp7J33iBhn128rpE3e/KPvRH1fp2YXu00gFMHBxlG/dA2jjcqEBWpzA78XhQGlDTo9kuZ+qA==
+X-Gm-Message-State: AOJu0Yzor44lGoMW2F2+VxpJaDCCAZ3Wy1Pm7PtMqblpsDZFJStZlpBR
+	oVlMh0cZ0zAXanenLC9zqy6GbWSXHMuFqfQExZOS9HNmvMBSSozd7Xzumq5HHBlgaytlE1uIzwi
+	E9Im/VmRwL9qNGcSdllutm205JJY53iMNblzGaIDIbO1svxWkDQ==
+X-Google-Smtp-Source: AGHT+IFnViE46hUFxNhS96CiitdKwqazrOx73uxR/QTBc21cTRvG54b6wKCZP+b0faw/yql5ruAenNvedVuUNjr8JY0=
+X-Received: by 2002:a81:5c44:0:b0:60a:379d:2bb8 with SMTP id
+ q65-20020a815c44000000b0060a379d2bb8mr2389589ywb.35.1711545175822; Wed, 27
+ Mar 2024 06:12:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327221819.70455754@canb.auug.org.au>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+References: <20240327131044.2c629921@canb.auug.org.au>
+In-Reply-To: <20240327131044.2c629921@canb.auug.org.au>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 27 Mar 2024 09:13:11 -0400
+Message-ID: <CAHC9VhTOb_mR67WK6pQJRGWFcFOwuTaHPd7_V9kAfZYcYMS9pw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the selinux tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 27/03/2024 22:18:19+1100, Stephen Rothwell wrote:
-> Hi Alexandre,
-> 
-> On Wed, 27 Mar 2024 11:04:21 +0100 Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> >
-> > This is exactly my case. I don't mind my branch being dropped and I can
-> > ask to add it back once I have urgent fixes.
-> 
-> Or you could just update it to -rc1 every merge window or so and it
-> will hang around.  I don't mind keeping branches around that will get
-> used sometime.  I just don't like them being too old.
+On Tue, Mar 26, 2024 at 10:10=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:
+>
+> Hi all,
+>
+> After merging the selinux tree, today's linux-next build (i386 defconfig)
+> failed like this:
+>
+> In file included from include/linux/kernel.h:31,
+>                  from security/selinux/ss/ebitmap.c:16:
+> security/selinux/ss/ebitmap.c: In function 'ebitmap_read':
+> include/linux/kern_levels.h:5:25: error: format '%ld' expects argument of=
+ type 'long int', but argument 3 has type 'u32' {aka 'unsigned int'} [-Werr=
+or=3Dformat=3D]
+>     5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header =
+*/
+>       |                         ^~~~~~
+> include/linux/printk.h:429:25: note: in definition of macro 'printk_index=
+_wrap'
+>   429 |                 _p_func(_fmt, ##__VA_ARGS__);                    =
+       \
+>       |                         ^~~~
+> include/linux/printk.h:500:9: note: in expansion of macro 'printk'
+>   500 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+>    11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+>       |                         ^~~~~~~~
+> include/linux/printk.h:500:16: note: in expansion of macro 'KERN_ERR'
+>   500 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |                ^~~~~~~~
+> security/selinux/ss/ebitmap.c:464:17: note: in expansion of macro 'pr_err=
+'
+>   464 |                 pr_err("SELinux: ebitmap: high bit %d is not equa=
+l to the expected value %ld\n",
+>       |                 ^~~~~~
+> cc1: all warnings being treated as errors
+>
+> Caused by commit
+>
+>   0142c56682fb ("selinux: reject invalid ebitmaps")
+>
+> I have reverted that commit for today.
 
-I've done that now and I'll try to remember to update at each -rc1.
+Thanks Stephen, if I don't see a fix from Christian soon I'll patch it
+myself.  It should be resolved later today.
 
-
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--=20
+paul-moore.com
 

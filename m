@@ -1,118 +1,132 @@
-Return-Path: <linux-next+bounces-1755-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1756-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18DE988F4FB
-	for <lists+linux-next@lfdr.de>; Thu, 28 Mar 2024 02:58:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0304288F507
+	for <lists+linux-next@lfdr.de>; Thu, 28 Mar 2024 03:00:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56991B234B5
-	for <lists+linux-next@lfdr.de>; Thu, 28 Mar 2024 01:58:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2AC429FA4A
+	for <lists+linux-next@lfdr.de>; Thu, 28 Mar 2024 02:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72C032209B;
-	Thu, 28 Mar 2024 01:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 886F02561F;
+	Thu, 28 Mar 2024 02:00:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KX7zyqJg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eTHXgyR5"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7E98465;
-	Thu, 28 Mar 2024 01:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6AD225CF
+	for <linux-next@vger.kernel.org>; Thu, 28 Mar 2024 02:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711591083; cv=none; b=LIl7ic2C5yyzC8N6uqL51dW9qJtOpbny7gtMDVBlWP5aPeiev/q+uZlzS96fWxgHipwysqEsiKa1O/vcDnPCQ3rm1ZZPMIcQCO/KjWXUZ8Sx3UE/Qyh90X1BF4oAHCvw/oOcHue4xohvHdBZNq36cbiWUw49FWrviJalL88IXyA=
+	t=1711591216; cv=none; b=CZzWUaz1uKIe9e37o4lz5Usn/xkRBRgpKGwCHByYgW5Yb4A23qKmsNQq6vMtx3NNqtRUt8uq2e74vdujldZ06MOMgZPLvMZnGeLsiQWqeeAI2qucb5EIya4otV+VWE9ygQBIKPc5O+fTu+s+SGxRkbB14RI5oQx0g2qPm0pQTtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711591083; c=relaxed/simple;
-	bh=17frHZKHa4HTS0M444Swz4V9jidjHHSAtk9DQb/zVs8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gCwsCHJYB2KLGY0CXZhBUvWEueqtUAdCpcEwgUBww1zPWCdfgvcvWl5++lbb43WzoF302jA4KDzgBrTA4gi/8T9c6CHF/FYNEdexW1PztDa7LdxuwATv/4NPDTzZ31HXX32XbTfJ3ZvTSa8qAoV5mt1tVzZM1ZyDmA6qsua7ZOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KX7zyqJg; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33ed7ba1a42so241524f8f.2;
-        Wed, 27 Mar 2024 18:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711591079; x=1712195879; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tosp/xHwhQFOv14TlgTnZk/pGUufTB1z88IENWTkKck=;
-        b=KX7zyqJgBoyUxD9psSlG4exqFfRjo/QdJ2GFaaq15bCl+5jHJbB/s3TwKXWfc14bqb
-         +wYMZP6+fKJZxwhKn9J4UpwgZXuc6DiPNs3G2NgHFTm455CRaiLA30rE3hmrg5GkZFI2
-         YCG6jFSyMcIOIQOydDQaD9Z5URKbbeKCXFqGxjefwGI2BUHvERHtGrm607Y/cNoB4x8W
-         0gVJP2cedfe/CkSgWprQGNa3oLulvYB9ZHm1CW0xMMNazpMeHlF3ElqhXIr7QU59PTgd
-         8jbGDlLBJxQqaumIUqrEUtgWPuC1xRAoqJemt0B+PHGx8XBNChSdzqNp+fiGr7ikpik2
-         HGiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711591079; x=1712195879;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tosp/xHwhQFOv14TlgTnZk/pGUufTB1z88IENWTkKck=;
-        b=eCunpIlnN7xz04k09abi7b5nkxNYDUAkwCH1w+qjTadSC9/SPya75aUiaTIX/694Fd
-         7BDt/rzeqs5LT/ZtkEl5ysS89WoenNCQ8XiiFGdsTREkGmeDqez3jm/d2y6WT3BBPcHn
-         Eo5gr+L4IP39k04jDFzKf/0OxrF9sX/FuOXUSnugAq9j3Tio7B7WdqsIXJJzfy3ZMjhC
-         gTJ17p2w6954n3y7U3ihBHinhowSUv+iSQJ2szx8b+1vU00e6dFK94xQWzchlT8SWNE6
-         ruNxYnFLavnGlcMa6fHKL8Vzrpd+rJY3xMEt/Id5o4rXaB8JyUIF7RJaVRtR3mdI+Ngt
-         xrFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVDyC0/Z2TvBh0wkZRp5667OAI49Pe0ToLxFAWqkSHwH7Bwr/WRUGPHmdMwo7nSYLz9C3PYV+NPmnjXxLZPw75M9LW5A3xNGwEdMVW2SlszTV/CW/OScoUNp8RqpAaTtR8P91W+Ugx2BastKtGJUwzT/5EhJANMPo6xLiAMcJyyKOdqbLWp9abHVNvty/15Zy3k+pmj5Q==
-X-Gm-Message-State: AOJu0YwrZNLtkXYXl18o1pih5tqn5zV/FdnIPAWJ4dZLAb4g/K9mUMjR
-	y14pAF9h2gBR4O8xDpwig0DNpSFg2o0GpdYzohtyhFra9jUBQODg4rNsxdymy4tU7HhqUFdI3Os
-	xNECOMak8632yo/Lz8LZjVJQUvoA=
-X-Google-Smtp-Source: AGHT+IHsz6xL8bOK7aBf8BF761yTQJSarhpeyqPNrxEeiReNWPZGeG4ZKWWYpHZ4dezNtkqzoqFjScaO3BflrBK3mSs=
-X-Received: by 2002:a5d:5486:0:b0:341:c775:68b8 with SMTP id
- h6-20020a5d5486000000b00341c77568b8mr1135611wrv.57.1711591079229; Wed, 27 Mar
- 2024 18:57:59 -0700 (PDT)
+	s=arc-20240116; t=1711591216; c=relaxed/simple;
+	bh=WO6HUfry9BHwXmmmaocg9kjEOnGz8Oiuy+GYJJcQtWs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TaFqN88MJCRc/+9ADWSQN04o0BShFoBkbMyQcK4NcrorzLUYH25+63kb9U8CiK1E3GOMkngfVJ4X7+uXuoWGZs9T9W8GMDYOtxzXtpkVmPVvVRTBirJxX5yVc8fZTe8ROctUDKD3rE8t/7cc1MH9Mvlmzz+cy8ukkHs1tOTQav8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eTHXgyR5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711591213;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p5nqKfv3v+biAgyqBmGEVEdrEDuJ1P9xCB6+AquGT5s=;
+	b=eTHXgyR5gXgRAvUuPYHpC8eV7fMc7QA75j3DoFjxWhST/7TE4jFaq52SITuUEVQNaWwsa+
+	DlutditSX86VRZvNO+gMud2bSI8Znd/O7vdRLUFtFduUbaZfQivN3Lp80I7I1jB3nZUj5E
+	XMQCO41VyA8kevbWIaH4k8UAUb3NvR0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-298-daDXQqzoMI2v4zX4q8y23g-1; Wed, 27 Mar 2024 22:00:01 -0400
+X-MC-Unique: daDXQqzoMI2v4zX4q8y23g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9FCE3879849;
+	Thu, 28 Mar 2024 02:00:00 +0000 (UTC)
+Received: from localhost (unknown [10.72.116.12])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id C08F9492BD0;
+	Thu, 28 Mar 2024 01:59:59 +0000 (UTC)
+Date: Thu, 28 Mar 2024 09:59:52 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the mm tree
+Message-ID: <ZgTPGJamrN+nJsfr@MiWiFi-R3L-srv>
+References: <20240328091337.03421187@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240328125500.2582492e@canb.auug.org.au>
-In-Reply-To: <20240328125500.2582492e@canb.auug.org.au>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 27 Mar 2024 18:57:47 -0700
-Message-ID: <CAADnVQJ3S2DpCTe6m2xxjwgmUO5wLknDdV68Y5S7Lit+jZy51Q@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the net tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, David Miller <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, Haiyue Wang <haiyue.wang@intel.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328091337.03421187@canb.auug.org.au>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
 
-On Wed, Mar 27, 2024 at 6:55=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
+On 03/28/24 at 09:13am, Stephen Rothwell wrote:
 > Hi all,
->
-> Today's linux-next merge of the bpf-next tree got a conflict in:
->
->   kernel/bpf/arena.c
->
-> between commit:
->
->   ee498a38f317 ("bpf: Clarify bpf_arena comments.")
->
-> from the net tree and commit:
->
->   45a683b2d815 ("bpf,arena: Use helper sizeof_field in struct accessors")
->
-> from the bpf-next tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> 
+> After merging the mm tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+> 
+> mm/page_alloc.c: In function 'build_zonelists':
+> mm/page_alloc.c:5324:13: warning: unused variable 'node' [-Wunused-variable]
+>  5324 |         int node, local_node;
+>       |             ^~~~
+> 
+> Introduced by commit
+> 
+>   95d0185255a3 ("mm/page_alloc.c: remove unneeded codes in !NUMA version of build_zonelists()")
+> 
+> from the mm-unstable branch of the mm tree.
 
-Thanks for headsup.
-We'll fix it up when bpf-next gets ffwded in a day or two.
+Thanks. Below code change has been queued on mm-unstable branch to fix it.
+
+From 6bb5aa700a6221248df150cba3d9c54cd95bed97 Mon Sep 17 00:00:00 2001
+From: Baoquan He <bhe@redhat.com>
+Date: Wed, 27 Mar 2024 20:06:45 +0800
+Subject: [PATCH] 
+ mm-page_allocc-remove-unneeded-codes-in-numa-version-of-build_zonelists-v2
+Content-type: text/plain
+
+remove unused locals
+
+Link: https://lkml.kernel.org/r/ZgQL1WOf9K88nLpQ@MiWiFi-R3L-srv
+Signed-off-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+ mm/page_alloc.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index a4f6b5f308ea..9c591413ca04 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5285,12 +5285,9 @@ static void setup_min_slab_ratio(void);
+ 
+ static void build_zonelists(pg_data_t *pgdat)
+ {
+-	int node, local_node;
+ 	struct zoneref *zonerefs;
+ 	int nr_zones;
+ 
+-	local_node = pgdat->node_id;
+-
+ 	zonerefs = pgdat->node_zonelists[ZONELIST_FALLBACK]._zonerefs;
+ 	nr_zones = build_zonerefs_node(pgdat, zonerefs);
+ 	zonerefs += nr_zones;
+-- 
+2.41.0
+
 

@@ -1,140 +1,84 @@
-Return-Path: <linux-next+bounces-1762-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1763-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF54C88F751
-	for <lists+linux-next@lfdr.de>; Thu, 28 Mar 2024 06:36:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7209188FA3E
+	for <lists+linux-next@lfdr.de>; Thu, 28 Mar 2024 09:48:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A46A298325
-	for <lists+linux-next@lfdr.de>; Thu, 28 Mar 2024 05:36:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CFA11C2357C
+	for <lists+linux-next@lfdr.de>; Thu, 28 Mar 2024 08:48:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 182BC40862;
-	Thu, 28 Mar 2024 05:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3558843AC8;
+	Thu, 28 Mar 2024 08:48:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C6nUZoTj"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="AbqKfglN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9DB8485
-	for <linux-next@vger.kernel.org>; Thu, 28 Mar 2024 05:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A856D24219;
+	Thu, 28 Mar 2024 08:48:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711604172; cv=none; b=tYyxlEK1RTVLoweIQigyd964/M0HeUGVgLSkyXILPV1FYnTkJV1ydXxTTOJSIXtj2dhpA/79h+kHLs/fNudo+xl6CGoDcs30DZOJW3+06INcUUR9Q8PCP2lHpdexKTykdHbP/m/OscmWA6KZx/NVGoxCkSg5k548hYhSx2BAV4g=
+	t=1711615700; cv=none; b=CNRC1EHya9o4AxTuv4gW7nhdGQiifAU31/Jnx/aT0ruaXFGzjioTiUv8TnzuWUzQIjNc+kntqutPeWpvAg7JRXPQetMTEgdNJQ45EsKnpZClE1foGrc3TdqC8hNayDINodq2jxjBkOJrKe6e6gb4BX3I5XCHWvRk3luqgN2rZG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711604172; c=relaxed/simple;
-	bh=3U6V+9JcBHoyWlFviROw3p+GodkWEvgG95H00we1DYg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rgmrKV9e5TAxrlQDC29eUnJuWTsZnP+Zn5yn0O9zWjbWA2Hzr6pUkc4LvpTq2EzS+vqT/BbnuSm+3qqqHASyT7aHivXTVhboU9SqOKgI9PByS7qVQUduDNqWYYBS86WE1qG+icBsFpOI70NIWmIj41is7owb3sF0ymjgq8KbMDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C6nUZoTj; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dcbf82cdf05so460107276.2
-        for <linux-next@vger.kernel.org>; Wed, 27 Mar 2024 22:36:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711604169; x=1712208969; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3U6V+9JcBHoyWlFviROw3p+GodkWEvgG95H00we1DYg=;
-        b=C6nUZoTjLYyBZE2GaOu0G7/r/Je5GhhNkNXCEOPw7zrCpwDXT8nPfmbztgql/JBaKg
-         khhZz2ZL+cNSW2+tdYx0KPllhfzNSPAN3ytxL3SpDTGCftmNn2ppoDDh4fZMIzXa25RQ
-         gVAZDRzlVl74DOwc1ILiyrN70a2YLdT47Bv4XHVrM0wT62tK4GqgqrUhJtEb5MKJQgI0
-         q8Wtw8zGBz4Z4023CmZSE7m9O0iUuHTcILfMxQ3iZDAxojomszy9p9m/aXul3F2gIxqF
-         R+ZmQ0cZO+pBBLmbwnIjSFJXHXCFdU746JZx9tgfxmJj6ombSqtbkMWTil8VUB0o9EC/
-         5wBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711604169; x=1712208969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3U6V+9JcBHoyWlFviROw3p+GodkWEvgG95H00we1DYg=;
-        b=OejB/kreEVJp3z1GgYpPOVqhUnshH/pYbYxvhnERpO0nPLaOV6bfMdA+0O7ldEJifH
-         3qmTvPIZMliyBhj63mpUIudGrO8fsF6OmVBRaEkIXOxM4vtcUIo8KrvodbZZkNMLkhwT
-         OjE2KBI0I8Y+UcbCxeDXRYvT/IfB6zemqUcLfZccJko2tO/KNU+67lWZzwFOsVzT73aU
-         64Zo78ZFW0/QzHqwNAOevZyGoPPnkkT6wU++cgDzW1MxejY2E9trBvafacV6bhqUAGSt
-         0Ikojz5ZiphoNe0ZESgGXn3roaiPHcz83ZnBrcA6AmfPYPieb6aTo072hA2778t4RI8m
-         0utQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUPIjhpvi3LC+3tbD7gHeRmNTtOpTaJtzT1oDk056yR6zX4kYQfHMnJh6+3jMU9Bpc86G7tyIodY4r+F+lUJZwAtIav6IidyxF8ZA==
-X-Gm-Message-State: AOJu0YzArbAbY07TY0+4Bi57jN3mk2HH0jAkxmIpYYBb6vyu/l0EENGn
-	8LaVgDIo5KUSn0BSegJZCCIyiKjNx3Je+NNhrl4sKazd0TgAtOoZphiERrjeISmk31AXESZECej
-	1MDWIiCdSpqlaMoNTKH06igjXp3Ld5NxBonnj
-X-Google-Smtp-Source: AGHT+IF0R+uKEToWGsBY2vSnfIQ6DhGDVJippMQDcB6SunV/Q//MnqMAHSWcEjEQX9kRv3J12yg8SvnpUOUx5mVmNBo=
-X-Received: by 2002:a25:a048:0:b0:dcd:4878:1f9 with SMTP id
- x66-20020a25a048000000b00dcd487801f9mr1868686ybh.8.1711604169102; Wed, 27 Mar
- 2024 22:36:09 -0700 (PDT)
+	s=arc-20240116; t=1711615700; c=relaxed/simple;
+	bh=u/1FHiDNRladIOArz9ybCTG/xaqsxfeiA3DoCS1mRTA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ISHZkZypwgZnt074jSC0NhJXGmUvdac57abLtQlXM1KfuqvEYMXD/v3g+NKOR4OYlQxmsZxSE8MQNUyKFr0ZpYmRE/WeXtfQRCG8rjntTDaC7MSdViFSNA313z1yd1NCi169e7kHf7pZdk4nA9B43ANx/+V7FlGqEXss58Mk1QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=AbqKfglN; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=iHrHxou/LQhUWas1UemQMQryecJ9CPAti3mj44c5cFc=;
+	t=1711615698; x=1712825298; b=AbqKfglN7B81f7kofAZWkbRWg4YqigVf0AsQd0p9JAeRwXw
+	lGMp/O8ZQ02thQMIug4UEI/ebmTG2ocwrtklmDMTTFAM0MV2XiMTWlS1q+oShXsDfMKivCzdnmUol
+	YwBs71G5M0v+YZ2UYJNAaFveNaOluxJBBjLQ0csSZDrBIxezIqe3VaReh0gUpfGtcJa9Z7AI3oSPS
+	4udM7Iea7e5cNx4XFtliAf/6PCs+CMeS594ABpqjD0iSB+/IsnuTAv55z86Gs1Mu4enB8Rq1Mfwuh
+	sh+sd7AtASXa+XcMU1tEmGhz7vCaeZZ8XanCAL6AhKrlLgPupW55aN/+JG2Cmiog==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.97)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1rplQd-00000000nRW-3isQ;
+	Thu, 28 Mar 2024 09:48:08 +0100
+Message-ID: <261b229ae93fbd27f63d887b3217e3bade4e816f.camel@sipsolutions.net>
+Subject: Re: [PATCH 1/1] arch/um: fix forward declaration for vmalloc
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: sfr@canb.auug.org.au, kent.overstreet@linux.dev, sj@kernel.org, 
+	richard@nod.at, anton.ivanov@cambridgegreys.com, linux-mm@kvack.org, 
+	linux-um@lists.infradead.org, linux-next@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Thu, 28 Mar 2024 09:48:06 +0100
+In-Reply-To: <20240326073750.726636-1-surenb@google.com>
+References: <20240326073750.726636-1-surenb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325123603.1bdd6588@canb.auug.org.au> <CAJuCfpH4Ee00hM9+B7=mi5Dwjrhov8vUK-KwPuoO3wsD7iJSAQ@mail.gmail.com>
- <5e1321ca-0d46-4e9d-a6e5-0560d99f65ff@infradead.org> <CAJuCfpFTOz8cNiJFiCU5tMM1u5L=wXRsXqxUhN9g-R0u77CyZw@mail.gmail.com>
- <20240328153947.3871cfdf@canb.auug.org.au> <20240328154427.3e926d21@canb.auug.org.au>
-In-Reply-To: <20240328154427.3e926d21@canb.auug.org.au>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 27 Mar 2024 22:35:56 -0700
-Message-ID: <CAJuCfpHZGkL9urkZaVmO_o0ujpr-moDGYiBES1iRy2dh8g-t8w@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the mm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Randy Dunlap <rdunlap@infradead.org>, 
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Andrew Morton <akpm@linux-foundation.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-malware-bazaar: not-scanned
 
-On Wed, Mar 27, 2024 at 9:44=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> On Thu, 28 Mar 2024 15:39:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > On Mon, 25 Mar 2024 23:16:55 -0700 Suren Baghdasaryan <surenb@google.co=
-m> wrote:
-> > >
-> > > Thanks! I'll change back all the instances in the documentation where
-> > > we replaced original names with _noprof versions.
-> >
-> > I now have the following:
->
-> Sorry, some of those are not relevant here, just the _noprof stuff.
+On Tue, 2024-03-26 at 00:37 -0700, Suren Baghdasaryan wrote:
+>=20
+> -extern void *vmalloc(unsigned long size);
+> +extern void *vmalloc_noprof(unsigned long size);
+> +#define vmalloc(...)		vmalloc_noprof(__VA_ARGS__)
+>=20
 
-https://lore.kernel.org/all/20240327044649.9199-1-rdunlap@infradead.org/
-which seems to not yet been pulled into mm-unstable should fix the
-following warnings:
+I was confused a bit by the define at first, but that's because this is
+a user-side header file.
 
-include/linux/slab.h:730: warning: Function parameter or struct member
-'_n' not described in 'kcalloc'
-include/linux/slab.h:730: warning: Function parameter or struct member
-'_size' not described in 'kcalloc'
-include/linux/slab.h:730: warning: Function parameter or struct member
-'_flags' not described in 'kcalloc'
-include/linux/slab.h:730: warning: Excess function parameter 'n'
-description in 'kcalloc'
-include/linux/slab.h:730: warning: Excess function parameter 'size'
-description in 'kcalloc'
-include/linux/slab.h:730: warning: Excess function parameter 'flags'
-description in 'kcalloc'
+Reviewed-by: Johannes Berg <johannes@sipsolutions.net
 
-And https://lore.kernel.org/all/20240326054149.2121-1-rdunlap@infradead.org=
-/
-should handle the _noprof warnings. I can see this patch in
-mm-unstable and running "make htmldocs" in mm-unstable does not show
-the _noprof warnings anymore. Please let me know if I should try some
-other command to reproduce these.
-Thanks,
-Suren.
-
-
->
-> --
-> Cheers,
-> Stephen Rothwell
+johannes
 

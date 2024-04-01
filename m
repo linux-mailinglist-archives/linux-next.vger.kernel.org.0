@@ -1,181 +1,120 @@
-Return-Path: <linux-next+bounces-1769-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1770-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E4A2893497
-	for <lists+linux-next@lfdr.de>; Sun, 31 Mar 2024 19:09:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 276C7894656
+	for <lists+linux-next@lfdr.de>; Mon,  1 Apr 2024 22:59:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81F2D1C23CC0
-	for <lists+linux-next@lfdr.de>; Sun, 31 Mar 2024 17:09:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB6D31F218D0
+	for <lists+linux-next@lfdr.de>; Mon,  1 Apr 2024 20:59:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0750715F3FE;
-	Sun, 31 Mar 2024 16:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD7E537F7;
+	Mon,  1 Apr 2024 20:59:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="xH2DVphr"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="P8plVfOP"
 X-Original-To: linux-next@vger.kernel.org
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854BE15EFD8;
-	Sun, 31 Mar 2024 16:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=62.96.220.36
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711903429; cv=fail; b=fojRgQlGA1hCJ2tYyQnWW8Py1ZLbIpvm92oYbvmaj/Futn8pcV1EpEOSoyZFxgH6Nk28hI3YOYYCORScekpfGp2LiSQMq+sjGB3HQXROg4zoh08MQXjbmDDFzteZ/Q1CY5af1jnFbaWFS0QW5XNycpvmg5+l93XcB9qaXG5qUCU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711903429; c=relaxed/simple;
-	bh=Oj48vqis8R4I/w5cN3Av9n7gb9nbzw8+GfGJzVJ1qo0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IiZOm10THn92UIjVEnhdgXn8XvErGKdtF5C3Y8mAlWlJn7BIWeEc4HJ7HJmdfByL/G3tazZOCke4EN2Muu34DdRcGcTHY4c5edUEAu8UBpESDohXoDg4EYBdW5HSKogmWtEW1ptBuhGZB3krfY+jTgxdL+hsc1WsI9Poz+RZ9KY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=google.com; spf=fail smtp.mailfrom=google.com; dkim=fail (2048-bit key) header.d=google.com header.i=@google.com header.b=xH2DVphr reason="signature verification failed"; arc=none smtp.client-ip=209.85.128.177; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; arc=fail smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=google.com
-Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id 1D168208CB;
-	Sun, 31 Mar 2024 18:43:46 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cq-8H1PYXN8G; Sun, 31 Mar 2024 18:43:45 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF052A1BF;
+	Mon,  1 Apr 2024 20:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712005150; cv=none; b=GTxtyV9VZXZVm+j0WuK3l1tao5mE9W9SmLdm3/YCujpmbaUr68X/f55PCOwVJ0xDqclM04axEkf6NFLHF5L2G25bgBcazoz7eK+V0yjdgaaMUPQD0iXbDUy5v2wRGwcIj8+A4ftGSNCbgV3r7ICY2QXVZlh74yn5K/JhJgsK7Bg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712005150; c=relaxed/simple;
+	bh=OB0ETBxnseius7m19Wmd6yrUIYnFKVtrxfsfellkL/0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=r37wg1e1Vb3Tt8p6Z+8vcI7O2tksd089YMthZWtSEITgC+lCsqty/INDaC1BIU1KpEv1FJexgkgBp9LZWIZJBasdRRI7qfI5pyV//4crK1wqG9fercmz/Ca3/1upe8hooQxMTnXh0P3j5LmAGDdwTWf8NcbllxsKGii5qHYNNo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=P8plVfOP; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712005135;
+	bh=M9y+v2QMPLEHcbgJ2rGOOe+abN6YHUdrG4eoxD783hA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=P8plVfOPiEOwVa5GYa+hlCTDfnttSyYUTVcdovNgK5oQ4sC2XwqQ77XN9/clflHoA
+	 JVU4RZZRb+GCIoclz7FlJO3krPxtDYwoTSBfGrjApejy0wKPKL4VtdhfIvY4+oJbCd
+	 aKWDS4UdQa+cQLS9Ab+68QgCyM4ux/svSfKsnMfZNOmMGis10QC/qwKYWss+60Mc0N
+	 Kdgkg8rktWmppR1lM8pxMlBqSsEt8hxHV5ilWzzD7yP+GPvSwYfHQMOc2DuqAZBbek
+	 rwr+/W3obhL1/wRsJNFvh2vk9XnMgi7uzId3zwderWM6IGo2KmmbjhZ44/qtXKa5L/
+	 AXluqUuPyG0Pw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id CEB53208D3;
-	Sun, 31 Mar 2024 18:43:44 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com CEB53208D3
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-	by mailout2.secunet.com (Postfix) with ESMTP id C15A4800061;
-	Sun, 31 Mar 2024 18:43:44 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 31 Mar 2024 18:43:44 +0200
-Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
- 15.1.2507.17; Sun, 31 Mar 2024 16:36:44 +0000
-X-sender: <linux-kernel+bounces-125496-steffen.klassert=secunet.com@vger.kernel.org>
-X-Receiver: <steffen.klassert@secunet.com> ORCPT=rfc822;steffen.klassert@secunet.com
-X-CreatedBy: MSExchange15
-X-HeloDomain: mbx-dresden-01.secunet.de
-X-ExtendedProps: BQBjAAoA3EmmlidQ3AgFADcAAgAADwA8AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50Lk9yZ2FuaXphdGlvblNjb3BlEQAAAAAAAAAAAAAAAAAAAAAADwA/AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5EaXJlY3RvcnlEYXRhLk1haWxEZWxpdmVyeVByaW9yaXR5DwADAAAATG93
-X-Source: SMTP:Default MBX-ESSEN-02
-X-SourceIPAddress: 10.53.40.199
-X-EndOfInjectedXHeaders: 10929
-X-Virus-Scanned: by secunet
-Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.80.249; helo=am.mirrors.kernel.org; envelope-from=linux-kernel+bounces-125496-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 9AD982087D
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
-ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711753332; cv=none; b=B3LOCr+wLYrabsu3GHzr7KsAGIGkalDqwB2bTOlzaP9poXrZdFzv+u6eJI41CLYiDbd8E6Cr2lBIolx+MLbXVTD9GcaO6WktrrM0iapKrIGD0BnhyLf2MjpQiuk3e/G9XyveHi00cEAr8+afWzk7YmoHzrMxDgay/WbpkfSKOpE=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711753332; c=relaxed/simple;
-	bh=LOlGtRD+I7SxnGyG4Qt3HDXxX82VHSKBErkCCIDULUM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I79VwkvHiWCqRsyuy+cBb0GCBUz9b1hMfg2aU/WHElcq4rXrkn7pRr18WaYecWgHNcr7Qf8Uc7zySWPZk5uPPzrQdSyTaT/cLX6wtDLF6x7+tQdmGhQmdOCqDclDN9AR33TDcu1+UIY4iPd1rTGjm60Naqq6jp/4dI+PjIoWG9o=
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xH2DVphr; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711753329; x=1712358129; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Igo4IUryPSmylrRgjB3Hg+wV547xWuDnOMCE0dxBkog=;
-        b=xH2DVphr1RMNlDIJ9mBeQGwyWsjq38aan7YKMGLjdGZmWLib+NUcXRhdWCuWcI5HNT
-         ZGSu6qeN3z19TBtIG88HLzizhGEGS4PxQ51+JLM/YwwJXGouZnJyJuq4lvq7Z2MG5skq
-         8PNjSfd64nLcFrrkoBdfFtXVMbGfTOwTKfe1LnHOlqZAbzh6Nr8FvBS7hA6sAQi+D9l6
-         X7ypNHm6mByX1xw7L5Yp99s8BA02l8eXliPXtVq11Z9TReDOWJonEJ6yAlUJlnTj1aGq
-         blbeUtROK2MV+hjJcQG6j7j5wjUqaC8iT8Fhdelvjs+2+cDwIzJaol8pS+VCnvtRqU8C
-         ifcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711753329; x=1712358129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Igo4IUryPSmylrRgjB3Hg+wV547xWuDnOMCE0dxBkog=;
-        b=UFAYY8fbMCvtV8egJN/2k1V2g6D7W3U1IwywSEegyLEZ1cG03+xco/4cvu1vel8uPu
-         JsXtk2X9c/G+8tn+R+HypWSIL4rSM3YN+nmsLVIC7Ho/+o5SQ98YyM2FyUkCmREchSY2
-         6XhhAZqFEL/RtjuWSGnLlIlm9kBc2ThmeQKl9O/qjYWAWh9auVhqrl6Huhava7KGUbvH
-         GswaYTnwPXX1h5I3xwmHU3v+yPgffr9afMV38uhn+AEGe6DkUZFcZEkO/e6Y9C6f4tb/
-         5Pq458KtuQ6IGjngat7KDzj2oe2vwAku5z1aBsyCzJiPHlaUb0rGYyWVicQS7IV7U/ZS
-         pF4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUfjzS8AcmMVPSQV9L0Xw8+DWmjo1BA3yESC/TgdN86evN432lUMuuVnUqKh8fNJSqAxAbWdMsQAFMqvh/FimuhYYAxiML5PIfrZu+x
-X-Gm-Message-State: AOJu0YxRW6ODMAdg0Y+7SdATD8lKRJ5z3s5DG3TCI0CtYKO/grs6oh1H
-	edCzni9xaRwoQqgUCgE3FV7qL3EpZXqcTOE8SOJBHWy6uX4OB50hon/Z8ejD7dGYZweSuvgWxEn
-	yISqMbEj5Gh0HyE1APTOU3+ZElxqWmkUWKRgr
-X-Google-Smtp-Source: AGHT+IEMWCPE7scOrb6eChbQBr0BQCWxKMukJUVs0Rndtpuxp6EowEceQGuHZdmJhEbFeclclOJgjloq4Q7FYUj0s8k=
-X-Received: by 2002:a25:8b88:0:b0:dc7:140:8c0c with SMTP id
- j8-20020a258b88000000b00dc701408c0cmr3746406ybl.23.1711753329011; Fri, 29 Mar
- 2024 16:02:09 -0700 (PDT)
-Precedence: bulk
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V7jzf5Zspz4wcn;
+	Tue,  2 Apr 2024 07:58:54 +1100 (AEDT)
+Date: Tue, 2 Apr 2024 07:58:53 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Oswald Buddenhagen <oswald.buddenhagen@gmx.de>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the sound-current tree
+Message-ID: <20240402075853.4e5a61cf@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325123603.1bdd6588@canb.auug.org.au> <CAJuCfpH4Ee00hM9+B7=mi5Dwjrhov8vUK-KwPuoO3wsD7iJSAQ@mail.gmail.com>
- <5e1321ca-0d46-4e9d-a6e5-0560d99f65ff@infradead.org> <CAJuCfpFTOz8cNiJFiCU5tMM1u5L=wXRsXqxUhN9g-R0u77CyZw@mail.gmail.com>
- <20240328153947.3871cfdf@canb.auug.org.au> <20240328154427.3e926d21@canb.auug.org.au>
- <CAJuCfpHZGkL9urkZaVmO_o0ujpr-moDGYiBES1iRy2dh8g-t8w@mail.gmail.com> <20240330094919.61e7c7b8@canb.auug.org.au>
-In-Reply-To: <20240330094919.61e7c7b8@canb.auug.org.au>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Fri, 29 Mar 2024 16:01:56 -0700
-Message-ID: <CAJuCfpHVSn-wAogkYxuLTewFXKNpVwfDGAqshe1Ff5b7BNteqg@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the mm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Randy Dunlap <rdunlap@infradead.org>, 
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Andrew Morton <akpm@linux-foundation.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/LWwARJsdLi1heG3CjWP.50C";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/LWwARJsdLi1heG3CjWP.50C
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 
-On Fri, Mar 29, 2024 at 3:49=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-au> wrote:
->
-> Hi Suren,
->
-> On Wed, 27 Mar 2024 22:35:56 -0700 Suren Baghdasaryan <surenb@google.com>=
- wrote:
-> >
-> > https://lore.kernel.org/all/20240327044649.9199-1-rdunlap@infradead.org=
-/
-> > which seems to not yet been pulled into mm-unstable should fix the
-> > following warnings:
-> >
-> > include/linux/slab.h:730: warning: Function parameter or struct member
-> > '_n' not described in 'kcalloc'
-> > include/linux/slab.h:730: warning: Function parameter or struct member
-> > '_size' not described in 'kcalloc'
-> > include/linux/slab.h:730: warning: Function parameter or struct member
-> > '_flags' not described in 'kcalloc'
-> > include/linux/slab.h:730: warning: Excess function parameter 'n'
-> > description in 'kcalloc'
-> > include/linux/slab.h:730: warning: Excess function parameter 'size'
-> > description in 'kcalloc'
-> > include/linux/slab.h:730: warning: Excess function parameter 'flags'
-> > description in 'kcalloc'
-> >
-> > And https://lore.kernel.org/all/20240326054149.2121-1-rdunlap@infradead=
-org/
-> > should handle the _noprof warnings. I can see this patch in
-> > mm-unstable and running "make htmldocs" in mm-unstable does not show
-> > the _noprof warnings anymore. Please let me know if I should try some
-> > other command to reproduce these.
->
-> Those patches entered the mm tree after I had merge it on Thursday.  It
-> should all be good on Tuesday.
+Hi all,
 
-Perfect. I'll ignore similar reports with _noprof prototype warnings until =
-then.
-Thank you!
+In commit
 
->
-> --
-> Cheers,
-> Stephen Rothwell
+  e1d8acf35ce7 ("Revert "ALSA: emu10k1: fix synthesizer sample playback pos=
+ition and caching"")
 
+Fixes tag
+
+  Fixes: df335e9a8b (ALSA: emu10k1: fix synthesizer sample playback positio=
+n and caching, 2023-05-18)
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+  - Subject does not match target commit subject
+    Just use
+        git log -1 --format=3D'Fixes: %h ("%s")'
+
+The date field adds nothing.
+
+Thus:
+
+Fixes: df335e9a8bcb ("ALSA: emu10k1: fix synthesizer sample playback positi=
+on and caching")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LWwARJsdLi1heG3CjWP.50C
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYLIA0ACgkQAVBC80lX
+0GxSmQf/U73DHJIZMTtvtRMUHeMJIbfnQWMQFp2wpLLY53vu7Cdv20kc0xM13/C0
+KGKp66A9ObD17QOwT14AGrmUeUZk/EqW6OUg2iBOqArQvgnD0Jm7A0pHddgYfLcU
+XvHL3A/5MZWS1pFMslPkCBDJMHNCgwyvJploH9SG2lx1WXGCaIenPp8szn7PEGZ0
+x/xjX1XFiWFhhiYLFJfTXi8rU1AARgEmDB+aSuGPXWnZo2O8bmu1X3jdCdmmQ/tE
+07wpD1NxHCTpEcrCRgaw9VNVZ261kiAvGmYFaSqfB+qPn2CNpNmAsSG0oq+KmCLI
+yt9f9y9/jfodIGfX6SNW55A58bI6Fw==
+=UjWk
+-----END PGP SIGNATURE-----
+
+--Sig_/LWwARJsdLi1heG3CjWP.50C--
 

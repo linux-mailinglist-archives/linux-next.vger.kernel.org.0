@@ -1,104 +1,173 @@
-Return-Path: <linux-next+bounces-1784-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1785-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 374A0895D6F
-	for <lists+linux-next@lfdr.de>; Tue,  2 Apr 2024 22:17:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D777896061
+	for <lists+linux-next@lfdr.de>; Wed,  3 Apr 2024 01:47:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E037D1F24AE4
-	for <lists+linux-next@lfdr.de>; Tue,  2 Apr 2024 20:17:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80DE11C21D90
+	for <lists+linux-next@lfdr.de>; Tue,  2 Apr 2024 23:47:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E164515D5A8;
-	Tue,  2 Apr 2024 20:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D4D158AAC;
+	Tue,  2 Apr 2024 23:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Da9ZUqdI"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="YP2z9cle"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65C515D5A3;
-	Tue,  2 Apr 2024 20:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13568626A0;
+	Tue,  2 Apr 2024 23:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712089070; cv=none; b=PpgKP9aPf/TrDMjQw9z0+9zGso2csu6InDKOuthGSDHN4ykxfUbkIy5KpwV7uOO4pZmvCTEewa5F1LnET7sOmvSFp/LGotkdfCMpu7Lm378kIVTmSWDIvbiFd8kkmCtBLS9xFhsxT1bHtDFdZQICVyXztiFMfLee0S22YBiiDdw=
+	t=1712101642; cv=none; b=TeLH6YOB0ie1X7bQ5Pe6xddmtJU3gy1UlK0ShKL0shOtwl/zrjVGeFl9MRRrcWmUOax8I3Lb7nNBQUHsfp5TFLY9myvlv2W8Ozyo9QB0QidvW6WAfStEJfeKHSCRM+iYuqLBFoUfCsvoVPr99bj/cYgUoOz0MCU2VuikGmIOn4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712089070; c=relaxed/simple;
-	bh=96iocZd5ustauxh3FiwURa8D+ou4eiLJnlw9KYvy/rc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VdxpICgN5ipxa0oMpxkQTwn9XzMTdLVe4Shjc3FGiH5i7wUYPj6DKkyoQOXmnGbS8ZxiLAozkKjl0uLfv2JLnkJWvToULuwHZRR4zVCWWYROWnYrUsCLdQs82LZUiS+O+npeMG4Yf7Z6Xv6rcPwNXU/jiY1u/ZxxFp3qxaUXHDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Da9ZUqdI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1C8C433F1;
-	Tue,  2 Apr 2024 20:17:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712089070;
-	bh=96iocZd5ustauxh3FiwURa8D+ou4eiLJnlw9KYvy/rc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Da9ZUqdIVrpsoX7s2d85LH6plOALCLB4vYOjJvbBryaOw2549LUGYopRn/wUey+Tm
-	 lcTnP17Jp4oMxrA4Y6gytDnwseWGNWLtSvd6nJ5lZ1A3V08SoDd/Or0SExsz5emQES
-	 lrJiH+4ZBlvltLDMDx6rglHev9HAPu53KdRW8/trP1QQ6CaZnyeNxh1zt140ue6cvl
-	 pNGoxlto2xzk+o2XdMjDhWsRssYxwjfzUPkPj6RY6mJaAD5ZROCmvkO2WtWGgC+ssK
-	 dEzyNjvPyLskdVyLPtnGvlGb2o/3yBafzu4eRUpoiojC+bjOahUelPxdvYfFicWhcJ
-	 8fafesRLGYKAg==
-Date: Tue, 2 Apr 2024 17:17:47 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <Zgxn68ECer9n8xbh@x1>
-References: <20240402094116.79751030@canb.auug.org.au>
+	s=arc-20240116; t=1712101642; c=relaxed/simple;
+	bh=inPONuplr7+QX+aR/j2SyIqrY1nOT60fhNr/9GgsCcI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=CfPNQXSTr0hgRhtaslhpTR3F2jHTsiFl99AAC59vylJwzxF4K7rnIWeC9V1Szek2G0VbNH7U+uVVgIYeCm/z5c3WWGEFdKtZliE4FuRaLFeh5VJvSUXWduMp+t7EaKaMe8u+/XcIX2r1ICilb9niUv3sAjfzEqkmSDA4gd+93oY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=YP2z9cle; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712101629;
+	bh=O1LoqnEQMcpTdBwdEfgqlvn/fIUNF8+6dsCHnA8sUDY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=YP2z9clebzpRta9TeoArx28YOxl7Zk8HUM2pUUwcs+eJYNXV+AuoyBfnGY2MNH4K8
+	 30fXfu7UAqYqQvweszB5pk2QNAPzdFeaxqNhXP0yAPf8B8NxBm0V3wEYAlnzIt5cJX
+	 3e4oA+NGk+/ftjINrI932Mx6FLyh+FuWzYa/2sIRdJtjs+wuY1UTxC8yZiUS5XuCCI
+	 H3cJmEpGpiQf9knJ+ALHZxn4jO+qt7f4fVm6C+xhNUh+fdZou8Isvxcwp7xUK9feQz
+	 2ctWCVlqUGLlTb0XQaZPhj+GqRbQcwDqe45Igm/P+WiEIMn4Z701ftSA3pF2sUASwb
+	 UImA9jwfPBcOw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V8PgK05cdz4wcp;
+	Wed,  3 Apr 2024 10:47:08 +1100 (AEDT)
+Date: Wed, 3 Apr 2024 10:47:05 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Boris Brezillon <boris.brezillon@collabora.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20240403104705.2ea598ff@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240402094116.79751030@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/=h/rHpjwY4cM717RH==vH..";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Apr 02, 2024 at 09:41:16AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the perf tree, today's linux-next build (native i.e. ppc64le
-> perf) failed like this:
-> 
-> make[3]: *** No rule to make target '/home/sfr/next/next/tools/include/uapi/linux/stat.h', needed by '/home/sfr/next/perf/libbpf/staticobjs/libbpf.o'.  Stop.
-> 
-> Maybe caused by commit
-> 
->   f122b3d6d179 ("perf beauty: Introduce scrape script for the 'statx' syscall 'mask' argument")
-> 
-> or
-> 
->   a672af9139a8 ("tools headers: Remove almost unused copy of uapi/stat.h, add few conditional defines")
-> 
-> or a combination of them?
+--Sig_/=h/rHpjwY4cM717RH==vH..
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Right, these are headers that were used to extract string tables but
-were added to a directory that was also used to build tools, sometimes
-because headers contained new defines that wouldn't be available in
-older distros.
+Hi all,
 
-We're trying to move things that are needed just for creating string
-tables to a separate directory, as done in the second cset you mentioned
-above, how to do it in a way that is noticed by the dependency files
-cached by the tools build processes is what is needed here.
+After merging the drm-misc tree, today's linux-next build
+(x86_64_allmodconfig) failed like this:
 
-I planned to investigate and fix this, but this was preventing
-development work to proceed as 6.9-rc was released, so I ended up moving
-these to perf-tools-next, I'll try again to investigate the deps issue
-to make this (and further work in this area) to avoid requiring these
-'make clean' steps.
+In file included from drivers/gpu/drm/panthor/panthor_fw.c:19:
+drivers/gpu/drm/panthor/panthor_fw.c: In function 'panthor_job_irq_suspend':
+drivers/gpu/drm/panthor/panthor_device.h:326:13: error: unused variable 'co=
+okie' [-Werror=3Dunused-variable]
+  326 |         int cookie;                                                =
+                             \
+      |             ^~~~~~
+drivers/gpu/drm/panthor/panthor_fw.c:979:1: note: in expansion of macro 'PA=
+NTHOR_IRQ_HANDLER'
+  979 | PANTHOR_IRQ_HANDLER(job, JOB, panthor_job_irq_handler);
+      | ^~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/panthor/panthor_fw.c: In function 'panthor_job_irq_resume':
+drivers/gpu/drm/panthor/panthor_device.h:336:13: error: unused variable 'co=
+okie' [-Werror=3Dunused-variable]
+  336 |         int cookie;                                                =
+                             \
+      |             ^~~~~~
+drivers/gpu/drm/panthor/panthor_fw.c:979:1: note: in expansion of macro 'PA=
+NTHOR_IRQ_HANDLER'
+  979 | PANTHOR_IRQ_HANDLER(job, JOB, panthor_job_irq_handler);
+      | ^~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+In file included from drivers/gpu/drm/panthor/panthor_gpu.c:19:
+drivers/gpu/drm/panthor/panthor_gpu.c: In function 'panthor_gpu_irq_suspend=
+':
+drivers/gpu/drm/panthor/panthor_device.h:326:13: error: unused variable 'co=
+okie' [-Werror=3Dunused-variable]
+  326 |         int cookie;                                                =
+                             \
+      |             ^~~~~~
+drivers/gpu/drm/panthor/panthor_gpu.c:166:1: note: in expansion of macro 'P=
+ANTHOR_IRQ_HANDLER'
+  166 | PANTHOR_IRQ_HANDLER(gpu, GPU, panthor_gpu_irq_handler);
+      | ^~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/panthor/panthor_gpu.c: In function 'panthor_gpu_irq_resume':
+drivers/gpu/drm/panthor/panthor_device.h:336:13: error: unused variable 'co=
+okie' [-Werror=3Dunused-variable]
+  336 |         int cookie;                                                =
+                             \
+      |             ^~~~~~
+drivers/gpu/drm/panthor/panthor_gpu.c:166:1: note: in expansion of macro 'P=
+ANTHOR_IRQ_HANDLER'
+  166 | PANTHOR_IRQ_HANDLER(gpu, GPU, panthor_gpu_irq_handler);
+      | ^~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+In file included from drivers/gpu/drm/panthor/panthor_mmu.c:30:
+drivers/gpu/drm/panthor/panthor_mmu.c: In function 'panthor_mmu_irq_suspend=
+':
+drivers/gpu/drm/panthor/panthor_device.h:326:13: error: unused variable 'co=
+okie' [-Werror=3Dunused-variable]
+  326 |         int cookie;                                                =
+                             \
+      |             ^~~~~~
+drivers/gpu/drm/panthor/panthor_mmu.c:1689:1: note: in expansion of macro '=
+PANTHOR_IRQ_HANDLER'
+ 1689 | PANTHOR_IRQ_HANDLER(mmu, MMU, panthor_mmu_irq_handler);
+      | ^~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/panthor/panthor_mmu.c: In function 'panthor_mmu_irq_resume':
+drivers/gpu/drm/panthor/panthor_device.h:336:13: error: unused variable 'co=
+okie' [-Werror=3Dunused-variable]
+  336 |         int cookie;                                                =
+                             \
+      |             ^~~~~~
+drivers/gpu/drm/panthor/panthor_mmu.c:1689:1: note: in expansion of macro '=
+PANTHOR_IRQ_HANDLER'
+ 1689 | PANTHOR_IRQ_HANDLER(mmu, MMU, panthor_mmu_irq_handler);
+      | ^~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-> This is an incremental build but doing 'make -C tools/perf clean' and then
-> rebuilding works, so maybe there is a dependency missing?
+Caused by commit
 
-Thanks for reporting.
+  962f88b9c916 ("drm/panthor: Drop the dev_enter/exit() sections in _irq_su=
+spend/resume()")
 
-- Arnaldo
+I have used the drm-misc tree from next-20240402 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=h/rHpjwY4cM717RH==vH..
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYMmPkACgkQAVBC80lX
+0GxDKAf9G3v6j8SSmsO725iM40aC0aOWHSxf+5dri4sI6wjIhxTIJ7Iy9x6628/n
+PErvIk03eZeJSF2AfQEtv2EZhdQLveic/2M0qhzoYe8g+XmPF9Ed64F0WBQNFO7i
+/F1RJcTHXDHll83mJroO7yuVFvmidBRhHG7lGUXT9JvHxvImRQZjD4Nw7i4yRN6j
+kPgUWf4wEEPVrthJVoRvo0AFI25aCb+d50yye0oBcXgAMMLlJfdCfysn1d6AcOH5
+UfK9xzntnUkX9wp8ZONMbnnNsiHj7CiC/OuSndeTzAgZx3MIe7ujiFirRk25P+vp
++BVVTQP4xhDo87Z3k6EKBMvIi3c0ZQ==
+=2cUO
+-----END PGP SIGNATURE-----
+
+--Sig_/=h/rHpjwY4cM717RH==vH..--
 

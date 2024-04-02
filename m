@@ -1,78 +1,56 @@
-Return-Path: <linux-next+bounces-1783-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1784-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDA01895601
-	for <lists+linux-next@lfdr.de>; Tue,  2 Apr 2024 16:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 374A0895D6F
+	for <lists+linux-next@lfdr.de>; Tue,  2 Apr 2024 22:17:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F96A1F23180
-	for <lists+linux-next@lfdr.de>; Tue,  2 Apr 2024 14:01:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E037D1F24AE4
+	for <lists+linux-next@lfdr.de>; Tue,  2 Apr 2024 20:17:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 790D485277;
-	Tue,  2 Apr 2024 14:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E164515D5A8;
+	Tue,  2 Apr 2024 20:17:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N5ibYs2s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Da9ZUqdI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7E585283;
-	Tue,  2 Apr 2024 14:00:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65C515D5A3;
+	Tue,  2 Apr 2024 20:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712066457; cv=none; b=M4mQHRf46Ui1zNzm8Db5XFPH8EG3oXkAiKoCqC2vEtAnaMzqzehcjdaNXiAhHZ+46R/6F5DmohZtqr0aKBHk/t1o/92PniNO+QtPCXUa9JhgQL6bJ/FuJzECEkaQPHOnzW5nacOI2AlUsODi9/Ps3+WYaOhRru9g+NwUVOw+fhI=
+	t=1712089070; cv=none; b=PpgKP9aPf/TrDMjQw9z0+9zGso2csu6InDKOuthGSDHN4ykxfUbkIy5KpwV7uOO4pZmvCTEewa5F1LnET7sOmvSFp/LGotkdfCMpu7Lm378kIVTmSWDIvbiFd8kkmCtBLS9xFhsxT1bHtDFdZQICVyXztiFMfLee0S22YBiiDdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712066457; c=relaxed/simple;
-	bh=sx/n5YT2uP/IXACSVATwzxQmHEWq2jAIn4wcthue3w8=;
+	s=arc-20240116; t=1712089070; c=relaxed/simple;
+	bh=96iocZd5ustauxh3FiwURa8D+ou4eiLJnlw9KYvy/rc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pjB4rMxpGm5qT8LRlawiOLizfp11f0T9LdifG8pDTsAfpX3DtkGTHDs1rtF1sBFIOQkwUsri2ZZztEU1h2AkexqLI/SJenUxfG4zoeSuM6CulQ6hOHfOTBd5xoFpJz7h2uzjnP+OpAJ1pk2dCUijs9dE2Qx8YG3MoWAOjouofew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N5ibYs2s; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712066456; x=1743602456;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sx/n5YT2uP/IXACSVATwzxQmHEWq2jAIn4wcthue3w8=;
-  b=N5ibYs2sURqHp6AZfR/wq0oNmNWgpmveYysbNlruzMAZM6SX7X/Z3/I7
-   B8BVgeU1oFP+5lRCfODIdvtj2YYaQVjKIiW56iWszix+3hx9bUJdv5TBr
-   20QGlGX4C3nyOUlQu9GfzdQwdGJB6n7we2FHaRGpcQJiQyR7nJKx30OYq
-   E7/LJtqZRIXFPgiLcyOhxUYMERqy2shdaTWv1quLiu44lMHvdSVDOta1C
-   BVg7ShLQciu/QI+k+k5Qy+RZqLxP3cUfMeJE1xuDx1IV9so/PdiGC0570
-   dbSc15e0ZdOPAKVy+t3zLE1MsE7ZeeSppmUDTp7zCUiTG0jiLAf1g7XI0
-   g==;
-X-CSE-ConnectionGUID: APbHvTPQRYKxa74cvMfayQ==
-X-CSE-MsgGUID: q2V2BQzWTQuq00iU30FrZw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="18687660"
-X-IronPort-AV: E=Sophos;i="6.07,175,1708416000"; 
-   d="scan'208";a="18687660"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 07:00:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="915142011"
-X-IronPort-AV: E=Sophos;i="6.07,175,1708416000"; 
-   d="scan'208";a="915142011"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 07:00:52 -0700
-Received: from andy by smile with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rreh0-00000000pJ9-0jG6;
-	Tue, 02 Apr 2024 17:00:50 +0300
-Date: Tue, 2 Apr 2024 17:00:49 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=VdxpICgN5ipxa0oMpxkQTwn9XzMTdLVe4Shjc3FGiH5i7wUYPj6DKkyoQOXmnGbS8ZxiLAozkKjl0uLfv2JLnkJWvToULuwHZRR4zVCWWYROWnYrUsCLdQs82LZUiS+O+npeMG4Yf7Z6Xv6rcPwNXU/jiY1u/ZxxFp3qxaUXHDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Da9ZUqdI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1C8C433F1;
+	Tue,  2 Apr 2024 20:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712089070;
+	bh=96iocZd5ustauxh3FiwURa8D+ou4eiLJnlw9KYvy/rc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Da9ZUqdIVrpsoX7s2d85LH6plOALCLB4vYOjJvbBryaOw2549LUGYopRn/wUey+Tm
+	 lcTnP17Jp4oMxrA4Y6gytDnwseWGNWLtSvd6nJ5lZ1A3V08SoDd/Or0SExsz5emQES
+	 lrJiH+4ZBlvltLDMDx6rglHev9HAPu53KdRW8/trP1QQ6CaZnyeNxh1zt140ue6cvl
+	 pNGoxlto2xzk+o2XdMjDhWsRssYxwjfzUPkPj6RY6mJaAD5ZROCmvkO2WtWGgC+ssK
+	 dEzyNjvPyLskdVyLPtnGvlGb2o/3yBafzu4eRUpoiojC+bjOahUelPxdvYfFicWhcJ
+	 8fafesRLGYKAg==
+Date: Tue, 2 Apr 2024 17:17:47 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Lee Jones <lee@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the mfd tree with the pci tree
-Message-ID: <ZgwPkWB5QBUDX2cj@smile.fi.intel.com>
-References: <20240402113116.70d6a885@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the perf tree
+Message-ID: <Zgxn68ECer9n8xbh@x1>
+References: <20240402094116.79751030@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -81,40 +59,46 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240402113116.70d6a885@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20240402094116.79751030@canb.auug.org.au>
 
-On Tue, Apr 02, 2024 at 11:31:16AM +1100, Stephen Rothwell wrote:
+On Tue, Apr 02, 2024 at 09:41:16AM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the mfd tree got a conflict in:
+> After merging the perf tree, today's linux-next build (native i.e. ppc64le
+> perf) failed like this:
 > 
->   drivers/mfd/intel-lpss-pci.c
+> make[3]: *** No rule to make target '/home/sfr/next/next/tools/include/uapi/linux/stat.h', needed by '/home/sfr/next/perf/libbpf/staticobjs/libbpf.o'.  Stop.
 > 
-> between commit:
+> Maybe caused by commit
 > 
->   5133224938b9 ("mfd: intel-lpss: Use PCI_IRQ_INTX instead of PCI_IRQ_LEGACY")
+>   f122b3d6d179 ("perf beauty: Introduce scrape script for the 'statx' syscall 'mask' argument")
 > 
-> from the pci tree and commit:
+> or
 > 
->   e42199bf13d4 ("mfd: intel-lpss: Switch over to MSI interrupts")
+>   a672af9139a8 ("tools headers: Remove almost unused copy of uapi/stat.h, add few conditional defines")
 > 
-> from the mfd tree.
-> 
-> I fixed it up (I just used the latter)
+> or a combination of them?
 
-This is correct fix, thank you!
+Right, these are headers that were used to extract string tables but
+were added to a directory that was also used to build tools, sometimes
+because headers contained new defines that wouldn't be available in
+older distros.
 
->	and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+We're trying to move things that are needed just for creating string
+tables to a separate directory, as done in the second cset you mentioned
+above, how to do it in a way that is noticed by the dependency files
+cached by the tools build processes is what is needed here.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I planned to investigate and fix this, but this was preventing
+development work to proceed as 6.9-rc was released, so I ended up moving
+these to perf-tools-next, I'll try again to investigate the deps issue
+to make this (and further work in this area) to avoid requiring these
+'make clean' steps.
 
+> This is an incremental build but doing 'make -C tools/perf clean' and then
+> rebuilding works, so maybe there is a dependency missing?
 
+Thanks for reporting.
+
+- Arnaldo
 

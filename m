@@ -1,110 +1,123 @@
-Return-Path: <linux-next+bounces-1794-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1795-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8DD4897BE1
-	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 01:10:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07CAE897CD0
+	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 02:05:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE61F1C21E08
-	for <lists+linux-next@lfdr.de>; Wed,  3 Apr 2024 23:10:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B7DF1C21240
+	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 00:05:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51BC915689E;
-	Wed,  3 Apr 2024 23:10:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2731A7F6;
+	Thu,  4 Apr 2024 00:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VmHgH3jw"
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="hl/hkNBY";
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="e8VPkXDX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D15156242;
-	Wed,  3 Apr 2024 23:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8B6641;
+	Thu,  4 Apr 2024 00:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.121.71.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712185844; cv=none; b=tHup5OE0+cTbM02dtmsRh3rGS7ZLd0i1z+gHz7VKv6ioggTZK4vFa1+O+DV2Myb423faYP7Yv9U44RG88gO2lwSDtwF8ceTij4NQsojlrR0oPSfxY9NOUf8se3bPgpktESGow31y42E36Y35iIJST6DMOXvdJtyRF7/BF+Kndr4=
+	t=1712189112; cv=none; b=CKKGHLLBrUs4eAXlcFpMIT59CF7vbKLM61KPleqDqvxaSSipICa+bcZ1MHbE0tC2d6s30z8hMRCjrYmqryZtu4qnNs4x14kHm51p9wn4OJHGuGxBuxlAm2Jbh4S2y3zTd9ZhSVBaGpiwu11hY1Aqv8qSh0g97bB30My+JX3e3BA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712185844; c=relaxed/simple;
-	bh=1I+HTpvXfWtLfZM1gjU0dplOuRDyxFkAd+/Ve5XDssg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gv/LqCJiLR2L1ic5HP1/DultH967Fgj7HMEwCrEz/+mj/INcVCpv/gJfWyeCcQxP8hPky1lFnhhRnYnpPtyl5emiSM8ZszLcfKUX1hCOu3uo5f3mk5vyp6IOnkM3cmwwFX1/w+jv7nU/JbD6O6KqZx6SPpIxuY+wexa7d5rDS2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VmHgH3jw; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712185840;
-	bh=Pw0D8m4HIoLYHCCmuhM3473u0QPNsLozboMFXtkMvk4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=VmHgH3jw54d6SZqX4oDuK3NAX5iADMTiUF3a20yCqopxCdOt3+ooLpcgVmnSTRXeN
-	 HDu5j9+raEO13Tf+JCk/oBNXfE+xwnM0at8IYMacWnLRzxGIxMi1esxoU8TqsUbZpp
-	 Wre7hmeZ3wrHhJat0RiV1Zb5Ceu/oC/A//iao+pF1bf5yCe1ZfRgWJ3anMkhA94RP+
-	 dxD255915C8NN3nfhz1sSCsgpN3sYaezpOa/b4yAqzQ43sYFY6w7VLUJP8+2j4EmGr
-	 CBlWnPydyYHGRuTnjSgwpCSxUw0SK3U3aiqCXhjiOnq/t7gTnzI3nJAxcmTTQ1ic54
-	 o8cm+OIn0rL1w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V90pk4zptz4wcQ;
-	Thu,  4 Apr 2024 10:10:38 +1100 (AEDT)
-Date: Thu, 4 Apr 2024 10:10:38 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Dominique Martinet <asmadeus@codewreck.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Randy Dunlap <rdunlap@infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the vfs-brauner tree
-Message-ID: <20240404101038.11486a24@canb.auug.org.au>
+	s=arc-20240116; t=1712189112; c=relaxed/simple;
+	bh=SQ0ipV/aFZevRZbQoVb97kEo9SFHmc1vSwZrkDCETOw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=glc15nyY5lee8BO5lrEFShZ94V+JajZ1TAi/azF9W1lvScCJGEDQTXa/EDskjDzHkfyrRbXUBTJZ1X7a5p+S8INo3HpuUC7WQlPMjo4UCXc4PAcyo48rm8UEjMch+RWPp8SGqeKH/i3MuFe91AtsvT2dMam9Pufs7LWoLcQ1JgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=hl/hkNBY; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=e8VPkXDX; arc=none smtp.client-ip=91.121.71.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
+Received: by nautica.notk.org (Postfix, from userid 108)
+	id B788BC01E; Thu,  4 Apr 2024 01:59:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+	t=1712188785; bh=iFZ/mkav7pOcjR/ZmvLNwSUTF1RkqX8g6p3bjVc91fA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hl/hkNBYe2+Y9drCuGa4x8Befec3nqnpOcW5Ae+gkUe1Yfnl362IjDCMsRAhkGpbq
+	 VZv3j4MiJdUaGleA5pR23ErpEzmks+jcF6F6CroEbw8lIdzmc9Zu9Qzjl9ukvkDZIf
+	 dquNfFcHFQ5FObZqA2F5rWBBgeSPAZIV8ShU1vIyQu65wFM7lgmuMLalN4zT/SGT4x
+	 mIyFiro7l0svHJgrR/8QgAixaLB32JoQoA9Pe/08/y3mhUBE0TW2C8XEnHxqFpdvsp
+	 P/42XzzKvNoHgp5R6sch9K19rgf2X13juNPhNfc9QS1erzH/F+5lALeD6q8wQMRXDg
+	 2wd1QkcR9Nx2Q==
+X-Spam-Level: 
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by nautica.notk.org (Postfix) with ESMTPS id 6AEC0C009;
+	Thu,  4 Apr 2024 01:59:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+	t=1712188784; bh=iFZ/mkav7pOcjR/ZmvLNwSUTF1RkqX8g6p3bjVc91fA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e8VPkXDXPCxhgEmzyYcmujNt/d+OvznYyEjMko0x5TdEPt4hJpAmRaSnu/9WyM/lB
+	 RGAqKXFH2O46bYHVmC4raMoyqz91r96hKH4VEvJopynCodcr3vfA9XITGfi3NvidYI
+	 q6HS7703QJNE1kiJsMYj70qJT23ZMgPlgfZJ0HalJ0UnI04/bjWuDA4iroN4z4+rj6
+	 i7/zjiTlQp2fDiCxHShwK1XoGCHvSldb0dPhe8ZQgPifMppKWNBU0xb468WiomiV06
+	 mlWJII9+Ci0goASz/OuzV5CHsfsvspU8xAjHkD89Vsx97v7oLvdLF+uyW1U9rFR+Xh
+	 eL+8VCpKudrbQ==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 874626b3;
+	Wed, 3 Apr 2024 23:59:36 +0000 (UTC)
+Date: Thu, 4 Apr 2024 08:59:21 +0900
+From: Dominique Martinet <asmadeus@codewreck.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Randy Dunlap <rdunlap@infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the vfs-brauner tree
+Message-ID: <Zg3tWULD56chInTG@codewreck.org>
+References: <20240404101038.11486a24@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tQE5pCoJAP_pNRB//fc1v1=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240404101038.11486a24@canb.auug.org.au>
 
---Sig_/tQE5pCoJAP_pNRB//fc1v1=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Thanks Stephen!
 
-Hi all,
+[off topic, I just spent 10 minutes looking for the list of urls of the
+repos merged into linux-next to check that 'vfs-brauner' tree commit as
+it doesn't appear to be in next yet, and couldn't find it as there's no
+"Merge branch x of ...brauner" commit in next at the moment.
+I'm sure it's there somewhere and I didn't look at the right place, but
+perhaps a link to such a list could be added to either of the following
+(which all describe linux-next to some level):
+- https://www.kernel.org/doc/man-pages/linux-next.html
+- Documentation/process/howto.rst
+- Documentation/process/2.Process.rst
+/off topic]
 
-The following commits are also in the mm and v9fs trees as different
-commits (but the same patches):
 
-  0e74485c814a ("nilfs2: fix out-of-range warning")
-  528aa74c091d ("9p: Clean up a kdoc warning.")
+Christian,
 
-These are commit
+Stephen Rothwell wrote on Thu, Apr 04, 2024 at 10:10:38AM +1100:
+> [...]
+> 528aa74c091d ("9p: Clean up a kdoc warning.")
+> 
+> These are commit
+> [...] 
+>   7013482ff594 ("9p/trans_fd: remove Excess kernel-doc comment")
+> 
+> from the v9fs tree.
 
-  93df85cc09a2 ("nilfs2: fix out-of-range warning")
+Thanks for picking that commit up (assuming you did recently); I've had
+it in my tree for a while and should have submitted it for 6.9-rc1 but
+the other 9p tree brought a few bugs in at the same time to I had held
+it off for safety, but it doesn't really make sense and I should have
+sent it a while ago.
 
-from the mm-non-mm-unstable branch of the mm tree and commit
+I only have a handful of patches so I can send them today/tomorrow if
+you drop your's, or I can drop this one here and send the rest
+shortly later to avoid further confusion.
 
-  7013482ff594 ("9p/trans_fd: remove Excess kernel-doc comment")
-
-from the v9fs tree.
-
---=20
 Cheers,
-Stephen Rothwell
-
---Sig_/tQE5pCoJAP_pNRB//fc1v1=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYN4e4ACgkQAVBC80lX
-0GyF0ggAmqlnEBXPrUzXqg7HuaFYGJYdRPgJLnf+85XpVX6Jc3vQUWhKcN6M1NRO
-NvyB9rKVTQ1q3fNMbKegd8us7RvqYkjUGCriey2IG6/czD4+6AzZWKvGGLVz5rGM
-Zi5y/pXWM6DyqBBlk6A8oSFlunjvlvze8PX5TPMxhn872JX5evkyzs58DOLTDXVy
-yogm5rqZ5m4avtSCeIfuSB9/AMWSX1RXCZEKq94PLpmS0yx0cYtgWkIgT4E67Z+s
-9aeJP+eoISsZGU745jSrEgtuYxWNCrxBrg89/yag3XozIFpKQOSrwz0jeNMfPu6+
-qDa2V09JzB+fhVLmm43zVuGNUy8Uaw==
-=ibaD
------END PGP SIGNATURE-----
-
---Sig_/tQE5pCoJAP_pNRB//fc1v1=--
+-- 
+Dominique Martinet | Asmadeus
 

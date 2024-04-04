@@ -1,103 +1,116 @@
-Return-Path: <linux-next+bounces-1796-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1797-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C673897CFB
-	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 02:21:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93C95897D0F
+	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 02:28:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 011BBB29C03
-	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 00:21:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 499CB1F2A32C
+	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 00:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FB42802;
-	Thu,  4 Apr 2024 00:21:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C273819;
+	Thu,  4 Apr 2024 00:28:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kuLzy2lQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TRBOQm+F"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0763634;
-	Thu,  4 Apr 2024 00:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7760F367;
+	Thu,  4 Apr 2024 00:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712190068; cv=none; b=TfwhBEv88e0tx8JzzoQJnAHQvMwbXiFLnl4adOSNJOHYVjqOKuOuCmbVB7KRpuD65Hb8z7/dYoRAprmAJMHp0I05ci8Q7WccTKd74xx8BHzqjRVKsn5wIm/zCwf/45+URykjm/tAzFM4XADipv3tRAGaUe+Zjkt6PgKH1dhKPCM=
+	t=1712190500; cv=none; b=NoPIjxRb48OanyDk/TuvkQR3xYRS1hl99NEiIF8W1TA8jDZjHT3lYrPszQJjOZrQsOalADrt6DK50YS8B/MSIT/PyYh4lCfbDQgt2aQr+t+IR6AAf4EJBO9/XXyAzGqjO+lj67jCDX21ZSXu745VRdAw7cLQlCrm8REo/KGvmZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712190068; c=relaxed/simple;
-	bh=UFMcrZzd5fY3dI5ggquMLYAhgyCdtiVfSq1hDRf4DT0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WRYQLr/iNY4ohoCoy2QC0LZnXZ5cW3hm2v8yVuiCYZx36UDX7CkRqDI5C8EXlIWJcrLAlVcJy+A/cPTZ5IUuhVn+euwsOgr8/loTMXdqnkiNHWbCwIGzxQZDZpMh86zyU1zHCFJbmDpWWikma3PecuyU9f/TotAmxLEBfVF5R9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kuLzy2lQ; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=LC9sqlC4wjJH17+sYVS+YlsViYsTu7cjAusLLak7UB0=; b=kuLzy2lQ74YdxJJ3pL9RaHGel1
-	i6H2rf6S1jkwncVuI8g6PgGA3UzG3ismw2nzTg3OYgulbYXTDcWfhBWcc8b6JIyS7f8LiX3mX36IO
-	D3IYXCKlVlk6m9fvXrNxY9S1FXqln1o+BtZDL4FQoWmrkX31vmn6uUi+2fVgwP9vkkbPtN0JiyQ6c
-	wtohaF/0RAvqcTcp3rjgyQaD8rQgSwroMH6ICXepdLtBO+9L4aNx+9hMDrQYPKA/qDSWpuU2wa/Vg
-	yJkKBYZg2ZELMXVaoMrspmQ91FKVDAu94hrn2eylUgUPh0sd/DgokC3f1OpqO/NMiZvutQYeaDZSK
-	Fq4pYF7A==;
-Received: from [50.53.2.121] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rsAqk-00000000kh4-0fPJ;
-	Thu, 04 Apr 2024 00:21:02 +0000
-Message-ID: <5f56a81b-ac8a-417c-85ad-149f9f64649b@infradead.org>
-Date: Wed, 3 Apr 2024 17:21:01 -0700
+	s=arc-20240116; t=1712190500; c=relaxed/simple;
+	bh=g/3zG1PsFBtDwbJLKeB2piKA+luIYblngtaoMDLRcH0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Msn+33w7/JaYoS8ittfDoI3O/f2QrZoPgldQqI4uEwt3xwRe9iTOyDcJJhqeiDYRTGCU571f5sTRyfqJPhMrBGyRtpjeDtOJnkk3mg/yF/gUSMlxj74n+jUNjEIG4Q98ylEcoYg5f/dEOPnDrBv0zP5EV/yWeVutQEtYoxK1oOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TRBOQm+F; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712190490;
+	bh=vpx8IMIkGxtx+N69krNuve3hd+m9nrp76chTq3odt8Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=TRBOQm+FVMVF1cb9dreCCCs2xDsQZnXJggi+1sJ91AkyIEdadCKPMJeuGr6BRxuHW
+	 juA7RMjRk0EzSmwafipelW7XYu/LmvujvntpwnQwIPzu1Rqc2MYcIKsYXuBQVBdWeY
+	 Jt2PNOI3Pr+pf9enVhJ2iWoGJ0RghA+RmTbnTbk6MazQeiY7TkaHKYOnxi83aTf1N4
+	 bvA1EAMKzGGumQhYeTOg8h2U1+VVLavdKlJW9YdEvwESUugFB3cvt+twqDJqkeimqC
+	 m6I5GyF4BMarLGt2RNn1PZ98D3jh8nDopHXPI0+LVtT/cWBPdEz58ybtwfPSm0dGZQ
+	 EgLSkzb+oTcUQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V92XB1v79z4wcb;
+	Thu,  4 Apr 2024 11:28:10 +1100 (AEDT)
+Date: Thu, 4 Apr 2024 11:28:07 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Joel Stanley <joel@jms.id.au>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Yang Chen <yangchen.openbmc@gmail.com>
+Subject: linux-next: manual merge of the dt-krzk tree with the aspeed tree
+Message-ID: <20240404112807.3c7fc933@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: duplicate patches in the vfs-brauner tree
-To: Dominique Martinet <asmadeus@codewreck.org>,
- Christian Brauner <brauner@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
- Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240404101038.11486a24@canb.auug.org.au>
- <Zg3tWULD56chInTG@codewreck.org>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Zg3tWULD56chInTG@codewreck.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/ujqdzDz6XE4DKneGS_YF/7i";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Dominique,
+--Sig_/ujqdzDz6XE4DKneGS_YF/7i
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 4/3/24 4:59 PM, Dominique Martinet wrote:
-> Thanks Stephen!
-> 
-> [off topic, I just spent 10 minutes looking for the list of urls of the
-> repos merged into linux-next to check that 'vfs-brauner' tree commit as
-> it doesn't appear to be in next yet, and couldn't find it as there's no
-> "Merge branch x of ...brauner" commit in next at the moment.
-> I'm sure it's there somewhere and I didn't look at the right place, but
-> perhaps a link to such a list could be added to either of the following
-> (which all describe linux-next to some level):
-> - https://www.kernel.org/doc/man-pages/linux-next.html
-> - Documentation/process/howto.rst
-> - Documentation/process/2.Process.rst
-> /off topic]
+Hi all,
 
-If you look in the Next subdir in a linux-next tree, for 20240403 it shows:
+Today's linux-next merge of the dt-krzk tree got a conflict in:
 
-vfs-brauner	git	git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git#vfs.all
+  arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-minerva-cmc.dts
 
-in the Trees file and in the merge.log file it shows:
+between commits:
 
-Merging vfs-brauner/vfs.all (35c44ac8370a Merge branch 'vfs.mount.api' into vfs.all)
-$ git merge -m Merge branch 'vfs.all' of git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs-brauner/vfs.all
+  4afd304e4e36 ("ARM: dts: aspeed: minerva: Revise the name of DTS")
+  6241b65454c7 ("ARM: dts: aspeed: minerva: Modify mac3 setting")
 
+from the aspeed tree and commit:
 
-HTH.
+  e515719c17be ("ARM: dts: aspeed: minerva-cmc: correct Mellanox multi-host=
+ property")
 
--- 
-#Randy
+from the dt-krzk tree.
+
+I fixed it up (I just used the former version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ujqdzDz6XE4DKneGS_YF/7i
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYN9BcACgkQAVBC80lX
+0GyS0gf/RocHKHltomnetQH0EFL3E7Beqxj0aqpU4ciPzcQJm10xrg8IeDAbdIXs
+Rse9RfA3eOHKWPe+jTQDNfHYI52zQ9nUptUhOgq3MPnQKtGxpKGA2v2g7nAlsOHp
+gEmxDOEZWcn8pz6k3kK/Ja8ifKrdeqcT8HFDd/E92MAczuwSAK19R6zYd79fqOJ0
+C437AdRMc75RJMPif6EWqcuyKf2LCJa2ow/ztZnOhwgaqKO6j0gfj45atzhglL9Y
+F23GxIpwy0T0o2gKpDHshAcmcHOP9X7Od1+QEttpOEEB+cZeLKRybtKfnwKeF5dV
+DV1xvXmTXHbTX5JWGSdPpzWLQ6Rvrg==
+=x2FM
+-----END PGP SIGNATURE-----
+
+--Sig_/ujqdzDz6XE4DKneGS_YF/7i--
 

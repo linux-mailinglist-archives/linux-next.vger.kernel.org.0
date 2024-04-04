@@ -1,106 +1,117 @@
-Return-Path: <linux-next+bounces-1803-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1804-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CE9A898272
-	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 09:50:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A129289870B
+	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 14:19:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBE53287EA2
-	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 07:50:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 396A0B285B9
+	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 12:19:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39DD75C61D;
-	Thu,  4 Apr 2024 07:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8358A127B40;
+	Thu,  4 Apr 2024 12:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FE2swIEj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R1P2aKLH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8210E63C7
-	for <linux-next@vger.kernel.org>; Thu,  4 Apr 2024 07:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7A8127B50;
+	Thu,  4 Apr 2024 12:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712217016; cv=none; b=gJbfsqyWXUkhOuUz84oE3qtlltjuRuzr28Jr2veHb8/E4qz14+tXsDzfmohJyitCSJ2V6e6SkGgZAKp8aAMNorDIXb2wcGI/hnKeOIcfbZeBH36+5EalIrejEDWjFfFhCBEMP/P5qooPVmXbZ/MRaKGicRT1HHoqxcGr6W6iKjk=
+	t=1712232890; cv=none; b=OXrfX9kgqKytUuyUPc0IRy108UipVCM//hu+tbskNfJoWc/w8+fdzDno+bnlkxJWTvzOOwrBkA0WZVTKzNYEhTSnT4b7qMa71v4y25+wM35irNDhJE+AiC6XTbhu1N4KXxdJTW9PGdshej3CF+guH3h+flTp/nOgKxY0fUGlYZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712217016; c=relaxed/simple;
-	bh=PDF8rAKtnoPQ5NeHKnC7IYfiaYEQ3BItds/rRYPd950=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=P1Rc8TYJ+4QuRQgnyXeOZCEVYGjr1x6HA7fcnYUgB3nM1gw3kn5EJAclXLM3Ot68rFfxzj/9daCUwXcRia4q06rOFXg+WJ+x8uZ4QNWGepenEFIyAzNZgnaSYDt2Agld/uu19lmrczzoYcbUWzybrGsFojkB9jBb+/nPqKEqy5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FE2swIEj; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712217013;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LvAHaZMN971uikkj/WIR5kxgCR1HxCvO96dpGZLwAzw=;
-	b=FE2swIEjrFgaRrLkG04fLmWXN4UmKxZQgOiLMIzOgH3e+5qBRX0Gi1pOP6psLgQRYv7k48
-	WgZcK9gcxgU1XI7SYeRdFfyvJBVh/7Se730h9TASN7OUp6TdGr/7Ht+i0VGx/djG2FaQNG
-	fALNLGHKidwcYgNjqF/v50wKxk4TCVc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-441-ko-0_dPIO36rm-uMOucm5A-1; Thu, 04 Apr 2024 03:50:11 -0400
-X-MC-Unique: ko-0_dPIO36rm-uMOucm5A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5453A87984B;
-	Thu,  4 Apr 2024 07:50:11 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.146])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A11C6200A386;
-	Thu,  4 Apr 2024 07:50:10 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <20240404132456.579b8ae9@canb.auug.org.au>
-References: <20240404132456.579b8ae9@canb.auug.org.au>
+	s=arc-20240116; t=1712232890; c=relaxed/simple;
+	bh=rOAdoL6tHaMG/zwN7wWRADpEydV7O+1IUICz69AHOf8=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yz83CGo+JO20UzxOcHZkN+mnli3w7d0cJahlP3/5BPJBH+5hu55BJvCID1fXZsMM0wIBFex6CB+QGGucLX8JBeOvC0WyLxaIOCJtaNkyQ+sv/GNGGarHcT2/qYVCivcTOlPuuQevR4nutZjPnbMFVKNlkQ3vHdcxoYNYRRWjdDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R1P2aKLH; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2d85da5a7d1so2520071fa.0;
+        Thu, 04 Apr 2024 05:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712232887; x=1712837687; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0bUZo/pGzDNuYFiyOW47yNiCIYxU4kzybrhVLN1vRNs=;
+        b=R1P2aKLHuiyQDlVyrvuve7a+OjWxN6n1HwpPApPQ1tjKjzJHLlhlxKqilli4tY+PwI
+         H6LEzKShyGm6v437490SQnKprn26vkw9FJMSOnnJt+ja1utBbRJZsQQcLL1SShBmUE+K
+         wJWyz66wnj7UAHGnVcEY8QwdmloOK8claXpoMSMpgudEPCkASY4eiXWtXnp/8VuNEkiD
+         66Abyt9dlhzfSGQ3v5hDjFfy2kuKxrfV1aM9teBDto0c0WNIJqc1sGoeqe+2S0SfZZ1N
+         ISjrcsBHuJP32cg0beai7L0X4EyUfTk9jmIVvB+c0vKGuN60P0SbLFev7yEecpX+ajZo
+         Qpjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712232887; x=1712837687;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0bUZo/pGzDNuYFiyOW47yNiCIYxU4kzybrhVLN1vRNs=;
+        b=OVrf1sfovlASQmHZpllBnw1yih7uj8a4cmg0Hgq7konUiuN1J/ChsgsSieg9U5YlH8
+         809i2rnKYBv9JV8tPQIs9Aj5425Slx2wGIJ3tbQ+QyH/Q/JvQCtsiqX0EctVV0L/n9tX
+         CcPrO7mDz1b6C4uKpB83TjQJgCcTUPGxuCnGcbcqTGXx8feEq/skBuAase+sMg95ARCJ
+         kmZEK8z5X0CUsjP0Pk+u0G2DX8zxVyEx1+0E9rjv37jO96nOsk3vOcGTfbPn/ZZParU1
+         JdXRq9N2WrQpOsYoFq9eLY79W+rqlriaSUgVl8SihXY3a6a7GqCE/ok6zwhwbC0ZbMC+
+         njHw==
+X-Forwarded-Encrypted: i=1; AJvYcCVqkFCeRFmXORs/taE7UzmccEHMC2P1IRWYuXI05ouXiNCt8wBlsKEQV14Rplk2egwhmrexTkGAnWlXAZkCdBmVIcwyGwABGvOOPrXd4jNo3Bijxm3BEdiu4TIEo96fmzSPlJ3JBR826g==
+X-Gm-Message-State: AOJu0YzoY+cIGaXpE6M+NkDuhNDbBr28qPc74IIcN4EFkoblA5pu/xGA
+	9e+gFjz59JNxtXGg44ipWyNMRG4TEWQioXaLYKZXI6f3lcLsLPjNm8cRdFfF
+X-Google-Smtp-Source: AGHT+IFx9UQY4y+jjtNaDdJmgXCy8TISkHZLbhqawJtLmLtM00wjEtv0sQJ4gIIXFwtWO1M1e8b/CA==
+X-Received: by 2002:a2e:bb84:0:b0:2d6:d044:aab5 with SMTP id y4-20020a2ebb84000000b002d6d044aab5mr817311lje.11.1712232886526;
+        Thu, 04 Apr 2024 05:14:46 -0700 (PDT)
+Received: from pc636 (host-90-235-13-217.mobileonline.telia.com. [90.235.13.217])
+        by smtp.gmail.com with ESMTPSA id u22-20020a2e8556000000b002d834cb0400sm532238ljj.17.2024.04.04.05.14.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 05:14:46 -0700 (PDT)
+From: Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date: Thu, 4 Apr 2024 14:14:43 +0200
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: dhowells@redhat.com, Christian Brauner <brauner@kernel.org>,
-    Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-    Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+	"Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the rcu tree
+Message-ID: <Zg6Zs76UDYQsJTWM@pc636>
+References: <20240404083923.358c23da@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3655431.1712217006.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 04 Apr 2024 08:50:06 +0100
-Message-ID: <3655432.1712217006@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240404083923.358c23da@canb.auug.org.au>
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hello!
 
-> diff --git a/net/9p/client.c b/net/9p/client.c
-> index dada0033d71e..d4b88b7ff5ef 100644
-> --- a/net/9p/client.c
-> +++ b/net/9p/client.c
-> @@ -1699,7 +1699,7 @@ p9_client_write_subreq(struct netfs_io_subrequest =
-*subreq)
->  	}
->  =
+> Hi all,
+> 
+> In commit
+> 
+>   a55be9aacc45 ("rcu: Do not release a wait-head from a GP kthread")
+> 
+> Fixes tag
+> 
+>   Fixes: 05a10b921000 ("rcu: Support direct wake-up of synchronize_rcu() users")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 654f59c6bc95 ("rcu: Support direct wake-up of synchronize_rcu() users")
+> 
+I have a question. Could you please clarify why those commits are in the linux-next?
+Those commits have to go over RCU tree. It looks like i am missing something but
+please elaborate.
 
->  	if (written > len) {
-> -		pr_err("bogus RWRITE count (%d > %lu)\n", written, len);
-> +		pr_err("bogus RWRITE count (%d > %zu)\n", written, len);
->  		written =3D len;
->  	}
-
-Actually, that's the wrong fix.  'len' needs to be int not size_t because =
-of
-the varargs packet formatter.
-
-David
+--
+Uladzislau Rezki
 
 

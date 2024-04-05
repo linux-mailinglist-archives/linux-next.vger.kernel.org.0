@@ -1,147 +1,109 @@
-Return-Path: <linux-next+bounces-1813-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1814-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 765E5899374
-	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 04:55:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A0E8993B2
+	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 05:16:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 184861F2229D
-	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 02:55:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 117321C21F8C
+	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 03:16:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA08168BE;
-	Fri,  5 Apr 2024 02:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDAFF18E01;
+	Fri,  5 Apr 2024 03:16:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Ig1fME5y"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gFm4eiwS"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC401C687;
-	Fri,  5 Apr 2024 02:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D5C134A9;
+	Fri,  5 Apr 2024 03:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712285736; cv=none; b=F0Fg+WxhGRc8yfOYR9hJRAkjLqCG22yxpT/wbhCIVLdd/+fT8ZNyhPlpJkvjlO0sAvUomTrj0O/IK8Q43dFfXd9QQ8WYbeDlMRzgsxycThzoYJpKTuW7ycir5Lq6/atJbXIEYb3z5Vqn7jXfifhAK2ZKFLVI+diC/jioAxJ9wmQ=
+	t=1712287008; cv=none; b=cNkN1LnoHNSfgfIT4RKWX/JTVQPVMyh8w6idLF5747ty7PO83zmBPtahzqWsuJq9RNFqNpKcYu6kgRduXRrp1o1HVbZT0X2Aqt+ug3VK1EFC7bwjK5BXCWe48UfFC+MpmR6mj+Kw9oNEsAel669Hc5o1xUlWouaVeFbKxU/38qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712285736; c=relaxed/simple;
-	bh=+kbTXVFwSt0UMkxpCLRgEYRw05hyqQaZU0yzBJlM1+M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hxF1Stit9xGhRYup2zvF6ReFkr+BRpEMww/oTuLbbb3qbUcDgbpaYgqo3veb2WiOwVAEjQragjDwUr6nAmiVBv8rm1cJukfystRORJYTuV6eCCTn7ITcMAW9rdCHJXUq6HNOxMcRb2t9E6wLNQjjO+83sjjG/KRrKTZ+4UHO0Ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Ig1fME5y; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1712287008; c=relaxed/simple;
+	bh=0Zi4U3clzZ1kBQmj0GO8eAlVOcZFloc7Y9Ybw2ZgoWE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=L8Cmb1xhdJhIzX9P8TPwJINz8Fxp9bldBuMRrS4pcvAXwGHC9v1DSL9UDemrnY/V94XiJBEtltl5SdxE0ubNddJIK+mCwIvZMF5lW7zr/YAOR0Yk0Oo0Mau1xIMHerucAk+xSB8wqhySuUtqG5tlNzvg4pT8YmJu1C2UG1azNys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=gFm4eiwS; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712285731;
-	bh=qnM+r/5Ta/w3NCYh7ZVWH2pEq3OJKmpTjO4RX2orPl4=;
+	s=201702; t=1712287002;
+	bh=d5cgo064iDyl0ySWVajO9U2m2sHPbkAkT/2ugofzNXU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Ig1fME5y/Ueald1JeeHYN37g+o/iZDPwldfnbArEowAGeY401eIJSnMDOLYYoimI/
-	 eQggAxQ1hODPPBxHZaGZ1Ksd0MV5Kne2wXRUMQJi0OsxVRSMVHQ6wV55GCjBdZBrk1
-	 XHfV6tmLW/Vnz5xgw3wE1YMOA3LW+FiOmSb4jCdmsPwl7zgQiybwOIJ7py6r8RlEYp
-	 I293NF33c8Czfd/COJF2u4THycADVUpOtNMFS43BNkYcVKGZ6KCYKxpmdGvLqyb7EX
-	 JIdDzJA0knc4pWfwi5pVDLnWeAGx/KthBQhtL7KEIIZoC/LaZI1qTKTJoEt6/+UwsY
-	 eXpGPg0aPPL3Q==
+	b=gFm4eiwSlb1thp61U8UQRQfKjOVqzHSKpTYaU+poLY27T7aNIEQwlhtPURYRUHMNU
+	 5mY8BoDc2Shc2dITpsYIfMm598kZPtvHa/7fCEnUy2/Rozqhox4eLpxpn7HUqv9dg3
+	 6e0sk3RIu0e33HDabGUExacqRUiWV/9SpD8yLGxKJjVrd3hL3Z2ngFiVNIPD/6O0Ei
+	 Uuc5SRb3V1/x/esBD32hx+hIi6KsHwYt0Rtke+A0rMs1gnagSfH01DPKmmq99TMUUm
+	 ElFPUXDKVFK6RsY0GPJgDX5uCMF1lO8mQlcMAu1O6M4EYOvJr6YtnShRCAHV6BRzl1
+	 Bm6ZpyJvHzgBw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V9jlk6B30z4wcb;
-	Fri,  5 Apr 2024 13:55:30 +1100 (AEDT)
-Date: Fri, 5 Apr 2024 13:55:27 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V9kD86bwDz4wyl;
+	Fri,  5 Apr 2024 14:16:40 +1100 (AEDT)
+Date: Fri, 5 Apr 2024 14:16:40 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+To: Daniel Vetter <daniel.vetter@ffwll.ch>, Jani Nikula
+ <jani.nikula@linux.intel.com>, Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Ankit Nautiyal <ankit.k.nautiyal@intel.com>, Mitul Golani
+ <mitulkumar.ajitkumar.golani@intel.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20240405135527.4b5daaed@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the drm-intel tree
+Message-ID: <20240405141640.09b0bdbf@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NoImhhi7JSTuJe.EShoZ1LH";
+Content-Type: multipart/signed; boundary="Sig_/U1sk1SgAMcc8AgI/HojegJ9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/NoImhhi7JSTuJe.EShoZ1LH
+--Sig_/U1sk1SgAMcc8AgI/HojegJ9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (arm64 defconfig)
-failed like this:
+After merging the drm-intel tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-In file included from arch/arm64/include/asm/memory.h:213,
-                 from arch/arm64/include/asm/page.h:46,
-                 from include/linux/page_counter.h:8,
-                 from mm/memcontrol.c:28:
-mm/memcontrol.c: In function '__mod_memcg_lruvec_state':
-include/linux/mmdebug.h:114:35: error: expected expression before 'do'
-  114 | #define VM_WARN_ON_IRQS_ENABLED() do { } while (0)
-      |                                   ^~
-mm/memcontrol.c:867:29: note: in expansion of macro 'VM_WARN_ON_IRQS_ENABLE=
-D'
-  867 |                         if (VM_WARN_ON_IRQS_ENABLED())
-      |                             ^~~~~~~~~~~~~~~~~~~~~~~
+include/drm/display/drm_dp_helper.h:126: warning: Function parameter or str=
+uct member 'mode' not described in 'drm_dp_as_sdp'
+include/drm/display/drm_dp_helper.h:126: warning: Excess struct member 'ope=
+ration_mode' description in 'drm_dp_as_sdp'
 
-Caused by commit
+Introduced by commit
 
-  e04f729678f6 ("__mod_memcg_lruvec_state(): enhance diagnostics")
-
-from the mm-unstable branch of the mm tree.
-
-I have applied the following patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 5 Apr 2024 13:27:48 +1100
-Subject: [PATCH] fix up for "__mod_memcg_lruvec_state(): enhance diagnostic=
-s"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/memcontrol.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 42f82259864f..91ac261877ec 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -864,8 +864,12 @@ void __mod_memcg_lruvec_state(struct lruvec *lruvec, e=
-num node_stat_item idx,
- 				pr_warn("stat item index: %d\n", idx);
- 			break;
- 		default:
-+#ifdef CONFIG_DEBUG_VM_IRQSOFF
- 			if (VM_WARN_ON_IRQS_ENABLED())
- 				pr_warn("stat item index: %d\n", idx);
-+#else
-+			;
-+#endif
- 		}
- 	}
-=20
---=20
-2.43.0
+  0bbb8f594e33 ("drm/dp: Add Adaptive Sync SDP logging")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/NoImhhi7JSTuJe.EShoZ1LH
+--Sig_/U1sk1SgAMcc8AgI/HojegJ9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYPaB8ACgkQAVBC80lX
-0GzAaAgAmy7FHNP6Q8kLxHwSI+wEgEuToR/mzlYCiccBO5w75v+vzRs+Y2s748fp
-/hmEgbZe6im+ud5ZMgK00XmvE8kkcyVX0HBSHzLVwvB40RRgsDtbfkZXIVcEWTx5
-fsiF2cuEC6ELAfL+NZ08C+fwH3arXx8gslIUznOPdJy9Zbe0bb7bHxDR7yaudTxn
-c3OWth/ZPLAZ0up6i+lHe/DdKoEKdgL+uf4FQvgL4qjwYRmWE5WZOZ4vlfdnkvkI
-oTcKlz2FwbbWQYX6Ib2Sgm3VZw4ptkthsgY/AcBOrz2UkDLorkSZE4osspaj6jly
-1k9thZ7v8iFNqbWagZYXEjy2T0HjKA==
-=UroZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYPbRgACgkQAVBC80lX
+0GwBIAf7BbIxxemjhKlaFZ8aVADC9tnt9y2IsHb4DtzmX5GPMZZlGv42O9jCzcec
+ttpPKV7UEOeSuB7Sis7gG+7JtNIF2TE7yeLrdB+Q3wcMeyvKtIitCIszuTeGG9v9
+NEAoElKZnBBZptvysMtyfs2czU5hiHIfVZm/Jjg9Gg51SQt3Hh9aTPsuvD3D0hmB
+I/956/7a8SEbQcCnfIN3XZ2JNJp4yATCvPQfCu1qWR1Xauu9OHT/eScDezwgkr7x
+QJqTpKs1r+C0LJ7aALjBa881xp7ilUMWnCFdPFtPRTILuhx8poGR4TItAInpm/hi
+zZ63sYuLlD3tmbUt1gJ2CjuvtTLG6Q==
+=Lxwm
 -----END PGP SIGNATURE-----
 
---Sig_/NoImhhi7JSTuJe.EShoZ1LH--
+--Sig_/U1sk1SgAMcc8AgI/HojegJ9--
 

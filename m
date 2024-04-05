@@ -1,60 +1,81 @@
-Return-Path: <linux-next+bounces-1819-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1820-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 088EB899B6F
-	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 12:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0A41899BDF
+	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 13:31:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 392761C20306
-	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 10:57:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D73F1C228AB
+	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 11:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E816D16C430;
-	Fri,  5 Apr 2024 10:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B1116C687;
+	Fri,  5 Apr 2024 11:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="thiYcObJ"
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="W0lLN19B";
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="Zh7bpjv4"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE93416C42D;
-	Fri,  5 Apr 2024 10:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289CD1649D9;
+	Fri,  5 Apr 2024 11:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.121.71.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712314634; cv=none; b=ILQ/z+lsC/SBKflND9wx2cxyT3svPR3Chu7TnoJu+eXJKtcwwKF2wPhm81lBYA/jSq8dX4506Q1/O/KuuaywAswWqbRxy4w/7JwU4saGD3/q6oVoUipzQZzUevHr+hDHo0jhY8tc3OmB5MhM6WxYY7yhlm9SlNzeBNuV8qYyGkU=
+	t=1712316668; cv=none; b=GZHPDPR5E0co9DsxkXE6TfsXl+LNNT0GaePcbnLZhn6jMxTf/SxGcrP3I/acm+7031KK11D2EkzyjtgRvyh66RnrVYPemtl6v+GSgOHtpO5xaQocwu2ldty6qcUZD5yZMAE3Ah1iqtqTDnFbLhxWCB1HTTNufRFP55NRqOuGfBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712314634; c=relaxed/simple;
-	bh=Xxn1NGkypp5P8z4HXd03oWTCZ2Bo1W8oA5c5ZlQz8xI=;
+	s=arc-20240116; t=1712316668; c=relaxed/simple;
+	bh=m7K3xrh7Wz99GlOaVIqzX1ncJYiBtyR+jSDbU435dqE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uArHtp1Nr9BRBgJXExWPFvoIg5PyKJ/4ea+dCcldWts1y+2y+5SA3pd4+qMma8yczI8q6THN8rNN7NHzdihX3aaJubAum3uIfJAHyTTZPtVDMJ5DS5M9PeteHOjnN8Gyvfx7gGgrBN+B/Rdpgs57UtNY+yOyKEuu718zzbmyxgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=thiYcObJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C57DC43601;
-	Fri,  5 Apr 2024 10:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712314634;
-	bh=Xxn1NGkypp5P8z4HXd03oWTCZ2Bo1W8oA5c5ZlQz8xI=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=iwMfVa0k26Bp78U01KzF9hHWxHoqenhWk2ejVgc9BlcO80aaoL6pX7D0dvNNJrjsRGfZR59575EQw+g0xH0eL7QTX1xRo/8IUO9RUGf7PCYPkkQGb5EXhA3FPWTTPDzXBibuGYGPTZ1q4L/WPBT0Xe/2OkSDgJnzZ+iF6LcvI0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=W0lLN19B; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=Zh7bpjv4; arc=none smtp.client-ip=91.121.71.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
+Received: by nautica.notk.org (Postfix, from userid 108)
+	id 5C646C01B; Fri,  5 Apr 2024 13:31:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+	t=1712316664; bh=mFIx+8k+ANOQ8BYwuRQQCSBqlnnopffUpvUlwuxTisk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=thiYcObJGO771zqY7FKooVjNcIEl5VihES03Q2bJIGkHn0qCkBYAVbnLtKjavvj71
-	 ox5/uds0ETw5mlzefrkjrY7IW0FHfOTxxTUqtk1jCnDN31OAi0uIKjaRB09CVPR7wM
-	 VgHMwK/q+zBXr42+5dStw4Ocr3Jytw9a0pNmNiUsXIZhNg3h9V1aQnG+/4Ccfl5oiW
-	 na3Xtx3kBhdp/v7V500DEGpOQZe5xXaQapzbJ0Q+tzZpT70fzZCqD/vE/g1u6xGfon
-	 F54x34Wo9Kd4AjjxiHoO707t8JyAp+dcLR2ua5G/eTPklUmhQz2A2R3WmAsh46+Rf5
-	 D6Hk+BIxJ61iw==
-Date: Fri, 5 Apr 2024 12:57:08 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Dominique Martinet <asmadeus@codewreck.org>, 
-	David Howells <dhowells@redhat.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	b=W0lLN19Bu1rxXBdVWoqZ98P3vVLkxIDL5sun5z7ZP1c01h+b36BllepjYp+ZXMDxF
+	 pJxQtxa8POrNEKW77JZtPynMo9mCgxlUwznE444NW2uB13ZE2v+hjl4Hvbq+wP6HNR
+	 eJLJLtu1sVjT+JrmlSgykChDlAPxiLiirErjWlFZterHEC8pcD5SDFgi4WVzCwTGnL
+	 mQVIx7swRLbicwtahrypx3888xbaJa/SXt8o6s/zHnrPz0It27DDGr/D27AIXLSj79
+	 r/5uY7/PNXuBR7rI2WpwmTMAXZK+tPnkonCcM0Ry9YWcG6TmnIbUSObTIYvJ495372
+	 rDFxrJWVUKnVg==
+X-Spam-Level: 
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by nautica.notk.org (Postfix) with ESMTPS id 71DFBC009;
+	Fri,  5 Apr 2024 13:30:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+	t=1712316660; bh=mFIx+8k+ANOQ8BYwuRQQCSBqlnnopffUpvUlwuxTisk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Zh7bpjv4FEj5oKlmEmYpdSD03U8Ortgvc7N5juSJ4S0p/rLp3UB/ZyBIPx42RiGO7
+	 6ya6kHjJVNdWY2g3sUy15wIG95eXLd9cbsNAQ3GJpiAgxu5HnSFjbw6P/vn49SPYz1
+	 GVZGfwIMIj5vOrVTcga9iLb1BcKHFE1bs0A9EFuSeRI0tw3jacCx7SV/GrCUxM0n3J
+	 atM9fyfQFA164g+RQ3qQR7KZVEOpV94YwtIXKKkLg3OO4zUbBbLcicIobLzP0wMxFy
+	 S6KpK1YC0sk3w3z4Nb5FYSDC1K3d1SUX6Es+zlH1ehGCkkUU9EM3IJGcF0AwBSv2I0
+	 WWicSBtpHMF9g==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id a8448ac7;
+	Fri, 5 Apr 2024 11:30:53 +0000 (UTC)
+Date: Fri, 5 Apr 2024 20:30:38 +0900
+From: Dominique Martinet <asmadeus@codewreck.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: David Howells <dhowells@redhat.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: duplicate patches in the vfs-brauner tree
-Message-ID: <20240405-entkleidet-performanz-2f46c4f67751@brauner>
+Message-ID: <Zg_g3usopd3KWtF0@codewreck.org>
 References: <20240404101038.11486a24@canb.auug.org.au>
  <Zg3tWULD56chInTG@codewreck.org>
  <5f56a81b-ac8a-417c-85ad-149f9f64649b@infradead.org>
  <Zg4F9SAGNcmKIa1v@codewreck.org>
+ <20240405-entkleidet-performanz-2f46c4f67751@brauner>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -63,48 +84,22 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Zg4F9SAGNcmKIa1v@codewreck.org>
+In-Reply-To: <20240405-entkleidet-performanz-2f46c4f67751@brauner>
 
-On Thu, Apr 04, 2024 at 10:44:21AM +0900, Dominique Martinet wrote:
-> Randy Dunlap wrote on Wed, Apr 03, 2024 at 05:21:01PM -0700:
-> > > [off topic, I just spent 10 minutes looking for the list of urls of the
-> > > repos merged into linux-next to check that 'vfs-brauner' tree commit as
-> > > it doesn't appear to be in next yet, and couldn't find it as there's no
-> > > "Merge branch x of ...brauner" commit in next at the moment.
-> > > I'm sure it's there somewhere and I didn't look at the right place, but
-> > > perhaps a link to such a list could be added to either of the following
-> > > (which all describe linux-next to some level):
-> > > - https://www.kernel.org/doc/man-pages/linux-next.html
-> > > - Documentation/process/howto.rst
-> > > - Documentation/process/2.Process.rst
-> > > /off topic]
-> > 
-> > If you look in the Next subdir in a linux-next tree, for 20240403 it shows:
-> > 
-> > vfs-brauner	git	git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git#vfs.all
-> > 
-> > in the Trees file and in the merge.log file it shows:
-> > 
-> > Merging vfs-brauner/vfs.all (35c44ac8370a Merge branch 'vfs.mount.api' into vfs.all)
-> > $ git merge -m Merge branch 'vfs.all' of git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs-brauner/vfs.all
+Christian Brauner wrote on Fri, Apr 05, 2024 at 12:57:08PM +0200:
+> > Given this I'd favor keeping Randy's older commit in my tree, so I'll
+> > send it to Linus as soon as Christian gives his ok on dropping the
+> > patch (or I guess it doesn't really make that much sense to wait any
+> > longer at this point?)
 > 
-> Thank you, I wasn't aware of this Next directory -- I'll definitely
-> look there next!
-> 
-> 
-> So these two commits content is identical but they are completly
-> different patches from different authors (I was wondering about the
-> different subject), and David never sent it as is to me as it was part
-> of another commit[1] and I guess the other half got dropped on a rebase
-> and I didn't notice the overlap...
-> 
-> [1] https://lkml.kernel.org/r/20240328163424.2781320-3-dhowells@redhat.com
-> 
-> Given this I'd favor keeping Randy's older commit in my tree, so I'll
-> send it to Linus as soon as Christian gives his ok on dropping the
-> patch (or I guess it doesn't really make that much sense to wait any
-> longer at this point?)
+> The patches are part of David's larger netfs-writeback series afaict.
+> So what patch do you need dropped?
 
-The patches are part of David's larger netfs-writeback series afaict.
-So what patch do you need dropped?
+This one:
+ 528aa74c091d ("9p: Clean up a kdoc warning.")
+
+
+I'll take this as an ok, I've just sent Linus my patches, thanks!
+-- 
+Dominique Martinet | Asmadeus
 

@@ -1,103 +1,130 @@
-Return-Path: <linux-next+bounces-1811-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1812-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 992928991D8
-	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 01:08:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 934D68992AD
+	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 02:51:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54E6F285EC3
-	for <lists+linux-next@lfdr.de>; Thu,  4 Apr 2024 23:08:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55C6428913A
+	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 00:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0BC13473D;
-	Thu,  4 Apr 2024 23:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AE416139;
+	Fri,  5 Apr 2024 00:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="vJic398R"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="YZKsd+a3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com [52.119.213.150])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF11548FE;
-	Thu,  4 Apr 2024 23:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961245258;
+	Fri,  5 Apr 2024 00:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712272113; cv=none; b=av3Urg3LHCT2GAkjuT00bg777HK/1ycM7MuoAzBWCuIP313Cv6FIDxevfSfPhgiYaD28dkhrAYqL8HGVDtKfGcwTC5oVFxhYcCrh8OaEHNQnMh08MBYKQi33TeKOJk6mZlln1PtO/lV6jABrfBS6Pdos+eUnZL/um085PcSDYrQ=
+	t=1712278286; cv=none; b=MPUgApoCWq+LpSZ2ctJbFCF3AUAllki7Sl/hlWwEO8U1uuJ7VkHwBM1qWqr0WV9d3ReuCKOZEGqEmdsaEroKqV/QxwwL7LajzyAwE1W3NphPPBuvXS1JTmgniSislh8ysQb2AXi/2QZd7LqnCdbXxAGVdB830Phxe00P9u1Dq3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712272113; c=relaxed/simple;
-	bh=YB3k73MSlgXhaZgBxLqPQ2GTe+rYPuSn+ymAiJvnNjk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hSMWYBz9PnME3Y04I32ksfkJk/mPcJEzItMcdUt2mzLOKOD9OkgGPYpakEuhaYLsmJj7XdMrbFX8qqyNH0M2bXjHE1lK4M1Sni1QNkQjNBdWulSL3u55vwLD3a7rmOyzrGIRcioqKtD8LKR8lTtd/C9eP+diWp8SZGc7gt9vNL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=vJic398R; arc=none smtp.client-ip=52.119.213.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1712272111; x=1743808111;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LYlULA1X6feFv3WTxvLyYvnsT80qwNGSBW46vZBwbD0=;
-  b=vJic398RT9sY4NnQUWRqDojpyHHcQyHWAwJ2KxTmc6imEHclmbAvS8lM
-   Su4mhcQlbMKKxeHjZXnvLYBBY3hkV+2NuutKQLlWwv8GMLOD/D8MPzCxD
-   jTzsDAGMrFYyWyVDKy4Xb7ii03GrhiXbx+nrOFybnZvKUE/HgGtnZmgNu
-   E=;
-X-IronPort-AV: E=Sophos;i="6.07,180,1708387200"; 
-   d="scan'208";a="624551142"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52002.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 23:08:29 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.7.35:26930]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.59.87:2525] with esmtp (Farcaster)
- id 7f2003e6-55ab-4344-b717-c85b3a1bcc78; Thu, 4 Apr 2024 23:08:28 +0000 (UTC)
-X-Farcaster-Flow-ID: 7f2003e6-55ab-4344-b717-c85b3a1bcc78
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Thu, 4 Apr 2024 23:08:28 +0000
-Received: from 88665a182662.ant.amazon.com (10.106.100.6) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.28;
- Thu, 4 Apr 2024 23:08:25 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <sfr@canb.auug.org.au>
-CC: <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
-	<linux-next@vger.kernel.org>, <trond.myklebust@hammerspace.com>,
-	<trondmy@gmail.com>
-Subject: Re: linux-next: build failure after merge of the nfs tree
-Date: Thu, 4 Apr 2024 16:08:17 -0700
-Message-ID: <20240404230817.62526-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240405095341.3a9f0d95@canb.auug.org.au>
-References: <20240405095341.3a9f0d95@canb.auug.org.au>
+	s=arc-20240116; t=1712278286; c=relaxed/simple;
+	bh=pjrhOaLsXXpOmwKXuBc00FUe1MGQYcZ25af8LTVmY9s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uymaQPkms2qBsgxeyy9FN/9jpIhxdYE9pIgPfBa8k+vrU3umd7FzsIBAXPML2w1dZX5oyQB7MxtepI16oBEmH/2BwT2U77+oveyvOLbyM45Mnx8tc2/meiQn3SBlo4dQMqcR1VHChgWdCEQvklSfj7W/+EzZtXKr8IeB/wCAzXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=YZKsd+a3; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712278275;
+	bh=0xcpK+/tp61187jUvOW+Gbn+cQ5wB0S6ZpepQtQQhUQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=YZKsd+a3JASN2obqsHUre8Y9CrljCrrxXsFcqoZ87k1DoXfgbjy7ZK0FfiqltY6EC
+	 hiij8dr7ghkFKGXWrl2iiYDrt8OYXThkQKlpe3uS959V/7hYs/8U5B7RbecguV1r+n
+	 5LGXGFE1ovgllaJidIvPVftBRy/n9AYrBkgVrKup2e2voujcBA668OXnPPwdaffL69
+	 Y+OKjHgGCs91twu0CL3k2wrDqgE8vceA4CpPAc8BPxbQdp4c9CULK6ax2RV+fTjGzA
+	 ymJWa879xgPb/vEPAHcL1DWCHw4bSwhcA9J4nJtvLDSNsca5AX5iO9N843pxeBc9J7
+	 U0sVJ2ttg5OCw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V9g0L1QjMz4wcd;
+	Fri,  5 Apr 2024 11:51:14 +1100 (AEDT)
+Date: Fri, 5 Apr 2024 11:51:11 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Suren Baghdasaryan <surenb@google.com>
+Subject: linux-next: manual merge of the tip tree with the mm tree
+Message-ID: <20240405115111.132053a5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D035UWA004.ant.amazon.com (10.13.139.109) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Content-Type: multipart/signed; boundary="Sig_/tVck7d_9CMMHvmaGVlfnBdx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 5 Apr 2024 09:53:41 +1100
-> Hi all,
-> 
-> After merging the nfs tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> fs/nfs/inode.c: In function 'nfs_net_init':
-> fs/nfs/inode.c:2434:13: error: assignment to 'int' from 'struct proc_dir_entry *' makes integer from pointer without a cast [-Werror=int-conversion]
->  2434 |         err = rpc_proc_register(net, &nn->rpcstats);
->       |             ^
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   f290a586e31f ("nfs: Handle error of rpc_proc_register() in nfs_net_init().")
-> 
-> I have used the nfs tree from next-20240404 for today.
+--Sig_/tVck7d_9CMMHvmaGVlfnBdx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, I posted v2 of the patch.
-https://lore.kernel.org/linux-nfs/20240404221200.52876-1-kuniyu@amazon.com/
+Hi all,
+
+Today's linux-next merge of the tip tree got a conflict in:
+
+  arch/x86/mm/numa_32.c
+
+between commit:
+
+  d82a37ff6b88 ("fixup! fix missing vmalloc.h includes")
+
+from the mm-unstable branch of the mm tree and commit:
+
+  9852b1dc6a14 ("x86/numa/32: Include missing <asm/pgtable_areas.h>")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/mm/numa_32.c
+index e25e08ba4531,025fd7ea5d69..000000000000
+--- a/arch/x86/mm/numa_32.c
++++ b/arch/x86/mm/numa_32.c
+@@@ -24,7 -24,7 +24,8 @@@
+ =20
+  #include <linux/memblock.h>
+  #include <linux/init.h>
+ +#include <linux/vmalloc.h>
++ #include <asm/pgtable_areas.h>
+ =20
+  #include "numa_internal.h"
+ =20
+
+--Sig_/tVck7d_9CMMHvmaGVlfnBdx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYPSv8ACgkQAVBC80lX
+0GyTcQgApTZIaZ8GULdnEH+9OBQSVde20ZMDYE+UstexmVJ90uVTy5mCzoZtjkSH
+lY33730MOjVAI0QW//WT9KWg8eZ/uu6z/0HhwZRMgilJGC5XselLGRf7hdF4wf/h
+Y+UX3IgZjA13uFAuIqHtjA1zOxVGqEqWnJ24xzCX4ckVDk3vgyQPg1jFvMFyW5Gc
+XAoCd/zLlfDPnUR3C3FHV2G1kOuDwwhHDQ4NHqxIUxOGaRF6o0IwLvalEkmhFiRq
+nbc2xWCpcZLehGZN7Tj2fWG3BLUZgm2ucP2OGeJM3PF3sjrsHF+VzlYkL5Or34Qa
+y0G3n9RYJYtCErIdjFxyeMF0FU2hXQ==
+=1zT6
+-----END PGP SIGNATURE-----
+
+--Sig_/tVck7d_9CMMHvmaGVlfnBdx--
 

@@ -1,116 +1,139 @@
-Return-Path: <linux-next+bounces-1827-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1828-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44E7889B48F
-	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 01:15:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E89189B4B1
+	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 01:51:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E269B1F21195
-	for <lists+linux-next@lfdr.de>; Sun,  7 Apr 2024 23:15:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09A37282DDA
+	for <lists+linux-next@lfdr.de>; Sun,  7 Apr 2024 23:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B643C08D;
-	Sun,  7 Apr 2024 23:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEDE143AC5;
+	Sun,  7 Apr 2024 23:51:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AtUhHuIy"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lXQZtvCk"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A3038F9C;
-	Sun,  7 Apr 2024 23:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD3043172;
+	Sun,  7 Apr 2024 23:50:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712531737; cv=none; b=s0oL3NSnq3sLAPBpKxyYPDln9O7IIdLqq6wwVtXraCLH4kXFy+drHRXTMTU16l1Ve7QCcsfM5NKOx1B/jMPIq0XvIOAublM+kghp8DPApsgpi4kEB7oGFBsEZsM52tL8Xam+AmVikn6pOF+k4IVjZIFZLAn9hyjXNOpp/iHvycA=
+	t=1712533860; cv=none; b=ABeQTlRzrvHlDT67T8WInu61Ty/Y6RPEZbZHhAcIROw1icJ3BBNlgQoEXZhcHmC28IfNSpZqHe1ugLh7iRf0z0A2a0EGu6fjJBPH1lyKyMEBqXU1WdTYCxNYkGGD4h/ceIwpUtEF1WAJJkjqluQ+K8O/o80oKK2BjSyj6i3jVOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712531737; c=relaxed/simple;
-	bh=J12MOgEY8a+3bmhya1dTFLRjK77jrBUR2Fkr92yMHkg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=t40E1eTkBYJdVWajRLF8DcfVEGx4Hb8wPw0kqKCmCrJ9dlDuThFWBV3xOcySOAkitngVW2ZQ2XUBl4Z7j0XCVILtu7JFBgGsTMF72QvEu8EgcRFC8fVh1eNC9wF9HU5VDKXFdn8TkjCTjwmZVOnbGU7lyVjFgA1WfMcKD+F96Ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AtUhHuIy; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1712533860; c=relaxed/simple;
+	bh=1c86L7SqWpvlEFYERJvkDHP0iyqxuQapID99+igNC+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ukhst4rYAVqVSTzsZQWBHndSL0HveLrW7pJn5XIsvU1hiOMvmzWrjZDcPU5PvAKTGiuUxHHe6X/IjhpXVclpzjZr3II4ZcFr76uAG960ZUGmGYIQb1xv0EPp99k3F1atLb6tcye/6wXfWf8pI92YvrJ+JzdbVmyrlk4wrnCMfU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lXQZtvCk; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712531729;
-	bh=zcn+XVfd3MWVQszLLcpWvD4qpTxFdGiCrd5YkSCNqMc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=AtUhHuIyshI0v4HylDYtmplViiPmNrsVts3ZCmbQqDy4UZdf1ZoaBxrtiro/UKPWN
-	 sy/VzbA6hrQmdzdE0Hi4Ib/yvEN4PzNod5UJmgdwYoD9T3jpoSoLaZVQwxYqUhBsEl
-	 7alt/lWVbmVa01DkV7+VHir7VKJP1eKbu5vYMZoAWE5f703SczJMvEET44dDf2FBtF
-	 Mzve32sL4noGrUULkpZb5AnL2I9SY7Uny2U/GIUTFtZWRDxOeK7Nd6I9k5j9lkuxPI
-	 pkyyFWfII0KEQqXVsFuIz619iFx0JjNu9cyU5iqdcmPaEN1j5Rzw22g/P5HSh17KMt
-	 6USvc5xYqedxg==
+	s=201702; t=1712533854;
+	bh=mf1mHLDUv6EvUcSexaiAYQTU14kE40UjmYeqke2141Y=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lXQZtvCkWynSe58fMpUMCXZbMm6A4MdTZKdsF/bv7ZkpjNI1ycyMVLmOzY703gWFW
+	 WcXh7iKSEvIA0ZQTpAC7H39nESfGKuBYaidCbhGSjwGashU65sPRviHUjqqvhwgBxA
+	 rmfAubJQ5XOETLgCyOQsNgQkGG16SMdM+HfUbK20E+NhgqQAdd/B6dVUy8sIzcCcLF
+	 m0mvUxjeaFeFxHBMskIIgRQqciOqfNO7uR2uZjufDzRQYDfT0nHo2BbiNwl+1BKE0f
+	 LsfXZW4x7mpCxdqzIWs/LmBve6OrcPmgVYv5rm503eyYoIoD3+YBL0sndr68wo4gPi
+	 QbZPM082u1iYg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VCSkS6fNcz4wjF;
-	Mon,  8 Apr 2024 09:15:28 +1000 (AEST)
-Date: Mon, 8 Apr 2024 09:15:26 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VCTWJ3VN8z4wcF;
+	Mon,  8 Apr 2024 09:50:52 +1000 (AEST)
+Date: Mon, 8 Apr 2024 09:50:51 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Barry Song <v-songbaohua@oppo.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20240408091526.562c30e1@canb.auug.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Suren Baghdasaryan <surenb@google.com>
+Subject: Re: linux-next: manual merge of the tip tree with the mm tree
+Message-ID: <20240408095051.53c1cc0e@canb.auug.org.au>
+In-Reply-To: <20240405115111.132053a5@canb.auug.org.au>
+References: <20240405115111.132053a5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1boJlDeg2tOlPJ9PAbAo0aX";
+Content-Type: multipart/signed; boundary="Sig_/Tr+SKGF4bRRZrZa3jP+EKeB";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/1boJlDeg2tOlPJ9PAbAo0aX
+--Sig_/Tr+SKGF4bRRZrZa3jP+EKeB
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+On Fri, 5 Apr 2024 11:51:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the tip tree got a conflict in:
+>=20
+>   arch/x86/mm/numa_32.c
+>=20
+> between commit:
+>=20
+>   d82a37ff6b88 ("fixup! fix missing vmalloc.h includes")
+>=20
+> from the mm-unstable branch of the mm tree and commit:
+>=20
+>   9852b1dc6a14 ("x86/numa/32: Include missing <asm/pgtable_areas.h>")
+>=20
+> from the tip tree.
+>=20
+> diff --cc arch/x86/mm/numa_32.c
+> index e25e08ba4531,025fd7ea5d69..000000000000
+> --- a/arch/x86/mm/numa_32.c
+> +++ b/arch/x86/mm/numa_32.c
+> @@@ -24,7 -24,7 +24,8 @@@
+>  =20
+>   #include <linux/memblock.h>
+>   #include <linux/init.h>
+>  +#include <linux/vmalloc.h>
+> + #include <asm/pgtable_areas.h>
+>  =20
+>   #include "numa_internal.h"
+>  =20
 
-In file included from include/linux/mm.h:1115,
-                 from include/linux/mman.h:5,
-                 from arch/powerpc/kernel/asm-offsets.c:19:
-include/linux/huge_mm.h:276:23: error: variably modified 'stats' at file sc=
-ope
-  276 |         unsigned long stats[PMD_ORDER + 1][__MTHP_STAT_COUNT];
-      |                       ^~~~~
+This is now a conflict between commit
 
-Caused by commit
+   9852b1dc6a14 ("x86/numa/32: Include missing <asm/pgtable_areas.h>")
 
-  d4358ee0a075 ("mm: add per-order mTHP anon_alloc and anon_alloc_fallback =
-counters")
+in Linus' tree and commit
+
+  a800a5095942 ("fixup! fix missing vmalloc.h includes")
 
 from the mm-unstable branch of the mm tree.
-
-PMD_ORDER is not necessarily constant on PowerPC (since it depends on
-PTE_INDEX_SIZE).
-
-I have reverted that commit (and the following one) for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/1boJlDeg2tOlPJ9PAbAo0aX
+--Sig_/Tr+SKGF4bRRZrZa3jP+EKeB
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYTKQ4ACgkQAVBC80lX
-0GzgsAf/bwPry6OrXEcvi7DTSMPh/cRl/1HfvbPykZM4r6quhE3L4rEXYmjR38zy
-kcaENe1h9GmnpyoRJ1sI/smdSDT7Ak7wSQaoMTafq3STjr5C+yrN/cAdne1V+8lQ
-jwToZ/H/mSFv9jkqNQnd8ga5DLlMySewzqEMdIXh4G5F/mC8GRiDlgAtssHNI1rQ
-EMYyPCi1d0GamwmoNmrGDtDKytyzC14KW+yY/ChmwGfioTkt1dJfNx8J0KqldN7k
-hs63Kn1ubQ4P1pJxVx7zmBEM8jcT22X6le7ssBkepSaJ7IbzVWSw+rcDR40FL8jD
-dHLppQy/fKC89FNkoAWUypSYxWMEeg==
-=UaaD
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYTMVsACgkQAVBC80lX
+0Gwlnwf/VsoaKMnW6cDikYJg7ReN0oTWe5Eqx7Afu+S//zg8M0a/i+deliAzIXuA
+MfInSSmJwDT/5Z5C27EE2nzo2gTJFJUIOXVsX9sAHRaQL5UV/eLJvXqIvwjwxvfW
+cppOdzM3mwR0RBSd4Xityp9WBXEOpFiia1fpxKLQjqz0LeeUu/rsVW8W2D0V+jo0
+loNDji2QoH8CjNht1nPrW3MtDfKmH2uB7Wb5c4SNYR/xuW81BZ+PBGnkST0AeYZB
+ShE7PzhlMe8pU1pXR+uhZ9kGxAxVVdyaZMNIEhGOc7Q4WIncNUG6sA9I6MrNXwWR
+QXVAXCJmpk0DsS3ajvx7vwQ3hROBtA==
+=HwbZ
 -----END PGP SIGNATURE-----
 
---Sig_/1boJlDeg2tOlPJ9PAbAo0aX--
+--Sig_/Tr+SKGF4bRRZrZa3jP+EKeB--
 

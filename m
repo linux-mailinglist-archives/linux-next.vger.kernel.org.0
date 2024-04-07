@@ -1,134 +1,108 @@
-Return-Path: <linux-next+bounces-1823-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1824-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 834DF89A367
-	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 19:17:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBB2A89B474
+	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 00:07:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DAF81F22E69
-	for <lists+linux-next@lfdr.de>; Fri,  5 Apr 2024 17:17:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14FA41C20BA4
+	for <lists+linux-next@lfdr.de>; Sun,  7 Apr 2024 22:07:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97B617164E;
-	Fri,  5 Apr 2024 17:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A012E381DE;
+	Sun,  7 Apr 2024 22:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jqwI3Dz3"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Ccdy9Jkp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDF3171651;
-	Fri,  5 Apr 2024 17:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1401E49B;
+	Sun,  7 Apr 2024 22:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712337445; cv=none; b=MbLJ5TNyPC+508f4olkOfoaO/g5crOXZ1Vruvc0xsP23Lsvlrg12LQsIJsdZmx/iA9OiwiSttdVdKfvdZw6ehDZhRHlKZf5R3OskiZqeSaibJ6ZkrjBXdBK7qBVvNbtW2bW+W8N8Oq/lRK44dVrH8mSa9+hM0coO+SMwl/WOOBM=
+	t=1712527667; cv=none; b=HPPBbHSTa7Qy1FM/sHtvaGe/sWA1Cxjwu2S5cpqN/Q213AxBGcsxcEgPdSyUb4mhYo/L2pvgqsM1NzDdRy527eKbqvFScxV2VwuX9Jjhb9gyRUZAzcU20yvMoz8/2mImp+W8Lj1MJsOkgJ/fQVW+O61qFYK9nk5RYw5jcLvgE3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712337445; c=relaxed/simple;
-	bh=amxGFfc8+ZOrhJviv2Fs2WijG2T/KaEioGbiNVQ7TXU=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P9IjWCShj//gCOcQIgRZpkFw9Mf+WHFUWKDblNQL/DjEldzpZ/XEIWmddx5BpVTDXWBHOiBR0kNBf8A/rweNwuTaF9ezqrvzZbcmty5JOxvXSTPxyD7NTTnf4iT/rPZV+BRwyC0dB+n4ZWDgH6RozjGDopsrbCMhMt1wOZs9Z/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jqwI3Dz3; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-516d1c8dc79so2044715e87.1;
-        Fri, 05 Apr 2024 10:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712337442; x=1712942242; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Pa45weZ9cXq2JEaWktSYETvsdwprSSGUKt900PcsRg=;
-        b=jqwI3Dz3baeslMoyfIqgfJyxYaD0p66jKD4NqZobmtpo43+SuxECYGUWNsdBEHwpft
-         oKeJHPHGULl9y6xGbtH892vID6rN6/2LIC9DMs5JmLS3c71psfc6IXcOOdJKGh+IA7IC
-         BWSNpExUfYZ9N09wIvZrpIEV8PAdmdfhlyQpY/iRDU+b1BWNF2B3wcb2VXJDPWY9JWF5
-         OUKFCmeo4BNpBqxwXT7172aX+1CKvpmvu+wHslY1+OdEtLTVJpVJs7anY+CJNqDFEudC
-         X+EOpA5Aj6/AVimerEe5PHR/oWTXMR3q3yrqSnA+wODI+EmZVX2mUHdcCIYSas85NApU
-         Hqhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712337442; x=1712942242;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Pa45weZ9cXq2JEaWktSYETvsdwprSSGUKt900PcsRg=;
-        b=JiyUJYdGKr65mvaCBq1R2Raugm1+0kQBpaKPt2IHQPbu/bfS+GTui71bSYRhD5v45P
-         ey0VBXS11X/N8SU6Amqo0DHYi1aMkJKU6qDPwoNIsULqOB+LUQi4LCVf14j+S8X6iciF
-         dO7Wby44ZFC7AozG/beQHXOHuUpcQ+SYhRFwOPkUrsLApynyBtR40y6I6p2j7CP9Ed1N
-         ioMdqeGT7DO0IOAz+kzqtfKQqsqpZZfUMO6ri1/h9kJysON2rUvmVTvRV6sH5sANqvwg
-         TwEIckjQJX13tkHs1bX0KybZP5zPooNv9ksJgiK2EhbAcHW0ClPku5RwFELf2VTtHpvR
-         O9mg==
-X-Forwarded-Encrypted: i=1; AJvYcCXydAZv903HY5PJ38mBAiLMYxargcpwyeIT+U1FxKq1RAjz58HqJGXFGjAg22VHz1ryzmm6dCZTJ0q/QjKjpZU3ZnPdZLOkOklnBb8sOW8E4P2zGPU4WwPeRPxRFAgaqTf9euuSKZkePQ==
-X-Gm-Message-State: AOJu0YzWPsGz/4rCEtGU7g5oXmc0d2qj2bKOvQBPbGOJ8CNP5X670CEl
-	nJiRrwaVlLKKu0r86qyefzC+UfeCvGfYVV2cwmsaz42dylCc+47gyLj3VWtS
-X-Google-Smtp-Source: AGHT+IGkR7WkSvWrgRCWgtzZ4OEI7sYoi8ZTd5cGSa/sWHGkAqL03SvSOutvZtgF70N2AnolLOTjFw==
-X-Received: by 2002:a19:ca1e:0:b0:516:d15b:f123 with SMTP id a30-20020a19ca1e000000b00516d15bf123mr1453551lfg.6.1712337442007;
-        Fri, 05 Apr 2024 10:17:22 -0700 (PDT)
-Received: from pc636 (host-90-235-13-217.mobileonline.telia.com. [90.235.13.217])
-        by smtp.gmail.com with ESMTPSA id r23-20020ac24d17000000b00516bddc80e3sm241036lfi.84.2024.04.05.10.17.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Apr 2024 10:17:21 -0700 (PDT)
-From: Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date: Fri, 5 Apr 2024 19:17:18 +0200
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Uladzislau Rezki <urezki@gmail.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the rcu tree
-Message-ID: <ZhAyHqKwvLHaHDJv@pc636>
-References: <20240404083923.358c23da@canb.auug.org.au>
- <Zg6Zs76UDYQsJTWM@pc636>
- <73bf08df-3edd-4948-bea1-3962063d673e@paulmck-laptop>
+	s=arc-20240116; t=1712527667; c=relaxed/simple;
+	bh=N3fPe2eKTXb4S0nQf5W8FSqKDYXdk5rlyV0PXb+k+Ak=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lgtvliD+nT7OrGUF+t/HYk694SeD3elQy38rXHAGb7kQabiXjNaHdweY3PtypARr6IeFiEjRMQ7VkgaX3rF9oCpQQzFvwWsVeDsqKE94wBd+NzAUbek/jEpwG1E8LXKTZdtmZJG4Y8A6aXMeT5FSapwTPUsKQOVm3ctrnL3cCqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Ccdy9Jkp; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712527652;
+	bh=171l4RcSwZERFvN1wKdEPSjDiIsWeuoCLer72DvNuj8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Ccdy9Jkprc3Q9cL8VYbDveOpoxcNMP/OksfZzEUQj9NmiG+elBECGGYi95lIpBKX0
+	 w0OOXKw5alh3un3xxvE2fouc6U/nBL2L2OqUHUAC3k14X7I6z4duabAUPnTKs0aMx8
+	 5kbg0XUXdxKn4Xq2IS1dkcPZ9d1i/3HseGN1cV+6CgfA03riZXDM92fCNXPY4PVfOZ
+	 ivJ1Mjn68BNrUmQZ4987dICqChnFUI6MfMYxcXTbhmY+nY5LPtPwRj3tnomJT0fJN4
+	 ap95ogSR1wUxNaReqiyKSmibZWbeJutTr/exNHePcoPWThPvOWJCj/t4S3iR2X1lSC
+	 J4dlC4h/EyDjw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VCRD44T42z4wcR;
+	Mon,  8 Apr 2024 08:07:32 +1000 (AEST)
+Date: Mon, 8 Apr 2024 08:07:02 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Dave Jiang
+ <dave.jiang@intel.com>
+Subject: linux-next: Fixes tag needs some work in the cxl-fixes tree
+Message-ID: <20240408080702.77f868be@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <73bf08df-3edd-4948-bea1-3962063d673e@paulmck-laptop>
+Content-Type: multipart/signed; boundary="Sig_/9M1sQo9LPB9oBrFX80t0oNG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Apr 04, 2024 at 07:35:31AM -0700, Paul E. McKenney wrote:
-> On Thu, Apr 04, 2024 at 02:14:43PM +0200, Uladzislau Rezki wrote:
-> > Hello!
-> > 
-> > > Hi all,
-> > > 
-> > > In commit
-> > > 
-> > >   a55be9aacc45 ("rcu: Do not release a wait-head from a GP kthread")
-> > > 
-> > > Fixes tag
-> > > 
-> > >   Fixes: 05a10b921000 ("rcu: Support direct wake-up of synchronize_rcu() users")
-> > > 
-> > > has these problem(s):
-> > > 
-> > >   - Target SHA1 does not exist
-> > > 
-> > > Maybe you meant
-> > > 
-> > > Fixes: 654f59c6bc95 ("rcu: Support direct wake-up of synchronize_rcu() users")
-> > > 
-> > I have a question. Could you please clarify why those commits are in the linux-next?
-> > Those commits have to go over RCU tree. It looks like i am missing something but
-> > please elaborate.
-> 
-> Stephen pulls the -rcu "rcu/next" tag into -next, and does similarly for
-> a large number of other trees.  This serves to pre-test the commits that
-> are likely to show up in the upcoming merge window.  The pre-testing
-> includes the build testing that Stephen does directly and additional
-> testing that others do on the -next tree (for example, I occasionally
-> run rcutorture on it).
-> 
-> So these commits are in -next because I told Stephen to include them.
-> 
-> But if you would like, I would be happy to pull your series out of the
-> portion covered by rcu/next for the time being.
-> 
-Thanks for such information!
+--Sig_/9M1sQo9LPB9oBrFX80t0oNG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---
-Uladzislau Rezki
+Hi all,
+
+In commit
+
+  c2db06c1a27e ("cxl: Fix retrieving of access_coordinates in PCIe path")
+
+Fixes tag
+
+  Fixes: 4d59ba915318 ("cxl: Fix retrieving of access_coordinates in PCIe p=
+ath")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+The fixes tag seems to be referring to the fixing commit.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9M1sQo9LPB9oBrFX80t0oNG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYTGQYACgkQAVBC80lX
+0Gyxowf/Z7VtTysyYXJ3gZDaCy1nshojlg09m6GacvjK2adwoMUw+lPKzr3izhtO
+dJQKRN6hI0GESh9q0bBxGct9MII8MPdEEs7fKYVF8/iFn/N3LSvMIcZtw2kAHCzU
+RB5ZX982Slpa4O9ojp+aV2NGF9z9wtXJHMpp0iEOUuwNx1FSFGiNhrA2sVL3rk8f
+KQkn3QJj0dr1oirDNbhP756n6ockeUx862WfTgpBJWuPQYjxB5AXyM2TVh4LvIy4
+FkUiUcsSz7FFZ/gW3ysZyH2q1YwGSpey5t9x4oMGKeyFO3F02u7Fl3kOvluC95N0
+CZoTXA2h294p+B3ej6KjtPhmuSgigQ==
+=H+y8
+-----END PGP SIGNATURE-----
+
+--Sig_/9M1sQo9LPB9oBrFX80t0oNG--
 

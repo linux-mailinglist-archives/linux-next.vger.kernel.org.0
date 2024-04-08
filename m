@@ -1,168 +1,147 @@
-Return-Path: <linux-next+bounces-1832-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1833-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D86E589B67A
-	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 05:37:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4710589B6C2
+	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 06:12:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07D471C20F4E
-	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 03:37:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF930B222B6
+	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 04:12:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C32D46A4;
-	Mon,  8 Apr 2024 03:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757FEBE6F;
+	Mon,  8 Apr 2024 04:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="lBGcBOor"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Cw4WP705"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84CB1FC8
-	for <linux-next@vger.kernel.org>; Mon,  8 Apr 2024 03:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348AC747F;
+	Mon,  8 Apr 2024 04:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712547416; cv=none; b=evXlRP6Ecj3GHSgTy2pOJ9RqAXmn5dIidPx9gNQqzm+I10e1zTMQ/JliZfNOseSE33wC+Fbhcb0Rr1g/9/lpGO6riQ4ISEJVjxJlJRDAM5LtavOmlWpeqOfd3UFg+8pHqJWn05LI3HkzvuT0r++sjwiUUQAsTjsArI9etl4xa/g=
+	t=1712549546; cv=none; b=Erj+SIFnvbHJCbWHI9hw75qGGKDlFJCti2PJakXHggnQd/QFLoITdH4Rfm5L4ElcLzvzzwmGq5CyqvGeKtTfmkuOyXVA7MqKwVzGBg4o1kZszVBbkp762wqisjUPbGVitdZ5HPCyaBCZom3Zi4ZuClTvKEqhX8O+kv+BwXwpNUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712547416; c=relaxed/simple;
-	bh=T8SivWLRydW+ZfDTEUCYBNn7UMYU3+O0MUjlfTLv8Ko=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=sog+3bKjG6zZ4Q3GRDI0PqohFNfKhoPTcnjhXnrJdpp23hw1ha9X5FaQupgXS2HOP4OI04H3gS6LfBN1SBCDG4pkT1saYsl4HnBSbr+oQOBVqLoFZVJDNkgzYwN9DI4i30Eiu6U/Kr8MkT33HcH0dEpEOKaf9Q9rn51YuKGP24o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=lBGcBOor; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5d3912c9a83so2318481a12.3
-        for <linux-next@vger.kernel.org>; Sun, 07 Apr 2024 20:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1712547413; x=1713152213; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=oA+NIJg0myyiW03oWvvz/4+VCETCVFM5opiigBweWH0=;
-        b=lBGcBOorRRekzdWtm2q6klVPyKFKiLhS1uHoBnnV1bEiw7LMhUf/G6to0Y4FlO4w5T
-         9LMEvpU25INk+gprWe6i8+LE/7lgck1rQY94qgssukiEmyCxSf0PySxAqejPDv/dBh8u
-         90JJFdP20l169xbctokNU4i0BU5l3Xc8hLNZ0XjPVBAWTsl3BU3ekRb7AUFNp1n01G0S
-         ce/3RCQqSpKvEmpgipCTuXMKTaYx6mMrq7p7jM8zthd3olCvA/LbIA4lSDOmmu+XBOWp
-         nMu7fknO7gxs0zHK8j91v4wAZyElY6DAnAWxS4iglxkucMYVp+ifGXBHzXUIUbInz5gW
-         tOUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712547413; x=1713152213;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oA+NIJg0myyiW03oWvvz/4+VCETCVFM5opiigBweWH0=;
-        b=Ps76DAelWP6nNM7R5xX10gJh40YFQbkhsdWh/dIYEGU0HfTJRXDZ/EAgeZvwmAJ+JW
-         kj4NnJshmnNJ78xn+xGnEczWm6XsyTwRZ/7vIZ8YM/jeaSJR68yUaLp7vBE6wZfZOm92
-         nKWZr+L2NvXnce81DCMJ2br9MJDcUnLhZ9KVNKu36KSVcbAOVps2yyNhCvIzL8Yx0TnU
-         Nor5USZEWAPee3WIDFi5OwwdJ0HV+EePpariGZ9DkS4o5bSeFGzPBPvcGCGDuR68o6e4
-         lb9IKpwyHzxE1dRCCNuDYuCBFEJ189HHjBfXjdPyoi1v6XLlc8O+fkeiUniJvo891Vn1
-         kJjQ==
-X-Gm-Message-State: AOJu0YxjDJd6HxUm7QEvXagsCv1vec6cFrNkGSkh+snAR0x7UEsnYPo8
-	C3ae1yNVckwBh902A68niMiRuyOdWMGTIXA7PLsnp8DjQyoIaZz+4LlIaODJwLYqqN37g755i2K
-	+
-X-Google-Smtp-Source: AGHT+IEgA8meuMSQI9cVJp342wfaypzDA65oEC6YOnBysqblihxYw5bUxt/aeVSh+rFLhIBABznPIg==
-X-Received: by 2002:a05:6a20:841b:b0:1a3:afdc:fe5 with SMTP id c27-20020a056a20841b00b001a3afdc0fe5mr7196144pzd.42.1712547413399;
-        Sun, 07 Apr 2024 20:36:53 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id gd16-20020a17090b0fd000b002a508487a96sm1294476pjb.28.2024.04.07.20.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Apr 2024 20:36:52 -0700 (PDT)
-Message-ID: <66136654.170a0220.7bc6f.2813@mx.google.com>
-Date: Sun, 07 Apr 2024 20:36:52 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712549546; c=relaxed/simple;
+	bh=e0+1g5J93AizHJVDtb4ao253/2RFa1h/xWZKAiMQgk8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=R9AGq0S1w0NYJexcWFaGbcLUzzs2qibkuKogp5ix4wnNGVwYZ5YproVboPtn6JGEpmzfslaHMqCdexWa2An+/BWLOiFYeLknbbcx30LHvJU7nwWm9PhZqgDazwu2CaUZT5FMBCpJ2vRO6sREUCbf5fHlt3WD0MzKKYkL7oK5XvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Cw4WP705; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712549539;
+	bh=FsghQSttg4WR1Ky0iCZ8lwhmFX1sFaubQuxxx9M5Tto=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Cw4WP705l/VjYcDb9yvMILtrfZJ7/kGt6Aalrn3LZ0FEluGrzDmDwQs/iWSpMbyPT
+	 h6vw3wjrUWAWXii8s1YaWl2HZLtg9n/url5KIoRIRu7+qD9lhTnVRP36/lAkdMYxUU
+	 5cnNLjhAxnzbQ5vXoF85EhQ4VpM8DzxCshoar+UeAK0gSL5WM9pfPvIAmmIwoKgiON
+	 ztXUrSh3BpBJFJ7udcgd0Di368GuMigtt6BSDO+KPXMcSxIpQ9Ynm9NgIGZOLFwMYC
+	 R66j5fKiNahqS1u01RpakqJsKXACnr5dVsPRVXulM0XwDZySXcIcnFjI6QfDNqETDC
+	 9DEgdXCAtobBA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VCbJz3lwRz4wjF;
+	Mon,  8 Apr 2024 14:12:19 +1000 (AEST)
+Date: Mon, 8 Apr 2024 14:12:16 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the sound-asoc tree
+Message-ID: <20240408141216.3eb1128c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/cHSj+P_Cu2CAxcSKGrEzGuQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/cHSj+P_Cu2CAxcSKGrEzGuQ
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.9-rc3-150-ga334017808414
-X-Kernelci-Report-Type: test
-Subject: next/pending-fixes baseline: 82 runs,
- 1 regressions (v6.9-rc3-150-ga334017808414)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes baseline: 82 runs, 1 regressions (v6.9-rc3-150-ga3340178=
-08414)
+Hi all,
 
-Regressions Summary
--------------------
+After merging the sound-asoc tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-platform         | arch | lab     | compiler | defconfig          | regress=
-ions
------------------+------+---------+----------+--------------------+--------=
-----
-beaglebone-black | arm  | lab-cip | gcc-10   | multi_v7_defconfig | 1      =
-    =
+In file included from include/linux/bits.h:22,
+                 from include/linux/gfp_types.h:5,
+                 from include/linux/gfp.h:5,
+                 from include/linux/slab.h:16,
+                 from sound/soc/intel/avs/icl.c:9:
+include/linux/build_bug.h:78:41: error: static assertion failed: "sizeof(st=
+ruct avs_icl_memwnd2) =3D=3D 65536"
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                         ^~~~~~~~~~~~~~
+include/linux/build_bug.h:77:34: note: in expansion of macro '__static_asse=
+rt'
+   77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS_=
+_, #expr)
+      |                                  ^~~~~~~~~~~~~~~
+sound/soc/intel/avs/icl.c:73:1: note: in expansion of macro 'static_assert'
+   73 | static_assert(sizeof(struct avs_icl_memwnd2) =3D=3D 65536);
+      | ^~~~~~~~~~~~~
 
+Caused by commit
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.9-rc3-150-ga334017808414/plan/baseline/
+  c2b10acb62c1 ("ASoC: Intel: avs: Add assert_static to guarantee ABI sizes=
+")
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.9-rc3-150-ga334017808414
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      a334017808414b07009579c33f12e53873d2b0d6 =
+PAGE_SIZE is 64K for this build.
 
+I have applied this patch for today:
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 8 Apr 2024 13:50:53 +1000
+Subject: [PATCH] ASoC: Intel: avs: stop building when PAGE_SIZE =3D=3D 64K
 
-Test Regressions
----------------- =
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ sound/soc/intel/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/sound/soc/intel/Kconfig b/sound/soc/intel/Kconfig
+index 4b9e498e3303..abe5cba82d50 100644
+--- a/sound/soc/intel/Kconfig
++++ b/sound/soc/intel/Kconfig
+@@ -211,7 +211,7 @@ config SND_SOC_INTEL_KEEMBAY
+=20
+ config SND_SOC_INTEL_AVS
+ 	tristate "Intel AVS driver"
+-	depends on X86 || COMPILE_TEST
++	depends on X86
+ 	depends on PCI
+ 	depends on COMMON_CLK
+ 	select SND_SOC_ACPI if ACPI
+--=20
+2.43.0
 
+--=20
+Cheers,
+Stephen Rothwell
 
-platform         | arch | lab     | compiler | defconfig          | regress=
-ions
------------------+------+---------+----------+--------------------+--------=
-----
-beaglebone-black | arm  | lab-cip | gcc-10   | multi_v7_defconfig | 1      =
-    =
+--Sig_/cHSj+P_Cu2CAxcSKGrEzGuQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-  Details:     https://kernelci.org/test/plan/id/661338cecb20b340bd4c42f2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYTbqEACgkQAVBC80lX
+0Gz21gf/VMYKdr8r6BdNpMpgCeETxmlYE1AyDtQN2LSqabcaW3Mzg7UTgczBFwWY
+QszRwE02gM6gZdmnR+rf27DwueiE99wVoxEDYCboPyBorX5nY+ME0rt5EG19dbpi
+Sp1LMZ4NeMrgIJJx/8+pNZUMSdyAbASFMx4/Q6DsfH8YApHWokZLLLFgGQlA5U57
+tD/NrBPHBKRkA21o+qsQuLtyHD/fZHZ4p8dicHHt/I3jlzj7wkOeErYnXgpzVUXc
+WmMjNkg7DJGnm8EPt9SWLbegMzEVNnwqRoFWBoX6rl1aL1BH8oxWYPgpWGp9Il6p
+qqz2wq2eXO72BvdedoKkRJ9XLgjWPA==
+=7Lkp
+-----END PGP SIGNATURE-----
 
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.9-rc3-15=
-0-ga334017808414/arm/multi_v7_defconfig/gcc-10/lab-cip/baseline-beaglebone-=
-black.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.9-rc3-15=
-0-ga334017808414/arm/multi_v7_defconfig/gcc-10/lab-cip/baseline-beaglebone-=
-black.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/661338cecb20b340=
-bd4c42f7
-        new failure (last pass: v6.9-rc2-404-g24e5164b281b)
-        1 lines
-
-    2024-04-08T00:22:17.606879  / # =
-
-    2024-04-08T00:22:17.615485  =
-
-    2024-04-08T00:22:17.720679  / # #
-    2024-04-08T00:22:17.727742  #
-    2024-04-08T00:22:17.829870  / # export SHELL=3D/bin/sh
-    2024-04-08T00:22:17.839437  export SHELL=3D/bin/sh
-    2024-04-08T00:22:17.940700  / # . /lava-1117431/environment
-    2024-04-08T00:22:17.951646  . /lava-1117431/environment
-    2024-04-08T00:22:18.053431  / # /lava-1117431/bin/lava-test-runner /lav=
-a-1117431/0
-    2024-04-08T00:22:18.063631  /lava-1117431/bin/lava-test-runner /lava-11=
-17431/0 =
-
-    ... (9 line(s) more)  =
-
- =20
+--Sig_/cHSj+P_Cu2CAxcSKGrEzGuQ--
 

@@ -1,103 +1,114 @@
-Return-Path: <linux-next+bounces-1840-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1841-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB07189C8B6
-	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 17:49:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 724C489CE6F
+	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 00:34:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C4041F25310
-	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 15:49:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD804B2234D
+	for <lists+linux-next@lfdr.de>; Mon,  8 Apr 2024 22:33:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEFD1422A7;
-	Mon,  8 Apr 2024 15:49:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED5818F54;
+	Mon,  8 Apr 2024 22:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JNYxggT8"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="l2dGt1Z2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2EB1419AD;
-	Mon,  8 Apr 2024 15:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2AB7462;
+	Mon,  8 Apr 2024 22:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712591341; cv=none; b=ECtd7FYXBEw+L8kV1dbvySafdus8j9ijZhq2F7aBW2Poqa1ezR65RTIiMDeHe0J//nY6YVIAYNtMtJ+UUIM7Ex/+sKUdrKLx4SUpJrc1oP6sVyw4ApXgBKFWhKp/nCMZkC3ebTYUemMvSymdVK+ArKeokWoOsru6eWOgsveKC8Q=
+	t=1712615634; cv=none; b=UaIi+314JiI67oWQwTT3VhdebkkGjsFolxJw6l2XK+iCYD0oQJftITucbuY0aZZe951/gEbXtdyC0mz/B0Gx8x33z77pUTjYhLRAGWemXuwt4bmZM8tkc/cGb0XWnxRn5kRc6qxVG7X/wcgYY40DMATpXiYmwxeHYaELL/TGlNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712591341; c=relaxed/simple;
-	bh=z7OOLivJJy3Z15llkGtgYnA7klW0jKakKsWkR3MHYA4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=juVPkyq2BapQi5QVhuAzKSLVFyMGMaPcZqETy5jjVsw9nS+aFJ2kGZBgpG1hYiK22QbDJuVD0SVMvf7RhUY1dgf+ERxi8kUsmKql6TORb7QQOFD5gR5JZ/0U2ln1Z0x5gpJAErB42tZXC4XmcocudK470NUR9gymWIfRwAINcaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JNYxggT8; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712591339; x=1744127339;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=z7OOLivJJy3Z15llkGtgYnA7klW0jKakKsWkR3MHYA4=;
-  b=JNYxggT8tKzNQfgDfZMrRMuUUv+Teaq9nQprEgoudBZuCGHxmlc07JZc
-   blBQPOuT45VyCQ/YKdrEQcG16cwstuFcKYddxwoetJr/NYYy4g4zaQii7
-   XZYR3G0WfozU2Vzb2ZIyDShawrblRXh21suOaLM63YEg/Pp6Gr9k8kjmf
-   /Uwg5is3FDJWg8yYVtsCsDzfjDCFUcbvB3QO0z5QRUZHQLwykI7UadI9n
-   eUXRS2clwmcyVNc1rx+U5BQcr7LWw01Fj93seT8NVIf5gAxaK5jz06UV+
-   WlCvQTw/znnvgnsJDeqVy2nyxaitxmGVWllrwd6anFo5S1qJU8NFj7RXU
-   g==;
-X-CSE-ConnectionGUID: ZNSE4feCRPO4l2QKoA+zgA==
-X-CSE-MsgGUID: fqjnHne7SUGhcodJmZAtAw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="7977085"
-X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="7977085"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 08:48:58 -0700
-X-CSE-ConnectionGUID: pXEDd6zkTM23Z6ScUmj1lA==
-X-CSE-MsgGUID: fE5PX+RES+CLHGePjd8r9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="19981521"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.67.111]) ([10.212.67.111])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 08:48:57 -0700
-Message-ID: <00b40925-224b-47e5-a535-a55bd7a49ec8@intel.com>
-Date: Mon, 8 Apr 2024 08:48:56 -0700
+	s=arc-20240116; t=1712615634; c=relaxed/simple;
+	bh=E810jBGAK64VhzZw3D7+umxL/CQhDPc+nvZhUihM1QI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=F84FnIM0oGq+D3nA3/iUVBEg4E6M5xkNvw9epSpjnj4t2InYug94O8/p1tGglGmJ2tLEX6h5HO8eIrn52hjzgm5Kh0/FeqrIvvhqQDRAsOEhcMgyHd+l/GS2Fmybl9vKIU0NOLYEZMhB8/I47GhSvS+SM4IxRZwcqqD/BIJECW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=l2dGt1Z2; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712615625;
+	bh=E810jBGAK64VhzZw3D7+umxL/CQhDPc+nvZhUihM1QI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=l2dGt1Z2zqvhYzv3GAf4BWYdEJ+caQ0yo2Ezhz7qJbDhvGzMadzDki21QhiS7yHal
+	 oH1kwedzecbYjrHcds/JH7jO4T6rUo8EefU/ENEc67uwP55QJnX/5TgyhMGBZ39zo+
+	 I+pj4GtywoS1y/lV4a9feTuvdZhiowl9FCxakMsZ+3qyDHJVvWGoaNbhY+dJ5xvxJO
+	 e9Ip326LNE4JzbpAyTl9lvtFxr4vEvRyOsveEiT2sBQIw5ATz3NrKmjBKlEp1CcpPO
+	 l1GIpClZsuL7bwYyHZlHhZibA2YZu6iNgwIQ6Srz0C2lDJM+pefPx5SBr2VZ2d09YA
+	 VqZguOqf0RU9Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VD3ls0LLFz4wb0;
+	Tue,  9 Apr 2024 08:33:44 +1000 (AEST)
+Date: Tue, 9 Apr 2024 08:33:41 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Cezary Rojewski <cezary.rojewski@intel.com>
+Cc: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "Linux Next
+ Mailing List" <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the sound-asoc tree
+Message-ID: <20240409083341.05419e72@canb.auug.org.au>
+In-Reply-To: <00016dca-9e32-4cc1-8d0e-36eaf12dc466@intel.com>
+References: <20240408141216.3eb1128c@canb.auug.org.au>
+	<00016dca-9e32-4cc1-8d0e-36eaf12dc466@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Fixes tag needs some work in the cxl-fixes tree
-Content-Language: en-US
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Dan Williams <dan.j.williams@intel.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240408080702.77f868be@canb.auug.org.au>
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20240408080702.77f868be@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/JCXYvRXIXDDAmDVl3FKnaP0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/JCXYvRXIXDDAmDVl3FKnaP0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi Cezary,
 
-On 4/7/24 3:07 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   c2db06c1a27e ("cxl: Fix retrieving of access_coordinates in PCIe path")
-> 
-> Fixes tag
-> 
->   Fixes: 4d59ba915318 ("cxl: Fix retrieving of access_coordinates in PCIe path")
-> 
-> has these problem(s):
-> 
->   - Target SHA1 does not exist
-> 
-> The fixes tag seems to be referring to the fixing commit.
-> 
+On Mon, 8 Apr 2024 10:24:28 +0200 Cezary Rojewski <cezary.rojewski@intel.co=
+m> wrote:
+>
+> Thank you for the report. I do not believe the patch above is the correct=
+ fix.
 
-Hi Stephen. Sorry about that. Should be fixed now. Thanks. 
+Sure, I just used that to get the build to work so I could continue.
+
+> Below is the context and the proposed fix [1] has just been sent to alsa-=
+devel.
+>=20
+> [1]: https://lore.kernel.org/alsa-devel/20240408081840.1319431-1-cezary.r=
+ojewski@intel.com/
+
+I will apply that fix from today (until it appears in the sound-asoc
+tree).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/JCXYvRXIXDDAmDVl3FKnaP0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYUcMYACgkQAVBC80lX
+0GyPfAgAj2t8Dm8caIhzpi1i6yiebZqfnGf6epL+CiU2Yf5OHXHc0Z3MIzPzc3zy
+o91BBks7G1RngdaqYq5Aqoa4bxpeq+EoftXUYLzhrK4xxohWQ7Vu9OKMn1FtqgGk
+GbX0ULZGZwXhn/kZ8RPnTkPPq1xumT3NihjgcZQOEP6DMuaen+ABX0tc00HpGS1H
+AUG5gAUmZstq/e/vVrnCitLwDughGo65zpcp8p3FYENC84/f6X2bTf63wXu7aX/i
+JhHOkKJ0a5iQLDwp+Y619WfyOEM0wbVQDLCa0ZfvZcCgFVkfRw3JLVFz7RIwhkZJ
+WlDvzXcR9nDMsB3V+F1hxIcpYg6cOw==
+=nTFd
+-----END PGP SIGNATURE-----
+
+--Sig_/JCXYvRXIXDDAmDVl3FKnaP0--
 

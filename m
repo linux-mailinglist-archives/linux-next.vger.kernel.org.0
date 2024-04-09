@@ -1,116 +1,107 @@
-Return-Path: <linux-next+bounces-1848-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1849-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0976589D27E
-	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 08:32:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 779A689E5DE
+	for <lists+linux-next@lfdr.de>; Wed, 10 Apr 2024 01:05:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B768428737B
-	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 06:32:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDCBFB20E95
+	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 23:05:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F211773A;
-	Tue,  9 Apr 2024 06:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02FC158DA3;
+	Tue,  9 Apr 2024 23:05:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gv5flgFr"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="n2dljnVZ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DA21DFD1;
-	Tue,  9 Apr 2024 06:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC996158D9B;
+	Tue,  9 Apr 2024 23:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712644363; cv=none; b=B4NfoN1AnJxgW56x7ZBd/gblqg8+o3WisJ3Kjn5B9r46m9P/T3EQvfS9yz8Ni+rOhD50pv1LmkdMfFtWLyD4+oPsKma0de7mTc17bOB/xJ2NXOi5erF/2axz9ErEaNjDTZ0nj+9nbij6Pd/QzitJqGqhWAkl953bheiblXxKKDo=
+	t=1712703913; cv=none; b=mdXy/buMTb7NLJ4CtaXezRKmfUpfIrwv/CLTe1kOVSNzQXdJRT7d5OEdg1kFxSiIIjFjUWK0g7YvgbddxhTI+v+ncACLqDtxiM8DNPSsR2oJZ0zqWmZBK2+3Gw5bzeKly8NeL0U5xEXTPznzL0vRjz9Hyg3bpQQlaOirSblYoak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712644363; c=relaxed/simple;
-	bh=uwimiWdg0T9d2TTNTlk3OaxzP7fmBzP+QfEQK1fM1vw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ABot22hgcM9Vr095Pdudbfg7D2UIHyCk+MtIAZHcx1sJvoKHG5Hf3dLaymb4I8zOkOrNC0eAoOBAGQqbOFVlQ+RMqn7LSxCASaNyFMgmOZq8P8+TjzzNkAwu7fTaRexjE/I1lm4A4G1okBQuqKdWSyS4SKI/aqB76pjBVbwV+p8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gv5flgFr; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712644362; x=1744180362;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uwimiWdg0T9d2TTNTlk3OaxzP7fmBzP+QfEQK1fM1vw=;
-  b=gv5flgFrQVePnhDVHq1TiVtXz6HuloPcJJzOwL3qoSFQOSRUzlT218+Y
-   E2S/50srvIaOt6gkGJk1odjnxGiQnvNL5ItYG8azMKbTNZvUIEpb1p3AL
-   5/HUp23/aNay9cmo0LK5Y2wZb2uRYHKzr6r9MgU1j0ye2VK+SPuPzH5Rr
-   b611x3ornYT2dGunyjFU/7G/jz77Kgam4MnRrZNN1P7tfkB1tFWTlTI2u
-   LG5kplDCpYjGMkMO1CNqr5XjzobKwOQfpW1kn5iUpIVMzsi2LpFHcypph
-   oYpmcDUdL4GGBNrMT07wHsG1WaM1DTzeCJhQ1ZppK7JoIdjXBaN5WTIiM
-   w==;
-X-CSE-ConnectionGUID: XO0Qy8cnQTSRhT36s5JUyg==
-X-CSE-MsgGUID: Qi786KYYQtikqD+eMdf6NQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="7791210"
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="7791210"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 23:32:40 -0700
-X-CSE-ConnectionGUID: BxVBfudqTs2J/koKcvN+rQ==
-X-CSE-MsgGUID: U6oEIpf+Skm8uD09xe2lQg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="51316237"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.37.26])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 23:32:38 -0700
-Message-ID: <52c9b314-9770-4bec-ae53-2840709b41d4@intel.com>
-Date: Tue, 9 Apr 2024 09:32:32 +0300
+	s=arc-20240116; t=1712703913; c=relaxed/simple;
+	bh=6zF5YooyCsfpmE0BWmrEU0IfZ+u+69VzuF8AtWFfHOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ONdORhUG8IOX4w+hqLYZTZDV0byFW/gMdFAc88gxqTlidTAggcD8pswXXdGKYvw1dLn9qW/aONIuU5+Mm6uJcslSyFJRU5GD8fyj+/jYARvpImsvM7KaLYcMCe/QdWo13QTneW/cDZBtB/9sD+7CFgg8E9aEM1mHmNVXOATZwBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=n2dljnVZ; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712703902;
+	bh=m4aSe3eXvdJ364oYuaB9qdyFtcfbMXUheiXw1fUAsao=;
+	h=Date:From:To:Cc:Subject:From;
+	b=n2dljnVZpPsB3lGuTlRECWPt3eg2LFOiqR5GIrb4TWxLSxXtauICVQjNiyXlcIrzU
+	 F822Ws7C+2g4IRibYegwtDjHCUygddf/Dx9ugkKkzKZh09PAf4oMN6X1BMSewOGLea
+	 v10hMTnQ68y4Xna4pM6OUatJi4QYWfw0VJkh4EkwMl3u9YbokVIWpG8yYl5vw1PGde
+	 MFJLJN0abj/fHzP3DcW3QUxU5V9nxu1OY2/Tv6WVl0UZ1WtV1PPB0TUlg9F7YQQS+G
+	 2W2ThuAeWOLtysJVwDXOGUbHVmwG1rhPmdOfgw29ui2BO/najHMvcNmB/tPXCEYoD/
+	 6a6UtDI0ywLDQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VDhPT723Vz4wc5;
+	Wed, 10 Apr 2024 09:05:01 +1000 (AEST)
+Date: Wed, 10 Apr 2024 09:05:00 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the usb.current tree
+Message-ID: <20240410090500.4018b9a0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the tip tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240409124905.6816db37@canb.auug.org.au>
-Content-Language: en-US
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20240409124905.6816db37@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/PD4=+Su.GmnavOII5I9PHSi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 9/04/24 05:49, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the tip tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> In file included from <command-line>:
-> lib/vdso/gettimeofday.c: In function 'vdso_calc_ns':
-> lib/vdso/gettimeofday.c:11:33: error: 'U64_MAX' undeclared (first use in this function); did you mean 'U64_C'?
->    11 | # define VDSO_DELTA_MASK(vd)    U64_MAX
->       |                                 ^~~~~~~
-> lib/vdso/gettimeofday.c:41:49: note: in expansion of macro 'VDSO_DELTA_MASK'
->    41 |         u64 delta = (cycles - vd->cycle_last) & VDSO_DELTA_MASK(vd);
->       |                                                 ^~~~~~~~~~~~~~~
-> lib/vdso/gettimeofday.c:11:33: note: each undeclared identifier is reported only once for each function it appears in
->    11 | # define VDSO_DELTA_MASK(vd)    U64_MAX
->       |                                 ^~~~~~~
-> lib/vdso/gettimeofday.c:41:49: note: in expansion of macro 'VDSO_DELTA_MASK'
->    41 |         u64 delta = (cycles - vd->cycle_last) & VDSO_DELTA_MASK(vd);
->       |                                                 ^~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   c8e3a8b6f2e6 ("vdso: Consolidate vdso_calc_delta()")
-> 
-> I have used the tip tree from next-20240408 for today.
+--Sig_/PD4=+Su.GmnavOII5I9PHSi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks you!  Please consider the fix cc'ed you and linked below:
+Hi all,
 
-    https://lore.kernel.org/all/20240409062639.3393-1-adrian.hunter@intel.com/
+The following commit is also in the net tree as a different commit
+(but the same patch):
 
+  fbdd90334a62 ("MAINTAINERS: Drop Li Yang as their email address stopped w=
+orking")
+
+This is commit
+
+  eaac25d026a1 ("MAINTAINERS: Drop Li Yang as their email address stopped w=
+orking")
+
+in the net tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/PD4=+Su.GmnavOII5I9PHSi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYVyZwACgkQAVBC80lX
+0GyA8AgAozQu1zovR4LIvcLiO4YXYKoMRXk2sDIh+OHD4atSqQS9li4uEV4PG+D/
+hhKkpZazyJE4EQy2OMBBIOCZ6zqrE2pU2AuofukuJnMELF94frg3kfqc5PrC1dU7
+zwIsqGOkvGnGBpfGQl/IYQnHxoICETqgWcUvUm00qP+o0XX2YJugmVWOUMrkV+sn
+Ov+jA0DGLZR5jOILTlifjxisAaSc72yOBzJ3HPbeGB5b0+Vjd4q7QxJ+zY6tnKkL
++rdsJOSBEDR7IldC2ImXTHlhw00isWD0OA9x3OYu2Hbj9jNEM0JV/GVlxIR52EfF
+y3+qnxD1KS7mkiOC+g4yI1YuPGFjGQ==
+=vvpf
+-----END PGP SIGNATURE-----
+
+--Sig_/PD4=+Su.GmnavOII5I9PHSi--
 

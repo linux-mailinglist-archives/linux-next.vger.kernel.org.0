@@ -1,103 +1,124 @@
-Return-Path: <linux-next+bounces-1844-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1845-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0843089D020
-	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 04:01:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A28D889D07C
+	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 04:49:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2BF928230E
-	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 02:01:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D5EB28261E
+	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 02:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBBEF4EB32;
-	Tue,  9 Apr 2024 02:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF9065464A;
+	Tue,  9 Apr 2024 02:49:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dNliNL23"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LqqIvbg5"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D280D4E1DA;
-	Tue,  9 Apr 2024 02:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12665CB8;
+	Tue,  9 Apr 2024 02:49:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712628074; cv=none; b=jDeFqFdmEIiH3WffOAvmdbF1kD9LCYaoV3xJqyywyPYxO7PTtL2PCO3JV1RH1jJwfd779lllxBT4de5I4DMsMbZH2w7koafK0IcQDyjRRAJjX3LmPpwo+U3fae2Mvja1TOS3R9eS0nVhFv+6u72nEQuxtXfllceEbcqDEbCsdzQ=
+	t=1712630955; cv=none; b=c7AOLOfat4nRQn4EBgT04yq2Mlvu6z6kRnWrrM+gVwSTOA/HiHUAZJyFUelXr3KN4Z7ioVVr8TguJe0Seeq1mcfr4ApimDv/HM4Svagpj2ZpIIDAm0HOHrrfly53aYsAYOVaOdWwd6zVBrh/l/P69AOtzqdChBbolAoxKyCknEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712628074; c=relaxed/simple;
-	bh=k14wQNkaK0FDOaPrYg1ruJBnl/3BTruD+x0EpqL/4pA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=O+x4DtsXcYZdZobop6bI2cL+f4PmrNev7AgPonMk8+4PtqGtVxra35nNkclHfEoetx4D3YWvX+ThyPr2Osb4vsgb5NeyugpnrE1Gy7oUm9kDOwm7zoz+xbjcf7ibeDG1zKyZuIwsPPoMbaYEVkrzJXK/qdkXbg5ENbLsNLHiqCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dNliNL23; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1712630955; c=relaxed/simple;
+	bh=+PZ4jR/2BJ9XxrBr7GMAojOZLzi+GDA/AyD9AFNbCSA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=bwUV8qXGG67VzZ6lby7OZu1jmaUgv3+yU7ATvtVPLBNYXRqAyPJvZElyY91jedKNZ39j0sQY7mXBOG0kF6YcBGl3hsQAUJNDesNGdIhnTG8LUTNE+2usIkdZGCpzW5CEanfPJc2/eSqkncgLwwksSiMmUuNlT9tQyKZohMIwCEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LqqIvbg5; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712628068;
-	bh=QaBsR0fy92pSRuUctybjiMsVmEST5lTM20nOfjnHsgQ=;
+	s=201702; t=1712630949;
+	bh=yHzw5mT25hvytC+YyTaCleTf54zFCnzDzIb2I1F1nJQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=dNliNL23RYbXQvn4mHhSfECiiPD4TRt5TppdkOACuZ8Y/2t3M3A0Sy6/dCFXWJIwr
-	 H3zcnxIDpp0qz2wlahRRN3+UJ+KRK6QNZEKiK8MZmeEBoHb0wL6X9sQys5jyE68+4O
-	 XHuKVwsMaEXpa+XKImGFMB5GgpQSQ69fHD3+8cyyqCCKdvDXUxRw49BxE5ICkhY5jZ
-	 MkMuwtaxFOqI0ozJrCV1kXhR4O3E4ELzzdYekNN12gh3wZ7cfI+vjyeWwVeCt0wSEl
-	 pbZVjr7AUzJDkuODwg3qLJSi7jUAny14MHf26lK9NxmWgcY+7SX7Hpg6KeGDOLyKuu
-	 fbombheyDjuBg==
+	b=LqqIvbg5CPZhUFx6/UmcBgvr/lyRtCv8YwoNaJ/4Wdi8aN9S0FoMMYkTVeEXy8zVa
+	 c2OeOPEFOD1LXzeXqJ/nmqburL91/+D6pHyJamLFNUijys+azqbUcRrWjvSydpL0hD
+	 j0hQiTDDLwwAagDrybdva0NadCHx8r7aSm8c1mMSwsr82r3QGfuvXfW0GDg/9gYo2X
+	 ApL2YwNr+xsQmZ8Fx5Kux54gu6VGYj47IMIQYTdtd44a58M5GAFgehptYG40br0MOH
+	 8vy1w9dXlVcmhWr3S42nOhlBXM9hk93cXUw5g0qBeRI8sa1sg4lJe7VkMgAW4/lAps
+	 FiTE8fGRH8uqA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VD8M852HXz4wbr;
-	Tue,  9 Apr 2024 12:01:08 +1000 (AEST)
-Date: Tue, 9 Apr 2024 12:01:08 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VD9QX6gDcz4wcC;
+	Tue,  9 Apr 2024 12:49:08 +1000 (AEST)
+Date: Tue, 9 Apr 2024 12:49:05 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the drm-msm-lumag tree
-Message-ID: <20240409120108.2303d0bd@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the tip tree
+Message-ID: <20240409124905.6816db37@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/a6kvfG.o5mwwx4BTHQQI_2y";
+Content-Type: multipart/signed; boundary="Sig_/FwkJqhkKj31640k9.uYOYpn";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/a6kvfG.o5mwwx4BTHQQI_2y
+--Sig_/FwkJqhkKj31640k9.uYOYpn
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the drm-msm-lumag tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+After merging the tip tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-lxml not found, skipping validation
+In file included from <command-line>:
+lib/vdso/gettimeofday.c: In function 'vdso_calc_ns':
+lib/vdso/gettimeofday.c:11:33: error: 'U64_MAX' undeclared (first use in th=
+is function); did you mean 'U64_C'?
+   11 | # define VDSO_DELTA_MASK(vd)    U64_MAX
+      |                                 ^~~~~~~
+lib/vdso/gettimeofday.c:41:49: note: in expansion of macro 'VDSO_DELTA_MASK'
+   41 |         u64 delta =3D (cycles - vd->cycle_last) & VDSO_DELTA_MASK(v=
+d);
+      |                                                 ^~~~~~~~~~~~~~~
+lib/vdso/gettimeofday.c:11:33: note: each undeclared identifier is reported=
+ only once for each function it appears in
+   11 | # define VDSO_DELTA_MASK(vd)    U64_MAX
+      |                                 ^~~~~~~
+lib/vdso/gettimeofday.c:41:49: note: in expansion of macro 'VDSO_DELTA_MASK'
+   41 |         u64 delta =3D (cycles - vd->cycle_last) & VDSO_DELTA_MASK(v=
+d);
+      |                                                 ^~~~~~~~~~~~~~~
 
-(lots of these)
+Caused by commit
 
-Introduced by commit
+  c8e3a8b6f2e6 ("vdso: Consolidate vdso_calc_delta()")
 
-  8f7abf0b86fe ("drm/msm: generate headers on the fly")
+I have used the tip tree from next-20240408 for today.
+
+
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/a6kvfG.o5mwwx4BTHQQI_2y
+--Sig_/FwkJqhkKj31640k9.uYOYpn
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYUoWQACgkQAVBC80lX
-0GzBYwf9G84BwOg2pXQH/mPYTOUjRJvuZ4yMr+JiuKdJ03gO+Nu93fZYubCtmcSf
-AE65gB+t//xnQ5xw8WdySJS5oFWS75nlo1FfK1c6v5f6umuUS2qb+DlBxWMYAXi2
-nARdBBg6Tm6020L5xF8i1XmtgIeq7cjArkNu3byL5V5laciawYB8+gyAhTkog3rH
-6/uDCPS4BGUCiQc6lLNhxMb9M7EFEKxkl0GCGmmf7/Ky+LGMGrUj1REIxPXHpKSM
-ksBjn7AvD8bCJWWQyw4gl8sbXd7pCMHhh+bRL9Fy7fBu6ia/TpkkxIl18Tlp6j9t
-zfmU9Epnzs8IcHweSWby3IxADmOCWg==
-=xNNm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYUrKEACgkQAVBC80lX
+0GwVWAf/YHdpxwSlC4asPHFj2Qfm/xp6rKeL+lntzfN5Um+68L+RRgb+DnKbt274
+7gA1YRr6Mn/MN70EiWhghrrro2HKSLqFWUh0oiZdzg+m3rwrNlWQH29BqfwPlZJo
+Ie9kGMWam+VS484ttULEIuOyAaBmag+IO+37tby+mQ50s8pEiOpH62H43xhAD1IC
+KAOji4sF22LvGzP7TIDgFgyMSgoKKYkgiBoiUi1ePON9/+7Xwg8hV3i+q4G17Y+W
+VopPMlYEQCvnFLUeykGr3xrgYLPOu/xSnPHvnMlv7r/zvzzGHifK2fRTyD+nxPal
+bjuF/845s/Jm0QUm0Vjz3SWVUZkmYw==
+=6E71
 -----END PGP SIGNATURE-----
 
---Sig_/a6kvfG.o5mwwx4BTHQQI_2y--
+--Sig_/FwkJqhkKj31640k9.uYOYpn--
 

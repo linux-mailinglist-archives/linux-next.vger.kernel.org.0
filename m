@@ -1,145 +1,116 @@
-Return-Path: <linux-next+bounces-1847-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1848-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA00C89D1D3
-	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 07:11:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0976589D27E
+	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 08:32:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8943C1F261D2
-	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 05:11:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B768428737B
+	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 06:32:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B001D5465D;
-	Tue,  9 Apr 2024 05:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F211773A;
+	Tue,  9 Apr 2024 06:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LZ8d+Jvh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gv5flgFr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EFA4F887
-	for <linux-next@vger.kernel.org>; Tue,  9 Apr 2024 05:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DA21DFD1;
+	Tue,  9 Apr 2024 06:32:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712639455; cv=none; b=dVNYy7O4Hwb/xBqaQQ9Ie3TUWQx+BN+0Ll4loTeA50OI+eque9x+WT1dQaZlQ0bcYj9LiSpKi5AFartw8Jl4II7guo5TBUr+CE8Zpl/RTnoo0vJTfjGphwiWm/73QB6gaLB17YPiupCx8ahvM//vG0H6IpBKb3US5rdjoW03bXY=
+	t=1712644363; cv=none; b=B4NfoN1AnJxgW56x7ZBd/gblqg8+o3WisJ3Kjn5B9r46m9P/T3EQvfS9yz8Ni+rOhD50pv1LmkdMfFtWLyD4+oPsKma0de7mTc17bOB/xJ2NXOi5erF/2axz9ErEaNjDTZ0nj+9nbij6Pd/QzitJqGqhWAkl953bheiblXxKKDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712639455; c=relaxed/simple;
-	bh=dwC0o7kN4aSLHYFcGLA7pQ1nKIAPVAEBs/g7lOmupm8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EpMOUthHBrEjtm9cbuSIpEKbuaIcMBRYhlCNFW6Hs8KmiUO+re1aDj9E7/1ugohEcNrV3jo6wZuqthvbuC7qyQfQKJNpaKVi3Py1/Co4npqTGo7cdv4GXkheyzzrODP1Jc9L4WS6CjXgp4u1wOagnsWZcFFa2FfRs/dUvfdATd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LZ8d+Jvh; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-36a0c8c5f18so112435ab.0
-        for <linux-next@vger.kernel.org>; Mon, 08 Apr 2024 22:10:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712639453; x=1713244253; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4XlSx76m7+cP8h9FQAUilr+n4nM0QWD1BsxQ6mGdrTY=;
-        b=LZ8d+JvhU0dfzdAauzAr21cDEFP8pmQMBUOvpQR+zvwbfV2uIMYHgWpqtBGhFFkt7k
-         PQBXHHwoI7VvpeOsgA+WNOx9IMCmYAVWcCkjcSaXwUAZ0UZhDY5/ZR+kG41SV7xIsyPx
-         BBN0+EBnC4bWZKQp9p5KmaRFgpo+MlYDEqvAJOUhDimsDdAcpoCdxP0hKpShenTKWr/4
-         RUC7FtjbPi4m5Ke39pPv2I/kI9PqMxwpJIojh8Uc0QkvNPIMpvdJRjVE11FKCoC6uCgs
-         QVTqY2luI2rKAzFW2l0Xq783GIw69/Qon6mE3kN0+GBwnxKp/lR+CFzqpgDCUFVZ1Lpv
-         auMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712639453; x=1713244253;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4XlSx76m7+cP8h9FQAUilr+n4nM0QWD1BsxQ6mGdrTY=;
-        b=UareEZopRMJE0+4Fikg7lMTcuTg+SRbyqcATdmXubILge2H2H/X7rUxOfokAVBjzfW
-         sWmlRqF8BKQLdmkGQBhEOpWOIYnaVsj07uiekPkOP30mmDYkL7XgvnBHZg0gKBD0JXfS
-         VT6q8sGIP8WYPfn7HuUCgu6j1sYgPLo8MVsrx6yRYmmOaNP7y7FxCqfcpNmognFCoMN8
-         UHgZhvFuTHiUJ1cSLxTQIJo9smjzuBrzrJq4TNT14uzw4KTLWT+W6SG0q2IVmamjLyaA
-         dKmI75IjGbce7YfZtgvrUItSYJ0rHLRliLOZU8Q31jQ5dVc1PhLI5wTU7X8hbGJyOBFz
-         1E6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUV+CQmt0O4IhvEGeNOE9FpFbN1U/jSsYM7DjEiyURvWOPmsOE9+bLUHRjvpom1+CkjLEjfDmsDcsugsDSNAyUB5Bdy3Gk0gRQlWw==
-X-Gm-Message-State: AOJu0YznIPP4u5j2GdOqfEBqSOvVcxC0s03JiGg2Z55B42964kpeXGDN
-	HW709l7udpttCyeFmhQ3LWTYGiP34UNb8kZOd4fr5O8kDgJZdcFA/H6LOJMNiN8JeG8NR2etcmO
-	dPrP9JkrIL4stPjgAQh12aqX2JfiK02490uWp
-X-Google-Smtp-Source: AGHT+IGMo6dxSPis7iuqkMcLFOGFh/Ddc4f+n+qMm9pmVjMFPYyo1L6wu+/u23iR1UJEY5zWQc7ums+QX5vvLk8O1Og=
-X-Received: by 2002:a05:6e02:13d2:b0:369:e9b7:768d with SMTP id
- v18-20020a056e0213d200b00369e9b7768dmr130351ilj.18.1712639452945; Mon, 08 Apr
- 2024 22:10:52 -0700 (PDT)
+	s=arc-20240116; t=1712644363; c=relaxed/simple;
+	bh=uwimiWdg0T9d2TTNTlk3OaxzP7fmBzP+QfEQK1fM1vw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ABot22hgcM9Vr095Pdudbfg7D2UIHyCk+MtIAZHcx1sJvoKHG5Hf3dLaymb4I8zOkOrNC0eAoOBAGQqbOFVlQ+RMqn7LSxCASaNyFMgmOZq8P8+TjzzNkAwu7fTaRexjE/I1lm4A4G1okBQuqKdWSyS4SKI/aqB76pjBVbwV+p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gv5flgFr; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712644362; x=1744180362;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uwimiWdg0T9d2TTNTlk3OaxzP7fmBzP+QfEQK1fM1vw=;
+  b=gv5flgFrQVePnhDVHq1TiVtXz6HuloPcJJzOwL3qoSFQOSRUzlT218+Y
+   E2S/50srvIaOt6gkGJk1odjnxGiQnvNL5ItYG8azMKbTNZvUIEpb1p3AL
+   5/HUp23/aNay9cmo0LK5Y2wZb2uRYHKzr6r9MgU1j0ye2VK+SPuPzH5Rr
+   b611x3ornYT2dGunyjFU/7G/jz77Kgam4MnRrZNN1P7tfkB1tFWTlTI2u
+   LG5kplDCpYjGMkMO1CNqr5XjzobKwOQfpW1kn5iUpIVMzsi2LpFHcypph
+   oYpmcDUdL4GGBNrMT07wHsG1WaM1DTzeCJhQ1ZppK7JoIdjXBaN5WTIiM
+   w==;
+X-CSE-ConnectionGUID: XO0Qy8cnQTSRhT36s5JUyg==
+X-CSE-MsgGUID: Qi786KYYQtikqD+eMdf6NQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="7791210"
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="7791210"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 23:32:40 -0700
+X-CSE-ConnectionGUID: BxVBfudqTs2J/koKcvN+rQ==
+X-CSE-MsgGUID: U6oEIpf+Skm8uD09xe2lQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="51316237"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.37.26])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 23:32:38 -0700
+Message-ID: <52c9b314-9770-4bec-ae53-2840709b41d4@intel.com>
+Date: Tue, 9 Apr 2024 09:32:32 +0300
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240409114028.76ede66a@canb.auug.org.au>
-In-Reply-To: <20240409114028.76ede66a@canb.auug.org.au>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 9 Apr 2024 07:10:40 +0200
-Message-ID: <CANn89iJyXNKycL1kd_KP8NH-qU7siv8BGW5PGLexjmqaXXGciA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the tip tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20240409124905.6816db37@canb.auug.org.au>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20240409124905.6816db37@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 9, 2024 at 3:40=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
->
+On 9/04/24 05:49, Stephen Rothwell wrote:
 > Hi all,
->
-> After merging the net-next tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->
+> 
+> After merging the tip tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
 > In file included from <command-line>:
-> In function 'tcp_struct_check',
->     inlined from 'tcp_init' at net/ipv4/tcp.c:4703:2:
-> include/linux/compiler_types.h:460:45: error: call to '__compiletime_asse=
-rt_940' declared with attribute error: BUILD_BUG_ON failed: offsetof(struct=
- tcp_sock, __cacheline_group_end__tcp_sock_write_txrx) - offsetofend(struct=
- tcp_sock, __cacheline_group_begin__tcp_sock_write_txrx) > 92
->   460 |         _compiletime_assert(condition, msg, __compiletime_assert_=
-, __COUNTER__)
->       |                                             ^
-> include/linux/compiler_types.h:441:25: note: in definition of macro '__co=
-mpiletime_assert'
->   441 |                         prefix ## suffix();                      =
-       \
->       |                         ^~~~~~
-> include/linux/compiler_types.h:460:9: note: in expansion of macro '_compi=
-letime_assert'
->   460 |         _compiletime_assert(condition, msg, __compiletime_assert_=
-, __COUNTER__)
->       |         ^~~~~~~~~~~~~~~~~~~
-> include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime=
-_assert'
->    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), m=
-sg)
->       |                                     ^~~~~~~~~~~~~~~~~~
-> include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON=
-_MSG'
->    50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #cond=
-ition)
->       |         ^~~~~~~~~~~~~~~~
-> include/linux/cache.h:108:9: note: in expansion of macro 'BUILD_BUG_ON'
->   108 |         BUILD_BUG_ON(offsetof(TYPE, __cacheline_group_end__##GROU=
-P) - \
->       |         ^~~~~~~~~~~~
-> net/ipv4/tcp.c:4673:9: note: in expansion of macro 'CACHELINE_ASSERT_GROU=
-P_SIZE'
->  4673 |         CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock, tcp_sock_wri=
-te_txrx, 92);
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> Presumably caused by commit
->
->   d2c3a7eb1afa ("tcp: more struct tcp_sock adjustments")
->
-> I have reverted that commit for today.
+> lib/vdso/gettimeofday.c: In function 'vdso_calc_ns':
+> lib/vdso/gettimeofday.c:11:33: error: 'U64_MAX' undeclared (first use in this function); did you mean 'U64_C'?
+>    11 | # define VDSO_DELTA_MASK(vd)    U64_MAX
+>       |                                 ^~~~~~~
+> lib/vdso/gettimeofday.c:41:49: note: in expansion of macro 'VDSO_DELTA_MASK'
+>    41 |         u64 delta = (cycles - vd->cycle_last) & VDSO_DELTA_MASK(vd);
+>       |                                                 ^~~~~~~~~~~~~~~
+> lib/vdso/gettimeofday.c:11:33: note: each undeclared identifier is reported only once for each function it appears in
+>    11 | # define VDSO_DELTA_MASK(vd)    U64_MAX
+>       |                                 ^~~~~~~
+> lib/vdso/gettimeofday.c:41:49: note: in expansion of macro 'VDSO_DELTA_MASK'
+>    41 |         u64 delta = (cycles - vd->cycle_last) & VDSO_DELTA_MASK(vd);
+>       |                                                 ^~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   c8e3a8b6f2e6 ("vdso: Consolidate vdso_calc_delta()")
+> 
+> I have used the tip tree from next-20240408 for today.
 
-Yeah, a build bot gave us a warning yesterday, I will fix this today.
+Thanks you!  Please consider the fix cc'ed you and linked below:
 
-Thanks.
+    https://lore.kernel.org/all/20240409062639.3393-1-adrian.hunter@intel.com/
+
 

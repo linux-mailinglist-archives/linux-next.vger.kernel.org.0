@@ -1,105 +1,126 @@
-Return-Path: <linux-next+bounces-1850-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1851-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4B1689E5E5
-	for <lists+linux-next@lfdr.de>; Wed, 10 Apr 2024 01:09:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39A1589E7DD
+	for <lists+linux-next@lfdr.de>; Wed, 10 Apr 2024 03:37:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27C23B22EB0
-	for <lists+linux-next@lfdr.de>; Tue,  9 Apr 2024 23:09:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C86E2836F9
+	for <lists+linux-next@lfdr.de>; Wed, 10 Apr 2024 01:37:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE50F158DA5;
-	Tue,  9 Apr 2024 23:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 599FA20E3;
+	Wed, 10 Apr 2024 01:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="W28KEUCv"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="j9Wil4H9"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56635156C6D;
-	Tue,  9 Apr 2024 23:09:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025B11FAA;
+	Wed, 10 Apr 2024 01:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712704143; cv=none; b=FRA9EqKNcup7Buh3SShYaykr4UdFC2+m3KnSDGEyl3wtBsqjACPXvzfcanwYIt91kLYx8/CnX3Tb5ab9QgfXNtL6Q3Z3+xbP7cIJJyw1h5S6u6+K05azWquVmnCYFbSHj7lFAlWCI5WGJh2bGajHqLxM6Qx8xiG6Ux+1yKgOSR0=
+	t=1712713046; cv=none; b=inzrepvl6gUJ/4fx0nAVj7EBGIzohaAYNE9QM+MFCSF8pKHx+jDafxXxCxFYpt3njuRxbp7QBzF6mS++RIjXY0I03B8Hfw/gDrkiTRcTWgQ8VkmFfRW9hA0RUKs8widlKISL9NlZlkTuQFz1eusmVa6p6OBBRUtCgEFfalSxbj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712704143; c=relaxed/simple;
-	bh=ZYIQtNCfFcQ4hNAtIYvJF57vHrzLbrpfBGOVmsFAmUs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=b2ERrrMBtgULBNGpvfV0MFKv9X9t6fhHuRQwBO4RXeg0un3lp0uSU/sDFcCSsIV9g/8ZiI/7EJyLnEUPwad3de6P9Yp2WPcNNmcVbM0ZMEQSILWsPFqoxbiqKdK0ZLTcTNp9WRbNWYHZ++TfnNAeULGuCMbhLvOoIziIriVYxxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=W28KEUCv; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1712713046; c=relaxed/simple;
+	bh=109X4ODkF1551qkhBxOoPEwPnuqiPXourDQ5O4+ZumM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tNYTDic9b0YeNBH2rx3BBwpbJzL/6exfmrn7hA1GDyWvRjPaw3Izcj35evce+FoXUeH4KHO1GWjQvsPlNuilbpulPk+g9phpeGHQZkAP/RFWx1bHvluNqADFKWluB0CskeQts+Pa03TMyC3pHmZFT7blwUpwUZG9f4aEwbSnxVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=j9Wil4H9; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712704139;
-	bh=vbCWh37N3JF+rpOCB/gFvQkREDM91HMUz4kTDIPorxk=;
+	s=201702; t=1712713039;
+	bh=GI7EAQKn4mkpeL+X3OogK5qZCQ71oAAkd8XB13Tuen0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=W28KEUCvCKaepIji2qf1NR2BlbFE6bk4HhNR3z6UcRJlJtfvhcq/mB8xqxVtDeIGr
-	 +7vffGIyWKbD6oKsAF1dDE4va/CGlGB7vqXcaI1RgncwIWQPrlCTqLNvoyZzlgqVe5
-	 Vvp5Y5M6dJWqvmybd6xvEI92yYUjLCHj4iQzmXHu6dju7OaCPdZASS9YMLlsfb0nyO
-	 Rt2F/LHKjQZdtUZKzmvMw6kcy8feIkcTkyRIUBal9oa9d33IH4KsNlDJuiJ9mbsoTe
-	 FFJjFiAuvd9HS9FZOKEhwQ80l2TNAjlSL5MlKCd+Q4QpykQf1/ObZ1b438V6AIAwMd
-	 BCyfEhOqO8vYQ==
+	b=j9Wil4H9LNL8UJyr3T63NHluVVfTiqoN8de1yTiku4zP7ftlb5hkKE/J2CEQXRIDb
+	 vqNtG4VGKwFwBl8A+QrGqUbdvHJFB0g9bOn9+JDNPXFi+XZwuOFiqHljSc57WR415y
+	 72eTN1RAPcGiwQ3wgsiHTq3Gvbf1lsl2s5bdsv9KS2ipTUxDkwlM5b9l/+QC0GGslj
+	 tG766qd9LPeT+Rw1XAU23sH7QOEZSWMpdOIFpH9w+etz5qyu+98dIp9XXv4P45Yh8H
+	 eVPSgo6qjyqM0Ixk0Lp186egmQGJ8lJcF+tFJzgQAIwY0r3E1BCkFHk0rsaiubwpQc
+	 XNWJ3HOCoYqoA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VDhV30MGGz4wcn;
-	Wed, 10 Apr 2024 09:08:58 +1000 (AEST)
-Date: Wed, 10 Apr 2024 09:08:58 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VDlnB5KPLz4wcn;
+	Wed, 10 Apr 2024 11:37:18 +1000 (AEST)
+Date: Wed, 10 Apr 2024 11:37:14 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Olof Johansson
- <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc: ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the samsung-krzk-fixes tree
-Message-ID: <20240410090858.549161db@canb.auug.org.au>
+To: Lucas De Marchi <lucas.demarchi@intel.com>, Oded Gabbay
+ <ogabbay@kernel.org>, Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?=
+ <thomas.hellstrom@linux.intel.com>, Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Jani Nikula <jani.nikula@linux.intel.com>, Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: DRM XE List <intel-xe@lists.freedesktop.org>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm-xe tree with the drm-intel tree
+Message-ID: <20240410113714.10cf2daf@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/R9JxI4JxuZwOJR6X5NGLobo";
+Content-Type: multipart/signed; boundary="Sig_/_tLqiJw.fJVFx5Ol4OO8Ixk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/R9JxI4JxuZwOJR6X5NGLobo
+--Sig_/_tLqiJw.fJVFx5Ol4OO8Ixk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the arm-soc-fixes tree as a different
-commit (but the same patch):
+Today's linux-next merge of the drm-xe tree got a conflict in:
 
-  c51102b6a279 ("MAINTAINERS: Change Krzysztof Kozlowski's email address")
+  drivers/gpu/drm/xe/xe_device_types.h
 
-This is commit
+between commits:
 
-  011d79ef1cfa ("MAINTAINERS: Change Krzysztof Kozlowski's email address")
+  ded402c7a044 ("drm/i915: move skl_preferred_vco_freq to display substruct=
+")
+  8219ab6d6f0d ("drm/i915: move max_dotclk_freq to display substruct")
+  9aad73290686 ("drm/i915: move display_irqs_enabled to display substruct")
+  f25ae90ff9c6 ("drm/i915: move de_irq_mask to display substruct")
+  860cefce5ebe ("drm/i915: move pipestat_irq_mask to display substruct")
 
-in the amr-soc-fixes tree.
+from the drm-intel tree and commit:
+
+  070f8fd6c654 ("drm/xe: remove unused struct xe_device members")
+
+from the drm-xe tree.
+
+I fixed it up (I used the former version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/R9JxI4JxuZwOJR6X5NGLobo
+--Sig_/_tLqiJw.fJVFx5Ol4OO8Ixk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYVyooACgkQAVBC80lX
-0GzlDwf+LGeky+9sZz5xOoezwuwf/OsMakl/BT3+WM0tSHylI39hORJjBsXhbcdB
-9NTPwvO5ULyfEg6IGOyM7yQ4S7rJZprZSVy5oRKoH0IJ7Wgztj0atRO4m1m5nmMU
-y9QM+xebaYrdEz+ux8xc6BN0BbO5ymxgKZSXM9g7K9DJUpZJb11bCnZlbJ3nvJUk
-vEFhkREiEeS/YuPPOQbaf15omzm5EKdbxaswi6tmMMk7XtmMPYoqgOQPBMfSpy4z
-zBxx0yo5q2XXHGVXXv2farOwXPbWoxJ6KOL1cg+Z39xrxaNMaxZqZvQt5IBeV0AS
-vvRu6FvKq0b12pjbj+0g+Tse+VzhkQ==
-=NJgb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYV7UoACgkQAVBC80lX
+0GwV7ggAkFJQho0n2tfMCEk3bAN32r3eqfGbV7AnV1JLHHSqh3S8+zWIFQRuS8Y5
+lGr1IuQSux5N6uc4lvj6P66m/4Rh7tZLd6acSKi95wal5f7vT3juIrW2hlRWoZsN
+VfhIwYsYF1xR25p8mxYo9vboVqOypaQGl46pudHYUZZHcJ/6YEDPF9BR1nSTon7g
+zmSPYr2mwICy8DjStGEUHJukOlPY26kE/vvoH9qQgplQ+YVTL3THdoTHCuLsc7+F
+/OWnMqfofImsDvwTQZTvtNpkc6cPWH0l/IzQdCgtSw8heJTakv42VKYPu2+kljft
+a4F4NQdL+iJtGnWjcE29C8tk19DleQ==
+=a8Jn
 -----END PGP SIGNATURE-----
 
---Sig_/R9JxI4JxuZwOJR6X5NGLobo--
+--Sig_/_tLqiJw.fJVFx5Ol4OO8Ixk--
 

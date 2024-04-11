@@ -1,416 +1,110 @@
-Return-Path: <linux-next+bounces-1881-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1882-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8612B8A17BC
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 16:45:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4C698A1FCD
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 21:57:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 142361F22EFF
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 14:45:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 166C128B19D
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 19:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B784D524;
-	Thu, 11 Apr 2024 14:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA3DC1798E;
+	Thu, 11 Apr 2024 19:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="pTQHg8bo"
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="MrcYFg97"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9EBD517
-	for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 14:44:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221E3205E17
+	for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 19:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712846652; cv=none; b=s8GHHuoIPiifzCWDfFs229HKfJfzIeGqgOlsMal4KPgqGrBAz5RRkUzKBmUAalLOXMVhShaxe1CQ5fhLIJ9ro5hrbMG5Uvhwa+s0bk+N+tmcmraKgo5371+nSZnSVVs2fqQS79bxmJ6Lt9CVBneioRr2IelX52XPSY8Pi+fLcbM=
+	t=1712865446; cv=none; b=JNpjuhH0z4he6ErXTbzBMdt2tOg3WdgrNtq/ymb22Q/WhTyBMaSN/87grsK4sqrIPUY3guVKLRKDj0g8xEb+HooO/CNjYFhrYFc3CieR1YLuRWYpTz4Bem2oyVU4bDM+p0ltnRCXybRLGos4maDAjZTgStrbb2aTZnLnqlr6Zug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712846652; c=relaxed/simple;
-	bh=Mbc0O3l8eQuVp+n5a2GRIozrWq4EZ3uRSzjIWph6W20=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=LH9mbyJcMrQy4Vz4qsf3AvueW67JciW0ausaO2/Eih+pf5O9R+rJznOaocZ2sThdWUuGpEst4z4lf75QzQL/VdWTBhxgpyuhLRhk6/vaTnaRy3Zs8nJjGoCXYNRNH4V8bsBQgtIopniAJva6Er4826JDQzilu6GztMbZx11VtUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=pTQHg8bo; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ed32341906so3802153b3a.1
-        for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 07:44:10 -0700 (PDT)
+	s=arc-20240116; t=1712865446; c=relaxed/simple;
+	bh=qX84F/lXaQ1PVH00KjcK2IThFqDOeXh8hk0g/UzpyPw=;
+	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
+	 Content-Type; b=J+1k1Aa2cLYabe9N+5Cr/oP9kDbg7Ar6iPNt8QF90PeLORwDTUFb2ZcvVV/jGYfmySvZSwI2hgrZPXT/3EdYrNRNEK0PtcE7sOG613fU3gkWOQ2vixzPvsskVPBuvYNAbITPO9B9gTC2umd24qSyDVJP4XD+nthLWzmHv2zIQBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=MrcYFg97; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6ed2dc03df6so225957b3a.1
+        for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 12:57:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1712846649; x=1713451449; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Nd/X94wrGZXuXBCs7aCBEsQsG2pXY0ZNXqhhIGAj+s=;
-        b=pTQHg8boNOW78PrcYPVk1ZKyZqz0repd7xObTTnXaLLQCb6f+rDg5qeNyi0UZ3CIq2
-         7MbYZgjkwSxiGKs4pe/1Jj5W8T5e0gwEbUdk7zAIPcePL5EMcNLZHGPIo1DRVOKeZLeE
-         2dTLWqjIB+2vLQbUlDKkakXzy4If2sZAFgmN6iIrQlhjtBqxQlPSP4WZjOBU17MDn0kM
-         DsiWBLlCQdifHLeqQzO7IMgasW8qBR3/FXIAdvMJsW/GhSntaSr1hWUtnQkxQoP9iOVG
-         gckQGGwjEW5PB2J3Q5d6SDfTmW8ps4y4vkSVaVNvhPzzHnWGbl/cUk+yZfwL8542FnLk
-         FT3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712846649; x=1713451449;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1712865444; x=1713470244; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7Nd/X94wrGZXuXBCs7aCBEsQsG2pXY0ZNXqhhIGAj+s=;
-        b=coqAzDFTZ/kca7IQ/2uY7DmTrxhLMfCDinfMrpC3JqYGqI5DR6+leL1yvFocP3UzBi
-         vTzFcNa3JCRgA6PG/5KLLaRFnErqz6F9jECq1ohr1KcfQXxleDCZ9lWgwcKRfrusR4c2
-         aJ7GFYA/eROA7sqrBqqli5hopmYeEwMONDSA43fNSQz9ybKRznJi7xuy+ZZW3qcDkdDQ
-         JOgLxdohnnBUI4UVZJ10Z+/0VKwFyqYAZyHOV3Xk1zYwbczVlnH9Fom5DM3yr6Wjt5Bj
-         U2VTt8962eFnmS1HK3KTjuVQeVj9cRabPRD+GQ88NOD1OVxSieI2ddBrVdksNmDKTzVy
-         NUTw==
-X-Gm-Message-State: AOJu0YwS4HSNRPR74zusmGYeXYKWUqqR52lLL+Zdfyom0ooz4SzmTnS6
-	A37ldxHFNa+Crn2hKzFuQPixLv+RL2AtLbl+IoKhJ4l7yRGUi/hNJwFRlsmBldWFN+9cQMr3Wx+
-	UhzM=
-X-Google-Smtp-Source: AGHT+IGfF2uF8XBMVT9s2XMxqviV0yC1TxhxV4zPhcAL++VOqFWpGTOCd1SJ9CEoDNNW9P5J6oGnaQ==
-X-Received: by 2002:a17:902:6805:b0:1e4:7cc5:2292 with SMTP id h5-20020a170902680500b001e47cc52292mr5164247plk.49.1712846649458;
-        Thu, 11 Apr 2024 07:44:09 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id s15-20020a170902ea0f00b001dc05535632sm1246091plg.170.2024.04.11.07.44.08
+        bh=ASuWKF1IyVny77juPKeYhHIQgdscvqAEKvf/s9kut2I=;
+        b=MrcYFg97/G9J5mWBaBeiWE4JECOHIYPO5NS+0/90qBKGd5tvfYoQx4fDFMeHk1ZeK3
+         sjNq9XTz094XnYQSvvDj5mDyEpzcclvBxDbh3q9aSjk1QnXr2zdo60Stss5l0Dzg61Eg
+         Iv1LXIq+dJHXEwZ+gQW5+kLzeU7PmwQ9HY1crQAFOYmdQKGcQpLG5bX4cKx60jV0bRkN
+         Khni4FE0BSRNp6R+0USuNWzu9sGxYPsFZfMVfD2yWXh6uvi9PiM7yWQG19qKOhBDehAX
+         GwB+CQ1vcF5/tJjG7pr8ONWJ5NnTfw/iKZW6GXAS9xPei5y5Ii8zlYe0P8nbSbYr8OnO
+         VjaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712865444; x=1713470244;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ASuWKF1IyVny77juPKeYhHIQgdscvqAEKvf/s9kut2I=;
+        b=Kz7knj4Ny9GpaRiGZcoE9KBXKsKjJZQzCTi3SZoK+Z0alp2hFfPPo5cNKg7BGK2LY7
+         N/XjlM40ytHXkwE8hf0vkIDnarsZ0DLGDgqWKowTVT/gzC9TVC9lyyF2NzR+HUdbIu8q
+         ZFPOYCi2aPH4dDSXVsuAkF0M5BmLDEvpYqli3XMhPwiauMAt3r7Rj/+sI/bxZDjdCSIA
+         la+LZzB8t5xtegDFXBrBqtYXy5s6cJvPVSaKY+ouxQ2fAXHzhwpSDiZEvoqmgkfHvOYU
+         sMig2dgOPdaTT7kKcmWTi6LilOcWAKT2EZGyLYd++4HQvUCm8r4ZJeOVJfBBYx7AQkBB
+         q5bw==
+X-Forwarded-Encrypted: i=1; AJvYcCV2DP9IIQWRIbdR23+h409iKQDhbHEei1mCoHW9RB4Ok9CAX4CwfA1PKNW1iKvSzJQ/xBXLBHLUXpqzYaIFoC4r/79oyjK5Cvl1mQ==
+X-Gm-Message-State: AOJu0Yx/49QziCwfpPwHmNUZ3rXVmPEFz7mGUPIALBeaSDMrZHhLnfQn
+	aIsLKalUruONnluhxFy0EYJrRqEfHPRdEFpxf/rBTxuS9ryS312y6c2u7+9/oo0=
+X-Google-Smtp-Source: AGHT+IGoeWkdZaGSZlUIvJ4+wlGVepb/0/HzuNHkaPvH2S+cbxddwGFXFYFQo0xSCJHBhfC++htiGA==
+X-Received: by 2002:a05:6a00:1a94:b0:6ec:db05:36d2 with SMTP id e20-20020a056a001a9400b006ecdb0536d2mr801820pfv.4.1712865444236;
+        Thu, 11 Apr 2024 12:57:24 -0700 (PDT)
+Received: from localhost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id y25-20020aa78559000000b006e6c0f8ce1bsm1555237pfn.47.2024.04.11.12.57.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 07:44:08 -0700 (PDT)
-Message-ID: <6617f738.170a0220.30c97.354f@mx.google.com>
-Date: Thu, 11 Apr 2024 07:44:08 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 11 Apr 2024 12:57:21 -0700 (PDT)
+Date: Thu, 11 Apr 2024 12:57:21 -0700 (PDT)
+X-Google-Original-Date: Thu, 11 Apr 2024 12:57:18 PDT (-0700)
+Subject:     Re: linux-next: duplicate patch in the risc-v tree
+In-Reply-To: <20240411080622.0cd5502c@canb.auug.org.au>
+CC: Paul Walmsley <paul@pwsan.com>, linux-kernel@vger.kernel.org,
+  linux-next@vger.kernel.org
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Message-ID: <mhng-e6968c18-74dc-4091-8f0c-6be1437f8167@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20240411
-X-Kernelci-Report-Type: test
-Subject: next/master baseline: 192 runs, 8 regressions (next-20240411)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master baseline: 192 runs, 8 regressions (next-20240411)
-
-Regressions Summary
--------------------
-
-platform             | arch   | lab           | compiler | defconfig       =
-             | regressions
----------------------+--------+---------------+----------+-----------------=
--------------+------------
-acer-R721T-grunt     | x86_64 | lab-collabora | gcc-10   | x86_64_defconfig=
-+x86-board   | 1          =
-
-bcm2836-rpi-2-b      | arm    | lab-collabora | gcc-10   | bcm2835_defconfi=
-g            | 1          =
-
-bcm2836-rpi-2-b      | arm    | lab-collabora | gcc-10   | multi_v7_defc...=
-MB2_KERNEL=3Dy | 1          =
-
-beaglebone-black     | arm    | lab-cip       | gcc-10   | multi_v7_defc...=
-MB2_KERNEL=3Dy | 1          =
-
-hp-11A-G6-EE-grunt   | x86_64 | lab-collabora | gcc-10   | x86_64_defconfig=
-+x86-board   | 1          =
-
-hp-14-db0003na-grunt | x86_64 | lab-collabora | gcc-10   | x86_64_defconfig=
-+x86-board   | 1          =
-
-r8a7743-iwg20d-q7    | arm    | lab-cip       | gcc-10   | shmobile_defconf=
-ig           | 1          =
-
-rk3288-rock2-square  | arm    | lab-collabora | clang-17 | multi_v7_defconf=
-ig           | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-240411/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20240411
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      4118d9533ff3a5d16efb476a0d00afceecd92cf5 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch   | lab           | compiler | defconfig       =
-             | regressions
----------------------+--------+---------------+----------+-----------------=
--------------+------------
-acer-R721T-grunt     | x86_64 | lab-collabora | gcc-10   | x86_64_defconfig=
-+x86-board   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6617b4fe367339c2a14c42e8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-board
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240411/x86_=
-64/x86_64_defconfig+x86-board/gcc-10/lab-collabora/baseline-acer-R721T-grun=
-t.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240411/x86_=
-64/x86_64_defconfig+x86-board/gcc-10/lab-collabora/baseline-acer-R721T-grun=
-t.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6617b4fe367339c2a14c4=
-2e9
-        failing since 42 days (last pass: next-20240226, first fail: next-2=
-0240228) =
-
- =
-
-
-
-platform             | arch   | lab           | compiler | defconfig       =
-             | regressions
----------------------+--------+---------------+----------+-----------------=
--------------+------------
-bcm2836-rpi-2-b      | arm    | lab-collabora | gcc-10   | bcm2835_defconfi=
-g            | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6617b8a513acb4a99c4c42ed
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: bcm2835_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240411/arm/=
-bcm2835_defconfig/gcc-10/lab-collabora/baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240411/arm/=
-bcm2835_defconfig/gcc-10/lab-collabora/baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6617b8a513acb4a99c4c4=
-2ee
-        failing since 311 days (last pass: next-20230601, first fail: next-=
-20230605) =
-
- =
-
-
-
-platform             | arch   | lab           | compiler | defconfig       =
-             | regressions
----------------------+--------+---------------+----------+-----------------=
--------------+------------
-bcm2836-rpi-2-b      | arm    | lab-collabora | gcc-10   | multi_v7_defc...=
-MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6617b93236d31a4dfe4c42f6
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240411/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-b=
-cm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240411/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-b=
-cm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6617b93236d31a4dfe4c4=
-2f7
-        failing since 379 days (last pass: next-20230327, first fail: next-=
-20230328) =
-
- =
-
-
-
-platform             | arch   | lab           | compiler | defconfig       =
-             | regressions
----------------------+--------+---------------+----------+-----------------=
--------------+------------
-beaglebone-black     | arm    | lab-cip       | gcc-10   | multi_v7_defc...=
-MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6617bae022d64a10db4c42db
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240411/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-cip/baseline-beagleb=
-one-black.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240411/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-cip/baseline-beagleb=
-one-black.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/6617bae022d64a10=
-db4c42e0
-        new failure (last pass: next-20240408)
-        1 lines
-
-    2024-04-11T10:26:21.841715  / # =
-
-    2024-04-11T10:26:21.850600  =
-
-    2024-04-11T10:26:21.955576  / # #
-    2024-04-11T10:26:21.962545  #
-    2024-04-11T10:26:22.064790  / # export SHELL=3D/bin/sh
-    2024-04-11T10:26:22.074392  export SHELL=3D/bin/sh
-    2024-04-11T10:26:22.176183  / # . /lava-1118902/environment
-    2024-04-11T10:26:22.186327  . /lava-1118902/environment
-    2024-04-11T10:26:22.288213  / # /lava-1118902/bin/lava-test-runner /lav=
-a-1118902/0
-    2024-04-11T10:26:22.298249  /lava-1118902/bin/lava-test-runner /lava-11=
-18902/0 =
-
-    ... (9 line(s) more)  =
-
- =
-
-
-
-platform             | arch   | lab           | compiler | defconfig       =
-             | regressions
----------------------+--------+---------------+----------+-----------------=
--------------+------------
-hp-11A-G6-EE-grunt   | x86_64 | lab-collabora | gcc-10   | x86_64_defconfig=
-+x86-board   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6617b62e0bbd9815514c4303
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-board
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240411/x86_=
-64/x86_64_defconfig+x86-board/gcc-10/lab-collabora/baseline-hp-11A-G6-EE-gr=
-unt.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240411/x86_=
-64/x86_64_defconfig+x86-board/gcc-10/lab-collabora/baseline-hp-11A-G6-EE-gr=
-unt.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6617b62e0bbd9815514c4=
-304
-        failing since 42 days (last pass: next-20240226, first fail: next-2=
-0240228) =
-
- =
-
-
-
-platform             | arch   | lab           | compiler | defconfig       =
-             | regressions
----------------------+--------+---------------+----------+-----------------=
--------------+------------
-hp-14-db0003na-grunt | x86_64 | lab-collabora | gcc-10   | x86_64_defconfig=
-+x86-board   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6617b4ff92eb66a18d4c42de
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-board
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240411/x86_=
-64/x86_64_defconfig+x86-board/gcc-10/lab-collabora/baseline-hp-14-db0003na-=
-grunt.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240411/x86_=
-64/x86_64_defconfig+x86-board/gcc-10/lab-collabora/baseline-hp-14-db0003na-=
-grunt.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6617b4ff92eb66a18d4c4=
-2df
-        failing since 42 days (last pass: next-20240226, first fail: next-2=
-0240228) =
-
- =
-
-
-
-platform             | arch   | lab           | compiler | defconfig       =
-             | regressions
----------------------+--------+---------------+----------+-----------------=
--------------+------------
-r8a7743-iwg20d-q7    | arm    | lab-cip       | gcc-10   | shmobile_defconf=
-ig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6617b545b31ed988dc4c42fc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: shmobile_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240411/arm/=
-shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240411/arm/=
-shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6617b545b31ed988dc4c4=
-2fd
-        failing since 0 day (last pass: next-20240408, first fail: next-202=
-40410) =
-
- =
-
-
-
-platform             | arch   | lab           | compiler | defconfig       =
-             | regressions
----------------------+--------+---------------+----------+-----------------=
--------------+------------
-rk3288-rock2-square  | arm    | lab-collabora | clang-17 | multi_v7_defconf=
-ig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6617c513a6e12ac3f74c42f0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.6 (++20231208085823+6009=
-708b4367-1~exp1~20231208085918.75))
-  Plain log:   https://storage.kernelci.org//next/master/next-20240411/arm/=
-multi_v7_defconfig/clang-17/lab-collabora/baseline-rk3288-rock2-square.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240411/arm/=
-multi_v7_defconfig/clang-17/lab-collabora/baseline-rk3288-rock2-square.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6617c513a6e12ac3f74c4=
-2f1
-        failing since 21 days (last pass: next-20240315, first fail: next-2=
-0240321) =
-
- =20
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On Wed, 10 Apr 2024 15:06:22 PDT (-0700), Stephen Rothwell wrote:
+> Hi all,
+>
+> The following commit is also in Linus Torvalds' tree as a different commit
+> (but the same patch):
+>
+>   36d37f11f555 ("export.h: remove include/asm-generic/export.h")
+>
+> This is commit
+>
+>   0316e4b04e01 ("export.h: remove include/asm-generic/export.h")
+>
+> in Linus' tree.
+
+Sorry about that, I guess I just picked it up as part of the series.  
+I'm just going to throw away the version in my tree, it's a cleanup so 
+it shouldn't matter too much.
+
+>
+> -- 
+> Cheers,
+> Stephen Rothwell
 

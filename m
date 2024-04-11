@@ -1,108 +1,161 @@
-Return-Path: <linux-next+bounces-1865-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1866-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 496BE8A0707
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 06:17:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 474CC8A072E
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 06:38:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33A021C21694
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 04:17:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1847289BDB
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 04:38:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7918413B787;
-	Thu, 11 Apr 2024 04:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F226853364;
+	Thu, 11 Apr 2024 04:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="vKIqCYSY"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="LckDQ6qy";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="auCiEw45"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B8613BC0A;
-	Thu, 11 Apr 2024 04:17:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B271FBB;
+	Thu, 11 Apr 2024 04:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712809039; cv=none; b=fd4yp87gxGMYmMiS5I6LYUGzgEkUCjhkkyYkuiMrrUPCni12o+yS2EhKZ3WZNuSrMoU+8WRkW9ZNKMDEOEtPL1e3xLTyn0baPcdMRCD852fUvKVJ3xWiYVpft2fdUL/oHiQMR2FJ4wZ6///pw2BnhQuhsDlPfVA1HCZYiglg8H8=
+	t=1712810321; cv=none; b=Hid/eUbnfIZNL29wF54BhKOcLtjSjkSk/6o+w9l/nQpien9SeLAmrqLn75UazZ+u5wkS8fGeb4ZV3AOARvDZEqL5Ri0uNtcaICgxHlMKfubR52/7xsT3z1tYmgYHA0uhRr9kFUEhkGYaBpJhYyUKxFerk1MN2k/MRACS0RLXTPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712809039; c=relaxed/simple;
-	bh=bLUDS8Uza7sdmsvCoYzhqfsixzf3KYgISXbAKy3r3TA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MTvjM7xxts74U8Ems80yTVSUze6XYQ4rT5wnmWHW1nvA5nqu8lSNO/C+QiLX4AkqePJLnP9Rg2Uy93WJZHdQrR3wn78ci9ek4TdR+KuRcYEu/CMtEcQeZFxI5OrH2QkGWUzkdz/MhSnHMzUHU8yMP12vbOlQal8ARJUiC3DEVXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=vKIqCYSY; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712809033;
-	bh=ffEfYRaJC20w15azJhJo0rYxYYPLTu9jsVa9ZGJDYog=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=vKIqCYSYRXf3Z2BZwWv8chkDPKx2YHh5srL5Cc/IwJcrzhBkXG5PxAjvukTDeFFR2
-	 0l0921niu8reAoElStC7wDidK7EuIK4WpEMs6a22qM7P65HY86Es3BCKqrg5blQxLD
-	 yXNFOikqtVl6q90CZ+x3RoLM85AApjEHMU/3xjQ5f15E3v4y5IANP6dU5piAlrTfmx
-	 NG3xuQJ4gB0zPEax8rypiyIaLw1Z1iE7/AML6x4c7kvDoE0AM+HPUGYndCnQSY9Hob
-	 aT96qwiv+gcQUB3t3PCZaivlnjiXme8Q+5e+ZlWLlEj0k72TP+oxyTyFtUpaSg7zmH
-	 hZDm2ZAIBjCFg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VFRHD1wwJz4wcC;
-	Thu, 11 Apr 2024 14:17:12 +1000 (AEST)
-Date: Thu, 11 Apr 2024 14:17:11 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
+	s=arc-20240116; t=1712810321; c=relaxed/simple;
+	bh=2QJOCBKT8uqHKXrNRwNb+d1lBDm1dAOBkKyWx0fCqS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NN/EQgmsGNMDWNxUjVTHIzJCQilr2r8Ti3nXMvjfsiig4ZYArQ4aZ+/obJjHX9nT/mF/tWSFMEj08IFudO9qEa0qriaYOkkRR5yeToBFA+Hv6qWzoiEZVPDBZZU3TbNyDxuAbRueE/Rj3VZ6CBUBs6G2/vGR5z7PwcPbkFf0vaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=LckDQ6qy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=auCiEw45; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 81C371380228;
+	Thu, 11 Apr 2024 00:38:38 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute7.internal (MEProxy); Thu, 11 Apr 2024 00:38:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1712810318; x=1712896718; bh=NCWvNXzLHm
+	JWqElu8lx/O63cakNTW+/sBJ2+LV2F62g=; b=LckDQ6qyi8k3r17YxgtthBV2OG
+	uLt4GlPjsSkUw/pvPVBAL7mBUxe2t8KFfdG+RLqEA6caOKLT5OdZuxpt9hBjTM4W
+	6lh4ZiRcmOUe9sKWWpp267iXgFrVlcAQ+40mw+mNWmq3DJp8u1kfk/0ypwQcoQpt
+	+JbbfEo/t6plqBxmoIy6g2ksPM5DC6P74BoGN+KHvBIFB2peQO3WpF6JOpgZ+yss
+	xYECwuGaDHxIqsk14CAR1jrSAbMYkcDNYYr19quX3BgEhO7beJcrTAGrHGA732ZJ
+	MROYGElzOhiYhDAQIJovP1Jcc2Rz7bc6nfioEHoIC5M3mQpXLpEQDNicvpBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1712810318; x=1712896718; bh=NCWvNXzLHmJWqElu8lx/O63cakNT
+	W+/sBJ2+LV2F62g=; b=auCiEw45hGmBwqglKrV/A5NhHYXPQ64N1+sWQMnW1H8m
+	9B5A0z+lYw1RxPR/X1ZzTGYVms1gSRj3e9M/veChMMQvr+I2JFEzW7dgTTKo+Xa+
+	dVb9qZ25GeFlhtfLzP9LO+/WMw56Q8xUPp60/civ+hYOUDKDnmhCFzuysyAw/GzK
+	4Nc+tr76d7WV6b7m2v1hGOHW8nR7NfBgH+9XcKiDIdIES4GbQPhpVDz4l9tRq9h+
+	knQDdlwIW8sbI/hKdGcaD8wkZRskflsm0w6m6bBpCCyeIADoUGsrPnRuiEPonzbS
+	t/X26uCNyLv8cF3aW2FZwiZWWWA4bkWzdTnhH9plhg==
+X-ME-Sender: <xms:TWkXZup1WPQF8NESUunqMhVl6WTKDaGcvFdeK_xgJCvwxL-Ww_MfRg>
+    <xme:TWkXZsqMSGslhaE88ZDnLEgKIIZHQZtEXYbGx-7ZDBYWYsrVYI9wzwTDBU-SucIgO
+    viotL8BHOCLfA>
+X-ME-Received: <xmr:TWkXZjPG-cnjF0bJNFyMCU7W3YWJM9ArHtT6B1Ho19DLdWq7-UjuNAKo8uY-6KyZE5unEkNEsC3PVom7kcAF8QAib5BSenOHVi37mw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehjedgkeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:TWkXZt6hUp1_fOVYtYDpJuVE4ct5R5Luwiuxow5yz_wEaKdHIekOCQ>
+    <xmx:TWkXZt4jiDICQM824uLBeKXZW5VjUWpNq2pDUU63wco0dfHTh2snCA>
+    <xmx:TWkXZthVv-mprY9qZBIXjFw4zV9koCkY3VJeNnIe1hVzKP1lknf37w>
+    <xmx:TWkXZn4uVVMh6wfdZNSl_SyYioBfwJ0VhHtL5wyziUPv8czEkIIWbg>
+    <xmx:TmkXZqxp1_XJpk7qO4rAwpJo8UudWGXZ0XXZVxZ8h6lpCAPcDFFyZhVG>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 11 Apr 2024 00:38:37 -0400 (EDT)
+Date: Thu, 11 Apr 2024 06:38:36 +0200
+From: Greg KH <greg@kroah.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: manual merge of the tty tree with the tty.current
  tree
-Message-ID: <20240411141711.63dbd8e9@canb.auug.org.au>
-In-Reply-To: <20240411135735.58de7090@canb.auug.org.au>
+Message-ID: <2024041114-abide-ageless-d7d3@gregkh>
 References: <20240411135735.58de7090@canb.auug.org.au>
+ <20240411141711.63dbd8e9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LucqT9vVJzOtGmPApdG1c4/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411141711.63dbd8e9@canb.auug.org.au>
 
---Sig_/LucqT9vVJzOtGmPApdG1c4/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Thu, 11 Apr 2024 13:57:35 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the tty tree got a conflict in:
->=20
->   drivers/tty/serial/serial_core.c
->=20
-> between commit:
->=20
->   9cf7ea2eeb74 ("serial: core: Clearing the circular buffer before NULLif=
-ying it")
->=20
-> from the tty.current tree and commit:
->=20
->   1788cf6a91d9 ("tty: serial: switch from circ_buf to kfifo")
->=20
-> from the tty tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
+On Thu, Apr 11, 2024 at 02:17:11PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Thu, 11 Apr 2024 13:57:35 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Today's linux-next merge of the tty tree got a conflict in:
+> > 
+> >   drivers/tty/serial/serial_core.c
+> > 
+> > between commit:
+> > 
+> >   9cf7ea2eeb74 ("serial: core: Clearing the circular buffer before NULLifying it")
+> > 
+> > from the tty.current tree and commit:
+> > 
+> >   1788cf6a91d9 ("tty: serial: switch from circ_buf to kfifo")
+> > 
+> > from the tty tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> > 
+> > -- 
+> > Cheers,
+> > Stephen Rothwell
+> > 
+> > diff --cc drivers/tty/serial/serial_core.c
+> > index 2247efe97250,a78ded8c60b5..000000000000
+> > --- a/drivers/tty/serial/serial_core.c
+> > +++ b/drivers/tty/serial/serial_core.c
+> > @@@ -1788,9 -1773,9 +1773,10 @@@ static void uart_tty_port_shutdown(stru
+> >   	 * Free the transmit buffer.
+> >   	 */
+> >   	uart_port_lock_irq(uport);
+> >  +	uart_circ_clear(&state->xmit);
+> > - 	buf = state->xmit.buf;
+> > - 	state->xmit.buf = NULL;
+> > + 	buf = port->xmit_buf;
+> > + 	port->xmit_buf = NULL;
+> > + 	INIT_KFIFO(port->xmit_fifo);
+> >   	uart_port_unlock_irq(uport);
+> >   
+> >   	free_page((unsigned long)buf);
+> 
+> That didn't work :-(
+> 
+> So I have used the below resolution instead.
+> -- 
 > Cheers,
 > Stephen Rothwell
->=20
+> 
 > diff --cc drivers/tty/serial/serial_core.c
 > index 2247efe97250,a78ded8c60b5..000000000000
 > --- a/drivers/tty/serial/serial_core.c
@@ -111,57 +164,19 @@ ying it")
 >   	 * Free the transmit buffer.
 >   	 */
 >   	uart_port_lock_irq(uport);
->  +	uart_circ_clear(&state->xmit);
-> - 	buf =3D state->xmit.buf;
-> - 	state->xmit.buf =3D NULL;
-> + 	buf =3D port->xmit_buf;
-> + 	port->xmit_buf =3D NULL;
+> - 	uart_circ_clear(&state->xmit);
+> - 	buf = state->xmit.buf;
+> - 	state->xmit.buf = NULL;
+> ++	kfifo_reset(&state->port.xmit_fifo);
+> + 	buf = port->xmit_buf;
+> + 	port->xmit_buf = NULL;
 > + 	INIT_KFIFO(port->xmit_fifo);
 >   	uart_port_unlock_irq(uport);
->  =20
+>   
 >   	free_page((unsigned long)buf);
 
-That didn't work :-(
+Thank you for this, I will use it when the tty-linus changes are merged
+with Linus's tree.
 
-So I have used the below resolution instead.
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/tty/serial/serial_core.c
-index 2247efe97250,a78ded8c60b5..000000000000
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@@ -1788,9 -1773,9 +1773,10 @@@ static void uart_tty_port_shutdown(stru
-  	 * Free the transmit buffer.
-  	 */
-  	uart_port_lock_irq(uport);
-- 	uart_circ_clear(&state->xmit);
-- 	buf =3D state->xmit.buf;
-- 	state->xmit.buf =3D NULL;
-++	kfifo_reset(&state->port.xmit_fifo);
-+ 	buf =3D port->xmit_buf;
-+ 	port->xmit_buf =3D NULL;
-+ 	INIT_KFIFO(port->xmit_fifo);
-  	uart_port_unlock_irq(uport);
- =20
-  	free_page((unsigned long)buf);
-
---Sig_/LucqT9vVJzOtGmPApdG1c4/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYXZEcACgkQAVBC80lX
-0Gx8/Qf/cqHcVPGJ9s7tLH2/0VRucyqoSHABzLgtK0ygtegijIyJuOI+LqsiLRP4
-ETtOyPzeRmBRlw0cN9cB79y8xpaWjHD9Z8pjcz/xQS2Ze8jH5F2NYpZDEowMdIxG
-2qQMuqjp6kkqnFu/uNDWz/Dgvf4ubzKH5tCQe9JdGC04qsh9TUcy4GCJQHUfwOH8
-9oWJgZhNqj7K4YV4viVIXBIgVbY6CRnnjMzNuKpJrpI37rIkyADHOZscZE+Y0ffW
-CLh3k70RpN4IqW7t8F4bQNPp0oxvyv+NYTJXHhGdBPs972g0v9+C/m/oXTe3Z7TE
-9SgQiBdLj5J8KUL0E54usnoMWwiw+g==
-=J0Ha
------END PGP SIGNATURE-----
-
---Sig_/LucqT9vVJzOtGmPApdG1c4/--
+greg k-h
 

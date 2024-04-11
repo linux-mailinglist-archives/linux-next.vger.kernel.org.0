@@ -1,107 +1,92 @@
-Return-Path: <linux-next+bounces-1874-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1875-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10BF28A08BB
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 08:47:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 682518A0985
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 09:17:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5CDD1F26829
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 06:47:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99D3C1C21CFD
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 07:17:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7B5613E023;
-	Thu, 11 Apr 2024 06:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6208F13DDB6;
+	Thu, 11 Apr 2024 07:17:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="un7obRe5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mxP41HbU"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041B513D8BE;
-	Thu, 11 Apr 2024 06:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA8813CAB3;
+	Thu, 11 Apr 2024 07:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712818020; cv=none; b=B3LI0aqU68Z6QSlyJHJrDBAUnMSkT+FzrT8W+p4UsXTu5cuDzEIL/BYcAukJZH9kWVV5I9gRYkwIRtS2eXK3MWbVN0tzHcWSW8ne26QU089HO79u0DtvOj1i2EDcWANEAf/NjXtxMMzYPy9NMHeI02PfUWqXMvTAzCL+X3S5zGU=
+	t=1712819855; cv=none; b=RGoHtyvfKOVZkKPW8M6W+Nqi7rDarVv07hTF6cmvR/nt9rCrUKwSGkeJrsRTowcIlGQWRf8aaX3Y32PdwqCl0fbvHTdRMyN0jWDBo8dRADcmAIP8+92mX17Cq9QJE4jzSTpwKQrUBqyncehKvwcC+6meij0lxpR8zdTDNG0PE4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712818020; c=relaxed/simple;
-	bh=ycsytKfJK6t7NOr6jPcN6Fm+AqSm01T0ZZBdzwiB6dM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Z5TvFENJRCNHkpF3SyyLZxYvvotm65bTYSEusYihjzd7ewnNpyXwcAIUsVAZaeOp/4+ES4fd+AC8FaqCYcnywstudGqsmG2b7lxp6sinX9B956/9GNSNLQCYCp1a/eE794fkc3/E3aTir5GFjG3uWn/n0tQOGWpLpGE3KeraIhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=un7obRe5; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712818015;
-	bh=GQC8k/W3Y7vUrOqYNyhfKiTc49l/e+bbC4LzTGQHhlo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=un7obRe5JjDn1QJ2uLXC/VYRATuD4GpHW86j0giLzcsLvWtM9mWFmVbE5B1VDyGaJ
-	 IXsAKeysuUjQNSGKRkorCVHTncGmnZ1SfWwKISf1TLKQ685Ple7BQ9jflnFvUX+/Mx
-	 J1wGm8cVRdmNgkIYswHERHJqPzL/8fE3NgwQJEsRCnGtdT9UM9AvfGfrhfSPxYdPYT
-	 MR8crjaWYvX7fznY6/PgIzKhWAmMqurZzEMOI6FFTt1jRAc4W7ilVVdhSXcI37ZI+p
-	 3Q/JQdOzQ0Y2GqaH9OY3d4Y7lq32q8eLMwj/IyFEjsuHWjPKffteP9oZhiwSss42ks
-	 z3VXd5o2yVkQA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VFVbz519Jz4wx5;
-	Thu, 11 Apr 2024 16:46:55 +1000 (AEST)
-Date: Thu, 11 Apr 2024 16:46:55 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the rcu tree
-Message-ID: <20240411164655.781a57d3@canb.auug.org.au>
+	s=arc-20240116; t=1712819855; c=relaxed/simple;
+	bh=mK7+2Yx5EdW3ebbUvwkBMpMnF62TBAbCt0KJq4syyLA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ue07x/PWekJp5mzGL1nR75lfJSDlho2ySE8Z6A+WQvP3Xjl02NjbQAWC7hexi/JszGvE4v7edu+oS0xSE4HDpdK2uRh1JktiWBt8+bnmsTiezeQCKgUHTGYkqC9krfBq7U+jiTOXdAVSAvQiCGAXhi3jTaC0penCbQgGEYLugxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mxP41HbU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 698BAC433C7;
+	Thu, 11 Apr 2024 07:17:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712819854;
+	bh=mK7+2Yx5EdW3ebbUvwkBMpMnF62TBAbCt0KJq4syyLA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mxP41HbUsHeHx8gmclfHe27Cs5AwM6Ze+0bJWuPpbhsLbXw2PUYYaxwDP2VA6XFaU
+	 MMFSxefVai/53aPaRkLzvqfZZDMCkJP6X4nbIi5CyXwVEGDflxjkl9Ed+Bh972lpR/
+	 VDQ942cONfqhySljR1fJVO2uwW0eGdh3i7QmeN8Uib503CPrKNK8ky37Fozcsdnx5b
+	 HoISMOeX+iic3aB2n42r5dtXAqg2qtQ3mnP9FBAJR6lTsN46s0QbzjIpDofCE9XarH
+	 ybq2ALaYSuPw83DdrBd40OpGU1DPWtU7gB94b/SDefrVmAgVRrSRkN4AbZAZsY426/
+	 XOAkSpDi7IOUA==
+Date: Thu, 11 Apr 2024 09:17:30 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the hid tree
+Message-ID: <lzv35zlbbaceu3kizexdvitywdoj3adwcg7vyuzyuz6tgaxiqi@qmuqplm5iluo>
+References: <20240411105131.7830f966@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rE8LfDGL.hadOQUIHXl.46E";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411105131.7830f966@canb.auug.org.au>
 
---Sig_/rE8LfDGL.hadOQUIHXl.46E
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Apr 11 2024, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the hid tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+> 
+> x86_64-linux-gnu-ld: vmlinux.o: in function `hid_bpf_input_report':
+> (.text+0x1c75181): undefined reference to `hid_input_report'
+> 
+> Caused by commit
+> 
+>   9be50ac30a83 ("HID: bpf: allow to inject HID event from BPF")
+> 
+> I have used the hid tree from next-20240410 for today.
 
-Hi all,
+Sorry for that. It should be fixed by:
+https://lore.kernel.org/linux-input/20240411-fix-hid-bpf-v1-1-4ae913031a8c@kernel.org/T/#u
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+If no one complains about it today, I'll append it to the HID for-next branch.
 
-  56544e22cc3a ("fs/proc: remove redundant comments from /proc/bootconfig")
-  e6f3a323fcfa ("fs/proc: Skip bootloader comment if no embedded kernel par=
-amete
-
-These are commits
-
-  fbbdc255fbee ("fs/proc: remove redundant comments from /proc/bootconfig")
-  c722cea20878 ("fs/proc: Skip bootloader comment if no embedded kernel par=
-ameters")
-
-in Linus' tree.
-
---=20
 Cheers,
-Stephen Rothwell
+Benjamin
 
---Sig_/rE8LfDGL.hadOQUIHXl.46E
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYXh18ACgkQAVBC80lX
-0GxjKQf+PB0/3uhRvOYkmjXt3ZXD19XAWr6PYwybbY+B8d9Z1VStM2yK8sVrJlip
-BJowCuEjSb9Vm1HHtTgvby5yGUlyTLD5pALjcrl0oWTLgBIY/jff86lTGm5lDXgN
-Bh/y7yhAcJT6YhdYzs0ih0NMFHG2rwgFbJfY5e8J6CCQeJPvfClgmqI7yfe0ijQz
-jfPFBQSWEHRpt5ylc5mZIFMda3SPSWQWezv5OCtga7GrcFW76RZ+pLlVUcoFQbTJ
-LRsDHvIBRcgsmI+2Q9nlrq47W9sAz5MuY4aKPqo/3IbCeg1TVcr93Qjeh2DXTzd6
-qbTy3eXnB9Nwm0tvv+065bNbzwdEhg==
-=mBps
------END PGP SIGNATURE-----
-
---Sig_/rE8LfDGL.hadOQUIHXl.46E--
 

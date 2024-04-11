@@ -1,101 +1,112 @@
-Return-Path: <linux-next+bounces-1885-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1886-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F56C8A205C
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 22:44:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 373308A20F3
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 23:34:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 301541F23A9A
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 20:44:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68F531C221D5
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 21:34:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D76D199B9;
-	Thu, 11 Apr 2024 20:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D3A63D0B8;
+	Thu, 11 Apr 2024 21:34:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDQpnlld"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="b3cMzLWA"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15021865A;
-	Thu, 11 Apr 2024 20:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1323BBE3;
+	Thu, 11 Apr 2024 21:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712868269; cv=none; b=aDKlB+IUbQ1hVmPjITRAqn9eya1stIcz9bGsKdOUW+VwYNNP243HX1hzFbdrg5jXCYHI3lN4LNCVgVDN8YtMzEY24rI3ZTbo2ej5wifoGK0UAyikvrfeEieUQjc+SL+Ns7uN2jr3UC3hgeb9lTWH2ARC+LqVXsYHiHKXfqC1lCQ=
+	t=1712871269; cv=none; b=cKt5wJq5BVCLbQbEyB8VcCWwDFpxndjv9jh2sahzXwh51btBYpxPEpzIizuE5BIjBX9fuNIdtompf+45rXIUs7M+L8dDRvfHanjntgIoGi2SYn59/Ok+/+9Fra6PdkIX4T9//zmkSDL7vCKRd7gR6dpaOy2Ss26ZwzetddLjDXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712868269; c=relaxed/simple;
-	bh=sJRicuIMdyPXST1iBQBaTpdPs5znDsy3fUbKNGxvvP4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jE993pWlzNdSaQenq+NSmCrUAs+kPGthCZSqsNYER8jXMqLxiQLGvJGyZUL4Wp5Itmxen2xu5gJvf+taPyh+YhiM+wBOqHScC5rFMBp3ygE69s9KTHoQ5JZfTKL9Jukp1JUb2J3Ry+7HUVpY3+Ah2CBAjwyOpZ7Wx2An/0BCh8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jDQpnlld; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2a2d0ca3c92so181989a91.0;
-        Thu, 11 Apr 2024 13:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712868267; x=1713473067; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vC6CFfrU7nNG00X2ZGZqSPYkqlRpBYfzzvwanWOLN0w=;
-        b=jDQpnlldzjEKWuaaZXfC2OIHSqJ4gqMcF42HQs/xGgJYuZA5AeWMHJYmPBbuXzBQ2d
-         HGt8Mp0G4VxWauUt9ZA6LcPnIiVh1OsufkzcDRIeajxjiftutouDGz50k/4/N+6Pk2SL
-         7bgtMDzNwVC9OWwVGnlsEpi38zVIXsqRWhXKalHEPgn013RD9wbEamBGt1pOiV5SvLHD
-         uGJ75bdgmsiddgv8c5dQOqgeWhRu+2AUqYcCJf3Blx1vhSuFEB3srUxqYI6HzyBdj4fL
-         q1QFukweTfvk1yVezbk8YXqROwFiRxtHuY3Sp/qNq0kXWhWeH7JYvb3dQkcm+2qAw5nI
-         wNrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712868267; x=1713473067;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vC6CFfrU7nNG00X2ZGZqSPYkqlRpBYfzzvwanWOLN0w=;
-        b=IzKEJFHzumDhass2aGsDRIMDcD+GwOzeqmoeajdmwK4GOus1RaJGl99hrJQLbtRSm+
-         EAOIy425DV6jZu/F7k9KKQqB5UeuRI5V0PY16vmuKftrMC8ARRAbn6sGkWfE1bhtMipE
-         Bjzd1c0r50WX8DLlnQl4yvTp9PeCgQcQvpiKKx+XG8qt6XBCV8EK16QgIpqS89+btdeu
-         yG/ibO6BUuMnpIhNKOWaAgISEWAO3F7cP62VXOqccobrwdOq0EB9sq+0wTuSaSKKbEN0
-         RhbUKJigQXb0nSFpIqGZjrAGv74csqbMURsF6+oL4Kzn0l8bNuTO1uY1hl4VcegQ8ODH
-         Ccyg==
-X-Forwarded-Encrypted: i=1; AJvYcCXKXGH7oO7FdNK2gJwXJUzhbtQsYr9lp2tH2W5msSfEpq0FkqOsFjfV+KY4mlJ1d3kn9ws788tRRuMtEZ1BP9o8Dg5v65Z9RCMSvxM/Tkmh5hMgDRm6M6jti9Dz0mI4I23XGQnCwd9+4Q==
-X-Gm-Message-State: AOJu0YwjIaFiQMnUDGmfjmcFrB/Fxgq/Ch+iXmA08kUpGM9gy3OErv7O
-	PBSPcCuHH087+QsoSeuHMaUXqKpWTIclpINj24SVTTJy1Rp5mQLwoMaYdyqVA9Ony7bURP84zPQ
-	CBusNZdM03kkvguD4IA9BVMnTFKzm2g==
-X-Google-Smtp-Source: AGHT+IGiQm77cSB4QuSfQ02Bfp5Rm6BkGApg0uafJ0k/8V2knSJ7Kwp/cNvH2c29/Sa95IMhd1Z6a7OXTecubQVEk2g=
-X-Received: by 2002:a17:90a:df86:b0:2a5:3f30:f5f6 with SMTP id
- p6-20020a17090adf8600b002a53f30f5f6mr1007173pjv.20.1712868267056; Thu, 11 Apr
- 2024 13:44:27 -0700 (PDT)
+	s=arc-20240116; t=1712871269; c=relaxed/simple;
+	bh=W3MvQH8SSPbBSlxe8iZX890gWDzm/xPRkbtRmrpC09A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pW+1nUsyKuVIE82aJaWHNQGXjZaOoDnizwLQfc6Elr36R6/vcIQC8O4M3tPqrPgN6j56oa/oquPtLjVJIcPGY/L9ymEtrfgTGvhNJej/YEmVDyqO33jeQIpqQXmBzw4W+p9BHLDU2fA7l5U1G5w0bcgZKbAutK5qIVIpUrbmZX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=b3cMzLWA; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712871262;
+	bh=bID0WC4uQ435fYxe8ZAH6Gg6WRcTNxszYe3iGagWjjc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=b3cMzLWAagmgp8xd5wIGOLW0iyXDAUu7H9XQXOS2Iq8yWqNShvGBU9Hm0sxLlTZCl
+	 CzxaHOhhBnYzFscXyP74egFsMXV7T20DiFBBnFSaaOCNx577WpxdK+Qss1dhh6a8SA
+	 nvkjXXIwjqIogUhftus7gSgITyiCt9N0ydCnpt9sgDs9DeEcAne6t35yA+ldaScy/n
+	 4UBBDzlXLERO154H99dbIeKc44FBciSGdj6Qgii82USfHqvfzXGd+ZDfUMHJZsy0I0
+	 MW6JIqLrD1F4CRqGYl8FWQiP2MD3wsd2JdXjBojpKhkxqE66/3wmU2UQgVL7+1gIn9
+	 fzjylRAtj7YEQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VFtHy0XGQz4wyS;
+	Fri, 12 Apr 2024 07:34:21 +1000 (AEST)
+Date: Fri, 12 Apr 2024 07:34:20 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
+ <johan.hedberg@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the bluetooth tree
+Message-ID: <20240412073420.718fa77a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CANiq72mdRgMuQVD53Kp=hqaoiSNwPVZVSrbbMxRYehi73FZf9A@mail.gmail.com>
- <mhng-7603cdcc-24ee-4b19-b049-64d1bd4151b9@palmer-ri-x1c9a>
-In-Reply-To: <mhng-7603cdcc-24ee-4b19-b049-64d1bd4151b9@palmer-ri-x1c9a>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 11 Apr 2024 22:43:35 +0200
-Message-ID: <CANiq72kMvJAKCbOhYXZgUbfrHjeskRsW_FpL=TkfYa19By64Hg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the risc-v tree with the rust-fixes tree
-To: Palmer Dabbelt <palmer@rivosinc.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Paul Walmsley <paul@pwsan.com>, ojeda@kernel.org, 
-	tim.chenbw@gmail.com, Conor Dooley <conor.dooley@microchip.com>, gary@garyguo.net, 
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/fgP+r/BndnO+Gj+gzxx6AX8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/fgP+r/BndnO+Gj+gzxx6AX8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 11, 2024 at 9:59=E2=80=AFPM Palmer Dabbelt <palmer@rivosinc.com=
-> wrote:
->
-> I'm assuming rust-fixes will make it up to Linus well before I send the R=
-ISC-V
-> for-next (ie, next merge window).  So I'll just call this one out when I =
-send
-> it up.
+Hi all,
 
-Yeah, sounds good. Thanks!
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
+  01841038e1d2 ("Bluetooth: Fix memory leak in hci_req_sync_complete()")
+  2151391668d9 ("Bluetooth: ISO: Don't reject BT_ISO_QOS if parameters are =
+unset")
+  289bfd91fcf2 ("Bluetooth: SCO: Fix not validating setsockopt user input")
+  35d2c39b23ff ("Bluetooth: hci_sock: Fix not validating setsockopt user in=
+put")
+  5a5010485400 ("Bluetooth: ISO: Fix not validating setsockopt user input")
+  a95f9d212d1b ("Bluetooth: L2CAP: Fix not validating setsockopt user input=
+")
+  b191fb7a3075 ("Bluetooth: hci_sync: Fix using the same interval and windo=
+w for Coded PHY")
+  e6bb15dbae90 ("Bluetooth: l2cap: Don't double set the HCI_CONN_MGMT_CONNE=
+CTED bit")
+  ee77912bc0bb ("Bluetooth: RFCOMM: Fix not validating setsockopt user inpu=
+t")
+
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/fgP+r/BndnO+Gj+gzxx6AX8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYYV1wACgkQAVBC80lX
+0Gw5AAf+JXMBLZycMpyAysHSYsj+XTRHq+Q9A/DDk2x6MW2R1HokcmSRcTekdYQ/
+O6oP9Em9pR3mj1mdntmmwJEm+Oi01zbJz1DQL0iTYC7052IZ/P+f9n88uZ+Z3kA2
+Scw/JEqx7ITsyS2XVnFm5D+9katBMscBRdfqKTIqdvn2YLJN4e4SkLEq0C/m/Lap
+bY5qZq66aou9fiL22yh3KSrh++zuq2nOfPORazigNgnvJXN2bc1rTEIXHsWbzbLe
+jgKXiBhGSWm5XmhjbiD/xmLbtaPqlaE0yoO6Xrt4bMGnoxOIZFDtBppn0Ng5F/CL
+p8+DnSyCkLEGKZys+IdWHneLHcoM8Q==
+=x0Vm
+-----END PGP SIGNATURE-----
+
+--Sig_/fgP+r/BndnO+Gj+gzxx6AX8--
 

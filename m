@@ -1,81 +1,82 @@
-Return-Path: <linux-next+bounces-1882-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1883-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4C698A1FCD
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 21:57:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB5BE8A1FD3
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 21:59:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 166C128B19D
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 19:57:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20B421C22389
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 19:59:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA3DC1798E;
-	Thu, 11 Apr 2024 19:57:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809FF18633;
+	Thu, 11 Apr 2024 19:59:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="MrcYFg97"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="rfoSI3MU"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221E3205E17
-	for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 19:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E333C18041
+	for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 19:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712865446; cv=none; b=JNpjuhH0z4he6ErXTbzBMdt2tOg3WdgrNtq/ymb22Q/WhTyBMaSN/87grsK4sqrIPUY3guVKLRKDj0g8xEb+HooO/CNjYFhrYFc3CieR1YLuRWYpTz4Bem2oyVU4bDM+p0ltnRCXybRLGos4maDAjZTgStrbb2aTZnLnqlr6Zug=
+	t=1712865585; cv=none; b=XQ5t0oHldjkG4EknWgWxWhkVkql+V+l+fI6+ntDuz5gjUsZuMPcmKlascdcOwxUOSyyGUUcYMdTIC82q57BJbTzSKy/jiZfZ6LVNSUFdl/mD1wbLrADdtmHxnnh1Ml0VJrwIrUJvL1LUsssNsCw3D1aRSVvekvGNUq14htNvBR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712865446; c=relaxed/simple;
-	bh=qX84F/lXaQ1PVH00KjcK2IThFqDOeXh8hk0g/UzpyPw=;
+	s=arc-20240116; t=1712865585; c=relaxed/simple;
+	bh=dW8XAmqM7eeyW4vgfPztKLtEUda+8GEk7kYd6Pd6ni8=;
 	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=J+1k1Aa2cLYabe9N+5Cr/oP9kDbg7Ar6iPNt8QF90PeLORwDTUFb2ZcvVV/jGYfmySvZSwI2hgrZPXT/3EdYrNRNEK0PtcE7sOG613fU3gkWOQ2vixzPvsskVPBuvYNAbITPO9B9gTC2umd24qSyDVJP4XD+nthLWzmHv2zIQBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=MrcYFg97; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6ed2dc03df6so225957b3a.1
-        for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 12:57:24 -0700 (PDT)
+	 Content-Type; b=F0FPPtG+hz4sSJ8RZ2VOnP5FsXX0/gUK3LUqV7r8dMOE3lWosrx+5DxnEfKjYu+903lIvQd8PqwMSG0BuzXa/QKFGJnVcL3MO79INhJ1jbM5vEqRYMfrJLC6dQgOc0JiO/Qi72atN5/DNnwqCDaDXAOfJ+mKsFfSCmpg0ugCSHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=rfoSI3MU; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6ee12766586so152427b3a.0
+        for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 12:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1712865444; x=1713470244; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712865583; x=1713470383; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ASuWKF1IyVny77juPKeYhHIQgdscvqAEKvf/s9kut2I=;
-        b=MrcYFg97/G9J5mWBaBeiWE4JECOHIYPO5NS+0/90qBKGd5tvfYoQx4fDFMeHk1ZeK3
-         sjNq9XTz094XnYQSvvDj5mDyEpzcclvBxDbh3q9aSjk1QnXr2zdo60Stss5l0Dzg61Eg
-         Iv1LXIq+dJHXEwZ+gQW5+kLzeU7PmwQ9HY1crQAFOYmdQKGcQpLG5bX4cKx60jV0bRkN
-         Khni4FE0BSRNp6R+0USuNWzu9sGxYPsFZfMVfD2yWXh6uvi9PiM7yWQG19qKOhBDehAX
-         GwB+CQ1vcF5/tJjG7pr8ONWJ5NnTfw/iKZW6GXAS9xPei5y5Ii8zlYe0P8nbSbYr8OnO
-         VjaQ==
+        bh=FjT+6o0lq0aPcW1oUwnjeSeQ1BXltNR4mobET1Ks5iw=;
+        b=rfoSI3MU9PoLxX3Xl0qnpQORHr/yIeoBU7PnqNW6Yzef92nCw81UmEth8M8EJbrbrS
+         VxdvZ1yxEw1Py9eRkeSbhfro0sglx45suuGPP0zY7gVLrSx/pSLdJ3Jzuv9cbhNOq/Q3
+         Swl3RxVgPt3ZpESg1hYiBbxTmSi5HWll2ySVF5xq+kFB0uNQLIyJG3cnuuXirlxDlIlv
+         twh5Vx3a0bkau2OqfkMDS1ghTY0z+dBqGBXFSjv9TmNvFMF5TpgAsPGRZHhxUqOTzCgZ
+         NTDeO6mtilg+eg46982T5TXHUaqG+9M0No6llDMRmxHdM05eZk9uhkasHes3NZSVvQSW
+         u5vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712865444; x=1713470244;
+        d=1e100.net; s=20230601; t=1712865583; x=1713470383;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ASuWKF1IyVny77juPKeYhHIQgdscvqAEKvf/s9kut2I=;
-        b=Kz7knj4Ny9GpaRiGZcoE9KBXKsKjJZQzCTi3SZoK+Z0alp2hFfPPo5cNKg7BGK2LY7
-         N/XjlM40ytHXkwE8hf0vkIDnarsZ0DLGDgqWKowTVT/gzC9TVC9lyyF2NzR+HUdbIu8q
-         ZFPOYCi2aPH4dDSXVsuAkF0M5BmLDEvpYqli3XMhPwiauMAt3r7Rj/+sI/bxZDjdCSIA
-         la+LZzB8t5xtegDFXBrBqtYXy5s6cJvPVSaKY+ouxQ2fAXHzhwpSDiZEvoqmgkfHvOYU
-         sMig2dgOPdaTT7kKcmWTi6LilOcWAKT2EZGyLYd++4HQvUCm8r4ZJeOVJfBBYx7AQkBB
-         q5bw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2DP9IIQWRIbdR23+h409iKQDhbHEei1mCoHW9RB4Ok9CAX4CwfA1PKNW1iKvSzJQ/xBXLBHLUXpqzYaIFoC4r/79oyjK5Cvl1mQ==
-X-Gm-Message-State: AOJu0Yx/49QziCwfpPwHmNUZ3rXVmPEFz7mGUPIALBeaSDMrZHhLnfQn
-	aIsLKalUruONnluhxFy0EYJrRqEfHPRdEFpxf/rBTxuS9ryS312y6c2u7+9/oo0=
-X-Google-Smtp-Source: AGHT+IGoeWkdZaGSZlUIvJ4+wlGVepb/0/HzuNHkaPvH2S+cbxddwGFXFYFQo0xSCJHBhfC++htiGA==
-X-Received: by 2002:a05:6a00:1a94:b0:6ec:db05:36d2 with SMTP id e20-20020a056a001a9400b006ecdb0536d2mr801820pfv.4.1712865444236;
-        Thu, 11 Apr 2024 12:57:24 -0700 (PDT)
+        bh=FjT+6o0lq0aPcW1oUwnjeSeQ1BXltNR4mobET1Ks5iw=;
+        b=NPxiALAWdVWw3cd3vkLfQxnq3DR4EIwnxMbuQ58clX2D4ZsJmG9ps6D5BURGh7SdN9
+         iDoF0fX6M2IuRwuUpTqBVVVrDAPoMaeW41J2UQ9CCWPplCaqjG/kHEQgtZ8PHFAma/lf
+         IryEnfdzG+XKuXAFsXqu4GoAqzCQKCuzXtTn+oiFjwNXdlTTsrtssaXNHk2ul+D9Ob9c
+         8XyDAa3CZahq1uQbAdjX3pE+S59NyScH7eYbMaD5MpssFtSwRgDb6FQ1ITrtxFysdvUk
+         Fum5Y+0H62xfXcq9AuzSrQP0YYe50nKVhR7+gDOqVySbdduq2KpTXeOiUigWWx7hnCxH
+         pc8w==
+X-Forwarded-Encrypted: i=1; AJvYcCWGwSEswbc75N8c7LNOXJajWWpVbUHV3tbD7YzjWncuFhUs8mAT+Cna2jlWCXSUs8A3wL17bI+Y8VFaSSHpH7rgBCLK75YC4VxhTQ==
+X-Gm-Message-State: AOJu0YxFeixQjH9mNnjqND598s2SoDT8QEptKRqVVsqiEZuzXWpSO9EW
+	NVPR6T8XEbm9Itxg5BSALE399fjt/8ifc+W+HpJa6oT/qgCuHtwfFVLFBGSpGFI=
+X-Google-Smtp-Source: AGHT+IHx+CIoxL14UTCSROAp5Y5aR0T5W2Mz/yPhBy5R39P5WnajKLD/VsBki0J7hnVrX6QyZDI6tg==
+X-Received: by 2002:aa7:888b:0:b0:6ec:fa34:34ab with SMTP id z11-20020aa7888b000000b006ecfa3434abmr844703pfe.9.1712865582845;
+        Thu, 11 Apr 2024 12:59:42 -0700 (PDT)
 Received: from localhost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id y25-20020aa78559000000b006e6c0f8ce1bsm1555237pfn.47.2024.04.11.12.57.21
+        by smtp.gmail.com with ESMTPSA id b12-20020a056a000a8c00b006ed64f4767asm1538680pfl.112.2024.04.11.12.59.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 12:57:21 -0700 (PDT)
-Date: Thu, 11 Apr 2024 12:57:21 -0700 (PDT)
-X-Google-Original-Date: Thu, 11 Apr 2024 12:57:18 PDT (-0700)
-Subject:     Re: linux-next: duplicate patch in the risc-v tree
-In-Reply-To: <20240411080622.0cd5502c@canb.auug.org.au>
-CC: Paul Walmsley <paul@pwsan.com>, linux-kernel@vger.kernel.org,
-  linux-next@vger.kernel.org
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Message-ID: <mhng-e6968c18-74dc-4091-8f0c-6be1437f8167@palmer-ri-x1c9a>
+        Thu, 11 Apr 2024 12:59:42 -0700 (PDT)
+Date: Thu, 11 Apr 2024 12:59:42 -0700 (PDT)
+X-Google-Original-Date: Thu, 11 Apr 2024 12:58:54 PDT (-0700)
+Subject:     Re: linux-next: manual merge of the risc-v tree with the rust-fixes tree
+In-Reply-To: <CANiq72mdRgMuQVD53Kp=hqaoiSNwPVZVSrbbMxRYehi73FZf9A@mail.gmail.com>
+CC: Stephen Rothwell <sfr@canb.auug.org.au>, Paul Walmsley <paul@pwsan.com>,
+  ojeda@kernel.org, tim.chenbw@gmail.com, Conor Dooley <conor.dooley@microchip.com>,
+  gary@garyguo.net, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+From: Palmer Dabbelt <palmer@rivosinc.com>
+To: miguel.ojeda.sandonis@gmail.com
+Message-ID: <mhng-7603cdcc-24ee-4b19-b049-64d1bd4151b9@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -85,26 +86,31 @@ Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Wed, 10 Apr 2024 15:06:22 PDT (-0700), Stephen Rothwell wrote:
-> Hi all,
->
-> The following commit is also in Linus Torvalds' tree as a different commit
-> (but the same patch):
->
->   36d37f11f555 ("export.h: remove include/asm-generic/export.h")
->
-> This is commit
->
->   0316e4b04e01 ("export.h: remove include/asm-generic/export.h")
->
-> in Linus' tree.
+On Thu, 11 Apr 2024 03:47:43 PDT (-0700), miguel.ojeda.sandonis@gmail.com wrote:
+> On Thu, Apr 11, 2024 at 1:43 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>>   =============  ================  ==============================================
+>>   ``arm64``      Maintained        Little Endian only.
+>>  -``loongarch``  Maintained        -
+>>  +``loongarch``  Maintained        \-
+>> + ``riscv``      Maintained        ``riscv64`` only.
+>>   ``um``         Maintained        ``x86_64`` only.
+>>   ``x86``        Maintained        ``x86_64`` only.
+>>   =============  ================  ==============================================
+> 
+> Looks good, of course, thanks!
 
-Sorry about that, I guess I just picked it up as part of the series.  
-I'm just going to throw away the version in my tree, it's a cleanup so 
-it shouldn't matter too much.
+Ya, and I think there's not a ton we can do about this one.  Just two 
+in-flight features colliding in the docs, some sort of shared tag seems 
+overkill.
 
->
-> -- 
+I'm assuming rust-fixes will make it up to Linus well before I send the RISC-V
+for-next (ie, next merge window).  So I'll just call this one out when I send
+it up.
+
+Thanks!
+
+> 
 > Cheers,
-> Stephen Rothwell
+> Miguel
 

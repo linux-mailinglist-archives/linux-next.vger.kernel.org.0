@@ -1,82 +1,82 @@
-Return-Path: <linux-next+bounces-1883-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1884-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB5BE8A1FD3
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 21:59:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DE418A2001
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 22:16:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20B421C22389
-	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 19:59:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BC2CB24D8D
+	for <lists+linux-next@lfdr.de>; Thu, 11 Apr 2024 20:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809FF18633;
-	Thu, 11 Apr 2024 19:59:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54561802B;
+	Thu, 11 Apr 2024 20:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="rfoSI3MU"
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="3Ul7+m29"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E333C18041
-	for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 19:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C7417C69
+	for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 20:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712865585; cv=none; b=XQ5t0oHldjkG4EknWgWxWhkVkql+V+l+fI6+ntDuz5gjUsZuMPcmKlascdcOwxUOSyyGUUcYMdTIC82q57BJbTzSKy/jiZfZ6LVNSUFdl/mD1wbLrADdtmHxnnh1Ml0VJrwIrUJvL1LUsssNsCw3D1aRSVvekvGNUq14htNvBR8=
+	t=1712866597; cv=none; b=qh8diU8hrp++AXoMeu7IxjJ656sL4Sm/ISigiGfR+FRhFk5eIfgQ9fLhIIISq/Ir/2KvnUQBVMlexPuuiC++h0V9pLmMjsQxAZHTdd6Tp7DfIyPKQtzVUrwFknklxLpEeS/A8u/1UZgRxZR8MNKIv0YY0vTZXauFvWJYy6+6fAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712865585; c=relaxed/simple;
-	bh=dW8XAmqM7eeyW4vgfPztKLtEUda+8GEk7kYd6Pd6ni8=;
+	s=arc-20240116; t=1712866597; c=relaxed/simple;
+	bh=FigJPmeeol9aTT8r85nc2virpzTGMjItOeicZjOZH+E=;
 	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=F0FPPtG+hz4sSJ8RZ2VOnP5FsXX0/gUK3LUqV7r8dMOE3lWosrx+5DxnEfKjYu+903lIvQd8PqwMSG0BuzXa/QKFGJnVcL3MO79INhJ1jbM5vEqRYMfrJLC6dQgOc0JiO/Qi72atN5/DNnwqCDaDXAOfJ+mKsFfSCmpg0ugCSHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=rfoSI3MU; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6ee12766586so152427b3a.0
-        for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 12:59:43 -0700 (PDT)
+	 Content-Type; b=RzihqNIptsOpzbWk3PZDiDzAsjrkcdn2TuZj4asJj3fSY8sAmCc+lFZS7GCYrW5l0FleMfVJ+bNw67PG0vXmg5cm0EVzv8KTKtv2TcvkjtyoV56luqjRFrY5E+B3jqW5cAAGBEncJdfaD4jq1Wfb76uJlGlyBq563Y/cU+BjZN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=3Ul7+m29; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e2c725e234so9620885ad.1
+        for <linux-next@vger.kernel.org>; Thu, 11 Apr 2024 13:16:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712865583; x=1713470383; darn=vger.kernel.org;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1712866595; x=1713471395; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FjT+6o0lq0aPcW1oUwnjeSeQ1BXltNR4mobET1Ks5iw=;
-        b=rfoSI3MU9PoLxX3Xl0qnpQORHr/yIeoBU7PnqNW6Yzef92nCw81UmEth8M8EJbrbrS
-         VxdvZ1yxEw1Py9eRkeSbhfro0sglx45suuGPP0zY7gVLrSx/pSLdJ3Jzuv9cbhNOq/Q3
-         Swl3RxVgPt3ZpESg1hYiBbxTmSi5HWll2ySVF5xq+kFB0uNQLIyJG3cnuuXirlxDlIlv
-         twh5Vx3a0bkau2OqfkMDS1ghTY0z+dBqGBXFSjv9TmNvFMF5TpgAsPGRZHhxUqOTzCgZ
-         NTDeO6mtilg+eg46982T5TXHUaqG+9M0No6llDMRmxHdM05eZk9uhkasHes3NZSVvQSW
-         u5vg==
+        bh=MI1lrr2uhxwJR+eCQKQup9QfuAe/qWYI7Ljrnyz9U00=;
+        b=3Ul7+m299p0PqqNmFeoRnx57/6NSLuBQBefAd0mBuWNXvrS6+NdjRv/mdc4iZve0aU
+         RPtlLMFkB2yKoY4DCEYSUlD6aKYyurMGdccerptNqD1eBi0NhJDSEN9benvZcWghNGYi
+         iDUEOsZXlIdHOSUULFRbADQCF4Ac9TGKE+kWCnDZ62+Ct+Mktf2heRKEqLV4ctfgun6S
+         tpyA4Zbeir3M1itx29XGHIbafgmeNRukYkJulXqcnX0PUwiRzRed/bFDx1/Kk1p61RwW
+         SDToXYK0Ci38Gswaff15gCNbi3ZXwyl0kOm1lytJ0vJIWsXsU/bLWvXilH0jprMSYUHE
+         RgNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712865583; x=1713470383;
+        d=1e100.net; s=20230601; t=1712866595; x=1713471395;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FjT+6o0lq0aPcW1oUwnjeSeQ1BXltNR4mobET1Ks5iw=;
-        b=NPxiALAWdVWw3cd3vkLfQxnq3DR4EIwnxMbuQ58clX2D4ZsJmG9ps6D5BURGh7SdN9
-         iDoF0fX6M2IuRwuUpTqBVVVrDAPoMaeW41J2UQ9CCWPplCaqjG/kHEQgtZ8PHFAma/lf
-         IryEnfdzG+XKuXAFsXqu4GoAqzCQKCuzXtTn+oiFjwNXdlTTsrtssaXNHk2ul+D9Ob9c
-         8XyDAa3CZahq1uQbAdjX3pE+S59NyScH7eYbMaD5MpssFtSwRgDb6FQ1ITrtxFysdvUk
-         Fum5Y+0H62xfXcq9AuzSrQP0YYe50nKVhR7+gDOqVySbdduq2KpTXeOiUigWWx7hnCxH
-         pc8w==
-X-Forwarded-Encrypted: i=1; AJvYcCWGwSEswbc75N8c7LNOXJajWWpVbUHV3tbD7YzjWncuFhUs8mAT+Cna2jlWCXSUs8A3wL17bI+Y8VFaSSHpH7rgBCLK75YC4VxhTQ==
-X-Gm-Message-State: AOJu0YxFeixQjH9mNnjqND598s2SoDT8QEptKRqVVsqiEZuzXWpSO9EW
-	NVPR6T8XEbm9Itxg5BSALE399fjt/8ifc+W+HpJa6oT/qgCuHtwfFVLFBGSpGFI=
-X-Google-Smtp-Source: AGHT+IHx+CIoxL14UTCSROAp5Y5aR0T5W2Mz/yPhBy5R39P5WnajKLD/VsBki0J7hnVrX6QyZDI6tg==
-X-Received: by 2002:aa7:888b:0:b0:6ec:fa34:34ab with SMTP id z11-20020aa7888b000000b006ecfa3434abmr844703pfe.9.1712865582845;
-        Thu, 11 Apr 2024 12:59:42 -0700 (PDT)
+        bh=MI1lrr2uhxwJR+eCQKQup9QfuAe/qWYI7Ljrnyz9U00=;
+        b=p9ONeAV5RfIKdoaEFQTPnnyaeIcHUzUTrBrUsw9qmSKXWbZR0LZ8herdL1GfqNO7oG
+         W27y2FQuK5fvM9cJBox+/VMBc3PcNxTUrCqRPgpVeJuAX36B3TJOmj1QNIxSasjk88De
+         /um58PQ0T6k1ZlQc/m8xwOgDTkQeDwc0DVr1ZGHf84H1IfUg+NV6YGspyl19jvr7X9Bo
+         bjvU68hn6y5GaG27aG7jD8jCe78X48VLc9RcVR0U1JxfABRL1qpRhr+R77rGp+o1MwZL
+         tVueAB2x5PuJWySjjWrCxJ/OGfeMtI4NLBfT0kEmCC+d01juStoUAUD7/zlqeJzqHRhH
+         a9Fg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbNG5Xy/rijlaDTv/oGU5n7/9RPJv6gSvAtDBMBXyep534ajq85B0ba/h7ip9uoBY8n8Cayz40TJw3BGUQbT1yWLwicjxMFHXL6w==
+X-Gm-Message-State: AOJu0YwciNOcIT4TgKi/SzxaA516TzwWYnAGR5EgCVyv4WQToVZCw+yM
+	aGe/vxzgHDNfZrl8a1EhaHVOcFqnQ6Xx+g9em/wirkzMxIQQ80w06TKrZUX+7L+BJrQMDQpGV45
+	+
+X-Google-Smtp-Source: AGHT+IFccneSwJaJyGfCasupHSlPcb2gw+0X/vWttGvs1X1hMf9iaiQzERVC7/I+eNsLdsBCcZbteg==
+X-Received: by 2002:a17:902:e80d:b0:1e2:abc5:e28b with SMTP id u13-20020a170902e80d00b001e2abc5e28bmr1009284plg.19.1712866595166;
+        Thu, 11 Apr 2024 13:16:35 -0700 (PDT)
 Received: from localhost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id b12-20020a056a000a8c00b006ed64f4767asm1538680pfl.112.2024.04.11.12.59.41
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902ab8400b001e512537a5fsm1576849plr.9.2024.04.11.13.16.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 12:59:42 -0700 (PDT)
-Date: Thu, 11 Apr 2024 12:59:42 -0700 (PDT)
-X-Google-Original-Date: Thu, 11 Apr 2024 12:58:54 PDT (-0700)
-Subject:     Re: linux-next: manual merge of the risc-v tree with the rust-fixes tree
-In-Reply-To: <CANiq72mdRgMuQVD53Kp=hqaoiSNwPVZVSrbbMxRYehi73FZf9A@mail.gmail.com>
-CC: Stephen Rothwell <sfr@canb.auug.org.au>, Paul Walmsley <paul@pwsan.com>,
-  ojeda@kernel.org, tim.chenbw@gmail.com, Conor Dooley <conor.dooley@microchip.com>,
-  gary@garyguo.net, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-From: Palmer Dabbelt <palmer@rivosinc.com>
-To: miguel.ojeda.sandonis@gmail.com
-Message-ID: <mhng-7603cdcc-24ee-4b19-b049-64d1bd4151b9@palmer-ri-x1c9a>
+        Thu, 11 Apr 2024 13:16:33 -0700 (PDT)
+Date: Thu, 11 Apr 2024 13:16:33 -0700 (PDT)
+X-Google-Original-Date: Thu, 11 Apr 2024 13:16:31 PDT (-0700)
+Subject:     Re: linux-next: manual merge of the riscv-dt tree with the risc-v tree
+In-Reply-To: <20240411094901.2130c36e@canb.auug.org.au>
+CC: Conor Dooley <conor.dooley@microchip.com>, Paul Walmsley <paul@pwsan.com>,
+  linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, masahiroy@kernel.org, cyy@cyyself.name
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Message-ID: <mhng-ec3820b2-2b47-4d5d-af2b-8d0f349336de@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -86,31 +86,57 @@ Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Thu, 11 Apr 2024 03:47:43 PDT (-0700), miguel.ojeda.sandonis@gmail.com wrote:
-> On Thu, Apr 11, 2024 at 1:43 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->>   =============  ================  ==============================================
->>   ``arm64``      Maintained        Little Endian only.
->>  -``loongarch``  Maintained        -
->>  +``loongarch``  Maintained        \-
->> + ``riscv``      Maintained        ``riscv64`` only.
->>   ``um``         Maintained        ``x86_64`` only.
->>   ``x86``        Maintained        ``x86_64`` only.
->>   =============  ================  ==============================================
-> 
-> Looks good, of course, thanks!
-
-Ya, and I think there's not a ton we can do about this one.  Just two 
-in-flight features colliding in the docs, some sort of shared tag seems 
-overkill.
-
-I'm assuming rust-fixes will make it up to Linus well before I send the RISC-V
-for-next (ie, next merge window).  So I'll just call this one out when I send
-it up.
-
-Thanks!
-
-> 
+On Wed, 10 Apr 2024 16:49:01 PDT (-0700), Stephen Rothwell wrote:
+> Hi all,
+>
+> Today's linux-next merge of the riscv-dt tree got a conflict in:
+>
+>   arch/riscv/Makefile
+>
+> between commit:
+>
+>   3b938e231b66 ("riscv: merge two if-blocks for KBUILD_IMAGE")
+>
+> from the risc-v tree and commit:
+>
+>   ef10bdf9c3e6 ("riscv: Kconfig.socs: Split ARCH_CANAAN and SOC_CANAAN_K210")
+>
+> from the riscv-dt tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> -- 
 > Cheers,
-> Miguel
+> Stephen Rothwell
+>
+> diff --cc arch/riscv/Makefile
+> index 7c60bbe1f785,fa6c389c3986..000000000000
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@@ -143,15 -133,7 +143,15 @@@ boot		:= arch/riscv/boo
+>   ifeq ($(CONFIG_XIP_KERNEL),y)
+>   KBUILD_IMAGE := $(boot)/xipImage
+>   else
+> - ifeq ($(CONFIG_RISCV_M_MODE)$(CONFIG_ARCH_CANAAN),yy)
+> ++ifeq ($(CONFIG_RISCV_M_MODE)$(CONFIG_SOC_CANAAN_K210),yy)
+>  +KBUILD_IMAGE := $(boot)/loader.bin
+>  +else
+>  +ifeq ($(CONFIG_EFI_ZBOOT),)
+>   KBUILD_IMAGE	:= $(boot)/Image.gz
+>  +else
+>  +KBUILD_IMAGE := $(boot)/vmlinuz.efi
+>  +endif
+>  +endif
+>   endif
+>   
+>   libs-y += arch/riscv/lib/
+
+Thanks.  I guess I should have looked a bit closer before Acking, but 
+I'm not sure this one warrants a shared tag or anything -- it's just 
+some Makefile refactoring that happens to step on each other.
 

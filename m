@@ -1,119 +1,111 @@
-Return-Path: <linux-next+bounces-1902-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1903-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 585E28A257F
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 07:12:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52E0A8A25DB
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 07:46:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EA171F22ED8
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 05:12:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09652286FF2
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 05:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8BD43611D;
-	Fri, 12 Apr 2024 05:11:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D6C1B974;
+	Fri, 12 Apr 2024 05:46:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qR1sBwC3"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iUQ3Io8O"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4A62C853;
-	Fri, 12 Apr 2024 05:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C902CCA6F;
+	Fri, 12 Apr 2024 05:46:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712898713; cv=none; b=QktrmGcUNDi9NRP22uSa67d+5K97t2XjstpmsCcsTfRbZwPu6ieATa4V2sgq6XjtH+CZjWb+ospjtn/X1PP3+dz7AqH4JnSY7V8U4fGavUE4H22/YBcPOsWUWM5svgAejRdYQzmGezZnmBSvID0/wXkkTJxj2IANiGnunWxm/44=
+	t=1712900776; cv=none; b=Gln9dQCadxFi1hMVNEzA5mIBsk0mstO2oujyyz6uKjtk9nqPDyo2zRqpix6UmbgZkz/s9dEOD4TuVWiuJrj0rYOwuS4GTaBUZD0/Iu6EdHrMlBodFFKqaS707rQEse1I2KrsNqZFWuGdmpMrAwYUTpRVNb3gIgaF95RyyWvLakE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712898713; c=relaxed/simple;
-	bh=ckxiAva6NtfOVZb76KvA2/vT+MZfq8toz6Bf3K5O6wI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tzQT9hweMS/dzMbo8wlxcfkP95Of6A8UWiL1QMcbw47T1ZZrub62lu65oNlizkLHgs1OrB6MB3UR6XncAS1S90bMyIzeSSejqORQJgrVPkbmitGaitBCj4mUnPogAaVtnpnC2b1f3mwnDj2RGSSkgq9OwOyFvYtpyOy59MKsFHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qR1sBwC3; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1712900776; c=relaxed/simple;
+	bh=rXIK8VtkdhVmsAblY71GsUzQ8Dd21JdSDvf4s/jax3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dgrLsxS+QSY7KOPHUHs+MtuvBw76PON0dSY91fiXl3XneA3XEl/yLEVa8oSPEfGagQnMBeNe0QJWYr+KzCI5xb0gvuSQtdPMnIOiEGthBs7Rs6ZMXWv2uVJyOxmgYjyN0/AYvyOiWKUjCM3hyPkd3zC9Jp6Fji3Ug8Pp3YNIvCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iUQ3Io8O; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712898708;
-	bh=FZe94IGm60i+wrx7mytputrazrpPG+SV8qrIZglowmg=;
+	s=201702; t=1712900771;
+	bh=gvQoxZ4IJnyUZsu/Lle10vTyY6xNeFLmwmCbgC0qlrE=;
 	h=Date:From:To:Cc:Subject:From;
-	b=qR1sBwC3vlTfLWyH1uiHI/UnlIjSUoWhZo4szCw9EytXnnGp5ceQSEJd85as8Gkbt
-	 +XaEiifvkeZDFJ0+GhDu09rV38JCNN+NNjsiJT8QDMwPtUmREQ0FrLyYNvoZ7H8k2/
-	 vRlIjdpgTGdrzjW1iyochicBCcyAyX/s+FPiNtEYP4VXk61LfmDoH4fPClufNaTnNz
-	 Ld4fXMuYxQ/WeABNBrRn9g/J1MHYzXKlyc/DVKhShZfvWEcUfTk+t4mmdxJR21u9Ag
-	 dw8DVvlS9go4r5Oo4wMrBus9Sej8xdR3kYYguMzuWMtui9HmNFhJeHcEMxqCacpjW+
-	 zA74AT67Xko0g==
+	b=iUQ3Io8Ohuy9OStDWFQUkx0+ZVEmHRyFwGW99RuEOUGm927paEHRNhKNV/VKXdaei
+	 gacINKWq6bU12tfMG8y6gybzNe9Kuwcckl3Z56R2+GrQ1DshCm3IvNJxw9wmZ7ohTM
+	 bR5rPSqqH3/r/0/GPE3LLFyJtje4sxXN5N34/GF0D9FwjMWOSez9PItPg9P5sylJxu
+	 0jXQafw8zhj0K6VKawmlGgCrEj54Q5lUGt8CqnUlvY8TNOQTsg2reggzqB3n+Byk7w
+	 TMMUHWErIAQSkaIm4y/KM16krYXQbRtbb0kXQUVNcL2a85q6iETGUAFXsIL/kn898Y
+	 1QxJv5gb67pWw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG4Rl6HY6z4wx5;
-	Fri, 12 Apr 2024 15:11:47 +1000 (AEST)
-Date: Fri, 12 Apr 2024 15:11:47 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG5CR0383z4wnr;
+	Fri, 12 Apr 2024 15:46:10 +1000 (AEST)
+Date: Fri, 12 Apr 2024 15:46:07 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>, Wu Hao
- <hao.wu@intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Xu Yilun
- <yilun.xu@linux.intel.com>, Linux Kernel Mailing List
+To: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Christoph Hellwig <hch@lst.de>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the fpga tree
-Message-ID: <20240412151147.22a059ff@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the scsi-mkp tree
+Message-ID: <20240412154607.1b5096b3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eRnw..xp0u8Ga9jNOdmZ2SW";
+Content-Type: multipart/signed; boundary="Sig_/_CZJRndn/WapJE.==_6XcmN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/eRnw..xp0u8Ga9jNOdmZ2SW
+--Sig_/_CZJRndn/WapJE.==_6XcmN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the fpga tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+After merging the scsi-mkp tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-drivers/fpga/ice40-spi.c:201:35: error: implicit declaration of function 'o=
-f_match_ptr' [-Werror=3Dimplicit-function-declaration]
-  201 |                 .of_match_table =3D of_match_ptr(ice40_fpga_of_matc=
-h),
-      |                                   ^~~~~~~~~~~~
-drivers/fpga/ice40-spi.c:201:35: error: initialization of 'const struct of_=
-device_id *' from 'int' makes pointer from integer without a cast [-Werror=
-=3Dint-conversion]
-drivers/fpga/ice40-spi.c:201:35: note: (near initialization for 'ice40_fpga=
-_driver.driver.of_match_table')
-drivers/fpga/ice40-spi.c:201:35: error: initializer element is not constant
-drivers/fpga/ice40-spi.c:201:35: note: (near initialization for 'ice40_fpga=
-_driver.driver.of_match_table')
-cc1: all warnings being treated as errors
+drivers/usb/storage/uas.c: In function 'uas_slave_alloc':
+drivers/usb/storage/uas.c:826:17: error: implicit declaration of function '=
+blk_queue_max_hw_sectors'; did you mean 'queue_max_hw_sectors'? [-Werror=3D=
+implicit-function-declaration]
+  826 |                 blk_queue_max_hw_sectors(sdev->request_queue, 64);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                 queue_max_hw_sectors
+cc1: some warnings being treated as errors
 
 Caused by commit
 
-  5d04660b29fb ("fpga: ice40-spi: Remove unused of_gpio.h")
+  a2ad002485c4 ("scsi: block: Remove now unused queue limits helpers")
 
-I have used the fpga tree from next-20240411 for today.
+I have used the scsi-mkp tree from next-20240411 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/eRnw..xp0u8Ga9jNOdmZ2SW
+--Sig_/_CZJRndn/WapJE.==_6XcmN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYYwpMACgkQAVBC80lX
-0Gx0yQgAgoRAfQYJw5MwUHc55xNs/m1J2IAReeekwKlpJK3GWDbaZ350/tkn1wCq
-4NllF3tnntYjUYWJf18BZx+GM0bci/UMReiILCb0wEIa13TJu3DhU176hxdlxph7
-Ckq0ve4+J2z+Vfh1+2xwSzVcNSecgXEPgpU4kBTMQPO9jSV9oUqbbXQ8elAd5nV/
-nhotpXwCzbmvUFtxDLjEmWTHKjLXJ05ZtG70+KW9m8kcQaZ+eXFIwr0GdN8eF2gN
-285Mjmj73h9+SbZ+T31a4OeQ07MdYBTZ9SNcqBVIl1FDxWmTKjIfBFu6qBtUzQje
-9tKKLhd2RaiUsU9FQzq7BmzyXdtZxg==
-=XnsU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYYyp8ACgkQAVBC80lX
+0Gyckwf9Ft2cVQ9AahQ/8S+qN11b7qVFoGvCOLvWx3xgj1NtwMIWhPa/W9/33r5j
+UJL7+l+pqZLNQrDn1w9FuV/qqf6eYfsGeCA+lTjWMiMrB9lApb4W5sV+JUz7zTNp
+6mnk8T26QBPxf2xqgfZ4oyIDmlIZy5kcw8YRaZNUx/NilRjSmFp3sf7F0Db6IRgz
+oUft4I4ugrORR5T35yOvD0xLFFObnR2YBEZ7lrIZlQTZDV5DtrylLa2bQ6RBxV75
+TmNLY6f6vB4vTyjFErV/3WlCypppETgNLiXjheVhVIdOD/oGPbejIvgs79VibTGv
+0eUg73alKT7WXojzN/+L8UAm78DdsQ==
+=ugdD
 -----END PGP SIGNATURE-----
 
---Sig_/eRnw..xp0u8Ga9jNOdmZ2SW--
+--Sig_/_CZJRndn/WapJE.==_6XcmN--
 

@@ -1,111 +1,120 @@
-Return-Path: <linux-next+bounces-1903-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1904-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52E0A8A25DB
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 07:46:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B05008A2609
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 07:55:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09652286FF2
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 05:46:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 656751F226E0
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 05:55:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D6C1B974;
-	Fri, 12 Apr 2024 05:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604CA1C2B3;
+	Fri, 12 Apr 2024 05:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iUQ3Io8O"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IGAPl25N"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C902CCA6F;
-	Fri, 12 Apr 2024 05:46:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8720B168DE;
+	Fri, 12 Apr 2024 05:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712900776; cv=none; b=Gln9dQCadxFi1hMVNEzA5mIBsk0mstO2oujyyz6uKjtk9nqPDyo2zRqpix6UmbgZkz/s9dEOD4TuVWiuJrj0rYOwuS4GTaBUZD0/Iu6EdHrMlBodFFKqaS707rQEse1I2KrsNqZFWuGdmpMrAwYUTpRVNb3gIgaF95RyyWvLakE=
+	t=1712901352; cv=none; b=FuXRB8JKfY/HJpaoBIr0g3U3F/eJJohb6jAyl7bTpQGjIpgpxdeO0DpZt92SmXjEo9WNzFAiO4FS+c+zJ2A/UEA/cyKm4yZ+0p1n0agmAG3IPKC1VcAl0wjh4Rnfk7F5THBPFjsnIhx2NKJwBsxrD9VrgLmPRHYOnojmDLV6/o8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712900776; c=relaxed/simple;
-	bh=rXIK8VtkdhVmsAblY71GsUzQ8Dd21JdSDvf4s/jax3A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dgrLsxS+QSY7KOPHUHs+MtuvBw76PON0dSY91fiXl3XneA3XEl/yLEVa8oSPEfGagQnMBeNe0QJWYr+KzCI5xb0gvuSQtdPMnIOiEGthBs7Rs6ZMXWv2uVJyOxmgYjyN0/AYvyOiWKUjCM3hyPkd3zC9Jp6Fji3Ug8Pp3YNIvCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iUQ3Io8O; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1712901352; c=relaxed/simple;
+	bh=4Djlf1oRlTR02Bx7PA2kazYcrd2LVrRQ+JBpAn9dsII=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TOLQJmCEZG+EoAJOt/UeBtP1armKHEMIK1PalQaI4rLW1zst2FtTlMsOaWsaK6ZMNJJiOXaASl7JHFx9ApkEJfCCHFuAm/oXlgNYQPHD1TtavzR044SkQ7nMskwrVNfrKrb80/zg/y/5zTzraT8FSHPIUwz6TIarkQW+lyz4TaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IGAPl25N; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712900771;
-	bh=gvQoxZ4IJnyUZsu/Lle10vTyY6xNeFLmwmCbgC0qlrE=;
+	s=201702; t=1712901347;
+	bh=l1nXej2xIOp5iLyN1wuFB5bgBTopoVfUsY7BuLnhp3I=;
 	h=Date:From:To:Cc:Subject:From;
-	b=iUQ3Io8Ohuy9OStDWFQUkx0+ZVEmHRyFwGW99RuEOUGm927paEHRNhKNV/VKXdaei
-	 gacINKWq6bU12tfMG8y6gybzNe9Kuwcckl3Z56R2+GrQ1DshCm3IvNJxw9wmZ7ohTM
-	 bR5rPSqqH3/r/0/GPE3LLFyJtje4sxXN5N34/GF0D9FwjMWOSez9PItPg9P5sylJxu
-	 0jXQafw8zhj0K6VKawmlGgCrEj54Q5lUGt8CqnUlvY8TNOQTsg2reggzqB3n+Byk7w
-	 TMMUHWErIAQSkaIm4y/KM16krYXQbRtbb0kXQUVNcL2a85q6iETGUAFXsIL/kn898Y
-	 1QxJv5gb67pWw==
+	b=IGAPl25NKe92LhURgO6occqYjTBW1uSuVgxWp4Slp7Ga91WlWsmthai1GqjBqanqh
+	 7YOSiHljZF1EvNigtyP8GzSdw4gd293OyUezSu69fOT3uJtcn9wNtxUL3tgO4SjndM
+	 4ixTOkBmtlIaP7FvF/VHYppaNrw2U0sFSqk30JJ5H7VpBGk1CjkhUotkMX3GIaPty0
+	 ZHoeVKtHnAEa2ml1ZLDP3WeePDTNzsAq9/pUS00GKNsnXWNMJM43AH8ZEGRkrSq6pL
+	 5AA79ZsPYKoOhiyQOB8gNLmAXaaKSUWTWVdGkhxFMSnZ61gHSrnviLo+NMoV44m+xv
+	 YnpnLn+rzq4eQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG5CR0383z4wnr;
-	Fri, 12 Apr 2024 15:46:10 +1000 (AEST)
-Date: Fri, 12 Apr 2024 15:46:07 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG5QV3pMQz4wd7;
+	Fri, 12 Apr 2024 15:55:46 +1000 (AEST)
+Date: Fri, 12 Apr 2024 15:55:45 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Christoph Hellwig <hch@lst.de>, Linux Kernel Mailing List
+To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Peter
+ Zijlstra <peterz@infradead.org>
+Cc: John Stultz <jstultz@google.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the scsi-mkp tree
-Message-ID: <20240412154607.1b5096b3@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+Subject: linux-next: manual merge of the kselftest tree with the tip tree
+Message-ID: <20240412155545.7b8ad20b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_CZJRndn/WapJE.==_6XcmN";
+Content-Type: multipart/signed; boundary="Sig_/O51+wFtQh==g8tFwDdgrZ1/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/_CZJRndn/WapJE.==_6XcmN
+--Sig_/O51+wFtQh==g8tFwDdgrZ1/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the scsi-mkp tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Today's linux-next merge of the kselftest tree got a conflict in:
 
-drivers/usb/storage/uas.c: In function 'uas_slave_alloc':
-drivers/usb/storage/uas.c:826:17: error: implicit declaration of function '=
-blk_queue_max_hw_sectors'; did you mean 'queue_max_hw_sectors'? [-Werror=3D=
-implicit-function-declaration]
-  826 |                 blk_queue_max_hw_sectors(sdev->request_queue, 64);
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                 queue_max_hw_sectors
-cc1: some warnings being treated as errors
+  tools/testing/selftests/timers/valid-adjtimex.c
 
-Caused by commit
+between commit:
 
-  a2ad002485c4 ("scsi: block: Remove now unused queue limits helpers")
+  076361362122 ("selftests: timers: Fix valid-adjtimex signed left-shift un=
+defined behavior")
 
-I have used the scsi-mkp tree from next-20240411 for today.
+from the tip tree and commit:
+
+  8e222dcf92a8 ("selftests: timers: Fix valid-adjtimex signed left-shift un=
+defined behavior")
+
+from the kselftest tree.
+
+Slightly different versions of the same patch (whitespace differences).
+
+I fixed it up (I (arbitrarily) used the former version) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/_CZJRndn/WapJE.==_6XcmN
+--Sig_/O51+wFtQh==g8tFwDdgrZ1/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYYyp8ACgkQAVBC80lX
-0Gyckwf9Ft2cVQ9AahQ/8S+qN11b7qVFoGvCOLvWx3xgj1NtwMIWhPa/W9/33r5j
-UJL7+l+pqZLNQrDn1w9FuV/qqf6eYfsGeCA+lTjWMiMrB9lApb4W5sV+JUz7zTNp
-6mnk8T26QBPxf2xqgfZ4oyIDmlIZy5kcw8YRaZNUx/NilRjSmFp3sf7F0Db6IRgz
-oUft4I4ugrORR5T35yOvD0xLFFObnR2YBEZ7lrIZlQTZDV5DtrylLa2bQ6RBxV75
-TmNLY6f6vB4vTyjFErV/3WlCypppETgNLiXjheVhVIdOD/oGPbejIvgs79VibTGv
-0eUg73alKT7WXojzN/+L8UAm78DdsQ==
-=ugdD
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYYzOEACgkQAVBC80lX
+0GxGJwf/RzCNeJhTlwetyQGgWpU7cSjVplAae34XRwZ8IQ/bP1ZLrKuvFINbK95e
+ZousWFtyI6eiNasFmiEsQyHpVDV3mApcYAopfh2vdrj/44N18nJYypCTHOxzZqXn
+cDgU/yOPOVFw5amTwfcEJPGirSXVvLQMXiF/g4IMqBFP4EIGpP8rLZRbtirwlDaA
+tSOlNrd4vvKX6Prc7d67oWpE03BSfjvi5aBX6Ahc0JEXqI/oyo2+s8SXu/0H4ew3
+GDwVLM1NsGySFsxQjFwhUPNqo0LN7D27uWuRWVZmEZkoEOFq91+DDVQXqJdWFPYx
+vpgrqe0vaEuCxDCi7ZXdtY3lc0hwWQ==
+=dJcT
 -----END PGP SIGNATURE-----
 
---Sig_/_CZJRndn/WapJE.==_6XcmN--
+--Sig_/O51+wFtQh==g8tFwDdgrZ1/--
 

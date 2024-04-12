@@ -1,159 +1,223 @@
-Return-Path: <linux-next+bounces-1891-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1892-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17EB58A2373
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 03:52:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A6908A238E
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 04:04:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71A46B235CC
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 01:52:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 941BC1F231D8
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 02:04:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BE98D517;
-	Fri, 12 Apr 2024 01:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F242CA64;
+	Fri, 12 Apr 2024 02:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="BCuVMQDc"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EJQwDDOn"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CBCD299;
-	Fri, 12 Apr 2024 01:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48738801;
+	Fri, 12 Apr 2024 02:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712886710; cv=none; b=sBA68asQLsXyX2gIychERvT67B26dTe6CA7Gk6BHjsrMZxOEktSre7tNrH5FzIQGoAPMZlJHyF5IUpohOYc621YlcAfeA3Ey8kowKhO34uGDQ8gVPkJV8yKgS45MTN2E0//NZDchRYnO1kcfOW1iJPRCTNMTn9pKoATWQeR+8Ps=
+	t=1712887471; cv=none; b=XnTBb6MxBX295Tt2zFw5f6AX25AKQ+l+7sOgf+ICCOfNtaPWOpFidw9oKf/tF2RL848DijuTuif+aW519EQk3QTSZEiLrdXHW7h8g1mME1N7ve9DXbPE2jSsseTUVe8EgC9CUJjI1AZ/kdL5vh3CLnv065Nl1mTVDL5itJRpdbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712886710; c=relaxed/simple;
-	bh=9foBUyuwAc/BVowri7rNOQtXGtztZ3wtSpYnM6Ic54g=;
-	h=Message-ID:Content-Type:Mime-Version:Subject:From:In-Reply-To:
-	 Date:Cc:References:To; b=tqzGjCQC1YeIw/StGM83RtcF/oWI0sDyG0RZIQo2+CBTmwRWZd3hSaiDa/8+1krUMqd2PUHpzEQ1lLziPEleTu/Qwj2IbPn4MXj2vQNa7WPfHyvahGS4tTsB98WDQoVbaPwtPvargKi0WzR5/yvRSqjlslPLI6jgLNifHLK50Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=BCuVMQDc; arc=none smtp.client-ip=162.62.58.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cyyself.name
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1712886691; bh=grNHUKauo33AOqUbUNv6E8S7kTP2vs4ALEUy8MB1AYA=;
-	h=Subject:From:In-Reply-To:Date:Cc:References:To;
-	b=BCuVMQDco6omgrXz4+I3E7l+HPxVhvEmH+JdZXyVKLqnUmRkG6iBBie/Nk7tRS410
-	 862H4SPWo1J+hduySbpUPk9V6RY9LTVtGUvcu/sETKpzypjw4b+1W8EUB3llcUI8pK
-	 MfjzcazVm2UDSn8nUist8M1GjCnfhG6trJYbG2vE=
-Received: from smtpclient.apple ([2406:840:f99a:b03c:85cb:7203:1084:e303])
-	by newxmesmtplogicsvrszc5-2.qq.com (NewEsmtp) with SMTP
-	id C898B00C; Fri, 12 Apr 2024 09:50:09 +0800
-X-QQ-mid: xmsmtpt1712886609tgl1651vh
-Message-ID: <tencent_3EC60EBE4F410FED19C726DCA218AA10E707@qq.com>
-X-QQ-XMAILINFO: Msgy4IdPSbYaZ64GTE7WkXXeggA/2VsreH9GQ9OT9UyO2Ihb4jjUAwx/RrMBzk
-	 vrBDoQ/g7uFY4E7iXB0Sl0bgoDE/d/PV765MFVHfULK4AhCYJhr7uOkc44uBuTSMQ06FlqjJr1oJ
-	 aZUiSlUU48WdPPXkfREvScKcBCvPa3uh2zNfX/QBq18mDH/kad32384cwMti0baQa4cYPAWaDzJh
-	 NV9uliLT+PJZXtF4RBmUini0fTtXUUysLpMbmeUJA2KCgOQXY6/KA5XC/0wW5XQmVFqYjPOKBFnp
-	 YabGR4yRFXPgkavkrIQilDcBe2w8aOycfWEUcHgXV0HuiC4JUxOXq7xla4g9DQklhRjn36ZQqOxl
-	 VOCUHLL8QRC8uBq2zq8zwUI1Lf0iNYatltiuXd5eGLODi7Zs6kLBAMvJP4t1AyTfCu+on8bx9hdW
-	 OeiFYYsxS1At2cSnyQeGrF5auR9DRtpOs5+mHv2w1+o9G0uht20HJpo2sKcI3TjYjzbKfgF45Ln+
-	 5ygg5CNVuFF+P038YORYiuuY8XJgO7LA0/1Hj5nIG4CDv0GC19dJjFds4QvTGFiF/3gZvkcy9cw3
-	 0IyE0ht3nEm24AmpIOhy4GiBxG9VMowtAV4W0J/v/pATFxZGrkcSICuKfZ1zCzbsN8LOKXdVejxX
-	 XgBp17Gre62tGXv1gArNGusQKZKFze57c8fSKzeapsHMg6b66vSYYd6Ke2pFG+Hqf2dUftYyzFDC
-	 6YQdJhz70qAG23Z7IImPOwzdQ9dz4iBxizTAZG6ZeKZ46qA3pCPzwdfmUD8PFltc6hrBBGeAzCTv
-	 BSDweV68npXjf382Jjm6+LVbixWlRDIf3lnlu14fCoMYQwb4i2JCO6BEF8eaECgtBHaNNafaGZ5T
-	 TmxSsLePzsIuXWHCE3n5tHncA9HLO0lfgDelPv7lJAxBQ9yATKvo/+lpIxUYdxYbas7cwm8bCR9f
-	 aG0iBZL4uBEJ+N/l7emvrwZmm2iQTDO0P9aCl2ktJqZ7MTO26iHdPhS+kWnlIj
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-Content-Type: text/plain;
-	charset=us-ascii
+	s=arc-20240116; t=1712887471; c=relaxed/simple;
+	bh=t9q+otk2Tc6NmYmjxqB1BgWWDc81IAO4Z0aG6aI6KQk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kiMh4erJ2TPJ6S3pyKVf93Mb/k2Qgtkxlc/UWY4bthfhBbyOMswUHiJfgZ4fsnf7LfI83bxm5DgvgaY7wYHMUfyRRAdaaZKocdbiohgXLZ69ovFudSMGGW+XxX8yWLQ3ehGzFFCCyzWH9VSMujkapMek/iBaw5iatOmZ02nBTMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EJQwDDOn; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712887465;
+	bh=DcuE7f9X1W1goW9Rw0CyhmG355kPpq2Gqbq8MdMXHsQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=EJQwDDOnAZZkWlKU+6Arj+Knp7t9fK9UCymNq/MT2dvBfs2T8aon9qUFF1+SBewY1
+	 TrDJiV8LpBztvSgxVzEokRjGOW8QuMIw7Ph3Lb7SbB1nJ5OZP8tjKxla8ln1OMcNE6
+	 BR+OK/x8cr4hKkc2O7VI1OEy2tOEaWmLAMF5r4U2GjOPuXKpFaOozisQxbNtPyz+oT
+	 pa8GkCo23I3GouQ4mJm568eeVZwVNz/KtGg05Y7WT2W7wGSyPky2XJ6UGcsVZLcb07
+	 B24R2neuwvmdmkRQgmzfRolDX3b698y0fweU3ySaPNFy+ER5Dv6IWSAhr7M4Cq1hcy
+	 qb6TNYe3/PK4g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG0HX6P8hz4wb2;
+	Fri, 12 Apr 2024 12:04:24 +1000 (AEST)
+Date: Fri, 12 Apr 2024 12:04:21 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Luis Chamberlain <mcgrof@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, "Mike Rapoport (IBM)"
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>
+Subject: linux-next: manual merge of the modules tree with the mm tree
+Message-ID: <20240412120421.27d86c34@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
-Subject: Re: linux-next: manual merge of the riscv-dt tree with the risc-v
- tree
-From: Yangyu Chen <cyy@cyyself.name>
-In-Reply-To: <20240411094901.2130c36e@canb.auug.org.au>
-Date: Fri, 12 Apr 2024 09:49:58 +0800
-Cc: Conor Dooley <Conor.Dooley@microchip.com>,
- Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <paul@pwsan.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Palmer Dabbelt <palmer@rivosinc.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/nVmWy2XDg2rYoS268/+W7Xr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/nVmWy2XDg2rYoS268/+W7Xr
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-OQ-MSGID: <0DA22639-19D6-4766-AD5D-9A0A3B6CB2AB@cyyself.name>
-References: <20240411094901.2130c36e@canb.auug.org.au>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-X-Mailer: Apple Mail (2.3774.500.171.1.1)
 
+Hi all,
 
+Today's linux-next merge of the modules tree got a conflict in:
 
-> On Apr 11, 2024, at 07:49, Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Hi all,
->=20
-> Today's linux-next merge of the riscv-dt tree got a conflict in:
->=20
->  arch/riscv/Makefile
->=20
-> between commit:
->=20
->  3b938e231b66 ("riscv: merge two if-blocks for KBUILD_IMAGE")
->=20
-> from the risc-v tree and commit:
->=20
->  ef10bdf9c3e6 ("riscv: Kconfig.socs: Split ARCH_CANAAN and =
-SOC_CANAAN_K210")
->=20
+  kernel/module/main.c
 
-I am the author of this commit. I just renamed CONFIG_ARCH_CANAAN to
-CONFIG_SOC_CANAAN_K210 in arch/riscv/Makefile.
+between commit:
 
-> from the riscv-dt tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your =
-tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any =
-particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc arch/riscv/Makefile
-> index 7c60bbe1f785,fa6c389c3986..000000000000
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@@ -143,15 -133,7 +143,15 @@@ boot :=3D arch/riscv/boo
->  ifeq ($(CONFIG_XIP_KERNEL),y)
->  KBUILD_IMAGE :=3D $(boot)/xipImage
->  else
-> - ifeq ($(CONFIG_RISCV_M_MODE)$(CONFIG_ARCH_CANAAN),yy)
-> ++ifeq ($(CONFIG_RISCV_M_MODE)$(CONFIG_SOC_CANAAN_K210),yy)
+  58782d7a7ccd ("lib: prevent module unloading if memory is not freed")
 
-I reviewed commit 3b938e231b66 ("riscv: merge two if-blocks for
-KBUILD_IMAGE"). Your change only replaces the ARCH_CANAAN symbol with
-SOC_CANAAN_K210 here. My intention for ef10bdf9c3e6 ("riscv: =
-Kconfig.socs:
-Split ARCH_CANAAN and SOC_CANAAN_K210") is to use loader.bin only for
-Canaan K210 SoC but not for other Canaan SoCs. So I think that's the =
-right
-way to resolve merge conflict.
+from the mm-unstable branch of the mm tree and commit:
 
-Reviewed-by: Yangyu Chen <cyy@cyyself.name>
+  a4ee8c9b86bd ("module: make module_memory_{alloc,free} more self-containe=
+d")
 
-> +KBUILD_IMAGE :=3D $(boot)/loader.bin
-> +else
-> +ifeq ($(CONFIG_EFI_ZBOOT),)
->  KBUILD_IMAGE :=3D $(boot)/Image.gz
-> +else
-> +KBUILD_IMAGE :=3D $(boot)/vmlinuz.efi
-> +endif
-> +endif
->  endif
->=20
->  libs-y +=3D arch/riscv/lib/
+from the modules tree.
 
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc kernel/module/main.c
+index 2d25eebc549d,d56b7df0cbb6..000000000000
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@@ -56,8 -56,8 +56,9 @@@
+  #include <linux/dynamic_debug.h>
+  #include <linux/audit.h>
+  #include <linux/cfi.h>
+ +#include <linux/codetag.h>
+  #include <linux/debugfs.h>
++ #include <linux/execmem.h>
+  #include <uapi/linux/module.h>
+  #include "internal.h"
+ =20
+@@@ -1204,26 -1194,51 +1195,55 @@@ static bool mod_mem_use_vmalloc(enum mo
+  		mod_mem_type_is_core_data(type);
+  }
+ =20
+- static void *module_memory_alloc(unsigned int size, enum mod_mem_type typ=
+e)
++ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+  {
++ 	unsigned int size =3D PAGE_ALIGN(mod->mem[type].size);
++ 	void *ptr;
++=20
++ 	mod->mem[type].size =3D size;
++=20
+  	if (mod_mem_use_vmalloc(type))
+- 		return vzalloc(size);
+- 	return module_alloc(size);
++ 		ptr =3D vmalloc(size);
++ 	else
++ 		ptr =3D execmem_alloc(EXECMEM_MODULE_TEXT, size);
++=20
++ 	if (!ptr)
++ 		return -ENOMEM;
++=20
++ 	/*
++ 	 * The pointer to these blocks of memory are stored on the module
++ 	 * structure and we keep that around so long as the module is
++ 	 * around. We only free that memory when we unload the module.
++ 	 * Just mark them as not being a leak then. The .init* ELF
++ 	 * sections *do* get freed after boot so we *could* treat them
++ 	 * slightly differently with kmemleak_ignore() and only grey
++ 	 * them out as they work as typical memory allocations which
++ 	 * *do* eventually get freed, but let's just keep things simple
++ 	 * and avoid *any* false positives.
++ 	 */
++ 	kmemleak_not_leak(ptr);
++=20
++ 	memset(ptr, 0, size);
++ 	mod->mem[type].base =3D ptr;
++=20
++ 	return 0;
+  }
+ =20
+- static void module_memory_free(void *ptr, enum mod_mem_type type,
+ -static void module_memory_free(struct module *mod, enum mod_mem_type type)
+++static void module_memory_free(struct module *mod, enum mod_mem_type type,
+ +			       bool unload_codetags)
+  {
++ 	void *ptr =3D mod->mem[type].base;
++=20
+ +	if (!unload_codetags && mod_mem_type_is_core_data(type))
+ +		return;
+ +
+  	if (mod_mem_use_vmalloc(type))
+  		vfree(ptr);
+  	else
+- 		module_memfree(ptr);
++ 		execmem_free(ptr);
+  }
+ =20
+ -static void free_mod_mem(struct module *mod)
+ +static void free_mod_mem(struct module *mod, bool unload_codetags)
+  {
+  	for_each_mod_mem_type(type) {
+  		struct module_memory *mod_mem =3D &mod->mem[type];
+@@@ -1234,13 -1249,12 +1254,13 @@@
+  		/* Free lock-classes; relies on the preceding sync_rcu(). */
+  		lockdep_free_key_range(mod_mem->base, mod_mem->size);
+  		if (mod_mem->size)
+- 			module_memory_free(mod_mem->base, type,
+ -			module_memory_free(mod, type);
+++			module_memory_free(mod, type,
+ +					   unload_codetags);
+  	}
+ =20
+  	/* MOD_DATA hosts mod, so free it at last */
+  	lockdep_free_key_range(mod->mem[MOD_DATA].base, mod->mem[MOD_DATA].size);
+- 	module_memory_free(mod->mem[MOD_DATA].base, MOD_DATA, unload_codetags);
+ -	module_memory_free(mod, MOD_DATA);
+++	module_memory_free(mod, MOD_DATA, unload_codetags);
+  }
+ =20
+  /* Free a module, remove from lists, etc. */
+@@@ -2309,7 -2301,7 +2314,7 @@@ static int move_module(struct module *m
+  	return 0;
+  out_enomem:
+  	for (t--; t >=3D 0; t--)
+- 		module_memory_free(mod->mem[t].base, t, true);
+ -		module_memory_free(mod, t);
+++		module_memory_free(mod, t, true);
+  	return ret;
+  }
+ =20
+
+--Sig_/nVmWy2XDg2rYoS268/+W7Xr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYYlqUACgkQAVBC80lX
+0GxJqgf/YhyeAFTIWqGU0sA/nEexDdRUO7eO2SyZMYL2wq97P1eW1PoDfWq2OM+0
+ESyjDL71qFdZNEyL49W2w5WQKfCBdxVaTUZo9x9Z+sSsF0frki7MUTyc5ggQP5yU
+8Ya8Ww9ERg4jsQPqSYQliKRkwdR+ppjRAKKImxUp6/UVNd3qWLfmNspC+f3K+kmc
+xZHs8aEgV3TjWLicYG5hSH0dka3zBDyq8HUVO4SqKm5Pa5TTZHBSEMg+4CX4pyN0
+7HtV5kO/14Rq1vK5DcmrQAXM/zrICesPF8TbF+mU8//nWxW96cSGR+uHaon4ictP
+HuZiOSvduv8/LO84DTrtuwlJ0G/L0g==
+=JSMi
+-----END PGP SIGNATURE-----
+
+--Sig_/nVmWy2XDg2rYoS268/+W7Xr--
 

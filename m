@@ -1,138 +1,134 @@
-Return-Path: <linux-next+bounces-1894-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1895-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BE468A243C
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 05:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18FC98A246F
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 05:34:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4703D28855E
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 03:15:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8704287846
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 03:34:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 971461B950;
-	Fri, 12 Apr 2024 03:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5529D14016;
+	Fri, 12 Apr 2024 03:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WeOSneIB"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="g+Mq3vUO"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE83199D9;
-	Fri, 12 Apr 2024 03:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0CD28FC;
+	Fri, 12 Apr 2024 03:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712891698; cv=none; b=OoyWpVzCc+Btcr5+bocYz5kqU5SWmCHoyipDuTRsuxaloXEde4g9TCY7EzVt1YUzphF7VtdRGiCoAKUhnCK06eNE1HnTTVSrRR5DC9oaE9UOByFP8YvZxwl9Ka2behMH2s9BAHXVIKGuQILpA8T2n7SteALK1cL/GIVm/L+VuaI=
+	t=1712892855; cv=none; b=HUZga4YfPZWsztky/nrzSkFjWZCNxDMMtY91yoOngM65NA7kiKOyPFrXlAdRhIWiD4YwuBt2oBYwt0Oa+ypmDElsuVx8lNUmb7bprNzOWVt44BdShZoSAizzZHUbsnF6PvlOg/y1hIYNqWMNWZd9pDVIZlprImpTrCZ6sy5r/Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712891698; c=relaxed/simple;
-	bh=GMSCKdtp7p5x5tKn0fvsWFlKFRuMmTOJXY3eOciD3LI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pUg3hWwhnFxiSbGqz3x3XyMjaqfXzua2fybZ5NFuoHqFZQZ9y9p4cU16FrGqDWXKzamPjwj4vXzuqaSBzQ8dUUL1d57ke7x2zgGDHAeWJPG1rDYFhti7SNzVZxLM1fLzWZrEfp5W6xiCn9O/8VvjeQeLNWErM9mDYxYQ5HViyqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=WeOSneIB; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1712892855; c=relaxed/simple;
+	bh=7UUc+9AWLzj9smYxaD8BUoPg3oDr6y3pMqaVgw67Uu8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=qrUSr3H23pcnWTKjqT6rNSonJVlgq2904uvYObQ0b1ULQ27RO4Wfs+E9ep4ft1xkX33I5Vtq+4ulzGVDYYQ9TGd8kHyAyKDOLg4dbDmal3aGXW9WQI5IHm1foDzHxLEF4DMwsq9p1VxfI7uaWv2nwe+CsnvJJm/6YUrhSEoB2wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=g+Mq3vUO; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712891691;
-	bh=EY3WqoWVQVYhu6CX8mA3X80QuETTVo1FlNuaCnjkIEI=;
+	s=201702; t=1712892848;
+	bh=9NHUhxP5YI/EJKapznWec2l/J2qFs55hoUvYBue1eMU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=WeOSneIBpWl5HEVoW37Hhd4Oh891LmOTg4am5vxz4vGFE/H2ppo7Ai0uCK7nf3veB
-	 MnGA0ZrABbEscv9fWrM+Chi7LzyJQNXDQ7vKCvcv7Xh+oSdD2Qu+rnWpfpUdbjeBPO
-	 aem/qZbAM09Mj638suQEdlOfTkLW7zK8dDhQaKo7vEy01XFeCqRjuOwBr9gEDqpJJa
-	 e0tanMd3TonJ3JZMVVM8zcYuw5kSOscyjPAEheRdMS+5cBXB2dWK1mC3iBWNTF5A1h
-	 vZA3jylkhYRWc+xu5jKliDSUpwiAGcrrzH3p5v++BVeE3nB0NErqc4O7wN/CuBWYaB
-	 pBzBp9caDZ9Qg==
+	b=g+Mq3vUOnS8hzVRgMdknmHD56/BeU0fOre6PzCJsL3Q2XYx9LXjt8Gm3kNr3EA9XL
+	 R6WsDV7+Xa3Gq6+0Dwboc30L6YEpBnNP/KVj3KdboZ1Tp8glG+WIcYggr8bs5QkL2Z
+	 i0KAlC3pd3ALsZ+ZZbu+rQSRxonnFyF76L6RnbNwOBJW1eDcGlIfy43XTEeIGi0Pni
+	 +K9VoYE7iVh51pDKXus6z3BPTPDxvHEYvb3ZnEM0T4EWH6IAmxgoHOV2u8PEJm5oyj
+	 DquSCnDdAU+uPPvvRXNpPG9fWhYbo4odgSVVMZjC1N+3CI4WR2LFOyV4i1crQqEnFJ
+	 yPhkLbyK6Hywg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG1rp6TzWz4wqM;
-	Fri, 12 Apr 2024 13:14:50 +1000 (AEST)
-Date: Fri, 12 Apr 2024 13:14:48 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG2H41Dpjz4wd7;
+	Fri, 12 Apr 2024 13:34:08 +1000 (AEST)
+Date: Fri, 12 Apr 2024 13:34:07 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
 Cc: KVM <kvm@vger.kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kvm-x86 tree with the kvm tree
-Message-ID: <20240412131448.4403df6a@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the kvm tree
+Message-ID: <20240412133407.3364cda3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3N_WPBCBiQSNIeSEhY.ZcO9";
+Content-Type: multipart/signed; boundary="Sig_/XoZoWVvdCW=_3sRXUnSB=2I";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/3N_WPBCBiQSNIeSEhY.ZcO9
+--Sig_/XoZoWVvdCW=_3sRXUnSB=2I
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-x86 tree got a conflict in:
+After merging the kvm tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-  arch/x86/kvm/svm/svm.c
+kernel/events/uprobes.c: In function '__replace_page':
+kernel/events/uprobes.c:160:35: error: storage size of 'range' isn't known
+  160 |         struct mmu_notifier_range range;
+      |                                   ^~~~~
+kernel/events/uprobes.c:162:9: error: implicit declaration of function 'mmu=
+_notifier_range_init' [-Werror=3Dimplicit-function-declaration]
+  162 |         mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm, ad=
+dr,
+      |         ^~~~~~~~~~~~~~~~~~~~~~~
+kernel/events/uprobes.c:162:41: error: 'MMU_NOTIFY_CLEAR' undeclared (first=
+ use in this function)
+  162 |         mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm, ad=
+dr,
+      |                                         ^~~~~~~~~~~~~~~~
+kernel/events/uprobes.c:162:41: note: each undeclared identifier is reporte=
+d only once for each function it appears in
+kernel/events/uprobes.c:175:9: error: implicit declaration of function 'mmu=
+_notifier_invalidate_range_start' [-Werror=3Dimplicit-function-declaration]
+  175 |         mmu_notifier_invalidate_range_start(&range);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+kernel/events/uprobes.c:208:9: error: implicit declaration of function 'mmu=
+_notifier_invalidate_range_end' [-Werror=3Dimplicit-function-declaration]
+  208 |         mmu_notifier_invalidate_range_end(&range);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+kernel/events/uprobes.c:160:35: warning: unused variable 'range' [-Wunused-=
+variable]
+  160 |         struct mmu_notifier_range range;
+      |                                   ^~~~~
+cc1: some warnings being treated as errors
 
-between commit:
+Caused by commit
 
-  605bbdc12bc8 ("KVM: SEV: store VMSA features in kvm_sev_info")
+  b06d4c260e93 ("mm: replace set_pte_at_notify() with just set_pte_at()")
 
-from the kvm tree and commit:
+I have applied the following patial revert for today.
 
-  c92be2fd8edf ("KVM: SVM: Save/restore non-volatile GPRs in SEV-ES VMRUN v=
-ia host save area")
 
-from the kvm-x86 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/x86/kvm/svm/svm.c
-index 0f3b59da0d4a,9aaf83c8d57d..000000000000
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@@ -1511,12 -1524,8 +1516,8 @@@ static void svm_prepare_switch_to_guest
-  	 * or subsequent vmload of host save area.
-  	 */
-  	vmsave(sd->save_area_pa);
-- 	if (sev_es_guest(vcpu->kvm)) {
-- 		struct sev_es_save_area *hostsa;
-- 		hostsa =3D (struct sev_es_save_area *)(page_address(sd->save_area) + 0x=
-400);
--=20
-- 		sev_es_prepare_switch_to_guest(svm, hostsa);
-- 	}
-+ 	if (sev_es_guest(vcpu->kvm))
- -		sev_es_prepare_switch_to_guest(sev_es_host_save_area(sd));
-++		sev_es_prepare_switch_to_guest(svm, sev_es_host_save_area(sd));
- =20
-  	if (tsc_scaling)
-  		__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
-
---Sig_/3N_WPBCBiQSNIeSEhY.ZcO9
+--Sig_/XoZoWVvdCW=_3sRXUnSB=2I
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYYpygACgkQAVBC80lX
-0GxBPwf/VFRBOWGuSGfmrscNLd6XvmE0R0vpMIqwr5pdezQfl130qO1JY1QoZiFj
-rvYF7lsDnxpRWNG2uYw6to5xtj4JX+dGvy6qMPUdYCLCD5uYO6JzE0w/rOcXit05
-zjcseqoGqo00wKRxSlj4vTflz4/Z6stt5HQnq8F1kqPuvQNpwAAxxgOa4XIgQzHP
-7w3ojlToNlsDOR8/JYHE1cvKvCwG5cbgqjbxdeeE7moQBR/omoCE8Rl7zslH3Xar
-/KgFryHn7kZJlNAvYQZcezZZIaV8dSygIa3brBD4bAzxjLt4LMk261ieW5ZOyS84
-Cdfi4OkLQYUxK0pqQ0OIVTRoa4xlhw==
-=AyeR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYYq68ACgkQAVBC80lX
+0GwKJwf+LxCKR/B3h+5Y+ROivsBKoQNcSbtZdRJdmQialSJIHIa2IY2dm5pEF9D/
+nQ7b7GS0S9oJ2AhDN77CEDnpmwAoeNyDCtIjw/H/FE94BwJm3STg42i/8/l8ssfP
+QDifXLUYHv+ozqLBASs28unuhbkz+06s+0978xzl/gxpLUouQ6cbVIqJFLpz6wUi
+wl5f+Odxjgf4T+axgNpUxixRfQNRGgWioONBE1rgoo7Ta0OioRM1KXd07f8p2RL4
+VPQ3r0GdeIVfjGtNd4PS0d4AhKeSxHww/a1rR/HbBTLcNce3z+CQLAziEHhj+zKG
+b8nCO/vcKw0q9FNpLIgK+RBigeo4SQ==
+=5LsJ
 -----END PGP SIGNATURE-----
 
---Sig_/3N_WPBCBiQSNIeSEhY.ZcO9--
+--Sig_/XoZoWVvdCW=_3sRXUnSB=2I--
 

@@ -1,125 +1,119 @@
-Return-Path: <linux-next+bounces-1901-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1902-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BD878A256F
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 07:10:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 585E28A257F
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 07:12:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC3661C223A0
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 05:10:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EA171F22ED8
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 05:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72E5417731;
-	Fri, 12 Apr 2024 05:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8BD43611D;
+	Fri, 12 Apr 2024 05:11:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="IOdAEUyX";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cL1BFCA9"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qR1sBwC3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout1-smtp.messagingengine.com (fout1-smtp.messagingengine.com [103.168.172.144])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1011125D5;
-	Fri, 12 Apr 2024 05:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4A62C853;
+	Fri, 12 Apr 2024 05:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712898626; cv=none; b=XN/Vz5k8QNlhtrAek59liSJiBKjnY78T/DWr3zQQE+hylzSCfJj/iWiSzUQanYPfnHoL0M51VlfROwZQ9zfdozya3FMwt5t3Y1PkfzzwVFjcZ0Yi/B3MuILJDkwl12TjGUjpqD5yHKwO+UN3Dqu0sZ1lZlVfBmT8tiJ/G7hwfeE=
+	t=1712898713; cv=none; b=QktrmGcUNDi9NRP22uSa67d+5K97t2XjstpmsCcsTfRbZwPu6ieATa4V2sgq6XjtH+CZjWb+ospjtn/X1PP3+dz7AqH4JnSY7V8U4fGavUE4H22/YBcPOsWUWM5svgAejRdYQzmGezZnmBSvID0/wXkkTJxj2IANiGnunWxm/44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712898626; c=relaxed/simple;
-	bh=mmw7UBZ/NYh0/8gsyGUAEwtlNcxN961B/jKYuFDAE4Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jvomRzn26SdXc6vKvEfUyGQ2rDDsbZstudXu3aUtY4L9Czdm0akNgatcQjfTmxYS4xfyY0CCfzQD7EAbTkQZs5J8SYw1Z4FsXGhpLImkzh5wnFy72WN1kdzxsJN9dGbmFLaYQNiG/Pjq35lIlpcjzXnjc4W1fLeGtbRytAr45Ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=IOdAEUyX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cL1BFCA9; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailfout.nyi.internal (Postfix) with ESMTP id B625113802C7;
-	Fri, 12 Apr 2024 01:10:23 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Fri, 12 Apr 2024 01:10:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1712898623; x=1712985023; bh=VPZ7kJdh9c
-	PLjRKHHVxTUf1hbUVmbHSA0q97FGn9WV4=; b=IOdAEUyXDYiVKbGbFZbRu/PbbL
-	e9wo+0jyFCZ9E0FwrFEV7fGpZuT6VTGsRzJbPkxgtBjOxVVjMgQV7DwbR8adnEie
-	8uHaYHFw1PSLu3YskQbjK98hH1QC+A+tL4MVQdbIVlN3TruepYUBRJHTfST0FKwX
-	Q4B9l8R2ohw0QwPWr0l4GcjjeHD+X4j2+5GDuJjFL09X7hl4jGtcvUSKAULEn+iw
-	sjmGVWowfpcwxPl1rF6AMNedtcU6763IGoVVornj1C3RFP7i3c1+LK0IDFhbR0jQ
-	KQDDBHVQke6FtDF0+XlMiXhWxA0aeRsFe3TWBwJ5huDCB5I0IhHgzXACuDDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712898623; x=1712985023; bh=VPZ7kJdh9cPLjRKHHVxTUf1hbUVm
-	bHSA0q97FGn9WV4=; b=cL1BFCA9FcaVisURAZlGYil167ZIhQ4h2RD4txuKqMo+
-	63ybBfi53GlsHgLotvTUIhmt9MlLZyLaWuQcsp3ygvty3xqCNOmhpBIpETMd6SFK
-	N7oAOvl9CbadpHh70uE9jaR+rN/NvxVPRRu0/wB0uia6D3cRZcpOTdV26ExKHIBX
-	0lBnRicg2itzASOgORuJl4FiyTGSSogopIfoad8DMT1D8Xn+qVMFajQ953vjV1JK
-	LSfOV/FI1RnYqZSbSIJjRbMrrAMJH6lEl5wTMqC2cWSetiwmQ6RQ1BrdStWQK6Gk
-	XpQ9BzzoJYo8pP5uf9AIIRctlXk3G1TPgQuY3fVOPA==
-X-ME-Sender: <xms:P8IYZnal6_fiiOzIAmPTB_AiNZ32jNwoBvrgVyk42WeeOPfzcN3oHQ>
-    <xme:P8IYZmaTu2rJKevnQe-veNO6jCw0rhenj22T0HjorinTD26H5bD5uJs4MG7WkB27y
-    UDfk68NjR8OcQ>
-X-ME-Received: <xmr:P8IYZp--s0X167KOClclxdJCdrFZEtPGbEnHNL42j9qub1c_OTB2BOxGRgkynaUJ91JI7Q5nHJBcSJU3Vo4HFf2dtW-5kO7PxYHkug>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudeitddgheejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:P8IYZtpvQgzUs2t_asAj7-EviUzBNdZTR5Yt2Y_IzSfkxnp4gsZMpg>
-    <xmx:P8IYZipAA076L1jtp-WfGIoAPgd1bu7DW-vsLLel6rStuxKwnp732A>
-    <xmx:P8IYZjSqpjbtpY2I58US2_AY1Zq8Ua8GxbutF-XiszGlLducdf8hxw>
-    <xmx:P8IYZqrBbnSPqWn8Wr7hy9rVFDk9hMMu3JPWhvJdGPS8Ij3xaCHZCA>
-    <xmx:P8IYZvgwwjjouRJN8fKzKeayGKbk1UH2KwjHACQ0XTQ9MZKhV8sPqb0g>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Apr 2024 01:10:22 -0400 (EDT)
-Date: Fri, 12 Apr 2024 07:10:19 +0200
-From: Greg KH <greg@kroah.com>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	PowerPC <linuxppc-dev@lists.ozlabs.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the driver-core.current tree
-Message-ID: <2024041201-shrug-carefully-c3a4@gregkh>
-References: <20240412084310.035f018d@canb.auug.org.au>
- <87mspzci46.fsf@mail.lhotse>
+	s=arc-20240116; t=1712898713; c=relaxed/simple;
+	bh=ckxiAva6NtfOVZb76KvA2/vT+MZfq8toz6Bf3K5O6wI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tzQT9hweMS/dzMbo8wlxcfkP95Of6A8UWiL1QMcbw47T1ZZrub62lu65oNlizkLHgs1OrB6MB3UR6XncAS1S90bMyIzeSSejqORQJgrVPkbmitGaitBCj4mUnPogAaVtnpnC2b1f3mwnDj2RGSSkgq9OwOyFvYtpyOy59MKsFHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qR1sBwC3; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712898708;
+	bh=FZe94IGm60i+wrx7mytputrazrpPG+SV8qrIZglowmg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=qR1sBwC3vlTfLWyH1uiHI/UnlIjSUoWhZo4szCw9EytXnnGp5ceQSEJd85as8Gkbt
+	 +XaEiifvkeZDFJ0+GhDu09rV38JCNN+NNjsiJT8QDMwPtUmREQ0FrLyYNvoZ7H8k2/
+	 vRlIjdpgTGdrzjW1iyochicBCcyAyX/s+FPiNtEYP4VXk61LfmDoH4fPClufNaTnNz
+	 Ld4fXMuYxQ/WeABNBrRn9g/J1MHYzXKlyc/DVKhShZfvWEcUfTk+t4mmdxJR21u9Ag
+	 dw8DVvlS9go4r5Oo4wMrBus9Sej8xdR3kYYguMzuWMtui9HmNFhJeHcEMxqCacpjW+
+	 zA74AT67Xko0g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG4Rl6HY6z4wx5;
+	Fri, 12 Apr 2024 15:11:47 +1000 (AEST)
+Date: Fri, 12 Apr 2024 15:11:47 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>, Wu Hao
+ <hao.wu@intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Xu Yilun
+ <yilun.xu@linux.intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the fpga tree
+Message-ID: <20240412151147.22a059ff@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mspzci46.fsf@mail.lhotse>
+Content-Type: multipart/signed; boundary="Sig_/eRnw..xp0u8Ga9jNOdmZ2SW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Apr 12, 2024 at 02:36:25PM +1000, Michael Ellerman wrote:
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> > Hi all,
-> >
-> > The following commit is also in the powerpc-fixes tree as a different
-> > commit (but the same patch):
-> >
-> >   156539fd6501 ("Documentation: embargoed-hardware-issues.rst: Add myself for Power")
-> >
-> > This is commit
-> >
-> >   36627111b568 ("Documentation: embargoed-hardware-issues.rst: Add myself for Power")
-> >
-> > in the powerpc-fixes tree.
-> 
-> I can drop my version easily enough.
+--Sig_/eRnw..xp0u8Ga9jNOdmZ2SW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Either is fine, or both, it doesn't really matter :)
+Hi all,
 
-thanks,
+After merging the fpga tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-greg k-h
+drivers/fpga/ice40-spi.c:201:35: error: implicit declaration of function 'o=
+f_match_ptr' [-Werror=3Dimplicit-function-declaration]
+  201 |                 .of_match_table =3D of_match_ptr(ice40_fpga_of_matc=
+h),
+      |                                   ^~~~~~~~~~~~
+drivers/fpga/ice40-spi.c:201:35: error: initialization of 'const struct of_=
+device_id *' from 'int' makes pointer from integer without a cast [-Werror=
+=3Dint-conversion]
+drivers/fpga/ice40-spi.c:201:35: note: (near initialization for 'ice40_fpga=
+_driver.driver.of_match_table')
+drivers/fpga/ice40-spi.c:201:35: error: initializer element is not constant
+drivers/fpga/ice40-spi.c:201:35: note: (near initialization for 'ice40_fpga=
+_driver.driver.of_match_table')
+cc1: all warnings being treated as errors
+
+Caused by commit
+
+  5d04660b29fb ("fpga: ice40-spi: Remove unused of_gpio.h")
+
+I have used the fpga tree from next-20240411 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/eRnw..xp0u8Ga9jNOdmZ2SW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYYwpMACgkQAVBC80lX
+0Gx0yQgAgoRAfQYJw5MwUHc55xNs/m1J2IAReeekwKlpJK3GWDbaZ350/tkn1wCq
+4NllF3tnntYjUYWJf18BZx+GM0bci/UMReiILCb0wEIa13TJu3DhU176hxdlxph7
+Ckq0ve4+J2z+Vfh1+2xwSzVcNSecgXEPgpU4kBTMQPO9jSV9oUqbbXQ8elAd5nV/
+nhotpXwCzbmvUFtxDLjEmWTHKjLXJ05ZtG70+KW9m8kcQaZ+eXFIwr0GdN8eF2gN
+285Mjmj73h9+SbZ+T31a4OeQ07MdYBTZ9SNcqBVIl1FDxWmTKjIfBFu6qBtUzQje
+9tKKLhd2RaiUsU9FQzq7BmzyXdtZxg==
+=XnsU
+-----END PGP SIGNATURE-----
+
+--Sig_/eRnw..xp0u8Ga9jNOdmZ2SW--
 

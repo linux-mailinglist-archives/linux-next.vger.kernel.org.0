@@ -1,52 +1,53 @@
-Return-Path: <linux-next+bounces-1907-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1908-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 524F58A2786
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 09:05:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 612CB8A2791
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 09:06:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E5E6281B16
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 07:05:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00FCE1F2230D
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 07:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45D0B482D0;
-	Fri, 12 Apr 2024 06:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75EF74F20C;
+	Fri, 12 Apr 2024 07:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="F0NQ07yx"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Cky2k1nJ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98B44085A;
-	Fri, 12 Apr 2024 06:58:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F039A5025E;
+	Fri, 12 Apr 2024 07:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712905117; cv=none; b=nS+vfFAcbZlhe65UakqEH2s9W6NW8clVWGIHhdTPsYqqX9YG21BAp6u4HlAR2jVmSZovfV003olIarTZ3jcOfVMKopuUz7Y1ZM1I8LaSpB9oIkzBMaoqi0JK5VZMMWCSpFQMfuJhLkCRwfLF+3NsyXhaqN+y4HyVU+QdV2WCVz8=
+	t=1712905322; cv=none; b=W9CLlSZrtF7IRE5FN3gCfZwXqR/cD0Y5Ysu9qcLDiJ4TPl2arESydaQ9sfJI22jP0byZvQ/y2w1JNWiHc1fdbU8bELWTtGtYxYMBEUqaxLg3DcAt+NBVlT22OP+r8QIEgJuAvZm2kUUYtDXfU9O6dH8NQq568nWjEFsIlBnpBsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712905117; c=relaxed/simple;
-	bh=aLPpNHCNWD9rfHxTwQaRkbMXIHU3eQsEjGW4vcaQCsQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=e1ThHMZyeleYoLEHn6iFOgMQYEeZg7oK2PPxv8SzRKk9ffq5ZCwkd3H8sMFyb4FBuYKye1xIGbqE5UyNQY770MFpqkpnfOkFqCJxKYQCX3y1mD7R8bxJsiMK2nSEHyO9VQb94V9I9ieP8bCR7iLu7LwhykVJjex+M1NXMpsx0rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=F0NQ07yx; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1712905322; c=relaxed/simple;
+	bh=4jRWhYC+ZsPWZd0ZNl9ZX4H9dxNs26/+BV6UxpdGhHM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=X/QT6tdvBacoL5tlNB6tkgcs7BLuqZ/ClgTMJEpll6KR6sa9dQI/rlCVzfmRcCjaQFrwyi6oSn14p0TJuL4NQssa0qVfFe+oQgeqnkw3gFAP6ahS0TCmx2dPeOFOkXhwXNoR5+wmx3Yz6dctcAmOQ+wuOIorqmbDeBq4VGgyMdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Cky2k1nJ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1712905110;
-	bh=qXSRgwoI/Lc9R2Wx9BxMG9QfSE0orexma7cEd5RYRAk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=F0NQ07yxUDHk8ejDl6Hu4pSWsASLwOESvCqEbqHaeJg2AVACBchMQMMcOt+rrG+Y3
-	 vU1i+LfAvwYGr3lypr3AIjxIwlVH1gXXrcXcMQ/Pexf38EHf1mwd5zWUUPGFkopKnq
-	 kEqsxmyCCNi+z0SQjOZDaZZX5Yq6/+aggK6L8qm1fEK0PNa42kJTy7JZj5fC9YmZXy
-	 XVfDWGTRUFEfITY/xQ3WbmWNHNjKiImNTIa7RQHvbYtuBYwfQRUEcMYDI7qQbplV0S
-	 DKRjWGL+EuuqLQDHvH+nva3J+MnXQ7lAPdQtSpiXoHm1wuiJjblJ/OYYetfYtIFduU
-	 XAPPceEPGYbAg==
+	s=201702; t=1712905315;
+	bh=pYSrHJvNgoVbRhpyGhtctqI/U6N/vPxCG9W1zrAdPg0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Cky2k1nJG7sWLhsaz/5xb30D7729X7iVhFzGz/OWRZNTYTnYqbmdwzqSpoMLCojJf
+	 VepfwQyF/KkoOG2DODiXeU1vvyRSC2DHEqWi1RF2PWUmZkyTXdJLX7jguqT7k2HTUJ
+	 szWcUafakWku3cdLtJw0j5/d2NQwjkFUi8MvAva6L3hhVssJrDRM31sw9MjN7AU2Sz
+	 WbLUJq6MZSClDho1Nw2rK2jiAxHy2t35fuK+Oio6/Vgo4K+h4Dk4ms+asGr9aQ6/3R
+	 6habeUemN0ntsIlukOno3t6u2OqYRdTbCxj1aePVpQ75055SOXPuhhSG8GiEgvUCl9
+	 UjmPo0j5r3zqQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG6ps5WJZz4wcq;
-	Fri, 12 Apr 2024 16:58:29 +1000 (AEST)
-Date: Fri, 12 Apr 2024 16:58:26 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG6tq27nrz4wd7;
+	Fri, 12 Apr 2024 17:01:55 +1000 (AEST)
+Date: Fri, 12 Apr 2024 17:01:54 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Daniel Vetter <daniel.vetter@ffwll.ch>
 Cc: Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, Intel
@@ -54,53 +55,65 @@ Cc: Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, Intel
  <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the drm-misc tree
-Message-ID: <20240412165826.18e8a5f4@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+Message-ID: <20240412170154.36b0cecf@canb.auug.org.au>
+In-Reply-To: <20240412165826.18e8a5f4@canb.auug.org.au>
+References: <20240412165826.18e8a5f4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tY2.spB_SgTGSLvvWZ5aIrw";
+Content-Type: multipart/signed; boundary="Sig_/6858CJVZE8hKI9vvrk+z28K";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/tY2.spB_SgTGSLvvWZ5aIrw
+--Sig_/6858CJVZE8hKI9vvrk+z28K
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the drm-misc tree, today's linux-next build (htmldocs)
-produced this warning:
+On Fri, 12 Apr 2024 16:58:26 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the drm-misc tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> drivers/gpu/drm/drm_plane.c:1767: warning: expecting prototype for drm_pl=
+ane_add_size_hint_property(). Prototype was for drm_plane_add_size_hints_pr=
+operty() instead
 
-drivers/gpu/drm/drm_plane.c:1767: warning: expecting prototype for drm_plan=
-e_add_size_hint_property(). Prototype was for drm_plane_add_size_hints_prop=
-erty() instead
+also
 
-Introduced by commit
+include/drm/drm_mode_config.h:963: warning: Function parameter or struct me=
+mber 'size_hints_property' not described in 'drm_mode_config'
+\include/drm/drm_mode_config.h:963: warning: Excess struct member 'size_hin=
+ts_propertty' description in 'drm_mode_config'
 
-  9677547d8362 ("drm: Introduce plane SIZE_HINTS property")
+> Introduced by commit
+>=20
+>   9677547d8362 ("drm: Introduce plane SIZE_HINTS property")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/tY2.spB_SgTGSLvvWZ5aIrw
+--Sig_/6858CJVZE8hKI9vvrk+z28K
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYY25IACgkQAVBC80lX
-0Gwd9Qf+LqI+LoYIwM7wXCo30NPlBxhqrTCnOoVXI8AG1EDedhQdCRns05uUJVjq
-C0h94TCqjEahbCB5t1ea/brXblcFQYj7KCT/+WHNscJ+TW7sXav9pFpkkbGpZGpm
-Wvgduf3Fo7MHqTTagqZmUnllaazVPBvrwkEapkD+0k5kBkAIIsDT5g4EdsZB10HN
-FMJYCv5FaBjWpWkum44wxL5oOIWg4s9taeFTC4l8HVmCU009+HFlrEM2Aio8iPG6
-xsg6FSGSf7PxuAkzrekjsORkWt8pMsYjrYLmXqWrjTGO5Bcm74uBxhxBlCw9lC0K
-Gm5fraODpN/mcY5BczkNwyNj4HrPXA==
-=H44g
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYY3GIACgkQAVBC80lX
+0GypQwf/TJCngMi4gCVfDSODVrEABJ9kii8AH2B9sS1cRQTWOM5kLbUP2y++PkK6
+RH9hssiG6eC4IG9uCniYr+r9IxJpVqTNF0LLEoMsRAyQr6xeHkOGZTTBcf5NGXfp
+Hj2uyRCsgaRBaDjXLTPsvTPQiT+4QaQtl5phogyBxXi2EdPPSDTZ8UtPEMeIwuRQ
+MJvb7Gd/EBLQogc/CzEI4nsX7NgRO/ej0ktGvUlGl7xlRWrTP4AJQhugOnyNrHdd
+0V+YLB9/SKdIK63A+g5B79Bv6NT/kZdbhzk9APThGRPnMBk6RJ2IV6MbK1gWeHMA
+nDUMzfg5tNdsM6QKWZlu8MR8QMJ81w==
+=1Aab
 -----END PGP SIGNATURE-----
 
---Sig_/tY2.spB_SgTGSLvvWZ5aIrw--
+--Sig_/6858CJVZE8hKI9vvrk+z28K--
 

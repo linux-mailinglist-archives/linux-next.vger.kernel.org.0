@@ -1,62 +1,139 @@
-Return-Path: <linux-next+bounces-1905-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1906-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0BF48A2638
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 08:09:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A7848A26C4
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 08:40:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 757E51F23A7E
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 06:09:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44CF51C23B7D
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 06:40:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EDAC1CD10;
-	Fri, 12 Apr 2024 06:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26434085A;
+	Fri, 12 Apr 2024 06:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FnzK/4HE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6358405C7;
-	Fri, 12 Apr 2024 06:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2623C3FE37;
+	Fri, 12 Apr 2024 06:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712902165; cv=none; b=lACwUPHfNvOPK7gM2dZVCFFHdzRYeq3Yza03OMUGYfuvY2J8RwpC36B/hpRdee8dHxGDBjADpe8Of+3bjF+3OhNMWQ+3wduC3MzZxoX8yB8l1svLEOI86UfmW3vLudTWhojRLJJnpLmQFeLns0Riz+Mcx6jF3OplQel1HMBZRKI=
+	t=1712904006; cv=none; b=PdgWwaZLZm+kR/61rA2TOagKA+ol/QRNEtQveLVONwRbj+rIrYD2uFIa61Ku/QbmxPc7wfsjjoixlYODD4TKKUS1kfnjF4oFxhP3f/KMeaIEB2Bmt9h1YFD5Zi/HTp6x+Rt8/C3mhNOiWkeYtwEBWckhjx4XLhMn13SXXqQ/TGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712902165; c=relaxed/simple;
-	bh=B43YITOTJ3PvlVPOv1ZEx+gz59dcQ4HvtELcT4QVYE8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P2TGSoDcZcZonc7cVx1UGoihvGffNYq/buUQ4k0ZC4bCdI2aUkwHzl+0GMfHexeq9Y28cSlcyu+p3is6RV7xt6fV56CtVKOQYIOCB/K+tY9sBDNBcNqyMA0vDEbELh0T10A1P21SZiiCKJYWEcAiPdC0hro+rsvpUcL87ZSNyq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id C35A068B05; Fri, 12 Apr 2024 08:09:11 +0200 (CEST)
-Date: Fri, 12 Apr 2024 08:09:11 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
-	Christoph Hellwig <hch@lst.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
-Message-ID: <20240412060911.GA32268@lst.de>
-References: <20240412154607.1b5096b3@canb.auug.org.au>
+	s=arc-20240116; t=1712904006; c=relaxed/simple;
+	bh=PCkee1BgUzC1EAtuUO8qm/VJInsFRKB7YkPED+SoodI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ak6vu0wPCJzL/uS5iI9AXBWH0G5wKsrIm8J2UsSqj8Iq3VZTd2Mp80ZhVwADefa/nB9wZ66oBotAnwF7bqHvYyhgJJqUCUuAfcp0VZhRs93ncBKRekJ1kWGQffUzSsALyYJN0hOtc9Hcv7SsLoy0KGSfOPpGuSj+LXbo4sHRSS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FnzK/4HE; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712904001;
+	bh=Y5l5hkAzwvAQKUhuF9D8ucm9ZhOjltCqyRNj+w2o3BA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=FnzK/4HEukrdWMqC+ByYSwKcGGlT7O2yjXruMRjZEcpfJ90DKUWSTxadJ3YtAhehE
+	 aOAzQDqUnAusRO7G40PD1BiJk4Ic1FYAgQMieVYBpHqTESyCU/fTLIf9xNEiqWrbaw
+	 HIhGbpFzhzVUpi9kVI9QwbziEUFeUjPX7A8ZebHFgVJZQEWF5NC+0PJwlz0oKcoFEL
+	 ATO5um8n8f4Y3CSUT8dgGKrvzI4medx0SanF2DryMPGZ7maJsNh6tSmHN5wYYYXGBC
+	 7I0XneF/xf3s9f/MJqVEDuMF0X04bZF/kixxPeorArEqd5blnWahoW8Hthyr6BJjQp
+	 uh4lz0aHv6qZw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VG6PX4C9Pz4wx5;
+	Fri, 12 Apr 2024 16:40:00 +1000 (AEST)
+Date: Fri, 12 Apr 2024 16:39:59 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Barry Song <v-songbaohua@oppo.com>, Chuanhua Han <hanchuanhua@oppo.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20240412163959.3092804a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240412154607.1b5096b3@canb.auug.org.au>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: multipart/signed; boundary="Sig_/1r+1bu_1ySpe+jg/pD+T/sB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-looks like the scsi tree failed to pick up:
+--Sig_/1r+1bu_1ySpe+jg/pD+T/sB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-uas: switch to using ->device_configure to configure queue limits
+Hi all,
 
-somehow, which was the commit just before the one removing
-blk_queue_max_hw_sectors in the series.
+After merging the mm tree, today's linux-next build (x86_64 allnoconfig)
+failed like this:
 
+In file included from include/linux/suspend.h:5,
+                 from arch/x86/kernel/asm-offsets.c:14:
+include/linux/swap.h:568:6: warning: no previous prototype for 'swap_free_n=
+r' [-Wmissing-prototypes]
+  568 | void swap_free_nr(swp_entry_t entry, int nr_pages)
+      |      ^~~~~~~~~~~~
+(lots of these)
+
+Caused by commit
+
+  ca23b4d4cae5 ("mm: swap: introduce swap_free_nr() for batched swap_free()=
+")
+
+from the mm-unstable branch of the mm tree.
+
+I have applied the following patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 12 Apr 2024 16:25:26 +1000
+Subject: [PATCH] fixup for "mm: swap: introduce swap_free_nr() for batched
+ swap_free()"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/swap.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index b7a107e983b8..d1d35e92d7e9 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -565,7 +565,7 @@ static inline void swap_free(swp_entry_t swp)
+ {
+ }
+=20
+-void swap_free_nr(swp_entry_t entry, int nr_pages)
++static inline void swap_free_nr(swp_entry_t entry, int nr_pages)
+ {
+ }
+=20
+--=20
+2.43.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/1r+1bu_1ySpe+jg/pD+T/sB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYY10AACgkQAVBC80lX
+0Gy60ggAhf4V6fK4QeUQoYkfBr1uZJev2Iff7FF8D+cSAlBdJEtqEF4Beax/SHGk
+XAcpWC2jlZM+pIDPbrPAoSTejdoZ1e+r/sCrjxJoGJJBBsBfYEIeqbnu3ZE5tOaJ
+nVVJWwPXmjRsqGjdIViRb/Nb9f3jggz9wW0Vg1eQ2S7WG53reNAcK4aKU/u/jwYG
+AwvCHk2TH02vX5g6TsY6RqJ0RkBW+tjiRXLsVJW4xbORPJ4LRbbsFX4ydRo2+zb2
+DbfMFSqL/aP+DgY+eDSkTcEoMBaAlkcViNr5j8XVUMcaSvBTi+/bpC5DxfaQvsOj
+01is3lnd9D4gj/s94jzIq4KNTurvQg==
+=XfYs
+-----END PGP SIGNATURE-----
+
+--Sig_/1r+1bu_1ySpe+jg/pD+T/sB--
 

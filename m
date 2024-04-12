@@ -1,170 +1,232 @@
-Return-Path: <linux-next+bounces-1914-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1915-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0F548A2E05
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 14:15:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CF408A3247
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 17:23:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F8971C210CD
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 12:15:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CD7B28251B
+	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 15:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F8C56459;
-	Fri, 12 Apr 2024 12:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0206148828;
+	Fri, 12 Apr 2024 15:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WIVLGs8H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bxVWIHeu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E317D56458
-	for <linux-next@vger.kernel.org>; Fri, 12 Apr 2024 12:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6988148827;
+	Fri, 12 Apr 2024 15:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712924116; cv=none; b=pOrm7bUiAJ23KADf4xnXDR9EKb+At2mU3BuenUT9NtEKTn4r9uw4j63cAugOhiHIY1z+7VQN18zLud10F2S00HCxTblmqFle/HDfC4fTNpbnmv1QQxiDyLdE0YU3BrZA4Gc90MvCCFbtyybGU9as7XxFJLWzJ2nRUkTArzLc3FY=
+	t=1712935331; cv=none; b=punu11N6u/hoq12nTm0WkvEUFIHVf3NPOIPq+uoTxbC+1tU9QxEy5GnZcWBU/Dp7K/X7Mh82X4rPIc86yW1zOdHRRCkEoNuIP/SHVV323HMrKtc16VKHSOc1wgz9JxdG8DEKXb7WSMz8Uy8JGH3uveJm4SQDoK1/xQGJ9/Hj3H0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712924116; c=relaxed/simple;
-	bh=jMgsflWuaYWNYa9dlh0cqvvdrhZy9tcBnp+Jx8l3B5U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q4OPP0+locfMLBUwKCWqKHKgjpjrGh/OOCR40mH7RHjMFqNodCJeW3GCAMAEtuOKy6+qvXl6BMr4o6A2Bwz38t4XMbRpM1V/dibSoysLAnV641aGONtoSS0tcvj0YvQLvxss0LkpYPr9DFVBhwWDYq5M40D7aOfzkJ05RrG+cVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WIVLGs8H; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712924113;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Kbg/AnMCE3YNGZKUUT6bVQZJO+XQvmdhDaWbX3/3Wzc=;
-	b=WIVLGs8Hw0HDya4Ua+1GWTJbf6IxEG45+jDaf+PAg5SppvjYTPp2N8UxyQbqhPRpofcICr
-	F64/NIZ2Q8TmKBYUO0+abw6+mHxu85BPN9ZqLabXGRe6cGI0/hqcKbkDf72+qT+2qXiYz6
-	iM5XQJgxCxLZZ4vLxJmTY2GRLCvkm5I=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-265-JOaDo5m-P4uRf731GREA4w-1; Fri, 12 Apr 2024 08:15:12 -0400
-X-MC-Unique: JOaDo5m-P4uRf731GREA4w-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-343da0a889dso537908f8f.0
-        for <linux-next@vger.kernel.org>; Fri, 12 Apr 2024 05:15:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712924111; x=1713528911;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kbg/AnMCE3YNGZKUUT6bVQZJO+XQvmdhDaWbX3/3Wzc=;
-        b=xO0hhTJfO2eOOhcZEscSjljQupuEWhJtCBVboslswUCqfjzed+ca2rEv/VJS/BDrFW
-         R/XabWU0p9iN1EmEPQC7uKDaeop2j9mF6FfLpIc+OmM8VrJxt5eKQ8NiC5xVPtlPQ4OX
-         kEgeSWCv9QeDhm5Vpt75/tu5sPkmRynCK5+WUuQO4q4AWfK4U5gFlZtPEdy9cLKKszUm
-         bcTFB2hhFXJt4zwPXnJO5bS2vZs1AaqPUEF6XO8pXJGJwFWXNEAyQuc4w6ljKfljd1Hs
-         GE77pM0q1FnVXACbzobTMIyB/gYRyPlxULQuQRa+vXP/1cNLYdvjzfgN+WN/cUspRgG3
-         gD/A==
-X-Forwarded-Encrypted: i=1; AJvYcCVuio2QYhnUUH4+BzFK0zq18zJg50Hg/PEQMAvXhWV2HY+OOqfsM8KXnjQIbKzscT660J1IzZ+2JOSZvrXyuJqw0ZidF1LSx9sNNA==
-X-Gm-Message-State: AOJu0YwX7IcwruIQq79n8toCbjnOs+3xpAtNGAMpZE7+K05nPHYcK0Nr
-	Q7f8S0gVZ8AAIfI+u+ubMcuw79HqT7Fw5sELMK6aYxAV5FXD25WhLCvYYPV9OKPVims7/QHY7c1
-	Aq3gD4jv254yXe3OE1cNMG4m+GGbKiIoFSgK/UldMN9SnpnRw7hM99JVWzs13hT8HH+Q1ld5o4q
-	pvCz0syLcF9OMddiD/oqR99RB1K9Nl0GWq4A==
-X-Received: by 2002:adf:f984:0:b0:343:90be:f8b5 with SMTP id f4-20020adff984000000b0034390bef8b5mr1811575wrr.36.1712924111090;
-        Fri, 12 Apr 2024 05:15:11 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH0f/Lal1JjP9dKNlIEcj9MMuXsHp5r8ZbKIS/SX6F6aPygKHGgkqTo1ZIYnBysCL3cQkaQ5/QML9YKp4gg4WQ=
-X-Received: by 2002:adf:f984:0:b0:343:90be:f8b5 with SMTP id
- f4-20020adff984000000b0034390bef8b5mr1811562wrr.36.1712924110759; Fri, 12 Apr
- 2024 05:15:10 -0700 (PDT)
+	s=arc-20240116; t=1712935331; c=relaxed/simple;
+	bh=GWI+u4qjsUPEJ+fxWTkTzIEPGmAcqzYbivpR7z2fEe8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sok5OjeJnyngF3Iq+8MjxRjPMv8SyQqtaDaLU2WpJ5+VPasMCkSwYpjkWybA+ObXPh8eIogAfxInL0AjB2AwvzJ3pTOtMNsugjTT/496CEESP2zX0FNyttO4mgNZeXTeNSMbhtOl4jAA8ghbB3vYiO21Ykj646/8UDo+/uBSjm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bxVWIHeu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E866C2BD11;
+	Fri, 12 Apr 2024 15:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712935331;
+	bh=GWI+u4qjsUPEJ+fxWTkTzIEPGmAcqzYbivpR7z2fEe8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bxVWIHeuV57J9RMesi0j36PpkdWXu7fFZsXHcxtjvg6SD6LEA/6CJeFxGGSWDNbFC
+	 xlFesC8XpFFDpWdfLiE8wAj3ULMWFO1fIn24Ot3T603B1raWNQGHEgRE1IlaQSDAEM
+	 XxCx9nzJLTPHiHxfF/x6ibt06xvWOPATwlovkvIoFKqbUxVAcdsOwBGJFq9IsVIrr+
+	 VnEmtedxD4mmSRHYFgwzikUR28XeeO1fsV+sf01HI1hw07yOPo7T28S6gmUqEDqlS8
+	 uLJntrlCKSEOYAFS1oJyhmzClJqfDJdGBMAzoeGHvs9eHxVcZA+izUoFnaHODMUu8U
+	 ioT9lwB3RMK8Q==
+Date: Fri, 12 Apr 2024 12:22:07 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the perf tree
+Message-ID: <ZhlRn0TUkcDaAZT5@x1>
+References: <20240402094116.79751030@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240412133407.3364cda3@canb.auug.org.au> <20240412133516.0286f480@canb.auug.org.au>
-In-Reply-To: <20240412133516.0286f480@canb.auug.org.au>
-From: Paolo Bonzini <pbonzini@redhat.com>
-Date: Fri, 12 Apr 2024 14:14:59 +0200
-Message-ID: <CABgObfb0Sm8z8u2269+oiR57fxAgh74JURDRrEebhFAaPNKqGA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kvm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: KVM <kvm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240402094116.79751030@canb.auug.org.au>
 
-On Fri, Apr 12, 2024 at 5:35=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
-> On Fri, 12 Apr 2024 13:34:07 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the kvm tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >
-> > kernel/events/uprobes.c: In function '__replace_page':
-> > kernel/events/uprobes.c:160:35: error: storage size of 'range' isn't kn=
-own
-> >   160 |         struct mmu_notifier_range range;
-> >       |                                   ^~~~~
-> > kernel/events/uprobes.c:162:9: error: implicit declaration of function =
-'mmu_notifier_range_init' [-Werror=3Dimplicit-function-declaration]
-> >   162 |         mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm=
-, addr,
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~
-> > kernel/events/uprobes.c:162:41: error: 'MMU_NOTIFY_CLEAR' undeclared (f=
-irst use in this function)
-> >   162 |         mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm=
-, addr,
-> >       |                                         ^~~~~~~~~~~~~~~~
-> > kernel/events/uprobes.c:162:41: note: each undeclared identifier is rep=
-orted only once for each function it appears in
-> > kernel/events/uprobes.c:175:9: error: implicit declaration of function =
-'mmu_notifier_invalidate_range_start' [-Werror=3Dimplicit-function-declarat=
-ion]
-> >   175 |         mmu_notifier_invalidate_range_start(&range);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > kernel/events/uprobes.c:208:9: error: implicit declaration of function =
-'mmu_notifier_invalidate_range_end' [-Werror=3Dimplicit-function-declaratio=
-n]
-> >   208 |         mmu_notifier_invalidate_range_end(&range);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > kernel/events/uprobes.c:160:35: warning: unused variable 'range' [-Wunu=
-sed-variable]
-> >   160 |         struct mmu_notifier_range range;
-> >       |                                   ^~~~~
-> > cc1: some warnings being treated as errors
-> >
-> > Caused by commit
-> >
-> >   b06d4c260e93 ("mm: replace set_pte_at_notify() with just set_pte_at()=
-")
-> >
-> > I have applied the following patial revert for today.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 12 Apr 2024 13:27:20 +1000
-> Subject: [PATCH] fix up for "mm: replace set_pte_at_notify() with just
->  set_pte_at()"
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  kernel/events/uprobes.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> index f4523b95c945..1215bc299390 100644
-> --- a/kernel/events/uprobes.c
-> +++ b/kernel/events/uprobes.c
-> @@ -18,6 +18,7 @@
->  #include <linux/sched/coredump.h>
->  #include <linux/export.h>
->  #include <linux/rmap.h>                /* anon_vma_prepare */
-> +#include <linux/mmu_notifier.h>
->  #include <linux/swap.h>                /* folio_free_swap */
->  #include <linux/ptrace.h>      /* user_enable_single_step */
->  #include <linux/kdebug.h>      /* notifier mechanism */
-> --
-> 2.43.0
+On Tue, Apr 02, 2024 at 09:41:16AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the perf tree, today's linux-next build (native i.e. ppc64le
+> perf) failed like this:
+> 
+> make[3]: *** No rule to make target '/home/sfr/next/next/tools/include/uapi/linux/stat.h', needed by '/home/sfr/next/perf/libbpf/staticobjs/libbpf.o'.  Stop.
 
-Fixed, thanks and sorry for messing up.
+How is this built? Using O=/home/sfr/next/perf?
+ 
+> Maybe caused by commit
+> 
+>   f122b3d6d179 ("perf beauty: Introduce scrape script for the 'statx' syscall 'mask' argument")
+> 
+> or
+> 
+>   a672af9139a8 ("tools headers: Remove almost unused copy of uapi/stat.h, add few conditional defines")
+> 
+> or a combination of them?
+> 
+> This is an incremental build but doing 'make -C tools/perf clean' and then
+> rebuilding works, so maybe there is a dependency missing?
 
-Paolo
+So I'm trying to revisit this, I did:
 
+⬢[acme@toolbox perf-tools-next]$ rm -rf /tmp/build/$(basename $PWD)/ ; mkdir -p /tmp/build/$(basename $PWD)/
+⬢[acme@toolbox perf-tools-next]$ alias m='rm -rf ~/libexec/perf-core/ ; make -k CORESIGHT=1 O=/tmp/build/$(basename $PWD)/ -C tools/perf install-bin && perf test python'
+⬢[acme@toolbox perf-tools-next]$ git remote update torvalds
+Fetching torvalds
+⬢[acme@toolbox perf-tools-next]$ m
+<SNIP>
+  LD      /tmp/build/perf-tools-next/perf-in.o
+  CC      /tmp/build/perf-tools-next/pmu-events/pmu-events.o
+  LD      /tmp/build/perf-tools-next/pmu-events/pmu-events-in.o
+  LINK    /tmp/build/perf-tools-next/perf
+  INSTALL binaries
+  INSTALL tests
+  INSTALL libperf-jvmti.so
+  INSTALL libexec
+  INSTALL perf-archive
+  INSTALL perf-iostat
+  INSTALL strace/groups
+  INSTALL perl-scripts
+  INSTALL python-scripts
+  INSTALL dlfilters
+  INSTALL perf_completion-script
+  INSTALL perf-tip
+make: Leaving directory '/home/acme/git/perf-tools-next/tools/perf'
+ 17: 'import perf' in python                                         : Ok
+⬢[acme@toolbox perf-tools-next]$
+
+Then left this there and merged perf-tools-next:
+
+⬢[acme@toolbox perf-tools-next]$ git merge perf-tools-next
+Auto-merging MAINTAINERS
+Merge made by the 'ort' strategy.
+ MAINTAINERS                                                            |    1 +
+ tools/include/uapi/asm-generic/fcntl.h                                 |  221 -----------
+ tools/include/uapi/linux/openat2.h                                     |   43 ---
+ tools/lib/perf/cpumap.c                                                |   33 +-
+ tools/lib/perf/include/perf/cpumap.h                                   |   16 +
+ tools/lib/perf/libperf.map                                             |    4 +
+<SNIP>
+ tools/perf/util/vdso.c                                                 |   48 +--
+ 186 files changed, 7217 insertions(+), 3829 deletions(-)
+ delete mode 100644 tools/include/uapi/asm-generic/fcntl.h
+ delete mode 100644 tools/include/uapi/linux/openat2.h
+ rename tools/{ => perf/trace/beauty}/arch/x86/include/asm/irq_vectors.h (100%)
+ rename tools/{ => perf/trace/beauty}/arch/x86/include/uapi/asm/prctl.h (100%)
+ create mode 100755 tools/perf/trace/beauty/clone.sh
+ create mode 100644 tools/perf/trace/beauty/fs_at_flags.c
+ create mode 100755 tools/perf/trace/beauty/fs_at_flags.sh
+ rename tools/{ => perf/trace/beauty}/include/uapi/linux/fcntl.h (100%)
+ rename tools/{ => perf/trace/beauty}/include/uapi/linux/fs.h (100%)
+ rename tools/{ => perf/trace/beauty}/include/uapi/linux/mount.h (100%)
+ rename tools/{ => perf/trace/beauty}/include/uapi/linux/prctl.h (100%)
+ rename tools/{ => perf/trace/beauty}/include/uapi/linux/sched.h (100%)
+ rename tools/{ => perf/trace/beauty}/include/uapi/linux/stat.h (100%)
+ rename tools/{ => perf/trace/beauty}/include/uapi/linux/usbdevice_fs.h (100%)
+ rename tools/{ => perf/trace/beauty}/include/uapi/linux/vhost.h (100%)
+ rename tools/{ => perf/trace/beauty}/include/uapi/sound/asound.h (100%)
+ create mode 100755 tools/perf/trace/beauty/statx_mask.sh
+ create mode 100644 tools/perf/ui/browsers/annotate-data.c
+ create mode 100644 tools/perf/util/disasm.c
+ create mode 100644 tools/perf/util/disasm.h
+⬢[acme@toolbox perf-tools-next]$ 
+
+And:
+
+⬢[acme@toolbox perf-tools-next]$ m
+rm: cannot remove '/home/acme/libexec/perf-core/scripts/python/Perf-Trace-Util/lib/Perf/Trace/__pycache__/Core.cpython-312.pyc': Permission denied
+make: Entering directory '/home/acme/git/perf-tools-next/tools/perf'
+  BUILD:   Doing 'make -j28' parallel build
+Warning: Kernel ABI header differences:
+<SNIP>
+Auto-detecting system features:
+...                                   dwarf: [ on  ]
+...                      dwarf_getlocations: [ on  ]
+...                                   glibc: [ on  ]
+...                                  libbfd: [ on  ]
+...                          libbfd-buildid: [ on  ]
+...                                  libcap: [ on  ]
+...                                  libelf: [ on  ]
+...                                 libnuma: [ on  ]
+...                  numa_num_possible_cpus: [ on  ]
+...                                 libperl: [ on  ]
+...                               libpython: [ on  ]
+...                               libcrypto: [ on  ]
+...                               libunwind: [ on  ]
+...                      libdw-dwarf-unwind: [ on  ]
+...                             libcapstone: [ on  ]
+...                                    zlib: [ on  ]
+...                                    lzma: [ on  ]
+...                               get_cpuid: [ on  ]
+...                                     bpf: [ on  ]
+...                                  libaio: [ on  ]
+...                                 libzstd: [ on  ]
+
+  GEN     /tmp/build/perf-tools-next/common-cmds.h
+  LINK    /tmp/build/perf-tools-next/libperf-jvmti.so
+  INSTALL /tmp/build/perf-tools-next/libsubcmd/include/subcmd/run-command.h
+<SNIP>
+INSTALL libbpf_headers
+  LD      /tmp/build/perf-tools-next/libperf/libperf-in.o
+  CLANG   /tmp/build/perf-tools-next/util/bpf_skel/.tmp/augmented_raw_syscalls.bpf.o
+  AR      /tmp/build/perf-tools-next/libperf/libperf.a
+  GENSKEL /tmp/build/perf-tools-next/util/bpf_skel/augmented_raw_syscalls.skel.h
+  GEN     /tmp/build/perf-tools-next/python/perf.cpython-312-x86_64-linux-gnu.so
+  GEN     /tmp/build/perf-tools-next/pmu-events/pmu-events.c
+  CC      /tmp/build/perf-tools-next/builtin-bench.o
+  CC      /tmp/build/perf-tools-next/builtin-annotate.o
+<SNIP>
+  CC      /tmp/build/perf-tools-next/util/bpf-event.o
+  CC      /tmp/build/perf-tools-next/util/bpf-utils.o
+  CC      /tmp/build/perf-tools-next/util/pfm.o
+  LD      /tmp/build/perf-tools-next/util/scripting-engines/perf-in.o
+  LD      /tmp/build/perf-tools-next/util/perf-in.o
+  LD      /tmp/build/perf-tools-next/perf-in.o
+  CC      /tmp/build/perf-tools-next/pmu-events/pmu-events.o
+  LD      /tmp/build/perf-tools-next/pmu-events/pmu-events-in.o
+  LINK    /tmp/build/perf-tools-next/perf
+  INSTALL binaries
+  INSTALL tests
+  INSTALL libperf-jvmti.so
+  INSTALL libexec
+  INSTALL perf-archive
+  INSTALL perf-iostat
+  INSTALL strace/groups
+  INSTALL perl-scripts
+  INSTALL python-scripts
+  INSTALL dlfilters
+  INSTALL perf_completion-script
+  INSTALL perf-tip
+make: Leaving directory '/home/acme/git/perf-tools-next/tools/perf'
+ 17: 'import perf' in python                                         : Ok
+⬢[acme@toolbox perf-tools-next]$
+
+⬢[acme@toolbox perf-tools-next]$ ls -la tools/include/uapi/linux/stat.h
+ls: cannot access 'tools/include/uapi/linux/stat.h': No such file or directory
+⬢[acme@toolbox perf-tools-next]$
+
+I'm not being able to reproduce that problem, can you see where am I
+doing some mistake in the above steps?
+
+Thanks,
+
+- Arnaldo
 

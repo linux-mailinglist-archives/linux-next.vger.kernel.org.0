@@ -1,114 +1,300 @@
-Return-Path: <linux-next+bounces-1916-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1917-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A2518A3269
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 17:27:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4E668A3A88
+	for <lists+linux-next@lfdr.de>; Sat, 13 Apr 2024 04:43:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0B96B223C4
-	for <lists+linux-next@lfdr.de>; Fri, 12 Apr 2024 15:27:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC01AB22FF8
+	for <lists+linux-next@lfdr.de>; Sat, 13 Apr 2024 02:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D54361474D2;
-	Fri, 12 Apr 2024 15:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F947101D5;
+	Sat, 13 Apr 2024 02:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dqDJWi85"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pfr48ukl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA6D137C59;
-	Fri, 12 Apr 2024 15:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4324B8831;
+	Sat, 13 Apr 2024 02:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712935655; cv=none; b=kSNw68q1ptJYNRjv4XNtKANJ9eTBZSeOlnJkiWO/NZywqiD8xiM0sYX9FGBLGE9tDx/8bm/BN590Ia6qamSYy0PU0RmOeoabBx73TaGO1qqBi8cAd08gs0+x1wWumq/WaXIvEZtTafAsERkREjZVn9VWwdFtTB5m/bQ1QlV3Gg4=
+	t=1712976228; cv=none; b=Nq2TrsS0BeVBj2bFHzlltKkWy9NP/B2Ncx7X9WHXKchFi8PgmL22IjZ+N+oMQJEqQjuHYDvbAvmkAf9nnxy0fojobwj8chH8GSTgQb6Ep5qA3FiucOeruR2BhoPzH8C/Lwu1z+Nj7YvsnkxkBV7wzrIgutOp+qu1NEC+bhzAj6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712935655; c=relaxed/simple;
-	bh=3ocp6HJUXvmCPVFIur9qbSPmsfazTRISGOaIoLPoDO4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BSlCkqDHVZeRkz+GzOAnHq2TrFniBTpN7OrGRuGphKo+VUsgJp4NCIXu5h62JbQxzYLhfB04OuTi+Su1AhFLGOn9ECzDoiQUvBiw/mx2YT9/Xn5eeuHHKdYutB8cvCNdPQCbuqGq80vaeHxGsJtUBKj5hlCbPYmSkJzWg1zltFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dqDJWi85; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712935654; x=1744471654;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3ocp6HJUXvmCPVFIur9qbSPmsfazTRISGOaIoLPoDO4=;
-  b=dqDJWi85uo2b5nj2Yz5YPHnLM6QAjZq/pfIrFJZrtuNQ8JMH02Lct0ew
-   Q4At+IsceI1AG8Ypgt90VJ7UQ3ZKbNk1ezD+wCWVmZuSYrGUyoWhNpcRW
-   xAaSQ59ztF1UBXgWuWC3X2C5no52hOeOc3VT20vzYuoD7DfhzZGijN5po
-   WTzTOwQ79FUdg+WCQyctfkl6AdjEyFNSFAq3Yifv9cCkxU90nq/xwJjn4
-   sTVibuDIa7xfZCClDCp/xa2KXzmDanwuDvZpHuH/APK7th44F/MuYvj3V
-   ff6cz+TZVYn4SMN6q+2Nas6a71hueFQKizNilbp83voqI45/AUgcCYYhR
-   g==;
-X-CSE-ConnectionGUID: bBV3cOsIRbmjjQzPFRiAOg==
-X-CSE-MsgGUID: lVm6iX6uRfO7WB6c3wt99g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="12186314"
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="12186314"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 08:27:34 -0700
-X-CSE-ConnectionGUID: 71/Qep/DT0OF6e0hYWCLVQ==
-X-CSE-MsgGUID: ljtoSLqtS9qZbPYhubwGnA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="21245359"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 08:27:31 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rvIoL-00000003gkX-1Kl8;
-	Fri, 12 Apr 2024 18:27:29 +0300
-Date: Fri, 12 Apr 2024 18:27:29 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@linux.intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the fpga tree
-Message-ID: <ZhlS4VrShNwoL4IF@smile.fi.intel.com>
-References: <20240412151147.22a059ff@canb.auug.org.au>
+	s=arc-20240116; t=1712976228; c=relaxed/simple;
+	bh=uTVry+7Yk0Yx2bIliqO9FLjvtQb3GTZpPJ+GYHnc3XY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RjdghBndWrEoho5qaEL+xt/UlDEghXX9qwWDPLituzTs/bCVmBfPSc2/R/CpxnQVM3LhYJjcvj5D1PabdLhrMvNHsjyuozZthZYgRh3UIGVMxxDmuLSGRffU4WjtKjHGzIKKKV/FB5bvuZ2M+ptnQVRk1/OTgTS2FJ4Jgh2kCtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pfr48ukl; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1712976221;
+	bh=9nQeBX4dxmkDHV+U6JS+37Qf6B1PkL6FnLHBHNt7+hA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=pfr48ukl3Xaeb61xKxCw0ei2sagvDVmXf0StOAiiGDul94R96OTKvdFqusX8EOJDz
+	 CYQWAlN/qX5yirhpZ/XBBZW5SfAs+VgJ8li8C1gBDS9/D9JVclL2bzlbf39Eej6aZF
+	 6+5sC3TPzOQRIq79P+epNEYHf4SYUC3w38Ly3DZhdLBFry9AAIqy+zujzZ623R01lO
+	 uLoj1DDmaa88Cc8viS2QSfcNwZqZW7qCWIg2JkTnrhQ5Z49rgklXDhbHmlG5x5rf3x
+	 /d6vaprUfpZZaHpSlJs8mSjK/fJ+6Vpgvg7piazg19u2lpYnuR6oyfEjuUR6SLT5K7
+	 eFIZoUsfYWReQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VGd6P3KP5z4wx5;
+	Sat, 13 Apr 2024 12:43:41 +1000 (AEST)
+Date: Sat, 13 Apr 2024 12:43:40 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
+ <namhyung@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the perf tree
+Message-ID: <20240413124340.4d48c6d8@canb.auug.org.au>
+In-Reply-To: <ZhlRn0TUkcDaAZT5@x1>
+References: <20240402094116.79751030@canb.auug.org.au>
+	<ZhlRn0TUkcDaAZT5@x1>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240412151147.22a059ff@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: multipart/signed; boundary="Sig_/uSPG1V6M+jjDHAsHTyK=rEV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Apr 12, 2024 at 03:11:47PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the fpga tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/fpga/ice40-spi.c:201:35: error: implicit declaration of function 'of_match_ptr' [-Werror=implicit-function-declaration]
->   201 |                 .of_match_table = of_match_ptr(ice40_fpga_of_match),
->       |                                   ^~~~~~~~~~~~
-> drivers/fpga/ice40-spi.c:201:35: error: initialization of 'const struct of_device_id *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
-> drivers/fpga/ice40-spi.c:201:35: note: (near initialization for 'ice40_fpga_driver.driver.of_match_table')
-> drivers/fpga/ice40-spi.c:201:35: error: initializer element is not constant
-> drivers/fpga/ice40-spi.c:201:35: note: (near initialization for 'ice40_fpga_driver.driver.of_match_table')
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   5d04660b29fb ("fpga: ice40-spi: Remove unused of_gpio.h")
-> 
-> I have used the fpga tree from next-20240411 for today.
+--Sig_/uSPG1V6M+jjDHAsHTyK=rEV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Okay, thanks for the report. I'll send a fix soon.
+Hi Arnaldo,
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Fri, 12 Apr 2024 12:22:07 -0300 Arnaldo Carvalho de Melo <acme@kernel.or=
+g> wrote:
+>
+> On Tue, Apr 02, 2024 at 09:41:16AM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the perf tree, today's linux-next build (native i.e. ppc6=
+4le
+> > perf) failed like this:
+> >=20
+> > make[3]: *** No rule to make target '/home/sfr/next/next/tools/include/=
+uapi/linux/stat.h', needed by '/home/sfr/next/perf/libbpf/staticobjs/libbpf=
+.o'.  Stop. =20
+>=20
+> How is this built? Using O=3D/home/sfr/next/perf?
 
+Yes.  The actual command line is:
 
+make -C tools/perf -f Makefile.perf -s -O -j60 O=3D/home/sfr/next/perf NO_B=
+PF_SKEL=3D1
+
+The source directory is /home/sfr/next/next.  This is a PowerPC 64 little e=
+ndian
+build (on a PowerPC 64 little endian host).
+
+OK, I just tested on my x86_64 laptop:
+(I started with a clone of Linus' current tree)
+
+pine:~/next/next (master)$ rm -rf ../perf
+pine:~/next/next (master)$ mkdir ../perf
+pine:~/next/next (master)$ make -C tools/perf -f Makefile.perf -s -O -j10 O=
+=3D/home/sfr/next/perf NO_BPF_SKEL=3D1
+Warning: Kernel ABI header differences:
+  diff -u tools/include/uapi/drm/i915_drm.h include/uapi/drm/i915_drm.h
+  diff -u tools/include/uapi/linux/fs.h include/uapi/linux/fs.h
+  diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+  diff -u tools/include/uapi/linux/vhost.h include/uapi/linux/vhost.h
+  diff -u tools/include/uapi/sound/asound.h include/uapi/sound/asound.h
+  diff -u tools/include/linux/bits.h include/linux/bits.h
+  diff -u tools/arch/x86/include/asm/disabled-features.h arch/x86/include/a=
+sm/disabled-features.h
+  diff -u tools/arch/x86/include/asm/required-features.h arch/x86/include/a=
+sm/required-features.h
+  diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpu=
+features.h
+  diff -u tools/arch/x86/include/asm/irq_vectors.h arch/x86/include/asm/irq=
+_vectors.h
+  diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-i=
+ndex.h
+  diff -u tools/arch/x86/include/uapi/asm/kvm.h arch/x86/include/uapi/asm/k=
+vm.h
+  diff -u tools/arch/powerpc/include/uapi/asm/kvm.h arch/powerpc/include/ua=
+pi/asm/kvm.h
+  diff -u tools/arch/s390/include/uapi/asm/kvm.h arch/s390/include/uapi/asm=
+/kvm.h
+  diff -u tools/arch/arm64/include/uapi/asm/kvm.h arch/arm64/include/uapi/a=
+sm/kvm.h
+  diff -u tools/include/asm-generic/bitops/__fls.h include/asm-generic/bito=
+ps/__fls.h
+  diff -u tools/include/asm-generic/bitops/fls.h include/asm-generic/bitops=
+/fls.h
+  diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cpu=
+type.h
+Makefile.config:455: No libdw DWARF unwind found, Please install elfutils-d=
+evel/libdw-dev >=3D 0.158 and/or set LIBDW_DIR
+Makefile.config:460: No libdw.h found or old libdw.h found or elfutils is o=
+lder than 0.138, disables dwarf support. Please install new elfutils-devel/=
+libdw-dev
+Makefile.config:602: No sys/sdt.h found, no SDT events are defined, please =
+install systemtap-sdt-devel or systemtap-sdt-dev
+Makefile.config:688: Warning: Disabled BPF skeletons as clang (clang) is mi=
+ssing
+Makefile.config:800: slang not found, disables TUI support. Please install =
+slang-devel, libslang-dev or libslang2-dev
+Makefile.config:1083: No libbabeltrace found, disables 'perf data' CTF form=
+at support, please install libbabeltrace-dev[el]/libbabeltrace-ctf-dev
+Makefile.config:1147: No openjdk development package found, please install =
+JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
+Makefile.config:1160: libpfm4 not found, disables libpfm4 support. Please i=
+nstall libpfm4-dev
+
+Auto-detecting system features:
+...                                   dwarf: [ OFF ]
+...                      dwarf_getlocations: [ OFF ]
+...                                   glibc: [ on  ]
+...                                  libbfd: [ on  ]
+...                          libbfd-buildid: [ on  ]
+...                                  libcap: [ on  ]
+...                                  libelf: [ on  ]
+...                                 libnuma: [ on  ]
+...                  numa_num_possible_cpus: [ on  ]
+...                                 libperl: [ on  ]
+...                               libpython: [ on  ]
+...                               libcrypto: [ on  ]
+...                               libunwind: [ on  ]
+...                      libdw-dwarf-unwind: [ OFF ]
+...                             libcapstone: [ on  ]
+...                                    zlib: [ on  ]
+...                                    lzma: [ on  ]
+...                               get_cpuid: [ on  ]
+...                                     bpf: [ on  ]
+...                                  libaio: [ on  ]
+...                                 libzstd: [ on  ]
+
+  PERF_VERSION =3D 6.9.rc3.g8f2c057754b2
+pine:~/next/next (master)$ git merge perf-tools-next=20
+Auto-merging MAINTAINERS
+Merge made by the 'ort' strategy.
+ MAINTAINERS                                        |    1 +
+ tools/include/uapi/asm-generic/fcntl.h             |  221 --
+	.
+	.
+	.
+ create mode 100644 tools/perf/util/disasm.h
+pine:~/next/next (master)$ make -C tools/perf -f Makefile.perf -s -O -j10 O=
+=3D/home/sfr/next/perf NO_BPF_SKEL=3D1
+Warning: Kernel ABI header differences:
+  diff -u tools/include/uapi/drm/i915_drm.h include/uapi/drm/i915_drm.h
+  diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+  diff -u tools/include/linux/bits.h include/linux/bits.h
+  diff -u tools/arch/x86/include/asm/disabled-features.h arch/x86/include/a=
+sm/disabled-features.h
+  diff -u tools/arch/x86/include/asm/required-features.h arch/x86/include/a=
+sm/required-features.h
+  diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpu=
+features.h
+  diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-i=
+ndex.h
+  diff -u tools/arch/x86/include/uapi/asm/kvm.h arch/x86/include/uapi/asm/k=
+vm.h
+  diff -u tools/arch/powerpc/include/uapi/asm/kvm.h arch/powerpc/include/ua=
+pi/asm/kvm.h
+  diff -u tools/arch/s390/include/uapi/asm/kvm.h arch/s390/include/uapi/asm=
+/kvm.h
+  diff -u tools/arch/arm64/include/uapi/asm/kvm.h arch/arm64/include/uapi/a=
+sm/kvm.h
+  diff -u tools/include/asm-generic/bitops/__fls.h include/asm-generic/bito=
+ps/__fls.h
+  diff -u tools/include/asm-generic/bitops/fls.h include/asm-generic/bitops=
+/fls.h
+  diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cpu=
+type.h
+  diff -u tools/perf/trace/beauty/arch/x86/include/asm/irq_vectors.h arch/x=
+86/include/asm/irq_vectors.h
+  diff -u tools/perf/trace/beauty/include/uapi/linux/fs.h include/uapi/linu=
+x/fs.h
+  diff -u tools/perf/trace/beauty/include/uapi/linux/vhost.h include/uapi/l=
+inux/vhost.h
+  diff -u tools/perf/trace/beauty/include/uapi/sound/asound.h include/uapi/=
+sound/asound.h
+Makefile.config:465: No libdw DWARF unwind found, Please install elfutils-d=
+evel/libdw-dev >=3D 0.158 and/or set LIBDW_DIR
+Makefile.config:470: No libdw.h found or old libdw.h found or elfutils is o=
+lder than 0.138, disables dwarf support. Please install new elfutils-devel/=
+libdw-dev
+Makefile.config:612: No sys/sdt.h found, no SDT events are defined, please =
+install systemtap-sdt-devel or systemtap-sdt-dev
+Makefile.config:698: Warning: Disabled BPF skeletons as clang (clang) is mi=
+ssing
+Makefile.config:810: slang not found, disables TUI support. Please install =
+slang-devel, libslang-dev or libslang2-dev
+Makefile.config:1093: No libbabeltrace found, disables 'perf data' CTF form=
+at support, please install libbabeltrace-dev[el]/libbabeltrace-ctf-dev
+Makefile.config:1157: No openjdk development package found, please install =
+JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
+Makefile.config:1170: libpfm4 not found, disables libpfm4 support. Please i=
+nstall libpfm4-dev
+
+Auto-detecting system features:
+...                                   dwarf: [ OFF ]
+...                      dwarf_getlocations: [ OFF ]
+...                                   glibc: [ on  ]
+...                                  libbfd: [ on  ]
+...                          libbfd-buildid: [ on  ]
+...                                  libcap: [ on  ]
+...                                  libelf: [ on  ]
+...                                 libnuma: [ on  ]
+...                  numa_num_possible_cpus: [ on  ]
+...                                 libperl: [ on  ]
+...                               libpython: [ on  ]
+...                               libcrypto: [ on  ]
+...                               libunwind: [ on  ]
+...                      libdw-dwarf-unwind: [ OFF ]
+...                             libcapstone: [ on  ]
+...                                    zlib: [ on  ]
+...                                    lzma: [ on  ]
+...                               get_cpuid: [ on  ]
+...                                     bpf: [ on  ]
+...                                  libaio: [ on  ]
+...                                 libzstd: [ on  ]
+
+  PERF_VERSION =3D 6.9.rc3.g42c4635c8dee
+make[3]: *** No rule to make target '/home/sfr/next/next/tools/include/uapi=
+/linux/stat.h', needed by '/home/sfr/next/perf/libbpf/staticobjs/libbpf.o'.=
+  Stop.
+make[2]: *** [Makefile:157: /home/sfr/next/perf/libbpf/staticobjs/libbpf-in=
+.o] Error 2
+make[1]: *** [Makefile.perf:892: /home/sfr/next/perf/libbpf/libbpf.a] Error=
+ 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile.perf:264: sub-make] Error 2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/uSPG1V6M+jjDHAsHTyK=rEV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYZ8VwACgkQAVBC80lX
+0GzD7QgAi4oX2RmV/SVD78CJxtiH5KLuqKYdNBmL1z7qVX4NdwLRQ5Vs0NvOgR52
+wqLcPGn39iMMNmG6ez96sW+OpXVNraZdZQalNWF8AxixlEsdJYYZg+qzl8a0kCe2
+5qjGpgNJSF6iGfIpuPTsGTaSJfwPuBA+hm9wgNvZS+AFFtE8Pl02jT+1+3emNHvH
+MFc5a6lemU95LMuO6iu+LUmPshPNphZ45Zxmg+b76wrHILJrD0o9MwNYn3e3s5ap
+E1SvnPilLDT9aOgS+B6jI+5Qby/j4WOh8ErMLwhUH1NNRBNK7Jiv1U3SrJ45YSfO
+lz0BeKLQ6vQIjHLfXQs5sXHaEchy6Q==
+=EXPd
+-----END PGP SIGNATURE-----
+
+--Sig_/uSPG1V6M+jjDHAsHTyK=rEV--
 

@@ -1,71 +1,72 @@
-Return-Path: <linux-next+bounces-1951-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1952-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE91C8A7960
-	for <lists+linux-next@lfdr.de>; Wed, 17 Apr 2024 01:54:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3F128A7962
+	for <lists+linux-next@lfdr.de>; Wed, 17 Apr 2024 01:54:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A88A284CBD
-	for <lists+linux-next@lfdr.de>; Tue, 16 Apr 2024 23:54:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 018E41C220F3
+	for <lists+linux-next@lfdr.de>; Tue, 16 Apr 2024 23:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D2D513AA2D;
-	Tue, 16 Apr 2024 23:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C82B13AA2D;
+	Tue, 16 Apr 2024 23:54:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eKuhO5D7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Wje0YfYU"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8603F13A3E8
-	for <linux-next@vger.kernel.org>; Tue, 16 Apr 2024 23:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A417713A3E8
+	for <linux-next@vger.kernel.org>; Tue, 16 Apr 2024 23:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713311649; cv=none; b=paq1ILxTNgyIUzSKmOHrc+tT5oMWu3HiSOL9j+M/EqqMhqQYBN+zELHTDdmm3PYo/YxUc8fLwboMN5pNS1C4HYwG9yMVj0f4pkWGlyJbCJC4cTnxCgpgR3EMv/2aanx1B1AZfc3a9OzsT2Bqw+tm08BhEFTbrFgsh9XKrBULmpo=
+	t=1713311680; cv=none; b=uXqyObda6y4bSL2+qxxR+0Wso5tCWewPySrHiDp1YNIw53hS4ue+gNppmDQCEftWAZhYKgBIehwU0//ue3zeJS+HwEkUyeKO3p84BrMDVq6TX7BF3E2gCcflyWXgnTOlhsFJ2yLkhQ2dNc2cwLkEGSRE1AtSJ+7xxMqYei9t8Sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713311649; c=relaxed/simple;
-	bh=lELwXqX2GnBMmAHfLBmNlByJmdmG/bVTILIylDcO+sk=;
+	s=arc-20240116; t=1713311680; c=relaxed/simple;
+	bh=hH2IXYyLUNTbEsjK/nJ0ZXdazav3Fl1xtHqJ9wgCBnI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XHIN5Ug4XlwdbD/I9AYldd48Bb/zf9OOqCe9mxTwrOvLX3zs+2zf4S02B/IUZkNR0EFtG6EU/EIUnw113ltcbGQ8LI66V5DTrSAJnzYtQ8hcWnClBEWeFTHQflIpRvycLmwb3shBBubIc570QmVWLJiXt4IY/GCcNcKD71mOE3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eKuhO5D7; arc=none smtp.client-ip=209.85.210.52
+	 In-Reply-To:Content-Type; b=GgvOlEBA3MrADOw4DIUhZ7uZcEdSi9TSq/vUcLjRV8RR3Cdshr8csbJYRsFwpbFRARSerVOoFY3EW3xZ4NWBPlphnkkMnwMw/o6sKdWP4sW9gN9n5SeI1uxX8mBFVxInO9Ffck50hw/JJKgUUlpakORSWUHru2VkMoK5N67+Z74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Wje0YfYU; arc=none smtp.client-ip=209.85.161.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6ea0a6856d7so1590457a34.1
-        for <linux-next@vger.kernel.org>; Tue, 16 Apr 2024 16:54:08 -0700 (PDT)
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5acdbfa7a46so99187eaf.3
+        for <linux-next@vger.kernel.org>; Tue, 16 Apr 2024 16:54:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1713311647; x=1713916447; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1713311679; x=1713916479; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=TR0TEYbFqb6c5b6HzlrOARuCR9bvnLhVJNRPXv/Uaxs=;
-        b=eKuhO5D7NVn72l1tCE7RCzD/rUsZvcYyMJQfwJqLEZebFqp+49LbN5ZSV3euBbHikF
-         3DJXX6vQjbW6r1osZKpWfI0JcEDY04hpWAcz21ALUw6oRP3NkAEXlyZ+MJKXWlV9ZhCU
-         m0FvX21gH4jfmfPXX3TprnV1ulpwdOeVFSfnM=
+        bh=obsgGE9UFLqDe9yocWfnnIS1vPYUkOPTzraJi5WeXac=;
+        b=Wje0YfYUJ1dXILWAc+P/+VzHGajVKGryx66ppM1cstwYXG09rAvCjBNbDq2YqdLZAa
+         LTqDhlHo5bI3XAUwy8XB2dyRmQ+2sstJ4c/mrGdJ82sW8Dr8HO1gmGGKuz3nDXi3iGH0
+         TYaecR1I9wZzkbbX2TVQqZsd7E7lxaqUSB0yc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713311647; x=1713916447;
+        d=1e100.net; s=20230601; t=1713311679; x=1713916479;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TR0TEYbFqb6c5b6HzlrOARuCR9bvnLhVJNRPXv/Uaxs=;
-        b=DfobJXTac50+xV3YRWQTDa6/r1UmynjVAcMUSsZP0OMFYak4ZhgMr5BR40ahZHYv8O
-         xwkYfBu+mbcrHqHTXVKI20gTazzUA11rnxCuJS+J6LG1jHukNsWbH6IqQjmGkvprpRdE
-         TctH+7U0bywhIhVmE/nohXyiYezp+dbnXuFU/bh8UB9BvfaJ7WZl5ttpILbEGJXtsiDT
-         QofIb8Ip8H7Kilmmzwv6/Zyy41VDpgG9+EiV/8BAhq7S4UYn9wlwDosINr8l1ww5XSOt
-         CTqE5YROaDUD8by3YrAeutNZrPlv9JA6+NNeyFNH7l7OCHCTipCDl4IEN45KCuuzDGAb
-         bMQA==
-X-Forwarded-Encrypted: i=1; AJvYcCVms5fPpSVcgOHuDwWbZDbJLnNyToHiouKyb83MzQL0Bp8lmEhlnE/r5SpoNu8ZRQdBbAt847ZZd29i2brnBtDm/z8fds18pqrJSQ==
-X-Gm-Message-State: AOJu0YzyxHZsjqbs1xjZ/AQq1509CdVTnNB+J1sCf6pVlIJthj3ZmwQQ
-	4tW4DxgPniheDoJ8Gur7s68HojE4eaTcICX5Nq1I17mMH7l/Mrz+4Frwy9UsWaE=
-X-Google-Smtp-Source: AGHT+IE0deEqv8RHKhl0RXyrVo47Iv1fvvJ8qSc+8jrpMU3Gj5qxW82X+IK0E4xoncbed3xqI33B5w==
-X-Received: by 2002:a4a:bb18:0:b0:5aa:14ff:4128 with SMTP id f24-20020a4abb18000000b005aa14ff4128mr14940743oop.1.1713311647605;
-        Tue, 16 Apr 2024 16:54:07 -0700 (PDT)
+        bh=obsgGE9UFLqDe9yocWfnnIS1vPYUkOPTzraJi5WeXac=;
+        b=isJzFcIfxGLDmm/nCguk5TiIejBdajssbPh7EpUHq4HuOi/pWCIg+RFj4jObX+EoR1
+         pNbvclCOjIvlX/rGuVH16ft3A9yn6gB4KV4MCp/YszJimuYw7hkSomgDzPkhHNJ8oCwD
+         hVS9yno1s1wTlPLOPQrJpcn61FwEtUrVPCsNyAhncDq7loqvbuyDDwIwnmH0uu+NPxyB
+         pZAAL8CyUkuXIW/AmXdNVs/QEObLGtdev2gGpXh/OG7j/fyz8zBbSInPgraKPgrA0QyG
+         5O+F3K84hDyii3FIFFFhV4HDJHOPjP6Jjs28DcVwcqRV1nDf1pt+xIm7qpSe+ZYKUwWM
+         RmKw==
+X-Forwarded-Encrypted: i=1; AJvYcCVLmBlOZoMUYaLLfmBCSlHmgBr/UbDcNoYpWGuRi0DZGBDYke4r1holH+quumg16NCOFgFgWh2fieWb04f8895P8TLj1a66Pzz3EQ==
+X-Gm-Message-State: AOJu0YzVFaEH4m+5Nmn0iuti1GXEGePKHT7MMlErJICJl2qGLrET0hzX
+	LiknKRilql/SSk/c1jAm7bv+85LGob66bw1U1rmKGXE071TttEUOwMCNFU/VnEYv99zFYJGXBQF
+	X9HY=
+X-Google-Smtp-Source: AGHT+IEsQgTwtMYioYHBQ1PcHMqd6YIkQksO6j9NJ5r3RaWWFOGzzSrNerdFgtbO0QrPQRKF/sgE2Q==
+X-Received: by 2002:a05:6830:22d6:b0:6ea:367a:f660 with SMTP id q22-20020a05683022d600b006ea367af660mr15557579otc.1.1713311678769;
+        Tue, 16 Apr 2024 16:54:38 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ay27-20020a056820151b00b005a47a6b8f67sm2795689oob.29.2024.04.16.16.54.06
+        by smtp.gmail.com with ESMTPSA id z20-20020a05683020d400b006eb7b744ad0sm1233916otq.71.2024.04.16.16.54.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Apr 2024 16:54:06 -0700 (PDT)
-Message-ID: <69d0c6c6-ed82-410c-9102-09ed3b95ae05@linuxfoundation.org>
-Date: Tue, 16 Apr 2024 17:54:05 -0600
+        Tue, 16 Apr 2024 16:54:38 -0700 (PDT)
+Message-ID: <ae01f203-ff71-48f9-b5cc-9497ac6e269f@linuxfoundation.org>
+Date: Tue, 16 Apr 2024 17:54:37 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -73,50 +74,36 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the kselftest tree with the tip tree
+Subject: Re: linux-next: duplicate patch in the kselftest tree
 To: Stephen Rothwell <sfr@canb.auug.org.au>, Shuah Khan <shuah@kernel.org>,
  Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
  "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: John Stultz <jstultz@google.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
  Linux Next Mailing List <linux-next@vger.kernel.org>,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20240412155545.7b8ad20b@canb.auug.org.au>
+References: <20240415144358.086d0a74@canb.auug.org.au>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240412155545.7b8ad20b@canb.auug.org.au>
+In-Reply-To: <20240415144358.086d0a74@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/11/24 23:55, Stephen Rothwell wrote:
+On 4/14/24 22:43, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the kselftest tree got a conflict in:
+> The following commit is also in the tip tree as a different commit
+> (but the same patch):
 > 
->    tools/testing/selftests/timers/valid-adjtimex.c
+>    398d99519758 ("selftests/perf_events: Test FASYNC with watermark wakeups.")
 > 
-> between commit:
+> This is commit
 > 
->    076361362122 ("selftests: timers: Fix valid-adjtimex signed left-shift undefined behavior")
+>    e224d1c1fb93 ("selftests/perf_events: Test FASYNC with watermark wakeups")
 > 
-> from the tip tree and commit:
-> 
->    8e222dcf92a8 ("selftests: timers: Fix valid-adjtimex signed left-shift undefined behavior")
-> 
-> from the kselftest tree.
+> in the tip tree.
 > 
 
-Thank you. I dropped 8e222dcf92a8 from linux-kselftest next
-
-> Slightly different versions of the same patch (whitespace differences).
-> 
-> I fixed it up (I (arbitrarily) used the former version) and can carry the
-> fix as necessary. This is now fixed as far as linux-next is concerned,
-> but any non trivial conflicts should be mentioned to your upstream
-> maintainer when your tree is submitted for merging.  You may also want
-> to consider cooperating with the maintainer of the conflicting tree to
-> minimise any particularly complex conflicts.
-> 
+Dropped the patch from linux-kselftest next.
 
 thanks,
 -- Shuah

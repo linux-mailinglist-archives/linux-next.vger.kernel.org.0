@@ -1,104 +1,148 @@
-Return-Path: <linux-next+bounces-1956-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1957-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C72F48A7BC4
-	for <lists+linux-next@lfdr.de>; Wed, 17 Apr 2024 07:18:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C16388A7BDB
+	for <lists+linux-next@lfdr.de>; Wed, 17 Apr 2024 07:29:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 877E81F220E9
-	for <lists+linux-next@lfdr.de>; Wed, 17 Apr 2024 05:18:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DCB1283265
+	for <lists+linux-next@lfdr.de>; Wed, 17 Apr 2024 05:29:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8256C5338F;
-	Wed, 17 Apr 2024 05:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 874C1524D4;
+	Wed, 17 Apr 2024 05:29:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="bLo0X7H0"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iW2uUq5d"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3522F53389;
-	Wed, 17 Apr 2024 05:18:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13CDBE4E;
+	Wed, 17 Apr 2024 05:29:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713331096; cv=none; b=goy830TNA/7MNFCRFpGYGALab4CgE7XOZBXq45KVmOtujhhH6nBMICMcValSRs3iSyFaAabJg8GRpSY4ZZ3OhY2UReu2qFT+oeVxf2p97aFrOgeQSOD8LjcYaPEirpGpHNC94Q/sdHagbglzorTF7cAnyKt4+67JQUdb80B4l1o=
+	t=1713331751; cv=none; b=Cc6RY/4X0yhmCXbclW0eY8mF+lvxIdH1Db2XVfpoiifuFKNKApcVXZYb5ey7G2OEgVYAtLi+Naid552483uq6GZmn86tTEwSZPBM8nspUXgBlJgdxQfoZXy9Hk8SkGvOKjrsQEnv1oJT9JA6/o6Y1JSUuj3pS23qPOHrsdRve7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713331096; c=relaxed/simple;
-	bh=Il9V0Kokey9Tjqc3N/KaASOnqs22ZCDqg0UEeI3u3fE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=PYmX+Khinlw7xJddWKM/DM+r/lvAl7VvONl7d3EQHTKNOuSU4m9Zoi1fyspCHkiUtYeqzI35/WBB6jvtKF0c7yvEIlngXyySyY3yCGwIzCnYFhAqWp0jSpnT92iNqY9vYZkuD48yj72TNJ7JgcFprLzLfCBoA3u/cNq9vCHxprI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=bLo0X7H0; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1713331751; c=relaxed/simple;
+	bh=OifDQbcJp4r7eu2NhLz6xbsvnaX8sjeCXCHE9D4QYuI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YWITNkzGECYMoGc3T3igWmH1Ltp8elI7SvqbprvYbv14c/ui3ZUn7xMDjTMgezBY5AowhXkPEipG+/GyfEr+FFcNCA46yHSC+mN8k9C1MLY+HOvotxSmCizVpA+Kk67a4659y8/BtAyjbwsXv7ZUUQh9sPI2a/zUvgpgXdmUmx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iW2uUq5d; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1713331092;
-	bh=aF2WuhjBofPVeU0nHFLxo1B1ck4dE7K1tTB5Yj2+mRQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=bLo0X7H0EH8FB98nbRjIfoJNxQ0/1rWwcvCtD/uEp/zN+dD/Phv7DnhIJwBvpDCid
-	 I+wpGbuU98CVEoa6MQsOSWdOe6tzi+a+OIzNTAi8KcqSbwLRHqPe+tcVlBQeiIArJq
-	 Kb9zMfOPl8lzhLh4Qw7eb+kq6MFheUn9UGfguD5WsKohItqUEZxq5V9lkrmbUmn306
-	 XY2ANhaJZWi2h4sGNWfi3jpuA4UYm3cBvlNeAS9T3wCCLLmtW/DyJIkPMGI/sYY4Zx
-	 fCsMwfi/RbcmGZEZ3QLEDhIhbjJaRT5rs3PI+dI0qfEuMhUL6jqUJBxnMw8dtJ9Bt/
-	 cp+ERVc38jNQw==
+	s=201702; t=1713331745;
+	bh=6dBK1X7uEM27YFQC+XuCWbQVncPoTrMhJPJ3YMBYJfw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=iW2uUq5d5UlZEKVoAWjWEQIIZh/ofsfaEIBQErkB9zK72x/AkoovlpN8fM9dBEbe/
+	 OZcmHrVIe2On6KegBWolfb/xD/l9p03jyVuUz6zdHLX41J40xJu8ioOu7Mc/jP0a17
+	 BM1TQUWhhTLp99dvseQHYKb5DpEHhtpddl+gQFkNAbC/p9yQ5Mgfj57mTg4BowmChH
+	 Oz6UhOOvxgo68iEKC3DlrE/RxWCs/Z3Itpd/zAjCoz8vKMBVcJ88gBsoyBtCOIDn3I
+	 xbyJS9vuA4gjN4oCUHomPiI895LEPjJO9EghERbGzWejFZFRA63qTvhR40g/2dvy74
+	 F7dYZHwA831iQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VK8Lr134Zz4wyV;
-	Wed, 17 Apr 2024 15:18:12 +1000 (AEST)
-Date: Wed, 17 Apr 2024 15:18:11 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VK8bP0jc7z4wyl;
+	Wed, 17 Apr 2024 15:29:05 +1000 (AEST)
+Date: Wed, 17 Apr 2024 15:29:04 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Andrew Morton <akpm@linux-foundation.org>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+Cc: Qiang Zhang <qiang4.zhang@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm tree
-Message-ID: <20240417151811.4484b368@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the mm-hotfixes tree
+Message-ID: <20240417152904.17fa874d@canb.auug.org.au>
+In-Reply-To: <20240416115114.8f1673a2490d31f77d276a41@linux-foundation.org>
+References: <20240416173525.13bfd8dc@canb.auug.org.au>
+	<20240416115114.8f1673a2490d31f77d276a41@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//h+ajTjQzdi6BuOLkvleB=j";
+Content-Type: multipart/signed; boundary="Sig_/tTAEg7zNEKKM8vvCp.6NbDd";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_//h+ajTjQzdi6BuOLkvleB=j
+--Sig_/tTAEg7zNEKKM8vvCp.6NbDd
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Andrew,
 
-After merging the mm tree, today's linux-next build (htmldocs) produced
-this warning:
+On Tue, 16 Apr 2024 11:51:14 -0700 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
+>
+> On Tue, 16 Apr 2024 17:35:25 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+>=20
+> > After merging the mm-hotfixes tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> >=20
+> > lib/bootconfig.c:911: warning: Function parameter or struct member 'ear=
+ly' not described in '_xbc_exit'
+> > lib/bootconfig.c:911: warning: expecting prototype for xbc_exit(). Prot=
+otype was for _xbc_exit() instead
+> >=20
+> > Introduced by commit
+> >=20
+> >   aaeda6237dec ("bootconfig: use memblock_free_late to free xbc memory =
+to buddy")
+> >=20
+> > from the mm-hotfixes-unstable branch of the mm-hotfixes tree. =20
+>=20
+> Thanks.  How's this?
+>=20
+> --- a/lib/bootconfig.c~bootconfig-use-memblock_free_late-to-free-xbc-memo=
+ry-to-buddy-fix
+> +++ a/lib/bootconfig.c
+> @@ -901,7 +901,8 @@ static int __init xbc_parse_tree(void)
+>  }
+> =20
+>  /**
+> - * xbc_exit() - Clean up all parsed bootconfig
+> + * _xbc_exit() - Clean up all parsed bootconfig
+> + * @early: in early xbc init error
+>   *
+>   * This clears all data structures of parsed bootconfig on memory.
+>   * If you need to reuse xbc_init() with new boot config, you can
+> _
+>=20
 
-Documentation/filesystems/index.rst:50: WARNING: toctree contains reference=
- to nonexisting document 'filesystems/buffer'
+OK, so the above two warnings went away, but now I get
 
-Introduced by commit
+lib/bootconfig.c:909: warning: expecting prototype for _xbc_exit(). Prototy=
+pe was for xbc_exit() instead
 
-  4b61a0e73910 ("doc: split buffer.rst out of api-summary.rst")
+Commit
 
-from the mm-unstable branch of the mm tree.
+  aaeda6237dec ("bootconfig: use memblock_free_late to free xbc memory to b=
+uddy")
+
+that was in the mm tree yesterday is not there now.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//h+ajTjQzdi6BuOLkvleB=j
+--Sig_/tTAEg7zNEKKM8vvCp.6NbDd
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYfW5MACgkQAVBC80lX
-0GyfOQgAnpx+Mll4Pbg0o/lkBKK6tl5xjrl3z4wjb5D+PSv+UYml/AkfQRvAhaF9
-+sFIN4JMUmnjpR6s5ikmV46QUVn0r/WKtrefGptJL5ZZdsAMLuWNBGx3nwjZIVob
-mDCcQ/C7vx0MbFJfjlt/gHq/FfeQVKP6+RgzE2mfRfDQXpL+IHUVo2QctdQX6Sbz
-Z4W9d7zE8XEDnaU34xvb5tTF/ISLzyh2FGfJxqsTSZ1X8NK46snen966An1Wje/R
-RbZL10GrQNCSs+JTEZvJgZCjBoFmnsJ3pwnwBx9S7rC/AKjqKyan/hfD32ue0sW+
-7BjDzZyDbs1MaITOiftMYH4bab9vrg==
-=0VIB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYfXiAACgkQAVBC80lX
+0Gw3JAf+OYUqk9c7q5BDXIF7RJzhtNgvb18mkgz2wmNDeMbwdeVHj2uSXYo7wPbm
+YSUDtk84ga559qAflvVcs0vudOin1KG3Vkv31p6/N+aXBpkvDFij1xZ/uNCtcKRH
+uTbnv/4G5O+BVRNXg0ysINesKRq8ISt9726gzLPghpVytWPP5P1MsXzc8x5YNT3w
+J/u9Z068F02z6K1b38ehtDvwov2oFl1Fx0bF4v0MHb5LnF134cS59QsSS/zS21HZ
+DZkdYRsKjdDezlxlC6TpnHmSKjM5T5OjWKUwpoUx9welbmwmIswqDAG2PVArHHHg
+HUTwqs1pcAMcs9s3jstpc/T2zVCSOw==
+=aTkw
 -----END PGP SIGNATURE-----
 
---Sig_//h+ajTjQzdi6BuOLkvleB=j--
+--Sig_/tTAEg7zNEKKM8vvCp.6NbDd--
 

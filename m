@@ -1,61 +1,106 @@
-Return-Path: <linux-next+bounces-1967-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1968-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBD098A92B1
-	for <lists+linux-next@lfdr.de>; Thu, 18 Apr 2024 07:57:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9938F8A9339
+	for <lists+linux-next@lfdr.de>; Thu, 18 Apr 2024 08:39:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29F8F1C20B75
-	for <lists+linux-next@lfdr.de>; Thu, 18 Apr 2024 05:57:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30437281F3F
+	for <lists+linux-next@lfdr.de>; Thu, 18 Apr 2024 06:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3ECC58119;
-	Thu, 18 Apr 2024 05:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97BFD1E48B;
+	Thu, 18 Apr 2024 06:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qG4tXOz1"
 X-Original-To: linux-next@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69DA255E58;
-	Thu, 18 Apr 2024 05:57:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F3225622;
+	Thu, 18 Apr 2024 06:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713419834; cv=none; b=VscfR6ohdQkeBIglqZADtIuDbTk5zE/SiNFX3QVTnAnKAcdRADgP7EsXBu/QQU9YnviYFW4VjCQXtX98/WJPKHKE5okk50x17dlrNVwDDRXVssSkEvT5xMQyVhXcLHzgMi4XSrHPdKSahMDiDru/HPujmDvuZFKSsLJhXCEJPoo=
+	t=1713422333; cv=none; b=tGj0sTB5dLEfV8+zT9Ow74dQnBims56F6wur6e1zJWACRbLM3P7TZapkNUrxL41dMDZlY7hYdps9yo7Vv1QrpwI8RYSTejXxcHe4CpF/raluCR3JktYmC/4Mz8y+YYH5ryvr+d1h/YYtpn8p0gm3xoptZmHhp6aJMnwVNwPhUks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713419834; c=relaxed/simple;
-	bh=EPkI3/Lfd4nekT9M7/fU7oixclKwgHuskeDBcm0iNJA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XGaAkJDryMUsXvQtxMCoydGa/5iAGmcjto9r8+6TuXURunRorsh0hWrdFFjEf60Gn9d7uLwHEJvFp2QMssl9D4nuZ7iX0sNGsBj3KZab/fHl9mnbcGsMLz4yNJoe7PZEJ41nAw6rmK7FKmS2rSPh6fIxemEiIPDTd4e8/MmgWBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id ECD7E68C4E; Thu, 18 Apr 2024 07:57:07 +0200 (CEST)
-Date: Thu, 18 Apr 2024 07:57:07 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
-	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the scsi-mkp tree with the block
- tree
-Message-ID: <20240418055707.GA24656@lst.de>
-References: <20240418145554.7a93325b@canb.auug.org.au>
+	s=arc-20240116; t=1713422333; c=relaxed/simple;
+	bh=UBdtksFAbQk8XeuVggCo+wrUYa0FmmiBqWUJ1GzBLS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ub15VMlyIE5dJ5rlv+FrLGAs9tPbIvIKexxFzW8RJBAYmxC4Iu7d7HkV2aD91EWiwDqBj0sa+c/OIY6XkCKcMGtznnYhJaVWHrTbeN46KOR1f1V44ecEaG1YBl7PR7t9DZ3N5AtcyRdM5aK9p7VRJ3yYFjq34OqK0xUHg4uLWeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qG4tXOz1; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1713422326;
+	bh=BHyU+uYXr2C2f4ARedjQ04T+FYE4a+tBYG1eM6Frwpg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=qG4tXOz1fW/cS7vlieBq86Wpnbb+3F2iL1TvYwf3jgY1dtzO8xsDdSwzNdfplk/Pe
+	 oAUC46Rt2EW/D/JnskwXwV2U4FaG289ukFOX/cO6nnS1nQ5Jpy8Hqo7ya/jP9Y+JCU
+	 Q3evxdRbEatDyhJT3NB+Io9FU7WojDnmxjBs3Utn03hmWVMBc+iuJN8vBz1QahMGtB
+	 GG/4xzkji6MArP0Xj91mCDfEt9qAgQ8Pf+d6MjscmtHGUnaI3n0TJ16vqXUD3QiSVM
+	 iYrbbD6c8u0jTb2riNQeVo/vlqg9NGEwF9/aaTJ2iyQCwEINlqJqz6I/OfofT4ToeK
+	 o+ylYl7vYU/tg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VKp5J2Q84z4wyf;
+	Thu, 18 Apr 2024 16:38:44 +1000 (AEST)
+Date: Thu, 18 Apr 2024 16:38:41 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Vetter <daniel.vetter@ffwll.ch>, Jani Nikula
+ <jani.nikula@linux.intel.com>, Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Luca Coelho <luciano.coelho@intel.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the drm-intel tree
+Message-ID: <20240418163841.3e9afb94@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240418145554.7a93325b@canb.auug.org.au>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: multipart/signed; boundary="Sig_/j726xbuXFUq5Ng.BccLOo7W";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Thanks Stephen,
+--Sig_/j726xbuXFUq5Ng.BccLOo7W
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-the conflict resolution looks good to me.
+Hi all,
 
+After merging the drm-intel tree, today's linux-next build (htmldocs)
+produced this warning:
+
+drivers/gpu/drm/i915/display/intel_dmc_wl.c:1: warning: no structured comme=
+nts found
+
+Introduced by commit
+
+  765425f598c2 ("drm/i915/display: add support for DMC wakelocks")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/j726xbuXFUq5Ng.BccLOo7W
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYgv/EACgkQAVBC80lX
+0GyEUgf7BziEcbp49SKj1TRqssoS2tLgh0tyioBmhaIkyrdd7pCBOaF4Vmr1jdNO
+dHBNbxpWo8wG7+fzbguk/ApIfJy3c0YJxI/IG0PxxiGCgucxGtr324KzW28RSdfO
+SGD3e1DRg3zo5RbkPyhlggCmRgiCc0dc1VVqvTYc2Do+qfWcf+BBU9eeg1B/Pcb4
+HfkWHZDY+6FsLNjWG/FIcfFd8HWtwDqGufSU2mqaaTlCAQDJYgmPLaF916LZMZDH
+GQLJ5xNGNATrvEQzQHK81lOFZdGeoqy4RRj9FneFek9DkoohJGmF+aygDSSnR9GN
+wEZ4amvIaqmVAetYNSBjOLBMRhjpSA==
+=ya9W
+-----END PGP SIGNATURE-----
+
+--Sig_/j726xbuXFUq5Ng.BccLOo7W--
 

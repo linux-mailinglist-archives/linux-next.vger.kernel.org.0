@@ -1,179 +1,131 @@
-Return-Path: <linux-next+bounces-1979-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1980-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC1008AA79A
-	for <lists+linux-next@lfdr.de>; Fri, 19 Apr 2024 06:20:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 155848AA842
+	for <lists+linux-next@lfdr.de>; Fri, 19 Apr 2024 08:09:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D9041F21706
-	for <lists+linux-next@lfdr.de>; Fri, 19 Apr 2024 04:20:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A10C1B21D21
+	for <lists+linux-next@lfdr.de>; Fri, 19 Apr 2024 06:09:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B8C028F3;
-	Fri, 19 Apr 2024 04:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE1F210A1B;
+	Fri, 19 Apr 2024 06:09:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="sb8Aj+XG"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="EFGa45E9";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EO2W39Hy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE292137E;
-	Fri, 19 Apr 2024 04:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0055D10A09;
+	Fri, 19 Apr 2024 06:09:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713500396; cv=none; b=DPc6ZhPiVJlF86+JggF+RpBbigawZmdHG3fnKeoOHx4vZt4vqPLVtrTUN79VtaR3zZB7L6NcVB81g0qfEXwbnWuewFON28JGJ2lEQEwghNn7dPvw9gja7XyIEq20tuzN2RT3Tiw305Pz3ZxWGaBPACzY0Bh/BlqxGWJQb68aF8A=
+	t=1713506970; cv=none; b=cVUg5puc/YaYn12Z9j4MNWPtw+AQjmRlXPP6K8rdYQRKx3+wQozA5N82v/BCcFUDswB3BkuZ61lQJWT8btG5Ep+zLotZbqifBOzZQhHyeSeIsbuBCy9fXRXUm2XRsBQlQXfQhzHgolUZSpzk5nQkkk5vOJGkQOd7A81K93ZazSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713500396; c=relaxed/simple;
-	bh=PBAnXLS7YBdgwAVOVCNs0FlMIlB26SpBlBzxXB19yfg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DCsM6KqW6PLMACsJkXVebP5mnaFu9Sp+5bu/MNEhvyJcIAvAXawC6oUdJw+Vdq9nQWQPIkw6oACFJtAbwxy6R1dUfHLWQV19oPNiPlxLX1Q/5BE733POuQjZfrWtFJqm1x+7rBtB8GGqqRatKcWWc+SXbyMuDpjYNZ7WcYdWMYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=sb8Aj+XG; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1713500390;
-	bh=uzRJHPvvStv+0WlWLGWHtXPKQ0B60p9m7wWL6w2VZVg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=sb8Aj+XGFYGh5tZCOKwi+kmNDQfSUb/CTglGvjKbsKDemMFIJE6R5+53YmfHSxr8h
-	 NrokrQEJEISlFF0HaqIPr1wocwO0KpG9K/CEdPErwb7RbIny/Y3I5/Ral8ywXg5S0O
-	 N0TbLPq/Fb70vq/BGoZ1+1ToMXaPwFLqxQ8S8vFqLwfF3C571Pib2YCIGjTPnoj/lC
-	 qSsKVfss2Ajf8gm6Jykt0ayFHf2zyGDh7O/RlWNZsM7Y8KNGBgpXHjHUGtaQ2w85xq
-	 fkc+vXlkwo+mp9ZFvOaZzcVeQ78+t61LObwxlaKyVjbThyAzyEaCJTlVkPg1auYOfo
-	 LCAG+8e+Uf36w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VLLyZ0pggz4x0C;
-	Fri, 19 Apr 2024 14:19:49 +1000 (AEST)
-Date: Fri, 19 Apr 2024 14:19:47 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tty tree with the tty.current tree
-Message-ID: <20240419141947.4bc16fa4@canb.auug.org.au>
+	s=arc-20240116; t=1713506970; c=relaxed/simple;
+	bh=RyIwE3trWPlOq9sty8gBXujeKIe368HFR8WPMyM4z9g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tlwOQNLWKfFMPZKKUV1l4r7/eE1I6xjfBPfZB5uMwU56HUmucGw925uhdGfeKZtEIx9Yg8UMXTNLoK5Wz7Xv12NqlQp0D5mtHDrEn8c8/l1xo1F5GeagMhS2DX7i8NyrJ4VvX/6E5oSsa9AhylcFq3DCDuo48eCcadMRYyhSJdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=EFGa45E9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EO2W39Hy; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailfout.nyi.internal (Postfix) with ESMTP id C56AB13800E8;
+	Fri, 19 Apr 2024 02:09:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 19 Apr 2024 02:09:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1713506967; x=1713593367; bh=TBixqiZ31b
+	LNMEUE6H16ebkmGgcqoeb9yiDBFLDTjv4=; b=EFGa45E9cUNzbNkm28/ZJjOd+R
+	nkC91IJiDybbjMiDLxfCgogjmwsb27L2jSQK38AzcGudpA59MKBBZYe3aU2Kkaf9
+	4fd6phaO3Lcrs/K0g5C1lywJjq964wxj7BpJpclw62o7ve4tANFYSxZdDrrV9Dch
+	9zgtiIvspaLZG/LdsuYGzSWai//L2smXeP7u8gsfaRuRfzyvLEMKhGPrtFoSqjvf
+	6qzY/qTrUTX3+8rAapG3jNFweN3cwAeBhiXAaikQoWS2ivIA4vs3m7aG5cJxL2oO
+	PKr6SzWgNK3LaRAudl8xqvdQ3ryVpFfcYvowSAaWtcQI9tZR4Dmn7qYl91JQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1713506967; x=1713593367; bh=TBixqiZ31bLNMEUE6H16ebkmGgcq
+	oeb9yiDBFLDTjv4=; b=EO2W39HyVEBr0yJQdp4gh2cU6flE8tH7pl5ciMmOjuac
+	lWXzozfN40QvCkuN3lnuUOrjQbMslsPTgxi3/VQpTVyhZ6kqk13ByxO/sM4qOmbe
+	CyE47IHIWhnJUZpR6AVDurHulCI5eVSCEoP5LPjVjL02jFWqrCKohEYCdzR9Fp4m
+	6Y8VHOCszJtHDAXYnr8tROQAlfof0T32vj+VH+oRtQYIPk8qdGdDI36pghIqNvY2
+	2cGlDclYZdvU/4xaDvcEwbGZEYd8Q6eNv5CNTg1lfn5ZOYFA/tWFrfsbYzLvep76
+	p+nL97WCl9H8XMUQCvMxtZfKvFcmMBMPmzKPkDsCVg==
+X-ME-Sender: <xms:lwoiZreyQDvn3VQesqLow5TypUnNZ6zmiHOj9Bg2tXR7n4ahmSz-0A>
+    <xme:lwoiZhOexhVDiopbAI9BOZCRZS6a4N00FDCe4HEb6MWlBqCfpnTcHub2q8BB2clnU
+    eZrah7RylHH9w>
+X-ME-Received: <xmr:lwoiZki4euIPK13uub05R3FrdFbJpt1MYfA9hBtSNC1qWDL9BL4bvUnVVAvf68NjDBwud62GPR_twk8vSBRT_XZ90MiRFg77C_ZtqA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudekuddgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:lwoiZs-SFEdZEGMQm4thAQQ9JM9OLl93CV2SOPeCAZPgJwCUyJ-uEA>
+    <xmx:lwoiZntAwNTdJ_ypveF0KQ0k1mt04a-lLUxj4wWZqLSfhtrCRE3KUQ>
+    <xmx:lwoiZrGSFOzqAoicA6sW5unR3w3EiWjtdXt1sdR3OC_byfkK5zDypg>
+    <xmx:lwoiZuMMVyyRQZDhBxjaCdoJ1zF3SdO064C9poeu1We3-R8Hog0ESw>
+    <xmx:lwoiZonnc21DV70iyxykuTt0oAkBkCkiyAqaDBZTIl2YjzFlvVJmK9fb>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 Apr 2024 02:09:26 -0400 (EDT)
+Date: Fri, 19 Apr 2024 08:09:24 +0200
+From: Greg KH <greg@kroah.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tty tree with the tty.current
+ tree
+Message-ID: <2024041916-grove-cymbal-291e@gregkh>
+References: <20240419141947.4bc16fa4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uVrJRs9Aye1uiDUT3E53_rk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240419141947.4bc16fa4@canb.auug.org.au>
 
---Sig_/uVrJRs9Aye1uiDUT3E53_rk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Apr 19, 2024 at 02:19:47PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the tty tree got a conflict in:
+> 
+>   drivers/tty/serial/serial_core.c
+> 
+> between commit:
+> 
+>   9cf7ea2eeb74 ("serial: core: Clearing the circular buffer before NULLifying it")
+> 
+> from the tty.current tree and commits:
+> 
+>   1788cf6a91d9 ("tty: serial: switch from circ_buf to kfifo")
+>   abcd8632f26b ("serial: core: Extract uart_alloc_xmit_buf() and uart_free_xmit_buf()")
+> 
+> from the tty tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Hi all,
+Looks good, thanks!
 
-Today's linux-next merge of the tty tree got a conflict in:
-
-  drivers/tty/serial/serial_core.c
-
-between commit:
-
-  9cf7ea2eeb74 ("serial: core: Clearing the circular buffer before NULLifyi=
-ng it")
-
-from the tty.current tree and commits:
-
-  1788cf6a91d9 ("tty: serial: switch from circ_buf to kfifo")
-  abcd8632f26b ("serial: core: Extract uart_alloc_xmit_buf() and uart_free_=
-xmit_buf()")
-
-from the tty tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/tty/serial/serial_core.c
-index c476d884356d,b9d631037ff6..000000000000
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@@ -285,6 -273,53 +273,54 @@@ static int uart_alloc_xmit_buf(struct t
-  		free_page(page);
-  	}
- =20
-+ 	return 0;
-+ }
-+=20
-+ static void uart_free_xmit_buf(struct tty_port *port)
-+ {
-+ 	struct uart_state *state =3D container_of(port, struct uart_state, port);
-+ 	struct uart_port *uport;
-+ 	unsigned long flags;
-+ 	char *xmit_buf;
-+=20
-+ 	/*
-+ 	 * Do not free() the transmit buffer page under the port lock since
-+ 	 * this can create various circular locking scenarios. For instance,
-+ 	 * console driver may need to allocate/free a debug object, which
-+ 	 * can end up in printk() recursion.
-+ 	 */
-+ 	uport =3D uart_port_lock(state, flags);
-++	kfifo_reset(&state->port.xmit_fifo);
-+ 	xmit_buf =3D port->xmit_buf;
-+ 	port->xmit_buf =3D NULL;
-+ 	INIT_KFIFO(port->xmit_fifo);
-+ 	uart_port_unlock(uport, flags);
-+=20
-+ 	free_page((unsigned long)xmit_buf);
-+ }
-+=20
-+ /*
-+  * Startup the port.  This will be called once per open.  All calls
-+  * will be serialised by the per-port mutex.
-+  */
-+ static int uart_port_startup(struct tty_struct *tty, struct uart_state *s=
-tate,
-+ 			     bool init_hw)
-+ {
-+ 	struct uart_port *uport =3D uart_port_check(state);
-+ 	int retval;
-+=20
-+ 	if (uport->type =3D=3D PORT_UNKNOWN)
-+ 		return 1;
-+=20
-+ 	/*
-+ 	 * Make sure the device is in D0 state.
-+ 	 */
-+ 	uart_change_pm(state, UART_PM_STATE_ON);
-+=20
-+ 	retval =3D uart_alloc_xmit_buf(&state->port);
-+ 	if (retval)
-+ 		return retval;
-+=20
-  	retval =3D uport->ops->startup(uport);
-  	if (retval =3D=3D 0) {
-  		if (uart_console(uport) && uport->cons->cflag) {
-
---Sig_/uVrJRs9Aye1uiDUT3E53_rk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYh8OMACgkQAVBC80lX
-0GyP8Qf+PerP7qklRR1sKfZGoIzmimiPT88oA0ClWwytU23oyOfCJbKHF7YssGHz
-HhuxaH0C0D2TrYUJG5d998PPtVo+SVtXfYNvXH84mkHRBf2Cuc+8uEKQ1tb9D0mv
-AhGhfGH1cvyM8oYjbnAnNGF0XzKbubwVNM7qjcZ/yYJEVJi2fBYKJTmZekc5zDvH
-KDTjhA2eKvc3JcKwgQagEM/+MaNBeDG+yT5IjO36zd4Jf+vqlcUw3jNkMWrC0soC
-DdZS2QlzOJjgZ3pnlTtaZ7+OVb+orPBszzYG6Fa7yIP4Ah5P1LVzlo0aV+BEw5CN
-DqNYggsj+bYuQJKXda6iUmqwMvzYOQ==
-=IdQQ
------END PGP SIGNATURE-----
-
---Sig_/uVrJRs9Aye1uiDUT3E53_rk--
+greg k-h
 

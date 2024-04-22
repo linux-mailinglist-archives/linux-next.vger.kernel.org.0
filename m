@@ -1,98 +1,100 @@
-Return-Path: <linux-next+bounces-2004-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2005-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08DFD8AD619
-	for <lists+linux-next@lfdr.de>; Mon, 22 Apr 2024 22:50:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0007B8AD74A
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 00:32:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1ACA1F21DC9
-	for <lists+linux-next@lfdr.de>; Mon, 22 Apr 2024 20:50:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADE1A284379
+	for <lists+linux-next@lfdr.de>; Mon, 22 Apr 2024 22:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A83941BC2F;
-	Mon, 22 Apr 2024 20:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2590F1CD2E;
+	Mon, 22 Apr 2024 22:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XOx2KqVV"
 X-Original-To: linux-next@vger.kernel.org
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708FA1B964;
-	Mon, 22 Apr 2024 20:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.201.40.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C4510A20;
+	Mon, 22 Apr 2024 22:31:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713819005; cv=none; b=O3eYnWTCkh01Bk3p8wOhZxDYXwEgDZaPYRtC8EXRLyOl5oiWx9llEx4H49bpIdd7ZRjuEaOerEpFS3xAAM88eYMVbykUEy/VfCNoNKo8WT3O5bueGYIfsUuyHfTNKP5NR9Aq+Hz5EBBwH8W7/mx99AbwG3X5yaSbvCRDQ/hX0Ns=
+	t=1713825119; cv=none; b=FG+tu3NbH68gaVTxDHcyypdW9gn1STSXEo7wteg4ubHDJm44smVFPiwuhY5nBOHfe+MgqVEYSTzbYXsO8x0OaY02lruDEzthbzHE9rce4Hi4Sc5t9VUXVjlaQx9RlQN9apoWAG5Fvrv7DinpwDJ3nCbt+b7yTJrptJpMWTQyRb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713819005; c=relaxed/simple;
-	bh=i6bdLCbDlUXhfBU62pSTidBdeKEWGuacTmR/v6dTwFc=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=ZmCH117n61gqP4jVfTj6BEB5TUeDQfylE845nHhKfZd29sRgwo/XS9WsSpfoQOg05k4kIhT3uf1jIZAHrpcvKptqV4jINkZ9fUPw0GEuYLoqKMKXnFNvllodxbrZ1YInPLZ4gpTG8N4wCAojdxPffqu11UgZZuiOt/vZNfk4OGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nod.at; spf=fail smtp.mailfrom=nod.at; arc=none smtp.client-ip=195.201.40.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nod.at
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nod.at
-Received: from localhost (localhost [127.0.0.1])
-	by lithops.sigma-star.at (Postfix) with ESMTP id 78689608F445;
-	Mon, 22 Apr 2024 22:50:01 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id aLFQ3ulMU7v4; Mon, 22 Apr 2024 22:50:00 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by lithops.sigma-star.at (Postfix) with ESMTP id CDCF6609B3C4;
-	Mon, 22 Apr 2024 22:50:00 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id gIB3UWmMAyCg; Mon, 22 Apr 2024 22:50:00 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-	by lithops.sigma-star.at (Postfix) with ESMTP id 9E120608F445;
-	Mon, 22 Apr 2024 22:50:00 +0200 (CEST)
-Date: Mon, 22 Apr 2024 22:50:00 +0200 (CEST)
-From: Richard Weinberger <richard@nod.at>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, 
-	kent overstreet <kent.overstreet@linux.dev>, 
-	SeongJae Park <sj@kernel.org>, 
-	anton ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, 
-	linux-mm <linux-mm@kvack.org>, 
-	linux-um <linux-um@lists.infradead.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <714170984.15180.1713819000411.JavaMail.zimbra@nod.at>
-In-Reply-To: <CAJuCfpFsrQxa2CX66xQtxp=Y-=R5_YkJMMX9VQ-g32rdCrukeg@mail.gmail.com>
-References: <20240326073750.726636-1-surenb@google.com> <95819052.15033.1713816660761.JavaMail.zimbra@nod.at> <CAJuCfpHnM6L-7s8cd90XKiawhw9LZaRfMfeDm54OshLQdV5YmA@mail.gmail.com> <1375034928.15114.1713817899712.JavaMail.zimbra@nod.at> <CAJuCfpFsrQxa2CX66xQtxp=Y-=R5_YkJMMX9VQ-g32rdCrukeg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] arch/um: fix forward declaration for vmalloc
+	s=arc-20240116; t=1713825119; c=relaxed/simple;
+	bh=kf+ZR8T7Z29rqXoays996MAkdV+Ne7CJSkwmJ2ck9tM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eAUeBi1uddctGLt7rOLxWZOOWah8qODvtVKu7vSrXHXOe7s+DzoVrjhV1JjM6JlmPBCDU+Z4SzwkaOa08WpCdXaDDzSHqjri999wYSxMli/QSknjzTKEV4FcmPtvyxF+mKbqtGfcmLxnC+99ttfbhGkTfkv3hfQ1MGhiJzkCxY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=XOx2KqVV; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1713825107;
+	bh=CBNPTh/j0dtAeIo8IQkOpYE80YzJz/hwlgHSjn0cD6k=;
+	h=Date:From:To:Cc:Subject:From;
+	b=XOx2KqVV0YEMhqPR/32casPYBn8zR1bHuB8Il8Q4yuYs2moel6E3ZSiyRaptG2TNm
+	 yqGcXF8dUqvyhp6ShYVrq0lRy/uHqHMKladyO+gckuHnjJuMJ2HVvO9AGBbabIV/vU
+	 r0I4qL68K8ZpGOigxoGYidW2jckk+xVqt2bZWmME898U1hiRsIsxx2vE2qLT9lKWTV
+	 TRN6kCWY+nYOPzenxcJ4Em4JQ0w6B0GfKu9B529lmxjAOfJGAyF5wXi7h9w0BqDKxz
+	 UBH/edtAJY/1DCnRXZ57k8NWE3rpawbE1nCnQPFoPfHDGTa/JArv26p3kBzvjuz+99
+	 fmfGpdUvhbQ+w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VNg375dsVz4wcp;
+	Tue, 23 Apr 2024 08:31:47 +1000 (AEST)
+Date: Tue, 23 Apr 2024 08:31:45 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the i2c-host-fixes
+ tree
+Message-ID: <20240423083145.771dddf5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; boundary="Sig_/2Bl54QsjYVEctGKe5NQ8Tt0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/2Bl54QsjYVEctGKe5NQ8Tt0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Topic: arch/um: fix forward declaration for vmalloc
-Thread-Index: UBGj77MW+AtEVaScQFoqg8K21PqsYg==
 
------ Urspr=C3=BCngliche Mail -----
-> Von: "Suren Baghdasaryan" <surenb@google.com>
->> > It's in mm-unstable under dc26c7e79daf2fc11169b23c150862f0e878ee5a. I
->> > think it just didn't reach Linus' tree yet.
->>
->> Hmm, so we better postpone this path until said commit hits Linus tree,
->> or you carry it together with the commit in mm-unstable.
->=20
-> Oh, sorry, I didn't realize you were talking about the `Fixes:
-> 576477564ede` part... Yeah, unfortunately SHAs in mm-unstable are
-> unstable, so the change being fixed is under
-> edf0a25633bda1e5b7844478dd13b4326a3d5d09 now. I think Andrew placed
-> this fix right after the change it fixes with intention to merge them
-> together later on.
+Hi all,
 
-Ah, the patch itself goes via Andrew's tree, works for me!
-Let me note this in the uml patchwork system.
+Commit
 
-Acked-by: Richard Weinberger <richard@nod.at>
+  86eb98127332 ("gpio: pca953x: move suspend()/resume() to suspend_noirq()/=
+resume_noirq()")
 
-Thanks,
-//richard
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2Bl54QsjYVEctGKe5NQ8Tt0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYm5VEACgkQAVBC80lX
+0GwxsAgApU6Mw2X6vrLWY+0YRiHvXwkKVwXMxuqE2T2kyOcusLJ/kRohu4qhylmN
+ZgO8umix+zchTajVmutXQNq+w0mUhCwqwxlN9vR7WWKdAhjdOSXt1gJPxFfBSVgk
+5WgxGY8U2xKE9+q2CxlwIac9oTl7F+dzUXxK8kpoFr0WxmX4xo/Yf7Y2WswRQByR
+cfog29l3cn7hEiKCUtduZ4WXbFlrVxAHJW1NpBlqZoXTFreAc708iaOgZUGUQCxW
+KXBdAhVxtABwKH/QsKvJBmq+qMlj6b+hLfamCFkDM0gLKMtdzHq2FQ+2S7Zj7fX1
+miEg6UbKhgbnbX3dLEZXEFHl75jpdw==
+=54sA
+-----END PGP SIGNATURE-----
+
+--Sig_/2Bl54QsjYVEctGKe5NQ8Tt0--
 

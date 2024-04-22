@@ -1,112 +1,101 @@
-Return-Path: <linux-next+bounces-1998-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-1999-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E13A8AD574
-	for <lists+linux-next@lfdr.de>; Mon, 22 Apr 2024 22:01:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71C7B8AD5AF
+	for <lists+linux-next@lfdr.de>; Mon, 22 Apr 2024 22:11:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B1CA6B234EB
-	for <lists+linux-next@lfdr.de>; Mon, 22 Apr 2024 20:01:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 114421F2253E
+	for <lists+linux-next@lfdr.de>; Mon, 22 Apr 2024 20:11:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FFC31553A9;
-	Mon, 22 Apr 2024 20:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XymXSrcR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 439D4155759;
+	Mon, 22 Apr 2024 20:11:07 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7541553BA;
-	Mon, 22 Apr 2024 19:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAAA51553A3;
+	Mon, 22 Apr 2024 20:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.201.40.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713816000; cv=none; b=cP7KK95MApGAd5XBy23IUbWrXZPvgzZoxIS+RDZTi9oZzeJ23k+CFsYw7xzekSyMa7jwrnCHszGAzjEAB5HaI0xkDpqv04ziou5o7qI0tobmkIIbCoTtI0z0od1mcwUInmd8twO1M2k3iTqP+LDdtrF6Gz4rH/UXmA7rQpLJS2w=
+	t=1713816667; cv=none; b=VubCmGMOHrVDdjLOR4vpFRap5QrPO2TrA5RZVJCEnoUH7RZd7kphb8Dz7BfhGrvDHcD4by5Chuw4eKsw3gQ31Al+obuc/aNrcr+DHcCVoRnTlZ2eMAkYSA54kOFoBbQG79O2In4b2qtybnMp3APC/xPI0+8pdi8//gRo8WwU9nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713816000; c=relaxed/simple;
-	bh=s4rZxG6EhzbT+B0YqIfnFCntNAReygYdG1olWDxRC14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CnOQG5yJF8vg+BPAMWXfmm09htS2JhBfTFXCL8I0yG6WIK6eHGFEcqZLDink28v5S02GeRQsI0z2RUL30rkT5FdoeUKyJDjSPX7hCSYg34gguo3MxbtbkGzXbhL+0892sM1dh/TJ6tJIDGawfZomL3FhSkdAATPDTXUf3kyh2fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XymXSrcR; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5ce07cf1e5dso3352707a12.2;
-        Mon, 22 Apr 2024 12:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713815998; x=1714420798; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yyXakcfzyETRyWM2oOoDThxZWSTDPMOaYMT0ORxfs4Y=;
-        b=XymXSrcRoapO2FeD7k/TzRS3QFWTmLAtnFLt5w/ReIr42c1wCRlHIY7JAZ5yaI9Vg4
-         PYAwVM4kZBljQELjj02ugk1O0FUQ72vM96qbne2ZISHVnryf/k8Ky9EeB3cFKBDgh8Ut
-         ONhMg1nw9zh8rTSWp2QQZ3vxUhXlCnyOLLA7+WKJ+DB1O2LvwNUt2MSH038ZwwwytznE
-         P9IGvP21MC6Nc5A3LAhskcJEtKpTsia5MX96STj+O4L+w3onE0tm23K8tFufLTnx9zWE
-         4OEFkU93rlBOWjoOnq5Rbd/oJ9fwsuSQooDdEGY2TSwu35d4UQAQ3LWJCHIVQIlDC0VN
-         Tjhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713815998; x=1714420798;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yyXakcfzyETRyWM2oOoDThxZWSTDPMOaYMT0ORxfs4Y=;
-        b=suCOq7HcjkqX6t/M+3D3coezn+IF4FoiXiLsC2G8SZoFB6YBV3YXIlRrNMvsJJ+5+x
-         oOGPCG5XNKEQoMf9+y6S3XGSUr3fpP0bSTiRs4FE2tGJGwEifOcL9HB29V9slkgP7oZN
-         QJ22H5w9nZeEJkxSnnSjNHhs8wbR+5Djy8peRHq5Uu8STFr2e/fYLw622yLooG/ixcm2
-         2l60YmvBY9m/0jSvglqgb9TllnUN53rDY0M4zptLRwoyA81X7Qaq7+FHDGhRU7gLoM6n
-         eZRIhmxHfVzGhQLsKfQTBS3M9ZD9+F58C94Y8qznDBKXGvlS4YGZXGZEBnSiP/XZub8Y
-         jpRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXlKDiQ/FFLj4dzGUtbc9GLdRYGkYThjQDEmvsQvhf7GWlSvOCYUZ0WOxfqL7asJ6RkspKKIbSz2vOXSW0Vui84kscAHpMmMsoRpQ==
-X-Gm-Message-State: AOJu0YwobQ/GwVT5sZTJJ0MLCnW/Ri/QPP8vyrNuUap60fUr4hM7xYRH
-	bHFG/OHHcwByJoWGz45SFdC6ADn9atSL65W9d1je2GjuZiUVl9NluUvpWssD
-X-Google-Smtp-Source: AGHT+IGlp8iUG3D3uE1/+/YHeh2DTnek49sNvbNGBWBTDrNBpE69rs6JW6wmGySIFRlAw9iYyKTZZg==
-X-Received: by 2002:a05:6a20:9759:b0:1a7:5402:8a92 with SMTP id hs25-20020a056a20975900b001a754028a92mr9489461pzc.31.1713815997611;
-        Mon, 22 Apr 2024 12:59:57 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:6f51])
-        by smtp.gmail.com with ESMTPSA id fb22-20020a056a002d9600b006eceaccaec9sm8182253pfb.131.2024.04.22.12.59.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Apr 2024 12:59:57 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Mon, 22 Apr 2024 09:59:55 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the workqueues tree
-Message-ID: <ZibBu_BIC9fgcWJj@slm.duckdns.org>
-References: <20240130133748.7c30d71f@canb.auug.org.au>
- <20240422094816.09cbdcc2@canb.auug.org.au>
+	s=arc-20240116; t=1713816667; c=relaxed/simple;
+	bh=4JpIgXCB9jUQPkFUGAI31NP5EjtRLupEYrFT1gtqbDU=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=ZsyV8WlcNro1ATU34Dqs/Yc0fBcib2u+tLiF6wbEvJ22pwhSZ15x5IN+7QRZzVumNysYWnRkFIwCRQNKptc2kJasm+UmhXdXCyaRcJErMHtLQ5rH0YQ8IjtIarNtPWXMIAmXJi35nOaTVZTGzVLT8W/kaq+OkpDA+BwI3frb3jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nod.at; spf=fail smtp.mailfrom=nod.at; arc=none smtp.client-ip=195.201.40.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nod.at
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nod.at
+Received: from localhost (localhost [127.0.0.1])
+	by lithops.sigma-star.at (Postfix) with ESMTP id 8788D647A82A;
+	Mon, 22 Apr 2024 22:11:01 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id fvDzHBxSevvb; Mon, 22 Apr 2024 22:11:01 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by lithops.sigma-star.at (Postfix) with ESMTP id 10A4F647A80D;
+	Mon, 22 Apr 2024 22:11:01 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id rBhDvx3ZBnCr; Mon, 22 Apr 2024 22:11:00 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+	by lithops.sigma-star.at (Postfix) with ESMTP id CEF3A609B3C4;
+	Mon, 22 Apr 2024 22:11:00 +0200 (CEST)
+Date: Mon, 22 Apr 2024 22:11:00 +0200 (CEST)
+From: Richard Weinberger <richard@nod.at>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, 
+	kent overstreet <kent.overstreet@linux.dev>, 
+	SeongJae Park <sj@kernel.org>, 
+	anton ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, 
+	linux-mm <linux-mm@kvack.org>, 
+	linux-um <linux-um@lists.infradead.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <95819052.15033.1713816660761.JavaMail.zimbra@nod.at>
+In-Reply-To: <20240326073750.726636-1-surenb@google.com>
+References: <20240326073750.726636-1-surenb@google.com>
+Subject: Re: [PATCH 1/1] arch/um: fix forward declaration for vmalloc
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240422094816.09cbdcc2@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: arch/um: fix forward declaration for vmalloc
+Thread-Index: VhMS7jUdUYDlNrao2e2bRQ6VhbmZJA==
 
-On Mon, Apr 22, 2024 at 09:48:16AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Tue, 30 Jan 2024 13:37:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > 
-> > After merging the workqueues tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> > 
-> > Documentation/core-api/workqueue:761: include/linux/workqueue.h:476: WARNING: Inline literal start-string without end-string.
-> > 
-> > Introduced by commit
-> > 
-> >   5797b1c18919 ("workqueue: Implement system-wide nr_active enforcement for unbound workqueues")
-> 
-> I am still seeing the above warning.
+----- Urspr=C3=BCngliche Mail -----
+> Von: "Suren Baghdasaryan" <surenb@google.com>
+> Betreff: [PATCH 1/1] arch/um: fix forward declaration for vmalloc
 
-Oops, sorry about missing that. Will fix.
+> Patch [1] replaced vmalloc() function with a new definition but it did
+> not adjust the forward declaration used in UML architecture. Change it
+> to act as before.
+> Note that this prevents the vmalloc() allocations in __wrap_malloc()
+> from being accounted. If accounting here is critical, we will have
+> to remove this forward declaration and include vmalloc.h, however
+> that would pull in more dependencies and would require introducing more
+> architecture-specific headers, like asm/bug.h, asm/rwonce.h, etc.
+> This is likely the reason why this forward declaration was introduced
+> in the first place.
+>=20
+> [1] https://lore.kernel.org/all/20240321163705.3067592-31-surenb@google.c=
+om/
+>=20
+> Fixes: 576477564ede ("mm: vmalloc: enable memory allocation profiling")
 
-Thanks.
+This commit id is not in Linus tree.
+Do I miss something?
 
--- 
-tejun
+Thanks,
+//richard
 

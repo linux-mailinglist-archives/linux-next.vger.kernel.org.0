@@ -1,130 +1,106 @@
-Return-Path: <linux-next+bounces-2012-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2013-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 219518ADD00
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 07:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E11868ADD28
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 07:33:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE18A1F22C7C
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 05:00:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96A871F228D8
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 05:33:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818F01F95A;
-	Tue, 23 Apr 2024 04:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F66D224E8;
+	Tue, 23 Apr 2024 05:33:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oubPctsr"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dS3qlHCB"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D1D1C2AD;
-	Tue, 23 Apr 2024 04:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC75C208A0;
+	Tue, 23 Apr 2024 05:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713848397; cv=none; b=vA4sg/02XEExtmUZjVfLb6exqRPeIMfBKApYchcps2328s0C8jPzpC1Ejnvx/r84taT8aza7oAqLWL5vaJGy89WapJBtvBfc/t4uzd96b90hGtBA7FWxI4vmNz2S+CRB1RhQJsw7Yt33nnyAV48eutgvgJvJjJJ5CiLO7OOjViQ=
+	t=1713850400; cv=none; b=XSmBL3ZhjuupGLnkQh0qVD3uhfYKetoSIvX6oDcZzS9EjaOjY9qCQotyNCckT18WklcoiLITS1TTVRY1exnbhLG8JKdh2Nm6ytjxI0PBZ7Dm5VwvxJXQLytGkCK9QyIhWlvzyCie/bcM0ydV1FX8OJBHskHkhcW5h3QM15Bl6Nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713848397; c=relaxed/simple;
-	bh=7jJWUwl43UaD/hIQsTXYJbvkxYmDGotowJp1+7Ux1n4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BK8+hP0RUSfv7VoXZmyWxKRxixXKJg57Dis3OXamABd9UvqxZLirAGTzHZ0F7PHXJOYq5cJZvja6OzMTaRTaAgPw2VqerYcWvx3IkccT6yHfNFE8bwvu1dgyiE+Qi+zq+92sfDsJGIIa0v3t10q7bjG2P3CzfkOkpfii8UdZdrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oubPctsr; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1713850400; c=relaxed/simple;
+	bh=zEogd6obGKCj1wI8vY87B5g4GlNmcx47Ub4SIxdywdk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=brE54IMaplGS2LVTtLYMoZcGd2bL2AfcLl5P4rMd9U2aHB/vIh2jWH7CjTAqnUjCUsPxYjCDNIQHy//UgcGMH7KOlXGT7ifZ8yYO5jzntnYHPYwWyxX03Ov+/rttGJHXg8eCmRSDYbTcno+rN8tA2oEGRwb7wpDaA6AMpJ3ud0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dS3qlHCB; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1713848389;
-	bh=BHtfamlsUXKbZJ/+GFWP2iJMX/S6L6L4JZ7x8U/w8hY=;
+	s=201702; t=1713850393;
+	bh=dP5BWkKu6CZlkYIJk5vA8JCOTxwXlOrwHIcJXys/LEA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=oubPctsriA8mVPolEPm2FdXwVgKvebTuF+v2A6DNa0h5jJ292NRQOcUOp239KMEPJ
-	 Y1n5vXiCYUnpi0GsGCcnU7/SxTaTaBi+Q6ZldSF9AMKbgI1oC0Rm225FwHhqyIBPcw
-	 1pTNDDH8ciW6J8vvA6Z3JwmMVQ0xmXhFkPDljEkamXni8vA5sDcsmb/4DB1CnB7kuC
-	 j62gAHJ2pm7VfvQztIs38Mu9mhqgJQH29Ud4jvIW0D/7ngR0N5dFH7HRf0jzIKuq4l
-	 Wz53bKxdDxgp85irZV6/J88iOqyiVOftIb153/KHXPDFvPU2AQbcQax0GTGKZZ4Fef
-	 y+EquiYId94wg==
+	b=dS3qlHCBqR8Qs9PvW63vVzpiNYtLlaFL9WxJTcnTwGy6In0QtombBONDb5Grzo8Fw
+	 bLtB+wcLpb8Rr4kWLK9xTBQXyNhNNz5jM18oOTw69TH5QD2Qctt9aDpjQ8g9RIQljl
+	 VM+Ih+iKgFBPsTHJ/99ccDYt6XIHt7GsRQkqLO8h7K9NDTEI4MOL833aREWkwidVcV
+	 RXNM7Xq23LG+LEMZQgP92nx9eADLlT4dTC/N63AMBE4q3TvqWoZv6BodknTtKjkDZk
+	 BHq3Byuns/CJ3rd+jz3LW5YV96uyn/BxUWAYUM51u68MBX32AYcu49dbQZ2fq/JwyQ
+	 Zw7+oCe8kd8CQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VNqfs1Chlz4wcC;
-	Tue, 23 Apr 2024 14:59:48 +1000 (AEST)
-Date: Tue, 23 Apr 2024 14:59:47 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VNrPN5sKPz4wb2;
+	Tue, 23 Apr 2024 15:33:12 +1000 (AEST)
+Date: Tue, 23 Apr 2024 15:33:12 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Michael S. Tsirkin" <mst@redhat.com>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: David Hildenbrand <david@redhat.com>, Kent Overstreet
- <kent.overstreet@linux.dev>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Suren Baghdasaryan <surenb@google.com>
-Subject: linux-next: manual merge of the vhost tree with the mm tree
-Message-ID: <20240423145947.142171f6@canb.auug.org.au>
+To: "Michael S. Tsirkin" <mst@redhat.com>, Greg KH <greg@kroah.com>, Arnd
+ Bergmann <arnd@arndb.de>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the vhost tree
+Message-ID: <20240423153312.6fb2dfa5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gw+FJAQxC/QjwB9ySYibKD.";
+Content-Type: multipart/signed; boundary="Sig_/oHtvu8ZM/pFv+qEdRxAmrI.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/gw+FJAQxC/QjwB9ySYibKD.
+--Sig_/oHtvu8ZM/pFv+qEdRxAmrI.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vhost tree got a conflict in:
+The following commits are also in the char-misc tree as different
+commits (but the same patches):
 
-  drivers/virtio/virtio_mem.c
+  6ee63c01e1a2 ("misc/pvpanic: add shutdown event definition")
+  718330fcd40b ("misc/pvpanic: use bit macros")
 
-between commit:
+These are commits
 
-  c22e503ced5b ("fix missing vmalloc.h includes")
+  ad76f3e8f57c ("misc/pvpanic: add shutdown event definition")
+  043327875298 ("misc/pvpanic: use bit macros")
 
-from the mm-unstable branch of the mm tree and commit:
-
-  4ba509048975 ("virtio-mem: support suspend+resume")
-
-from the vhost tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+in the char-misc tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/virtio/virtio_mem.c
-index e8355f55a8f7,6d4dfbc53a66..000000000000
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@@ -21,7 -21,7 +21,8 @@@
-  #include <linux/bitmap.h>
-  #include <linux/lockdep.h>
-  #include <linux/log2.h>
- +#include <linux/vmalloc.h>
-+ #include <linux/suspend.h>
- =20
-  #include <acpi/acpi_numa.h>
- =20
-
---Sig_/gw+FJAQxC/QjwB9ySYibKD.
+--Sig_/oHtvu8ZM/pFv+qEdRxAmrI.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYnQEMACgkQAVBC80lX
-0Gx7Zgf6A+7fSdSlZ2oaudv5lV+rR5Qk41xtA6uESL9Ubx3w/yvptWR24avAW7Rh
-DABRUi0XJFnNzr2/gZO1M3xzZEH8tO4OG540PFU83xu3p26/31dfkr7AhIDrIS/s
-DplqESSgMe3/yWC8kLfDZSSr4CDnt6qOGy8xzNQqW97X0e94VD5ZjfHOC9gt4nOU
-Ghr4OlQCL81ggDWsclviediGMcjbAYagTGIIHZQUG7ZEr+4iMwf5/3ZLopcuCmMP
-6iK+LLC39GL6dn/7kDhlUB8blkYM2Ns8pqrAQizlEHMgMdvcUaRsGpdKTSU4Ckmn
-ImM6Dqtj7zWcDg8nNpPAtMjk2sVQNA==
-=XLid
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYnSBgACgkQAVBC80lX
+0GzlMwf+OGWcHcy32pkIE0Qbr7wZTMgE5rhS7zkEsruwHPkSM/kxvraJaq8YbexM
+1/DvxCxJSYiUceKK6+AockQUxovmpmqM4BA46rsJkC0GeQMYlshkato0qxlKGpod
+Pjjosb8VCvZI/eu7+KlcdwrQiY9qF2JGOXaB7/DBkFUMfOifNZFRtQEIzzdsQLRo
+xWnQ93BgSRRE+Gxn3WpkUrpBlN5d5p+SrQJreyg1jx9uqKIynikoyR1xJXXLxlub
+1GAEk80dENNr+nLhlvjh5CJwJIFzf7lIM7EhqSgErq39kc4J7lkm8eG0aPOhwmqX
+RXSRuz0cvv8BevI1bK9LdfYQfnhU3g==
+=5Es1
 -----END PGP SIGNATURE-----
 
---Sig_/gw+FJAQxC/QjwB9ySYibKD.--
+--Sig_/oHtvu8ZM/pFv+qEdRxAmrI.--
 

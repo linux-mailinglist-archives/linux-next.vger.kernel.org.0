@@ -1,109 +1,86 @@
-Return-Path: <linux-next+bounces-2021-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2022-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35E0C8AE58D
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 14:08:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCC888AE6FE
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 14:52:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6264289F13
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 12:08:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37929B24A93
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 12:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F6531369A9;
-	Tue, 23 Apr 2024 12:03:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Nj0ErV9Y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05178136659;
+	Tue, 23 Apr 2024 12:50:18 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3066B6EB70;
-	Tue, 23 Apr 2024 12:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE4B12A14D;
+	Tue, 23 Apr 2024 12:50:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713873819; cv=none; b=TnGQ18+4CNPxLpdFHiVkjWvtgbes8rlrhGKPEjIlUOnEPabQeATwkj6cLcmYJbYP0i/I2T2r5u1z9hyDf0OdFXxXmnLHM3Ut+Mv4wlKTADNHBwtMMGv9FKM80nS/iPsBmjMhTCVtvtE8bmzI11tXBwqh7arjMNjHCf9JQrbWka4=
+	t=1713876617; cv=none; b=qBNunZp5gs9PqM0CUSsnYdYb8LJHEXXfAv00d1NcrioXH/fJHi1i6rgLhEJKU6jkcEPWVEaL3BWjhT3WyQ/5HHSSbtJ/7HttRTeqZ2Hcl5SvBrV8XOGgLoLbj8I006+ghjabEw1jBxJf3Bly1jBadJWmzxQ0PMzgBNFBLNiJSR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713873819; c=relaxed/simple;
-	bh=UZ//9VIhv4qjWnX5nh9G7I3qe5jqrU01sdWw60cEs94=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f3y4tQvbdFFMZm9MRl7ddcK6YC/xUvJB3z0mJYWrYqFVfM+vZx8LFlUQlQJn96DycULGm3Z3QwdXNGG3gGe454IoXplJBhPQtBrI7qApvYz4W+69kUR65bOizeGYrrlLgM8kdbLk7yIEQIgpx3PUKWSbw/AFovER+tnUqBNniVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Nj0ErV9Y; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1713873809;
-	bh=UZ//9VIhv4qjWnX5nh9G7I3qe5jqrU01sdWw60cEs94=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Nj0ErV9YWJwsnZC1nAbagW7U5GC6uljdCO49jdTWnQjEBIDnK+TcmLT8mKps8xs+L
-	 s43TKbaU+t2cjcn/FkyJH91tPEO244We4/LuubAU2W3Qt1CTl1itiALH7+W0NCg0jd
-	 mlPmbosYNJOJBqB1wFHnh2qT93HEkecRIw+dbqF65GwiVmqE44M0oWUuNlh0UnBZqZ
-	 VkHetyLOvlznFKNoBelItJLkZFfB4C8t2KNPeQTG6bDo9oCc+qZsaCWyMiPDofp6uj
-	 YmE7CdBQYOBS4aFscD3b6FXGPQQ44kCykq6hHbCpWeRsL/OxirUTcVmFmaj4wDkLGF
-	 mEU1CFffbWIHw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VP13j3qj2z4wxx;
-	Tue, 23 Apr 2024 22:03:29 +1000 (AEST)
-Date: Tue, 23 Apr 2024 22:03:17 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Hildenbrand <david@redhat.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>, Andrew Morton
- <akpm@linux-foundation.org>, Kent Overstreet <kent.overstreet@linux.dev>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Suren Baghdasaryan
- <surenb@google.com>
-Subject: Re: linux-next: manual merge of the vhost tree with the mm tree
-Message-ID: <20240423220317.01d65416@canb.auug.org.au>
-In-Reply-To: <e07add5b-e772-4a8c-b71f-79f1fe74580a@redhat.com>
-References: <20240423145947.142171f6@canb.auug.org.au>
-	<e07add5b-e772-4a8c-b71f-79f1fe74580a@redhat.com>
+	s=arc-20240116; t=1713876617; c=relaxed/simple;
+	bh=DN8u1fezfiV+bCBhk0BjAUKzEYybbF/hhjMf9bWbb7A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jEBGgEjLYjQobBvoPcSAp1xT7aqAp1dUGlEJQHtsUziRrqnJfb0QVdbj3mfnv8MLwZoEpxDV/C5DDfHRp8Xj109ZkKCKtq4U8daUwR7YTn9M1Pj5P0ACvVgxaAutx/HLIAIdZS0A0wnNOK3Y+XzTfm+UKUaDDEPjcwi4kMnSORg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE68B339;
+	Tue, 23 Apr 2024 05:50:43 -0700 (PDT)
+Received: from bogus (unknown [10.57.84.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EBC73F64C;
+	Tue, 23 Apr 2024 05:50:14 -0700 (PDT)
+Date: Tue, 23 Apr 2024 13:50:11 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Mike Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the clk tree
+Message-ID: <20240423125011.tjyvkzns7fqpdsl2@bogus>
+References: <20240423103934.399e2a6e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/F=LLHuWQLYmMaKRwZGZ4m/P";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240423103934.399e2a6e@canb.auug.org.au>
 
---Sig_/F=LLHuWQLYmMaKRwZGZ4m/P
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 23, 2024 at 10:39:34AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commits are also in the scmi tree as different commits
+> (but the same patches):
+> 
+>   87af9481af53 ("clk: scmi: Add support for get/set duty_cycle operations")
+>   fa23e091236b ("clk: scmi: Add support for re-parenting restricted clocks")
+>   c3ad1d0a7ef2 ("clk: scmi: Add support for rate change restricted clocks")
+>   a1b8faf8784c ("clk: scmi: Add support for state control restricted clocks")
+>   2641ee13c449 ("clk: scmi: Allocate CLK operations dynamically")
+> 
+> These are commits
+> 
+>   ca82ded0e3dc ("clk: scmi: Add support for get/set duty_cycle operations")
+>   3a0501ad6fd4 ("clk: scmi: Add support for re-parenting restricted clocks")
+>   4562172e3ec2 ("clk: scmi: Add support for rate change restricted clocks")
+>   6785c6c261bd ("clk: scmi: Add support for state control restricted clocks")
+>   4196d89b2393 ("clk: scmi: Allocate CLK operations dynamically")
+> 
+> in the scmi tree.
 
-Hi all,
+I will drop them from the scmi tree.
 
-On Tue, 23 Apr 2024 10:21:55 +0200 David Hildenbrand <david@redhat.com> wro=
-te:
->
-> Easy header conflict. @MST, @Andrew, do we simply want to take that
-> virtio-mem patch via the MM tree to get rid of the conflict
-> completely?
 
-And because it is so trivial a conflict, you should just mention it to
-Linus when you send the merge requests.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/F=LLHuWQLYmMaKRwZGZ4m/P
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYno4UACgkQAVBC80lX
-0Gw69gf/XLART4dB3aN423dkAk+x5c9i17dlzZu5MoepPrVeq1GAD99uWEQuY1dF
-5aSI/kORlQfom5RkSxsOCJGCAsbShJiadKA/TxsAH80cPzcj/h9AMB0kAc8dK9XZ
-3Of9QVsds2jtdnXGvZrdxfV5jpRz0Whu3Wjk3Il7Cw/4qVMmpKnYb+g4rDmUWEZl
-gnGukR/QLOjFvFwgjcX0+SUHVEJYl2kNKKE56DiaOWrNni9nLcWn/IjgMDS/wXbs
-iUAyi1uTvydVfQItmkGBQ/0VrWLA6gOFjfTb7WJMEjvCCg+A8FiEvBmmb6zVemLq
-IqEtsIAtJyS5ZdvE9fs8Su0gpJZPYw==
-=4h11
------END PGP SIGNATURE-----
-
---Sig_/F=LLHuWQLYmMaKRwZGZ4m/P--
+-- 
+Regards,
+Sudeep
 

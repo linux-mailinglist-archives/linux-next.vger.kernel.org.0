@@ -1,141 +1,115 @@
-Return-Path: <linux-next+bounces-2009-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2010-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F38EE8ADB18
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 02:27:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E48C88ADB31
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 02:39:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 939B01F25574
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 00:27:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75BBEB22C6E
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 00:39:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC23A28DA5;
-	Tue, 23 Apr 2024 00:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3EA0802;
+	Tue, 23 Apr 2024 00:39:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rCCY7nFQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SDLZfVyy"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9951B2E644;
-	Tue, 23 Apr 2024 00:22:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7F16AA1;
+	Tue, 23 Apr 2024 00:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713831779; cv=none; b=MpQtasu06EaA2eps3crMdbmxEuoYkWd0OZgyjqmL3brHrnSshoCQCvtoOcjO5b3A9MzRiBhe5FwNQORx5c80/VXS3Ht7M7KWR2ts4le8YdLpeHmxRH1UmX40atJ8zrpxhm90nvnah/3MYL93QBbPUh5zlz10b2l0qRkz6O7Qkc0=
+	t=1713832783; cv=none; b=SGIfprtgfd9fTLlAS1FR8TwjErdZ4G4P6be1LJtDuky2pLyYKE+lXIGH0U14lyzASc3hQuCIqL7i/aLFsOUa7gnTNY855dTltfjdQsQUhz+/hI99T2KXXoW8T8QjQo2y05miC6e1EJ3TX3lK2BlkK15xGk07It0JMU+IM2TA4OM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713831779; c=relaxed/simple;
-	bh=7c1Zp56q9rDSO4sWrhiFjM+Yai2TNa3k26KwKA7t4S0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DPtRfWsYMrikhLah3R8rrBOC5FXm6tBSsXwAPJeufZtW/gAfghzezwg0PB9d0MUW5kgbloep5NBHgNDTDn1+Zq+yko1jSdXdNvROvL5ZzdIZBjeG1ftxgvPPPoea15YrrfcirC9RoR2YAWBaQUF/D2AtjCy+LRPaRTzMBl4daUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rCCY7nFQ; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1713832783; c=relaxed/simple;
+	bh=agZr6c/xl9fEJY1kZKahHC4ATQbeGwxR+gGhFXXjFDg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ti2m/R1JcxXAp209ggoW7pmbKrmnr7tjm1i3IXvXjDNC9w+4rNZqjTDfG+Lmixbe+jn0RxY7yfHACpG3h+efXVcvvmKh5MG+KP/KJaA5+uK+KkOwl8j18Pn4S2Iy9YbjnNt0WNO2TYjCiZhS7TTuX/XBfPnkZu+NUadjCEjvfZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SDLZfVyy; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1713831774;
-	bh=rmk3N3DyRezf/hgXZF4A5i5PMn/lnY+lkwftoLV3WJ0=;
+	s=201702; t=1713832778;
+	bh=A8sYhUte2phTFGEt9R3CJDI4XFlLj/ipfjoUAO0mtt0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=rCCY7nFQc06bHzeHzuVo8a3T2jA83YGrexXakKE49LreIFtR3i29SZQM0VNWlVwnz
-	 9HpE8Ve6hU1lge8d19YMuMPkeDF8BmVscPsWBEzQafocFbTQ3ifMsGCeXIeNaEDeuP
-	 2APFGoNI9UKCQLLUsMcMUE88/MgkqSR7rka8pwRn+JNoJOElP1r4gwIink7FFEJgkG
-	 NYHcCViY6rWAwoTgZwwSwguE+1VBsq87vgO+xtluDNBRjWSNaUaJdFbQ/0E5DF0WCA
-	 KNoMxsliilVrj9ZvdWmjV36261ucyTmqYcXB7JCOglYjyZvum9m746OYluqQdmg7Xd
-	 nZ6JCsTPQG4Xw==
+	b=SDLZfVyyMAisNZjQvlzw6t1Oka4nVI28yS2le8FlTYgHq1wxLjcyHDXZbSR76GmPo
+	 F3XzOU4Hww0W/sPFfFZdMZewF3bVebVfcgH5zZgT4WcknWe7McQKtOgIFvyvRAtvTI
+	 a7NyZaoeGx3Mx101RMiRU+pnmSAe9UQWCXF1h3KQAvL8VHviQbqaHjTUo9x2zBfHzd
+	 zG3t+FzQ2u28AJO7dY0f5BjmFYJFMVa60V9TRpkcWiR9JUuR8An+y72kL856slZC1j
+	 mOEWxQ/foZcaOhjuizJTwyYf4KD8F9jdcYYkjVlRq7Zyo2jKuBtKaFPEhtBZQhntuL
+	 mCCFhZy7O25PA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VNjWK755lz4wc8;
-	Tue, 23 Apr 2024 10:22:53 +1000 (AEST)
-Date: Tue, 23 Apr 2024 10:22:53 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VNjtf1Qflz4wcq;
+	Tue, 23 Apr 2024 10:39:37 +1000 (AEST)
+Date: Tue, 23 Apr 2024 10:39:34 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Kemeng Shi <shikemeng@huaweicloud.com>, Linux Kernel Mailing List
+To: Mike Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
+Cc: Cristian Marussi <cristian.marussi@arm.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Tejun Heo <tj@kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20240423102253.3675d0af@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the clk tree
+Message-ID: <20240423103934.399e2a6e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/h9oUFIeP8zYE7l0.+pbAmgA";
+Content-Type: multipart/signed; boundary="Sig_/QX60uKT_F43BmfRZoPMp/_=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/h9oUFIeP8zYE7l0.+pbAmgA
+--Sig_/QX60uKT_F43BmfRZoPMp/_=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+The following commits are also in the scmi tree as different commits
+(but the same patches):
 
-mm/backing-dev.c: In function 'wb_stats_show':
-mm/backing-dev.c:175:33: error: 'struct bdi_writeback' has no member named =
-'memcg_css'
-  175 |                    cgroup_ino(wb->memcg_css->cgroup),
-      |                                 ^~
+  87af9481af53 ("clk: scmi: Add support for get/set duty_cycle operations")
+  fa23e091236b ("clk: scmi: Add support for re-parenting restricted clocks")
+  c3ad1d0a7ef2 ("clk: scmi: Add support for rate change restricted clocks")
+  a1b8faf8784c ("clk: scmi: Add support for state control restricted clocks=
+")
+  2641ee13c449 ("clk: scmi: Allocate CLK operations dynamically")
 
-Caused by commit
+These are commits
 
-  3acd401af0c9 ("writeback: support retrieving per group debug writeback st=
-ats of bdi")
+  ca82ded0e3dc ("clk: scmi: Add support for get/set duty_cycle operations")
+  3a0501ad6fd4 ("clk: scmi: Add support for re-parenting restricted clocks")
+  4562172e3ec2 ("clk: scmi: Add support for rate change restricted clocks")
+  6785c6c261bd ("clk: scmi: Add support for state control restricted clocks=
+")
+  4196d89b2393 ("clk: scmi: Allocate CLK operations dynamically")
 
-from the mm-unstable branch of the mm tree.
-
-I have applied the following (hack) patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 23 Apr 2024 10:06:13 +1000
-Subject: [PATCH] fixup for "writeback: support retrieving per group debug
- writeback stats of bdi"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/backing-dev.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/mm/backing-dev.c b/mm/backing-dev.c
-index 481886f47164..af8c81adf7a4 100644
---- a/mm/backing-dev.c
-+++ b/mm/backing-dev.c
-@@ -172,7 +172,11 @@ static void wb_stats_show(struct seq_file *m, struct b=
-di_writeback *wb,
- 		   "b_more_io:         %10lu\n"
- 		   "b_dirty_time:      %10lu\n"
- 		   "state:             %10lx\n\n",
-+#ifdef CONFIG_CGROUP_WRITEBACK
- 		   cgroup_ino(wb->memcg_css->cgroup),
-+#else
-+		   (ino_t)0,
-+#endif
- 		   K(stats->nr_writeback),
- 		   K(stats->nr_reclaimable),
- 		   K(stats->wb_thresh),
---=20
-2.43.0
+in the scmi tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/h9oUFIeP8zYE7l0.+pbAmgA
+--Sig_/QX60uKT_F43BmfRZoPMp/_=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYm/10ACgkQAVBC80lX
-0GxhrQf/YrizRSNq3WnmuQ7sJ3FSOk4BAiF8p2leUHGkRVc4e75KEjV9OekpohlP
-fL6j3NRl1o0PXki6hnaRfX7fM+ei+Mb98rzL2A9UOf80yARhjPBRE+PY7YEhaSc1
-rW/SxtkoASRpTws4kaabpUh1lF0ilYlF8VF+vPqJ19vIoscBjg5Yb6e2OnA7UDr9
-5jOtS1WfXiuby+mQJF8jVI7HckQXesaY/jg3BhdUt23H4PHvR+FLCtS3Joz5P9Yc
-gMXXyhoGp8iAcYtBTYWan8j78bE7idowmSGdUPPwQLfZSiI5xeAPasjjoH2kBy+6
-U6hYFWkTSLdvvj7QjxA+V8673trcPA==
-=nkFz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYnA0YACgkQAVBC80lX
+0GwIrQf+JK2LgulV5HZfVZwyy7AcDsqm1+RkWfDrsDPGvidN5oQ3zJ7U834cJR/s
+do/7Z/ihnHfbkAl817JStgIUjpzv8hB7HlDl5QOawwqSdGnaerb/Njb6zvR61vYO
+WXDmafB9PwEbyY+Rr0iqiUiq6jJmGH4I35DWYNstFRP288r3LxxPytz45+O4ixdd
+pDuS0F9XcLp9j+Tm9LRsSZ/tZS/bk14w+glIbglt+IWN8/TIEMzeVFEJSo1Ug6t5
+M2ZRd/pp5JDD9HtxHyR5JAdfvLQbmLyo62NwXaVwsLxaHcTpB5rXCN3p4pCEsUz8
+LLyTRDLUSOwnJbxFeAh6WdHzQyM6Vw==
+=ExKv
 -----END PGP SIGNATURE-----
 
---Sig_/h9oUFIeP8zYE7l0.+pbAmgA--
+--Sig_/QX60uKT_F43BmfRZoPMp/_=--
 

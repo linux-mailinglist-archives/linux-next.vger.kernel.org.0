@@ -1,87 +1,79 @@
-Return-Path: <linux-next+bounces-2024-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2025-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 302738AE94F
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 16:20:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A68CE8AF5BF
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 19:42:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C53F71F233AC
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 14:20:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 352B0285C6D
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 17:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F7A13B293;
-	Tue, 23 Apr 2024 14:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90B4813DDAF;
+	Tue, 23 Apr 2024 17:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KnW73mnG"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="IEpNmJdz"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D45113776F;
-	Tue, 23 Apr 2024 14:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674F413CA8A;
+	Tue, 23 Apr 2024 17:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713882037; cv=none; b=MML2xjhvSs6jTFBYdoEs5bLzUXfOtrA5DGZLjYQfjJ3ut93qU5phaUyoEye4tBl6YkiFFLsn9iBKvN0lJ1wiutvbBxmoTUi2GgmX/5/PlvhYmRsn32MFzF3WLZ9Irkm++Gm3hFxqlImIHso1CeCCKM7Xyzh2e2+ejeehrm3Vs/c=
+	t=1713894165; cv=none; b=Z7tRFDeNrHQ7GBCS3bikIpZAmZiTO4xIK/DYuzr53fYlAQpFffRJb+9+ngIgP/oKpuTz9S8xC0SmW1Rl1RyLYQyNS4JM44oyG/6N5G4IGmZi3hnm8UQiF7xGM6i3cKdNkVv2nMg4K5VPdJAdW4DVRVq2pOEo2/+O26SwRRlA2hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713882037; c=relaxed/simple;
-	bh=zLC/Cfeda05MZAEngIc01iWcAOs4ICPgoAY1ea19gwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SMOMc1cbpl3g9d8bnGd+i3lhC5QdCjLgDrxk19O/i+Y6wmkw5CGhXzSUNKKPSHBuqWqk24MXm73yVlFyzNG981BDHFl/gb0F4mQDuxwosyXeTam3uiVaomxpQcGas/RsYODUnAIIrUFRf7Q0Bjr0wlS/LOyt5sdGSUAXv6fbNDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KnW73mnG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B46EFC116B1;
-	Tue, 23 Apr 2024 14:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713882037;
-	bh=zLC/Cfeda05MZAEngIc01iWcAOs4ICPgoAY1ea19gwM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KnW73mnGmamG9IFaewuH5XSilHmTIw0l6vRolCW1Kia0k5zrXRgEZr4/igfT1/YrR
-	 wRbPwfZPsoSmNeBZuEgOkk3BCF66U+ebX5NNBbzhxfnZg7LVmPhTGqmTvU3nqj0Teh
-	 6spRECGs34isnlUhTPMenIc+f0mrfkHDoXATGmR+UAfs6PyzIdyxiJztBLcW9oZxxp
-	 pQiZgZ93UAl5KQrvgQa1at5YmznpCr57P+5mHra0cwKsNUHEwfU9wmXLMnIZHRLhx7
-	 vQG4fuRbpKEDLUL4PfAGDo3SGbg7p4JKoPu7MOT11jSnaGrcRl7O+NonO/ZD6kvv2d
-	 o0X/1j8lLBAdQ==
-Date: Tue, 23 Apr 2024 16:20:33 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1713894165; c=relaxed/simple;
+	bh=jr0FL/sdQ5DqkDL9pdfWp5P13hNiyF7VcuK+S9HzQ4E=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=NzmsJi5YtjbHRp3QU6n9KoJHe+dE0Z0ntdjq3y5VgaZTT1PqXB0MDCsusEraHnfh5ZVWSZBNnhkZBHunXcrVlEFXjGmox2wCE89YJWxDLmlzHNv9iqU0DcklMII/Jh8xLwSo3Yj63fts3cPeCfKDy6UPhFMYB9gTTxFhgA1HcHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=IEpNmJdz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E3EC116B1;
+	Tue, 23 Apr 2024 17:42:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1713894165;
+	bh=jr0FL/sdQ5DqkDL9pdfWp5P13hNiyF7VcuK+S9HzQ4E=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IEpNmJdzUHxHHBiS/0YhvZZ8Fk+7y/RJ/mmOhtuRZd+Vgf4KX8CuUJ4NqcqPN4fQ9
+	 WoxXv/IfSBxMbgBj0caJgRJYt1Hxl5DsRP/p074MWKoUHoEPBHxFUqeBOuNWW+cred
+	 T2KWkH/lxDshwWyRxrkilogbeFgbXbLXw8xaPBnE=
+Date: Tue, 23 Apr 2024 10:42:44 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the
- i2c-host-fixes tree
-Message-ID: <qn4mvuemt3wblgntqx7rit4syvgkfipne26d63do4ef2jalpjd@vsvxdg36r3xf>
-References: <20240423083145.771dddf5@canb.auug.org.au>
- <20240423091728.06d9ad30@canb.auug.org.au>
+Cc: David Hildenbrand <david@redhat.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Kent Overstreet <kent.overstreet@linux.dev>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Suren Baghdasaryan <surenb@google.com>
+Subject: Re: linux-next: manual merge of the vhost tree with the mm tree
+Message-Id: <20240423104244.d0108d71eee622b2f9371cfa@linux-foundation.org>
+In-Reply-To: <20240423220317.01d65416@canb.auug.org.au>
+References: <20240423145947.142171f6@canb.auug.org.au>
+	<e07add5b-e772-4a8c-b71f-79f1fe74580a@redhat.com>
+	<20240423220317.01d65416@canb.auug.org.au>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240423091728.06d9ad30@canb.auug.org.au>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Stephen,
+On Tue, 23 Apr 2024 22:03:17 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-On Tue, Apr 23, 2024 at 09:17:28AM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> On Tue, 23 Apr 2024 08:31:45 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Tue, 23 Apr 2024 10:21:55 +0200 David Hildenbrand <david@redhat.com> wrote:
 > >
-> > Commit
-> > 
-> >   86eb98127332 ("gpio: pca953x: move suspend()/resume() to suspend_noirq()/resume_noirq()")
-> > 
-> > is missing a Signed-off-by from its committer.
+> > Easy header conflict. @MST, @Andrew, do we simply want to take that
+> > virtio-mem patch via the MM tree to get rid of the conflict
+> > completely?
 > 
-> That commit is also (still) in the i2c-host tree.
+> And because it is so trivial a conflict, you should just mention it to
+> Linus when you send the merge requests.
 
-Ops... this patch shouldn't be there at all.
-
-I think it ended up by mistake while I was testing the series.
-
-I will remove it.
-
-Thanks a lot!
-Andi
+Yes, let's leave things as they are.  We have to give Linus *something*
+to do ;)
 

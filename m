@@ -1,115 +1,103 @@
-Return-Path: <linux-next+bounces-2010-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2011-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E48C88ADB31
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 02:39:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B16E8ADB33
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 02:42:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75BBEB22C6E
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 00:39:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51770283DA0
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 00:42:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3EA0802;
-	Tue, 23 Apr 2024 00:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B57972CA8;
+	Tue, 23 Apr 2024 00:42:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SDLZfVyy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QyztH4D6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7F16AA1;
-	Tue, 23 Apr 2024 00:39:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D14728E8;
+	Tue, 23 Apr 2024 00:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713832783; cv=none; b=SGIfprtgfd9fTLlAS1FR8TwjErdZ4G4P6be1LJtDuky2pLyYKE+lXIGH0U14lyzASc3hQuCIqL7i/aLFsOUa7gnTNY855dTltfjdQsQUhz+/hI99T2KXXoW8T8QjQo2y05miC6e1EJ3TX3lK2BlkK15xGk07It0JMU+IM2TA4OM=
+	t=1713832948; cv=none; b=QGvVp4+I9IK944z5QnZV9JJFvh0XFuG1WFddFAY5e0jq/rH4rkrrH86akgAwM3/lsCRIsP3jFl7luk0fxxNazAnFEV0Py3GsL850v572sz1br+Jy5w2Df9jpa4ebPaIW4iM91eA0i64TC9cHwo2WYX71uBOHnVb6k4WqJlQYiCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713832783; c=relaxed/simple;
-	bh=agZr6c/xl9fEJY1kZKahHC4ATQbeGwxR+gGhFXXjFDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ti2m/R1JcxXAp209ggoW7pmbKrmnr7tjm1i3IXvXjDNC9w+4rNZqjTDfG+Lmixbe+jn0RxY7yfHACpG3h+efXVcvvmKh5MG+KP/KJaA5+uK+KkOwl8j18Pn4S2Iy9YbjnNt0WNO2TYjCiZhS7TTuX/XBfPnkZu+NUadjCEjvfZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SDLZfVyy; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1713832778;
-	bh=A8sYhUte2phTFGEt9R3CJDI4XFlLj/ipfjoUAO0mtt0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=SDLZfVyyMAisNZjQvlzw6t1Oka4nVI28yS2le8FlTYgHq1wxLjcyHDXZbSR76GmPo
-	 F3XzOU4Hww0W/sPFfFZdMZewF3bVebVfcgH5zZgT4WcknWe7McQKtOgIFvyvRAtvTI
-	 a7NyZaoeGx3Mx101RMiRU+pnmSAe9UQWCXF1h3KQAvL8VHviQbqaHjTUo9x2zBfHzd
-	 zG3t+FzQ2u28AJO7dY0f5BjmFYJFMVa60V9TRpkcWiR9JUuR8An+y72kL856slZC1j
-	 mOEWxQ/foZcaOhjuizJTwyYf4KD8F9jdcYYkjVlRq7Zyo2jKuBtKaFPEhtBZQhntuL
-	 mCCFhZy7O25PA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VNjtf1Qflz4wcq;
-	Tue, 23 Apr 2024 10:39:37 +1000 (AEST)
-Date: Tue, 23 Apr 2024 10:39:34 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Mike Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
-Cc: Cristian Marussi <cristian.marussi@arm.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the clk tree
-Message-ID: <20240423103934.399e2a6e@canb.auug.org.au>
+	s=arc-20240116; t=1713832948; c=relaxed/simple;
+	bh=rRO3bp1N1vLLRE5YfInI8ljfDb8Jop/yA0o7ZgULyBs=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TBUHqjJPRaVaNC0VYtuOnfri8N5DqZAub/kWNR3BJy+uht16JfI+k4Hn71GjGa8vJB8nUz/PxOjPRn3l8ewTeC6XhwE7trfQJ0lMsXCofvr5RjoMMzaOslj/ov6GlIxAKqjnu/tv6gEx3UW8fInYrDE7HELo9eB+mem4UzM+Txw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QyztH4D6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BAF2C113CC;
+	Tue, 23 Apr 2024 00:42:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713832947;
+	bh=rRO3bp1N1vLLRE5YfInI8ljfDb8Jop/yA0o7ZgULyBs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=QyztH4D6UF+doV6TcHbmMllMpofHSqL6S0Gt8AJmpseE4P8zTLf0Nio8lsPtRRRQk
+	 xmEg8xrunC256LHPdGMHhfKdAxe3FCvLa3fggEvxvl37/Yv+KgQuBEf6v2l83tw54J
+	 F6/cS/kwjKCTbpuWB+k6b4OGyDRzwwEnT+8a3cCaYh02mkmlZBk6yD3hXmC+gS8XLZ
+	 VWJws/CMfvPXKovpLUr6RAe4qPrX58deF+Y1DSt8Rxt+SZHZ/Lxe4wTnqTuH04yfDA
+	 KtEljYOwwpiDteuOapaw2xHD0kqswS/KoplvSPIdR14Nq875A6X7I0GFHr8U33JqRf
+	 pBNN8u82smiBA==
+Received: from [12.161.88.66] (helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rz4Eq-0070Fi-NQ;
+	Tue, 23 Apr 2024 01:42:25 +0100
+Date: Tue, 23 Apr 2024 01:42:21 +0100
+Message-ID: <87ttjsucya.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christoffer Dall <cdall@cs.columbia.edu>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the kvm-arm tree
+In-Reply-To: <20240423092557.73c2ec1b@canb.auug.org.au>
+References: <20240423092557.73c2ec1b@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QX60uKT_F43BmfRZoPMp/_=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/QX60uKT_F43BmfRZoPMp/_=
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 12.161.88.66
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi all,
+On Tue, 23 Apr 2024 00:25:57 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> Hi all,
+> 
+> In commit
+> 
+>   fe4763e18355 ("KVM: arm64: nv: Work around lack of pauth support in old toolchains")
+> 
+> Fixes tag
+> 
+>   Fixes: e09faab353a6 ("KVM: arm64: nv: Add emulation for ERETAx instructions")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 6ccc971ee2c6 ("KVM: arm64: nv: Add emulation for ERETAx instructions")
 
-The following commits are also in the scmi tree as different commits
-(but the same patches):
+Indeed. Thanks for spotting this. Fixed and pushed out.
 
-  87af9481af53 ("clk: scmi: Add support for get/set duty_cycle operations")
-  fa23e091236b ("clk: scmi: Add support for re-parenting restricted clocks")
-  c3ad1d0a7ef2 ("clk: scmi: Add support for rate change restricted clocks")
-  a1b8faf8784c ("clk: scmi: Add support for state control restricted clocks=
-")
-  2641ee13c449 ("clk: scmi: Allocate CLK operations dynamically")
+	M.
 
-These are commits
-
-  ca82ded0e3dc ("clk: scmi: Add support for get/set duty_cycle operations")
-  3a0501ad6fd4 ("clk: scmi: Add support for re-parenting restricted clocks")
-  4562172e3ec2 ("clk: scmi: Add support for rate change restricted clocks")
-  6785c6c261bd ("clk: scmi: Add support for state control restricted clocks=
-")
-  4196d89b2393 ("clk: scmi: Allocate CLK operations dynamically")
-
-in the scmi tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QX60uKT_F43BmfRZoPMp/_=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYnA0YACgkQAVBC80lX
-0GwIrQf+JK2LgulV5HZfVZwyy7AcDsqm1+RkWfDrsDPGvidN5oQ3zJ7U834cJR/s
-do/7Z/ihnHfbkAl817JStgIUjpzv8hB7HlDl5QOawwqSdGnaerb/Njb6zvR61vYO
-WXDmafB9PwEbyY+Rr0iqiUiq6jJmGH4I35DWYNstFRP288r3LxxPytz45+O4ixdd
-pDuS0F9XcLp9j+Tm9LRsSZ/tZS/bk14w+glIbglt+IWN8/TIEMzeVFEJSo1Ug6t5
-M2ZRd/pp5JDD9HtxHyR5JAdfvLQbmLyo62NwXaVwsLxaHcTpB5rXCN3p4pCEsUz8
-LLyTRDLUSOwnJbxFeAh6WdHzQyM6Vw==
-=ExKv
------END PGP SIGNATURE-----
-
---Sig_/QX60uKT_F43BmfRZoPMp/_=--
+-- 
+Without deviation from the norm, progress is not possible.
 

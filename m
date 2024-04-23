@@ -1,107 +1,133 @@
-Return-Path: <linux-next+bounces-2026-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2027-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26DF78AF68A
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 20:30:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19C6C8AF8FF
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 23:40:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58A151C22AB9
-	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 18:30:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66C12B2A39D
+	for <lists+linux-next@lfdr.de>; Tue, 23 Apr 2024 21:40:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7641E534;
-	Tue, 23 Apr 2024 18:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED687143882;
+	Tue, 23 Apr 2024 21:40:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="cG6URue7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hV+LMIhL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751091AACB;
-	Tue, 23 Apr 2024 18:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1471020B3E
+	for <linux-next@vger.kernel.org>; Tue, 23 Apr 2024 21:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713897047; cv=none; b=SaBfBCoHSaep/jG6Ka8lr14MrTm23E2JZr+cA2CYNzKk1lyAdC4Ve/rEdfhufcJ7I7tYotsgAc6mlbYkaCMMAYXNz/IWhVhb9tqgufSU+D3E4SEkbuwtcIEGpSs25ia0MLni0VZ3w4YkXA+DMtXegZbfjl33HY9TtW1azmQoTog=
+	t=1713908434; cv=none; b=TwFIIUHM2dqx+a/uuSHaRprAwa0qV2T4d3AH3eY/vNxrK4wu/02prfBytksD1ANOceGLkb+w2e47C8U/I8yafomEpYOTmuDwjeG/z55DX2ABwl49xQ30xYMrnvRjhOMv8I2100jQG+A4k4cwFKy/rlskkat3Xfz2ns0ycSHUoPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713897047; c=relaxed/simple;
-	bh=RFLVao8VFS9H/vSYh9wVNzB1/kKqDD9w28nPAFPN6MA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fZNLgr0jwDW3jcAaNob9eZO/+d74XmTo8ubNMWAmBfiLudysEb08fOzhuO8yZ9IU8adJavD8E3Bg5ftx8uPSWOPuRSCKuOgnstg9iSX4rdxuDmDs+joq4MLYdQjQJRbk3hRFUFtM6Kow0Sju4MuVt6fZZQZwmaBpbdgIaBmvKaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=cG6URue7; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 301c8b56d00d4e83; Tue, 23 Apr 2024 20:30:43 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
+	s=arc-20240116; t=1713908434; c=relaxed/simple;
+	bh=wnpyAme8jrGRa/6eoPDE5p77nCJISkL4t+hFGeR1EJI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JNP27H5I7X6NlWt/K609DsxmZytR/d7y9yeela1q/s4R5fdwBHVIkFQ+3zj+BxRnP391Bj+VNxD3y3ZUYv5z+/hAW6tMGYPcFZUdFzcPV+X0C+qNYqVnxBu4c/mQpTzr1T0OFBT/UmU7ZMDT7EiO2SjiKXgMr6p9z7l7iDbpp9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=hV+LMIhL; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1713908427;
+	bh=wHYxct6asNImlbeupPEFHpTTxlZt2liy9+CRSPwAYVg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hV+LMIhLeShhLbbuSeOQACQUCwvMaCJajbPMaBmdA1nt+3efGfvv5XCRRWY8QMgMH
+	 h/z9n6gMxzzNDZk+vrohsItjtT7IdFrtiItiPC4IcPOSVZc6jjCalCsQaBei0LSK9Z
+	 6EsFkhmhhCIRVO5HUYy410IA1L/+j4HxWmloflDGyobq4t6fKkPuzHU9rEO5H2rset
+	 dffwhCAjvSs5MXtDNrt9jsUyaFa11FtPz4Ck2IGwisQx2GLust2FpoThSHcYuQX0N8
+	 FvC+wALA+kYwqHw9gL+JbvVpQPdaXVS1hhX/Cvc53h6ClgrTN94djyP+NRM/J7s+iT
+	 8/j9cFPP+S9gg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DCBCB66DB8D;
-	Tue, 23 Apr 2024 20:30:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1713897043;
-	bh=RFLVao8VFS9H/vSYh9wVNzB1/kKqDD9w28nPAFPN6MA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=cG6URue7kEmcSZ8dgkbCjfb7T9PYZWQWtgjmHoobjdDRf57IRPso46UK6u4ckSqlF
-	 GdWIy3qBU42X9C9+sOdkM8RRGU/0BVdNAcuZlGjBR8HB2HgSTxXPAYY/6JhyYN8a/Z
-	 XV1h6HFw2/K4OENCSUo2cEBX4RferB9V/ljHt5X9tTpV0XlKULZ9dCy+RLzLjux/jR
-	 6PIlLQY+MRfOz9eaKSNpH5gUVi08Rjs3rI68LvTbbxWdS7IGuRBeCbj1f5hDrhDofB
-	 EgZ0sO9OtQLAb6V7C4TegAfEV1+YLB1S3Qy1jL8y/IcceLcrkmaLosSCwwQDzTb220
-	 QrdS1UM4QXFZQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: linux-next: duplicate patch in the pm tree
-Date: Tue, 23 Apr 2024 20:30:42 +0200
-Message-ID: <12425337.O9o76ZdvQC@kreacher>
-In-Reply-To: <20240422081547.7d75d471@canb.auug.org.au>
-References: <20240422081547.7d75d471@canb.auug.org.au>
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VPFsQ4vX0z4wc5;
+	Wed, 24 Apr 2024 07:40:26 +1000 (AEST)
+Date: Wed, 24 Apr 2024 07:40:23 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, linuxppc-dev
+ <linuxppc-dev@lists.ozlabs.org>, kexec@lists.infradead.org,
+ sourabhjain@linux.ibm.com, bhe@redhat.com
+Subject: Re: Please add powerpc topic/kdump-hotplug branch to linux-next
+Message-ID: <20240424074023.43932cca@canb.auug.org.au>
+In-Reply-To: <87bk60ji79.fsf@mail.lhotse>
+References: <87bk60ji79.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeluddguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Content-Type: multipart/signed; boundary="Sig_/ATeAZrrv2EJbPtCU7.6+XEM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Stephen,
+--Sig_/ATeAZrrv2EJbPtCU7.6+XEM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Monday, April 22, 2024 12:15:47 AM CEST Stephen Rothwell wrote:
-> 
-> --Sig_/2mWov6L/1T3YTV5TB80hoeT
-> Content-Type: text/plain; charset=US-ASCII
-> Content-Transfer-Encoding: quoted-printable
-> 
-> Hi all,
-> 
-> The following commit is also in Linus Torvalds' tree as a different
-> commit (but the same patch):
-> 
->   6711564863de ("thermal/debugfs: Add missing count increment to thermal_de=
-> bug_tz_trip_up()")
-> 
-> This is commit
-> 
->   b552f63cd437 ("thermal/debugfs: Add missing count increment to thermal_de=
-> bug_tz_trip_up()")
-> 
-> in Linus' tree.
+Hi Michael,
 
-Thanks for the report, this should be fixed now in the PM tree.
+On Tue, 23 Apr 2024 23:56:42 +1000 Michael Ellerman <mpe@ellerman.id.au> wr=
+ote:
+>
+\> Can you please add the topic/kdump-hotplug branch of the powerpc tree to
+> linux-next. It contains a series that touches generic kexec code as well
+> as x86 and powerpc code.
+>=20
+> The hope is to have to get it merged for v6.10, so it should go along
+> with the powerpc next branch in the merge order.
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=
+=3Dtopic/kdump-hotplug
 
+Added from today.
+
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
 Cheers,
-Rafael
+Stephen Rothwell=20
+sfr@canb.auug.org.au
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/ATeAZrrv2EJbPtCU7.6+XEM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYoKscACgkQAVBC80lX
+0Gyc/QgAoeBb/nq8jS4FDhTR1whXCAYnYtDtBfITZ+rhVw+j8iIMfMNpdjWIuHKp
+EmcHHvC6tkE3aFbNIALtDH3oHVmGD9GNJBnkWvJxefymoLOGxaNH44ld2o+lX3WJ
+chIyEnZzqcf7hO+CdtobArpLdPkrfRX7FU+yIsNCCdJYYhzPcdUvnvBE7ZJgZHGB
+sgrCoMjOEMDfQO3ZYUw7AYbZiZt5imEq/UH0pIf6CK5qXfnrtc9iXA0GoA1/Pg14
+aF+B1RX24/4Tk+lkvnOsT/YGk7bFzhodDuQvnMUb5Ht13MbyQZQj4749q2BUg5L8
+DVcqvB/sysHxdGcFJjM0dQKNjpf3Zw==
+=IxtL
+-----END PGP SIGNATURE-----
+
+--Sig_/ATeAZrrv2EJbPtCU7.6+XEM--
 

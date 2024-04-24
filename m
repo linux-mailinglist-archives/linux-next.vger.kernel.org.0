@@ -1,121 +1,131 @@
-Return-Path: <linux-next+bounces-2031-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2032-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9C3E8AFE3B
-	for <lists+linux-next@lfdr.de>; Wed, 24 Apr 2024 04:14:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39BAC8AFE4E
+	for <lists+linux-next@lfdr.de>; Wed, 24 Apr 2024 04:20:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5EEF1C22035
-	for <lists+linux-next@lfdr.de>; Wed, 24 Apr 2024 02:14:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE4571F237BB
+	for <lists+linux-next@lfdr.de>; Wed, 24 Apr 2024 02:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98FCC18B14;
-	Wed, 24 Apr 2024 02:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F1AA1CAAF;
+	Wed, 24 Apr 2024 02:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="e7uwacfc"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Gd0qg5l3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC36F17758;
-	Wed, 24 Apr 2024 02:13:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4251C6BD;
+	Wed, 24 Apr 2024 02:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713924831; cv=none; b=swDvAqdiXUdd26ikhApkUbLdznAXSj/LB8kCthMwv0vlqPJpGfL6jYHrXDTcw1omLPozOvNnKS6y2QMPbR55twKm2A4L76rr4g4KUElhVGNty9e1eXnd3Ih0fQqUquT23cgg2QanFWIxtv2odLTMKL9hFvrIv5Ra9JxkHtmKpPU=
+	t=1713925243; cv=none; b=FMLTILr7ToD1YVgghporKdVkTq4oc4BJnCFa17cvkeqfBZsOPnsKJlMCMTbMz20P8kJIJL3pOnhitMeMR8wIqfZ6XKY0GYu3LDSQs8bxGTa9cpihOFGweeZqXS4TdiX7EndZRhumBq57WtoIcmX3CKmy/L1UbZox2NQWmJI99to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713924831; c=relaxed/simple;
-	bh=0AjE9zP4E8Flvw9iwoz9dgNwzuUo5I8ra7phX+VJgQ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KViKyh2Dsnh7ZZcFyppsXrxIq5u4ZcZ3+5++WvYnwJKEcyXvDM90JXY2N5vvyoaHWX08ys2VvFVCmJDzaaAnUWIW6FaTgETo9tJT7Lh9440407iKfJTKEZEs1NsfeUKdQbZbx5nz6WXPGDs+F/d2NH7KdbZ33qm4I3mbyKBqAIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=e7uwacfc; arc=none smtp.client-ip=115.124.30.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1713924826; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=eCwe0kYBKJC6Z0H3THeSf/hbnrkxhxMDDPQARlCbV2U=;
-	b=e7uwacfcEvjEB27k0X/VOSN8UbGcp9WV9+H7dHAanWHki8W869XhinOLXc+ljhOsUCL7NZlwe1bILjJHlb67fkM6TMkkNtGT99e/RlPe7bd7d8EqKHVp705ogSPHUXr9ymnGSaTPSpll2ETZagBgRrGgBX3IvdYf/XLm0TXcZQ0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R241e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0W5AWppJ_1713924824;
-Received: from 30.97.48.214(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0W5AWppJ_1713924824)
-          by smtp.aliyun-inc.com;
-          Wed, 24 Apr 2024 10:13:45 +0800
-Message-ID: <0dbf63ba-026c-41a7-93fa-55a7a216e627@linux.alibaba.com>
-Date: Wed, 24 Apr 2024 10:13:43 +0800
+	s=arc-20240116; t=1713925243; c=relaxed/simple;
+	bh=/IBQ9UaOk78Qjtch3BUHtK6o8y0xEN6Rjb/8jpj4E6w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XI1JenuAAd04x10PdvtDQfPVhYkRcnRY0g7gEzUZnz0s13W4D/SsvtSWb/Cvbat6M2yAHu8/nWJutdjKa8thh0/2gJzSl246socNJHbDjCklYG4g9dBE1nvxtiZtE0Yhmt5axSjzG4/Whrlqy7vY1iPa9VGw+tnOJqIEZLYhUk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Gd0qg5l3; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1713925237;
+	bh=640fTtfxXa31FKB6D2phChlcHfYmgE6v+FReGt0p9CY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Gd0qg5l3dQ+aLUqPA0Gfn0UQ2Vu11y2g9IpXyO2T4AifjR360jrPiCpYhS1z/LARL
+	 lYmQR4Y+PJdQUOjMXyMMqoccO0CtTqz6TXkY9RlDBDnLyQD5W8FFBnzSNV+xhZK6Gw
+	 Ak/wYuBiTmvLZdIUVtTEBnDGwO7Jy+mrDLoXZlT+CBUoZtnhBhKMDiXhvH/CORgNS6
+	 icZprMM9CyQG9iJfUIrr4xpKIPhhblCFwdb/wcSbwFPy8QZS0jfdaof35ysPWgse1e
+	 oH93WeaWN+R8rHH/Mlz5GGzhyY8fdchA6StCZUxyQ7v0VCFt2N6xm0FNwaMGAOtCVV
+	 0E4jMYagO8nZg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VPN4h6Wdvz4wc7;
+	Wed, 24 Apr 2024 12:20:36 +1000 (AEST)
+Date: Wed, 24 Apr 2024 12:20:34 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Luis Chamberlain <mcgrof@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>
+Subject: linux-next: manual merge of the modules tree with the mm tree
+Message-ID: <20240424122034.5b4a1a01@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the vfs-brauner tree with the
- erofs-fixes tree
-To: Baokun Li <libaokun@huaweicloud.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Gao Xiang <xiang@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240424102445.53ba5ba2@canb.auug.org.au>
- <b7332fb7-4c49-3af2-7095-e728a6af8ff7@huaweicloud.com>
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <b7332fb7-4c49-3af2-7095-e728a6af8ff7@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/H/+E5WcEms/IdccAZrVLtmR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Stephen,
+--Sig_/H/+E5WcEms/IdccAZrVLtmR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 2024/4/24 09:26, Baokun Li wrote:
-> Hi Stephen,
-> 
-> On 2024/4/24 8:24, Stephen Rothwell wrote:
->> Hi all,
->>
->> Today's linux-next merge of the vfs-brauner tree got a conflict in:
->>
->>    fs/erofs/super.c
->>
->> between commits:
->>
->>    ab1bbc1735ff ("erofs: get rid of erofs_fs_context")
->>    569a48fed355 ("erofs: reliably distinguish block based and fscache mode")
->>
->> from the erofs-fixes tree and commit:
->>
->>    e4f586a41748 ("erofs: reliably distinguish block based and fscache mode")
->>
->> from the vfs-brauner tree.
->>
->> I fixed it up (I think - I used the former version) and can carry the
->> fix as necessary. This is now fixed as far as linux-next is concerned,
->> but any non trivial conflicts should be mentioned to your upstream
->> maintainer when your tree is submitted for merging.  You may also want
->> to consider cooperating with the maintainer of the conflicting tree to
->> minimise any particularly complex conflicts.
->>
-> Christian previously mentioned that the fix from the vfs-brauner tree
-> was an accident:
-> 
-> "An an accident on my part as I left it in the vfs.fixes branch."
-> 
-> So the two commits from the erofs-fixes tree are the final fixes.
-> 
-> I'm very sorry for any inconvenience caused.
+Hi all,
 
-Yeah, Christian was picked this fix by accident as mentioned in,
-https://lore.kernel.org/r/20240419-tundra-komodowaran-5c3758d496e4@brauner
+Today's linux-next merge of the modules tree got a conflict in:
 
-I guest that was due to his local work at that time since the
-original idea to fix this issue was from him (thanks again!).
+  arch/powerpc/mm/mem.c
 
-Currently I tend to submit these two fixes on my own for this
-development cycle in order to meet the test plans.
+between commit:
 
-Thanks,
-Gao Xiang
+  c22e503ced5b ("fix missing vmalloc.h includes")
 
+from the mm-unstable branch of the mm tree and commit:
 
-> 
-> Thanks,
-> Baokun
+  7aa7eb8269ea ("arch: make execmem setup available regardless of CONFIG_MO=
+DULES")
+
+from the modules tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/powerpc/mm/mem.c
+index a197d4c2244b,5de62a3c1d4b..000000000000
+--- a/arch/powerpc/mm/mem.c
++++ b/arch/powerpc/mm/mem.c
+@@@ -16,7 -16,7 +16,8 @@@
+  #include <linux/highmem.h>
+  #include <linux/suspend.h>
+  #include <linux/dma-direct.h>
+ +#include <linux/vmalloc.h>
++ #include <linux/execmem.h>
+ =20
+  #include <asm/swiotlb.h>
+  #include <asm/machdep.h>
+
+--Sig_/H/+E5WcEms/IdccAZrVLtmR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYobHIACgkQAVBC80lX
+0GzHLwf/T0fiy+3h+FiR5SrA3FMVBpVHDjptBdZ5nzyZr5xWmJe4ZzTwbD1TMY87
+KEWJMusc2M1mAhqKzzGXxNASMCvctLW5qYo7LijJamkQIs9SwUObV4QQAUrtTkTD
+jABxLGZ5vhqRwGyeejPc/8XKw1oZvMWhFcWdlNedKXE7P38F2XiDES1Q8UITQ2No
+Ekd1t/2BiwoLQbiDFaf38eUnqsxTc47kVMkBAJD3TiTOmqk15exovN7oPOBiX0KD
+IOPVU97iD1VcFX4tPC88V5fk/FcObyRXZQyPe8US5kinjI3WkpeV2qLUUk6tI31x
+w+EOh9lv0Wdb2vW/RclVyrPZ8ned6w==
+=GpxW
+-----END PGP SIGNATURE-----
+
+--Sig_/H/+E5WcEms/IdccAZrVLtmR--
 

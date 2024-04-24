@@ -1,123 +1,121 @@
-Return-Path: <linux-next+bounces-2030-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2031-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B2DD8AFDCE
-	for <lists+linux-next@lfdr.de>; Wed, 24 Apr 2024 03:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C9C3E8AFE3B
+	for <lists+linux-next@lfdr.de>; Wed, 24 Apr 2024 04:14:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CFA91C22F51
-	for <lists+linux-next@lfdr.de>; Wed, 24 Apr 2024 01:26:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5EEF1C22035
+	for <lists+linux-next@lfdr.de>; Wed, 24 Apr 2024 02:14:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A7417BB5;
-	Wed, 24 Apr 2024 01:26:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98FCC18B14;
+	Wed, 24 Apr 2024 02:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="e7uwacfc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2BA417BA4;
-	Wed, 24 Apr 2024 01:26:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC36F17758;
+	Wed, 24 Apr 2024 02:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713921999; cv=none; b=YP6MswkW7mBnTY4MYRYlqci3altqTqSBskdxvBMAyBMdL2CiAAONKh9eKEcvSMh4YmqhPWgd73zuq+VkwRPjPY8mtSX2eqaW69QqASc1G/N7FtkdbIKIpB369DnUmRmsJx0tZVzHS0T4kC4ozyHrZQgszT/YyaYwTvVitL755ZU=
+	t=1713924831; cv=none; b=swDvAqdiXUdd26ikhApkUbLdznAXSj/LB8kCthMwv0vlqPJpGfL6jYHrXDTcw1omLPozOvNnKS6y2QMPbR55twKm2A4L76rr4g4KUElhVGNty9e1eXnd3Ih0fQqUquT23cgg2QanFWIxtv2odLTMKL9hFvrIv5Ra9JxkHtmKpPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713921999; c=relaxed/simple;
-	bh=HdbK1c5PH65Ln+NqTiHTHYmjfZk4I/zimd1Bd+VuGcw=;
+	s=arc-20240116; t=1713924831; c=relaxed/simple;
+	bh=0AjE9zP4E8Flvw9iwoz9dgNwzuUo5I8ra7phX+VJgQ4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IFCLm0T9tLl88OesNYestJM+feZGuiHL91/lBjTKsuANeexZH0U9LwDKyOImbn0dl1syRFMqO9Dus3K72yDAfxae3Px4J4a0t5g0br5NlhT431yzfvmx6MH5ZmtNwkP3HSLRvyjRs4KRt38HaPeQE6DeevrAP3kXG9ouFbUmZBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4VPLtF1nKjz4f3jkV;
-	Wed, 24 Apr 2024 09:26:29 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 17E701A058D;
-	Wed, 24 Apr 2024 09:26:34 +0800 (CST)
-Received: from [10.174.177.174] (unknown [10.174.177.174])
-	by APP1 (Coremail) with SMTP id cCh0CgBHGBHGXyhmarAvKw--.54201S3;
-	Wed, 24 Apr 2024 09:26:33 +0800 (CST)
-Message-ID: <b7332fb7-4c49-3af2-7095-e728a6af8ff7@huaweicloud.com>
-Date: Wed, 24 Apr 2024 09:26:30 +0800
+	 In-Reply-To:Content-Type; b=KViKyh2Dsnh7ZZcFyppsXrxIq5u4ZcZ3+5++WvYnwJKEcyXvDM90JXY2N5vvyoaHWX08ys2VvFVCmJDzaaAnUWIW6FaTgETo9tJT7Lh9440407iKfJTKEZEs1NsfeUKdQbZbx5nz6WXPGDs+F/d2NH7KdbZ33qm4I3mbyKBqAIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=e7uwacfc; arc=none smtp.client-ip=115.124.30.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1713924826; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=eCwe0kYBKJC6Z0H3THeSf/hbnrkxhxMDDPQARlCbV2U=;
+	b=e7uwacfcEvjEB27k0X/VOSN8UbGcp9WV9+H7dHAanWHki8W869XhinOLXc+ljhOsUCL7NZlwe1bILjJHlb67fkM6TMkkNtGT99e/RlPe7bd7d8EqKHVp705ogSPHUXr9ymnGSaTPSpll2ETZagBgRrGgBX3IvdYf/XLm0TXcZQ0=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R241e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0W5AWppJ_1713924824;
+Received: from 30.97.48.214(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0W5AWppJ_1713924824)
+          by smtp.aliyun-inc.com;
+          Wed, 24 Apr 2024 10:13:45 +0800
+Message-ID: <0dbf63ba-026c-41a7-93fa-55a7a216e627@linux.alibaba.com>
+Date: Wed, 24 Apr 2024 10:13:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
+User-Agent: Mozilla Thunderbird
 Subject: Re: linux-next: manual merge of the vfs-brauner tree with the
  erofs-fixes tree
-Content-Language: en-US
-To: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Baokun Li <libaokun@huaweicloud.com>,
+ Stephen Rothwell <sfr@canb.auug.org.au>
 Cc: Gao Xiang <xiang@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Gao Xiang <hsiangkao@linux.alibaba.com>,
  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- libaokun@huaweicloud.com
+ Linux Next Mailing List <linux-next@vger.kernel.org>
 References: <20240424102445.53ba5ba2@canb.auug.org.au>
-From: Baokun Li <libaokun@huaweicloud.com>
-In-Reply-To: <20240424102445.53ba5ba2@canb.auug.org.au>
+ <b7332fb7-4c49-3af2-7095-e728a6af8ff7@huaweicloud.com>
+From: Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <b7332fb7-4c49-3af2-7095-e728a6af8ff7@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgBHGBHGXyhmarAvKw--.54201S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4fuw15Jr4kZr4DWF4xXrb_yoWkCrX_Ww
-	15Jan2vws8Zr42yw42yFsxZ3y7CFWjqr18tF1kKFsrZ3Z3Jan5GFn2y348A34vqryfWa98
-	CF1agFy8Kw429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb38FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-	6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-	Y487MxkF7I0Ew4C26cxK6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-	WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-	67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-	IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
-	IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWI
-	evJa73UjIFyTuYvjfU8VbyDUUUU
-X-CM-SenderInfo: 5olet0hnxqqx5xdzvxpfor3voofrz/
+Content-Transfer-Encoding: 8bit
 
 Hi Stephen,
 
-On 2024/4/24 8:24, Stephen Rothwell wrote:
-> Hi all,
->
-> Today's linux-next merge of the vfs-brauner tree got a conflict in:
->
->    fs/erofs/super.c
->
-> between commits:
->
->    ab1bbc1735ff ("erofs: get rid of erofs_fs_context")
->    569a48fed355 ("erofs: reliably distinguish block based and fscache mode")
->
-> from the erofs-fixes tree and commit:
->
->    e4f586a41748 ("erofs: reliably distinguish block based and fscache mode")
->
-> from the vfs-brauner tree.
->
-> I fixed it up (I think - I used the former version) and can carry the
-> fix as necessary. This is now fixed as far as linux-next is concerned,
-> but any non trivial conflicts should be mentioned to your upstream
-> maintainer when your tree is submitted for merging.  You may also want
-> to consider cooperating with the maintainer of the conflicting tree to
-> minimise any particularly complex conflicts.
->
-Christian previously mentioned that the fix from the vfs-brauner tree
-was an accident:
+On 2024/4/24 09:26, Baokun Li wrote:
+> Hi Stephen,
+> 
+> On 2024/4/24 8:24, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the vfs-brauner tree got a conflict in:
+>>
+>>    fs/erofs/super.c
+>>
+>> between commits:
+>>
+>>    ab1bbc1735ff ("erofs: get rid of erofs_fs_context")
+>>    569a48fed355 ("erofs: reliably distinguish block based and fscache mode")
+>>
+>> from the erofs-fixes tree and commit:
+>>
+>>    e4f586a41748 ("erofs: reliably distinguish block based and fscache mode")
+>>
+>> from the vfs-brauner tree.
+>>
+>> I fixed it up (I think - I used the former version) and can carry the
+>> fix as necessary. This is now fixed as far as linux-next is concerned,
+>> but any non trivial conflicts should be mentioned to your upstream
+>> maintainer when your tree is submitted for merging.  You may also want
+>> to consider cooperating with the maintainer of the conflicting tree to
+>> minimise any particularly complex conflicts.
+>>
+> Christian previously mentioned that the fix from the vfs-brauner tree
+> was an accident:
+> 
+> "An an accident on my part as I left it in the vfs.fixes branch."
+> 
+> So the two commits from the erofs-fixes tree are the final fixes.
+> 
+> I'm very sorry for any inconvenience caused.
 
-"An an accident on my part as I left it in the vfs.fixes branch."
+Yeah, Christian was picked this fix by accident as mentioned in,
+https://lore.kernel.org/r/20240419-tundra-komodowaran-5c3758d496e4@brauner
 
-So the two commits from the erofs-fixes tree are the final fixes.
+I guest that was due to his local work at that time since the
+original idea to fix this issue was from him (thanks again!).
 
-I'm very sorry for any inconvenience caused.
+Currently I tend to submit these two fixes on my own for this
+development cycle in order to meet the test plans.
 
 Thanks,
-Baokun
+Gao Xiang
 
+
+> 
+> Thanks,
+> Baokun
 

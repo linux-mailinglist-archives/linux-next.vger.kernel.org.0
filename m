@@ -1,118 +1,99 @@
-Return-Path: <linux-next+bounces-2055-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2056-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 878CB8B2A6D
-	for <lists+linux-next@lfdr.de>; Thu, 25 Apr 2024 23:09:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5328B8B2DEA
+	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 02:18:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B733EB213F6
-	for <lists+linux-next@lfdr.de>; Thu, 25 Apr 2024 21:09:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB41B1F218E2
+	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 00:18:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827B215380E;
-	Thu, 25 Apr 2024 21:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 552B9364;
+	Fri, 26 Apr 2024 00:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XO8Yqbl7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EaxcdgIm"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047F2152E19;
-	Thu, 25 Apr 2024 21:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CBA620;
+	Fri, 26 Apr 2024 00:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714079348; cv=none; b=TMANQxtFycWO/z23euRMH7LvAd/bYVkbB7zPgM+2XMYUZovKxzxcphywJ6YV2KZWcxoL5XKAi9M6t3g01pp+CvHTLMIwH4Y0n8zUe2pjC29UijFmTC4svlBKT+KCeRdAETWxgQmyTl/us348cjdwdX53LmfCmox5YwCMu+QpYGI=
+	t=1714090729; cv=none; b=EQkGDe1NpGXjQ5rKpARN3ACEWK8ZDKMOockqIqMitYPENsW7/wFzCYAKDgSMAbIErAzL4Uv0t/7ctHOX3PIDYC0+LSIvJEq5F5sQ0XYRDA+C/oSJSFUZb3QBzCBEmXmlE6EjV/VrNfCidlbnAxFDr2zJlL6QNnUR+BgDU7OOF1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714079348; c=relaxed/simple;
-	bh=yerrk0rdVucOk+EbK40MqtQVv2YDm0HaAjFWfFyK+zM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=bJ3q20jCPiNY/Svlgq0XEtRX+CPTZ1GDxd2BGdDR+K9bT9mEW/tAS6NErZwO4CVMF6lo2uqWqvm81mW0fIbXV8QdOf0ZYxifvchsifuecURyloIEcjZwZKq5QXaEOIkcL8kWMWsezDXPNMdae44MZFJkyChtQ2ms/D0YAhSdUuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=XO8Yqbl7; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1714090729; c=relaxed/simple;
+	bh=9ycmrmx8XGQIVsVWBCN5lP2LVOqgfEuazMcB2SY/oeM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=LgTRqmGtpI5OhCoZ9tFlRW2LJjpptpggYjA7GEkPB9fJSWoa7M5J3VGVlVX7M4PpferODG2fSeuHK5L+J3SP4hCVIXMyHWVOZSIbdUG3XpEotJ4El7xRZjujsmU4DqqMKNL+Wonw/wD9gElyXCnzCucr7Sd5r88BsX20l8yapDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EaxcdgIm; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1714079343;
-	bh=HQ9mB3jJnTd7oaYs4J8bO4Q3lVS9XIz5rOMtPQW1/vY=;
+	s=201702; t=1714090722;
+	bh=V3i7bB4xVigHTQJijvglvbfbxRtYWKrx07gsRRE9zvk=;
 	h=Date:From:To:Cc:Subject:From;
-	b=XO8Yqbl7a3MRXgF8A0uYLRp/RGrKxdy/aktwyFujFVgB1QkiyIk6ZDRKaba72QV3E
-	 VSjYnPYYSYT2fm7rHCXM0XzxH9UzzHo9FtgIuIZQzrtn0orPEwByx4Uvtf/ueRtf+s
-	 +oR8rFPGTgetl6J4Y/avDY/l/UWW19DAU/cbB/7JKiQ3BKk5gF/5d9OMZ1q/jtnFHI
-	 K5ue4X6P1fnHxCEQ/V7+Dkpy5LsjRBIrkZtZ2emCHe23u+hijantsT3CjspH/RtDrx
-	 UuLGcgCdl1lwdQ2PDnGEJlkj9m7ZXV5ogRQXPInmiOrFWN9plDXL0EnyLTIeqoYRmt
-	 FLsmF1yC3YmCQ==
+	b=EaxcdgImvI+wE0eSFjoo5GeJ730Imps5MUre3KCMZfyt6FRfe4mtdMwGxRcSAN7+5
+	 /LrBKUT9F7GdcWq3FwD/mVH2mkK2gF6OPPyfIJIGxae2PdgHq701/rvwhVJsbnu2Xh
+	 aOxjV5F1tnFCtg+4SPI95SsD5cPS+vK7tGCGSg63AXlqssTnMg5zHw5YycrlIPR0LD
+	 krH5jN5r3JN5bf9WfsA4ALeyW8oHi30by5Fmph8FKbVy4PUtoGl/FuhQ3ZgbSy0HFL
+	 Bxq6Jh+PVxGaD4ATxU+AxLNAZkewJQYvuNYP0FoSCKZCQ+BKuuyn2vGE+ifOU5wn9F
+	 Q2NWbbOTaauVw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VQT4H1Jvwz4wny;
-	Fri, 26 Apr 2024 07:09:02 +1000 (AEST)
-Date: Fri, 26 Apr 2024 07:09:02 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VQYH6008Zz4wcr;
+	Fri, 26 Apr 2024 10:18:41 +1000 (AEST)
+Date: Fri, 26 Apr 2024 10:18:38 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
- <johan.hedberg@gmail.com>
+To: David Sterba <dsterba@suse.cz>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20240426070902.0cfa1282@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the btrfs tree
+Message-ID: <20240426101838.0cd78625@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xuqiCR+9hBizTPSexM=cJfu";
+Content-Type: multipart/signed; boundary="Sig_/b7_t==gRfH.wBVGWFzcoZBG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/xuqiCR+9hBizTPSexM=cJfu
+--Sig_/b7_t==gRfH.wBVGWFzcoZBG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in Linus Torvalds' tree as different
+The following commits are also in the bbtrfs-fixes tree as different
 commits (but the same patches):
 
-  2d7a4bf4bae8 ("Bluetooth: qca: fix NULL-deref on non-serdev suspend")
-  4405182b7a15 ("Bluetooth: hci_sync: Use advertised PHYs on hci_le_ext_cre=
-ate_conn_sync")
-  5a0265dc7990 ("Bluetooth: hci_sync: Using hci_cmd_sync_submit when removi=
-ng Adv Monitor")
-  5e7d1e242697 ("Bluetooth: qca: set power_ctrl_enabled on NULL returned by=
- gpiod_get_optional()")
-  9c049d8a7595 ("Bluetooth: Fix type of len in {l2cap,sco}_sock_getsockopt_=
-old()")
-  a3aca621101b ("Bluetooth: MGMT: Fix failing to MGMT_OP_ADD_UUID/MGMT_OP_R=
-EMOVE_UUID")
-  aec46cd4ebff ("Bluetooth: qca: fix invalid device address check")
-  d19d765596e7 ("Bluetooth: hci_event: Fix sending HCI_OP_READ_ENC_KEY_SIZE=
-")
-  df5efbdaa7d5 ("Bluetooth: btusb: mediatek: Fix double free of skb in core=
-dump")
-  e10bb8abb81e ("Bluetooth: qca: fix NULL-deref on non-serdev setup")
-  e4e20e0a1700 ("Bluetooth: btusb: Add Realtek RTL8852BE support ID 0x0bda:=
-0x4853")
-  f33b1c9d33d9 ("Bluetooth: btusb: Fix triggering coredump implementation f=
-or QCA")
+  7f1f55f2cdcd ("btrfs: add missing mutex_unlock in btrfs_relocate_sys_chun=
+ks()")
+  8aa467899340 ("btrfs: take the cleaner_mutex earlier in qgroup disable")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/xuqiCR+9hBizTPSexM=cJfu
+--Sig_/b7_t==gRfH.wBVGWFzcoZBG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYqxm4ACgkQAVBC80lX
-0Gzy2QgApkpdfoVxTe+5lNjXPtlQ2Dpr+PvilgyHzg0cJoeWkubP2OSmadyTD7AR
-70+NPIy/uQDPkYB0xpp1jGTessV++eiZd7+lNDzK+dQ4s1XQbkgm8zeBAcPn/rew
-gBsAv26kr/VvH2bh6iQC5abjFkW/gdARtspwNYI8jOzh+zrZOiiowe8OsJ6NvrFg
-w1q7TGtunMMGFIpJWIdOFREMn5RdgJUOexTNN4iyZ4FqVVP8uSkful3pLocvGWr5
-/vdbrp+a2slxafulizTU7R/XHb5IR/+VYFh2gFoj+5LnEziq0ivAHxdNEnHfQPoY
-GnomAD9oCTR88pdh101JHcTPclZ3Cw==
-=1RjI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYq8t4ACgkQAVBC80lX
+0GxNKgf/YyRSOPAckz9UNWM+801+y1zPLWj9trEF0sj/4+UMQHX2nz+xHNr7U58L
+dnLOPIky9mEUzdnqu4t7tApxXKmxm65hFTSxtn0cHKHPdD3AZg27ABjVplA1YzYp
+vcyIhmjOMa2R7mHPh9yoCoYYxwdmx9+0DgJa+z59MboV7P/lDJdSFRhAp5nVDWfN
+Rpz7K9raowrWJmgnfQ6VLJVHGNqXgp9OgzauB3TrGNskhtdg+l8sVb9qlE4ZizDl
+SmZHzzlbyguKr50Z8a9J4tz4+hJRhs5nRQp92PGXL6ZUtFwcnNTJqJ/sNFXDfFmz
+n1tVtt4F8RzRe0ZfyxQhMRzIRe/9iA==
+=SU45
 -----END PGP SIGNATURE-----
 
---Sig_/xuqiCR+9hBizTPSexM=cJfu--
+--Sig_/b7_t==gRfH.wBVGWFzcoZBG--
 

@@ -1,110 +1,125 @@
-Return-Path: <linux-next+bounces-2059-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2060-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B6848B2E5B
-	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 03:36:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEE0C8B2E95
+	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 04:10:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3528282802
-	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 01:36:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C3D6B22BBC
+	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 02:10:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3056AEC5;
-	Fri, 26 Apr 2024 01:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B8017F7;
+	Fri, 26 Apr 2024 02:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cIMUG+tF"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FRT4dQh+"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06CFCEA4;
-	Fri, 26 Apr 2024 01:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631E16FA8;
+	Fri, 26 Apr 2024 02:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714095394; cv=none; b=daiPqrPMdAKEmD4NcGd2A1s40HaYqfR40J4Hl+PCkPqmfcvtVGwqHqajOgyWuXlHBmI7pv+upUFk261oqkLdcqRQouzmjizuNoxmplmdpT4oLD6am+u+o/EuIvIVXByzKt7aj3nr/szGWHrvm17vViyjAmE33dkDk89GxZcqoKM=
+	t=1714097440; cv=none; b=H/FfrpX8ejyBG+jmQvw6cnkrKAtS3MEwHpWjHxm5/b+dyLd5rJx0dL1N3aloPuCOO4CudjKLjs700yctjPWV+TRM0uD4J3WDp9WyrHaAw89DCnsBT3T7keqptzg6v2tWYZUwsh3zZga75UKi7uxhUY4x3ph+xJBHPODaFl4oEuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714095394; c=relaxed/simple;
-	bh=lNmvERQcvW68KokotIoCcccOI1SExoGN+4NuTUFKq6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qOwRItEXEkvgLmSJuLAGVNV+XWc0AXJegmrbCRA6nWiaG8xHQVCkjNOfbNynpzIgLbuPOAUC7mvTCdbN2Q0ClOb5pnKE4jKjhzt8gp0wxstzCaGJi90WyGftPiaYrTBGSKdDd4giRFnNmZdpWC1Ema9+NFb5UgdvGWoDK3j2IHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cIMUG+tF; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1714097440; c=relaxed/simple;
+	bh=25wLHrnCq4+o10YPKDMt5BUupNlywHRUzqusiwVyA08=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=KIV/lk7AYKoFVY5Pyn+l4gQVrnT5fl3fTjp+nJ4Z5jf0Yn4PbQMpt9pBwX2LS2FVZ3uC/EO4fqls8gnkR4bPJlkm71MHFfBPjGxWPTJRNxsX8SlUfKQfp4eCJbUXKjWJj4ZFsUtKbK/pe3BFiGQ7mIGJLtpmV9jyTlJgAIYpoGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FRT4dQh+; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1714095388;
-	bh=lNmvERQcvW68KokotIoCcccOI1SExoGN+4NuTUFKq6I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cIMUG+tF33SaoainAdnHacEBylB+GtDMf+Ki8LknmUXYC4Fr5F2UlCXLnkdv1VYAv
-	 IVaXMA8nU2CcHuhasuoRzxDJjXvLKaOB0nd3Di2YE84rVymMkRrtI4EGM1tRu/jZ/5
-	 XQfSkqz4YhKFvUMPJgOkbsfXlJCv5Q2WTf9TPMc4EDjIqpGjeuF5RYJ4xnpabaQXSb
-	 w7paWzFEJzNQDhfhwBH1/KoiFIG1lW4wSpFu2Ixv5yl6mfZVrTXZLuG8c5eUgSWzAj
-	 A1BUYWgiWEh7vd0HCAI+/ZXTxTyN29TvFhtTXYR3Bvb3jU8m5AK6MzEHKgbDcw4Zgw
-	 tp4OvDGTaZ5dQ==
+	s=201702; t=1714097429;
+	bh=1ojHsRPiRsoir+Q24y/ktvG1Mk3MRS2GO165P9N7x8Y=;
+	h=Date:From:To:Cc:Subject:From;
+	b=FRT4dQh+esGSDeX4HQBZcy8sf1DcR9wTgS+M9YzHA0H3gSIlF0aGr5VI+LxRaCZwc
+	 mUPj6ZxwlTAPou1JnofUpDb5AeldQ1Etu17O3TBLPeE/6nYLDb97p3xKOMGTUqmRGa
+	 sTurosRmQG733M2gXQgED4UrPVW9LNAbtyZbkZsB4Y+YFqHgXrkmOwo+sGtkFnNbxo
+	 6V+G5aFqgE6q2UvABAQW/de+3rWAao83AivEec/KI4eypJ14pPzQulmud1Z7jsbRVt
+	 u+yv/X6MRrnLbBRgqOViujI9tMfDtn7WXG9/IvxlaZ2169X1wafOv5YMAeZ7a5C7SA
+	 hDYqpYzbvWQdA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VQb0r2RGhz4wnr;
-	Fri, 26 Apr 2024 11:36:28 +1000 (AEST)
-Date: Fri, 26 Apr 2024 11:36:25 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VQbm43Gzhz4wyQ;
+	Fri, 26 Apr 2024 12:10:28 +1000 (AEST)
+Date: Fri, 26 Apr 2024 12:10:27 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+To: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Jani Nikula <jani.nikula@intel.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: error fetching the drm-msm-lumag tree
-Message-ID: <20240426113625.5b97c03d@canb.auug.org.au>
-In-Reply-To: <CAA8EJprYTKSwS+r+u3yVbo7cLVkA+XnBT9UHVt+yM4Qp3u-GnQ@mail.gmail.com>
-References: <20240426104618.43d926d3@canb.auug.org.au>
-	<CAA8EJprYTKSwS+r+u3yVbo7cLVkA+XnBT9UHVt+yM4Qp3u-GnQ@mail.gmail.com>
+Subject: linux-next: build failures after merge of the drm-misc tree
+Message-ID: <20240426121027.2033ddd0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7ZTw+rLQEGDDQJ1eFsW6t=D";
+Content-Type: multipart/signed; boundary="Sig_/=Ij.CB74ner2v2IZJgS4KBc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/7ZTw+rLQEGDDQJ1eFsW6t=D
+--Sig_/=Ij.CB74ner2v2IZJgS4KBc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Dmitry,
+Hi all,
 
-On Fri, 26 Apr 2024 04:26:26 +0300 Dmitry Baryshkov <dmitry.baryshkov@linar=
-o.org> wrote:
->
-> On Fri, 26 Apr 2024 at 03:46, Stephen Rothwell <sfr@canb.auug.org.au> wro=
-te:
-> >
-> > Fetching the drm-msm-lumag tree produced this error:
-> >
-> > fatal: couldn't find remote ref refs/heads/msm-next-lumag =20
->=20
-> Should be fixed now
+After merging the drm-misc tree, today's linux-next builds (arm
+multi_v7_defconfig and x86_64 allmodconfig) failed like this:
 
-Yes, thanks.
+(from the arm build)
+
+drivers/gpu/drm/omapdrm/omap_fb.c: In function 'omap_framebuffer_describe':
+drivers/gpu/drm/omapdrm/omap_fb.c:325:9: error: implicit declaration of fun=
+ction 'seq_printf'; did you mean 'drm_printf'? [-Werror=3Dimplicit-function=
+-declaration]
+  325 |         seq_printf(m, "fb: %dx%d@%4.4s\n", fb->width, fb->height,
+      |         ^~~~~~~~~~
+      |         drm_printf
+
+(from the x86_64 build)
+
+drivers/gpu/drm/loongson/lsdc_crtc.c: In function 'lsdc_crtc_late_register':
+drivers/gpu/drm/loongson/lsdc_crtc.c:692:9: error: implicit declaration of =
+function 'debugfs_create_file'; did you mean 'bus_create_file'? [-Werror=3D=
+implicit-function-declaration]
+  692 |         debugfs_create_file("ops", 0644, crtc->debugfs_entry, lcrtc,
+      |         ^~~~~~~~~~~~~~~~~~~
+      |         bus_create_file
+
+Caused by commits
+
+  9e2b84fb6cd7 ("drm/print: drop include seq_file.h")
+  33d5ae6cacf4 ("drm/print: drop include debugfs.h and include where needed=
+")
+
+I have used the drm-misc tree from next-20240423 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/7ZTw+rLQEGDDQJ1eFsW6t=D
+--Sig_/=Ij.CB74ner2v2IZJgS4KBc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYrBRkACgkQAVBC80lX
-0GwTwwf/QGHpN90AybQ9sFwSsHbo8xJ/vuW6r4hwiEwwrimqGe7VOT9TVuSWi6kp
-8xC0X1YhwKjyJ4ws5PD8GxYofx37rZtgJPf0SynktTQMGQd7JgGAMeXJYkQRvOMl
-rKgqqYfDW9/AQoy8MWw+WP+1IJTCZ4pJF6eFOCWBU/eu4LkJ4xVz8Kg9tIN353uh
-UdGR6eI9HMoai5KjDiN2P8FauXF4FW6iMrOu2qv+i4keWxE27fLtUlNns6enWNtt
-xXEC7ZE3hFO0INxSR8DKRxrdj13n5OCaC4NLxBy6DXGIniO1NWFyJLqhXbh06Wo7
-MH4ktcoLSyRkdRDZPfKStGbLG6XgmQ==
-=d5N3
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYrDRMACgkQAVBC80lX
+0Gxm3wf+PzMwQe47NtzpGc7OV20UnbDTHUsuVa7yxfjlFoBSlXTjPSnUA6a9zmEM
+AsjgmuA3Iog1k902zOmLAGzZN928mcTskkkYE3sRRZnJSK4rGOcwrTOZ8/ycq6lD
+DqMLIo7SNHaRbaOGVzKhVVVhK6W2mrlohWogu5Ec8goHo1KuIDKESZywaUzmKC8i
+vD6JzLAELe8U4NTAormWzo9RFKGItIJ1zks6NkdrTBA8icKkbxOFP+5A2zwnysx/
+xr1dQzDX7c76toSQIjfqaY1cEcYCPQMFjcDLVpW7d09DwEEThNp3FLXu1165hh1L
+hMEjYQvfxBZbD+AKY6HkanPo1y7tRQ==
+=huZo
 -----END PGP SIGNATURE-----
 
---Sig_/7ZTw+rLQEGDDQJ1eFsW6t=D--
+--Sig_/=Ij.CB74ner2v2IZJgS4KBc--
 

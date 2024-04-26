@@ -1,116 +1,197 @@
-Return-Path: <linux-next+bounces-2068-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2069-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DD4D8B2FF9
-	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 07:57:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B1818B3002
+	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 08:01:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF8C31C20BEC
-	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 05:57:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 934C51F228CC
+	for <lists+linux-next@lfdr.de>; Fri, 26 Apr 2024 06:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFD713A26F;
-	Fri, 26 Apr 2024 05:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B9113A240;
+	Fri, 26 Apr 2024 06:01:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="eYjhE38b"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="F6KURqXb"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04742282FD;
-	Fri, 26 Apr 2024 05:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8BF26AE3;
+	Fri, 26 Apr 2024 06:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714111059; cv=none; b=W+RhJ/4k75YwID/iSuTgHXnIbSN5ORDTiBZqw34NFfVTdTWKR/7yQvBW77VfS8CGFfEaHkk75NG/+xLhpEaXBsOukZMshdEyLM3DbOHkGqxAYWsM85Rw8ZiZvDP14ZX2O97WkOE+EI3G1+mZ9w4lEXMr9A+5na3qRyOqT8iTR+M=
+	t=1714111285; cv=none; b=N1n+LqJdX5dUtSbS+PJye5TFjXQNTSTPDrlFtYE1cYRZYLfW845FdCGrvuFIluYH8DaOXDTw2hY9eox6mOgAOa0vWN0a89VgHp6yoYIGHTqs4sAHyf2do7ekksKAMIID1PZx0hWiDxdE9m0MtQN085Go+LDUdXaz15oNeLnU1T0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714111059; c=relaxed/simple;
-	bh=mBReC7h8PXppwFFu2pI8/O+aztbOk1UJ9dCCARvq0No=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=K7YkepVxAVKiLAyD1wJKduMWnNf0AvUXGktdqZ+R8dQkmrFapXzOTHgxm2nUqOumEqWfZ4hln28ZSUMJzpNhClcgXZzikTJjtd+HRPkfDawT2pzwIne8bo3XJ9rAzXFBq39vAkpYat+lT/snX+hgL9xQy70Kh2y6GxTjV5rCzo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=eYjhE38b; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1714111285; c=relaxed/simple;
+	bh=DHy1YJTwuP4MLr0w/sLo3b5t2nMYXW8OcBH26mpmf6k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f52iUOkgb09pPRcWY2bLN4AgYwZ2NS0aTZXT5k0EWZQhTP+Hf+N/Arxx85tiH3zBjuzPti7J+7za1VA1cfp2pbxtoqfsuJQkhbEPaTfS9P7jyeotgw9RHX3H9GPhSxnLqlxwd8J/9XfzU7hrxuXYmxiRfo+x7PJmXvzw6Un63UU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=F6KURqXb; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1714111054;
-	bh=cwxQSbYeVT0eKer8AIrRsOXGmUapNqpYECkP5Xuix1o=;
-	h=Date:From:To:Cc:Subject:From;
-	b=eYjhE38bPiYA61YQNRcovqm8Ks5rnWWaz5PxcwqSfSgu7jRpd6zBYhiQWRDoFYOyn
-	 AGKHxXcMUq1aazF9kypwoJps7diANOzfK5TEATwyab0F7ZmZvWS6frMfpckuPiftMC
-	 PcWpngtcnRupjIL6Tbrg6LSvKTRBR1oXJr0BpCPSJTcmpkzZwQLJwgx5ZMZg+eeHgb
-	 5RAI3GcNL/f+MyiqLpBr/KeTDjJnKC+NYR3mezqrKczE7PAXpUl4d6yRP0qc7jdl9B
-	 9WJEpZ/xfxde6qTIu7yFYKzKgrH1D+kMRHiDCT0vrE0MM6tHfcKAWGgLoQFdFuFhPB
-	 fSYYNb1ZG/vIA==
+	s=201702; t=1714111279;
+	bh=MoGuqSkvq3te2HqshVymfGO+yIdfJnPtyUAQu8kGXEM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=F6KURqXbjhcB45pBbwT7+NSQGiR6PjF7vLbEJ7VimfJodfi6ABQa2lvK64o9abzfX
+	 XjY3wD2Gct1Cwcypg1DD6K0zi9E7uB7ZUCceEhJDLYd3+b/eWDfbfKShTa2fp7jg2l
+	 Zqv13nGP6uvMI+Hm7eG6xbi48cZdoJkb7PiyOw6frF6qL5yHfRWzZmKYwdbuX8FtcR
+	 JQs3W4RVbSR0pw56qT/CeuB717ePiuXJViXA9ZtyMnvRnM6ilG8VzGBn1mQsbrrx3a
+	 UbrdIWszpeMi2cKCr//8Yddg0Fqe9fGBdk77JPOIkTof7NtpwVqPRDy+GhaaXbMThX
+	 SNL2SNiVmT+Sw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VQhp56k6kz4wc8;
-	Fri, 26 Apr 2024 15:57:33 +1000 (AEST)
-Date: Fri, 26 Apr 2024 15:57:30 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VQhtN70j4z4wcp;
+	Fri, 26 Apr 2024 16:01:16 +1000 (AEST)
+Date: Fri, 26 Apr 2024 16:01:15 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kees Cook <keescook@chromium.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Max Filippov
- <jcmvbkbc@gmail.com>
-Subject: linux-next: manual merge of the execve tree with the mm tree
-Message-ID: <20240426155730.5c03ae33@canb.auug.org.au>
+To: Jens Axboe <axboe@kernel.dk>, James Bottomley
+ <James.Bottomley@HansenPartnership.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>, Christoph Hellwig
+ <hch@lst.de>, Damien Le Moal <dlemoal@kernel.org>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the scsi-mkp tree with the block
+ tree
+Message-ID: <20240426160115.7797a43a@canb.auug.org.au>
+In-Reply-To: <20240418145554.7a93325b@canb.auug.org.au>
+References: <20240418145554.7a93325b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SWuLex9OyMn4yg7AY6Y6Wt/";
+Content-Type: multipart/signed; boundary="Sig_/KKT_rzaTn=lRwZe/uW7OAsn";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/SWuLex9OyMn4yg7AY6Y6Wt/
+--Sig_/KKT_rzaTn=lRwZe/uW7OAsn
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the execve tree got a conflict in:
+On Thu, 18 Apr 2024 14:55:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the scsi-mkp tree got conflicts in:
+>=20
+>   block/blk-settings.c
+>   include/linux/blkdev.h
+>=20
+> between commit:
+>=20
+>   e4eb37cc0f3e ("block: Remove elevator required features")
+>=20
+> from the block tree and commit:
+>=20
+>   ec84ca4025c0 ("scsi: block: Remove now unused queue limits helpers")
+>=20
+> from the scsi-mkp tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc block/blk-settings.c
+> index 8e1d7ed52fef,292aadf8d807..000000000000
+> --- a/block/blk-settings.c
+> +++ b/block/blk-settings.c
+> @@@ -1048,28 -822,22 +825,6 @@@ void blk_queue_write_cache(struct reque
+>   }
+>   EXPORT_SYMBOL_GPL(blk_queue_write_cache);
+>  =20
+> --/**
+> -  * blk_queue_can_use_dma_map_merging - configure queue for merging segm=
+ents.
+> -  * @q:		the request queue for the device
+> -  * @dev:	the device pointer for dma
+>  - * blk_queue_required_elevator_features - Set a queue required elevator=
+ features
+>  - * @q:		the request queue for the target device
+>  - * @features:	Required elevator features OR'ed together
+> -- *
+> -  * Tell the block layer about merging the segments by dma map of @q.
+>  - * Tell the block layer that for the device controlled through @q, only=
+ the
+>  - * only elevators that can be used are those that implement at least th=
+e set of
+>  - * features specified by @features.
+> -- */
+> - bool blk_queue_can_use_dma_map_merging(struct request_queue *q,
+> - 				       struct device *dev)
+>  -void blk_queue_required_elevator_features(struct request_queue *q,
+>  -					  unsigned int features)
+> --{
+> - 	unsigned long boundary =3D dma_get_merge_boundary(dev);
+> -=20
+> - 	if (!boundary)
+> - 		return false;
+> -=20
+> - 	/* No need to update max_segment_size. see blk_queue_virt_boundary() */
+> - 	blk_queue_virt_boundary(q, boundary);
+> -=20
+> - 	return true;
+>  -	q->required_elevator_features =3D features;
+> --}
+> - EXPORT_SYMBOL_GPL(blk_queue_can_use_dma_map_merging);
+>  -EXPORT_SYMBOL_GPL(blk_queue_required_elevator_features);
+> --
+>   /**
+>    * disk_set_zoned - inidicate a zoned device
+>    * @disk:	gendisk to configure
+> diff --cc include/linux/blkdev.h
+> index 2c535af79529,e3c7082efa39..000000000000
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@@ -924,9 -942,15 +926,6 @@@ disk_alloc_independent_access_ranges(st
+>   void disk_set_independent_access_ranges(struct gendisk *disk,
+>   				struct blk_independent_access_ranges *iars);
+>  =20
+> - extern bool blk_queue_can_use_dma_map_merging(struct request_queue *q,
+> - 					      struct device *dev);
+>  -/*
+>  - * Elevator features for blk_queue_required_elevator_features:
+>  - */
+>  -/* Supports zoned block devices sequential write constraint */
+>  -#define ELEVATOR_F_ZBD_SEQ_WRITE	(1U << 0)
+>  -
+>  -extern void blk_queue_required_elevator_features(struct request_queue *=
+q,
+>  -						 unsigned int features);
+> --
+>   bool __must_check blk_get_queue(struct request_queue *);
+>   extern void blk_put_queue(struct request_queue *);
+>  =20
 
-  fs/binfmt_elf_fdpic.c
-
-between commits:
-
-  ddfa3901a4de ("binfmt_elf_fdpic: fix /proc/<pid>/auxv")
-  f559d7a05917 ("binfmt_elf_fdpic-fix-proc-pid-auxv-checkpatch-fixes")
-
-from the mm-nonmm-unstable branch of the mm tree and commit:
-
-  10e29251be0e ("binfmt_elf_fdpic: fix /proc/<pid>/auxv")
-
-from the execve tree.
-
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+This is now a conflict between the scsi tree and the block tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/SWuLex9OyMn4yg7AY6Y6Wt/
+--Sig_/KKT_rzaTn=lRwZe/uW7OAsn
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYrQkoACgkQAVBC80lX
-0GzUdgf/Sa0f7EEq6VpGRcEAROEblJQMJp5Bockxm9Wo2gseb8RjOvnbszCAAp27
-V9Jr4Sl9kcM51Uj3dwxAikfj5IedE4BQgYiDgn2qXwEYjeaWvMnYswCb1M149zN5
-ko/u0xMK0Uos/DGMbZLHPe+ALpUHgJQvmIsLewodzfJttZrKDOfjJuft/8tiYU1Q
-d83BlZWDQPR1IGoKGrbcSmZoo0GA7+32Hq94WFQcTrReCptel3zkmQIxDpRbRTmI
-58Ft8kmkr3jUJLk+BUsnJbCo6NUMQ97TV219MG1nL7HQpyyw/MJuIy/bJBMI4WRp
-nJmGmGTd7ADcR3xwMWokHXvTHwtXMg==
-=OEa6
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYrQysACgkQAVBC80lX
+0Gz8Ygf/T9YDKkxxEewjA5z7RTHeZjrUambwAv2KWd2lU/A4h5jMu3VrfkNf4JVA
+HsO6qL+geu1zH5/2ge/bGbz9tje0QoqECirMostG6a7mevwSI4vhIy0x8UWRYR/t
+lLn9TtRs2lhmhu4LLsshsiT7+ID+wd9Ydr+dFxZHAcN4zrvrtQAwO9T7Rltq7wdH
+tLU5RVZ4b1reMjtlus4kH6UHeksA7xyTKSVEvPukCk3DFfPAClZ+Q9LRhjwPve81
+MOzHMg5D4YqgMBAEOJDSm4Afh+L3B+wPVKmFH6bF3QcnmyolxYKWqpEQOxSRCiU1
+qW/E5jF9NrL72805B5ODFgrPk4B2oA==
+=m3ng
 -----END PGP SIGNATURE-----
 
---Sig_/SWuLex9OyMn4yg7AY6Y6Wt/--
+--Sig_/KKT_rzaTn=lRwZe/uW7OAsn--
 

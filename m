@@ -1,104 +1,133 @@
-Return-Path: <linux-next+bounces-2119-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2120-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCBA58B82B3
-	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 00:38:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FAB38B82FA
+	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 01:19:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF5F9B22337
-	for <lists+linux-next@lfdr.de>; Tue, 30 Apr 2024 22:38:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF35D1C2271E
+	for <lists+linux-next@lfdr.de>; Tue, 30 Apr 2024 23:19:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34F8217C6A;
-	Tue, 30 Apr 2024 22:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D061BF6F9;
+	Tue, 30 Apr 2024 23:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="X3NwAcyT"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LkWu2QpV"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A346D518;
-	Tue, 30 Apr 2024 22:38:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AFF29A2;
+	Tue, 30 Apr 2024 23:19:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714516699; cv=none; b=p6eRVIk6ZXcNXAtpqvbR7IG+lLE/gNEtfcW61m66NmAYf4SVD/IabZX+tlBwmYFNhs0SeBrRrDBB7dhDF/s7cQQweFw2oZpIGT6D1iO4vKmrKQaDq4l2TcDPVqOmIfU0G+Gd1Vh3MvikDYOoCUfBLj4QeUzkQGr5sKWMxUypkw8=
+	t=1714519192; cv=none; b=NCc0duVgB8muh8kYD6qMyhTI3FOs/p13JFmIGxYWyJjS8WW8mY6g2jDZ0R3wzBhbaJEud16EVtslFYoayjgsB+27oLgJ75FWvHKIT1ZgkQbJRCTFIV7/cS8AY4TkVJeHSxt4hofab4Bp/ue+tIJqgM4FvBB8jbQHl7yt2NnX6ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714516699; c=relaxed/simple;
-	bh=csOoGmAfntY21DBypBODKsbOQpLhizP4aBW+BO070yU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YzqwXbfyBVAyI7046mkCGVqQlb0Q98h8ECRalfzOk89zQiteHidNN9RwQqlz+Lbul/lrhDUkOkBGeHSnt5C2DJXGT8CJsf9T5LV3hE3yd5r8b0Mwg+o2k54E/FQTULKiQcjAW8sVg2xjRcao4rP2lLYCIL3RedEK47krtoHAfa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=X3NwAcyT; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1714519192; c=relaxed/simple;
+	bh=uJ0gY99LTGWuLFLaj3XnbjegvyOyOpBdzfEAxIFAVTA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cIA8lPRYAMvZsQn+lvl1QJvbHO3HzO7U9XF7KfeHtneCLqK1E2sI6OqpH5uuZc3zYn7NE4tofY2yL9crT2Lwg339KzghG9C6i1p+AcObXNiVH4lQMpWHDMnXXwmcSQJiBe5K+1CsekXaalO/3bOm7MP3I2NbTP7S/9csgEDyJ5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LkWu2QpV; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1714516689;
-	bh=lCLxfsMlPBoiPmZZeynvw5FpSOeZ67s9YOCt1JlEqV8=;
+	s=201702; t=1714519186;
+	bh=+WEiOInUJQiSX8H7KMPHGgg5nSFkGomVCm+b04fDsdY=;
 	h=Date:From:To:Cc:Subject:From;
-	b=X3NwAcyT7lXtul0O9VwUDkrzGauj0DUWzfVlrlM4Rf2ShI3qrG5vs2WDXDG9C4Rr0
-	 zouZfV8VLxQNwCWGU2iIYgS6kVQpgqEOU8T87xqoQsYIqaFTuL4ITKV6cEVz7Ne7wn
-	 YOjiXa4XqiXwKSehO1+lpOHwAUBGZ0dqlvTYMqELCItGu4szJZwY0IcoW/EOKaxKk4
-	 fEvgPOXsyp8stVUb0OYi0C0+3+8rjoWu+nl0eDvqvGIG/EcsZwGknrP7tn08akdjiY
-	 EgLgrM0Cn2R+9AygHDkzS7+GqO2Qzsj7PAmkBbQH18wPsk0olFbOmvuaj038S4NFzM
-	 PiaCVX87zNU8Q==
+	b=LkWu2QpVAlt+vkiZoBcxTGU9h8XJ/m1+/C1PJhCzBKJSBt9yLNv2yuhXjns3wHdcW
+	 15tf8kFiuxqmAEa0pA9Vw3uvU0KJzCyN7reaJiWN557kRGSrB2jf/VgbIz9BRZy9Do
+	 5U3YDDPihyWK89DxqO5ECg/MN0gZqjdDRoN0Wf083zgmrJYi/jtieUlv63sstwfSsN
+	 k5i3abD4/Q8mAg6oxWYwOCR/ZYAOyvgJHSJahbgvEovUgVlwVM8fRXKX7X8zc+eOXe
+	 gLC9jot61JdYtGszBScF0ncG0HqDRAlUiDH6ookK29Z7c9QYPPy5E6F2TCpqz/1iZq
+	 gZ9VV/puqDdXg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VTZpl5rcvz4x0v;
-	Wed,  1 May 2024 08:38:06 +1000 (AEST)
-Date: Wed, 1 May 2024 08:38:05 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VTbkn6gqqz4wyk;
+	Wed,  1 May 2024 09:19:45 +1000 (AEST)
+Date: Wed, 1 May 2024 09:19:42 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>, Wu Hao
- <hao.wu@intel.com>, Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the fpga-fixes tree
-Message-ID: <20240501083805.76e87698@canb.auug.org.au>
+To: Richard Weinberger <richard@nod.at>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Suren Baghdasaryan <surenb@google.com>, Tiwei
+ Bie <tiwei.btw@antgroup.com>
+Subject: linux-next: manual merge of the uml tree with the mm tree
+Message-ID: <20240501091942.1999963d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/otmDCSYlh0gcg8pw6rP508o";
+Content-Type: multipart/signed; boundary="Sig_/0jI0Ig61DGvLhGsB1skwXzx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/otmDCSYlh0gcg8pw6rP508o
+--Sig_/0jI0Ig61DGvLhGsB1skwXzx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the char-misc.current tree as a different
-commit (but the same patch):
+Today's linux-next merge of the uml tree got a conflict in:
 
-  54435d1f21b3 ("fpga: dfl-pci: add PCI subdevice ID for Intel D5005 card")
+  arch/um/include/shared/um_malloc.h
 
-This is commit
+between commit:
 
-  bb1dbeceb1c2 ("fpga: dfl-pci: add PCI subdevice ID for Intel D5005 card")
+  88ae5fb755b0 ("mm: vmalloc: enable memory allocation profiling")
 
-in the char-misc.current tree.
+from the mm-unstable branch of the mm tree and commit:
+
+  0c2b208c8b79 ("um: Fix the declaration of vfree")
+
+from the uml tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/otmDCSYlh0gcg8pw6rP508o
+diff --cc arch/um/include/shared/um_malloc.h
+index bf503658f08e,d25084447c69..000000000000
+--- a/arch/um/include/shared/um_malloc.h
++++ b/arch/um/include/shared/um_malloc.h
+@@@ -11,9 -11,8 +11,9 @@@
+  extern void *uml_kmalloc(int size, int flags);
+  extern void kfree(const void *ptr);
+ =20
+ -extern void *vmalloc(unsigned long size);
+ +extern void *vmalloc_noprof(unsigned long size);
+ +#define vmalloc(...)		vmalloc_noprof(__VA_ARGS__)
+- extern void vfree(void *ptr);
++ extern void vfree(const void *ptr);
+ =20
+  #endif /* __UM_MALLOC_H__ */
+ =20
+
+--Sig_/0jI0Ig61DGvLhGsB1skwXzx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYxcs0ACgkQAVBC80lX
-0GztJwf9GeNKSLwoaTY/PxLBi5EAUZ2JWD3f8n93sjgT3jQKPjNv4/v70sxHrwQt
-Z++ZzjOGCaYD8AwClRAiqY1DZ9SzAzIoMc6e5xFNtF9YFJ+P2owletx7CHFd+pio
-R9jSvw4/hxDwuPqyUkCbMl21jhxc9ySRSFIvE4AbwThVdEkb6Eh2h3l8bYgCpKfT
-EISOo5uSvJJrPPuHRNhcpnAdMcfsD3hBo2wJvMcjDVmdbZbY0GbvYthrrKRwfIjd
-oVJBOwdXPI238000wRUdXUKsVH0PRtoV5Y5fU4XlMEKH971UP6nzJCG6BB+jzcKA
-RF3Zeej1TZRMdR+ASCt5oDBdBidlTQ==
-=lCR/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYxfI4ACgkQAVBC80lX
+0Gx0mQf+LJfLl7KCt9vtWc75mp20oGx6xoBGpxZGs6CPmLsaYC24xoGfbrDeCRJy
+L+Iwwx8503LXpkROLpeDp3ZX0v9v41UM08spDgTbxovsnIHgAqHOAi/msdzNtW0/
+Qf19/0flbc8bAKdimSLHuwdl/ATkALytxypel79+mTs8Nbj5odrPsbQIYtx4azob
+Jv5LGDLw7t1Fyhe0EuIvwWHUrrKIVY6WYqgFueH9ZvJn2Bdu3sOw8L0gnMHuSwxT
+rI1DuHXp6V79I/AHl9X0jsGBqYJMrLw+Y0c88rtnCiQNhg+9jnHwRV9aqaL/lxyu
+Fu4nyTRisd4QPFKK1xDFWAl5E9aDXg==
+=Lnty
 -----END PGP SIGNATURE-----
 
---Sig_/otmDCSYlh0gcg8pw6rP508o--
+--Sig_/0jI0Ig61DGvLhGsB1skwXzx--
 

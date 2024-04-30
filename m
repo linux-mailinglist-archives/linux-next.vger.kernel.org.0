@@ -1,174 +1,148 @@
-Return-Path: <linux-next+bounces-2106-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2107-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B0B58B69C2
-	for <lists+linux-next@lfdr.de>; Tue, 30 Apr 2024 07:15:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B32B8B6ADD
+	for <lists+linux-next@lfdr.de>; Tue, 30 Apr 2024 08:50:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEF5A285774
-	for <lists+linux-next@lfdr.de>; Tue, 30 Apr 2024 05:15:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CBEC1C20E08
+	for <lists+linux-next@lfdr.de>; Tue, 30 Apr 2024 06:50:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0955E171A7;
-	Tue, 30 Apr 2024 05:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9547F199D9;
+	Tue, 30 Apr 2024 06:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="YD9iG33F"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="S9p9f5Nr"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57DB2F43;
-	Tue, 30 Apr 2024 05:15:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D459F14A9D;
+	Tue, 30 Apr 2024 06:50:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714454117; cv=none; b=nAR7imOfNMpnThG6hceShYbqmUN0I5TTMIRGRJDUvJTfzVvh+bs+cl08J7ZNKbSDps4w3nns9FLY/vJfHyFxzUSVZYthwIprz8+Iq6ua87mj7KDjeGRb302lBrdWq9/tABaKh77Y1uiafLvRd+nCWz3UT+phBh23vSypTHWTCWo=
+	t=1714459827; cv=none; b=IX/GNxgcSgP7jhox+Hv+kfbhdyZI7EiCCnVgFundkkJZTCaqOKL6KIhFOnB9Nlh/iD5Gqsb34ozriLlaciRuUXZMsoQ1jTfiquPwrqIczz8R1QPzA6fh0s8Z2jyVay5LP08U1khwFXJ2025+NuwAYuAZvF2+ifz0MhOswquwT94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714454117; c=relaxed/simple;
-	bh=yFM2lX+Fko6THHEVGLRv2pdxRWq16pt18ov3gqJGfus=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=mKxXI1eqKTKyOxkfCmaojjTLRQrN7JS8Z4NJNUdSeuowif0ZnD18uNNz94jyPy873m2xkn9AekcaGblmKqJn0XiQcN+T7YTDvalTUpmY/pOPzUBAWZWrVv50A4tYaeKcQW/1mv1E4z7WqdqDOZ1SDdJl1075ODvnOcRR3JD8YkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=YD9iG33F; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1714459827; c=relaxed/simple;
+	bh=oGIHD1luvTflcc36qacrfpmzkfE2+5KuMdDdue+4T2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gQwzqRozlAUDW5rOiX7BKJwZz8aXnWHuRNwxGx7vucpGAJQKZ3yXzT84BrMt3zgSZ6IOHF6/GmcaHh55ZnSJ9sJ5ulIiADi04czpLTj8lLFpcIej6Gv4hFHvBxZhfSeJyS7QlLX2mEuyEINwuXm1b8EPB7dDsA93vGyeVYhmUcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=S9p9f5Nr; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1714454111;
-	bh=SyLZnE161INd7TxlG7IGN3cfNQAjNdhBiUY91nhJtpE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=YD9iG33FHfIL/cnyZ2IsVulaPrvNglE5PvbWa6BldCab+YiHPP+OJbenIZFMAjVkb
-	 X/akmLEvj7ZEmGNT+zDgnhQM3HcLMNKzqb+qt8YpPLiLgckyAGMlzSlQdzw3hVVG9N
-	 TlLENerqr5BD6QsYiok+7M3D04YoZ6bc0rrSW+/3s/FMPIDNZAGEko++xskSIoD/Am
-	 pc+OS+8VW9GHyF/rQHfYbe7SXujclJXP/ED1D99ZDvMo3p8FIcKW+dQlmHmniXrnDp
-	 +wE8qULHaQnEnv4OVYDe2c+TrSx41qDOrpCamVqCnbIuznOCRjIpjGCwD5PPXA/Neh
-	 XG3L239QLsurw==
+	s=201702; t=1714459820;
+	bh=cVUX0R3ZD3NmC7G2/3F3cA5Cf1m9rBcrHVtUteIyysk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=S9p9f5Nr/iJHETP4aP9Kju/Ne8JiuCpV+HIhAuXWrr+/oyarYGJItMBKe6CIvygz6
+	 +365VW9vyUbldzkEEGVRUcb8bFJjUd6ofQakkmFFAB3w/iFELPANz7wS4zqbu02GoX
+	 9lxtv+yffEs6q8Z71+e2WoYmOquOMo7zLWGnb6fPJbJWkq1vm+G821vgX5aVMK+nN+
+	 EmdNtoWVVKCXQRqRpnG6JzLzz9E5FR7HULtMV/QIKwG37IBfiVRbamMpJUt1uY8KGo
+	 VibWR1+lS8CyeOpaZ6JGx3cc6ytfzTYM9i7NCnRfiiMVQaj24vJBvzKXrB+O+ZXqrF
+	 ElLqKnqIroLxQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VT7gM0xdLz4wby;
-	Tue, 30 Apr 2024 15:15:10 +1000 (AEST)
-Date: Tue, 30 Apr 2024 15:15:10 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VT9n82H9Cz4wcd;
+	Tue, 30 Apr 2024 16:50:20 +1000 (AEST)
+Date: Tue, 30 Apr 2024 16:50:17 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the iio tree with the iio-fixes tree
-Message-ID: <20240430151510.0f49b40e@canb.auug.org.au>
+To: Jean Delvare <jdelvare@suse.de>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the dmi tree
+Message-ID: <20240430165017.4fa14188@canb.auug.org.au>
+In-Reply-To: <20240430114613.0cef65fc@canb.auug.org.au>
+References: <20240430114613.0cef65fc@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.9qz=rzYQ0tG4Q4QASCXUNi";
+Content-Type: multipart/signed; boundary="Sig_/N_TempakDxPoxRpWF7vQ=KM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/.9qz=rzYQ0tG4Q4QASCXUNi
+--Sig_/N_TempakDxPoxRpWF7vQ=KM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the iio tree got a conflict in:
+On Tue, 30 Apr 2024 11:46:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> After merging the dmi tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+>=20
+> In file included from include/asm-generic/bug.h:22,
+>                  from arch/arm/include/asm/bug.h:60,
+>                  from include/linux/bug.h:5,
+>                  from include/linux/thread_info.h:13,
+>                  from include/asm-generic/preempt.h:5,
+>                  from ./arch/arm/include/generated/asm/preempt.h:1,
+>                  from include/linux/preempt.h:79,
+>                  from include/linux/spinlock.h:56,
+>                  from include/linux/mmzone.h:8,
+>                  from include/linux/gfp.h:7,
+>                  from include/linux/umh.h:4,
+>                  from include/linux/kmod.h:9,
+>                  from include/linux/module.h:17,
+>                  from drivers/firmware/dmi_scan.c:5:
+> drivers/firmware/dmi_scan.c: In function 'dmi_decode_table':
+> include/linux/kern_levels.h:5:25: warning: format '%ld' expects argument =
+of type 'long int', but argument 2 has type 'int' [-Wformat=3D]
+>     5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header =
+*/
+>       |                         ^~~~~~
+> include/linux/printk.h:429:25: note: in definition of macro 'printk_index=
+_wrap'
+>   429 |                 _p_func(_fmt, ##__VA_ARGS__);                    =
+       \
+>       |                         ^~~~
+> include/linux/printk.h:510:9: note: in expansion of macro 'printk'
+>   510 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> include/linux/kern_levels.h:12:25: note: in expansion of macro 'KERN_SOH'
+>    12 | #define KERN_WARNING    KERN_SOH "4"    /* warning conditions */
+>       |                         ^~~~~~~~
+> include/linux/printk.h:510:16: note: in expansion of macro 'KERN_WARNING'
+>   510 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+>       |                ^~~~~~~~~~~~
+> drivers/firmware/dmi_scan.c:109:25: note: in expansion of macro 'pr_warn'
+>   109 |                         pr_warn(FW_BUG
+>       |                         ^~~~~~~
+>=20
+> Introduced by commit
+>=20
+>   868577e6bfe1 ("firmware: dmi: Stop decoding on broken entry")
+>=20
+> Include printk.h?
 
-  drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c
-
-between commit:
-
-  d7230b995246 ("iio: invensense: fix timestamp glitches when switching fre=
-quency")
-
-from the iio-fixes tree and commit:
-
-  a1432b5b4f4c ("iio: imu: inv_icm42600: add support of ICM-42686-P")
-
-from the iio tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+This caused i386 defconfig build fail, so I have reverted this commit
+for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c
-index 9cde9a9337ad,cfb4a41ab7c1..000000000000
---- a/drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c
-+++ b/drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c
-@@@ -509,20 -512,20 +512,20 @@@ int inv_icm42600_buffer_fifo_parse(stru
-  		return 0;
- =20
-  	/* handle gyroscope timestamp and FIFO data parsing */
- -	ts =3D &gyro_st->ts;
- -	inv_sensors_timestamp_interrupt(ts, st->fifo.period, st->fifo.nb.total,
- -					st->fifo.nb.gyro, st->timestamp.gyro);
-  	if (st->fifo.nb.gyro > 0) {
-- 		ts =3D iio_priv(st->indio_gyro);
-++		ts =3D &gyro_st->ts;
- +		inv_sensors_timestamp_interrupt(ts, st->fifo.nb.gyro,
- +						st->timestamp.gyro);
-  		ret =3D inv_icm42600_gyro_parse_fifo(st->indio_gyro);
-  		if (ret)
-  			return ret;
-  	}
- =20
-  	/* handle accelerometer timestamp and FIFO data parsing */
- -	ts =3D &accel_st->ts;
- -	inv_sensors_timestamp_interrupt(ts, st->fifo.period, st->fifo.nb.total,
- -					st->fifo.nb.accel, st->timestamp.accel);
-  	if (st->fifo.nb.accel > 0) {
-- 		ts =3D iio_priv(st->indio_accel);
-++		ts =3D &accel_st->ts;
- +		inv_sensors_timestamp_interrupt(ts, st->fifo.nb.accel,
- +						st->timestamp.accel);
-  		ret =3D inv_icm42600_accel_parse_fifo(st->indio_accel);
-  		if (ret)
-  			return ret;
-@@@ -549,16 -554,20 +554,16 @@@ int inv_icm42600_buffer_hwfifo_flush(st
-  		return 0;
- =20
-  	if (st->fifo.nb.gyro > 0) {
-- 		ts =3D iio_priv(st->indio_gyro);
-+ 		ts =3D &gyro_st->ts;
- -		inv_sensors_timestamp_interrupt(ts, st->fifo.period,
- -						st->fifo.nb.total, st->fifo.nb.gyro,
- -						gyro_ts);
- +		inv_sensors_timestamp_interrupt(ts, st->fifo.nb.gyro, gyro_ts);
-  		ret =3D inv_icm42600_gyro_parse_fifo(st->indio_gyro);
-  		if (ret)
-  			return ret;
-  	}
- =20
-  	if (st->fifo.nb.accel > 0) {
-- 		ts =3D iio_priv(st->indio_accel);
-+ 		ts =3D &accel_st->ts;
- -		inv_sensors_timestamp_interrupt(ts, st->fifo.period,
- -						st->fifo.nb.total, st->fifo.nb.accel,
- -						accel_ts);
- +		inv_sensors_timestamp_interrupt(ts, st->fifo.nb.accel, accel_ts);
-  		ret =3D inv_icm42600_accel_parse_fifo(st->indio_accel);
-  		if (ret)
-  			return ret;
-
---Sig_/.9qz=rzYQ0tG4Q4QASCXUNi
+--Sig_/N_TempakDxPoxRpWF7vQ=KM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYwfl4ACgkQAVBC80lX
-0GxF/Af/bS1heTqPtajMFr5YRwV0Pu5rFKzkPL8BxetX1YY/uXJX5yKXAoCc7r/1
-2lS74WwxA8bAAnMTuILlsx8V+UVFkOxZJBoNpPBWVUsbZeSadgXExip/FR6ENalW
-LxwkdGqwtEh3tG91BHHIaaTMatWJJ0MxwAzpYJNX6zOKdEHS+KV7J1DRRGQpTw/I
-ZPmaJ+k5YLI8PBH/HiWe/1r2S274jv52cs+YdZvbsOIaPke0Lq4Qbn9giLdYXYnO
-uTg+MKj/oClCg4RMimbyhhgFovCk6borju1Ch5pHqI/5GpM3TA5IS7cwT99jDLLP
-JnhpHxniUAawvx1ka78j0glI5g0B8g==
-=V3xp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYwlKkACgkQAVBC80lX
+0Gx7gwgAjcp5cKcL+Ihf4/edvKKLjfteag7VKVnR04oHRgZlKWqCIAAaFrHq0Cuh
+KWg0pLbQoC2nmJsN8rzTpAHSDOa2lvelvV5w1SDlP585Yo2KUwu7AcBK9H0+wlXZ
+6fGELHxKSrVho3AKfxBHtC9XYU2rslJaD2Yvr3H35LvGd9kNTZJ5ZEnUMGBxXl2u
+7Wx53sG0hkhBYaMFd6zAzorp1yYQRGHB3suTBJvSOSeSDdoSZVHJnDmiXL3VxGh3
+ADBaAuwPzSbgUTlSpjL8jpZZRvZrRxUjSo7Is+uihgTaySAMCF9U0x+mW9ZTuY6L
+QTxXMSB6pW8j8IPIB2HtFjRzbBXL9w==
+=O/eA
 -----END PGP SIGNATURE-----
 
---Sig_/.9qz=rzYQ0tG4Q4QASCXUNi--
+--Sig_/N_TempakDxPoxRpWF7vQ=KM--
 

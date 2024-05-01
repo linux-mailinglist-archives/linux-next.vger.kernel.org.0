@@ -1,105 +1,104 @@
-Return-Path: <linux-next+bounces-2126-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2127-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87CDD8B83F3
-	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 03:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB05E8B83F8
+	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 03:35:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DD8E1F24235
-	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 01:25:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BDCF1F238FD
+	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 01:35:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D82546BA;
-	Wed,  1 May 2024 01:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BRMCwMQF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA814C66;
+	Wed,  1 May 2024 01:35:01 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8F32F2D;
-	Wed,  1 May 2024 01:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC20B4A33;
+	Wed,  1 May 2024 01:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714526712; cv=none; b=fSecrPRwzBVv+cp3TcbhCnfnz6z3tt1twBVCoFANnTH3F2RRGZgTF2S8G8o6EBwYazf34RbcUOLlY74nMnkPYtEYRBUaWxl5CAzYoNl2axGqiC2f6n3glAnayp1b2veoAso1DGZPA1VqqWmxWOnNwYzhTe/CzAmhoXk5O/qO7UM=
+	t=1714527301; cv=none; b=eQC1pvu9853HYdf8K4ZaSHoXCZ79RFHPh67lra6adcduVYzpyXH87Ye+NnJAYCtXmdYD+oMuRId9EIpR54c5AkzA3TsZVjwGnwEHs1wQon/8leRLDM1drRkdkkML2+7kooavyUT9ZN66kQPHBegmlnoV/qIlSSZ3Z7D/GfBWNuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714526712; c=relaxed/simple;
-	bh=vW7NLhwnZvPamUR5KsBr747Do5nqO+AvA+ZrmO/N3MY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eifadcjHClXy5a5W3Th8UKP9JI51W2WVo+TOY1UPit+sg2ztSqUKNQjdyzqU+b69nlpoQ1+UjhfZVAeOM59r3HsZoNXbbnV5EuCT+7sHRbfnTfKqmVWxlfTRe6ITrX8l5VP3BTQUYhwDqFF3QSEJKZnCkDq1I91TTbPStpY4C/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BRMCwMQF; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1714526706;
-	bh=nP5SMpDJ/2GvExyerRKKlP05DnejVyacDjAMo5mn2+M=;
-	h=Date:From:To:Cc:Subject:From;
-	b=BRMCwMQFc7gRxND+tzLrfbyoUqXg9QCgVXRMdJb62AXG0khLafpnhnt8mBz3FQcRG
-	 ecLlfsUQHx5u9Qjzsj+aeZREtOQInx5GL+gCQkWdqc65LYsct9jXGixUDfMwljJ3pR
-	 qaESdh4Y35MMUnPhV+rVYwcABrKdvQoBjcF6R5JIlKOPCBpeZ2APeuG06IKE2H9V8P
-	 hlqgWqYiVhoD3cXSKi7YKgx669BNmFliO7w7PTU0rGIVQvZl/QYRJR6fCIXc0KGZ58
-	 MPjPlPLtDU0wer7uFMLA1zMuWz7fpNsZNl+KfGb2iYl4mRz5HxDGwo/fCtdpo0QKMR
-	 NAHxAesnjcIPA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VTfWQ0qyJz4x10;
-	Wed,  1 May 2024 11:25:05 +1000 (AEST)
-Date: Wed, 1 May 2024 11:25:03 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Sterba <dsterba@suse.cz>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the btrfs tree
-Message-ID: <20240501112503.4e40931b@canb.auug.org.au>
+	s=arc-20240116; t=1714527301; c=relaxed/simple;
+	bh=ojCK361NApnkeNZEAQMiCCmFYP9p9GCT3zWweDRk2IY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hVm8TU5v2xJXgqkmQATwOqv2yXA1aYxXj/tXxifmq7ryZVHnZb+jBGObK0yOVzYWo1s+qlDHPCWGEXGCG+Ml5OJ8KXgO+skZ6V6eyzI28+DxvhVwts30gG5sRHjY+3P6sq5UyANbnK8Ao2v9iJsHN46Dk6D60W4U0p7M1rkDe+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sung-woo.kim; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sung-woo.kim
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-51ac9c6599bso7020885e87.1;
+        Tue, 30 Apr 2024 18:34:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714527298; x=1715132098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ojCK361NApnkeNZEAQMiCCmFYP9p9GCT3zWweDRk2IY=;
+        b=a/ZSZN5h6efT08XN8eXQfEOXqKrx4VyOG35bM/BbJ3vflgC8T7IQV7vsRPnwWa64bd
+         MCeBoEm092UgwFT/SzrMFVh6cb2sn9FX3kQvtwY5hM3fXN1u/HfMobql+NZY0fjYW/zn
+         U1A9HhwxgeZO7Coy7VM49vQtmSmY2cNvo45Q5OlkudO7sh03e/c0nT8QxntKHOsOTR8N
+         ibNeYNo3zMEney2D391AC4nZaNpNpVEsU6rNBH61orrY4wAZh9cUgQuQGfb+UmnbcP3+
+         1bTANttiKM6VC/35aCGUR0GAQhiuEN5RtFu7Xq65fK7FyRv56vWES4KSP/clUIGWAD/N
+         cC9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUuW2EvIx09z0kIkwHJl66tsarqDJTpFjGpyJeHKMsOPmVM5iPujDhjowFTs387hZv2BzRT4otwuETWCy6svkBR+IYHSxshQzBcUS+VrmXuAqcWhVQNT7/FDGpE/QQilMbIAn/5yUwmQw==
+X-Gm-Message-State: AOJu0YxS8KOpBJ7F1mJ7E8L5DVcRLBz3f/NV8Cta/72FUD6gQIMHUtyz
+	yaMnPCed1OhzCMFGoiRbdVqJ7GpURdN0nwcg4kxQHhnwAPWFJgnjX+N9v4+5O6o=
+X-Google-Smtp-Source: AGHT+IEUL15r7ROMr1waQtt658aOX88J27yKxvH8Z9OQCJjKm7LvuATnI5Dm9aLTcehEDi8pa6I7/A==
+X-Received: by 2002:a05:6512:1383:b0:51d:2017:e65 with SMTP id fc3-20020a056512138300b0051d20170e65mr866141lfb.66.1714527297663;
+        Tue, 30 Apr 2024 18:34:57 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id 17-20020ac24851000000b00518a01fdf2asm4700183lfy.144.2024.04.30.18.34.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Apr 2024 18:34:57 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-516d4d80d00so8090760e87.0;
+        Tue, 30 Apr 2024 18:34:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV/6gtfHXMzeI3y08BLHzFh7aU8lme8OBrf2rGFTx+pZgEvOf/MGLU+/0j3ArMy+5AvXuyLcvByYcYGyJz6J9suQPt7pMEDkZSotNYBkatzzp1PUPghvdykeLYAvDVbhTYhhNzpuW4cWw==
+X-Received: by 2002:a05:6512:e8a:b0:51e:9812:b2ae with SMTP id
+ bi10-20020a0565120e8a00b0051e9812b2aemr662647lfb.33.1714527297286; Tue, 30
+ Apr 2024 18:34:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZBnG=INdMWcOHCfmVgzBYW3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/ZBnG=INdMWcOHCfmVgzBYW3
-Content-Type: text/plain; charset=US-ASCII
+References: <20240501111917.23e2b0f2@canb.auug.org.au>
+In-Reply-To: <20240501111917.23e2b0f2@canb.auug.org.au>
+From: Sungwoo Kim <iam@sung-woo.kim>
+Date: Tue, 30 Apr 2024 21:34:43 -0400
+X-Gmail-Original-Message-ID: <CAJNyHp+G_zt_SbbGwFZzPyi=HjDs8sv_N0DqjHWih0OKb1EykA@mail.gmail.com>
+Message-ID: <CAJNyHp+G_zt_SbbGwFZzPyi=HjDs8sv_N0DqjHWih0OKb1EykA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bluetooth tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
+	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Stephen, thank you for reporting this.
 
-The following commit is also in the btrfs-fixes tree as a different commit
-(but the same patch):
+On Tue, Apr 30, 2024 at 9:19=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> After merging the bluetooth tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+>
+> net/bluetooth/hci_core.c: In function 'hci_release_dev':
+> net/bluetooth/hci_core.c:2831:9: error: implicit declaration of function =
+'msft_release'; did you mean 'dst_release'? [-Werror=3Dimplicit-function-de=
+claration]
 
-  6d31c0d2309d ("btrfs: set correct ram_bytes when splitting ordered extent=
-")
+The patch was insufficient. If CONFIG_BT_MSFTEXT=3Dn, msft.h does not
+declare msft_release().
+I will send a patch for this.
 
-This is commit
-
-  63a6ce5a1a62 ("btrfs: set correct ram_bytes when splitting ordered extent=
-")
-
-in the btrfs-fixes tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ZBnG=INdMWcOHCfmVgzBYW3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYxme8ACgkQAVBC80lX
-0GyCOggAny3P73R+/k7egZ6kAdVEGEPAMBEgSo7CGc7KleGTxhQsd2zmKBodjNDb
-4ISEnKu13F/VmNOrdtSJ1UmV4nUjf5jnpjtXxfqhMcFx0IjVbzVGINOzBIiFbMW9
-M/XySojSSSHvKPZXKaL+MU9hsAXel56jM3Vlp7/8HuN5Gr+wuE0i+cOY/wuQDVZa
-RCLMCvEZmP5M5pOPC2YqW+jFDcR7V6kBZeRC8PwUV4j5hQppBTJl+DRAPjse63mG
-NEEMq3QaICHfj5k9dhnIH+tqNyAEXHrE/2WjzTO42dAymlNn6hZDWMiMhjdfi1oP
-cx8I1hvlojtqNa6dvfkxUiqA/j6nhw==
-=Y0JH
------END PGP SIGNATURE-----
-
---Sig_/ZBnG=INdMWcOHCfmVgzBYW3--
+Thanks & Regards,
+Sungwoo.
 

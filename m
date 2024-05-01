@@ -1,104 +1,97 @@
-Return-Path: <linux-next+bounces-2127-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2128-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB05E8B83F8
-	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 03:35:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6374B8B8466
+	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 04:40:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BDCF1F238FD
-	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 01:35:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F6BAB22685
+	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 02:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA814C66;
-	Wed,  1 May 2024 01:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC7B01BDCF;
+	Wed,  1 May 2024 02:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="HNGdH8T2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC20B4A33;
-	Wed,  1 May 2024 01:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1931BDC3;
+	Wed,  1 May 2024 02:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714527301; cv=none; b=eQC1pvu9853HYdf8K4ZaSHoXCZ79RFHPh67lra6adcduVYzpyXH87Ye+NnJAYCtXmdYD+oMuRId9EIpR54c5AkzA3TsZVjwGnwEHs1wQon/8leRLDM1drRkdkkML2+7kooavyUT9ZN66kQPHBegmlnoV/qIlSSZ3Z7D/GfBWNuY=
+	t=1714531231; cv=none; b=rZlH7B7Q/Uc1UlBYY+AEGjQKJnbDj3pvahdiUaVBjYcVVRaTCNtK+IW0IuQOxoqE39+csKBCL/I5RHaLx9tCzX6PxQ83Os3JYnS8FbN/tV+dAQ325+/FUnoVVZsK3D2LJLUEZ+Euz1vf1MhshhVcx5p9PwFka+uzIG2NEHFGlic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714527301; c=relaxed/simple;
-	bh=ojCK361NApnkeNZEAQMiCCmFYP9p9GCT3zWweDRk2IY=;
+	s=arc-20240116; t=1714531231; c=relaxed/simple;
+	bh=qujjLLZn1dYnPnloT6Ei0EJqKblua6wMYeE71eljMcE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hVm8TU5v2xJXgqkmQATwOqv2yXA1aYxXj/tXxifmq7ryZVHnZb+jBGObK0yOVzYWo1s+qlDHPCWGEXGCG+Ml5OJ8KXgO+skZ6V6eyzI28+DxvhVwts30gG5sRHjY+3P6sq5UyANbnK8Ao2v9iJsHN46Dk6D60W4U0p7M1rkDe+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sung-woo.kim; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sung-woo.kim
+	 To:Cc:Content-Type; b=V2zp8iifBZHHsVLQIlasdlsKvkPM3QBwOqBzrEcfuEL7+PYT5wcUymbpum4BOrpNU80hpjxeKuuex98t3uyIYGHu5DcoiMtWeDIg0PtOX/ZO+SXcCpwRS62TUHnUEEwD+Cwbh63+xFKXguE792fii/KHlan2Gsq1WJf6JkD/WqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au; spf=pass smtp.mailfrom=gmail.com; dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b=HNGdH8T2; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-51ac9c6599bso7020885e87.1;
-        Tue, 30 Apr 2024 18:34:59 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56e48d0a632so9859787a12.2;
+        Tue, 30 Apr 2024 19:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google; t=1714531227; x=1715136027; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qujjLLZn1dYnPnloT6Ei0EJqKblua6wMYeE71eljMcE=;
+        b=HNGdH8T21mqwQgOIJEF3gQg7TzE9hIoX9Po/NWkwk7SiuQol6U/W9w9PKTlu6ihX3h
+         DIaMKfZhip/lPqgjMB2mb3qNcB8+Exoh0smAPhNnNdt5uKamFcGi03NTUjxtQIrSxpfZ
+         lsnmn/WsebbWi4379QHr/3DrVA4Zk64P6bJZk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714527298; x=1715132098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ojCK361NApnkeNZEAQMiCCmFYP9p9GCT3zWweDRk2IY=;
-        b=a/ZSZN5h6efT08XN8eXQfEOXqKrx4VyOG35bM/BbJ3vflgC8T7IQV7vsRPnwWa64bd
-         MCeBoEm092UgwFT/SzrMFVh6cb2sn9FX3kQvtwY5hM3fXN1u/HfMobql+NZY0fjYW/zn
-         U1A9HhwxgeZO7Coy7VM49vQtmSmY2cNvo45Q5OlkudO7sh03e/c0nT8QxntKHOsOTR8N
-         ibNeYNo3zMEney2D391AC4nZaNpNpVEsU6rNBH61orrY4wAZh9cUgQuQGfb+UmnbcP3+
-         1bTANttiKM6VC/35aCGUR0GAQhiuEN5RtFu7Xq65fK7FyRv56vWES4KSP/clUIGWAD/N
-         cC9w==
-X-Forwarded-Encrypted: i=1; AJvYcCUuW2EvIx09z0kIkwHJl66tsarqDJTpFjGpyJeHKMsOPmVM5iPujDhjowFTs387hZv2BzRT4otwuETWCy6svkBR+IYHSxshQzBcUS+VrmXuAqcWhVQNT7/FDGpE/QQilMbIAn/5yUwmQw==
-X-Gm-Message-State: AOJu0YxS8KOpBJ7F1mJ7E8L5DVcRLBz3f/NV8Cta/72FUD6gQIMHUtyz
-	yaMnPCed1OhzCMFGoiRbdVqJ7GpURdN0nwcg4kxQHhnwAPWFJgnjX+N9v4+5O6o=
-X-Google-Smtp-Source: AGHT+IEUL15r7ROMr1waQtt658aOX88J27yKxvH8Z9OQCJjKm7LvuATnI5Dm9aLTcehEDi8pa6I7/A==
-X-Received: by 2002:a05:6512:1383:b0:51d:2017:e65 with SMTP id fc3-20020a056512138300b0051d20170e65mr866141lfb.66.1714527297663;
-        Tue, 30 Apr 2024 18:34:57 -0700 (PDT)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
-        by smtp.gmail.com with ESMTPSA id 17-20020ac24851000000b00518a01fdf2asm4700183lfy.144.2024.04.30.18.34.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Apr 2024 18:34:57 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-516d4d80d00so8090760e87.0;
-        Tue, 30 Apr 2024 18:34:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV/6gtfHXMzeI3y08BLHzFh7aU8lme8OBrf2rGFTx+pZgEvOf/MGLU+/0j3ArMy+5AvXuyLcvByYcYGyJz6J9suQPt7pMEDkZSotNYBkatzzp1PUPghvdykeLYAvDVbhTYhhNzpuW4cWw==
-X-Received: by 2002:a05:6512:e8a:b0:51e:9812:b2ae with SMTP id
- bi10-20020a0565120e8a00b0051e9812b2aemr662647lfb.33.1714527297286; Tue, 30
- Apr 2024 18:34:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1714531227; x=1715136027;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qujjLLZn1dYnPnloT6Ei0EJqKblua6wMYeE71eljMcE=;
+        b=gMLmsnaQfgIjDmM6TeRzlG6etiLhmjTsAXLZjznxcEShHQLo+wwQRIXdaMpwS46Yqw
+         bkU26sbpjwvTObo7T7hI5eUs98xgwENPw9gcIfE7k/dsJV6XTvSznxcZQTUQbiYtj3GR
+         nsN5JMqUpdZ6KfBxWUzo1fGOwUV9zfY6+N4SVPEmbIiJsUeut5FrMWG5nzXHZsAL6VYz
+         MHbh83RKH9WKC1M6ao6sPy4rp1jMpjyIUzpaBiiOO+764aDAQN0h8k30VcAqcmQyrboE
+         huZZKEHfXMorvD8gP/4bj94+0KnjYcqa8JIua8Bm8sPMLt6Xy6zXtX6wBE/rkECpOwcG
+         1daw==
+X-Forwarded-Encrypted: i=1; AJvYcCX5QlKZC8dVQcJxe1kVv3hHY5tX8as+UxzNOZPTgs7B4wvCe/ZVsECCk8iBMODW9XCiRB/ODtvMCHeD57IFkbohg50KfaW7XxB5pg==
+X-Gm-Message-State: AOJu0Yz607hqmkUi5iMeTydywMcwj6SPsFpALyFe6dPG+7UeoNZaT5nt
+	mldQQyaXocMJp1n79XqEWpfwVTPmoRq+zv9VtJ3c8ZLdLUOWPx0DcazRqwRS27BCu5/khlPPSvI
+	ZGDe7XGEW+3rA5g7KyqMUXhr3eoibAS4E
+X-Google-Smtp-Source: AGHT+IEFKDGzuFm8Fc25foRnb9gyGT4KZsSqApZuo4AQVmspY5qXEgpj39HGAiFOYxIcDpFUbHDfPtNpp5kGIOLJlng=
+X-Received: by 2002:a17:906:a058:b0:a55:b488:27b9 with SMTP id
+ bg24-20020a170906a05800b00a55b48827b9mr1259682ejb.38.1714531226654; Tue, 30
+ Apr 2024 19:40:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240501111917.23e2b0f2@canb.auug.org.au>
-In-Reply-To: <20240501111917.23e2b0f2@canb.auug.org.au>
-From: Sungwoo Kim <iam@sung-woo.kim>
-Date: Tue, 30 Apr 2024 21:34:43 -0400
-X-Gmail-Original-Message-ID: <CAJNyHp+G_zt_SbbGwFZzPyi=HjDs8sv_N0DqjHWih0OKb1EykA@mail.gmail.com>
-Message-ID: <CAJNyHp+G_zt_SbbGwFZzPyi=HjDs8sv_N0DqjHWih0OKb1EykA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the bluetooth tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
-	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+References: <20240430173042.09beb33b@canb.auug.org.au>
+In-Reply-To: <20240430173042.09beb33b@canb.auug.org.au>
+From: Joel Stanley <joel@jms.id.au>
+Date: Wed, 1 May 2024 12:10:15 +0930
+Message-ID: <CACPK8Xef6bjbrC0Go+2wDEWpVi9eTueyodRjjaRjZfkjw07pog@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the aspeed tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
 	Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen, thank you for reporting this.
-
-On Tue, Apr 30, 2024 at 9:19=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
+On Tue, 30 Apr 2024 at 17:00, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
 > Hi all,
 >
-> After merging the bluetooth tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->
-> net/bluetooth/hci_core.c: In function 'hci_release_dev':
-> net/bluetooth/hci_core.c:2831:9: error: implicit declaration of function =
-'msft_release'; did you mean 'dst_release'? [-Werror=3Dimplicit-function-de=
-claration]
+> Commits
 
-The patch was insufficient. If CONFIG_BT_MSFTEXT=3Dn, msft.h does not
-declare msft_release().
-I will send a patch for this.
+all of them!
 
-Thanks & Regards,
-Sungwoo.
+> are missing a Signed-off-by from their committer.
+
+We were trying some dual maintainership but having to drop some
+patches lead to a rebase, and this mess. Fixed now.
+
+Cheers,
+
+Joel
 

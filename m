@@ -1,104 +1,119 @@
-Return-Path: <linux-next+bounces-2130-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2131-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73C5F8B8546
-	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 07:19:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D5A38B854E
+	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 07:28:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8EFCB21D3F
-	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 05:19:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A22221C222E1
+	for <lists+linux-next@lfdr.de>; Wed,  1 May 2024 05:28:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351B343AA1;
-	Wed,  1 May 2024 05:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C6A147F46;
+	Wed,  1 May 2024 05:28:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OEnKf3Bv"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Y9SeVoLN"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D86F2576B;
-	Wed,  1 May 2024 05:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126C345C10;
+	Wed,  1 May 2024 05:28:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714540776; cv=none; b=E7x7mH9KA+xF6yQSc1Rx6dfL0iqNxjBOAVhBuZmCG6DwQ/muQmkGZzFr+KEw3n66Fgr8mMhR3MPYxd50i+npUdRgmuu60xenvM3E8ufcTE99qhPUVbLxLCUjWzwAdiRh+qkkCNdDyAPUMJDP6epOKtL4ODaOdov3LNMqPXCh/8g=
+	t=1714541332; cv=none; b=UgNWsmRcnLA/1VxXS39KS0AGdxFCRy5VCwPdU6/WKllbrAuPpmMnjy19fJXip6QNX3bJxBzW9bJDZip5IYSVBepQCnmPwvqJKuCRUbW2YOc87YHZfg6Twb5atQKEzeGeSMAY3zM1vw1iNZtw2o2a8Eouq2bRzcWz4vR0245d+E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714540776; c=relaxed/simple;
-	bh=rZOVMkjacxk6ggX2MZ0ySIKeOu+bur476T2sZGzGrI4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=quDqmlc4xm2FC6qP//fw8yNxyQlD06V2Ofw6scCqxX5zifz7hgAik6VBvGOuQcWcwqXRTMNuHzU+0fTOIjn6LwXfETQpB9n/pPrnJMs4K5zp+cVfLF+dXv9fGrRGQC0JI7l++PnlH5rcOltrWR+FiK7GCGeSVBzszT3YeqZdVLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OEnKf3Bv; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1714541332; c=relaxed/simple;
+	bh=3bPyfozDstmDwZLV/ukzH1VbLQqxYqjZIzAj2hMugxs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Zj3hOVzPBhQPASYiZNc07Nb1H3cbT95MHbvLNS/RqrOiSqqGWHMeqVRuNLBXPi+pZ/O0J9lWix3O5sXM8SZ72o/OThJwRiIGQGq+1KRC8PIDdgRNLHXWkFR8ULT1rPF31O8VypADdMCnQ3uYin/4XiS9zkSTtGzWPnECFWX6spw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Y9SeVoLN; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1714540770;
-	bh=qIOMi5cZWSDGMcCVi4MgiYeL0Wgytoc+x8bs5oC5YgA=;
+	s=201702; t=1714541328;
+	bh=7iCiIxpOc6gBOG6oc53IQAt5L1pLTD4S8r3Fd/+jfGo=;
 	h=Date:From:To:Cc:Subject:From;
-	b=OEnKf3Bv4CmkjWVQpyVhJR8IU9hmp3QnGVs8GcO81IE/iYHQZXH8CR3cU7itiOfE5
-	 WCSJlUCRUN2alsLkNZoeUPM3WVsGz+Ub/C98uuw+Hn8/IhCzySNKQnc0rBqOTnJQTy
-	 AN69gdnWfUKoMcv3oQfS6tq+Y5VjIvsmOFA1DHx4uYtne4D9uWjB9jb1WJ/AYHsb11
-	 cMCexrqGej4+8TWLsTlCCvVnF7nTdOqBH0owMl+f2EAiy50Fr0mDbz1AFAjbZw3Pf7
-	 2gmb8MlL8JTGEB+Wf0mcwusYJ2bJJzq5zPoeVt0X3TrP6n/jDEc08BWy0C7iMgTMFm
-	 PR21C0NaLoUuA==
+	b=Y9SeVoLNkuwKMSixdOVwOUEDImRD1Q1+nHe0e//Lo88IRUfMPbNmOFJSkzyme1NEP
+	 brneucKVgQQ+xV2i/4KoTI+GR81VbCCMF5yXJUXcvMUXUyjFRW+QTuBK77h3FXSzYq
+	 cldiFAr7jhZT3srgrW7OOqParjMo6APLg5nHI/tDEA4aYFOmWrX6MWJmiyiigccAzp
+	 tGnTiCl7EqTmcHlVK9ymPwssX3ywfwie2rJEoxJdJLMLvHO3JH35Xb8v66GhZnEe3T
+	 jJjOpP2wEBe9IpuFpjz6xrHRqsOfeJK7CdahjSNHOFOK5C/LK3numEOpWEbsx8ynvD
+	 VpGZhd+PyFjtQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VTljt3FFSz4wxf;
-	Wed,  1 May 2024 15:19:30 +1000 (AEST)
-Date: Wed, 1 May 2024 15:19:29 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VTlwb29y4z4x0t;
+	Wed,  1 May 2024 15:28:46 +1000 (AEST)
+Date: Wed, 1 May 2024 15:28:46 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Deucher <alexdeucher@gmail.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>, Roman Li <roman.li@amd.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20240501151929.219916ee@canb.auug.org.au>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Chengming Zhou <chengming.zhou@linux.dev>, Nicolas Bouchinet
+ <nicolas.bouchinet@ssi.gouv.fr>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the slab tree
+Message-ID: <20240501152846.311be492@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//XGt8rXHGLsv+32atP6I7T1";
+Content-Type: multipart/signed; boundary="Sig_/dZ+1.=a=9al1OJivYkBYJTL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_//XGt8rXHGLsv+32atP6I7T1
+--Sig_/dZ+1.=a=9al1OJivYkBYJTL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced this warning:
+After merging the slab tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:581: warning: Function pa=
-rameter or struct member 'idle_workqueue' not described in 'amdgpu_display_=
-manager'
+mm/slub.c: In function 'slab_free_hook':
+mm/slub.c:2187:25: error: implicit declaration of function 'get_info_end' [=
+-Werror=3Dimplicit-function-declaration]
+ 2187 |                 inuse =3D get_info_end(s);
+      |                         ^~~~~~~~~~~~
+mm/slub.c: In function 'maybe_wipe_obj_freeptr':
+mm/slub.c:3872:14: error: implicit declaration of function 'freeptr_outside=
+_object' [-Werror=3Dimplicit-function-declaration]
+ 3872 |             !freeptr_outside_object(s))
+      |              ^~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-Introduced by commit
+Caused by commit
 
-  afca033f10d3 ("drm/amd/display: Add periodic detection for IPS")
+  7f39e23ed8dd ("mm/slub: avoid zeroing outside-object freepointer for sing=
+le free")
+
+$ grep CONFIG_SLUB_DEBUG .config
+$
+
+I have used the slab tree from next-20240430 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//XGt8rXHGLsv+32atP6I7T1
+--Sig_/dZ+1.=a=9al1OJivYkBYJTL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYx0OEACgkQAVBC80lX
-0GxqKAf/d30FYXwhVSxsM1+mBP3YLfd+W/gOhfsAW/B/ksEkT8rQISKzlrxKcY2K
-vJkXDF22v0AYS/qBvrEj50tvhzgSKcsyr7jGwQZ8wydj+uPzOrqyQdG9ul71rs5C
-gEoJLc4ULBLUGXt/t6gJSPHrtIsbFezgTJ24DV6WDtQ0+62Ey439Cs81U7YlcGoA
-x2sKaPd4rqKiOJELt8Y7YhyrzarKuEp7JYBeOR2iv1kxh1c+SFXYR8CruNBJqave
-kropRFHN6lzHDYml+6tBSpGjOkGMW9HZzYzfY+jGEcemHcRr6dzG9GenbEHK8V+m
-Wzic4L/kCg+QuAeMqmrKsjRqcH9LtQ==
-=//8Z
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYx0w4ACgkQAVBC80lX
+0Gyq5wgAiD/Wy9xaBsjDyaTUstXKWq5pQBwbuPWJlsCVitTF1wElG3f4WcY7SkGH
+/AjOH/ZSHF/FyQfID14/ccQ9a7DWlhVF1X0J9KGSoJLra8eCI3Ui4GiHug5rRQdi
+ZkRIw2Lf6L8nKj63BZhCvfUpoxashC8SUOUD8losZ/itoveGfB9PY8xC/6wLHSxE
+dQrE6R+kJC3cEa7hz56XdizasDmlpxQNKaBfMEG16ZWGZ8wbI2Eh3qFqlWlm1ndn
+TTu3yYUJmoEJhyIl8ZVBnimtMhSK7Qt37qEBLs060ICiYMzScI8jON14US0dr17m
+IopkuNEgukrsfu96V6/z5CBFCbkyEg==
+=Hnlj
 -----END PGP SIGNATURE-----
 
---Sig_//XGt8rXHGLsv+32atP6I7T1--
+--Sig_/dZ+1.=a=9al1OJivYkBYJTL--
 

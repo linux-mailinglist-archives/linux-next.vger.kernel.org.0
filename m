@@ -1,206 +1,111 @@
-Return-Path: <linux-next+bounces-2147-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2148-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A7EB8B9DC8
-	for <lists+linux-next@lfdr.de>; Thu,  2 May 2024 17:50:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F3B58BA378
+	for <lists+linux-next@lfdr.de>; Fri,  3 May 2024 00:50:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20042B2107C
-	for <lists+linux-next@lfdr.de>; Thu,  2 May 2024 15:50:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 008031F24DA5
+	for <lists+linux-next@lfdr.de>; Thu,  2 May 2024 22:50:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444E515B56C;
-	Thu,  2 May 2024 15:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E3F1B978;
+	Thu,  2 May 2024 22:50:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h6TlrR0e"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DMka/n/c"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A889215B56A;
-	Thu,  2 May 2024 15:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333631B947;
+	Thu,  2 May 2024 22:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714665007; cv=none; b=hnl7VDJNNH1BtENyJ3JVPW3F/jbs5t70/z2UJ7csp5b7wUud22grIjJEu3hDe7Nv8n6YcokJ2chxSDJ0tZthcktDEEfST6nLPAqaWnWH9o5UKDGp/6SYQuc0b2TpyZmLdYdQc5cX1TMKgP3IdXVVYCChWnO6Ik6an8KXlkYCpqE=
+	t=1714690218; cv=none; b=npo9/xRnygNVteyK/tRPo6oKm60uGfhZuffmF6Jk0zy9Ic6XNrqEYLyKjAGzfo5WbUIN2y6g5TiH73Zma9CXIJpb+h/Sezr9e8bI1/bkZv8xkvPvjrkYiez7/qjjyA2SaHFpU3iPsA8/5fNmStEPq+Xs7XQ8YG656/xUAATecC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714665007; c=relaxed/simple;
-	bh=c0fcIIK1hzpM+Ucqk29XrQIIPoJgmlTgGSCF9ZJGE0A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eWK1GpfQm0QUGbnu4PxFkB3MJQFHqAMKMFIjDVE0sFy2ebYR67Mz3G9su2J+J03JZJGLxh+/qWYf+yKStSdjCB6g7yaqL9mp7sBNPF2ffwDOTpShzCUJeY5t/W/RfXqG0e18h3T7dLuUYiiBOaRoV5ElDirE68ku/yeYdU+sG9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h6TlrR0e; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714665006; x=1746201006;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=c0fcIIK1hzpM+Ucqk29XrQIIPoJgmlTgGSCF9ZJGE0A=;
-  b=h6TlrR0eqTO2EavMXPYp3EkKiAmOjKw3rS173PY2LvAY+P4vN5oxFbkO
-   WydyH86pVuT8ReHoiVk1C1xEj+gJBhnETGIKZ5Sqeu/+utAC4yCRLovqF
-   mnJpOmIgTEd8kjvUk1xapXzLHsiSxL1s0uol3l2SyEDCFFCS8TZjPbJ/d
-   m8TeDPCCBFnlKyXv8/fRrMYykTNRovFwXCT0w0477h/LQLuA24nPaWqAT
-   vvK0iS58VJbma9s4Y/1yTYNH7pp8QvSSR2GwVxHiy+2J3lt6xzwP7TUmm
-   +rWTEpi5sk9Yuppkud6sz2LVb1GxeROhDPFwK+CyNTvY2CYaeoblhfuab
-   w==;
-X-CSE-ConnectionGUID: mIlOiVaQSN+goI/3MwDibw==
-X-CSE-MsgGUID: sVRpmQ1mRKWvkpMCe+av2w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11062"; a="14258466"
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="14258466"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 08:50:06 -0700
-X-CSE-ConnectionGUID: lbDpu8gxRvmR8er5gnqm2Q==
-X-CSE-MsgGUID: 1KMNCNGZR2edWYSi+7O3/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="31954329"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 08:50:03 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id C10F711FA94;
-	Thu,  2 May 2024 18:50:00 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1s2Yh6-002IpH-2M;
-	Thu, 02 May 2024 18:50:00 +0300
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-	linux-media@vger.kernel.org
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH 1/1] media: intel/ipu6: Don't re-allocate memory for firmware
-Date: Thu,  2 May 2024 18:49:50 +0300
-Message-Id: <20240502154950.549015-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240501102236.3b2585d1@canb.auug.org.au>
-References: <20240501102236.3b2585d1@canb.auug.org.au>
+	s=arc-20240116; t=1714690218; c=relaxed/simple;
+	bh=pSM2vhex3VBgefl7WQTUvMktZ2mdr9pHWUp1yBiwejY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=t+Pjx1+EcFx+8h/0c+S4nFfdsMb/1Mfbs7Mh8EBnVFm/JeYPvJHBSkRPAyffOaur/DjxcBsMsYqiOV52UTL5WWQvyVxpbtjSr+TUiBFKw8NAG1WxcRD3nAbzSINUVjFIWeri/sSwIspjxvjRHZuwz814VrJ02cWhbjPWLe6njG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DMka/n/c; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1714690213;
+	bh=uI5hGZzVwSZENNno+sCdAGJoMSDIrNofVkrglPrzHVE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=DMka/n/cv+gZXOT+WT6ZMYgCjoESv/fXNWk82LPZ5V/eOtfbHZPQ4AdL2JCVZCssP
+	 4q+XXA25I7lySPDml83cXmfihghcBE0zPZMTw1G0wH6qbZEzEH9DEz2OuqyUlHTJJO
+	 bBWBxf0cQMlx4cGMqSdXsSgx+1I3/apBFa/8v4d0/xitI56rwqtfzp3AowrUlhMv2Q
+	 ZXgvjm4CvOnUF/xyACSpmDQz28vkvqymzf6yoCNIiPWdLcnfc5R0cjLaXKkjJrS0+b
+	 JHo6bTenXw+TaazSOHZGvsxxT58hPtz0aRxQ3o+njGnwtxu+dzEK5JgD/3hSxb2i3V
+	 4g3TIjLFvKetQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VVpzn4jFpz4wcr;
+	Fri,  3 May 2024 08:50:13 +1000 (AEST)
+Date: Fri, 3 May 2024 08:50:11 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alex Deucher <alexdeucher@gmail.com>
+Cc: Alex Hung <alex.hung@amd.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20240503085011.1a0cb036@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/Pq.zhqxELbMZUKJUJo9fX_k";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-The ipu6 driver allocated vmalloc memory for the firmware if
-request_firmware() somehow managed not to use vmalloc to allocate it.
+--Sig_/Pq.zhqxELbMZUKJUJo9fX_k
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Still how the memory is allocated by request_firmware() is not specified
-in its API, so be prepared for kmalloc-allocated firmware, too. Instead of
-allocating new vmalloc-backed buffer for the firmware, obtain the pages
-from virtual addresses instead.
+Hi all,
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 25fedc021985 ("media: intel/ipu6: add Intel IPU6 PCI device driver")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
-Hello everyone,
+In commit
 
-Mauro preferred not to merge the earlier patch. Admittedly, there are
-better ways to fix the problem. Such as this one.
+  8891fd6cb2cf ("drm/amd/display: Assign disp_cfg_index_max when dml21")
 
-- Sakari
+Fixes tag
 
- drivers/media/pci/intel/ipu6/ipu6-buttress.c |  7 +++-
- drivers/media/pci/intel/ipu6/ipu6.c          | 41 +-------------------
- 2 files changed, 7 insertions(+), 41 deletions(-)
+  Fixes: 03e611b7b65b ("drm/amd/display: Limit array index according to arc=
+hitecture")
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-buttress.c b/drivers/media/pci/intel/ipu6/ipu6-buttress.c
-index dbcf1aa87872..23c537e7ce1e 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-buttress.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-buttress.c
-@@ -552,12 +552,16 @@ int ipu6_buttress_reset_authentication(struct ipu6_device *isp)
- int ipu6_buttress_map_fw_image(struct ipu6_bus_device *sys,
- 			       const struct firmware *fw, struct sg_table *sgt)
- {
-+	bool is_vmalloc = is_vmalloc_addr(fw->data);
- 	struct page **pages;
- 	const void *addr;
- 	unsigned long n_pages;
- 	unsigned int i;
- 	int ret;
- 
-+	if (!is_vmalloc && !virt_addr_valid(fw->data))
-+		return -EDOM;
-+
- 	n_pages = PHYS_PFN(PAGE_ALIGN(fw->size));
- 
- 	pages = kmalloc_array(n_pages, sizeof(*pages), GFP_KERNEL);
-@@ -566,7 +570,8 @@ int ipu6_buttress_map_fw_image(struct ipu6_bus_device *sys,
- 
- 	addr = fw->data;
- 	for (i = 0; i < n_pages; i++) {
--		struct page *p = vmalloc_to_page(addr);
-+		struct page *p = is_vmalloc ?
-+			vmalloc_to_page(addr) : virt_to_page(addr);
- 
- 		if (!p) {
- 			ret = -ENOMEM;
-diff --git a/drivers/media/pci/intel/ipu6/ipu6.c b/drivers/media/pci/intel/ipu6/ipu6.c
-index 7bcd9c5a381a..2cf04251c9e7 100644
---- a/drivers/media/pci/intel/ipu6/ipu6.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6.c
-@@ -503,45 +503,6 @@ static void ipu6_configure_vc_mechanism(struct ipu6_device *isp)
- 	writel(val, isp->base + BUTTRESS_REG_BTRS_CTRL);
- }
- 
--static int request_cpd_fw(const struct firmware **firmware_p, const char *name,
--			  struct device *device)
--{
--	const struct firmware *fw;
--	struct firmware *dst;
--	int ret = 0;
--
--	ret = request_firmware(&fw, name, device);
--	if (ret)
--		return ret;
--
--	if (is_vmalloc_addr(fw->data)) {
--		*firmware_p = fw;
--		return 0;
--	}
--
--	dst = kzalloc(sizeof(*dst), GFP_KERNEL);
--	if (!dst) {
--		ret = -ENOMEM;
--		goto release_firmware;
--	}
--
--	dst->size = fw->size;
--	dst->data = vmalloc(fw->size);
--	if (!dst->data) {
--		kfree(dst);
--		ret = -ENOMEM;
--		goto release_firmware;
--	}
--
--	memcpy((void *)dst->data, fw->data, fw->size);
--	*firmware_p = dst;
--
--release_firmware:
--	release_firmware(fw);
--
--	return ret;
--}
--
- static int ipu6_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
- 	struct ipu6_buttress_ctrl *isys_ctrl = NULL, *psys_ctrl = NULL;
-@@ -627,7 +588,7 @@ static int ipu6_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	if (ret)
- 		return ret;
- 
--	ret = request_cpd_fw(&isp->cpd_fw, isp->cpd_fw_name, dev);
-+	ret = request_firmware(&isp->cpd_fw, isp->cpd_fw_name, dev);
- 	if (ret) {
- 		dev_err_probe(&isp->pdev->dev, ret,
- 			      "Requesting signed firmware %s failed\n",
--- 
-2.39.2
+has these problem(s):
 
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 55ec7679e6a5 ("drm/amd/display: Limit array index according to archi=
+tecture")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Pq.zhqxELbMZUKJUJo9fX_k
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmY0GKMACgkQAVBC80lX
+0GxV3gf+LkGWYMBMHIhZA5r99WsPgMSJ8561orAd6F6gGTxZPFms+jwjrPWk959b
+UTghOfet1YlGx7Ke3e5saQAm2i9WB4Knruyu6CJItKYC/0SPHGpAIxWYtLdLGQ+K
+8NkdGhLrLqZrt+8twgSLkFx/JiVBwqLdytqbg5tnhWx3moIGRTavYRWyuw9gZd7F
+oDD/NDtdNKh9iJBMdNjNjyF6GIluxe0WnNvWDVQ2FTG2wzrPVU9n9TblJZNAPlDE
+etXowlpqMxIEN5IOMu3Bq2VtJIFqDb2o01UabUVRoMTYXrmZDw4agzHYlQ9zl1Uo
+roO/hsaP70cnc9s7nFLSCGdsfDoO0A==
+=rD0J
+-----END PGP SIGNATURE-----
+
+--Sig_/Pq.zhqxELbMZUKJUJo9fX_k--
 

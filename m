@@ -1,115 +1,192 @@
-Return-Path: <linux-next+bounces-2154-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2155-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 307098BA6BA
-	for <lists+linux-next@lfdr.de>; Fri,  3 May 2024 07:52:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 656958BA746
+	for <lists+linux-next@lfdr.de>; Fri,  3 May 2024 08:57:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF4322835C5
-	for <lists+linux-next@lfdr.de>; Fri,  3 May 2024 05:52:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7249F1C20506
+	for <lists+linux-next@lfdr.de>; Fri,  3 May 2024 06:57:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B52813959D;
-	Fri,  3 May 2024 05:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6107E14658C;
+	Fri,  3 May 2024 06:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EXeA4W6Q"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="YZ1rNmbr";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pi4MyNql";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="UB8VjV2+";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mB4wMTHQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1E7224D0;
-	Fri,  3 May 2024 05:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2AA139D00;
+	Fri,  3 May 2024 06:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714715544; cv=none; b=hlGD3p74xdMdGvfCUDAMPQzJrYUS1V31x94tHpdLahu1ZnDu1gTyn/5SBHuo1YFDfHDI9Ls10a2lTWF+nvccyFrVxx4MABFaVt9OUXPv0ND7/agBP0X/Chb1DODaYYxlCV/y3obBnTxyXRy+fuU/JQx5onQtIXdWmVKBxJf+OwY=
+	t=1714719468; cv=none; b=XltiWbsIqVEnqDTQqeccY+Fao2BQo0B/GCssedMKCmo8t6zaJMb8RxtecQHsm8o3vCrPMhIFCyAatAG5o4bOucr7xgbd1Kh/6+Kp2vB1bizEDnt9V3BE7OjLPwBb9YA6QEmAimDZ7s2FXruN/ff62TGVTeaCjQoRPZrEFyBhlw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714715544; c=relaxed/simple;
-	bh=9pv3EwGTx9i7Xe19e7suJEgQc428qtzwFanLLNFw+qg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=o50huTUP3JwzTv7svF8TYNlKQtysyUFBJ1u98SoRzfExa2Kzr8Deiy1ivB/O+OF1VroyzRI6t1Qwqa4QmIV8rviOlyO/9lcCWbfDv9KgWDLaR4MYmf9ZkjcKRl1XqseFEO1Cq8BfOh/mCv6NsQcz6VOgZljL6EaaXCIjv2K9xbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EXeA4W6Q; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1714715538;
-	bh=vzGaRy77es6ENVr8TbEtx4fxiipOa+6iUF9HSYhMIzE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=EXeA4W6QFhQvfZoqf+e6Z/UexqHFyiqpghqJakTDppDlG/sdK9INvhoAGs0Xqly+V
-	 WetBTsxqwqLGgkHxSmFouSEMUu42LJxyFzFrQfPqtj7cCiNOXrPD8fKLCnMi4wZHoe
-	 9Js8OxAzeVvo/uz6R32SI+WoxkgbKUIIFHRNPPshGHWkcg/m15OCx70pNt5G5HEP0u
-	 7NneeNgZA77OMwXMl/Kaw/c7dMrR00LedwJR9wX3GzrFdWnQaZKdiDGdE/R8iizCTK
-	 etnL4R8jlRllPG2i8zFnlhb/VE/L+2va1e+Ini9MBqawQ+6ceVAHih+RHxaTPQXnBN
-	 srCkQce4i0eyQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	s=arc-20240116; t=1714719468; c=relaxed/simple;
+	bh=joQqh3QSOY/472f0avmrUum+JUEohKnHf2cJ0A/y9r0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KBfqAPzhoZoPd0WSyTH0R0ebtKrsiEuRSJymKZELvHqaP3yc/rWwM84vV94XYbH4Y8zW2dPn5urtxEURVWW1lbmeR7hofRoD7rh+qCSunsvPCqrIo2yy6I956shLqVB936NyvKGEOSP93eVDXhhqDUVJzonZKVFsEEAovIDFaIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YZ1rNmbr; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pi4MyNql; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=UB8VjV2+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mB4wMTHQ; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VW0Lp2wf1z4wck;
-	Fri,  3 May 2024 15:52:18 +1000 (AEST)
-Date: Fri, 3 May 2024 15:52:15 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Yury Norov <yury.norov@gmail.com>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Kuan-Wei Chiu <visitorckw@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bitmap tree with the mm tree
-Message-ID: <20240503155215.22466d02@canb.auug.org.au>
+	by smtp-out2.suse.de (Postfix) with ESMTPS id D4FB41FB61;
+	Fri,  3 May 2024 06:57:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1714719465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VxRxPWAdxzXr4foLnpsqB7K/Is9SJ1N4uUXBELbk9JI=;
+	b=YZ1rNmbrWnmHUtf3dUA37kiCmYUCrKNde4GFwzX51P9JCx12bnV3Xu0mGKddNyRIGZD48p
+	2CYxhT5oQNqf1N9+1hhxO6t6IxTru2hyRjf8bJBAu5qIdogJ6sMLNwzC7zzaVVe7azy8Ye
+	OKGKeBcjDvQWLkHLirCZ4/YAPPOpRg8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1714719465;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VxRxPWAdxzXr4foLnpsqB7K/Is9SJ1N4uUXBELbk9JI=;
+	b=pi4MyNqluUYmYJF78N2Q+nVxwjx5c01ikH75sipkorgVrQuhxm8oem/SmYDPitKLNSbhto
+	C/wUtY67WDHE8rDQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1714719463; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VxRxPWAdxzXr4foLnpsqB7K/Is9SJ1N4uUXBELbk9JI=;
+	b=UB8VjV2+RlKOjDZ1N5qqM5ruKkcxB1N/SzbvW8Za52ibCF9I+uNcwn3Fn8D4TLBBz7pRgB
+	geMgduv2swE4rfdtrChv4dKAVENwIGAMIhgQyAajwEqFEwLt84+8bhC66iSKqXhGz9+LJN
+	UZ+hPeCibUynNC65fSFQq1IYwG6q5O8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1714719463;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VxRxPWAdxzXr4foLnpsqB7K/Is9SJ1N4uUXBELbk9JI=;
+	b=mB4wMTHQ9ivVUGc4l2IWMO943bwluJ1e46d7bot5lJvKiyEs227mIKUWqJLqHjtOksDzEV
+	QEkGgXNxH3CHjYBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 420B113991;
+	Fri,  3 May 2024 06:57:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id k87NCOeKNGbifAAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Fri, 03 May 2024 06:57:43 +0000
+Date: Fri, 3 May 2024 08:57:40 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the dmi tree
+Message-ID: <20240503085740.478d564b@endymion.delvare>
+In-Reply-To: <20240430165017.4fa14188@canb.auug.org.au>
+References: <20240430114613.0cef65fc@canb.auug.org.au>
+	<20240430165017.4fa14188@canb.auug.org.au>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YZV15e6mYmmMAUJv8W==.nI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/YZV15e6mYmmMAUJv8W==.nI
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_DN_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[auug.org.au:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Spam-Score: -4.30
+X-Spam-Flag: NO
 
-Hi all,
+Hi Stephen,
 
-Today's linux-next merge of the bitmap tree got a conflict in:
+On Tue, 30 Apr 2024 16:50:17 +1000, Stephen Rothwell wrote:
+> On Tue, 30 Apr 2024 11:46:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > 
+> > After merging the dmi tree, today's linux-next build (arm
+> > multi_v7_defconfig) produced this warning:
+> > 
+> > In file included from include/asm-generic/bug.h:22,
+> >                  from arch/arm/include/asm/bug.h:60,
+> >                  from include/linux/bug.h:5,
+> >                  from include/linux/thread_info.h:13,
+> >                  from include/asm-generic/preempt.h:5,
+> >                  from ./arch/arm/include/generated/asm/preempt.h:1,
+> >                  from include/linux/preempt.h:79,
+> >                  from include/linux/spinlock.h:56,
+> >                  from include/linux/mmzone.h:8,
+> >                  from include/linux/gfp.h:7,
+> >                  from include/linux/umh.h:4,
+> >                  from include/linux/kmod.h:9,
+> >                  from include/linux/module.h:17,
+> >                  from drivers/firmware/dmi_scan.c:5:
+> > drivers/firmware/dmi_scan.c: In function 'dmi_decode_table':
+> > include/linux/kern_levels.h:5:25: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'int' [-Wformat=]
+> >     5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+> >       |                         ^~~~~~
+> > include/linux/printk.h:429:25: note: in definition of macro 'printk_index_wrap'
+> >   429 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+> >       |                         ^~~~
+> > include/linux/printk.h:510:9: note: in expansion of macro 'printk'
+> >   510 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+> >       |         ^~~~~~
+> > include/linux/kern_levels.h:12:25: note: in expansion of macro 'KERN_SOH'
+> >    12 | #define KERN_WARNING    KERN_SOH "4"    /* warning conditions */
+> >       |                         ^~~~~~~~
+> > include/linux/printk.h:510:16: note: in expansion of macro 'KERN_WARNING'
+> >   510 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+> >       |                ^~~~~~~~~~~~
+> > drivers/firmware/dmi_scan.c:109:25: note: in expansion of macro 'pr_warn'
+> >   109 |                         pr_warn(FW_BUG
+> >       |                         ^~~~~~~
+> > 
+> > Introduced by commit
+> > 
+> >   868577e6bfe1 ("firmware: dmi: Stop decoding on broken entry")
+> > 
+> > Include printk.h?  
+> 
+> This caused i386 defconfig build fail, so I have reverted this commit
+> for today.
 
-  include/linux/bitops.h
+Sorry about that. I have amended the commit to use format %zd instead
+of %ld. This passes my local user-space testing so hopefully it will
+fix the i386 and armv7 builds as well.
 
-between commit:
-
-  120c5991cbae ("bitops: optimize fns() for improved performance")
-
-from the mm-nonmm-unstable branch of the mm tree and commit:
-
-  1b6ef2812522 ("bitops: Optimize fns() for improved performance")
-
-from the bitmap tree.
-
-I fixed it up (I just used the latter as it had a more recent date) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/YZV15e6mYmmMAUJv8W==.nI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmY0e48ACgkQAVBC80lX
-0Gz5Egf/eYAbNTYsz/C3Kc7MaH8QeQ/NEeIbg0h2DEjLMVw+Pq7svMNoDfWGRVF4
-juGqithBjsasmEXIgwbywbHDV2/qiNwyx7e7xOEeNiMfyYQYG+FwIUg6Ofb8CMd3
-1xKFutyurfwBSYQ/k0gKiirgFturj8Rl0Qooy/88I1zWzkGik31IZxNeQjmHrIdw
-JBNwD5fSjVAdkJJdzYxrX+USnmTU3J9EqkwaISz6hnVd8HikH0MF2IJP7MRD3RbP
-lUxJBd+8SCxwnq0G4GlK0tC3zQ6k5EgtFj6i5y2EIBx8YqzBg3oDi2ej4jc2mm6Z
-MIOsflMzsMJQM08ItrH3HhT42a4OOQ==
-=L3us
------END PGP SIGNATURE-----
-
---Sig_/YZV15e6mYmmMAUJv8W==.nI--
+-- 
+Jean Delvare
+SUSE L3 Support
 

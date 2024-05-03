@@ -1,167 +1,95 @@
-Return-Path: <linux-next+bounces-2163-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2164-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA0E58BAC87
-	for <lists+linux-next@lfdr.de>; Fri,  3 May 2024 14:30:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E25C8BACBB
+	for <lists+linux-next@lfdr.de>; Fri,  3 May 2024 14:45:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B110CB20F63
-	for <lists+linux-next@lfdr.de>; Fri,  3 May 2024 12:29:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8DF21F219B8
+	for <lists+linux-next@lfdr.de>; Fri,  3 May 2024 12:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3FA815350D;
-	Fri,  3 May 2024 12:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B51A1534E7;
+	Fri,  3 May 2024 12:44:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="avVItQ1N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BiUVUmdc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B63518C3D;
-	Fri,  3 May 2024 12:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5498152E1E;
+	Fri,  3 May 2024 12:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714739396; cv=none; b=sBEAG/9ELksz0awMvvXW+ClmSqA5AtdG2DxeVkSDI/vDkKplgmMO2LijB4C3s+RmqPruYfSv+7iV0dey07AfzYj8O4h+ar8yo8ygI9wZojQrdxitIzfygmjjbfKKPplxe2rPNosnMcUcdobL0VUd4RUOehp11cQ8Zi/oLHHMOGw=
+	t=1714740299; cv=none; b=aGRqP8fnJ+vgMTehNBNsINZqxt59kuEdSWPPr3i4tasB6CUhLa74LMOwk3YXM2JJpVAOVQK/ZPQ778oiESFHuoctA2LQMeCNXlLhuxX4su5HxTgrOp/S2K+cekRLTU4ipurzEs8I5mZHsuduQcKo0WKg9yMFx2RyrGGSFN5BR+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714739396; c=relaxed/simple;
-	bh=e0n/TGXxwB9sJ48pgnHjIMk7j4yTJJ513iQPc6r5xv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PuwBAPWphfSRSFT01TAzEHy9BEqEeZIdFpLF/XGtGmdqtEt5bqnaOs/PliEtTwRhABeQWsPrkA1XrI7vprHkdUUfugv5RprQGLidgk4xrheLEX5KleadSAh153bJRXeBWgkJfwXDJMKri6RkgNeUtSYH0+a9ZXuOIj+nwwdpZSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=avVItQ1N; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=S0UJPqXtsVag5h+QuENMSLncR/6k7COzDF1p8qBCEHw=; b=avVItQ1NOJVtLkOkOlSb/6AU1P
-	HGpsPtACY47xIcbHRe5euJXrEHeXS2GIPzI+H/4t8y9ngM886Imc981km10xGtYcvRNtT82zHOWXI
-	k7Z7WDD/+qqJSrVPd6Lsl6LrsHyqcg+Cm+kEQ14F+WyXUXMtUN8L9VFD/DrPpGqMKSASHyq3dzUcA
-	9AL4YdI5giRHWHecNwJ9uGQ2llgqAlBrl76CZMCsrkq7vPV7yrY1DE79o5KXsvP8V5cN6H1dHgBpU
-	RGWOJdcc7CtFh97mu68Fu5jlABxq8pyrxoUkgkI9HJ81BpeBllTSZCpf2+0vhcYDnDdKFSAdIpmzT
-	seqE/ZFQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43680)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1s2s2u-0008Lz-1E;
-	Fri, 03 May 2024 13:29:48 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1s2s2v-0004aO-Ch; Fri, 03 May 2024 13:29:49 +0100
-Date: Fri, 3 May 2024 13:29:49 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the arm tree
-Message-ID: <ZjTYvarXbn5eVPFT@shell.armlinux.org.uk>
-References: <20240503101516.09f01e44@canb.auug.org.au>
- <ZjSduO+MI7EA3O9A@shell.armlinux.org.uk>
- <20240503220826.48a59ffd@canb.auug.org.au>
+	s=arc-20240116; t=1714740299; c=relaxed/simple;
+	bh=Q1K0LG/hc88SOG/DFNfnQeeuOWApQi+WZVzmhWlJmFM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=t9uxqY9BLWil59u2oYfLRFFQI08RUoQ/p6bNtrqa8oqIpnIOZkEMHv9OojU3wfXl8CvDCLAuWW82IQ4x3rmz9xRO55EBJptf2EihMpZW1HJCtB2LzTgebBvAQxL8DMMIRmni5X3SMjBxjfwd9PuRQsnY4FOqlZeVs1XzYbSZGH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BiUVUmdc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 592B3C2BBFC;
+	Fri,  3 May 2024 12:44:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714740298;
+	bh=Q1K0LG/hc88SOG/DFNfnQeeuOWApQi+WZVzmhWlJmFM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BiUVUmdc1PEABxzY++rsSOM3OPcJbeDk3mZKoqXrHUOljAjMJJRs6DGMbcaAiNapz
+	 ekB4AFLwGi9H83+3VTULvORdRfacfQcKdrBnTHk0xnZayj1F2QYAgHaKCWPTSsALaW
+	 Wmfn7FwFIPdyuPKFHY80i1wR3Skykw+OwAslZDiHV34TMB5QMkZvoDRylq59Xg1/Qb
+	 eX72urZFpjBbaKCcEyS8hNRrFld8n22Wjh6M03kIH3X+tlidJc9wqfe0u6g5DeBfHz
+	 EWGt1Um4KPidfUMap960e+VlEss3kRNvzZ1MHv6A9bHOuk4EgOS3peG1cVsTT3Bjcz
+	 2oc5OcU0Eh4sw==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-518a56cdbcfso14091920e87.2;
+        Fri, 03 May 2024 05:44:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVWlLE/j0pLYzMXonwHJ5IbsrtGHtjOxXxDlTrdXEHD46ozshNua1awEBO58eronqnppQvewENu1qn1XuWEz0L+Cm+26kufSfEPWyUxPxXPT8B0H+S+56rolax64j+GJw5eCoArFslC/Q==
+X-Gm-Message-State: AOJu0YzY821+uKlLDkUcNB9hauikF/Oz6PE8P/HGHQkWp2OA3GvqWCZa
+	Pe/tgRE1p2yhjesNFKQceHbNmV1QNA2KylU7KAFXpglA+AaFD/2VnDN4awWqb4Ll0GolYivOY5i
+	In9gZX3U5+bbRcQ6u9z/MIfQ3Zw==
+X-Google-Smtp-Source: AGHT+IE/PTZ+vyxHB0vTeYK1HIk16HI614VzsvVRLNOydLs+muABnTwiFLrGXvHp0oGN3rEVNwTMCCIE1utFGI4arKw=
+X-Received: by 2002:a05:6512:3d87:b0:51d:a208:2282 with SMTP id
+ k7-20020a0565123d8700b0051da2082282mr2966851lfv.51.1714740296560; Fri, 03 May
+ 2024 05:44:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240503220826.48a59ffd@canb.auug.org.au>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20240503141548.68c2b106@canb.auug.org.au>
+In-Reply-To: <20240503141548.68c2b106@canb.auug.org.au>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 3 May 2024 07:44:43 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq++BkQeXBKqYzQqz_DO=r+s7oT7QoOx3kObjHYDydp5hw@mail.gmail.com>
+Message-ID: <CAL_Jsq++BkQeXBKqYzQqz_DO=r+s7oT7QoOx3kObjHYDydp5hw@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the devicetree tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Lee Jones <lee@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 03, 2024 at 10:08:26PM +1000, Stephen Rothwell wrote:
-> Hi Russell,
-> 
-> On Fri, 3 May 2024 09:18:00 +0100 "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> >
-> > On Fri, May 03, 2024 at 10:15:16AM +1000, Stephen Rothwell wrote:
-> > > 
-> > > After merging the arm tree, today's linux-next build (x86_64 allmodconfig)
-> > > failed like this:
-> > > 
-> > > drivers/clk/clkdev.c: In function 'vclkdev_alloc':
-> > > drivers/clk/clkdev.c:195:16: error: assignment to '__va_list_tag (*)[1]' from incompatible pointer type '__va_list_tag **' [-Werror=incompatible-pointer-types]
-> > >   195 |         fmt.va = &ap;
-> > >       |                ^
-> > > cc1: all warnings being treated as errors  
-> > 
-> > This builds perfectly fine for me - this is on debian stable with
-> > arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 20210110:
-> > 
-> > No warnings, no errors.
-> > 
-> > va_format is defined as:
-> > 
-> > struct va_format {
-> >         const char *fmt;
-> >         va_list *va;
-> > };
-> > 
-> > and what we have here is a "va_list ap".
-> > 
-> > Therefore, the assignment:
-> > 
-> >         fmt.va = &ap;
-> > 
-> > is correct.
-> > 
-> > What certainly won't work is:
-> > 
-> > 	fmt.va = ap;
-> > 
-> > and there aren't any other reasonable alternatives.
-> > 
-> > My conclusion: your compiler is being stupid.
-> 
-> Definitely possible.  My build is an x86_64 allmodconfig cross build
-> hosted on PowerPC64LE.
-> 
-> $ x86_64-linux-gnu-gcc --version
-> x86_64-linux-gnu-gcc (Debian 13.2.0-7) 13.2.0
-> 
-> It still fails for me even just building your tree.  :-(
-> 
-> And if I revert commit 5d998425e37b it does not fail (of course).
+On Thu, May 2, 2024 at 11:15=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> The following commit is also in the mfd tree as a different commit
+> (but the same patch):
+>
+>   828215066d88 ("dt-bindings: mfd: aspeed: Drop 'oneOf' for pinctrl node"=
+)
+>
+> This is commit
+>
+>   8f553c27697b ("dt-bindings: mfd: aspeed: Drop 'oneOf' for pinctrl node"=
+)
+>
+> in the mfd tree.
 
-So I think the questions are...
+Now dropped.
 
-1) why does this fail with this compiler?
-
-2) why does this instance fail, when we have plenty of other instances
-in the kernel doing the same thing? (grep vaf fs/)
-
-I'm wrong about the va_start()/va_end() - those are done in the
-caller, e.g. clkdev_create() does the va_start..va_end before
-passing the va_list to vclkdev_create() which then passes it down
-to vclkdev_alloc(). So it would be wrong to add another va_start()
-in vclkdev_alloc().
-
-The only thing I can think of doing is something like:
-
-#ifdef CONFIg_X86_64
-	pr_error("%s:%s ID is greater than %zu\n",
-		 "[compiler error - unreportable device]",
-        	 con_id, failure, max_size);
-#else
-	{
-		struct va_format fmt;
-	        fmt.fmt = dev_fmt;
-	        fmt.va = &ap;
-	        pr_err("%pV:%s: %s ID is greater than %zu\n",
-        	       &fmt, con_id, failure, max_size);
-	}
-#endif
-	kfree(cla);
-	return NULL;
-
-which would be better than nothing... but really we shouldn't be
-working around what looks to me like a compiler bug like this.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Rob
 

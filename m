@@ -1,111 +1,115 @@
-Return-Path: <linux-next+bounces-2166-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2167-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADB258BC463
-	for <lists+linux-next@lfdr.de>; Mon,  6 May 2024 00:01:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4C458BC466
+	for <lists+linux-next@lfdr.de>; Mon,  6 May 2024 00:04:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C29CA1F21D36
-	for <lists+linux-next@lfdr.de>; Sun,  5 May 2024 22:01:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DB961C2095C
+	for <lists+linux-next@lfdr.de>; Sun,  5 May 2024 22:04:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4C50136E1D;
-	Sun,  5 May 2024 22:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0062136E20;
+	Sun,  5 May 2024 22:04:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Ihum5M0n"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="nyeGfYBR"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD69B6BB33;
-	Sun,  5 May 2024 22:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944DD136E03;
+	Sun,  5 May 2024 22:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714946508; cv=none; b=N/dD/p+B4WTGTmPcwHJBP9Ybw9WEC+yUBkHuKPYKEhAq0wNmEWAwBgHrzEY+ewEli1ual4fXESDFAs4ObCpIxBO0xvmSRxWyVSC4eZkz9pa7NvyLO4i7yC+4pk5oWqk5e3nFXvaAnTgDqMuH8b35JsxXc2JgFZv6fIet5rWhsF8=
+	t=1714946640; cv=none; b=uIUnlRD+Xh4d5EZyA1CpinJ2Po0D+2JDFZkW0N5QOOEoOn6Pn1PjCA2itdiApoRnulZfncEmOOrUn7C134DsWm8AnJLyjzZ5Y6ZONVha9mnYbsRMC1qSlALCymkMsf8dmEWyPsqIarSCIIM89mqJslulNpnHVSQLAr6mpeh5i2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714946508; c=relaxed/simple;
-	bh=FrwPl+JWqc+HPObcFdxwqBrCB7UTUyGF3FS1XidQnag=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jHTXehWm70YxffxE3wwbEkVX2JqLBIit0vw+ExxDNLKpMB+IBmM4CqFxngVkxuleP73qK1VMLDqcqh3tbuW3o56GpVMZrKLpjcvGDqatowhf6oneMRoEyhvgX7dRA86VAhOxGDRNKTIRp+VJEFI/7Fg8oSg1IYXq7YgwYwi5UKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Ihum5M0n; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1714946640; c=relaxed/simple;
+	bh=eEAYQXfdxuIVc3yHy+1MMCH/JfdJJ4pV9FJy1JHE27o=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XC8MsaaDRIWtg4fZe98tC8gXGXop6cnSyH9GGVwybnn+xo9nCQZZrkTmzIBwc98+Iz2BMjt6CLGm5Vbdu22LZo0wD4oLn+kJDUU1gosoMwr1pRDUr/vnKEBm1dREFFp8lHZxhLhXupSGFsW/gpQQcDhZABhLIldKXFJ9Dv5zoCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=nyeGfYBR; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1714946502;
-	bh=NpfiwcEN18GBXSxmdSKE4DjdgpjBIfIS84mKPHakvGk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Ihum5M0nqXhNqvrVloo6x50mBttQ22x4fMW5lePjDrJeZ1QduCenqJ56QFy7kBeI5
-	 63ApjCW5B/Gf+IfScqsohwA8VxIhZYbKVig0nETX/do6H+eRxbCM249vvcFqgk+KmP
-	 NCOe9V9s7XUttymWjMkee9baSGcPwRSNHO2tY1/J4FvmgUDnlPvn3tFyHTaEuux78i
-	 gybwsID1exxXBYaKZNe//1/gXtP2ucaNA0XUF3DrDc98+KdGD9ak4uOYLV/N0wWPzl
-	 RdryW8VV9Knaet1aaPV9V/JIjbnVPK7Clr/C1xzrv6zGgPDNrvLGas3PQ5GqMS7DUq
-	 DRJjj2xX+tIUQ==
+	s=201702; t=1714946636;
+	bh=tVxnR5AG3Vk1TVk5CYYSoNFW2ZV7l8WgVqDajRnQ3Vg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=nyeGfYBRcOI6wibIOIYR38qj5NRniTtO54y0fRMAeKsx+xXFpXYlsSK04gAmIgHxg
+	 YwjFbEZvn2nIHDZ+oVJ2EkrXZV6ghCmJyR6jgt+VcGpLIaZ0iBCCZgb1b3cId/25rH
+	 kEkdmYuhXfQm6H0rWiBEewnpSyNxCTNEhvrZI5M+S9KHtmAKqiWRkg9Ac1e19B+HIT
+	 F3X9YyiQyvadI42qYjN3Fr+C7bqgIJ7wBQqB84EnzTh7Rv//AMQIJOPdyx6CRpRaLu
+	 u2HeB4hPB2VjAWHhin0f3KmiZ48ijLdYmZZRMCZ0GJBfaN0U2UBKw0B7c9ea8ucjQw
+	 DV3EIVRBVgzQQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VXdmQ2HfMz4wcR;
-	Mon,  6 May 2024 08:01:40 +1000 (AEST)
-Date: Mon, 6 May 2024 08:01:38 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VXdq00YY9z4wcR;
+	Mon,  6 May 2024 08:03:56 +1000 (AEST)
+Date: Mon, 6 May 2024 08:03:55 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>
-Cc: Johan Hovold <johan+linaro@kernel.org>, Luiz Augusto von Dentz
- <luiz.von.dentz@intel.com>, Networking <netdev@vger.kernel.org>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>, Wu Hao
+ <hao.wu@intel.com>
+Cc: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the net tree
-Message-ID: <20240506080138.2f57d906@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patch in the fpga-fixes tree
+Message-ID: <20240506080355.7550e2e9@canb.auug.org.au>
+In-Reply-To: <20240501083805.76e87698@canb.auug.org.au>
+References: <20240501083805.76e87698@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/c4uXEfQ9DHFdKnfEi_ApBE7";
+Content-Type: multipart/signed; boundary="Sig_/OXA8nZ68_l/EM6BGrLxnd_O";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/c4uXEfQ9DHFdKnfEi_ApBE7
+--Sig_/OXA8nZ68_l/EM6BGrLxnd_O
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+On Wed, 1 May 2024 08:38:05 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> The following commit is also in the char-misc.current tree as a different
+> commit (but the same patch):
+>=20
+>   54435d1f21b3 ("fpga: dfl-pci: add PCI subdevice ID for Intel D5005 card=
+")
+>=20
+> This is commit
+>=20
+>   bb1dbeceb1c2 ("fpga: dfl-pci: add PCI subdevice ID for Intel D5005 card=
+")
+>=20
+> in the char-misc.current tree.
 
-  40d442f969fb ("Bluetooth: qca: fix firmware check error path")
-
-Fixes tag
-
-  Fixes: f905ae0be4b7 ("Bluetooth: qca: add missing firmware sanity checks")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 2e4edfa1e2bd ("Bluetooth: qca: add missing firmware sanity checks")
+This latter commit is now in Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/c4uXEfQ9DHFdKnfEi_ApBE7
+--Sig_/OXA8nZ68_l/EM6BGrLxnd_O
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmY4AcIACgkQAVBC80lX
-0Gw6Pwf/WotSkD5+J0QhhD5gLGgdPxGXRdJpBk80+UN2QBDqR6cSdEH8hT6QhWJG
-kbatPK7fWnWkzgHhQIepKxywUGuGYRd8cM/4TXhIRxJvdd5zRjwxTA/9NOXywLtR
-YJkvrlB62DRu5+p6piwMX2aggVqCfFSRHXm1jBKoJ0mHnaKqCuOKKlP7bt8G/nUH
-5oFCFFpciiqwFS7KFkak+3zDd3fUJSkptYcx/8HDK7297uzSa5Q78r3ExYOTwEn2
-hXunlN2IKGi+pWItygtTKt9XfRxspR6p1tYe63v3XZ/tds+be/SCkS+6l6BATq8N
-ZDphy5FHnvjsygeg14w+/UxeRZEzSg==
-=OoAo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmY4AksACgkQAVBC80lX
+0Gxsfgf/fbUvivwCFPt+6iP3cvtP5ZNcPekR82VNN9zUNUnvJbLBrZZAL0Vgs2Li
+F3UvtXbJzmt3iXl4135csIAZQ3UAn8srZVO3it58V++LkZ3TlXjI9TUFB1N0ne2l
+S9fwxif8aFsIBCYHuzah/yzVeKWDx+VvQ1mNXROfKkpDBYjBqQXk802NJlD2fwsD
+EDWkO3F+DtnOoG2/Z/g5FOpIEtjrS3mdjCRDLeD+whjpAUAaM2Sx7LlThmoTxHxy
+VKw0+ZwPSA2nnnJwIoXuCGcfK/i4vMNJfbnrho6sMTOzba5bvL1AlETmkZIAcLCV
+Ol7ZSVxWRLHx+ambiM8PsQqaPxjN/g==
+=ennv
 -----END PGP SIGNATURE-----
 
---Sig_/c4uXEfQ9DHFdKnfEi_ApBE7--
+--Sig_/OXA8nZ68_l/EM6BGrLxnd_O--
 

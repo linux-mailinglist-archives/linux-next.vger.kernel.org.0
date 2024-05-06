@@ -1,133 +1,118 @@
-Return-Path: <linux-next+bounces-2190-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2191-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86C448BCC57
-	for <lists+linux-next@lfdr.de>; Mon,  6 May 2024 12:48:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A9AC8BCC6E
+	for <lists+linux-next@lfdr.de>; Mon,  6 May 2024 12:55:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 429AC284EC3
-	for <lists+linux-next@lfdr.de>; Mon,  6 May 2024 10:48:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B6D51C21002
+	for <lists+linux-next@lfdr.de>; Mon,  6 May 2024 10:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B77E4757FC;
-	Mon,  6 May 2024 10:48:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 752BB78C71;
+	Mon,  6 May 2024 10:55:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="faoBhgNL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RSP2+ACv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714C72BAE3;
-	Mon,  6 May 2024 10:48:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2786B6CDCE;
+	Mon,  6 May 2024 10:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714992531; cv=none; b=Wtwn8EpodhWqxPgizSZsQwor2SjJlWLO74+h8L8aa5tRV0TRS0LsVBgPX/krm9mres8KqYLQysueaVTGWEfszUL2xRdCJw6ZAmQIme8NyJ8Q7RKEP1T54anxAMfWYJ+25mnJJ8ZjWgE2s2OBI4SHR0aVZPajHcUDhXmBY3ukFyo=
+	t=1714992951; cv=none; b=R5Wy8PysUBZ78KAqNGK3h6qQ91nZBFBsfl69mIOeUr1xeoRvPNxkLsfL/4z1rXmLaPYEi7GqjuSGxhwDXxwIM8ZHXI7x56A0+WIUriY1GW4H4flSEC9JX0xWmU5AtJcos+PPLuyPWgLiTeEH9gdVkcK6PYu0SPVV9bZR4vnD7tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714992531; c=relaxed/simple;
-	bh=ARJ23TKvLTR3WJAf6QdqBrxazK18M1dwucHinD9aSQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HDNbbwXf7KQ7T7jneQo2lgBV4P9eHJ4lkPlyeXFE2p0ClR+POiIJEOv7BDTiwmGmQ/tHxQ3eZN3bdSpxgv3YTk3mh8RFUb0UZ9BCgirEWz6zXYJG/ajKECXf9Xy4N686Wnnn3/+nZmskPsJ7vM4wdDU4BJobHPpIwHrwOL6wvPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=faoBhgNL; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1714992951; c=relaxed/simple;
+	bh=mct5Y7njPeT4smIls3sbUM7/sO0Lhh1l6Xs5dBHpDg4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=e1VX0oq0gC8dTATeibeM8atxbrCinHGZmtUJec5mRUmNhYKfNsVpIzmzEzbr/QBso3WZI3Y401n1uVyh+IEZbfXdJ93cBpks+a+lmT3asd0bfFbKACBQH+pSrenVG+Gl8boESr0E9OdoMGgm/EkHHFn+oCJwVVgdhAslfvB7byo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RSP2+ACv; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1edc696df2bso11509445ad.0;
-        Mon, 06 May 2024 03:48:50 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6f44a2d1e3dso1468907b3a.3;
+        Mon, 06 May 2024 03:55:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714992530; x=1715597330; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GVtnw2cXz417fcLRGeO5sbYvgn6wv34FVlGvTsbbKFI=;
-        b=faoBhgNL6O47g8dtm/JQBFq8bS/ftE/HEslqrp6icrT9gi4vX06mdOAz9kwS6m76/Q
-         ta+q2+AM2QUSZMsXzp3CQ8k+Of23gYYxjvchs47bIbjalPAO6xPzdYPlARIWU0Lo2gCD
-         pviNVR8Mj49VdAj/VqPMSirgueMSsb/l7mMnMYbYgdgzyuvS5m/IVyCQoEA3I+i8ymsK
-         HPtW4b0DqAKxWXyvWjxLAZtvqzpiDhIg17iuT6D/7bt8pNUnmzXefwSwowl9w6lpmZXH
-         1opZ1V2akDmIlExKBqU6AE5hy3livWWJPNCK6bYkmSYjEc5ftzaSVb9vfzK9xI4BSriy
-         HppA==
+        d=gmail.com; s=20230601; t=1714992949; x=1715597749; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zWFTD/Zt1hBpGSdsuo+qdOz+mUpvF5tYZZPdx+vucD0=;
+        b=RSP2+ACvhcWo9bPu2qGsTddRHD6WjV694lHpffVsbFuV/WIpCMP0xpI1iNeEwlsXHa
+         LQtW58hAcsHy39pciuk5mu/qVEf20mJy+u2JY4X5qJ+4r7TauaxmwFKz/wXyJJhrvYC5
+         YJvzsNBY/yCpASaNv6H6HWJXdhxI2jJ0QSH/VEuueVE4/5sdkGQ/KtutrPZyjompDRn2
+         IxduI8wLcHD82qeDvSnlnOo7AWkatpqfZqXXdxsMoy9yBx3n4IR9AEP1gKX3rLerbh6U
+         d2aaRfiW8xg3jcKm5KJGKsTKYJNt5GLk+/bFricRiOSZSbgJaV2EVGLwxsF03MOQTrwH
+         mj0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714992530; x=1715597330;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GVtnw2cXz417fcLRGeO5sbYvgn6wv34FVlGvTsbbKFI=;
-        b=YlAxq/eVZA1WrDtOZCuGCZfm75GIS5FfgH+jUtTYxeY8JArl3UJECXlZraf0fYcWC6
-         NUHtFAJg1M6EqOXN5/ITcdOqsx5BFh64idR+3LRF38gabVhaUNI30TY1AzF76lMTL3Br
-         IGa5B34VHOS7iLLxt+aD5O5oW9TSDQ1TbmZXbfrrBdM1Wgh2xUKp4W2W6VJQj5GeYj+2
-         +8JixhclFyR+mktUwviP5mIPkFU3JyirKHM0UpnMpLqVJnI2V0CnSsTZFPf9uN3XyL6/
-         3sHAuZ1FmbYTDBBzPFzaqg5fK2ho1Q1/pMPqBUjK/gI8f2P98n+YD/neD+HGpuaeRyU5
-         qNRw==
-X-Forwarded-Encrypted: i=1; AJvYcCXTeHo3/NjUlHUqnHSImwYgjKWgnJzJwzCZpYiQxIIZUS+qn1GTj2Tbgrgm/NoRTCM9odigST7VSNfyBMp1XEvoeOUSqJXjS1qaNeSTTsjSGDbpW8RLU4X8q88yo/BPuwU8RCbttDASsw==
-X-Gm-Message-State: AOJu0YyHtZOIf0lJfobyjhoKnCZFgLXj4H7EPOHKekrygmp3xaHrbmLa
-	9IzEQoS9pPQW1IPf/lKHJpEr1RBhk4eqSpS0wJrPq15SmsPkd1JGRXSFcw==
-X-Google-Smtp-Source: AGHT+IGnWIsSRlAr5d3rci6sw7HXIGyd/+wJHXiy+6By0qMgyxiDSKH3XQIY+LjNyA3VTFAnuBa7Ig==
-X-Received: by 2002:a17:902:f68a:b0:1e4:24cc:e020 with SMTP id l10-20020a170902f68a00b001e424cce020mr11777169plg.67.1714992529467;
-        Mon, 06 May 2024 03:48:49 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id w16-20020a170902e89000b001ea699b79cbsm7972761plg.213.2024.05.06.03.48.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 03:48:47 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 61E69184790CF; Mon, 06 May 2024 17:48:44 +0700 (WIB)
-Date: Mon, 6 May 2024 17:48:44 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the tpmdd tree
-Message-ID: <Zji1jB9xqOo3es5g@archie.me>
-References: <20240506162105.42ce2ff7@canb.auug.org.au>
+        d=1e100.net; s=20230601; t=1714992949; x=1715597749;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zWFTD/Zt1hBpGSdsuo+qdOz+mUpvF5tYZZPdx+vucD0=;
+        b=l08YXpUAgkJtngCzSIMD6I1xnikqS628XJ+lIewNaRWobFWVPIxAp5GCOIvDgoUUgo
+         A+KUm8+Lz8M5LgHbkM1t1M7KRdB6hMby8eLo7fctoqV+leDmcpPtYdd9MhLS4tFCvH95
+         LRWUf8rLWYr0/meOl4Xbcx2rL+hOGlpNG4TBdkYPtPJwk+cl5cWVnKu71uZG2P9AVti8
+         wyfV8VOx7AntEw3rCv9NP1QvMVnAPDyxoarK+hluwp67NBt/SGww4ORS3gHrFMuI4uwM
+         Wcl6Mlv3K2sEpoSZNqn5bRj2YP3sb90mZADtTJExewA6hfz/3YJjSRKDPnzHltjg3vO8
+         QIwA==
+X-Forwarded-Encrypted: i=1; AJvYcCXUm7OG1DhUoMiEGAc93ZYxk24VcJWfv8QS2POjlAjVfMrYArLBi+bmLGg96AW48RbbwwKWcaC+J5FJKUPcdHGFazsfCBWdZ97DdYyXBnydwwCGKa2UOM6ZDu4D5KrbTp/2YzxvajICjg==
+X-Gm-Message-State: AOJu0Ywf4jUs6ICdDtwdfkkr88sydbaqgaeohSttpxjec6BqHc8dCIVh
+	IiyyQb1sBy5ATq2VIrhWeQBeIYCdfBGWhZm9vGLvcEds+L9F8r23
+X-Google-Smtp-Source: AGHT+IGVpr6ifI3SzO8o7YgprNvSCHbQ/5jc76oCvgJh+ah/Hb73/r0bDtF7W/VU1OoyyfTLibqRDw==
+X-Received: by 2002:a05:6a00:a04:b0:6f3:ef3d:60f4 with SMTP id p4-20020a056a000a0400b006f3ef3d60f4mr11251523pfh.33.1714992949168;
+        Mon, 06 May 2024 03:55:49 -0700 (PDT)
+Received: from [192.168.0.107] ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id c8-20020a62e808000000b006f44ebf4c91sm5323485pfi.21.2024.05.06.03.55.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 May 2024 03:55:48 -0700 (PDT)
+Message-ID: <65817e22-6cc8-4433-ad35-e3c556f390a8@gmail.com>
+Date: Mon, 6 May 2024 17:55:44 +0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CWBYFMWURoT+x7Ys"
-Content-Disposition: inline
-In-Reply-To: <20240506162105.42ce2ff7@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warning after merge of the tpmdd tree
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Jarkko Sakkinen <jarkko@kernel.org>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20240506162105.42ce2ff7@canb.auug.org.au>
+ <Zji1jB9xqOo3es5g@archie.me>
+Content-Language: en-US
+In-Reply-To: <Zji1jB9xqOo3es5g@archie.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 5/6/24 17:48, Bagas Sanjaya wrote:
+> On Mon, May 06, 2024 at 04:21:05PM +1000, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the tpmdd tree, today's linux-next build (htmldocs)
+>> produced this warning:
+>>
+>> Documentation/security/tpm/tpm-security.rst: WARNING: document isn't included in any toctree
+>>
+>> Introduced by commit
+>>
+>>   ddfb3687c538 ("Documentation: add tpm-security.rst")
+>>
+> 
+> Duh! I should have added the toctree for that doc when reviewing it. I will be
+> sending the fixup shortly.
+> 
 
---CWBYFMWURoT+x7Ys
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oops, I feel like had not reviewed that doc.
 
-On Mon, May 06, 2024 at 04:21:05PM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the tpmdd tree, today's linux-next build (htmldocs)
-> produced this warning:
->=20
-> Documentation/security/tpm/tpm-security.rst: WARNING: document isn't incl=
-uded in any toctree
->=20
-> Introduced by commit
->=20
->   ddfb3687c538 ("Documentation: add tpm-security.rst")
->=20
+Sorry for inconvenience.
 
-Duh! I should have added the toctree for that doc when reviewing it. I will=
- be
-sending the fixup shortly.
-
-Thanks.
-
---=20
+-- 
 An old man doll... just what I always wanted! - Clara
 
---CWBYFMWURoT+x7Ys
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZji1gQAKCRD2uYlJVVFO
-o/dBAQDbpxSPpTnwtqWyTvsRwk3dMr3h2YVH+1fcetN+iLLebQD/ZGJ8uDPNaBD7
-SYfgK6v58okFRbyDAJELeIxOR8OLcgk=
-=vJb1
------END PGP SIGNATURE-----
-
---CWBYFMWURoT+x7Ys--
 

@@ -1,156 +1,104 @@
-Return-Path: <linux-next+bounces-2197-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2198-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3E578BD9EA
-	for <lists+linux-next@lfdr.de>; Tue,  7 May 2024 05:55:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEF2C8BDB6B
+	for <lists+linux-next@lfdr.de>; Tue,  7 May 2024 08:26:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DBEA283707
-	for <lists+linux-next@lfdr.de>; Tue,  7 May 2024 03:55:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01AF2B21097
+	for <lists+linux-next@lfdr.de>; Tue,  7 May 2024 06:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E59F4087F;
-	Tue,  7 May 2024 03:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CDC26BFC0;
+	Tue,  7 May 2024 06:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="evVuxTsO"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Xi2NaIzO"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF61E3FBB0;
-	Tue,  7 May 2024 03:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9576F08B;
+	Tue,  7 May 2024 06:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715054151; cv=none; b=Dv87AemdSZVxci6TOABjmUS/g235hR+Kt/b8e1Z4ugRJFfTGxademgORIfdM8Rdffcz+iE0meS3/V7Rs8cX54xNx832z/PozDQOLTMd0Q3p0ktWr6ydMRGH3Bdk6xmu2ut7Vo0+G45QfWi4NTc5HYdq9M06hqCHc1Vgc/2/FTJU=
+	t=1715063191; cv=none; b=epQvLNPIn0vpqxD/d1qFTLjK6UolCQ0GI/dtq0XVQk+Xxv+tWgw4HleRV4KyXhN8GeSOG7Zel5iaolUA+kKMoWW8urD2fvVi26FvaObbIKECZZu2Pwz29PMv77j17xSVyGRvDjB7wcKyOAH7eKHZ+IU/Q2NSd11rxEr79H+l2Es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715054151; c=relaxed/simple;
-	bh=/vJ4c0AQmmB9ps+rh3Y0oGTRG28m+JJpNgChWpJQls8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=slL+6BGuusrWA3IpeFFztZzAFo+6XWInPjkCRRGRMs9by+yMzIpP1vj/0w8tJgr+YaPF6ATTFRTFgcjNHRPkNLeY2cI2tAFT1+i25xzsuqm1xpslU96EImGj5SmxgAMx64oNm+AgN1IYCXcfMXilmAIHXmFhaXBo0NfyZgn7ENs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=evVuxTsO; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1715054144;
-	bh=wOtPNxB5OzuiLNH0fMUK5c9wuXAdWP2Bh0gK00toAS8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=evVuxTsO7Gm7tMSnmmBSjDM4TuiWoSBD7DYmjC3UEU2GnTX2MwcFzVxP/6+l7NmnM
-	 7JtZJMkxHIamnBKP5WjbBYTKOGZHOOHZ8Wn/jvbGpwX9iW4VTgbPFDmsTZfV60cc4P
-	 4ToGoBe47wula7JmgLIVWWGxI1KkG4Gk4QH9XJDApifStJ3WaJu5as0VkowtpflfjZ
-	 1aeCvk40Pq6CCPMyw02b63LnpN+yIX3FENWe6rsT3KJlIOoA/v4O1++b6DQfIMOSTr
-	 HEs4BtC7AacZWM4FlJ6euZ32mcsiRC5qxqvZpI8Cerd0tS8TGW8UctxxJ/9eQq2HjC
-	 ei1qEaUaXLW9Q==
+	s=arc-20240116; t=1715063191; c=relaxed/simple;
+	bh=+fE/W+Ef2b72t6qc7ynSEofl4rRYDITSbAJ+pHYSwDM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DDoy70Z1gCNb4zFupGC0gZ7lTZrqPySOLVzSfjIedvBFoK0rF8GGywgp0+m33tyer0mZ9d3L2l7eLKWcqpvDBY+hgnAf6o85N/vagzyopcB0aIrC6NkjJhxYOa+OvOWpSqBfSjjv4hNEnkaH+ehipEtOF/cwk9a6U2Y3L4a82UY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Xi2NaIzO; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1715063186;
+	bh=EcutFKNIZ1/CVm8NDXaDBXw1sgllUPbSN8CzTkQAeXY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Xi2NaIzOM1tDOW1K9WqXHb6Yz+P1WnOhFPX0xDT7ecjGlfxy6B8s9atM2Nsq9AXPm
+	 S1qxvLoz1M+HjX+NxrcP0untTHcCgaBXDpi3Mx2+FcVYn22nfySXPRns7sM3ATiPQN
+	 JqAHLmU4T45PaK9j1zivU2Toa6Ek4liJsu2c4K9XuyQqMDXeOrhVDRnE4ThV1RoEXK
+	 DBDkPQVJ6r7q+fWnmfmDgpmi/wxINeAsu1HkGbOATCrlKXn0QP7njlNqZI1lp0PbfX
+	 zk+k6P0TYpmGCUaZlDCVEFyoNoo84pIXXP8RiOJ0AEeyDiyroCl2yMSBvRP205AVV5
+	 jXEgs1ulG79HA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VYPZS0ThQz4x0K;
-	Tue,  7 May 2024 13:55:44 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Palmer Dabbelt
- <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc: Benjamin Gray <bgray@linux.ibm.com>, Charlie Jenkins
- <charlie@rivosinc.com>, Palmer Dabbelt <palmer@rivosinc.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: linux-next: manual merge of the risc-v tree with the powerpc tree
-In-Reply-To: <20240507100441.0ffefbd9@canb.auug.org.au>
-References: <20240507100441.0ffefbd9@canb.auug.org.au>
-Date: Tue, 07 May 2024 13:55:41 +1000
-Message-ID: <87bk5ip96q.fsf@mail.lhotse>
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VYSwL5NXjz4wcF;
+	Tue,  7 May 2024 16:26:26 +1000 (AEST)
+Date: Tue, 7 May 2024 16:26:23 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the mm tree
+Message-ID: <20240507162623.4d94d455@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/+bD8Cm=Pn8RzzfDWoyIMpUX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> Hi all,
->
-> Today's linux-next merge of the risc-v tree got conflicts in:
->
->   include/uapi/linux/prctl.h
->   kernel/sys.c
->
-> between commit:
->
->   628d701f2de5 ("powerpc/dexcr: Add DEXCR prctl interface")
->
-> from the powerpc tree and commit:
->
->   6b9391b581fd ("riscv: Include riscv_set_icache_flush_ctx prctl")
->
-> from the risc-v tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--Sig_/+bD8Cm=Pn8RzzfDWoyIMpUX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.
+Hi all,
 
-As you would have seen, I accounted for 71 being taken by
-PR_RISCV_SET_ICACHE_FLUSH_CTX in my tree, so this is just a textual
-conflict.
+After merging the mm tree, today's linux-next build (htmldocs)
+produced this warning:
 
-So should be nothing to do other than mention it to Linus.
+Documentation/mm/damon/design.rst:482: ERROR: Unexpected indentation.
+Documentation/mm/damon/design.rst:483: WARNING: Block quote ends without a =
+blank line; unexpected unindent.
 
-cheers
+Introduced by commit
 
-> diff --cc include/uapi/linux/prctl.h
-> index 713d28788df7,524d546d697b..000000000000
-> --- a/include/uapi/linux/prctl.h
-> +++ b/include/uapi/linux/prctl.h
-> @@@ -306,20 -306,10 +306,26 @@@ struct prctl_mm_map 
->   # define PR_RISCV_V_VSTATE_CTRL_NEXT_MASK	0xc
->   # define PR_RISCV_V_VSTATE_CTRL_MASK		0x1f
->   
-> + #define PR_RISCV_SET_ICACHE_FLUSH_CTX	71
-> + # define PR_RISCV_CTX_SW_FENCEI_ON	0
-> + # define PR_RISCV_CTX_SW_FENCEI_OFF	1
-> + # define PR_RISCV_SCOPE_PER_PROCESS	0
-> + # define PR_RISCV_SCOPE_PER_THREAD	1
-> + 
->  +/* PowerPC Dynamic Execution Control Register (DEXCR) controls */
->  +#define PR_PPC_GET_DEXCR		72
->  +#define PR_PPC_SET_DEXCR		73
->  +/* DEXCR aspect to act on */
->  +# define PR_PPC_DEXCR_SBHE		0 /* Speculative branch hint enable */
->  +# define PR_PPC_DEXCR_IBRTPD		1 /* Indirect branch recurrent target prediction disable */
->  +# define PR_PPC_DEXCR_SRAPD		2 /* Subroutine return address prediction disable */
->  +# define PR_PPC_DEXCR_NPHIE		3 /* Non-privileged hash instruction enable */
->  +/* Action to apply / return */
->  +# define PR_PPC_DEXCR_CTRL_EDITABLE	 0x1 /* Aspect can be modified with PR_PPC_SET_DEXCR */
->  +# define PR_PPC_DEXCR_CTRL_SET		 0x2 /* Set the aspect for this process */
->  +# define PR_PPC_DEXCR_CTRL_CLEAR	 0x4 /* Clear the aspect for this process */
->  +# define PR_PPC_DEXCR_CTRL_SET_ONEXEC	 0x8 /* Set the aspect on exec */
->  +# define PR_PPC_DEXCR_CTRL_CLEAR_ONEXEC	0x10 /* Clear the aspect on exec */
->  +# define PR_PPC_DEXCR_CTRL_MASK		0x1f
->  +
->   #endif /* _LINUX_PRCTL_H */
-> diff --cc kernel/sys.c
-> index f9c95410278c,1b7bda0722ca..000000000000
-> --- a/kernel/sys.c
-> +++ b/kernel/sys.c
-> @@@ -146,12 -146,9 +146,15 @@@
->   #ifndef RISCV_V_GET_CONTROL
->   # define RISCV_V_GET_CONTROL()		(-EINVAL)
->   #endif
-> + #ifndef RISCV_SET_ICACHE_FLUSH_CTX
-> + # define RISCV_SET_ICACHE_FLUSH_CTX(a, b)	(-EINVAL)
-> + #endif
->  +#ifndef PPC_GET_DEXCR_ASPECT
->  +# define PPC_GET_DEXCR_ASPECT(a, b)	(-EINVAL)
->  +#endif
->  +#ifndef PPC_SET_DEXCR_ASPECT
->  +# define PPC_SET_DEXCR_ASPECT(a, b, c)	(-EINVAL)
->  +#endif
->   
->   /*
->    * this is where the system-wide overflow UID and GID are defined, for
+  b7138c7d40b0 ("Docs/mm/damon/design: use a list for supported filters")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+bD8Cm=Pn8RzzfDWoyIMpUX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmY5yY8ACgkQAVBC80lX
+0Gy3NQgAiI1px7I31AcaBQNw1XvxK9y8rQ+KAtXRqJMAx3KNLvzbCAkHGgalcagV
+1FQd/PshFXFh7d1XQgAYloH1rDTm4QfGuYcJX8s7Un7j/6F4gw1QwicZnTrPXf9A
+NvdckCkYofVC9hxILcPO+WIandm+MeNAgY+Yo8Yy/2SJ6TCUd/yXaO27kBBilOr2
+2wei9UUv/o530LfbvzxpNFdyrQjdlS9muE3uNmHcPnGfKWRozl+MdyqX59h1qyyL
+Ye7kP5StEk0EFDVOPazEOKPR/MdkmeCDulVIUMu//8y9Kbi3ODRIvgElIPxhKE14
+caLVrmmCT37uGd0BP7un6dHl+Y+x4Q==
+=yJAi
+-----END PGP SIGNATURE-----
+
+--Sig_/+bD8Cm=Pn8RzzfDWoyIMpUX--
 

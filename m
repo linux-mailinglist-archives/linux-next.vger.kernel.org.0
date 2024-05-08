@@ -1,84 +1,80 @@
-Return-Path: <linux-next+bounces-2229-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2230-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B13728BFE9C
-	for <lists+linux-next@lfdr.de>; Wed,  8 May 2024 15:21:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44E058BFEAD
+	for <lists+linux-next@lfdr.de>; Wed,  8 May 2024 15:24:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C67F2897C6
-	for <lists+linux-next@lfdr.de>; Wed,  8 May 2024 13:21:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3DB72852DB
+	for <lists+linux-next@lfdr.de>; Wed,  8 May 2024 13:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB546FE06;
-	Wed,  8 May 2024 13:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A5875803;
+	Wed,  8 May 2024 13:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hGjCzRZj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X33BlpRT"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBF06F514;
-	Wed,  8 May 2024 13:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A4B55774;
+	Wed,  8 May 2024 13:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715174494; cv=none; b=kxvlhuIsIgaEa0brs1ZOwIicA7WoALtFe7lNw2TNEp/p2qRRwWWuNVp2SRpuVScYYIgZFdDHcT/QL/BAMnQAX99j0eHpq0ckZ+7UP1t3GDTiDXu/mbSkarlaZkse1UIlsXd7JQ0Zjm3rjRx93Fucasp9SWGY/mu9DsLUd70jwP0=
+	t=1715174687; cv=none; b=HRct5BFVWUtSFBmzIBAVHNMrfA+VjTLtdlHphuq5eGlrpxKMVb+QvS5B7AVrg4rF32Ncx7iB02Y4OStDGCjykbn6GfdUyaW22oeYuULquzDqirWBApoHRka+Uo85vSn53uEtHl5OJh2af6hz54sKB4r3LaCDanJi65ZCewKJf/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715174494; c=relaxed/simple;
-	bh=ssaG7LKbJUkwN9FIh78/iyjTlMmbcPt8tPMh8MlDX/I=;
+	s=arc-20240116; t=1715174687; c=relaxed/simple;
+	bh=kAHIIhfIM5V1oSLPMND5CH9K/rA9UAETbP9dW4IiSS4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S01kX0kcd9o3VDjbjgxl2X07Vta3EOtAa53v11lWuftL7wc7vdt0EpBnVru3V+QU4R7yd+rsU9CSi3JG7ayjhMlmuDLYwh9aLo4/0kkNguB9/TeA5DYfXKs9QII6jcQWerM3Ngojlc0wvoUQHKH3rqjBGcRjwdPtNQzSZDIp8IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hGjCzRZj; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 448DL9WH017863;
-	Wed, 8 May 2024 13:21:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=CDqHnKT8vhO5HdyY5jQPjAI+5F/MYn/SRXL9aPBLaXk=;
- b=hGjCzRZjowD3g5gIC3PLqY3QMyy3Y1W04lw+XwZzlb9JCQ1zE/2HYS0tegV8Gbakfs07
- FL6r4DvblfS3YHx+cjHHjSFfuUg6CUSLZQbRu2iu3ulBG3WeySHTiTzOpJ9a/AJp7Aaj
- Vs5ycqyEaZMzykaYX2xflDs83bJpDwK+qPX5NUQ4kjHTY8QxRZNT0h5K7JjmiDFSXFFa
- rP1RBDGsGYMq0CIYs7KdyVlyA3AKfZ/AsTt1P3FrN/xORTXjbBpSIplAvvlcFkwRxy3g
- 2mbhEDvMrHWBQwPdxlu7MGl2t6o1eZ28izzirAy/cqJvh4Q7NsYHYVuuDOP5eSBmENvn 3w== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y09tv027a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 May 2024 13:20:59 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 448BV6lT017387;
-	Wed, 8 May 2024 13:18:35 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xyshsvtjf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 May 2024 13:18:35 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 448DIR4A45613336
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 8 May 2024 13:18:29 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9DB0E2004E;
-	Wed,  8 May 2024 13:18:27 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7ADD520040;
-	Wed,  8 May 2024 13:18:27 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.60])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed,  8 May 2024 13:18:27 +0000 (GMT)
-Date: Wed, 8 May 2024 15:18:26 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jens Remus <jremus@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the s390 tree with the kbuild tree
-Message-ID: <20240508131826.6522-B-hca@linux.ibm.com>
-References: <20240508095726.32237e53@canb.auug.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R4izCb9JVwGDfjRWbdelG8PPb3D4JODFDj790Di5JEmKJAJ9XwO2ITKrxkqoIeaIGm+52v2ingaaSzrmq+3JWnfXRqimJs1Jf8mHshensxLOqa3trYD75RF0zadGptSc+N4wHMFeFEYIUIHLVNMf6OEqifiSGqHBy/rJy/Eaoao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X33BlpRT; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2b4b30702a5so1002541a91.1;
+        Wed, 08 May 2024 06:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715174685; x=1715779485; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EFYU/ERHgcG3qou9V3wcQY5XN6M0+wb2L+7Lfwo5Dzc=;
+        b=X33BlpRTTDqVKBXioifxQMRRFM7lSkuMdYsbJaMfVZwcpDUvbhZ7kxaiiuDLZmwMQ+
+         HQoG9wfzE36/DOVgXpJkV59mluwAa4N/GdgcnumpBghp6tKSXMHpoYyvITFJP1rLb+6g
+         v60fmvREcsuls9uwi/3gUr3WbCm4FY8NHOPUM6DimpN6wRIK+lAaBx63PkQsLmzVwT0m
+         tOFeJJXXVCv/4Iuiy5laRgMDsU0T0lrJqmtmdGi5sKXyKTqe4QtWiO8JEu9T5cow/X0g
+         XCZo9NydQGk36rlDvu+nsv7GHh2VtxQII41uQUq+p+b6BlxyASwPKAhcx1ROlUzwLHI3
+         wtug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715174685; x=1715779485;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EFYU/ERHgcG3qou9V3wcQY5XN6M0+wb2L+7Lfwo5Dzc=;
+        b=iA5NyJ3jMWvDUJL0lDXRp1z4aQrpdIB1Wj0me8+0BQ+hX1NOBHxqB7nGn47U2X7tAA
+         f62HiCcDE4WOjMoCpQDP2vOJzVGuTnr+UJeJX/v/EZwAzUni4tiBK7WyHia/m2QQ55Q7
+         1yXO9+DRkCrYAO1g8+CGoXdWMWNoWKma/4KQbUvfotosNqAUS3r9ZusNIIDgogAPXDIu
+         uyj4U3cp4A2YKSOoumihcMYzrvrAmWhYoNFi12YFTAaPrYgcAlg+zbrh6+zyHpU7uFru
+         sypiDxWUPti1IZpCk3e6zI7W5a3EMMynELlDqxDYxPJpBn7KixtSmsRcgbaWoNMqHpvz
+         j5sQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXK7+KixwV45VhR8kYXa+YODPp8kXVFdHJWh2QObyKcnTrU2fmoxSTYYDsmsyjEVCi/gp2h7d6mxpG/D88IQ+2REDGIcVrJ2W070xr5rpeuF1PqpaCE7CJ0xZlOzEklvYSz+77CbSu5BA==
+X-Gm-Message-State: AOJu0Yxq2O4H22HOhBv+Uxm1ziD6glXMW0c9zu8VS3EDuZFTc5j/Ygn7
+	CyvgOIx60wwFoq1aJ7pn8ddMYTfbflwnveHMm0KHqupTpwmfSZGesd5yU6dk
+X-Google-Smtp-Source: AGHT+IFQd3LXtHALrZn9QA82TSP+NTQvstJwDCfqRp7iAfEDzBvGkkEI3NmiT97NUdBAkM7gnHma9A==
+X-Received: by 2002:a05:6a20:3219:b0:1a7:91b0:9ba3 with SMTP id adf61e73a8af0-1afc8e0ed11mr2820483637.4.1715174684932;
+        Wed, 08 May 2024 06:24:44 -0700 (PDT)
+Received: from visitorckw-System-Product-Name ([140.113.216.168])
+        by smtp.gmail.com with ESMTPSA id u10-20020aa7848a000000b006f3eedaa816sm11144212pfn.47.2024.05.08.06.24.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 May 2024 06:24:44 -0700 (PDT)
+Date: Wed, 8 May 2024 21:24:41 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bitmap tree
+Message-ID: <Zjt9GRTRgjfgtOwd@visitorckw-System-Product-Name>
+References: <20240508162755.7d339509@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -87,52 +83,70 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240508095726.32237e53@canb.auug.org.au>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: TMTV4g1THWxioHQfmuweizNX44lq7cqA
-X-Proofpoint-GUID: TMTV4g1THWxioHQfmuweizNX44lq7cqA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-08_09,2024-05-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=955 phishscore=0
- mlxscore=0 malwarescore=0 spamscore=0 adultscore=0 suspectscore=0
- bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2405010000 definitions=main-2405080094
+In-Reply-To: <20240508162755.7d339509@canb.auug.org.au>
 
-Hi Stephen,
-
-On Wed, May 08, 2024 at 09:57:26AM +1000, Stephen Rothwell wrote:
+On Wed, May 08, 2024 at 04:27:55PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the s390 tree got a conflict in:
+> After merging the bitmap tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
 > 
->   scripts/Makefile.vdsoinst
+> lib/test_bitops.c: In function 'test_fns':
+> lib/test_bitops.c:56:9: error: cleanup argument not a function
+>    56 |         unsigned long *buf __free(kfree) = NULL;
+>       |         ^~~~~~~~
+> lib/test_bitops.c:60:15: error: implicit declaration of function 'kmalloc_array' [-Werror=implicit-function-declaration]
+>    60 |         buf = kmalloc_array(10000, sizeof(unsigned long), GFP_KERNEL);
+>       |               ^~~~~~~~~~~~~
+> lib/test_bitops.c:60:13: error: assignment to 'long unsigned int *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
+>    60 |         buf = kmalloc_array(10000, sizeof(unsigned long), GFP_KERNEL);
+>       |             ^
+> cc1: all warnings being treated as errors
 > 
-> between commit:
+> Caused by commit
 > 
->   d6d223135547 ("kbuild: simplify generic vdso installation code")
+>   777c893e12fa ("lib/test_bitops: Add benchmark test for fns()")
+>
+> I have used the bitmap tree from next-20240507 for today.
 > 
-> from the kbuild tree and commit:
-> 
->   4cfae05eb3aa ("s390/vdso: Create .build-id links for unstripped vdso files")
-> 
-> from the s390 tree.
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-...
+Hi Yury,
 
-> diff --cc scripts/Makefile.vdsoinst
-> index bf72880c50d0,a81ca735003e..000000000000
-> --- a/scripts/Makefile.vdsoinst
-> +++ b/scripts/Makefile.vdsoinst
-> @@@ -20,8 -21,8 +20,8 @@@ $$(dest): $(1) FORC
->   	$$(call cmd,install)
->   
->   # Some architectures create .build-id symlinks
-> - ifneq ($(filter arm sparc x86, $(SRCARCH)),)
-> + ifneq ($(filter arm s390 sparc x86, $(SRCARCH)),)
->  -link := $(install-dir)/.build-id/$$(shell $(READELF) -n $$(src) | sed -n 's@^.*Build ID: \(..\)\(.*\)@\1/\2@p').debug
->  +link := $(install-dir)/.build-id/$$(shell $(READELF) -n $(1) | sed -n 's@^.*Build ID: \(..\)\(.*\)@\1/\2@p').debug
+I believe the following patch can resolve this issue. If you agree that
+this patch is correct, could you help me fold it into the commit that
+caused the error mentioned above?
 
-You can drop this fixup, since I removed the above referenced commit from
-the s390 tree again.
+Regards,
+Kuan-Wei
+
+From e028ad2415fc1b9cf7f59faa298ac7d6c2723b4a Mon Sep 17 00:00:00 2001
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+Date: Wed, 8 May 2024 21:16:50 +0800
+Subject: [PATCH] lib/test_bitops: Fix compilation error on ppc64_defconfig
+
+Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+---
+ lib/test_bitops.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/test_bitops.c b/lib/test_bitops.c
+index ee4759ced0f6..564bc486b599 100644
+--- a/lib/test_bitops.c
++++ b/lib/test_bitops.c
+@@ -8,6 +8,7 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/printk.h>
++#include <linux/slab.h>
+ 
+ /* a tiny module only meant to test
+  *
+-- 
+2.34.1
+
+
+
 

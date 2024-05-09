@@ -1,103 +1,115 @@
-Return-Path: <linux-next+bounces-2238-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2239-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C0438C0774
-	for <lists+linux-next@lfdr.de>; Thu,  9 May 2024 00:45:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC4D08C0900
+	for <lists+linux-next@lfdr.de>; Thu,  9 May 2024 03:17:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADE301F2503B
-	for <lists+linux-next@lfdr.de>; Wed,  8 May 2024 22:45:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88BC7282DAF
+	for <lists+linux-next@lfdr.de>; Thu,  9 May 2024 01:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFBC622318;
-	Wed,  8 May 2024 22:45:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B1422BB12;
+	Thu,  9 May 2024 01:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FrWVWrNw"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="tyv93Y1y"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210C217C79;
-	Wed,  8 May 2024 22:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9092145BF0
+	for <linux-next@vger.kernel.org>; Thu,  9 May 2024 01:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715208319; cv=none; b=B73Liqoyl1xHEdz4bUwFI8k0KjMCSfVSZAOkaiQhUQhg5XOfK4HvwQQ71ayxG7GMGIhlVCBDA8gK39XhKTcC20wywEwNFavdpM7+nzJOzsLMVtqgNAbYfgiyao5kYdg0fgcQUEw+Z5f+ZH4ZgDU6TqFqt0TZ0f/QcZpig5jw+88=
+	t=1715217449; cv=none; b=cAsMn03PWyGEM3I9uzi1koIeNDjRxTworCnyrxv6LHwlWZKY6ubO+JSSYD5olfs4AR+GioENzIsDpWeYRJ17xDyZxP1vSDm1yNLAVA29ukHkt43K96tBlD4wB+WTr0JWipM6TPILIAq63vBmHqRwDEMIN4ZbYKQpuvtg2aydceg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715208319; c=relaxed/simple;
-	bh=XoDsCvV6zkUV0+3Fhr6Nsi59VArpSjQAk9Wtdx840F4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ag3eLQOK0QF6sPMbq5VW7slpdHZg6FZe1avuICfVQS5uXBpeA9eb8zyyXo7ZHF2wP/QTPXI8q1yaeGkni0vxkMTL+HBoRLs2ITZnXLpjZiY5Nt1hNhuqHhkvvsu0s5G6oTQoggfImMTfx59gwNp9uvixtI6VmBSnd3Z0/oUbXb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FrWVWrNw; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1715208315;
-	bh=R9Se/EocRmXvxWKB/IxywV6aw07G4p6oFrpP3Fw0LlA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=FrWVWrNw1tZcz47qu7DugOwL4lvpDPRH4jP52Tg2jp0wCUHQd23oodBZQn4b0bj+z
-	 LgsvqRqEfqrA9Ng1fxUXxbJOjtB8TZ7aIuX2MJZ42lsN6dcH5xQI5QPLm79EWanKaW
-	 8v9cAX357REyMRzqQTJV4qwlDLMhwwgxOx2KffeoRIu4LTLajDxSsJzjqoi+BBYzeT
-	 gsmexbPGHrHNtGyySkphrSsvSNvvZxsvEczBKyj7jJxpCYNI1pM3pB6+hEH10afrir
-	 S0pMqaqwuOFkJ9bpjBlmvPawiWLsiML4IWIXsd0ASCWmpOdrPRac/mXz5/4EaEUMbk
-	 zUvZyooOiEtAA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VZVbH3RPJz4x1R;
-	Thu,  9 May 2024 08:45:15 +1000 (AEST)
-Date: Thu, 9 May 2024 08:45:14 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the bitmap tree
-Message-ID: <20240509084514.45a48d99@canb.auug.org.au>
+	s=arc-20240116; t=1715217449; c=relaxed/simple;
+	bh=Vn/FlcWA6OG4zn50UWZrP5Q0IQS/pcplR6g4NLIdTLc=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=gQrgZcS1RLPx/Jsb9JQNbie9wlJtTQECa6nbJBc2wByiTZ1Z0uH1/gtu0MMtG39OMd6dI0q2RhLcXG8AHqajVp7LzI+xMLobwh3bSv013SMCS7VXb7THR0QHKwFmhBVIiNYHgR9S6S090L6bHJV5Uhip9ZpuZcvgQUXmfDFfzpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=tyv93Y1y; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6f44a2d1e3dso382282b3a.3
+        for <linux-next@vger.kernel.org>; Wed, 08 May 2024 18:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1715217446; x=1715822246; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vn/FlcWA6OG4zn50UWZrP5Q0IQS/pcplR6g4NLIdTLc=;
+        b=tyv93Y1y0Hs+4RndAKx0PdfNcV7tTlYYdUCyw+3aplAjlIzJ+i0257OnlIheF+TILR
+         4I7LoYHVLSbDuAFYcNEqyPDJArsm8hrqMsAX+mxgNzL193ZjBxyZxAP/QTFc9Xb3Ffr3
+         3Fko/knPBhRRd+cuqq5vB49Ec/UItuqINlKQS9V4rn2jHUyMV6K9cTLaHQgugtDZNxxz
+         y+C4zIz7sO1agXcQlU8glYG1IXVdtBzzUWqh1DIG+/S6xCxXkBu2kbCulchaqgO5C5Ym
+         1Hky0bbpe+kGu/4AcnicLL58TZCGtvhmo7gEUR/5Mzn2+90/GVLaYR55tIO6m/ITt4Ud
+         HD+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715217446; x=1715822246;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vn/FlcWA6OG4zn50UWZrP5Q0IQS/pcplR6g4NLIdTLc=;
+        b=EhfMrkXo0CZQ0cVNtdOsepzgd2usAqt3iz0c5ZUhMR2rdwFokt5MSmgrZLWHVMjdE3
+         Rcf2DLxhpBeT9HsGiKdxhftI55aBZ9O6AYyk1HxXlA+oSPyAIDWcmTaMXaVXYIwCZcec
+         PjAY+Te8EKlimvYKGkA+GCksC1EzlvqNnYQBrPy6n0LLjGfQoCTOqT+vyuGQI733gWPN
+         dT0y2Ztf68Olb8fuQpE63VB4mZqvkdwdD/S8foDrbdfV/QC9T0HSKxCTqNls3bXiwqxp
+         ZOq5NrK5LLc3HE41BfDpCz1ETM66126qFmTSNsCL56HFsKyvbwgoujL4nPwyFbcA+oX8
+         z15w==
+X-Gm-Message-State: AOJu0Yy+J5+wh6SFVV2nRbHgHgl/1+pJxdz/nRjKllZFegcxaohqBW+9
+	1Qsxp37tH0VHC12H5FDFECwjlg4VLa/PuOZXEGJa2X1jeG9vKLK0P8EiF5SfHpXJGcFIGYi44Ak
+	T
+X-Google-Smtp-Source: AGHT+IF59sMJhGDZSF2RFveidLf44BGmSPwU7h99m3grcLgNUsHbN8mjnMzfma03D/2uzGkfwLQaJA==
+X-Received: by 2002:a05:6a20:9691:b0:1af:a5b1:2901 with SMTP id adf61e73a8af0-1afc8d1ab8bmr4131554637.4.1715217445978;
+        Wed, 08 May 2024 18:17:25 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c036272sm1734235ad.188.2024.05.08.18.17.25
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 May 2024 18:17:25 -0700 (PDT)
+Message-ID: <663c2425.170a0220.7a70.0d87@mx.google.com>
+Date: Wed, 08 May 2024 18:17:25 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TvIlTf34Zbx=n_Ps2_a_Oxn";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/TvIlTf34Zbx=n_Ps2_a_Oxn
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v6.9-rc7-177-ge84b53c411b5
+X-Kernelci-Report-Type: build
+Subject: next/pending-fixes build: 1 build: 0 failed,
+ 1 passed (v6.9-rc7-177-ge84b53c411b5)
+To: linux-next@vger.kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi all,
+next/pending-fixes build: 1 build: 0 failed, 1 passed (v6.9-rc7-177-ge84b53=
+c411b5)
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.9-rc7-177-ge84b53c411b5/
 
-  552467a38cf5 ("arm64: tlb: Fix TLBI RANGE operand")
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.9-rc7-177-ge84b53c411b5
+Git Commit: e84b53c411b51bc97acac760c3624d626e5a05a9
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 1 unique architecture
 
-This is commit
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-  e3ba51ab24fd ("arm64: tlb: Fix TLBI RANGE operand")
+Detailed per-defconfig build reports:
 
-in Linus' tree.
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TvIlTf34Zbx=n_Ps2_a_Oxn
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmY8AHoACgkQAVBC80lX
-0GxJ1Af6Alvkat8u7pQdjNPIi1sm+EAXzcY6gGfuL4pXgh8JwnyGlR7VqKvchRxD
-G+dd75Fe/kbOprViAV8iWwJo1oBRkWIYhw9GVIy7n2cfs+NKLeAqECa97a3eaoVE
-BeJftkohYlmo9BKrPUK6bLzN/pcKedcj0Z/kEatLeHvKFCTIMEtVs7bDsrl3xTQF
-qH5vM6Yn4m1jmUzZslg5kt+smzCePKF45Avf/Tgxdx5caUj72mybJFDevi2csZJ/
-cyEUs0VXEYx67KZ7g71HMD/eBbYJz4vI2ZpZP3g99Ob/Pu77y6scYa9utbwrJr/h
-ANwC5ottpYjHA9uynWOE+hSRTUYmRg==
-=TM66
------END PGP SIGNATURE-----
-
---Sig_/TvIlTf34Zbx=n_Ps2_a_Oxn--
+---
+For more info write to <info@kernelci.org>
 

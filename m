@@ -1,112 +1,130 @@
-Return-Path: <linux-next+bounces-2248-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2249-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D4458C19D7
-	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 01:16:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C45F8C19E0
+	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 01:22:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98B4F1C22A52
-	for <lists+linux-next@lfdr.de>; Thu,  9 May 2024 23:16:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC4241F238FA
+	for <lists+linux-next@lfdr.de>; Thu,  9 May 2024 23:22:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEAB012D758;
-	Thu,  9 May 2024 23:16:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E7286245;
+	Thu,  9 May 2024 23:22:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PVZktpqa"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TCxLAsxu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D0B86245
-	for <linux-next@vger.kernel.org>; Thu,  9 May 2024 23:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76016129A6F;
+	Thu,  9 May 2024 23:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715296600; cv=none; b=kSt9FrYDad298BtyypQCAeJCMmbcngZ1h0uxCtzD20WEJlpVPzHI9Yq8cf+Y4Gh8luKJgFT9OTMpEWsyTchOfAU2ZCnY+Z2BlMYXSAHFlezF3I9hOD041rGKt2KUznxOMV+z8VAsq+ejfuu8n8pmRG7SSyW9mreGPjlXc16ZQSo=
+	t=1715296933; cv=none; b=WzH1ggb0JPpHqPrKsaN3W1GfQUnCVIbzDpqTZS5uuOUAzXb8ZtLKS48ibXHkCGntOneY09fozyrMAqefmCPCzupk9eHGde4s+E2wc5E0sGz2yNK2aEEw26Is1PJ0q9U2UXgyq4RVr2Sq5c9bUZa8lKLHEB0I6CAI004fNUBGVTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715296600; c=relaxed/simple;
-	bh=EeYIzLBvQx4IKziEV7PvM+S0Fz+Q37VPJh9CDGswnNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l7lvADbdcGD31sOpMqYt9dKTdJSG3shMTZ7JJWIvmrI6R1Hzg8uKS6r3os6HDbH+XVc92a4zm0latXM8pSC5NwrG0zDV/VsoAYJHQn9m6THq/AyupVpTZeOrPA8+IIyh+6DrsvZsRphi+2xE+aNvDBVvwiV10notuh3Ws3pIWZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PVZktpqa; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 9 May 2024 19:16:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1715296596;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kmpq4qsm9xW2KmIJo1KKqXkICsV8ykT2VohgeRvZUpE=;
-	b=PVZktpqaWPH59fBEmkwmQwAHIESxbhgQZ2sI9DcZUUDPorK+mT98KD5bPX8VOyvfz8cjR5
-	RrX5xQFwQQOIsC1VbXIDtFPaqdYUsI0nkfhBrjuwBU0FNEfNW9B3g54vTpTBeylot8HHx4
-	6qtS6SoeFGA+jBnCbShkBhUHdw+LF2s=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: Coly Li <colyli@suse.de>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	Matthew Mirvish <matthew@mm12.xyz>
-Subject: Re: linux-next: manual merge of the refactor-heap tree with the
- block tree
-Message-ID: <buehluxvo234sj7onzl6wwjmuslmnkh7g6vnpru23kpti6qmpp@7nqak2ser7mw>
-References: <20240509152745.08af752f@canb.auug.org.au>
- <te64v6zwwor6jkco6uiu2zz7ern6ijhyu5okfvdz3bmj3w5qfp@mx4zdniwymqj>
- <Zj1RzZdtfL7UQax1@visitorckw-System-Product-Name>
+	s=arc-20240116; t=1715296933; c=relaxed/simple;
+	bh=hDrY//Uiqhy+HCq634k7pNbJivqBAegZvoPN3T2Hg94=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cXo4+pr+xh/JHerIOI5/lGYHnP17mt3GkgnEWrb8CXSjxWd8Ib8t62tNhhsdKHWpAGIY4wz0s40tx8SyfPkW6w1Aq3tWZeVnhHIN2sT4p89cyO3dCLMdHhNVbdFBz1e3D3IIQQ5VSZcORIiXWviiSU6GgHqsVRCFakICnUn0oyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TCxLAsxu; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1715296926;
+	bh=2XRqo6Zz6CVYNzebclt601u06+nXtaM0cV/6U2ljK9M=;
+	h=Date:From:To:Cc:Subject:From;
+	b=TCxLAsxuA/IQDf0eFqWRRE+NIPfJw0h34vh8SmT1+MN2Il7HLeM6xDCbdwXDmsZit
+	 /CH7G8JSLbhl8Cr9hMbUez4jLMOwERNGYKOENMv6xf+bjw76cBQY7xTCspxDBXEOnt
+	 ZsPLmisg0VSxCkX7JdfXHG2EsLl+xlsaOq3c0HPWREJ+Z8f61OtBRdysXzryDU2CZS
+	 0YcZw90gwMkv1dEpoOWbCS49gxH7BpbbJhItCNlWcwy2P6/iUWoCehwyBeeXrKLD5e
+	 VmbnYA8OMXJS0EG5lt7QaYPyOs0ZaQRQg3nQnAemSe542aOd0gWGdVe8++iuUjl0J2
+	 R+eSRynjyoQog==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Vb7MK40Zfz4wyY;
+	Fri, 10 May 2024 09:22:05 +1000 (AEST)
+Date: Fri, 10 May 2024 09:22:02 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Tao Su <tao1.su@linux.intel.com>
+Subject: linux-next: manual merge of the mm tree with Linus' tree
+Message-ID: <20240510092202.5d7df5a6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zj1RzZdtfL7UQax1@visitorckw-System-Product-Name>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; boundary="Sig_/UMbiVPOBNRoNU7ZDd1PCN63";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, May 10, 2024 at 06:44:29AM +0800, Kuan-Wei Chiu wrote:
-> On Thu, May 09, 2024 at 03:58:57PM -0400, Kent Overstreet wrote:
-> > On Thu, May 09, 2024 at 03:27:45PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > Today's linux-next merge of the refactor-heap tree got conflicts in:
-> > > 
-> > >   drivers/md/bcache/bset.c
-> > >   drivers/md/bcache/bset.h
-> > >   drivers/md/bcache/btree.c
-> > >   drivers/md/bcache/writeback.c
-> > > 
-> > > between commit:
-> > > 
-> > >   3a861560ccb3 ("bcache: fix variable length array abuse in btree_iter")
-> > > 
-> > > from the block tree and commit:
-> > > 
-> > >   afa5721abaaa ("bcache: Remove heap-related macros and switch to generic min_heap")
-> > > 
-> > > from the refactor-heap tree.
-> > > 
-> > > Ok, these conflicts are too extensive, so I am dropping the refactor-heap
-> > > tree for today.  I suggest you all get together and sort something out.
-> > 
-> > Coli and Kuan, you guys will need to get this sorted out quick if we
-> > want refactor-heap to make the merge window
-> 
-> Hi Coli and Kent,
-> 
-> If I understand correctly, the reported bug is because we attempted to
-> point (heap)->data to a dynamically allocated memory , but at that time
-> (heap)->data was not a regular pointer but a fixed size array with a
-> length of MAX_BSETS.
-> 
-> In my refactor heap patch series, I introduced a preallocated array and
-> decided in min_heap_init() whether the data pointer should point to an
-> incoming pointer or to the preallocated array. Therefore, I am
-> wondering if my patch might have unintentionally fixed this bug?
-> 
-> I am unsure how to reproduce the reported issue. Could you assist me in
-> verifying whether my assumption is correct?
+--Sig_/UMbiVPOBNRoNU7ZDd1PCN63
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This is a merge conflict, not a runtime. Can you rebase onto Coli's
-tree? We'll have to retest.
+Hi all,
+
+Today's linux-next merge of the mm tree got a conflict in:
+
+  tools/testing/selftests/kselftest_harness.h
+
+between commit:
+
+  caed8eba2215 ("selftests: kselftest_harness: fix Clang warning about zero=
+-length format")
+
+from Linus' tree and commit:
+
+  89bc631bb87f ("Revert "selftests/harness: remove use of LINE_MAX"")
+
+from the mm-nonmm-unstable branch of the mm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/kselftest_harness.h
+index d98702b6955d,7eca89267962..000000000000
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@@ -1208,8 -1201,7 +1204,7 @@@ void __run_test(struct __fixture_metada
+  		diagnostic =3D "unknown";
+ =20
+  	ksft_test_result_code(t->exit_code, test_name,
+ -			      diagnostic ? "%s" : "", diagnostic);
+ +			      diagnostic ? "%s" : NULL, diagnostic);
+- 	free(test_name);
+  }
+ =20
+  static int test_harness_run(int argc, char **argv)
+
+--Sig_/UMbiVPOBNRoNU7ZDd1PCN63
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmY9WpoACgkQAVBC80lX
+0Gzx7Af/csdy9gKml+ESzh/6FujKznPX23xqzbgVonDIEHEwjIRCM0qiNk2mKseG
+sa4KgquC3dpzCnwa6CUwFcwZ6gvnZdNmvyWKkDN9NIKaHNDW31eRF3S2HI0b6+zZ
+eTcwhhL5NadKYHzNjnSDG5txe02FpgpbLJROLSW0TQgOXLY6d4qs0EXPLb8nK7KI
+Fu2T1WmIb0W3VQlHaeZ2JWUeJX6lR+hCrUED04XW8zifJllsoa+Oz82Sn0t4FoD/
+o47P5lLejs8Gr7t8yaBhtQYy4AGhLJ4DCsSBibZynPygoNa4eQTbKJiLTF08Crkw
+cNBJuYAkle0b6ZXVo5IJdnsEI4gkxg==
+=dSVX
+-----END PGP SIGNATURE-----
+
+--Sig_/UMbiVPOBNRoNU7ZDd1PCN63--
 

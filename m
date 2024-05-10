@@ -1,156 +1,151 @@
-Return-Path: <linux-next+bounces-2253-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2254-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35CD38C1CCE
-	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 05:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E80A8C1D37
+	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 05:53:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E546E282014
-	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 03:10:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 882D2283B98
+	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 03:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AB30148846;
-	Fri, 10 May 2024 03:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055F1149C56;
+	Fri, 10 May 2024 03:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AzjyrkUZ"
+	dkim=pass (2048-bit key) header.d=mm12.xyz header.i=@mm12.xyz header.b="ihVippyL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from elcheapo.mm12.xyz (elcheapo.mm12.xyz [148.135.104.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B467C14882B;
-	Fri, 10 May 2024 03:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA23171A7;
+	Fri, 10 May 2024 03:53:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.135.104.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715310610; cv=none; b=mzCDeagMKd+MqJVYZMGCpcK5loMWsLwnPiDVzxxTncHkPcYl5BmUD1Y2+lxj2FOAmJMurQKKmAqA+xKXLTftIgxMd/HJrBwaKjoOPPUUNKBhv3A4Y1iDWPuKYf2GgQvFxs8/5DrnC6K3nklAVSbB2NtXi+N+qlozP/FXJPr2jY0=
+	t=1715313226; cv=none; b=qzGWwzkQuq3yDjUQWqhhND2pRWoy4OAmouOgsy1R81YMuZNoJ/VKNJPkgMXLT9sPouVtFIg0rMPblu+GbPXNY/v7nqQHF0R33fhtzzpJmA8LQq6EV8a8P5TtgtRe+/NNcRr9xHHzMZ0Zc1u22kZnxz7r4PRsMnTNbAzY31Pkdq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715310610; c=relaxed/simple;
-	bh=QuOINjcFX6oWWss922e1TM2DKRD7Tn6ri+SmvpyWv9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=rXIY3l6OdZYwTNs59sHyUc4ARV64PFoEkZJJPnQG/wB6dv1Mc+OLBOxD4pofnNnACUXfsVsxw72vUlkanw91B8o5dNDWqkr/u6nVv2GLsVgxCevaRYQjcJ+IMcyF5QpMibPGhCXelE7Yg5tq5XXbL3VDZ1ZU+qPZKmn/6g9e31I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AzjyrkUZ; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1715310604;
-	bh=zIu1WBLBpuAIUz5eXi4REEW5GA6h3Sk+aWeTT7FQQbo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=AzjyrkUZMufbbbS3P8/BHIg/lSSxVqoTOahyzqyV3UQxwoyy0rjrfm7A/Ivx2jXl4
-	 qxWBheElFEegldRXjat/x0eyQIdDvvnUb2CvcqqobVLUTCRY0hGPNI/tEraqSE8SGD
-	 6EPTu5rvhioYR9w77yS0yvVb+GzWpLTy/LGOehHkfqz96bdGzvfGKMXYjpSvaP/IfQ
-	 L08jctxC7tp+WVHtsL8QrMGthM8dqsxe5umwCS7pG3V/BZmH7mCYEFAgAHgDLsLxP1
-	 QsJVyqlqy2hDhVfuOzUQQfD1DtqRh08CIJIRHgxYGPchidbcz0uuIMYRZupMtKCJYn
-	 ARQ3FEHZ7jncQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VbDQM6G7dz4wc5;
-	Fri, 10 May 2024 13:10:03 +1000 (AEST)
-Date: Fri, 10 May 2024 13:10:03 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>
-Cc: Damien Le Moal <dlemoal@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the block tree
-Message-ID: <20240510131003.70f46881@canb.auug.org.au>
+	s=arc-20240116; t=1715313226; c=relaxed/simple;
+	bh=y7BXUOx/dAVhQLguT838TRDZl0y8vZ5eIRRG8rxR2/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uBt8Lk6/3i3foqKlYccKTtYO3RVLjJocr0GezF8u08RnZ4jDFb4BmZkSR6NUg75pXnwdwh3zWyn15G7Lc9Z2ufwFWxgBSTPy/gDLRmkEMzG0WZdvmqsy7Bedh+mAV0LC0RY6p4Bh+D6pBHUiGxQ/jPU6thTdzga72IneP49jSCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mm12.xyz; spf=pass smtp.mailfrom=mm12.xyz; dkim=pass (2048-bit key) header.d=mm12.xyz header.i=@mm12.xyz header.b=ihVippyL; arc=none smtp.client-ip=148.135.104.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mm12.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mm12.xyz
+Received: from scala.mm12.xyz by elcheapo.mm12.xyz (Postfix) with ESMTPSA id 672C31F46E;
+	Thu,  9 May 2024 23:46:20 -0400 (EDT)
+Received: by scala.mm12.xyz (Postfix, from userid 1000)
+	id 61AD4180437; Thu,  9 May 2024 23:46:18 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mm12.xyz; s=mail;
+	t=1715312778; bh=y7BXUOx/dAVhQLguT838TRDZl0y8vZ5eIRRG8rxR2/k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ihVippyLA5SdmGURV5AfqHgDxPYz0rsg1xW6miwecMyyZwh11gmKB3LFS0jKIn6kF
+	 3pYD+g3uAtWJCIgxpl4eOLDcyNHgp8TlFVVLXyBzAyPkTucgRk5sjV6H4JldRHV0Yl
+	 tYD7Lc9RJeb5NTdHQ9sBzdLEwgwz6tQIkRf8OU6c+LdRDdqJOD2zIfC1f22AW861po
+	 wsFERbhND+1dJmyPjy7q/iRqH/dOtacE/vog8+kM2m4VNwxmOLqc40h4ZRQyU7JJF9
+	 ctzvbW0ze5eXkLYORxKlBcLdhDxReLQl7dDa+OqNmhYvSv1flbblSGZ0UiTYMutTir
+	 MkKEs62uT3xLQ==
+Date: Thu, 9 May 2024 23:46:18 -0400
+From: Matthew Mirvish <matthew@mm12.xyz>
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>, Coly Li <colyli@suse.de>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the refactor-heap tree with the
+ block tree
+Message-ID: <20240510034618.GA3161190@mm12.xyz>
+References: <20240509152745.08af752f@canb.auug.org.au>
+ <te64v6zwwor6jkco6uiu2zz7ern6ijhyu5okfvdz3bmj3w5qfp@mx4zdniwymqj>
+ <Zj1RzZdtfL7UQax1@visitorckw-System-Product-Name>
+ <buehluxvo234sj7onzl6wwjmuslmnkh7g6vnpru23kpti6qmpp@7nqak2ser7mw>
+ <Zj2PX6Fy3BEnQc50@visitorckw-System-Product-Name>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CA8QBtHjdZ7LNPB0JHKF2Uf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zj2PX6Fy3BEnQc50@visitorckw-System-Product-Name>
 
---Sig_/CA8QBtHjdZ7LNPB0JHKF2Uf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, May 10, 2024 at 11:07:11AM +0800, Kuan-Wei Chiu wrote:
+> On Thu, May 09, 2024 at 07:16:31PM -0400, Kent Overstreet wrote:
+> > On Fri, May 10, 2024 at 06:44:29AM +0800, Kuan-Wei Chiu wrote:
+> > > On Thu, May 09, 2024 at 03:58:57PM -0400, Kent Overstreet wrote:
+> > > > On Thu, May 09, 2024 at 03:27:45PM +1000, Stephen Rothwell wrote:
+> > > > > Hi all,
+> > > > > 
+> > > > > Today's linux-next merge of the refactor-heap tree got conflicts in:
+> > > > > 
+> > > > >   drivers/md/bcache/bset.c
+> > > > >   drivers/md/bcache/bset.h
+> > > > >   drivers/md/bcache/btree.c
+> > > > >   drivers/md/bcache/writeback.c
+> > > > > 
+> > > > > between commit:
+> > > > > 
+> > > > >   3a861560ccb3 ("bcache: fix variable length array abuse in btree_iter")
+> > > > > 
+> > > > > from the block tree and commit:
+> > > > > 
+> > > > >   afa5721abaaa ("bcache: Remove heap-related macros and switch to generic min_heap")
+> > > > > 
+> > > > > from the refactor-heap tree.
+> > > > > 
+> > > > > Ok, these conflicts are too extensive, so I am dropping the refactor-heap
+> > > > > tree for today.  I suggest you all get together and sort something out.
+> > > > 
+> > > > Coli and Kuan, you guys will need to get this sorted out quick if we
+> > > > want refactor-heap to make the merge window
+> > > 
+> > > Hi Coli and Kent,
+> > > 
+> > > If I understand correctly, the reported bug is because we attempted to
+> > > point (heap)->data to a dynamically allocated memory , but at that time
+> > > (heap)->data was not a regular pointer but a fixed size array with a
+> > > length of MAX_BSETS.
+> > > 
+> > > In my refactor heap patch series, I introduced a preallocated array and
+> > > decided in min_heap_init() whether the data pointer should point to an
+> > > incoming pointer or to the preallocated array. Therefore, I am
+> > > wondering if my patch might have unintentionally fixed this bug?
+> > > 
+> > > I am unsure how to reproduce the reported issue. Could you assist me in
+> > > verifying whether my assumption is correct?
+> > 
+> > This is a merge conflict, not a runtime. Can you rebase onto Coli's
+> > tree? We'll have to retest.
+> 
+> Oh, sorry for the misunderstanding I caused. When I mentioned "bug" [1]
+> earlier, I was referring to the bug addressed in
+> 3a861560ccb3 ("bcache: fix variable length array abuse in btree_iter"),
+> not a merge conflict.
+> 
+> Here are the results after the rebase:
+> https://github.com/visitorckw/linux.git refactor-heap
+> 
+> [1]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2039368
 
-Hi all,
+The ubuntu kernels build with UBSAN now, and the bug reported is just a
+UBSAN warning. The original implementation's iterator has a fixed size
+sets array that is indexed out of bounds when the iterator is allocated
+on the heap with more space -- the patch restructures it a bit to have a
+single iterator type with a flexible array and then a larger "stack"
+type which embeds the iterator along with the preallocated region.
 
-After merging the block tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+I took a brief look at the refactor-heap branch but I'm not entirely
+sure what's going on with the new min heaps: in the one place where the
+larger iterators are used (in bch_btree_node_read_done) it doesn't look
+like the heap is ever initialized (perhaps since the old iter_init
+wasn't used here because of the special case it got missed in the
+refactor?) With the new heaps it should be fairly easy to fix though;
+just change the fill_iter mempool to be allocating only the minheap data
+arrays and setup iter->heap.data properly with that instead.
 
-block/blk-zoned.c: In function 'blk_zone_write_plug_bio_endio':
-block/blk-zoned.c:1260:25: error: 'struct block_device' has no member named=
- 'bd_has_submit_bio'
- 1260 |         if (bio->bi_bdev->bd_has_submit_bio)
-      |                         ^~
-block/blk-zoned.c: In function 'blk_zone_wplug_bio_work':
-block/blk-zoned.c:1329:17: error: 'struct block_device' has no member named=
- 'bd_has_submit_bio'
- 1329 |         if (bdev->bd_has_submit_bio)
-      |                 ^~
+Hope that helps,
+Matthew Mirvish
 
-Caused by commit
-
-  dd291d77cc90 ("block: Introduce zone write plugging")
-
-interacting with commit
-
-  ac2b6f9dee8f ("bdev: move ->bd_has_subit_bio to ->__bd_flags")
-
-from the vfs tree.
-
-I have applied the following merge resolution patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 10 May 2024 12:59:09 +1000
-Subject: [PATCH] fix up for "bdev: move ->bd_has_subit_bio to ->__bd_flags"
-
-interacting with "block: Introduce zone write plugging".
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- block/blk-zoned.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/block/blk-zoned.c b/block/blk-zoned.c
-index 57d367ada1f2..03aa4eead39e 100644
---- a/block/blk-zoned.c
-+++ b/block/blk-zoned.c
-@@ -1257,7 +1257,7 @@ void blk_zone_write_plug_bio_endio(struct bio *bio)
- 	 * is not called. So we need to schedule execution of the next
- 	 * plugged BIO here.
- 	 */
--	if (bio->bi_bdev->bd_has_submit_bio)
-+	if (bdev_test_flag(bio->bi_bdev, BD_HAS_SUBMIT_BIO))
- 		disk_zone_wplug_unplug_bio(disk, zwplug);
-=20
- 	/* Drop the reference we took when entering this function. */
-@@ -1326,7 +1326,7 @@ static void blk_zone_wplug_bio_work(struct work_struc=
-t *work)
- 	 * path for BIO-based devices will not do that. So drop this extra
- 	 * reference here.
- 	 */
--	if (bdev->bd_has_submit_bio)
-+	if (bdev_test_flag(bdev, BD_HAS_SUBMIT_BIO))
- 		blk_queue_exit(bdev->bd_disk->queue);
-=20
- put_zwplug:
---=20
-2.43.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/CA8QBtHjdZ7LNPB0JHKF2Uf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmY9kAsACgkQAVBC80lX
-0GwbEAf/adypU03m99zkCNZ0GBjnS+iK2E9ZNM04woxhPKQMknfgOkLaQLyfaFHD
-oL9n2SIzPZ+sh44ulM9QSh+XO2zjSMtbpB4pQMBxc+OOMHVJZxwJlo82iupPldZF
-wt8xut7Cstu+gu44o2YBKV4C0zVgf0jnMCgJKCO7eIAcvbZONAE8kELVmszYkRUZ
-JfuDqfmUVFDYsxLp7mWtPpusLCo8Whbw4YXMcSmCVjgQaO6GMDFw/+0jwedoRiBj
-jHNMcQ8bFt2dIrUciIXJBklnqVIBQ6aqEOvhIsgQpOtvLZaJdZnSz7ju9Z86yCf/
-km+Nzq5AR+Uo23Z6IJGqtPkLMqxvHQ==
-=oZHg
------END PGP SIGNATURE-----
-
---Sig_/CA8QBtHjdZ7LNPB0JHKF2Uf--
+> 
+> Regards,
+> Kuan-Wei
 

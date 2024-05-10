@@ -1,134 +1,172 @@
-Return-Path: <linux-next+bounces-2260-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2261-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4F648C1EED
-	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 09:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 76CB38C1EEF
+	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 09:25:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 695271F21B93
-	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 07:22:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9A051F21DCD
+	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 07:25:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D70215E81F;
-	Fri, 10 May 2024 07:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ADC615ECC1;
+	Fri, 10 May 2024 07:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iQPMddhw"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="BBmfbTTB";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9KsAXVKF";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="BBmfbTTB";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9KsAXVKF"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5640915279B;
-	Fri, 10 May 2024 07:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDECA1311B9;
+	Fri, 10 May 2024 07:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715325746; cv=none; b=mdIb1Yuq97lPhNNwI6x4Ow8LgfgvRnLhQ5bWNJOqc9vmtFsDUL0CQBKvo/N7+LAm/+QGhule8qNtO5d5xpmCPz6KcV/4+owqh9uZ1Z9c4PBBCR+uHozR1J6U3O2isBSrgPlygBoabvup9SsP2JW0p/ampzWEXHBLuznaLly1+eU=
+	t=1715325914; cv=none; b=Q/0bOksRyyCkQFVSaNf7dxClg4CW61yU9mJX6LNXBu7iaksrSiqLtwqdZKuKUs+mrgQdhSOfpy68mzeqINLN/5dhBZtdKbRi3ktrIeoItMxTyBvc3uWA01vXR3rkJjoQVnVs//pqJDwSQPpyUwoI5Ag9QP0vIlo84wzCTss7ZF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715325746; c=relaxed/simple;
-	bh=EzdfZ0kpf3fhUbIFDljCEYBvplIrKON70GWCiQd1UDM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VaRo/XLDdR4il2fdNXqZsc4jwpfLFF6cLyxsLEW6tJYyzXbqsD6bh987+rfZUBiEza59Gl1YyXWtjx/LSWouzRH1U8V3MasfGXpm+TOk7spqhfF+vMpW0Ysqan3sSe7t3YfBwj15ybwgKGu/fcKnveHYXMnpF3LA43ztW5QdOe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iQPMddhw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4962DC113CC;
-	Fri, 10 May 2024 07:22:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715325746;
-	bh=EzdfZ0kpf3fhUbIFDljCEYBvplIrKON70GWCiQd1UDM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iQPMddhweUBjd9ncDSrkcRN3oMPdHf4DboeeRHGz8m9kRzalpIecEE5K2u4Kr6CBR
-	 x9HZsB/Cvuz1fw69VhodG65NIhgtGF/miuq7c5g4WoCaZVUD18fMjRI9TAofvOyOo3
-	 iJSf23KyS6oZdoU/77MnMhxNbOcJJeTTQ8Tt8pCndYkk0W7yg2vnl58omSssN4zZ8X
-	 wgoE8y3xFTEiFIOmFrSe2TO13uUPNH8fBKDWa/CkDu+cOHS/N9igs8yKIStmugXkw5
-	 I9wHUEcxnHf8oe5XHnLN1I2lIrRYFEtrkt3fypgnjgG/F2l/c9OFa0MpvgaVxOxdxF
-	 VO9LiiMR4fWtw==
-Message-ID: <3f293b59-0992-4d39-8473-283a8dcbbf43@kernel.org>
-Date: Fri, 10 May 2024 16:22:24 +0900
+	s=arc-20240116; t=1715325914; c=relaxed/simple;
+	bh=nd4cW5pghAvNmY1E1H9w2jdwWMlpCmdGAGLC9+HF/ls=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=l6L8vmexWm8sE13KujPqChlX4mwH4JebWdBquMJoiizzc2pQf7AAV6GzBTuaVFmCh3RnL4vSX3kMdrFoRyV7z7QwHJP3g8AOqOle+OF0M/FePFnnmcsEwYIn+3QayjEePwJyutVGwqG+iv6pwxhjbdXAHKA4EAqP24MRHlZKz+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=BBmfbTTB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9KsAXVKF; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=BBmfbTTB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9KsAXVKF; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id D0DFF61135;
+	Fri, 10 May 2024 07:25:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1715325910; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iLwlNz1udgFJgXEAjY7nBeVpbOODhDsDqWXUtj3ajOw=;
+	b=BBmfbTTBQdDmAHlDdv08KjwXiyPm/2rxU5MaHs7VgauiMQhzESBAV++vXvQ6AMj/XtHFiH
+	6yhFicV1iYnKb6gVneglQc2s82yvksFJ5vvacEix5pwkqI8Wa3loNSrRTHqvCYD53a70zT
+	rF2y9NvmzZWxPu+Nu+HRr0041WZjBQw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1715325910;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iLwlNz1udgFJgXEAjY7nBeVpbOODhDsDqWXUtj3ajOw=;
+	b=9KsAXVKFPQVA5J6imO8DRyFum4R9y47mM6m5AbMFJ9xtbpkVmVEFfjLWtsVjz00hsxD1/6
+	ywCIsMEZDMbDATAg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1715325910; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iLwlNz1udgFJgXEAjY7nBeVpbOODhDsDqWXUtj3ajOw=;
+	b=BBmfbTTBQdDmAHlDdv08KjwXiyPm/2rxU5MaHs7VgauiMQhzESBAV++vXvQ6AMj/XtHFiH
+	6yhFicV1iYnKb6gVneglQc2s82yvksFJ5vvacEix5pwkqI8Wa3loNSrRTHqvCYD53a70zT
+	rF2y9NvmzZWxPu+Nu+HRr0041WZjBQw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1715325910;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iLwlNz1udgFJgXEAjY7nBeVpbOODhDsDqWXUtj3ajOw=;
+	b=9KsAXVKFPQVA5J6imO8DRyFum4R9y47mM6m5AbMFJ9xtbpkVmVEFfjLWtsVjz00hsxD1/6
+	ywCIsMEZDMbDATAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A20A2139AA;
+	Fri, 10 May 2024 07:25:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id tiv5JdbLPWYWEQAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 10 May 2024 07:25:10 +0000
+Date: Fri, 10 May 2024 09:25:25 +0200
+Message-ID: <87h6f69li2.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Mark Brown <broonie@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Takashi Iwai <tiwai@suse.de>,
+	Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the sound-asoc tree
+In-Reply-To: <20240510170305.03b67d9f@canb.auug.org.au>
+References: <20240510170305.03b67d9f@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the block tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Jens Axboe <axboe@kernel.dk>,
- Al Viro <viro@zeniv.linux.org.uk>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240510131003.70f46881@canb.auug.org.au>
-From: Damien Le Moal <dlemoal@kernel.org>
-Content-Language: en-US
-Organization: Western Digital Research
-In-Reply-To: <20240510131003.70f46881@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_DN_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,suse.de,vger.kernel.org];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCPT_COUNT_FIVE(0.00)[6]
+X-Spam-Score: -3.30
+X-Spam-Flag: NO
 
-On 5/10/24 12:10, Stephen Rothwell wrote:
+On Fri, 10 May 2024 09:03:05 +0200,
+Stephen Rothwell wrote:
+> 
 > Hi all,
 > 
-> After merging the block tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> After merging the sound-asoc tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
 > 
-> block/blk-zoned.c: In function 'blk_zone_write_plug_bio_endio':
-> block/blk-zoned.c:1260:25: error: 'struct block_device' has no member named 'bd_has_submit_bio'
->  1260 |         if (bio->bi_bdev->bd_has_submit_bio)
->       |                         ^~
-> block/blk-zoned.c: In function 'blk_zone_wplug_bio_work':
-> block/blk-zoned.c:1329:17: error: 'struct block_device' has no member named 'bd_has_submit_bio'
->  1329 |         if (bdev->bd_has_submit_bio)
->       |                 ^~
+> ld: warning: discarding dynamic section .glink
+> ld: warning: discarding dynamic section .plt
+> ld: linkage table error against `acp_dsp_stream_config'
+> ld: stubs don't match calculated size
+> ld: can not build stubs: bad value
+> ld: sound/soc/sof/amd/acp-probes.o: in function `acp_probes_compr_shutdown':
+> acp-probes.c:(.text.acp_probes_compr_shutdown+0x8c): undefined reference to `acp_dsp_stream_put'
+> ld: sound/soc/sof/amd/acp-probes.o: in function `acp_probes_compr_startup':
+> acp-probes.c:(.text.acp_probes_compr_startup+0x84): undefined reference to `acp_dsp_stream_get'
+> ld: sound/soc/sof/amd/acp-probes.o: in function `acp_probes_compr_set_params':
+> acp-probes.c:(.text.acp_probes_compr_set_params+0x108): undefined reference to `acp_dsp_stream_config'
+> ld: acp-probes.c:(.text.acp_probes_compr_set_params+0x140): undefined reference to `acp_dsp_stream_put'
+> ld: sound/soc/sof/amd/renoir.o:(.toc+0x0): undefined reference to `sof_acp_common_ops'
+> ld: sound/soc/sof/amd/rembrandt.o:(.toc+0x0): undefined reference to `sof_acp_common_ops'
+> ld: sound/soc/sof/amd/vangogh.o:(.toc+0x0): undefined reference to `sof_acp_common_ops'
+> ld: sound/soc/sof/amd/acp63.o:(.toc+0x0): undefined reference to `sof_acp_common_ops'
 > 
 > Caused by commit
 > 
->   dd291d77cc90 ("block: Introduce zone write plugging")
+>   9c2f5b6eb8b7 ("ASoC: SOF: Use *-y instead of *-objs in Makefile")
 > 
-> interacting with commit
-> 
->   ac2b6f9dee8f ("bdev: move ->bd_has_subit_bio to ->__bd_flags")
-> 
-> from the vfs tree.
-> 
-> I have applied the following merge resolution patch.
+> I am not sure why, but reverting that commit fixed the build, so I have
+> done that for today.
 
-Looks good to me. Thanks Stephen !
+Ah, there is a bug in the original Makefile that didn't use "+=",
+hence it overrides.  I'm going to submit a fix patch.
 
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 10 May 2024 12:59:09 +1000
-> Subject: [PATCH] fix up for "bdev: move ->bd_has_subit_bio to ->__bd_flags"
-> 
-> interacting with "block: Introduce zone write plugging".
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  block/blk-zoned.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/blk-zoned.c b/block/blk-zoned.c
-> index 57d367ada1f2..03aa4eead39e 100644
-> --- a/block/blk-zoned.c
-> +++ b/block/blk-zoned.c
-> @@ -1257,7 +1257,7 @@ void blk_zone_write_plug_bio_endio(struct bio *bio)
->  	 * is not called. So we need to schedule execution of the next
->  	 * plugged BIO here.
->  	 */
-> -	if (bio->bi_bdev->bd_has_submit_bio)
-> +	if (bdev_test_flag(bio->bi_bdev, BD_HAS_SUBMIT_BIO))
->  		disk_zone_wplug_unplug_bio(disk, zwplug);
->  
->  	/* Drop the reference we took when entering this function. */
-> @@ -1326,7 +1326,7 @@ static void blk_zone_wplug_bio_work(struct work_struct *work)
->  	 * path for BIO-based devices will not do that. So drop this extra
->  	 * reference here.
->  	 */
-> -	if (bdev->bd_has_submit_bio)
-> +	if (bdev_test_flag(bdev, BD_HAS_SUBMIT_BIO))
->  		blk_queue_exit(bdev->bd_disk->queue);
->  
->  put_zwplug:
 
--- 
-Damien Le Moal
-Western Digital Research
+thanks,
 
+Takashi
 

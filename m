@@ -1,110 +1,125 @@
-Return-Path: <linux-next+bounces-2268-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2269-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 654548C275B
-	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 17:08:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F00418C2803
+	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 17:41:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 971521C22076
-	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 15:08:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9694A280E4E
+	for <lists+linux-next@lfdr.de>; Fri, 10 May 2024 15:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18444168AFC;
-	Fri, 10 May 2024 15:08:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C509A17166E;
+	Fri, 10 May 2024 15:41:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HJE88Yu+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ct/jClQ9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0CC12C461;
-	Fri, 10 May 2024 15:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C45171666;
+	Fri, 10 May 2024 15:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715353717; cv=none; b=iFzsUCZXCmvVgNuMzjwIyE/ba2a31hEO1phP/ugH0axPQn1UI2aEeCyUIda4O9Gf9nHC7lSNWwEgsYc6x5EgNg5DIUltr4zYnpW673uA89Lk2rhbMLclKbDENUpIfEW8fChr3eurCg93ZgY7MZ66fGkdlQGdSvixP46P1t/MlhM=
+	t=1715355665; cv=none; b=WLJ8SgkbcUR5KvV5dsDFObjtHy0T0UqoZ0yku9+0prPREuskNVBepWv/kaNfF5dCiPyTJWyYUMy1447Q78OQbcE6pG89lgBF3cUsJMbe/n4msEnXdHid2aDfRz+HzduC8Mgr7yKBHAtE5jiOU74zMZ+ToDX9YH7BcCymZDB5TqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715353717; c=relaxed/simple;
-	bh=/lJNxijefJ/utW/c1qkfBk8egXnkRoHiD+hGQWtMKi0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FXZsi1XTBI07jYM4fdPGWwH5Pbj45mCzQkZBkHBWf8efgaiTgUuQlOs58mwEMZcPdcgTMqmJOZsotIG0UYq2NB/YgmgJSieGUHFDGqU1aJFMJDrVyb4/ouBm6BiEunT8GGtNDeuCF3qyZv2rSeoPmeuTYeR//lH0e+JmTpxNUbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HJE88Yu+; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715353715; x=1746889715;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/lJNxijefJ/utW/c1qkfBk8egXnkRoHiD+hGQWtMKi0=;
-  b=HJE88Yu+GQcgtbJSxt6icceHGJhHO3rrKCGdximUSeUBcqPi0yGJMHca
-   JEHgtJkZUyL9mKSQinQsE7pPeRdzakEMCpTit0769CeDJYJuJt9LPYFjS
-   PrJuMr1jkouPz8YbEiKWTVKLU1XnicXNe/Tz2IfzS7VffJBWZ5ltX6lR5
-   UEXotnPZm8XED2TTbRi3rBH9d3pvejOIAOZZ5g2VxFdAzLw27c/5aA+G9
-   foQW+IClFS0+Pf5vPCy5q7PA3IjGWr+6NZCmXkMCh7JowkZBFUR14iGuB
-   TRfb8ATMpNLxTysDbfFaEQChCWWJ5JSrIAjQyIiy5/pVY7Ed5wa39iHq0
-   w==;
-X-CSE-ConnectionGUID: rlJH3kONQb2EhhVCzlBmxA==
-X-CSE-MsgGUID: bFlHVRgaRn6H/gU8OmTyEQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="11465773"
-X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
-   d="scan'208";a="11465773"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 08:08:35 -0700
-X-CSE-ConnectionGUID: NThJguWNTcG2TAIhx/OkQw==
-X-CSE-MsgGUID: gkPfs8l1RO+MJ8WG84blCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
-   d="scan'208";a="34517822"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 08:08:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1s5RrL-000000068gN-09s0;
-	Fri, 10 May 2024 18:08:31 +0300
-Date: Fri, 10 May 2024 18:08:30 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the gpio-brgl tree with the
- gpio-brgl-fixes tree
-Message-ID: <Zj44bgNE5Fav2Qfv@smile.fi.intel.com>
-References: <20240510153212.246fbf31@canb.auug.org.au>
- <CACMJSev6EDeLdQ0e7A7f6AMhh08FznA67x5ONG+vSseC5QLt6A@mail.gmail.com>
- <20240510170827.2b655636@canb.auug.org.au>
- <20240510171049.2e0e3c56@canb.auug.org.au>
+	s=arc-20240116; t=1715355665; c=relaxed/simple;
+	bh=CKunOYXyn/VAhDnWGXGmiC49CJrlDoM/ZPQJtbdNQ60=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D/eIlFhLvqepoePoIjnWu7pxJG2Qz6hIygNVrOuwZ3y0pe0i+DZcKCRWbZUzM53cYmRD1skkxPMT3FOaQydEpoHgeB2rf6I+2vY2XF5hPjmTUMzzexU27+S+Qm6pX8R/qtrKeln3adc8ENlUjsIj1ie1pjAwF3nh0H/HRe8toGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ct/jClQ9; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1eb0e08bfd2so15012135ad.1;
+        Fri, 10 May 2024 08:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715355664; x=1715960464; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z1NMq9il33+y9mKx5YlkejFWAQlsQ5vAdnhUq+IEfAA=;
+        b=ct/jClQ96Rh7rRXZ0RbsHyTgAN6Y1hYLYSclyyhqbmzBYnT//+fWN9+GiWBUCqnIrO
+         U7hCz690mOZtEF0O81vj+tNrz3uCBvXg4NBt5vbVbECssAhVDtsHHqwe8BBvy63GBAHW
+         5EWlOvqab/A7yJFMS9ECgXPQmS4jbt3ikJCKepNKU3mx3GFVcH+ZVr0zuVrW3ttr7F3t
+         kGbSrJrBYxiSfAyiUVfdeWfsePwfbJwyLlP2zWUiLsxIcKtbnKAYRGIDEJ4QINOaRQF/
+         hFKy+OOZkC21kflWIVArW6TQp75QKoQXgO3vhe+l8A0NIrlYFZTvrAaKFyk3kW6Ic+4k
+         CyTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715355664; x=1715960464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z1NMq9il33+y9mKx5YlkejFWAQlsQ5vAdnhUq+IEfAA=;
+        b=Q08uv4IPEBbbasXqb5jtaIXNescerEsksryVP8hWGAo3sXHlit8pknYuE2HzV/7N3d
+         at2DIsVMFTnLMcEqr5m4rAJnZkS/Nk7yA1F4JXWxatMxB7kpZ2tBtXRS8Kv00BaplQzF
+         COdPUG8MNHtbyaJp4MkQmvoytDQLsDoSN2VOmT+Bhs8VqY6TseSPQREKzl74NukgZeLo
+         E+f6hsU8TYbt347cfD6SGo3Vuavm1llGLIWnBtSQQViHM1DbsI33dAynORvxpSFx9On6
+         2RQtjTejUjF1cOV+9t1W5zSZPye4FM/nLCoJc9S+G6GBu5ac1jrYuj+rVIaJX/tergs5
+         nPaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVRjurvK5NYR4v0MpjUI3rLa9hwHRnKD5rOcyu6i788GBxW86MHmCT5VQlfQPFqceX888QZ/lFFeQ4AKw6x6X3wqDhdr9YAeVRGvFnQZgNZZddKEqigM8QEUDk+bfmsdRtLGcwPdog0ZA==
+X-Gm-Message-State: AOJu0Yxr5lDNKFlaLOYajSxuoa5HcMk+PHOdE/I4CnHvmHx1rg88kWSb
+	HAXYthGuKZ3F21XaOrM8MJZzlSsN4uo3U4P5J2wuDhS3PNTY64NQAoQCtLD0NHgCuG+Vn6X9Zq2
+	PZ/x4wR/fNnAmuuubV67mnuVOfj8jOg==
+X-Google-Smtp-Source: AGHT+IHvCUL2yFY+CKv648nymXOwAlvwARkChLmD6Po+/oRyO/ys64x2+bkPNCubPXo3hR2sP6eaRkPoFy6xR/uRLC0=
+X-Received: by 2002:a17:903:41c9:b0:1e1:3300:702b with SMTP id
+ d9443c01a7336-1ef43d1558emr34534465ad.15.1715355663609; Fri, 10 May 2024
+ 08:41:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240510171049.2e0e3c56@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240509082313.1249dabf@canb.auug.org.au> <2b3ea2b9-1959-40ff-b8f9-5ad1569f72be@redhat.com>
+In-Reply-To: <2b3ea2b9-1959-40ff-b8f9-5ad1569f72be@redhat.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Fri, 10 May 2024 11:40:51 -0400
+Message-ID: <CADnq5_Nk0qZzBPJaBYVBjuEOxaTDtXu2tosGyZigum5rnz2fRw@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+To: =?UTF-8?Q?Michel_D=C3=A4nzer?= <mdaenzer@redhat.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 10, 2024 at 05:10:49PM +1000, Stephen Rothwell wrote:
-> On Fri, 10 May 2024 17:08:27 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > On Fri, 10 May 2024 08:33:37 +0200 Bartosz Golaszewski <bartosz.golaszewski@linaro.org> wrote:
-> > >
-> > > Thanks! I will send the fixes upstream today and then pull v6.9 into
-> > > my tree before the merge window PR to fix this conflict.  
-> > 
-> > Or you could just merge your for-current branch into your for-next
-> > branch and avoid possible issues with all the rest of v6.9 ...
-> 
-> Or, since it is a pretty simple conflict, just do not merge and just
-> mention the conflict to Linus in your merge window PR.
+On Fri, May 10, 2024 at 4:56=E2=80=AFAM Michel D=C3=A4nzer <mdaenzer@redhat=
+.com> wrote:
+>
+> On 2024-05-09 00:23, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > In commit
+> >
+> >    27557a840463 ("drm/amdgpu: Fix comparison in amdgpu_res_cpu_visible"=
+)
+> >
+> > Fixes tag
+> >
+> >    Fixes: a6ff969fe9 ("drm/amdgpu: fix visible VRAM handling during fau=
+lts")
+> >
+> > has these problem(s):
+> >
+> >    - SHA1 should be at least 12 digits long
+> >      This can be fixed for the future by setting core.abbrev to 12 (or
+> >      more) or (for git v2.11 or later) just making sure it is not set
+> >      (or set to "auto").
+>
+> It wouldn't have helped, since I pruned it manually from the full hash
+> (from gitk). The intention was pruning to 12 as always, apparently I
+> miscounted though. Oops.
 
-I also would go the latest suggestion.
+I've fixed it up and repushed.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Alex
 
-
+>
+>
+> --
+> Earthling Michel D=C3=A4nzer            |                  https://redhat=
+.com
+> Libre software enthusiast          |         Mesa and Xwayland developer
+>
 

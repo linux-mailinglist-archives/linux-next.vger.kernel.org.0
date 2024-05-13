@@ -1,231 +1,130 @@
-Return-Path: <linux-next+bounces-2272-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2273-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91FF98C3A14
-	for <lists+linux-next@lfdr.de>; Mon, 13 May 2024 04:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 14ACB8C3A2D
+	for <lists+linux-next@lfdr.de>; Mon, 13 May 2024 04:23:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47FF6281483
-	for <lists+linux-next@lfdr.de>; Mon, 13 May 2024 02:11:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2DE928110F
+	for <lists+linux-next@lfdr.de>; Mon, 13 May 2024 02:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D85584DE0;
-	Mon, 13 May 2024 02:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106DE12EBD7;
+	Mon, 13 May 2024 02:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="O9/knpBP"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="M69832yQ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435B612DDA5;
-	Mon, 13 May 2024 02:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D5769950;
+	Mon, 13 May 2024 02:23:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715566169; cv=none; b=ALVzt6z2ZY0sfoBpeopTUAs8lUzfHGAcy10hY3h3nk5AueT8kn4u/Yb/1swlRIVn8h3mxUmeiywzUDPLXKtPfPcOHeDb1fG0pTsHhZT1IJ/JhysZ6EXCvvX+VMMzBU+O2/HD0VtBedBOYWSkb6gmuXQBUXKgsvgYEjaj23dttcg=
+	t=1715567023; cv=none; b=sENRL+HqkYD7NHPTQ5VxGJd2EbmceFKpOcFUg8IpV1eRptGjm9bpOi2xGxAcBLL0wG90mK4Dx/tqvhGNKXMAMetO7LGnGAFs8rcO1jvJwIxdZLssQTHjPlrzOuPZKcGfnKQBJtifAjxPmAc5vxfEVVY0LT21Au5Q5lLLGMYYNUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715566169; c=relaxed/simple;
-	bh=2MepeWenM74/RNmnRFkqhzelH92s04DuLWY14zmnYPI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nVHhpDYCiO7OFBOfwKiXuhtQJrkF/LBQy3r87LsG2BXWHpr53UqDkgXCxAtYe3MUGHeo5JWqOMgZHa/xTiqafyJNc4a4E0bMZ/etV+bc/fPQDgAbwYfPeAU1gfw3WFV+LTNI7+H6z4dborfZ6XjjZ5b2s0GnuPJYJtaPKZez0KY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=O9/knpBP; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1715567023; c=relaxed/simple;
+	bh=AvfMQ+PwspxEgnsIBk+Zujy3wb35knGqIdpOQfFlWvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Vmj0zgj+FalGl+0/FCM79HjWFZoXYUnzQMd2ZJIqcqLipy+vwJIbILi8rmBRlGKjRSRWMdFThIQy5BaxmjbWg9M+bKd6GjYfbabCjdISdOxN06gQjjxrLtE/zyjUshN/6u2G9nJ+1W0wq1h3A8nPET317fVo7UEa5Xdj1PNtb7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=M69832yQ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1715565816;
-	bh=TtDK2gOuNrhXeYNzr0rt8E+fUCAbs13e9V2OgjizcpY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=O9/knpBPUmsq3UAOQDPuMQfdLEnsCcuS3OEBhtXQxjwnBMUg0j5cPusEgEZ6P5I4j
-	 Gtzfm+Q/31klVULeGIFLK5X8on9B4QmRq5HR2itGgrAdOxWrjA0zO9uKnxuw8fisdg
-	 r9WrrjGbJ6gkbRgh/ZNdcSwJY/+sAimXgIy4G2FT1Bp6w5+vcOmAbHzfKB5y0892sU
-	 n9FT2zQz18gW5eznPFKAmEk7sfL1JjMMK7QiK+Lol7tXHrzoaHNAc0o6DqJNgN8XSh
-	 9yMMALmtxITZlKzYmfcz6PgW7UhvV+xysqw+ZrYdwuO53gCvlJT5txQA3Oy5IA9ZKj
-	 8wkruX8WPLXnQ==
+	s=201702; t=1715567016;
+	bh=dvMSMciRDx93BTjaoQ6Vd2/mBWH/Rc/j2XkzvMbeLgU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=M69832yQOBnZUqfSCL9Du7lCXBwDIz5egF7VghZOf9jLlbegmRVA30P9U20vFWYDl
+	 HZB31bqGCvmIvCXX7Ojkx0/mTXi0WnHus3C6yZdBWmSPnsbC9DT+JNJgTGSvgbWETE
+	 xorxsof/kbOAlgVFoNRaLqccHXLpxeeKJO3PK07Sq5BTLrFc4ApV2L6nXHZ8sEl86f
+	 kIHbjBa0kMzvI+PUiDlsoUNuIgTUZ3wu+NOku5wL95seVDuNND2qpW+ko1Y8cX7rq7
+	 JqJeQH/Zixk7C4x59Cxi3fmxykF5XhfaJ9I1iTX7WQLBwkc6pToWeKCLYzmMX68PCM
+	 8U8lE3iSfTT8g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Vd2pJ2mPSz4wqM;
-	Mon, 13 May 2024 12:03:36 +1000 (AEST)
-Date: Mon, 13 May 2024 12:03:12 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Vd3FN1vWnz4wcR;
+	Mon, 13 May 2024 12:23:35 +1000 (AEST)
+Date: Mon, 13 May 2024 12:23:34 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Masahiro Yamada <masahiroy@kernel.org>, Dave Airlie <airlied@redhat.com>
-Cc: Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Rob Clark <robdclark@chromium.org>, DRI
- <dri-devel@lists.freedesktop.org>
-Subject: Re: linux-next: manual merge of the drm-msm tree with the kbuild
- tree
-Message-ID: <20240513120312.55d97d04@canb.auug.org.au>
-In-Reply-To: <20240507125132.2af57c71@canb.auug.org.au>
-References: <20240507125132.2af57c71@canb.auug.org.au>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Uday Shankar
+ <ushankar@purestorage.com>
+Subject: linux-next: manual merge of the block tree with Linus' tree
+Message-ID: <20240513122334.135fef82@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9ovoDOjjHk/AwKL8atjs=DW";
+Content-Type: multipart/signed; boundary="Sig_/C9fpOpUrFYB=8e+qC/lc9HA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/9ovoDOjjHk/AwKL8atjs=DW
+--Sig_/C9fpOpUrFYB=8e+qC/lc9HA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 7 May 2024 12:51:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the drm-msm tree got a conflict in:
->=20
->   drivers/gpu/drm/msm/Makefile
->=20
-> between commit:
->=20
->   7c972986689b ("kbuild: use $(src) instead of $(srctree)/$(src) for sour=
-ce directory")
->=20
-> from the kbuild tree and commits:
->=20
->   0fddd045f88e ("drm/msm: generate headers on the fly")
->   07a2f8716c41 ("drm/msm/gen_header: allow skipping the validation")
->=20
-> from the drm-msm tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc drivers/gpu/drm/msm/Makefile
-> index b8cc007fc1b9,718968717ad5..000000000000
-> --- a/drivers/gpu/drm/msm/Makefile
-> +++ b/drivers/gpu/drm/msm/Makefile
-> @@@ -1,10 -1,11 +1,11 @@@
->   # SPDX-License-Identifier: GPL-2.0
->  -ccflags-y :=3D -I $(srctree)/$(src)
->  +ccflags-y :=3D -I $(src)
-> + ccflags-y +=3D -I $(obj)/generated
->  -ccflags-y +=3D -I $(srctree)/$(src)/disp/dpu1
->  -ccflags-$(CONFIG_DRM_MSM_DSI) +=3D -I $(srctree)/$(src)/dsi
->  -ccflags-$(CONFIG_DRM_MSM_DP) +=3D -I $(srctree)/$(src)/dp
->  +ccflags-y +=3D -I $(src)/disp/dpu1
->  +ccflags-$(CONFIG_DRM_MSM_DSI) +=3D -I $(src)/dsi
->  +ccflags-$(CONFIG_DRM_MSM_DP) +=3D -I $(src)/dp
->  =20
-> - msm-y :=3D \
-> + adreno-y :=3D \
->   	adreno/adreno_device.o \
->   	adreno/adreno_gpu.o \
->   	adreno/a2xx_gpu.o \
-> @@@ -140,11 -145,68 +145,68 @@@ msm-display-$(CONFIG_DRM_MSM_DSI) +=3D ds
->   			dsi/dsi_manager.o \
->   			dsi/phy/dsi_phy.o
->  =20
-> - msm-$(CONFIG_DRM_MSM_DSI_28NM_PHY) +=3D dsi/phy/dsi_phy_28nm.o
-> - msm-$(CONFIG_DRM_MSM_DSI_20NM_PHY) +=3D dsi/phy/dsi_phy_20nm.o
-> - msm-$(CONFIG_DRM_MSM_DSI_28NM_8960_PHY) +=3D dsi/phy/dsi_phy_28nm_8960.o
-> - msm-$(CONFIG_DRM_MSM_DSI_14NM_PHY) +=3D dsi/phy/dsi_phy_14nm.o
-> - msm-$(CONFIG_DRM_MSM_DSI_10NM_PHY) +=3D dsi/phy/dsi_phy_10nm.o
-> - msm-$(CONFIG_DRM_MSM_DSI_7NM_PHY) +=3D dsi/phy/dsi_phy_7nm.o
-> + msm-display-$(CONFIG_DRM_MSM_DSI_28NM_PHY) +=3D dsi/phy/dsi_phy_28nm.o
-> + msm-display-$(CONFIG_DRM_MSM_DSI_20NM_PHY) +=3D dsi/phy/dsi_phy_20nm.o
-> + msm-display-$(CONFIG_DRM_MSM_DSI_28NM_8960_PHY) +=3D dsi/phy/dsi_phy_28=
-nm_8960.o
-> + msm-display-$(CONFIG_DRM_MSM_DSI_14NM_PHY) +=3D dsi/phy/dsi_phy_14nm.o
-> + msm-display-$(CONFIG_DRM_MSM_DSI_10NM_PHY) +=3D dsi/phy/dsi_phy_10nm.o
-> + msm-display-$(CONFIG_DRM_MSM_DSI_7NM_PHY) +=3D dsi/phy/dsi_phy_7nm.o
-> +=20
-> + msm-y +=3D $(adreno-y) $(msm-display-y)
->  =20
->   obj-$(CONFIG_DRM_MSM)	+=3D msm.o
-> +=20
-> + ifeq (y,$(CONFIG_DRM_MSM_VALIDATE_XML))
-> + 	headergen-opts +=3D --validate
-> + else
-> + 	headergen-opts +=3D --no-validate
-> + endif
-> +=20
-> + quiet_cmd_headergen =3D GENHDR  $@
->  -      cmd_headergen =3D mkdir -p $(obj)/generated && $(PYTHON3) $(srctr=
-ee)/$(src)/registers/gen_header.py \
->  -		      $(headergen-opts) --rnn $(srctree)/$(src)/registers --xml $< c-=
-defines > $@
-> ++      cmd_headergen =3D mkdir -p $(obj)/generated && $(PYTHON3) $(src)/=
-registers/gen_header.py \
-> ++		      $(headergen-opts) --rnn $(src)/registers --xml $< c-defines > $@
-> +=20
-> + $(obj)/generated/%.xml.h: $(src)/registers/adreno/%.xml \
-> + 		$(src)/registers/adreno/adreno_common.xml \
-> + 		$(src)/registers/adreno/adreno_pm4.xml \
-> + 		$(src)/registers/freedreno_copyright.xml \
-> + 		$(src)/registers/gen_header.py \
-> + 		$(src)/registers/rules-fd.xsd \
-> + 		FORCE
-> + 	$(call if_changed,headergen)
-> +=20
-> + $(obj)/generated/%.xml.h: $(src)/registers/display/%.xml \
-> + 		$(src)/registers/freedreno_copyright.xml \
-> + 		$(src)/registers/gen_header.py \
-> + 		$(src)/registers/rules-fd.xsd \
-> + 		FORCE
-> + 	$(call if_changed,headergen)
-> +=20
-> + ADRENO_HEADERS =3D \
-> + 	generated/a2xx.xml.h \
-> + 	generated/a3xx.xml.h \
-> + 	generated/a4xx.xml.h \
-> + 	generated/a5xx.xml.h \
-> + 	generated/a6xx.xml.h \
-> + 	generated/a6xx_gmu.xml.h \
-> + 	generated/adreno_common.xml.h \
-> + 	generated/adreno_pm4.xml.h \
-> +=20
-> + DISPLAY_HEADERS =3D \
-> + 	generated/dsi_phy_7nm.xml.h \
-> + 	generated/dsi_phy_10nm.xml.h \
-> + 	generated/dsi_phy_14nm.xml.h \
-> + 	generated/dsi_phy_20nm.xml.h \
-> + 	generated/dsi_phy_28nm_8960.xml.h \
-> + 	generated/dsi_phy_28nm.xml.h \
-> + 	generated/dsi.xml.h \
-> + 	generated/hdmi.xml.h \
-> + 	generated/mdp4.xml.h \
-> + 	generated/mdp5.xml.h \
-> + 	generated/mdp_common.xml.h \
-> + 	generated/sfpb.xml.h
-> +=20
-> + $(addprefix $(obj)/,$(adreno-y)): $(addprefix $(obj)/,$(ADRENO_HEADERS))
-> + $(addprefix $(obj)/,$(msm-display-y)): $(addprefix $(obj)/,$(DISPLAY_HE=
-ADERS))
-> +=20
-> + targets +=3D $(ADRENO_HEADERS) $(DISPLAY_HEADERS)
+Today's linux-next merge of the block tree got a conflict in:
 
-This is now  conflict between the drm tree and the kbuild tree.
+  drivers/block/ublk_drv.c
+
+between commit:
+
+  eaf4a9b19b99 ("ublk: remove segment count and size limits")
+
+from Linus' tree and commit:
+
+  073341c3031b ("ublk_drv: set DMA alignment mask to 3")
+
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/9ovoDOjjHk/AwKL8atjs=DW
+diff --cc drivers/block/ublk_drv.c
+index 374e4efa8759,292fa2bdd77d..000000000000
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@@ -2177,8 -2176,8 +2176,9 @@@ static int ublk_ctrl_start_dev(struct u
+  		.max_hw_sectors		=3D p->max_sectors,
+  		.chunk_sectors		=3D p->chunk_sectors,
+  		.virt_boundary_mask	=3D p->virt_boundary_mask,
+ +		.max_segments		=3D USHRT_MAX,
+ +		.max_segment_size	=3D UINT_MAX,
++ 		.dma_alignment		=3D 3,
+ -
+  	};
+  	struct gendisk *disk;
+  	int ret =3D -EINVAL;
+
+--Sig_/C9fpOpUrFYB=8e+qC/lc9HA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZBdOAACgkQAVBC80lX
-0Gz3bQgAkiAXFF6nLBuTsHzu71fph5uUENv2IXjpd4DL5oKiZBdEZ0g7c4FlwrxL
-4mrcTtYQ5N508pjgpcmhmCUxXjigZ33iFbdGP6niVHhMbiI5vZXkbvQICPg1LFW/
-7j4Yhd+cw0SnlE9dIG39mJs6SABD31ixspMK2xYmGvJl1VamXSKL4e1LkC7IpTgg
-n0SHaiJb6L5ej2XKFPeYY6atbOJvGNVGUi52/04dSoD5gHXovsZQkyprjoe+6dan
-LV7CCKzT+2QgA2nbzhOazGfRjfgrCANMvzc5he4u2HR2bK+vC6RdWGRnV2lR4oga
-c1KETvoShadWUD8+6cLtL/At2kaSmA==
-=L/I+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZBeaYACgkQAVBC80lX
+0GxvRgf9HqKvhrRFJLJwLrXkfwYIC0r7mUpWeUbx0ysfd4r/gGlv+7pXCAEFT7XI
+4GJGyzHIvBDIaCNvLVS6EY5a7crYtLMpgkVXeXVr8ELUonAWV10xjVvxkYeCesqt
+yxS4dMfQ2lSaRbhNDE9r1tbZyMs7icLMzuUvZZ2Vg9cx090Q5hzzosfT4gI8hpYN
+cJADI0LngXVCwvrEaVbLrInSKNyybSXisifiCBuYY34IIHBJc1wVjGPPpXmIkuzj
+TS6HVOrbwinYkyGlDDH/o1EqlXDVZXO/+zM2ys0FXsXc/zp1KA55xniicvAEgiI5
+1zBdIvvne4wiACOKLPE4BRRMZqMnjg==
+=up/E
 -----END PGP SIGNATURE-----
 
---Sig_/9ovoDOjjHk/AwKL8atjs=DW--
+--Sig_/C9fpOpUrFYB=8e+qC/lc9HA--
 

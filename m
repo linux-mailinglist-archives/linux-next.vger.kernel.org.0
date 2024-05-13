@@ -1,251 +1,312 @@
-Return-Path: <linux-next+bounces-2270-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2271-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E3DB8C336C
-	for <lists+linux-next@lfdr.de>; Sat, 11 May 2024 21:24:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06EF78C3978
+	for <lists+linux-next@lfdr.de>; Mon, 13 May 2024 02:00:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B4531F215B5
-	for <lists+linux-next@lfdr.de>; Sat, 11 May 2024 19:24:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3770028128F
+	for <lists+linux-next@lfdr.de>; Mon, 13 May 2024 00:00:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 433FA1CD00;
-	Sat, 11 May 2024 19:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD4033989;
+	Mon, 13 May 2024 00:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JUvkIec+"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="dXZ2XCFR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9B91C2AF;
-	Sat, 11 May 2024 19:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C097101CA
+	for <linux-next@vger.kernel.org>; Mon, 13 May 2024 00:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715455494; cv=none; b=XJQrTfRv/SOpLFu9uMDwzNnqA/V/Nwbl62w7S0MUxo3JcHVICvY70rgR8mgXqsA8gvnoh/L4ZwbxI5MBbaP4AXiQQB6l+Mhq477Vx6q4DkBNSzUo0HXqowzv0LawuzkYj3Wlz2uCz9LRpt+NHQdu02mb2l8Ehy+zoVP5JxgFCAU=
+	t=1715558423; cv=none; b=fg8ZQ9kGy424QY/m4RA6OlATruZ3xQZVTvFONXubqNmp9oKuAG2IXopecMJvwmVwSPqDmU2u+6bH6vaicExjeFfkQ31PSoFiXqXPkO5MOK3isDFJKbCyzYRvovcOLxFOhLS9EsBEvMsusfZxoPwEUae2HePehQzW7D+phTNatMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715455494; c=relaxed/simple;
-	bh=Oojtd8wUrtLbOQw+GM/SeCSUNsbclOuxrR75Sm5o014=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SwE+RC3RLkaS7C+SS1dq8Y6R994/RDRW9zxmPH2PFaajz9q6t7ix2cHxk2iXz29D25EaPQQiJb1VZ7fGuJlNgth2j/xB9nIG0VqSfF0eEN3IZmYKrgh2PmSqMMSKHa4qObH2A+hpbtvO/v6+9fj6Uo7NyfkNHqvlX0NZbm/7bl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JUvkIec+; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2b2aab2d46dso821566a91.0;
-        Sat, 11 May 2024 12:24:52 -0700 (PDT)
+	s=arc-20240116; t=1715558423; c=relaxed/simple;
+	bh=elgW6sW0gLeBeXzbGp4q/QjmFue1XipHfZ4ji3jdbFM=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=np593dxI8fWw8GkC8C/wnQddA/+77h2tlyBIMTdzn6lmYJsrsj2BS6PTfLHRfi7SPdFYVhWLEU/rUHqdiiZ21AepKMuCt/Qd00mCYg6AWn88JtBMbTMSIq9RyJjv245Dp+pweVitn1uUYln2JxsCPyQJ2n7glydJiefgqZ2QPaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=dXZ2XCFR; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6f4dcc3eeb3so1880866b3a.0
+        for <linux-next@vger.kernel.org>; Sun, 12 May 2024 17:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715455492; x=1716060292; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OAGU71RasMrQNUShiGxsismiL+Kwi9s8fXEHCVFp+mU=;
-        b=JUvkIec+9Skh47wn5yBeHpZL50HdouI/R9bQVY2bl1Ife0Ug4+LlAM5itDKd9JaWJs
-         BKjWiftofEOpknc15DTWKFsj4UZX9XM8zISPS+EhX6cakYaqtST9Qx3bigtm+xRMECZF
-         KgpJuMfoLtALW0v4TZG9iMxMw6sYDAc3YQb/qphSsc1Hzv+574x2Hwq18YLRZPSoaJIL
-         HHPBV5vk5LolVOec0B1qgvFiwWPc4za5Qetkdp/yGsK/4zJr+7UeksBLj2WTwA9n6rNK
-         uW0/rIyRqJY0jxlQ0RGavG5O7uvSObqo6zbkDo89dtvihRLhRhtkqguwwkcblK2cepYL
-         oIrQ==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1715558420; x=1716163220; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vr+yJ8ws7rGaO0XqtYY/ObAA/K/X3N/lseVt1x2bLJU=;
+        b=dXZ2XCFRSeKHF47RCv1dwY9bFZIdlXJ+JqrJAoRKv+qVPJwi9MdGv5AnSUPWsiU233
+         +OxRgfBFvgbjf6AHBdChHGpx0la1DTdO9Y8UrLhUm/boh7V8fuZNE24flX+fPmC4t0s0
+         PJW981gpwetCU06Vg/Wo3OLmrA7dUN8BtNmO2im4wlPoUQCS3kqMxG0572DyLbejubXs
+         BNJkk0DV3nrsjUjEfF7o3dWY/oLRwThDiXGD2ZenkKK+xijuIjhD/FgKMFuDSdr3V2Am
+         Ox/4RsW096E6brvNhMdN/c3cNnrlChtGj08ZI0gjN3Fvkpari9/r6F7v2gEWzkWyAUHA
+         mFUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715455492; x=1716060292;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OAGU71RasMrQNUShiGxsismiL+Kwi9s8fXEHCVFp+mU=;
-        b=j1vt2EoYuE001FvTPdRktDAUvt+HhqrV0KsmJED0pC5bMKyoYqb6Se9gbglFKqYrcK
-         zlWSFmqn6IamBmZL0VaA0TmW9U+S+4hO2/MQxH3GJGSMlYgOYQn5Yqx8BP6uDOW+CxCv
-         ppiyEUPdcsUpAaaDvnu8Xo6CKA9lMj/TVVheyz1VZeDRuc1/DG9FQ+Jz5HYxT1yRVfW9
-         vD3vw8yN4k9SyfvzS5pQsBJDoJk/0idffVPd/zjXZrP9+y1E8LzJQqRyfVPYkihpzl2a
-         s2ihE2F5h3O0JEWe7ReemEVf0Y/69Rg79sHjGREUvDlidOG+jNiz1bVsY2C+/AuSyZVe
-         VW4w==
-X-Forwarded-Encrypted: i=1; AJvYcCURU2dquPC23zWXZMy4VUVp519j3kUFIFKcYcF/fbW6gGIHPqTcrldy3cAwD35ylm+nRnUqYANxkgN6IFB9O0h4c2F5ogA//maWcN99e9DbtaAj4HufCaZ685kaUqVAD1O2QWxYneha5Q==
-X-Gm-Message-State: AOJu0YyJtRrso3L7qtqh2a4OxGvK7aRhF3mJvyjziz0Tt/VPNDhDOs6C
-	WT7o7Guu5pNlIcnCzem85yznbXQU1rGdDGQeYn4BZD0s3xQo6GVT
-X-Google-Smtp-Source: AGHT+IHA9Homf+/aelZZpl2LJTQYbvRx9yHcytSpcm++mrA9kVLtgx1X3/VaOvqG488eFYm+CtYxAg==
-X-Received: by 2002:a17:90a:5285:b0:2a5:3f1f:a1d1 with SMTP id 98e67ed59e1d1-2b6cb7d0ebbmr5867849a91.0.1715455491619;
-        Sat, 11 May 2024 12:24:51 -0700 (PDT)
-Received: from visitorckw-System-Product-Name ([140.113.216.168])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b6288498e2sm7078871a91.13.2024.05.11.12.24.49
+        d=1e100.net; s=20230601; t=1715558420; x=1716163220;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vr+yJ8ws7rGaO0XqtYY/ObAA/K/X3N/lseVt1x2bLJU=;
+        b=pOCQoQmaENgJVGiEPAM1kINRVtcE1soB8iVfOqm1QU15PJE1V+5myU+eB1ScRYytdx
+         vtA4q8KI7AoJNmoMh43lgg8RpOAMkVK2xRtFpS+J0UO7ktmCHLgAr2I4RLB3tBPW4PyY
+         lvIAgtLbRX4oqmfhGYkP+PNmfVS/rCVIbkS9JBhLSL/1rd6nz737396YGjgXMzuiR0gH
+         MMtFAdhsXONYW+dZm42u/aR4Auzba9F8bavgPcm3E+t6l43VJB0EfVxmmr8YkUwfLaDW
+         uqbRzNfYhxU3YNtWz04q1XZj38Bfp2vGD74UU9C2UZz5jdyGNELvF03Sn5NOkD6eBrRb
+         kJnw==
+X-Gm-Message-State: AOJu0Yw4PWPhMD+ukJuERZIgohfdUPE7GOOCxWOAL1wR9hTpdmU/36Cq
+	9r2TO4XoS3SkfG3LK97+pd8iqge/fmKxSK6ZQ0TMObKE3Rek3g01QnD0f5eAcCcnSzcCUYi/V/5
+	0FDM=
+X-Google-Smtp-Source: AGHT+IHJchzIydF2YsnsPL2THG6K4acngWTC0W7qNodGtNKWVE++jd8M9wmvVmkonZxxuckWXgWODA==
+X-Received: by 2002:a05:6a20:dc94:b0:1af:a9ad:fbb9 with SMTP id adf61e73a8af0-1afde1c5dcemr6219547637.59.1715558419348;
+        Sun, 12 May 2024 17:00:19 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6340a449f4csm6634722a12.4.2024.05.12.17.00.18
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 May 2024 12:24:51 -0700 (PDT)
-Date: Sun, 12 May 2024 03:24:47 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Matthew Mirvish <matthew@mm12.xyz>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>, Coly Li <colyli@suse.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the refactor-heap tree with the
- block tree
-Message-ID: <Zj/F/yf0ixB/eRX7@visitorckw-System-Product-Name>
-References: <20240509152745.08af752f@canb.auug.org.au>
- <te64v6zwwor6jkco6uiu2zz7ern6ijhyu5okfvdz3bmj3w5qfp@mx4zdniwymqj>
- <Zj1RzZdtfL7UQax1@visitorckw-System-Product-Name>
- <buehluxvo234sj7onzl6wwjmuslmnkh7g6vnpru23kpti6qmpp@7nqak2ser7mw>
- <Zj2PX6Fy3BEnQc50@visitorckw-System-Product-Name>
- <20240510034618.GA3161190@mm12.xyz>
- <Zj3kowGa9XzJ0yak@visitorckw-System-Product-Name>
+        Sun, 12 May 2024 17:00:19 -0700 (PDT)
+Message-ID: <66415813.630a0220.cd4cd.0fd0@mx.google.com>
+Date: Sun, 12 May 2024 17:00:19 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zj3kowGa9XzJ0yak@visitorckw-System-Product-Name>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v6.9-71-g3d77dbcb46b6f
+X-Kernelci-Report-Type: build
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 31 warnings (v6.9-71-g3d77dbcb46b6f)
+To: linux-next@vger.kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Fri, May 10, 2024 at 05:11:02PM +0800, Kuan-Wei Chiu wrote:
-> On Thu, May 09, 2024 at 11:46:18PM -0400, Matthew Mirvish wrote:
-> > On Fri, May 10, 2024 at 11:07:11AM +0800, Kuan-Wei Chiu wrote:
-> > > On Thu, May 09, 2024 at 07:16:31PM -0400, Kent Overstreet wrote:
-> > > > On Fri, May 10, 2024 at 06:44:29AM +0800, Kuan-Wei Chiu wrote:
-> > > > > On Thu, May 09, 2024 at 03:58:57PM -0400, Kent Overstreet wrote:
-> > > > > > On Thu, May 09, 2024 at 03:27:45PM +1000, Stephen Rothwell wrote:
-> > > > > > > Hi all,
-> > > > > > > 
-> > > > > > > Today's linux-next merge of the refactor-heap tree got conflicts in:
-> > > > > > > 
-> > > > > > >   drivers/md/bcache/bset.c
-> > > > > > >   drivers/md/bcache/bset.h
-> > > > > > >   drivers/md/bcache/btree.c
-> > > > > > >   drivers/md/bcache/writeback.c
-> > > > > > > 
-> > > > > > > between commit:
-> > > > > > > 
-> > > > > > >   3a861560ccb3 ("bcache: fix variable length array abuse in btree_iter")
-> > > > > > > 
-> > > > > > > from the block tree and commit:
-> > > > > > > 
-> > > > > > >   afa5721abaaa ("bcache: Remove heap-related macros and switch to generic min_heap")
-> > > > > > > 
-> > > > > > > from the refactor-heap tree.
-> > > > > > > 
-> > > > > > > Ok, these conflicts are too extensive, so I am dropping the refactor-heap
-> > > > > > > tree for today.  I suggest you all get together and sort something out.
-> > > > > > 
-> > > > > > Coli and Kuan, you guys will need to get this sorted out quick if we
-> > > > > > want refactor-heap to make the merge window
-> > > > > 
-> > > > > Hi Coli and Kent,
-> > > > > 
-> > > > > If I understand correctly, the reported bug is because we attempted to
-> > > > > point (heap)->data to a dynamically allocated memory , but at that time
-> > > > > (heap)->data was not a regular pointer but a fixed size array with a
-> > > > > length of MAX_BSETS.
-> > > > > 
-> > > > > In my refactor heap patch series, I introduced a preallocated array and
-> > > > > decided in min_heap_init() whether the data pointer should point to an
-> > > > > incoming pointer or to the preallocated array. Therefore, I am
-> > > > > wondering if my patch might have unintentionally fixed this bug?
-> > > > > 
-> > > > > I am unsure how to reproduce the reported issue. Could you assist me in
-> > > > > verifying whether my assumption is correct?
-> > > > 
-> > > > This is a merge conflict, not a runtime. Can you rebase onto Coli's
-> > > > tree? We'll have to retest.
-> > > 
-> > > Oh, sorry for the misunderstanding I caused. When I mentioned "bug" [1]
-> > > earlier, I was referring to the bug addressed in
-> > > 3a861560ccb3 ("bcache: fix variable length array abuse in btree_iter"),
-> > > not a merge conflict.
-> > > 
-> > > Here are the results after the rebase:
-> > > https://github.com/visitorckw/linux.git refactor-heap
-> > > 
-> > > [1]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2039368
-> > 
-> > The ubuntu kernels build with UBSAN now, and the bug reported is just a
-> > UBSAN warning. The original implementation's iterator has a fixed size
-> > sets array that is indexed out of bounds when the iterator is allocated
-> > on the heap with more space -- the patch restructures it a bit to have a
-> > single iterator type with a flexible array and then a larger "stack"
-> > type which embeds the iterator along with the preallocated region.
-> > 
-> > I took a brief look at the refactor-heap branch but I'm not entirely
-> > sure what's going on with the new min heaps: in the one place where the
-> > larger iterators are used (in bch_btree_node_read_done) it doesn't look
-> > like the heap is ever initialized (perhaps since the old iter_init
-> > wasn't used here because of the special case it got missed in the
-> > refactor?) With the new heaps it should be fairly easy to fix though;
-> > just change the fill_iter mempool to be allocating only the minheap data
-> > arrays and setup iter->heap.data properly with that instead.
-> 
-> Thank you, Matthew.
-> Not initializing the heap's data pointer was indeed my mistake.
-> Following your advice, I made the following modifications to the code
-> on the refactor-heap branch in my github repo. I hope this time it
-> works well.
->
-Should I resend it as a patch series?
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 31 warnings (v6.9-7=
+1-g3d77dbcb46b6f)
 
-> 
-> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-> index a2bb86d52ad4..ce9d729bc8ff 100644
-> --- a/drivers/md/bcache/btree.c
-> +++ b/drivers/md/bcache/btree.c
-> @@ -149,19 +149,19 @@ void bch_btree_node_read_done(struct btree *b)
->  {
->  	const char *err = "bad btree header";
->  	struct bset *i = btree_bset_first(b);
-> -	struct btree_iter *iter;
-> +	struct btree_iter iter;
-> 
->  	/*
->  	 * c->fill_iter can allocate an iterator with more memory space
->  	 * than static MAX_BSETS.
->  	 * See the comment arount cache_set->fill_iter.
->  	 */
-> -	iter = mempool_alloc(&b->c->fill_iter, GFP_NOIO);
-> -	iter->heap.size = b->c->cache->sb.bucket_size / b->c->cache->sb.block_size;
-> -	iter->heap.nr = 0;
-> +	iter.heap.data = mempool_alloc(&b->c->fill_iter, GFP_NOIO);
-> +	iter.heap.size = b->c->cache->sb.bucket_size / b->c->cache->sb.block_size;
-> +	iter.heap.nr = 0;
-> 
->  #ifdef CONFIG_BCACHE_DEBUG
-> -	iter->b = &b->keys;
-> +	iter.b = &b->keys;
->  #endif
-> 
->  	if (!i->seq)
-> @@ -199,7 +199,7 @@ void bch_btree_node_read_done(struct btree *b)
->  		if (i != b->keys.set[0].data && !i->keys)
->  			goto err;
-> 
-> -		bch_btree_iter_push(iter, i->start, bset_bkey_last(i));
-> +		bch_btree_iter_push(&iter, i->start, bset_bkey_last(i));
-> 
->  		b->written += set_blocks(i, block_bytes(b->c->cache));
->  	}
-> @@ -211,7 +211,7 @@ void bch_btree_node_read_done(struct btree *b)
->  		if (i->seq == b->keys.set[0].data->seq)
->  			goto err;
-> 
-> -	bch_btree_sort_and_fix_extents(&b->keys, iter, &b->c->sort);
-> +	bch_btree_sort_and_fix_extents(&b->keys, &iter, &b->c->sort);
-> 
->  	i = b->keys.set[0].data;
->  	err = "short btree key";
-> @@ -223,7 +223,7 @@ void bch_btree_node_read_done(struct btree *b)
->  		bch_bset_init_next(&b->keys, write_block(b),
->  				   bset_magic(&b->c->cache->sb));
->  out:
-> -	mempool_free(iter, &b->c->fill_iter);
-> +	mempool_free(iter.heap.data, &b->c->fill_iter);
->  	return;
->  err:
->  	set_btree_node_io_error(b);
-> diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
-> index cba09660148a..c6f5592996a8 100644
-> --- a/drivers/md/bcache/super.c
-> +++ b/drivers/md/bcache/super.c
-> @@ -1914,8 +1914,7 @@ struct cache_set *bch_cache_set_alloc(struct cache_sb *sb)
->  	INIT_LIST_HEAD(&c->btree_cache_freed);
->  	INIT_LIST_HEAD(&c->data_buckets);
-> 
-> -	iter_size = sizeof(struct btree_iter) +
-> -		    ((meta_bucket_pages(sb) * PAGE_SECTORS) / sb->block_size) *
-> +	iter_size = ((meta_bucket_pages(sb) * PAGE_SECTORS) / sb->block_size) *
->  			    sizeof(struct btree_iter_set);
-> 
->  	c->devices = kcalloc(c->nr_uuids, sizeof(void *), GFP_KERNEL);
-> 
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.9-71-g3d77dbcb46b6f/
+
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.9-71-g3d77dbcb46b6f
+Git Commit: 3d77dbcb46b6fd474b0a384f2ffa3acf2843e247
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig (gcc-10): 2 warnings
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 3 warnings
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 26 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
+=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
+=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
+r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
+ =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
+ for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
+ for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
+e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
+e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
+ for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
+e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
+pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
+or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
+for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
+for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
+ls' found, but node is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
+ is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
+=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
+ =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
+ =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
+=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
+ =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
+=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
+=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
+=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
+=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
+=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
+r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
+=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 

@@ -1,115 +1,165 @@
-Return-Path: <linux-next+bounces-2283-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2284-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FC178C4A32
-	for <lists+linux-next@lfdr.de>; Tue, 14 May 2024 01:50:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AEF68C4A49
+	for <lists+linux-next@lfdr.de>; Tue, 14 May 2024 01:53:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE5D21C20F13
-	for <lists+linux-next@lfdr.de>; Mon, 13 May 2024 23:50:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5426B286EBE
+	for <lists+linux-next@lfdr.de>; Mon, 13 May 2024 23:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52BEA85934;
-	Mon, 13 May 2024 23:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2AB285C4E;
+	Mon, 13 May 2024 23:53:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="uBIry12q"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="luRtVw/9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDED1D559
-	for <linux-next@vger.kernel.org>; Mon, 13 May 2024 23:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5BD85C42;
+	Mon, 13 May 2024 23:53:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715644227; cv=none; b=aogpiTbf5csew14IvcHznyUxiHQI7iRy0KfVCfbzBqoe0sCL5ANLZnudDoH9eRFVebSiuhdPK0q/nGzel52z6icfjJWc8JJFXIYH5bbrU8IjqF6VpoqLfk0pgHZJS3JNMtYcSwgrxoiHkyEeB9mMmguSH4blW1TTmQHnr+kBWK8=
+	t=1715644421; cv=none; b=IrJsyPu/cQURE+wbywi3PLOThEZOgUpBrVH7fLyUZgZ+yKhlJzbvF2it2USWMDHEkb10DRA+ed/uI4zEpWPqirqdwtndeltHG8IiMOXfkqmZDYKbqOVWygXBmLULkIUHvqffw+C/4hbSw4QgVlbWkzezPwrpg9yGS7JNwMas/zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715644227; c=relaxed/simple;
-	bh=NAXJSi4Tt+bnaT9DgJUdHaSGfyAM/pSw2r4arOIex+c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P9LHfpHR9XxiUPs4/Gox9cBSllVGmy/iWnRtHnwnlE8Ge4rxTRukbdlixjg0dLH/RSrbMYaJPxy1e6GbImCG7JoLBGAFze4tXd/YBqsfZ9+VB0sqWpq6F/1RxA0IQ2V4ykFk18k2FhgstWPsg8/B2ef/53iCDuhJe26slHRsRHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=uBIry12q; arc=none smtp.client-ip=209.85.167.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3c74a49fc4cso119394b6e.3
-        for <linux-next@vger.kernel.org>; Mon, 13 May 2024 16:50:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1715644224; x=1716249024; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Eni1/VbwuWwNZf5Mgh8+VsuI37bGfwDEcei5bm7PZnk=;
-        b=uBIry12qz/OoLCSezvKVc6KN5PhiSBATuxHXOGDBvp2KLche9IqSJkSLGzq9wmO6hU
-         QbSZvclp3OOT/zYFZl0JrelCXM90YCsd9/Zr4HibkWHfVnlDZcKnT08LF4fP8NEM5OnS
-         eqdPDDQQ9f/IrUFYJ+YJ1fYtQk8Kda+J5Q6z1kdGkkUUIKCRYlpA9Usyo2S6Nrz9P6KG
-         H0cmis31clUmxbZN8reJmPoLlFP30pFrcpUEp/r89k4WBIRbvR+LC2DoaGK5yDzMkDs4
-         /v9buXvsg8D8WGcYCjibHHFFTm+ls/6pwBo222MX/BSXabu24r3R57J2fBGLijxvhIh3
-         AhdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715644224; x=1716249024;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Eni1/VbwuWwNZf5Mgh8+VsuI37bGfwDEcei5bm7PZnk=;
-        b=I0ECaaYSzZEu6hLxiag+WKy1FTujGmhtYZuIZ2xY1kWVqas4SVkKU4LEe4I9afbbpH
-         q184JDhWc6B7i8MrBB7gQhhhLcOVwrkULbo9zX3D++qwl+EnYzjKeUoHTjJ2EbgxRTWW
-         /T8uvUkx2EEtm33tOKa2AeL2U6wfWxFPNQx2+z2R6+Fy9UZCiwPyu9AU5QXPO1/C12bI
-         j2g13R0/OTlHZLmfJOB1E+EZaE76iySAu5pE+VC/8+ebRyJY5ssLgYrDBQPnDKaxqNly
-         eETrw74Tnjp5NVV5Esa5ZrTY5eI/ydw7BgEK2xLPioCQ2yUagpho4uzIvuioVL8zQt2M
-         EUMA==
-X-Forwarded-Encrypted: i=1; AJvYcCXOXm41DETRjaOvvhwSRY3U9+oE+HTWvLNZzzGWLYNxXykcWfXmMYM9AjZj2CHksj+N3HIDoyVzF0xTQmoslR8CGOwSH6McAmnNjA==
-X-Gm-Message-State: AOJu0YwwLqnhvCAGAkU3lBx08MUGESM9iNbySWBl4hDNHY6VvsqJRvjO
-	rszdK+JqphKQ85NMV+4RhlUjcce8KQtakUwaf8E6DNr9IT6QwY8Xp1yHZMi6ns0=
-X-Google-Smtp-Source: AGHT+IEz1fMTS9/cuGPsvFnPtyCesgGuQT3FIewHTuYEJ6jRtBBQDhiMSKmJvFfBzjBKqPJU1rxjRw==
-X-Received: by 2002:a05:6870:d109:b0:23c:66b9:6a2b with SMTP id 586e51a60fabf-24172314711mr13607217fac.0.1715644222363;
-        Mon, 13 May 2024 16:50:22 -0700 (PDT)
-Received: from [172.21.17.150] ([50.204.89.20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4f2fe72desm4308766b3a.135.2024.05.13.16.50.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 May 2024 16:50:21 -0700 (PDT)
-Message-ID: <a2a87d8c-eb92-497f-bd30-99840c9e0ff1@kernel.dk>
-Date: Mon, 13 May 2024 17:50:15 -0600
+	s=arc-20240116; t=1715644421; c=relaxed/simple;
+	bh=R/KylpXSXNvGKAiTGKjpx8UwgnUX+GBGMiz5pPzku6s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fOphjwz3PevUhH3djBFlNNnjfOnoF/DW8VCOdm3AcX4NaaP/D/PS20NmzWmozagWhklLjofng8wrviBFBiHNNyKRznb2ZUY50wW8LaNrlAuA5HIe5XjXTphq6YCpxr7uukA8rY5XAzZmTWKDY7Lu7WKr9XAzmDIVn4CxorTvBos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=luRtVw/9; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1715644417;
+	bh=nrX0QnSujQBcrtoDk0rMMTUg0PNEV0q40s3RZ7bbSG4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=luRtVw/9c5vJtIXfTK3jZAetTYnmiLMQfjZDWIWVXnCvgH77gnB56xkHocfQJNL+r
+	 chWcXETXg8CdgBdS38EWVf5W/PHUF06x59Y6qUXwIrOQFLiTbXZNXG83s3XpDTqsxA
+	 w2NP68VvF/+XNmqxPZ5T1qtAOJJAmVt/sollEYAvatSGsCKbekdbCXGD5wk/yzoDOC
+	 +rhDOmL31lgkUYpRnwAc+5hRdpCJcbLvuKDwIPWvs4RaSNK6bUgVFTC1QbmcbJAusH
+	 Ef+geWdhxThLJD7bifBI7PuYRPUiycXdMVXLO5SDk4cYGBjMsjxSCcEgNVnxZ9kZFG
+	 toRpkjZGyV7Mw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Vdbsr6PlMz4wbr;
+	Tue, 14 May 2024 09:53:36 +1000 (AEST)
+Date: Tue, 14 May 2024 09:53:36 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Jens Axboe <axboe@kernel.dk>, Damien Le Moal <dlemoal@kernel.org>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the block tree
+Message-ID: <20240514095336.5b805453@canb.auug.org.au>
+In-Reply-To: <20240510131003.70f46881@canb.auug.org.au>
+References: <20240510131003.70f46881@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the block tree with Linus' tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Uday Shankar <ushankar@purestorage.com>
-References: <20240513122334.135fef82@canb.auug.org.au>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20240513122334.135fef82@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/fo57KRCbyFjjZQkD81OmLOp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 5/12/24 8:23 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the block tree got a conflict in:
-> 
->   drivers/block/ublk_drv.c
-> 
-> between commit:
-> 
->   eaf4a9b19b99 ("ublk: remove segment count and size limits")
-> 
-> from Linus' tree and commit:
-> 
->   073341c3031b ("ublk_drv: set DMA alignment mask to 3")
-> 
-> from the block tree.
+--Sig_/fo57KRCbyFjjZQkD81OmLOp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The block tree currently contains just that one pending patch, and I'll
-pick it into a block-6.10 branch now that Linus has merged the other
-bits. Hence this conflict will go away.
+Hi all,
 
--- 
-Jens Axboe
+On Fri, 10 May 2024 13:10:03 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the block tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> block/blk-zoned.c: In function 'blk_zone_write_plug_bio_endio':
+> block/blk-zoned.c:1260:25: error: 'struct block_device' has no member nam=
+ed 'bd_has_submit_bio'
+>  1260 |         if (bio->bi_bdev->bd_has_submit_bio)
+>       |                         ^~
+> block/blk-zoned.c: In function 'blk_zone_wplug_bio_work':
+> block/blk-zoned.c:1329:17: error: 'struct block_device' has no member nam=
+ed 'bd_has_submit_bio'
+>  1329 |         if (bdev->bd_has_submit_bio)
+>       |                 ^~
+>=20
+> Caused by commit
+>=20
+>   dd291d77cc90 ("block: Introduce zone write plugging")
+>=20
+> interacting with commit
+>=20
+>   ac2b6f9dee8f ("bdev: move ->bd_has_subit_bio to ->__bd_flags")
+>=20
+> from the vfs tree.
+>=20
+> I have applied the following merge resolution patch.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 10 May 2024 12:59:09 +1000
+> Subject: [PATCH] fix up for "bdev: move ->bd_has_subit_bio to ->__bd_flag=
+s"
+>=20
+> interacting with "block: Introduce zone write plugging".
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  block/blk-zoned.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/block/blk-zoned.c b/block/blk-zoned.c
+> index 57d367ada1f2..03aa4eead39e 100644
+> --- a/block/blk-zoned.c
+> +++ b/block/blk-zoned.c
+> @@ -1257,7 +1257,7 @@ void blk_zone_write_plug_bio_endio(struct bio *bio)
+>  	 * is not called. So we need to schedule execution of the next
+>  	 * plugged BIO here.
+>  	 */
+> -	if (bio->bi_bdev->bd_has_submit_bio)
+> +	if (bdev_test_flag(bio->bi_bdev, BD_HAS_SUBMIT_BIO))
+>  		disk_zone_wplug_unplug_bio(disk, zwplug);
+> =20
+>  	/* Drop the reference we took when entering this function. */
+> @@ -1326,7 +1326,7 @@ static void blk_zone_wplug_bio_work(struct work_str=
+uct *work)
+>  	 * path for BIO-based devices will not do that. So drop this extra
+>  	 * reference here.
+>  	 */
+> -	if (bdev->bd_has_submit_bio)
+> +	if (bdev_test_flag(bdev, BD_HAS_SUBMIT_BIO))
+>  		blk_queue_exit(bdev->bd_disk->queue);
+> =20
+>  put_zwplug:
+> --=20
+> 2.43.0
 
+This is now a semantic conflict between the vfs tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fo57KRCbyFjjZQkD81OmLOp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZCqAAACgkQAVBC80lX
+0Gxclwf/V6HIcsyWW98hZSKTFWyKVQIoS2XYHiiXXKaE6iKD6jiKvJnk/Km/CCIN
+uTJPZOvarDDIylH5r+Eg2Y6u6wNIq85qhlOWbBWwoVmvK9SX5GN4jo77mJEoT6SB
+tca64lvZA/XCKBjloC7p8GK+4e7YVGVNA7tS85oQVUELJq74/5kQGouYSopGheJY
+Z/cP8hEu+9ehVBlHp6ndEpAPcU2WFVcPsWhaXm+fAzI/Qt3vJgAgGx4btWXVdKN0
+/Dy5jYyeCnQE9Slt3TgIhkXkw2ZvRMtt+maHKXn0bPYf25WHam4aCY1WN0sPk0S1
+tR4v4sAXHpDJng7IaZcRbqqLkXAr2A==
+=p9oD
+-----END PGP SIGNATURE-----
+
+--Sig_/fo57KRCbyFjjZQkD81OmLOp--
 

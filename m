@@ -1,230 +1,199 @@
-Return-Path: <linux-next+bounces-2299-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2300-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39C3D8C4D38
-	for <lists+linux-next@lfdr.de>; Tue, 14 May 2024 09:40:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3142D8C5AF8
+	for <lists+linux-next@lfdr.de>; Tue, 14 May 2024 20:20:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD810282096
-	for <lists+linux-next@lfdr.de>; Tue, 14 May 2024 07:40:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6B63282480
+	for <lists+linux-next@lfdr.de>; Tue, 14 May 2024 18:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B222B1400A;
-	Tue, 14 May 2024 07:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A7D71802C7;
+	Tue, 14 May 2024 18:20:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4oY5dsM"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="q+S7AcML"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2054.outbound.protection.outlook.com [40.107.236.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2453214A8F;
-	Tue, 14 May 2024 07:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715672416; cv=none; b=Xc/Sr2G3QiemvPuWbm8J+T3ikXYTHmxhFhxdGS5UrWyS/YydfwVuT9jh3AbTxDWsxPBgYWrAlD2Q9POiDYEZcAylcLYIqQnAvoxV7JTkrdg28gcAemJ/hT1upFJLWJAY+0b3V06iGer3/Ht2n5TyIWkHW32HeR/1aGQR0ofy/v4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715672416; c=relaxed/simple;
-	bh=wmBYKPZic6o/3k1aA9E1qpLYMrpAVXLd4dEq/ZkqCGc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r7m6o9xcuMPlTxdlPE4Rx74klUaUwjrNhXdWKSBQUUyCEKpraSpH3/6hCwOZgiwfTttF5Iur+3Wj9YyX7ywx2oDopLdUhID7RedZ0MuzJKQKmuvAkdTk6+/1m6okU0/zWLkkZ4W4ZCCMRh3+pE6xDm8kaFgZ6YLoypWC9iH2Rts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M4oY5dsM; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6f4302187c0so4288333b3a.1;
-        Tue, 14 May 2024 00:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715672414; x=1716277214; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3YvLEqN9SF7GsP5Ax2ZZ6G4kMkxSvXwWE7lq39nUwFw=;
-        b=M4oY5dsMwocE7dvSdbdbOVgqXrZlKOWItwYbhkBwOcyG9VKS+hQ25Mcc9x5cgiDWNg
-         UJH8Dj8y4uJ8VHKrBRKrRee9CK9F1YMUwSdy9rZ5x+ivU/xEKtYHA/k2zhLNfab09qoI
-         KLSZy8n5U0LglITz51hCHpFEkHkJLXjmjcbzMz3IdPtkAsmWHM8scOvHSVzLMIOi9vyn
-         e6PUcajqwIWZzcGSPOaumnFkh+QcCdqW7cDc4tdfOXSicWOpLIuibrQAyg60/6ygk6FJ
-         Fi8Pk0yYf0WwZLU1AAAlIMe2j+ixNk0QWQFPExBMhtpmKgXmzwpgMyZ5L2c/uhho70Da
-         PzOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715672414; x=1716277214;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3YvLEqN9SF7GsP5Ax2ZZ6G4kMkxSvXwWE7lq39nUwFw=;
-        b=fhC0zxT1N43mRIvvA3FM2QOnlVq97moOby4PxvCvbnq1FRYWVLHmv4uXHd4rW4Hjt6
-         LAhzrLrkgrPro6GX35qfZRomCTgwz4Oc9OcCzVaZUIX5BHLyBnDji+JH+Fjevlpvmn5M
-         SuMxbaOQTVtSuet6fjU0Mk+YGvr2luqGNIFh/C2bhceaS+B4vHwFmuwqfMhE/EJSjEfU
-         97xya0QcxgaHKiexVB+YJIuFHnqcUq0V6bADGLkZQlAkQ7nF3kWogJs2s/QngO9WzKGA
-         LlRNH2DTQbZLxAOHY4clbKkUvmBaGucuXBAfhRcj2xPLTevDM3/a76twvJIwc1v51myz
-         7gDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUZLBrMIVnHkMsN4pQOdRyrQSLx2B1arr3GCbePzuF1UIJDZD+stFjkh/KB0p3qOsvUD0AQRp0DVMnBJw+D/PXC3L8M1fZT7HOi4OtpKpO3BQg4Ta720Ca90zyHOBDXg90rJav2dhjAaQ==
-X-Gm-Message-State: AOJu0Yw6Obfh4ScDpI6+ptxOPEpUEI3KtWbNAYxzvI9yEiARIWW6oKvi
-	ZXCmaP1jpEsj7p+dNo2bHBIBwD/cPSr31zo8JHAzN3Q4UnPIakuQ
-X-Google-Smtp-Source: AGHT+IGNqjEroFEESDPk+9hGlEurdGGZ2qzj8D2ekEtBC4a4gYh2e8R5zHqiPYEoJGR5nX/Za9xXlA==
-X-Received: by 2002:a05:6a20:4323:b0:1af:58f8:1190 with SMTP id adf61e73a8af0-1afde0d5a81mr17017732637.12.1715672414235;
-        Tue, 14 May 2024 00:40:14 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2a81c8csm8501511b3a.70.2024.05.14.00.40.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 May 2024 00:40:13 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 1E369183B228E; Tue, 14 May 2024 14:40:10 +0700 (WIB)
-Date: Tue, 14 May 2024 14:40:09 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Kuan-Wei Chiu <visitorckw@gmail.com>,
-	Matthew Mirvish <matthew@mm12.xyz>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>, Coly Li <colyli@suse.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the refactor-heap tree with the
- block tree
-Message-ID: <ZkMVWeGUb8OSiC4U@archie.me>
-References: <20240509152745.08af752f@canb.auug.org.au>
- <te64v6zwwor6jkco6uiu2zz7ern6ijhyu5okfvdz3bmj3w5qfp@mx4zdniwymqj>
- <Zj1RzZdtfL7UQax1@visitorckw-System-Product-Name>
- <buehluxvo234sj7onzl6wwjmuslmnkh7g6vnpru23kpti6qmpp@7nqak2ser7mw>
- <Zj2PX6Fy3BEnQc50@visitorckw-System-Product-Name>
- <20240510034618.GA3161190@mm12.xyz>
- <Zj3kowGa9XzJ0yak@visitorckw-System-Product-Name>
- <Zj/F/yf0ixB/eRX7@visitorckw-System-Product-Name>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589C91E487;
+	Tue, 14 May 2024 18:20:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715710822; cv=fail; b=u2qLPiJUdOHcQWNbNLR9ltv6WQbP1EpK73+lD/7P36n/Zf1uH5BXcQ6ggc2IJK5cLkK3yD1+vtRVCmEDVx6EAZcVQslaRggwX/4zaY6GqhI/P0NC8Wds9mDaWJwvC+ibsG68IkHynMjTsd9u7+b0ax3ah9gFa14MKWz7xYvOk3E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715710822; c=relaxed/simple;
+	bh=KrJHf9BEI1qGeWRoMxp/BE7nneWWXTY0KHZgnrFQco0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=dlkQ84erMIpje2uXZqhlLwTJKtwnMOZ+IkKJtCvMBEYhKQW9VBJ42nkYMa8wZWfoCFWB3Sv2SwQzbywLQSQX+y6jzSxyBJ/XX70bzYa87t1BEhTDi46VWkmwV3ckWEenBwNOFPmFSuuXEcjEBvYQzaGDIDUP06N09I4Bxc+HAfY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=q+S7AcML; arc=fail smtp.client-ip=40.107.236.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ld6KQr4a7gFriskpo3F4tCyzQ/YZPa/s9/QtOQrgpgzIArb5q7Z72pzN0eFcz1/SkIjUApthqjgHi32YOhQs+A13f4C9khKuxPcHb36w6l8IKbHDn88H9URBy081t09zUSei4s2vaxuGCIV8yXoK0BLhlFcdi3NYAUX2NLKDFYBaOgp9fV/b1/cELyJsKqp1JQgb1ysW6qViEb2NfmW4pDWsqr1SpVVBCkLP0zmiy5VHgrYGRRCJkgjZPzM/k9vstb/k7PNB4d2DRfumVmzzBjNJ+2U2G8zj3LXzPBbNcOYqQn44OsuzoZNUr/v0ZuI/8RT1OxZP7WmS6+Ba0Xk4Dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0RF4Xm+1/Owbtjvy9scmjxTo2mhupENUylLlCCzglvA=;
+ b=Xn0O4EFUSX8eGSqRjxOCHBaKq/Kjel7J5iaVQgfQHBOgDKsU3ZA4B42aqVP2K4+P3CFghdeszatKerRCzbhX2f1J+GVh02fVXHLJE7D9MLR9gvXUxG1rK63Js9Ejv47DgQEvE66VAZ4rG/uU7dRXJJENGyRNEfbqXhcP0eKkm7iL0vsFDRMnSA16OUab8b1zMNHPzqNJQbZIayBHLSMA1EOytaxD6zlAwZkdV9TYw4uMH/XFVcm1rlmaxLhkmz+9XNOJd/SfavaV6lGC2aBG4WYdFQm04yVn1bbMKhIAkE6F80jLzAv6JnPPrbxv1Sh186td4Kf4cSzib6Bnc16vbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0RF4Xm+1/Owbtjvy9scmjxTo2mhupENUylLlCCzglvA=;
+ b=q+S7AcML4Dmfd7HGgUtCQjIeShFqynk37lZdHEYgL4Tq93WEYhlTZ6P7HRLrNRhjYo8IiUqtNpcKz+tivKltLg/jM7N8s/FczPMwNK+YRKhuwT5ZEeF9dV+/+j27MRtq1ctZk9SqyCX0IIhTIqsP/1gAFDpKA4iTrttFWv7ZqUo=
+Received: from CY5PR12MB6429.namprd12.prod.outlook.com (2603:10b6:930:3b::16)
+ by CY8PR12MB9033.namprd12.prod.outlook.com (2603:10b6:930:71::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.26; Tue, 14 May
+ 2024 18:20:17 +0000
+Received: from CY5PR12MB6429.namprd12.prod.outlook.com
+ ([fe80::2e76:1977:c456:6faf]) by CY5PR12MB6429.namprd12.prod.outlook.com
+ ([fe80::2e76:1977:c456:6faf%6]) with mapi id 15.20.7544.052; Tue, 14 May 2024
+ 18:20:17 +0000
+From: "Nirujogi, Pratap" <Pratap.Nirujogi@amd.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Alex Deucher
+	<alexdeucher@gmail.com>
+CC: "Deucher, Alexander" <Alexander.Deucher@amd.com>, Dave Airlie
+	<airlied@redhat.com>, DRI <dri-devel@lists.freedesktop.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>, "Chan, Benjamin (Koon Pan)"
+	<Benjamin.Chan@amd.com>
+Subject: RE: linux-next: build warning after merge of the amdgpu tree
+Thread-Topic: linux-next: build warning after merge of the amdgpu tree
+Thread-Index: AQHapc5aW+MlwW2dl0GecX4g1oYmjLGXCj7w
+Date: Tue, 14 May 2024 18:20:17 +0000
+Message-ID:
+ <CY5PR12MB642964F3A1D72F422DCB814BFEE32@CY5PR12MB6429.namprd12.prod.outlook.com>
+References: <20240514171417.492a1301@canb.auug.org.au>
+In-Reply-To: <20240514171417.492a1301@canb.auug.org.au>
+Accept-Language: en-CA, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ActionId=be8fbee1-feed-4f69-a6f3-e3a47f11ab2f;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=0;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=true;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
+ Internal Distribution
+ Only;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2024-05-14T18:17:06Z;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY5PR12MB6429:EE_|CY8PR12MB9033:EE_
+x-ms-office365-filtering-correlation-id: e52406ba-78d8-45bf-0400-08dc74428198
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230031|376005|1800799015|366007|38070700009;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?KA8ptH3/0jxhkHcddMxCTbfVbY07adheMKWXECo+XPmbxIFDNq3FzumhJkOJ?=
+ =?us-ascii?Q?ZJ11kDecZOd4cz4dfnoPZQSR+mXBdXIt9l0eOs+XGf2cWeDJvhr7U8X64uGP?=
+ =?us-ascii?Q?92S3zh89Oyluf0zPhOgsYx2ADT8W/oyj74ay4rAJ/RfpO7FnpHbtkbHr+gLT?=
+ =?us-ascii?Q?3AmKYmfTKDsRTrFt6HWCSmL7Exun/YcnnYlhfEt+qH4oU6J0lX/vtKGWXwY1?=
+ =?us-ascii?Q?2n1E9e9olOUfebpvlQj0lL9m+4TN8Qr6ziPqgV9/iOkSEcFwN0gz9ghI6owz?=
+ =?us-ascii?Q?LH0vz1D6xJ5MmOxDbIhtvZRqXKlPCmzG0j1PobG1Bvp/canABWxzyXEPCpH/?=
+ =?us-ascii?Q?gpGNb1OBAEu1qKJWp042aL4FyZlSUggAqrM1LtmzPjpsTPuNq0r0yu+JnTUQ?=
+ =?us-ascii?Q?/UinOBnyT+JtowG7FbseRhfXRxskQFX/K7OEZCuVcAMNaFNTQASJeb3ByFtY?=
+ =?us-ascii?Q?Kk+0OWd1MtxcpnLYEs066JU1rGogQaOfXe4zw4lSWMU/clHQl/RlJRc+TJPc?=
+ =?us-ascii?Q?qFdkKC+9QOzP5oMCAPJvFuyfAIz3wwb93J4e+ta+q7f5eCvn6Q4GXwRf0pEX?=
+ =?us-ascii?Q?2f/DUHWsA+fXjmwh/87LvDm99HK1XV5VQyMLMAf7GjhV9iCAJIuSBw7vwmVn?=
+ =?us-ascii?Q?u79qwk9eraxHpxTexIXIXI1lVkfJNtqJUlnEzbsKvEs0y5wrnwbIcAY+FJ93?=
+ =?us-ascii?Q?wozm9PGOXWMARcYEbREsn3BGKIyY0hJw1ZMJyh96AxUNhG3KMJRRSlw/v7fN?=
+ =?us-ascii?Q?REjb1HHUICTRknRN/hYWupTjYSBL3IIlpS+CVzBBaChG2i1NtJ38jHMIe2QY?=
+ =?us-ascii?Q?1WHPnEzqROqYIhb+bE8GtfRNTALzIH94hrshfPx2Ihb6RhLNxAjpmIQpBnbD?=
+ =?us-ascii?Q?ZbtOcjPphcVcLO8SCNxljdT5ymlGu+JbKyf/AoUoIQIqVPULlXq/MNCzolvr?=
+ =?us-ascii?Q?Nk9lKbcZOZp3e1K6JAXo5zNsjk/xj5muxKQ2C7mOdNnMyJmRjhd85VjacnqF?=
+ =?us-ascii?Q?TnzRAcmbzS5XzECiDCEd617yJSie6b0GCnPBq4cptYCacdzfFUAljyYzHBhD?=
+ =?us-ascii?Q?SDu9j9mHe3lLUZwnGeJXpks9VcWfARUqStm6ALkMQsqIXxMAXOqocKfBE9ss?=
+ =?us-ascii?Q?552ZqqaqVuxP9Icx/FUljgWrG5cY76QwYRdl5gh8NbSOgiJDugRc11WKK9lC?=
+ =?us-ascii?Q?FUWQOJ7fzTFo+w/eq8Me/3jlXdWhe9elEH78qgFVuYTTORzmw+RxmSfW7cXq?=
+ =?us-ascii?Q?khbPafgUqbXR8cip2sEfCvl/AA9Fb940VOYBY7Uw+DKiZ30XcXNOZve2m54t?=
+ =?us-ascii?Q?anzg9gtAyHeTH436yjs/3g+eOoV+J0YeVPATZEy4pvjsWg=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6429.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?JOcs2Z4IQPxJeidU9Mm2UtiNOD8p9nN/PnkSHpB1GPIPH4es7Xouu0yHYWa6?=
+ =?us-ascii?Q?HD7n4f+heVBAjTH3aBlDKCcez6pQ3iv26bIHMC0gnmBCzzSmuzoc74bbgCFt?=
+ =?us-ascii?Q?Eja2EpC5RIoHmPz/s+DMglnuNpn943T6vRCWscBoW8/ONPLYvu1WI0jLpxd9?=
+ =?us-ascii?Q?9nk3cphx5N7dOJHLazd2jo8ig2sUQZVyrNsiq895VeLzS4jwNvVLAZGNsSvS?=
+ =?us-ascii?Q?qkahEZwWSayFyVetDnmcxrA2ZUw96o/yN1yJL5EhkYYKjFOXoMhYqVzi49CL?=
+ =?us-ascii?Q?SX8Xmqig5fF6R25PBV52wXZL2ieaPBFFFYpoEDZ7ptci1CpcaQqrWExoj1ng?=
+ =?us-ascii?Q?w+81xojPaSggBkSE61kRdeYWQ2mv7+HgBAKYibI+bv66/vMDQiQYutB7D3Uk?=
+ =?us-ascii?Q?15F2HxbDKO1w55O8wkD/N8XSz5+p4Gsa+JICoosZQGg3/oxuSUkd+tdLQdk9?=
+ =?us-ascii?Q?kNuyYuiKEExLjoJwWk2EQeQ0eZGrHh3u+JkNEbaLL6kQk7RcFHrh4DbV4YZV?=
+ =?us-ascii?Q?TzI+Ux8lqANyj4CIvcXjUO0f+ibWZSbikshnwTeOMOjZtRzL1ROL+AZc0TGR?=
+ =?us-ascii?Q?bZaoYQLfj/045gHLMYwiSlxKQNOPZIY2x6jwxUMlOy0j/RtSA4qYZRESo0Vm?=
+ =?us-ascii?Q?c1sV8rRB9JYAH/e4A8StE3MRW0cnkYp8ksTxijuA3AdM8EPauN6UAp/iRgRX?=
+ =?us-ascii?Q?x4igrrS/tYQezsDvq06ggi68B8t9lcUDBgcnJ2L1opJOykhd9PzumYnF25Q7?=
+ =?us-ascii?Q?AOr20KM7FIg00tGakboBizH7RpJgVH7JHGA8HC4YRhNGYqpJM7B1hkLOwVB9?=
+ =?us-ascii?Q?Ik0Bv+rDuaJPjR8CN2zv7pLC8n2bnL+iDINremP5PE/pJyU2TDYIJFMfTkN3?=
+ =?us-ascii?Q?gDt5TIfyR15v9kY70bZlX/zZdsAap4KIH13eEJyosBGCnh2WAe5shS2U65nO?=
+ =?us-ascii?Q?BjHjLWB7RHxr24v/3eud0oA1LbiiKBcwG7Yd+SaRJ/NeYfZGMP9ttB2s/pT9?=
+ =?us-ascii?Q?H3JM3DOp7KdUthWGSHj6T9JdPsouOLXxbGVk6TPQcwvRLJD1aSEp1Zy/D+pr?=
+ =?us-ascii?Q?SfM8afsdTGrIx3/79xbGxw5vaE6UXxjkKsC7LErcmCTpe7vE4f9RxIigJykP?=
+ =?us-ascii?Q?ZjQsLu0tOB0lhFyX3XlvnCxDyHA4TFQDz79FbYjs/yMTHcw1jdNJxjs2o4CL?=
+ =?us-ascii?Q?NIVuMy8FFv5qbAbINzVXaBOzQnPgnl+dYaGfzoZpwzoReJYVyjOdo59qxALJ?=
+ =?us-ascii?Q?623ccohw9Q3T4YXNHf00HGVmX0tddXv6D0VVDYvm4GF13ob4PDG8KXvKoy2v?=
+ =?us-ascii?Q?r3U9ydfbOsQ3Wj9CFk6qk11VPNba94yT4WvsMRPI+zVgKV+uIbedkA/cHl6y?=
+ =?us-ascii?Q?GGjXddMGZyfXTp5FOk0g2kNFhS/oUZvDFGVWovYaQHJW7PhUs/MovwKtWUTf?=
+ =?us-ascii?Q?243xUpclbtHDVTJCmLjCexUIn/eULJnmJjufNk3FJmVtDETtF4ZiJlnqDSru?=
+ =?us-ascii?Q?4GHMDSavIWjftGWr1t6z+o2nYOEiskITknqcPepf2vfTtDsAEWOmGPgxquO2?=
+ =?us-ascii?Q?0ZQdWmvqW8Y4BcIjgOk=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="312VrB8j4PQGMpon"
-Content-Disposition: inline
-In-Reply-To: <Zj/F/yf0ixB/eRX7@visitorckw-System-Product-Name>
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6429.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e52406ba-78d8-45bf-0400-08dc74428198
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2024 18:20:17.0586
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lf+pGs5b8t7PgzaHSa1njEZCRZrYnmzYUUJmZYzY3pMm+gDe3pUUx2+4xY0m5ILoO5ErlvmsRiOLQN/sMtft2g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB9033
 
+[AMD Official Use Only - AMD Internal Distribution Only]
 
---312VrB8j4PQGMpon
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-On Sun, May 12, 2024 at 03:24:47AM +0800, Kuan-Wei Chiu wrote:
-> On Fri, May 10, 2024 at 05:11:02PM +0800, Kuan-Wei Chiu wrote:
-> > On Thu, May 09, 2024 at 11:46:18PM -0400, Matthew Mirvish wrote:
-> > > On Fri, May 10, 2024 at 11:07:11AM +0800, Kuan-Wei Chiu wrote:
-> > > > On Thu, May 09, 2024 at 07:16:31PM -0400, Kent Overstreet wrote:
-> > > > > On Fri, May 10, 2024 at 06:44:29AM +0800, Kuan-Wei Chiu wrote:
-> > > > > > On Thu, May 09, 2024 at 03:58:57PM -0400, Kent Overstreet wrote:
-> > > > > > > On Thu, May 09, 2024 at 03:27:45PM +1000, Stephen Rothwell wr=
-ote:
-> > > > > > > > Hi all,
-> > > > > > > >=20
-> > > > > > > > Today's linux-next merge of the refactor-heap tree got conf=
-licts in:
-> > > > > > > >=20
-> > > > > > > >   drivers/md/bcache/bset.c
-> > > > > > > >   drivers/md/bcache/bset.h
-> > > > > > > >   drivers/md/bcache/btree.c
-> > > > > > > >   drivers/md/bcache/writeback.c
-> > > > > > > >=20
-> > > > > > > > between commit:
-> > > > > > > >=20
-> > > > > > > >   3a861560ccb3 ("bcache: fix variable length array abuse in=
- btree_iter")
-> > > > > > > >=20
-> > > > > > > > from the block tree and commit:
-> > > > > > > >=20
-> > > > > > > >   afa5721abaaa ("bcache: Remove heap-related macros and swi=
-tch to generic min_heap")
-> > > > > > > >=20
-> > > > > > > > from the refactor-heap tree.
-> > > > > > > >=20
-> > > > > > > > Ok, these conflicts are too extensive, so I am dropping the=
- refactor-heap
-> > > > > > > > tree for today.  I suggest you all get together and sort so=
-mething out.
-> > > > > > >=20
-> > > > > > > Coli and Kuan, you guys will need to get this sorted out quic=
-k if we
-> > > > > > > want refactor-heap to make the merge window
-> > > > > >=20
-> > > > > > Hi Coli and Kent,
-> > > > > >=20
-> > > > > > If I understand correctly, the reported bug is because we attem=
-pted to
-> > > > > > point (heap)->data to a dynamically allocated memory , but at t=
-hat time
-> > > > > > (heap)->data was not a regular pointer but a fixed size array w=
-ith a
-> > > > > > length of MAX_BSETS.
-> > > > > >=20
-> > > > > > In my refactor heap patch series, I introduced a preallocated a=
-rray and
-> > > > > > decided in min_heap_init() whether the data pointer should poin=
-t to an
-> > > > > > incoming pointer or to the preallocated array. Therefore, I am
-> > > > > > wondering if my patch might have unintentionally fixed this bug?
-> > > > > >=20
-> > > > > > I am unsure how to reproduce the reported issue. Could you assi=
-st me in
-> > > > > > verifying whether my assumption is correct?
-> > > > >=20
-> > > > > This is a merge conflict, not a runtime. Can you rebase onto Coli=
-'s
-> > > > > tree? We'll have to retest.
-> > > >=20
-> > > > Oh, sorry for the misunderstanding I caused. When I mentioned "bug"=
- [1]
-> > > > earlier, I was referring to the bug addressed in
-> > > > 3a861560ccb3 ("bcache: fix variable length array abuse in btree_ite=
-r"),
-> > > > not a merge conflict.
-> > > >=20
-> > > > Here are the results after the rebase:
-> > > > https://github.com/visitorckw/linux.git refactor-heap
-> > > >=20
-> > > > [1]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2039368
-> > >=20
-> > > The ubuntu kernels build with UBSAN now, and the bug reported is just=
- a
-> > > UBSAN warning. The original implementation's iterator has a fixed size
-> > > sets array that is indexed out of bounds when the iterator is allocat=
-ed
-> > > on the heap with more space -- the patch restructures it a bit to hav=
-e a
-> > > single iterator type with a flexible array and then a larger "stack"
-> > > type which embeds the iterator along with the preallocated region.
-> > >=20
-> > > I took a brief look at the refactor-heap branch but I'm not entirely
-> > > sure what's going on with the new min heaps: in the one place where t=
-he
-> > > larger iterators are used (in bch_btree_node_read_done) it doesn't lo=
-ok
-> > > like the heap is ever initialized (perhaps since the old iter_init
-> > > wasn't used here because of the special case it got missed in the
-> > > refactor?) With the new heaps it should be fairly easy to fix though;
-> > > just change the fill_iter mempool to be allocating only the minheap d=
-ata
-> > > arrays and setup iter->heap.data properly with that instead.
-> >=20
-> > Thank you, Matthew.
-> > Not initializing the heap's data pointer was indeed my mistake.
-> > Following your advice, I made the following modifications to the code
-> > on the refactor-heap branch in my github repo. I hope this time it
-> > works well.
-> >
-> Should I resend it as a patch series?
+Thank you for reporting this warning, I will address this in the next amdgp=
+u patchset I will be submitting in this week.
 
-Go ahead.
+Thanks,
+Pratap
 
---=20
-An old man doll... just what I always wanted! - Clara
+-----Original Message-----
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Sent: Tuesday, May 14, 2024 3:14 AM
+To: Alex Deucher <alexdeucher@gmail.com>
+Cc: Deucher, Alexander <Alexander.Deucher@amd.com>; Nirujogi, Pratap <Prata=
+p.Nirujogi@amd.com>; Dave Airlie <airlied@redhat.com>; DRI <dri-devel@lists=
+.freedesktop.org>; Linux Kernel Mailing List <linux-kernel@vger.kernel.org>=
+; Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the amdgpu tree
 
---312VrB8j4PQGMpon
-Content-Type: application/pgp-signature; name="signature.asc"
+Hi all,
 
------BEGIN PGP SIGNATURE-----
+After merging the amdgpu tree, today's linux-next build (htmldocs) produced=
+ this warning:
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZkMVVAAKCRD2uYlJVVFO
-o4xpAQDcKGhTrKxpV8NOk9uCQIEYfiixEwNAetO//zNDgyWC3wD/SacWmXhwC6uq
-YKUG0mVu0I+GIuX7vPUQfOQsSAyfZQ8=
-=vAUY
------END PGP SIGNATURE-----
+drivers/gpu/drm/amd/include/amd_shared.h:110: warning: Enum value 'AMD_IP_B=
+LOCK_TYPE_ISP' not described in enum 'amd_ip_block_type'
 
---312VrB8j4PQGMpon--
+Introduced by commit
+
+  a83048bfa402 ("drm/amd/amdgpu: Add ISP support to amdgpu_discovery")
+
+--
+Cheers,
+Stephen Rothwell
 

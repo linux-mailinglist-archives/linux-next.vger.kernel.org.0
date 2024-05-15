@@ -1,73 +1,72 @@
-Return-Path: <linux-next+bounces-2323-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2324-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B3888C6C9A
-	for <lists+linux-next@lfdr.de>; Wed, 15 May 2024 21:09:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B78CF8C6D24
+	for <lists+linux-next@lfdr.de>; Wed, 15 May 2024 22:19:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90EF71F21770
-	for <lists+linux-next@lfdr.de>; Wed, 15 May 2024 19:09:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA84F1C2233E
+	for <lists+linux-next@lfdr.de>; Wed, 15 May 2024 20:19:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F5415AD90;
-	Wed, 15 May 2024 19:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A7DA4206F;
+	Wed, 15 May 2024 20:19:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="D2JZ88Fk"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="zh3FPuQX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92139158DA5
-	for <linux-next@vger.kernel.org>; Wed, 15 May 2024 19:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C800315B0E1
+	for <linux-next@vger.kernel.org>; Wed, 15 May 2024 20:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715800158; cv=none; b=eLyPlSdNMkdoyACQ2c0QQ12b0sjcmwcbN5ngWssLZXQlsuslaKcKlki0xZXki27SOmLqDjhd6czSHNhG22R7g3rbSSyCtn189VzVZyg2xu299Hlmn0TJerj5+YaWoX4fn291fCSEkEbfk+weRF6BuHO0CgmCHgQ8pRu7PAdiQBY=
+	t=1715804387; cv=none; b=NvT6a6qp9VD4bbkBuS0lL0zkrMzx7UIr6w1y0t9tGMteLzf8XAiM+sdELjoj3uOEGUWUc+hcF345vmJL5Yp940zmodaiZpJBFKS9wmE5ZuYr9YFCMBoWMU7af5MezwlCN/BwIz/kCBHuD5xfZpEsfXlGOsYm5Wj4h8LKD1AL6Y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715800158; c=relaxed/simple;
-	bh=EcxAbGOLHXnDrD1K5Fon8mprvbQf/hlIG7xFfklbDRc=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=heYCtvXCWS3zzkvsBCkmylqMT7u9aYCtjSeaVCacW5R2Gu4oaWZsn0myvzlcBAbupmOy2vl3OdHHBKETGjIy+Wl+g8gEOXuq4dXUnVUcQUtrHCICYiFDQjgedEDD14gSQg/dt4nR8OjwCYxG8xuYr+QBIIauqDHUXztX5ecpVQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=D2JZ88Fk; arc=none smtp.client-ip=209.85.161.52
+	s=arc-20240116; t=1715804387; c=relaxed/simple;
+	bh=LhNul+nUNYPX3Cb7+Bk+xzwY4cggr1wBt9KZpq63S3E=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=qlax3HJLykVqhb6iusyldgPAO53+YpW/RQlZjqblloDAuV4RGkuKLDYwpvHfxrAzg/guGv9Cm9rDD6+lbdUhRn75SGRTiK0qRy3DuqAzhcANmOXQIu6Tx4tYYOBfg2MZmPiSmSmtOeXYy0uCN5YtycfaYfXuDX6z8LXjx9JO6kA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=zh3FPuQX; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5b2a2ef4e4cso3069749eaf.0
-        for <linux-next@vger.kernel.org>; Wed, 15 May 2024 12:09:16 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1ed835f3c3cso63460245ad.3
+        for <linux-next@vger.kernel.org>; Wed, 15 May 2024 13:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1715800155; x=1716404955; darn=vger.kernel.org;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1715804384; x=1716409184; darn=vger.kernel.org;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZNf4JolEpiZtDMSOe1ZLuKIWb6E3lDnxIBr7NZ2SzE=;
-        b=D2JZ88FkQaUd/llUeJFcjAtPPtaIyE2C3D6SgpiSUXad/qa4Ic8P8TFoM9A3Dzt2N1
-         /W3ojs4WAN36LawtSp53kEsoVRLeqWMUj6CFkRCuCdBW/FEk9yrbVeCCFlLGXbQAA57S
-         vgLRO2BiC9wR3w8PxkQe+szxEkYrPrV4vgI8A64nkT7dzvzg2OQxafDLc97tKNXgmEHz
-         KKdaHcEglo1Tx9FgpMrXo2xMf3ICe55i36LDwCeaygVOskkwV/Mp7/BO/uP/7d9OG0D8
-         MiAJh1Xh6mhZXWLyPIPLpVwVE8HFpOtP6eGv09FPYlszl4Q0S0hhCutte9XdriAMkh5g
-         Cxaw==
+        bh=iuc8ggrpE145BTi0ExJEoruSaBhFzZw4MpMORLLUDEQ=;
+        b=zh3FPuQX8jL9YB5LEia4UiHxp/fnLmQpNmcwgZr1d0tfCK+vf2REU8O8Bf7TCR+Oir
+         PUf/Qk943cmzCEE9sareSS+CLEYeIMzr7nNVY8LJHoIZwm0wsm8j8T/56FBJmLM6dcB1
+         ouAaGR9yVh9YvykRbUOKpt7etsVYS2qDT7dBUWkpK04aJojyL8YDKKSQeTpyCduHkkmN
+         gQbg2VclPI9HqsCpjSpiV/naSAVWj57/8V/mUtp+hBaTWlelG9AwszzVhTw2j+JMMAPP
+         h+KixrYSCA3m+Raq+ptTc8j3T9e4MpOVruNJfZOFR7997ZlXTfjqLn5prnVsNMm3bC26
+         43rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715800155; x=1716404955;
+        d=1e100.net; s=20230601; t=1715804384; x=1716409184;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NZNf4JolEpiZtDMSOe1ZLuKIWb6E3lDnxIBr7NZ2SzE=;
-        b=qhb6zGWELOHVrRLnLua63kLDUTOPTgC3thxD2NzkuHfIVGDzmaN0jT0w7q8ylIMO5h
-         A9pNL4EkCOSJflRPg2TfRznwxpjLr1Cy0g2va5UdYVWcVxC7/xubF34ikA8Xw3Bjm3nA
-         rRvagTVHEp0Vq3kjf9y1m4tJBQMmPdEwkuM8so/JX/tFCfq6b4kKLIEjfmv/uU5lV8Yo
-         llyy6H8PV0V3LjO4kfemBacke4QO/vEsDAc/kDTM72mqJMk30fB62S86XuymtpZL3wBF
-         BxtnAKJNXj6BWArJYJ2lVk3vUAt6GxVBAmSU6wnWYGen/GtQI3POcX07j2jzmJquJZWH
-         s2SA==
-X-Gm-Message-State: AOJu0YxvtTMPtMtAidFORMlg0KOPI0LSCHkvrbnR5yR+Ssr1q2LEBshd
-	i/On7qO3MDnGs/h1aTiDvrGqrfDO6RBpcBXWjCCUHwM9Jx8Qpd3qogukSYljmGI3N5uLok3dtTS
-	bnuI=
-X-Google-Smtp-Source: AGHT+IE9lCKNohzX27Q1WvIEhYB0xer6qKOqrJTH0O9Ecy7QI+4PPDEoGFrs3k1L+CqsL2QmvGi3Uw==
-X-Received: by 2002:a05:6358:914e:b0:183:4d1d:dcae with SMTP id e5c5f4694b2df-193bb2dc8d6mr1766611455d.28.1715800155138;
-        Wed, 15 May 2024 12:09:15 -0700 (PDT)
+        bh=iuc8ggrpE145BTi0ExJEoruSaBhFzZw4MpMORLLUDEQ=;
+        b=FKcUkT+U6mZzNMfJ/HjBasGoLu10waroivZZoppopmLeJb3+g4v46Xs8ITL7hP90zc
+         XITSkobr/Fqwc4Dw5UgtqY6PvovDw2CYFlQVv2QpW4spYdlqJYIQkwkUEYCSnfy5n0EW
+         c60OnrTtWlih8UMMnYPZj/Kpn9SxynOyLcnqOZ6NA99jBcnaEl0/lQcycxOP7UxyQN8t
+         kIND07halrXdcjeapl0OhCQ2EhNlay7T29tdybZEUytSawbYdRyKfaulQEfWoCjErA2W
+         yKy2SqEtiFiMonRICwHyn3KLfIOfKLkLqxlYlGZB5o9nyObCIJT13wIh2wSqsgz6F5Oq
+         038A==
+X-Gm-Message-State: AOJu0YwyFzZZ/i6GvX/9ntKfa4/SsL+nbnAeqCtLA+l9RnBjG72OkzvH
+	kpMCgoc3uYzdGur4/Bi6jb966ueo37GJ+xrw7YyPXf6ozv+8ex0FYMuy6XksetnGFtwX7zvwItU
+	HusE=
+X-Google-Smtp-Source: AGHT+IFCHRGdVNem4JlTPJzPv2dzFg0GKXooVMuSIWFx/tkGSIL4F2seEuT2FgeZ9Wk9sSVPOZIo5w==
+X-Received: by 2002:a17:902:eb86:b0:1eb:4a40:c486 with SMTP id d9443c01a7336-1ef43d17f42mr228731005ad.14.1715804383635;
+        Wed, 15 May 2024 13:19:43 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6340a449f5dsm11845949a12.1.2024.05.15.12.09.14
-        for <linux-next@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c0362d4sm122373665ad.210.2024.05.15.13.19.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 May 2024 12:09:14 -0700 (PDT)
-Message-ID: <6645085a.630a0220.ec4bd.e882@mx.google.com>
-Date: Wed, 15 May 2024 12:09:14 -0700 (PDT)
+        Wed, 15 May 2024 13:19:43 -0700 (PDT)
+Message-ID: <664518df.170a0220.782de.fbeb@mx.google.com>
+Date: Wed, 15 May 2024 13:19:43 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
@@ -76,17 +75,16 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.9-3455-g73ce8fe833b0
-X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 31 warnings (v6.9-3455-g73ce8fe833b0)
-To: linux-next@vger.kernel.org
+X-Kernelci-Kernel: next-20240515
+X-Kernelci-Report-Type: test
+Subject: next/master baseline: 210 runs, 13 regressions (next-20240515)
+To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+ kernelci-results@groups.io
 From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 31 warnings (v6.9-3=
-455-g73ce8fe833b0)
+next/master baseline: 210 runs, 13 regressions (next-20240515)
 
 This legacy KernelCI providing this report will shutdown sometime
 soon in favor of our new KernelCI infra. Not all tests are being
@@ -95,225 +93,488 @@ If you are still using this report and want us to prioritize your
 usecase in the new system, please let us know at
 kernelci@lists.linux.dev
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.9-3455-g73ce8fe833b0/
+Regressions Summary
+-------------------
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.9-3455-g73ce8fe833b0
-Git Commit: 73ce8fe833b0a506ddf12c1ee9f985c729c6d82c
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+at91-sama5d4_xplained        | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...CONFIG_SMP=3Dn | 1          =
 
-Warnings Detected:
+at91-sama5d4_xplained        | arm   | lab-baylibre  | gcc-10   | sama5_def=
+config              | 1          =
 
-arc:
-    haps_hs_smp_defconfig (gcc-10): 2 warnings
+bcm2836-rpi-2-b              | arm   | lab-collabora | gcc-10   | bcm2835_d=
+efconfig            | 1          =
 
-arm64:
+imx8mp-evk                   | arm64 | lab-broonie   | gcc-10   | defconfig=
+                    | 1          =
 
-arm:
+imx8mp-verdin-nonwifi-dahlia | arm64 | lab-broonie   | gcc-10   | defconfig=
+                    | 1          =
 
-i386:
+jetson-tk1                   | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defconfig           | 1          =
 
-mips:
-    32r2el_defconfig (gcc-10): 3 warnings
+jetson-tk1                   | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
 
-riscv:
+meson-g12a-u200              | arm64 | lab-baylibre  | gcc-10   | defconfig=
++debug              | 1          =
 
-sparc:
-    sparc64_defconfig (gcc-10): 26 warnings
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-collabora | gcc-10   | defconfig=
++debug              | 1          =
 
-x86_64:
+qemu_arm64-virt-gicv3        | arm64 | lab-collabora | gcc-10   | defconfig=
++debug              | 1          =
+
+r8a7743-iwg20d-q7            | arm   | lab-cip       | gcc-10   | shmobile_=
+defconfig           | 1          =
+
+rk3288-rock2-square          | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+rk3288-veyron-jaq            | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
 
 
-Warnings summary:
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+240515/plan/baseline/
 
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
-=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
-=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
-r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
- =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
- for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
- for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
-e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
-e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
- for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
-e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
-pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
-or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
-for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
-for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
-ls' found, but node is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
- is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
-rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
- provider
-    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20240515
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      82d92a9a1b9ea0ea52aff27cddd05009b4edad49 =
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
+Test Regressions
+---------------- =
 
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
-ot an interrupt provider
-    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
-ound, but node is not an interrupt provider
-    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+at91-sama5d4_xplained        | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...CONFIG_SMP=3Dn | 1          =
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
 
-Warnings:
-    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
-er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
-ider
-    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
+  Details:     https://kernelci.org/test/plan/id/6644e03cae8f32d98a4c42da
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-at91-sama5d4=
+_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-at91-sama5d4=
+_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
 
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
-section mismatches
 
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
-=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
+  * baseline.login: https://kernelci.org/test/case/id/6644e03cae8f32d98a4c4=
+2db
+        new failure (last pass: next-20240507) =
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
+ =
 
----
-For more info write to <info@kernelci.org>
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+at91-sama5d4_xplained        | arm   | lab-baylibre  | gcc-10   | sama5_def=
+config              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644da60e42d8abaab4c42f6
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm/=
+sama5_defconfig/gcc-10/lab-baylibre/baseline-at91-sama5d4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm/=
+sama5_defconfig/gcc-10/lab-baylibre/baseline-at91-sama5d4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644da60e42d8abaab4c4=
+2f7
+        failing since 469 days (last pass: next-20230125, first fail: next-=
+20230131) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+bcm2836-rpi-2-b              | arm   | lab-collabora | gcc-10   | bcm2835_d=
+efconfig            | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644de0906a0079eee4c42e4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: bcm2835_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm/=
+bcm2835_defconfig/gcc-10/lab-collabora/baseline-bcm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm/=
+bcm2835_defconfig/gcc-10/lab-collabora/baseline-bcm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644de0906a0079eee4c4=
+2e5
+        failing since 345 days (last pass: next-20230601, first fail: next-=
+20230605) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+imx8mp-evk                   | arm64 | lab-broonie   | gcc-10   | defconfig=
+                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644db886aa496a9c34c435e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644db886aa496a9c34c4=
+35f
+        failing since 20 days (last pass: next-20240415, first fail: next-2=
+0240424) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+imx8mp-verdin-nonwifi-dahlia | arm64 | lab-broonie   | gcc-10   | defconfig=
+                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644dafb80504bc5144c42ff
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-imx8mp-verdin-nonwifi-dahlia.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-imx8mp-verdin-nonwifi-dahlia.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644dafb80504bc5144c4=
+300
+        failing since 21 days (last pass: next-20240415, first fail: next-2=
+0240424) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+jetson-tk1                   | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644e1dedce7a7f1fa4c42da
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644e1dedce7a7f1fa4c4=
+2db
+        failing since 56 days (last pass: next-20240315, first fail: next-2=
+0240320) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+jetson-tk1                   | arm   | lab-baylibre  | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644e479442ab0ca8f4c42f9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-baylibre/b=
+aseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-baylibre/b=
+aseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644e479442ab0ca8f4c4=
+2fa
+        failing since 764 days (last pass: next-20220401, first fail: next-=
+20220411) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+meson-g12a-u200              | arm64 | lab-baylibre  | gcc-10   | defconfig=
++debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644ddb8f7f7c4a1114c4302
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-meson-g12a-u200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-meson-g12a-u200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644ddb8f7f7c4a1114c4=
+303
+        failing since 147 days (last pass: next-20231115, first fail: next-=
+20231220) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-collabora | gcc-10   | defconfig=
++debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644dbf2e57be405414c42dd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2-uefi.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2-uefi.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644dbf2e57be405414c4=
+2de
+        new failure (last pass: next-20240410) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+qemu_arm64-virt-gicv3        | arm64 | lab-collabora | gcc-10   | defconfig=
++debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644dbde5eec0585d94c4462
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644dbde5eec0585d94c4=
+463
+        new failure (last pass: next-20240410) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+r8a7743-iwg20d-q7            | arm   | lab-cip       | gcc-10   | shmobile_=
+defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644e12e26135b5bd74c42da
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: shmobile_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm/=
+shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm/=
+shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644e12e26135b5bd74c4=
+2db
+        new failure (last pass: next-20240513) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+rk3288-rock2-square          | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644e575f55562a7234c42db
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644e575f55562a7234c4=
+2dc
+        failing since 540 days (last pass: next-20221121, first fail: next-=
+20221122) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+rk3288-veyron-jaq            | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6644e4868ee051f6e44c42da
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-veyron-jaq.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240515/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-veyron-jaq.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6644e4868ee051f6e44c4=
+2db
+        failing since 540 days (last pass: next-20221121, first fail: next-=
+20221122) =
+
+ =20
 

@@ -1,247 +1,242 @@
-Return-Path: <linux-next+bounces-2327-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2328-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED9418C6ED6
-	for <lists+linux-next@lfdr.de>; Thu, 16 May 2024 00:55:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C74F68C6F18
+	for <lists+linux-next@lfdr.de>; Thu, 16 May 2024 01:21:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CEE91F21CAE
-	for <lists+linux-next@lfdr.de>; Wed, 15 May 2024 22:55:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B570281705
+	for <lists+linux-next@lfdr.de>; Wed, 15 May 2024 23:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB06D4086A;
-	Wed, 15 May 2024 22:55:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B904D40858;
+	Wed, 15 May 2024 23:20:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MpXxLqcs"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FKmkZqve"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6463C68C;
-	Wed, 15 May 2024 22:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0CC3C48E;
+	Wed, 15 May 2024 23:20:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715813711; cv=none; b=gVramRTwqSf2FStKpPFUmUBFlwO6JvJOpADMau0LlyrJmLx+YQTxwDn9+RG2JoBWFukUw/K5049EZo75L1sKnxT/BxMFVQ4h00Evi+GaOmELIzP753QtNNpKwtD4iqvF5rkZFsp0QkvoJc6IpSHC9Gu/g/IcsOpyGckqpgyITJA=
+	t=1715815257; cv=none; b=czz4mql7kzq6rWiaXSgFCoPJXwDfgoHAT4HgnuRj3EF3J12Ob9f5Z6kHt1PH66zdhG9ot4dW9c3lDzJU4BNE8RLYrEvluJpcA2+uEMWrpeOtyzoa9Z5QrWjEjs5EgtFUrW3Z2C5IXh7IIv5kecWGMb3c2Im1ZHZ1UY7x4K3/B9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715813711; c=relaxed/simple;
-	bh=o4DgAy62qyJ0nADFKG9xG856wIaWqxAtZHJ9t5cc5SU=;
+	s=arc-20240116; t=1715815257; c=relaxed/simple;
+	bh=6lC+EB8PMnn7w7tVrIFZKflEl1HH73+L4eUsnoKu1A4=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W8ZDc/WKh2bbbAsTzzWAetfEtXroYb4V7zbiQXxB0JjW/yNi3yc89NPxZTr4jwZpnHf/Ru1hv21uFeitOgJWD1MSwWI2KGxMtJiBDQU2Krx2b48Q4kBLIlHgKAlNntXS3IF3GUkJouBrWk9Qs6IYqm0A82nyMiB0p23sQWxndi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=MpXxLqcs; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=GtR1VSikzGUYs6EkO072vYTTLTudaW27asTsWoz9CjykHVzO3btPrmkPeLFfhPNjmbLK+hFhVFS0TuCowWoax2/ECAV213/fQ8PIXeTOVL/+aL7bUvFQ0pnUKLCgkQrLO4GrfFPfM2UhhucPFfv/xiG9vXpkXzvUkNn7Vq/1PKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FKmkZqve; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1715813707;
-	bh=oo8tP2JjIO5kS3+u8DU/4QjZmOqGxW1CPFiQYmO+7XQ=;
+	s=201702; t=1715815252;
+	bh=0LbV+Pj+2FBLlnHt+buhweww+h1gkW8waguXYfTAQFU=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MpXxLqcsr/gXdzRBKYTTnyyE2Dn4g/Z73Ry0b6qoADkG2uIuCp153biTBK2DI9/CF
-	 IFASQLOEcPUkQfzD0LMbwR9WdqSZPl0Kguw9baslpgbW1juaep6ReS6+Xs6KwYLOLw
-	 35yW0BdyFemcgSCGWWglmNHWHP5fNwbyt+BsSw+CBR76+RuNLxtCd0aYfC6i7ETinS
-	 MGdV9AU00WnTOPGD+83NJVbbWHb5xHymeCEvUoHxNdt5QJ489jfQRJeGpI01ZSOYYc
-	 Qzn6W7S26r9dSIM3x6qPx7c1I2rj18/FF466kggwjBvw7DK+u2rsWVzKFHJg5h/Q0k
-	 vZzQJhJ2HwyYA==
+	b=FKmkZqveqZ7PNZX6UW1TFH5/rAXkflxjF2cO+eKPcuZQnEbi8aRqms4BedQMoOYzY
+	 B9qLOp/9L58I7kECBmZjTktIpYH0xPzU6Wn7+iMiXLkVUTzfwizdzJtk6x7DzGbcYu
+	 c1s7KnObWYSNffyIm7DORmvgOUhCDzwRhayWVR+gYEhsv07GQXgnUuO1q5ZG5EvniZ
+	 yzLitHAhQOpj6wLI0hvQib3dl2XP5XH50f29T1FqIlXgvcW1pNMI/NXbCg1Fm++tUb
+	 vUvPsqtbqcgGSGxzmQyAVizVLO/psTwMgMaIbRhL3vXYO0oB0HqH1tQEsqDrNv66d8
+	 tn/Go6wg0Dmfg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VfpTR0JDtz4wxf;
-	Thu, 16 May 2024 08:55:07 +1000 (AEST)
-Date: Thu, 16 May 2024 08:55:06 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Vfq373LMkz4x1T;
+	Thu, 16 May 2024 09:20:51 +1000 (AEST)
+Date: Thu, 16 May 2024 09:20:50 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>,
- Alexander Lobakin <aleksander.lobakin@intel.com>, Kent Overstreet
- <kent.overstreet@linux.dev>, Linux Kernel Mailing List
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Dave Airlie <airlied@redhat.com>, Rob Clark <robdclark@gmail.com>, Sean
+ Paul <seanpaul@chromium.org>, Dmitry Baryshkov
+ <dmitry.baryshkov@linaro.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>, Suren
- Baghdasaryan <surenb@google.com>, Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the mm tree
-Message-ID: <20240516085506.6169f45f@canb.auug.org.au>
-In-Reply-To: <20240516085140.5c654de5@canb.auug.org.au>
-References: <20240429114302.7af809e8@canb.auug.org.au>
-	<20240516085140.5c654de5@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Rob Clark <robdclark@chromium.org>, DRI
+ <dri-devel@lists.freedesktop.org>
+Subject: Re: linux-next: manual merge of the drm-msm tree with the kbuild
+ tree
+Message-ID: <20240516092050.2a258c6f@canb.auug.org.au>
+In-Reply-To: <20240513120312.55d97d04@canb.auug.org.au>
+References: <20240507125132.2af57c71@canb.auug.org.au>
+	<20240513120312.55d97d04@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TsITq.qB1112D2X9O+uw5/w";
+Content-Type: multipart/signed; boundary="Sig_/sSD=YDmJ8SjJ=sPXEg5_OuR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/TsITq.qB1112D2X9O+uw5/w
+--Sig_/sSD=YDmJ8SjJ=sPXEg5_OuR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 16 May 2024 08:51:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 13 May 2024 12:03:12 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> On Mon, 29 Apr 2024 11:43:02 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
+> On Tue, 7 May 2024 12:51:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au>=
+ wrote:
 > >
-> > Today's linux-next merge of the net-next tree got a conflict in:
+> > Today's linux-next merge of the drm-msm tree got a conflict in:
 > >=20
-> >   include/linux/slab.h
+> >   drivers/gpu/drm/msm/Makefile
 > >=20
 > > between commit:
 > >=20
-> >   7bd230a26648 ("mm/slab: enable slab allocation tagging for kmalloc an=
-d friends")
+> >   7c972986689b ("kbuild: use $(src) instead of $(srctree)/$(src) for so=
+urce directory")
 > >=20
-> > from the mm_unstable branch of the mm tree and commit:
+> > from the kbuild tree and commits:
 > >=20
-> >   a1d6063d9f2f ("slab: introduce kvmalloc_array_node() and kvcalloc_nod=
-e()")
+> >   0fddd045f88e ("drm/msm: generate headers on the fly")
+> >   07a2f8716c41 ("drm/msm/gen_header: allow skipping the validation")
 > >=20
-> > from the net-next tree.
+> > from the drm-msm tree.
 > >=20
->
-> This is now a conflict between the mm-stable tree and Linus' tree.
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> >=20
+> > diff --cc drivers/gpu/drm/msm/Makefile
+> > index b8cc007fc1b9,718968717ad5..000000000000
+> > --- a/drivers/gpu/drm/msm/Makefile
+> > +++ b/drivers/gpu/drm/msm/Makefile
+> > @@@ -1,10 -1,11 +1,11 @@@
+> >   # SPDX-License-Identifier: GPL-2.0
+> >  -ccflags-y :=3D -I $(srctree)/$(src)
+> >  +ccflags-y :=3D -I $(src)
+> > + ccflags-y +=3D -I $(obj)/generated
+> >  -ccflags-y +=3D -I $(srctree)/$(src)/disp/dpu1
+> >  -ccflags-$(CONFIG_DRM_MSM_DSI) +=3D -I $(srctree)/$(src)/dsi
+> >  -ccflags-$(CONFIG_DRM_MSM_DP) +=3D -I $(srctree)/$(src)/dp
+> >  +ccflags-y +=3D -I $(src)/disp/dpu1
+> >  +ccflags-$(CONFIG_DRM_MSM_DSI) +=3D -I $(src)/dsi
+> >  +ccflags-$(CONFIG_DRM_MSM_DP) +=3D -I $(src)/dp
+> >  =20
+> > - msm-y :=3D \
+> > + adreno-y :=3D \
+> >   	adreno/adreno_device.o \
+> >   	adreno/adreno_gpu.o \
+> >   	adreno/a2xx_gpu.o \
+> > @@@ -140,11 -145,68 +145,68 @@@ msm-display-$(CONFIG_DRM_MSM_DSI) +=3D =
+ds
+> >   			dsi/dsi_manager.o \
+> >   			dsi/phy/dsi_phy.o
+> >  =20
+> > - msm-$(CONFIG_DRM_MSM_DSI_28NM_PHY) +=3D dsi/phy/dsi_phy_28nm.o
+> > - msm-$(CONFIG_DRM_MSM_DSI_20NM_PHY) +=3D dsi/phy/dsi_phy_20nm.o
+> > - msm-$(CONFIG_DRM_MSM_DSI_28NM_8960_PHY) +=3D dsi/phy/dsi_phy_28nm_896=
+0.o
+> > - msm-$(CONFIG_DRM_MSM_DSI_14NM_PHY) +=3D dsi/phy/dsi_phy_14nm.o
+> > - msm-$(CONFIG_DRM_MSM_DSI_10NM_PHY) +=3D dsi/phy/dsi_phy_10nm.o
+> > - msm-$(CONFIG_DRM_MSM_DSI_7NM_PHY) +=3D dsi/phy/dsi_phy_7nm.o
+> > + msm-display-$(CONFIG_DRM_MSM_DSI_28NM_PHY) +=3D dsi/phy/dsi_phy_28nm.o
+> > + msm-display-$(CONFIG_DRM_MSM_DSI_20NM_PHY) +=3D dsi/phy/dsi_phy_20nm.o
+> > + msm-display-$(CONFIG_DRM_MSM_DSI_28NM_8960_PHY) +=3D dsi/phy/dsi_phy_=
+28nm_8960.o
+> > + msm-display-$(CONFIG_DRM_MSM_DSI_14NM_PHY) +=3D dsi/phy/dsi_phy_14nm.o
+> > + msm-display-$(CONFIG_DRM_MSM_DSI_10NM_PHY) +=3D dsi/phy/dsi_phy_10nm.o
+> > + msm-display-$(CONFIG_DRM_MSM_DSI_7NM_PHY) +=3D dsi/phy/dsi_phy_7nm.o
+> > +=20
+> > + msm-y +=3D $(adreno-y) $(msm-display-y)
+> >  =20
+> >   obj-$(CONFIG_DRM_MSM)	+=3D msm.o
+> > +=20
+> > + ifeq (y,$(CONFIG_DRM_MSM_VALIDATE_XML))
+> > + 	headergen-opts +=3D --validate
+> > + else
+> > + 	headergen-opts +=3D --no-validate
+> > + endif
+> > +=20
+> > + quiet_cmd_headergen =3D GENHDR  $@
+> >  -      cmd_headergen =3D mkdir -p $(obj)/generated && $(PYTHON3) $(src=
+tree)/$(src)/registers/gen_header.py \
+> >  -		      $(headergen-opts) --rnn $(srctree)/$(src)/registers --xml $< =
+c-defines > $@
+> > ++      cmd_headergen =3D mkdir -p $(obj)/generated && $(PYTHON3) $(src=
+)/registers/gen_header.py \
+> > ++		      $(headergen-opts) --rnn $(src)/registers --xml $< c-defines >=
+ $@
+> > +=20
+> > + $(obj)/generated/%.xml.h: $(src)/registers/adreno/%.xml \
+> > + 		$(src)/registers/adreno/adreno_common.xml \
+> > + 		$(src)/registers/adreno/adreno_pm4.xml \
+> > + 		$(src)/registers/freedreno_copyright.xml \
+> > + 		$(src)/registers/gen_header.py \
+> > + 		$(src)/registers/rules-fd.xsd \
+> > + 		FORCE
+> > + 	$(call if_changed,headergen)
+> > +=20
+> > + $(obj)/generated/%.xml.h: $(src)/registers/display/%.xml \
+> > + 		$(src)/registers/freedreno_copyright.xml \
+> > + 		$(src)/registers/gen_header.py \
+> > + 		$(src)/registers/rules-fd.xsd \
+> > + 		FORCE
+> > + 	$(call if_changed,headergen)
+> > +=20
+> > + ADRENO_HEADERS =3D \
+> > + 	generated/a2xx.xml.h \
+> > + 	generated/a3xx.xml.h \
+> > + 	generated/a4xx.xml.h \
+> > + 	generated/a5xx.xml.h \
+> > + 	generated/a6xx.xml.h \
+> > + 	generated/a6xx_gmu.xml.h \
+> > + 	generated/adreno_common.xml.h \
+> > + 	generated/adreno_pm4.xml.h \
+> > +=20
+> > + DISPLAY_HEADERS =3D \
+> > + 	generated/dsi_phy_7nm.xml.h \
+> > + 	generated/dsi_phy_10nm.xml.h \
+> > + 	generated/dsi_phy_14nm.xml.h \
+> > + 	generated/dsi_phy_20nm.xml.h \
+> > + 	generated/dsi_phy_28nm_8960.xml.h \
+> > + 	generated/dsi_phy_28nm.xml.h \
+> > + 	generated/dsi.xml.h \
+> > + 	generated/hdmi.xml.h \
+> > + 	generated/mdp4.xml.h \
+> > + 	generated/mdp5.xml.h \
+> > + 	generated/mdp_common.xml.h \
+> > + 	generated/sfpb.xml.h
+> > +=20
+> > + $(addprefix $(obj)/,$(adreno-y)): $(addprefix $(obj)/,$(ADRENO_HEADER=
+S))
+> > + $(addprefix $(obj)/,$(msm-display-y)): $(addprefix $(obj)/,$(DISPLAY_=
+HEADERS))
+> > +=20
+> > + targets +=3D $(ADRENO_HEADERS) $(DISPLAY_HEADERS) =20
+>=20
+> This is now  conflict between the drm tree and the kbuild tree.
 
-But with the revised fixup below, of course.
+And now a conflict between the kbuild tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/slab.h
-index 4cc37ef22aae,d1d1fa5e7983..88426b015faa
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@@ -773,40 -744,66 +773,54 @@@ static inline __alloc_size(1, 2) void *
-   * @size: how many bytes of memory are required.
-   * @flags: the type of memory to allocate (see kmalloc).
-   */
- -static inline __alloc_size(1) void *kzalloc(size_t size, gfp_t flags)
- +static inline __alloc_size(1) void *kzalloc_noprof(size_t size, gfp_t fla=
-gs)
-  {
- -	return kmalloc(size, flags | __GFP_ZERO);
- +	return kmalloc_noprof(size, flags | __GFP_ZERO);
-  }
- +#define kzalloc(...)				alloc_hooks(kzalloc_noprof(__VA_ARGS__))
- +#define kzalloc_node(_size, _flags, _node)	kmalloc_node(_size, (_flags)|_=
-_GFP_ZERO, _node)
- =20
- -/**
- - * kzalloc_node - allocate zeroed memory from a particular memory node.
- - * @size: how many bytes of memory are required.
- - * @flags: the type of memory to allocate (see kmalloc).
- - * @node: memory node from which to allocate
- - */
- -static inline __alloc_size(1) void *kzalloc_node(size_t size, gfp_t flags=
-, int node)
- -{
- -	return kmalloc_node(size, flags | __GFP_ZERO, node);
- -}
- +extern void *kvmalloc_node_noprof(size_t size, gfp_t flags, int node) __a=
-lloc_size(1);
- +#define kvmalloc_node(...)			alloc_hooks(kvmalloc_node_noprof(__VA_ARGS__=
-))
- =20
- -extern void *kvmalloc_node(size_t size, gfp_t flags, int node) __alloc_si=
-ze(1);
- -static inline __alloc_size(1) void *kvmalloc(size_t size, gfp_t flags)
- -{
- -	return kvmalloc_node(size, flags, NUMA_NO_NODE);
- -}
- -static inline __alloc_size(1) void *kvzalloc_node(size_t size, gfp_t flag=
-s, int node)
- -{
- -	return kvmalloc_node(size, flags | __GFP_ZERO, node);
- -}
- -static inline __alloc_size(1) void *kvzalloc(size_t size, gfp_t flags)
- -{
- -	return kvmalloc(size, flags | __GFP_ZERO);
- -}
- +#define kvmalloc(_size, _flags)			kvmalloc_node(_size, _flags, NUMA_NO_NO=
-DE)
- +#define kvmalloc_noprof(_size, _flags)		kvmalloc_node_noprof(_size, _flag=
-s, NUMA_NO_NODE)
- +#define kvzalloc(_size, _flags)			kvmalloc(_size, _flags|__GFP_ZERO)
- =20
- -static inline __alloc_size(1, 2) void *
- -kvmalloc_array_node(size_t n, size_t size, gfp_t flags, int node)
- +#define kvzalloc_node(_size, _flags, _node)	kvmalloc_node(_size, _flags|_=
-_GFP_ZERO, _node)
- +
-- static inline __alloc_size(1, 2) void *kvmalloc_array_noprof(size_t n, si=
-ze_t size, gfp_t flags)
-++static inline __alloc_size(1, 2) void *kvmalloc_array_node_noprof(size_t =
-n, size_t size, gfp_t flags, int node)
-  {
-  	size_t bytes;
- =20
-  	if (unlikely(check_mul_overflow(n, size, &bytes)))
-  		return NULL;
- =20
-- 	return kvmalloc_node_noprof(bytes, flags, NUMA_NO_NODE);
- -	return kvmalloc_node(bytes, flags, node);
-++	return kvmalloc_node_noprof(bytes, flags, node);
-+ }
-+=20
-++#define kvmalloc_array_node(...)	alloc_hooks(kvmalloc_array_node_noprof(_=
-_VA_ARGS__))
-++
-+ static inline __alloc_size(1, 2) void *
-+ kvmalloc_array(size_t n, size_t size, gfp_t flags)
-+ {
-+ 	return kvmalloc_array_node(n, size, flags, NUMA_NO_NODE);
-+ }
-++#define kvmalloc_array_noprof(_n, _size, _flags)	kvmalloc_array(_n, _size=
-, _flags)
-+=20
-+ static inline __alloc_size(1, 2) void *
-+ kvcalloc_node(size_t n, size_t size, gfp_t flags, int node)
-+ {
- -	return kvmalloc_array_node(n, size, flags | __GFP_ZERO, node);
-++	return kvmalloc_array_node_noprof(n, size, flags | __GFP_ZERO, node);
-  }
- =20
-- #define kvmalloc_array(...)			alloc_hooks(kvmalloc_array_noprof(__VA_ARGS=
-__))
- -static inline __alloc_size(1, 2) void *kvcalloc(size_t n, size_t size, gf=
-p_t flags)
- -{
- -	return kvmalloc_array(n, size, flags | __GFP_ZERO);
- -}
- +#define kvcalloc(_n, _size, _flags)		kvmalloc_array(_n, _size, _flags|__G=
-FP_ZERO)
-- #define kvcalloc_noprof(_n, _size, _flags)	kvmalloc_array_noprof(_n, _siz=
-e, _flags|__GFP_ZERO)
-++#define kvcalloc_noprof(_n, _size, _flags)	kvmalloc_array_node_noprof(_n,=
- _size, _flags|__GFP_ZERO)
- =20
- -extern void *kvrealloc(const void *p, size_t oldsize, size_t newsize, gfp=
-_t flags)
- +extern void *kvrealloc_noprof(const void *p, size_t oldsize, size_t newsi=
-ze, gfp_t flags)
-  		      __realloc_size(3);
- +#define kvrealloc(...)				alloc_hooks(kvrealloc_noprof(__VA_ARGS__))
- +
-  extern void kvfree(const void *addr);
-  DEFINE_FREE(kvfree, void *, if (_T) kvfree(_T))
- =20
-
---Sig_/TsITq.qB1112D2X9O+uw5/w
+--Sig_/sSD=YDmJ8SjJ=sPXEg5_OuR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZFPUoACgkQAVBC80lX
-0GwAfwf3bdnCyFNkWI2rog8o8I9W7GGzCO+n+Y3t8qoq8pN2+lkNyOUKGsTvQYmw
-C0S2o81B1rczgjPM9zJA+wp7KXQdw9ZIq/Ack7h2PThGxwiOpf7tS76E69zV+Td+
-V2GmEE/3/KlgcfDMsu0V+DQfTSR9HF96A1O9wnPVsmhGxEEeFWIRuznsepKit7B9
-6KDbCzg24gZOaJcA3csImuQ+sTf6SUzpZHyrDmEA0nR7EnlFAKXUppATqA8yAFzR
-yUhp9Qv5Za2uDvIoBQn+3QIom55zfSvUBcBao3VcyD9H6VwBxzadK6AxUJf1gGsx
-FqZ/0eBcN6x3RJsn3Gxa+mvE1OzR
-=/sGT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZFQ1IACgkQAVBC80lX
+0Gy1pQf+LyZCjL7Hww6fBJsBQno7RSeYrTdWGuFi56VJVbQnO/8g1tEgkhS3bb8c
+vsry0RPJkVckPWHZZ9XewogQ+qHU/DRm3sXDC/BVQ76cFscxGjxoIN77ZFyhtF4W
+CNk6QFFdujafGCuK+nS3klKcC/LqffzoubsihmR/AKW+LFTtSSjaqnQtIW4QseIc
+ElgdmWtWJlFaZJzmKgd7w6kHqe7e9Rt3E4nScs9XkwAN30AEtuRD8bvfhhLNjTpe
+wVZyw09FeCMVkvh+06Egcwk5Kggiukua+wXCY7z5Eh0sRPcWaGQrFdJHZNCpj13R
+eNOrup6Cy6SczWCAgRoQE2R8SqgOLQ==
+=08ja
 -----END PGP SIGNATURE-----
 
---Sig_/TsITq.qB1112D2X9O+uw5/w--
+--Sig_/sSD=YDmJ8SjJ=sPXEg5_OuR--
 

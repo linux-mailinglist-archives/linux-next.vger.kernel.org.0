@@ -1,183 +1,176 @@
-Return-Path: <linux-next+bounces-2330-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2331-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D5638C6F23
-	for <lists+linux-next@lfdr.de>; Thu, 16 May 2024 01:24:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F9958C6F3C
+	for <lists+linux-next@lfdr.de>; Thu, 16 May 2024 01:36:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0037D1F218C4
-	for <lists+linux-next@lfdr.de>; Wed, 15 May 2024 23:24:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26A7AB22AE3
+	for <lists+linux-next@lfdr.de>; Wed, 15 May 2024 23:36:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20B44D9F2;
-	Wed, 15 May 2024 23:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA8753FB2C;
+	Wed, 15 May 2024 23:36:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PmnaoTIW"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="M6EFXWVs"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBAE3FBA7;
-	Wed, 15 May 2024 23:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A795415B0E2;
+	Wed, 15 May 2024 23:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715815446; cv=none; b=Yikz4q+0TA52663C4OzSKeB7z3GA74WPga5D2B0H4RqK23Dai2Y3aurGF9D5JVZQqBX1VlhrGqAZ46U2grLeszfEbUKM3aJhM1cc3j8JfcbAnBz6TBBGQLL4rIgiVVzyrUtMae6YB8uWBObCW32NCUiOaSbE7ucU8qgRTKGgj6I=
+	t=1715816210; cv=none; b=VPAZd2yvE2r+1GibNK05Nv5SYW4dvbbqqMJB2XRho5pXcxziCgkzaOZyjOI0hwDGZVh14flk52RSm7gvwJMqG6+183j854ldHIKIGhsSIa/Zh161tMiBKzG5y7hPyqPfg3fkppqwlg9MsfspMs2EIUYmYCSMxQFtAXUA1IMe27s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715815446; c=relaxed/simple;
-	bh=Q8VPkE29IY3yc1Ga9qKaqmduPct/QBAS7mlBMvMJWI0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uFTBx089CYE6Le6UPIP5IqM49H/O396dwQgKW5kcaOUBgN5P4oc6ofs8CQuDhhGZZiKa3Yji80rZM5fQM4M3OkKDOb+Gvr1nKzztsd4GBGwJnOJJwu/kvSCAmkm/JK6brr9o9kPrNc0f9E3KutYe3zhgHjp460+IMPFV6pUI9fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PmnaoTIW; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1715816210; c=relaxed/simple;
+	bh=h/fELJAsDg748mkEEC6ctQgaxGp68FRdRSGLSUo9hEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RPu5rzR0MayFyqLherFPlBg5wRilEUFV9WhEdnmZEJ800rSTow1ztO8PSS61Vm4+VHPSwPKaE0XQ+G/BkdOnHxvmZ8v1AC7P1tN2F/Z93MfSYwfEzoswj3jAOCne3qpKIkcqG4icpzMEByjqKWfn57QZnQR56J46MekmtTPZpV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=M6EFXWVs; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1715815443;
-	bh=d98LuK1KfsLFwZxjpmtakns62dhgVIQuZbCW8Ow/p4g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=PmnaoTIWJQ55BQJBEg/AEUhVUuzta/XESSmq1HP+LG7DLaLHKFCLLFWe9Y3JVAL7T
-	 qelhM8EmbwVFGOHp6NnuRWY+iX7Ea2dPP4NPxTwzKj04yiutK6XGO9/ea4FUHNTnWM
-	 3OXt0QoN5bJyJ4jZvZl5hQigbjfWWslnVoHq4E4/I4vHPMonKdf/A9AN9nzjeWpY0j
-	 eTSF9wVyjTgiWLXyEF0rwyLuoi61XhjGtwcKWPFf9Ucimku1rGAqeoMqUijRuydt5W
-	 vEP/sF9PUw6cyTAKkoqlARTlWhuIM60DNLbDlgzmH7lfzDqGMSE5HShxcNL+SbHJAO
-	 I7lUoA7AyqfuQ==
+	s=201702; t=1715816204;
+	bh=zxamCbQZXQn0CBVHpsgeP7uFu78F+PTSpmPwxa+Bibo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=M6EFXWVsGQLVfWrhP2ExvblMzaeS/jLjNXSHcRPxbCKObGxY6L6qThezBkHAAqwqD
+	 /MIp3UMFPL2bJPG12OKPucEN52nMlzjqNpSt9lvRMQ5qMujZGJ4wg23fZqx2Lfius5
+	 zzEV/UREQEx0Gh5sReDdpxyqefJ8rcf+kgKi2RsPZdz281tqdNyAZtl4WvwMZvTSiU
+	 kUgng1cFnom9H3LQaYZBlXRfj7PXMX+LJCP/dDxnRt7rqhgZf9EDLsMRcFP7zC5CSR
+	 LCzS6b1nd3k2DfbUcmEkfuC6zmcHJ+AktyvIZAQ2mwXPNS5d5SLtU7kChIujb2p4bH
+	 X74/Xj1gj3Q5A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Vfq6p192nz4x1T;
-	Thu, 16 May 2024 09:24:02 +1000 (AEST)
-Date: Thu, 16 May 2024 09:24:01 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VfqPP71Fgz4x1Y;
+	Thu, 16 May 2024 09:36:41 +1000 (AEST)
+Date: Thu, 16 May 2024 09:36:41 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christoph Hellwig <hch@lst.de>
-Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Alexander Lobakin
- <aleksander.lobakin@intel.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
- Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>, Emil Renner Berthing
+ <emil.renner.berthing@canonical.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the net-next tree with the
- dma-mapping tree
-Message-ID: <20240516092401.5257bf0e@canb.auug.org.au>
-In-Reply-To: <20240509115307.71ae8787@canb.auug.org.au>
-References: <20240509115307.71ae8787@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Masahiro Yamada <masahiroy@kernel.org>,
+ Palmer Dabbelt <palmer@rivosinc.com>, Yangyu Chen <cyy@cyyself.name>
+Subject: linux-next: manual merge of the risc-v tree with Linus' tree
+Message-ID: <20240516093641.15695f18@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XcPvDPn//a2UViAc0ysycQ_";
+Content-Type: multipart/signed; boundary="Sig_/zBiFYrER7aIM+9EzT=z+MMJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/XcPvDPn//a2UViAc0ysycQ_
+--Sig_/zBiFYrER7aIM+9EzT=z+MMJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 9 May 2024 11:53:07 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the net-next tree got a conflict in:
->=20
->   net/core/page_pool.c
->=20
-> between commit:
->=20
->   4321de4497b2 ("page_pool: check for DMA sync shortcut earlier")
->=20
-> from the dma-mapping tree and commit:
->=20
->   ef9226cd56b7 ("page_pool: constify some read-only function arguments")
->=20
-> from the net-next tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc net/core/page_pool.c
-> index 4f9d1bd7f4d1,8bcc7014a61a..000000000000
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@@ -398,26 -384,16 +399,26 @@@ static struct page *__page_pool_get_cac
->   	return page;
->   }
->  =20
->  -static void page_pool_dma_sync_for_device(const struct page_pool *pool,
->  -					  const struct page *page,
->  -					  unsigned int dma_sync_size)
->  +static void __page_pool_dma_sync_for_device(const struct page_pool *poo=
-l,
-> - 					    struct page *page,
-> ++					    const struct page *page,
->  +					    u32 dma_sync_size)
->   {
->  +#if defined(CONFIG_HAS_DMA) && defined(CONFIG_DMA_NEED_SYNC)
->   	dma_addr_t dma_addr =3D page_pool_get_dma_addr(page);
->  =20
->   	dma_sync_size =3D min(dma_sync_size, pool->p.max_len);
->  -	dma_sync_single_range_for_device(pool->p.dev, dma_addr,
->  -					 pool->p.offset, dma_sync_size,
->  -					 pool->p.dma_dir);
->  +	__dma_sync_single_for_device(pool->p.dev, dma_addr + pool->p.offset,
->  +				     dma_sync_size, pool->p.dma_dir);
->  +#endif
->  +}
->  +
->  +static __always_inline void
->  +page_pool_dma_sync_for_device(const struct page_pool *pool,
-> - 			      struct page *page,
-> ++			      const struct page *page,
->  +			      u32 dma_sync_size)
->  +{
->  +	if (pool->dma_sync && dma_dev_need_sync(pool->p.dev))
->  +		__page_pool_dma_sync_for_device(pool, page, dma_sync_size);
->   }
->  =20
->   static bool page_pool_dma_map(struct page_pool *pool, struct page *page)
-> @@@ -708,10 -688,11 +710,9 @@@ __page_pool_put_page(struct page_pool *
->   	if (likely(__page_pool_page_can_be_recycled(page))) {
->   		/* Read barrier done in page_ref_count / READ_ONCE */
->  =20
->  -		if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
->  -			page_pool_dma_sync_for_device(pool, page,
->  -						      dma_sync_size);
->  +		page_pool_dma_sync_for_device(pool, page, dma_sync_size);
->  =20
-> - 		if (allow_direct && in_softirq() &&
-> - 		    page_pool_recycle_in_cache(page, pool))
-> + 		if (allow_direct && page_pool_recycle_in_cache(page, pool))
->   			return NULL;
->  =20
->   		/* Page found as candidate for recycling */
+Today's linux-next merge of the risc-v tree got a conflict in:
 
-This is now a conflict between the dma-mapping tree and Linus' tree.
+  arch/riscv/Makefile
+
+between commit:
+
+  ef10bdf9c3e6 ("riscv: Kconfig.socs: Split ARCH_CANAAN and SOC_CANAAN_K210=
+")
+
+from Linus' tree and commits:
+
+  3b938e231b66 ("riscv: merge two if-blocks for KBUILD_IMAGE")
+  c1f59d035966 ("riscv: make image compression configurable")
+
+from the risc-v tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/XcPvDPn//a2UViAc0ysycQ_
+diff --cc arch/riscv/Makefile
+index 0577d34fb1a7,321c057e2bdc..000000000000
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@@ -132,12 -136,20 +139,20 @@@ endi
+  CHECKFLAGS +=3D -D__riscv -D__riscv_xlen=3D$(BITS)
+ =20
+  # Default target when executing plain make
+- boot		:=3D arch/riscv/boot
+- ifeq ($(CONFIG_XIP_KERNEL),y)
+- KBUILD_IMAGE :=3D $(boot)/xipImage
+- else
+- KBUILD_IMAGE	:=3D $(boot)/Image.gz
++ boot					:=3D arch/riscv/boot
++ boot-image-y				:=3D Image
++ boot-image-$(CONFIG_KERNEL_BZIP2)	:=3D Image.bz2
++ boot-image-$(CONFIG_KERNEL_GZIP)	:=3D Image.gz
++ boot-image-$(CONFIG_KERNEL_LZ4)		:=3D Image.lz4
++ boot-image-$(CONFIG_KERNEL_LZMA)	:=3D Image.lzma
++ boot-image-$(CONFIG_KERNEL_LZO)		:=3D Image.lzo
++ boot-image-$(CONFIG_KERNEL_ZSTD)	:=3D Image.zst
++ ifdef CONFIG_RISCV_M_MODE
+ -boot-image-$(CONFIG_ARCH_CANAAN)	:=3D loader.bin
+++boot-image-$(CONFIG_ARCH_CANAAN_K210)	:=3D loader.bin
+  endif
++ boot-image-$(CONFIG_EFI_ZBOOT)		:=3D vmlinuz.efi
++ boot-image-$(CONFIG_XIP_KERNEL)		:=3D xipImage
++ KBUILD_IMAGE				:=3D $(boot)/$(boot-image-y)
+ =20
+  libs-y +=3D arch/riscv/lib/
+  libs-$(CONFIG_EFI_STUB) +=3D $(objtree)/drivers/firmware/efi/libstub/lib.a
+@@@ -154,20 -166,9 +169,9 @@@ endi
+  endif
+ =20
+  vdso-install-y			+=3D arch/riscv/kernel/vdso/vdso.so.dbg
+ -vdso-install-$(CONFIG_COMPAT)	+=3D arch/riscv/kernel/compat_vdso/compat_v=
+dso.so.dbg:../compat_vdso/compat_vdso.so
+ +vdso-install-$(CONFIG_COMPAT)	+=3D arch/riscv/kernel/compat_vdso/compat_v=
+dso.so.dbg
+ =20
+- ifneq ($(CONFIG_XIP_KERNEL),y)
+- ifeq ($(CONFIG_RISCV_M_MODE)$(CONFIG_SOC_CANAAN_K210),yy)
+- KBUILD_IMAGE :=3D $(boot)/loader.bin
+- else
+- ifeq ($(CONFIG_EFI_ZBOOT),)
+- KBUILD_IMAGE :=3D $(boot)/Image.gz
+- else
+- KBUILD_IMAGE :=3D $(boot)/vmlinuz.efi
+- endif
+- endif
+- endif
+- BOOT_TARGETS :=3D Image Image.gz loader loader.bin xipImage vmlinuz.efi
++ BOOT_TARGETS :=3D Image Image.gz Image.bz2 Image.lz4 Image.lzma Image.lzo=
+ Image.zst loader loader.bin xipImage vmlinuz.efi
+ =20
+  all:	$(notdir $(KBUILD_IMAGE))
+ =20
+
+--Sig_/zBiFYrER7aIM+9EzT=z+MMJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZFRBEACgkQAVBC80lX
-0GyBLAgAjOyX7LRNLBPiTsX9UYXq3Dj5vzSJE9dv5mqGbXU+39GRYPRVpADcZaXo
-8cNjiP7nkub+BQYXPFndeyB/J3hngcEPdMt1fY1qMBikrRBpIkt1XPuiRP1K8YR7
-p9Kb4C4GZ/UR2m6xSGXhXDROgMXYknqOcHX3SNQUXn/lc+MyAxl5PKHGxcoLqGnw
-BG7UTF8Fs0J4MUIZ31hzgw23q37ULLLULk6uzFtjZgI+UcSMHRVLkBzVYSDZvzlF
-xO08zGVXSqtih/VwzDRNtLR6GLiroTa/FR1K+9v6glrfoUNuSpA+ncqWcoqTQQjh
-vt0nklB3T5+hFrlsveDZsjhNWvaWrw==
-=hnQX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZFRwkACgkQAVBC80lX
+0Gym4Qf/U1wWiCaSM9jRRxodXRPieDLW/xtdKEph4feEq5H+wV6czgoMRDNQFLlH
+0Xai1JA2puWR+naZVOcPJ8eB/r07Tn2M3DgiJk42ItkzAQBdTci036cbE/T+/sKV
+rHm5nDFYGQ1qo4Fg1L7sqHLo7nIh4dNGlsBW9PT6w/6SNMxLcY/jsc29CdYXhpRx
+UxhwuyikTmuAIBezIxLPQiEhTP8VI3lvgJ6MCcv3IjPIX2Sozk/6SjXCvXBpmz2b
+pS/FqTz5jQ6DR/s/IVWDK0Z0oxaCpU+HaTHKyi6WwBeS5pY4TpZ/UqEjnGigkSs4
+X3EL0kQveCwS2hlcR23fWI+3LL3FcA==
+=D5or
 -----END PGP SIGNATURE-----
 
---Sig_/XcPvDPn//a2UViAc0ysycQ_--
+--Sig_/zBiFYrER7aIM+9EzT=z+MMJ--
 

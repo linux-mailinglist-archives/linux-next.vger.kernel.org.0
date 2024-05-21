@@ -1,80 +1,113 @@
-Return-Path: <linux-next+bounces-2369-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2370-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 521DA8CAC6C
-	for <lists+linux-next@lfdr.de>; Tue, 21 May 2024 12:44:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35A788CAF8F
+	for <lists+linux-next@lfdr.de>; Tue, 21 May 2024 15:42:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F57B2823C5
-	for <lists+linux-next@lfdr.de>; Tue, 21 May 2024 10:44:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7AA1B20D6B
+	for <lists+linux-next@lfdr.de>; Tue, 21 May 2024 13:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FFE96CDC2;
-	Tue, 21 May 2024 10:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CFEC7E57C;
+	Tue, 21 May 2024 13:42:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="J4aF987Q"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HekusvH9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-175.mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F28F6CDBD;
-	Tue, 21 May 2024 10:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08907CF39
+	for <linux-next@vger.kernel.org>; Tue, 21 May 2024 13:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716288275; cv=none; b=XVBVNFJVTgQJ93V8Ht+9QUZl7rWtwZ8HkWJMNmjDmsRo3++JCfdP7vO8GQSiQGmMAS78eqmCdAgJ266A7mgnT0w7LCPcV44tqH9Xqw0aDlU5xkp2Z3UtXH7uZHx2hcU8ZjCEA0OfpfmjRzMr1dXL6CtwXHv3ubj7WGyivwZXCBo=
+	t=1716298969; cv=none; b=KO3HpbOK46bDiqo0bDSZYTXpEE6CkXvPD3DfFUxhceFFVXBCies6I4CKK7+ZqXJ/2St+P2qqrZCBGtGSEggQcsB4EHZ2jYJDesszKbKWx2MmjuItrfFwn5bzp/hAwfVWCrOq/I2WdlVJk1fzvXiWVzdbLP1+WH2kz2reTOYKEJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716288275; c=relaxed/simple;
-	bh=1Iwp34WIXn/TPRJOcu6SUvQdBFGuAro05DI9cIwDPXU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O6nRJy9nzrCyOHlKpXZTJcJ5A9guO8XWP8K6/ErKgO5Mnk44VKr9p/MF6NXh9+kClfBr02XwujCxGkTo5/KwaFNoAvvFb5fmDUwDWiBX3gHcJJVVzfVDuJvFTh1jGebPbHM1Wtu5FaPBl4QSTC4pUrAezY7tt8ZYy6Ww1PeN5AM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=J4aF987Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83113C32786;
-	Tue, 21 May 2024 10:44:34 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="J4aF987Q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1716288272;
+	s=arc-20240116; t=1716298969; c=relaxed/simple;
+	bh=nskXoVH0tSdwHwBT5lpfPvxc/GCyARcFwFwmmtGRg6Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m7SZ2mfpJLa+PnctSEPYtAIKrigNWcPdB+ay98C35stKAEuuM7vSLc4M+dTg+zE2fvE7OzYSStsQnSn98aYOLvvAM5QHVlUKM94Tetp1HOyFUrFKZYOvsDYwuwV2xonJQx+ezogqv+KC9kvAC1nl/PQjJzLgpsxwG4sv2ym8cYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HekusvH9; arc=none smtp.client-ip=91.218.175.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: visitorckw@gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716298964;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1Iwp34WIXn/TPRJOcu6SUvQdBFGuAro05DI9cIwDPXU=;
-	b=J4aF987Qam6/RcaSa8geQ0riPAiASfLxSPyKMskFnO7K2xjw7XjwqUUCaLyFHnfmm56brw
-	P8w4VRoi9fHSq+twd9rk2ZYXfkYP5L7qEU51++JT6azxfvsdTRsezx41F8VKXZNkRv543Z
-	wG259ADQXU+OfLryjBPjxQ9Oiv9Ls5o=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4028e81a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Tue, 21 May 2024 10:44:32 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-de61424f478so3431087276.0;
-        Tue, 21 May 2024 03:44:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVPSbl2/CqGGIqipNgu2kBUjdnruR/izm52C71kLPaW4K0t4D2bwppJi78l9tGXUGRpEt/n6vZFST5Wkg8edX5nyZaNyeVNxUvS24PN/HNW791y2aKoyhLjGmwgKp/RLB+IkSql1nleog==
-X-Gm-Message-State: AOJu0YzPNLYC4m/+LVhh50DiW5gTEF1KEwZzvfOsORENcwVWWUXEM1Wm
-	4CyLMQXygUnkbudJrEdPDH/wWHWu1tQzQeG4LhffG6z2j2y7TU77+55O7JYX2NPKgbFYHR0wnjo
-	i8Vf5FvSfBRL5+sVriJ1KkPFtLAE=
-X-Google-Smtp-Source: AGHT+IF8zwlnybijOkvhDCfOyHo2mee4oB4zfqOzvIszNc7Suqr0jgwx6kN29yeMjE1zT3WHjMv614UuLe5PUrHldrI=
-X-Received: by 2002:a05:6902:28b:b0:de0:f74b:25f3 with SMTP id
- 3f1490d57ef6-dee4f3961dcmr28524605276.60.1716288271210; Tue, 21 May 2024
- 03:44:31 -0700 (PDT)
+	bh=kmyyYf/FNg0lJsmtTVqGM2lJeyBvXRDagDqrypf1zFs=;
+	b=HekusvH9FhSlsL2OyjT4vkM4ik7uEwHkVk8gsvKfpd8/M5RpCJQmDraUJy1+MaAxgXr2QI
+	e0R0rRKH/vHme7hLcBDbhROJv+giXL8hrerLAMoVHQYkmKxSIJ8V/AGxs1HHYdvjB77CR1
+	FhNqpeRhk6/HUwh6bR4QEZONdydGonM=
+X-Envelope-To: sfr@canb.auug.org.au
+X-Envelope-To: axboe@kernel.dk
+X-Envelope-To: colyli@suse.de
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: linux-next@vger.kernel.org
+X-Envelope-To: matthew@mm12.xyz
+X-Envelope-To: bagasdotme@gmail.com
+Date: Tue, 21 May 2024 09:42:40 -0400
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Jens Axboe <axboe@kernel.dk>, 
+	Coly Li <colyli@suse.de>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Matthew Mirvish <matthew@mm12.xyz>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: linux-next: manual merge of the refactor-heap tree with the
+ block tree
+Message-ID: <qqdgvzivlg7uapdv6vkpqsodonzlvptrqn4h4sgyhtrqlfggej@zaudibjtmylj>
+References: <20240509152745.08af752f@canb.auug.org.au>
+ <20240521121803.399705b0@canb.auug.org.au>
+ <ZkwKe15cyhgRP4Qy@visitorckw-System-Product-Name>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240429161743.21019d15@canb.auug.org.au>
-In-Reply-To: <20240429161743.21019d15@canb.auug.org.au>
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date: Tue, 21 May 2024 12:44:19 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pdBbO0B17WgLYNyGpoK6UsaDPXGo7pxTakJcWfN7HTgg@mail.gmail.com>
-Message-ID: <CAHmME9pdBbO0B17WgLYNyGpoK6UsaDPXGo7pxTakJcWfN7HTgg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the random tree with the pm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: "Theodore Ts'o" <tytso@mit.edu>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Sudan Landge <sudanl@amazon.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZkwKe15cyhgRP4Qy@visitorckw-System-Product-Name>
+X-Migadu-Flow: FLOW_OUT
 
-Fixed.
+On Tue, May 21, 2024 at 10:44:11AM +0800, Kuan-Wei Chiu wrote:
+> On Tue, May 21, 2024 at 12:18:03PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > On Thu, 9 May 2024 15:27:45 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > 
+> > > Today's linux-next merge of the refactor-heap tree got conflicts in:
+> > > 
+> > >   drivers/md/bcache/bset.c
+> > >   drivers/md/bcache/bset.h
+> > >   drivers/md/bcache/btree.c
+> > >   drivers/md/bcache/writeback.c
+> > > 
+> > > between commit:
+> > > 
+> > >   3a861560ccb3 ("bcache: fix variable length array abuse in btree_iter")
+> > > 
+> > > from the block tree and commit:
+> > > 
+> > >   afa5721abaaa ("bcache: Remove heap-related macros and switch to generic min_heap")
+> > > 
+> > > from the refactor-heap tree.
+> > > 
+> > > Ok, these conflicts are too extensive, so I am dropping the refactor-heap
+> > > tree for today.  I suggest you all get together and sort something out.
+> > 
+> > I am still dropping the refactor-heap tree ...
+> 
+> Hi Kent,
+> 
+> Are you still planning to send the pull request in this merge window?
+> I've sent the v5 patch series [1] to resolve the conflicts some time ago.
+> Is there anything missing from my side?
+
+Unfortunately it's going to have to wait until next merge window, all
+the conferences the past week have meant I've been pretty distracted,
+still not fully caught back up.
 

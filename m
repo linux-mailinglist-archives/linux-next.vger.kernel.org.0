@@ -1,228 +1,113 @@
-Return-Path: <linux-next+bounces-2372-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2373-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC8748CB134
-	for <lists+linux-next@lfdr.de>; Tue, 21 May 2024 17:26:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 724C58CB603
+	for <lists+linux-next@lfdr.de>; Wed, 22 May 2024 00:34:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F15241C2160D
-	for <lists+linux-next@lfdr.de>; Tue, 21 May 2024 15:26:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E592C1F2243D
+	for <lists+linux-next@lfdr.de>; Tue, 21 May 2024 22:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79646145325;
-	Tue, 21 May 2024 15:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B14A9149C54;
+	Tue, 21 May 2024 22:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T0cxT4JT"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IZ6opajI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E25144D1F
-	for <linux-next@vger.kernel.org>; Tue, 21 May 2024 15:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716305175; cv=fail; b=U+I3LzTMmkFGznxk7s94Q0NAk3gP8zs+pH7ijub6RXftDVE9kCOjo/8kT4zEG+J/12ZSKfRdVguONiicUo6RJul3nRccf8A3+CkMLAxr8o+zkTtFP+tcCqQY1tD+aVoHbo0sFUCoBKHKdx69P3HGQzXA/9Ty4GzsRSzgoun9qLA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716305175; c=relaxed/simple;
-	bh=I5CJhnnCSBqe1QFHSTltH4qOuyAuF2GRwv2Hi76gLSg=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=e/zX3AZIQGSP72Nso3BQPG/a+1qONP3rOuOebvsNbHvGmZ+04ZASsApP8zEt29YjA6ZMpMIu4KN8/83uASKvv6uOL53dZcxupwK7KFjXkCFZ9hJyw/fhax4olY5X0RDF04LxnRrMNX539+eSuUBfpPItWZwdt5xW0beiySuIfUo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T0cxT4JT; arc=fail smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716305174; x=1747841174;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=I5CJhnnCSBqe1QFHSTltH4qOuyAuF2GRwv2Hi76gLSg=;
-  b=T0cxT4JTaVr7wuPrCASIUTAE6IIY36ETJV1QB7kD8QxFOhJIZgSy4MLm
-   qPAQQvHcR1PVWA4OvRWWTAHON8TS/cDzTtcgv6hITXrg+OE/r281oEyNx
-   uh+hZQ8vpR0VGAhHFnOKARdRTtoNKDkmiAIb/V75PYzmQ+Ov9Mwg7z9je
-   Smts8ysqrXFlIbKnYJA5EEhYkXzc4Ovd3RmHDr/nf6RGOcW5nQ+LgVKcT
-   vuz2uokGUQJ2fjAw9+9pvJ88b7BpxFHDai1GOElmvH8UM3OPsf4ilX3fO
-   kuoJYqMo+0Bl4OcH48RfYF9QpjXfMaUXQsvqdNXfvXprir/Rq3gV9D/DJ
-   Q==;
-X-CSE-ConnectionGUID: ff+yh3pVSKGYu2jivjUJyQ==
-X-CSE-MsgGUID: FuGtN2cDQ7aBRAF4h+v1Aw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="12736869"
-X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
-   d="scan'208";a="12736869"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 08:26:13 -0700
-X-CSE-ConnectionGUID: FTpR6vWhT4eYI3zADnbrHg==
-X-CSE-MsgGUID: vpe00nChRXql86+7QoRkuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
-   d="scan'208";a="37542181"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 21 May 2024 08:26:13 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 21 May 2024 08:26:12 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 21 May 2024 08:26:12 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Tue, 21 May 2024 08:26:12 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 21 May 2024 08:26:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EpUgJ/IUPKF7BJBQVJuCXvO9edAhWonDNFVbOgvDxQPBhJuz9JKBHspbBOMhdtT872VIO6vqKrxYhpZZmc61XRd+jGyNWTRh4yJbvEPmlV0bnKWi3bxvem7xTu3YO/C1ay0ZP98TOeiuoFX9IjAmb8zmKRH2sp30p6xADWT+yNyKJ1JkLRtjR+XcWfXx7BrGKyp9b743f0Cc+hpnzg0TFPlzlCL4JTfVSHcVw9rsuiGw/sGN4LfAO6Up2jW7nFk9IHUV/Vq5MdJHdpGINABgVcbTYFDl0LgGFQcSq8vASL0Ybr16lp+ZPDhz0PPhmcP6R4ceHef/IS953ePzGYZqJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I5CJhnnCSBqe1QFHSTltH4qOuyAuF2GRwv2Hi76gLSg=;
- b=QVZS9rghMnEh7USDECLFnBDiaFrbxq0U7Cy/pR5Yu3azfaltBUEGXx44vfMplf9cZv4AGUcg/Ek7pL1ClEw+38M8Y/cxkgGyDwB586D/BM/B7yC4XcC97Ba5Tf+xsrmOGiob5ij5IDG1vHmTioOM4eGQW9zWt6U1HwgZhqNlt0o9dzEWrCrXazp3CUfGhHnOfkmtnjy23QmfSdzXiFPSmh5fYT53V+UF16+zCu8D8nqaAhwXGoQe84GZ9MQzUPZaHipNQv98bLk/GxrRUntkx1L5ol+tvUXyNblq2nnH9/ABQohWD3PuvCDCVmwtyupdtVPBWQXucSNVochTdchBxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by IA1PR11MB7810.namprd11.prod.outlook.com (2603:10b6:208:3f3::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.35; Tue, 21 May
- 2024 15:26:09 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44%6]) with mapi id 15.20.7587.035; Tue, 21 May 2024
- 15:26:09 +0000
-Date: Tue, 21 May 2024 10:26:03 -0500
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: "Knop, Ryszard" <ryszard.knop@intel.com>
-CC: "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>,
-	"linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-	"sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, "Daniel
- Vetter" <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>, Jani Nikula
-	<jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, "Joonas
- Lahtinen" <joonas.lahtinen@linux.intel.com>, Tvrtko Ursulin
-	<tursulin@ursulin.net>
-Subject: Re: FYI: drm-intel repo moved to fd.o GitLab
-Message-ID: <lutgryt5og2hrkoh5fjp5lmuq2ynksjwxrjfpl5brkob6pujud@zayf2voxtcdp>
-References: <adff92fd559f6798690e3050b4474b099a3dde75.camel@intel.com>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <adff92fd559f6798690e3050b4474b099a3dde75.camel@intel.com>
-X-ClientProxiedBy: MW4PR04CA0047.namprd04.prod.outlook.com
- (2603:10b6:303:6a::22) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC8A2AE6C;
+	Tue, 21 May 2024 22:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716330881; cv=none; b=WilR6Yvq4UgyOWWcapWRL/9b5bt9kEXXb9t6dZCgTUL1QNCBtISSMGGXwMLWODWno+xIzKFJKkPgXmFKgeaVM/UkaWtKKx175Nw/Tqks/1cFiNcupWpnpzxvGWzVxKNfyZWy3/RJM4yH6pDg8iRPr/lRakC3yYBm2p1VJKgXvtc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716330881; c=relaxed/simple;
+	bh=OBM7O2kKtLY/1QgubILBB/QK9LUevsJ1RA9MVdlyKRM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=S5jMR6NT6GxWfuP/dMNPnOwobv58JvISDVzpKg0QRgE72DY2qoygVgjTN9mHjXxoVKZEG26weC4T1u4G90N1+VugVc+5oX3K8/SQcGpgn+JFtei9McgpBuc1b8wHKYwkPNuqIGUclg+10jVRxt5AEJKBic5iSCxwBJpQd+egYGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IZ6opajI; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1716330875;
+	bh=uoPzlo97cnnqqclusONENycg8BoqMoybdfTYv6wPJS0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IZ6opajIcsSzSB9DWKyVtb6qU9kOiixWFQRAv2a6e+lug5SwFxWtah9AZXEwNjkV5
+	 U9AWiSk+DHujalOPC9R+3b07z94qGOcQtsZU9GG2petRpAXR7qKd/VSXOauqleu4hm
+	 UMOZTbPbIJPiQzfqKAmJEzMrU3yg/SFs8T2qY9XsOQcbYMljFrV0uQjEZG6yjdYhHy
+	 wZ3JCVPyPEP7cYtK4hTAgSbhUJUYZB1wJyj2aaD5F1aQKBk8vCNmqocEETOaV7SisE
+	 uzfE/WvCcSeLrdUkMFiSegoAZw9pjANyjboh+FhLN1p9ji8EI/PxdN3b5tb4cL117m
+	 qKCSoy1HAE7mA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VkTkz5WPCz4wcg;
+	Wed, 22 May 2024 08:34:35 +1000 (AEST)
+Date: Wed, 22 May 2024 08:34:32 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
+ <namhyung@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the perf tree
+Message-ID: <20240522083432.49da1e35@canb.auug.org.au>
+In-Reply-To: <20240520073426.7d8bd11e@canb.auug.org.au>
+References: <20240520073426.7d8bd11e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|IA1PR11MB7810:EE_
-X-MS-Office365-Filtering-Correlation-Id: 36902928-e9b6-4563-6914-08dc79aa5718
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|7416005|366007|376005;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?fyX9TXgCvXavDeuBD+pJZVb15gaKzUeeXtHpOKxWsxnxp7xcUWGHNT4furCQ?=
- =?us-ascii?Q?DmK1n44C12pNWndiRUtJaLgvELbz1wdADdukBvjfgxouAhufe3Z3kAYllBlR?=
- =?us-ascii?Q?PjxOqVoFDUgdC5pgkKYWYZbkVXHGiq9ZskNzbnT9NNtdPLA0WknlXifympK1?=
- =?us-ascii?Q?qPP53y9CnjCfPJ5RbLh7ZvgrQdbmE4ka3/bICgfqSH/zbb9atiL/ufhnyJuP?=
- =?us-ascii?Q?eNY1UieA5bASwCtVSI7tdpRbtcLJ+yf51EzO6VuGkyOjMD1gCeCOLT5e0PZm?=
- =?us-ascii?Q?RZchRjcArhE51QbudekZogP5JeZOkfV++wtoWWgB/79L19gHQn122DoTwev0?=
- =?us-ascii?Q?pxiSKLNYPzqGnDImcF1gvsdm72h5200xbLoZq6Rw35mFPbZwvpOQWBXDN6ug?=
- =?us-ascii?Q?1bPfxh8edlbjDyXrV3EZvshE46oQUJbFpg10oBQ0l7lT0OTrwrK5BDWzufzP?=
- =?us-ascii?Q?VqW3Zm0Zh9hgHggfxumVAcDd8QizFc3+9GzyotB/LwH5s68wNRrIiOuoL0Gq?=
- =?us-ascii?Q?mrL1eGFqbg3Qm8c7pc6TxLr07564vBJwGL0UDbYgbrsdhhSziq22fr/36oMR?=
- =?us-ascii?Q?uVvYSQnxww2AOXzpB4cELJmdmFB3Be5mxXu7bKl1nvfo6G2uG3ofkMYGia7o?=
- =?us-ascii?Q?nLsM79lOL5rdmcqY90tD+xwhJzoIxZX2DJDe90ZBSDf7tG1ftppDBliPj6lU?=
- =?us-ascii?Q?BFt3/N4Ew4ljCYDjuN2GbJ3BbzrT9JsxLEmW7ctj8S/RbJN4UhqTZAtY3C6F?=
- =?us-ascii?Q?SPmhTDB24I8Y37J2RbQwLwKAU8W1GnwpR3qUkOp+k59UdZ3wMeYy/O9rdVhE?=
- =?us-ascii?Q?ImTkYnwvOHZ+JET+C9W1lJVb2YXty1m8lkH6GglAw87jEMq64QUt50lslHdk?=
- =?us-ascii?Q?5Iq7Dmoqd0zJENZRnMk9aJRCQxshuUw21aSoE2pTM5nG59yVgnHya2qtZp2b?=
- =?us-ascii?Q?sROi0vOgEkVCUPdQ7pZP4saQnI37QcGFRHU51lPeHhGb0xLKYOO5w8ZXh/Em?=
- =?us-ascii?Q?64MlAn1Rq1wr8Uvjq4YjPJ+qaH2e0BKmQHUEoPIl6Ygwyty8hk+EgP95/0Mu?=
- =?us-ascii?Q?+iLTbGYpKYJV9XJXd/Q7kZfS18KHOpymbRmg4Q/sJqdVw6v5AYYFmFkN+Bbm?=
- =?us-ascii?Q?V6mRx2//LZrhxTAf6uxGu3MHWimeXL6Ao33K7BQT8B1968A91IIBEWgJLLEp?=
- =?us-ascii?Q?uC1grEq5HlFgN4Puqm1rZDsi3MD58hmYSqPVs+s0zTmTwM6TdSZekPbZ1hs?=
- =?us-ascii?Q?=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(366007)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dCm+2wA4IZvb5CZlpXMoiv8vbq1AMjDkzQaeTOeHtkComV+vryODYQjniQ64?=
- =?us-ascii?Q?92Zp+PIvys77oTL8YinYcDHKCm+RRs5rXIvlkQ+WkSuUJ8XB8q+OeVVTUzui?=
- =?us-ascii?Q?dhYCqtKqsEynj5YRdVnj5GYgn8OVvrXRfb6yOqtJDGUUHByLToWNRWxSyi3J?=
- =?us-ascii?Q?CVfGe2eHTyQhlogqHwWih6RTaKpzvsqdsnTKR0GwB8M179aF/oYzjmGjQ7z9?=
- =?us-ascii?Q?sXQ9vLUnRUO4M5sKpKFrC6S8vS1gPgsm3mGWs3cMdbtw3CnEMm8cY6wdYDwG?=
- =?us-ascii?Q?5mc0GRbPf3QZeb3Nm31e3lDaFrrWOt6RkRFnim8u8kqoQp1qlkndqBp/7cFH?=
- =?us-ascii?Q?jyMDdtqYUymhDJLfUotFFqvlLzIkX+pp0lvlWhL2vOx0AYS5t7uBnRGjl+D2?=
- =?us-ascii?Q?ckSULhiwP/jlWkJrLfXzfnUd0FzGn3dmrklkxyluvcsfZaS7d5+cGG7sIiG0?=
- =?us-ascii?Q?fyjR92NKUzwzFx4eBUPQnRSpjS+qP6WaUTUQCXLRIKeIp/GHpseJ7u0qYwlt?=
- =?us-ascii?Q?2VZizZe+gtggTrKFDa1dca8eZnBeQkRmrlprZtOqTZndm2KPI5MUtlC8nt6C?=
- =?us-ascii?Q?scOo65+2TL1FTJVZI7JER0CrIOIs0fl3l/a/5GU3Cah584XV+aZISxzQ+DdY?=
- =?us-ascii?Q?nV7zolU9Z2Boof3LilUUidhyfGNwKuekIOWQ/9Fr26mUUo96eN9H2cNKS3r8?=
- =?us-ascii?Q?bFkPfjz7KpFGfOXrK2emoQ0k6e1wTL5bxBGDix2pYbuwS97xPzP0tD+TQ8gk?=
- =?us-ascii?Q?D9Z9NHB8OxFIm7ZJwAUkMb9mC+E5kjBXl/EyisImP/mesGSeL9ypAGZA9ubJ?=
- =?us-ascii?Q?fA3lB6etY3jQ+YgJevsNhP6F72GhuSKTuOQbXrl4Knq2ajITVhU31W06Wwi7?=
- =?us-ascii?Q?pFQxsyVy7VXrGhGGuQcIq2cnZtTTcnT+SrQzBhBsZbZtr0wdOmQqIycRxp87?=
- =?us-ascii?Q?YKK3d/0Sv6ypK4dce7Dig1Uw+/f1w4ZHYGedZ+v6DZrJRKp0ARj48kJhez94?=
- =?us-ascii?Q?NenGVbHezXRJeVS6JaybwMeKZV7s2BmWA556oHmjwepSstgjn/WCbM8OVGc+?=
- =?us-ascii?Q?9aRAYGm3D0LXYCJ0iGYL/JBx11qjEtwY03wgPp50EQuFADdfZ8VHbEp6xCJe?=
- =?us-ascii?Q?5mk9w/hKHD0T7Rsxrg4dCVSVzVFnIXqcqa8bXoMDsZ0OZmzMwyn5VIO/XWT+?=
- =?us-ascii?Q?nLFh7nzTEGZJjUfcTguzoIKGwEzkcUXlBpYGYFcdZmQynfpGS2e6YGYBKgtP?=
- =?us-ascii?Q?BZjSIYpcsab72Rgk8cP0HxLlavolbQ0sK+kGnf00EjFONhbjACd+/57v3CYd?=
- =?us-ascii?Q?FzpAo56Tb9BgeU2e1BS2jB3tK9w5y3tkFxuLa4e0Mc7FLel/rhUgkthwJrcN?=
- =?us-ascii?Q?40S6hFx+wncWZS0+h8kTr+4Pm1AouhiaGpBi/b5R+e4ZKbu/LOHpztgDFOyT?=
- =?us-ascii?Q?X4I904UXgD3Lv7HjwRSuqwsDCmr0U6mrQggZqNcnLM3CZTnhsk5A3PobPOJ0?=
- =?us-ascii?Q?iBk7fzpvFDtfThPqdprm09ey4XjLj4AHOQRMSdGIm7IkXEM8h8IlEDxUyywb?=
- =?us-ascii?Q?15TA9nXiua1O3XCFsZqWNxX6A7q8bh+xl4yjsDX0MOkukEYlCFFKUIV/hGbi?=
- =?us-ascii?Q?6Q=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36902928-e9b6-4563-6914-08dc79aa5718
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2024 15:26:09.4804
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: inFD08ti8brnldW1IpJIhxb5q+UP4d0JmI3k4Opt+MdfHPPCnX9ZxQ4aylY9Y20vYixePYVsTCKZUfzfJjvCW5/1htI1SpsB/pLzO3KiMRs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7810
-X-OriginatorOrg: intel.com
+Content-Type: multipart/signed; boundary="Sig_/MBL3ub9FZe8jQFgxPxkZ_sX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Cc'ing drm and drm-intel maintainers too.
+--Sig_/MBL3ub9FZe8jQFgxPxkZ_sX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-And a few more details below.
+Hi all,
 
-On Tue, May 21, 2024 at 02:56:22PM GMT, Knop, Ryszard wrote:
->Hello,
+On Mon, 20 May 2024 07:34:26 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
->As of today, we've moved the drm-intel repository (upstream for
->drivers/gpu/drm/i915) to a new location:
->
->Previously: https://cgit.freedesktop.org/drm-intel
->Moved to: https://gitlab.freedesktop.org/drm/i915/kernel
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patch):
+>=20
+>   cd88c11c6d89 ("tools lib rbtree: Pick some improvements from the kernel=
+ rbtree code")
+>=20
+> This is commit
+>=20
+>   bbed8b9ffed1 ("tools lib rbtree: pick some improvements from the kernel=
+ rbtree code")
+>=20
+> in Linus' tree.
 
-For those using dim, it should ask you to migrate your remote
-automatically on your next branch update. By default it will use
-the ssh protocol. If you don't have your ssh key in gitlab already,
-you can follow https://docs.gitlab.com/ee/user/ssh.html#add-an-ssh-key-to-your-gitlab-account
-to add it.
+This duplicate is now in the perf-current tree.
+--=20
+Cheers,
+Stephen Rothwell
 
-New server has no git:// protocol, so anyone using it is advised
-to move to https:// instead.
+--Sig_/MBL3ub9FZe8jQFgxPxkZ_sX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
->
->The old repo is now a read-only mirror of the GitLab-hosted one.
->Relevant documentation and links were updated. Thanks to bentiss,
->mripard and demarchi for help with the move!
+-----BEGIN PGP SIGNATURE-----
 
-and thank you for preparing all the patches to the different repos.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZNIXgACgkQAVBC80lX
+0GwtLQf8DQTqG6/gGWx6tR/nRlCAiWP4vYrFAjdrbR0fMY1agrdYnVvOW+U1/x54
+9Q16Vbgl5vfvlv7eMV7l7u7sMXoq7n44j3s/VU7ihX4QwqNmy2aMJnSsDHL4reKZ
+2EdLTKkoxoZbeAyDwp8+BVlSMZOIGhjVRur/fxszX4pF10kMUYDM1uY4FWJFfzcz
+lmL42ktfeALjPP+9BRlk8MCotxd0V4lP4mbvTX8dHeSXvRH7mfJ3uJ37zwnWWJqM
+TnK9rXE4XuY3fCVSNu1Lk022Y1uD4BaYOKOZbszMWFU7KVqvgsYHG7SFWoh8CdjP
+eTyCojalFyl9MCzdY9G6sGv5vKuTrQ==
+=Ixr1
+-----END PGP SIGNATURE-----
 
-Lucas De Marchi
-
->
->Ryszard
+--Sig_/MBL3ub9FZe8jQFgxPxkZ_sX--
 

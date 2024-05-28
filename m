@@ -1,128 +1,127 @@
-Return-Path: <linux-next+bounces-2396-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2397-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C7FD8D113F
-	for <lists+linux-next@lfdr.de>; Tue, 28 May 2024 03:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8616A8D1156
+	for <lists+linux-next@lfdr.de>; Tue, 28 May 2024 03:07:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E2BB1F2150E
-	for <lists+linux-next@lfdr.de>; Tue, 28 May 2024 01:01:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24BE11F21BC7
+	for <lists+linux-next@lfdr.de>; Tue, 28 May 2024 01:07:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88B4EEC5;
-	Tue, 28 May 2024 01:01:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 334978F7D;
+	Tue, 28 May 2024 01:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="q/oDgmuc"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="adzrfQvg"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03EBEAEB;
-	Tue, 28 May 2024 01:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3347B4683;
+	Tue, 28 May 2024 01:07:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716858071; cv=none; b=P6Nz5bgi62NzWpAbIXqh5NhdzfN3iX+TJ1Eq5E6c2Xbdh5X/36TEfR3ej4VU6nPKf4+rXt3ZB+EloOU+IigDjcwTsm1x/sW7yEn9KWmDxy3ocLXGeiMDBN7EhDFUzcHaMXZg/8B3oH+HYASFixeHsCXWEJzwOrTTrLvpXKXd6Fk=
+	t=1716858465; cv=none; b=ly+CDfH7H6+m/AQ48sT8WQUOESzGP/Ip1xw8ElJb5Vzz20k+8i4rujvp4OTUApGJls/Fnck60B1la5QS631ltnLhjRCg6U419GTD9vcnOiik0qObr+zqBGpaP6qP1qfjxpL3brKDQ9B7L31e0vyO3mceZocEYYIOQzCU7t/Bm/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716858071; c=relaxed/simple;
-	bh=/MkQrM/eQKLO9xuDVh6gN9EadPTbBgQEOU2aVQoPRqg=;
+	s=arc-20240116; t=1716858465; c=relaxed/simple;
+	bh=u+tFoPxaVdY26Z6BSHRAKdbh15TlsMAxUUPWh11Nqmo=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kYPIauncsLu/7O7oo9gvPgUko1teoj3Rc1if4KMnVP017fyNnGfuRNnYmdJ0K6N7Z0bG1k6avNVguMWZ3aaJq3XNKOoAL2LR4Ma657jz2+3ObPqfDrChTjVJ/dNA6g13ZeKoHAQpz1F81XkXweMvg1uZdtqW7uvdSFVB3YDew8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=q/oDgmuc; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=W6/dTEymoH1I2zntIEjreDcnbmOGX0pZPR3RFNMOROIFXBKKnTs84dmP4pyb/9tFbjirR+8SfSmCwu2313UDHriXvA0ChNqT/cSZXy9s2mIFOrKIx+019fbz5gN0g8WMCtX/aUOqXOQt6bFX5fMCC5gCzKraoHLnfzIHaXsX59k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=adzrfQvg; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1716858068;
-	bh=yDBIwrtzuNuwq/Qf8L4HwUWAPrAwM59cLPBrPL4jRLM=;
+	s=201702; t=1716858460;
+	bh=3ZFa+LwBk82BBfT1xKk4cXtURBSQY1TnJISU04EjuHM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=q/oDgmucz+cbR1WtknFYudBFadVPHYsMFQd3aPjnxphV1RnsyiN9Gj8pv2KgVnCuj
-	 x/d57aZLT8EXs5RTxj5GnO5+hEylQKNT3Eml8JH3zmB+Y0Wx4Db1IlkJqSYC7zldkJ
-	 zit3Y2QJ1adVFXNiIuxtdHZO2ZS5dHrEiIth69p3/BecomRUtH0Gmi1EJtD4tQwnIz
-	 Oj6mTRcnxiDb0rh0Biv38iy8Y11Bd4+4Ot36dJsKpNNK3LHqhhuuLQAHS4VpPcYKgv
-	 PJx3jJNPfkG7mzfUogfHVvSTaiKuVSkywvuBl7fR2OGcpjLPNdUAChJMZg+S+ACHsr
-	 JxkjVZKkLKDkQ==
+	b=adzrfQvgemEXYbbSOVVh0Z8pED74TUFYB881DgvPs1LQG29ZFeLsdCMRJYJUjGNyV
+	 MN4OMXwq0z7H3kQ3ER2p7Cx1Heh0X+i+MystiyvzYpoNAD5CfpE4txPaa/FIZMX8fy
+	 RZYciBUvlkS1/VibgF1pBci78eKiMV/s3cb289I0XpaJIxm4dYyAxxWfwnVlBzQlvb
+	 Ejbb92KkFIWLfAd5zTNrr1+2X/Uvd/EWCp/dCgMfzcj6wbbcIhSXEHBvvSkzgY+aXa
+	 YQ4ZfETMh2HL2AxqNmvwYh9BQnhvAkPgKb/xfqUZ/Kjlw2bG/D1uS3tj0SsNI3dGUY
+	 SJ9Bm3GbEKM1g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VpDjG69M9z4wyw;
-	Tue, 28 May 2024 11:01:06 +1000 (AEST)
-Date: Tue, 28 May 2024 11:01:06 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VpDrp2Z4nz4x0K;
+	Tue, 28 May 2024 11:07:38 +1000 (AEST)
+Date: Tue, 28 May 2024 11:07:37 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Wolfram Sang <wsa@the-dreams.de>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Alex Deucher
- <alexander.deucher@amd.com>, Kenneth Feng <kenneth.feng@amd.com>, Likun Gao
- <Likun.Gao@amd.com>, Heiner Kallweit <hkallweit1@gmail.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the i2c-host tree
-Message-ID: <20240528110106.5881d1b5@canb.auug.org.au>
-In-Reply-To: <20240522104128.37c646af@canb.auug.org.au>
-References: <20240522104128.37c646af@canb.auug.org.au>
+To: Kent Overstreet <kent.overstreet@linux.dev>, Kuan-Wei Chiu
+ <visitorckw@gmail.com>, Jens Axboe <axboe@kernel.dk>
+Cc: Coly Li <colyli@suse.de>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Matthew Mirvish <matthew@mm12.xyz>, Andrew
+ Morton <akpm@linux-foundation.org>
+Subject: Re: linux-next: manual merge of the refactor-heap tree with the
+ block tree
+Message-ID: <20240528110737.730a8f40@canb.auug.org.au>
+In-Reply-To: <20240509152745.08af752f@canb.auug.org.au>
+References: <20240509152745.08af752f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Xlx.N38ihM7FbNRsO3KBhnK";
+Content-Type: multipart/signed; boundary="Sig_/ErfPTUrGblVMXdZjl71eSr8";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Xlx.N38ihM7FbNRsO3KBhnK
+--Sig_/ErfPTUrGblVMXdZjl71eSr8
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 22 May 2024 10:41:28 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Thu, 9 May 2024 15:27:45 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> After merging the i2c-host tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> Today's linux-next merge of the refactor-heap tree got conflicts in:
 >=20
-> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu14/smu_v14_0_2_ppt.c: In functi=
-on 'smu_v14_0_2_i2c_control_init':
-> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu14/smu_v14_0_2_ppt.c:1565:34: e=
-rror: 'I2C_CLASS_SPD' undeclared (first use in this function); did you mean=
- 'I2C_CLASS_HWMON'?
->  1565 |                 control->class =3D I2C_CLASS_SPD;
->       |                                  ^~~~~~~~~~~~~
->       |                                  I2C_CLASS_HWMON
+>   drivers/md/bcache/bset.c
+>   drivers/md/bcache/bset.h
+>   drivers/md/bcache/btree.c
+>   drivers/md/bcache/writeback.c
 >=20
-> Caused by commit
+> between commit:
 >=20
->   49b33f4b3a9e ("i2c: Remove I2C_CLASS_SPD")
+>   3a861560ccb3 ("bcache: fix variable length array abuse in btree_iter")
 >=20
-> interacting with commit
+> from the block tree and commit:
 >=20
->   3e55845c3983 ("drm/amd/swsmu: add smu v14_0_2 support")
+>   afa5721abaaa ("bcache: Remove heap-related macros and switch to generic=
+ min_heap")
 >=20
-> from Linus' tree (in the current merge window).
+> from the refactor-heap tree.
 >=20
-> I have used the i2c-host tree from next-20240521 for today.
+> Ok, these conflicts are too extensive, so I am dropping the refactor-heap
+> tree for today.  I suggest you all get together and sort something out.
 
-This is now a failure after the merge of the i2c tree :-(
-
-I have used the i2c tree from next-20240523 for today.
+It looks as though the patches from the refactor-heap tree are now being
+carried in the mm-nonmm-unstable branch of the mm tree.  Should I
+rmeove the refactor-heap tree from linux-next?  It *will* be dropped for
+today at least.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Xlx.N38ihM7FbNRsO3KBhnK
+--Sig_/ErfPTUrGblVMXdZjl71eSr8
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZVLNIACgkQAVBC80lX
-0Gxgqgf+NaIARQEIm343J4zwOEf9oypQ1n8rh7E7dknTsNvjcWTfEQesBmIQcoca
-VDyUBXAtQ87JYD43czuOsiEbvldlcK/ZpE7m03Rf7DA00Tk1MxFmXneM7ZSZR/0X
-MiiL8tJrPp4wYJtBI01hMKTGn9KDONrYnJeyGEgdbEdkLvozihO+icKO1anlR+iQ
-twzj3bqMSeaFSHNttEOWXDcxSysPjVbqo25BLsWEUjDH/w06d/JjeDwSOb+7IULp
-7gIkDeh85mNJ5DX7hgHX4SZuhQfcGy+92qW8swzcBDNmeXb//DAVqFvOej16BPcv
-LACDSab5QuJt/D0dVJslBH8KfdB4Gw==
-=zkMF
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZVLlkACgkQAVBC80lX
+0Gw63wf+JfCFmVU5p6PZ2eYkfAjYMAnhA+Refe+0aosAcYUoND0OIJweEwr8ZChe
+mnWPAGCD/XEFOCZLgXi/wlFLDgcpZkPfK//QpaXbR2q7TYGjd4Cmj07Di+S69FfT
+hErS9HoxX2m/ef+FMIWSg9GfBVe7EGqA+3bmwkSNn83InFgB7lakxGodrp3usGSa
+wi0WnuhBMkYqETdeKLeILUKhmfL9b7mIt+bck68MLgrxq8HU4bEzPV/WJ/Mr2Foz
+UGvyXjTn8StdgCUXk5WwwE5gXAapYnLy4hcEcD4+vCC52N2W5ulDJfUc1YUoMCIB
+c7YOjbenx52Z3hnmfEyGceOp2+Zpdw==
+=GRr2
 -----END PGP SIGNATURE-----
 
---Sig_/Xlx.N38ihM7FbNRsO3KBhnK--
+--Sig_/ErfPTUrGblVMXdZjl71eSr8--
 

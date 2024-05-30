@@ -1,87 +1,111 @@
-Return-Path: <linux-next+bounces-2423-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2424-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50E028D51B8
-	for <lists+linux-next@lfdr.de>; Thu, 30 May 2024 20:23:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFCA48D5540
+	for <lists+linux-next@lfdr.de>; Fri, 31 May 2024 00:07:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DFCDEB216BC
-	for <lists+linux-next@lfdr.de>; Thu, 30 May 2024 18:23:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9968D1F24AD4
+	for <lists+linux-next@lfdr.de>; Thu, 30 May 2024 22:07:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FC14CE04;
-	Thu, 30 May 2024 18:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MQFwHd9n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A736F316;
+	Thu, 30 May 2024 22:07:16 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE4F45BE7;
-	Thu, 30 May 2024 18:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67192B9A6;
+	Thu, 30 May 2024 22:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717093405; cv=none; b=VL7zGP/odIfJrMhFcuJMPNIFjAql+eLfrw8SYnMy6lo0AP+IfEJEtgl+80qvLFYnpY/smd2jsiN0nW9l1x6eVGjL4lOFqJH/B+qqlqfMCgVj8vm8OZujeNqpoOivmJJo795AYZtMqMY7rw/h/M+UHsiWTEMAzVKuKlaU48/TaN8=
+	t=1717106836; cv=none; b=Y1dDY2+hEDG/YGNygAznnfOKYowBuE3ONygvG3CenC4hknCCNpZxerZMC2jIF6ccqCq6aG4+64qlZnuj4S2uzKWV5eDmL3z5X1wL3vksbQJBaCbCIjdYwQxvF8v3+MvX+4L+kWjobUVt47rngBkWBTWpvDS8t3xEBIefb4+kURw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717093405; c=relaxed/simple;
-	bh=UFD4h93+j16vWqtu35EKx3VSnv6aiNL7yfTJXeQSQM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U65zIROFSfPiYZnkocVHfO2KwW5zwCLxlEjJEoHpzr0veON43pCQSaNkJDjp48SSBRr1idVvx6UpAyUnVff4EQ4y02jdEkgsgGQqfKjx9gVt1D/umsuoyDbbf4bnAQXVP6xOm6KMuvuFoPecRoasWnNGvIl6F51YBZvAox2mg2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MQFwHd9n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC1BC32781;
-	Thu, 30 May 2024 18:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717093405;
-	bh=UFD4h93+j16vWqtu35EKx3VSnv6aiNL7yfTJXeQSQM8=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=MQFwHd9ndaJYZq5AsMeFhLirahmWH/J+FAO6wdmu/D8w5NMLFiRn5M09+JEEa1lXj
-	 GjYF+/vj2Z0BBG9aRu6IWwOF/AJLFwMK2GmJMdCitFhN1ie06Ol+pDJY/wr5NnTuq3
-	 1eU9OKG0LWXSylqtE2OYvvpGve7bswz/1jeAjcdBmKSUHXLu5u7WuTgSGw+IIxiM28
-	 Z7nF0n6umkQHfGa4MlyfEi8WN07v7QucYhBxKqFmtOY6R9GNmTJPyjDKhC6R+cImjp
-	 zWGutLSLn9/uq5qEIZSHK5g0db5ceRgw8rwarWT/5LvI8YgiPJcUjZJ5m2bXw7/bNj
-	 NFONAHfzzd8jA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 7CD02CE075F; Thu, 30 May 2024 11:23:24 -0700 (PDT)
-Date: Thu, 30 May 2024 11:23:24 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the rcu tree
-Message-ID: <f4304c77-7b1e-49d3-8a32-70f40f2d068d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240529081011.6f8c3366@canb.auug.org.au>
+	s=arc-20240116; t=1717106836; c=relaxed/simple;
+	bh=ZixTRPy843E7u6UKUnsux4KdAsvXgadP2Ayx+QBPbe8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kZAlSEN2cNgNDCWdyFSzHYBFSfJrOCxmQGOcaTYamhSe58lAR6cEmh06uuvoRmt747lNg31ptvJ8OAdBh0aklo9BjqUjoCRF7PyTJO2WMpI5yhXWHxDRmbXyRqQZM++FwC+SMZgp9MqfLoR4YqtsdWrxxdmwAhZGiyEDEAUYemM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 44UM6vlP068530;
+	Fri, 31 May 2024 07:06:57 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
+ Fri, 31 May 2024 07:06:57 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 44UM6uwL068526
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 31 May 2024 07:06:56 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <31a20541-d5a2-43c7-8225-adc6d44f6e41@I-love.SAKURA.ne.jp>
+Date: Fri, 31 May 2024 07:06:57 +0900
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240529081011.6f8c3366@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: the fetch of the tomoyo tree failed
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20231017163242.62af10b3@canb.auug.org.au>
+ <20231114144510.49fd3688@canb.auug.org.au>
+ <7c814d59-fd95-40f4-80ba-237bead3de69@I-love.SAKURA.ne.jp>
+ <20231114161611.256f0239@canb.auug.org.au>
+Content-Language: en-US
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20231114161611.256f0239@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 29, 2024 at 08:10:11AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   6bfd01c430b9 ("rcu/nocb: Don't use smp_processor_id() in preemptible code")
-> 
-> Fixes tag
-> 
->   Fixes: 8feeeba60711 ("rcu/nocb: Use kthread parking instead of ad-hoc implementation")
-> 
-> has these problem(s):
-> 
->   - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: a1ae3280882c ("rcu/nocb: Use kthread parking instead of ad-hoc implementation")
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Thank you for catching this, and will fix in a few days.
+Hello.
 
-							Thanx, Paul
+Since OSDN does not revive, I moved TOMOYO's repository
+to git://git.code.sf.net/p/tomoyo/tomoyo.git .
+
+Regards.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.22 (GNU/Linux)
+
+iQIcBAEBAgAGBQJmWPeMAAoJEEJfEo0MZPUqA30QAJP5Zog3KlNb640PsIf/O2AP
+RiI9FRp4Cgj4W7EexvoZKk4Npu0FM+W0IZUnafwi8r9MTEwkmo1CzMuHAaBkNe6e
+ePmeuPidwBAkhDy4SmcSx9X1wr0DEYqOU9B0256Xv1ptMmmOkPixqmjXgbru5ln+
+yoy9A7V+mahP4k0XC6R6BoICKdVyqBezUqrMoFogp0K1IIa5Bkw5uKV4mkK4rQhe
+wn2sLbps9Yec1dTUeU7Qb1RQehvzGbBwt2+CgnTcFVR1M8xpcBH8EewksMuh/3Hi
+9CAkAjfEs4NqJntOZwhILOaWvIZWvxdS4e9XO6xg/ZqZM8ObSD+6LvrCZNJlNxrV
+9vMcY2sGVqzZxY7rL6WAIT1bQSr18ziDlnPjpHznEmBCCtmoGeuLdaODrtADf8MZ
+5UlZRhdXJgUjOyvJT9gEMq5sHAu4WpWNiBr12giln90+Jzg8kn4hZucbtJZBM4lN
+fWKyxFB5xCCtej4vF/bfxwredWhOSIzHt13mbiWhXGEz4iuttB2EoD3tQILC173G
+lm2thAZjyRNMXRRQRunDrKnWRLFlUpXPiD3wCcsFiFm8zw38mrfVUC6X9HUEm3Ic
+EZK44o4ihJzQu5saWp0VqMSCl0yITpKHVH2fp11ONpKwYpp9ApeY8fxmBzgND9nJ
+xLnk2vM6wDHikx+DX35F
+=gDlk
+-----END PGP SIGNATURE-----
+
+On 2023/11/14 14:16, Stephen Rothwell wrote:
+> Hi Tetsuo,
+> 
+> On Tue, 14 Nov 2023 13:49:29 +0900 Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> wrote:
+>>
+>> Unfortunately, it seems that OSDN became unresponsive after OSDN was acquired by
+>> OSCHINA ( https://www.oschina.net/news/250642/oschina-acquired-osdn ).
+> 
+> Bad luck :-(
+> 
+>> I'm considering migrating to a different platform.
+> 
+> Maybe git.kernel.org? ;-)
+> 
+
 

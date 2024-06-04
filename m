@@ -1,116 +1,90 @@
-Return-Path: <linux-next+bounces-2457-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2458-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B86038FA6D4
-	for <lists+linux-next@lfdr.de>; Tue,  4 Jun 2024 02:12:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47DF18FA6E8
+	for <lists+linux-next@lfdr.de>; Tue,  4 Jun 2024 02:20:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56BB41F2275F
-	for <lists+linux-next@lfdr.de>; Tue,  4 Jun 2024 00:12:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7464E1C218CE
+	for <lists+linux-next@lfdr.de>; Tue,  4 Jun 2024 00:20:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73B58384;
-	Tue,  4 Jun 2024 00:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 110B110F1;
+	Tue,  4 Jun 2024 00:19:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="B5wRju2R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rduXa3mU"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BAC372;
-	Tue,  4 Jun 2024 00:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F02A5F;
+	Tue,  4 Jun 2024 00:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717459935; cv=none; b=RXPPR6vs7KhKhvBEqmapecNmCrwuAm7YphhsUOmnl644uWcoUIEGtPSiuQ9YMLTmtR74Fc5cdDtpn5hURwwHGuWtP7TvhIuneZNY34axPvn9GgsCeH/g/svas6UX2BaPYtxnWMA9mJuim/sECk4bpFfBVYhwFuYOJjy9tNV7f3I=
+	t=1717460399; cv=none; b=Sf+hfipZ5Ny99QkZogDh1qxRv+F99cgVSLXNbulpeBZsclBuwF7oJ6gnAOUTU+14BmSLkDCP5boSczCXY3nhnUasEmLoKic49lZUzFvqaZyPeSoL1ChpIv3jx5qTf7JJzS25sRwhvMWA7AHJxDdHyxtCUZpvhZ1tYnsC+S8BUvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717459935; c=relaxed/simple;
-	bh=DT6ZriKLDL2/nkp1V6B9kkq6e9Nx7cAlrQKpuP7m2z8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=A3d/12H+UixCFvkiAyjF52lEBI50dNSCVzqu/XMhGCzDk+wIgEeuhOcxpYFwF4toa7Ut+cFYgYye6N7YbefsspmM3Wby/LyZI8+nRDnNHEj35/jQUvQ4I+Qmt9F+I4cFlJOT3DEAbyJSrs9a8zxgEMkdLS4Jn4VWgTEDm2TrY1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=B5wRju2R; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1717459931;
-	bh=Hv0tTCtGNRDz4IxQxUCsS/WiWb2yQMgR724fsyR9A5U=;
-	h=Date:From:To:Cc:Subject:From;
-	b=B5wRju2RCadGD9C1LieOsF+KIgLpzMiS/sbS8g0GZUXyb4NrqCE0ECWN90qmt5S18
-	 CPaIJsmnfmkA0Qija6N3fXjUkHN4fYQC+88fFV3RN9JzwwrTE6+VGUsTTpJpwJkdpl
-	 xa98A9pDHsPDCkGU1dxwPfGf6Pg/Q4QLPJKz6u8QYMdMc7tZq6+Tc96lW4P5oMcMeq
-	 IP40DbEc0zhFPzVZZTRVG8ENBZfBRGTc2je9GtLCUQuxLJTAI3OsE6soo7PpAmL306
-	 e7fjGPe99T47t4D5tzkRFjVVcsxOoRpFPN2mBxcwPsKu1MdmMAVwTjsgBFX23AOBGo
-	 VQDCtECe7xkrA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VtWHZ1XLvz4wcC;
-	Tue,  4 Jun 2024 10:12:10 +1000 (AEST)
-Date: Tue, 4 Jun 2024 10:12:09 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Trond Myklebust
- <trondmy@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>, Sagi Grimberg <sagi@grimberg.me>, Trond Myklebust
- <trond.myklebust@hammerspace.com>
-Subject: linux-next: manual merge of the vfs-brauner tree with the nfs tree
-Message-ID: <20240604101209.5134a47c@canb.auug.org.au>
+	s=arc-20240116; t=1717460399; c=relaxed/simple;
+	bh=BMoF7J99zKFVpn0nM3A/va9d59DByhwsOxGR9qU6aXs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uMQgJ2j1QJrxy9QXCtBYZdW4VKbnnahzYBvbx9TkmMsf3wt8TvVCkpTzSnq1ay3gnsLvLACWQmzL+VFvcqB/DLHakM/RbhJcbmJ0Bc9uBPkSROkHyWse20wAtxiBJ5LsKyg3RGVbUGLb08mWBVxoVK8yyqsQCglFVz6dHvCb3is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rduXa3mU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FCAC2BD10;
+	Tue,  4 Jun 2024 00:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717460398;
+	bh=BMoF7J99zKFVpn0nM3A/va9d59DByhwsOxGR9qU6aXs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=rduXa3mUHV2RZB/p8YWiwFD7OzVROM8+GCTtGqWOg5ngAzVETcZ5a2m1J3jB74I4S
+	 blgxyhyZ3+Wiu52PhOEVZUL+dMVtKFWh8eu92Gm57NfJh46y0KV+180S0ZXZFEgjn4
+	 07kN5DZUPJ6QSgVTbk0eFB42pPKZCD5MtaMpFchmT5e/HONrPzJWrlOcyYhbSZhIMR
+	 sAhIIxKRC68XCcb67ZUQJDlKWE+JL+/TA282sgxl77g6yZ65Xia4iTDL0j1zTJ3mNU
+	 EZPKY8Qo2gqdhdykxIUcZitdK8CVGCGo9mGRwYdXESnit3Uh5QC73D/O1nYPHA9dE8
+	 QliKhT+Gxs8VA==
+Date: Mon, 3 Jun 2024 17:19:57 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, David Miller
+ <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, Networking
+ <netdev@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20240603171957.11cb069f@kernel.org>
+In-Reply-To: <20240604100207.226f3ac3@canb.auug.org.au>
+References: <20240531152223.25591c8e@canb.auug.org.au>
+	<20240604100207.226f3ac3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mWXFnTaouDl+lVyq184KVFe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/mWXFnTaouDl+lVyq184KVFe
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+On Tue, 4 Jun 2024 10:02:07 +1000 Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Fri, 31 May 2024 15:22:23 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the net-next tree, today's linux-next build (x86_64
+> > modules_install after an x86_64 allmodconfig build) failed like this:
+> > 
+> > depmod: ERROR: Cycle detected: rvu_nicpf -> otx2_devlink -> rvu_nicpf
+> > depmod: ERROR: Cycle detected: rvu_nicpf -> otx2_dcbnl -> rvu_nicpf
+> > depmod: ERROR: Cycle detected: otx2_ptp
+> > depmod: ERROR: Cycle detected: ptp
+> > depmod: ERROR: Found 3 modules in dependency cycles!
+> > 
+> > Caused by commit
+> > 
+> >   727c94c9539a ("ethernet: octeontx2: avoid linking objects into multiple modules")
+> > 
+> > I have reverted that commit for today.  
+> 
+> Any fix for this yet?
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
-
-  fs/nfs/symlink.c
-
-between commit:
-
-  134d0b3f2440 ("nfs: propagate readlink errors in nfs_symlink_filler")
-
-from the nfs tree and commit:
-
-  8f3ab6e4bebe ("nfs: Remove calls to folio_set_error")
-
-from the vfs-brauner tree.
-
-I fixed it up (the latter included the change from thr former) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/mWXFnTaouDl+lVyq184KVFe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZeW9kACgkQAVBC80lX
-0GyseQgAifD+kLQSzJafL8CzUlOJnZ8aaDlMnYWiYWV7qFU0WoRHtuuastr75VND
-lMBUmpA4BjbIOUgDokjNHD4RNAOJZ25PsG/0ZE3ng1drpt5+ZSnUC4akstX/W4hi
-/IHlyOA4Cnk7gMCNURTexGUyh7NMWHsyojHuqn6LayiLlYZGAf8y0dQbxeFIKAVH
-AUtq8Jtj9/BQABJ6z22+VCE5xLo8ZP1LkR1QFKMqIBczdWr2NeUUK8uh4ofz75lp
-qZavCw4inWZjTYvikddg7tQH3io/6Q5IYlF0U9DUtVVFAd7+Y4tNliW1GXYRE1b4
-OH1foVBJ2fEDZe/Q+kZc9Lr92yTtkA==
-=AOPI
------END PGP SIGNATURE-----
-
---Sig_/mWXFnTaouDl+lVyq184KVFe--
+Arnd, do you have cycles to take a look? I don't unfortunately, if you
+don't either perhaps revert for now?
 

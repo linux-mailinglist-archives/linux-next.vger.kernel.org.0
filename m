@@ -1,120 +1,114 @@
-Return-Path: <linux-next+bounces-2487-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2488-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB6068FE5BA
-	for <lists+linux-next@lfdr.de>; Thu,  6 Jun 2024 13:46:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48FAD8FF701
+	for <lists+linux-next@lfdr.de>; Thu,  6 Jun 2024 23:47:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D9F21F26FE5
-	for <lists+linux-next@lfdr.de>; Thu,  6 Jun 2024 11:46:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E44D62857F2
+	for <lists+linux-next@lfdr.de>; Thu,  6 Jun 2024 21:47:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E094178396;
-	Thu,  6 Jun 2024 11:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77B18219E1;
+	Thu,  6 Jun 2024 21:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="pYQz6zxc"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="A/0f0sJm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26BE739FEF;
-	Thu,  6 Jun 2024 11:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9382F2B;
+	Thu,  6 Jun 2024 21:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717674383; cv=none; b=kc/O/FuXLfSegGgStnyVTwGbzm5IsdN4V7iUC9ijSTPT3ksWHlXjb3S4m5bcHvGqo77n0bxVtTREbr2KJhu2uuKG/OlogfHXcge0SLYCnPI/62s15NpAYht5CJXxkhlK7QdNCqxO2sOZmzF+SGpjZJg27E5q+gJ6mH2dhyXsG4Y=
+	t=1717710442; cv=none; b=nphNbn+wWKNmRgyce9GkQbXZCMOZXwbNiJpnUsbOlgOZAPDcgN1m9mSjmlTvxEbBzRL9n7x+iPXDEr1knD+aS7bXnUNUxYCop8jbuGt1zy0jfBzuon965Zqbz7cXnfsLT/rAdRgclGRBSdA8W8TVlrX4vd6jdZNdHtbOnrgWAEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717674383; c=relaxed/simple;
-	bh=bawd7RoudWzE2MLiDRDMbDUVmw5SvItRGm9RIcJfnSM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=an51hKZVdrOzWG4UCTM57Jp6zUI25vJwWvwNixN6V8JC9wCp8QwDmWCxD+u6R0D9oKFnT4A9W16PV8AGIHd8NTHGZqzBFZrk/7efuUj3K5opr3tyy3PETi11fX/1LcOOEZkQDY+LlPPX/6/gBXYOzd7qcKgmScDqQliUWvSG1ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=pYQz6zxc; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+	s=arc-20240116; t=1717710442; c=relaxed/simple;
+	bh=/iPN4m0a4yNtyGO2fZsVP3jEdCk2fprkDN6p48JCvKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=r3xWDb31kB0BnrueznvF8NJppthuh5j7mrlYhJ8u9teJFQtMPOyG+L0n5EBNNMW+ocGdVdMQoEArARypeX/TSoHssoO/NNe3FU8/zaA1wFcJexiaY3XmsSMZfZ8OeDujwzxpErJbNm3Rcvshu9q1ISxIje3abU+6QluSt44J4lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=A/0f0sJm; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1717710434;
+	bh=yQKunjdgLYpgpq4ERfEQ/ViJUETeK4Sm4IU0aIcVhGE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=A/0f0sJmBt7NCudA0XzagPS1HPPHb1LJIFmVTPZDJUt7t/8kp9lM09+RZjWOJJwLK
+	 xOgOwQuVPLECJjTUrJzVADPfqkgoFM8f4BcgQUNGss4gTT31GGMw7K1On8GJeEad4e
+	 xsTpoTqaQjUGI66MNvrcFPl4kXsvc4U9ZrEW/JWcZmaK6Bpk4DCmNBxLR4sKroFu7n
+	 aclvDdv+hRpokGikTAldAoP2Xsgu78KrbfNQT4rQR7baWoLHC11HvQTw0ouAiSKdaj
+	 Cw2tUDuhm0N5SC33bZq8+KKEpoHT0Ysr6vqiOq263E6BXgQ3ooDTQiIf9uHeKqL24x
+	 TRJiACXSZ+D7w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 6DDC988395;
-	Thu,  6 Jun 2024 13:40:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1717674056;
-	bh=Nyy8WYwlJkr9UvhAPlerxpBTyEbPyphWULV8TmMUzaU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pYQz6zxcgac01LlqCNOMbPaufE8YwphfPIR5SkZzMpMmELev1dXCLCBoucvlsUSfF
-	 l/3YBGPPFvkadQEpBoVp3atPRsuLp1pzdgwEerFOH6ZvJwNBBUMpMkZy1IRrL97yfy
-	 mMIXt91y17oBYF/bpPOFwzNaVwYEe/hq4kNSidvDd/Oq96x0O5P6jbSxf0Sg4kIWqt
-	 kgS92C72WlfKuwjHeO54oguTFMkG+3NWwxpia00M0JWCnOGYbC7S+0nmHeV5qHuCDF
-	 zzFFARA3mnX1+oOwTXQ9d2cisWz8drewWujYIJb9Ah5EOQM9WWm7JbxYTQpvktbuDR
-	 Rh7DZDG57eoxg==
-Message-ID: <5770f01f-2341-4fed-81da-3803f3c54f03@denx.de>
-Date: Thu, 6 Jun 2024 13:14:37 +0200
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VwHwx6JH6z4wcC;
+	Fri,  7 Jun 2024 07:47:13 +1000 (AEST)
+Date: Fri, 7 Jun 2024 07:47:11 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
+ <benjamin.tissoires@redhat.com>
+Cc: Andrew Ballance <andrewjballance@gmail.com>, Benjamin Tissoires
+ <bentiss@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the hid tree
+Message-ID: <20240607074711.4390fbe4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the stm32 tree
-To: Alexandre TORGUE <alexandre.torgue@foss.st.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Alexandre Torgue <alexandre.torgue@st.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240606091217.19a08b65@canb.auug.org.au>
- <a827536d-004f-4a5d-8995-321ba9926349@denx.de>
- <361a9191-c320-411e-a628-ff41298391a9@foss.st.com>
-Content-Language: en-US
-From: Marek Vasut <marex@denx.de>
-In-Reply-To: <361a9191-c320-411e-a628-ff41298391a9@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: multipart/signed; boundary="Sig_/0lB1VbUxYf8kXxngRTZOhZx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 6/6/24 8:54 AM, Alexandre TORGUE wrote:
-> Hi
+--Sig_/0lB1VbUxYf8kXxngRTZOhZx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hello everyone,
+Hi all,
 
-> On 6/6/24 01:29, Marek Vasut wrote:
->> On 6/6/24 1:12 AM, Stephen Rothwell wrote:
->>> Hi all,
->>
->> Hello everyone,
->>
->>> After merging the stm32 tree, today's linux-next build (arm
->>> multi_v7_defconfig) failed like this:
->>>
->>> make[4]: *** No rule to make target 
->>> 'arch/arm/boot/dts/st/stm32mp135f-dhsom-dhsbc.dtb', needed by 
->>> 'arch/arm/boot/dts/st/dtbs-list'.  Stop.
->>>
->>> Caused by commit
->>>
->>>    12ff8e167641 ("ARM: dts: stm32: Add support for STM32MP13xx DHCOR 
->>> SoM and DHSBC board")
->>>
->>> I have used the stm32 tree from next-20240605 for today.
->>
->> Fixed in
->>
->> [PATCH] ARM: dts: stm32: Fix STM32MP13xx DHCOR DHSBC Makefile entry
->>
->> sent to linux-arm-kernel .
->>
->> Thanks for the report, sorry for the breakage.
-> 
-> 
-> My fault, I tested to build the board using
-> "make  st/stm32mp135f-dhcor-dhsbc.dtb"
+In commit
 
-That's what I also use most of the time, and OE does its own DT builds.
-The LKP bot did find it today.
+  cfacaaf33cd7 ("hid: asus: asus_report_fixup: fix potential read out of bo=
+unds")
 
-> Fixed in stm32-next by applying Marek patch. I'll maybe squash it with 
-> initial patch for my PR.
+Fixes tag
 
-Thanks !
+  Fixes: 59d2f5b73921 ("HID: asus: fix more n-key report descriptors if n-k=
+ey quirked")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 59d2f5b7392e ("HID: asus: fix more n-key report descriptors if n-key=
+ quirked")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/0lB1VbUxYf8kXxngRTZOhZx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZiLmAACgkQAVBC80lX
+0Gz8yAf/S8QjsnCuBKsoSlI3HHp2pqtIAb1biAfEiy6HjVQn+kg6tKpD22aCkOOz
+nK+zcJW0EGhbQvOb5hwNQvmOT2+mOwuLTPmZyR376674cK9I0hl3bpvc0OVaJ+rV
+ukdsFa6Qu5UYQ+3YjyfB2Xouo6qeOgiRnOcYM5VPswbZgccfAR3kAW9V/LaV+y9z
+O/VAMGOJyctTv6JpfzrtsX9cB+KJvrcbuCHep8mXq4vdcOlVnU9FZRCPJMu6X9pu
+4jmKD36NNWegKhOdetx8sSWPtbBNRmCn0WYNSxliPQsqbAhVzVxLiCCRs/CpEbju
+3j6HDGw5BEXnCONNqXcSIhL2U7zR0w==
+=A6L0
+-----END PGP SIGNATURE-----
+
+--Sig_/0lB1VbUxYf8kXxngRTZOhZx--
 

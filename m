@@ -1,107 +1,117 @@
-Return-Path: <linux-next+bounces-2505-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2506-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5133E902B33
-	for <lists+linux-next@lfdr.de>; Tue, 11 Jun 2024 00:00:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03616902B7F
+	for <lists+linux-next@lfdr.de>; Tue, 11 Jun 2024 00:21:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62F921C21E87
-	for <lists+linux-next@lfdr.de>; Mon, 10 Jun 2024 22:00:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7BFD1F22A67
+	for <lists+linux-next@lfdr.de>; Mon, 10 Jun 2024 22:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA9E12F397;
-	Mon, 10 Jun 2024 22:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B32215098A;
+	Mon, 10 Jun 2024 22:21:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="utw4ENKH"
+	dkim=pass (2048-bit key) header.d=rothwell.id.au header.i=@rothwell.id.au header.b="pW2ZL601"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mail.rothwell.id.au (gimli.rothwell.id.au [103.230.158.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23B714659A;
-	Mon, 10 Jun 2024 22:00:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C18745F4;
+	Mon, 10 Jun 2024 22:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.230.158.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718056816; cv=none; b=KFn+hXpRw2FscwRHTzg9nknSrzbz/Mv8+ODEVVCDxXahQhSHiuJMXu8iEjFtzJvDDu79CsFUHiDOQ9LTKX3QknBuAdc3+zcaRcO6aQDrj0ohj6upMb+KFgR9h6YHziTMgLKQXraO35pDBrsJMQKhwGXh/guhMgb/xJKGPnmC3cw=
+	t=1718058082; cv=none; b=HsaZHtob1jj+4OuqGv/N3Jg4vBEawZF6qOYR/Lx8VJM3RHpG2gFcTmvnk+WuQqH86+1pEalspnuW4gqNvjpgeTGlBbRrGVMlmeNpGzphh4DtRAN2JfK1UpCs4lWL7vb/1kPE/JRwLUgnQN+8F0E8YPX+lNfYDjMa3WuMgXjWkEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718056816; c=relaxed/simple;
-	bh=2R0NwbqEDeIX5iZBZLyYqdcTiQFsjIqaMwU57bVp+9c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Kf+le0Ij7GEncCQRtZjxOdV0y+dNaBshQAG+DezHZ7j8TC5c4kiLNABuIIxrqv4P4676+27ODvLJzHO1SfInfnrj0QoXkJlBsURDi6DpLgOtU3hKncj22qrBtBtF51MWElb0BTv3RYsPpdggslCGRg13S27VfA2w2G5MyYApO4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=utw4ENKH; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1718056813;
-	bh=2Hv3doo9nIl72RYqk0oaoIQ2eWIQTj/r2hz2Ua9K3Y4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=utw4ENKHAeSHaAY0n5moAyVLySXp3r87K9YvEhqv5t96Nr/qjTR0QeXo54VpmH3Dw
-	 CoCkxxA/HPzou5Jw8P997u7uVIM2FMmVs6i0JCj3yF/M9m6RFj1uGWv2WBiXaug4gg
-	 7fiO+LFNBPl7DZpVY/M/Vk9POzhedMVJuRTyuvTZJLfjOwRjxDLBiuCr7EKcS5BzBl
-	 uQFSbmpoq+fjo9k9VZ8legjLn9LVejtsnvebuLIOrGS8AQ4JFVM3vVmtCCyR+jXWUs
-	 vP+c1TCkffPQ6p566HN49W8r1IW0VoauO3zMFeFACR4KdP+gAc5fO5yRBRzgh762ZV
-	 yXI0DwbDVUSUQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	s=arc-20240116; t=1718058082; c=relaxed/simple;
+	bh=03Wv3iuJB/txfjVrc2YZH23gRt/Gc/3S3BTnGCY2bu8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oQivhxCjN5dfqCdL38C2mpjUfxx1c7tOYOhNSRratP25wY4zF8X/an3T0LvQlSwG/w4WmqK39tqEhqFEYzW4buDDRZPmayBzPvxg5xMGI/Xp12WGkoyPli1Ode2UBYtZNBxoIpjSnj43PmKxO7K2BFFbeGM+JT0voOiATuhKW74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rothwell.id.au; spf=pass smtp.mailfrom=rothwell.id.au; dkim=pass (2048-bit key) header.d=rothwell.id.au header.i=@rothwell.id.au header.b=pW2ZL601; arc=none smtp.client-ip=103.230.158.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rothwell.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rothwell.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
+	s=201702; t=1718057542;
+	bh=o2WHC39aeKi1ObzdV5DagZCOhaGXixNtJPpOUV27h5A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=pW2ZL601n5Y+OaMcg5Zrzjv1jlmm+MIyOCxa0crps9iaxbl84bAc28iIHLV+PbaS/
+	 LXlV0PZwFnZ+RxGP+Yz+KOB2LGhP6DVFgEpSp5DvUJj6T1TeDg1N0+H6lthwEnptk9
+	 EPqxjlZFeETolHVQ4GooysVJrybePWRcESHQkixsD+Ui0mSkt61KHrauhUZn+xQoxK
+	 GlEOqXfru7kqTObXU2VcyQkFpUKUPD8sv0Iwb/kb574k1Ds+x/OF3V1a/KkU9hI7VT
+	 NWxncEeN6B0I31Et3gfYWt0Gis7EdPtjR6eVGy8XB5MvM2mpmi8l2SGyCbH0+/PyD+
+	 g9TbRDJxwOK0g==
+Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Vym25102Zz4wc5;
-	Tue, 11 Jun 2024 08:00:12 +1000 (AEST)
-Date: Tue, 11 Jun 2024 08:00:12 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the ntfs3 tree
-Message-ID: <20240611080012.79ae200c@canb.auug.org.au>
+	by mail.rothwell.id.au (Postfix) with ESMTPSA id 4VymJ51sWwz57;
+	Tue, 11 Jun 2024 08:12:21 +1000 (AEST)
+Date: Tue, 11 Jun 2024 08:12:17 +1000
+From: Stephen Rothwell <sfr@rothwell.id.au>
+To: Andreas Gruenbacher <agruenba@redhat.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Steven Whitehouse
+ <swhiteho@redhat.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the gfs2 tree
+Message-ID: <20240611081217.4d2147f2@oak>
+In-Reply-To: <CAHc6FU66Tsg1WZcUwK641rJ-KytbBSkegzrXWFgsEuuhe+PDhQ@mail.gmail.com>
+References: <20240529142455.1c68e65a@canb.auug.org.au>
+	<CAHc6FU7MrnksU9vDvdAvc_tv5knukGpnxXEpqidvdfWqDf1p5Q@mail.gmail.com>
+	<20240531100032.4a112093@canb.auug.org.au>
+	<CAHc6FU66Tsg1WZcUwK641rJ-KytbBSkegzrXWFgsEuuhe+PDhQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.42; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dU9eNozOS8tIRrPkM9Pm/EN";
+Content-Type: multipart/signed; boundary="Sig_/YkyRNdiE3zdYKcMepyqZxEL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/dU9eNozOS8tIRrPkM9Pm/EN
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/YkyRNdiE3zdYKcMepyqZxEL
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Andreas,
 
-In commit
+On Mon, 10 Jun 2024 14:53:28 +0200 Andreas Gruenbacher <agruenba@redhat.com=
+> wrote:
+>
+> On Fri, May 31, 2024 at 2:00=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.o=
+rg.au> wrote:
+> >
+> > Done.  Who should actually be the contacts for this tree, I currently
+> > have only Steven Whitehouse listed. =20
+>=20
+> Could you please add me, as I'm the maintainer. Steven almost isn't
+> active in the development of gfs2 at all anymore, but still very much
+> on the management side, so it probably makes sense to keep him in the
+> list as well.
 
-  861ed5b28839 ("fs/ntfs3: Replace inode_trylock with inode_lock")
-
-Fixes tag
-
-  Fixes: 4342306f0f0d5i ("fs/ntfs3: Add file operations and implementation")
-
-has these problem(s):
-
-  - missing space between the SHA1 and the subject
-  - Subject does not match target commit subject
-    Just use
-        git log -1 --format=3D'Fixes: %h ("%s")'
+Done.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/dU9eNozOS8tIRrPkM9Pm/EN
+--Sig_/YkyRNdiE3zdYKcMepyqZxEL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZnd2wACgkQAVBC80lX
-0GxD1Af/Tas9gTJtmRAAIhFfn9bJwRJWVkOgS97IyTLG2aG9lbwX1JKdnqX3IrOj
-f32Gqa6dj6P+Sk/SeRG5m2a7FT4J5wefymrLdl8MMNErxaMgB+wswcCFCxIKd28X
-7fQTOs6L//r3N1Vzgc7fVlpRSG0EqFwMEm0R6lPxbmwB5cfj/h0EPJVpiwjw/rTr
-T/qBS7FHwogwCiWthj99IcSVTybqCjNiBpRFCj0N92xI02s7WcXXmY7+COyG3Fsr
-32ZANMtHm1fzGXH58EdTELYJYcRqJKPG+twOHhV8eWPz9vEjwraW3aYo4TQdvRx6
-ZV7JnUIhTSaQ+fFjNC0tAG5KEWTrQQ==
-=uw1Y
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZnekIACgkQAVBC80lX
+0Gx2cggAgGgiYkrTLlv1dqUR/1iyuny+udpr7QOXjZfQOX9fzpPWSTK/kXBf6/qr
+0sf10QPkGdXeCC04Gpb+qvEsanduelo0niPRrsOlN5KN4bwKSHaKZ/qp4sVng7VT
+2WBdiVTa+WPTnclAplsMzvCJ6bQ4OmX36g8MKj+wGCnDII5ILJ3JVYGHsnYeKWRP
+tzkjt/1l8GQTwAAuas4MwEvJ52GRrXYQcCuEBWcNt6VrfocMyw54RCskMQq+Yd7X
+JmQ14kew64VZjfOHMvQwgQFUreMsr5VdIr78xyTeTR39DkD+mOp6o7NsmazHE4CG
+vTc0m8fHrL6qo+Rc2aKry9qze/0K4g==
+=5mop
 -----END PGP SIGNATURE-----
 
---Sig_/dU9eNozOS8tIRrPkM9Pm/EN--
+--Sig_/YkyRNdiE3zdYKcMepyqZxEL--
 

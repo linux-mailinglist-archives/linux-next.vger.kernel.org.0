@@ -1,92 +1,90 @@
-Return-Path: <linux-next+bounces-2519-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2520-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF86D904865
-	for <lists+linux-next@lfdr.de>; Wed, 12 Jun 2024 03:28:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE55690492B
+	for <lists+linux-next@lfdr.de>; Wed, 12 Jun 2024 04:44:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D94481C22729
-	for <lists+linux-next@lfdr.de>; Wed, 12 Jun 2024 01:28:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A29181F24878
+	for <lists+linux-next@lfdr.de>; Wed, 12 Jun 2024 02:44:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78BD51865;
-	Wed, 12 Jun 2024 01:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B91ECA7D;
+	Wed, 12 Jun 2024 02:44:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dyzncG6r"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LWGrLywr"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC3C17C9;
-	Wed, 12 Jun 2024 01:27:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E17C122;
+	Wed, 12 Jun 2024 02:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718155676; cv=none; b=ipR7GkSKTa9zri39vBEcduV7KRE7TuRC2DswgHoynrJlLA9jbRm2mogeR7G4rQ9XXi/lFYZdVqy+BK70InGbfrwciME4c6/8y9kYR2WBXsWtCpASUsoAbnGAhj2QaT3Va7AGcGoKUGsDYxjFg9dnD8nNWRsGUtb+qM+UZs+7dPI=
+	t=1718160272; cv=none; b=J9fDJWj7quZaMdwbjqS/cJz8NodKNbJV7ETOlFIFa3/gNfXVLjuyy2N20uWIw9doRXXEjO3uO7AmxsRbzjSlNMahvjCjN4o+J3b0grDDw2fP8xl/y4osUchrsdU/ZClNGz3axuAJ1qUQUnTspmnREumDfpC8HBF4S3WT27ORuAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718155676; c=relaxed/simple;
-	bh=72ccGiqpasKMW/KuF0ZWk8xmKm5MkMvQGTh43Of7jks=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RKLpqITOOgGVggpAxkmppi6+I5urJ+FHYLgGGNbo6CiCic/Jcm1beL4njaCB0MMGM3PnJ+JvNNIX2fY7bBYgszQKHWmm3o7u8Q7Ik4s+yQT4orMpBzIAKYKKv3yAkXhm4efxN2zVDW6Jv83yVT4An4lYfWEJTZT6sFCyyveTTxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dyzncG6r; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1718160272; c=relaxed/simple;
+	bh=BE5Y9Qo5Eyxv2m3y0eALTspWX6n8dh5oWhlO+vbvdHM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=R4xkNH4tpv1K1i8uAAldZfjrMaR6QVSE8YAhy6xSNM5Y0DEgDXnvIDTW0ezwWRgbSh08MR7497WqDf6GTbmauMXcMvWABAWoq+osYDGT2+rDbsOhfd5zwrjdoT+Ez67sapCAaeylplG+CYkY08MZKYpS0SXb4IN3p+XSuRPLbYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LWGrLywr; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1718155671;
-	bh=aenrKh5vxiZhj+lFhogAzKc1iOwHEHknWWsHgrgrf2E=;
+	s=201702; t=1718159802;
+	bh=avg0iBHIDOS3x7PvuRSF0DrowyNVDLUAoBUaDVo+mOc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=dyzncG6rDIK6Q1P1pek2X2HGCvOLLvO9d6kaBeaiYFFCduUeauiopPbenV3ahkdi/
-	 qtnNmsvVDM9HIyRMZ70ekQoOZ0BhSTa/4zIWTUwPGOrofPk5Y63uhIQkTXXm5t3DKk
-	 D+M7VxRwxGN/W+1FZLQp/8pHp6Hsnk7qPdjOQ/LtzXgBSTPXTSraR+6tYaeWA9CiLS
-	 WfDF+x3Jl48kZXKDG1y57+ZE8C7E3ZaLHj+85ddVk0ThNXYR/wyGM3EU+oRjZH7JUs
-	 6zQeDR6qjrzZizW/fTZi/ZEDL43NL0ZjeQ8SlF9G+W1EQtY7JVmjxvWRPzSpSI1MIg
-	 BGEArgKWS7vTQ==
+	b=LWGrLywrcFTTXgXdkZgCAm6p+caTvNIpUPEASXmV5597KhRitw7YeETxiCwdV5LHo
+	 EuEHSiy3JZOUccuSH4GfUrK/EKMYb6U02fgZJ4TW2RIu7BLPL524e4FTmG9jMKJ6SG
+	 zs3/393A/Fz9rlae3cyITSjkWkaDxHvLKW7l9L7EMTowautNqveu5aMcVYe7rYakEr
+	 4/hFKe4vF6nl/66x5ED+6OmwPZPi7GXaw7xFcwvi8bJ0k3h/IYzneeGdjMhpk8Bpvp
+	 3OuZnvEGNIOqBz3f0cBLciKYJqHdyTAF/EUsQac+82a9c62zkV/KzAHlRWxN6PjOtL
+	 Bp7FQXVPk/1ig==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VzSb64rXCz4w2P;
-	Wed, 12 Jun 2024 11:27:46 +1000 (AEST)
-Date: Wed, 12 Jun 2024 11:27:46 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VzV6d5hLgz4wb2;
+	Wed, 12 Jun 2024 12:36:41 +1000 (AEST)
+Date: Wed, 12 Jun 2024 12:36:40 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: "Borislav Petkov (AMD)" <bp@alien8.de>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Tony Luck <tony.luck@intel.com>, Yury Norov
- <yury.norov@gmail.com>
-Subject: linux-next: manual merge of the tip tree with the mm tree
-Message-ID: <20240612112746.3130d68b@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
+ <u.kleine-koenig@pengutronix.de>
+Subject: linux-next: manual merge of the driver-core tree with the mm tree
+Message-ID: <20240612123640.68ae0310@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YOSTDTDlMN0uXKzhX+3sSTZ";
+Content-Type: multipart/signed; boundary="Sig_/NXGv7YrK=2nxl_57utSjCDV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/YOSTDTDlMN0uXKzhX+3sSTZ
+--Sig_/NXGv7YrK=2nxl_57utSjCDV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+Today's linux-next merge of the driver-core tree got a conflict in:
 
-  include/linux/cacheinfo.h
+  drivers/fsi/fsi-occ.c
 
 between commit:
 
-  f6a9651bfd74 ("cpumask: make core headers including cpumask_types.h where=
- possible")
+  2d2bf1e680a9 ("fsi: occ: remove usage of the deprecated ida_simple_xx() A=
+PI")
 
 from the mm-nonmm-unstable branch of the mm tree and commit:
 
-  685cb1674060 ("cacheinfo: Add function to get cacheinfo for a given CPU a=
-nd cache level")
+  29f102dbb11f ("fsi: occ: Convert to platform remove callback returning vo=
+id")
 
-from the tip tree.
+from the driver-core tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -99,36 +97,37 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/cacheinfo.h
-index 286db104e054,3dde175f4108..000000000000
---- a/include/linux/cacheinfo.h
-+++ b/include/linux/cacheinfo.h
-@@@ -3,7 -3,8 +3,8 @@@
-  #define _LINUX_CACHEINFO_H
+diff --cc drivers/fsi/fsi-occ.c
+index f7157c1d77d8,21d2666c4195..000000000000
+--- a/drivers/fsi/fsi-occ.c
++++ b/drivers/fsi/fsi-occ.c
+@@@ -718,9 -719,7 +718,7 @@@ static void occ_remove(struct platform_
+  	else
+  		device_for_each_child(&pdev->dev, NULL, occ_unregister_of_child);
  =20
-  #include <linux/bitops.h>
-+ #include <linux/cpuhplock.h>
- -#include <linux/cpumask.h>
- +#include <linux/cpumask_types.h>
-  #include <linux/smp.h>
+ -	ida_simple_remove(&occ_ida, occ->idx);
+ +	ida_free(&occ_ida, occ->idx);
+-=20
+- 	return 0;
+  }
  =20
-  struct device_node;
+  static const struct of_device_id occ_match[] =3D {
 
---Sig_/YOSTDTDlMN0uXKzhX+3sSTZ
+--Sig_/NXGv7YrK=2nxl_57utSjCDV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZo+ZIACgkQAVBC80lX
-0GxisQf+OmG6pg1a7Pj2fCoxVz3x2kbRExO5WJss2J8RJZWmyUs+q7NOkLb8QhA/
-nakSdWLgocoJ5AwgCCZjidYIPzQtqTM54R9hQsymo5jWk51xYCLhmWTe8rEElK7P
-pkH99Shjf3D4ErISee+9pQCfMp1D3vC75eb70fZIYqucaPbqJtkQ0JwjGAFflv6Q
-wFn+VQAwlfiXkIiS2gUYOKTSN7KqAJZr95+VzsWCvjMP/vUUIire6WY6p+8RMu8F
-PgnsHYWP79PONHrOyBcnnDau5IgFMqUgLFSerx2gxEXUFdFBKG1MEvEB5L3KiryU
-L8sPSAHgeGHDJyf0KKtifnrJ2Vb1zw==
-=iA/m
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZpCbgACgkQAVBC80lX
+0GxVHQgAogcMO90jU47ZoQmSJulLfzunOkza2dlL3ZHjbJO3e2SO1LeKswN19IHb
+sbAAIcpb6ZB86vDf+exLjkXmz5s+eZi38mntFWivvLvqAqdrl1hZOFoZvTDc7dpQ
+KRuTedv+mclaDxfxH/8wY9Z3andvEWQa9MmBhHpGpEKcrdhWVGegm9ts+1McFfL5
+niC2i2/8nO1AHFto3m90ErEdtpSm2tHUgJK5owNLZaJWDmhIkjEH4O/V23j7oWgi
+x0TiaW4KJIKrRCP+U2iJT0cQB9khEUgjlZdYtLKDDOR/0KWDI5Exu+5e2Mw93Wjy
+c+xsQSt9un3ZQJxuWw324GQuxQsr3A==
+=LhxS
 -----END PGP SIGNATURE-----
 
---Sig_/YOSTDTDlMN0uXKzhX+3sSTZ--
+--Sig_/NXGv7YrK=2nxl_57utSjCDV--
 

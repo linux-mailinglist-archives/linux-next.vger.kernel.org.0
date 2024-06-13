@@ -1,165 +1,89 @@
-Return-Path: <linux-next+bounces-2535-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2536-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 789C8906133
-	for <lists+linux-next@lfdr.de>; Thu, 13 Jun 2024 03:44:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55A9B9061B1
+	for <lists+linux-next@lfdr.de>; Thu, 13 Jun 2024 04:21:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04167B2255F
-	for <lists+linux-next@lfdr.de>; Thu, 13 Jun 2024 01:44:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DD321C210B8
+	for <lists+linux-next@lfdr.de>; Thu, 13 Jun 2024 02:21:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D92CB83CCC;
-	Thu, 13 Jun 2024 01:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E8793BBF2;
+	Thu, 13 Jun 2024 02:21:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="V462TnBh"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="OoVAVAWn"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2720183CBB;
-	Thu, 13 Jun 2024 01:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A363D96D;
+	Thu, 13 Jun 2024 02:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718242971; cv=none; b=o7qSKmxLaniq6VUrh6IsIFTd7bTbRzhiz1xYIbt3UJhWwQQy6MdZ/MR+RdkTkT0C+NhJPRskQOfyRPEwiuAFtR3f1iSZAtf03E+6hkF7Qgl1ZpvxJjDvMo+WvAGr8lCM1rhWJfp+l2ASe742GTqyERofOAMVmkqOdJon/Vudj7s=
+	t=1718245303; cv=none; b=kZWUmVtyjGVVjZ0tPJIks6X7Iw+XTXU3xY2t9clc8dWfpZ4D82hZfI81zkvDfpYuhguK1/UQgpY+8hK5e1xZJopvB6iSRWy6WjPlxu1A82XTpcZCWYBekAh6lHUaNyoBGJeuME8Q7xcm6ArYkYi0BSZcbl5BkXFMmC5rg3bBgHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718242971; c=relaxed/simple;
-	bh=5/+IrkgrhOmaGeVPdZOFOumO83cbV9KbZWwfFB9s9f0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hmdP1oHn6OkHA3pbT/zQ9FOSosCrMYREqohlxPBLVw1XdAlIZE+Vd3KkF8LhGguF2jtTubzvrS36xlxt+1TCUtPKCgptbBRXDxkxvWQ4xxsO8uLGE04l6kPoyqyrCc2Xs0TA+PJXk1nnByD7lA/T6Z5/q1TXrQIcm1Z31uUSCbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=V462TnBh; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1718242966;
-	bh=qZu3S/2G+ssclBYZDuHdoHCD0A2B/XeDXD0CZyUPl/c=;
-	h=Date:From:To:Cc:Subject:From;
-	b=V462TnBhJ8uYTQKYyo2kspIokgluYpFHyYbznX1xHUBwPr7RiGXijqmMrGVnTas9J
-	 aZOv45OTPUSsvI5SiKXechIkoWvn4wpcXzMbfU/VS5/5f8D6NqZgPdyRcZ/5ich/lb
-	 EnrcCaX0pDrZrjzO8YC4a+MnbN7iRiLzzPXauw6Bw1KzdQnvlV1Xa1XxLYQEX7aTdG
-	 UwUTEwcJQPGwX9AYs7IVHfkd1ovK25LiEzVQRMc/uab2Bl0Q5beGKSQrMAiyD5HWCR
-	 tsjOH8T9/wkWYP8q9ru1icF3L3TmauQ4ze/FUFAR9XH7zJKjp+x2gOiP72udDhnjOK
-	 4ocBL1J+5zWOw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4W04sx3P9Fz4wb1;
-	Thu, 13 Jun 2024 11:42:44 +1000 (AEST)
-Date: Thu, 13 Jun 2024 11:42:43 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Christian Brauner <brauner@kernel.org>
-Cc: Christian =?UTF-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>, Jiri Olsa
- <jolsa@kernel.org>, Linux Kernel Mailing List
+	s=arc-20240116; t=1718245303; c=relaxed/simple;
+	bh=pL2+P6vsz1q1L9XIcxmwV5WdL5pw+YnjsyiJgh124Ec=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=fMlreX33SL5IX3MbvxXXVueyPaNBudmCkf7eHlqOit86AE6r6nEo1r6Aczd41JtUyzELzc6rxhCf2xa73FLsqnor0wA87aJinNOxO8tLlWItGC4ZpFDvTklrF9GDsGAkw1Vg7aBnYIJqdvsQa8B7VpXi/v25ZDvlzIgjwtd7BCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=OoVAVAWn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4500BC116B1;
+	Thu, 13 Jun 2024 02:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1718245302;
+	bh=pL2+P6vsz1q1L9XIcxmwV5WdL5pw+YnjsyiJgh124Ec=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OoVAVAWn5kGsTQcogMXlM2bC4c4+xsQvFwXUPKhZAGzP+XUvfTbx9QrtzDwLCN79i
+	 DDuZl+msUzXiG7yUPgN9ibqYJtPL6eF3vKwKMJJDpJDdl106i3YLn28Nk7NhRgjJGu
+	 jjFDeqzpztJCToQ/W7qmCHVd2KVdDfrDpyVI2YFk=
+Date: Wed, 12 Jun 2024 19:21:41 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christian Brauner <brauner@kernel.org>, Christophe JAILLET
+ <christophe.jaillet@wanadoo.fr>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ftrace tree with the vfs-brauner
- tree
-Message-ID: <20240613114243.2a50059b@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patch in the vfs-brauner tree
+Message-Id: <20240612192141.69896438b5f6e674e07d418e@linux-foundation.org>
+In-Reply-To: <20240613104837.346519cc@canb.auug.org.au>
+References: <20240613104837.346519cc@canb.auug.org.au>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xF37dqulSIjQfCC/XcTfBBj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/xF37dqulSIjQfCC/XcTfBBj
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+On Thu, 13 Jun 2024 10:48:37 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Today's linux-next merge of the ftrace tree got conflicts in:
+> Hi all,
+> 
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patch):
+> 
+>   08ce6f724ce9 ("proc: Remove usage of the deprecated ida_simple_xx() API")
+> 
+> This is commit
+> 
+>   d92c9986e4db ("proc: remove usage of the deprecated ida_simple_xx() API")
+> 
+> in the mm-nonmm-unstable branch of the mm tree.
 
-  arch/x86/entry/syscalls/syscall_64.tbl
-  include/uapi/asm-generic/unistd.h
+That's one patch from a three-patch series in a different tree.
 
-between commit:
+Also,
 
-  e6873349f700 ("fs/xattr: add *at family syscalls")
+hp2:/usr/src/mm> git log fs/proc/ | grep "Signed-off-by.*brauner" | wc -l  
+22
+hp2:/usr/src/mm> git log fs/proc/ | grep "Signed-off-by.*akpm" | wc -l 
+1211
 
-from the vfs-brauner tree and commit:
+Christian, if procfs patches are to henceforth go via the vfs tree,
+let's be a bit more organized about it?
 
-  190fec72df4a ("uprobe: Wire up uretprobe system call")
-
-from the ftrace tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/entry/syscalls/syscall_64.tbl
-index 26af003921d2,6452c2ec469a..000000000000
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@@ -385,10 -384,7 +385,11 @@@
-  460	common	lsm_set_self_attr	sys_lsm_set_self_attr
-  461	common	lsm_list_modules	sys_lsm_list_modules
-  462 	common  mseal			sys_mseal
- -463	64	uretprobe		sys_uretprobe
- +463	common	setxattrat		sys_setxattrat
- +464	common	getxattrat		sys_getxattrat
- +465	common	listxattrat		sys_listxattrat
- +466	common	removexattrat		sys_removexattrat
-++467	64	uretprobe		sys_uretprobe
- =20
-  #
-  # Due to a historical design error, certain syscalls are numbered differe=
-ntly
-diff --cc include/uapi/asm-generic/unistd.h
-index 5b8dab0b934e,2378f88d5ad4..000000000000
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@@ -845,17 -845,11 +845,20 @@@ __SYSCALL(__NR_lsm_list_modules, sys_ls
-  #define __NR_mseal 462
-  __SYSCALL(__NR_mseal, sys_mseal)
- =20
- -#define __NR_uretprobe 463
- +#define __NR_setxattrat 463
- +__SYSCALL(__NR_setxattrat, sys_setxattrat)
- +#define __NR_getxattrat 464
- +__SYSCALL(__NR_getxattrat, sys_getxattrat)
- +#define __NR_listxattrat 465
- +__SYSCALL(__NR_listxattrat, sys_listxattrat)
- +#define __NR_removexattrat 466
- +__SYSCALL(__NR_removexattrat, sys_removexattrat)
- +
-++#define __NR_uretprobe 467
-+ __SYSCALL(__NR_uretprobe, sys_uretprobe)
-+=20
-  #undef __NR_syscalls
-- #define __NR_syscalls 467
- -#define __NR_syscalls 464
-++#define __NR_syscalls 468
- =20
-  /*
-   * 32 bit systems traditionally used different
-
---Sig_/xF37dqulSIjQfCC/XcTfBBj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZqTpMACgkQAVBC80lX
-0Gyxugf+OyoGzMPb40i+163XGdy4bk47x//dbm0++u5gjsfFmZto4qBgjQ8rGTB0
-JCo/lp8T9JM9r9rI400qSijsFAaCWtoFzykWCyHFIaVhpO0+YK87NMeWUcRSt1qF
-4NKgQr4wyGhpGLlNbsgvo9d7ybHVuQp3byOLo3zZ7xG0n0R+EcYXYaZDsNlk8T8o
-6nP5gH7iquDmj9btE6qwaZPqnpGpaj7/Fhgd6sUddA5G+ZKt6ewSY0XY0LcQ33+0
-lZ4Mr/4KHUF3r01dw0d6R3eGatbKyK3siv8y01duGCwPH7O2J06XIC4L4sR+AhNy
-3pZuoW4qGYkpkJ+dGlfmNb7IeEavxg==
-=8NEG
------END PGP SIGNATURE-----
-
---Sig_/xF37dqulSIjQfCC/XcTfBBj--
 

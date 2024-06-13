@@ -1,201 +1,114 @@
-Return-Path: <linux-next+bounces-2548-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2549-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CC62907F2D
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 01:05:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28E85907F9F
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 01:41:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC16A1F239D9
-	for <lists+linux-next@lfdr.de>; Thu, 13 Jun 2024 23:05:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4ECB1F222D4
+	for <lists+linux-next@lfdr.de>; Thu, 13 Jun 2024 23:41:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E58F213D50F;
-	Thu, 13 Jun 2024 23:05:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED46413F421;
+	Thu, 13 Jun 2024 23:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LDtYgCaf"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="Fn450LZx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9934B1369AF;
-	Thu, 13 Jun 2024 23:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B8A12E1CA;
+	Thu, 13 Jun 2024 23:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718319929; cv=none; b=HTfeNLD31SbJDt0KZGUaRTXeVv4SHUSPIaxRD3IbFWw4R2DDrGcXu3pfjMmTg3AnmJ3AUfE/TH9wTgEVYlPBJtj+wMDvlDLo2NAzqwCtrA1Ghtpl0n5XahefXD77fZ/5eq4fb3OPOywGLNGIxgW0ka7jTCIAZuiwGYKQTk50EZ4=
+	t=1718322068; cv=none; b=rU2yAsp7ZyKgA7hPBhl9c7opVMdB9jwr/SiGoVtJLnwuLDnOnEoTjr51DQ3Ro2eHVYg6QkRCx1vBI26usrKkTurGv19wi1yYJ0IGJtra08omaAvPOQe3FGFyzI/OH3L7QebYe/4b+8Am9QriWNk3hDg1AD7VCTZjb8vNwUuvFqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718319929; c=relaxed/simple;
-	bh=J2V4BQsgrzwCnPPCNckcZfloaWh80A4wC9VQfx+cwKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N0jSMoUbcAHRviczC2hB1Mik87Ff3/5FDA87fFH/G2AWrAkBrwaSwKKqnEU16AyNPlx//OzBimwy+a+Ev6rUizg+//1N6IACdmRSiwon6wS3+i905jQ8xduiLvpB+MHF+U/9hyJ6ZUGyt/crUBBjirEfa1PRcFepqOBqCge1Ggc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LDtYgCaf; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1718319924;
-	bh=Q7AAgLnmEYeIARDGD3RrKwEsOEZdNlWKsPjJWgH9uw8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LDtYgCaf0+p/6i0REe6j6O4J7U2GgdgzcswV6v7ZwLS3x7LzrZrE5p8T59XeAhy7t
-	 LjsmPVYqI8jGKXwftDJIkFys3uSpyYYmlx3AZI9erlbvmpO2Gy3gW2AkiIzIjElSZK
-	 g6Vt2E/rPfTgfposwNmP4/Zz3aCS4o4Be5gvgc6SDNJzAIObemvQnNZ4hzd4/LKRVa
-	 vdAVXGPPn2p8bNBQG2OKInkOan6n1iziPZtZe66MpLUugcXWl5BS0e/TnfM0LGsfmN
-	 5rr4PnfjrfnR7ZJtK482O8z3MBnbpzz12OCLsviZFHPqjmv8R8wYAISp5sWNPPxO2o
-	 MXOVldAk1te+Q==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4W0dKv6FpBz4wcp;
-	Fri, 14 Jun 2024 09:05:23 +1000 (AEST)
-Date: Fri, 14 Jun 2024 09:05:23 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Christian Brauner <brauner@kernel.org>, Christian
- =?UTF-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, Mark
- Brown <broonie@kernel.org>
-Subject: Re: linux-next: manual merge of the ftrace tree with the
- vfs-brauner tree
-Message-ID: <20240614090523.246f48e4@canb.auug.org.au>
-In-Reply-To: <ZmqaytbJ0r0EXO8d@krava>
-References: <20240613114243.2a50059b@canb.auug.org.au>
-	<ZmqaytbJ0r0EXO8d@krava>
+	s=arc-20240116; t=1718322068; c=relaxed/simple;
+	bh=rJH5XYEEQ2rdzZ9NAs5lUd2PQln9UtQS4Dtq+ZGCd/A=;
+	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version; b=D/F4qhJl6TQ+T2rIt8lyR6yyZLmsXanXaHKNRdapZpbvTx1grxh7psw40PdhjODFt/PtbF+lFHcQwqnmE3vY9JOlX0DcL/M4OLnFhI9G2OEnc5fAogWqCJL1Yot5SugSfQkQNJaGxdIHSUKuBBw06nwdForRbsXyNXplCmYUWu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=Fn450LZx; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1718322056; x=1718926856; i=spasswolf@web.de;
+	bh=A4iS7SnFzYQOWLls9ToE2MWXUz1kLfgULdeHOJvJs7Q=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Date:Content-Type:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=Fn450LZxmiyvXFcqhS/ezmwmMP40HIxgH+9T5w8GvIzVVGcP8JIcey9NkvImQQ46
+	 J796SCTKUlpCj5KmV/rLSg2KRgNsd/KDsvU34uHExsFnsl+XNFtTHy5Yf4BF/A0P2
+	 oFKsyDrifMwrnlBB0U49BrivkjG61v+Af5wFEZ1/viPas7tWIJf7ptlzjJgdjRevz
+	 LtBzU5vq8ph+5CMT2QLOBrel4CgHyTr3vlwR4AAlErXzJEg1nQLqKz0kKfS2QxOLG
+	 p3PCRDYYl66evajiLoawJ6deYk36VwEhsrlC3wf1tlQiLmb9R26v7YknM0HdrZ4oi
+	 yvtafh1x7SED9tvj1A==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([84.119.92.193]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1M8Bw1-1sLUZH1AnL-00G9CC; Fri, 14
+ Jun 2024 01:40:56 +0200
+Message-ID: <f4ea65e28ac47e6acb13f401f46a414a2f50f7bf.camel@web.de>
+Subject: commit 1c29a32ce65f4cd0f1c causes Bad rss-counter state and
+ firefox-esr crash in linux-next-20240613
+From: Bert Karwatzki <spasswolf@web.de>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-next@vger.kernel.org
+Date: Fri, 14 Jun 2024 01:40:54 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.52.2-2 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pqlA1vpx455Q_K6YVmokT2X";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:p7sdNQFAkJeMigdIoUg/J5dHLO/S/IikzRRthlWOxaX8SlaCiIv
+ N7mI7hpBcgZb6yYH6vlMBekap4UH4IdJRhysy6dEpK8prk2n4vHJ3qdHHeqDqCV0vdOl0m0
+ f8NWhkNHVKZ3liVQcypF1H3Ymtvh/wZlvNbyzBbISvzpZpxjBdqeZztymzrm0sp//nIQ9/d
+ ChY6OjGRiWJR7rDwTygUw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:o0ZBZYDwGvY=;dUo3B/6dqNV4vFFkeyj4nLZhgzm
+ ENDQKnvvYZRaEkzBnI7X8+ydESLF5wWHDTNuR6n7S9WW+cCJ7ipUat6Ucf5w47aIU6kOEKibg
+ 4fD84Pp/ARrbqk+4EA15AwwwZAqIHO/pOgVSmV5BZ0RhK/U0nPRr+z3ZDzyXC6F1l7rw8P104
+ 9VLSGhKw4xvaIiuGmxxpEp3VippWU5hT7lSRziTZv7RQr9uEz+INC+UdY/gVliIIaACrdF+Y5
+ zDSqrCRtAUGzfW/sGHs0dAEjXI+2vPsZ8h1gQ/L3nf7NO8F9oiBAvqgQ2YdaagzKV9qbsj7Qu
+ Dxk1fNsyGsS7MZvQ4QfM+beQq/cwrafPJZQHq6IUTSME0C4RcGg7sci9CeM1KIAcRh/DiXZc9
+ vMg2Wgl75lyTELrvOcaPcJeNqKq/Wyg5BwdJECQLZLUNmPEmiHhR6MmYkdEq1iss+OmoHA/Ho
+ tICIaRpIAql9BEfpppIbEmJuyUB1vZjpYq9IDJ+xf2igM/7nCVkLioN4lvWjDfn99f+SHmF1r
+ oE2UE4t3cTNgb/b06FKLxTBfB1LQr2ew50ZcB5DoQ9AsJRRa8ZSHavyf7gjif1MO1P1xFobbF
+ fH5xRYpevoScKQpkXq4NeIQs/lSyQ0FQ1lNFQCCQCPKbr4hnO+TJVJcku9S2Om9uo0IXLMKrT
+ 5AvJe1K46oNfu1WOP6meY94E6XoU61T25lXAvXfkd2VnQTxVODrGdT09hoL0cU1u6UkhmDjBW
+ XixNhbEyd9rJT4gLPaUng/dJbRgAj480Lx9BPtqxpX9C7ayh34dEI2wfUOkTPrpmYWCHcwnCY
+ ueUEehsoMou/oeexbJyNmR3/wkh4ji/diEQW7NXbE0Y5o=
 
---Sig_/pqlA1vpx455Q_K6YVmokT2X
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Since linux-next-20240613 firefox-esr crashes after several minutes of browsing
+giving the following error messages in dmesg:
+[ T2343] BUG: Bad rss-counter state mm:00000000babe0c39 type:MM_ANONPAGES val:86
+[ T4063] show_signal_msg: 16 callbacks suppressed
+[ T4063] Isolated Web Co[4063]: segfault at 396d1686c000 ip 0000396d1686c000 sp
+00007ffd767b30a8 error 14 likely on CPU 7 (core 3, socket 0)
+[ T4063] Code: Unable to access opcode bytes at 0x396d1686bfd6.
+[ T4211] BUG: Bad rss-counter state mm:00000000cd9fc541 type:MM_ANONPAGES
+val:817
+[ T3798] BUG: Bad rss-counter state mm:00000000432d87c2 type:MM_ANONPAGES
+val:181
+[ T5548] BUG: Bad rss-counter state mm:00000000034aa27a type:MM_ANONPAGES
+val:242
+[ T3823] BUG: Bad rss-counter state mm:0000000099734197 type:MM_ANONPAGES
+val:137
+[    T1] BUG: Bad rss-counter state mm:000000005e5e2f2f type:MM_ANONPAGES val:28
 
-Hi Jiri,
+(these are the error messages of several crashes and the error seems to affect
+other processes, too (T1))
 
-[Cc'd Mark Brown and Michael Ellerman just in case they decide to do
-linux-next releases whil I am away.]
+The crash can be provoked to appear in ~1min by opening large numbers of tabs in
+firefox-esr (by holding pressing ctrl+t for some time). With this I bisected the
+error to commit "1c29a32ce65f mm/mmap: use split munmap calls for MAP_FIXED" and
+reverting this commit in linux-next-20240613 fixes the issue for me.
 
-On Thu, 13 Jun 2024 09:07:54 +0200 Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Thu, Jun 13, 2024 at 11:42:43AM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Today's linux-next merge of the ftrace tree got conflicts in:
-> >=20
-> >   arch/x86/entry/syscalls/syscall_64.tbl
-> >   include/uapi/asm-generic/unistd.h
-> >=20
-> > between commit:
-> >=20
-> >   e6873349f700 ("fs/xattr: add *at family syscalls")
-> >=20
-> > from the vfs-brauner tree and commit:
-> >=20
-> >   190fec72df4a ("uprobe: Wire up uretprobe system call")
-> >=20
-> > from the ftrace tree.
-> >=20
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >=20
-> > --=20
-> > Cheers,
-> > Stephen Rothwell
-> >=20
-> > diff --cc arch/x86/entry/syscalls/syscall_64.tbl
-> > index 26af003921d2,6452c2ec469a..000000000000
-> > --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> > +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> > @@@ -385,10 -384,7 +385,11 @@@
-> >   460	common	lsm_set_self_attr	sys_lsm_set_self_attr
-> >   461	common	lsm_list_modules	sys_lsm_list_modules
-> >   462 	common  mseal			sys_mseal
-> >  -463	64	uretprobe		sys_uretprobe
-> >  +463	common	setxattrat		sys_setxattrat
-> >  +464	common	getxattrat		sys_getxattrat
-> >  +465	common	listxattrat		sys_listxattrat
-> >  +466	common	removexattrat		sys_removexattrat
-> > ++467	64	uretprobe		sys_uretprobe
-> >  =20
-> >   #
-> >   # Due to a historical design error, certain syscalls are numbered dif=
-ferently
-> > diff --cc include/uapi/asm-generic/unistd.h
-> > index 5b8dab0b934e,2378f88d5ad4..000000000000
-> > --- a/include/uapi/asm-generic/unistd.h
-> > +++ b/include/uapi/asm-generic/unistd.h
-> > @@@ -845,17 -845,11 +845,20 @@@ __SYSCALL(__NR_lsm_list_modules, sys_ls
-> >   #define __NR_mseal 462
-> >   __SYSCALL(__NR_mseal, sys_mseal)
-> >  =20
-> >  -#define __NR_uretprobe 463
-> >  +#define __NR_setxattrat 463
-> >  +__SYSCALL(__NR_setxattrat, sys_setxattrat)
-> >  +#define __NR_getxattrat 464
-> >  +__SYSCALL(__NR_getxattrat, sys_getxattrat)
-> >  +#define __NR_listxattrat 465
-> >  +__SYSCALL(__NR_listxattrat, sys_listxattrat)
-> >  +#define __NR_removexattrat 466
-> >  +__SYSCALL(__NR_removexattrat, sys_removexattrat)
-> >  +
-> > ++#define __NR_uretprobe 467
-> > + __SYSCALL(__NR_uretprobe, sys_uretprobe) =20
->=20
-> hi,
-> we need one more change in tests (below), otherwise lgtm
-> I can send formal patch for you if needed, plz let me know
->=20
-> thanks,
-> jirka
->=20
->=20
-> ---
-> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/to=
-ols/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> index c8517c8f5313..bd8c75b620c2 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> @@ -216,7 +216,7 @@ static void test_uretprobe_regs_change(void)
->  }
-> =20
->  #ifndef __NR_uretprobe
-> -#define __NR_uretprobe 463
-> +#define __NR_uretprobe 467
->  #endif
-> =20
->  __naked unsigned long uretprobe_syscall_call_1(void)
+Bert Karwatzki
 
-Or you could change __NR_uretprobe in the patch set to 467, then this
-will become just a conflict and not a renumbering.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/pqlA1vpx455Q_K6YVmokT2X
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZrezMACgkQAVBC80lX
-0GzrUQgAi6RKxet5+upQje0Zmi+rxYK24YRJoiBJYS4FOhJjmVrfV30PhS4A0iRY
-6rJLbmNQDJch+fanjTk9vgBnwWQyF7UM6u0llgJNJG1CIj9B+hzrly8vwlDQVrMb
-V9omSFNzdEPuACyBQxesJbT0WSSh7FhADWdgAs0fJbJ4bV+JJrUJjMUUk/gCH9yL
-jhT1Edundp6wSc8MMBTDDSh/qEJ7TZ+QaE3qy33hS5xtZ6IbbffTE0jIWmfqXpMM
-fy8XmSBqEb7aiODMsOGQQ40bkt445ZD/ov+YkdFmOQ+l17pd4nF8TGgY6homlbzc
-02zfq8b8CoN+4Otx2GEyoQwX19fwVw==
-=dszQ
------END PGP SIGNATURE-----
-
---Sig_/pqlA1vpx455Q_K6YVmokT2X--
+PS. Please CC me when answering, I'm not subscribed to the lists.
 

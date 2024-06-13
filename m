@@ -1,93 +1,105 @@
-Return-Path: <linux-next+bounces-2530-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2531-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0C80905308
-	for <lists+linux-next@lfdr.de>; Wed, 12 Jun 2024 14:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C31E905FCF
+	for <lists+linux-next@lfdr.de>; Thu, 13 Jun 2024 02:49:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DD6F285AE9
-	for <lists+linux-next@lfdr.de>; Wed, 12 Jun 2024 12:55:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9FA7284004
+	for <lists+linux-next@lfdr.de>; Thu, 13 Jun 2024 00:49:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BCF9176241;
-	Wed, 12 Jun 2024 12:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 832CE8BF7;
+	Thu, 13 Jun 2024 00:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VedoSkYN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="G+vZYs7E"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10ADD36AF2;
-	Wed, 12 Jun 2024 12:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A758BEC;
+	Thu, 13 Jun 2024 00:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718196956; cv=none; b=roXyhePGG/GAgnqZ7m1c76bFWESr1xlWIxVkAmPUsbbFUxMYoSaZebtt4GWWVmui82aVaIu1UShjJzPyMNSzV0sotmaq9TFP2Cj7tl6GEWLemuD+9LWW2PLlQkL2v2gWX22SL/4yy0lpe2n75GTDn++cJfc8NdrH5r0i4RN3eog=
+	t=1718239754; cv=none; b=Embk/Qcbr/tx9B0ww77yZczbaYegMv3uGJlETOK8MT7yHcAi4RN+agWdu0oBvPYJrpAj5o6ocSeSqA34b/rLMecDxl3bSN+KjlI27qCWUckJ5VEIYx9VLXoYubeDn4dkuarS3H1x32k1RwlOMNmhiZWC8FfA5366IY2A3d13LWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718196956; c=relaxed/simple;
-	bh=LQajmAT5tdxV94n2f65Y/ADCj6Zh6Hl1V86H+5ho60U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GEaQ5WkOwTenBNyAQhkITL+onCFolkcI5LzdQRUhO8SFAbTREWhco+y7h2sjetXolb31Uj2xh90aHerpkZ2U1JAsjSwFRMOZeRfqXEv+9v2T67uyveiU6b50QphkrVSPt+ITAIXDVJu8ruMxrWnfAef599SyyML74KLcl/ZMAgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VedoSkYN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE73C4AF49;
-	Wed, 12 Jun 2024 12:55:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718196955;
-	bh=LQajmAT5tdxV94n2f65Y/ADCj6Zh6Hl1V86H+5ho60U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VedoSkYNinhVCXWmTwmWOX/cqvmce1ZqSG2znPknXC6W0GlpAFyoKrx/QDxpSC1rd
-	 eK/VLVisrRIMqCVqmjsL+9Ud4uAjb3ofNPcOvoxdBBEX6x8R7H8tu3OAlAzyN+b729
-	 Gzn4yDWhOQg+dmr4LP9CGyPYBA9lME0xyNLpz0V8ALjc5d6Ai84RnUqzN//9XFUOPD
-	 +eNdLJBA14JO8yY5jyuuhhzHviAnnkyS2IBHTfdWOcy5bUrDajYHyt+err87ANT9LI
-	 zMu1o0VnCLD7ZxadudtvrsIco3i3R3bKaOj7qvlPh6+tHMUHkiLZqoaanRaogx3h9p
-	 CdQ8OE9I8IKaA==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52c7fbad011so4886966e87.0;
-        Wed, 12 Jun 2024 05:55:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVUQ3OOhwhinlq8v/vDlvO01YDpAgxnB4I+DQ0T7+KNfwfK1/czCx5AUTxeZVXVzNAsAnk2RN7EF5kboQYLpHswxZbmB6fiayMijZuG1pbVp0cZ2VDYXCCR0xGHrXeeZjb3cdm3n5+lpg==
-X-Gm-Message-State: AOJu0YzSs7qvaLoBkwfFFtGemvI59Z6CuVlJqRCplyTODvJKrj4bmz9w
-	eRATbz0jnQEEOV2AXMwFRTgQGsdGPMNTLdTRVrJSZNKA+v8eTYhyzIOm5gco8lpZwwYZGkkKsd/
-	5FRiJ84787KGAMOM9Op7tVhZK9w==
-X-Google-Smtp-Source: AGHT+IHlqCANyPk5NnnOPBFpGdcjloDxa3D9UPbW8EZGcbf8tFKLu+GQ6gfRwWDQrwNwF/cY7NUbyFnY3/YPK22y52Q=
-X-Received: by 2002:a05:6512:4889:b0:52c:9f6e:c9be with SMTP id
- 2adb3069b0e04-52c9f6eca6dmr51983e87.36.1718196954220; Wed, 12 Jun 2024
- 05:55:54 -0700 (PDT)
+	s=arc-20240116; t=1718239754; c=relaxed/simple;
+	bh=fe5U01rmWr3rZyOyQ76SE/H9ue/yECNbsLJpJpFn14I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=FrjyMVsLmOCl2ZoNDtlyrXfQ8oLDI5IaJxYNkudoe26CCik5v1TeF7lWS9gSocwn+kIXuqUnGEfynI3fuzXPgWzaqEAAyN/QKpRbYrf/f5K8JL6YPe/du0t/eryL82Y21LKxe/HI8KifrR4EBEh8BbF9Ppvt/pqXHzK+cn/Q1SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=G+vZYs7E; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1718239742;
+	bh=87SUkLe0q72yXLlJp4strv9BsncnC7PqoId9N9/m2rA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=G+vZYs7EwbHj/JeLOdMkVmDVgDHfdr4mXOREdgUHgI0Ckw1Bo7TNtw2xCFaSiC0oZ
+	 L/Z2W34HUL7NnZXhfEFOMybbMBi7gd0nxwXbtJLXOSMZTcDDiTdG+tkkQInH6Ov6Cx
+	 zpQJqqh5R7Ey/7kXGR4Rb0OFqNfPxMw9hwsce4+J++6L8CFJ+R0U8srnQl6Qqs/Wn2
+	 YnWiMVBHlnduistckUz2okKiQsipu0/CovnoZSR8cGrR5o/AL7I6tjLVB33szXrPzt
+	 1mB2UiR4K+KQWyvT2O2RfkX39YPVoHKxQnd5yQduET9ZxeHJfFFM3ktRqRN1PzpRZO
+	 wNh77whoT8Nqg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4W03gx38znz4wbp;
+	Thu, 13 Jun 2024 10:49:01 +1000 (AEST)
+Date: Thu, 13 Jun 2024 10:48:37 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the vfs-brauner tree
+Message-ID: <20240613104837.346519cc@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240612162848.2949c33a@canb.auug.org.au>
-In-Reply-To: <20240612162848.2949c33a@canb.auug.org.au>
-From: Rob Herring <robh@kernel.org>
-Date: Wed, 12 Jun 2024 06:55:41 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+YZFsxubEdye7xA0_rLLbrzK19F=hn+uRqKA+q6W_xqA@mail.gmail.com>
-Message-ID: <CAL_Jsq+YZFsxubEdye7xA0_rLLbrzK19F=hn+uRqKA+q6W_xqA@mail.gmail.com>
-Subject: Re: linux-next: duplicate patch in the nvmem tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/rf1_FXR8Clb/fPR.7Am4k/N";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/rf1_FXR8Clb/fPR.7Am4k/N
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 12, 2024 at 12:28=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
->
-> Hi all,
->
-> The following commit is also in the devicetree tree as a different
-> commit (but the same patch):
->
->   89ca7c2d13bf ("dt-bindings: nvmem: mediatek: efuse: add support for MT7=
-981")
->
-> This is commit
->
->   ee96c0a8d12f ("dt-bindings: nvmem: mediatek: efuse: add support for MT7=
-981")
+Hi all,
 
-Now dropped.
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patch):
 
-Rob
+  08ce6f724ce9 ("proc: Remove usage of the deprecated ida_simple_xx() API")
+
+This is commit
+
+  d92c9986e4db ("proc: remove usage of the deprecated ida_simple_xx() API")
+
+in the mm-nonmm-unstable branch of the mm tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/rf1_FXR8Clb/fPR.7Am4k/N
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmZqQeUACgkQAVBC80lX
+0GyVnAf7BFLoxAg+Dr/6YaS5Ic/6vLghOC12TML4JjJfxMEArmNc9opQI4taW3dF
+yQg/X7KLt5S66g74rFxBkx/nB5clj/pF3D1eJpkXlPZkukAcVNn6LkG3ZvWqhAVD
+qhKLQhPyhEUbjZQT0lY5pPG6j6VsOoxrIwJr3X3ojxnjeVAbCVW2rS5xAb9tpn/x
+QNQODEyzc/lp1SsDR/9P2igt8KztWc4c0qx2b1uz1S1Itfwt7JcTezoRJyGOU1d4
+b26upQqJAijnLqqJ03TPKVSJOE4skzfCVKs8ZxC2Af6VxMPKsnmvVYf1Edt3uh8X
+iTCnLwGtQnAg39yJ2TuYr71WMhj8+g==
+=XkyJ
+-----END PGP SIGNATURE-----
+
+--Sig_/rf1_FXR8Clb/fPR.7Am4k/N--
 

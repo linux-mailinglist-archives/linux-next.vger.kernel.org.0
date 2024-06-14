@@ -1,54 +1,64 @@
-Return-Path: <linux-next+bounces-2550-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2551-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECF3D908009
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 02:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DB74908080
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 03:07:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D74B1C20297
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 00:03:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2085C1C21476
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 01:07:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25EB1383;
-	Fri, 14 Jun 2024 00:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BB85158D75;
+	Fri, 14 Jun 2024 01:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="1BKppVSF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HB4EC0v9"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E381736C;
-	Fri, 14 Jun 2024 00:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE992F25;
+	Fri, 14 Jun 2024 01:07:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718323433; cv=none; b=FzV6/nWYL8u4nqY+bBR8ilX+6s0vFa7lL50kq9zzSZg8qGuVoUMbigjLlMHjQ/EPE9J56TrGHa0i+dRoisGyfU+0yJy1HflXOTs5o0g9egek2NUWT/tCAMXtEILd9yGSsfYB7dUWnBy9KTz5gMVjiRE0HCBUInBq/Iz4OIt5Pxw=
+	t=1718327274; cv=none; b=WzHtMweS3RyFMNjwoIXkwoXgUGaAjbeS9KtqU3jRYM0GkXcu+u++CPPkc+4cFgV5Z6EpU5cUi2KSMeDrqBUViZWvywLi6IXouBZDE25LUVn/Mrje9qTXTBNKnoqqNIEWy3CnsOwmI9iHF3+jDR03AzonKx7phWigR4QWgfZnJgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718323433; c=relaxed/simple;
-	bh=IDZppd8I11DRt960/387Nib64RFk/NqQUrG6Tp8DmJw=;
+	s=arc-20240116; t=1718327274; c=relaxed/simple;
+	bh=GwS7Y56Lx+fE/+Y9/JVAXhP3402AVgK8FgY1QgvObb8=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=R+s0bX4ughrLBggy09iAp1mWdoEsD2VYAJpisCI1LAj4zMqI1/EmrxP31zUFzsL5MB2J3r+TGUbfA9SSEu81+64nJL5Rtlo711wIKwdzucWGoZdubjscYW4VF0/P7VoxVdmOFrMeI0qhQBB0fdCqCMOBMhB91GtGUkewJgglwOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=1BKppVSF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B732C2BBFC;
-	Fri, 14 Jun 2024 00:03:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1718323432;
-	bh=IDZppd8I11DRt960/387Nib64RFk/NqQUrG6Tp8DmJw=;
+	 Mime-Version:Content-Type; b=ADUjArzAOR/X01c7dN/Pf6DNPd8EVozrxoo9NJ+lMe+p1uiwyePXoxHTqjO9LWFP4rx+WY4PKX8v/RzSn8CcQOcbjXJMtr2o30lsr32qzAPEl4IJnX8yEOiQ257EhFbIwhnembdBGmbMMqqeI/iQPE+9OX3TgFvb1wbmja6kSz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HB4EC0v9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DCAC2BBFC;
+	Fri, 14 Jun 2024 01:07:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718327273;
+	bh=GwS7Y56Lx+fE/+Y9/JVAXhP3402AVgK8FgY1QgvObb8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=1BKppVSF5Cjfv7fktHuzeWdqy0qtO34XKNrdqM213LZbVXpoqDGR17NRdioYl/URO
-	 HmRRakRJMr1o7GNe72H1ZUQwyFYEUYoZxx018+7BGLSoquoVfRuHrnh3i7nWS1i7ZM
-	 ou5BFvQHXTUYPuqubOj+2lH2trHdpXjcl1b7HrR8=
-Date: Thu, 13 Jun 2024 17:03:51 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Bert Karwatzki <spasswolf@web.de>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: commit 1c29a32ce65f4cd0f1c causes Bad rss-counter state and
- firefox-esr crash in linux-next-20240613
-Message-Id: <20240613170351.cc3e7ccfa1bb198b57f31352@linux-foundation.org>
-In-Reply-To: <f4ea65e28ac47e6acb13f401f46a414a2f50f7bf.camel@web.de>
-References: <f4ea65e28ac47e6acb13f401f46a414a2f50f7bf.camel@web.de>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	b=HB4EC0v9hTVYXkIe3354UyWHM3bLX7Cu5VMpybrzLJ0EDJVGrNSx7Mumr9qWwoWKZ
+	 QF4jyLQoatMECNM/tb0cRo21UFz93wzZx2H2f9o4WIZW95ITenBozy0Z4SjT24fBX6
+	 Z2hcf9QdyW2KYFhgBvdhy690qSOMfP4+xLVzmH73DpSxgUsOh9WvGz3198OMdR8Yfd
+	 6jxw5Itn1xOYuLsFYsNPhLPJXDdyLfZj/aOcnvUDAWvOkok+b8LOiWN4g1EL0B3Yms
+	 g4d5pvVElCT4LAjDnyFBV25cvudTzX1ST3y6LVt7M5ih64z8o8dE48mxYheLFy3Q1g
+	 60g2NjjFf4nWw==
+Date: Fri, 14 Jun 2024 10:07:48 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Christian Brauner
+ <brauner@kernel.org>, Christian =?UTF-8?B?R8O2dHRzY2hl?=
+ <cgzones@googlemail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, Mark
+ Brown <broonie@kernel.org>
+Subject: Re: linux-next: manual merge of the ftrace tree with the
+ vfs-brauner tree
+Message-Id: <20240614100748.fcaa7efe6debea3801682ba1@kernel.org>
+In-Reply-To: <20240614090523.246f48e4@canb.auug.org.au>
+References: <20240613114243.2a50059b@canb.auug.org.au>
+	<ZmqaytbJ0r0EXO8d@krava>
+	<20240614090523.246f48e4@canb.auug.org.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -58,35 +68,120 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 14 Jun 2024 01:40:54 +0200 Bert Karwatzki <spasswolf@web.de> wrote:
+On Fri, 14 Jun 2024 09:05:23 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-> Since linux-next-20240613 firefox-esr crashes after several minutes of browsing
-> giving the following error messages in dmesg:
-> [ T2343] BUG: Bad rss-counter state mm:00000000babe0c39 type:MM_ANONPAGES val:86
-> [ T4063] show_signal_msg: 16 callbacks suppressed
-> [ T4063] Isolated Web Co[4063]: segfault at 396d1686c000 ip 0000396d1686c000 sp
-> 00007ffd767b30a8 error 14 likely on CPU 7 (core 3, socket 0)
-> [ T4063] Code: Unable to access opcode bytes at 0x396d1686bfd6.
-> [ T4211] BUG: Bad rss-counter state mm:00000000cd9fc541 type:MM_ANONPAGES
-> val:817
-> [ T3798] BUG: Bad rss-counter state mm:00000000432d87c2 type:MM_ANONPAGES
-> val:181
-> [ T5548] BUG: Bad rss-counter state mm:00000000034aa27a type:MM_ANONPAGES
-> val:242
-> [ T3823] BUG: Bad rss-counter state mm:0000000099734197 type:MM_ANONPAGES
-> val:137
-> [    T1] BUG: Bad rss-counter state mm:000000005e5e2f2f type:MM_ANONPAGES val:28
-
-Let's hope Linus doesn't read this.  Why are we nuking the entire
-planet just because some counter went wonky?
-
-> (these are the error messages of several crashes and the error seems to affect
-> other processes, too (T1))
+> Hi Jiri,
 > 
-> The crash can be provoked to appear in ~1min by opening large numbers of tabs in
-> firefox-esr (by holding pressing ctrl+t for some time). With this I bisected the
-> error to commit "1c29a32ce65f mm/mmap: use split munmap calls for MAP_FIXED" and
-> reverting this commit in linux-next-20240613 fixes the issue for me.
+> [Cc'd Mark Brown and Michael Ellerman just in case they decide to do
+> linux-next releases whil I am away.]
+> 
+> On Thu, 13 Jun 2024 09:07:54 +0200 Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Thu, Jun 13, 2024 at 11:42:43AM +1000, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > Today's linux-next merge of the ftrace tree got conflicts in:
+> > > 
+> > >   arch/x86/entry/syscalls/syscall_64.tbl
+> > >   include/uapi/asm-generic/unistd.h
+> > > 
+> > > between commit:
+> > > 
+> > >   e6873349f700 ("fs/xattr: add *at family syscalls")
+> > > 
+> > > from the vfs-brauner tree and commit:
+> > > 
+> > >   190fec72df4a ("uprobe: Wire up uretprobe system call")
+> > > 
+> > > from the ftrace tree.
+> > > 
+> > > I fixed it up (see below) and can carry the fix as necessary. This
+> > > is now fixed as far as linux-next is concerned, but any non trivial
+> > > conflicts should be mentioned to your upstream maintainer when your tree
+> > > is submitted for merging.  You may also want to consider cooperating
+> > > with the maintainer of the conflicting tree to minimise any particularly
+> > > complex conflicts.
+> > > 
+> > > -- 
+> > > Cheers,
+> > > Stephen Rothwell
+> > > 
+> > > diff --cc arch/x86/entry/syscalls/syscall_64.tbl
+> > > index 26af003921d2,6452c2ec469a..000000000000
+> > > --- a/arch/x86/entry/syscalls/syscall_64.tbl
+> > > +++ b/arch/x86/entry/syscalls/syscall_64.tbl
+> > > @@@ -385,10 -384,7 +385,11 @@@
+> > >   460	common	lsm_set_self_attr	sys_lsm_set_self_attr
+> > >   461	common	lsm_list_modules	sys_lsm_list_modules
+> > >   462 	common  mseal			sys_mseal
+> > >  -463	64	uretprobe		sys_uretprobe
+> > >  +463	common	setxattrat		sys_setxattrat
+> > >  +464	common	getxattrat		sys_getxattrat
+> > >  +465	common	listxattrat		sys_listxattrat
+> > >  +466	common	removexattrat		sys_removexattrat
+> > > ++467	64	uretprobe		sys_uretprobe
+> > >   
+> > >   #
+> > >   # Due to a historical design error, certain syscalls are numbered differently
+> > > diff --cc include/uapi/asm-generic/unistd.h
+> > > index 5b8dab0b934e,2378f88d5ad4..000000000000
+> > > --- a/include/uapi/asm-generic/unistd.h
+> > > +++ b/include/uapi/asm-generic/unistd.h
+> > > @@@ -845,17 -845,11 +845,20 @@@ __SYSCALL(__NR_lsm_list_modules, sys_ls
+> > >   #define __NR_mseal 462
+> > >   __SYSCALL(__NR_mseal, sys_mseal)
+> > >   
+> > >  -#define __NR_uretprobe 463
+> > >  +#define __NR_setxattrat 463
+> > >  +__SYSCALL(__NR_setxattrat, sys_setxattrat)
+> > >  +#define __NR_getxattrat 464
+> > >  +__SYSCALL(__NR_getxattrat, sys_getxattrat)
+> > >  +#define __NR_listxattrat 465
+> > >  +__SYSCALL(__NR_listxattrat, sys_listxattrat)
+> > >  +#define __NR_removexattrat 466
+> > >  +__SYSCALL(__NR_removexattrat, sys_removexattrat)
+> > >  +
+> > > ++#define __NR_uretprobe 467
+> > > + __SYSCALL(__NR_uretprobe, sys_uretprobe)  
+> > 
+> > hi,
+> > we need one more change in tests (below), otherwise lgtm
+> > I can send formal patch for you if needed, plz let me know
+> > 
+> > thanks,
+> > jirka
+> > 
+> > 
+> > ---
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > index c8517c8f5313..bd8c75b620c2 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > @@ -216,7 +216,7 @@ static void test_uretprobe_regs_change(void)
+> >  }
+> >  
+> >  #ifndef __NR_uretprobe
+> > -#define __NR_uretprobe 463
+> > +#define __NR_uretprobe 467
+> >  #endif
+> >  
+> >  __naked unsigned long uretprobe_syscall_call_1(void)
+> 
+> Or you could change __NR_uretprobe in the patch set to 467, then this
+> will become just a conflict and not a renumbering.
 
-Thanks, that must have taken a lot of time.
+OK, Jiri, can you send it to me. I will update probes/for-next.
+
+Thank you,
+
+
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 

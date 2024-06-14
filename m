@@ -1,95 +1,84 @@
-Return-Path: <linux-next+bounces-2557-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2558-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6BB6908BF4
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 14:44:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A013B90915F
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 19:23:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 515FC1F278B6
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 12:44:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5653B2120B
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jun 2024 17:21:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39F34198A27;
-	Fri, 14 Jun 2024 12:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADAC16D339;
+	Fri, 14 Jun 2024 17:21:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L9wPwX4+"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="CDBUNfek"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110B3196C8B;
-	Fri, 14 Jun 2024 12:44:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3E815FD13;
+	Fri, 14 Jun 2024 17:21:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718369051; cv=none; b=Vzh5FPl/04cYQ4/dfVeBV7T81pfPhqNT58F6U2/b49KkvWwjESCdjTZZkIZvGXG9TQWcguyMj1KAO8lfcXK5mww3wSyBWvOEKPahwFigpJQli/XwuU8ClxAhkTd34G9gIvB2KnV+p5WgY0wbyLDQLBC+OaF8acn6HjQUX7+YEKw=
+	t=1718385711; cv=none; b=DaaEIticxNS0Ts2drIGsmUhIXFLocSsgAoVn3qtiNRDHqJzgybMqpsM4B13mm8RYaDfm02K4ZNVtV2Uiw+zPoGNR9lcnsWRiv2SUaSTV83oCGeUJkQSJNX1Ij652/DenhNw4fm5zM4zo5Bj0Pgq3znJMqIVRZAObAxNYByanbxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718369051; c=relaxed/simple;
-	bh=F+70HqNrOnJHgZzQfxEBwkmuRJxP5ktUon7gNFn2wG8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=swd2AfniSzy2NFBgVTjKMKK6de3+UNLF639tC9uttB+zi840HriXcTPCeQA+/uKxwBVwD1ppC+RLBa1q/p6irw8xqpmMDZLty5Qg8GQ58Hq9Hkd7zykztwdvL1BBAZsOmRdDgNDxG0gpFOulsnM3Duck67Kjos+UYkd602Juw3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L9wPwX4+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3688DC2BD10;
-	Fri, 14 Jun 2024 12:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718369050;
-	bh=F+70HqNrOnJHgZzQfxEBwkmuRJxP5ktUon7gNFn2wG8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L9wPwX4+r1YyCuPIjj477dWuiQ0Lmls44LIj9WIUrWLdELe4mxlRyyFR1hTHlfrQ6
-	 0LqnVT3PB3AuPsVN6h9P5EVspu08Rl0OZTUQajQNpr4czNk8xHBN3eGWRMJptpxYnT
-	 OAtE9XVcsiLGmmrZUaYTwNqa6ScpGze0aP9jk/BOLu8UJ3hQNAwgUvOni/xarPJhxL
-	 forHTiqs5HKEfqf2wM2JuzxHF3HC+HXOd2F5+ErX52Rw3qnz9+uMv29LNapw+MOsHg
-	 1zhSj0qDOe3xw8gDtdrIsNnUWN9Wt8l7rzBpJheNDxdJ/ypdQkU4akebUOVDejodlj
-	 rrAEY37/NX/Pw==
-Date: Fri, 14 Jun 2024 13:44:01 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Jun 13
-Message-ID: <Zmw7EQnVEEVCRmGN@finisterre.sirena.org.uk>
-References: <20240613144524.22abd1a0@canb.auug.org.au>
+	s=arc-20240116; t=1718385711; c=relaxed/simple;
+	bh=P6JtOjCs6Jj3m4upHVfTuWBdfTxPaTKNa00iSGnrSbA=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=TpE4cYXLuOLtCduvuAry9iffXLKhaK7Ru7U/+Q5SJa1PlxQOrb1jB5O6kHO9ITjGryk54Pjp6uTvgyaDNF7BJvcUZElDfdVPS+Y1Y0BTMWeI1WKa9dRO57XGISIllhbNLXj2nEhfR1QdSOqFpXTe8AtfA3mNnV/9kkgmo4BqoVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=CDBUNfek; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4C8C2BD10;
+	Fri, 14 Jun 2024 17:21:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1718385710;
+	bh=P6JtOjCs6Jj3m4upHVfTuWBdfTxPaTKNa00iSGnrSbA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=CDBUNfekePxrjpUgM4+htLAUDXr17ezDLUgCh/vX5jXsJno6qwWfIAwXMgT+egUYB
+	 AOkEkoFrE6ugrNb6ANRtEJrDYc11NMyFmOiHBpLDNiwXlf97VqpbfNql98B+po6h7e
+	 gntqUfebPK6yjawrUFef5RAjC22kEder7Y95AccQ=
+Date: Fri, 14 Jun 2024 10:21:49 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: Bert Karwatzki <spasswolf@web.de>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: commit 1c29a32ce65f4cd0f1c causes Bad rss-counter state and
+ firefox-esr crash in linux-next-20240613
+Message-Id: <20240614102149.f752c1609106b97ea302ccf0@linux-foundation.org>
+In-Reply-To: <w5uejhiciolye2ikgsdjim25z7lau7km3tu6t2vby3kuxeshos@osowmu4ecng5>
+References: <f4ea65e28ac47e6acb13f401f46a414a2f50f7bf.camel@web.de>
+	<20240613170351.cc3e7ccfa1bb198b57f31352@linux-foundation.org>
+	<w5uejhiciolye2ikgsdjim25z7lau7km3tu6t2vby3kuxeshos@osowmu4ecng5>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+jRttAIso1e5rO9V"
-Content-Disposition: inline
-In-Reply-To: <20240613144524.22abd1a0@canb.auug.org.au>
-X-Cookie: Your love life will be... interesting.
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 14 Jun 2024 08:30:20 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
 
---+jRttAIso1e5rO9V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> > 
+> > > (these are the error messages of several crashes and the error seems to affect
+> > > other processes, too (T1))
+> > > 
+> > > The crash can be provoked to appear in ~1min by opening large numbers of tabs in
+> > > firefox-esr (by holding pressing ctrl+t for some time). With this I bisected the
+> > > error to commit "1c29a32ce65f mm/mmap: use split munmap calls for MAP_FIXED" and
+> > > reverting this commit in linux-next-20240613 fixes the issue for me.
+> > 
+> > Thanks, that must have taken a lot of time.
+> 
+> Yes, thank you for all that work and apologies in creating this
+> frustrating situation.
+> 
+> Andrew, please drop the set from your branch.  I need to write some more
+> tests, but I suspect I will need to do some work around the vma_merge()
+> function, which is never a fun endeavor.
 
-On Thu, Jun 13, 2024 at 02:45:24PM +1000, Stephen Rothwell wrote:
-
-> News: I will not be doing any linnux-next releases between June 14 and
-> June 30, inclusive.
-
-I'm on a train most of today so nothing from me today but I will try to
-provide coverage for the rest of Stephen's (well earned!) vacation -
-hopefully there should be something on Monday, though sometimes there's
-bootstrapping issues which cause me to run out of time on the first day.
-
---+jRttAIso1e5rO9V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZsOwcACgkQJNaLcl1U
-h9CIEgf+PtSM2OvSiiZmuyXEV6MqNaV9VMWgRJkR2rfV/1zkXLut3yzUcygYu2RI
-iYSFSWPzR2SYikuBlegmYdcPNH/84FXJOU9WQs/xCegfAFcV9jVv0gFKsrREig0+
-kyrzvhRMzyXVLC8xQfShEI0FjOrnGjX8ClCqtjO7944o+yuDEaZM9dXK1NGnyGSj
-BFK1hMVxzKWShu3ccGOwd9LCzmGTzbNFxiokeRisxbnVokLw9a6/WvQPYThM73ht
-5po9puOM2Qi3nyrFyrIUxdYfvZw4KV0avynwa2KUaTOvUXP6+CLdsHkd9RYY9mJv
-1FIm7kn6c2vczmb40IMMzUoMXa5Eiw==
-=U/12
------END PGP SIGNATURE-----
-
---+jRttAIso1e5rO9V--
+Dropped, thanks.
 

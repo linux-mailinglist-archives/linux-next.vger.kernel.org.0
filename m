@@ -1,144 +1,121 @@
-Return-Path: <linux-next+bounces-2578-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2579-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A165F90C3BE
-	for <lists+linux-next@lfdr.de>; Tue, 18 Jun 2024 08:39:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E91A90C65E
+	for <lists+linux-next@lfdr.de>; Tue, 18 Jun 2024 12:20:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D3E82809A6
-	for <lists+linux-next@lfdr.de>; Tue, 18 Jun 2024 06:39:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F0E71C21313
+	for <lists+linux-next@lfdr.de>; Tue, 18 Jun 2024 10:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5EA481DB;
-	Tue, 18 Jun 2024 06:38:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D1013BAC7;
+	Tue, 18 Jun 2024 07:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="eRmwnu98";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="n8xmEqUH"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="I5iRKQed"
 X-Original-To: linux-next@vger.kernel.org
-Received: from wfhigh3-smtp.messagingengine.com (wfhigh3-smtp.messagingengine.com [64.147.123.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53316BFAA;
-	Tue, 18 Jun 2024 06:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40EE76F1D
+	for <linux-next@vger.kernel.org>; Tue, 18 Jun 2024 07:49:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718692735; cv=none; b=suu92b0j3kGWRqPVCYU6jqgPW0Z3ZdMGhDIci2UFgdSiaaR35zNXzGLRNfIcuTxDHyT8KsC0ctj9PSzT1RbLpEW6Ai9LFrYmS1x0nVLXolMwESxI/KjGBr0LF2liisDSFSnGG5HWMVXGvUdf/uvfCaMdfqMH+2aMqv0hkF0+wnM=
+	t=1718696978; cv=none; b=afAKN2tFdit2rqn+Hx7uHC1ezCQTXic4sba/fPl0oS2her7/Q7g+/xp/5HDXST6ibXJYu+Ir8G9sNvJzXNJm/KKu8OSwZJjWMqOcU2+2XiTxfepWfY8t3oWuDOIeAonEYxdUjP68kMqyj4o3gztWAk+V9OEddmJcBkwYjBaO+QE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718692735; c=relaxed/simple;
-	bh=2MHzymjsptfmyDg7nkJWUgpNKKI9/H3dw6H8umrDA/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rv7AzGZKGBAAt7Pcrdhk1IGAJtWaeVnfqSMdpl5sNp0zT8XIm5tyX1VZEO2pvLq+HbVLmeRZn58xk1HVTZ6KjDI6UMuq0YnPKNpFMEPM0p2/12NwSuDpSWe4dP7BnnqU2QC90Rrx1FxYHBIlzZZp/ZVEXyY89WvLgFos3HxFVIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=eRmwnu98; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=n8xmEqUH; arc=none smtp.client-ip=64.147.123.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 3FE5018000D1;
-	Tue, 18 Jun 2024 02:38:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 18 Jun 2024 02:38:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1718692731; x=1718779131; bh=MelmEiifL3
-	mefmpiNyW6L73XRVlNle+exQ08leADDXE=; b=eRmwnu98b1+f62nfFifpY8Y7se
-	hkKWXGiqSEivcgJVMHY/7F4oK26Nh2hYW4dFXYK+XeoEPtBceJAnNHlRz7N21CzX
-	qTNq7tYVj3GkOrjDA3gnAlPRAvg3sUg0KPcSu4YE3XX0S11PFIJ1s1SJfEXgsD94
-	olNXFin/71/h3ljwjvVSlcaEys4bcxZrY6i746dojtrVycCxGyg6ck50DH83+HaB
-	ye9s4iNAdXisuCXhT/Inf8wW7umNLvaSJhacRN3WAtFv1YsQlUAM5zsaii3AG2Pg
-	xBN46sn+ZujTmtg+d7rGCfGdGBk9zv2EscXEtXlGIRiy9vceopH1CuaqJvFg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1718692731; x=1718779131; bh=MelmEiifL3mefmpiNyW6L73XRVlN
-	le+exQ08leADDXE=; b=n8xmEqUHI/5mmb02Z1+IZYfCIQ4Wq7OtiY8ygvfpUTfb
-	FMN/+NTRP7gabrQ+Z/9UMxqVGD9gSPCz/H7hWBFMos/5rfEzCI46cgJi3mSfik7m
-	18Mkl1jkzu7PoJl9b2DMEBi4AV6Y79oV1Knqg2ZfX/AMFr7nOmVpkRELhuBC1hSn
-	JJKjOGlFf3cu01KJqsUcrTwqgau9VH9ZeV2D6DzUvlxyhKjJe/zx6RJfbGHxn2LV
-	G5l7nmofHQheGtxNFM8IZyBIf8ibT5GTDj/VqNSFz8LitddlrfzVA+VF+CByuczt
-	cO8tLX5koGy/7g9xBpXU1/TP0QWgB6Fy+YQeEoIVig==
-X-ME-Sender: <xms:eytxZunYQy-NhdCszhu7qkeYgjKLFXqgZpNcAeml5vDZf8WvqnRSZQ>
-    <xme:eytxZl3NhmHA-IUAgX7pWAlQSVw9QTzOaG2xe9QGzdZoa7RH8rvO0OhYodjwhdh-8
-    oYCMDdooxXa5Q>
-X-ME-Received: <xmr:eytxZspWA5I4ARwAWpSolFeHx7C1uT-ZJYDOEDG3wAh2P3QqgavsoawFOUEKfbZ_pPuFKyG-Nzfgx8rNDNpevy0SKhI1dkGbYu1B8g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedviedgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:eytxZincgJ4JsR2pqFnYM74WBJbf8GNDe2vvAOW34jpspnkUwvmuFQ>
-    <xmx:eytxZs1XugIqhJr5gq4zYOifowyzyuySZ1_kavkh522_IOTRISFONQ>
-    <xmx:eytxZpssHMxJuUhmoRNAwJU0ulfq6L4F43lCgcAUNUqrAa3HdhODog>
-    <xmx:eytxZoXRkzOoUBRIEE9raKi62oJzYiTswliLfyXdsodbJD8_O0a6mQ>
-    <xmx:eytxZmNVE6GRY6JAViC_A_gaO_lDXS4v-uL75o1F_6uX-Phn0UKKuQJA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Jun 2024 02:38:50 -0400 (EDT)
-Date: Tue, 18 Jun 2024 08:38:48 +0200
-From: Greg KH <greg@kroah.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
-	Gustavo Silva <gustavograzs@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Sumit Garg <sumit.garg@linaro.org>
-Subject: Re: linux-next: manual merge of the char-misc tree with the qcom tree
-Message-ID: <2024061841-embellish-epilepsy-3a20@gregkh>
-References: <ZnCUDSypSIPCTfJ8@sirena.org.uk>
+	s=arc-20240116; t=1718696978; c=relaxed/simple;
+	bh=M6IjAQJ7uWC7h4ilG1WLKnCCSBc0hUV/buoGZiIOrfc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DYvEVDHJp3hII1Hl80xLyE4l76IYwzGayMMy3fe/gfbcdvLMOUVVljFhKMI1Ut6urLdxWPWy2v15mwWv66uYeucjAuWxdd7XWcSZKo4XPxNyZBeCJ3ywf6p0mj0UgRvXa7WWc1TiA9XZDYL61D9/ntr5wj14o6d5cwGUP4dUyLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=I5iRKQed; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-42189d3c7efso54383745e9.2
+        for <linux-next@vger.kernel.org>; Tue, 18 Jun 2024 00:49:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1718696975; x=1719301775; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=slVhHLNHnoer2IgmxdtW2n42We64zqnTXEtmuZh6XNg=;
+        b=I5iRKQedDIFFDJpbWTppdtVGZllCVr10lV9ML78jpGdOU98sGYNnRjyy/o/engNfWG
+         KTvIn+JRb+RgzzDSFhLx2MzeWK85xVtBHrPz9hYZ/HXCTlH2rffk/UhsHn4nP7Paq0pz
+         SDRt5tqoON1zBiWTz/3z1jqjAZucwbbsqInpi1GRZFb+WeI1GJLX33zMmnIyAsFWPepT
+         p3bnltcqIUIdL+25Gfx2bcwgTsjWL8LctQfMP1sHi7EzkCJwaBHnD0TvfgPiTiEfSjkM
+         +aRXueKxArEPBZE8zUJpOsn0IMl5TeBVHbywhyepHQDdsRZmcxWeu3K/1/E3VZD0Js8E
+         XoRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718696975; x=1719301775;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=slVhHLNHnoer2IgmxdtW2n42We64zqnTXEtmuZh6XNg=;
+        b=JhXpUazZngSkzlyh9SPiRh5uFdupLzsQD1enuNFpTUXIB8FruYH7CnOwFNELl7osds
+         yvBEnkGNIOM4Vw7IroRkNybjEGFPMU2HmUUcdSLRR1kWm2JSwmF6R3u1YQUXr8NXxEEs
+         XQ/xDqWsDp1Y5QoKOTQqhEObOTUptPLdyMWSGvidWRrpr5obUVhOYKcQ2Wjw3V11Q1jY
+         kO675kQBzzsru2Qt3fHGgUBI8Z0/ZMem16WZNNCqgA88FQjO9sxfT60KfX+0ikK8ET8Q
+         Ge5Rkmr3cnBSc77GPyAdnRbXSp4kTlc2VO6DBmkf9ZZyNi1+ZGQhh32OEdZ7V4XpYolC
+         0AoA==
+X-Forwarded-Encrypted: i=1; AJvYcCXusiv+NDCb/NfYxMvmcQp2K96BQeV5ksl6ckEKA8KVbzKCzsFG4NURW9J4u9/CAWr0LVL6stV0WSKiegSPQ+fINDcjbpEkVFz1Xw==
+X-Gm-Message-State: AOJu0YzRtx663/a8NfpuqXhYNlLs3SonZluhUW+T+NbolrR3sNfTibW3
+	7yw+RELyfXvw+DcM6iv6b3uEqyeVs0ExaLK2vfmf5lm78e8Ocs8vyTe62Bl9yjU=
+X-Google-Smtp-Source: AGHT+IHAe9Sp/boX/61amtrpHaGVSdWp1zPS7L3crhK53BIAjo0hqkzbwsV3DM2DqDUJ03cDNj5hig==
+X-Received: by 2002:a05:600c:4f83:b0:421:29cd:5c95 with SMTP id 5b1f17b1804b1-42304820b3bmr138531575e9.10.1718696974946;
+        Tue, 18 Jun 2024 00:49:34 -0700 (PDT)
+Received: from [192.168.1.70] ([84.102.31.231])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42286fe919bsm215819655e9.19.2024.06.18.00.49.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 00:49:34 -0700 (PDT)
+Message-ID: <01f2ee94-f8b0-449c-aa19-3ee38a2e36a1@baylibre.com>
+Date: Tue, 18 Jun 2024 09:49:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZnCUDSypSIPCTfJ8@sirena.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the mediatek tree
+To: Mark Brown <broonie@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@kernel.org>,
+ Nicolas Pitre <npitre@baylibre.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <ZnBn-vSj-ssrJFr2@sirena.org.uk>
+Content-Language: en-US
+From: Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <ZnBn-vSj-ssrJFr2@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jun 17, 2024 at 08:52:45PM +0100, Mark Brown wrote:
+On 6/17/24 18:44, Mark Brown wrote:
 > Hi all,
-> 
-> Today's linux-next merge of the char-misc tree got a conflict in:
-> 
->   Documentation/devicetree/bindings/vendor-prefixes.yaml
-> 
-> between commit:
-> 
->   1fabbb0888c3d ("dt-bindings: vendor-prefixes: Add Schneider Electric")
-> 
-> from the qcom tree and commit:
-> 
->   202ce3eaa6912 ("dt-bindings: vendor-prefixes: add ScioSense")
-> 
-> from the char-misc tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> diff --cc Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 56ad56d7733e9,044e2001f4e3a..0000000000000
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@@ -1264,8 -1254,8 +1264,10 @@@ patternProperties
->       description: Smart Battery System
->     "^schindler,.*":
->       description: Schindler
->  +  "^schneider,.*":
->  +    description: Schneider Electric
-> +   "^sciosense,.*":
-> +     description: ScioSense B.V.
->     "^seagate,.*":
->       description: Seagate Technology PLC
->     "^seeed,.*":
+>
+> After merging the mediatek tree, today's linux-next build (arm64
+> defconfig) failed like this:
+>
+> /tmp/next/build/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-display.dtsi:113.6-121.3: Warning (graph_port): /fragment@4/__overlay__: graph port node name should be 'port'
+> Error: /tmp/next/build/arch/arm64/boot/dts/mediatek/mt8186.dtsi:2399.29-30 syntax error
+> FATAL ERROR: Unable to parse input tree
+> make[4]: *** [/tmp/next/build/scripts/Makefile.lib:431: arch/arm64/boot/dts/mediatek/mt8186-corsola-magneton-sku393216.dtb] Error 1
+>
+> Caused by commit
+>
+>    d7c1bde38bf37a5 ("arm64: dts: mediatek: mt8186: add default thermal zones")
+>
+> I have used the last version of the mediatek tree from 20240613 instead.
 
-Looks good, thanks!
+Hello Mark,
+
+Here is the explanation:
+https://lore.kernel.org/all/71d53ff6-fdae-440d-b60d-3ae6f0c881d9@baylibre.com/
+https://lore.kernel.org/all/6d9e0f19-9851-4f23-a8b8-6acc82ae7a3d@baylibre.com/
+
+For some reason, the 2 first commits of the series were not applied
+with the dts. These commits are needed because they contain some
+definitions used by the dts.
+
+Julien
 

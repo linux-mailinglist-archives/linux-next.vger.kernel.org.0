@@ -1,52 +1,58 @@
-Return-Path: <linux-next+bounces-2613-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2614-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AE2D910B71
-	for <lists+linux-next@lfdr.de>; Thu, 20 Jun 2024 18:10:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8734D910B95
+	for <lists+linux-next@lfdr.de>; Thu, 20 Jun 2024 18:13:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AE9A1C24ABD
-	for <lists+linux-next@lfdr.de>; Thu, 20 Jun 2024 16:10:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7CBE1C23D05
+	for <lists+linux-next@lfdr.de>; Thu, 20 Jun 2024 16:13:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A677D1B1514;
-	Thu, 20 Jun 2024 16:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01DB51B1429;
+	Thu, 20 Jun 2024 16:13:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m1N5ZWMZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XoHSjzSq"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1611B1509;
-	Thu, 20 Jun 2024 16:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7713BB50;
+	Thu, 20 Jun 2024 16:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718899824; cv=none; b=Lt70kfcaHWI2pGLA4fFto6fVm1ML5Q81cvjVNKzwkA88igv5FcVmXB+ftUUIc3dqzxz8992/ebxoP5+nH43SfvNs4ao1ceg/tl+uuNL1XZhq48ysM6ZH2x1lQ9F8mBjdWUGu8R3BBJ0A20pxMtFEHSeUupXlJWDizVRs2z/VLSE=
+	t=1718900026; cv=none; b=s3bqIYXJwb1EvO4rjnZgL/NisjQpMDQE39ECOgvnmAJDtt8ceEmAXMQzqT/lgJntHCtjI/2BwXSLZghzYATPqYX8kwnVJ9Z+tcWTnVomAl2LoeN18FnhjUpNppx0KiBUgEV0/oieUmpXwADkCl87Jfxvwe2yLaryYf7Q69YhtHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718899824; c=relaxed/simple;
-	bh=7GwI5j/yDSrkvc5Pgfk2z6Kha0u3fi52ugjXtVX8NrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=b5fO4ACZSEOeEyhkTc8VqxRTf5j7HmSrEtLTbY+GLOWs8DgZHNJfW1Kg05f7ezoqw51ZybGPavFJvBrAHpnH26nTrAWY7ZK8DvgK1HxdKIKMYaxTmDhXQ7MqB+tuWrUziUqxHvL+eFvwN5dhPIShYOaxwRWFF/Zm79qZUYqQzv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m1N5ZWMZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84187C2BD10;
-	Thu, 20 Jun 2024 16:10:23 +0000 (UTC)
+	s=arc-20240116; t=1718900026; c=relaxed/simple;
+	bh=OXkO016wMCWKZEPrcn0q2ULLa+4o64CIGf2MO9OVFKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NMv6NHMQx9MoWGAORnGb2cys+N/olKq2Jv0F8xLHR4kmfMmlK/d7WiM3mbTpOW3M8B+rtkagvyYkTjdUVRU7JnQXcc/+HxJQ1Hz7Qlt9uW9TVvcI8xmF5NJlyp6AWGpup6gevuilmsZQs08pebz+FTUIP3bn5ZmEnvqkhCOupoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XoHSjzSq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B720C2BD10;
+	Thu, 20 Jun 2024 16:13:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718899824;
-	bh=7GwI5j/yDSrkvc5Pgfk2z6Kha0u3fi52ugjXtVX8NrU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=m1N5ZWMZ/XSbda0wCNHyvPeIn/7PFSW86lVG8+Ney+4rTlMfydYRxl50BDj9thoQu
-	 uVCpXRsp8Cl+1ljvbBo5Io4j7RBJiOW7FgaGgtyrexNf10KwnjTZLUpEVRmMnMXs3A
-	 FPpSf6ZIhr4gpG0YeIVTyHRUpjjqrvAMm5uO3iRM98QIn+p26m+tHUSD+nJ1uTMJ2P
-	 V7WOXR+GSKD96ZniuFSaul2ZXQgNUkHj9KHi3SszsM2ERL0Vt1wq+LZeSAdA2DzXY6
-	 n2ECxUKerntdz+g4td25JkOVh4xPQiFn8f32rCkoem//EL5uwyw2pY3fKKb5vaF0aE
-	 4d+Va3ulVK43g==
-Date: Thu, 20 Jun 2024 17:10:20 +0100
+	s=k20201202; t=1718900025;
+	bh=OXkO016wMCWKZEPrcn0q2ULLa+4o64CIGf2MO9OVFKs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XoHSjzSql0shKa7qinh7FZBL6kqMBbKqpV7iVzU3iYf/4nW1TrYdn6DClw+vb2/y0
+	 ANBUK3llKqB1s8XCrMyTPcqZcG2QtGoJO61K7yUI5VcnY7eVLR6RgDLB63TvYR+CGw
+	 cRTFqCFy2kOsOVYYo+XOc6+faZdHbh+f4fGiqZQUNfXckDpQkChTAXvx1rMisor+bw
+	 UjZWtnZ88cKGci/4YWzY8WVdZkIavmLqcb4z+hsmoWeiZT7CwMo2rGgB4Y8RbYxtvs
+	 35BIC3qV9re6yk+MQEvPoUZkDT+2neTmV2bLLOulqbQEBsRzFGbN0t5TcX773amSFs
+	 2q2Omrro/quIA==
+Date: Thu, 20 Jun 2024 17:13:41 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Jun 20
-Message-ID: <ZnRUbK1pvBJqOsoh@sirena.org.uk>
+To: "Gowans, James" <jgowans@amazon.com>
+Cc: "rppt@kernel.org" <rppt@kernel.org>,
+	"linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+	"jbeulich@suse.com" <jbeulich@suse.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the memblock tree with the origin
+ tree
+Message-ID: <db13f2b7-88da-42db-85ed-d78cdd5f6c62@sirena.org.uk>
+References: <ZnRQv-EVf2LQ1Cjv@sirena.org.uk>
+ <eb58b1b2f84444acde3f9e25219fa40c73c499f8.camel@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -54,72 +60,62 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ja5wTWUi8XDrbGi5"
+	protocol="application/pgp-signature"; boundary="IrRq9jtI5uaLbfFM"
 Content-Disposition: inline
+In-Reply-To: <eb58b1b2f84444acde3f9e25219fa40c73c499f8.camel@amazon.com>
+X-Cookie: You're already carrying the sphere!
 
 
---ja5wTWUi8XDrbGi5
+--IrRq9jtI5uaLbfFM
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Thu, Jun 20, 2024 at 04:07:45PM +0000, Gowans, James wrote:
+> On Thu, 2024-06-20 at 16:54 +0100, Mark Brown wrote:
 
-Changes since 20240619:
+> > + 	if (WARN_ONCE(nid =3D=3D MAX_NUMNODES, "Usage of MAX_NUMNODES is dep=
+recated. Use NUMA_NO_NODE instead\n"))
+> > + 		nid =3D NUMA_NO_NODE;
+> > +=20
+> >  -	/*
+> >  -	 * Detect any accidental use of these APIs after slab is ready, as at
+> >  -	 * this moment memblock may be deinitialized already and its
+> >  -	 * internal data may be destroyed (after execution of memblock_free_=
+all)
+> >  -	 */
 
-The v4l-dvb-next tree gained a build failure, I used the version from
-20240619 instead.
+> This looks like you're deleting the check from the
+> memblock_alloc_range()? The intention of
+> commit 94ff46de4a738 ("memblock: Move late alloc warning down to phys all=
+oc")
+> was to *add* this check here.
 
-The memblock tree gained a conflict with Linus' tree.
+Huh, git showed the add/add conflict weirdly then (it looked like an
+add/remove) and I wasn't paying enough attention.  Sorry about that.
 
-Non-merge commits (relative to Linus' tree): 6610
- 6991 files changed, 595079 insertions(+), 119966 deletions(-)
+> Do you have a link where I can see the final repo?
+> I'm not seeing it here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/=
+mm/memblock.c
 
-----------------------------------------------------------------------------
+The merge is still running, it'll appear whenever -next is released
+today.
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a defconfig
-for arm64, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf.
-
-Below is a summary of the state of the merge.
-
-I am currently merging 377 trees (counting Linus' and 106 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---ja5wTWUi8XDrbGi5
+--IrRq9jtI5uaLbfFM
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ0VGwACgkQJNaLcl1U
-h9CbFgf6AxKaq2WvM99zGqR6xvmWmBT/fJwItZmalzqKC93CNpeuZOwjXEj6KDKw
-r+pURQFhRX18+R/VSfkByV4cC8DcHc4wtpg6xEJunlWWXhK55ME6LHOI9mwFQwO5
-7f/q4W39ttIlDaafua0moLSLTfuhvIVGm3kYguPoONgAUiMEWWWzJe0RaM1T/icg
-TaVWaWf9sHcqxrMSp01JwKQlWGAuuUHWuVfaOInmn3j2bHMvO3KNGACDQtoPcwqn
-gFWZyaY8C5/7iwLVjiFsfOCc6zf/kAm5oqtl9PcEUSmAEVemWskS0QCMAOoxHiHq
-EqxoAG2MjJmAcNNoDprRGyWwNW0vHA==
-=FEGW
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ0VTQACgkQJNaLcl1U
+h9Dovgf/SE8QVlTpey7KF/FSzIq0nyQ6+ye8Ujco5s/1tJxqps43leBVgsihFXJW
+NhwocVg7L54xin6QBQU4kJiJ7kwA1gW1fS53KA4TpkK30liC1dkDUC0LFuFgwjqc
+RhVuG1oVbcg+u9Nz4XQO4PN0JI+6dXJUSp/oxB8tt9OkVHY0rLsaeH/uT14ghlmc
+5dmv6Y0o3o7ebNBMtSXB17L3xrJGcY/HZNPllmHj276kSDxWne1CH7IfyR6AHhMG
+fnpyVOYDCnZh9BvYk5uTCkyCuALMMkK7NftEQqekgIRq7j9eW+GutwFu233w3ztc
+IBfmIbyQ/4mMrq9v7GDPx+CufMPRXA==
+=ls+v
 -----END PGP SIGNATURE-----
 
---ja5wTWUi8XDrbGi5--
+--IrRq9jtI5uaLbfFM--
 

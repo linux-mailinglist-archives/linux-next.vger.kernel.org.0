@@ -1,158 +1,106 @@
-Return-Path: <linux-next+bounces-2629-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2630-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1B7E912C98
-	for <lists+linux-next@lfdr.de>; Fri, 21 Jun 2024 19:47:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 790BE912CC5
+	for <lists+linux-next@lfdr.de>; Fri, 21 Jun 2024 19:57:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66AD41F25ED7
-	for <lists+linux-next@lfdr.de>; Fri, 21 Jun 2024 17:47:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D6A7B25F13
+	for <lists+linux-next@lfdr.de>; Fri, 21 Jun 2024 17:57:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B8215FD0E;
-	Fri, 21 Jun 2024 17:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2016116A93D;
+	Fri, 21 Jun 2024 17:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jzi/yily"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="cD5wxEsr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3950854FB5;
-	Fri, 21 Jun 2024 17:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B9816A392
+	for <linux-next@vger.kernel.org>; Fri, 21 Jun 2024 17:57:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718992058; cv=none; b=Lriz/XHB6QDSpKXiPhmF+WtGukkCCN64YTHPl3nQtrQX5NzjP1anr3m+yISpR4Xhc/jkSy+mT8O550X1n7jr03XgRz9qXF18cvhKYNvzzk0lq80/o/c20tN1tsbSPtXjS6FzCqfhj12XBf9bsHfe8buff+u4snmc4rFOwLz9xDI=
+	t=1718992637; cv=none; b=XFV92xZIYYYWV/yaNUxeTKCwfpuB8hj2U+eVcC0E6DEvo/0+1Vaek+WNjDpOLzyJj6AqkX8MZcdtoXgbl2hHwOytJvwKQZW1Uy5UOLOgU0gDd091QkU6QLDlL9XrKVF3RK1i4Mc81hEdyhkNvOG+IU8/jvjPI+AX97x9HqySE2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718992058; c=relaxed/simple;
-	bh=aqx777HwFvNcT/eoFXPK+umOv2NCOdADxPLgOhv7eIk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NA6Aur/zmoU+nmzyBVywfSewIYDCQcrX2jWMEQ4cqc/bWAvGx+8GS3BU4zqz2uvprYUFHIlFg+wk4WF9mVN3zM3B2h7thDXr/X4oJAJX5kNFfCKLnAkmX+iI5hy6sVZYGQGVHENy71+rK+GVS/gRgpXE1k1Phhf0dPpQfKwcJhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jzi/yily; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FCD9C2BBFC;
-	Fri, 21 Jun 2024 17:47:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718992057;
-	bh=aqx777HwFvNcT/eoFXPK+umOv2NCOdADxPLgOhv7eIk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=jzi/yilyBcEOU+wEadoe+lJlhDGhYmP38JUSYi9ArLCBwTbeyXLUjmYrPAUBY0Nex
-	 sSNlOtJTW1nDytLQLzMY8JNg5GZpq2XE2u92PmUF4Jljf73YRglNrumee12Yd9EXWM
-	 HWH+U4x+zo+kRivJTKdbOT47BQhY0Iy1qT8L0KujsE9cDkm3J7WUojZw82JeZ6aDYh
-	 ZNrF73DsLoXlkiaAlFoiXArykkvabkqUeU9YjcD10VD5X0L8ZEGVyqHQBv0qFBbHyL
-	 MPlZDgkI3RhJLFFD+LewihSQAIoNg+h17Eip3P0bYcFxtR+XcJqYVLPWY5FlpZ4jcL
-	 FEmEu6P76J8lg==
-Date: Fri, 21 Jun 2024 18:47:33 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: Gustavo Silva <gustavograzs@gmail.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Tejun Heo <tj@kernel.org>
-Subject: linux-next: manual merge of the char-misc tree with the sched-ext
- tree
-Message-ID: <ZnW8tfHMHBKH4yj9@sirena.org.uk>
+	s=arc-20240116; t=1718992637; c=relaxed/simple;
+	bh=huiiGge3N5NRabnHhvGTRpLAvVUJYtR2Isze4gc0Iyg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TXDOsMZN/DKHi1FtWA/Xutc/kzIaSNnr9PCClXHgxXMuT5XGztFhXzteV1jYO+cnx0tYKubSqf+WGDmSDlRjjTLqDM/eXRZCCI21eVazO0XaOkM5upEU6Gt4koCJoP2jIcnJGr/Hj2mwz2l5r+r4Dj3Y2s3mcCtwFlxYT3Ol9p0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=cD5wxEsr; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-25cb022c0e6so226018fac.0
+        for <linux-next@vger.kernel.org>; Fri, 21 Jun 2024 10:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1718992633; x=1719597433; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u2uqp7TElEavi/tTlIJQ2pRjgF4RKNZn5WN+PGY/J3c=;
+        b=cD5wxEsrGUsk9P88rSupFociznSs3d59o3z5E7zbGRE0CsVLBLnls5xUtJ0wSbfBMz
+         UXd9Ndcz+LRitcDj2j7k53Emgx0c/BHhDyJHMzsDX5H6XTqrbTZqjo8Cl5aRGYDMJj0M
+         SmsgI0nMob2lqc/vmji2rZIvGbmMYZWQuXStWqffmxzpbWt30eQqvCZecvb4XDrM2keI
+         u7qN6z4OZ/c6WHvZZvb3xyjld2032TDG+rn5BUgp3a4MDCJaOi+Pa7klEf7dyfu83iwM
+         sTGCkQdpXLOn4wlPBn2sQm05u4G1xVYfEb7mUC5E33bFH3zE/LzCCYoTfnFBmDmW+dao
+         Urfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718992633; x=1719597433;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u2uqp7TElEavi/tTlIJQ2pRjgF4RKNZn5WN+PGY/J3c=;
+        b=cpYciYaOYKFpp8QMKXe3sCPo59ZHFm+8QagWUN7QEgSBX7DsCFGn+TywefmZcjrS0j
+         jg6bOSKhwKk4hYlTIfMCChO/X19kN27y7KulZFDk3wKuALKs0Km+IUVFN1eeRCysIJ7M
+         bj9X7WWnD1VH8ypg3j7mV5wZW2Qtq5mtirztgJtG44f5iEsyjyYdKOZ55obM5Uh4zQVj
+         zEmSsNatYxi0pMGFou+AyOQ/JL6bL/IFSI52kBI5UhDe6wPhAgutRRntfSBLVz3ZQNs0
+         S5iCbEFAKA7geclYH+gwrGldXvevsC25GcrkQKJ4Z1VKjat1LCVRTbvOeqMHeJAPW1Jd
+         84gQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUq9N7mXRwDfBmxH9Z8j9CARmaginlAaqZyC9NVysM8mqp1BgaYIkqWgPdEnwA6ICmu/nTbgrtE14ZjBXcO49KDu4kjBfoV5oWUDQ==
+X-Gm-Message-State: AOJu0YynQQimxqetnskuzZDb/cyGDhQYsAVQtNX9ScqBYiyt655SpUNY
+	yzGDAGzatpD6sLSFz5++fkmtl0VidvbZrfJ49XYojWC5QiycKR8N1xhHYCoHkyc=
+X-Google-Smtp-Source: AGHT+IGi0WX+0vM76rlJSCntcANXU1jeQRrj9IofAe0fvrLTEz82eLwYCIjJ+BpSxkmkMO/qy/bddg==
+X-Received: by 2002:a05:6808:150f:b0:3d2:2356:d271 with SMTP id 5614622812f47-3d51b9654ebmr11015214b6e.1.1718992633179;
+        Fri, 21 Jun 2024 10:57:13 -0700 (PDT)
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3d53451bd94sm389075b6e.33.2024.06.21.10.57.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jun 2024 10:57:12 -0700 (PDT)
+Message-ID: <b765d200-4e0f-48b1-a962-7dfa1c4aef9c@kernel.dk>
+Date: Fri, 21 Jun 2024 11:57:05 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yhPS/foK5T+Eokda"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the block tree
+To: John Garry <john.g.garry@oracle.com>, Mark Brown <broonie@kernel.org>,
+ Himanshu Madhani <himanshu.madhani@oracle.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Keith Busch <kbusch@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <ZnWe6sXMxm4RXBcM@sirena.org.uk>
+ <670625c0-a288-4166-9209-2eccc5ee97c3@kernel.dk>
+ <b098bd2d-f308-4383-b348-98f9904ca28a@oracle.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <b098bd2d-f308-4383-b348-98f9904ca28a@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 6/21/24 11:02 AM, John Garry wrote:
+> Sure, but I think that we can also use the following, since both are unsigned int:
+>     if (WARN_ON_ONCE(chunk_sectors % boundary_sectors))
+> 
+> I'll send a fix.
 
---yhPS/foK5T+Eokda
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Good point, yeah that's better as it's just 32-bit types regardless.
 
-Hi all,
+-- 
+Jens Axboe
 
-Today's linux-next merge of the char-misc tree got a conflict in:
-
-  MAINTAINERS
-
-between commit:
-
-  f0e1a0643a59b ("sched_ext: Implement BPF extensible scheduler class")
-
-=66rom the sched-ext tree and commit:
-
-  4c4daafc996a8 ("MAINTAINERS: Add ScioSense ENS160")
-
-=66rom the char-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 56ad56d7733e9,044e2001f4e3a..0000000000000
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@@ -1264,8 -1254,8 +1264,10 @@@ patternProperties
-      description: Smart Battery System
-    "^schindler,.*":
-      description: Schindler
- +  "^schneider,.*":
- +    description: Schneider Electric
-+   "^sciosense,.*":
-+     description: ScioSense B.V.
-    "^seagate,.*":
-      description: Seagate Technology PLC
-    "^seeed,.*":
-diff --cc MAINTAINERS
-index c3a397c60b693,24d372f7653ed..0000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -20032,19 -19947,14 +20043,27 @@@ F:	include/linux/wait.
-  F:	include/uapi/linux/sched.h
-  F:	kernel/sched/
- =20
- +SCHEDULER - SCHED_EXT
- +R:	Tejun Heo <tj@kernel.org>
- +R:	David Vernet <void@manifault.com>
- +L:	linux-kernel@vger.kernel.org
- +S:	Maintained
- +W:	https://github.com/sched-ext/scx
- +T:	git://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext.git
- +F:	include/linux/sched/ext.h
- +F:	kernel/sched/ext.h
- +F:	kernel/sched/ext.c
- +F:	tools/sched_ext/
- +F:	tools/testing/selftests/sched_ext
- +
-+ SCIOSENSE ENS160 MULTI-GAS SENSOR DRIVER
-+ M:	Gustavo Silva <gustavograzs@gmail.com>
-+ S:	Maintained
-+ F:	drivers/iio/chemical/ens160_core.c
-+ F:	drivers/iio/chemical/ens160_i2c.c
-+ F:	drivers/iio/chemical/ens160_spi.c
-+ F:	drivers/iio/chemical/ens160.h
-+=20
-  SCSI LIBSAS SUBSYSTEM
-  R:	John Garry <john.g.garry@oracle.com>
-  R:	Jason Yan <yanaijie@huawei.com>
-
---yhPS/foK5T+Eokda
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ1vLQACgkQJNaLcl1U
-h9C1Vgf9E4/oGzPyppL2Wj4pAosIPYjDkqeBvbpvJoJJfsqCT496C4znB0cMbiaL
-aUqc1SA9y6PLnRAJyO2vR8h0Oo7OqNjV4AwQZuKSkfnoaQGhucv0jHHf0YmGoRZs
-k9TcNpeoMFATq72YKI7nLak/xCrbOgnMvga1QyqUKV9xQi1dkQhqNWr6uA6PczfY
-FwsWsm1YqFgxreZh+wEIVCKCpSUWg85QC3OHTm6TakCOpZoTLBjL3G8W2xExIVSB
-fAxEVT8nYpurocg20N+5S4J6+NWlx9cWy06R7vFvF9Q5mb9jq9JNqGSmiF+2BqnY
-oJLxg7HnVTIHZlp/h1XDE755KEDUzA==
-=W3i2
------END PGP SIGNATURE-----
-
---yhPS/foK5T+Eokda--
 

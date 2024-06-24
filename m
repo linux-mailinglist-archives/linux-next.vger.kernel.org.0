@@ -1,55 +1,58 @@
-Return-Path: <linux-next+bounces-2651-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2652-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C33B9915601
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 19:57:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C7D3915631
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 20:05:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 781241F21819
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 17:57:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 440A71F215CB
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 18:05:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E2151A00CE;
-	Mon, 24 Jun 2024 17:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F93313BC1E;
+	Mon, 24 Jun 2024 18:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c+/IXTZX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4Alrhjj"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5435B19FA6F;
-	Mon, 24 Jun 2024 17:55:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744D718039;
+	Mon, 24 Jun 2024 18:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719251720; cv=none; b=EUVFRhEWKjgvA/zQ9c+AvwQlfx5FcgORP/QWJ52D9OUTKrEZxjEJCQSIrbZiuvO2xb3oAdmTslN6kns4zRcNVNX+Wa2Wv+/+MiRDuafqyItEd224jSIFm0bqYCaInu9guJtrWOGwzlZ2ab2ic4WFuX4p2/2hMul5Nfr70Kw126U=
+	t=1719252335; cv=none; b=k8Q2vTEHVXkvfLhLI12pW1OH0kXhqQiM7TOdob2l5CApnPNme//e2UbeK2Ig1Ru+DglKyp7hxrxevDmQODPiWUMU3GOqc7U6ktyoEYfii2YacOnLrz86feTUUJb+qfRP3NODj41gkLLDnSZdudEadEXfM0KkSsB6gHE7o+DORbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719251720; c=relaxed/simple;
-	bh=Dsng+wl/JnpD45QyCVpIBvIgJ9Y7NDKt9V/oHYab9Co=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RQ2Up9TieW5FaW8xXZ//ew2uAZoEzFx3JhGwOew5nflwXtFl7g4RulHyRBddHaMM1MMZ7Lrm3zhnlzblUyk/ugXp1vz1waRf7tEX8YkhrGVj44tuUJogc2ghtYLAoMFauT8Mkx4bjzHpHwnaRXyx3KBmy7doYNhuMuCjmFtvjNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c+/IXTZX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA936C2BBFC;
-	Mon, 24 Jun 2024 17:55:18 +0000 (UTC)
+	s=arc-20240116; t=1719252335; c=relaxed/simple;
+	bh=dEStDFuSTYU8n7jrSHnMseqew7Yr9W9Y/sesTQnL1x8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JFn9YKJStajfko6A3/HsixgyrjcSBjqQYapwMEwzYs/gl30OlStUFUQ7x9cZbyfnKlHxmdnyG9Shi1RPlaJsLzsRvHhnDp/GNp+ZbHRCkLiXl5/nUtVeDI0Qks22n9hoKoxuumWLyb+Y9G8wNrVZc1bYaCypmyzxzv7eaVUVkPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A4Alrhjj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A011CC32789;
+	Mon, 24 Jun 2024 18:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719251719;
-	bh=Dsng+wl/JnpD45QyCVpIBvIgJ9Y7NDKt9V/oHYab9Co=;
-	h=Date:From:To:Cc:Subject:From;
-	b=c+/IXTZXQnIXX5XeyEK/y+kcEZ4jBpzwIcIVmDs2lam62zVSGEXa4f7dlZ7OEW/Tv
-	 cjGo/3Ytyl/Jexu425iXJ+I5OmYjiWOgUNyqzSexC9Aqg9cd/mqx2BDNMJqjOLlrqB
-	 Y0eY8cRiTpL2J1kfVvYN802pnNX/UrQcyQepKUN0CSOSySSeXnFYsh7VD4Y4WddnIz
-	 gLKYF403tuiRVpixsPjeg2tWzp6VYyNXEmesag6Oo0yNydSr9rQ5E+1dWtOl1wHRZr
-	 FM72R3ubEpG32NP/b4geV7OzcQPqNHvKKSVQtOj1K28C/AC3Z1M63Wc9sOhy5hkkEj
-	 NBO3oKjJomVcw==
-Date: Mon, 24 Jun 2024 18:55:15 +0100
+	s=k20201202; t=1719252334;
+	bh=dEStDFuSTYU8n7jrSHnMseqew7Yr9W9Y/sesTQnL1x8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A4AlrhjjM53NXC0HwSKg+XN15w1WObxHQcIoKn8b8ezy4hGWuKhpQy5Jnhg5sJHqO
+	 NGPqle/peJMmON3qZObhYfPWxsLvm/vBAcA53IfL1tahCBLsDZpzR/nTV3SJfQpiTi
+	 T5NL1yw33mpHLYT+29hXEVTGICp2Bvd/x4sUHar9yhSmJ6YfVtxPRtH/RVL7ZJN2ng
+	 vlO8LU8mRe9eitNjYVBK1MkYG2Umbbcvwsn33k8xrjH/6EN2z5kXEQtIw+u3wF2hwj
+	 VKdXKqXFjTP0B1li9GrmidpeAZz8tqnQBtgAda7Foc3ghb3XUjTZAP94m2euwxlPgI
+	 rq9vPWdsjb3iQ==
+Date: Mon, 24 Jun 2024 19:05:30 +0100
 From: Mark Brown <broonie@kernel.org>
-To: William Breathitt Gray <wbg@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the counter-next tree with the
- counter-current tree
-Message-ID: <ZnmzA0nM0Sn2Awkn@sirena.org.uk>
+To: Greg KH <greg@kroah.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Subject: Re: linux-next: manual merge of the driver-core tree with the reset
+ tree
+Message-ID: <cc2eeff6-d7d9-45a9-a681-793053f0f26c@sirena.org.uk>
+References: <Znmufb9L78FCoSSS@sirena.org.uk>
+ <2024062443-runt-lard-fd07@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -57,77 +60,42 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="40OqtuILxyApl9cd"
+	protocol="application/pgp-signature"; boundary="mXlM7WGKGIZH7Y6z"
 Content-Disposition: inline
+In-Reply-To: <2024062443-runt-lard-fd07@gregkh>
+X-Cookie: Allow 6 to 8 weeks for delivery.
 
 
---40OqtuILxyApl9cd
+--mXlM7WGKGIZH7Y6z
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Mon, Jun 24, 2024 at 07:47:56PM +0200, Greg KH wrote:
+> On Mon, Jun 24, 2024 at 06:35:57PM +0100, Mark Brown wrote:
 
-Today's linux-next merge of the counter-next tree got a conflict in:
+> > diff --cc drivers/reset/reset-meson-audio-arb.c
+> > index 894ad9d37a665,8740f5f6abf80..0000000000000
+> > --- a/drivers/reset/reset-meson-audio-arb.c
+> > +++ b/drivers/reset/reset-meson-audio-arb.c
 
-  drivers/counter/ti-eqep.c
+> No diff for the conflict?
 
-between commit:
+That's what happens when the merge winds up bringing in no changes.
 
-  0cf81c73e4c6a ("counter: ti-eqep: enable clock at probe")
-
-=66rom the counter-current tree and commit:
-
-  1c30c6d024726 ("counter: ti-eqep: implement over/underflow events")
-
-=66rom the counter-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc drivers/counter/ti-eqep.c
-index 825ae22c3ebc7,9742ba9fc3072..0000000000000
---- a/drivers/counter/ti-eqep.c
-+++ b/drivers/counter/ti-eqep.c
-@@@ -6,8 -6,8 +6,9 @@@
-   */
- =20
-  #include <linux/bitops.h>
- +#include <linux/clk.h>
-  #include <linux/counter.h>
-+ #include <linux/interrupt.h>
-  #include <linux/kernel.h>
-  #include <linux/mod_devicetable.h>
-  #include <linux/module.h>
-@@@ -377,8 -465,7 +466,8 @@@ static int ti_eqep_probe(struct platfor
-  	struct counter_device *counter;
-  	struct ti_eqep_cnt *priv;
-  	void __iomem *base;
- +	struct clk *clk;
-- 	int err;
-+ 	int err, irq;
- =20
-  	counter =3D devm_counter_alloc(dev, sizeof(*priv));
-  	if (!counter)
-
---40OqtuILxyApl9cd
+--mXlM7WGKGIZH7Y6z
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ5swIACgkQJNaLcl1U
-h9AFVQgAgDJvCuLymRf+pSDaEA3ZixKP1r/fCMazx0wEx0iwce9qiKiW2yvGYRpq
-HiR3ZJCfbxzcyo6hF4iZoIyHW8Mz4wKUGrMTDSuceaMO1oWn50DSjj2kk3NeA7zY
-FTaI0UqJHVOiAkpiprgw9PgbYYaAzKFbFB6yRVdPTgacVnZMZET1jmOvJ46kicP6
-vOu0JhmkKrhtxGYwiVs8auZLcDIJkrUO77Fj4JBm4VOA5k1S9wSOeX1h8av6xKFz
-eF7jYbs9zwe66mnhIgOaBHQV+7hXhzbxUqRebm/eZ4pm3jcKr9jAWQrfY0SqP1EJ
-ExTWa6APtc9StQiXYoSlh478IT92zQ==
-=Y+J7
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ5tWkACgkQJNaLcl1U
+h9Ca0wf/VadP31FBBMBtCQWcIenUZoMjYJodgWLkBDRdpVj9/jy2e94HRyb3Guw/
+9kiZBmsRSaKuCJsHgRuam9Z1D5t+yCHCy545CL7WPdtfyZU1+xlqaUETgClTg4dM
+SqNjqu3Sq2KY3UhEtVs5mdc2bJKxLCVKQYxBNCzpStvXMeqlqMG4BNyy1dkL1D1O
+dR/PidTPBi+2IrcDL6EbP6dhqHOp02GhHTs7wE5Y27CMJErMLS745sPpz5mpi7+U
+wS7i+0CsSCBJIgMBbU/+SXM8Ugd1MhtoiBNRXw5IWcSojuYRd1RGZr4CHMMppnZI
+2i0moT1mgoNpmG7eqzfw2UVRxUDZUg==
+=4okn
 -----END PGP SIGNATURE-----
 
---40OqtuILxyApl9cd--
+--mXlM7WGKGIZH7Y6z--
 

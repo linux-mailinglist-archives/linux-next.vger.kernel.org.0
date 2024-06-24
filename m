@@ -1,117 +1,117 @@
-Return-Path: <linux-next+bounces-2643-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2644-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77231914253
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 07:55:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C902F9152B0
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 17:41:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A118D1C20E77
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 05:55:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85647281869
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 15:41:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F7F018044;
-	Mon, 24 Jun 2024 05:55:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFE719CD07;
+	Mon, 24 Jun 2024 15:41:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNXL00pR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EpYXIQcm"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1331F4A3D;
-	Mon, 24 Jun 2024 05:55:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444B219B3CE;
+	Mon, 24 Jun 2024 15:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719208545; cv=none; b=JazDbR1L3e8rSzJHcUb+2q0cjzoPCf68G1K0MBk3wBS5JaVdlr+4qM01UfBIm+GLrwE+J4ZgwBURt2hcpVOhYOJL1bvKqmsrNeV6xfhdMROP66QSaBfDdYSf6om5WlZUdePhhs+CZgOCOyZz2lXLRIjh8UeSXUWVJPd3cXHuYQM=
+	t=1719243706; cv=none; b=NhjYPnhUUqYDYqaXhm/JL23FRPOUeygKcaJLD9vpj9kYL1M9u5B+r9+sWh5rJfES159HGvsZPWURsmP8NtVG3Ea73visYRSGMsHt1i4hR7YDTGgIc7qGl+ljsEipvTmasTBwJhNJ5wcDYAGOVxTxCJCgVCeLUnWbWkgaKIEgulw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719208545; c=relaxed/simple;
-	bh=AetNSzrnaPlRh1G+Y/PBBp/nNyu54u1F1KslDVUUDfw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m91Dg5pkmdxeYXV3iGdPAyKGWU1om4f6TlxXDyactF0beSncK7mtCujBmUuKdIM/rVgsrqHPcxOotFv3yyrsKOB6nZQmIqn9Uj1StE0tO+Hs4gNEVd9+1UJ5YoSAdoF+lFYUXRjAoANDViq9jav1Gnn8AVLDjLNGZPuKilyk6aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNXL00pR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F28C2BBFC;
-	Mon, 24 Jun 2024 05:55:42 +0000 (UTC)
+	s=arc-20240116; t=1719243706; c=relaxed/simple;
+	bh=J1IgWE+3IlU9Yb1Tk9FND0iDyJTW4Nt9mwUhwpsMalU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=B69Fygvr3OXV6Wr2Zw//et8Tcm4k6YYWIWezywgkdFMAfsCCbE+sv0GF2T3BZ0P8pL/oa9uBDleOXpkIhUQAsjAmpLkTt7exNo3KEpIraOwKPEX41oXvBJ9kkxz6ACtLkJhj8dWmD6HemHqEd3o/3d4DtH++JVjh27hFMGhSokY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EpYXIQcm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134CDC2BBFC;
+	Mon, 24 Jun 2024 15:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719208544;
-	bh=AetNSzrnaPlRh1G+Y/PBBp/nNyu54u1F1KslDVUUDfw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NNXL00pRDZoCXzTURiJbF+uxuIBgU7t29Pw59iWxKLtkEbunQl5nlzN/I3Pbo1I8M
-	 deadt7wDFm4t2v6/kainsUnljMwzRLo3WmDS8SzyOUIAXsIYGat1YmzgrQy0IiZrHF
-	 TXOwHEvo/IZ09SUjbWXjE5tOl94QDZKcvVbaxnC/PEGWQ0PSr1mU/P/W0RRQstPfxm
-	 60FWWvFKEeEhWjatD9fVSma5n/osyrs5JPRDqWKykeSy4/+f6sYxav/x2rFtqnfSHD
-	 ai53Xr95CuhO+qJxmxSMaYiHJ/l19I1BPHQYKAadWYADmMrp0rfQm4d072kpiUCNJ2
-	 JhZWsDeHztmSg==
-Date: Mon, 24 Jun 2024 08:53:27 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: "Gowans, James" <jgowans@amazon.com>,
-	"linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-	"jbeulich@suse.com" <jbeulich@suse.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the memblock tree with the origin
- tree
-Message-ID: <ZnkJ1zj0NTR3dYwo@kernel.org>
-References: <ZnRQv-EVf2LQ1Cjv@sirena.org.uk>
- <eb58b1b2f84444acde3f9e25219fa40c73c499f8.camel@amazon.com>
- <db13f2b7-88da-42db-85ed-d78cdd5f6c62@sirena.org.uk>
- <e6f1bf73d13060635520c70df269c0b390352f37.camel@amazon.com>
- <44ce3730-8e4d-42f9-8b17-104805e46f93@sirena.org.uk>
- <9262bfba5d65c603dcad49a75e5a30564f75c3d4.camel@amazon.com>
- <cf013a59-a297-4685-94ac-87566023aa5d@sirena.org.uk>
+	s=k20201202; t=1719243705;
+	bh=J1IgWE+3IlU9Yb1Tk9FND0iDyJTW4Nt9mwUhwpsMalU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=EpYXIQcmJYJoECi5q0yaOXKQnsLK5LhnEdJFI4SdUYw7kPD7yD+f+bDkkg7KKXPd+
+	 2i/lZL0sALcJk/RzotAJjbEtFxzRs+j/FGrlwHTNEUrSuxGQROdv8guZddqp8TymId
+	 U3b8RNwuFj1BwmxKd1Zisk6G71SiUAJ49zEXt7RS5mXuEcDL+of1WRtkg3ZJ7BvdQI
+	 dFsmAVpIiCmLZ8FsD7eqzl9KaugIAXTbKdHT9sm8H53NnX++ZD6CQ1lBIptfX+2H+Y
+	 S2thaEv92RLFUx50B8d8SN22+V3Mob6bqEwDbaG+fzsxBj7MqFrKvJzCdMbFqyaK8k
+	 ot0H3xaHkEAJQ==
+Date: Mon, 24 Jun 2024 16:41:41 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Connor Abbott <cwabbott0@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Rob Clark <robdclark@chromium.org>
+Subject: linux-next: manual merge of the drm-msm tree with the qcom tree
+Message-ID: <ZnmTtQyxH6hFGmO-@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tF+rPnmXMmmPiY27"
+Content-Disposition: inline
+
+
+--tF+rPnmXMmmPiY27
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf013a59-a297-4685-94ac-87566023aa5d@sirena.org.uk>
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi all,
 
-On Fri, Jun 21, 2024 at 09:30:51PM +0100, Mark Brown wrote:
-> On Fri, Jun 21, 2024 at 08:08:53PM +0000, Gowans, James wrote:
-> > On Thu, 2024-06-20 at 19:00 +0100, Mark Brown wrote:
-> 
-> > > Yes, the merge in -next is wrong.
-> 
-> > What's the next step to fix the incorrect merge commit?
-> > Looking at today's -next I see the same issue:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/mm/memblock.c?h=next-20240621&id=f689ee4c062317a0831fbffeeb30d7816608b2e7
-> 
-> It's remembered by rerere, hopefully I'll convince rerere to forget it
-> on Monday.
+Today's linux-next merge of the drm-msm tree got a conflict in:
 
-Just in case this is the resolution for merge conflict
+  include/linux/firmware/qcom/qcom_scm.h
 
-diff --cc mm/memblock.c
-index e81fb68f7f88,692dc551c0fd..000000000000
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@@ -1441,6 -1446,20 +1439,17 @@@ phys_addr_t __init memblock_alloc_range
-  	enum memblock_flags flags = choose_memblock_flags();
-  	phys_addr_t found;
-  
- -	if (WARN_ONCE(nid == MAX_NUMNODES, "Usage of MAX_NUMNODES is deprecated. Use NUMA_NO_NODE instead\n"))
- -		nid = NUMA_NO_NODE;
- -
-+ 	/*
-+ 	 * Detect any accidental use of these APIs after slab is ready, as at
-+ 	 * this moment memblock may be deinitialized already and its
-+ 	 * internal data may be destroyed (after execution of memblock_free_all)
-+ 	 */
-+ 	if (WARN_ON_ONCE(slab_is_available())) {
-+ 		void *vaddr = kzalloc_node(size, GFP_NOWAIT, nid);
-+ 
-+ 		return vaddr ? virt_to_phys(vaddr) : 0;
-+ 	}
-+ 
-  	if (!align) {
-  		/* Can't use WARNs this early in boot on powerpc */
-  		dump_stack();
+between commits:
 
--- 
-Sincerely yours,
-Mike.
+  158ed777e330e ("firmware: qcom: scm: Add gpu_init_regs call")
+  178e19c0df1b1 ("firmware: qcom: scm: add support for SHM bridge operation=
+s")
+
+=66rom the qcom tree and commit:
+
+  90c3e2bc9ecbf ("firmware: qcom_scm: Add gpu_init_regs call")
+
+=66rom the drm-msm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc include/linux/firmware/qcom/qcom_scm.h
+index 9f14976399ab8,a221a643dc12a..0000000000000
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+
+--tF+rPnmXMmmPiY27
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ5k7QACgkQJNaLcl1U
+h9DtZgf+JWDavVOeEGi+W3qXnBC4EOr8J0+Gg1g/JMLxXDHBFNOBKSAGt3q+EKqH
+zqCTV9nCyAc7Nd4SNVB1L1aO4iWu6CKvETAHlou+Et0oKLV/IwB3hbArAoTcLMs3
+Tx/JP5lDMKFW8GPFD/Y/Sg4igRVbPOPWEYiY8IULxt8REJHHzyaN7Ry1hKhiSg5A
+zpzLi2lhCwb4b5fpK8Y0hAnsnimvTj7d84YxJzjMRoCsFhRRLcRIx6Zfzx7hU1i9
+nou9zDIIHOBPeXzsEYYETkmEguS9BNbdaafB2e1HAIg0jZnfI6r2h/jPybdw8W2x
+iulizHUxtdfdJ4hPEoy33USJZyoIEw==
+=JN2W
+-----END PGP SIGNATURE-----
+
+--tF+rPnmXMmmPiY27--
 

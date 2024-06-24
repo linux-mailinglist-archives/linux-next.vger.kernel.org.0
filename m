@@ -1,83 +1,63 @@
-Return-Path: <linux-next+bounces-2642-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2643-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F9EC9132C1
-	for <lists+linux-next@lfdr.de>; Sat, 22 Jun 2024 10:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77231914253
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 07:55:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9941F1C21012
-	for <lists+linux-next@lfdr.de>; Sat, 22 Jun 2024 08:28:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A118D1C20E77
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jun 2024 05:55:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 552D714C59B;
-	Sat, 22 Jun 2024 08:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F7F018044;
+	Mon, 24 Jun 2024 05:55:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YosAV3lB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNXL00pR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C35D335B5;
-	Sat, 22 Jun 2024 08:28:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1331F4A3D;
+	Mon, 24 Jun 2024 05:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719044925; cv=none; b=AJ9Gz7FmyqEU8XCf6R+Q0oHPPgpkxNvFz7hsbmFOMgshaxoNzIBSykPeEbjg/NlAGpwJPwABmZTNwzelQYVn8PbFc9VqKA+a1oWjId+Ly5FvPQG48hbNv9cbYxPs26+nWIHI0Mr2ZimEP0xKD4zKFaGoc/sa7EEgWoFkDQmb62A=
+	t=1719208545; cv=none; b=JazDbR1L3e8rSzJHcUb+2q0cjzoPCf68G1K0MBk3wBS5JaVdlr+4qM01UfBIm+GLrwE+J4ZgwBURt2hcpVOhYOJL1bvKqmsrNeV6xfhdMROP66QSaBfDdYSf6om5WlZUdePhhs+CZgOCOyZz2lXLRIjh8UeSXUWVJPd3cXHuYQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719044925; c=relaxed/simple;
-	bh=I36hrDGCl16z50N/hx++eF1frdHWfm/lr4cjAYqIPJw=;
+	s=arc-20240116; t=1719208545; c=relaxed/simple;
+	bh=AetNSzrnaPlRh1G+Y/PBBp/nNyu54u1F1KslDVUUDfw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XqLp2/xbCKiFOVXUX/aTDyskK3l7wWkAH/OGph0Yq3Pw/+4rLANrRBeozR5zICmOaz3ITBileA1MO1wkkMMtVfMMO07YYNlD7fyfty7DCDANX6GEXe9QosB9G3bQyPTQFyatuLdWEDeLi4EGZftYrg5F1K4UEUF9Kb3bvvjqqMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YosAV3lB; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719044924; x=1750580924;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I36hrDGCl16z50N/hx++eF1frdHWfm/lr4cjAYqIPJw=;
-  b=YosAV3lB1rwWvzoC8QJs4jo62U2xGinlzx3Nj642LBMZBGLiHadgjWVD
-   8yr7z6JCzhtpuTNwTnEgqKWQrZyzE7AsCPO/CXFKiPe+grIeytW2jQdlY
-   BetZyyMjzJ4zQXbIS+XYBrLUowrphX9KGb4WhwBQiOorUDWOX0fQw336g
-   PD+cWCqeAC2J3VbVJyvYPfxjm0AiMEpiPcGbsgTb1lUiRUTMWsx8gtDrN
-   SrRKEJyYm3OYqyeOKvkXEdz4D/iYzcGVAdgZyqZWhny9zcMEVaJnTmRmi
-   SnFyU9BeHfD2C4eCy1xqIWrBaTz52DHSLA7H7Y3TKrmyFv7V148ywZSyN
-   A==;
-X-CSE-ConnectionGUID: 1ForCOQjTIazyQOjqEuY9A==
-X-CSE-MsgGUID: ex+r3gOKRJ+ZJ9OlZrJwyA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="18988373"
-X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="18988373"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2024 01:28:43 -0700
-X-CSE-ConnectionGUID: cmQVtE8pSWe4ihT/bVxuiQ==
-X-CSE-MsgGUID: juhYmWpiTe6FYYwhG2UfUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="47751938"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 22 Jun 2024 01:28:39 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sKw6v-0009SY-0R;
-	Sat, 22 Jun 2024 08:28:37 +0000
-Date: Sat, 22 Jun 2024 16:28:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, Kui-Feng Lee <thinker.li@gmail.com>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	linux-input@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <202406221626.JK0Nnkxy-lkp@intel.com>
-References: <ZnB9X1Jj6c04ufC0@sirena.org.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=m91Dg5pkmdxeYXV3iGdPAyKGWU1om4f6TlxXDyactF0beSncK7mtCujBmUuKdIM/rVgsrqHPcxOotFv3yyrsKOB6nZQmIqn9Uj1StE0tO+Hs4gNEVd9+1UJ5YoSAdoF+lFYUXRjAoANDViq9jav1Gnn8AVLDjLNGZPuKilyk6aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNXL00pR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F28C2BBFC;
+	Mon, 24 Jun 2024 05:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719208544;
+	bh=AetNSzrnaPlRh1G+Y/PBBp/nNyu54u1F1KslDVUUDfw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NNXL00pRDZoCXzTURiJbF+uxuIBgU7t29Pw59iWxKLtkEbunQl5nlzN/I3Pbo1I8M
+	 deadt7wDFm4t2v6/kainsUnljMwzRLo3WmDS8SzyOUIAXsIYGat1YmzgrQy0IiZrHF
+	 TXOwHEvo/IZ09SUjbWXjE5tOl94QDZKcvVbaxnC/PEGWQ0PSr1mU/P/W0RRQstPfxm
+	 60FWWvFKEeEhWjatD9fVSma5n/osyrs5JPRDqWKykeSy4/+f6sYxav/x2rFtqnfSHD
+	 ai53Xr95CuhO+qJxmxSMaYiHJ/l19I1BPHQYKAadWYADmMrp0rfQm4d072kpiUCNJ2
+	 JhZWsDeHztmSg==
+Date: Mon, 24 Jun 2024 08:53:27 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: "Gowans, James" <jgowans@amazon.com>,
+	"linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+	"jbeulich@suse.com" <jbeulich@suse.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the memblock tree with the origin
+ tree
+Message-ID: <ZnkJ1zj0NTR3dYwo@kernel.org>
+References: <ZnRQv-EVf2LQ1Cjv@sirena.org.uk>
+ <eb58b1b2f84444acde3f9e25219fa40c73c499f8.camel@amazon.com>
+ <db13f2b7-88da-42db-85ed-d78cdd5f6c62@sirena.org.uk>
+ <e6f1bf73d13060635520c70df269c0b390352f37.camel@amazon.com>
+ <44ce3730-8e4d-42f9-8b17-104805e46f93@sirena.org.uk>
+ <9262bfba5d65c603dcad49a75e5a30564f75c3d4.camel@amazon.com>
+ <cf013a59-a297-4685-94ac-87566023aa5d@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -86,61 +66,52 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZnB9X1Jj6c04ufC0@sirena.org.uk>
+In-Reply-To: <cf013a59-a297-4685-94ac-87566023aa5d@sirena.org.uk>
 
-Hi Mark,
+Hi,
 
-kernel test robot noticed the following build errors:
+On Fri, Jun 21, 2024 at 09:30:51PM +0100, Mark Brown wrote:
+> On Fri, Jun 21, 2024 at 08:08:53PM +0000, Gowans, James wrote:
+> > On Thu, 2024-06-20 at 19:00 +0100, Mark Brown wrote:
+> 
+> > > Yes, the merge in -next is wrong.
+> 
+> > What's the next step to fix the incorrect merge commit?
+> > Looking at today's -next I see the same issue:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/mm/memblock.c?h=next-20240621&id=f689ee4c062317a0831fbffeeb30d7816608b2e7
+> 
+> It's remembered by rerere, hopefully I'll convince rerere to forget it
+> on Monday.
 
-[auto build test ERROR on hid/for-next]
-[cannot apply to linus/master v6.10-rc4 next-20240621]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Just in case this is the resolution for merge conflict
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Brown/linux-next-build-failure-after-merge-of-the-bpf-next-tree/20240618-022240
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/ZnB9X1Jj6c04ufC0%40sirena.org.uk
-patch subject: linux-next: build failure after merge of the bpf-next tree
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20240622/202406221626.JK0Nnkxy-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406221626.JK0Nnkxy-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406221626.JK0Nnkxy-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/hid/bpf/hid_bpf_struct_ops.c:280:16: error: initialization of 'int (*)(void *)' from incompatible pointer type 'int (*)(void *, struct bpf_link *)' [-Werror=incompatible-pointer-types]
-     280 |         .reg = hid_bpf_reg,
-         |                ^~~~~~~~~~~
-   drivers/hid/bpf/hid_bpf_struct_ops.c:280:16: note: (near initialization for 'bpf_hid_bpf_ops.reg')
->> drivers/hid/bpf/hid_bpf_struct_ops.c:281:18: error: initialization of 'void (*)(void *)' from incompatible pointer type 'void (*)(void *, struct bpf_link *)' [-Werror=incompatible-pointer-types]
-     281 |         .unreg = hid_bpf_unreg,
-         |                  ^~~~~~~~~~~~~
-   drivers/hid/bpf/hid_bpf_struct_ops.c:281:18: note: (near initialization for 'bpf_hid_bpf_ops.unreg')
-   cc1: some warnings being treated as errors
-
-
-vim +280 drivers/hid/bpf/hid_bpf_struct_ops.c
-
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  274  
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  275  static struct bpf_struct_ops bpf_hid_bpf_ops = {
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  276  	.verifier_ops = &hid_bpf_verifier_ops,
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  277  	.init = hid_bpf_ops_init,
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  278  	.check_member = hid_bpf_ops_check_member,
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  279  	.init_member = hid_bpf_ops_init_member,
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08 @280  	.reg = hid_bpf_reg,
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08 @281  	.unreg = hid_bpf_unreg,
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  282  	.name = "hid_bpf_ops",
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  283  	.cfi_stubs = &__bpf_hid_bpf_ops,
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  284  	.owner = THIS_MODULE,
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  285  };
-ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  286  
+diff --cc mm/memblock.c
+index e81fb68f7f88,692dc551c0fd..000000000000
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@@ -1441,6 -1446,20 +1439,17 @@@ phys_addr_t __init memblock_alloc_range
+  	enum memblock_flags flags = choose_memblock_flags();
+  	phys_addr_t found;
+  
+ -	if (WARN_ONCE(nid == MAX_NUMNODES, "Usage of MAX_NUMNODES is deprecated. Use NUMA_NO_NODE instead\n"))
+ -		nid = NUMA_NO_NODE;
+ -
++ 	/*
++ 	 * Detect any accidental use of these APIs after slab is ready, as at
++ 	 * this moment memblock may be deinitialized already and its
++ 	 * internal data may be destroyed (after execution of memblock_free_all)
++ 	 */
++ 	if (WARN_ON_ONCE(slab_is_available())) {
++ 		void *vaddr = kzalloc_node(size, GFP_NOWAIT, nid);
++ 
++ 		return vaddr ? virt_to_phys(vaddr) : 0;
++ 	}
++ 
+  	if (!align) {
+  		/* Can't use WARNs this early in boot on powerpc */
+  		dump_stack();
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sincerely yours,
+Mike.
 

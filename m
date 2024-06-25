@@ -1,115 +1,107 @@
-Return-Path: <linux-next+bounces-2671-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2672-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0FE2916EF4
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jun 2024 19:15:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90503917002
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jun 2024 20:19:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A9E5B210B0
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jun 2024 17:15:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BD492824C4
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jun 2024 18:19:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77A7617799B;
-	Tue, 25 Jun 2024 17:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B60179203;
+	Tue, 25 Jun 2024 18:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GYCqYqdn"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2xGHTXdx";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="h88RpE1v"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97E41779BA;
-	Tue, 25 Jun 2024 17:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D793178CFD;
+	Tue, 25 Jun 2024 18:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719335714; cv=none; b=gqrUdB0PkP/y7iDqrJ7tvfxaaj9CcsTFai7mxBZVbTvv6UTqdmoSLGRbO0xKyAoFyXVv0R48zbD9h94cuBd/E0YYmMfEGDCZHl/QRUEnTuLg2BlplZ2iANAS7XD6dzmx3yiDrokq/yXAibPS6lgfq7ABJYwHvfKsO/Kam5eOfC8=
+	t=1719339551; cv=none; b=o8MJDd6UkaBibDL0BkzxaijzvcsjalAlt9AdzOwNPFE6XIjAGtCvei4AXbfFasc1YKaN05dMw6v+7ongUP/h1jiSvVfz0ia4+aNcMavQhu8k4bMTmOnLaJekkssWX0w+0REbY37lq666k64ddhE8G3TLvetIz62nPHy8EsJj8WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719335714; c=relaxed/simple;
-	bh=jjtcuEA9sKtqwrfShdvUlPqsNArkCuWKWDP61e+bF2w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CBzrTHCptDEdypX6Taq7H8CButKC5rXhxAqP8OGbUllE8FeGKIRVw/OVnXirhgz0kEoH5JKp4EFUhKmDz9c5zLUlkUCFv06kGmWJ3KIi+CPiJ3hjK3L5ZxAsZG8k3lxkioAIPBEVSZRvl8aCB9s/x77j1ikA6yhdFEfpMASpRqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GYCqYqdn; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3645e9839b3so4431627f8f.3;
-        Tue, 25 Jun 2024 10:15:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719335711; x=1719940511; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jjtcuEA9sKtqwrfShdvUlPqsNArkCuWKWDP61e+bF2w=;
-        b=GYCqYqdntBMnluW6qiqNvbQTF4M3Wf/7jQUcNvFQh0/c7MnymLqfB30MaVFF4J5LP7
-         0xPoA7PCN/11FaTSUsZRvxEp217dBwCCRW/Rxz+CxuSquk03z6OZcU9Xy7C9YoYwqd4j
-         U+fTKsgx4ounyvkyMqhUPEA4aIbVF1g/9seCMCC5zmX/3kfKSLYDpWmj1sc7RdxmkZ4W
-         VLTRg7cY8zppH7Jdna3N/KkoyYSU4MG18kGOgg8+xMBRpz9kekvfhgGe5KLpu39/gdgC
-         Y21f0cmoIZfNl+8XjhBV7RB2YuYfh0FLAdnEhsqFdNNJn7DePQNk5W4A90tYr0spsIsn
-         p0kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719335711; x=1719940511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jjtcuEA9sKtqwrfShdvUlPqsNArkCuWKWDP61e+bF2w=;
-        b=cRiw76e7KbwZIAyNjraNoRFp0L7dVhonnHu4fK+DSfUeqHr5Yf+XU3dNzhoqIwv3ob
-         vV+2IvVAfYbY9epwKKuFziIxHtmeA7XzocqvtJNqaMtVU5V9Fq6RO0+tBoB2Wv5BGAf9
-         D2sbxDEijIvBxGZ2s391DfAQWAKokWGH00vPZBMrMxr/Od8O8sbiSb1mtXRCg7DNTzO1
-         FJhmZ9FEg3G3+7Ny3e71gH4st1dUX9ApQEFsTVPGpITckCkxn1EkfXBqQ3lyuamTIKjV
-         yIXgW56NUi0fsun1OL3GnkoHa+rzViXRIcpm2unKyDkPQNt+LQ1hz9yhpmVHxxWl5gan
-         9cUA==
-X-Forwarded-Encrypted: i=1; AJvYcCUaH4SQgKPIXtQXeG8S3AqNEjSqV5khV6tmi4DxVl3h1pfKwnT7fiU6iC4eSs3fJYkoFFp+ZIBZgCST4bSOVftpiOf1txuEVzimphvqmNnftfN3lSuBkKUAyGOdc6uBBeHG464ocJykbmvDORfi5k0HJX8J6PFak/z+gLK/PxgOq7NBtgtKcODJvBEpwl7QJMEkJ9p6KbH6xRjrel7H2kcWp91sj7yI42HHy+IcNnA0P57s
-X-Gm-Message-State: AOJu0YxI2Cj3arAukmN9e07VJ8JBHL60dxa14GbHE/rp9SapJ40UVcPJ
-	MpkwM9I5fb2BB2pF9wieVkZ9THOlE2mDGyDK/J109WAhGFgAJfMhLwDKWzNZpZYPCA0aIHuy+WS
-	LGuXKJI43izBwNpK3y9jvxMEY66U=
-X-Google-Smtp-Source: AGHT+IGqtcwJLjr+3MHilvLPVtfKoipe5kx4LBLA5mXRe+9hOE9htiLokRjYzn24SuFzozxc4yBuhK03IeWG4UE0GVg=
-X-Received: by 2002:a5d:598a:0:b0:366:ed80:d056 with SMTP id
- ffacd0b85a97d-366eef90065mr5423589f8f.14.1719335710842; Tue, 25 Jun 2024
- 10:15:10 -0700 (PDT)
+	s=arc-20240116; t=1719339551; c=relaxed/simple;
+	bh=sWfgKQAKWRN1bxsTLtOx+QXxi/EMIY4Oaiof9qYsDj0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=VCBuUok1HWDV3gPypMIibkEwwNhe5oUnrrzhHF5MpWcaFylt3bTfvygbbOqUaLNbLtAWdHyuHf7apbTUJ5x9C/ugkhOoM903MNKZ01/chQWWw7QgySRqP6YWmZakv/w7dtaDnh85bpM6N2RCr89dnJ40ipPD0vVa6MwMlNq3CGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2xGHTXdx; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=h88RpE1v; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1719339548;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Izt7X2Ump6bqomeHDq6AkRm+hADEbBol4mL7qD9AqZ0=;
+	b=2xGHTXdxgeoXUHdLMlEO57cOvI+tUUooyTIo2Jw/Taj486JxnbNnuh/hz2VPwBpwlvueH0
+	7m9wnX3LBv53F2lZmHasiSIgwr+c0roXW9epqjIk6Zx6XXORPEtMzP8IbWbbjEpysQYEjV
+	EEt3erl+QOVfeuxa4qczlE8Io2RPKXzOhJActzZvMBVuEqweSvGHqADzOIntwHETpusw3h
+	jZB3tCcV3GpugsowL8Njc7F+j5LhVuEzPBfhPbACQe9gnok0Dv6e0XloWFBnkissO47MHV
+	1ouOqCDm810r0qOzNlIsI/7/nNFtoDY23LnOHuoiHCNSflyknKA7ZLCbUsdbOA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1719339548;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Izt7X2Ump6bqomeHDq6AkRm+hADEbBol4mL7qD9AqZ0=;
+	b=h88RpE1vSLOZFz383Iitr9GgfXBns0bFlLVV4VG+/b8EuPsMQkmRzLXTJkINOrMB0D9F6n
+	HHpy9hzyE5Gu+pDw==
+To: Mark Brown <broonie@kernel.org>, Ingo Molnar <mingo@redhat.com>, "H.
+ Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Jisheng Zhang <jszhang@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+In-Reply-To: <ZnrXSitgAnCO0EG9@sirena.org.uk>
+References: <ZnrXSitgAnCO0EG9@sirena.org.uk>
+Date: Tue, 25 Jun 2024 20:19:08 +0200
+Message-ID: <87sex051ib.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZnB9X1Jj6c04ufC0@sirena.org.uk> <CAFVMQ6R8ZZE+9jWM1vhEuz2PsLyCgKhpaVD377TKEu4AfGO_iA@mail.gmail.com>
- <ud5j6hbozgg6em43volidpffykdtd2lpf32etmdiyksorl2cb4@whtseaibw2xw>
-In-Reply-To: <ud5j6hbozgg6em43volidpffykdtd2lpf32etmdiyksorl2cb4@whtseaibw2xw>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 25 Jun 2024 10:14:59 -0700
-Message-ID: <CAADnVQ+cJ5bga7tX9BSTC150CgXM8KQT+Z21zYE-VY-8fts6kg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Thinker Li <thinker.li@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, 
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Tue, Jun 25, 2024 at 8:54=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
-org> wrote:
->
-> On Jun 24 2024, Thinker Li wrote:
-> > Hi Mark,
-> >
-> > I'm sorry for not getting back to you sooner. I have been traveling
-> > since my last message.
-> > I guess this patch is for the HID tree. The changes in this patch are g=
-reat.
->
-> Ok, thanks for the review. However, the need appears because there is a
-> conflicting update in the bpf tree.
->
-> May I ask the bpf maintainers (Daniel/Alexei/Andrii) for an immutable
-> tag I could merge to so I can take this patch from Mark?
+On Tue, Jun 25 2024 at 15:42, Mark Brown wrote:
 
-I'm not sure how that would look like.
-imo conflict is minor enough.
-When net-next/bpf-next lands in the upcoming merge window
-just provide Mark's patch as a conflict resolution suggestion
-in the cover letter of hid PR ?
+> Hi all,
+>
+> After merging the tip tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c:33:25: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'dw_apb_ictl_handle_irq'
+>    33 | static void __irq_entry dw_apb_ictl_handle_irq(struct pt_regs *regs)
+>       |                         ^~~~~~~~~~~~~~~~~~~~~~
+> In file included from /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c:15:
+> /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c: In function 'dw_apb_ictl_init':
+> /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c:206:32: error: 'dw_apb_ictl_handle_irq' undeclared (first use in this function); did you mean 'dw_apb_ictl_init'?
+>   206 |                 set_handle_irq(dw_apb_ictl_handle_irq);
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~
+> /tmp/next/build/include/linux/irq.h:1331:23: note: in definition of macro 'set_handle_irq'
+>  1331 |                 (void)handle_irq;               \
+>       |                       ^~~~~~~~~~
+> /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c:206:32: note: each undeclared identifier is reported only once for each function it appears in
+>   206 |                 set_handle_irq(dw_apb_ictl_handle_irq);
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~
+> /tmp/next/build/include/linux/irq.h:1331:23: note: in definition of macro 'set_handle_irq'
+>  1331 |                 (void)handle_irq;               \
+>       |                       ^~~~~~~~~~
+>
+>
+> Caused by commit
+>
+>   7cc4f309c933ec5d ("irqchip/dw-apb-ictl: Support building as module")
+>
+> (I think, I didn't specifically verify.)  I have used the tree from
+> 20240624 instead.
+
+It comes from irq/core. It'll be gone tomorrow.
 

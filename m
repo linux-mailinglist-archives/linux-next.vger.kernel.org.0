@@ -1,151 +1,115 @@
-Return-Path: <linux-next+bounces-2670-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2671-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4523C916E2C
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jun 2024 18:32:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0FE2916EF4
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jun 2024 19:15:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAEAE1F21A11
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jun 2024 16:32:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A9E5B210B0
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jun 2024 17:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE02A14A639;
-	Tue, 25 Jun 2024 16:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77A7617799B;
+	Tue, 25 Jun 2024 17:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="R3AZp5He"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GYCqYqdn"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C03B14A0B8
-	for <linux-next@vger.kernel.org>; Tue, 25 Jun 2024 16:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97E41779BA;
+	Tue, 25 Jun 2024 17:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719333159; cv=none; b=E1nJyOw//VN4FGVIXh1YGCF0c+k09k0u7b9ab94uixlkMySUs70v+h5HfMMarnfhP+pxCMknNivvJwO8FXvNJMDnwxdAfxSKOY73xnTzVkKLyAIPrshJ05afjI34sgxp0PK1rTista5JYYNxGW/UhKWMcYTGpTIGqFMvv5SArOw=
+	t=1719335714; cv=none; b=gqrUdB0PkP/y7iDqrJ7tvfxaaj9CcsTFai7mxBZVbTvv6UTqdmoSLGRbO0xKyAoFyXVv0R48zbD9h94cuBd/E0YYmMfEGDCZHl/QRUEnTuLg2BlplZ2iANAS7XD6dzmx3yiDrokq/yXAibPS6lgfq7ABJYwHvfKsO/Kam5eOfC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719333159; c=relaxed/simple;
-	bh=wfoIUI8q+GZElLsKR418sMV8r6LoxqsMQ0TO0BysrhI=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=J1WAkBMfCjWgbaFMCF2gS++XhQZ6nxXRcQ+2zc87EnZqUBaiUfT739KjwNDL1WpARXfZiWraD5KZYbGfvsInbfYCfsquKhEhd7mjfO/bEGzkXaMdwTwzM1hjNNVTyRB4/V/Ko6xlmVLhmtSTTqqvK49FvJ/rZ2ryQ901Iuz7gsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=R3AZp5He; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-70698bcd19eso746081b3a.0
-        for <linux-next@vger.kernel.org>; Tue, 25 Jun 2024 09:32:37 -0700 (PDT)
+	s=arc-20240116; t=1719335714; c=relaxed/simple;
+	bh=jjtcuEA9sKtqwrfShdvUlPqsNArkCuWKWDP61e+bF2w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CBzrTHCptDEdypX6Taq7H8CButKC5rXhxAqP8OGbUllE8FeGKIRVw/OVnXirhgz0kEoH5JKp4EFUhKmDz9c5zLUlkUCFv06kGmWJ3KIi+CPiJ3hjK3L5ZxAsZG8k3lxkioAIPBEVSZRvl8aCB9s/x77j1ikA6yhdFEfpMASpRqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GYCqYqdn; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3645e9839b3so4431627f8f.3;
+        Tue, 25 Jun 2024 10:15:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1719333157; x=1719937957; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=bczkSUHrRadtvYkCl9yZ2Tf8XIBgzplOYUUp5JDQba8=;
-        b=R3AZp5He6AKHGiJ+Q6wOIf3U6ASXKJDmDG4gDooGKJCnTF8tV0FU/3ewqgKiQRBydm
-         W7tWXgNpTCh8PFEkxv319iX4NsOqqYKN0e6bQqnYDA5PIRfHOZHziS/SMn/os1g3ODCZ
-         Gu6G7TJ7NhsT+6RiR03bpbRcU90Cqa6vGk8r9gee0QQpCHIUaVGM4ufSYYMNKDzOM8Zy
-         KIMXOmiuwftgXcy768o7MkwKZS/vqoLipRzFblw1Mwd4DFwmfNvTP2Xa4OHhu6OyZfZ2
-         AheAR/B/SdczbFOJ6XDxR30ItvduqlImXcKIzU8jtA5XE+n9hsOBLJ/UPze2Tg6mKCQs
-         aQqg==
+        d=gmail.com; s=20230601; t=1719335711; x=1719940511; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jjtcuEA9sKtqwrfShdvUlPqsNArkCuWKWDP61e+bF2w=;
+        b=GYCqYqdntBMnluW6qiqNvbQTF4M3Wf/7jQUcNvFQh0/c7MnymLqfB30MaVFF4J5LP7
+         0xPoA7PCN/11FaTSUsZRvxEp217dBwCCRW/Rxz+CxuSquk03z6OZcU9Xy7C9YoYwqd4j
+         U+fTKsgx4ounyvkyMqhUPEA4aIbVF1g/9seCMCC5zmX/3kfKSLYDpWmj1sc7RdxmkZ4W
+         VLTRg7cY8zppH7Jdna3N/KkoyYSU4MG18kGOgg8+xMBRpz9kekvfhgGe5KLpu39/gdgC
+         Y21f0cmoIZfNl+8XjhBV7RB2YuYfh0FLAdnEhsqFdNNJn7DePQNk5W4A90tYr0spsIsn
+         p0kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719333157; x=1719937957;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bczkSUHrRadtvYkCl9yZ2Tf8XIBgzplOYUUp5JDQba8=;
-        b=abZtdzt+h8ZnfvKtOlXMD7/+EATw39JIk0KGQ+7Cr+GsfhQIUWU601e41QI22smqY7
-         hQ9t6xvQH9jg1Nwm/9OTehg41UmhFKtjTHWaugGY7cSceR9vazh/++tPabAPgHf+kJKP
-         UCwpkR026NG1yEVS1mCpR2B2FmNI7C/iryCYr2a6a/+nHt9mR02T4KSo4WPARZBf8FUD
-         npb6WCLTkLm4bPGP4toCdgtIMQHM9cbgC73sYPxmQOmZFI5shSB2zuHGMhoFE3Mb4PQV
-         kyqsJulMdmAgtAJ68+WFGU14IPBx0aWsDuK9bySRZ/3OnFjvPxfE3e/q/BfBD9wZypSL
-         FSlw==
-X-Gm-Message-State: AOJu0YxPQRbuevfI0J+CHdghCuZm3pkwokdnVmV8luz6VC0YplAEw0sx
-	ho9Ry+SsHL7bsiGMlT4VN+qi7b6dp0n82AiA3GXl0LwirrCf7Aw8v4mbtu5oBCHFxGbgyw0hqmM
-	A
-X-Google-Smtp-Source: AGHT+IFLv9Qtrtl0wjAo8Aka/wS5WWNwL7PtDAbuEOhtgQG7mNSk3chBvsGdydgLud7OH4r025D7cA==
-X-Received: by 2002:a05:6a20:3419:b0:1b2:cf6c:d5a4 with SMTP id adf61e73a8af0-1bcf8025e10mr6596826637.61.1719333156983;
-        Tue, 25 Jun 2024 09:32:36 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7068248ffbdsm4300976b3a.19.2024.06.25.09.32.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jun 2024 09:32:36 -0700 (PDT)
-Message-ID: <667af124.050a0220.68c33.b95f@mx.google.com>
-Date: Tue, 25 Jun 2024 09:32:36 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1719335711; x=1719940511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jjtcuEA9sKtqwrfShdvUlPqsNArkCuWKWDP61e+bF2w=;
+        b=cRiw76e7KbwZIAyNjraNoRFp0L7dVhonnHu4fK+DSfUeqHr5Yf+XU3dNzhoqIwv3ob
+         vV+2IvVAfYbY9epwKKuFziIxHtmeA7XzocqvtJNqaMtVU5V9Fq6RO0+tBoB2Wv5BGAf9
+         D2sbxDEijIvBxGZ2s391DfAQWAKokWGH00vPZBMrMxr/Od8O8sbiSb1mtXRCg7DNTzO1
+         FJhmZ9FEg3G3+7Ny3e71gH4st1dUX9ApQEFsTVPGpITckCkxn1EkfXBqQ3lyuamTIKjV
+         yIXgW56NUi0fsun1OL3GnkoHa+rzViXRIcpm2unKyDkPQNt+LQ1hz9yhpmVHxxWl5gan
+         9cUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUaH4SQgKPIXtQXeG8S3AqNEjSqV5khV6tmi4DxVl3h1pfKwnT7fiU6iC4eSs3fJYkoFFp+ZIBZgCST4bSOVftpiOf1txuEVzimphvqmNnftfN3lSuBkKUAyGOdc6uBBeHG464ocJykbmvDORfi5k0HJX8J6PFak/z+gLK/PxgOq7NBtgtKcODJvBEpwl7QJMEkJ9p6KbH6xRjrel7H2kcWp91sj7yI42HHy+IcNnA0P57s
+X-Gm-Message-State: AOJu0YxI2Cj3arAukmN9e07VJ8JBHL60dxa14GbHE/rp9SapJ40UVcPJ
+	MpkwM9I5fb2BB2pF9wieVkZ9THOlE2mDGyDK/J109WAhGFgAJfMhLwDKWzNZpZYPCA0aIHuy+WS
+	LGuXKJI43izBwNpK3y9jvxMEY66U=
+X-Google-Smtp-Source: AGHT+IGqtcwJLjr+3MHilvLPVtfKoipe5kx4LBLA5mXRe+9hOE9htiLokRjYzn24SuFzozxc4yBuhK03IeWG4UE0GVg=
+X-Received: by 2002:a5d:598a:0:b0:366:ed80:d056 with SMTP id
+ ffacd0b85a97d-366eef90065mr5423589f8f.14.1719335710842; Tue, 25 Jun 2024
+ 10:15:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <ZnB9X1Jj6c04ufC0@sirena.org.uk> <CAFVMQ6R8ZZE+9jWM1vhEuz2PsLyCgKhpaVD377TKEu4AfGO_iA@mail.gmail.com>
+ <ud5j6hbozgg6em43volidpffykdtd2lpf32etmdiyksorl2cb4@whtseaibw2xw>
+In-Reply-To: <ud5j6hbozgg6em43volidpffykdtd2lpf32etmdiyksorl2cb4@whtseaibw2xw>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 25 Jun 2024 10:14:59 -0700
+Message-ID: <CAADnVQ+cJ5bga7tX9BSTC150CgXM8KQT+Z21zYE-VY-8fts6kg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Thinker Li <thinker.li@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, 
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc5-250-g3d9217c41c07b
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 74 runs,
- 1 regressions (v6.10-rc5-250-g3d9217c41c07b)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes baseline: 74 runs, 1 regressions (v6.10-rc5-250-g3d9217c=
-41c07b)
+On Tue, Jun 25, 2024 at 8:54=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
+org> wrote:
+>
+> On Jun 24 2024, Thinker Li wrote:
+> > Hi Mark,
+> >
+> > I'm sorry for not getting back to you sooner. I have been traveling
+> > since my last message.
+> > I guess this patch is for the HID tree. The changes in this patch are g=
+reat.
+>
+> Ok, thanks for the review. However, the need appears because there is a
+> conflicting update in the bpf tree.
+>
+> May I ask the bpf maintainers (Daniel/Alexei/Andrii) for an immutable
+> tag I could merge to so I can take this patch from Mark?
 
-Regressions Summary
--------------------
-
-platform   | arch | lab          | compiler | defconfig          | regressi=
-ons
------------+------+--------------+----------+--------------------+---------=
----
-jetson-tk1 | arm  | lab-baylibre | gcc-10   | multi_v7_defconfig | 1       =
-   =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.10-rc5-250-g3d9217c41c07b/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.10-rc5-250-g3d9217c41c07b
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      3d9217c41c07b72af3a5c147cb82c75f757f4200 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform   | arch | lab          | compiler | defconfig          | regressi=
-ons
------------+------+--------------+----------+--------------------+---------=
----
-jetson-tk1 | arm  | lab-baylibre | gcc-10   | multi_v7_defconfig | 1       =
-   =
-
-
-  Details:     https://kernelci.org/test/plan/id/667ac07bc485e4687e7e707c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.10-rc5-2=
-50-g3d9217c41c07b/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetso=
-n-tk1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.10-rc5-2=
-50-g3d9217c41c07b/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetso=
-n-tk1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/667ac07bc485e4687e7e7=
-07d
-        failing since 6 days (last pass: v6.3-10703-gb3f869e79cdf0, first f=
-ail: v6.10-rc4-262-g1ce98b2c2d5b0) =
-
- =20
+I'm not sure how that would look like.
+imo conflict is minor enough.
+When net-next/bpf-next lands in the upcoming merge window
+just provide Mark's patch as a conflict resolution suggestion
+in the cover letter of hid PR ?
 

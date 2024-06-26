@@ -1,106 +1,164 @@
-Return-Path: <linux-next+bounces-2676-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2677-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D013C918032
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jun 2024 13:50:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B03809185B9
+	for <lists+linux-next@lfdr.de>; Wed, 26 Jun 2024 17:27:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EB931C239BB
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jun 2024 11:50:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D312E1C21E4B
+	for <lists+linux-next@lfdr.de>; Wed, 26 Jun 2024 15:27:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23CBE18130E;
-	Wed, 26 Jun 2024 11:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="New132iK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C97F18C352;
+	Wed, 26 Jun 2024 15:27:28 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE91180A9F;
-	Wed, 26 Jun 2024 11:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3D418C350
+	for <linux-next@vger.kernel.org>; Wed, 26 Jun 2024 15:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719402637; cv=none; b=PyVavWz6h2iuLIHmV/8ntgjDdOaMPKGQQu7hsKLIbdWy+QiLXVzv6J7y7RN+wQEHz4Fpb/fqqtRud0NsFqyVN2Dlw7gCWcqihFKsLrCutzuK+8nfFrNrImxazy9+Xd8cjf/RsZkCWN3OHfZsuPxX2gX/y9ZHY06TWMFIPiQ6NE4=
+	t=1719415648; cv=none; b=b03t2HoeSm38jT+1R4tXxx425Rq3U+mFIxve3IYpeNlDM2y0ZNHC6iFY1bQjoEeJZQLrSAUvpQ0nE/zWkmcbQ0XEhKV1/zWRNgqlEfWA3sbDVeXN3GR0JkVa+rQabfo4ynJu/TKSvM6rVQz7CBs8/s6pl8OuQOfJAylHIP5sw+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719402637; c=relaxed/simple;
-	bh=SaIU/2dEnekDrk5wU+9WLeL+H51aE9uNonF6YvUiL5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YoMoC/bwvd0vHMaaTXa+VmSxYfpOHK07Tc8q8s3IiZ7z9vI5kAaDZ6PSHh7Fw7bwWXpdRZDW1GTNKuV9i5KuAB0+fm2WPba/bToEDcImhk1EbtfYB2+WHBQyNzoQKtlzTaLPh69VB5jsfTXlEku7MwXKfEUkYVSW2EL7pImZFS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=New132iK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD8DC32786;
-	Wed, 26 Jun 2024 11:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719402636;
-	bh=SaIU/2dEnekDrk5wU+9WLeL+H51aE9uNonF6YvUiL5U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=New132iK9iJBrUPriS8BqUxxVo0eBII6Cu/xNK+kGcDNw/SJLjttzSoe68O6CRtFe
-	 kaSnYW8z9OUitusGnpXBPfP+mJKZPHhgpXjpmPjBnkQoYs6ILkVqmVDvutP6FGtJEa
-	 2+/HKz5rKjFSIRvT8nhq6KnQX1gXhYJn6FEbksHA/lp8DEdYZ9m3UK+/fxkCZTui49
-	 qnpuNyWNMVtQl3AyRVkYEMZOTMuyiACADLPjB4/N9pYIbgdbbe6055J1QUDpys3n11
-	 syL/t2xOBeICtnsoNj3Bpw7RBdwvm79WGoJD5aSmO2mOIOQNjzM0r+Y/H0HKCXVyEQ
-	 eJ/HOHS2BHO+A==
-Date: Wed, 26 Jun 2024 19:36:30 +0800
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Mark Brown <broonie@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <Znv9PgzW8b7rd-Ia@xhacker>
-References: <ZnrXSitgAnCO0EG9@sirena.org.uk>
- <87sex051ib.ffs@tglx>
+	s=arc-20240116; t=1719415648; c=relaxed/simple;
+	bh=BleCr8Mhu+R2zsdCbIvZ23wKYL4W8NBBCOEQ5yWtMi8=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Yq/qUKPZLTXr1Q80tb71ky9b3mTXhDBV8p0+mYxtxV4oZeEyxg1VS7yIiI+XmNaDERhQFp22//LmYzayNNwEK9dEncj6mydqSOq3TinoxaV0U5ve9raxjQ3ZO5aruLiooDAhz7GpsT4H00Sq54bjFAAvRxiNnJip28fE1fgMmdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-7eee4ffd19eso978674139f.1
+        for <linux-next@vger.kernel.org>; Wed, 26 Jun 2024 08:27:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719415645; x=1720020445;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=muFjIliOCSevMBNmjRAbmoaEq6b90Bcb5SmnFYYXYFk=;
+        b=ii6lXK+Au1ehT6A84hFMigfFFx0gZ1wVuzDLctr/+6IyNNh/SkJNsv9eCDeKnEUj+6
+         MJJA970YwQ1IHTEI94kSKpNIpA7hOfTZngOYfiIjnBsEJEdvHRhpadhTPUzo6F255Hm2
+         qVbRLqg9CnT/WxHQYwrDWJRPyxR2S7Nv+j0lIY8onTbCBuIrBB3gjeiP3DoQImfqkAUn
+         Wr45ncv5/2X/Z9FMrftBM6wfH+2n43TrMiguQIQjFyqAk3VKQ2YKabsuljnhW/nBjx9B
+         5DPk3NNfCjOyV7xOQIQH4gPIFrzmEpQDaUVRJTKZxH4ilYkYF0u4dgKE3yTsIMbsOgyH
+         pfOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW9meGs9invcWVluLIkfrHQpq48hepK+4jHCIJyqE36VvQHO0e2TdxORCDhTof4owZK9vrDHAc15cQuOIaxDEWI79FNDOPki7cBcw==
+X-Gm-Message-State: AOJu0Yyv37RPcXpWI/YrKUmFoDIOKmCGJ1iU/bTwctJtL8ETWepEUOZb
+	fNV1AVGXn2n7XeulJV5VqbhYVXZK0Z6Pny6NZk8pgO79NkSBd5qaR4j/SzsTBt8T4t1iahr0dFE
+	F33/d1GnV+iNmkcBSj7iTgmLUelQhwQ4w/B5y1EtGM9ptTSKB4z6Ro6E=
+X-Google-Smtp-Source: AGHT+IEEOn46GmPzIxcvI3oueipDiyudUO/wN+BmtrD/3uGY/zkrVbOhscGYR+fTax/ksuVCyOi7sYIwZ+o8D7kTf2NJdceQ9R3a
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87sex051ib.ffs@tglx>
+X-Received: by 2002:a05:6602:3424:b0:7f3:80a7:9ca6 with SMTP id
+ ca18e2360f4ac-7f3a15669cdmr45293239f.3.1719415645698; Wed, 26 Jun 2024
+ 08:27:25 -0700 (PDT)
+Date: Wed, 26 Jun 2024 08:27:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c88c57061bcca691@google.com>
+Subject: [syzbot] [fs?] linux-next test error: BUG: sleeping function called
+ from invalid context in mas_alloc_nodes
+From: syzbot <syzbot+2e16d05f747636051a3e@syzkaller.appspotmail.com>
+To: brauner@kernel.org, jack@suse.cz, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com, 
+	viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jun 25, 2024 at 08:19:08PM +0200, Thomas Gleixner wrote:
-> On Tue, Jun 25 2024 at 15:42, Mark Brown wrote:
-> 
-> > Hi all,
-> >
-> > After merging the tip tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >
-> > /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c:33:25: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'dw_apb_ictl_handle_irq'
-> >    33 | static void __irq_entry dw_apb_ictl_handle_irq(struct pt_regs *regs)
+Hello,
 
-I will try to fix it. I tested arm/arm64, but didn't try x86 :(
+syzbot found the following issue on:
 
-Thanks for the information.
+HEAD commit:    0fc4bfab2cd4 Add linux-next specific files for 20240625
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11294561980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df444fac2868e4e3
+dashboard link: https://syzkaller.appspot.com/bug?extid=2e16d05f747636051a3e
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 
-> >       |                         ^~~~~~~~~~~~~~~~~~~~~~
-> > In file included from /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c:15:
-> > /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c: In function 'dw_apb_ictl_init':
-> > /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c:206:32: error: 'dw_apb_ictl_handle_irq' undeclared (first use in this function); did you mean 'dw_apb_ictl_init'?
-> >   206 |                 set_handle_irq(dw_apb_ictl_handle_irq);
-> >       |                                ^~~~~~~~~~~~~~~~~~~~~~
-> > /tmp/next/build/include/linux/irq.h:1331:23: note: in definition of macro 'set_handle_irq'
-> >  1331 |                 (void)handle_irq;               \
-> >       |                       ^~~~~~~~~~
-> > /tmp/next/build/drivers/irqchip/irq-dw-apb-ictl.c:206:32: note: each undeclared identifier is reported only once for each function it appears in
-> >   206 |                 set_handle_irq(dw_apb_ictl_handle_irq);
-> >       |                                ^~~~~~~~~~~~~~~~~~~~~~
-> > /tmp/next/build/include/linux/irq.h:1331:23: note: in definition of macro 'set_handle_irq'
-> >  1331 |                 (void)handle_irq;               \
-> >       |                       ^~~~~~~~~~
-> >
-> >
-> > Caused by commit
-> >
-> >   7cc4f309c933ec5d ("irqchip/dw-apb-ictl: Support building as module")
-> >
-> > (I think, I didn't specifically verify.)  I have used the tree from
-> > 20240624 instead.
-> 
-> It comes from irq/core. It'll be gone tomorrow.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/16d20f206142/disk-0fc4bfab.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4ced1cf03d35/vmlinux-0fc4bfab.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/68553962499b/bzImage-0fc4bfab.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2e16d05f747636051a3e@syzkaller.appspotmail.com
+
+BUG: sleeping function called from invalid context at include/linux/sched/mm.h:337
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 5093, name: udevd
+preempt_count: 1, expected: 0
+RCU nest depth: 0, expected: 0
+3 locks held by udevd/5093:
+ #0: ffff88805c08e420 (sb_writers#5){.+.+}-{0:0}, at: mnt_want_write+0x3f/0x90 fs/namespace.c:409
+ #1: ffff88807d7a5128 (&type->i_mutex_dir_key#5){++++}-{3:3}, at: inode_lock include/linux/fs.h:799 [inline]
+ #1: ffff88807d7a5128 (&type->i_mutex_dir_key#5){++++}-{3:3}, at: open_last_lookups fs/namei.c:3582 [inline]
+ #1: ffff88807d7a5128 (&type->i_mutex_dir_key#5){++++}-{3:3}, at: path_openat+0x7e9/0x35e0 fs/namei.c:3821
+ #2: ffff88807d7a4ed8 (&simple_offset_lock_class){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:351 [inline]
+ #2: ffff88807d7a4ed8 (&simple_offset_lock_class){+.+.}-{2:2}, at: mtree_alloc_cyclic+0x217/0x330 lib/maple_tree.c:6586
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 1 UID: 0 PID: 5093 Comm: udevd Tainted: G        W          6.10.0-rc5-next-20240625-syzkaller #0
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/07/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:120
+ __might_resched+0x5d4/0x780 kernel/sched/core.c:8520
+ might_alloc include/linux/sched/mm.h:337 [inline]
+ slab_pre_alloc_hook mm/slub.c:3926 [inline]
+ slab_alloc_node mm/slub.c:4017 [inline]
+ kmem_cache_alloc_noprof+0x5d/0x2a0 mm/slub.c:4044
+ mt_alloc_one lib/maple_tree.c:162 [inline]
+ mas_alloc_nodes+0x26c/0x840 lib/maple_tree.c:1242
+ mas_node_count_gfp lib/maple_tree.c:1322 [inline]
+ mas_wr_preallocate+0x4ca/0x6b0 lib/maple_tree.c:4351
+ mas_insert lib/maple_tree.c:4389 [inline]
+ mas_alloc_cyclic+0x3f7/0xae0 lib/maple_tree.c:4451
+ mtree_alloc_cyclic+0x239/0x330 lib/maple_tree.c:6587
+ simple_offset_add+0x105/0x1b0 fs/libfs.c:289
+ shmem_mknod+0xfa/0x1e0 mm/shmem.c:3438
+ lookup_open fs/namei.c:3516 [inline]
+ open_last_lookups fs/namei.c:3585 [inline]
+ path_openat+0x1aaf/0x35e0 fs/namei.c:3821
+ do_filp_open+0x235/0x490 fs/namei.c:3851
+ do_sys_openat2+0x13e/0x1d0 fs/open.c:1417
+ do_sys_open fs/open.c:1432 [inline]
+ __do_sys_openat fs/open.c:1448 [inline]
+ __se_sys_openat fs/open.c:1443 [inline]
+ __x64_sys_openat+0x247/0x2a0 fs/open.c:1443
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fd6237169a4
+Code: 24 20 48 8d 44 24 30 48 89 44 24 28 64 8b 04 25 18 00 00 00 85 c0 75 2c 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 76 60 48 8b 15 55 a4 0d 00 f7 d8 64 89 02 48 83
+RSP: 002b:00007ffd504c9180 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007fd6237169a4
+RDX: 0000000000080241 RSI: 00007ffd504c96c8 RDI: 00000000ffffff9c
+RBP: 00007ffd504c96c8 R08: 0000000
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 

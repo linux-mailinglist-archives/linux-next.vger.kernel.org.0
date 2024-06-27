@@ -1,56 +1,52 @@
-Return-Path: <linux-next+bounces-2694-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2695-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC01991ACAB
-	for <lists+linux-next@lfdr.de>; Thu, 27 Jun 2024 18:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C00791AE76
+	for <lists+linux-next@lfdr.de>; Thu, 27 Jun 2024 19:49:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2CAEFB256FF
-	for <lists+linux-next@lfdr.de>; Thu, 27 Jun 2024 16:26:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE946B231CA
+	for <lists+linux-next@lfdr.de>; Thu, 27 Jun 2024 17:49:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695A8199399;
-	Thu, 27 Jun 2024 16:26:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5391319DF95;
+	Thu, 27 Jun 2024 17:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xd/yMpP1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYWlA3na"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42459199395;
-	Thu, 27 Jun 2024 16:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D8E19DF8B;
+	Thu, 27 Jun 2024 17:48:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719505593; cv=none; b=MAui0UY4cS7eGqlfdLe1Z963GrrbvoY0ZIE8GPC8kCVYX5Wq9qqFMN7qoZePDLYnkf/ej68sutwEkkADJ1gMafFHeFKcqtJ4Qwp6J00w2OBZ3G6a0p7O6QkxYuoUiWQDiw30oh28ajlaMZPdP3uiX80nX5X7l+QiUiZiYA1eiKE=
+	t=1719510536; cv=none; b=aYAYyNdclL6QmyjIVS5aKAng17+1VcPJwXhaaSIP07vdf8nXFSfOXJ/LG2iYpZ/vLWp+uwSJm/2U6Hehn8ZPGW4ie/EIX9HExLxFXydsiMEZMpROoHvJ6wlhExKxFe4pIJhi7V/KLFEil6LLD09uRZugylh8YIi0Q7nHjRsAu1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719505593; c=relaxed/simple;
-	bh=sU1Cb0L0FCKuWzazLB1vKSGcm3JPWOspMJs1Q1aG5cs=;
+	s=arc-20240116; t=1719510536; c=relaxed/simple;
+	bh=8gVzBekE2oyh3Wr+wM9bjtLGi+3aTY8+Iej1gUuNYTI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KwVmaJ406YBLmjSBw7GQPiYoBSLmuHAdyK4uiNkJdG/m0XbuP9dThYkOvWK0CQO3i1ru5Vhls0Wxa/td69Di+MKcRG70hRaCJcHMJRcGJcWqZg4wMujET3roLuRhB+OzQAZSUrixyPFtPM4DVFJmZ2lvtX/SoLXbq+yxj4vvaN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xd/yMpP1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D5CC2BBFC;
-	Thu, 27 Jun 2024 16:26:31 +0000 (UTC)
+	 Content-Disposition; b=bJihqm8q4y0R+ljUM0W/FvtFAi/SxpIp5Op49/EM4wmBo/a38qA9myDKaj9tKOH6tZz2g+eYAjSFPdDyO3r19TUaSOPADuZft70z/KkVduQYczGwc9P2yXCj8ULLDTGY61FtjNACK57Vl9FuEDA7cVTXCZVSd3TvTFoxWOLIJM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYWlA3na; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3E5EC2BBFC;
+	Thu, 27 Jun 2024 17:48:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719505592;
-	bh=sU1Cb0L0FCKuWzazLB1vKSGcm3JPWOspMJs1Q1aG5cs=;
+	s=k20201202; t=1719510535;
+	bh=8gVzBekE2oyh3Wr+wM9bjtLGi+3aTY8+Iej1gUuNYTI=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Xd/yMpP1kRcpk/Z9V7wO9L6s8r7idpNbBIpV0lSl8Enmh+krhFIT28ZNo4+fy3eC/
-	 TuMwruJsP4gZVeSqmx2cFhzTJqiSFtimZovb3QNwY+Re50eQCKk/Av+W0urr+9eoWb
-	 a7A5pNqWWtQrk/XicjJcVwpzfbQBiij1uSr13yBRWdMJKviy7mHojy/pGmAhhW+i3a
-	 liBgQrLOvQcx89mRYsXJkUbcVsg3wMv1xGOiLBoONpfy9A4QFR1hCGrb4ZiFrz8KVl
-	 6FuowdM3D+gjFEArEEOiAq+ZuglIXguLfz9U0a9g+31L3tT/KfPztbngMWwuVJXAsv
-	 76+vW12R1q3AA==
-Date: Thu, 27 Jun 2024 17:26:28 +0100
+	b=nYWlA3naWyEy4jbCxEIqtUCy1CZvU1CtcEXb/UwnZq+wykJnE6+uWFy47eTcUj7Qz
+	 sEufNB853c6mCPWbF8HengG6rpMwBY7xeloX0G3OUVvF2ITWurEDbm4N1+GFCvJL7c
+	 +vK6EcryevJutRoMFQn3PcImhz0ZeniaiKjBdebvJje9kfuYLzpOclpIARkFgVdFwv
+	 034IQNEzxx5hGYL0DjXSJWmtqFWelWAUKqegpxiAb60WxPISSYj7Q9ltZcmRMCjXYh
+	 bJHd1i4LsVlSP05phimYeZljCMk0Zok9Q6lSEPQRk3gYFByQuLhyhYs4qy7X6wbBBO
+	 drbNaviiiTw0g==
+Date: Thu, 27 Jun 2024 18:48:52 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Lee Jones <lee@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: linux-next: manual merge of the leds-lj tree with the
- chrome-platform tree
-Message-ID: <Zn2StETOCb26F3I5@sirena.org.uk>
+To: Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Jun 27
+Message-ID: <Zn2mBPrQHe4k1TXC@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -58,77 +54,79 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Hh9JSyXiINCq6YZM"
+	protocol="application/pgp-signature"; boundary="6R/g9yWYluo+aSeQ"
 Content-Disposition: inline
 
 
---Hh9JSyXiINCq6YZM
-Content-Type: text/plain; charset=iso-8859-1
+--6R/g9yWYluo+aSeQ
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the leds-lj tree got a conflict in:
+Changes since 20240626:
 
-  MAINTAINERS
+The rpmsg tree gained a build failure, I used the version from 20240626
+instead.
 
-between commit:
+The vfs-brauner tree gained a build failure, I used the version from
+20240626 instead.
 
-  bc3e45258096f ("hwmon: add ChromeOS EC driver")
+The drm tree gained multiple conflicts with the drm-fixes tree.
 
-=66rom the chrome-platform tree and commit:
+The drm tree gained a conflict with Linus' tree.
 
-  8d6ce6f3ec9d5 ("leds: Add ChromeOS EC driver")
+The leds-lj tree gained a conflict with the chrome-platform tree.
 
-=66rom the leds-lj tree.
+Non-merge commits (relative to Linus' tree): 8127
+ 8860 files changed, 765288 insertions(+), 152271 deletions(-)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+----------------------------------------------------------------------------
 
-diff --cc MAINTAINERS
-index de839b7c4ac2a,a7deb8fa20cac..0000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -5197,14 -5135,11 +5197,19 @@@ S:	Maintaine
-  F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
-  F:	sound/soc/codecs/cros_ec_codec.*
- =20
- +CHROMEOS EC HARDWARE MONITORING
- +M:	Thomas Wei=DFschuh <thomas@weissschuh.net>
- +L:	chrome-platform@lists.linux.dev
- +L:	linux-hwmon@vger.kernel.org
- +S:	Maintained
- +F:	Documentation/hwmon/cros_ec_hwmon.rst
- +F:	drivers/hwmon/cros_ec_hwmon.c
- +
-+ CHROMEOS EC LED DRIVER
-+ M:	Thomas Wei=DFschuh <thomas@weissschuh.net>
-+ S:	Maintained
-+ F:	drivers/leds/leds-cros_ec.c
-+=20
-  CHROMEOS EC SUBDRIVERS
-  M:	Benson Leung <bleung@chromium.org>
-  R:	Guenter Roeck <groeck@chromium.org>
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
 
---Hh9JSyXiINCq6YZM
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There is also the merge.log file in the Next
+directory.  Between each merge, the tree was built with a defconfig
+for arm64, an allmodconfig for x86_64, a multi_v7_defconfig for arm
+and a native build of tools/perf.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 378 trees (counting Linus' and 106 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
+
+--6R/g9yWYluo+aSeQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ9krMACgkQJNaLcl1U
-h9DAPwf+PdxHGqQdzW8qZldQ7mjUbiEmigrLHXulGhaZVJsySdDJS53MLqGOFKOr
-qs3TTZw6mdMLsAjCV0xcKFS8/R0TcVmK8n5nmIJxx8qXAtI1DGrVbCeCBQDjAsn6
-d4HBDgtowSniQYNchdpF599hh6Jz2b+6b2swNZduEOyOiWBKMQLMICd62T6/jl5a
-xlG1ZkMQwxF74vsErHIBz3UeTXNsnO496v9Z2GePJAWz6g2MrHuH7zQaV88T8cIb
-2v+RV1chI3YBXorXd1xw8O5KSEQVb803M8PohSZOnRpBSruKYQOITCmj/jYN3G+v
-pddfvj+LPArZyFqu0ruHUWWFlM8peQ==
-=JHu7
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ9pgMACgkQJNaLcl1U
+h9BnAwf+LfsBtV8Fi/SWpoMLJltuLYyK4Cq5O1h3prZYUvjM1DX4pRDdNLkr57NU
+E8A9KIHdf8ptE3Dc1wt7df/uJdmfGtu18t1sQyQqmlpXzpgyKnAUJsBf3l52CI2s
+v1kOku3GrxktF1UyoaAm1Vku8nVWNuT4wy/bGWS/s9QBO27ZhB76bKFoRrmUKdqD
+g8K3xvksjKYIiQbpBQ4DrQRVCtaSOviaoXY8dyJukGb2PON+ede6QSaLvdqM/q0w
+f9OHByQsnFkmQUBNPCkDX9q/M+6IqUoM2jT01Qiuokuv5csU4BFwqYVNKTo1uLh0
+a3y8grm9uArLzO13A564zD8y0x9jig==
+=m0PV
 -----END PGP SIGNATURE-----
 
---Hh9JSyXiINCq6YZM--
+--6R/g9yWYluo+aSeQ--
 

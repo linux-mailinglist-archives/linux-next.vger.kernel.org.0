@@ -1,151 +1,100 @@
-Return-Path: <linux-next+bounces-2685-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2686-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A1429198D8
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jun 2024 22:16:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7252691A021
+	for <lists+linux-next@lfdr.de>; Thu, 27 Jun 2024 09:14:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 548A4282FCD
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jun 2024 20:16:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 270DA1F24773
+	for <lists+linux-next@lfdr.de>; Thu, 27 Jun 2024 07:14:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A583218FDA0;
-	Wed, 26 Jun 2024 20:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B38481AA;
+	Thu, 27 Jun 2024 07:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="1w8swe6B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LEeZNoq8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE97C19149F
-	for <linux-next@vger.kernel.org>; Wed, 26 Jun 2024 20:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A264D8B9;
+	Thu, 27 Jun 2024 07:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719433007; cv=none; b=MwxaWtd0y72PsLn+rSR5X6m/zuCTAd0FHbCUV71TCbfAJFFD89/8ffkz/aVYfRqQjTss/w8NyD1fS8T5bkH8NTsNCNFPoxfRK26b5v9I65Cz8xwH0JZs1i4Iw1pznHiQG4LUd6C/vnIBoC+G2hICCFw0KzNcq9gj1HOrNIxy+Vk=
+	t=1719472456; cv=none; b=FChjuQO6YUqAd07ZeeiqdzoytMsgaEbrOW5LyfMh+yoZs4K1gdqNmRwoguB+w41kiA2IIIL4QVBmtZYKaul4FWakzYf61KTYf5SPpGMJawPuCqoJbwQ7HrgJC+wQ2npbXQHR7UQwpk5UQqV6WhILbBGsTLPA+gYI+4Z3gUGw3f0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719433007; c=relaxed/simple;
-	bh=+yZKK2ZDLXl9id0WiMg8wP6RHuRYC1hNTZ8pcDq4PxQ=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=q6CTPIdAQcxMEWWa+G9bxRy2+tzPSUQ9nb26Pr0vhNddRBvQLt2ePoiM7tOuoDhvJuKFu4BWbkJHHn1W2eFR5rts3KzkNKGA7/xLaMnLuEVwpfleszKei0DDxyJBK6tbMFv7nS0NPvfqcuzMwhqJvVCIURAvIhrX+LY9GvRILlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=1w8swe6B; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-706a4a04891so1243027b3a.3
-        for <linux-next@vger.kernel.org>; Wed, 26 Jun 2024 13:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1719433004; x=1720037804; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=yf3B4tI+UNEBvK5CF119+uVggw9zrvw98VvVnLPizw8=;
-        b=1w8swe6BQWBHj45YBrclxFlw/6XUWGTqjSLBYfoyMbMxKVTGwkY/U1B0bmE7s3vPxr
-         cvJNQhzElMKUAtailuPSFEy4NJ9vkbTx4XbmAUHJBbLeF0IJ4nGRDd3p+ahuhzGQsCvl
-         6IlWtjJSaQW4HaX0D7cYbiwLJdvk/g+fWNPClnF053YFuQmbb317XWzFvoNe+oBxtsat
-         uFq2l8+Yd7DhjMSZN015T8z2qXJ+NqE9JIYbmbBqUPIn7E/R2yi33FN19juUQ37X//3N
-         tyaOIo7Q59YKnaNwnk6K36HnsbE1ScuC+wyrywjK+Zo+HHCAl/M0sU1z5oj/kgvncQMg
-         Jo+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719433004; x=1720037804;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yf3B4tI+UNEBvK5CF119+uVggw9zrvw98VvVnLPizw8=;
-        b=XNfX9xlmAHgwSnGwv8tZsJ67k4AeetpPm/NPZSo+LvBiqtlPKwgtsBTa4HiPPioxZa
-         GGHprKFOIoXQC75SzpEKTb7DAYOn3/lKXmNhXw+fzjiQ1wHHAuhsYGRbTv+ILEF5+Z4R
-         62I6P/s0jNEJ83S6FObTbuqRcSzrGtHRrrvGkQkLpalg45YffDKLF3DseVi4iExx8YwR
-         0jrtdlzMd3KIvPD2l6jA9McSK48xLDJhfS0ai9Vm9R/DhcygDzqhdJ9zp/p11E15MSGU
-         8QEa0nN3NK6fVCBL9WpdEVXiNIfU1/oGEWLS/uohfAIW//tGQLitlg/HOkrhjXf34M0/
-         eKBA==
-X-Gm-Message-State: AOJu0YwO3Yk4NfL2UGNInSbqrp10mAa4LeeEWAtVYLauLF9JTfXNUatQ
-	V6ovmxu4lCT5MIyCM5WFFfkauLNCAgh6ttb5yemQIYznw7oZMHxeLQocdLdwqZR/MIiAA603+ge
-	9
-X-Google-Smtp-Source: AGHT+IETdeMWOccbZqNBNz3bnFU/Ry2mzmpWEh+Y5sTVwKDa1VIdi2VAhbObNc+1fpc9fvEPg18g8w==
-X-Received: by 2002:a05:6a00:89:b0:705:c860:13c with SMTP id d2e1a72fcca58-7067105f4dbmr10212822b3a.34.1719433004362;
-        Wed, 26 Jun 2024 13:16:44 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70678827659sm6904938b3a.7.2024.06.26.13.16.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jun 2024 13:16:43 -0700 (PDT)
-Message-ID: <667c772b.050a0220.848dc.4a69@mx.google.com>
-Date: Wed, 26 Jun 2024 13:16:43 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1719472456; c=relaxed/simple;
+	bh=heO+CZ9nver405szEFaA0YnWPRyUevAoU0f9yFseYgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tw1pJv2YaBzJXpum/TO8aV8N90XzcAKkYnoNZZyBB0poxTT09jmI8BgLb9nd6Oorz0suLBHz88AUkJ0PzJW+6d2SXunH4J8ZzMnsfepqanWN9tFeKy2DKcGJoJz8h7JH1Rwa8PCTjLXziX6+VLH93Kka7mR3wdiUFkbFyRdg6ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LEeZNoq8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB8FC2BBFC;
+	Thu, 27 Jun 2024 07:14:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719472455;
+	bh=heO+CZ9nver405szEFaA0YnWPRyUevAoU0f9yFseYgk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LEeZNoq8B5DHK64YBtURZYLowmWNjZI8Vziu2frq0t+7j0v3Nh9CHz2o0CM3B8/yD
+	 uNJWUqVBuryBm7Y+8TqQTPP7MJHkVXFsRV8f9aZmddUcWViRIgMyssJFWe+nCQpxsN
+	 LJygEWRUmQxN4WX6w5WjYfzKALxZQirliNfttoM3aZMDvJnpp7tJ+ovR2YStIkqbvi
+	 nunRziwlMIQ8Vx/jeLF+MkqCTpWY+JEKrA20TA8PeejqJwCXssjeGe/dgrATFw+3GT
+	 OGMncN2TmasNDz5cbXvvLC0rU2ypaY/2pQyDbaCYrRcnEvEBcopKqalBw1QoypjRns
+	 iElluEN5NVaVA==
+Date: Thu, 27 Jun 2024 09:14:09 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Thinker Li <thinker.li@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <pe5rcpwxdb7rrnpdifpenjavfnhmtjekd5wdtq27nn4lqz377g@pox5yp25ukli>
+References: <ZnB9X1Jj6c04ufC0@sirena.org.uk>
+ <CAFVMQ6R8ZZE+9jWM1vhEuz2PsLyCgKhpaVD377TKEu4AfGO_iA@mail.gmail.com>
+ <ud5j6hbozgg6em43volidpffykdtd2lpf32etmdiyksorl2cb4@whtseaibw2xw>
+ <CAADnVQ+cJ5bga7tX9BSTC150CgXM8KQT+Z21zYE-VY-8fts6kg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc5-290-g7c636c256db1
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 77 runs,
- 1 regressions (v6.10-rc5-290-g7c636c256db1)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ+cJ5bga7tX9BSTC150CgXM8KQT+Z21zYE-VY-8fts6kg@mail.gmail.com>
 
-next/pending-fixes baseline: 77 runs, 1 regressions (v6.10-rc5-290-g7c636c2=
-56db1)
+On Jun 25 2024, Alexei Starovoitov wrote:
+> On Tue, Jun 25, 2024 at 8:54 AM Benjamin Tissoires <bentiss@kernel.org> wrote:
+> >
+> > On Jun 24 2024, Thinker Li wrote:
+> > > Hi Mark,
+> > >
+> > > I'm sorry for not getting back to you sooner. I have been traveling
+> > > since my last message.
+> > > I guess this patch is for the HID tree. The changes in this patch are great.
+> >
+> > Ok, thanks for the review. However, the need appears because there is a
+> > conflicting update in the bpf tree.
+> >
+> > May I ask the bpf maintainers (Daniel/Alexei/Andrii) for an immutable
+> > tag I could merge to so I can take this patch from Mark?
+> 
+> I'm not sure how that would look like.
+> imo conflict is minor enough.
+> When net-next/bpf-next lands in the upcoming merge window
+> just provide Mark's patch as a conflict resolution suggestion
+> in the cover letter of hid PR ?
 
-Regressions Summary
--------------------
+I guess I can also wait for the bpf PR to come in, merge with it and add
+Mark's patch at that time. It's not so much of a conflict but 2
+independant changes in 2 different trees.
 
-platform   | arch | lab          | compiler | defconfig          | regressi=
-ons
------------+------+--------------+----------+--------------------+---------=
----
-jetson-tk1 | arm  | lab-baylibre | gcc-10   | multi_v7_defconfig | 1       =
-   =
+Anyway, we'll figure it out when we need :)
 
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.10-rc5-290-g7c636c256db1/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.10-rc5-290-g7c636c256db1
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      7c636c256db1ec9afd69b731e0a777980d14f346 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform   | arch | lab          | compiler | defconfig          | regressi=
-ons
------------+------+--------------+----------+--------------------+---------=
----
-jetson-tk1 | arm  | lab-baylibre | gcc-10   | multi_v7_defconfig | 1       =
-   =
-
-
-  Details:     https://kernelci.org/test/plan/id/667c467db80fc73adf7e7075
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.10-rc5-2=
-90-g7c636c256db1/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson=
--tk1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.10-rc5-2=
-90-g7c636c256db1/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson=
--tk1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/667c467db80fc73adf7e7=
-076
-        failing since 8 days (last pass: v6.3-10703-gb3f869e79cdf0, first f=
-ail: v6.10-rc4-262-g1ce98b2c2d5b0) =
-
- =20
+Cheers,
+Benjamin
 

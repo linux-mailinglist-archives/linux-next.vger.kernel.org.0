@@ -1,57 +1,52 @@
-Return-Path: <linux-next+bounces-2713-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2714-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA65491C6D2
-	for <lists+linux-next@lfdr.de>; Fri, 28 Jun 2024 21:46:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9342091C739
+	for <lists+linux-next@lfdr.de>; Fri, 28 Jun 2024 22:17:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28B491C23D09
-	for <lists+linux-next@lfdr.de>; Fri, 28 Jun 2024 19:46:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43BB9281CFB
+	for <lists+linux-next@lfdr.de>; Fri, 28 Jun 2024 20:17:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 576257347F;
-	Fri, 28 Jun 2024 19:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B8765381A;
+	Fri, 28 Jun 2024 20:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJtwbgav"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJUBETHI"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303BC4CB37;
-	Fri, 28 Jun 2024 19:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1F450249;
+	Fri, 28 Jun 2024 20:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719604014; cv=none; b=e/z2KMN/w4Sw++SMm2YxaPOEPezcXNEW0ubME3QSE+gD4FjVab3ROhYxTlyxaMz2/jy0/90ohiPaHJAWkNvQOy038TdTohcqt79lMjnrHU7x0Gur83MHL+MQ94x2zQYw/c9Dkv9oXTJ/UQZ09jUqvNLrr702rTPUIFBWqsjA8Kw=
+	t=1719605796; cv=none; b=T80HGxaLgtP62bVsydAUaGssXf0L8NDBFB6zPnI6JvYg9BMAvAm0Lfw0Av0LZmzLIRkP9xNIt3suD5gyvm8Ov2aRtQKOBjSDNluX6BfZNHWips6TTc5T4IsGpzXRUCqLBFW0RQPwlH7Xcyl72e72zuhKTPy+cWVsUavvhcFbxoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719604014; c=relaxed/simple;
-	bh=+syI8ijwYmrqQlbVFajTNcRb+OqZfCEeB1u14NJ78G0=;
+	s=arc-20240116; t=1719605796; c=relaxed/simple;
+	bh=+hjZmy+i/jia3KZUtnP6na3L9fbAC7hhffAvdTALoqw=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=F4QdGezTMtV7Kds5xj0eZzpU75B9GT5U+xksYZ7oBGMuBNgEu4EvdcjD2NpkQ1sl2a7H7bAQ1I1wfMOcvOR+U57vlIjFgZMJS+9gZdCQ3wxsNsW/+h9s9UJzX2l/OMLgPTZpIfIMsnZEANsCYlaQu+FfsENIBX0WaVt+pQ7XojI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJtwbgav; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08962C116B1;
-	Fri, 28 Jun 2024 19:46:51 +0000 (UTC)
+	 Content-Disposition; b=ZyH+364CS+dIDHOSc/Ewp40+biy9QcDKDs1frs/1QqVWJJOm0Cy2NIONXVaVdqCxnrAcWjhCHUYwQ8/myp9Z+QGJuRsnLCkiZPEmefQNu5oVzQDRogHzsF/mUEa8XLjrQ95VXhD07382nVS86qIXmyMcu/83VY9swEd481nTQU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJUBETHI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03119C116B1;
+	Fri, 28 Jun 2024 20:16:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719604013;
-	bh=+syI8ijwYmrqQlbVFajTNcRb+OqZfCEeB1u14NJ78G0=;
+	s=k20201202; t=1719605795;
+	bh=+hjZmy+i/jia3KZUtnP6na3L9fbAC7hhffAvdTALoqw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=TJtwbgav4SWb7bu/RMe6DsFxBShaD+RtKQsvT/1Zv3vRpvCITmquL4Uo6L1LHbgnK
-	 YTNAZeaWzFS1RrerAE7NSxVq9iZeU/GWLYWe0iskMq+NRexMNresNSW+26HXm0yMpt
-	 /18yVY3+dz8Jw+GiwPo4rXsYIixFwgE6WZKh9DBZH5giYQOydg1TAmQAzYCWgxC3i1
-	 l8WAUpZfg6R1YwnIIy6ljw7QjQCCWnys3lc9ImW/o7Ael512kmxtFakjYNWDZXMXgq
-	 K1R0VNZWSYuX4vK7eN/JV9fRvORUqAbr/+6pKdyvJmyP+eYfT1GJuo5B97hHQuSexp
-	 uLcXHAd1Sw9/g==
-Date: Fri, 28 Jun 2024 20:46:49 +0100
+	b=VJUBETHI6mmuvFLtAZuoA9q3idnwXYL725TsMJa3ENC/fl56m0feHGifpqC/kTmo2
+	 Zz6v0JG7Yviq6GQGi2SYtRIEfhyTY7cDenLXRpLZI24Ww7iVG8nrOF3curc5FmGa+w
+	 zpKKYlAEYMd0+B9iMNRPHx+VHl84GG6pPDtcUwZjm+NA9ysfXFMcUQtyxJbWrt5rs8
+	 /V67qxBrKYmmdOTyJX34155fF8soa9Xzzq87zjdCorZ3LQ3quhOpjd8HKO4H30vBV3
+	 PU4BUfF8Qhnr/LvAJoQHd9pADBNTTS93QN3BX3Vp3ylmDuom31WTNOI0bgGGXaWqkG
+	 GQwlPMx1t04oA==
+Date: Fri, 28 Jun 2024 21:16:32 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-	Yannick Fertre <yannick.fertre@foss.st.com>,
-	Philippe Cornu <philippe.cornu@foss.st.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm tree
-Message-ID: <Zn8TKYDCOCtbbNH8@sirena.org.uk>
+To: Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Jun 28
+Message-ID: <Zn8aIDP2A-EBbZaa@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -59,90 +54,85 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="f/G9OlavzYhgk78r"
+	protocol="application/pgp-signature"; boundary="GtAAJVELQfreE8oB"
 Content-Disposition: inline
 
 
---f/G9OlavzYhgk78r
+--GtAAJVELQfreE8oB
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the drm tree and then some other trees which seem to have
-allowed the driver to be built much later in the merge process today's
-linux-next build (x86_64 allmodconfig) failed like this:
+Stephen should be back on Monday so normal service restored.
 
-/tmp/next/build/drivers/gpu/drm/stm/lvds.c:1212:19: error: initialization o=
-f 'void (*)(struct platform_device *)' from incompatible pointer type 'int =
-(*)(struct platform_device *)' [-Werror=3Dincompatible-pointer-types]
- 1212 |         .remove =3D lvds_remove,
-      |                   ^~~~~~~~~~~
-/tmp/next/build/drivers/gpu/drm/stm/lvds.c:1212:19: note: (near initializat=
-ion for 'lvds_platform_driver.<anonymous>.remove')
+Changes since 20240627:
 
-Caused by commit
+The risc-v tree gained a conflcit with the risc-v-fixes tree.
 
-  6597efcfc53585d5 ("drm/stm: Allow build with COMPILE_TEST=3Dy")
+The btrfs tree gained multiple conflicts with the fs-current tree.
 
-interacting with
+The drm tree gained a conflict with Linus' tree.
 
-  aca1cbc1c9860e39 ("drm/stm: lvds: add new STM32 LVDS Display Interface Tr=
-ansmitter driver")
-  0edb555a65d1ef04 ("platform: Make platform_driver::remove() return void")
+The drm tree gained a build failure, I used the version from 20240627
+instead.
 
-I have applied the below fixup patch.
+The block tree gained multiple conflicts with the vfs-brauner tree.
 
-=46rom 59a5e11f41e93512ca1a5aed36c1c396d175797d Mon Sep 17 00:00:00 2001
-=46rom: Mark Brown <broonie@kernel.org>
-Date: Fri, 28 Jun 2024 20:45:16 +0100
-Subject: [PATCH] drm: Fix up STM LVDS driver for void remove() conversion
+The kvm-riscv tree gained a conflict with the perf tree.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/gpu/drm/stm/lvds.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+The drm tree gained a build failure due to an interacton with the
+driver-core tree for which I applied a fixup.
 
-diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-index bfc8cb13fbc5c..2fa2c81784e97 100644
---- a/drivers/gpu/drm/stm/lvds.c
-+++ b/drivers/gpu/drm/stm/lvds.c
-@@ -1186,15 +1186,13 @@ static int lvds_probe(struct platform_device *pdev)
- 	return ret;
- }
-=20
--static int lvds_remove(struct platform_device *pdev)
-+static void lvds_remove(struct platform_device *pdev)
- {
- 	struct stm_lvds *lvds =3D platform_get_drvdata(pdev);
-=20
- 	lvds_pixel_clk_unregister(lvds);
-=20
- 	drm_bridge_remove(&lvds->lvds_bridge);
--
--	return 0;
- }
-=20
- static const struct of_device_id lvds_dt_ids[] =3D {
---=20
-2.39.2
+Non-merge commits (relative to Linus' tree): 8590
+ 9252 files changed, 783165 insertions(+), 159592 deletions(-)
 
+----------------------------------------------------------------------------
 
---f/G9OlavzYhgk78r
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There is also the merge.log file in the Next
+directory.  Between each merge, the tree was built with a defconfig
+for arm64, an allmodconfig for x86_64, a multi_v7_defconfig for arm
+and a native build of tools/perf.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 378 trees (counting Linus' and 106 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
+
+--GtAAJVELQfreE8oB
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ/EygACgkQJNaLcl1U
-h9Dg9Af/YMVO1Lly6BdV05v0ivZ1USdvVJBnKSsyw9PjNdv2EJxmwZaeRdzaknnk
-8pfPTCR4STWZVhgzHaoKGwdOJotO2W7rGEsKSbx6N2ivLoUjqHOZQ6Nb7FZXj5v9
-O+P5EXUIQlaUY3LdFMh/4GI6suqI2E4WL6TXPZdjIerow3J9+vAQhfce7NqkwHFM
-Bo7PXw81tCTWP34zHOhyHDDoMsDDcxZwkrMbT02b/GHHNGM+h5sEbNo+dmibElEO
-DgEetM1K14MaT47S5PuHYpp7GSA9PTEcjJnLhRzOtVd9clybG4BQ9LkcuNQu+9iH
-G/kjrvP0p22zNpg/KNneN+Li6aZa/A==
-=CEG2
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ/Gh8ACgkQJNaLcl1U
+h9DGCwf/TmWrPzKQDBfhihxbIXYh37GXlciDBwkhG6BHuZn+vX/pWZ4uYWHcCoqW
+UaxNc77ZhIeUTRegDBiG8zqTPaoD17fYhAliFeYwInlETkLtNFFFYenqEvgDYd9B
+3XrKGFi7NetLMcO/k2o3TdbJf1+dLZrcIV5xtg6x7TS/+G56rwVuKCv2nF5L9kCZ
+Wmh/p+b/xzSxbORhwtoi03tshNl9N8+G54H34teBfJrnswqKfL4B5ktkX7e3j8Mg
+NYpqkgzGpeS1FOmOIbveAL2IUsJuah6a/gHStwP74UaGDL2iszWEFvzoi1Gg/pbb
+MuJ5tZoyCoOxzTT7wRL6zIPYktikIg==
+=rOpE
 -----END PGP SIGNATURE-----
 
---f/G9OlavzYhgk78r--
+--GtAAJVELQfreE8oB--
 

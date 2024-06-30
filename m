@@ -1,75 +1,98 @@
-Return-Path: <linux-next+bounces-2721-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2722-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7CDE91D4AA
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 00:48:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D80291D4AF
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 01:09:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DA51281011
-	for <lists+linux-next@lfdr.de>; Sun, 30 Jun 2024 22:48:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E28B6B20CD8
+	for <lists+linux-next@lfdr.de>; Sun, 30 Jun 2024 23:09:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B339677119;
-	Sun, 30 Jun 2024 22:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DDDD3D388;
+	Sun, 30 Jun 2024 23:09:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JsKmgDkC"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Tevq+fg1"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E7274047;
-	Sun, 30 Jun 2024 22:47:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A82D45C18;
+	Sun, 30 Jun 2024 23:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719787679; cv=none; b=Y51dJPvlF9qUV2vYEhCN/gM6N1+PHV4ZAhM007cDeJvN2ncEHyaqZ4fhc4izO9MkFfma2LNnYPkWs06I/qtCebltztIGX5NDMxODaX3HmnuCT/Kkqkb3X1r4yCtjfjt8+CenSFp54OLcoBLjlo6imJyB1Zt06/V93lsfa6HH3is=
+	t=1719788961; cv=none; b=Cyn9c3bKrQmKKwwcz0ZGZQR0T7s15qJYn7M6Xx03JiuNUVydA/rzpBZ1g4x3u4BHhGX4o0aycPHQcBYWILQ22DRpcgXmszM4GJM5xJrlqrFbigBqGVj989i4CzNkT6jLzudm9Aqhs+t5LZtKZtqPdSFdnfWZF+6J93RHIJs02kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719787679; c=relaxed/simple;
-	bh=RIC6lDHSzZtXB+D7SloinnSD1l7Tk7yMuJN2fdG+AnA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BOZzmkLXbvTgcVRjnWkEw+yLNYxivTNPsc076NFOBobFFS3tZjrtjCu48/z6y1pZvvdqnCAefQyGcGKCMYrN7sqoXgvyiRBp+Ex0gg7o0Z1dcfcIq4Shao61sYv/lvSXqUauutwdJBvrCGUvBz6Zc4iwktyQMp8kLkiz6DdlRl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JsKmgDkC; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=0MRFLh85YS1Qw0yjRTcIq2eP7WQdtKPZJO85E9hAJFU=; b=JsKmgDkC4v+xIpHl23pfRrlpDC
-	XbqGJq50HJ3xZM8acYsae1kKCm33ZxdSYY14zp7MuflWzTatkujKKBEQI/rqNun8F+I8BQB4dF2S8
-	yzBVFbojyt79DaL6oCG1zHEqnuf3DJmCn5k1v+vRkmreWT7cyPSzw0NXdYw5Nm/eP22QKwWq0Fhxn
-	FTCTjWgJDHlOPtz91CGrQ4+mQbAJAgq+ecnmWPUHXtbow1Nw8Cj/LRVHUVLMhKw/DHlIzDoq5xNof
-	RnqQ1roqlJO5++uTFnow0erNz60YMR9EggQYfJAv2tvOmcB3qkf1otkB+MeswnjcOnfsW9jdXbeA5
-	HNumMMPA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sO3Kv-00000001B8l-2Lok;
-	Sun, 30 Jun 2024 22:47:57 +0000
-Date: Sun, 30 Jun 2024 15:47:57 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: bugzilla-daemon@kernel.org
-Cc: kvm@vger.kernel.org, kdevops@lists.linux.dev,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [Bug 218980] New: [VM boot] Guest Kernel hit BUG: kernel NULL
- pointer dereference, address: 0000000000000010 and WARNING: CPU: 0 PID: 218
- at arch/x86/kernel/fpu/core.c:57 x86_task_fpu+0x17/0x20
-Message-ID: <ZoHgnfJpBekFoCkF@bombadil.infradead.org>
-References: <bug-218980-28872@https.bugzilla.kernel.org/>
- <ZoHaVmNbFGcejSjK@bombadil.infradead.org>
+	s=arc-20240116; t=1719788961; c=relaxed/simple;
+	bh=oJUvNd8+Erzk7yzDx40vkFWIXQ+1rv/mENLB2vpcpEc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=qEGT1kq7O9QQDovwrporJ06j+UVa912Mgsc6kkelWerh1KmgRtE8AblVnNEiO3HfPz06D4hOntL6CDNCDOw9zAGNKZ2Fc5KdVlVKDggTy55SXP7kalGh6ooqh26pkF4qOYTM8mDppgN/wLN1ndH1A3TwRnq9AdVyMt1/mn766eM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Tevq+fg1; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1719788955;
+	bh=+gIHKdQRK5Z4MWlbiZxnXGJUYKXbMvf1z3fPt2s7qOE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Tevq+fg1TAwfR2U7UV54qWSwbWQFFX/D+FjNY3a1VPQChc63PeV9nsYQCXXI/RATP
+	 /Zskj7bTyGBlkAc47QoOsmlA316ZiZkeZxp4IbSb/SRU7oZMoWcyCzzuYWFeD0eeOu
+	 0SQS7+ua5GoPlxTCO7LdVSr0XaAmFconERogBwcSA86Ukrvptrc7dZq3N7bcv1tldc
+	 FTUvdPy388NiEKwFuNxks9Gj+TY4Kjm3EYwd8LBPs6MkCBmUq0IYQ02lRG6tiHF42s
+	 MF0rQNpWmnOHenaGObsSeXkeRDK4sRlo1nOJLAELsTJZSmGqN8y3+d6NKtc95FS5Ck
+	 KEyv+/Ey4ksng==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WC4cV6XQfz4wnr;
+	Mon,  1 Jul 2024 09:09:14 +1000 (AEST)
+Date: Mon, 1 Jul 2024 09:09:13 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the ntfs3 tree
+Message-ID: <20240701090913.2348f098@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZoHaVmNbFGcejSjK@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/CnYfNz6V0O0G_Q=++ulTpMi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Sun, Jun 30, 2024 at 03:21:10PM -0700, Luis Chamberlain wrote:
->   [   16.785424]  ? fpstate_free+0x5/0x30
+--Sig_/CnYfNz6V0O0G_Q=++ulTpMi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Bisecting leads so far to next-20240619 as good and next-20240624 as bad.
+Hi all,
 
-  Luis
+Commit
+
+  76a65ae141a2 ("fs/ntfs3: Fix the format of the "nocase" mount option")
+
+is missing a Signed-off-by from its author and committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/CnYfNz6V0O0G_Q=++ulTpMi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaB5ZoACgkQAVBC80lX
+0GxcJwf/b6taKWXHr07BRr1sHHmxyrNSOt3ow7PQWQsKgOTJV+0W2m5DtLijs0+3
+w16RGueX2nT2DHXANj6juAPZL6ubVLLFF7KJKuDo0WTf5q2rq/6kZ7Np239Nh552
+3JvJELCufsQ+/UO2EouJqCkrNUlf24mJ6fneBFCczf36KB4EUpSWC+VGrRBW8BSS
+3/XatLwJR6tSanjTL7t2gL6kL9W93wva7QZu8PHEJ9Px8KiN40rmwf1N8j+vmbAX
+M2hWLTpT05RyCPo8cCoRmYt4CpEvRsGnxeGaLHwv2QgGszGSSCJfsE8cXHnc+BFt
+x2PeRKomWv4tKusJ69OmN72XwngMKw==
+=rlT6
+-----END PGP SIGNATURE-----
+
+--Sig_/CnYfNz6V0O0G_Q=++ulTpMi--
 

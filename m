@@ -1,150 +1,138 @@
-Return-Path: <linux-next+bounces-2763-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2764-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16C2A91DC17
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 12:09:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C04C991DCD6
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 12:36:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5110281E86
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 10:09:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CFF7B2181B
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 10:36:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4979285956;
-	Mon,  1 Jul 2024 10:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6FD112F365;
+	Mon,  1 Jul 2024 10:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l7QwhlzY"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="cZc8hfSy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E41412BF32;
-	Mon,  1 Jul 2024 10:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3BC12D1FF;
+	Mon,  1 Jul 2024 10:35:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719828538; cv=none; b=u8gYvXrS7/91zTn6fiq4Q7LggCgk4vU2oJXTLcB3B+CyPOZD1+jWphdP55jm/xLdjowBtyrrArC2cgB1se0kXyLefoZlVB51nhZUB7lXFp2iRj/AFI+7JJLYDLasakXEXwwAom2h9su67v4i3c7pkj5DDGzHXQF4raqtKEn0ZiA=
+	t=1719830113; cv=none; b=ZKA39wVLzoD46fvW1vkmEYfZpeIWYsX2HS/Z1EQj8BB6ijyK/18LFDyixrGzTUr7V+sA20Itti3LiUp5StjoJurQ/cT2cTBDLEmzVksdSkkSMElp5xifkfH/jSoBAP8D5L0J8E5d4gpomjlxWCURhlP+rFQR3JJQ31bhgH5EvrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719828538; c=relaxed/simple;
-	bh=jH3nearMFaAQlRhm+ugZS+3bjSfLjOJPX+r7dcSWXuM=;
+	s=arc-20240116; t=1719830113; c=relaxed/simple;
+	bh=Mmz+2dx5cpVS5YtvtPwVx6XaqDt1igMuihlv6awjfdE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r70D9LjTaicX3OJqGDtQSaY23BFynTDj9W5Mva2OLFWq0RAfv5bnmmHKKIzHeIBsuD3FpCZNMNmlO+Bpu5UqcF/NNIbUZIpkGE9zAnz3007VqUEZHbnuudiuLo0YM4C/6ZxBumBEsRTcDXSqhDzloR4c8IC5F9a2YJ7wOEg9AkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l7QwhlzY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20C37C116B1;
-	Mon,  1 Jul 2024 10:08:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719828537;
-	bh=jH3nearMFaAQlRhm+ugZS+3bjSfLjOJPX+r7dcSWXuM=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=JkV/Z3hgGcn9jPz6buiL8pdLOsF0vAhzlMLifPyV67IZNc/1Zmymcj+wdsWwsp/nuHJpixISzvGZmJvtGBbyzimtWl+nnZHDWkyJ06fblBPR9DhqeBzRbMmsXvj5IdQ7x06SHWwXhKUaqFXNPQ9bEZCGyizVjAl/H3blgmCIgdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=cZc8hfSy; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E633E40E0185;
+	Mon,  1 Jul 2024 10:35:08 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id dwLZEh2YD_WK; Mon,  1 Jul 2024 10:35:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1719830104; bh=NOuFjr/UlbKkvyJRgO/cJCw8YFOCfJg3myNEK+D6AQE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l7QwhlzYmn5KN8z7OP0jBE/CimXzbBKWObFyuQAEkcdTdgfIoHwmbutcDW4QocKfc
-	 pls+raO8TxJdqu4mALYSqwhFeCFdgwBULoaf86ySStXqJtJJ80I0CQeslqPs6kIDAu
-	 c4tlIGEcVRgZ8euR4ZZqS/+DXWlxJWZnB6lO4DjWLzN7ZNNqTCjvK2zS+AhEbcSqhP
-	 /ILKBL2pLpPh8cckYr7l7txhpoarsQDELzwl2sBbGNbznFareoihFxb8HkOH3DRciX
-	 To13StKSg65vbY3+x8jL4gvuMTqm13e7iiP4tzZzZSW2EDr0kUyyOHsUGEisJzCgRX
-	 +C68+twjUjcVg==
-Date: Mon, 1 Jul 2024 19:08:53 +0900
-From: William Breathitt Gray <wbg@kernel.org>
-To: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Nishanth Menon <nm@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Santosh Shilimkar <ssantosh@kernel.org>, Judith Mendez <jm@ti.com>,
+	b=cZc8hfSygYueR24ymG5pqUJlSGGvNAW1ZVz5gtbvmGD5ZJ31KThUWiv/hOHEnm0mI
+	 VJY2+xX7iIPlEhYJsKmYhuAmo3KWmPHrJdvIIHU005m/VezRpeUF2u8aQjDtA0RPI7
+	 hsrfeav0VbUI6e6KaZyKwLW1+Bgd//EUL51GE4+SGgSf1+Hwem7fk5VCZyUVr48n93
+	 AQ0cr3J/LTXa21zq17sX+MCeqa/3dRKaWfqVR1XGiTI25zROHox9oTXaLj6OCJvzoX
+	 L7r8BpzOM5jqy5p2qNBGeiJp0LToakLt0L8tVJXZrUOnWUJxv5ocUR2z05T9pHyRfc
+	 9L308lRT23dR9Y812ZRETBFkXcAjqUv/Y8wYQaJMrlYnE2VCuJ+cH9Kfa7juy6yy/A
+	 vU3umSR4/IORLICozOuqch/OqpO1QXQa3TXw+qvmKOS8zdI7+YmTLFM7ts3MInpv9u
+	 w/HEEpPcLJvAc5OfnMIfengLTd8D+W8EP/IHMh0QDCeCbbxeymtYg/V3BoAPOnq/nX
+	 ewEO0f3ibpqb2Kajz8kEI0pBnea0T5RPZBmu9QxKWPTqQAhMKaFeMQnvH33vx4nLUA
+	 CI4x7vrm8nvaIM/HDQ4j3KGqYbGBHMbS02VCWrkzCQuhcsVYuIZq2a462RjLZw3ete
+	 jOaov9OgMF16R7uls9iZEOOg=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A22A240E019D;
+	Mon,  1 Jul 2024 10:34:56 +0000 (UTC)
+Date: Mon, 1 Jul 2024 12:34:51 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Siddharth Vadapalli <s-vadapalli@ti.com>
-Subject: Re: linux-next: manual merge of the counter-next tree with the ti
- tree
-Message-ID: <ZoKANeudCKsjjYDQ@ishi>
-References: <20240701163749.1cb88c8b@canb.auug.org.au>
- <d595b624-ef18-4aac-ab2c-bd36a8c4de3d@ti.com>
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] Documentation/ABI/configfs-tsm: Fix an unexpected
+ indentation silly
+Message-ID: <20240701103451.GDZoKGS5klAmgmXI6s@fat_crate.local>
+References: <20240701184557.4735ca3d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nnREai9O/od+bX6T"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d595b624-ef18-4aac-ab2c-bd36a8c4de3d@ti.com>
+In-Reply-To: <20240701184557.4735ca3d@canb.auug.org.au>
 
+On Mon, Jul 01, 2024 at 06:45:57PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the tip tree, today's linux-next build (htmldocs) produced
+> this warning:
+> 
+> Documentation/ABI/testing/configfs-tsm:97: ERROR: Unexpected indentation.
+> 
+> Introduced by commit
+> 
+>   627dc671518b ("x86/sev: Extend the config-fs attestation support for an SVSM")
 
---nnREai9O/od+bX6T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+---
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-On Mon, Jul 01, 2024 at 12:58:28PM +0530, Vignesh Raghavendra wrote:
-> Hi Will,
->=20
-> On 01/07/24 12:07, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Today's linux-next merge of the counter-next tree got a conflict in:
-> >=20
-> >   arch/arm64/boot/dts/ti/k3-am62p-main.dtsi
-> >=20
-> > between commits:
-> >=20
-> >   3ad6579f106d ("arm64: dts: ti: am62p: Rename am62p-{}.dtsi to am62p-j=
-722s-common-{}.dtsi")
-> >   77044cfb9346 ("arm64: dts: ti: k3-am62p-j722s: Move AM62P specific US=
-B1 to am62p-main.dtsi")
-> >   ed07d82f9e3e ("arm64: dts: ti: k3-am62p-j722s: Move SoC-specific node=
- properties")
-> >   84935117f25f ("arm64: dts: ti: k3-am62p: Add gpio-ranges properties")
-> >=20
-> > from the ti tree and commit:
-> >=20
-> >   131eaf47c4c5 ("arm64: dts: ti: k3-am62p-main: Add eQEP nodes")
->=20
-> Could you please drop from your tree "arm64: dts: ti: .." patches, these =
-need to go via TI SoC/arm64 tree.=20
->=20
-> In particular
->=20
-> 7fb9d8854fcf(Judith Mendez)6 hours ago  arm64: dts: ti: k3-am64x-sk: Enab=
-le eQEP
-> afdfe6439a6d(Judith Mendez)6 hours ago  arm64: dts: ti: k3-am64-main: Add=
- eQEP nodes
-> 131eaf47c4c5(Judith Mendez)6 hours ago  arm64: dts: ti: k3-am62p-main: Ad=
-d eQEP nodes
-> ba5a251b1d53(Judith Mendez)6 hours ago  arm64: dts: ti: k3-am62a-main: Ad=
-d eQEP nodes
-> e2e1fce199b0(Judith Mendez)6 hours ago  arm64: dts: ti: k3-am62-main: Add=
- eQEP nodes
->=20
-> Thanks!
->=20
-> >=20
-> > from the counter-next tree.
-> >=20
-> > I don't know how to fix this up, so I just dropped the latter chanhd
-> > for now.
-> >=20
->=20
->=20
-> --=20
-> Regards
-> Vignesh
+Fix:
 
-Hi Vignesh,
+  Documentation/ABI/testing/configfs-tsm:97: ERROR: Unexpected indentation
 
-I have now dropped the "arm64: dts: ti: ..." patches from my
-counter-next tree, I retained just the counter patches.
+when building htmldocs with sphinx. I can't say I'm loving those rigid
+sphinx rules but whatever, make it shut up.
 
-Thanks,
+Fixes: 627dc671518b ("x86/sev: Extend the config-fs attestation support for an SVSM")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20240701184557.4735ca3d@canb.auug.org.au
+---
+ Documentation/ABI/testing/configfs-tsm | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-William Breathitt Gray
+diff --git a/Documentation/ABI/testing/configfs-tsm b/Documentation/ABI/testing/configfs-tsm
+index 1db2008f25f9..534408bc1408 100644
+--- a/Documentation/ABI/testing/configfs-tsm
++++ b/Documentation/ABI/testing/configfs-tsm
+@@ -103,8 +103,7 @@ Description:
+ 		provider for TVMs, like SEV-SNP running under an SVSM.
+ 		Specifying the service provider via this attribute will create
+ 		an attestation report as specified by the service provider.
+-		Currently supported service-providers are:
+-			svsm
++		The only currently supported service provider is "svsm".
+ 
+ 		For the "svsm" service provider, see the Secure VM Service Module
+ 		for SEV-SNP Guests v1.00 Section 7. For the doc, search for
+-- 
+2.43.0
 
---nnREai9O/od+bX6T
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Regards/Gruss,
+    Boris.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZoKANQAKCRC1SFbKvhIj
-K1jgAQCAqfAEjD9q5+cUSla7wIXytQE8E3rqtODn5ITHc+ImlAD/ZOl6Qoipad8I
-FObVp6vumXMNs7gV8clo8HyJcs/cVg4=
-=IFSD
------END PGP SIGNATURE-----
-
---nnREai9O/od+bX6T--
+https://people.kernel.org/tglx/notes-about-netiquette
 

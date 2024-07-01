@@ -1,104 +1,138 @@
-Return-Path: <linux-next+bounces-2755-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2756-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D05A391DB0F
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 11:08:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EE1891DB2F
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 11:13:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D0A51C20E83
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 09:08:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CEF9B25BF8
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 09:13:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4118184DE9;
-	Mon,  1 Jul 2024 09:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6829E84039;
+	Mon,  1 Jul 2024 09:13:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WLxj+aOz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388DD84A39;
-	Mon,  1 Jul 2024 09:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55ED71747;
+	Mon,  1 Jul 2024 09:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719824876; cv=none; b=r+rQEsx0dsPGJwjRmrAztG3AN/Jmu+WZjEV48CiZq1YAVxLj4UHPrWb+ZGENdGoPhUKdqoh45VQqf1QBtLnXNtqnsqWUDBMpbzjFKfdZhEN2hjLlsqkd8priJfaykUeaMzivob/JEqhukrsupQBMqNkz9iH+dC1N4KaBazp5juw=
+	t=1719825206; cv=none; b=kBJEpMVO58wVPB6O8gjmAIuVWa5SeAnaf8acRvabWwgufvvrDdlrZF1ftawXTtZR+W1kQSuNPijOEzmteik65zUIizUJNLrvG0KUFEFcj+CJYiSCg6stGs70EHsEAdwxHlTeLVflq/0J8XzIMiXpkkSplDz7Rw+UHP9/O9Tdc5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719824876; c=relaxed/simple;
-	bh=/IZXXZjOvtVc39q90mZgzNzvaY6DYnsWnylw+vN7b1w=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HydnpOlufiltsI3KqbQrpMgRlUutolK/HOnqGtCS4+53y0ENNCqZzI8bDrL7eycjPf9FRU6Vz30jM6T8bxZV6Fu4WTa8UddmW33l2g3IcZbxZvs7cdLAP09mIRT7J7EhqZD9uUMk2q4dGqemtjJCB89AYfRgITtDf+AM4wNm9cI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WCKs56HCCz6K9TP;
-	Mon,  1 Jul 2024 17:06:01 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id D17FC1400D1;
-	Mon,  1 Jul 2024 17:07:51 +0800 (CST)
-Received: from localhost (10.203.174.77) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 1 Jul
- 2024 10:07:51 +0100
-Date: Mon, 1 Jul 2024 10:07:50 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-CC: Yury Norov <yury.norov@gmail.com>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, James Morse
-	<james.morse@arm.com>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
-	<linux-next@vger.kernel.org>, "Russell King (Oracle)"
-	<rmk+kernel@armlinux.org.uk>
-Subject: Re: linux-next: manual merge of the bitmap tree with the arm64 tree
-Message-ID: <20240701100750.00002b8e@Huawei.com>
-In-Reply-To: <20240701175051.0ef5d901@canb.auug.org.au>
-References: <20240701175051.0ef5d901@canb.auug.org.au>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1719825206; c=relaxed/simple;
+	bh=QbfrfuYBfk9vrk8xYLVM8k/QMogV1A4LDBze4ncEJmY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=M7RWG8VADwha+k1uw+qsFo7wfDnb5dpwoqMmIxSdqg2+GHd1TkRWh8ibojQANFQpSBUSxBKEinzVsDfjiO9F/Zyt6W1VsmlgAEIRF+HRV1xV5lO3qNow+F4/Wk0lnzqBjP0yrpm6EuXtNwS3Q5/rw9fGkXtAaTZdFOmOelYjDXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=WLxj+aOz; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1719825201;
+	bh=pntqiERvY5XH4mZl9gDPqfPzur6ofOBurt6MgCHU+uc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=WLxj+aOz6Z8ovaI9h5E6jIyilGP7PfeuwbHdrBxAn3FqmBmQtPKYudzvhPU8LxpA6
+	 dn5mkW16GhNL2WkBATgqLrsvGigyI4M9dz9JaLEYYvtQx3KmuizlWrrLUlLMMcP9up
+	 nMwOnb6Eh6wziqK4+eMKoh0xmzPTEQeDWNqYumDJiOeeUWTWpnPeep5C1gBCZFI+G5
+	 UsCy65Sm1dwIji2Nwm+igUauM0VgwXfaFmmgpvoPPxy/5a2HdDVfMhz4DvRE8bf/87
+	 FIznBh05NGyiG58iveGEGAPaPiL2xOvO9O4EaZoQGa1z7vN9SIWnB9cOxMSA4DyKBk
+	 BGf5J3OHtm9ag==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WCL1X0hnVz4wxs;
+	Mon,  1 Jul 2024 19:13:20 +1000 (AEST)
+Date: Mon, 1 Jul 2024 19:13:19 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Dave Airlie <airlied@redhat.com>
+Cc: Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, DRI
+ <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm tree
+Message-ID: <20240701191319.087b227e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: multipart/signed; boundary="Sig_/B/525Pd9aGGHMxX7KNdXK6F";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, 1 Jul 2024 17:50:51 +1000
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/B/525Pd9aGGHMxX7KNdXK6F
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
-> 
-> Today's linux-next merge of the bitmap tree got a conflict in:
-> 
->   include/linux/cpumask.h
-> 
-> between commit:
-> 
->   4e1a7df45480 ("cpumask: Add enabled cpumask for present CPUs that can be brought online")
-> 
-> from the arm64 tree and commit:
-> 
->   5c563ee90a22 ("cpumask: introduce assign_cpu() macro")
-> 
-> from the bitmap tree.
-> 
-> I fixed it up (I just did the obvious - see below) and can carry the
-> fix as necessary. This is now fixed as far as linux-next is concerned,
-> but any non trivial conflicts should be mentioned to your upstream
-> maintainer when your tree is submitted for merging.  You may also want
-> to consider cooperating with the maintainer of the conflicting tree to
-> minimise any particularly complex conflicts.
-> 
+Hi all,
 
-Thanks Stephen,
+After merging the drm tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-We can make a similar change to the others in 
- 5c563ee90a22 ("cpumask: introduce assign_cpu() macro")
-but to avoid merge complexity probably easier to just do it next cycle.
+In file included from arch/powerpc/include/asm/mmu.h:144,
+                 from arch/powerpc/include/asm/paca.h:18,
+                 from arch/powerpc/include/asm/current.h:13,
+                 from include/linux/sched.h:12,
+                 from include/linux/ratelimit.h:6,
+                 from include/linux/dev_printk.h:16,
+                 from include/linux/device.h:15,
+                 from include/linux/dma-mapping.h:8,
+                 from drivers/gpu/drm/omapdrm/omap_gem.c:7:
+drivers/gpu/drm/omapdrm/omap_gem.c: In function 'omap_gem_pin_tiler':
+arch/powerpc/include/asm/page.h:25:33: error: conversion from 'long unsigne=
+d int' to 'u16' {aka 'short unsigned int'} changes value from '65536' to '0=
+' [-Werror=3Doverflow]
+   25 | #define PAGE_SIZE               (ASM_CONST(1) << PAGE_SHIFT)
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/omapdrm/omap_gem.c:758:42: note: in expansion of macro 'PAG=
+E_SIZE'
+  758 |                                          PAGE_SIZE);
+      |                                          ^~~~~~~~~
+drivers/gpu/drm/omapdrm/omap_gem.c: In function 'omap_gem_init':
+arch/powerpc/include/asm/page.h:25:33: error: conversion from 'long unsigne=
+d int' to 'u16' {aka 'short unsigned int'} changes value from '65536' to '0=
+' [-Werror=3Doverflow]
+   25 | #define PAGE_SIZE               (ASM_CONST(1) << PAGE_SHIFT)
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/omapdrm/omap_gem.c:1504:65: note: in expansion of macro 'PA=
+GE_SIZE'
+ 1504 |                         block =3D tiler_reserve_2d(fmts[i], w, h, P=
+AGE_SIZE);
+      |                                                                 ^~~=
+~~~~~~
+cc1: all warnings being treated as errors
 
-Jonathan
+Exposed by commit
 
+  dc6fcaaba5a5 ("drm/omap: Allow build with COMPILE_TEST=3Dy")
 
+PowerPC 64 bit uses 64k pages.
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/B/525Pd9aGGHMxX7KNdXK6F
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaCcy8ACgkQAVBC80lX
+0GyEwQgAoOM0TkYVu4rVlwWtEHxMyN+WlQS3JRLPXW/xtjFnPJmZM2Mh6rXRqVxE
+eqizwXjGj5tp1mxEbV3D4DAvEFXv3+4z6WRfdZVVvDdiM8QfFhy0ilGoJRdSKAcR
+8Xpi41aQcLjuFMux1rJ6JKdFnQGQKoSHqBP4isEmyQwLIfxV+pR3d9kGAmtoFWLU
+/5yuRoeIWA9AkXTm9RIxAAeEcIwcqCJSmDSe1hjfuH0ZsbT4VmjKB+DIc0Ho1jLk
+a1pGL0fKvnvYqMGJX2sWpf70Ecrn1oCOHHs5C3oyqPv/p2ahc8l0HUhoPOkxsfVI
+7AKJ29wyLnsRbVQBQZ6m/dpiYxh3Sw==
+=OM/o
+-----END PGP SIGNATURE-----
+
+--Sig_/B/525Pd9aGGHMxX7KNdXK6F--
 

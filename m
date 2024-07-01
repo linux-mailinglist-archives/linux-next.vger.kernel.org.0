@@ -1,90 +1,106 @@
-Return-Path: <linux-next+bounces-2768-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2769-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9896991DFCD
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 14:47:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 787FB91E084
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 15:22:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C95121C21CF5
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 12:47:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D0881F24015
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 13:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74F02158D7A;
-	Mon,  1 Jul 2024 12:47:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C59115E5B5;
+	Mon,  1 Jul 2024 13:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="WlfL441q"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579C182D69;
-	Mon,  1 Jul 2024 12:47:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789B6158D94;
+	Mon,  1 Jul 2024 13:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719838035; cv=none; b=Q4dB2Xrpo9pqxnqhXPwF/rfG+8WgPNHrWza/lDYqR2IlbRB5Cpd0YBLgnwJ2IcxTerDh+XU9CAg2HVBOXGxoIewOBf3kSDVhI5cViJ20VApDSfzR80/H3RSH+e46jdpzs5a+n7G+QCJORzxmej8D2sqaOLcVb6Bz7MVFIsZxUw8=
+	t=1719840059; cv=none; b=sFCFBtKVwkmp+GeJ/Opwi5c1I7u204fIV/NbHXb9+84+7DqFvBuTbL01y9Z/go81QOarNKZ1PudiV1bL6Qk736U/zWktP1gmI/zhhAYFkauzsXAzz8TGbqH55mCKucXWfdRF9mpbGqhZb5n1ZMQM+Hxha0Bm4va+n6CDon7UsLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719838035; c=relaxed/simple;
-	bh=miPind/sd9Zucwj9BR9NP7mw7StMu86symzAscES8oo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bk7rh0pc64P3cyY4eI+AKXPCzddm+2xPAOl93JR33LnNbmkerhXIV33fN95P04eyMO47JNZlpFykYv7Qj3PrAtaeZ03kXw8gdmYQL9ZelWXoTFV4Hw2XFQpJD4UZcnapOpsqwmjG7NCzJIGTnV+EyjsJVatqBeCtAfhCCrC86gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90E8CC116B1;
-	Mon,  1 Jul 2024 12:47:13 +0000 (UTC)
-Date: Mon, 1 Jul 2024 13:47:11 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Yury Norov <yury.norov@gmail.com>, Will Deacon <will@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: Re: linux-next: manual merge of the bitmap tree with the arm64 tree
-Message-ID: <ZoKlT59tNmCgYR7B@arm.com>
-References: <20240701175051.0ef5d901@canb.auug.org.au>
- <20240701100750.00002b8e@Huawei.com>
+	s=arc-20240116; t=1719840059; c=relaxed/simple;
+	bh=mtrtSp478FPKF9vQGKwAdqQFbIH9LnPG99zKGDECjCM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=XlBYuSJIAk6jB0aZya9w9L2G7gc0Rjl2k0exr7WTKKsZ0OanpybQUGNEH3edBb0VHBdBc7TaecPwhsNMl/CI8d4Kk8jvUriysRw1++MYVxA1lwvMdw0RoqIqvYhB5DyuMormv2+Wv1haG11hQreeZ1xTN3nTW+ccE+icx883fyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=WlfL441q; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 461DKjOJ057076;
+	Mon, 1 Jul 2024 08:20:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1719840045;
+	bh=MkzSmS/kf7DTFI7fj9Gv8FL/b/S4vI/VbjMRgXYS3xk=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=WlfL441q8K8vQMq6D28808EkQEtVCWHHl4l7C94pDCd+iY8ewze0+cCMSE28uo+PH
+	 J7EPqZrdGBjRkhB0fWp+8LkeumN5yub2bEk2FfpcpOE6gEOlc31pjV+3asBGSZENnC
+	 2gPQihTODIOi3NnTEHSLCkUbFROetrJ3AleM4jYs=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 461DKjUi006884
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 1 Jul 2024 08:20:45 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 1
+ Jul 2024 08:20:45 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 1 Jul 2024 08:20:45 -0500
+Received: from [10.249.142.56] ([10.249.142.56])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 461DKfFk008547;
+	Mon, 1 Jul 2024 08:20:42 -0500
+Message-ID: <d15a139f-4561-496b-bc3f-429d997ff014@ti.com>
+Date: Mon, 1 Jul 2024 18:50:41 +0530
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240701100750.00002b8e@Huawei.com>
+User-Agent: Betterbird (Windows)
+Subject: Re: linux-next: manual merge of the counter-next tree with the ti
+ tree
+To: William Breathitt Gray <wbg@kernel.org>
+CC: Stephen Rothwell <sfr@canb.auug.org.au>, Nishanth Menon <nm@ti.com>,
+        Tero
+ Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>, Judith
+ Mendez <jm@ti.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Siddharth Vadapalli
+	<s-vadapalli@ti.com>
+References: <20240701163749.1cb88c8b@canb.auug.org.au>
+ <d595b624-ef18-4aac-ab2c-bd36a8c4de3d@ti.com> <ZoKANeudCKsjjYDQ@ishi>
+From: "Raghavendra, Vignesh" <vigneshr@ti.com>
+Content-Language: en-US
+In-Reply-To: <ZoKANeudCKsjjYDQ@ishi>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Mon, Jul 01, 2024 at 10:07:50AM +0100, Jonathan Cameron wrote:
-> On Mon, 1 Jul 2024 17:50:51 +1000
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > Today's linux-next merge of the bitmap tree got a conflict in:
-> > 
-> >   include/linux/cpumask.h
-> > 
-> > between commit:
-> > 
-> >   4e1a7df45480 ("cpumask: Add enabled cpumask for present CPUs that can be brought online")
-> > 
-> > from the arm64 tree and commit:
-> > 
-> >   5c563ee90a22 ("cpumask: introduce assign_cpu() macro")
-> > 
-> > from the bitmap tree.
-> > 
-> > I fixed it up (I just did the obvious - see below) and can carry the
-> > fix as necessary. This is now fixed as far as linux-next is concerned,
-> > but any non trivial conflicts should be mentioned to your upstream
-> > maintainer when your tree is submitted for merging.  You may also want
-> > to consider cooperating with the maintainer of the conflicting tree to
-> > minimise any particularly complex conflicts.
+
+On 7/1/2024 3:38 PM, William Breathitt Gray wrote:
+> On Mon, Jul 01, 2024 at 12:58:28PM +0530, Vignesh Raghavendra wrote:
+>> Hi Will,
+>>
+
+[...]
+
+> Hi Vignesh,
 > 
-> Thanks Stephen,
+> I have now dropped the "arm64: dts: ti: ..." patches from my
+> counter-next tree, I retained just the counter patches.
 > 
-> We can make a similar change to the others in 
->  5c563ee90a22 ("cpumask: introduce assign_cpu() macro")
-> but to avoid merge complexity probably easier to just do it next cycle.
+Great, thanks!
 
-We can add a patch at -rc1 once both trees got merged, we do this
-occasionally.
-
--- 
-Catalin
+Regards
+Vignesh
 

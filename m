@@ -1,70 +1,69 @@
-Return-Path: <linux-next+bounces-2778-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2779-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2EA491E96D
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 22:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A253691E97B
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 22:20:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DD49283C3C
-	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 20:18:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D019283DD0
+	for <lists+linux-next@lfdr.de>; Mon,  1 Jul 2024 20:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 933A916F8F7;
-	Mon,  1 Jul 2024 20:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 270C016DC09;
+	Mon,  1 Jul 2024 20:19:46 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041F416DC09;
-	Mon,  1 Jul 2024 20:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C093316F85A;
+	Mon,  1 Jul 2024 20:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719865118; cv=none; b=rHLzx7quX62jXe64NJsgKjcEfT/nfdvscqqsDf1Wu3Yu+43F0DEWu65djC7G0NGFU9Ww2hs4zSLaVFxkJ1mNpOakj2AmOdDZFHpcqEUm8y2mCQlcmVAZE20YPQPr+Az+B2ym4Z4QgyOL5/jMNGGYFx42Pvwh0mowVif+bDOgkbI=
+	t=1719865186; cv=none; b=VfNfmq3vUur3W1uhFdR9Ln/TKo7GySE/ce3x/5OdRFE0bxYiq+R79HviyFnz4JeQ2HWfjQtz4eEuY2D2ap/cPxhM+kaWsolHbvyATazjN1nkXOi42VNmAulWHuY+LgDbIzhXE85qpM5mmMVtu74/kTgWKs07SZutwkhdHdMyfn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719865118; c=relaxed/simple;
-	bh=NI3s/o+bmWnBqE1CDXLmYzm0L/oZ7olInnCwBeLctks=;
+	s=arc-20240116; t=1719865186; c=relaxed/simple;
+	bh=gtILim/HJ+ujvf7/kOaItzXfFZ51HgQjkvh01fOIx50=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oHWSggGiG9by3SEL6yntqAsWHp5osP9mAE0ky3a32bcllT43p+EVjLC79mCFBhdK2SptQ5K6IvxSGsa383XNeTejDOwOI2z4VLbrhyq/olbMxdT5EgPkFsSFnHQb+RDcDt7GofvFKcBO36fCIuzybdHXao0a2wddylmz4gD2p44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=bUyZ5D/+cJr08OHh+WsLFpEifx4NbKk1EBYDg/ujE9i6yhag+5/BOFQb9if1oReCrQX3T+BYUMl9r+brixog8uqXrLnfFnSexzjWkZXMX5ikUXuJNuwBUToCldCDl1HL4elaioLbl27GUJ6SDzIUHWvTAWvjFMLlV9rBks92T5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7066cba4ebbso2255988b3a.3;
-        Mon, 01 Jul 2024 13:18:36 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2c9357a2647so1679981a91.0;
+        Mon, 01 Jul 2024 13:19:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719865116; x=1720469916;
+        d=1e100.net; s=20230601; t=1719865184; x=1720469984;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DBP9MZWwypSl48wuanJ156LEJMBL9eDePs7yiGtO0QU=;
-        b=TCI04qaPntPob3N2H2ATz07MpzcCpTuIGlY9ZuTu6py3VHRBuetf5EAh4kELRZPzse
-         S63XQ9NOynKF8YMh86bHoucRvKmeIlvCD8wVaglpKZU10NmA+PNBxCkaZFjyTYRe/N5f
-         wecfp/n5ooqt384Zx5c2uPopYbs68WjS/o/a0uK7gmSrh5t5qWuTr3I+kEo5DAc0Zl8T
-         r+hJyMlMb4JbM/m+PUMx038YETud/HwMsow0h0TGsMEv22/SnPCtzM1sWM4HyRikynO1
-         U5AHpxt5brcfy/yKiKKIVCwNH3YUEnNmqZ81lCKH7f2GVNxgXBYRFRmX8K3KSekOWmw9
-         dCGg==
-X-Forwarded-Encrypted: i=1; AJvYcCU52yui2TA8mNC99VcK5jDEY1Qz/QFrgE0LIq/grqyoW4I0AwwQFQ6wYmNdWGRBuRyqzJKFCSpMDtSa0lWBXoW9Kru0bcFinHgBIzj8BCWi2PfJ9eMMWsfFLVOFMy5N9LVtayH1Tf2ARQ==
-X-Gm-Message-State: AOJu0YzyKdZVtnU7TBKHZfUEBj7bupUoRmeLVS3lbvk18j9CJh02m0Td
-	+I7tN8p5Q2L92f4wnyFdEvUKOJqw94jMHlFanSSu1B7KaDcKX/pA
-X-Google-Smtp-Source: AGHT+IH03CePmzk1psec6WUUuqlPcFSVADz4yd+sY9YqIgXU1EOQbZzVSg8PHibHKrP5s1o2BSgYkg==
-X-Received: by 2002:a05:6a20:840e:b0:1be:c2f7:275 with SMTP id adf61e73a8af0-1bef6245512mr5931315637.50.1719865116131;
-        Mon, 01 Jul 2024 13:18:36 -0700 (PDT)
+        bh=p7CPC45a6z8Ol07078t1kucZHx8bYtcfgFOovH1ePZg=;
+        b=sHMM4qb2L9q17hRCcG3WAL+MQB1qr/NWFTQvdv7mo2TNFl6rRWZm4Vfnk5IQ+AO0GR
+         awaMLC6+Mj7YMX/JHIrtC3E5WT4WnTrKbVrWxLD4QV55R0ZO02UhCiMOul7w7fuDNVi4
+         ZEVanwKmclfM6zApPr8N8+5shJxkFziKGWjw62L7zDnTNuuaX9nwBGg9pU7qZ9nv5iTn
+         py7eiyG3xs5GCIMtOGWDIe24h9mPElKZnrqwtYVMtaj7v6rK3MDGp9ATyLX+UyQ/ko2Z
+         NM8x77uomB3cydxgLBAIKtq6DGvAi96N+kF4EKzFPvyxZj/ueVrl1+Ni0SRYf9nk+OQm
+         j84A==
+X-Forwarded-Encrypted: i=1; AJvYcCUDmyHZzuSMLppxOTjqTDyCgk+14SR0kpWUNolru9dIs8F7Om8sN7B/XxVcSv2AZ70cDs5kxuL5I3gb8ec5X5Q95vLVcUSr2MZkg1T3HgpEUrGEnC+GqOCg9/C9Fz5rOnB8hXdxc9gLtA==
+X-Gm-Message-State: AOJu0YyhLzOU2p+5suzA4FtWmhQvT4Vk+VjM7xvvHrdG8HNRfDiGNrX7
+	SEuhpTOVGCZhgKtMIc3jBya+BDDBNeBpd0hFqowpa0Q33Sx3eol6
+X-Google-Smtp-Source: AGHT+IEJEbvlzvQOFT4pgucYd/khgtZxyiVbBGWZVUo+7PnVlJPOOL5Ta86DrxUKO5kNZN2yrkZx6w==
+X-Received: by 2002:a17:90a:dc09:b0:2c7:35f6:87e5 with SMTP id 98e67ed59e1d1-2c93d6ea810mr3583915a91.5.1719865183953;
+        Mon, 01 Jul 2024 13:19:43 -0700 (PDT)
 Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c91ce6e7easm7243671a91.25.2024.07.01.13.18.35
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c9270c121fsm6882502a91.11.2024.07.01.13.19.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jul 2024 13:18:35 -0700 (PDT)
-Date: Tue, 2 Jul 2024 05:18:33 +0900
+        Mon, 01 Jul 2024 13:19:43 -0700 (PDT)
+Date: Tue, 2 Jul 2024 05:19:42 +0900
 From: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Bjorn Helgaas <bhelgaas@google.com>,
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
 	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the pci tree
-Message-ID: <20240701201833.GB272504@rocinante>
-References: <20240701091320.64ea6091@canb.auug.org.au>
- <ZoJg_k2En6bqQzA4@ryzen.lan>
+Subject: Re: linux-next: build failure after merge of the pci tree
+Message-ID: <20240701201942.GC272504@rocinante>
+References: <20240701130108.63628d9f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -73,35 +72,33 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZoJg_k2En6bqQzA4@ryzen.lan>
+In-Reply-To: <20240701130108.63628d9f@canb.auug.org.au>
 
 Hello,
 
-> > In commit
-> > 
-> >   aaf840725904 ("PCI: dw-rockchip: Depend on PCI_ENDPOINT if building endpoint mode support")
-> > 
-> > Fixes tag
-> > 
-> >   Fixes: 9b2ba393b3a6 ("PCI: dw-rockchip: Add endpoint mode support")
-> > 
-> > has these problem(s):
-> > 
-> >   - Target SHA1 does not exist
-> > 
-> > Maybe you meant
-> > 
-> > Fixes: 728538f5e806 ("PCI: dw-rockchip: Add endpoint mode support")
-[...]
-> The branch was rebased so the SHA1 changed.
+> After merging the pci tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
 > 
-> Perhaps the maintainers could update the Fixes tag.
+> drivers/pci/controller/dwc/pcie-designware-ep.c:818:6: error: redefinition of 'dw_pcie_ep_linkup'
+>   818 | void dw_pcie_ep_linkup(struct dw_pcie_ep *ep)
+>       |      ^~~~~~~~~~~~~~~~~
+> drivers/pci/controller/dwc/pcie-designware-ep.c:22:6: note: previous definition of 'dw_pcie_ep_linkup' with type 'void(struct dw_pcie_ep *)'
+>    22 | void dw_pcie_ep_linkup(struct dw_pcie_ep *ep)
+>       |      ^~~~~~~~~~~~~~~~~
 > 
-> (Personally, I would just squash the small fix with the commit that it fixes.)
+> Caused by commit
+> 
+>   9eba2f70362f ("PCI: dwc: ep: Remove dw_pcie_ep_init_notify() wrapper")
+> 
+> possibly because of an interaction with commit
+> 
+>   3d2e425263e2 ("PCI: dwc: ep: Add a generic dw_pcie_ep_linkdown() API to handle Link Down event")
 
-I will squash the patch that adds PCI_ENDPOINT dependency with the rest of
-the series, and then drop the Fixes: tag afterwards, since it would not
-longer be needed.
+I will look into this shortly...
+ 
+> I have used the pci tree from next-20240628 for today.
+
+Got it.  Makes sense, thank you!
 
 	Krzysztof
 

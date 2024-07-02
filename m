@@ -1,151 +1,191 @@
-Return-Path: <linux-next+bounces-2809-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2810-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6843A924C05
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 01:10:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7EFF924C13
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 01:22:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07433B21507
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jul 2024 23:10:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20D191F2381E
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jul 2024 23:22:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0887217A588;
-	Tue,  2 Jul 2024 23:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 915CA14F9FA;
+	Tue,  2 Jul 2024 23:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kIHtGzAN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OrsEWSFV"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9611DA336;
-	Tue,  2 Jul 2024 23:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB101DA30B;
+	Tue,  2 Jul 2024 23:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719961796; cv=none; b=j9PnT6/MnZG/PnukoTmwVRgLfsfFn1cFOfR10asFzCuFnh+IOQJ47Ey6zdLWZoxqA3rtQs6ynEnJTcz0KYh6bjGh91ht3sjIJ4Dg/VK4+KQE/7ESV/C6gqFIdAu88ImB13qVp6YRio6ZV9D7uZ1VsAne6QiPUSz/Ka6mI0F4ves=
+	t=1719962568; cv=none; b=ZWm6+dloKB9F4lPXa69JS6FyLADdUXUIuXXKjbiv1rBnff6Aw2z2Nu0NNiX20dvRDwv5jmRIdtX5bZQWFxkLUDezuIdkiGY0ooGhdAXqEFTBidfS2L550q3vpxyhHtGy/elCHLYyhyuC8X3khQ7sB4aNkXcucCHCXnKgYCJSDLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719961796; c=relaxed/simple;
-	bh=y9N33F06ZryHfZyNCGspkxZ0ZNsGT6P0cegl8jrhM58=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t/4E8yHMWmkdlzCQWJYG67X6upBzGBNLy/lIe0uk7P7Adw395nwmDAMeyY0urrnWvXsWn1CY7pAa+XjO8KYUl8LpsgHnwol5TW+8v0XuT41a78/hDiRVVMpcfFGJ796dyTTnjL2rKqVTuNDuusJBIfWqOpRehQKkOfUYt2+49/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kIHtGzAN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D61C116B1;
-	Tue,  2 Jul 2024 23:09:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719961796;
-	bh=y9N33F06ZryHfZyNCGspkxZ0ZNsGT6P0cegl8jrhM58=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kIHtGzANmyAGQjd3gd5BY5TBypu6EbczX0pUawHMD/+Q6oalVLzanDd48B//6FBJV
-	 IFOUH6LEmF5UXOSoT4vjqwgrKm3sSbEVRanteFtI1aKLRyfIYTQwCHrX08m7dcqv2D
-	 7SURJ4gukQDBxVyV0cohxnHocbzXX7RIMwsYCLw6ba9uRfVj7bdl+LH+WZDqnJeBYX
-	 tfsVL1eNkq8XIuSKKhq226IsB75GfYpm2/WCQE3KqWtksSUwBZJxXpsXNjduHDaOWR
-	 U0fCVVEkejOguaurUAEfgwzBqGsSfSPfMXAlaLeXYqZRR+21tLX4zIpQzjGnaB2W5u
-	 4XcScGsl4a8Rw==
-From: SeongJae Park <sj@kernel.org>
-To: Jiaqi Yan <jiaqiyan@google.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	linux-doc@vger.kernel.org
-Subject: Re: linux-next: build warnings after merge of the mm tree
-Date: Tue,  2 Jul 2024 16:09:51 -0700
-Message-Id: <20240702230951.78721-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <CACw3F52_obAB742XeDRNun4BHBYtrxtbvp5NkUincXdaob0j1g@mail.gmail.com>
-References: 
+	s=arc-20240116; t=1719962568; c=relaxed/simple;
+	bh=REbe6WGQ6Ib0OcOX5pORxT0QBGzBhRKYGxco9d+az/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=g+H+en/mbLLiLjEC4aLhm7uUwEppjIFPZqhQwdU8zkW9YijOSgz9KL5uE1QHhUhypZG6G3nRAuabDzwSgltugTs6FWJTu9jMlXvKR9nHx1y1QLehKZYsrpSyl06nBWBCDLL3N8Phcg2TvRQs6IPobIRHB8txW5KFsQ19YadbnkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OrsEWSFV; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1719962555;
+	bh=j1lYas/9hzOOuzljKOtg9P7FT/xPULbebgfHS6aaLBA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OrsEWSFVWkhfcXuDw3kF3+vyYjOFHMca9USYrkC86DFW/a1wYQnW+9SnONYxhUSxp
+	 P+KyeV3UaKXGVSY10pXpJeniBfr8MRIzv8Wb//+C5zexhUOIX/sWCdIl4npiP/hShv
+	 ul4xs+YrzcuHMHkX9KYneq5Ll3FalYSgzzECyB4LrUDC9Y+aDaK4umEAlxMII54gt8
+	 IxOeNBgg+bB8N9VvIUZ+X6UclbbJ3uBDWMnZiFHSpnsLe7xXX8EjJX0Jif/lh2Xy+A
+	 BKMRP8V0u57/sM6DVNmR6Ox+2SO1YVQQXd4Jip1maGATja4Kqi3qEKXbqIJExHVEUO
+	 F6qFD3zc+mmoQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WDJpy3m7Mz4wc1;
+	Wed,  3 Jul 2024 09:22:34 +1000 (AEST)
+Date: Wed, 3 Jul 2024 09:22:33 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Yang Shi <yang@os.amperecomputing.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm-hotfixes tree
+Message-ID: <20240703092233.44f51416@canb.auug.org.au>
+In-Reply-To: <20240703084440.3af9f526@canb.auug.org.au>
+References: <20240701101641.4fea0ac2@canb.auug.org.au>
+	<20240701110159.216a8d1f@canb.auug.org.au>
+	<37b70d3f-c46c-4df4-b52a-3c6ba5feb692@os.amperecomputing.com>
+	<20240703084440.3af9f526@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/AoCmTEf.GTVRbHxwH4s6.Ki";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hello Jiaqi,
+--Sig_/AoCmTEf.GTVRbHxwH4s6.Ki
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi Andrew,
 
-On Mon, 1 Jul 2024 23:37:55 -0700 Jiaqi Yan <jiaqiyan@google.com> wrote:
-
-> On Mon, Jul 1, 2024 at 11:18 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+On Wed, 3 Jul 2024 08:44:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> On Mon, 1 Jul 2024 11:15:17 -0700 Yang Shi <yang@os.amperecomputing.com> =
+wrote:
 > >
-> > On Mon, 1 Jul 2024 21:33:20 -0700 Jiaqi Yan <jiaqiyan@google.com> wrote:
-> >
-> > > > > This seems a reasonable thing to do so there's probably some way in
-> > > > > which to do it, but a bit of grepping failed to turn up examples in
-> > > > > existing .rst files.  Can someone please suggest?
-> > > >
-> > > > It seems I need to add some blank lines according to [1], especially
-> > > > to add a blank line above the first list item:
+> > On 6/30/24 6:01 PM, Stephen Rothwell wrote: =20
+> > >
+> > > On Mon, 1 Jul 2024 10:16:41 +1000 Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:   =20
+> > >> After merging the mm-hotfixes tree, today's linux-next build (powerpc
+> > >> ppc64_defconfig) failed like this:
+> > >>
+> > >> mm/gup.c: In function 'gup_hugepte':
+> > >> mm/gup.c:474:25: error: implicit declaration of function 'try_grab_f=
+olio_fast'; did you mean 'try_grab_folio'? [-Werror=3Dimplicit-function-dec=
+laration]
+> > >>    474 |                 folio =3D try_grab_folio_fast(page, refs, f=
+lags);
+> > >>        |                         ^~~~~~~~~~~~~~~~~~~
+> > >>        |                         try_grab_folio
+> > >> mm/gup.c:474:23: warning: assignment to 'struct folio *' from 'int' =
+makes pointer from integer without a cast [-Wint-conversion]
+> > >>    474 |                 folio =3D try_grab_folio_fast(page, refs, f=
+lags);
+> > >>        |                       ^
+> > >> mm/gup.c: At top level:
+> > >> mm/gup.c:2747:22: error: conflicting types for 'try_grab_folio_fast'=
+; have 'struct folio *(struct page *, int,  unsigned int)'
+> > >>   2747 | static struct folio *try_grab_folio_fast(struct page *page,=
+ int refs,
+> > >>        |                      ^~~~~~~~~~~~~~~~~~~
+> > >> mm/gup.c:474:25: note: previous implicit declaration of 'try_grab_fo=
+lio_fast' with type 'int()'
+> > >>    474 |                 folio =3D try_grab_folio_fast(page, refs, f=
+lags);
+> > >>        |                         ^~~~~~~~~~~~~~~~~~~
+> > >> cc1: some warnings being treated as errors
+> > >>
+> > >> Caused by commit
+> > >>
+> > >>    5f408bfe0d13 ("mm: gup: stop abusing try_grab_folio")
+> > >>
+> > >> I have reverted that commit for today.   =20
+> > > And I also had to revert commit
+> > >
+> > >    52cca85b0ebf ("mm-gup-introduce-memfd_pin_folios-for-pinning-memfd=
+-folios-fix")
+> > >
+> > > from the mm-unstable branch of the mm tree.   =20
+> >=20
+> > The patch attached in this mail should fix the compile error.
+> >=20
+> > https://lore.kernel.org/linux-mm/CAHbLzkowMSso-4Nufc9hcMehQsK9PNz3OSu-+=
+eniU-2Mm-xjhA@mail.gmail.com/ =20
+>=20
+> It looks like that patch has been applied to the mm tree instead of the
+> mm-hotfixes tree - as a fix for commit
+>=20
+>   50ceb37037f3 ("mm: gup: stop abusing try_grab_folio")
 
-According to my understanding and testing on my machine, it seems we need blank
-lines only before and after the blocks.
+So for today, I have applied the following patch to the mm-hotfixes
+tree merge and stopped reverting
+mm-gup-introduce-memfd_pin_folios-for-pinning-memfd-folios-fix.
 
-[...]
-> 
-> Ah, sorry Andrew, I should sent out this diff, as there are more blank
-> lines needed:
-> 
-> diff --git a/Documentation/admin-guide/sysctl/vm.rst
-> b/Documentation/admin-guide/sysctl/vm.rst
-> index 75e22137d849..f48eaa98d22d 100644
-> --- a/Documentation/admin-guide/sysctl/vm.rst
-> +++ b/Documentation/admin-guide/sysctl/vm.rst
-> @@ -274,12 +274,15 @@ Correctable memory errors are very common on
-> servers. Soft-offline is kernel's
->  solution for memory pages having (excessive) corrected memory errors.
-> 
->  For different types of page, soft-offline has different behaviors / costs.
-> +
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 3 Jul 2024 08:52:20 +1000
+Subject: [PATCH] fixup for "mm: gup: stop abusing try_grab_folio"
 
-So, this was needed to make 'make htmldocs' quiet on my machine.
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ mm/gup.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
->  - For a raw error page, soft-offline migrates the in-use page's content to
->    a new raw page.
-> +
->  - For a page that is part of a transparent hugepage, soft-offline splits the
->    transparent hugepage into raw pages, then migrates only the raw error page.
->    As a result, user is transparently backed by 1 less hugepage, impacting
->    memory access performance.
-> +
+diff --git a/mm/gup.c b/mm/gup.c
+index 12c7b41712f7..5f58c95b3ab9 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -437,6 +437,9 @@ static unsigned long hugepte_addr_end(unsigned long add=
+r, unsigned long end,
+ 	return (__boundary - 1 < end - 1) ? __boundary : end;
+ }
+=20
++static struct folio *try_grab_folio_fast(struct page *page, int refs,
++					 unsigned int flags);
++
+ /*
+  * Returns 1 if succeeded, 0 if failed, -EMLINK if unshare needed.
+  *
+--=20
+2.45.2
 
-But above two blank lines were not really needed to make 'make htmldocs' calm,
-at least on my setup.  Many other documents also don't have this kind of blank
-line.
+--=20
+Cheers,
+Stephen Rothwell
 
->  - For a page that is part of a HugeTLB hugepage, soft-offline first migrates
->    the entire HugeTLB hugepage, during which a free hugepage will be consumed
->    as migration target.  Then the original hugepage is dissolved into raw
-> @@ -296,8 +299,11 @@ the request to soft offline the pages.  Its
-> default value is 1.
-> 
->  It is worth mentioning that after setting enable_soft_offline to 0, the
->  following requests to soft offline pages will not be performed:
-> +
+--Sig_/AoCmTEf.GTVRbHxwH4s6.Ki
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Interestingly, 'make htmldocs' didn't complain even if I don't put this blank
-line.  But for consistency (see the beginning of sysctl/vm.rst), I think having
-this would be good.
+-----BEGIN PGP SIGNATURE-----
 
->  - Request to soft offline pages from RAS Correctable Errors Collector.
-> +
->  - On ARM, the request to soft offline pages from GHES driver.
-> +
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaEi7kACgkQAVBC80lX
+0GxzwQgApIcRpx/dRkzrNBQUATis0acRzM32NogLihXcAC5j09S2ZJ6trZiRp/r6
+LsLuMUhPtvX+2+pZWINpqGTn/LU/l48kVSOL/guichHAainSGqUHBnfZ9V+93icd
+y3oQvBL2cC5DIq3WH5MowrAhhc/kAbZq2EqofZgPWFMG+HpBME98PTXaSS1mukjz
+s6z5a6svp/OZ2nGJleQos5mjxr5EzAd1fIG4wV/c4ED4hgpskLxKn90TAK8WJAqq
+I22ImsnfuY70W953DTVbEZpnHP/5sQEApDC+4itXHW2yjjISLaj+owFtouiQDBR2
+g2/xwEZk2ccSPgZGgi4mbGajRVQ8Kg==
+=BW72
+-----END PGP SIGNATURE-----
 
-Again, same to the reason above, it seems above two blank lines are not really
-needed.
-
->  - On PARISC, the request to soft offline pages from Page Deallocation Table.
-> 
->  extfrag_threshold
-> 
-
-I have no strong opinion about these, though.  Having four more blank lines
-that might unnecessary is obviously no problem.
-
-
-Thanks,
-SJ
+--Sig_/AoCmTEf.GTVRbHxwH4s6.Ki--
 

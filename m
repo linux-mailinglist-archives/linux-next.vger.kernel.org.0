@@ -1,127 +1,125 @@
-Return-Path: <linux-next+bounces-2805-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2806-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 358A7924437
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jul 2024 19:07:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05BF59247D6
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jul 2024 21:06:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E731B2889C7
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jul 2024 17:07:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B78E02823C4
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jul 2024 19:06:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D534F1BD51A;
-	Tue,  2 Jul 2024 17:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UUwn6WqT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0843485298;
+	Tue,  2 Jul 2024 19:06:37 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41971BE22F;
-	Tue,  2 Jul 2024 17:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF8F82C76;
+	Tue,  2 Jul 2024 19:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719940057; cv=none; b=WkVucKnBSc/QY3c8sz843MaIvgRonKQxGaxqMt/lKsae9vu711+n6NnSLx/GTaTxn3CuKZ/C1DVauV5BdUJ2byXWKcxmNddZyzT94ge3S3Bh8WUfKgOJayqRm3IHoovsX2UBHMK1PM6nDXhU1ooSt7YopCiJ7ehwcsLJNyxZ+7I=
+	t=1719947196; cv=none; b=BQUTPq3svma7EkToDc5Ir4TGCQDmPVf0XIYMtZNXqNxbAITZQt8xlSm9ayH+G0U+EEUP3AxZTVFmdRdjkBvGbf5R5rW96beFuzpWZs33PmfF0VpO6Rd/oy+dvvWdgprPeDBP3Kxu9S6tGDvwaFnrkUxmnP8YgyIe2+riVliKsz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719940057; c=relaxed/simple;
-	bh=KRJLrCPjzuN7NDtqiPxJzD1CO4i8+5KGuuBlOvBG/O8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cZh/B0zXVJZq4fVKaBNxNnG4iNvwjQtWuhd8/33MiX0U3C7Ko3JdyYH7oQWE/Gz9v6Jx4F7j89U71cpXd0H7E5c6ILbjRTOeDJ6Hla2mDTBYsmOZTLIQWBfI/AP0x3Zsv4698lfmg0EJEAi6InvlMes7k+pdZlO9ZqEqluik5CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UUwn6WqT; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1719940054;
-	bh=Nihxo7JoZbhpabmyLPfq0ndYP15PexXP6QmKs2usb1k=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UUwn6WqTR2y7ZooRbgmkI6g/rfU4fXSFYvwfL0Sk9bzxtDKXR30BCO2Bwj+u1CQy3
-	 X9kABXpTkSdHyw/9L4MSYlrRREFTdPIJh6QW5xPK71NUaGkNzxLbA9A/q7gLi8q9Hf
-	 ivaUjTueW8nRaLgO/dq2rDRpl4Xbbv916U0nAp4MunN+hoR+MFGJUi5bkqVMJ6DNvj
-	 9Yue/2SJsUmOy+9XCMMZbzcboQAk7bvvcfthmrjoWzHYwZLqQ7/WgoTXgK5Df4npn9
-	 c/BI2yyYKKbf+for5oUu/yckkzi85X2RnFQ8e1meBF7L+lASqQjlsqP0/nyXYm17nQ
-	 v5UZrZOmWZhDQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WD8VF1bjdz4x0w;
-	Wed,  3 Jul 2024 03:07:32 +1000 (AEST)
-Date: Wed, 3 Jul 2024 03:07:32 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: "Theodore Ts'o" <tytso@mit.edu>, Christian Brauner <brauner@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Christian =?UTF-8?B?R8O2dHRzY2hl?=
- <cgzones@googlemail.com>, Jiri Olsa <jolsa@kernel.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the random tree with the
- vfs-brauner, ftrace trees
-Message-ID: <20240703030732.02b5dda7@canb.auug.org.au>
-In-Reply-To: <CAHmME9rYfTtO9CPGi1nB=ohZ_SBMFocxpB=Ga3cqA54EF8F7Og@mail.gmail.com>
-References: <20240702165601.08bb4545@canb.auug.org.au>
-	<CAHmME9rYfTtO9CPGi1nB=ohZ_SBMFocxpB=Ga3cqA54EF8F7Og@mail.gmail.com>
+	s=arc-20240116; t=1719947196; c=relaxed/simple;
+	bh=q7+wG+b9gxlSDc6Eqd0NHJ3CXS6OH3hQTqH6wE7Mkp4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fbDXxmp517LijcFWZ0f0xV9/dm4BnSiORFI5tkbRhy9Fy0UjwNn3YYewHu4g6na8/NH093KHJQFHa/HN+W52i0CPKqfMdmuKDsLdOS1i5SIiaJoRwUVb8akaaam+ipYF/1dVFz1Jw3UK9mYsNHKnib72TjqIDd9ncVWIkz0ASZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2c7dd4586afso3421555a91.2;
+        Tue, 02 Jul 2024 12:06:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719947195; x=1720551995;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E4l4wrLrwHQUBz/nGXSYnlK3Nzjrs09hIzfvhqYHSUA=;
+        b=Ju8YADyB6XVWOoIBR0xfxcr3LsucAZU5+mziN9cUbrPJTlM4uFNd0Qb6XYqCoH0pGX
+         xR4EYXLJzmyyeJutBo+Lf8s3MVOF2cIXYiFQMpD36L8bTR6mc3AR8x2ZfF64+RyPlWj4
+         zgvEgcMnh/oPnRjbWRecD/IkiAjLEv5bmNEeqMdOOipjWtXI9BxSKIeOpkbkIg89NmbU
+         4q556QUTE6vxOU2v4SWZ0ZzEzt02+iLDiKEUnwVOcIY/QxMFGy1v9lp8yUW8Cig6F+kO
+         WtE5LjWB1KYkCrCsy36vCZ7h8OXwtRG/lowcWjSnb1gbCzCD5ePUG47uPapJ2XTIjKQh
+         0khg==
+X-Forwarded-Encrypted: i=1; AJvYcCXafb+tsBbDcVk5UZ2kvtv/FEDHqvAYT/9ndkNc84qzbGZS7upk5Ck5eWS6DDm9cSN/KuMJcOHMlctpLC+WG83ZD5DzsxB05t9Gor/06Zn0Yp+1OtgJVIeNRPenwwA69ewv3URwpVnLRA==
+X-Gm-Message-State: AOJu0YxgYBdXEbGY9iWBpv5ag9AUeHOn+WmwyZMl8yHhhEEvtBO2ZLbp
+	jnqgu7KBZtoNAlneo40zDJ7LN3IrUFLTf1hG+RZWs+szVKTaBJR8cyML7qdVw0chufORgrQO31R
+	Ve2uGvD4igY0TwfbytSpEIdsjaIY=
+X-Google-Smtp-Source: AGHT+IEMAdEOjFFQo3J4MszCH6o0T1XFraS1FfYW45SSOkJGwH4YJinD05hQmKO0JmJAvKQ6FA/pDrrPK6SRk/tOlDc=
+X-Received: by 2002:a17:90b:4c4a:b0:2c8:6118:11a8 with SMTP id
+ 98e67ed59e1d1-2c93d785fadmr6855706a91.49.1719947194703; Tue, 02 Jul 2024
+ 12:06:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jkRpFIQ=X40U3SC9Ft6_h26";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/jkRpFIQ=X40U3SC9Ft6_h26
-Content-Type: text/plain; charset=UTF-8
+References: <Zn8HeRRX3JV2IcxQ@sirena.org.uk>
+In-Reply-To: <Zn8HeRRX3JV2IcxQ@sirena.org.uk>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Tue, 2 Jul 2024 12:06:23 -0700
+Message-ID: <CAM9d7cisEqDuHOS-8CPwCvacREKZWOtGDZ4ucvgaNftWAKwE0A@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the kvm-riscv tree with the perf tree
+To: Mark Brown <broonie@kernel.org>
+Cc: Anup Patel <anup@brainfault.org>, Ian Rogers <irogers@google.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	Shenlin Liang <liangshenlin@eswincomputing.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jason,
+Hello,
 
-On Tue, 2 Jul 2024 16:43:17 +0200 "Jason A. Donenfeld" <Jason@zx2c4.com> wr=
+On Fri, Jun 28, 2024 at 11:57=E2=80=AFAM Mark Brown <broonie@kernel.org> wr=
 ote:
 >
-> Hi Stephen,
->=20
-> On Tue, Jul 2, 2024 at 8:56=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
-> >  +466   n32     removexattrat                   sys_removexattrat
-> > ++468   n32     vgetrandom_alloc                sys_vgetrandom_alloc =20
->=20
-> Wondering why 467 was skipped.
+> Hi all,
+>
+> Today's linux-next merge of the kvm-riscv tree got a conflict in:
+>
+>   tools/perf/arch/riscv/util/Build
+>
+> between commit:
+>
+>   e467705a9fb37 ("perf util: Make util its own library")
+>
+> from the perf tree and commit:
+>
+>   da7b1b525e972 ("perf kvm/riscv: Port perf kvm stat to RISC-V")
+>
+> from the kvm-riscv tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-It is being used by the uretprobe system call on x86 and asm-generic.
+Thanks for the fix, it looks good to me.  I'll remember this
+and report to Linus when I send the pull request later.
 
-> Also, any chance you can let me keep 463 and shift the others (unless
-> Christian objects)? Or does it not really matter anyway because Linus
-> is gonna merge this how he wants, separately from what you do in
-> -next?
+Thanks,
+Namhyung
 
-Well, the other new syscalls have been in -next for some time, so I
-don't really want to move them (and it would make more work for me :-)).
-
-As you say, Linus will just merge these depending on his own ordering.
-However, if you switch to 468/568, then he will probably not change it.
-I was also hoping that the uretprobe syscall would change to 467 for
-the same reason.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/jkRpFIQ=X40U3SC9Ft6_h26
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaEM9QACgkQAVBC80lX
-0GyGRwf/VYeAa1VP+lRm4iV+SXiUZogWIwMoA22tI0CMgX580JO8ktJs48YWFZY6
-d5HWSzT6FdwJ2mfMe2M+iryPIH610rRoiW9CKomzjFZw/3ANPp/8+AzdIf7ntKas
-VqPZCcNT0X5KOJx6+7cmY+6Jobe6gmlmOxPId3fvqvW8JpjioEgXuQQA/RWTR0gV
-wztHlYJWwWkVd7cq0bMPa0HGchNdfKAgNr80lI3cqg8g+KCQqTTZvVVp657oLake
-ISWzYcwaAFia2RpgpRpGt+LuLcfa7eF9geYU6yJ8BCnxpQruAhrCniXWJo+Q8vd+
-ko0VX6lAJZxRxudio6SIfowjP6yfhg==
-=Meqh
------END PGP SIGNATURE-----
-
---Sig_/jkRpFIQ=X40U3SC9Ft6_h26--
+>
+> diff --cc tools/perf/arch/riscv/util/Build
+> index 65ec3c66a3754,d72b04f8d32bb..0000000000000
+> --- a/tools/perf/arch/riscv/util/Build
+> +++ b/tools/perf/arch/riscv/util/Build
+> @@@ -1,5 -1,6 +1,6 @@@
+>  -perf-y +=3D perf_regs.o
+>  -perf-y +=3D header.o
+>  +perf-util-y +=3D perf_regs.o
+>  +perf-util-y +=3D header.o
+>
+>  -perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+>  -perf-$(CONFIG_DWARF) +=3D dwarf-regs.o
+>  -perf-$(CONFIG_LIBDW_DWARF_UNWIND) +=3D unwind-libdw.o
+> ++perf-util-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+>  +perf-util-$(CONFIG_DWARF) +=3D dwarf-regs.o
+>  +perf-util-$(CONFIG_LIBDW_DWARF_UNWIND) +=3D unwind-libdw.o
 

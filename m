@@ -1,218 +1,256 @@
-Return-Path: <linux-next+bounces-2812-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2813-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80490924C6E
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 01:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5E78924CD0
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 02:41:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 215F51F21E5C
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jul 2024 23:55:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DA0A1F21DF5
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 00:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13301DA32A;
-	Tue,  2 Jul 2024 23:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57698645;
+	Wed,  3 Jul 2024 00:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kOfnbgZn"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="YVhSQbJ6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2097.outbound.protection.outlook.com [40.107.223.97])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E438415B10B
-	for <linux-next@vger.kernel.org>; Tue,  2 Jul 2024 23:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719964522; cv=none; b=SvOi7VG/dynRTeSinWep5ZrfB6ZjiBLV3mPNJEbC48rxrJbsq2SnR/iUn4G5SuD2Cf3so1SZ3oM1Xq49qyUCY8EOUn3/OY0CNBzM5NTzsUqjLtrtX1ycH/cJLLDPoIdUypR1HpiGmmpqo3Az2IfsKgML0HG3rRYpYw+M+3qDeJk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719964522; c=relaxed/simple;
-	bh=EDhDG017HVwpVzQWhP9PCQKMPhAQILJNstvkAl8CoE0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lt53VILG2MxnkhEfuCu1gygdUTNAomHSsBDQ3t6VTJ+v4gN+5CKF3AtRusadfdWHUvw7Z/tNvx6hXXqxf+pL3pKgV/3iU+R2TAS684cDyWhY6valpjCjvRUF6lm/m2hegY06WcN9K9wRLLKonHLjCHE6nhdOcD1nG3jFNX38sjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kOfnbgZn; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-354b722fe81so3177016f8f.3
-        for <linux-next@vger.kernel.org>; Tue, 02 Jul 2024 16:55:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F221F623;
+	Wed,  3 Jul 2024 00:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.97
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719967268; cv=fail; b=VMkP/205hRMtE6EApD8mumFbD+Qn0ERX+Z+L5kio/b/+74b1pV0hqSZsZwtJmFKLszBpkurggMhBH0DS2fHVkj1X2XYMdkwtLy3H/M114S9S7iFSrIHhDuTNV6o3to0X1wrimmhLJrOHApKjZMuzfGV+No4Ii3fOcPzkj4siXlc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719967268; c=relaxed/simple;
+	bh=KHA+y3S0NX59sjXXoeZoXQGMpvG/gGYSOf04WoaPiJI=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=T+jjYY21uZzx41aIr4n/cbIw4xwNh0nDzocdCEUb5vjNPaui1DnFM3TaD1huBsC/XrSyxTrmvSw2JclovEWXFTPJppM0SWgcnzlODScO4gWmzZlZmcuuS8u25DwSOF8D2vP19nexZgcgtF5I2hL9dLaotvjSQrhuGPhoWGZOnAs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=YVhSQbJ6; arc=fail smtp.client-ip=40.107.223.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hw0APgafIJrll0yjK51TykDVGtgSvkh7IBb+bhWcKocvn2Fj3kK8320L6DKAwz5HPBuyk7LEzvSUXeHfFKdRF2mYMkNvf57pDIxNjbSew8WQ0ysU74PTKiKyOioG8GgdNqz5EhdNudtDZNC0W9Gy144MtH5jc4NZV7BPd7Wv63837MY6cNJeA4PSAL/AhgrSvSQt8Oz2DtPuiGbGYii2HKjUoWLipU08IK7l3D/epIhcwcGIvGigWHfrtfLB6xWgn+RxllKZ4U3LPk1pysgp0ELV8ZqKZ8ioFa3mAeci2H9N2ACGOgrs1hUG//tNex6K+mApA9W4LoH91U0Ue3Mmhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4MF29OXg8iYXUaKRe3E9LfYCdxu7ABNIuLaiwiOkG8A=;
+ b=iMh0S4m8ec97t6LxyFBXm4Q5YoZKJVmf/UmKLzIYDc2uID9xI/ZOFtyluW5lejE1I+kCNgbafHK8vjHvINxuvKSOV/TIYlzFA+yOH9Q6R+fyNvFOgTmPA9lFwRy+TebKwJZ/DiJ5iFQ7aYGSd9VX/9XyxsCfoPiDcyF9ZSGnhwW7kIDX3oMLfS+B9VRsQ7u5N/oIOnP3RbFqpp37HrjuWussb1TSZslhR239F4rx07hy46TMXXo+UmiBxXVH30Tmgcf6zpwKLUEJJn1bFwhfxdIFxUjC9iSlychO/For2HW/f0N0BifmlgQlhr7gv+WawsJHCi3C+17d/qIJOlnAoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719964519; x=1720569319; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=km4qsHJHKqda9E66CUlrx57zoiZfz1VAUkowth8QfXI=;
-        b=kOfnbgZnJQnZKpp0wTPp2ABafG4jiAMe2YwLP+ImwIIzK4E+H2vxWuaZ2E1ggE6WZa
-         ys+yerx3HL7vGjCBIX+5Wgk4COzSESl0ByeMRFdY9cGUkq8kLMQ6vQVaCTzcgnqPrmt8
-         fw+YFuMpghh6a2bKykn0wdHjV30IkY+FwGCICQtPHJhQYgdTYGyMZSfwY6vwOAjrXrmi
-         rjVzrRmya12EFOAP/WsrPASixWXcVkHXnjpm14gEjyaWkDlw3W58oFD7Jo1bEhONzgYI
-         hvG+azUn74Cyemd2kJ8KkAFT2Lh/lcoYGMhiQofqY80U6e7uwJptjOXU73JxUXiUz1MT
-         hXtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719964519; x=1720569319;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=km4qsHJHKqda9E66CUlrx57zoiZfz1VAUkowth8QfXI=;
-        b=MaV1JfzZZGgAWgW1mxBJMY7zDbLIBOMtYHm9vKbPR25ZV/2hlNClc0BPyQ9QpLGrD/
-         ZpD14/6PqWMuCXE/acC2CCAOJSbhKxFXv5ZGD6KB37gh3FDCflM3+N6pt54pchjH3tgB
-         9xbZwGRnmAVxQUAxTy+rultmAjqxpeEmCz3V9pxqVnGArwJM3diqxStbIQTwyXYH7vGF
-         EvDR9W9QE8Rbfsb+Sf2UFM3rwQnHHbcoffZlP41PECS+CxCQSFbkmw1CaprMDIHhauYC
-         tQGK3GGoprxH8gftsiHwvz7Hpnl7RAn+cQ3zWD8Fr+b+3zUGH4oZcSQApuNEEqx3lins
-         RT1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVlddBWdboID5Ac4szBRCGKBEbaHc/UqN6ZtjmNbeP5oV9hmVW7zgeRxfL3vLc2GExjZ7jzDxslr75opjKlX0wtVSZpMTbNUX1KhQ==
-X-Gm-Message-State: AOJu0YxvDC37i30ZpPXoieNj6fJLI0Bl/HIfBmFU5ai5V6fLsQtO5OMS
-	2qGWi39hE5+7ByFhsik3ZUoaN5s7f2i4p2ZS7TheQaDv/+OApcf2/aanqhY7DHm5UwY5+uKojNe
-	anaXTXkWKQ98k4TCZe6RXQMh0MZ47zrQpnalk
-X-Google-Smtp-Source: AGHT+IH5zwIwvLQGEuIu/nPR6ya02EVLQ7qtQuC7shDkZz1+29oW9qpeW5xFLhHQee9ZI3BF3KCtfvvtzh6VVtGZXnw=
-X-Received: by 2002:adf:f5c4:0:b0:365:ebb6:35e4 with SMTP id
- ffacd0b85a97d-367756a836amr7357563f8f.23.1719964519041; Tue, 02 Jul 2024
- 16:55:19 -0700 (PDT)
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4MF29OXg8iYXUaKRe3E9LfYCdxu7ABNIuLaiwiOkG8A=;
+ b=YVhSQbJ6MNX+iH4kQaYGUUunLQ+PRiWpI5AUzWG/1IGRqIQyB4j5EbqBDa1xeAjpJF0EvbNVkurtPEqVPGJ2zGC8B4oYj/iSNUUVA5x1lWBVObS/ElT+PmHp/uETKkNHFwruIQBI4PZDP5Izz0r3t7g/ba02Mlwdv+8OxaORgTg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from BYAPR01MB5463.prod.exchangelabs.com (2603:10b6:a03:11b::20) by
+ DM8PR01MB6824.prod.exchangelabs.com (2603:10b6:8:23::24) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7719.33; Wed, 3 Jul 2024 00:41:01 +0000
+Received: from BYAPR01MB5463.prod.exchangelabs.com
+ ([fe80::4984:7039:100:6955]) by BYAPR01MB5463.prod.exchangelabs.com
+ ([fe80::4984:7039:100:6955%4]) with mapi id 15.20.7719.029; Wed, 3 Jul 2024
+ 00:41:01 +0000
+Message-ID: <2f8d6381-d693-4d16-b510-b74aff4fc55d@os.amperecomputing.com>
+Date: Tue, 2 Jul 2024 17:40:55 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the mm-hotfixes tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20240701101641.4fea0ac2@canb.auug.org.au>
+ <20240701110159.216a8d1f@canb.auug.org.au>
+ <37b70d3f-c46c-4df4-b52a-3c6ba5feb692@os.amperecomputing.com>
+ <20240703084440.3af9f526@canb.auug.org.au>
+ <20240703092233.44f51416@canb.auug.org.au>
+Content-Language: en-US
+From: Yang Shi <yang@os.amperecomputing.com>
+In-Reply-To: <20240703092233.44f51416@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0P221CA0017.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:610:11c::26) To BYAPR01MB5463.prod.exchangelabs.com
+ (2603:10b6:a03:11b::20)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CACw3F52_obAB742XeDRNun4BHBYtrxtbvp5NkUincXdaob0j1g@mail.gmail.com>
- <20240702230951.78721-1-sj@kernel.org>
-In-Reply-To: <20240702230951.78721-1-sj@kernel.org>
-From: Jiaqi Yan <jiaqiyan@google.com>
-Date: Tue, 2 Jul 2024 16:55:06 -0700
-Message-ID: <CACw3F51pPswPj=siLg1FkscMZhdELa0_46eOPUZtr5_yQc8P7g@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the mm tree
-To: SeongJae Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR01MB5463:EE_|DM8PR01MB6824:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37af68ae-78ce-4c80-adc7-08dc9af8cfd7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dGFDZEFKMjZuV1I3UVI0aUs1UVpXTzYzb3VWa0Y4UmxGbURmSFhBWHMzQ1pO?=
+ =?utf-8?B?aVV3RkQ3M20zRXY4eS8zaUEycGdGQ1JKekJKUXZBUkg2Zy92Ukp6M1lBdzNl?=
+ =?utf-8?B?bGZ3NE1zTXFSU2lXNGJXcWpQWkwzOVVoMzcrQkVwZ0lNVDdKdURrUzh6TUVO?=
+ =?utf-8?B?WXNLSkR3M0VkSWZmUG1qVmViVlZTdldJYi94MXliSVlHTEVxUElYcUNaMzk5?=
+ =?utf-8?B?K1JlZVZNdTViUkhra2F6dTIyVkZ3U3BBTGRWc09rNFBNVDFkYlA3TEszN1ZF?=
+ =?utf-8?B?TUorS3ZHTHhLZkt0VFFPSlZMRCtZV1BENmVGSmRYRlRFd3RnSFZVN2cvUjFS?=
+ =?utf-8?B?d1lnVUlJU3NQWUhxRXBJdm0rY1pIRVBYdjRraXJ4V1NZZ1I0c3kvM0Vnbm5P?=
+ =?utf-8?B?Y1dDckJ3SWNBMmtNOHJGKzJTM21UTitqZEdqRDZ2b3IvckE1RlFvWjBZWTk1?=
+ =?utf-8?B?QkdhMlhmbWp2U2dTUFdJaHZib29EOC9GWjNHM2ZsQlJ2T3BxUDllNU9wSVhz?=
+ =?utf-8?B?Qk1qNUVDamtLd3ZUMEhjdE5pNTB3aWVsLzZpZW9VOUxUVmIvaUlaWC9yYUVt?=
+ =?utf-8?B?Ti9NSE5wTnBLOUJEWHVGMXZuMHNQQWxESzRMeDZUYW9RdXI3TXY5WHVuZHQ1?=
+ =?utf-8?B?dE1VVnlkcG15OVRLcWlvQ1o5TWcvVGZrWlhtQ2xqOTNyNjFXazhVNC80SWlO?=
+ =?utf-8?B?WTJWdVlMQlRRcW92V0k4eTgwZDdCZTR0bGR5eWJuNXl6b2w2NW90ZnA3OFln?=
+ =?utf-8?B?T1dSQ3NJcnpxNHpOZHIwNDZuVUVOdHp6Sk80bjQrN2FxUEN1QXlRNEY0aDBM?=
+ =?utf-8?B?Y1A0ZGdDRHpKQ2RvbmRwWDFKcEEzZjhaUzZCcU8yQjdrVzBpVXQ5d0Y3Q2hG?=
+ =?utf-8?B?VFpGWFNIYjUxZDh3ZjNSbWJFbHkyS2U0RnhUWnVUaytXR0ZWcWVNdE1xdE5P?=
+ =?utf-8?B?TTkvR3I3MzRhMXRtVTBPL2RUZTRLRzZYaVU2MTBuall3elQ3c0FBL1h6cHll?=
+ =?utf-8?B?SnpBdG84NlVtZFlVbjJ6VDF3anl2RzhLeXptSHIrcHdvNGpUc29TWTRhakJ6?=
+ =?utf-8?B?aGtuTkhvVjhuR2dzejlyNU5Mc2ZEbWcwOTNhdURMSVg1NnNhMjNYaDArdXBY?=
+ =?utf-8?B?TTBmVGI2aFU4dkR6R2s3N2NsOHljelVEU3FCa0RuSmhtME9OdUJqWENDVzZ5?=
+ =?utf-8?B?blVoUzQ1N3BGQ0c5UE1tbGNsZUhobmdvallENEdabWg3YTltdzZ3b1ZlM1M5?=
+ =?utf-8?B?aXlRUXhBVWdaUEZjWjNvNGM5LzQ4QlkyUE4yNWxmTm9oRHFqVW5OWHdHVFJX?=
+ =?utf-8?B?ZUU0ckJxSVUvbTdjYXAvRjJQdHRmM1VKL1V0OVFYNW1PK2VBUDhqQkhURWZL?=
+ =?utf-8?B?SUR4RkVJZlg5NEJIcENtMG0zVmJEcUJRRks2R3BIZFhMODFmNUdUUHBJNHBQ?=
+ =?utf-8?B?NkgwRDhjNHNmUC80dS9CakNZSXpxNkNnVkxBSTl4bEc1Y3hrU1VQMWZvNFJN?=
+ =?utf-8?B?UjZwTzUreThKdFFHZzVwQTBPT2RnK2ZCOWZoRFVvZS9BUFhVK01xRndBSmZY?=
+ =?utf-8?B?MGFHWS85M25JZ1lCcjJxdjZOblk3T0YzNGtweWJ5VzhIbllVdDltMWtWdTJW?=
+ =?utf-8?B?cVZYWmcrS1Znazh3OUJxaHdjd3hHdFdOOVMwSG9JRTNUZnl6TG9qekJNK0J4?=
+ =?utf-8?B?SCtMbjVPZCtzbC9UOURjQjRmMVd4MzBlbTl1MkVTNUpZcExTbXdQUW5kUlUx?=
+ =?utf-8?Q?c4YgkGNE+JlSFJxOuw=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR01MB5463.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?RGRJUEVqYW1KamtDNU5lM3M0cENOTzBqUGZlUTM5YWJBbTNTbDljRlRWNWhh?=
+ =?utf-8?B?Ty95TGRrbkg2MXFwMTJTc2p2cVVpa2ZaRFlTQmxlWmZsNGRRUDZZK2xDbkp3?=
+ =?utf-8?B?QVBTdGZGanV4WU1TcE5rUGRtYkZ5cmpQQ0crNUgxQm02ZmRaVloxNmZIT0lt?=
+ =?utf-8?B?enp2SHIvcnNKbVdkYzY4cnBSZUtFdGJYeVpVVVRpUVN1NGsrSDlYK1g4cHVZ?=
+ =?utf-8?B?dCtQenhGWlVRa2JBc044b0luc2ZrY2xwbSt4dHJSOUdyNE5pRXZDTHpNZllC?=
+ =?utf-8?B?Sy93ekk1ems2dlhxZE5GbDFBdEVUL3pEY3BEMHFFUWtmNmdsd05hUTljYWNT?=
+ =?utf-8?B?RTYvWklQMk5NcXBZMFhhQjZWeFBMWVV4ajUxVld2RjRXQTVrNFcvbHI4RlJJ?=
+ =?utf-8?B?Q3k0ZXViQVR0ektCb0VKUlBJaVJXR040T2RFT29BSldMVGpVemhuUGQ4UzRn?=
+ =?utf-8?B?S1lyRmI5SXZlSjg3QXplWWZwS09ZNlZrR0lKb2lGRTErRnpGRk45Zm9aU0RV?=
+ =?utf-8?B?blNPbFJIdVlSazVXY0dQU1hqV1pSOVowV2hNeVNaRmROZmVoc3NSWUEzQ0xU?=
+ =?utf-8?B?TkJhMFRqdDIvTHgxNXJIM3pLZnJmVVhHb3hBTnVTNEhkclFFV0Q2cE5tMW1F?=
+ =?utf-8?B?Nk1jd2txd1JkeG5GOVlKaEhpRlc2SHBieWFIKzdQcU1LbzZjcHBWN1djM0Mz?=
+ =?utf-8?B?WU1OaWpKREFQMFl1a3EwRGZJaTdzbHV4bHQ4KzJDdUxWZlQ5aTl5cmRJeFor?=
+ =?utf-8?B?ZWNvV2M2OEtGK3NDOHVERElIVXBjUG5XdHY2bjdxd1VmYTViQXRJZjlDMnBE?=
+ =?utf-8?B?bnBGZVFoR2o3d2tkb2UzU2RYTFZpTFlhUjFZR04rdnVodjBvL2dlSUEvdWZ5?=
+ =?utf-8?B?MGFqY01lNTA0SmhKZEh4ODR3WmU1a0VNekN2VnI1TUVXTEpsTFJ5MWpiR3lL?=
+ =?utf-8?B?RlRMMnJxZTZqRHViSGlmVEtnczBiT1NySnkrU0tGVTRmUytCNHU0NVZYTUdU?=
+ =?utf-8?B?ODhjbUlGM0xYc3BMZm1JZVMyNFIzbU5reFh4SWc5WUJJbW9GdXZXc3pjYzJW?=
+ =?utf-8?B?MkxtTWI0Y2xtNlJZdUJoTWNacVZkRmZYRmw3Wk15dEtJdnZ0NVdadVkvdGwz?=
+ =?utf-8?B?WTlrTzFSa3F4WFVWUDFJTldUSjdiZHh3Tmh5YVlVVUc0K2ZLbXZGckJuRGsr?=
+ =?utf-8?B?MXhHN0FXRVRJbS9SS3ErSkgrOVFRQnJoZkpqRnMvdHZoS2JVOVd6SzZaMm9X?=
+ =?utf-8?B?RTNvc0d2WW5xTVExMjI5UUxGVHBzaVErL053UWdqcUVCd0JvRDdYbnZyY1Vs?=
+ =?utf-8?B?ZFZvM1BCSEU2QWV0c0hFa1lUQ0tNSllmaExEWk1yTVJVVGpYL2dxLzVCODlh?=
+ =?utf-8?B?OTRpa2pOeWp0RXZaZmY5bWo2MXVYYUR4eW5FK2swbnRjMVNObkR5MFRQM3Mx?=
+ =?utf-8?B?d1J1VERtS2d2WENXRldKQW1NREgvZEJ5L0ovaHhHUFJNaEhrVTltUVRwU0dT?=
+ =?utf-8?B?eTNodFY1SGNzTERKS3RRWG5nR2FWOWRLMVllQkFtWUx6UFlPVHBac2xod0hH?=
+ =?utf-8?B?WGNTSCtRdVY2ZWJ2dklRemtseFhHb294RnZYdE1CMmpLMmJVNE9XWC9PTWRK?=
+ =?utf-8?B?M0t6T29rcnZBdlU3UzlPZzFjaTB4YWtBbytwL0x1RlFIdWRoendxclk3Rlor?=
+ =?utf-8?B?L0JKb0xvNUpzSS9sb1R2bGtBckw2SVNLL29HQlJOeitjK3UxbkV2ZVd4NDBH?=
+ =?utf-8?B?SWs4TWlWVHlZZVA3Y1BReTkyUi93OEswMXhHOU1EeWFhOVA4UFlBZUNDMW0r?=
+ =?utf-8?B?VnVYeGhGbFV1Z2JEcFZQQ2hoVlNFcFFTalh0NG85SytCQ0dzaCtPNFBuVkhL?=
+ =?utf-8?B?a1M3cDdpalF1T2drSWN3WlFybDJJMm5UTzVUdTBTRklTRk0xQ1NOOXQ2YlJr?=
+ =?utf-8?B?K3BaU3A3NktuSDExRlRZdHN0STBPL1ZsSWlDRGhHT3ZRUkRHenY2NmZPd0Jl?=
+ =?utf-8?B?WG9qRm9sdkxoR1RQZ1lFdU1CMHh0ZWlEa0s2YmRQdzExcC84OFZJUXpxa0dy?=
+ =?utf-8?B?Q2VUbGg5L096Q0dMNkk0MUhXTTVrNHFQancvQTdDZ0tXclNZdDEwN2dBbkRF?=
+ =?utf-8?B?SW05R3JBT2tVY2NPVGV2UEVsMUIwS0xvNGJMMGpvYmR0b2NqODZoMEZncHJv?=
+ =?utf-8?Q?77/3RJDsgdLQIAd824f4uo0=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37af68ae-78ce-4c80-adc7-08dc9af8cfd7
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR01MB5463.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2024 00:41:01.0780
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TbOTNPmjRc8YNOao3Moi/n/LNPgqLp/7hCj5aTB0Zq1Pi+UUVj3R6Ws8soCIj/7/SD350Ax/DeEisTM8/irz6u4JiR/dvi/QWcp6XoyCAhE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR01MB6824
 
-On Tue, Jul 2, 2024 at 4:10=E2=80=AFPM SeongJae Park <sj@kernel.org> wrote:
->
-> Hello Jiaqi,
->
->
-> On Mon, 1 Jul 2024 23:37:55 -0700 Jiaqi Yan <jiaqiyan@google.com> wrote:
->
-> > On Mon, Jul 1, 2024 at 11:18=E2=80=AFPM Andrew Morton <akpm@linux-found=
-ation.org> wrote:
-> > >
-> > > On Mon, 1 Jul 2024 21:33:20 -0700 Jiaqi Yan <jiaqiyan@google.com> wro=
-te:
-> > >
-> > > > > > This seems a reasonable thing to do so there's probably some wa=
-y in
-> > > > > > which to do it, but a bit of grepping failed to turn up example=
-s in
-> > > > > > existing .rst files.  Can someone please suggest?
-> > > > >
-> > > > > It seems I need to add some blank lines according to [1], especia=
-lly
-> > > > > to add a blank line above the first list item:
->
-> According to my understanding and testing on my machine, it seems we need=
- blank
-> lines only before and after the blocks.
 
-Yes, as stated in [1], "The blank line above the first list item is
-required; blank lines between list items (such as below this
-paragraph) are optional."
 
+On 7/2/24 4:22 PM, Stephen Rothwell wrote:
+> Hi Andrew,
 >
-> [...]
-> >
-> > Ah, sorry Andrew, I should sent out this diff, as there are more blank
-> > lines needed:
-> >
-> > diff --git a/Documentation/admin-guide/sysctl/vm.rst
-> > b/Documentation/admin-guide/sysctl/vm.rst
-> > index 75e22137d849..f48eaa98d22d 100644
-> > --- a/Documentation/admin-guide/sysctl/vm.rst
-> > +++ b/Documentation/admin-guide/sysctl/vm.rst
-> > @@ -274,12 +274,15 @@ Correctable memory errors are very common on
-> > servers. Soft-offline is kernel's
-> >  solution for memory pages having (excessive) corrected memory errors.
-> >
-> >  For different types of page, soft-offline has different behaviors / co=
-sts.
-> > +
->
-> So, this was needed to make 'make htmldocs' quiet on my machine.
+> On Wed, 3 Jul 2024 08:44:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>> On Mon, 1 Jul 2024 11:15:17 -0700 Yang Shi <yang@os.amperecomputing.com> wrote:
+>>> On 6/30/24 6:01 PM, Stephen Rothwell wrote:
+>>>> On Mon, 1 Jul 2024 10:16:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>>>> After merging the mm-hotfixes tree, today's linux-next build (powerpc
+>>>>> ppc64_defconfig) failed like this:
+>>>>>
+>>>>> mm/gup.c: In function 'gup_hugepte':
+>>>>> mm/gup.c:474:25: error: implicit declaration of function 'try_grab_folio_fast'; did you mean 'try_grab_folio'? [-Werror=implicit-function-declaration]
+>>>>>     474 |                 folio = try_grab_folio_fast(page, refs, flags);
+>>>>>         |                         ^~~~~~~~~~~~~~~~~~~
+>>>>>         |                         try_grab_folio
+>>>>> mm/gup.c:474:23: warning: assignment to 'struct folio *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>>>>>     474 |                 folio = try_grab_folio_fast(page, refs, flags);
+>>>>>         |                       ^
+>>>>> mm/gup.c: At top level:
+>>>>> mm/gup.c:2747:22: error: conflicting types for 'try_grab_folio_fast'; have 'struct folio *(struct page *, int,  unsigned int)'
+>>>>>    2747 | static struct folio *try_grab_folio_fast(struct page *page, int refs,
+>>>>>         |                      ^~~~~~~~~~~~~~~~~~~
+>>>>> mm/gup.c:474:25: note: previous implicit declaration of 'try_grab_folio_fast' with type 'int()'
+>>>>>     474 |                 folio = try_grab_folio_fast(page, refs, flags);
+>>>>>         |                         ^~~~~~~~~~~~~~~~~~~
+>>>>> cc1: some warnings being treated as errors
+>>>>>
+>>>>> Caused by commit
+>>>>>
+>>>>>     5f408bfe0d13 ("mm: gup: stop abusing try_grab_folio")
+>>>>>
+>>>>> I have reverted that commit for today.
+>>>> And I also had to revert commit
+>>>>
+>>>>     52cca85b0ebf ("mm-gup-introduce-memfd_pin_folios-for-pinning-memfd-folios-fix")
+>>>>
+>>>> from the mm-unstable branch of the mm tree.
+>>> The patch attached in this mail should fix the compile error.
+>>>
+>>> https://lore.kernel.org/linux-mm/CAHbLzkowMSso-4Nufc9hcMehQsK9PNz3OSu-+eniU-2Mm-xjhA@mail.gmail.com/
+>> It looks like that patch has been applied to the mm tree instead of the
+>> mm-hotfixes tree - as a fix for commit
+>>
+>>    50ceb37037f3 ("mm: gup: stop abusing try_grab_folio")
+> So for today, I have applied the following patch to the mm-hotfixes
+> tree merge and stopped reverting
+> mm-gup-introduce-memfd_pin_folios-for-pinning-memfd-folios-fix.
 
-Absolutely.
-
->
-> >  - For a raw error page, soft-offline migrates the in-use page's conten=
-t to
-> >    a new raw page.
-> > +
-> >  - For a page that is part of a transparent hugepage, soft-offline spli=
-ts the
-> >    transparent hugepage into raw pages, then migrates only the raw erro=
-r page.
-> >    As a result, user is transparently backed by 1 less hugepage, impact=
-ing
-> >    memory access performance.
-> > +
->
-> But above two blank lines were not really needed to make 'make htmldocs' =
-calm,
-> at least on my setup.  Many other documents also don't have this kind of =
-blank
-> line.
-
-Yes, they are optional.
+Thanks, Stephen. I think Andrew may misread what my patch fixed. I 
+emailed him offline. Once he fixed it you should not need this 
+workaround anymore.
 
 >
-> >  - For a page that is part of a HugeTLB hugepage, soft-offline first mi=
-grates
-> >    the entire HugeTLB hugepage, during which a free hugepage will be co=
-nsumed
-> >    as migration target.  Then the original hugepage is dissolved into r=
-aw
-> > @@ -296,8 +299,11 @@ the request to soft offline the pages.  Its
-> > default value is 1.
-> >
-> >  It is worth mentioning that after setting enable_soft_offline to 0, th=
-e
-> >  following requests to soft offline pages will not be performed:
-> > +
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 3 Jul 2024 08:52:20 +1000
+> Subject: [PATCH] fixup for "mm: gup: stop abusing try_grab_folio"
 >
-> Interestingly, 'make htmldocs' didn't complain even if I don't put this b=
-lank
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>   mm/gup.c | 3 +++
+>   1 file changed, 3 insertions(+)
+>
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 12c7b41712f7..5f58c95b3ab9 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -437,6 +437,9 @@ static unsigned long hugepte_addr_end(unsigned long addr, unsigned long end,
+>   	return (__boundary - 1 < end - 1) ? __boundary : end;
+>   }
+>   
+> +static struct folio *try_grab_folio_fast(struct page *page, int refs,
+> +					 unsigned int flags);
+> +
+>   /*
+>    * Returns 1 if succeeded, 0 if failed, -EMLINK if unshare needed.
+>    *
 
-In fact, without this blank line, even though make htmldocs doesn't
-throw ERROR or WARNING, the output html file is broken: there is no
-bullet point for the list items below.
-
-> line.  But for consistency (see the beginning of sysctl/vm.rst), I think =
-having
-> this would be good.
-
-Agreed.
-
->
-> >  - Request to soft offline pages from RAS Correctable Errors Collector.
-> > +
-> >  - On ARM, the request to soft offline pages from GHES driver.
-> > +
->
-> Again, same to the reason above, it seems above two blank lines are not r=
-eally
-> needed.
-
-Yep, optional again. I mainly just want to be consistent.
-
->
-> >  - On PARISC, the request to soft offline pages from Page Deallocation =
-Table.
-> >
-> >  extfrag_threshold
-> >
->
-> I have no strong opinion about these, though.  Having four more blank lin=
-es
-> that might unnecessary is obviously no problem.
->
->
-> Thanks,
-> SJ
 

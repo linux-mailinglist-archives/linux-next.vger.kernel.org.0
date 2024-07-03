@@ -1,130 +1,121 @@
-Return-Path: <linux-next+bounces-2817-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2818-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF11C924D2E
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 03:29:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0ECD924DE1
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 04:36:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E7461F2342A
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 01:29:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EB9B1C22BF1
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 02:36:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F1131373;
-	Wed,  3 Jul 2024 01:29:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B891FB4;
+	Wed,  3 Jul 2024 02:36:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XC6nxYXd"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BrTosh7Q"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806224409;
-	Wed,  3 Jul 2024 01:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2E9139D;
+	Wed,  3 Jul 2024 02:36:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719970185; cv=none; b=jVozjarE1eH6ofE1iLrsgpiM00BrR32fdd/1cw5YO97mdjOIe+y0s+mizQ4sjU8fp6d2t5xiARMJlCw0XW8UgZYf3hznLEEomRK4XK/yAdf1k2vDpe9/HPqEOTdBhULMnYTTmalzJ2uT9LBlaW4ItB8aFyD/OweaB0bSlctYWK8=
+	t=1719974211; cv=none; b=Z5WpO5OniDygb48hAFCgUg2LapFlRC36NBGMoeCr8CrxmUGS8oloefvdG+LJ37TBJZtIZFaTI4aCq7iZC4YFtLPbt1TUOGxg+4x83JCNe5lqwT5ZtO+2Ra5xhkZi5UY2IyGzEUShH8gmKPPdCBCZVnsLbFjDtyYK0YQUBugLlwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719970185; c=relaxed/simple;
-	bh=g+XXyHOzir2A2nh4K4ouH8PO9d/BcCXBpfaXdmkAeN4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=AhDjg/fliRWFownExQmTCR8lP/2u/8ifzReP+VG6d6EvbqoNxtMKSL5izRbpD6A4NkY99+HL+TeWAnC0XMx8tfn5KFMV00ePCPOyb/h9pQqBj9Rn8h2ps/Ubs88pETfEAjd1J7EMuwjZLZKvbwkXyFgKmnsBmNTqZv+USLhGjrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=XC6nxYXd; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1719974211; c=relaxed/simple;
+	bh=aSfuX8QaCcB4szCaBQHcb6fbkYpJ+xJH7F8/1Hanxio=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RrWv8kSkaoTdhiOmnHcMwahFSlUHjiWrKB/Tf11IgTOFdSFzkpxCybfiuopeuB2TjaAqXH9HrkrTPZ5o7vqJcrTJ/cFokFwJIPIIHUIrJw2yRLyzfgtbiRpBA9tK/wGMFYrS6lyv/78HFV7gKT6V2h0g6W3U99hAwRkizwXPL7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BrTosh7Q; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1719970179;
-	bh=nIM5iPvChSeqRiNksJ2bd1KdDzBJoaJC7afh/m1jadA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=XC6nxYXdzsXwAtOUKw73d5PjyMc7HeX7ZJoT1mjy60zHjNwsaENQxUKfuBro+MEUV
-	 RA3vOaLPjOxVQ69UAkQteAu/lvlSXd2Qoi8zW9aQBaRAhpnnlAboZhUc6eGaz4ReYL
-	 RuLfJpIkn0DO6NTkhM7M5Z7f46ieoyqjzBB750gApxSKQAJtv1cdsEAmahXow2fJuc
-	 Nd3qqvhw5o7a/pwVi0eGXLUuXb6KYtC/Qx05Aoy+aeJOFbAiK7wOjvNxhgwQbepP4l
-	 kjbFLinaKFVnU2EbfaHnue+nf/0C/56GOQkUIS0BnFyEROTMLa6kPtL44EMwzyZkuL
-	 MFe3s2Thub0WQ==
+	s=201702; t=1719974205;
+	bh=0SHqF0dUovd6ss7dr8haTSOKzF2Sqk2aiA+Wo+YlUXw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BrTosh7QOfRCq2kxrXOrE8VmZbJ+puf5D3nORfbHKQFZ166stwB0wms/m3X4eyOFO
+	 Kr7n0OQysIE4CUVMEpEMBM8t0wDnDB2G9glSM8lOIIaIU6zJMpQiWvYgOEn1Ovlgex
+	 UEkrQ60MvhEBj2ekWFrKPsk9f7xvJt5XqbEhjyGZF0ESDf2slOcg4Ci13fW72gtdRK
+	 StugcFI0ly3iVCGkClfUtX8oXm2/1DdYc31ir1Q2zloNy7I97NvwGZACzBes6XlMxG
+	 uB9wk9zd5xi2mfvy4ZnuSqsdXLOVejNqlNLiDf7M1Qf5jEQekJi87DoW9obsXnX4+H
+	 LtJl48F11Yshg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WDMdZ5cJnz4wc1;
-	Wed,  3 Jul 2024 11:29:37 +1000 (AEST)
-Date: Wed, 3 Jul 2024 11:29:36 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WDP704HvCz4wbr;
+	Wed,  3 Jul 2024 12:36:44 +1000 (AEST)
+Date: Wed, 3 Jul 2024 12:36:43 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Jiawen Wu
- <jiawenwu@trustnetic.com>, Linux Kernel Mailing List
+To: Dave Airlie <airlied@redhat.com>
+Cc: Mark Brown <broonie@kernel.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Piotr =?UTF-8?B?UGnDs3Jrb3dza2k=?= <piotr.piorkowski@intel.com>, Michal
+ Wajdeczko <michal.wajdeczko@intel.com>,
+ buildfailureaftermergeofthedrmtree@sirena.org.uk, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20240703112936.483c1975@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the drm
+Message-ID: <20240703123643.5b4dc83f@canb.auug.org.au>
+In-Reply-To: <Zn7s611xnutUFxR0@sirena.org.uk>
+References: <Zn7s611xnutUFxR0@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_UeR91GFvX0uJsm9Y8KOSP1";
+Content-Type: multipart/signed; boundary="Sig_/yaBhn/0VkwjWMaUO2AGJq8U";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/_UeR91GFvX0uJsm9Y8KOSP1
+--Sig_/yaBhn/0VkwjWMaUO2AGJq8U
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+On Fri, 28 Jun 2024 18:03:39 +0100 Mark Brown <broonie@kernel.org> wrote:
+>
+> After merging the drm tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> /tmp/next/build/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c: In function '=
+pf_get_threshold':
+> /tmp/next/build/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:1788:27: error=
+: unused variable 'xe' [-Werror=3Dunused-variable]
+>  1788 |         struct xe_device *xe =3D gt_to_xe(gt);
+>       |                           ^~
+> cc1: all warnings being treated as errors
+>=20
+> Caused by commit
+>=20
+>   629df234bfe73d ("drm/xe/pf: Introduce functions to configure VF thresho=
+lds")
+>=20
+> I have used the tree from 20240627 instead.
 
-  drivers/net/ethernet/wangxun/libwx/wx_hw.c
-
-between commit:
-
-  bd07a9817846 ("net: txgbe: remove separate irq request for MSI and INTx")
-
-from the net tree and commit:
-
-  b501d261a5b3 ("net: txgbe: add FDIR ATR support")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I am still seeing that build failure.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/ethernet/wangxun/libwx/wx_hw.c
-index d1b682ce9c6d,44cd7a5866c1..000000000000
---- a/drivers/net/ethernet/wangxun/libwx/wx_hw.c
-+++ b/drivers/net/ethernet/wangxun/libwx/wx_hw.c
-@@@ -1959,7 -1977,7 +1977,8 @@@ int wx_sw_init(struct wx *wx
-  	}
- =20
-  	bitmap_zero(wx->state, WX_STATE_NBITS);
- +	wx->misc_irq_domain =3D false;
-+ 	bitmap_zero(wx->flags, WX_PF_FLAGS_NBITS);
- =20
-  	return 0;
-  }
-
---Sig_/_UeR91GFvX0uJsm9Y8KOSP1
+--Sig_/yaBhn/0VkwjWMaUO2AGJq8U
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaEqYAACgkQAVBC80lX
-0GyYZAf8DxYgI5fhkZtmy+Uwo+WcOxg8hYCNADg8Ozmw0ZpfyWjjaemX75sVac8P
-AV58qTSoA98P+ktBpOlJrZVgmd3vOasBB3HqIWp6HiS8oVySYqxxW5zboNC3uUut
-/X3tzuUBlkggYIHZElnmyDUWJCXs7rDhUihBEkU04dOdFyTI5OhwL6Vp5M7069bY
-zluk5SjeM23y0hn9WswmzOJZw7OUE6ELKCPaen+fSqKTpadDSDHLm8VuaSmlKPtc
-hr3nyvPSR/SsPufnOLO30crCz8bomm5y6ashou7OPNAV3IKAOpU7QvW4k8R3w8/r
-ChJtUFF6DShtJAY9KjQM2t5RthSRkg==
-=HcsQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaEuTsACgkQAVBC80lX
+0GxrbQf+LSBGQ52sQ0YfN9wr5fTIjIq/ntnbwl+hoEnKZtBUjmaiPZWEoWXYnmbG
+oKgUBRZvVBAKjxpb4hwV4aVdvQGWKDe4FjD+AwUeevutrFEeZEGI2ZQBLfHbFC6x
++kio3gEHjh/I5VOIgeaDToOo47JLKvArn5Bu69nZgMZIaOVectLT74KrE0TP4L4a
+V5Ey0a2C4MXXbTC+zZWP2Y9AX8LgvxE5wGOkRJ5pN7C0p5Ff8UDYwEXBEQ/T6SRF
+E3ejRAGuWP5FVOe6gGDeC2FEeBQfrCVrnIzCq7aqNiZIyW3lrXTFHQo3atFYwekB
+gk25zepLUnHaYJPhIXoYZw0eLsGC2g==
+=efJw
 -----END PGP SIGNATURE-----
 
---Sig_/_UeR91GFvX0uJsm9Y8KOSP1--
+--Sig_/yaBhn/0VkwjWMaUO2AGJq8U--
 

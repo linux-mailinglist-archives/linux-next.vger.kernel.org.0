@@ -1,240 +1,137 @@
-Return-Path: <linux-next+bounces-2830-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2831-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9372B9266EB
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 19:17:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A47A92702D
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jul 2024 09:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AB412893F2
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jul 2024 17:17:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D8B2B23C5C
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jul 2024 07:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4FA318308A;
-	Wed,  3 Jul 2024 17:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5671E1A01DE;
+	Thu,  4 Jul 2024 07:02:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Go7n1/cp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NT1XRMFH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA1618C05;
-	Wed,  3 Jul 2024 17:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8508613E024;
+	Thu,  4 Jul 2024 07:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720027049; cv=none; b=S71LKTgsYxFTFBOwyVHfC6b20pHfsvzjrLwEpQVYZ030ZqdMIaT9P9Q0ru9NTOFBLySgZjbMxZCGyRg+V93pgJctd5WGl+4UT3IFSIsdTr1djLNpGqyM9WMQkV9c+Etq0P9bU+bnr/2XxU1kQ4geZUFYXUas3mbH9XJ9ChDEDSw=
+	t=1720076548; cv=none; b=Ihk8awMGpkin+XVP8gVvhMCQw97dxKd5+DVOjcbUyEwhnLlHN73suC+j+tqsLmV6Ig+aPuZ6krDjpMfJAYs8PUBggMsoxb1/LKIHJtIfaHxTpG2Zogd2aj01B/oBn8fJb5+x9NCmr3Vd7foNdvHVmX5bvAfleMQOFTxRvN22N4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720027049; c=relaxed/simple;
-	bh=49RzZTWJipbL3RIw+kemkgFat7FFpGDJxcMEypRlpJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Js8qSpwl9yIwKvJ53B+gmu07wZmSUelss+4vCAdynKD8FbNqwa5KnkIsojVwfdtu7TsbHCb8mXJMw7mi2NYif0RMeor4BQBZ0n/0hY/+8VFcRuulxf4G8pI18xRfODItfzQtMcOllyOo1iiwnyhGpNysSrV9CKmkyre2wAx/hk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Go7n1/cp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A42C3277B;
-	Wed,  3 Jul 2024 17:17:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720027049;
-	bh=49RzZTWJipbL3RIw+kemkgFat7FFpGDJxcMEypRlpJU=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=Go7n1/cpx9saeMga79jim/RG0+yZT9yiURl3Uxc52YUCGnRjg6WrQc5ltGJV0suw6
-	 MnDWzwLeBeZnWb6m/o0HiM1njLRlS8nuRhefwFawmkg7wecQ3TpPJmzffAKmQopHlZ
-	 8yB/8hNbfiO2wM2EngBKfi2F707xhzQo4I7l0/2RWfepJlbQEXOL1QL5GX5zZZti2Q
-	 30ilTwfviryYiYQyO9PUVPGevgFJposA8f2eqnnINtrAMQkkhllKtjB7vpH+2CSMUH
-	 m21ljt0O7QK6S0wHGTt2xtoyK4R4lHUXbVaTe5+f0AsEDxUt0Nl6IXSV1x7qcCoiTL
-	 slJ6Z49zN5Aow==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id A2322CE0BC3; Wed,  3 Jul 2024 10:17:28 -0700 (PDT)
-Date: Wed, 3 Jul 2024 10:17:28 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Petr Mladek <pmladek@suse.com>, John Ogness <john.ogness@linutronix.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the paulmck tree with the printk tree
-Message-ID: <ae5990ea-4f42-4edd-a8e6-b9cb97f13696@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240703131820.02eb8021@canb.auug.org.au>
+	s=arc-20240116; t=1720076548; c=relaxed/simple;
+	bh=HTB1sePIud3c4rcPIx03gGOAyz7Lyhr/bfLJjJkcDk8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XOWDjr6t5Ku5atnDuHZ4XsccIVCKMqGOs+pODX7dRfqW5vuD2oh79n+tzyWeXuI+2wWw+3Gh0TaAKrNSiA7RxkyqBfFf7H/40yg3YzhgyHiFfIzDHXRWV/LDSvlY9ojmwownR+2LDj7sDvmNgbwQk28m+mxO4FdREWpNjeQ/dA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NT1XRMFH; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720076546; x=1751612546;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=HTB1sePIud3c4rcPIx03gGOAyz7Lyhr/bfLJjJkcDk8=;
+  b=NT1XRMFHxJSJj1NM83HIbuPPsU4XyfcVuLD0l5BRhfFmcN9/taMuuSJu
+   xQmvqYcDgJDtx8kdcoI1GYb/se+rZp53IFyZFJQGdrnawDRKfTgG/NmpY
+   Mu9nQfsImFAzT2wzZqje+/8xDW9Y9WUmuarIHbyQbl1Mrfd+x2rcWWRW+
+   QgoqSw6+3Omk2FSb5Shgq/3m/SuQnRdfeV8Y1A5e8L4iLh3LbG1MrU/AP
+   znZm5fiUBjs2SVxgXHzm1u+0rmOvuBKuji0WE/eXxHtbCbnq6clovZhr1
+   D7zqx2INdpk20DFtnyY4939oz68UM/C1PHP/czlSlI4sxJfR+Osl4UYB0
+   g==;
+X-CSE-ConnectionGUID: 54n5I2dLSeChtKtZl4U9oQ==
+X-CSE-MsgGUID: ogsdIr4jSwu1ehTWkgAEQg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11122"; a="20241796"
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="20241796"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 00:02:26 -0700
+X-CSE-ConnectionGUID: bq0nrWTxSw60uPvQdaXmhw==
+X-CSE-MsgGUID: Ym0juRbYSuOgUTjJN9j4VA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="46518039"
+Received: from oandoniu-mobl3.ger.corp.intel.com (HELO [10.245.245.56]) ([10.245.245.56])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 00:02:23 -0700
+Message-ID: <8de22d252014aa52e631eb1bcf8e85d50e96c29e.camel@linux.intel.com>
+Subject: Re: linux-next: build failure after merge of the drm
+From: Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
+To: Michal Wajdeczko <michal.wajdeczko@intel.com>, Stephen Rothwell
+	 <sfr@canb.auug.org.au>, Dave Airlie <airlied@redhat.com>, Rodrigo Vivi
+	 <rodrigo.vivi@intel.com>
+Cc: Mark Brown <broonie@kernel.org>, DRI <dri-devel@lists.freedesktop.org>, 
+	Piotr =?ISO-8859-1?Q?Pi=F3rkowski?=
+	 <piotr.piorkowski@intel.com>, 
+	buildfailureaftermergeofthedrmtree@sirena.org.uk, Linux Kernel Mailing List
+	 <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	 <linux-next@vger.kernel.org>
+Date: Thu, 04 Jul 2024 09:02:21 +0200
+In-Reply-To: <10c3d9b8-bf5b-42c1-9c87-36828f5c995c@intel.com>
+References: <Zn7s611xnutUFxR0@sirena.org.uk>
+	 <20240703123643.5b4dc83f@canb.auug.org.au>
+	 <10c3d9b8-bf5b-42c1-9c87-36828f5c995c@intel.com>
+Autocrypt: addr=thomas.hellstrom@linux.intel.com; prefer-encrypt=mutual;
+ keydata=mDMEZaWU6xYJKwYBBAHaRw8BAQdAj/We1UBCIrAm9H5t5Z7+elYJowdlhiYE8zUXgxcFz360SFRob21hcyBIZWxsc3Ryw7ZtIChJbnRlbCBMaW51eCBlbWFpbCkgPHRob21hcy5oZWxsc3Ryb21AbGludXguaW50ZWwuY29tPoiTBBMWCgA7FiEEbJFDO8NaBua8diGTuBaTVQrGBr8FAmWllOsCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQuBaTVQrGBr/yQAD/Z1B+Kzy2JTuIy9LsKfC9FJmt1K/4qgaVeZMIKCAxf2UBAJhmZ5jmkDIf6YghfINZlYq6ixyWnOkWMuSLmELwOsgPuDgEZaWU6xIKKwYBBAGXVQEFAQEHQF9v/LNGegctctMWGHvmV/6oKOWWf/vd4MeqoSYTxVBTAwEIB4h4BBgWCgAgFiEEbJFDO8NaBua8diGTuBaTVQrGBr8FAmWllOsCGwwACgkQuBaTVQrGBr/P2QD9Gts6Ee91w3SzOelNjsus/DcCTBb3fRugJoqcfxjKU0gBAKIFVMvVUGbhlEi6EFTZmBZ0QIZEIzOOVfkaIgWelFEH
+Organization: Intel Sweden AB, Registration Number: 556189-6027
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240703131820.02eb8021@canb.auug.org.au>
 
-On Wed, Jul 03, 2024 at 01:18:20PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the paulmck tree got a conflict in:
-> 
->   kernel/rcu/tree_exp.h
-> 
-> between commit:
-> 
->   9a30ceb4d93e ("rcu: Mark emergency sections in rcu stalls")
-> 
-> from the printk tree and commit:
-> 
->   c19a6725b019 ("rcu: Extract synchronize_rcu_expedited_stall() from synchronize_rcu_expedited_wait()")
-> 
-> from the paulmck tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Hi
 
-Thank you for catching this!
+On Wed, 2024-07-03 at 13:46 +0200, Michal Wajdeczko wrote:
+> + Rodrigo for help
+>=20
+> On 03.07.2024 04:36, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > On Fri, 28 Jun 2024 18:03:39 +0100 Mark Brown <broonie@kernel.org>
+> > wrote:
+> > >=20
+> > > After merging the drm tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > >=20
+> > > /tmp/next/build/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c: In
+> > > function 'pf_get_threshold':
+> > > /tmp/next/build/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:1788:2
+> > > 7: error: unused variable 'xe' [-Werror=3Dunused-variable]
+> > > =C2=A01788 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct x=
+e_device *xe =3D gt_to_xe(gt);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~
+> > > cc1: all warnings being treated as errors
+> > >=20
+> > > Caused by commit
+> > >=20
+> > > =C2=A0 629df234bfe73d ("drm/xe/pf: Introduce functions to configure V=
+F
+> > > thresholds")
+> > >=20
+> > > I have used the tree from 20240627 instead.
+> >=20
+> > I am still seeing that build failure.
+> >=20
 
-Given how near we are to the merge window, I will defer c19a6725b019 to
-the v6.12 merge window.  Abundance of caution and all that...
+I see that git for an unknown reason introduces this line as an
+automatic resolve merging drm-next into the drm-tip build. Later there
+was a manual fixup for this after merging another branch into drm-tip
+but that's too late.
 
-							Thanx, Paul
+So I've added a manual fixup to drm-rerere to remove this line just
+after the merge that somehow introduces it.
 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc kernel/rcu/tree_exp.h
-> index be2d251e84f8,d4be644afb50..000000000000
-> --- a/kernel/rcu/tree_exp.h
-> +++ b/kernel/rcu/tree_exp.h
-> @@@ -543,6 -542,69 +543,70 @@@ static bool synchronize_rcu_expedited_w
->   	return false;
->   }
->   
-> + /*
-> +  * Print out an expedited RCU CPU stall warning message.
-> +  */
-> + static void synchronize_rcu_expedited_stall(unsigned long jiffies_start, unsigned long j)
-> + {
-> + 	int cpu;
-> + 	unsigned long mask;
-> + 	int ndetected;
-> + 	struct rcu_node *rnp;
-> + 	struct rcu_node *rnp_root = rcu_get_root();
-> + 
-> + 	if (READ_ONCE(csd_lock_suppress_rcu_stall) && csd_lock_is_stuck()) {
-> + 		pr_err("INFO: %s detected expedited stalls, but suppressed full report due to a stuck CSD-lock.\n", rcu_state.name);
-> + 		return;
-> + 	}
-> + 	pr_err("INFO: %s detected expedited stalls on CPUs/tasks: {", rcu_state.name);
-> + 	ndetected = 0;
-> + 	rcu_for_each_leaf_node(rnp) {
-> + 		ndetected += rcu_print_task_exp_stall(rnp);
-> + 		for_each_leaf_node_possible_cpu(rnp, cpu) {
-> + 			struct rcu_data *rdp;
-> + 
-> + 			mask = leaf_node_cpu_bit(rnp, cpu);
-> + 			if (!(READ_ONCE(rnp->expmask) & mask))
-> + 				continue;
-> + 			ndetected++;
-> + 			rdp = per_cpu_ptr(&rcu_data, cpu);
-> + 			pr_cont(" %d-%c%c%c%c", cpu,
-> + 				"O."[!!cpu_online(cpu)],
-> + 				"o."[!!(rdp->grpmask & rnp->expmaskinit)],
-> + 				"N."[!!(rdp->grpmask & rnp->expmaskinitnext)],
-> + 				"D."[!!data_race(rdp->cpu_no_qs.b.exp)]);
-> + 		}
-> + 	}
-> + 	pr_cont(" } %lu jiffies s: %lu root: %#lx/%c\n",
-> + 		j - jiffies_start, rcu_state.expedited_sequence, data_race(rnp_root->expmask),
-> + 		".T"[!!data_race(rnp_root->exp_tasks)]);
-> + 	if (ndetected) {
-> + 		pr_err("blocking rcu_node structures (internal RCU debug):");
-> + 		rcu_for_each_node_breadth_first(rnp) {
-> + 			if (rnp == rnp_root)
-> + 				continue; /* printed unconditionally */
-> + 			if (sync_rcu_exp_done_unlocked(rnp))
-> + 				continue;
-> + 			pr_cont(" l=%u:%d-%d:%#lx/%c",
-> + 				rnp->level, rnp->grplo, rnp->grphi, data_race(rnp->expmask),
-> + 				".T"[!!data_race(rnp->exp_tasks)]);
-> + 		}
-> + 		pr_cont("\n");
-> + 	}
-> + 	rcu_for_each_leaf_node(rnp) {
-> + 		for_each_leaf_node_possible_cpu(rnp, cpu) {
-> + 			mask = leaf_node_cpu_bit(rnp, cpu);
-> + 			if (!(READ_ONCE(rnp->expmask) & mask))
-> + 				continue;
-> + 			preempt_disable(); // For smp_processor_id() in dump_cpu_task().
-> + 			dump_cpu_task(cpu);
-> + 			preempt_enable();
-> ++			nbcon_cpu_emergency_flush();
-> + 		}
-> + 		rcu_exp_print_detail_task_stall_rnp(rnp);
-> + 	}
-> + }
-> + 
->   /*
->    * Wait for the expedited grace period to elapse, issuing any needed
->    * RCU CPU stall warnings along the way.
-> @@@ -597,60 -654,8 +659,11 @@@ static void synchronize_rcu_expedited_w
->   		j = jiffies;
->   		rcu_stall_notifier_call_chain(RCU_STALL_NOTIFY_EXP, (void *)(j - jiffies_start));
->   		trace_rcu_stall_warning(rcu_state.name, TPS("ExpeditedStall"));
-> - 		pr_err("INFO: %s detected expedited stalls on CPUs/tasks: {",
-> - 		       rcu_state.name);
-> - 		ndetected = 0;
-> - 		rcu_for_each_leaf_node(rnp) {
-> - 			ndetected += rcu_print_task_exp_stall(rnp);
-> - 			for_each_leaf_node_possible_cpu(rnp, cpu) {
-> - 				struct rcu_data *rdp;
-> - 
-> - 				mask = leaf_node_cpu_bit(rnp, cpu);
-> - 				if (!(READ_ONCE(rnp->expmask) & mask))
-> - 					continue;
-> - 				ndetected++;
-> - 				rdp = per_cpu_ptr(&rcu_data, cpu);
-> - 				pr_cont(" %d-%c%c%c%c", cpu,
-> - 					"O."[!!cpu_online(cpu)],
-> - 					"o."[!!(rdp->grpmask & rnp->expmaskinit)],
-> - 					"N."[!!(rdp->grpmask & rnp->expmaskinitnext)],
-> - 					"D."[!!data_race(rdp->cpu_no_qs.b.exp)]);
-> - 			}
-> - 		}
-> - 		pr_cont(" } %lu jiffies s: %lu root: %#lx/%c\n",
-> - 			j - jiffies_start, rcu_state.expedited_sequence,
-> - 			data_race(rnp_root->expmask),
-> - 			".T"[!!data_race(rnp_root->exp_tasks)]);
-> - 		if (ndetected) {
-> - 			pr_err("blocking rcu_node structures (internal RCU debug):");
-> - 			rcu_for_each_node_breadth_first(rnp) {
-> - 				if (rnp == rnp_root)
-> - 					continue; /* printed unconditionally */
-> - 				if (sync_rcu_exp_done_unlocked(rnp))
-> - 					continue;
-> - 				pr_cont(" l=%u:%d-%d:%#lx/%c",
-> - 					rnp->level, rnp->grplo, rnp->grphi,
-> - 					data_race(rnp->expmask),
-> - 					".T"[!!data_race(rnp->exp_tasks)]);
-> - 			}
-> - 			pr_cont("\n");
-> - 		}
-> - 		rcu_for_each_leaf_node(rnp) {
-> - 			for_each_leaf_node_possible_cpu(rnp, cpu) {
-> - 				mask = leaf_node_cpu_bit(rnp, cpu);
-> - 				if (!(READ_ONCE(rnp->expmask) & mask))
-> - 					continue;
-> - 				preempt_disable(); // For smp_processor_id() in dump_cpu_task().
-> - 				dump_cpu_task(cpu);
-> - 				preempt_enable();
-> - 				nbcon_cpu_emergency_flush();
-> - 			}
-> - 			rcu_exp_print_detail_task_stall_rnp(rnp);
-> - 		}
-> + 		synchronize_rcu_expedited_stall(jiffies_start, j);
->   		jiffies_stall = 3 * rcu_exp_jiffies_till_stall_check() + 3;
->  +
->  +		nbcon_cpu_emergency_exit();
->  +
->   		panic_on_rcu_stall();
->   	}
->   }
-
+/Thomas
 
 

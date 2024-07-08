@@ -1,54 +1,61 @@
-Return-Path: <linux-next+bounces-2838-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2839-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A0F992A9BE
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 21:21:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50E0E92AB85
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 23:56:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEE8A281CCE
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 19:20:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82C761C21351
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 21:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00FE014C5BE;
-	Mon,  8 Jul 2024 19:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0345314F9C5;
+	Mon,  8 Jul 2024 21:56:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u0c2Axxn"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="I9zY5Q/C"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC34A14C58E;
-	Mon,  8 Jul 2024 19:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5AF14D28A;
+	Mon,  8 Jul 2024 21:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720466452; cv=none; b=Tys2lwbJBoVdtmgRn38m//W5mr34uglVuafuyz6OgBo0h/1Hr6aXshwjQ/ddz/QZoDexPM//xAf2Nem4Fmbrw1dWq+ntWZdBKqMzP8VgXZsmnR/aR+TTW2FWmC3JJKtS/invCqOGymkzlYSKZ/rYyQtBSyiK12jo/WzR3v93JLY=
+	t=1720475774; cv=none; b=BlUSDwA9xDbBN6WoMzp8eFEMLs/qv1jxxYfcXA58pTTJpvpUu4TECK8BDc0Asc0/UA2TDK4o24LwS+LKZO1VyvYbrL31fEggmlZjQRvC+slEN/NCF7fstxm7I3UCsT2BnsoEs9RY/DqYXU2bGbrLxb6WE8uWIQiFvmF8UE6g+II=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720466452; c=relaxed/simple;
-	bh=OsrWd4BqZBZ2b+fwGJXmNa6so9mX+eyKWWuxa5n57p0=;
+	s=arc-20240116; t=1720475774; c=relaxed/simple;
+	bh=1QzH7g1WSDOqhhrq9zntalcA82I0Sb3L1MfQnJw6QxY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r2Yy0mYqWOquFtDNd0s9EBiCTGP6NhTo/Fvl1arILgEbLiygVKg7fNuXnsJz5R/oFSzD0USUwlRbRCXx7qhWDEr93wzliXaS506CUR6biVO1KU3mmOavf7ts9sobXcZ4rq2qMfHyianjC1EF4kCzC92xzWXrP5LFYADIESQ2PXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u0c2Axxn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E18C3277B;
-	Mon,  8 Jul 2024 19:20:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720466452;
-	bh=OsrWd4BqZBZ2b+fwGJXmNa6so9mX+eyKWWuxa5n57p0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u0c2AxxnsHldVEwAirVkvL/z0iodZbYatLDUo6vbvgv18dLJgyicirHCv7rXPljv1
-	 gtUjPyoKtfK+97sxuikunPLHp+XxmIuqAe62IS+4ydTjU7P/2mwJYFu1l4POBkHB3z
-	 J3LgL/pU6dMsd2ePrQHIVkA3idj4aBGXnN0P9PHdOjdk/W0AtiB9I1Q0Y/xZ0tACmS
-	 Ej69FdOV5Ei8f0d13OE4xrvntrifYW5VMTvb6VxHkuLgEy//G7sy6zN0DHWvvUIN4C
-	 SvytaIXReUVg2/HncfLeEyZp1w/wKTAX9QjnbD25eaJqsjo2eEcjAJWU2I5Ei9nGrp
-	 ZVoG7hnd0vE1Q==
-Date: Mon, 8 Jul 2024 12:20:51 -0700
-From: Kees Cook <kees@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=t/U5vORvhpoCCUarM5hS8l05yZggAALHURIGoywtMOw/LqiXqUiuaorPnxchqdVj4x7MoTnaPWmpC8YUfsIdMRC254GH6esML+xZW9L/8iPI1i+LGGxEyh3TVt+IMG0m4W/MZ41TW4bQ2zxTcqcvFfPKJ1t/X21UMcCSXyAE5yU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=I9zY5Q/C; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=WVdQYIbU5xrJg1EpR8Xx1KJhAgJ0SPfnuQLS9S9gRVA=; b=I9zY5Q/CqRSm03vJE1+Aduz81/
+	lnVXZ9N30ysmzqxO9RLB+9mnwm1xI5xIYV++BceVBBb0L00DRdb2XTnGUCAZrHxZQ1bQImUehF39/
+	Iqw5YqdySdB1L7U6xWKPnA6xKnhcg6c8JqHbTHHWgaEliJh5+/zYfnNF5Z9+EUdtNGyCpdXmij/rQ
+	3rlIBqIG6ANm6cmnvm0MVmy/dzHumKmjtY3lBh/oDfX/hxTlpt3qsGAbMCOy0SGS7XZAHw3IRVUnJ
+	g4ly5a39HJ5TPdm6Epyyn1bNVfAk89KNEd899qFeuEOF8rFIvbvArFnalBv3sbjcuxM9gg1lCckly
+	T0KEE6PA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sQwLC-00000005950-1KsD;
+	Mon, 08 Jul 2024 21:56:10 +0000
+Date: Mon, 8 Jul 2024 14:56:10 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: bugzilla-daemon@kernel.org
+Cc: kvm@vger.kernel.org, kdevops@lists.linux.dev,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the kspp tree
-Message-ID: <202407081220.31CFF5E@keescook>
-References: <20240708182458.06d4eefa@canb.auug.org.au>
+Subject: Re: [Bug 218980] New: [VM boot] Guest Kernel hit BUG: kernel NULL
+ pointer dereference, address: 0000000000000010 and WARNING: CPU: 0 PID: 218
+ at arch/x86/kernel/fpu/core.c:57 x86_task_fpu+0x17/0x20
+Message-ID: <ZoxgeulJHh-4i-Kh@bombadil.infradead.org>
+References: <bug-218980-28872@https.bugzilla.kernel.org/>
+ <ZoHaVmNbFGcejSjK@bombadil.infradead.org>
+ <ZoHgnfJpBekFoCkF@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -57,18 +64,16 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240708182458.06d4eefa@canb.auug.org.au>
+In-Reply-To: <ZoHgnfJpBekFoCkF@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Mon, Jul 08, 2024 at 06:24:58PM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Sun, Jun 30, 2024 at 03:47:57PM -0700, Luis Chamberlain wrote:
+> On Sun, Jun 30, 2024 at 03:21:10PM -0700, Luis Chamberlain wrote:
+> >   [   16.785424]  ? fpstate_free+0x5/0x30
 > 
-> The following commit is also in Linus Torvalds' tree as a different commit
-> (but the same patch):
-> 
->   e3890eadadad ("string: kunit: add missing MODULE_DESCRIPTION() macros")
+> Bisecting leads so far to next-20240619 as good and next-20240624 as bad.
 
-I've dropped this from my tree now. Thanks!
+Either way, this is now fixed on next-20240703.
 
--- 
-Kees Cook
+  Luis
 

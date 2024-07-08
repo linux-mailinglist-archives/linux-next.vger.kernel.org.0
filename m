@@ -1,100 +1,86 @@
-Return-Path: <linux-next+bounces-2840-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2841-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D6D992AB89
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 23:57:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 608B592ABCA
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 00:13:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29A97281F4E
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 21:57:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1309B21E60
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 22:13:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3CA314EC61;
-	Mon,  8 Jul 2024 21:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16FC51509BF;
+	Mon,  8 Jul 2024 22:13:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Z3yLB0XH"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lKgeq+CP"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE3A14D28A;
-	Mon,  8 Jul 2024 21:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6721509A5;
+	Mon,  8 Jul 2024 22:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720475872; cv=none; b=DUaGN+oHccSMDVhHYneHWhfZvVz0NXdwNuqQoR7oVsmZ0v2JpFLMIXWXSED+N9FxPqN7RAf/XJ+hb2m886scBBh41XOVuYko+Zrh/nhb9Jj4PN8zBXcHRlJo4CpW6P2aiZDia6CaAY36o9DoJB1vRAvHVNyPMES+waJtbnH4LZM=
+	t=1720476784; cv=none; b=XSemsbjky9lbmgeA+i1/pGxZhfL606sIUsbm/hc/T79pIWLchYw8XwFyNXf01v5woTd6DkB3ft4zcuoq1RfQYVIy9Jjoox7BwtKiWGKzESzaxtczbNjFoTTft648tq1dPnkXoFrTIahphn/4UoPU+V3B31/UMFMsTMiIEZPrj5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720475872; c=relaxed/simple;
-	bh=LKHYZeYNaLOOJu8eJHtrLafIEucDa/cEgejIoonuEso=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aCf/iqobT70N12FLJ/LmDzscVcKbZa5oue5+oo3CGuJxApq3LtcM3WIkcwaBvnlIIQESJNqpOqOpsicc2Sl8ZxgbWgfza+POGXbmeqehnQYnqrv5yQXHqiCBe/THdlFbsdg8juuEj8uluuuM2rS3PRNig3pfFrHs68fjUETfkkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Z3yLB0XH; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1720475866;
-	bh=3vLFw91ir8W1EScyPaD0LKiJBkMIRKC8mv6t4G1PHXk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Z3yLB0XHLdVzUiQ/bdZ3oo9/PY5khGQUmXZpRobiUtflFh4Lnlqhnc05BWbDr+3Lt
-	 ldm/uSQK90YEE+Bob2W8s1qkrjB1nYJuSSVc3KARqk65uZiZLa1ywZDjYPeaYjKFay
-	 bcICzHCFOoW+MnErpnlxdOzdQhNJmIEa4LQF4kBDW8Dko2I2pUHMMPCuAKM5abKrgx
-	 ijZSr3YirSoYaIxJD6pCM/dyynASertpd2oVnqXQaF6ZGFeCLlfWGdFxZ+/NRfscH/
-	 XszaV0R27BJSid6Hpc7ab+RDPfQW33SOyoUxMsL158c2rM0mGYfUZMxtst6VXribqr
-	 Jxzef3BunJyrQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WHyfL6MxSz4w2N;
-	Tue,  9 Jul 2024 07:57:46 +1000 (AEST)
-Date: Tue, 9 Jul 2024 07:57:45 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
- <namhyung@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the perf tree
-Message-ID: <20240709075745.23abecec@canb.auug.org.au>
+	s=arc-20240116; t=1720476784; c=relaxed/simple;
+	bh=0g9ZqQ34v/Y9q91tPXMcX2UQRI2ExeR/qOQkYnG0C3E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CT7EVZeraYR/gHEBoPpVYyXTk3eDi7KtzsNsGLGj0CzdMFZNYnaolz90WR8TmyFFE0DGt57mtbvt5LduWbwGd5H6X44tPMgilV0XgT8kr3PiS16sl+vKmPsVYkyuW84fBv1Dp3OfeTV2m2QHRXwXW17jqbsvEr0NCuZr09RrDi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lKgeq+CP; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=i/+aDu6z/bqon10/zj70vwV8SqER1DJmyZY2X7lDB68=; b=lKgeq+CPjQYMHzPZ6RgiJ7Ikxa
+	a/hrFPtzxmA3G6vx48jk9nPqhwvMMs8r+iBOz8i8oWPpRw7Knq2MPr8n8GaYEcP1InItJWEpxiGWz
+	3zRPM5j8ocquC2+NA82oaelN+s0jlB7h28yqq0PH+mY0SJt47bL1tGP6aoq+aPX8Ey4cd0bNqUnaE
+	7ai5AaonGZdzqhMjKNa2JXvCQ5oQje6N8513q58Y3Zm9ej6RStMVmRZOhz5nCRMH/z6XDxUt9jRRe
+	2R/757wEQYkborAz60Ip/EegeMsQRNrEOqeEbegMQeoJ1OexyLLbeNAYZN54VGuJwqgX2u2xQf5pk
+	EOlujcCw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sQwbS-00000005Aya-1dK6;
+	Mon, 08 Jul 2024 22:12:58 +0000
+Date: Mon, 8 Jul 2024 15:12:58 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
+	Chandan Babu R <chandan.babu@oracle.com>, djwong@kernel.org,
+	david@fromorbit.com, willy@infradead.org,
+	Christian Brauner <brauner@kernel.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: akpm@linux-foundation.org, yang@os.amperecomputing.com,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	john.g.garry@oracle.com, linux-fsdevel@vger.kernel.org,
+	hare@suse.de, p.raghav@samsung.com, gost.dev@samsung.com,
+	cl@os.amperecomputing.com, linux-xfs@vger.kernel.org, hch@lst.de,
+	Zi Yan <ziy@nvidia.com>
+Subject: Re: [PATCH v9 00/10] enable bs > ps in XFS
+Message-ID: <Zoxkap1DtwZ-1tjI@bombadil.infradead.org>
+References: <20240704112320.82104-1-kernel@pankajraghav.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_uZOH/AKTDBFLUawt3edxcY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240704112320.82104-1-kernel@pankajraghav.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
---Sig_/_uZOH/AKTDBFLUawt3edxcY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jul 04, 2024 at 11:23:10AM +0000, Pankaj Raghav (Samsung) wrote:
+> From: Pankaj Raghav <p.raghav@samsung.com>
+> 
+> This is the ninth version of the series that enables block size > page size
+> (Large Block Size) in XFS.
 
-Hi all,
+It's too late to get this in for v6.11, but I'd like to get it more exposure
+for testing. Anyone oppose getting this to start being merged now into
+linux-next so we can start testing for *more* than a kernel release cycle?
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
-
-  1059fb529114 ("perf dsos: When adding a dso into sorted dsos maintain the=
- sort order")
-  feaaa8be0b1e ("perf comm str: Avoid sort during insert")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/_uZOH/AKTDBFLUawt3edxcY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaMYNkACgkQAVBC80lX
-0GwLBAf+MA4S98f4il2bgp0dAOo4MRCzrYZoCW6x/83hNG2JQzLLm8NHjfcb3wyl
-/vJa0uUzKwgs4QwYuBVQjkfG4WZGHCx4uLjyDGDJX7Q3ALYOU2ns/+94FO1zJ6bN
-G0NfgJ6huGU9IeElr7Fcz5t2hAq7oIGcNOl1yWfF7pQPpD7xJMo8VRDqMByMSMCt
-LGEx2v4CJFH1cUCxfJxNDY54mvCx6ls+nWv/EzJSRnZ0PcaCJ4zqEuz+IvLgQAFL
-dnScTOAfCUCJspTmviELuEufhUdkCEsTtR9IxDLtP5jCmtRmF4fkEDrYMXNJVn71
-MyAyUz5N7Rno0TIltJN+YovvVatIQw==
-=zVjz
------END PGP SIGNATURE-----
-
---Sig_/_uZOH/AKTDBFLUawt3edxcY--
+  Luis
 

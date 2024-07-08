@@ -1,66 +1,67 @@
-Return-Path: <linux-next+bounces-2841-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2842-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 608B592ABCA
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 00:13:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 853D792AC0B
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 00:27:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1309B21E60
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 22:13:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 494F02822FE
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 22:27:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16FC51509BF;
-	Mon,  8 Jul 2024 22:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7548214F9F8;
+	Mon,  8 Jul 2024 22:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lKgeq+CP"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oFVtHkX6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6721509A5;
-	Mon,  8 Jul 2024 22:13:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7633D3CF63;
+	Mon,  8 Jul 2024 22:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720476784; cv=none; b=XSemsbjky9lbmgeA+i1/pGxZhfL606sIUsbm/hc/T79pIWLchYw8XwFyNXf01v5woTd6DkB3ft4zcuoq1RfQYVIy9Jjoox7BwtKiWGKzESzaxtczbNjFoTTft648tq1dPnkXoFrTIahphn/4UoPU+V3B31/UMFMsTMiIEZPrj5g=
+	t=1720477665; cv=none; b=PtR4E0+aO8TriNZKHNLIz6h9n1XJN+O9g89EFb8MIsLC73OgnILC3Jr5arGXJ18OipJ1OzhuOBfiG5RA9qL/ce83mh0C9RX71FKUueOCWJ8WsNZaal8KnEaBQmzcXYjZHZKgK0RoK7k1ueXn5ZhYULgQG4b3huEkny8MSSOrKu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720476784; c=relaxed/simple;
-	bh=0g9ZqQ34v/Y9q91tPXMcX2UQRI2ExeR/qOQkYnG0C3E=;
+	s=arc-20240116; t=1720477665; c=relaxed/simple;
+	bh=cdy5zILmTkrtUAEBPhlgJpgFPWVDym+4zvsbx+LMWhs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CT7EVZeraYR/gHEBoPpVYyXTk3eDi7KtzsNsGLGj0CzdMFZNYnaolz90WR8TmyFFE0DGt57mtbvt5LduWbwGd5H6X44tPMgilV0XgT8kr3PiS16sl+vKmPsVYkyuW84fBv1Dp3OfeTV2m2QHRXwXW17jqbsvEr0NCuZr09RrDi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lKgeq+CP; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=IqOvWvCSWVPmOga+5IWzV/PRZe//AOmRji63GWYsa7dnGFXzsYPrS5MdbbhinUarTMoN0tSwwsSzz4Ig8l8Zse6d8/eVrMQddUnExPDl7yeJnjbqJ7YX8VJ5czMmy6T7aBMXLvFUViuBnBZk+Y9O7bg9jNjB3lOiGPF9PN1Y02w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oFVtHkX6; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=i/+aDu6z/bqon10/zj70vwV8SqER1DJmyZY2X7lDB68=; b=lKgeq+CPjQYMHzPZ6RgiJ7Ikxa
-	a/hrFPtzxmA3G6vx48jk9nPqhwvMMs8r+iBOz8i8oWPpRw7Knq2MPr8n8GaYEcP1InItJWEpxiGWz
-	3zRPM5j8ocquC2+NA82oaelN+s0jlB7h28yqq0PH+mY0SJt47bL1tGP6aoq+aPX8Ey4cd0bNqUnaE
-	7ai5AaonGZdzqhMjKNa2JXvCQ5oQje6N8513q58Y3Zm9ej6RStMVmRZOhz5nCRMH/z6XDxUt9jRRe
-	2R/757wEQYkborAz60Ip/EegeMsQRNrEOqeEbegMQeoJ1OexyLLbeNAYZN54VGuJwqgX2u2xQf5pk
-	EOlujcCw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sQwbS-00000005Aya-1dK6;
-	Mon, 08 Jul 2024 22:12:58 +0000
-Date: Mon, 8 Jul 2024 15:12:58 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
+	bh=BLVcL2EPYuo10mpXkM4Nfciy2mqtNKXtJyWcJeoaAt4=; b=oFVtHkX65Mdb3qO4D7Uvvgsbml
+	8c4tUiCT3xY/DCu6RB3bVaMNqlRV+lb2FOXjosFbBJHVAr63YwHbThYh7koJNrDX2lA2R/4+4/WKJ
+	w50l+aSFHWR2MaVqLfQxDla7Qkgx1sZP95/6HbgmdGUbwZIW3+E5eLxQlwH4lOkHAYen/dYygSqGf
+	NeAl8RqvfW8qi3nWArf+VF7tqCfjuuOysFgIg5rBpTTE96/K8OdxlB3emyGS7kY42LtKZV/Vo2raX
+	PefjkiI2QJriZYRUr8oyb7szDRq9rezDOhQVBMMv9dGuS86ryJhKmpDwocNtawGZqsGI2YDmQXUvS
+	tVb/IBqQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sQwpT-00000007EGt-3hi4;
+	Mon, 08 Jul 2024 22:27:27 +0000
+Date: Mon, 8 Jul 2024 23:27:27 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
 	Chandan Babu R <chandan.babu@oracle.com>, djwong@kernel.org,
-	david@fromorbit.com, willy@infradead.org,
-	Christian Brauner <brauner@kernel.org>,
+	david@fromorbit.com, Christian Brauner <brauner@kernel.org>,
 	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: akpm@linux-foundation.org, yang@os.amperecomputing.com,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	akpm@linux-foundation.org, yang@os.amperecomputing.com,
 	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
 	john.g.garry@oracle.com, linux-fsdevel@vger.kernel.org,
 	hare@suse.de, p.raghav@samsung.com, gost.dev@samsung.com,
 	cl@os.amperecomputing.com, linux-xfs@vger.kernel.org, hch@lst.de,
 	Zi Yan <ziy@nvidia.com>
 Subject: Re: [PATCH v9 00/10] enable bs > ps in XFS
-Message-ID: <Zoxkap1DtwZ-1tjI@bombadil.infradead.org>
+Message-ID: <Zoxnz7R5EBb6SCR7@casper.infradead.org>
 References: <20240704112320.82104-1-kernel@pankajraghav.com>
+ <Zoxkap1DtwZ-1tjI@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -69,18 +70,19 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240704112320.82104-1-kernel@pankajraghav.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <Zoxkap1DtwZ-1tjI@bombadil.infradead.org>
 
-On Thu, Jul 04, 2024 at 11:23:10AM +0000, Pankaj Raghav (Samsung) wrote:
-> From: Pankaj Raghav <p.raghav@samsung.com>
+On Mon, Jul 08, 2024 at 03:12:58PM -0700, Luis Chamberlain wrote:
+> On Thu, Jul 04, 2024 at 11:23:10AM +0000, Pankaj Raghav (Samsung) wrote:
+> > From: Pankaj Raghav <p.raghav@samsung.com>
+> > 
+> > This is the ninth version of the series that enables block size > page size
+> > (Large Block Size) in XFS.
 > 
-> This is the ninth version of the series that enables block size > page size
-> (Large Block Size) in XFS.
+> It's too late to get this in for v6.11, but I'd like to get it more exposure
+> for testing. Anyone oppose getting this to start being merged now into
+> linux-next so we can start testing for *more* than a kernel release cycle?
 
-It's too late to get this in for v6.11, but I'd like to get it more exposure
-for testing. Anyone oppose getting this to start being merged now into
-linux-next so we can start testing for *more* than a kernel release cycle?
-
-  Luis
+That's not how linux-next works.  It's only for patches which are
+destined for the next merge window, not for the one after that.
 

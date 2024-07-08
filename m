@@ -1,79 +1,100 @@
-Return-Path: <linux-next+bounces-2839-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2840-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50E0E92AB85
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 23:56:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D6D992AB89
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 23:57:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82C761C21351
-	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 21:56:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29A97281F4E
+	for <lists+linux-next@lfdr.de>; Mon,  8 Jul 2024 21:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0345314F9C5;
-	Mon,  8 Jul 2024 21:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3CA314EC61;
+	Mon,  8 Jul 2024 21:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="I9zY5Q/C"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Z3yLB0XH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5AF14D28A;
-	Mon,  8 Jul 2024 21:56:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE3A14D28A;
+	Mon,  8 Jul 2024 21:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720475774; cv=none; b=BlUSDwA9xDbBN6WoMzp8eFEMLs/qv1jxxYfcXA58pTTJpvpUu4TECK8BDc0Asc0/UA2TDK4o24LwS+LKZO1VyvYbrL31fEggmlZjQRvC+slEN/NCF7fstxm7I3UCsT2BnsoEs9RY/DqYXU2bGbrLxb6WE8uWIQiFvmF8UE6g+II=
+	t=1720475872; cv=none; b=DUaGN+oHccSMDVhHYneHWhfZvVz0NXdwNuqQoR7oVsmZ0v2JpFLMIXWXSED+N9FxPqN7RAf/XJ+hb2m886scBBh41XOVuYko+Zrh/nhb9Jj4PN8zBXcHRlJo4CpW6P2aiZDia6CaAY36o9DoJB1vRAvHVNyPMES+waJtbnH4LZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720475774; c=relaxed/simple;
-	bh=1QzH7g1WSDOqhhrq9zntalcA82I0Sb3L1MfQnJw6QxY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t/U5vORvhpoCCUarM5hS8l05yZggAALHURIGoywtMOw/LqiXqUiuaorPnxchqdVj4x7MoTnaPWmpC8YUfsIdMRC254GH6esML+xZW9L/8iPI1i+LGGxEyh3TVt+IMG0m4W/MZ41TW4bQ2zxTcqcvFfPKJ1t/X21UMcCSXyAE5yU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=I9zY5Q/C; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=WVdQYIbU5xrJg1EpR8Xx1KJhAgJ0SPfnuQLS9S9gRVA=; b=I9zY5Q/CqRSm03vJE1+Aduz81/
-	lnVXZ9N30ysmzqxO9RLB+9mnwm1xI5xIYV++BceVBBb0L00DRdb2XTnGUCAZrHxZQ1bQImUehF39/
-	Iqw5YqdySdB1L7U6xWKPnA6xKnhcg6c8JqHbTHHWgaEliJh5+/zYfnNF5Z9+EUdtNGyCpdXmij/rQ
-	3rlIBqIG6ANm6cmnvm0MVmy/dzHumKmjtY3lBh/oDfX/hxTlpt3qsGAbMCOy0SGS7XZAHw3IRVUnJ
-	g4ly5a39HJ5TPdm6Epyyn1bNVfAk89KNEd899qFeuEOF8rFIvbvArFnalBv3sbjcuxM9gg1lCckly
-	T0KEE6PA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sQwLC-00000005950-1KsD;
-	Mon, 08 Jul 2024 21:56:10 +0000
-Date: Mon, 8 Jul 2024 14:56:10 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: bugzilla-daemon@kernel.org
-Cc: kvm@vger.kernel.org, kdevops@lists.linux.dev,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [Bug 218980] New: [VM boot] Guest Kernel hit BUG: kernel NULL
- pointer dereference, address: 0000000000000010 and WARNING: CPU: 0 PID: 218
- at arch/x86/kernel/fpu/core.c:57 x86_task_fpu+0x17/0x20
-Message-ID: <ZoxgeulJHh-4i-Kh@bombadil.infradead.org>
-References: <bug-218980-28872@https.bugzilla.kernel.org/>
- <ZoHaVmNbFGcejSjK@bombadil.infradead.org>
- <ZoHgnfJpBekFoCkF@bombadil.infradead.org>
+	s=arc-20240116; t=1720475872; c=relaxed/simple;
+	bh=LKHYZeYNaLOOJu8eJHtrLafIEucDa/cEgejIoonuEso=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aCf/iqobT70N12FLJ/LmDzscVcKbZa5oue5+oo3CGuJxApq3LtcM3WIkcwaBvnlIIQESJNqpOqOpsicc2Sl8ZxgbWgfza+POGXbmeqehnQYnqrv5yQXHqiCBe/THdlFbsdg8juuEj8uluuuM2rS3PRNig3pfFrHs68fjUETfkkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Z3yLB0XH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1720475866;
+	bh=3vLFw91ir8W1EScyPaD0LKiJBkMIRKC8mv6t4G1PHXk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Z3yLB0XHLdVzUiQ/bdZ3oo9/PY5khGQUmXZpRobiUtflFh4Lnlqhnc05BWbDr+3Lt
+	 ldm/uSQK90YEE+Bob2W8s1qkrjB1nYJuSSVc3KARqk65uZiZLa1ywZDjYPeaYjKFay
+	 bcICzHCFOoW+MnErpnlxdOzdQhNJmIEa4LQF4kBDW8Dko2I2pUHMMPCuAKM5abKrgx
+	 ijZSr3YirSoYaIxJD6pCM/dyynASertpd2oVnqXQaF6ZGFeCLlfWGdFxZ+/NRfscH/
+	 XszaV0R27BJSid6Hpc7ab+RDPfQW33SOyoUxMsL158c2rM0mGYfUZMxtst6VXribqr
+	 Jxzef3BunJyrQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WHyfL6MxSz4w2N;
+	Tue,  9 Jul 2024 07:57:46 +1000 (AEST)
+Date: Tue, 9 Jul 2024 07:57:45 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
+ <namhyung@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the perf tree
+Message-ID: <20240709075745.23abecec@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZoHgnfJpBekFoCkF@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/_uZOH/AKTDBFLUawt3edxcY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Sun, Jun 30, 2024 at 03:47:57PM -0700, Luis Chamberlain wrote:
-> On Sun, Jun 30, 2024 at 03:21:10PM -0700, Luis Chamberlain wrote:
-> >   [   16.785424]  ? fpstate_free+0x5/0x30
-> 
-> Bisecting leads so far to next-20240619 as good and next-20240624 as bad.
+--Sig_/_uZOH/AKTDBFLUawt3edxcY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Either way, this is now fixed on next-20240703.
+Hi all,
 
-  Luis
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
+
+  1059fb529114 ("perf dsos: When adding a dso into sorted dsos maintain the=
+ sort order")
+  feaaa8be0b1e ("perf comm str: Avoid sort during insert")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/_uZOH/AKTDBFLUawt3edxcY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaMYNkACgkQAVBC80lX
+0GwLBAf+MA4S98f4il2bgp0dAOo4MRCzrYZoCW6x/83hNG2JQzLLm8NHjfcb3wyl
+/vJa0uUzKwgs4QwYuBVQjkfG4WZGHCx4uLjyDGDJX7Q3ALYOU2ns/+94FO1zJ6bN
+G0NfgJ6huGU9IeElr7Fcz5t2hAq7oIGcNOl1yWfF7pQPpD7xJMo8VRDqMByMSMCt
+LGEx2v4CJFH1cUCxfJxNDY54mvCx6ls+nWv/EzJSRnZ0PcaCJ4zqEuz+IvLgQAFL
+dnScTOAfCUCJspTmviELuEufhUdkCEsTtR9IxDLtP5jCmtRmF4fkEDrYMXNJVn71
+MyAyUz5N7Rno0TIltJN+YovvVatIQw==
+=zVjz
+-----END PGP SIGNATURE-----
+
+--Sig_/_uZOH/AKTDBFLUawt3edxcY--
 

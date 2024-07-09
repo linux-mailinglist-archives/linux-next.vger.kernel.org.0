@@ -1,142 +1,152 @@
-Return-Path: <linux-next+bounces-2892-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2893-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B56B92BAC8
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 15:16:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C5392BAD0
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 15:17:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C86D61F253C8
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 13:16:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 972261C21CC7
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 13:17:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805371581E3;
-	Tue,  9 Jul 2024 13:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06CB6158D92;
+	Tue,  9 Jul 2024 13:17:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="FnFwP8hG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SKlY68cv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FVh3KBPz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5B226AD0;
-	Tue,  9 Jul 2024 13:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD71382;
+	Tue,  9 Jul 2024 13:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720530969; cv=none; b=QM1AxYGN//NP/zapoB5ZZHyzo+o/qouYN4tpZlX6NxdKKyHgEiV3FPQCfxbXRdMFb+OUIkQrfoyM8IPBNVGbvOWw1aLFaJA8MhpjWT8axRwTGzawgoQMyJ52iLrDnI8qb3uE0bde1LraHPc2djfBUyNkkI6fbLxIbgtqbv6ErAk=
+	t=1720531050; cv=none; b=cuo4nOa1jrf7vwXtaIksG1/Mw+La8TkOoEgl0g3Qe15P5R/yrgm/F5J9k1mx8OZaGjNjrhD4qqcsJBy5eB1u3xxpDtmXe/oLBXf46XHmIT03GbNc2ceHc0M5r2s/iKM5m9iRNIi8heOpH1w2TSmp5+p5L+es1hrRM5GMuvmCcPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720530969; c=relaxed/simple;
-	bh=/nAG63nyq0Wp3ClVP493u/8kHz/KBkTw+MFGRwzENDk=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=DFFAUa6sM47SSQzdsKdypaznXGzrM1eXGOMXe+nfl2IFHohKgySAoLTgR8CAkUsAjMG7R0e2X/To8eWugHvxrskCwsIJTkpH3HwGfgdkM1keFcq0aiG+UM13GBf8V156oL8L/mAXqGdxCRvbp+3VxwbJy+jNYAQY8bLYcPsKom8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=FnFwP8hG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SKlY68cv; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 85D401381D73;
-	Tue,  9 Jul 2024 09:16:06 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 09 Jul 2024 09:16:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1720530966;
-	 x=1720617366; bh=pJViaH5myuQ9GKC5vABBiWBPS5eqpjZ7itBibvIKUxY=; b=
-	FnFwP8hGfmGlQWKlfR1G/bwMzn1jsFx26XSqzhPTt4RefJhs/hw2jU/rLaRLZeNz
-	anXwyftVbKT19TSbYG1i2bpw9HJdDgO7lquGfcEc4Yq66Eq3JDOWlB+/QB4jsPBJ
-	EVG3MMIQxGaLQmtcW/Z2meLPGU0m1nHYD6yzIMbpDxN+0ms+oWxC79TekMbBFYiU
-	T72dWz2u/ymoMx/BrmXzNPEjrFzXGF6Jz3lxsUAAxq9u8wszpZv6rvuDODQo4uxK
-	ZUIttfehEFGc7FUMdtQU/YJW5t5B9sY6Qv2H7kdx9JiSaFZtT22EpGhwjnV7cyDV
-	a+kBDFGDmBAu8RmjYOQXUw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720530966; x=
-	1720617366; bh=pJViaH5myuQ9GKC5vABBiWBPS5eqpjZ7itBibvIKUxY=; b=S
-	KlY68cvaRHQcF+vJ21D+CwJ4Lp133JlsV2Pmy35ZYMnQWDYLTT23lNcO3iG18TyE
-	Ov26qQECcILId0zJWJlcCkKG1P3j5CTPGJ5WklrZWplymQ1BK6jpdLvwseqPu3cN
-	Ig0DcXTDW2JvuMOyfwSwt+eoxXtuVvpaDoYPadHrUQshQRQA6g6AAgD4nk4nJseS
-	kWOmRI2L6QGjl8xnKOilCqkV4r8mQgizZbfLtPi9Eqwrs+4MehpNHyIuq0kzjuc8
-	TSLkPIK/1D+REe6sH87ysVZOAH9XLjebBl5azVVa2ZNLChX2dFWgI4zXdreAxbFZ
-	AdTYnBRWnCKg7Jt8bsCWw==
-X-ME-Sender: <xms:FTiNZrs4CvYBmCW-olQ9U9xsRcnv0i4E_VLhRFEXCTjXLNv7kSe3uw>
-    <xme:FTiNZsdFrK_eYMjVtoXwLyt7T1A2jK7bdFuVfSj0EWcT-hB0YYUXiQVjSWeg-9DVL
-    lnW1tunqlAaTJNDXB8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdelgdeivdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
-    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:FTiNZuzX3m82ZdzjcwjQpa4-WaFwwFIGIMpkpUkgSEZO-fmRPm7xGw>
-    <xmx:FTiNZqNjU9I9dnqzn9qVMg01rzvyY-kbACadHA-_EBCEORSJRZ9-jg>
-    <xmx:FTiNZr-ijemOS783jOwzZ5pI_BU6Y9t1i-nsJVE9a2qMdN-W7rLLMw>
-    <xmx:FTiNZqWBgNzACHHfsCp8WdhoPENrouVJ88hqogUQOkv034SawFyCEg>
-    <xmx:FjiNZsPP3iOcWJ8BpUCFbwp-V56ucQA_nwv3x_Luex1vMcYt_wEJNttA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 01DBFB6008D; Tue,  9 Jul 2024 09:16:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	s=arc-20240116; t=1720531050; c=relaxed/simple;
+	bh=bUasv2JxQEdoW/7obI9YLQN6EJqdmQUyrJKHy8YBHSI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Es6mBgoP/8oexYg6ZULn/Sf6Cp2LsAiEO/gi5luChh/opaodYneQVSg2GpFHfDb7E4qoukbmp+QaXdZtCigkCyyGbYLswiB6J+tN73t8otAA8/JnxznBCGjidnNmVfJm6tcw+rDMRkZLQpEirhaTjJ4weMPaHIOr+xRv5rK14AI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FVh3KBPz; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52ea33671ffso4721172e87.3;
+        Tue, 09 Jul 2024 06:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720531047; x=1721135847; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/bRZAx19wkUN/1TE8HsbNELZo7CPgBIzr84+50jfPNA=;
+        b=FVh3KBPz5FCjVv1fasjKaEFZShppK9Og5droPzlKi2oTs9NISHiBoweQ2ZvbYMNv6D
+         XeM538Y2MJhLy7+RElegWimxqt9sdk9pJ/TT3fCJ3rwukYMz9sruv5ubx8DQduoc8s2x
+         kgnWVajppjc1KOuwfIX0BHqxXTviPIMhFLgL3YHmLXnSqWzWlz7Ay5kkGr/ga/drI8no
+         CfTOD70Vic+WQrfGEy9OWdHNU55LmdhtkESbPkZ0H1xWsy5fCNBneBp6fWJTSZrf4zqT
+         UXMFGhs0T2KtrVMspHAB4ZG4J2hcd4zjVb4xcoJm6nJ0ALaksonkKTHkuDO+/4gGzpF6
+         j29A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720531047; x=1721135847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/bRZAx19wkUN/1TE8HsbNELZo7CPgBIzr84+50jfPNA=;
+        b=nKy3wSHAape1b/ABZqjP4R5WFWcAH2xkLodgrzQk0tPrwwjZN97iAOrF0G/V3xu/YK
+         LfpovB7rPYvGLN2224IPHBKxi9lj0/3RbNiZOE7q+3FM2evhPbwYTw3DLCRFCjZ3pg/U
+         SWidMWo8qbAm7hq/jPZKvgGRFuQM0AEXebZLZYsWTJc17kN39JwaqcJ6Fy8cDPgncANV
+         6GoTKz8p3WyhFEdJpTuF6xZVTD+zJtUrhjaQuJbfrU7zG9buUHYn3Cs2wYfiYl3b5Sok
+         N/BQEaadzZKYxjDoSQp4+H4sztpajHFvfXlrUCGV8EhojxzYp4Us9sLCT+lmeOFxgZw1
+         xRGA==
+X-Forwarded-Encrypted: i=1; AJvYcCVymclfbugQGOrCKVAJoUNxIQIehnoLXAO5OfUsLKJwpfeSTtd1rumZj0BnUWQE20xLq1RJljLq2vw6If/t78+LqcU7ikfpubhkILG5lwfhP7hNd+gUeeUYzAsb0mwacY1q22fI0ZjOaA==
+X-Gm-Message-State: AOJu0YyI4Zv448UeshJysiCoThsg96jMkROMH76q8aGxNe7UuGURjzfm
+	pWBcQA1mGpicGGVyBrZQIo67zGhgt7x3poAhJRctMsik+xVZZkN+
+X-Google-Smtp-Source: AGHT+IG0vA3o76Tj/MYYVYrGxWYlgqni9G++/BYbvwvvUZf8HSo1CG+D/d/zELuUsVQ6V+WW+OUKKA==
+X-Received: by 2002:a05:6512:6cf:b0:52e:9ac6:a20f with SMTP id 2adb3069b0e04-52eb99a33bfmr1600244e87.37.1720531047127;
+        Tue, 09 Jul 2024 06:17:27 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-594bb9604easm1061398a12.4.2024.07.09.06.17.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jul 2024 06:17:26 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 9 Jul 2024 15:17:25 +0200
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+	Christian Brauner <brauner@kernel.org>,
+	Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-next <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the
+ asm-generic tree
+Message-ID: <Zo04ZYIEyayrvBYz@krava>
+References: <20240709105709.18ce785d@canb.auug.org.au>
+ <20240709200851.4d921e43@canb.auug.org.au>
+ <784a34e5-4654-44c9-9c07-f9f4ffd952a0@app.fastmail.com>
+ <Zo0kzIR_ZueaEjTa@krava>
+ <c25a32c6-8ed0-4ef9-a13e-cb16a89edb73@app.fastmail.com>
+ <Zo0wG8e7BwudENQI@krava>
+ <736fde6a-7b2a-4920-af1e-1ad2358db785@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f2ceee62-2612-42d1-b727-2f087acc6785@app.fastmail.com>
-In-Reply-To: 
- <CAL_JsqLmm6Da=4G9cJfAtKJB5j_dfbTywRRwHMKZyf3J7SAxfg@mail.gmail.com>
-References: <20240709164618.69cfcfad@canb.auug.org.au>
- <CAL_JsqLmm6Da=4G9cJfAtKJB5j_dfbTywRRwHMKZyf3J7SAxfg@mail.gmail.com>
-Date: Tue, 09 Jul 2024 15:15:44 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Rob Herring" <robh@kernel.org>, "Stephen Rothwell" <sfr@canb.auug.org.au>
-Cc: "Olof Johansson" <olof@lixom.net>, "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Paul Walmsley" <paul@pwsan.com>, ARM <linux-arm-kernel@lists.infradead.org>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the devicetree tree
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <736fde6a-7b2a-4920-af1e-1ad2358db785@app.fastmail.com>
 
-On Tue, Jul 9, 2024, at 14:42, Rob Herring wrote:
-> On Tue, Jul 9, 2024 at 12:46=E2=80=AFAM Stephen Rothwell <sfr@canb.auu=
-g.org.au> wrote:
->>
->> Hi all,
->>
->> The following commits are also in the arm-soc and risc-v trees as
->> different commits (but the same patches):
->>
->>   0620bce64afa ("dt-bindings: riscv: cpus: add ref to interrupt-contr=
-oller")
->>   877097a2fab0 ("dt-bindings: interrupt-controller: convert marvell,m=
-pic binding to YAML")
->>   c7ce06684bf5 ("dt-bindings: interrupt-controller: riscv,cpu-intc: c=
-onvert to dtschema")
->
-> I had to rebase my tree yesterday to drop a bunch of reserved-memory
-> restructuring that seems broken beyond repair. Maybe I'm going to have
-> to just do reverts instead. I had no knowledge that anyone had pulled
-> in my tree and how is it just these 3 commits? It should be at least
-> these:
+On Tue, Jul 09, 2024 at 02:58:06PM +0200, Arnd Bergmann wrote:
+> On Tue, Jul 9, 2024, at 14:42, Jiri Olsa wrote:
+> > On Tue, Jul 09, 2024 at 02:20:26PM +0200, Arnd Bergmann wrote:
+> >> On Tue, Jul 9, 2024, at 13:53, Jiri Olsa wrote:
+> >> > On Tue, Jul 09, 2024 at 01:44:34PM +0200, Arnd Bergmann wrote:
+> >> >
+> >> >> Though I'm still not sure what uretprobe is only added
+> >> >> to half the architectures at the moment. There is a chance
+> >> >> we need a different conditional for it than '64'.
+> >> >
+> >> > uretprobe is defined only for x86_64, not sure what that means
+> >> > for scripts/syscall.tbl though
+> >> 
+> >> I meant you hooked it up unconditionally for all architectures
+> >> using the old method, i.e. arc, arm64, csky, hexagon, loongarch64,
+> >> nios2, openrisc, riscv32, riscv64, and xtensa in addition
+> >> to x86-64, but not for the other ABIs: alpha, arm32, m68k,
+> >> microblaze, mips-o32, mips-n32, mips64, nios2, parisc32, parisc64,
+> >> powerpc32, powerpc64, powerpc-spu, s390-31, s390-64, sh,
+> >> sparc32, sparc64, x86-32 and x86-x32.
+> >> 
+> >> If that is not the list you had intended, do you have a list
+> >> of which architectures actually have the required hardware
+> >> to hook it up? It would be good to do this correctly from
+> >> the start so we don't rely on architecture maintainers assigning
+> >> the numbers individually.
+> >
+> > hum, so it's hooked in:
+> >   190fec72df4a uprobe: Wire up uretprobe system call
+> >
+> > and the intention is to have it ONLY for x86_64 (as stated above),
+> > if that's not what happened I need to fix it, please let me know
+> > what's the problem
+> 
+> If this cannot be used on any other architectures, I would
+> suggest adding it to the architecture specific list instead,
+> probably number #335, which is unused on x86-64.
+> 
+> I was under the assumption that this would theoretically be
+> useful for non-x86 architectures in the future, in which
 
-I picked up=20
+yes, at the moment uretprobe is implemented on x86_64 only,
+but it could be perhaps implemented on other archs in future
 
-b1a4e71d4fc4 arm: dts: arm: Drop redundant fixed-factor clocks
-f7e642bcd622 dt-bindings: interrupt-controller: convert marvell,mpic bin=
-ding to YAML
-2af8d8a583a4 ARM: dts: armada-{370-xp,375,38x,39x}: Drop #size-cells fro=
-m mpic node
+> case you should reserve the same syscall number everywhere
 
-from patchwork when they were sent to soc@kernel.org. I don't
-see the other ones in the arm-soc tree though, maybe they
-are merged elsewhere?
+hum, is that necessary? I don't mind, but I don't see why it
+should be the same number on another archs?
 
-      Arnd
+> now and rely the stub in kernel/sys_ni.c for those that are
+> missing the implementation.
+
+thanks,
+jirka
 

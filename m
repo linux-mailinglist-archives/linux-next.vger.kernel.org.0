@@ -1,165 +1,183 @@
-Return-Path: <linux-next+bounces-2865-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2866-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5433692B15B
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 09:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D1AEA92B15E
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 09:41:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FE6D282466
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 07:40:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A62F282876
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 07:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA5C144D11;
-	Tue,  9 Jul 2024 07:40:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E417B143C74;
+	Tue,  9 Jul 2024 07:41:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="MXKZ8mU1"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ohzxsFGG"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD70C13211E
-	for <linux-next@vger.kernel.org>; Tue,  9 Jul 2024 07:40:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50AC13BC30;
+	Tue,  9 Jul 2024 07:40:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720510852; cv=none; b=raiH4IdvhWMdVqvLu7msodMYYoEwnwqCI4GS+QIPxUsf5ulUmz5Ur8wsz7GJj0hIawzCgxqQCb7RvUU/9bK52tzIHxKtXQpMXTNJVhAeJxmiEFIzsZa6XQ0ZD/U7SnzOwZD451q2CWy7mHVNmCjoDeSG8VezwTyXUzStwEVKNOg=
+	t=1720510860; cv=none; b=X8g/jWq8SKAemRSljG2EGMhI87tgGoJp3KV+9cpkqK90FoVM2oDyAGqNoFxP9lAweWSNHqgWmKkasZK4zefeIO167bFuE9lzTBA+4xFefHgMOtcckmuhaTMUscYkdkpb3FzruK422cPC0d4Gnte89SWE1JmFmM3pNEYFsrsDcQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720510852; c=relaxed/simple;
-	bh=ixggmUE0LTyUbS3bl9curw62MEaHezEtSQEQ5nCTZfI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XhQFnwbJxLiZ8l2WhSBRzQ0bVWaP8MkxNEYx3IvpFP3eFZq8mLdS+NaaQEQjwK2DrBndeo4tCSJxay2ewl7goqvWYfky9WrSA4OBWjEKa9SHgvt6QpgyY6x37AQo9WIXIZTQGHkha2P9UaTprSDdDVdj35N450vCfiWVteWigl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=MXKZ8mU1; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-64f4fb6ce65so40779477b3.2
-        for <linux-next@vger.kernel.org>; Tue, 09 Jul 2024 00:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1720510849; x=1721115649; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oV2ivOS0H4TcrNQjSu8eXaAaHjNVHS96/zwQt0kFu/A=;
-        b=MXKZ8mU1uht3aDSxtfSCU4sRnIgOv94pyXun6PqgNn6hFD30vpDnWaFkurAj1kJFKW
-         /0IrScXPWBOtQstEpK6qIUrw+Gox5AdGMbPGDt0cQb9a0eKviLcUre7YrDJA5mxDYrFQ
-         2SkUyuiOFgddZQCbODD3ZnAZBKZRY4nbDqpNrUkF+Zvfi4q2hun1OaYkpTlVsghDbJGs
-         PyRjlurGlSWKj3gEAmgsGuSOmZfWQ0QXoJlpJkWo5S/1pjx/sHogL839kXrgOtpB04FW
-         Z7t3x6tmezJ0ZVNmsW1hdd99CFLQeTxPXrCEtUFRp37A7UdQtTIkgRo9P/LWHrA9iIag
-         Vkrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720510849; x=1721115649;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oV2ivOS0H4TcrNQjSu8eXaAaHjNVHS96/zwQt0kFu/A=;
-        b=EXE4U+IcGv8M4gnQwZZ0Rw7vmdeIv4W49xnK5f59WNbh4flrdJigX9Te+lUGGEKiPU
-         nnAfQwKSUxhKJ7u/THTEsCep4LPGO4seHXZ3feKtTJ+oMmW3GvmCpsyqLwNvs2Ephix/
-         /ClKx7hk0KQqrG48FXvLTs/HgSZnRMPrQ5fP+IDXsM85TjquOMCAbdObg2fA9VEwVOzz
-         UjvAMaM+/eXzPkXDDV35gk27sApJ4BaATPqxL9E9pEk2F34hqBtvCzo75FuJK+h6AfA0
-         Ma+OZva4REXiOTN/90DGnSvFVmwGoUcULEis0eRFTXCJZXszWWQsyrDxRPmzhH2Ios4J
-         SqgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXG4o5Nx+IYUx9Zf2nL059UY9vqvjwpxIEciOwDFDbiyaj44yi6ls1Dp9LE+LvweaJFA8AnuvLK3wFA+0Mr6+NwU9pxD2/9FsbYHQ==
-X-Gm-Message-State: AOJu0Yx7KgDB782XOfdHf7STiEeek48zX6+gsvqCpS11rcBfsnnKNijn
-	PMpHaZW28Q041zzW7+jppnFQC3GO+n0ev2uIO1d/25IvFwPzY3U26wNyuMeGH+3557zifmVrhvZ
-	LVoA5imJHsSysGPoF/aKZVZbDPN7th+GZDtim29BS3oEiZjVziDE=
-X-Google-Smtp-Source: AGHT+IHfQTRA7DIEd/l5VzXaMa8uR3RFFy6Bw7APbayqXIsTVF/H4Rl79/XS/cd6+JfJMLdBwPmNJye4ekec70FChu0=
-X-Received: by 2002:a05:690c:4a0c:b0:63b:aaf1:b8c1 with SMTP id
- 00721157ae682-658f02f5605mr25038747b3.37.1720510848794; Tue, 09 Jul 2024
- 00:40:48 -0700 (PDT)
+	s=arc-20240116; t=1720510860; c=relaxed/simple;
+	bh=mYo7BBhpvpBBP6FL1/v+q7xQ7NJIq+ysLMBI1P5ITMc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YMFsH+wXjc1SgzMixiaf3tqbotWDSW2zjIaOFXClcpHWzbvjfbLhi51Sfk8v9RJprzgUSb82SQew5+VDeHZMDYh9ySgUY/yZZx/40nImGi18YLgFNkG4eEXijQR60hYeZt0Dmlw/uuBvnbY8oRKN3mOCB8hK8CXPa5erPnse3YI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ohzxsFGG; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1720510855;
+	bh=OwVQjnWdc27b9qsSsgiOeJjlBd4pbZkQSedap0Ld7VQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ohzxsFGG8wwni+M09QuRQ3hBteffi336ndNeCuSnZK8Efyp+CfyQ73tpnzT99Voh/
+	 r+146Vl0EdRwaXYDGGBtlVSJd+sA/jtACtQP43xc2x1yNxeYTk2LOuMuuW+U5SP8oh
+	 rkTtWTXibjvTRZA4+0kIBEdN4ENpJyimugxdBF7IkPoEOZt4D9hskl5EyrRyfpfBQT
+	 Za4doTFYFwDTgrVjh1RFVQQrNPyfS+joFzHEClI1cuRrg8YFxnkrRz5oBPIP/KuSjb
+	 1yTARMy4ip7R3LQZ79nMpW7YHbVfWKOTYr1aTCxJd8ySyNe633p4eZknAX52dkFF/J
+	 ZaEmwtfDiasHQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WJCbB4M48z4w2R;
+	Tue,  9 Jul 2024 17:40:54 +1000 (AEST)
+Date: Tue, 9 Jul 2024 17:40:53 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Barry Song <baohua@kernel.org>, Barry Song <v-songbaohua@oppo.com>,
+ Lance Yang <ioworker0@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the random tree with the mm-stable tree
+Message-ID: <20240709174053.051a46a4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240709163715.3bcd6ab3@canb.auug.org.au>
-In-Reply-To: <20240709163715.3bcd6ab3@canb.auug.org.au>
-From: Naushir Patuck <naush@raspberrypi.com>
-Date: Tue, 9 Jul 2024 08:40:13 +0100
-Message-ID: <CAEmqJPpaz8dDGvv2z2VkRPFdw7kr-NCnOmbYc-VaTJUx0KXr6A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Greg KH <greg@kroah.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	David Plowman <david.plowman@raspberrypi.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>, 
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
-	Nick Hollinghurst <nick.hollinghurst@raspberrypi.org>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Nss_ongiZk.IhXDCBHpNi9z";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-HI Stephen,
+--Sig_/Nss_ongiZk.IhXDCBHpNi9z
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for fixing this.
+Hi all,
 
-On Tue, 9 Jul 2024 at 07:37, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the driver-core tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/media/platform/raspberrypi/pisp_be/pisp_be.c:1786:27: error: initialization of 'void (*)(struct platform_device *)' from incompatible pointer type 'int (*)(struct platform_device *)' [-Werror=incompatible-pointer-types]
->  1786 |         .remove         = pispbe_remove,
->       |                           ^~~~~~~~~~~~~
-> drivers/media/platform/raspberrypi/pisp_be/pisp_be.c:1786:27: note: (near initialization for 'pispbe_pdrv.<anonymous>.remove')
-> cc1: all warnings being treated as errors
->
-> Caused by commit
->
->   0edb555a65d1 ("platform: Make platform_driver::remove() return void")
->
-> interacting withc commit
->
->   12187bd5d4f8 ("media: raspberrypi: Add support for PiSP BE")
->
-> from the vl4-dvb-next tree.
->
-> I have applied the following fix up patch.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 9 Jul 2024 16:03:05 +1000
-> Subject: [PATCH] fix up for "platform: Make platform_driver::remove() return void"
->
-> interacting with commit
->
->   12187bd5d4f8 ("media: raspberrypi: Add support for PiSP BE")
->
-> from the v4l-dvb-next tree.
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Today's linux-next merge of the random tree got a conflict in:
 
-Acked-by: Naushir Patuck <naush@raspberrypi.com>
+  mm/rmap.c
 
-> ---
->  drivers/media/platform/raspberrypi/pisp_be/pisp_be.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/media/platform/raspberrypi/pisp_be/pisp_be.c b/drivers/media/platform/raspberrypi/pisp_be/pisp_be.c
-> index e74df5b116dc..7596ae1f7de6 100644
-> --- a/drivers/media/platform/raspberrypi/pisp_be/pisp_be.c
-> +++ b/drivers/media/platform/raspberrypi/pisp_be/pisp_be.c
-> @@ -1756,7 +1756,7 @@ static int pispbe_probe(struct platform_device *pdev)
->         return ret;
->  }
->
-> -static int pispbe_remove(struct platform_device *pdev)
-> +static void pispbe_remove(struct platform_device *pdev)
->  {
->         struct pispbe_dev *pispbe = platform_get_drvdata(pdev);
->
-> @@ -1765,8 +1765,6 @@ static int pispbe_remove(struct platform_device *pdev)
->         pispbe_runtime_suspend(pispbe->dev);
->         pm_runtime_dont_use_autosuspend(pispbe->dev);
->         pm_runtime_disable(pispbe->dev);
-> -
-> -       return 0;
->  }
->
->  static const struct dev_pm_ops pispbe_pm_ops = {
-> --
-> 2.43.0
->
-> --
-> Cheers,
-> Stephen Rothwell
+between commits:
+
+  26d21b18d971 ("mm/rmap: remove duplicated exit code in pagewalk loop")
+  15bde4abab73 ("mm: extend rmap flags arguments for folio_add_new_anon_rma=
+p")
+
+from the mm-stable tree and commit:
+
+  94beef29e110 ("mm: add MAP_DROPPABLE for designating always lazily freeab=
+le mappings")
+
+from the random tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc mm/rmap.c
+index 8616308610b9,1f9b5a9cb121..000000000000
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@@ -1394,27 -1384,26 +1394,30 @@@ void folio_add_anon_rmap_pmd(struct fol
+   *
+   * Like folio_add_anon_rmap_*() but must only be called on *new* folios.
+   * This means the inc-and-test can be bypassed.
+ - * The folio does not have to be locked.
+ + * The folio doesn't necessarily need to be locked while it's exclusive
+ + * unless two threads map it concurrently. However, the folio must be
+ + * locked if it's shared.
+   *
+ - * If the folio is pmd-mappable, it is accounted as a THP.  As the folio
+ - * is new, it's assumed to be mapped exclusively by a single process.
+ + * If the folio is pmd-mappable, it is accounted as a THP.
+   */
+  void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *=
+vma,
+ -		unsigned long address)
+ +		unsigned long address, rmap_t flags)
+  {
+ -	int nr =3D folio_nr_pages(folio);
+ +	const int nr =3D folio_nr_pages(folio);
+ +	const bool exclusive =3D flags & RMAP_EXCLUSIVE;
+ +	int nr_pmdmapped =3D 0;
+ =20
+  	VM_WARN_ON_FOLIO(folio_test_hugetlb(folio), folio);
+ +	VM_WARN_ON_FOLIO(!exclusive && !folio_test_locked(folio), folio);
+  	VM_BUG_ON_VMA(address < vma->vm_start ||
+  			address + (nr << PAGE_SHIFT) > vma->vm_end, vma);
+-=20
+- 	if (!folio_test_swapbacked(folio))
++ 	/*
++ 	 * VM_DROPPABLE mappings don't swap; instead they're just dropped when
++ 	 * under memory pressure.
++ 	 */
+ -	if (!(vma->vm_flags & VM_DROPPABLE))
+++	if (!folio_test_swapbacked(folio) && !(vma->vm_flags & VM_DROPPABLE))
+  		__folio_set_swapbacked(folio);
+ -	__folio_set_anon(folio, vma, address, true);
+ +	__folio_set_anon(folio, vma, address, exclusive);
+ =20
+  	if (likely(!folio_test_large(folio))) {
+  		/* increment count (starts at -1) */
+@@@ -1858,8 -1862,15 +1867,13 @@@ static bool try_to_unmap_one(struct fol
+  				 * discarded. Remap the page to page table.
+  				 */
+  				set_pte_at(mm, address, pvmw.pte, pteval);
+- 				folio_set_swapbacked(folio);
++ 				/*
++ 				 * Unlike MADV_FREE mappings, VM_DROPPABLE ones
++ 				 * never get swap backed on failure to drop.
++ 				 */
++ 				if (!(vma->vm_flags & VM_DROPPABLE))
++ 					folio_set_swapbacked(folio);
+ -				ret =3D false;
+ -				page_vma_mapped_walk_done(&pvmw);
+ -				break;
+ +				goto walk_abort;
+  			}
+ =20
+  			if (swap_duplicate(entry) < 0) {
+
+--Sig_/Nss_ongiZk.IhXDCBHpNi9z
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaM6YYACgkQAVBC80lX
+0GybgAf9ECAKGIckkbB4BocYWJ2LMVtImP9MpX5fijc2X7IUsowkamBueLMpgVIa
+o06Z6BEgfLrs5IDk/2KJLh2blwxaub/cQJbIylL4BiyGTKQM6+TwvuBDDbNESaQX
+rH9C5CrGBjNDFCL+R0qOS0NyK98Q9gOLb7MpsdnI3KjKYPczM4TVwQgKcpn8UFBG
+6szVfoxMtWWspV6rvMDRKCrqoKn8SFY+1n2yB0grzs9ZYnY4jooO49xqyiwbaqlh
+xqN+gDGASx7jZ35vH5qFfMvHiUNZxr5fPKsR06nPHk7H4xpOtrAMIRvTAxH8/eIl
+B+IPAD1AUGOo/PXILnAJDPjyZZ5igw==
+=xolW
+-----END PGP SIGNATURE-----
+
+--Sig_/Nss_ongiZk.IhXDCBHpNi9z--
 

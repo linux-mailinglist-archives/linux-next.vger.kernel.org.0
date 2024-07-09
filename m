@@ -1,89 +1,89 @@
-Return-Path: <linux-next+bounces-2854-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2855-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9146192AF12
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 06:27:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F1DC92AF74
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 07:38:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B1B1B21B0B
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 04:27:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3F58282902
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 05:38:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46D947D07F;
-	Tue,  9 Jul 2024 04:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E489445948;
+	Tue,  9 Jul 2024 05:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="F7EnHroO"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="H9RNPmtg"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A4728DB3;
-	Tue,  9 Jul 2024 04:27:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A7B12F375;
+	Tue,  9 Jul 2024 05:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720499265; cv=none; b=oOPGb1BWRmH7wsnK3ryosjMMGhzTA+gvJs4e4yFeoX/Jzlt071Ws/AY3130/68CNBBN5BkGgzFEbIMXOLTifDVRgin8/2gngEjVjk7wr/9R+A4GmJi/FteWRv/Kzy9iazthuT2iVALH/2ldasjGS+OPPSTcMUfumWA62HKGc63g=
+	t=1720503478; cv=none; b=kEEJCbosuU+V+yn/oNruSN5E9QjQWJe0j2A3puO12DgtKmODCsCYg/eS5M+0TB7H7PA7izM70qYIrJvKQEKBSsciqFG0IVuby1qN7cmnOKhmtSiKZHIAusaBfDt1kHT7ZH+GSzoPq4pMfY3XEvFSblPpXDO9YO8bSDs2Q2+LMX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720499265; c=relaxed/simple;
-	bh=Rq8UMxYcRBX75UhrKCJ/gQOueuS4Wwg/vnGKmRZTfwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=m2qnmziXyYInrqwa+NJ7IsnWhMhfsoz1j+QgdCZ28+VYkYbXptHOcoFiWKTDmz+E6AK84sXQLMLrz/ZOXZUMurIYIm2fo6ISXQCTvse7D7oy1/Ke8Tflt+D7bt+o7eBdYnztJG9Gp5tiMl4igCKq0tvYhK1i09z1sHdU+am/W00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=F7EnHroO; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1720503478; c=relaxed/simple;
+	bh=OvEheWWr/Xaaxfb/IzwJiJS5OKTS97s57xi1JzrKHTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=q1mGG1nxTm77ZO/4Oi/bmGUErGaP0jgR+XWAUtZk8Bqy+pxJq3y5weXFlZLkrEmt0NIAShDi4sD/Zgpi5yIwLieTacbpexDu4tovSQJ8d3ZVq3wNMSowNGUeVQbp9y2+BL5mt565v1vizzCj5T26XKke84Z3EwyVmpNNal11QEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=H9RNPmtg; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1720499259;
-	bh=GlY58UvqFVHgpHlpbM8kfBxfFvTpecOtBl7/YzMcjuE=;
+	s=201702; t=1720503470;
+	bh=Kb2sNZnu0CcRvr0hN0gsbVGhVm931fLwhcdsA85amDU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=F7EnHroO62Q1H21tQ/PzWdx6YyfNkR2ZGrW3a7nHAp+cTrn+xXdHqZOfuq57ZUosK
-	 nR0u9wq2aIRPlScGlWHcadY8CIPOALs4xhUQleXY5p83TqC9Ksg9P3LgY/qDziJF7V
-	 ssBp0kT9mEpPNi4jA4F7VY5Fabg3qN3Xrgm+eC8bwyffiwVCB2GCYFMjM+/kCJX7kB
-	 e6wQGNhebxcs53z77aQLlTyM687P6UNABqygnTQvFcnExJHV4m5QAPduLdM5CmZwAW
-	 Gwaw5IwNS6yVBfwNuKeAUQ2LUNDCzEXjgsbiMYZOxo45Z6NWzuq6n6xek8i2W90TDw
-	 31uHR1p3RyTCg==
+	b=H9RNPmtgzMjYhbPrnQW7VzPV1TitDyOZoQLNsiaL2bhA5Ux6NhObPj/LXSYikRTfW
+	 +Q7gAO1MZhrIkw54BPm1g/gIXCHU+Jc9BiAMg/lAPGrAh37Un/HJvQEhhZfZT3AOPv
+	 ++yyKkSa02YRkTsFWXrUccyP3Md+KcIyKrCAhntG5kfgPLv/EMq0iy6FbrxLNn9CnF
+	 50onYLseRgIr3Pa6dWPdR/j1EKbkaSVt5FE4lx8wbRZDRiJ2H2/8wNwjqLBLihppY5
+	 zuLJj0sCoIze+X5DskS4ghCJoQo1oZz/5nIn1c4ruqbpPoM/HRsJZIKdYxrcvTtfZT
+	 k5uPw07DDPL8g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WJ7JC5DYVz4wZx;
-	Tue,  9 Jul 2024 14:27:39 +1000 (AEST)
-Date: Tue, 9 Jul 2024 14:27:38 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WJ8s92Wk3z4wZx;
+	Tue,  9 Jul 2024 15:37:49 +1000 (AEST)
+Date: Tue, 9 Jul 2024 15:37:47 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Rob Herring <robh@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Linux Kernel Mailing
+To: Greg KH <greg@kroah.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linux Kernel Mailing
  List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the devicetree tree with the kbuild
- tree
-Message-ID: <20240709142738.167999ba@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Subject: linux-next: manual merge of the tty tree with the tty.current tree
+Message-ID: <20240709153747.07d7272c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/B7geL4Vw7Eo/RMNFQ6Ha8m/";
+Content-Type: multipart/signed; boundary="Sig_/20wsyuH.4Ohkr5IbyyKsu/p";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/B7geL4Vw7Eo/RMNFQ6Ha8m/
+--Sig_/20wsyuH.4Ohkr5IbyyKsu/p
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+Today's linux-next merge of the tty tree got a conflict in:
 
-  scripts/Makefile.lib
+  drivers/tty/serial/imx.c
 
 between commit:
 
-  ab6aaea6835b ("kbuild: avoid build error when single DTB is turned into c=
-omposite DTB")
+  9706fc87b4cf ("serial: imx: only set receiver level if it is zero")
 
-from the kbuild tree and commit:
+from the tty.current tree and commit:
 
-  dd402cbd0afa ("kbuild: verify dtoverlay files against schema")
+  3093f180bc6e ("serial: imx: stop casting struct uart_port to struct imx_p=
+ort")
 
-from the devicetree tree.
+from the tty tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -96,55 +96,50 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc scripts/Makefile.lib
-index 636119dc4403,29da0dc9776d..000000000000
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@@ -407,12 -407,15 +407,19 @@@ cmd_dtc =3D $(HOSTCC) -E $(dtc_cpp_flags
-  		-d $(depfile).dtc.tmp $(dtc-tmp) ; \
-  	cat $(depfile).pre.tmp $(depfile).dtc.tmp > $(depfile)
+diff --cc drivers/tty/serial/imx.c
+index ff32cd2d2863,d96f0524f7fb..000000000000
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@@ -1549,10 -1553,9 +1554,10 @@@ static int imx_uart_startup(struct uart
  =20
- +# NOTE:
- +# Do not replace $(filter %.dtb %.dtbo, $^) with $(real-prereqs). When a =
-single
- +# DTB is turned into a multi-blob DTB, $^ will contain header file depend=
-encies
- +# recorded in the .*.cmd file.
-+ DT_CHECK_CMD =3D $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BIN=
-DING_DIR) -p $(DT_TMP_SCHEMA)
-+=20
-+ ifneq ($(CHECK_DTBS),)
-+ quiet_cmd_fdtoverlay =3D DTOVLCH $@
- -      cmd_fdtoverlay =3D $(objtree)/scripts/dtc/fdtoverlay -o $@ -i $(rea=
-l-prereqs) ; $(DT_CHECK_CMD) $@ || true
-++      cmd_fdtoverlay =3D $(objtree)/scripts/dtc/fdtoverlay -o $@ -i $(fil=
-ter %.dtb %.dtbo, $^) ; $(DT_CHECK_CMD) $@ || true
-+ else
-  quiet_cmd_fdtoverlay =3D DTOVL   $@
- -      cmd_fdtoverlay =3D $(objtree)/scripts/dtc/fdtoverlay -o $@ -i $(rea=
-l-prereqs)
- +      cmd_fdtoverlay =3D $(objtree)/scripts/dtc/fdtoverlay -o $@ -i $(fil=
-ter %.dtb %.dtbo, $^)
-+ endif
+  static void imx_uart_shutdown(struct uart_port *port)
+  {
+- 	struct imx_port *sport =3D (struct imx_port *)port;
++ 	struct imx_port *sport =3D to_imx_port(port);
+  	unsigned long flags;
+  	u32 ucr1, ucr2, ucr4, uts;
+ +	int loops;
  =20
-  $(multi-dtb-y): FORCE
-  	$(call if_changed,fdtoverlay)
+  	if (sport->dma_is_enabled) {
+  		dmaengine_terminate_sync(sport->dma_chan_tx);
+@@@ -1984,8 -1937,8 +1989,8 @@@ static void imx_uart_poll_put_char(stru
+  static int imx_uart_rs485_config(struct uart_port *port, struct ktermios =
+*termios,
+  				 struct serial_rs485 *rs485conf)
+  {
+- 	struct imx_port *sport =3D (struct imx_port *)port;
++ 	struct imx_port *sport =3D to_imx_port(port);
+ -	u32 ucr2;
+ +	u32 ucr2, ufcr;
+ =20
+  	if (rs485conf->flags & SER_RS485_ENABLED) {
+  		/* Enable receiver if low-active RTS signal is requested */
 
---Sig_/B7geL4Vw7Eo/RMNFQ6Ha8m/
+--Sig_/20wsyuH.4Ohkr5IbyyKsu/p
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaMvDoACgkQAVBC80lX
-0GzLOwf6Azn898I9IYbx0cOxjh16AlgcpVB6sPvgFqO8txlQbKE8PQ+gZtfRgVB6
-ET5ReR1GDHbBNzeHsMgmMzF+ZB1rXcS0WQDYyX485Qkc64LiimwQmVP/zRn7HaTP
-JrdpTSJFr6W1XVMKabvRem9Qp3e3n21w5ykC7FlYCaw7P6YBFsWKM0rE8u/f5WAy
-ngAAzx6/6oSxLb5uUK/3a4vIbp6IzWRkfebCqFnltb72dhoYrzfItpX78h6lEQz+
-2g5S/ts/DRRWW/W2/D9eaY9mHBh66zNaVUwg1y+T+lynAHJIJZaWhkhcN0mSrYUz
-lxY9Nau7EzUFW+nvDv+/mxuE6weLFA==
-=9CNJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaMzKsACgkQAVBC80lX
+0GwBaAf+IQdnt5lHrEVR733zi2DEUfysmf9dniwZEnSKMMXn21Pi/l/RACvNcKoq
+BU1au5gAw+QxyvggvqAjxGSjF+ASNNsYeUWmGyxy4yUN0RfTlzfbl3SUYQZswvyn
+BFmn15gdHDVUh5d7mYPOss3HekEhwYmC6KqDhLECj2BVDCVQk3WxeXGC8906bL9V
+E84grww3k0K8T+32EW3yxyNvDfFDoe0dqIi6DI8A79aCs7X53SsmkQ961eedT59y
+NvED0bUgIpRlcOSPgRJdQUwHIeOvcoPfB+oW1Y6vO6Dn3NvZrqBy8N3z3mworD42
+f0B2+LP3QYgCFsoZr3TfBejhm4MMtQ==
+=yz1h
 -----END PGP SIGNATURE-----
 
---Sig_/B7geL4Vw7Eo/RMNFQ6Ha8m/--
+--Sig_/20wsyuH.4Ohkr5IbyyKsu/p--
 

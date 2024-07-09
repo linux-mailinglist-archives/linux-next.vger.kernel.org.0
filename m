@@ -1,149 +1,110 @@
-Return-Path: <linux-next+bounces-2902-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2903-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B52592C26C
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 19:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 10C0192C319
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 20:09:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0956BB22CDE
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 17:27:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A850EB24093
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 18:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1921515B116;
-	Tue,  9 Jul 2024 17:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E3F17B037;
+	Tue,  9 Jul 2024 18:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PtDY+Xgy"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TN8H2bbZ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E0E3D967;
-	Tue,  9 Jul 2024 17:27:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6AF17B036
+	for <linux-next@vger.kernel.org>; Tue,  9 Jul 2024 18:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720546028; cv=none; b=gu8a//c6acMWw0TTP7gCyO4izCdBFfYO8GJzYYBnOak4Rimmx0tMksnsgLP1pEZ/13dfV0oMbFBsXn3wEEUYc5+hDzgkqgHFBZB1YGjiDbEmCei09isRBkaxc6DI0jG6emNsS6h7QlrLjHXRlAbfZSj2WZMWiMmTXesxpEiGCYE=
+	t=1720548558; cv=none; b=J7llC6nvmI0yUsQrKqs02cCIUtDryNHBkrE2yxloq5bdbBaiZr/heDOsN9lnmpZ1kddA8J1Xb7gXce8W9hYT2ZZm2dpr2qGwT8pMYJ07ih5quMaqhvt+MJRKMoSvssn+xc16zSMy65K1A4zd/Cknk8LGo83fYAm7t159e0Dl3lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720546028; c=relaxed/simple;
-	bh=fRD0QtuTFpWTIbbNvqJ42bfrkfmvGDAk+6WRXY40IxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FEchAebVnAdxz2bCu219aiM7r/9DGjI4hySIFbP8/x2Q2UtrqTvlcBDP//WQPclsRoYK/2scdPYhBmwd5J4wfOyxc6i831MitPp91hwa5qHs0lXex6GdwxYIh2CFBzWdzVZZL+RMNtc4SwA7OUKAmhOamn5QkR8JjFyCpqaHMlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PtDY+Xgy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B6FC3277B;
-	Tue,  9 Jul 2024 17:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720546027;
-	bh=fRD0QtuTFpWTIbbNvqJ42bfrkfmvGDAk+6WRXY40IxQ=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=PtDY+Xgybjud64Zo0AKzyeiTuQ+p43u9Yf7/WkHV3BQsFFeIsF8Vs83/oJv2uTW1L
-	 zc0KjhRqmbrVrGQ7H8l2RwneDn9PCdzIanz3rQRo0vzyKDjOHW5rDAiuHYp10cke9F
-	 LX5oYh6KMdk8UbvO5Gi7Q6/IjpEtBSGuBqR5rcgcmCIYDr7Oo/U8UjpYKIv4rV+abg
-	 Ob01G2gzGkHi3gLaVjlduy5tiSynXRB2KA/cCgbmlP6ZLGoSA9mz5b4RL5vBlJJfUB
-	 m5oXDsBWtaPCZmAZmghAaverqMwGsMxkHKjVyAz68jYmMKzQ/WovxgVukWTuJ+XLyU
-	 Mkx8Ej3u5IkuQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 2CE02CE0A45; Tue,  9 Jul 2024 10:27:07 -0700 (PDT)
-Date: Tue, 9 Jul 2024 10:27:07 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Kalle Valo <kvalo@kernel.org>
-Cc: ath12k@lists.infradead.org, linux-wireless@vger.kernel.org,
-	kees@kernel.org, sfr@canb.auug.org.au, linux-next@vger.kernel.org
-Subject: Re: [PATCH RFC] wifi: ath12k: workaround fortify warnings in
- ath12k_wow_convert_8023_to_80211()
-Message-ID: <241ec41b-c37a-46e2-bf28-9e18130ea4ca@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240704144341.207317-1-kvalo@kernel.org>
+	s=arc-20240116; t=1720548558; c=relaxed/simple;
+	bh=Nedr5O72MMaCJZHo0lSW5X91GqQNSfgbP3hdBOw9eC4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SX0MoL5bfCI2S/aow3cKi1SjowC8XKd4SkmwlWorHdwKArz5nQiHTWxp7LCqAAs4WMX7bq3fHf2MmZ08F0oACDu0dLxmuK4o92VcFoAkzRwBq0MemQXvT8801rabRipeikvrLfypFzGzgZqDPG7YKHEML+GMvCeMzBR6PUGKGww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TN8H2bbZ; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7f70a7470d3so11229439f.0
+        for <linux-next@vger.kernel.org>; Tue, 09 Jul 2024 11:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1720548556; x=1721153356; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1E/FOgz2bzLAk7czsspwJRssUwyfo69Q4JV8FZsYC/0=;
+        b=TN8H2bbZ7ibYoNF1/DHVfQSYP5qoFtQyexlE/dzeUFZbgg/QELjX7t0j2ngDxcA+iZ
+         bHmZqjljGlnX/rOe2rfEGkxU0NO6qyvXOQFq7Fo77WzXMEIPjTHJY9QzeqIj/2qcp0kB
+         T1QuH14XYCiZr20E2bLg/GX180keEh6mnqYZk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720548556; x=1721153356;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1E/FOgz2bzLAk7czsspwJRssUwyfo69Q4JV8FZsYC/0=;
+        b=myzoEoVmN7wW0ZAcVLfXDHVEPubbwblJrxCUUTsltZjpwhHgTnoPAtu5xJ+whUqvPQ
+         QDhtFHuT6iyMclfMJlo0x6Pl3kayncET3iysxcFCzE0+UBd1BwtzfBYHJjuuivBWuHRi
+         q7yCueZS9E1B/ajbN4wsv+JkHm13lNkHyzJ1jRptG1MqMJ54UX0NiQSO6Wg6wDs70/bZ
+         6ITHrxAhinD2hNugdkUr+eNA0z08EtgfZWXbdmMhGA0ycePrQbhw1H2xe6X951zC0GYe
+         tkKDXY8xw+leWxLPmoB6DX4mERZg99cA7Ezlgqt221RbDE64CpcoNMmjEDz8keQCFe4Y
+         Dm2A==
+X-Forwarded-Encrypted: i=1; AJvYcCWxMDDgofAGFKQrfHKK1fKEtGT3lj/vvuBTZ7mW10gd4HQwe1HTl1HnuehF3l2P0krGkAD4C2SBkY+d33xvhIfPopT9OzAqualEjw==
+X-Gm-Message-State: AOJu0YyvHN+/DTAEnTfBeVWC7rxsscpeNyxaMN26EJ6ehyVKua9A/NMB
+	X+ZKM2U0lsxCqidbuWvj7ummWv4Kmfl+OVs+o5eDQ0MgDrLdKD+FUkNAMQr3bzM=
+X-Google-Smtp-Source: AGHT+IHeHnBu5isyAddwI1V9QJx7d99P47RZ/yrGAW+PJhY/k0T9TJ/9xtTL5eHYe0IzkmsubRMkRg==
+X-Received: by 2002:a05:6602:3413:b0:7f8:bfcd:db53 with SMTP id ca18e2360f4ac-8000269672bmr385534639f.1.1720548556008;
+        Tue, 09 Jul 2024 11:09:16 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1b0d41csm612367173.38.2024.07.09.11.09.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jul 2024 11:09:15 -0700 (PDT)
+Message-ID: <bb8602f1-71f9-438d-91b9-6793250648ea@linuxfoundation.org>
+Date: Tue, 9 Jul 2024 12:09:14 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240704144341.207317-1-kvalo@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: duplicate patches in the random tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Theodore Ts'o <tytso@mit.edu>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>, Shuah Khan <shuah@kernel.org>
+Cc: John Hubbard <jhubbard@nvidia.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240709180829.65e8967d@canb.auug.org.au>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240709180829.65e8967d@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 04, 2024 at 05:43:41PM +0300, Kalle Valo wrote:
-> From: Kalle Valo <quic_kvalo@quicinc.com>
+On 7/9/24 02:08, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Johannes reported with GCC 11.4 there's a fortify warning below. The warning is
-> not seen with GCC 12.1 nor 13.2. Weirdly moving the other operand of sum to the
-> other side the warning goes away. This is safe to do as the value of the
-> operand is check earlier. But the code looks worse with this so I'm not sure
-> what to do.
+> The following commits are also in the kselftest-fixes tree as different
+> commits (but the same patches):
 > 
-> In file included from ./include/linux/string.h:374,
->                  from ./include/linux/bitmap.h:13,
->                  from ./include/linux/cpumask.h:13,
->                  from ./include/linux/sched.h:16,
->                  from ./include/linux/delay.h:23,
->                  from drivers/net/wireless/ath/ath12k/wow.c:7:
-> drivers/net/wireless/ath/ath12k/wow.c: In function ‘ath12k_wow_convert_8023_to_80211.constprop’:
-> ./include/linux/fortify-string.h:114:33: error: ‘__builtin_memcpy’ accessing 18446744073709551611 or more bytes at offsets 0 and 0 overlaps 9223372036854775799 bytes at offset -9223372036854775804 [-Werror=restrict]
->   114 | #define __underlying_memcpy     __builtin_memcpy
->       |                                 ^
-> ./include/linux/fortify-string.h:637:9: note: in expansion of macro ‘__underlying_memcpy’
->   637 |         __underlying_##op(p, q, __fortify_size);                              |         ^~~~~~~~~~~~~
-> ./include/linux/fortify-string.h:682:26: note: in expansion of macro ‘__fortify_memcpy_chk’
->   682 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                        |                          ^~~~~~~~~~~~~~~~~~~~
-> drivers/net/wireless/ath/ath12k/wow.c:190:25: note: in expansion of macro ‘memcpy’
->   190 |                         memcpy(pat, eth_pat, eth_pat_len);
->       |                         ^~~~~~
-> ./include/linux/fortify-string.h:114:33: error: ‘__builtin_memcpy’ accessing 18446744073709551605 or more bytes at offsets 0 and 0 overlaps 9223372036854775787 bytes at offset -9223372036854775798 [-Werror=restrict]
->   114 | #define __underlying_memcpy     __builtin_memcpy
->       |                                 ^
-> ./include/linux/fortify-string.h:637:9: note: in expansion of macro ‘__underlying_memcpy’
->   637 |         __underlying_##op(p, q, __fortify_size);                              |         ^~~~~~~~~~~~~
-> ./include/linux/fortify-string.h:682:26: note: in expansion of macro ‘__fortify_memcpy_chk’
->   682 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                        |                          ^~~~~~~~~~~~~~~~~~~~
-> drivers/net/wireless/ath/ath12k/wow.c:232:25: note: in expansion of macro ‘memcpy’
->   232 |                         memcpy(pat, eth_pat, eth_pat_len);
->       |                         ^~~~~~
+>    868680ffba11 ("selftests/vDSO: remove duplicate compiler invocations from Makefile")
+>    7bb79ef48b9d ("selftests/vDSO: remove partially duplicated "all:" target in Makefile")
+>    14cd1a877fc6 ("selftests/vDSO: fix clang build errors and warnings")
 > 
-> Compile tested only.
+> These are already causing an unnecessary conflict
+> :-( Maybe you could just merge the kselftest-fixes tree
+> (git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git#fixes),
+> but first make sure that it won't be rebased.
 > 
-> Reported-by: Johannes Berg <johannes@sipsolutions.net>
-> Fixes: 4a3c212eee0e ("wifi: ath12k: add basic WoW functionalities")
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+They are now in Linus's mainline. :)
 
-(Also compile retested, for whatever that is worth.)
-
-This still shows up in allmodconfig next-20240709 builds.
-
-						Thanx, Paul
-
-> ---
->  drivers/net/wireless/ath/ath12k/wow.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/ath/ath12k/wow.c b/drivers/net/wireless/ath/ath12k/wow.c
-> index c5cba825a84a..e9588bb7561c 100644
-> --- a/drivers/net/wireless/ath/ath12k/wow.c
-> +++ b/drivers/net/wireless/ath/ath12k/wow.c
-> @@ -186,7 +186,7 @@ ath12k_wow_convert_8023_to_80211(struct ath12k *ar,
->  	if (eth_pkt_ofs < ETH_ALEN) {
->  		pkt_ofs = eth_pkt_ofs + a1_ofs;
->  
-> -		if (eth_pkt_ofs + eth_pat_len < ETH_ALEN) {
-> +		if (eth_pat_len < ETH_ALEN - eth_pkt_ofs) {
->  			memcpy(pat, eth_pat, eth_pat_len);
->  			memcpy(bytemask, eth_bytemask, eth_pat_len);
->  
-> @@ -228,7 +228,7 @@ ath12k_wow_convert_8023_to_80211(struct ath12k *ar,
->  	} else if (eth_pkt_ofs < prot_ofs) {
->  		pkt_ofs = eth_pkt_ofs - ETH_ALEN + a3_ofs;
->  
-> -		if (eth_pkt_ofs + eth_pat_len < prot_ofs) {
-> +		if (eth_pat_len < prot_ofs - eth_pkt_ofs) {
->  			memcpy(pat, eth_pat, eth_pat_len);
->  			memcpy(bytemask, eth_bytemask, eth_pat_len);
->  
-> 
-> base-commit: c1cacb01f35589bd41360cdb7535afc792c08a7c
-> -- 
-> 2.39.2
-> 
+thanks,
+-- Shuah
 

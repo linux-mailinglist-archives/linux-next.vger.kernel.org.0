@@ -1,131 +1,126 @@
-Return-Path: <linux-next+bounces-2886-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2887-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0BDE92B951
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 14:22:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2757892B964
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 14:27:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 776BD1F25668
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 12:22:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBD6928127B
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 12:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B18DB158A30;
-	Tue,  9 Jul 2024 12:20:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE3F15886B;
+	Tue,  9 Jul 2024 12:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="t9cxp9wX";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IgzLWRJ9"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EZ9C8XoG"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7BB158211;
-	Tue,  9 Jul 2024 12:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C98155A25;
+	Tue,  9 Jul 2024 12:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720527651; cv=none; b=buaqzzndW9f9DpRd1Ra8+r3Bd6CvwJHqjap3Ge+WJW9wYqWMpZoYhOPyrzHUlUrApFu4RXWBqsAQIG5OkRM9zGAdD2GBubOfht2NoZ10VZ1hK9RU1KHK3arrv8c0x6D8SpiYzcq78vu4X0IMlT5iAjDX470uCIgsrreK9u1cSmQ=
+	t=1720528019; cv=none; b=G4Ile3Dkhf+Vx1RgNCI8nPiKwEwh4eYW4BRU/TONk2XAYZSFuxvl9YcOyLWL6NB7sp1kDtNAC+d+r7Ttj2DVmc4Lx5+EtRV0zVMLeYjIYQAMwftTZNWPV1a4+tMv3/jZ9fEmMKZUQbdlz0kJDZntokCdU2kFctVbJTbzcv/lKqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720527651; c=relaxed/simple;
-	bh=lg51kiG0bH2wha3CWkMu86WelvccUDFoYneT0UfT70k=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=FI9BKQ4r9WCYK8uV+V2I84c5953tWX6WNqVuxYBo2KUeLscMW+f0Lwp4eFYywWeMh5D1HtzwCk7XPrakwXkWlCSnHAYLXf+fAh0t8BIJawr2eDyu3+qDLNFFWO9ld8Sxt9wFcg6aqlFgfVez9NAaJQDKM8fF87xI+hFJWQ8aGq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=t9cxp9wX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IgzLWRJ9; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 0FDB71146E4E;
-	Tue,  9 Jul 2024 08:20:49 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 09 Jul 2024 08:20:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1720527649; x=1720614049; bh=NmuEqsdIBv
-	nTnkIAbmhsVQaDimK4bgjI7WetAoXyddc=; b=t9cxp9wX1dPUWsdEeL0ONvbgq/
-	Fu7IaKCBkNzagYz8/C/wqxCjVz4zcbyXmuDP2WyemyVZbvU5TEVM7StShWAqMB/T
-	D8m3QCBSOszLtYye+4B79Dq3t4VFpEccbHclQfMxieimqAYPjkuVMRMmDoe0YlR7
-	nZVQ2WnoMPvS2ui7Cf5S0m3XDBsa+s4j6Ql3+5oKpu6tvlhPShJrjN55uJ/keKFV
-	l424/nd+cJsxOe3beiCzeCQ3Uf48KUdzSqo1+4tjWdGmS0tj69LWKCvZ71CTrb21
-	4BZEoErYkaR735QHDuw8yc0LR9fTEOv+p5T0mJmAfOsb/PnSMcBikGwixhAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1720527649; x=1720614049; bh=NmuEqsdIBvnTnkIAbmhsVQaDimK4
-	bgjI7WetAoXyddc=; b=IgzLWRJ9n2rfPUYmI6HYBl0E8phMdKY79qROe1vjYNkK
-	70d6fsKzf5Olo3ozgyXKrm0Msma+4JOcnECQpGKPYGfwdXToC1IW2/Hh7PsQEeYJ
-	2I9Wjplgx0aokatFfGEoliBeIyl8mt6PSfLWAj0cQjN3uhxaLjOIYACIoudM+C8n
-	HNJ/ub+dUGc2doqlNrgOV55SHiYHcQh9PjEXPv04+iqDKFPfyWqmLNwlN1TEzjQ+
-	XY6uZXCJgETEjbdPXYzY+BvOaIS8icjr7RhSxrj5GWt5aXoFwFu33jjOfwGlghsr
-	dQpFryoqW2a3BqMourNzwST+23TBP/l7MtL87DZTwQ==
-X-ME-Sender: <xms:HyuNZvO6Ae5VikP2ENomMZwoaaERatKELJss13Hnx6Cr2mlB6MEcmw>
-    <xme:HyuNZp8HrT7ye-1lTHxI130NaF7MGBhOhwu18EaZdI4xO-kWwJCGhItHOgozR-S59
-    8s04VvPYIk0CJchpgM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdelgdehudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:HyuNZuRweQSmrWo-xdnNfkQvYXgWc-4a5uMgodPt6FAb7iCqguiThg>
-    <xmx:HyuNZjtVNRLYS1AEdNEyThzvkaz1Z1aQEWXWKofxN1cZbNuUqO0HPA>
-    <xmx:HyuNZncQ8KN-A0uC-2lJcCpPUUYayFoFu4kfrOYPG6GsDRzkpuX5Gw>
-    <xmx:HyuNZv2InFx6qQ3cfYP-dlVYRukCGFdWxL8O08S8IGuZjDXzIEsrtQ>
-    <xmx:ISuNZoGx9FfH1GKo0jcoV0LaAf2xpuSjm4r3kRqEKcVShp9KmWBKGRgj>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 3B4D4B60092; Tue,  9 Jul 2024 08:20:47 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	s=arc-20240116; t=1720528019; c=relaxed/simple;
+	bh=sV/kHiERULcn2+CKseOGExeItquaW9e6l/jwQkKffIw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uSH2roJlS33V2CnZOS9fSuADqe+28y/Conokd9MXj3QSPEW4X+D+Q/9AYHwSjk663NGrfwQ37TsSFD0V+Mh2vxoRX+qV/4cyo2mGvEvrlb1lhOhDFT1HGsIG0nFUrH2/Gu1WHAWUfyaiywh74nmOmnMP66QDF8mqFr8xTAF67B4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EZ9C8XoG; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1720528012;
+	bh=QE5ErKqVAiEnvGSamMcUaE+v5eOBOF3Dca8BGyewkZ4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EZ9C8XoGNDJz8c6gvDr3geT1YIQdgzFROfspp0YRNXxmg36LiWzurvr4KVKJzwsIh
+	 eimy3X35J2pPPOGuo+OyD5S9UYEIX+auBH89colXtIzscCVgRa8A/RBc7w2NtaFC04
+	 lCa5q7USl7XD3QBrT9KYgcLI73AvdKEC4UZ7kmq5RET00XrCVPBHq8rXuA1hbYVc8w
+	 VxriBWsQY+WaHY1iINGmlmlLb4MOrA2tgViJyURFR0FRJUuVzEqa5ecRIxrJPEAxMW
+	 1KpYCUcljxssWoJCvz3nijV/yiZ3MBaJqVCtKLQT4+a9RK4TVcIbOwwg8rOy1xT8Q5
+	 ka7jq9CyS83yw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WJKx81q0Qz4wc3;
+	Tue,  9 Jul 2024 22:26:52 +1000 (AEST)
+Date: Tue, 9 Jul 2024 22:26:45 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Lee Jones <lee@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Thomas =?UTF-8?B?V2Vpw59zY2h1?=
+ =?UTF-8?B?aA==?= <linux@weissschuh.net>
+Subject: Re: linux-next: manual merge of the battery tree with the leds-lj
+ tree
+Message-ID: <20240709222645.25c1b3c0@canb.auug.org.au>
+In-Reply-To: <20240709092337.GB501857@google.com>
+References: <20240709133420.55645c59@canb.auug.org.au>
+	<20240709161729.27935749@canb.auug.org.au>
+	<20240709092337.GB501857@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c25a32c6-8ed0-4ef9-a13e-cb16a89edb73@app.fastmail.com>
-In-Reply-To: <Zo0kzIR_ZueaEjTa@krava>
-References: <20240709105709.18ce785d@canb.auug.org.au>
- <20240709200851.4d921e43@canb.auug.org.au>
- <784a34e5-4654-44c9-9c07-f9f4ffd952a0@app.fastmail.com>
- <Zo0kzIR_ZueaEjTa@krava>
-Date: Tue, 09 Jul 2024 14:20:26 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jiri Olsa" <olsajiri@gmail.com>
-Cc: "Stephen Rothwell" <sfr@canb.auug.org.au>,
- "Christian Brauner" <brauner@kernel.org>,
- =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the vfs-brauner tree with the asm-generic tree
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/L8agdaeq+RDfobJc9Deh4r8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Jul 9, 2024, at 13:53, Jiri Olsa wrote:
-> On Tue, Jul 09, 2024 at 01:44:34PM +0200, Arnd Bergmann wrote:
+--Sig_/L8agdaeq+RDfobJc9Deh4r8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Lee,
+
+On Tue, 9 Jul 2024 10:23:37 +0100 Lee Jones <lee@kernel.org> wrote:
 >
->> Though I'm still not sure what uretprobe is only added
->> to half the architectures at the moment. There is a chance
->> we need a different conditional for it than '64'.
->
-> uretprobe is defined only for x86_64, not sure what that means
-> for scripts/syscall.tbl though
+> On Tue, 09 Jul 2024, Stephen Rothwell wrote:
+>=20
+> > Hi all,
+> >=20
+> > On Tue, 9 Jul 2024 13:34:20 +1000 Stephen Rothwell <sfr@canb.auug.org.a=
+u> wrote: =20
+> > >
+> > > Today's linux-next merge of the battery tree got a conflict in:
+> > >=20
+> > >   include/linux/leds.h
+> > >=20
+> > > between commit:
+> > >=20
+> > >   6b0d3355e5a5 ("leds: class: Add flag to avoid automatic renaming of=
+ LED devices") =20
+> >=20
+> > This is also in the mfd tree. =20
+>=20
+> That's intentional.  It's a shared branch.
+>=20
+> Same commit ID, right?
 
-I meant you hooked it up unconditionally for all architectures
-using the old method, i.e. arc, arm64, csky, hexagon, loongarch64,
-nios2, openrisc, riscv32, riscv64, and xtensa in addition
-to x86-64, but not for the other ABIs: alpha, arm32, m68k,
-microblaze, mips-o32, mips-n32, mips64, nios2, parisc32, parisc64,
-powerpc32, powerpc64, powerpc-spu, s390-31, s390-64, sh,
-sparc32, sparc64, x86-32 and x86-x32.
+Yeah, not a problem, I was just noting for completeness.
 
-If that is not the list you had intended, do you have a list
-of which architectures actually have the required hardware
-to hook it up? It would be good to do this correctly from
-the start so we don't rely on architecture maintainers assigning
-the numbers individually.
+--=20
+Cheers,
+Stephen Rothwell
 
-     ARnd
+--Sig_/L8agdaeq+RDfobJc9Deh4r8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaNLIUACgkQAVBC80lX
+0Gw3fwf/etON1YTO4cyG1lgez1BoPdRMRQRPF77h02//HPlgYLctmib1qJfGcgCa
+NewM6StTktoaaWK80wQDlUB42/NSUzjVz7viiu2Y+adOSoDv/4Qem1nfT2bFJ7Dq
+kQnVLzyWriQ55NkjwyBac8CbQk4QDph34uCUT8slz2iMwJTjsXbtIVz1HOJRM14v
+ZyqVHl0r0XJUyFVeKLp/pZo6MvM/YShqE+n6dv+ErkuR3TmkuU27hfO9E6EqZO1m
+KRKeVNJgVkiYxBZAqY0Q0nVceFexECbV4maKShXiWFIMTS+viIQeAV1M0YsD57Jz
+OUWgpHnPIUajHQ65i1cq+F6rgEcKsQ==
+=iMZd
+-----END PGP SIGNATURE-----
+
+--Sig_/L8agdaeq+RDfobJc9Deh4r8--
 

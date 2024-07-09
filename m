@@ -1,71 +1,71 @@
-Return-Path: <linux-next+bounces-2866-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2867-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1AEA92B15E
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 09:41:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FA2E92B16A
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 09:43:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A62F282876
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 07:41:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A7C5283D42
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 07:43:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E417B143C74;
-	Tue,  9 Jul 2024 07:41:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51B3913211E;
+	Tue,  9 Jul 2024 07:43:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ohzxsFGG"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="s42YhSu2"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50AC13BC30;
-	Tue,  9 Jul 2024 07:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223FB143752;
+	Tue,  9 Jul 2024 07:43:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720510860; cv=none; b=X8g/jWq8SKAemRSljG2EGMhI87tgGoJp3KV+9cpkqK90FoVM2oDyAGqNoFxP9lAweWSNHqgWmKkasZK4zefeIO167bFuE9lzTBA+4xFefHgMOtcckmuhaTMUscYkdkpb3FzruK422cPC0d4Gnte89SWE1JmFmM3pNEYFsrsDcQQ=
+	t=1720511025; cv=none; b=p7hI4nnQJAOjKbdjKYt8fTPe4TfxHqSwaeBMu4spn3Bw/VdQY/nNp0zAms3J/UEkegPxjld/ZLKS4+vfdNY4QZ70Ke2TOVxe7c9teipT/c8V7sm9yl+6Dw09N0VKEdsr+SO1K7B2w8I9THq/z8lAHRYBtBRvd/sUfEIAvKoWv9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720510860; c=relaxed/simple;
-	bh=mYo7BBhpvpBBP6FL1/v+q7xQ7NJIq+ysLMBI1P5ITMc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YMFsH+wXjc1SgzMixiaf3tqbotWDSW2zjIaOFXClcpHWzbvjfbLhi51Sfk8v9RJprzgUSb82SQew5+VDeHZMDYh9ySgUY/yZZx/40nImGi18YLgFNkG4eEXijQR60hYeZt0Dmlw/uuBvnbY8oRKN3mOCB8hK8CXPa5erPnse3YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ohzxsFGG; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1720511025; c=relaxed/simple;
+	bh=dr7l3t+GjKMDnDuiYasmDuc9Qrrjr+5nnYrK+/4137Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=qhs0RuOMu1sVtDofVClrkrqcTkI2LpAe0GjzGzLHvjVoU8jZ1ftRxt0dLiLNTXm3gpPyy4BfkZjKmuEfkqyhu1gZZzU0ILeJ1OCuld04H6fiPf/m5KmXWFGy3mci9EygvBfzZA98XBHcGoJjf5cBV1GG3e5Yi8iD4FSQQX62CSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=s42YhSu2; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1720510855;
-	bh=OwVQjnWdc27b9qsSsgiOeJjlBd4pbZkQSedap0Ld7VQ=;
+	s=201702; t=1720511021;
+	bh=o9VUrZTwSxcIukPrWAGUJ9E0ASY1OK2NhB+cQqKDHHM=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ohzxsFGG8wwni+M09QuRQ3hBteffi336ndNeCuSnZK8Efyp+CfyQ73tpnzT99Voh/
-	 r+146Vl0EdRwaXYDGGBtlVSJd+sA/jtACtQP43xc2x1yNxeYTk2LOuMuuW+U5SP8oh
-	 rkTtWTXibjvTRZA4+0kIBEdN4ENpJyimugxdBF7IkPoEOZt4D9hskl5EyrRyfpfBQT
-	 Za4doTFYFwDTgrVjh1RFVQQrNPyfS+joFzHEClI1cuRrg8YFxnkrRz5oBPIP/KuSjb
-	 1yTARMy4ip7R3LQZ79nMpW7YHbVfWKOTYr1aTCxJd8ySyNe633p4eZknAX52dkFF/J
-	 ZaEmwtfDiasHQ==
+	b=s42YhSu2BtzzHurrB0fD3leQYO5KzNFamh/v7Tnpe3T0wppC2gLPV9+wkM7NQyMGz
+	 KvbJhqrZb1o9OCURLKSzKEFBlUOJgsJpfqi6Fuwy1yPM+isz2a1OlBgiMev/hne1H1
+	 87j4YsPGok0YeOQIu4noQeTl/1vm/HhVYvrCy5PvgG/iBV9OYfzuJe1nt1wGyqV2b9
+	 1G9lg5CdAPqiX39YwGmgSi0iPpnBqWwoj48Mrs7gWpinq8sZdbGJLZtAw4I//xsfbS
+	 P0HYoPUAEl+UYwqcCeKEn4gAx5tXBjcuCjikxGVW/1BXPLDkb8U6y3I+Dfl66vyEu+
+	 kPYZ+b9Df4xxQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WJCbB4M48z4w2R;
-	Tue,  9 Jul 2024 17:40:54 +1000 (AEST)
-Date: Tue, 9 Jul 2024 17:40:53 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WJCfP39Q7z4w2R;
+	Tue,  9 Jul 2024 17:43:41 +1000 (AEST)
+Date: Tue, 9 Jul 2024 17:43:40 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
  Andrew Morton <akpm@linux-foundation.org>
-Cc: Barry Song <baohua@kernel.org>, Barry Song <v-songbaohua@oppo.com>,
- Lance Yang <ioworker0@gmail.com>, Linux Kernel Mailing List
+Cc: Donet Tom <donettom@linux.ibm.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
+ <linux-next@vger.kernel.org>, "Ritesh Harjani (IBM)"
+ <ritesh.list@gmail.com>
 Subject: linux-next: manual merge of the random tree with the mm-stable tree
-Message-ID: <20240709174053.051a46a4@canb.auug.org.au>
+Message-ID: <20240709174340.5c03c2b9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Nss_ongiZk.IhXDCBHpNi9z";
+Content-Type: multipart/signed; boundary="Sig_/MmvR/cmc7U=7=PRedTMJjZb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Nss_ongiZk.IhXDCBHpNi9z
+--Sig_/MmvR/cmc7U=7=PRedTMJjZb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -73,13 +73,12 @@ Hi all,
 
 Today's linux-next merge of the random tree got a conflict in:
 
-  mm/rmap.c
+  tools/testing/selftests/mm/Makefile
 
-between commits:
+between commit:
 
-  26d21b18d971 ("mm/rmap: remove duplicated exit code in pagewalk loop")
-  15bde4abab73 ("mm: extend rmap flags arguments for folio_add_new_anon_rma=
-p")
+  3a103b5315b7 ("selftest: mm: Test if hugepage does not get leaked during =
+__bio_release_pages()")
 
 from the mm-stable tree and commit:
 
@@ -99,85 +98,35 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc mm/rmap.c
-index 8616308610b9,1f9b5a9cb121..000000000000
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@@ -1394,27 -1384,26 +1394,30 @@@ void folio_add_anon_rmap_pmd(struct fol
-   *
-   * Like folio_add_anon_rmap_*() but must only be called on *new* folios.
-   * This means the inc-and-test can be bypassed.
- - * The folio does not have to be locked.
- + * The folio doesn't necessarily need to be locked while it's exclusive
- + * unless two threads map it concurrently. However, the folio must be
- + * locked if it's shared.
-   *
- - * If the folio is pmd-mappable, it is accounted as a THP.  As the folio
- - * is new, it's assumed to be mapped exclusively by a single process.
- + * If the folio is pmd-mappable, it is accounted as a THP.
-   */
-  void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *=
-vma,
- -		unsigned long address)
- +		unsigned long address, rmap_t flags)
-  {
- -	int nr =3D folio_nr_pages(folio);
- +	const int nr =3D folio_nr_pages(folio);
- +	const bool exclusive =3D flags & RMAP_EXCLUSIVE;
- +	int nr_pmdmapped =3D 0;
+diff --cc tools/testing/selftests/mm/Makefile
+index e1aa09ddaa3d,e3e5740e13e1..000000000000
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@@ -75,7 -73,7 +75,8 @@@ TEST_GEN_FILES +=3D ksm_functional_test
+  TEST_GEN_FILES +=3D mdwe_test
+  TEST_GEN_FILES +=3D hugetlb_fault_after_madv
+  TEST_GEN_FILES +=3D hugetlb_madv_vs_map
+ +TEST_GEN_FILES +=3D hugetlb_dio
++ TEST_GEN_FILES +=3D droppable
  =20
-  	VM_WARN_ON_FOLIO(folio_test_hugetlb(folio), folio);
- +	VM_WARN_ON_FOLIO(!exclusive && !folio_test_locked(folio), folio);
-  	VM_BUG_ON_VMA(address < vma->vm_start ||
-  			address + (nr << PAGE_SHIFT) > vma->vm_end, vma);
--=20
-- 	if (!folio_test_swapbacked(folio))
-+ 	/*
-+ 	 * VM_DROPPABLE mappings don't swap; instead they're just dropped when
-+ 	 * under memory pressure.
-+ 	 */
- -	if (!(vma->vm_flags & VM_DROPPABLE))
-++	if (!folio_test_swapbacked(folio) && !(vma->vm_flags & VM_DROPPABLE))
-  		__folio_set_swapbacked(folio);
- -	__folio_set_anon(folio, vma, address, true);
- +	__folio_set_anon(folio, vma, address, exclusive);
- =20
-  	if (likely(!folio_test_large(folio))) {
-  		/* increment count (starts at -1) */
-@@@ -1858,8 -1862,15 +1867,13 @@@ static bool try_to_unmap_one(struct fol
-  				 * discarded. Remap the page to page table.
-  				 */
-  				set_pte_at(mm, address, pvmw.pte, pteval);
-- 				folio_set_swapbacked(folio);
-+ 				/*
-+ 				 * Unlike MADV_FREE mappings, VM_DROPPABLE ones
-+ 				 * never get swap backed on failure to drop.
-+ 				 */
-+ 				if (!(vma->vm_flags & VM_DROPPABLE))
-+ 					folio_set_swapbacked(folio);
- -				ret =3D false;
- -				page_vma_mapped_walk_done(&pvmw);
- -				break;
- +				goto walk_abort;
-  			}
- =20
-  			if (swap_duplicate(entry) < 0) {
+  ifneq ($(ARCH),arm64)
+  TEST_GEN_FILES +=3D soft-dirty
 
---Sig_/Nss_ongiZk.IhXDCBHpNi9z
+--Sig_/MmvR/cmc7U=7=PRedTMJjZb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaM6YYACgkQAVBC80lX
-0GybgAf9ECAKGIckkbB4BocYWJ2LMVtImP9MpX5fijc2X7IUsowkamBueLMpgVIa
-o06Z6BEgfLrs5IDk/2KJLh2blwxaub/cQJbIylL4BiyGTKQM6+TwvuBDDbNESaQX
-rH9C5CrGBjNDFCL+R0qOS0NyK98Q9gOLb7MpsdnI3KjKYPczM4TVwQgKcpn8UFBG
-6szVfoxMtWWspV6rvMDRKCrqoKn8SFY+1n2yB0grzs9ZYnY4jooO49xqyiwbaqlh
-xqN+gDGASx7jZ35vH5qFfMvHiUNZxr5fPKsR06nPHk7H4xpOtrAMIRvTAxH8/eIl
-B+IPAD1AUGOo/PXILnAJDPjyZZ5igw==
-=xolW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaM6iwACgkQAVBC80lX
+0GzQ0Qf8D5iZvMUXOim4h+wk5dm9lHbdnosCIMex9sPYFogb+B8L5JFi8rNQ3R+N
+RJrVWK8G/gcEh3dtx7/VV1FpURnjs0AKDvJbYHVTSRbrfbKhAcoeZEvzf3eXNv6i
+9Gf/hrOznL+Fs0ZIkt1UwgIgCHHctZNura+Tt80LlSa3fRe1ybGeQ5eMP68AsMnV
+siS9me/dpizAbMnJluRxwWLbhT86tXBehR6UNI2F+5x4Q/AUSclEuh/aSQGtDSzp
+19v7cJXh50Ggx8ANyDtdJWlxktpQ7B4wrZOoMT3Sya8+9yhSOcvdxGCiuhiKBQ6W
+1mR1+GF/nNUtOxwe72xMb5OFvNWC9w==
+=Ea6t
 -----END PGP SIGNATURE-----
 
---Sig_/Nss_ongiZk.IhXDCBHpNi9z--
+--Sig_/MmvR/cmc7U=7=PRedTMJjZb--
 

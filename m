@@ -1,135 +1,151 @@
-Return-Path: <linux-next+bounces-2873-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2874-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4763C92B223
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 10:29:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A252792B25C
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 10:42:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB7BF1F21E67
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 08:29:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DCD5283353
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 08:42:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7441815251B;
-	Tue,  9 Jul 2024 08:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A50E6156654;
+	Tue,  9 Jul 2024 08:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="YMTcHgH+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="anj+SeJp"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="KsZ33xOe"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB5881745;
-	Tue,  9 Jul 2024 08:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCE415573D;
+	Tue,  9 Jul 2024 08:40:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720513786; cv=none; b=rLw65CM6aGDTa+YmQRiO/d79IpjcY5phvwoVFk9hMwn9MLIfP5U5RAfjnu5WJNUM5Bf1MVyUhlnzgKubDHWNrSJn9uAIuZi8tebMkK2BnRTxCKZPTCbNgsO3Qfb+N+GKnupi2o8Y7+oXhSxNsRvbQbwiTMbUjuUcm80VCdJCQ9Y=
+	t=1720514411; cv=none; b=SUnqllfrLq6Uh1E8onrtWGC+o06Yxfda8rWZ1YsXtl85KwgCFBn7ky7A9X+XsMAJKH/0m/cAqXbm9yDqZfa6Wl5gF9DEmzdKbGcYl1HCi/lXDdWIFmYJKcCvAPUfZcU4c6/d9sSTRJpWvlDv+Hg2y3rWKQfiw18tdmIY7oZTB/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720513786; c=relaxed/simple;
-	bh=Hio/XpiGa0C1CbUC+8v7iXVUYWD+wgGkdq7CW/+unic=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=P7pnH9wP+u9Jzt+qi5PVnw5i98kK4gKUwtCb15slIsTtWsDzqkQW0xq8RUSCompGz8+sk7IPKACZ+LJHa4tO3dEiPobeJ0Jm8HZhd7RKW85qio9NBKT/cQ0GdPbQY/4JL7JI7XyD3nBSg5SzXbrd9soGgjw0fwp+P7tdyZvYDHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=YMTcHgH+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=anj+SeJp; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id E1AE51384DB8;
-	Tue,  9 Jul 2024 04:29:42 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 09 Jul 2024 04:29:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1720513782; x=1720600182; bh=KqOB6QWEXY
-	M/EwL2m6HVgq4cG3Z37oQQTgP99FSgDis=; b=YMTcHgH+zXLfN+Gi2xaAp3Blf1
-	IHujHrE8rMS2cuKNOPT66UiR9NDbTZqtC5toLUqtW7OM7f4qjS+SC12vV0RUaT4x
-	0Gg9TutuG67M/cU2+F6qvU/7igGGcB9JwBop4Gz+npREjWn2Cnay+iIFVRTI3ewY
-	spJ+dMK6dI3lkmsMu25jmVTTxQ9DDgPA23/AfVxj/oDjdBAp7G9WngKQh6/a9D4C
-	1IFFuf2omLSBMWImYU6tS7mSPD09JGsJGAfQfNLGJMOyhlkQWwYMx5Ji6vZiFMBl
-	CPgIjRtslPwxMYoVXCkHrrbsKsynxiuVPkyA7GupCcCSlnVhggWwZqVK4YIg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1720513782; x=1720600182; bh=KqOB6QWEXYM/EwL2m6HVgq4cG3Z3
-	7oQQTgP99FSgDis=; b=anj+SeJpMsxhIynJ1XoJ60Bpe4t1bzEw6QEANmuFupD2
-	49MB9DxOtkJFw4LT44KFPxJm1lJ2w5z7w2xjqWmoxuhk4d27CkgfiwU1CuKE22BF
-	Odf4iL/sWSBqy4KNX+gRuYOQQmcib+DFgiS/w0NKFlvhl5VVqi9gLxmHFulLSrhw
-	7QOZrRyBOzWXwSe/KysWGjb2fB0G75quK7HQ5+T30GR+FLS5yK5OiM6zyLgxVelI
-	xJR4bU/5HjpvGhVLtCDgvahB8FRejfCIzjvnmupKpgDeqQ9tvlBlm+l2wYvs4KU/
-	EVRvoaf9hk+SieipO6NMsQgoGiPots8SQq2AyvPEoQ==
-X-ME-Sender: <xms:9PSMZmnwB2gI8KcC9epJH1QDwe44yl5oQYT6xnn9YwMilijEqeOS1g>
-    <xme:9PSMZt3OIWS-0SRCc572mUg3rBswKGEuQZOlZ3hVeuXzpPYxzej533edc77vx5cLm
-    WOBrYvyFTBAXgrigQE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdelgddthecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:9PSMZkr6W1PYSvwVDsUbBiS2cuM6mXagXXWRfDhhnJqL9ds6m9N7AQ>
-    <xmx:9PSMZql5I07hACZMUMwDI10hgzGLjsft5sN89sx4NZYNxfLcsi4akw>
-    <xmx:9PSMZk1neBbsH6s2JiMl4sn4EEwWQyjAjSY29I-2zw9vAy8ixaMkRg>
-    <xmx:9PSMZhvG9T_J4nOVgghkgFHNs3NuP7-49KhmZJ-aL5_JJmHYAgFtcg>
-    <xmx:9vSMZo8KM1bd0mBOb2qJF12KOTsxS2X1FV4RHyMOnO7dm068teyTMnPE>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 4ACD1B6008D; Tue,  9 Jul 2024 04:29:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	s=arc-20240116; t=1720514411; c=relaxed/simple;
+	bh=y9cnUr2Hhyo3aXF2dhsc/sdk8CJQm6ZcFFHK60b908w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cmvroetQbSG2nwsnVw96vzR7vpgUhqBKYMkN8tgB/hJ/+OZy32hpLFc/AMGVp/4D1JriqDQTQ0Gw2QGyjLhXS1KjzT8BjhpEyYtlJo8vJ6cXIEh+h2VogzHTbov2JeXfaoTns3/7lYpOA2t+8YAqcWL/SIm2Wcv6qkYQU9STLpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=KsZ33xOe; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1720514405;
+	bh=5ShoYFOMGU+1vmB1rgdQgvzyxsF69OqkcwfJBnXZki8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=KsZ33xOePV868UzIysKGitU/KHKBxf1RVqPY1Ct2O8ObxSkFoyaALfPJi08scVehH
+	 wrJwxOfUvQ7uemgNtHIW8D31g9F/UzQSiCK+/RUOQQDlnd4W65bZu44w40HbO7OcK5
+	 RJKwnZklz1pYGd3JFeBh6SROV2voEYMoFXGP57I4T1K2BR+vFU0d+cHM6PBTuER8hK
+	 UFEzBWYDfqIfyrHzeE2bIYuPLQwwwL+yUJNaf9corxVhhAn+CcMyxNzQ136ZELaAcz
+	 80EYNaF0X8+MG0rh6rFrEe++Ox+nx5MbNLCVBHyc0CkBPFNCp856HKdhHvYPYyzn74
+	 UT0aC1nINP/SQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WJDvT5tsHz4xQW;
+	Tue,  9 Jul 2024 18:40:05 +1000 (AEST)
+Date: Tue, 9 Jul 2024 18:40:04 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nicolas Pitre <npitre@baylibre.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20240709184004.60f94726@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <df14f286-a00c-493d-9abd-83d42dd6b6b2@app.fastmail.com>
-In-Reply-To: <20240709175803.36f8bca6@canb.auug.org.au>
-References: <20240709175803.36f8bca6@canb.auug.org.au>
-Date: Tue, 09 Jul 2024 10:29:19 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Stephen Rothwell" <sfr@canb.auug.org.au>, "Kees Cook" <kees@kernel.org>
-Cc: "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- linux-next <linux-next@vger.kernel.org>, liujinlong <liujinlong@kylinos.cn>,
- liujinlong <mingliu6104@gmail.com>
-Subject: Re: linux-next: manual merge of the kspp tree with Linus' tree
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/rapPalzJMwbDFUFj46ja6p1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Jul 9, 2024, at 09:58, Stephen Rothwell wrote:
-> Hi all,
->
-> Today's linux-next merge of the kspp tree got a conflict in:
->
->   kernel/kallsyms.c
->
-> between commit:
->
->   7e1f4eb9a60d ("kallsyms: rework symbol lookup return codes")
->
-> from Linus' tree and commit:
->
->   21b4564fedad ("sprint_symbol: Replace strcpy with memmove to handle 
-> potential overlap")
->
-> from the kspp tree.
->
-> I fixed it up (the former removed the code modified by the latter, so I
-> did that) and can carry the fix as necessary. This is now fixed as far as
-> linux-next is concerned, but any non trivial conflicts should be mentioned
-> to your upstream maintainer when your tree is submitted for merging.
-> You may also want to consider cooperating with the maintainer of the
-> conflicting tree to minimise any particularly complex conflicts.
+--Sig_/rapPalzJMwbDFUFj46ja6p1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi all,
 
-Thanks for pointing this out. It does look like the second
-patch also just tries to address the same warning that I
-fixed in my larger patch.
+After merging the mm tree, today's linux-next build (i386 defconfig)
+failed like this:
 
-Kees, do you want to just drop that patch from your tree?
+lib/math/div64.c: In function 'mul_u64_u64_div_u64':
+lib/math/div64.c:211:2: error: #error "unknown endianness"
+  211 | #error "unknown endianness"
+      |  ^~~~~
+lib/math/div64.c:219:21: error: 'union <anonymous>' has no member named 'l'
+  219 |         X.v =3D (u64)A.l * B.l;
+      |                     ^
+lib/math/div64.c:219:27: error: 'union <anonymous>' has no member named 'l'
+  219 |         X.v =3D (u64)A.l * B.l;
+      |                           ^
+lib/math/div64.c:220:21: error: 'union <anonymous>' has no member named 'l'
+  220 |         Y.v =3D (u64)A.l * B.h + X.h;
+      |                     ^
+lib/math/div64.c:220:27: error: 'union <anonymous>' has no member named 'h'
+  220 |         Y.v =3D (u64)A.l * B.h + X.h;
+      |                           ^
+lib/math/div64.c:220:33: error: 'union <anonymous>' has no member named 'h'
+  220 |         Y.v =3D (u64)A.l * B.h + X.h;
+      |                                 ^
+lib/math/div64.c:221:21: error: 'union <anonymous>' has no member named 'h'
+  221 |         Z.v =3D (u64)A.h * B.h + Y.h;
+      |                     ^
+lib/math/div64.c:221:27: error: 'union <anonymous>' has no member named 'h'
+  221 |         Z.v =3D (u64)A.h * B.h + Y.h;
+      |                           ^
+lib/math/div64.c:221:33: error: 'union <anonymous>' has no member named 'h'
+  221 |         Z.v =3D (u64)A.h * B.h + Y.h;
+      |                                 ^
+lib/math/div64.c:222:21: error: 'union <anonymous>' has no member named 'h'
+  222 |         Y.v =3D (u64)A.h * B.l + Y.l;
+      |                     ^
+lib/math/div64.c:222:27: error: 'union <anonymous>' has no member named 'l'
+  222 |         Y.v =3D (u64)A.h * B.l + Y.l;
+      |                           ^
+lib/math/div64.c:222:33: error: 'union <anonymous>' has no member named 'l'
+  222 |         Y.v =3D (u64)A.h * B.l + Y.l;
+      |                                 ^
+lib/math/div64.c:223:10: error: 'union <anonymous>' has no member named 'h'
+  223 |         X.h =3D Y.l;
+      |          ^
+lib/math/div64.c:223:16: error: 'union <anonymous>' has no member named 'l'
+  223 |         X.h =3D Y.l;
+      |                ^
+lib/math/div64.c:224:17: error: 'union <anonymous>' has no member named 'h'
+  224 |         Z.v +=3D Y.h;
+      |                 ^
 
-     Arnd
+Caused by commit
+
+  7a3c42cc4fc3 ("mul_u64_u64_div_u64: make it precise always")
+
+from the mm-nonmm-unstable branch of the mm tree.
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/rapPalzJMwbDFUFj46ja6p1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaM92QACgkQAVBC80lX
+0GxBVwgAgHuPqASRv0/BBKUWaI0FG76ok4ilXZt0mP7bVT0zxhq8YydZBUYfpkD/
+be1bUE+pVJ5Zk2lINRyqYhF1aBHDjKVqcWEKNcQp1XI2mL6qzcmxuE3HFwiK6Efu
+0yi24f4GLkKwYVwRlDkT3LKM073T4SvrhJO7UF2U/fY6fruJ0Te3KFJ+MAUq6/du
+vtcWDivTJ6EVxbXQL2xZId1fADBw/ThJ1qglxc5bkyAGIw8Xo6iaBZZD84ie/rc1
+1fp4QMuP39TcHz3+FrDc/C12SK+A6Y//eqnAc4ZYFFMo3+O5gw5Yca7/rd1dYbdp
+fKbTSBrHUiBNv1Tm+b5TOnKYRIu+uw==
+=I2em
+-----END PGP SIGNATURE-----
+
+--Sig_/rapPalzJMwbDFUFj46ja6p1--
 

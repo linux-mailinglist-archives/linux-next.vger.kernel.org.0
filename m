@@ -1,137 +1,87 @@
-Return-Path: <linux-next+bounces-2850-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2851-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 342A292ADC9
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 03:25:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 432DA92AEC7
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 05:31:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCEA01F22919
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 01:25:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 744331C20C85
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jul 2024 03:31:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570BC286A6;
-	Tue,  9 Jul 2024 01:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tcIiGSOM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25973849C;
+	Tue,  9 Jul 2024 03:31:45 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D211F28366;
-	Tue,  9 Jul 2024 01:25:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF45664A;
+	Tue,  9 Jul 2024 03:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720488353; cv=none; b=P1euojm6sg0rKLUPM4ZyC/R7w0IMDfcxSk/WIxaqVyO3Iu2t3PEtXSPcBHfK+2w6U6EkD5BzpwjoTPZqNKsZ+YVMJGEYQh4xuZpy82hg7WYrWz2BEM7FkfeYdZY2ZQImjrbtVncFybLqD920XJGrhvk7RCuzxjhETGZYso5QGnE=
+	t=1720495905; cv=none; b=HnzZz5XkD3fzwUzN7CJGoBBF8hEiPtpSTL64UzNOvvnx7eI5gzQ+5+m2IaGNIYqJLgBoZAKgBxGETB6FHSq5di+gKApr0jiH38Cmzs9zmC9yPOzdzBRKi9+fF5gImmcuNRc2AniySwier9Tbfav3wPi0CmZvnbB5n9T5rBEzVLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720488353; c=relaxed/simple;
-	bh=jOKwpX73FcCYIAYPoH8+LQo4CGM5eNnYpK5fKeEybuE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Eq/g2J/M7nnIV1tCPN5LJtC37vYKmT5ygrnvQAJQfXW49oKGrj6fRft/vYtRPswKXEGuAc0Xg15l552ggBnQvk0CS6EjxH+H2hciJ/AlyLocoqRP3cL035chTPV8qwE4TI8sLKRsNP55KWsdUGhxDet+Q3fSbDueVmzADNdpr8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tcIiGSOM; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1720488346;
-	bh=TC5JRjDGSmcZZJ4dgD4NGdJD+9jxfQSq9YP7zYZBSbo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=tcIiGSOMK5tyZXcTu+tQVA02W3/hmI9hVwgZ0bMSp6cqO9qn6FEG7eyY1Ti4JkRpz
-	 FB89XtJgOcNueH/TXbtY2PXMkscYpoJm7uxhyj37ekUvJH3ofmuJAeUx170evtNMev
-	 EMqHnJq/hS3i9973CdrnOaOOebTUThc7bQ+4s4THJeEMDEqBhR0OdshnF2Dsk04dSJ
-	 WlCseqTSvgbqMrTziUf7S4WYu77remgZGq5D/nROiXsd6tfmeWffbxKCxH3uhjm04h
-	 +uSrOiNIOEArJnu+A7ilOUDhNooibiUdsgH8oCwmA97Agqau43dG399dHNyZ0ffQks
-	 xKehW5UIuexrQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WJ3GK3QLPz4w2N;
-	Tue,  9 Jul 2024 11:25:45 +1000 (AEST)
-Date: Tue, 9 Jul 2024 11:25:44 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
- <benjamin.tissoires@redhat.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Suren Baghdasaryan <surenb@google.com>
-Subject: linux-next: manual merge of the hid tree with the mm tree
-Message-ID: <20240709112544.190ffda4@canb.auug.org.au>
+	s=arc-20240116; t=1720495905; c=relaxed/simple;
+	bh=reDBoHM4FmpBLKApE4BRXy3nadP7Vf26p0GIlJBPv4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LcsJ6waF0v6byXykUfKwVq/+kpebGXCL4u0+ezHW+YV83y+pPt8r2OWERtvmnZDjssKqAeoPJBJ4KZADwzSZXCp2LRdzq+rKAsPDxPlzJacg1zx/MUGbxE4whgh23zHxzpUhT57MnE4xK5DdSlYGN5rGaI2dgpenoGj5rv3fsDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-70af5fbf0d5so2900358b3a.1;
+        Mon, 08 Jul 2024 20:31:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720495903; x=1721100703;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ar4dhfjUe2YqQB1ma5/z2JYsatI/fICi2DYsiJcXzhQ=;
+        b=d04Gd+/+w/v7lUuPSJtVcUyfa1twfpwySNOjLKcJ6YCIuR6Qo3Yk7o1/jMtIMGJsV/
+         LELYNC0mrWHyqLQavpHpMjENOyMtKmvOQXL3W76jHx+HTjwJocstn845n7bX1YLG8HPn
+         jvXrd0661ialAl4kG6kz175iOO/cQ/W1L1vKg/CTssTkSfsuFqnvqHz6zkNrXfxswhh4
+         cOfk1LrkwcfhmtS7RJpEe4aY1/zyPgM79So59mykygkYZCykkvHH15ZDJCUsBl9jaWca
+         pagls2YF2YhcsQb/Nc901cVkWI0YKHNM9vJy2Ffr1oH7CKOAeAkXPIhbZdOlXItZ4nN7
+         UtYA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCCDMi91VMr+45Kyq4k4k/Z6g8f8izABn/+FVZwdLfhJMA7SDDDOajgJDaZf1r7316RTNxIlEFpaHFDEY2YpAXlYgRru+p0uae2DF7yPCfnOxU8lFqHKEaUFPF5KnhrHdM5R3KbKjmug==
+X-Gm-Message-State: AOJu0YwMSf4iVrQsl5LUSDZznHLk8kHczGVR21l0HapLQQy7x/mub7go
+	LDjPTwScEDsoOMbaTQZi0yFdtG49vEN5VcBBF+EdD/7zXrd4nu6C
+X-Google-Smtp-Source: AGHT+IH/83wMwWG9Rj6rD03TbTr2U8FgYQTShrKVdvAtOd/8vABJgzbbrQy009PzSTh9LAJz57Cytw==
+X-Received: by 2002:a05:6a00:c8c:b0:70b:a46:7dfd with SMTP id d2e1a72fcca58-70b44dd8bb1mr1531152b3a.17.1720495902864;
+        Mon, 08 Jul 2024 20:31:42 -0700 (PDT)
+Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b4389ba28sm657650b3a.9.2024.07.08.20.31.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jul 2024 20:31:42 -0700 (PDT)
+Date: Tue, 9 Jul 2024 12:31:41 +0900
+From: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the pci tree
+Message-ID: <20240709033141.GA2897846@rocinante>
+References: <20240708181559.3920edf6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NAVrAfdl4p6hXZzxs31WWAi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240708181559.3920edf6@canb.auug.org.au>
 
---Sig_/NAVrAfdl4p6hXZzxs31WWAi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+> Commit
+> 
+>   5f5817e68ef8 ("PCI: Add missing MODULE_DESCRIPTION() macros")
+> 
+> is missing a Signed-off-by from its committer.
 
-Today's linux-next merge of the hid tree got a conflict in:
+Should be fixed now.  Thank you!
 
-  include/linux/hid_bpf.h
-
-between commit:
-
-  bad8443fbbca ("mm: add comments for allocation helpers explaining why the=
-y are macros")
-
-from the mm-unstable branch of the mm tree and commit:
-
-  6cd735f0e57a ("HID: bpf: protect HID-BPF prog_list access by a SRCU")
-
-from the hid tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/hid_bpf.h
-index 99a3edb6cf07,9ca96fc90449..000000000000
---- a/include/linux/hid_bpf.h
-+++ b/include/linux/hid_bpf.h
-@@@ -151,12 -227,7 +227,12 @@@ static inline int dispatch_hid_bpf_outp
-  static inline int hid_bpf_connect_device(struct hid_device *hdev) { retur=
-n 0; }
-  static inline void hid_bpf_disconnect_device(struct hid_device *hdev) {}
-  static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
-- static inline void hid_bpf_device_init(struct hid_device *hid) {}
-+ static inline int hid_bpf_device_init(struct hid_device *hid) { return 0;=
- }
- +/*
- + * This specialized allocator has to be a macro for its allocations to be
- + * accounted separately (to have a separate alloc_tag). The typecast is
- + * intentional to enforce typesafety.
- + */
-  #define call_hid_bpf_rdesc_fixup(_hdev, _rdesc, _size)	\
-  		((u8 *)kmemdup(_rdesc, *(_size), GFP_KERNEL))
- =20
-
---Sig_/NAVrAfdl4p6hXZzxs31WWAi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaMkZgACgkQAVBC80lX
-0GwhXAf/R4CzLIOh2qhlhRwz/o6XJpfm54jmwD1728EsE7aJO6F90p4or3F5Nxw9
-3GfOJJACY7iffkQJqB7/u0BI5qGl5ZaaO1TzJgrX3Wbz/4snzfCoR7WXxcx0QXwp
-1q7TeQn1hIRi9SaRycqOqeXN1dJX9VI2J4OMg+UpTWdTvm1iQA08DOwIs+KE9hEB
-9W+SjbfybpPvfwHiDzN+K0x7jkxJDUfdoTYgVeQ92kPIrSaq05BeHhRnizQ4SdTE
-+Wv27yTRxy3nSYKfEejr+N4AbYfWL/0ydEoxYi1VJRY2yxWzI5/lX15h1E5HaWaU
-2IROVCneh6teWhlch8YzCEBIV6giOQ==
-=Zrzc
------END PGP SIGNATURE-----
-
---Sig_/NAVrAfdl4p6hXZzxs31WWAi--
+	Krzysztof
 

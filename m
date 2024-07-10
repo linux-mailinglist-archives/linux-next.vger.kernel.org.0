@@ -1,194 +1,85 @@
-Return-Path: <linux-next+bounces-2911-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2915-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2D8F92C864
-	for <lists+linux-next@lfdr.de>; Wed, 10 Jul 2024 04:22:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E246D92C8DE
+	for <lists+linux-next@lfdr.de>; Wed, 10 Jul 2024 05:04:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED596B220AF
-	for <lists+linux-next@lfdr.de>; Wed, 10 Jul 2024 02:22:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06E861C22C9B
+	for <lists+linux-next@lfdr.de>; Wed, 10 Jul 2024 03:04:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D1B279C0;
-	Wed, 10 Jul 2024 02:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB62B4AEEA;
+	Wed, 10 Jul 2024 03:04:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ulDfp3US"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="HRhv7ptD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883A94C6B;
-	Wed, 10 Jul 2024 02:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.18])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF09482D8;
+	Wed, 10 Jul 2024 03:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720578142; cv=none; b=ET3fJyxWwP4jKmjs3lPlCWyJcl8eMnNq+fqgHmmdn3uUL78BTbPWrazOMQu5yaDMBjtrqOe5+SRF5/fg13sQeqM/SLmGYbNuAzcfnngHL7c1YBZ16uNSwvmKDMfYkbDHqzQXh06CurE52tZohktZ0FtKxq1J+Z1oLyN1JoKisWA=
+	t=1720580652; cv=none; b=oJU/G7XsMIMKIadiawRsmeWITx3PsJpe6bar20GEei0bZ35yktJcn3Y4FXSjYbqIycSZTli+C28NCBwXvUvoF3i2PZvZkjfR8OtQA7JkbFNFutvGUwacncYrCiVdYqWxLOoSaxYqkp2ZdEQbo028JDBfz0B1srz4aG9+CLBicD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720578142; c=relaxed/simple;
-	bh=eFOYdRn1ECFr63rgUzuEcRQBGl1iiKE1nTouLGeF1Xc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dR/A0eOuT+VeYQ3MkflI9PJJIGtxIFXPYW80YphErkNVCRY6E2LyrdVtk7Xle3J2KcPyLue8BPUu6pD9DNkKpmfYjDMdGNoTnClqAq4DJkhlUj3hk7h/PkLPu2ju8hUp4AKEp8srajmz3CgcTqXNmbCGuMP2v6oZYA91QnSC/Ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ulDfp3US; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1720578136;
-	bh=RxuRMetBI4DFsxXi3ukHOyx3N1MdWq19bHTjU08akcE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ulDfp3USaPAN5hThxFEDKXdH0nAQ41XLl9LQpn9QloWV8jHPLzvubgL6Eu4akp/Sh
-	 qIdjAhXPFT4BEHccC7FUYhf2YyQxlaHO6UrvGKeg3FYb+xs8NoQCz2g39SqABfZOGH
-	 TCDE7E9FirkGLMPUQe3pTcYXs2LoYJGTvipmUgqp70arWd0fLSXMmsxDPYblDoJUIu
-	 4vbZcyHgiYOZ1pYP/7VnyHWlvgvwzD8K9GulTqYfqxwwRo7re06Gjxu21gZMqCxbvK
-	 K/gAB3PM27mCO8H7csQpTWpVcMY+UxM8WV5kl7H62+iAV6xrCMzEJjZDkyotiO0VIQ
-	 GmQFFNzWIZyDQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WJhT40PsWz4w2M;
-	Wed, 10 Jul 2024 12:22:16 +1000 (AEST)
-Date: Wed, 10 Jul 2024 12:22:15 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Christian Brauner" <brauner@kernel.org>, Christian =?UTF-8?B?R8O2dHRz?=
- =?UTF-8?B?Y2hl?= <cgzones@googlemail.com>, "Linux Kernel Mailing List"
- <linux-kernel@vger.kernel.org>, linux-next <linux-next@vger.kernel.org>,
- "Jiri Olsa" <jolsa@kernel.org>
-Subject: Re: linux-next: manual merge of the vfs-brauner tree with the
- asm-generic tree
-Message-ID: <20240710122215.7b09d347@canb.auug.org.au>
-In-Reply-To: <784a34e5-4654-44c9-9c07-f9f4ffd952a0@app.fastmail.com>
-References: <20240709105709.18ce785d@canb.auug.org.au>
-	<20240709200851.4d921e43@canb.auug.org.au>
-	<784a34e5-4654-44c9-9c07-f9f4ffd952a0@app.fastmail.com>
+	s=arc-20240116; t=1720580652; c=relaxed/simple;
+	bh=mzB2pR72KMygmv8qJ1h/AzV0GyJz5bsjmqe+iGfGSdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S0MctG/cSXdoZ1QQMw9Nu9MLr8zEIwQsplBScunfuRsX2/GfiIyKG9Kho8EQfWNPv77y/t3SD5WZ7KKOPrQ/KA08qlj6SZaTk7yLFrSGsLoF8R7j5tCZYbvtISqL7lymF8zD21tGPhFc85keny1SUOcH5qlaX+VZHxYxk5QWiWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=HRhv7ptD; arc=none smtp.client-ip=220.197.32.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=yYtU1h1eDFudRupuFjOmskdIRg/MaZB4WUfDNPnHm4U=;
+	b=HRhv7ptD6fO4Nz6uzsXGaCdpdM6+xJE9ru6t4KQORSTA1Aa3caWMNkbQ0DwQw6
+	Ga4IxOvHMWK7bVxwshI+7CG4Tke7lFujMFeIJ6Mb/j7TSEjOLAWkIWbX8Srr2BYr
+	kRIqIJOnZDUy16utzMXenXfVZQIxyeJQyWkJNjDGjyrg8=
+Received: from dragon (unknown [117.62.10.72])
+	by gzsmtp1 (Coremail) with SMTP id Mc8vCgDnjz6W8o1mWkWBAA--.32164S3;
+	Wed, 10 Jul 2024 10:31:52 +0800 (CST)
+Date: Wed, 10 Jul 2024 10:31:50 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Shawn Guo <shawnguo@kernel.org>, Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>, Fabio Estevam <festevam@denx.de>,
+	ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the imx-mxs tree
+Message-ID: <Zo3yljWDKlIT1TCU@dragon>
+References: <20240710115319.10dae8e2@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QNsCmDa43aeu.PDi6I7imoX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240710115319.10dae8e2@canb.auug.org.au>
+X-CM-TRANSID:Mc8vCgDnjz6W8o1mWkWBAA--.32164S3
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUwT5lDUUUU
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiCRgYZWZv-fryrAAAs8
 
---Sig_/QNsCmDa43aeu.PDi6I7imoX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jul 10, 2024 at 11:53:19AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commit is also in the arm-soc tree as a different commit
+> (but the same patch):
+> 
+>   3898bc187cde ("arm64: defconfig: Enable the IWLWIFI driver")
+> 
+> This is commit
+> 
+>   465830ad2534 ("arm64: defconfig: Enable the IWLWIFI driver")
+> 
+> in the arm-soc tree.
 
-Hi all,
+Thanks for reporting!  It happened because of that my for-next branch is
+outdated.  I just updated it.
 
-On Tue, 09 Jul 2024 13:44:34 +0200 "Arnd Bergmann" <arnd@arndb.de> wrote:
->
-> On Tue, Jul 9, 2024, at 12:08, Stephen Rothwell wrote:
-> > On Tue, 9 Jul 2024 10:57:09 +1000 Stephen Rothwell <sfr@canb.auug.org.a=
-u> wrote: =20
-> >>
-> >> Today's linux-next merge of the fs-next tree got conflicts in:
-> >>=20
-> >>   arch/arm64/include/asm/unistd.h
-> >>   arch/arm64/include/asm/unistd32.h
-> >>=20
-> >> between commit:
-> >>=20
-> >>   ea0130bf3c45 ("arm64: convert unistd_32.h to syscall.tbl format")
-> >>=20
-> >> from the asm-generic tree and commit:
-> >>=20
-> >>   e6873349f700 ("fs/xattr: add *at family syscalls")
-> >>=20
-> >> from the vfs-brauner tree.
-> >>=20
-> >> I fixed it up (I used the former versions) and can carry the fix as
-> >> necessary. This is now fixed as far as linux-next is concerned, but any
-> >> non trivial conflicts should be mentioned to your upstream maintainer
-> >> when your tree is submitted for merging.  You may also want to consider
-> >> cooperating with the maintainer of the conflicting tree to minimise any
-> >> particularly complex conflicts. =20
-> >
-> > This resolution may be not enough as I now get the following warnings
-> > from the arm64 defconfig build:
-> >
-> > <stdin>:1603:2: warning: #warning syscall setxattrat not implemented [-=
-Wcpp]
-> > <stdin>:1606:2: warning: #warning syscall getxattrat not implemented [-=
-Wcpp]
-> > <stdin>:1609:2: warning: #warning syscall listxattrat not implemented [=
--Wcpp]
-> > <stdin>:1612:2: warning: #warning syscall removexattrat not implemented=
- [-Wcpp] =20
->=20
-> I see. The newly added syscalls need to be copied from
-> include/uapi/asm-generic/unistd.h into the newly added
-> scripts/syscall.tbl. I am aware of this and was planning
-> to send this as a fixup afterward to avoid an awkward
-> four-way merge with the uretprobe and xattrat patches.
->=20
-> Based on your merge in 1dd7a574e54e ("Merge branch
-> 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/
-> git/trace/linux-trace.git"), I think we want this
-> to be in all syscall.tbl files:
->=20
-> diff --git a/scripts/syscall.tbl b/scripts/syscall.tbl
-> index b0ea892de12e..4873fa3ca496 100644
-> --- a/scripts/syscall.tbl
-> +++ b/scripts/syscall.tbl
-> @@ -419,3 +419,8 @@
->  460	common	lsm_set_self_attr		sys_lsm_set_self_attr
->  461	common	lsm_list_modules		sys_lsm_list_modules
->  462	common	mseal				sys_mseal
-> +463	common	setxattrat			sys_setxattrat
-> +464	common	getxattrat			sys_getxattrat
-> +465	common	listxattrat			sys_listxattrat
-> +466	common	removexattrat			sys_removexattrat
+Shawn
 
-I have added this merge fix patch to the merge of the fs-next tree
-today (it is needed when the vfs-brauner tree is merged with the
-asm-generic tree):
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 10 Jul 2024 12:16:06 +1000
-Subject: [PATCH] fixup for "fs/xattr: add *at family syscalls"
-
-interacting with "arm64: convert unistd_32.h to syscall.tbl format"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- scripts/syscall.tbl | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/scripts/syscall.tbl b/scripts/syscall.tbl
-index 797e20ea99a2..86b53c7a815b 100644
---- a/scripts/syscall.tbl
-+++ b/scripts/syscall.tbl
-@@ -402,3 +402,7 @@
- 460	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	common	lsm_list_modules		sys_lsm_list_modules
- 462	common	mseal				sys_mseal
-+463	common	setxattrat			sys_setxattrat
-+464	common	getxattrat			sys_getxattrat
-+465	common	listxattrat			sys_listxattrat
-+466	common	removexattrat			sys_removexattrat
---=20
-2.43.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QNsCmDa43aeu.PDi6I7imoX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaN8FcACgkQAVBC80lX
-0GwUugf/fY1jDZ/+ud9Gus6SZQsl7wzRYCCOkxWg8pyh++qL3g+nmvj2gCW7nHO7
-IWnCVNJeZg+Pri7IwHFJGVK1B7Cg0YvLlvHYqwx2Bmzaw11Xo3YQTVDUtQf68xVL
-tj6RMRhFlWSA2165R/qzUeTUOB302fEECuNmxtVUA2Sim1i6fOtKJ/gv0zuo2VaQ
-gxZ7LcFXZHccmuFNHATvEHrVhE9HOn5iAhmCR4erVvSFNP1+g66is5YSkogbmPrG
-zZAjfjNBxvRe0WKKnrwBA9a2yAqPBNsbZ5wssjONTNRZq9t700sK0PjH2DcqALXa
-yCfqHneW1cLctsMoCwVlUtGcr6xTqw==
-=0l88
------END PGP SIGNATURE-----
-
---Sig_/QNsCmDa43aeu.PDi6I7imoX--
 

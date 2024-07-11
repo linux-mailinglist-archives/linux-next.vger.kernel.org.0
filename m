@@ -1,116 +1,134 @@
-Return-Path: <linux-next+bounces-2948-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2949-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6AAE92F2CC
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 01:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C79C92F2DC
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 01:58:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1417D1C21E07
-	for <lists+linux-next@lfdr.de>; Thu, 11 Jul 2024 23:51:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E1D91C20B44
+	for <lists+linux-next@lfdr.de>; Thu, 11 Jul 2024 23:58:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05C8B16D4F3;
-	Thu, 11 Jul 2024 23:51:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F37D16E884;
+	Thu, 11 Jul 2024 23:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PTzQaDsv"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CnqvycZH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223086EB7C;
-	Thu, 11 Jul 2024 23:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB49815AAD9;
+	Thu, 11 Jul 2024 23:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720741903; cv=none; b=LPVlO96Ya3QC9wUx1xNJuB/7pyFrxGT0+4Bk6r30fgBWx8K/Yzt7x2kNma/+K5WOdiazxplU41Z8byUohaSPUd3myvH+wkhlwgkJW+j2UBnmqKpXK9TRA4zPBFdvGvITA5md2g3tnuZIgBzXdfwKE4j7i9G+AzgTpQNboKaMKRA=
+	t=1720742314; cv=none; b=Bu8Ozu6ySnwLoImz80YJMn/AFKjH9LemVGp/zQdJmc+AiMQP1yyfR1GKxhBEEWMRjU0g36LdD8xhg23MSVAoJKVrA4lZmVXxPev1xWqIz6Bqcdh6Bpoqhx6FBV2oUTAJkkEOrW091oDSR//P3fXkp7HwVRiO6ib4Vc6M+u+O7e4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720741903; c=relaxed/simple;
-	bh=yLuenXi7mNTZLGlPoQmf3M2TZQJUdq3ySkuvd61rF2s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p5TNySFunyaghGpHVzVC2s3Tgjct4WIopHWTmt2cUTSjP5mI+i99YluHVwMmpGkHyscAFOa7JaoyNkv0PmjCwWMzLdUV4NMjTZcGkY3J+0XwntFKUyRcrAMCFdbiKuMvUgbtRoJl7YYQ+lbZaxj0P7BErDWTEMOCbQ1AhkoZpC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PTzQaDsv; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4279c924ca6so4856925e9.0;
-        Thu, 11 Jul 2024 16:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720741900; x=1721346700; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5rNOkKqKSlXdOxVSuCJmj91KdmRmhTrpa/Yg8kLQxJg=;
-        b=PTzQaDsvpxiKLgA2sTFYuydEsWznDjJzNR68+i+XXBhm5OsPH43P7UEDkloF5gs0C/
-         6MuIT/fHIQuNwZ4f9DfHPx+25UAC3ZxoOIoo3lRVHi6ZIsJmQ7/9s9Vgj5vkjHSRi9NA
-         yU1BR77EreYQHaB0uIhM0HCPlVcTmYrc2g8sfBCWQRi1NR/C1A9ThxdjAmHalarVyokQ
-         i9LOUmb8frg+o4c9GsNyh82FACPO3P9c03poU2Ln3eKiEkWhPtxCNnBodknw2TN9/XDY
-         V/AcrFJsKuyr/vIRZuRb/S2sRughH65m5VkWVUwwh+sIxO2/wehsaTzO5HZZ/AE0ama3
-         SkhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720741900; x=1721346700;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5rNOkKqKSlXdOxVSuCJmj91KdmRmhTrpa/Yg8kLQxJg=;
-        b=pPAfDYb4YuR2/8Ba4bickuejoqA6sZl8b4jmQhZolLwIOCK20HVdlhbjd1ED3sqfda
-         jWAmN+Svy1icNs2hrNwBYV3J37vUEq8RRPYl6D7JOMb6lBdfOgq9UZ0HCf78UJF135yI
-         1fEvDMDqHuD58dD9i4EykfZpX5H7LeMm8stBYGJD5fI+2/LfiUnZBWPdv8O5E85JseUU
-         ayOPkYRROe60Q+9eqTzNzLt/2+PyPsKeEKRTa/RZnoqgUYX3SoPYR9ft9dKdBKsto91k
-         MaufzLsqKxta2aaw33QzSdM5d+qBSnAokZqGkSqIy9TNZ53H98PBk/mhMsBJZxQDMuia
-         WtSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWvdHv5d0V3N96gj+Eyu70uWTq3wggZ9mqX5O74S3v5vzCU8w+ds8/Vf7gI6evrzQ5j5PfmM1sQf0X79gAlLHbuiq2S8ByEQ4jOSHZ9jCenzg8ZaV84AfhH1dZhhhGLzBkVLQchwopFNXw5o8ghIOPITuNEJ+8uzUgGNgSZcfDYbdU+Oh8i2wdkOky6xTgaTTwGqRvzig==
-X-Gm-Message-State: AOJu0YzlvCaCAXI9ilVhC3Sn7jCPwwTYtD9KjweDucQbWOU7AAnf4B1s
-	/bMTeoM4X+Z0HaOFx2yt4ZmZriXp6rejamNo4TcqPOxRLyqB+vFqMrl2QLzHWjLpvSNhV8OZHQk
-	bEpzH/8JahKLyiRa7X3Y+M7iinVjicmEF
-X-Google-Smtp-Source: AGHT+IFrtwMZGSser2pdLEMHu9/BZwtIElLY0d4iYbH3J9P9LMSwb1QRp/owr34MzeIK2Dss6VDWbjorwxkpYt37c8M=
-X-Received: by 2002:a05:6000:1887:b0:367:89fc:bc11 with SMTP id
- ffacd0b85a97d-367cea4625emr9022935f8f.10.1720741900251; Thu, 11 Jul 2024
- 16:51:40 -0700 (PDT)
+	s=arc-20240116; t=1720742314; c=relaxed/simple;
+	bh=2vBC+KzcKTxk5k7WHAz1mB5gMwlYbubQ12KRQ2/rDrs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=bmnYLtX3qV8niDsAXb4UbAkBtamtkQVk+rIJ6C21pQ73qozvGO4AkuKAHOPKPnhf5rshSURIs75noKT7GQSKnjgB7qmxLyg+xf8FXCLtLCNCvVuf2h80zp4t8jJXF2DtPVFPQGHrbW27+8yGe0wMWoNJOYzaP+EXFmu4zmMGzmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CnqvycZH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1720742308;
+	bh=zZ8/h8JZ7AJhCHt1R2GbbeguaQJrJzLHHkBrjjtpecM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=CnqvycZHlJGkCivGN/mIlvxtw+96I1ott32433moDF+sYHUUVUGfhO7fVs+N0KsTX
+	 BSoZUgXHQ6LaknIBJRlD3+lflUxlclf2GApHhwvh5m4B0EqHWMyyO7qeWwl6SDm/M4
+	 NoDzejE8wR11Q5/8nRkPPJMmQX/J7JgbQk14JuQQmck/AjF2Rq9EHRc4YrdDz0bBTO
+	 YFDAG/kWHAUlvWdB/qfq8wS+/snaFgnMkBk0Xc2h3LSv8UZ6FtK+hdA6G/DnXzJlv3
+	 2gIGJSl1ZpO/KOQIOV7W0XAuNidh9eVDXR7ssVo2Lt49w5g74GRC08L/oWGfGLDFRm
+	 qvNHIH5grgZQg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WKsBB2KTBz4w2F;
+	Fri, 12 Jul 2024 09:58:26 +1000 (AEST)
+Date: Fri, 12 Jul 2024 09:58:25 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mike Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Olof Johansson <olof@lixom.net>, Arnd Bergmann
+ <arnd@arndb.de>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>, Drew Fustini
+ <dfustini@tenstorrent.com>, Drew Fustini <drew@pdp7.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Yangtao Li <frank.li@vivo.com>
+Subject: linux-next: manual merge of the clk tree with the arm-soc tree
+Message-ID: <20240712095825.6e1224d9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240712083603.10cbdec3@canb.auug.org.au>
-In-Reply-To: <20240712083603.10cbdec3@canb.auug.org.au>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 11 Jul 2024 16:51:28 -0700
-Message-ID: <CAADnVQKVC4NGsEU0X3XJmmCot40Vvik-9KNFU07F=VBF-4UVRQ@mail.gmail.com>
-Subject: Re: linux-next: duplicate patch in the bpf-next tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, David Miller <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/qD7mgudfTiVy6t9Hm6zpsBV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/qD7mgudfTiVy6t9Hm6zpsBV
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 11, 2024 at 3:36=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> The following commit is also in the net tree as a different commit
-> (but the same patch):
->
->   6f130e4d4a5f ("bpf: Fix order of args in call to bpf_map_kvcalloc")
->
-> This is commit
->
->   af253aef183a ("bpf: fix order of args in call to bpf_map_kvcalloc")
->
-> in the net tree.
+Hi all,
 
-Argh.
-So the fix was applied to bpf-next back in May and the same people
-come back to complain in July that it's somehow still broken and must be
-fixed in Linus's tree.
-So the new patch was applied to bpf and pulled to net
-and on the way to Linus now.
+Today's linux-next merge of the clk tree got a conflict in:
 
-We will ffwd bpf-next in a day or so, if git cannot handle it,
-we will revert from bpf-next.
-Sigh.
+  MAINTAINERS
+
+between commit:
+
+  480d9a6083f4 ("MAINTAINERS: thead: add git tree")
+
+from the arm-soc tree and commit:
+
+  1037885b309c ("dt-bindings: clock: Document T-Head TH1520 AP_SUBSYS contr=
+oller")
+
+from the clk tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 44cff47c2594,04eb5587ffa7..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -19382,8 -19322,9 +19382,10 @@@ M:	Guo Ren <guoren@kernel.org
+  M:	Fu Wei <wefu@redhat.com>
+  L:	linux-riscv@lists.infradead.org
+  S:	Maintained
+ +T:	git https://github.com/pdp7/linux.git
++ F:	Documentation/devicetree/bindings/clock/thead,th1520-clk-ap.yaml
+  F:	arch/riscv/boot/dts/thead/
++ F:	include/dt-bindings/clock/thead,th1520-clk-ap.h
+ =20
+  RNBD BLOCK DRIVERS
+  M:	Md. Haris Iqbal <haris.iqbal@ionos.com>
+
+--Sig_/qD7mgudfTiVy6t9Hm6zpsBV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaQcaEACgkQAVBC80lX
+0GweAAf+NvWgW6ckvbjJTDY/DDeKsGHmyNw9ApUImUJOIpMjGsgxmZbU6CrA0CFZ
+iSBMVdpZsZC1gbd2BVuXOmrta9m/M+CxnpmjKAIG4cGQNIbob9f6uo4vlGudCCCi
+Qygww/jMCKE9HM6HocaIFY/n0cdNsY5kAjEyycgDiIkc/LxalUKqC8LsLBLC+90t
+XOdeG8Db1yGgsnb84/X1kQqvHoejExDTAFYVeuExoh5ADePkriG6+4CFTiBTKk/2
+0Hmq7u5fSe+GjkllfAebC2gC8kocvaKSEEetlRxZ/hwvm4Ch0xCzd1LJFcL66kqC
+ADm8MebRMhNez8kHqBNrGP3FaBWyTw==
+=yBL5
+-----END PGP SIGNATURE-----
+
+--Sig_/qD7mgudfTiVy6t9Hm6zpsBV--
 

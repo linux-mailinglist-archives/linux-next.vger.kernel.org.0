@@ -1,111 +1,116 @@
-Return-Path: <linux-next+bounces-2947-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2948-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B983092F23D
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 00:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D6AAE92F2CC
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 01:51:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8AE61C220AD
-	for <lists+linux-next@lfdr.de>; Thu, 11 Jul 2024 22:48:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1417D1C21E07
+	for <lists+linux-next@lfdr.de>; Thu, 11 Jul 2024 23:51:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75BAB19FA86;
-	Thu, 11 Jul 2024 22:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05C8B16D4F3;
+	Thu, 11 Jul 2024 23:51:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GDBwS3uP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PTzQaDsv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03D612C477;
-	Thu, 11 Jul 2024 22:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223086EB7C;
+	Thu, 11 Jul 2024 23:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720738128; cv=none; b=izihzQXE/jMrw3yNKhYSDwudbMMF6YVhAfDVC5mjvL8xDTmhP41zEMApqrK+I7VMvQ91WO0RMG19/Nuj90iVYInr1cNTpcYGSWLt2wFkVJkrjIRAYoO2ArNoiofqBt6TijJsJt1UmKHBdNnnvJs1q6IxM2jUjxFbjG6D2CP2ibw=
+	t=1720741903; cv=none; b=LPVlO96Ya3QC9wUx1xNJuB/7pyFrxGT0+4Bk6r30fgBWx8K/Yzt7x2kNma/+K5WOdiazxplU41Z8byUohaSPUd3myvH+wkhlwgkJW+j2UBnmqKpXK9TRA4zPBFdvGvITA5md2g3tnuZIgBzXdfwKE4j7i9G+AzgTpQNboKaMKRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720738128; c=relaxed/simple;
-	bh=l6qknLB3r1VcIgnMjd1fJHGlGy4jV/UXQba43+QufKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ft3uknCtPwj4HKePe7rxkd8ag9aps0sGdDG2SqfjPPGisJwsUgqTGPb8bBrm+MgWgD0iqFbd1WEzb/wLmq5ykVUEU2GSHHFa0V8PUg04FPUuEETzkFR92Z+EkEFt/fCp670uG9jGLrIiV8XRC07sKsFZG127Ve+s3m7RU29R6Ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GDBwS3uP; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	s=arc-20240116; t=1720741903; c=relaxed/simple;
+	bh=yLuenXi7mNTZLGlPoQmf3M2TZQJUdq3ySkuvd61rF2s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p5TNySFunyaghGpHVzVC2s3Tgjct4WIopHWTmt2cUTSjP5mI+i99YluHVwMmpGkHyscAFOa7JaoyNkv0PmjCwWMzLdUV4NMjTZcGkY3J+0XwntFKUyRcrAMCFdbiKuMvUgbtRoJl7YYQ+lbZaxj0P7BErDWTEMOCbQ1AhkoZpC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PTzQaDsv; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-70b05260c39so1055616b3a.0;
-        Thu, 11 Jul 2024 15:48:46 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4279c924ca6so4856925e9.0;
+        Thu, 11 Jul 2024 16:51:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720738126; x=1721342926; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IFUcJzdDHPjYonTAFX9OO+OO85kdQ7ExODK04DQenm8=;
-        b=GDBwS3uPcjwEJ+q2X9/hioj2v63h3+NZPkLuXxFrkIb6xolYz5VfUJ3maTQxA65OoA
-         43DI8d1zGT9xKinfCrwkar+EV+MVU7rFEKnqYNKjZI0Rz71H7UqiXYWsjzxN8BiaymlB
-         qtwUuRQtIvStG7ug/coKiPJDbceiHxUMEQ3F3lJ2FPJ3XxJEvAKSF2S6vLxgcNoVZmiO
-         hlQh6cCPelHmElswXXcDYawAVvVIAh4sjYAnUL7Hqxue8oxQfoWhJj1ekwffkNRu9IYZ
-         WbyL2uA0vtQFQVDO03JiQU8KTV9TD3hA1ySHnKnuAcfQHI8/7vfObztEIRYOcNrjK/BK
-         hd5A==
+        d=gmail.com; s=20230601; t=1720741900; x=1721346700; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5rNOkKqKSlXdOxVSuCJmj91KdmRmhTrpa/Yg8kLQxJg=;
+        b=PTzQaDsvpxiKLgA2sTFYuydEsWznDjJzNR68+i+XXBhm5OsPH43P7UEDkloF5gs0C/
+         6MuIT/fHIQuNwZ4f9DfHPx+25UAC3ZxoOIoo3lRVHi6ZIsJmQ7/9s9Vgj5vkjHSRi9NA
+         yU1BR77EreYQHaB0uIhM0HCPlVcTmYrc2g8sfBCWQRi1NR/C1A9ThxdjAmHalarVyokQ
+         i9LOUmb8frg+o4c9GsNyh82FACPO3P9c03poU2Ln3eKiEkWhPtxCNnBodknw2TN9/XDY
+         V/AcrFJsKuyr/vIRZuRb/S2sRughH65m5VkWVUwwh+sIxO2/wehsaTzO5HZZ/AE0ama3
+         SkhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720738126; x=1721342926;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1720741900; x=1721346700;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IFUcJzdDHPjYonTAFX9OO+OO85kdQ7ExODK04DQenm8=;
-        b=vXtqZJBUc987zf9MFYW3SGySvPIvxHto49Yxlrvshjx0JPI3ic6lfjS04TkptEjzlW
-         s5DHNw9hSEvmi4L3qQL87ZioYxdh3pqPPz41itJI+SuSgZTJAwPi+OBzs5wwL5OvuO5L
-         C2+XopHpPTncIUwZhXYHj7GliyM9HRuXmwbEosR1VrBCoJNiCHFmTZrqJBqnmOsVXotg
-         7Gzm9sDUfFjUjkDvY5aBj5mYfYZJw1zdx0T4ruZYlxymRtl88BdRulUotCEQc1hJ+XKE
-         72zeqcSDGJZvG46zJVt/LILsbcMG7ntE0CN9j1CUN+n8U2sYuej+D04VuhaSRwfWmxRX
-         U0aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVNxRMJAwx+YICKkAyPqCC9uk1G7zcXLnfJpW5rEf+GQonQ3AiJMIgtN/53/yY1+VlKpusSiP5FF/VH/m5i1PdyIR+/Ff1FsDkWNQ==
-X-Gm-Message-State: AOJu0YyuIDgQlCO25eLTiaHbQqqTE52JLjBDjPkpgjY230gCFhXetA1B
-	HGvdq+HL1S6zyqsyMvPJmqzcklLvcPmGTe2yd9r32wqi/p5qZP/2ZPzw4w==
-X-Google-Smtp-Source: AGHT+IEwqs7QNiYVGSWxohJ+m6sTbr5AmF230aZYQcc4lWf0JVmFvZCev4dFUUWM9j9EKVY7KerypA==
-X-Received: by 2002:a05:6a00:228c:b0:706:61d5:2792 with SMTP id d2e1a72fcca58-70b43538719mr12628902b3a.8.1720738125982;
-        Thu, 11 Jul 2024 15:48:45 -0700 (PDT)
-Received: from localhost (dhcp-141-239-149-160.hawaiiantel.net. [141.239.149.160])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b54edb3a7sm3693751b3a.43.2024.07.11.15.48.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jul 2024 15:48:45 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Thu, 11 Jul 2024 12:48:44 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the workqueues
- tree
-Message-ID: <ZpBhTOuSxEYbjjvX@slm.duckdns.org>
-References: <20240712084047.7121fa76@canb.auug.org.au>
+        bh=5rNOkKqKSlXdOxVSuCJmj91KdmRmhTrpa/Yg8kLQxJg=;
+        b=pPAfDYb4YuR2/8Ba4bickuejoqA6sZl8b4jmQhZolLwIOCK20HVdlhbjd1ED3sqfda
+         jWAmN+Svy1icNs2hrNwBYV3J37vUEq8RRPYl6D7JOMb6lBdfOgq9UZ0HCf78UJF135yI
+         1fEvDMDqHuD58dD9i4EykfZpX5H7LeMm8stBYGJD5fI+2/LfiUnZBWPdv8O5E85JseUU
+         ayOPkYRROe60Q+9eqTzNzLt/2+PyPsKeEKRTa/RZnoqgUYX3SoPYR9ft9dKdBKsto91k
+         MaufzLsqKxta2aaw33QzSdM5d+qBSnAokZqGkSqIy9TNZ53H98PBk/mhMsBJZxQDMuia
+         WtSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWvdHv5d0V3N96gj+Eyu70uWTq3wggZ9mqX5O74S3v5vzCU8w+ds8/Vf7gI6evrzQ5j5PfmM1sQf0X79gAlLHbuiq2S8ByEQ4jOSHZ9jCenzg8ZaV84AfhH1dZhhhGLzBkVLQchwopFNXw5o8ghIOPITuNEJ+8uzUgGNgSZcfDYbdU+Oh8i2wdkOky6xTgaTTwGqRvzig==
+X-Gm-Message-State: AOJu0YzlvCaCAXI9ilVhC3Sn7jCPwwTYtD9KjweDucQbWOU7AAnf4B1s
+	/bMTeoM4X+Z0HaOFx2yt4ZmZriXp6rejamNo4TcqPOxRLyqB+vFqMrl2QLzHWjLpvSNhV8OZHQk
+	bEpzH/8JahKLyiRa7X3Y+M7iinVjicmEF
+X-Google-Smtp-Source: AGHT+IFrtwMZGSser2pdLEMHu9/BZwtIElLY0d4iYbH3J9P9LMSwb1QRp/owr34MzeIK2Dss6VDWbjorwxkpYt37c8M=
+X-Received: by 2002:a05:6000:1887:b0:367:89fc:bc11 with SMTP id
+ ffacd0b85a97d-367cea4625emr9022935f8f.10.1720741900251; Thu, 11 Jul 2024
+ 16:51:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240712084047.7121fa76@canb.auug.org.au>
+References: <20240712083603.10cbdec3@canb.auug.org.au>
+In-Reply-To: <20240712083603.10cbdec3@canb.auug.org.au>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 11 Jul 2024 16:51:28 -0700
+Message-ID: <CAADnVQKVC4NGsEU0X3XJmmCot40Vvik-9KNFU07F=VBF-4UVRQ@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the bpf-next tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, David Miller <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 12, 2024 at 08:40:47AM +1000, Stephen Rothwell wrote:
+On Thu, Jul 11, 2024 at 3:36=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
 > Hi all,
-> 
-> Commits
-> 
->   aacff6ebea30 ("workqueue: Rename wq_update_pod() to unbound_wq_update_pwq()")
->   09827e6f1295 ("workqueue: Remove the arguments @hotplug_cpu and @online from wq_update_pod()")
->   bc8d14a48a35 ("workqueue: Remove the argument @cpu_going_down from wq_calc_pod_cpumask()")
->   cbea25234674 ("workqueue: Remove the unneeded cpumask empty check in wq_calc_pod_cpumask()")
->   49d94fbe1f8c ("workqueue: Remove cpus_read_lock() from apply_wqattrs_lock()")
->   e5265846a49b ("workqueue: Simplify wq_calc_pod_cpumask() with wq_online_cpumask")
->   1b366099b179 ("workqueue: Add wq_online_cpumask")
-> 
-> are missing a Signed-off-by from their committer.
+>
+> The following commit is also in the net tree as a different commit
+> (but the same patch):
+>
+>   6f130e4d4a5f ("bpf: Fix order of args in call to bpf_map_kvcalloc")
+>
+> This is commit
+>
+>   af253aef183a ("bpf: fix order of args in call to bpf_map_kvcalloc")
+>
+> in the net tree.
 
-Sorry. Will fix them up.
+Argh.
+So the fix was applied to bpf-next back in May and the same people
+come back to complain in July that it's somehow still broken and must be
+fixed in Linus's tree.
+So the new patch was applied to bpf and pulled to net
+and on the way to Linus now.
 
-Thanks.
-
--- 
-tejun
+We will ffwd bpf-next in a day or so, if git cannot handle it,
+we will revert from bpf-next.
+Sigh.
 

@@ -1,124 +1,110 @@
-Return-Path: <linux-next+bounces-2960-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2961-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E84FC92F5B0
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 08:51:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA05C92F5CC
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 08:56:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F2251C21934
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 06:51:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 701D6281DEC
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 06:56:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BCAC13D52F;
-	Fri, 12 Jul 2024 06:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4404D13DDC3;
+	Fri, 12 Jul 2024 06:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rLxGdSvc"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tvDh6oTk"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE00D39B;
-	Fri, 12 Jul 2024 06:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E8AF13DDBA;
+	Fri, 12 Jul 2024 06:55:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720767073; cv=none; b=UAFvVFONfFliwdYtv+QSE8ZwEg+WyGFqvDcMurIVLJSo1+C9DuWh+BS1dpqu9PJ/eFOiM5uZT8kpaNMsAghdlz6P5YFeA2cHO4+JI7j+XdQSuFEJgaKl73RfWmhCGEnFJp+m8x05zNwrvgNwaXirP7jVeMVte3jFuNzaonDAuLI=
+	t=1720767332; cv=none; b=g3Gak4R5bI07YJqo5n+fjfsRxirsC6mftoAfzxtvgpdPQNH+hYBw5uaeVJpmV+KX1bkAkbBJLpLAkjjOiFuL5Xv/+IIw5suyLFBuRBbo7/e60TrxCbS5+PSuY2bn7AvR4XNNpm4kTkhSvLOJw6AOtG1LHwg0yJEsrR3gQMHjjUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720767073; c=relaxed/simple;
-	bh=UPanOI9zKGSDL7AzLQdR3hDfJaQcntsKpWvsuBdX0kk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UyfBIlsQAo6JM+KuVqKwqcpNNHLA7CfxBP0vycYHXqz4kgPn7zjemUSOYzwqQTdCApiaMW9rkaRwrGBqNouz+aH2vYKDAcvznveDiTaPDX8MV61lrSZFth/SJaZKaT4YDbKriBA6kxDUgw21SNGLU7xfSsNwoAxC8Osn/YvNqgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rLxGdSvc; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1720767332; c=relaxed/simple;
+	bh=ZbbsLwoya6tixuPpRvni4f3DMKqspE6J9o10Q7PaI/4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GCzMfIL6AnvMu7rXvyKjfF03cDGrAO0fPjZzGZDNLPcyDg665rv3vx6M1uh7h9yJ/j6euYpA4GFP7MWbYvyWq/G4mxOayjqb3HJV+WWNRfBBAHBczWGBBPO8DsaAJ8gy0GPO7XpCgpe/rozUXYpnKI9cYPhm4sWy0aOzOr/xgZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tvDh6oTk; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1720767068;
-	bh=bTZG00kGVPd/R/JT/8M5/xrkYpDXgBqQSDDm07g9Yok=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rLxGdSvc93KlG8pcA4oIt0qUyIeWMtRiu195er+23qf/DtGhdR8g0s8GqB3qA3Ga9
-	 1YWWmbu249SBl1QD1hrzNK79g8IXZRAZUJra64ojqYFc+3/rT91JFoLandzwDg+cvh
-	 p9J9qnN3TPMWeGgkPeXfq3DnMrxoYgpPTLUVCKIvlpPsrRsmtninsv5aNeJaIJwV7Y
-	 cVUnaYUEkA55LdVWab5JQiF6FIkiyM8Ro196shK+AEd4gdMhXsZ9Iz6ym+WbYZiCjp
-	 cUfAU9R244vIxEL/fyIz9aIjdISeupbMZnWuPhfHMCcaLTWWtjpewB95OlwKM22F2P
-	 cV2wrE4T8/Y1Q==
+	s=201702; t=1720767328;
+	bh=BZZNIcGexPgDWaQqyvGhePz6Fkk2rKYNueqzc4Ios+o=;
+	h=Date:From:To:Cc:Subject:From;
+	b=tvDh6oTkI7B87eA/a2ltawR4KNia9dCODo36jEB1I48VYf5QK0GAq1hjfMzB/5VwY
+	 jOBt85hsSVIn560DS+sO9nEp1/oO1WirQtzfALTegdopRAJN7Qmri/UzAtTIx9QWh4
+	 DT8+loJgaHJPMy7NbKoN6VCW7yQSAHhC/fIHpQkEJ5w5YaG1LONxHNL8XMs1R42ftf
+	 CHIt3X4DZrUpRnnoKtZgyPrIi68wHQWhafIUKcLlCJsYFof2RqnJ1yJ3WDwPgnJmS6
+	 S86b4LlTFdVdy8NnepD1frLHOw/+y8BsMLKe5VVmxcAxzWZ7gIKgeSRrdMpH0tDwzb
+	 voqwXJEyEzdxQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WL2LN5sTyz4wx5;
-	Fri, 12 Jul 2024 16:51:08 +1000 (AEST)
-Date: Fri, 12 Jul 2024 16:51:07 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WL2RM4Zsmz4wx5;
+	Fri, 12 Jul 2024 16:55:27 +1000 (AEST)
+Date: Fri, 12 Jul 2024 16:55:27 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Tejun Heo <tj@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the cgroup tree
-Message-ID: <20240712165107.7b46a640@canb.auug.org.au>
-In-Reply-To: <20240712164354.65cb32bc@canb.auug.org.au>
-References: <20240712164354.65cb32bc@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the i2c-host tree
+Message-ID: <20240712165527.75e4ddc9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nt75AuTn/SB2PGUgmc7gJWX";
+Content-Type: multipart/signed; boundary="Sig_/OJ0DanheuLF5XTj8kKn+x8Z";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/nt75AuTn/SB2PGUgmc7gJWX
-Content-Type: text/plain; charset=UTF-8
+--Sig_/OJ0DanheuLF5XTj8kKn+x8Z
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Fri, 12 Jul 2024 16:43:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the cgroup tree, today's linux-next build (htmldocs)
-> failed like this:
->=20
-> Sphinx parallel build error:
-> UnicodeDecodeError: 'utf-8' codec can't decode byte 0xfd in position 558:=
- invalid start byte
->=20
-> Caused by commit
->=20
->   704f684e15ad ("cgroup: Add Michal Koutn=C3=BD as a maintainer")
->=20
-> I tracked this down using
->=20
->   git diff stable.. | cat -v | grep -F 'M-}'
->=20
-> and finding the commit that added the line that was output.
-> I tested it by building with the commit temporarily reverted.  I have
-> left that commit in today's linux-next.
->=20
-> Clearly (I think) there is nothing wrong with the commit, but the Sphinx
-> utf-8 decoder also clearly does not think it is valid UTF-8 :-(
+After merging the i2c-host tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-Actually my character map app says that it should be the two bytes 0xC3
-0xBD in UTF-8 (it is 0x00FD in UTF-16).
+include/linux/i2c.h:583: warning: Function parameter or struct member 'xfer=
+' not described in 'i2c_algorithm'
+include/linux/i2c.h:583: warning: Function parameter or struct member 'xfer=
+_atomic' not described in 'i2c_algorithm'
+include/linux/i2c.h:583: warning: Function parameter or struct member 'reg_=
+target' not described in 'i2c_algorithm'
+include/linux/i2c.h:583: warning: Function parameter or struct member 'unre=
+g_target' not described in 'i2c_algorithm'
+
+Introduced by commit
+
+  a93c2e5fe766 ("i2c: reword i2c_algorithm according to newest specificatio=
+n")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/nt75AuTn/SB2PGUgmc7gJWX
+--Sig_/OJ0DanheuLF5XTj8kKn+x8Z
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaQ0lwACgkQAVBC80lX
-0Gwu9AgAoENiwYThdcwHnRS4J7TF/9GSC0qYIur8pNcqhpOAc+CmcQO3dorpNEHx
-RQagzDvVHPsDk+8aNrcFqD/sXSU20N2BA2wD6VqHPwTNKeD1W3Rmy0IzmtlmlY3B
-m37ib5KqIKJkWTTViqULv3X6NbFQEttb2DarTnqqi7FNNS7fJooBbiU55emJfxmr
-RjpDfShrrN4xrWDMIpVUoqFeA4eOOcU7R2zx3GF56IH2Y0KbiJVDxjpTJo7D3YaV
-OQ6FCkDQFA7n8fKnhBPgMVdnrXFJGfLthpV1nZ1O5uwUy9IDNsnNJyD0xdP8kbuG
-u78FljSCTNM+1l9KSSMgLbQj9iRb7Q==
-=DFZj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaQ018ACgkQAVBC80lX
+0GwfXwf/Who+FKMRc6v1oya5PAJzZ7PnQn+/ug6gJKQ4WeV/gbD3b30y9aThlPWn
+13DVdCCXkhMtBPusmm3LNu7nm56YMLjB8tUZn6hRxurNXfWrB7YQxf5tk9zCJh3L
+wsNgXLUPu1sXDreRtjNveU8TwaHeErjL2gPp+cKGWWuxqidmN+87d1RPNdxBz7eO
+g1TAn0EzR7YknXDVY/rHMGzX/zJcaQvG/ARJ5RcHIE8MEMqUKb05iit5caHmu3S4
+n5AEAEAMHVHhHDojXNzgvYT90MziyiZheeURrU1/66mG14mX32UDRYyhEJCwLD70
+weLhAH2u1Gbt/+wBCdWGSmZXWTFQJg==
+=Kx5I
 -----END PGP SIGNATURE-----
 
---Sig_/nt75AuTn/SB2PGUgmc7gJWX--
+--Sig_/OJ0DanheuLF5XTj8kKn+x8Z--
 

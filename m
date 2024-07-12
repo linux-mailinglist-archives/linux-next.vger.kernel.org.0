@@ -1,171 +1,137 @@
-Return-Path: <linux-next+bounces-2957-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2958-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A3DA92F4C8
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 06:58:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 985BD92F544
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 07:58:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22CCA1F21827
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 04:58:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85F3D1C21780
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 05:58:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B39CF17579;
-	Fri, 12 Jul 2024 04:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67F8013B2BF;
+	Fri, 12 Jul 2024 05:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="sE0X3RQt"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="K3OHIhU7"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D9217C96;
-	Fri, 12 Jul 2024 04:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81CC13A86D;
+	Fri, 12 Jul 2024 05:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720760294; cv=none; b=It8Psnp+7PNmJThCXV0uCGmAd6TEVm6rLiDE7g1wIYnEZi/tV2ysoHfRlgbRWwTwsYtZRpU6NkYb77WHdRtdg+hkpDbeRymX8IxWif+RyRQ0h/+vNEjI9siEKcBIXrwgceKtt/O2WHNq0YW/dfd+UUOZAkTTo7wax4JTfENLrg8=
+	t=1720763933; cv=none; b=Jy8SMwfbPOCQYPsPzT+15GHaoJ0wMRpMOTvQQ/khFnMeb0ujOhrdCAJgLEPbqpYd9+TjsV0h1mKhdDo5By/+0t6Y4BCiqfEHVQzriOlnyx6bEJ76vtMD6cO3ubjZCMEc9X2MaZR28HikmCqtR/OwipQnRAN4iJe3GxtortK0Ivk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720760294; c=relaxed/simple;
-	bh=4Dh4BhQU/enHyhgZOhpsslzQX5NTr6GaYASU2sFsAZY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZC7crVKXUmolhDjdjE3JBZSrrEF0ZVGiovsdij2qfzF2qHgKNDAYM4NeBip0122E4tAPOaWBOBmjGwUKZZeOisL69UMzeArgfH/GiPh2D4RiZlBP0DerIAvKWqxrkAXpinv+AlICyiwNAco7Dzg+Sga9Pxui9OVlegsXHEwmTfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=sE0X3RQt; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1720763933; c=relaxed/simple;
+	bh=lAxaCBrzhRlkFX9SSx0qkLYqR7+Wzdcd6us4sOF/HRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=E5HmVufI1AwUr0C0/kQO597bWfaoGP/8UFCK4FJal4YwzeoQhoRfbDN63nQm1lEEk4hI6eOXA7a5y+dRqE2IY0AP4Qt7zoRC1Ag8i51QhY4LhhcVH/uWh7VY2FJgFm46KScrps8hNRMTgSbdTzpi79GiE+lCpHrccfanQcbpZr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=K3OHIhU7; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1720759712;
-	bh=9FwLU3TuUr3CTim33ErSUoBRj8iBha51//MEqJpMSaQ=;
+	s=201702; t=1720763923;
+	bh=f4oChVHotZcLPWAj4I3MpuIu4/cNsZms0INNC0g2sLk=;
 	h=Date:From:To:Cc:Subject:From;
-	b=sE0X3RQtTgS7a1gIPMkfoH/k+C10RwKe1Ruwgv5mtgGpY7QeAjIPGlX3FefJGHZ81
-	 s/dxnFue97CPzwEMwcjvPT0wrMHlbeEafPCHh0iy6f3RjMlQJ9p1CsHtvqoGtsXbdL
-	 USocc7ijb3tWW6zrJ7Gu6PQnMdIO9BeMZiTteusvSeWbhMaVTxoFi0pkuEWIqwFg4u
-	 2p7lM0V2tYFrR53pIfPFYVSBdqlMTwzFjXh5CbqA8JviTlHQbPlPejja/++fOjrNpA
-	 RE/0tKWdsRAIxH0kKDwNay2Nui6qwErKofx4WWfV/kWUAhId1TofP/zqeOlmzbqg2V
-	 BvQe3KnY7Fj+Q==
+	b=K3OHIhU7r17c9GLRQKB8JmdrlrdQTqcHtW+BM0+AMDQWFnXqYIVU0WRZopxoO7GAa
+	 arNBSY7HTcFyOpwMdoqkhX0si5dXWAMr50s0L04mmgi8FAxD5WENuHrq5Cr6VBi0a8
+	 P0CwsYKmfh8y6rabY6cqeR6orNdKRdnOJduY1RKC1c8b64I/Jds04GP+Wxgxvv9wax
+	 q7dHtuc+EvvgBJ6VUPcyyf/VNp0yLuVujL8YjESCrtdeel9m+VT4Ma1rtW2WX2LqYs
+	 ZcEtWWaGwIUJ2oplw0HqVMR9jB04a2g5bB2lp3kFY3K4puxQpe8/j6o89zaRly48WE
+	 mS6s/iMIHj0Xw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WKzcw3vHZz4wZx;
-	Fri, 12 Jul 2024 14:48:32 +1000 (AEST)
-Date: Fri, 12 Jul 2024 14:48:31 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WL19t5mDlz4wx5;
+	Fri, 12 Jul 2024 15:58:42 +1000 (AEST)
+Date: Fri, 12 Jul 2024 15:58:42 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Lee Jones <lee@kernel.org>
-Cc: Christian Marangi <ansuelsmth@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the leds-lj tree
-Message-ID: <20240712144831.269b1bc6@canb.auug.org.au>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Lu Baolu <baolu.lu@linux.intel.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the iommufd tree
+Message-ID: <20240712155842.240a85e3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//7Cb_No.v3_Dz+SvTz/xHuP";
+Content-Type: multipart/signed; boundary="Sig_/opC3uHI9ru4P2979A3A73rd";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_//7Cb_No.v3_Dz+SvTz/xHuP
+--Sig_/opC3uHI9ru4P2979A3A73rd
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the leds-lj tree, today's linux-next build (x86_64
+After merging the iommufd tree, today's linux-next build (x86_64
 allmodconfig) failed like this:
 
-In file included from drivers/leds/leds-lp5569.c:11:
-drivers/leds/leds-lp5569.c: In function 'lp5569_post_init_device':
-drivers/leds/leds-lp5569.c:204:52: error: passing argument 3 of 'lp55xx_rea=
-d' from incompatible pointer type [-Werror=3Dincompatible-pointer-types]
-  204 |                           chip, LP5569_REG_STATUS, &val);
-      |                                                    ^~~~
-      |                                                    |
-      |                                                    int *
-include/linux/iopoll.h:46:28: note: in definition of macro 'read_poll_timeo=
-ut'
-   46 |                 (val) =3D op(args); \
-      |                            ^~~~
-In file included from drivers/leds/leds-lp5569.c:20:
-drivers/leds/leds-lp55xx-common.h:229:62: note: expected 'u8 *' {aka 'unsig=
-ned char *'} but argument is of type 'int *'
-  229 | extern int lp55xx_read(struct lp55xx_chip *chip, u8 reg, u8 *val);
-      |                                                          ~~~~^~~
-drivers/leds/leds-lp5569.c:204:52: error: passing argument 3 of 'lp55xx_rea=
-d' from incompatible pointer type [-Werror=3Dincompatible-pointer-types]
-  204 |                           chip, LP5569_REG_STATUS, &val);
-      |                                                    ^~~~
-      |                                                    |
-      |                                                    int *
-include/linux/iopoll.h:51:36: note: in definition of macro 'read_poll_timeo=
-ut'
-   51 |                         (val) =3D op(args); \
-      |                                    ^~~~
-drivers/leds/leds-lp55xx-common.h:229:62: note: expected 'u8 *' {aka 'unsig=
-ned char *'} but argument is of type 'int *'
-  229 | extern int lp55xx_read(struct lp55xx_chip *chip, u8 reg, u8 *val);
-      |                                                          ~~~~^~~
+In file included from include/linux/container_of.h:5,
+                 from include/linux/list.h:5,
+                 from include/linux/wait.h:7,
+                 from include/linux/wait_bit.h:8,
+                 from include/linux/fs.h:6,
+                 from drivers/iommu/iommufd/fault.c:7:
+drivers/iommu/iommufd/fault.c: In function 'iommufd_fault_fops_write':
+drivers/iommu/iommufd/fault.c:308:57: error: comparison between 'enum iommu=
+fd_page_response_code' and 'enum iommu_page_response_code' [-Werror=3Denum-=
+compare]
+  308 |                 static_assert(IOMMUFD_PAGE_RESP_SUCCESS =3D=3D
+      |                                                         ^~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+drivers/iommu/iommufd/fault.c:308:17: note: in expansion of macro 'static_a=
+ssert'
+  308 |                 static_assert(IOMMUFD_PAGE_RESP_SUCCESS =3D=3D
+      |                 ^~~~~~~~~~~~~
+drivers/iommu/iommufd/fault.c:310:57: error: comparison between 'enum iommu=
+fd_page_response_code' and 'enum iommu_page_response_code' [-Werror=3Denum-=
+compare]
+  310 |                 static_assert(IOMMUFD_PAGE_RESP_INVALID =3D=3D
+      |                                                         ^~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+drivers/iommu/iommufd/fault.c:310:17: note: in expansion of macro 'static_a=
+ssert'
+  310 |                 static_assert(IOMMUFD_PAGE_RESP_INVALID =3D=3D
+      |                 ^~~~~~~~~~~~~
 cc1: all warnings being treated as errors
 
 Caused by commit
 
-  d9cc80b1c9b4 ("leds: leds-lp5569: Enable chip after chip configuration")
+  c7a0991733cc ("iommufd: Add check on user response code")
 
-I have applied the folloing patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 12 Jul 2024 14:40:23 +1000
-Subject: [PATCH] fixup for "leds: leds-lp5569: Enable chip after chip confi=
-guration"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/leds/leds-lp5569.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/leds/leds-lp5569.c b/drivers/leds/leds-lp5569.c
-index 52fb83f35bb7..623030f2f5ac 100644
---- a/drivers/leds/leds-lp5569.c
-+++ b/drivers/leds/leds-lp5569.c
-@@ -173,6 +173,7 @@ static int lp5569_post_init_device(struct lp55xx_chip *=
-chip)
- {
- 	int ret;
- 	int val;
-+	u8 u8val;
-=20
- 	val =3D LP5569_DEFAULT_CONFIG;
- 	val |=3D FIELD_PREP(LP5569_CP_MODE_MASK, chip->pdata->charge_pump_mode);
-@@ -201,7 +202,7 @@ static int lp5569_post_init_device(struct lp55xx_chip *=
-chip)
-=20
- 	read_poll_timeout(lp55xx_read, ret, !(val & LP5569_STARTUP_BUSY),
- 			  LP5569_STARTUP_SLEEP, LP5569_STARTUP_SLEEP * 10, false,
--			  chip, LP5569_REG_STATUS, &val);
-+			  chip, LP5569_REG_STATUS, &u8val);
-=20
- 	return lp5569_init_program_engine(chip);
- }
---=20
-2.43.0
+I have used the iommufd tree from next-20240711 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//7Cb_No.v3_Dz+SvTz/xHuP
+--Sig_/opC3uHI9ru4P2979A3A73rd
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaQtZ8ACgkQAVBC80lX
-0Gz+ZwgAnV2MJqxmT9iVUINH8mireQ1MCzb9jY05YbCA7vvCJXvNIGXn02bAqqae
-WN1YkMtjEzLSQp6RVvM/vr4ASWHJPywYuSbUbZImO8H/gmtqdkHDbp5SAO5VJk20
-Ga8Aqb/7AY1U0dCRhwYHbHQuMC+Cq8zLMeWeQVG3whWShv05wv+iwb+YCOD4nGUb
-TLeugztkwB9Kf1na1Y623UY48Q+0xfRzPMZZGVzmSX9inOiSxD7jiTMFJwv8o9Oo
-zmEDzRwv6LRT1m5TWFp6RJqOimkCOjERQvFZzsNYyeX3XOaV4FrJHG53YEBQ8ivA
-tsnzzLuZH/F/K126A2f5B76ZYZoKTg==
-=jaMN
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaQxhIACgkQAVBC80lX
+0GyKTQf/UBP3aXqEV6Tz1KZHVO/yT9juZ2zy9vXD/3jYno0s5fs+x3jNWefStPrN
+toZRHc6524FvkwqHBdLIG4DPp3X7lHSa8sg3tdG9cDLdKOpx2hTvoYx4fXW8G+e4
+vNQ3H/GBO10Q3wpg7M0z0/lIzsLBvJhfrmQoeW0EAtMg+SKOGjOfUOjwg5a9kXwy
+DX7lD77eSJJouZX1JqnAWkxPpgQPK2+4PemV9EJA1Iz78RUZp1PMpWVWhbCVsCEc
+cAQA0UcSzpXns9VWGBjwDidwyVGbiAplmfiWIDZawDbb7sCQ03Yn1nPvz8dsSOTs
+a8bcljiY5biMLwkejtaf/9j0jWbwoA==
+=VInl
 -----END PGP SIGNATURE-----
 
---Sig_//7Cb_No.v3_Dz+SvTz/xHuP--
+--Sig_/opC3uHI9ru4P2979A3A73rd--
 

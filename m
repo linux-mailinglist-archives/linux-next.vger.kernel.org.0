@@ -1,118 +1,141 @@
-Return-Path: <linux-next+bounces-2975-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2976-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3264092FAD4
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 15:00:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31DD692FB34
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 15:21:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E027B281642
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 13:00:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C29EEB22A03
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 13:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6E1516F8FE;
-	Fri, 12 Jul 2024 13:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8205616EBF7;
+	Fri, 12 Jul 2024 13:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="2hUULr+3";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="O/KM6A/6"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="TB5CLr4T"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F6A16FF5F;
-	Fri, 12 Jul 2024 13:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1F21662EC;
+	Fri, 12 Jul 2024 13:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720789228; cv=none; b=hRlfx9bkdD4H/kveJ+sZPAp9Uxpc+dEOSkMEmNSp5Yfi636OKhm1Jf/IemJ1nztOlBBviZ6Vmk3gJMBivYa/wq4IIjiQ4jlE1IOl+hA6TdciBYz1236nOmGBS5aepu1k1Ea35MxY7zcpjKtSPiZ8lU1HR6v/EaknNtrDnpHVqoI=
+	t=1720790484; cv=none; b=lrjv36tKJFdoJUjAhbss3v0c2XxMDkSbIjYFO4wBuBhBeXTBJ/6IL5xPQ97Sk/gabrQqPZs7vxj8Bej5Gi/7ijuYqOcOxcM3Ki+vFv0ocmuB98ODYLbFyHL2BEdY8mbZMFM9TKuP5TUMBsrkODTSsmdpKW99DmyP+qsvhwLb3dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720789228; c=relaxed/simple;
-	bh=3Caa9i6rxgEInURErL47jrOZK01wi/gcnCNnCEkyS2Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ellI+4CM5yRwx4xtf7jsEnfTCViUbms5YqNTGujUl0J+0ZlA53kVgIbULjpNNNLjdmsZ/7jr8v7LkFj7k9gGlNqfPTdWIhUEbPmCvr8a9q9Oq+KVGsPntjaRwmeT/4Pq6z/jMdApGijpTXRN9bsR1VHnwokFos3wf5RRAKEqAzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=2hUULr+3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=O/KM6A/6; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 6E00B1388718;
-	Fri, 12 Jul 2024 09:00:25 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Fri, 12 Jul 2024 09:00:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1720789225; x=1720875625; bh=3GDpwNPGzb
-	vmC/FwaIqYjMRc2Nt8+PK5dONnWjiwXEg=; b=2hUULr+38ocdOiBK1WZnhr+4iv
-	9EdpsIXGD9ahmL7C8M9YiPERzwFuW+9lrI6Qi1eukpz6qLzzbYfrBkKioy9gA2/P
-	xKsMhoyTmeIg80PyCt5zqgVJs/wKbMzwNfV2/opzYl8louFhO1HqAO93cwHRnp6x
-	ECD8SqMVgKrfGVlk/rHpkC7Ci5QWSsW6F1X219rAUzunvVEh9yaY8+eGioJYW0/1
-	3PKOBwsTTXSPNkTPWl2zKaM70xcU2TRdc2dtGYqvUMs8OodJZMaRaBxMd2wP1gA0
-	v2SlmSfJrfMF4ZG6Vufu7KgFIEbXmmUA9TgsPsTli5hch9sd8cBetKvPqiPA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1720789225; x=1720875625; bh=3GDpwNPGzbvmC/FwaIqYjMRc2Nt8
-	+PK5dONnWjiwXEg=; b=O/KM6A/6QgNvquZ6L1KmR766RwywPNC8rF05xHCrOzhl
-	Zgig0yAfw2BkU7FiPDkENC323ePNEGaR313DSILtUSkAo+JH8l77g9LoYUu+y7YR
-	q6WWrxxDWbOUeakbkZrIYlwbwblz6BOOfg9mW4t37scGmuhSLfiJ7XYDJlU+j9ZK
-	wa1L1LPTX6IeHKEJMhk1Ku2jrQPTZfM/sO2GiBmnIUm1A8AeM5XSFVmmN+rD7WMi
-	zYyWR9QAJvUI1tZypvKYhB9PT9ZJXQjxjl7OiQami9uonneP8INzU6r863ksx7EK
-	Bk139xqpdPola80FgF2hsmAJQgWDPstWGR1tte7JQQ==
-X-ME-Sender: <xms:5yiRZjbFHeOUXcwVtKGj560x8ykGvF1fiMn6kRkvCRV2zUCaUa96VA>
-    <xme:5yiRZiaYmVzF9AVX9Gr4rJg20ggFw9D7pgM5KaT3cMHm-4KZTIKWZ4kadVqna3neK
-    IK8KTjI6u2FzQ>
-X-ME-Received: <xmr:5yiRZl9EgJpq8F2dO_hZPpsEJ0l9EJMfGs6UylNqAC245yd_ZZq0daVJRczGNGblAAhtW5Yrnpdl3SJZi7DbF2waE7isE_G1xH_NcQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeeigdehgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:5yiRZprigbToEDWBt8n5MTNCVBekqFwEBwJZzqxTziOohL8uhce-JA>
-    <xmx:5yiRZuqbHzsE17P_Mgau2AbSaID8H8mLEbtOxaOHjJxcvDi_lm64xA>
-    <xmx:5yiRZvQ6KLs4hOOBEcVv72PAn-43x2ovrre3Lm6w8QC1N_dAhYcnQg>
-    <xmx:5yiRZmrjpTiW9dQA0pwCW8x7c2y2LuxpF_BgOAVCp6u9463XvK89uQ>
-    <xmx:6SiRZrj8rDjo7phBfT7H_PA7IK0E_M95FjafI9nMS_vhnKcLwqeQe7J1>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Jul 2024 09:00:22 -0400 (EDT)
-Date: Fri, 12 Jul 2024 15:00:20 +0200
-From: Greg KH <greg@kroah.com>
+	s=arc-20240116; t=1720790484; c=relaxed/simple;
+	bh=BKtYWDuEb0MSm5flvpwvbSNHeqNn4WVksGNcjFZdPKU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CbZ6akJQlTZCboxghDO192DOgoT/9+eZbECyg+Q9YuJ6I24ZKyqrZdnRzOB9+iAtV+WdNRdUEeuBPTuknVN9+/YjIsr9lZV24SXSND4EPSVURu63Bamk9erKrWGYgWgs0LRdDToc1g46FLhxDnkGZ3ZijL7SMCcDwVVAyBezxAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=TB5CLr4T; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id b188ee1a26ad7b74; Fri, 12 Jul 2024 15:21:19 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DDED6A03394;
+	Fri, 12 Jul 2024 15:21:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1720790479;
+	bh=BKtYWDuEb0MSm5flvpwvbSNHeqNn4WVksGNcjFZdPKU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=TB5CLr4TQYE2lPGSvBM2ULQVNVKL51K7zJnZhwawpBtICucFKRT8mtoZ5dZvl09qs
+	 KcofkbIB6KUbn01JkDin4qoYh5mu92kTZVQSBXvlI2oCMISMMvYK4K/Idy6BL+wAAJ
+	 AySpdbfoEOjTLOLOq5kuF/HT7PvaERNoX7wZSy9WAdqmovNe3EDBL6mt4rZpiK1NJZ
+	 AWNzqBdBujkHnu3srjjhMf9ASnjAfDeRpx6g7GeLFZMhQohCVO1jDnogaXqyTs2hbx
+	 KRMkqV978w5QNry5lLNlF2gYkpZ58t9HKBk8sziDkj6jAhsvcleYiRpkg9+9ditFqK
+	 zV1UktNSovCHQ==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Vamsi Attunuru <vattunuru@marvell.com>
-Subject: Re: linux-next: unexpected file added by the char-misc tree
-Message-ID: <2024071202-monogamy-retake-0b78@gregkh>
-References: <20240712224438.2d6e0cf6@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the pm tree
+Date: Fri, 12 Jul 2024 15:21:18 +0200
+Message-ID: <2748010.mvXUDI8C0e@rjwysocki.net>
+In-Reply-To: <20240712114838.2af5b525@canb.auug.org.au>
+References: <20240712114838.2af5b525@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240712224438.2d6e0cf6@canb.auug.org.au>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrfeeigdehkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 
-On Fri, Jul 12, 2024 at 10:44:38PM +1000, Stephen Rothwell wrote:
+Hi Stephen,
+
+On Friday, July 12, 2024 3:48:38 AM CEST Stephen Rothwell wrote:
+> 
+> --Sig_/uDBst4ohDb48w0eZ67u3=2t
+> Content-Type: text/plain; charset=US-ASCII
+> Content-Transfer-Encoding: quoted-printable
+> 
 > Hi all,
 > 
-> Commit
+> After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
 > 
->   5f67eef6dff3 ("misc: mrvl-cn10k-dpi: add Octeon CN10K DPI administrative driver")
+> drivers/thermal/tegra/soctherm.c: In function 'tegra_thermctl_set_trip_temp=
+> ':
+> drivers/thermal/tegra/soctherm.c:592:13: error: unused variable 'ret' [-Wer=
+> ror=3Dunused-variable]
+>   592 |         int ret;
+>       |             ^~~
+> cc1: all warnings being treated as errors
 > 
-> added this unexpected file:
+> Caused by commit
 > 
->   drivers/misc/Makefile.rej
+>   b46696a4e8c4 ("thermal: trip: Pass trip pointer to .set_trip_temp() therm=
+> al zone callback")
+> 
+> I have applied the following patch for today:
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 12 Jul 2024 11:46:14 +1000
+> Subject: [PATCH] fixup for "thermal: trip: Pass trip pointer to .set_trip_t=
+> emp() thermal zone callback"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/thermal/tegra/soctherm.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/socth=
+> erm.c
+> index 62983653ca19..d3dfc34c62c6 100644
+> --- a/drivers/thermal/tegra/soctherm.c
+> +++ b/drivers/thermal/tegra/soctherm.c
+> @@ -589,7 +589,6 @@ static int tegra_thermctl_set_trip_temp(struct thermal_=
+> zone_device *tz,
+>  	struct tegra_soctherm *ts =3D zone->ts;
+>  	const struct tegra_tsensor_group *sg =3D zone->sg;
+>  	struct device *dev =3D zone->dev;
+> -	int ret;
+> =20
+>  	if (!tz)
+>  		return -EINVAL;
+> --=20
+> 2.43.0
+> 
+> --=20
 
-Ugh, my fault, that's what I get for applying patches with fuzz :(
+Sorry for adding a build issue and thanks for the patch!
 
-I'll go drop it, thanks!
+This should be fixed in my linux-next branch now.
 
-greg k-h
+Thank you!
+
+
+
 

@@ -1,141 +1,111 @@
-Return-Path: <linux-next+bounces-2976-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2977-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31DD692FB34
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 15:21:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61CB592FCF6
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 16:54:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C29EEB22A03
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 13:21:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A0061C22F60
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 14:54:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8205616EBF7;
-	Fri, 12 Jul 2024 13:21:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01413172BB6;
+	Fri, 12 Jul 2024 14:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="TB5CLr4T"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="lP3VY3Ng"
 X-Original-To: linux-next@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1F21662EC;
-	Fri, 12 Jul 2024 13:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5F4EAC7;
+	Fri, 12 Jul 2024 14:54:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720790484; cv=none; b=lrjv36tKJFdoJUjAhbss3v0c2XxMDkSbIjYFO4wBuBhBeXTBJ/6IL5xPQ97Sk/gabrQqPZs7vxj8Bej5Gi/7ijuYqOcOxcM3Ki+vFv0ocmuB98ODYLbFyHL2BEdY8mbZMFM9TKuP5TUMBsrkODTSsmdpKW99DmyP+qsvhwLb3dc=
+	t=1720796077; cv=none; b=bmXEta5+uBszesfszVlVFHpcB51Ke7xhQv8eUHZj10K/614kGcjomGBE52LBHQF6gjxBAL+mqPV+BNAK+xuisEWJJHWEIdWCwMoNIOKciSzTVWsWb0iuPbk05XoGhv2ofsWz9J4jws1RhiMVWoqdr//qcl+XTeDni7oUPUpIees=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720790484; c=relaxed/simple;
-	bh=BKtYWDuEb0MSm5flvpwvbSNHeqNn4WVksGNcjFZdPKU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CbZ6akJQlTZCboxghDO192DOgoT/9+eZbECyg+Q9YuJ6I24ZKyqrZdnRzOB9+iAtV+WdNRdUEeuBPTuknVN9+/YjIsr9lZV24SXSND4EPSVURu63Bamk9erKrWGYgWgs0LRdDToc1g46FLhxDnkGZ3ZijL7SMCcDwVVAyBezxAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=TB5CLr4T; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id b188ee1a26ad7b74; Fri, 12 Jul 2024 15:21:19 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
+	s=arc-20240116; t=1720796077; c=relaxed/simple;
+	bh=YW6LyqOG5vH7lucFATlUG1ixa82tnD7jzg0M9MsPa5A=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=BJCK4afF03fnfH7EiIGb5GKCULn65/S40jsans2REyG/S6gFRlq1WWqP78/Ol8w45MorTyhyNV7R3LDYJ1PFFlCoJknxc62v5WsP/DVbHtFGp5GhBAsQrijb7wn9KR/x9dyKONQSNavrMDTOwF5z9PhlDnUniY2xueY7TXS6ttE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=lP3VY3Ng; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 65CBA418AE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1720795700; bh=FODPk4cnpB7NBQQ/6uarYjITFGV79B8qfu0oUx5Z4dY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=lP3VY3NgASYQEyeWBUhEQLsuTUaR9i+qhLSxz+KwMQnlRubV31pGZdww/d2b/G9qx
+	 JGY3kh048INk3uJaAhJR3rI5YjdRP9VX1kPfhySXavkssWcNrduIaXeuwR5eBgf7nj
+	 uBAmaR18F3Dyn9rRTqmA7PTkYWLSgxmJ3mfN79ba6/jHOXeTYv7rXEKUu9rPuosBIP
+	 NHhtFW2LVuXJbE+7A6hLUDuE70andtfVOMgtVPr1M+B3+YrFIFoy3WZBAEVUdhsHOv
+	 3dTIoFHzdzU/fqO3Qppoi+WkcoQUYSjGVdKzJCLIqhpVEmIfHx+i5sGpkq131ixdRv
+	 gH314FLN68RmQ==
+Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DDED6A03394;
-	Fri, 12 Jul 2024 15:21:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1720790479;
-	bh=BKtYWDuEb0MSm5flvpwvbSNHeqNn4WVksGNcjFZdPKU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=TB5CLr4TQYE2lPGSvBM2ULQVNVKL51K7zJnZhwawpBtICucFKRT8mtoZ5dZvl09qs
-	 KcofkbIB6KUbn01JkDin4qoYh5mu92kTZVQSBXvlI2oCMISMMvYK4K/Idy6BL+wAAJ
-	 AySpdbfoEOjTLOLOq5kuF/HT7PvaERNoX7wZSy9WAdqmovNe3EDBL6mt4rZpiK1NJZ
-	 AWNzqBdBujkHnu3srjjhMf9ASnjAfDeRpx6g7GeLFZMhQohCVO1jDnogaXqyTs2hbx
-	 KRMkqV978w5QNry5lLNlF2gYkpZ58t9HKBk8sziDkj6jAhsvcleYiRpkg9+9ditFqK
-	 zV1UktNSovCHQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+	by ms.lwn.net (Postfix) with ESMTPSA id 65CBA418AE;
+	Fri, 12 Jul 2024 14:48:20 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the pm tree
-Date: Fri, 12 Jul 2024 15:21:18 +0200
-Message-ID: <2748010.mvXUDI8C0e@rjwysocki.net>
-In-Reply-To: <20240712114838.2af5b525@canb.auug.org.au>
-References: <20240712114838.2af5b525@canb.auug.org.au>
+Cc: Tejun Heo <tj@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the cgroup tree
+In-Reply-To: <20240712165107.7b46a640@canb.auug.org.au>
+References: <20240712164354.65cb32bc@canb.auug.org.au>
+ <20240712165107.7b46a640@canb.auug.org.au>
+Date: Fri, 12 Jul 2024 08:48:19 -0600
+Message-ID: <8734oe1xak.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrfeeigdehkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-On Friday, July 12, 2024 3:48:38 AM CEST Stephen Rothwell wrote:
-> 
-> --Sig_/uDBst4ohDb48w0eZ67u3=2t
-> Content-Type: text/plain; charset=US-ASCII
-> Content-Transfer-Encoding: quoted-printable
-> 
 > Hi all,
-> 
-> After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> drivers/thermal/tegra/soctherm.c: In function 'tegra_thermctl_set_trip_temp=
-> ':
-> drivers/thermal/tegra/soctherm.c:592:13: error: unused variable 'ret' [-Wer=
-> ror=3Dunused-variable]
->   592 |         int ret;
->       |             ^~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   b46696a4e8c4 ("thermal: trip: Pass trip pointer to .set_trip_temp() therm=
-> al zone callback")
-> 
-> I have applied the following patch for today:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 12 Jul 2024 11:46:14 +1000
-> Subject: [PATCH] fixup for "thermal: trip: Pass trip pointer to .set_trip_t=
-> emp() thermal zone callback"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/thermal/tegra/soctherm.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/socth=
-> erm.c
-> index 62983653ca19..d3dfc34c62c6 100644
-> --- a/drivers/thermal/tegra/soctherm.c
-> +++ b/drivers/thermal/tegra/soctherm.c
-> @@ -589,7 +589,6 @@ static int tegra_thermctl_set_trip_temp(struct thermal_=
-> zone_device *tz,
->  	struct tegra_soctherm *ts =3D zone->ts;
->  	const struct tegra_tsensor_group *sg =3D zone->sg;
->  	struct device *dev =3D zone->dev;
-> -	int ret;
-> =20
->  	if (!tz)
->  		return -EINVAL;
-> --=20
-> 2.43.0
-> 
-> --=20
+>
+> On Fri, 12 Jul 2024 16:43:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+>>
+>> After merging the cgroup tree, today's linux-next build (htmldocs)
+>> failed like this:
+>>=20
+>> Sphinx parallel build error:
+>> UnicodeDecodeError: 'utf-8' codec can't decode byte 0xfd in position 558=
+: invalid start byte
+>>=20
+>> Caused by commit
+>>=20
+>>   704f684e15ad ("cgroup: Add Michal Koutn=C3=BD as a maintainer")
+>>=20
+>> I tracked this down using
+>>=20
+>>   git diff stable.. | cat -v | grep -F 'M-}'
+>>=20
+>> and finding the commit that added the line that was output.
+>> I tested it by building with the commit temporarily reverted.  I have
+>> left that commit in today's linux-next.
+>>=20
+>> Clearly (I think) there is nothing wrong with the commit, but the Sphinx
+>> utf-8 decoder also clearly does not think it is valid UTF-8 :-(
+>
+> Actually my character map app says that it should be the two bytes 0xC3
+> 0xBD in UTF-8 (it is 0x00FD in UTF-16).
 
-Sorry for adding a build issue and thanks for the patch!
+As you observed, the patch is encoded in ISO-8859, not UTF8; that
+doesn't fit well in a file that uses UTF8.  One could argue that Sphinx
+should be a bit more robust, but satisfactory results will not be had
+regardless.
 
-This should be fixed in my linux-next branch now.
+An encoding check might be a useful thing to have in checkpatch.pl,
+methinks.
 
-Thank you!
-
-
-
+jon
 

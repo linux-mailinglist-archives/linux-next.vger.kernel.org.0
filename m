@@ -1,134 +1,118 @@
-Return-Path: <linux-next+bounces-2949-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2950-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C79C92F2DC
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 01:58:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6333392F2F5
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 02:17:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E1D91C20B44
-	for <lists+linux-next@lfdr.de>; Thu, 11 Jul 2024 23:58:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04FA7B22F2D
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jul 2024 00:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F37D16E884;
-	Thu, 11 Jul 2024 23:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B221139D;
+	Fri, 12 Jul 2024 00:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CnqvycZH"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lVjESjg4"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB49815AAD9;
-	Thu, 11 Jul 2024 23:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80200621;
+	Fri, 12 Jul 2024 00:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720742314; cv=none; b=Bu8Ozu6ySnwLoImz80YJMn/AFKjH9LemVGp/zQdJmc+AiMQP1yyfR1GKxhBEEWMRjU0g36LdD8xhg23MSVAoJKVrA4lZmVXxPev1xWqIz6Bqcdh6Bpoqhx6FBV2oUTAJkkEOrW091oDSR//P3fXkp7HwVRiO6ib4Vc6M+u+O7e4=
+	t=1720743439; cv=none; b=me/cEs+RTpCNMMOcQAslji3F2mbjcf/tH3wxvYihJ0J6Sbg3VEEyLYnJBf/POlVfGa78jUmMSyEhk2klJWIOqBRHiFwaIv4lGCuV4+SepaRZV6ysEwjt58kHGcv3F48PzJsAW0ywYiRt7BJzbTQDyApGjDkxxe9JndNRdQQuAQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720742314; c=relaxed/simple;
-	bh=2vBC+KzcKTxk5k7WHAz1mB5gMwlYbubQ12KRQ2/rDrs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=bmnYLtX3qV8niDsAXb4UbAkBtamtkQVk+rIJ6C21pQ73qozvGO4AkuKAHOPKPnhf5rshSURIs75noKT7GQSKnjgB7qmxLyg+xf8FXCLtLCNCvVuf2h80zp4t8jJXF2DtPVFPQGHrbW27+8yGe0wMWoNJOYzaP+EXFmu4zmMGzmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CnqvycZH; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1720743439; c=relaxed/simple;
+	bh=n+l8j3zXDVmrCyjD/AKm3cdf3Dekt08k92V5tenRSow=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=d2uQtKcBNeKXH7vabHx6J4c/iVHb6xB8+Jn7MltXbQVElsaKVMYM1KmXJNuZnTG/IMjpTZq4SUzBeWw64+BmbQQMQ2IaalOgixCXTwVkrShhBeY23rn4yU9Qf8Rft60ofZCdTBAnWZO0MRB6dDe7oheHIIuFX9n/onSBic5YWww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lVjESjg4; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1720742308;
-	bh=zZ8/h8JZ7AJhCHt1R2GbbeguaQJrJzLHHkBrjjtpecM=;
-	h=Date:From:To:Cc:Subject:From;
-	b=CnqvycZHlJGkCivGN/mIlvxtw+96I1ott32433moDF+sYHUUVUGfhO7fVs+N0KsTX
-	 BSoZUgXHQ6LaknIBJRlD3+lflUxlclf2GApHhwvh5m4B0EqHWMyyO7qeWwl6SDm/M4
-	 NoDzejE8wR11Q5/8nRkPPJMmQX/J7JgbQk14JuQQmck/AjF2Rq9EHRc4YrdDz0bBTO
-	 YFDAG/kWHAUlvWdB/qfq8wS+/snaFgnMkBk0Xc2h3LSv8UZ6FtK+hdA6G/DnXzJlv3
-	 2gIGJSl1ZpO/KOQIOV7W0XAuNidh9eVDXR7ssVo2Lt49w5g74GRC08L/oWGfGLDFRm
-	 qvNHIH5grgZQg==
+	s=201702; t=1720743433;
+	bh=Bw03T/wXA3hX+oFkbo08Y3OH9ztHLzh+baF8k8tN74Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lVjESjg4k6s1GG2NZLeADAtRJPYJdUw+Yf8zh1lze6ptbQlTpQf18j030KIYVqfBi
+	 aAimcdiirfc74mMKqPHF+3sihskpvyvJd0M1bmlEwF9kuW+FBQXI1/fgVjJ13wF2Kt
+	 5ph5kHLiO/TfhsyZdeoSOJOfat3fp4BzS/k0mWDyxHfgL35zYt2lDCrPhWQ70o3BEq
+	 61Gxa8q6Mxl8/MU6nLiSGkwAUcNSVUSyKPtXFPKcg25/bcv/DsLVMcSeCYmN3o0ntj
+	 IzUMO4DybGC4Eia2o4Fr3tad+gqGKNpYMNjINKfWVlX3zHzPO5rmIduILjlyay7v48
+	 05hea2m4NWf3w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WKsBB2KTBz4w2F;
-	Fri, 12 Jul 2024 09:58:26 +1000 (AEST)
-Date: Fri, 12 Jul 2024 09:58:25 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WKsbr3pxSz4wxs;
+	Fri, 12 Jul 2024 10:17:12 +1000 (AEST)
+Date: Fri, 12 Jul 2024 10:17:11 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Mike Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Olof Johansson <olof@lixom.net>, Arnd Bergmann
- <arnd@arndb.de>
-Cc: ARM <linux-arm-kernel@lists.infradead.org>, Drew Fustini
- <dfustini@tenstorrent.com>, Drew Fustini <drew@pdp7.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Yangtao Li <frank.li@vivo.com>
-Subject: linux-next: manual merge of the clk tree with the arm-soc tree
-Message-ID: <20240712095825.6e1224d9@canb.auug.org.au>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, David Miller
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, bpf <bpf@vger.kernel.org>, Networking
+ <netdev@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the bpf-next tree
+Message-ID: <20240712101711.272eda17@canb.auug.org.au>
+In-Reply-To: <CAADnVQKVC4NGsEU0X3XJmmCot40Vvik-9KNFU07F=VBF-4UVRQ@mail.gmail.com>
+References: <20240712083603.10cbdec3@canb.auug.org.au>
+	<CAADnVQKVC4NGsEU0X3XJmmCot40Vvik-9KNFU07F=VBF-4UVRQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qD7mgudfTiVy6t9Hm6zpsBV";
+Content-Type: multipart/signed; boundary="Sig_/lBVNIj918H/bfEVTwa/d5bZ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/qD7mgudfTiVy6t9Hm6zpsBV
+--Sig_/lBVNIj918H/bfEVTwa/d5bZ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Alexei,
 
-Today's linux-next merge of the clk tree got a conflict in:
+On Thu, 11 Jul 2024 16:51:28 -0700 Alexei Starovoitov <alexei.starovoitov@g=
+mail.com> wrote:
+>
+> Argh.
+> So the fix was applied to bpf-next back in May and the same people
+> come back to complain in July that it's somehow still broken and must be
+> fixed in Linus's tree.
+> So the new patch was applied to bpf and pulled to net
+> and on the way to Linus now.
+>=20
+> We will ffwd bpf-next in a day or so, if git cannot handle it,
+> we will revert from bpf-next.
 
-  MAINTAINERS
-
-between commit:
-
-  480d9a6083f4 ("MAINTAINERS: thead: add git tree")
-
-from the arm-soc tree and commit:
-
-  1037885b309c ("dt-bindings: clock: Document T-Head TH1520 AP_SUBSYS contr=
-oller")
-
-from the clk tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Don't bother, it is not causing any conflicts.  Occasional duplicates
+like this are not really a problem.  I report them just in case they
+were done in error.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index 44cff47c2594,04eb5587ffa7..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -19382,8 -19322,9 +19382,10 @@@ M:	Guo Ren <guoren@kernel.org
-  M:	Fu Wei <wefu@redhat.com>
-  L:	linux-riscv@lists.infradead.org
-  S:	Maintained
- +T:	git https://github.com/pdp7/linux.git
-+ F:	Documentation/devicetree/bindings/clock/thead,th1520-clk-ap.yaml
-  F:	arch/riscv/boot/dts/thead/
-+ F:	include/dt-bindings/clock/thead,th1520-clk-ap.h
- =20
-  RNBD BLOCK DRIVERS
-  M:	Md. Haris Iqbal <haris.iqbal@ionos.com>
-
---Sig_/qD7mgudfTiVy6t9Hm6zpsBV
+--Sig_/lBVNIj918H/bfEVTwa/d5bZ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaQcaEACgkQAVBC80lX
-0GweAAf+NvWgW6ckvbjJTDY/DDeKsGHmyNw9ApUImUJOIpMjGsgxmZbU6CrA0CFZ
-iSBMVdpZsZC1gbd2BVuXOmrta9m/M+CxnpmjKAIG4cGQNIbob9f6uo4vlGudCCCi
-Qygww/jMCKE9HM6HocaIFY/n0cdNsY5kAjEyycgDiIkc/LxalUKqC8LsLBLC+90t
-XOdeG8Db1yGgsnb84/X1kQqvHoejExDTAFYVeuExoh5ADePkriG6+4CFTiBTKk/2
-0Hmq7u5fSe+GjkllfAebC2gC8kocvaKSEEetlRxZ/hwvm4Ch0xCzd1LJFcL66kqC
-ADm8MebRMhNez8kHqBNrGP3FaBWyTw==
-=yBL5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaQdgcACgkQAVBC80lX
+0GzBiQf/W+jGo/+m8c27dNIUHQUGYmS9UmptbTzzgDyglqx89/bMp8rfDmkrUgM/
+ULhUhLmPilTJOnOb3lz7kdyTPNFsSFSFPm2KsvZqg5pRwcPsZ0sKv999IoLoFwIN
+jzvxJbW2Uz+YUEedLxLhBuCgZChj9t5ujx2gY4sdzSduyYAHzS9J8cjs9c2rf2P3
+Prz4JudqiXoeS40dfwCk+2xKqQI0cWXFYIqrlt5uMjClsU8dm8+S+u9Qvh++lT9A
+HNfCQQlPAMKAnRl6YMu7814GRaTuG8sC8aDMPTua8P8ffG7L7gDYgy/AekybGlBL
+zCUv/M7VYrxb/Kz3an5gmVMJV8BHJw==
+=vcnk
 -----END PGP SIGNATURE-----
 
---Sig_/qD7mgudfTiVy6t9Hm6zpsBV--
+--Sig_/lBVNIj918H/bfEVTwa/d5bZ--
 

@@ -1,78 +1,105 @@
-Return-Path: <linux-next+bounces-2983-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2984-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7031930426
-	for <lists+linux-next@lfdr.de>; Sat, 13 Jul 2024 08:56:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A639930BBE
+	for <lists+linux-next@lfdr.de>; Sun, 14 Jul 2024 23:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECEDE1C21076
-	for <lists+linux-next@lfdr.de>; Sat, 13 Jul 2024 06:56:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28898B20E22
+	for <lists+linux-next@lfdr.de>; Sun, 14 Jul 2024 21:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CB01BDCF;
-	Sat, 13 Jul 2024 06:56:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B780F13C9DE;
+	Sun, 14 Jul 2024 21:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hfj3khxG"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="a0/Z65ay"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4181AAD7;
-	Sat, 13 Jul 2024 06:56:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CF810A11;
+	Sun, 14 Jul 2024 21:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720853812; cv=none; b=ZyaJQ4a6QFJQNhhwSI+twB68jSdtWgs+ntj+Tx25uSOblj0kXYYk/sM2sdp6mfMZuIwhdd6DCcxfqXVC13/oRspb+BZpySL3stdsRm/zfYgIKep6RdsPUnfqBc0hqO5yGnz9E8Ag1pfdhH1lge1iDi4fjn8KjKCgKWu3U/uw2u8=
+	t=1720992465; cv=none; b=iXGYTBC7gDMDweb1nq+L11JqMI9vuYM3YiD/IufQq8+5QiVFlocikp5Wjyq5Y5D8arASXMZSfCgDshC1G7/+BpsTDoLPnj7hLdwYP+JIY57tqc+hN15PiMtIoyAr5HmRy2SNvNH3qV8CKVe0aZ6bbEjsj7Fiy7eDRq2WGcx9L78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720853812; c=relaxed/simple;
-	bh=AO2zhQ6NY+7j4iOWmqDHqHMD3UBdDyrD45oR3qQTSy4=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bk8QZPLqkyGtg/UB2ZLQUWHTf7wX4pVUCu3pFxkTlDQ8ai45koIxUak0AQqyFncKaO8spYWLTVyasw/gScJOXcmdrVEV7roZq62kGZijblFa/j17M29IFFtKQ2u3Db8twMqGBI1O0bWk5Fj5CnGbsikmhs4aHe10AsuzzIVZajQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hfj3khxG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3524C32781;
-	Sat, 13 Jul 2024 06:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720853812;
-	bh=AO2zhQ6NY+7j4iOWmqDHqHMD3UBdDyrD45oR3qQTSy4=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=hfj3khxGFoGoVUta3Ao5Wfonh2XSFrOLKldhTDNITdNTrW66JSTo8HtyL9Alhb1//
-	 ue38vI206xMK7mtjZJr/Ol7P4XobGoltqOF0h/Q1mGr242PG1zSHg3+8rJCpn5Sgk/
-	 ucos8MDaAWQRZfO5eKossFLbGZ/Rh4bF0qHFrHKsg6SROBAHlTgr1CNiE18wwecHDj
-	 hmHvAcxrZvansguJinwtwGMf6IPEzlZ2iUxUhSZu5mzsUX67NidnFEqn3Razawyzrw
-	 mNB0O13FOmfL16/TJMeI2rueXDFuJ2kgaovr7hAPXaCZMHP8+zu2zlEx4pVEI+ggdy
-	 dec3bYJzueI8A==
-Date: Sat, 13 Jul 2024 08:56:48 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the i2c-host tree
-Message-ID: <yogbvwx3rqxpqv33sm7irvrdjvebi4hgcwn2w45s6hodyko3qb@my7kojqeydcr>
-References: <20240712165527.75e4ddc9@canb.auug.org.au>
- <ZpDVAG2p_v5DsZgY@shikoro>
+	s=arc-20240116; t=1720992465; c=relaxed/simple;
+	bh=0GRLEPscJTLtdsnaUX0cb/KY2ehZd5L1gNWfv8B7TKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=j07k3vyP8aFGAdZuXRMxF2a3r/vpwSX32jrApTQrvyJWyBJ3YO7JndEZBiDIsoIsSKg2Mj8onohsi58BZDgpRCanHYgekFRwUBR2QQqUyByFMR1veQ+YrUKSsGwM3fSKFV0EqmwTPjSBMGejMZW9mUotJMXaW1wqrXFGU9FVDdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=a0/Z65ay; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1720992457;
+	bh=OK6tOFx59VWlQ52L2/SslGUs3SXMEwFYEeS4A0GD/2s=;
+	h=Date:From:To:Cc:Subject:From;
+	b=a0/Z65ayvEq2rdrYzPe1pO1sRD6ybn6bcv7OjzSt9KMZRkNrA3hvaRR/jSWx1Dp5L
+	 mVxbLyTKHa2HNFmag0tyxAGUcCNe6BzqWkzmSNXOcYCJxcAXAuVwDrmQZrpmRsaalM
+	 QNXFjtaxkMdtinWJuJejuz4iAJRXagzIIb8VhmNlPnR65J3Y08o0pEcNR1du22q65z
+	 J6zPED30u4MIMKGapf96vRXIs6BE26G6WJE4vS9Ng0zJ4yvZaHKa3Nm57oYZpLRRL6
+	 lSF7Tc6ZNQeZYHT3/Zj+Do5nqKwfesISmMfDcDMi5I23CUsebbhUyTIVBbgJsMQt2/
+	 OeZN0YQ+INhog==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WMdhn0WSJz4wbh;
+	Mon, 15 Jul 2024 07:27:37 +1000 (AEST)
+Date: Mon, 15 Jul 2024 07:27:35 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the mm tree
+Message-ID: <20240715072735.4fade208@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZpDVAG2p_v5DsZgY@shikoro>
+Content-Type: multipart/signed; boundary="Sig_/_Y496mAEmrxmLD6X8HFEPQ+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Jul 12, 2024 at 09:02:24AM GMT, Wolfram Sang wrote:
-> > include/linux/i2c.h:583: warning: Function parameter or struct member 'xfer' not described in 'i2c_algorithm'
-> > include/linux/i2c.h:583: warning: Function parameter or struct member 'xfer_atomic' not described in 'i2c_algorithm'
-> > include/linux/i2c.h:583: warning: Function parameter or struct member 'reg_target' not described in 'i2c_algorithm'
-> > include/linux/i2c.h:583: warning: Function parameter or struct member 'unreg_target' not described in 'i2c_algorithm'
-> 
-> Ouch, yes. I will fix this! Thanks. Seems like regular buildbot builds
-> do not build docs when they were changed?
+--Sig_/_Y496mAEmrxmLD6X8HFEPQ+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-apparently not, because I received only build success messages.
+Hi all,
 
-I will add the docs building in my test flow.
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
-Thanks Stephen,
-Andi
+  0f59cd3ed361 ("mm/hugetlb: fix kernel NULL pointer dereference when migra=
+ting hugetlb folio")
+
+This is commit
+
+  f708f6970cc9 ("mm/hugetlb: fix kernel NULL pointer dereference when migra=
+ting hugetlb folio")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/_Y496mAEmrxmLD6X8HFEPQ+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaUQscACgkQAVBC80lX
+0GwpYQf+P/c61DjZib1Q1DXv6KS/IWguZhBV3CworiUnkWuRDRe+E2NF4iE3UcsJ
+VOulWVwi5X2091kCmSIO7usUDXb2+nqy3swFNOyQouiskv8LrP0HH1vQvuk1dUsF
+O5jGfrrVjaDjem08CyR7mzOCpTm1Qb69HPQALCDQH1dvqJCLnD2dbWvDaR9zFd0Q
+IliVannCsJtWqBtArMtUhYl6YxLjf6igLBUwllWAtg7u457Sli2h6h56GNqPSlYx
+62kFw/si3FuHMjbIDqfwS1Crc4pf1up0/9ly0hKQl46fBKyPz1qNyE5smzIkfYK6
+lKRCDCA0jPmdxhrbawsK9EbHT2We6A==
+=D+lR
+-----END PGP SIGNATURE-----
+
+--Sig_/_Y496mAEmrxmLD6X8HFEPQ+--
 

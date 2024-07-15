@@ -1,195 +1,101 @@
-Return-Path: <linux-next+bounces-2998-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-2999-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD0EC930C67
-	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 03:48:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D3A3930C97
+	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 04:21:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1280F1C209C7
-	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 01:48:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00AC61F21137
+	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 02:21:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A65A256D;
-	Mon, 15 Jul 2024 01:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2A264C9D;
+	Mon, 15 Jul 2024 02:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Kl6xOXQQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Bmnb+5TB"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E3B4C6D;
-	Mon, 15 Jul 2024 01:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA15629CA;
+	Mon, 15 Jul 2024 02:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721008090; cv=none; b=N8cHXZnQfD8L9aotWN87nFLOsqVx8ld+1RnCrO2PFB68wkLL7umyVjuRNd4Lw52UIVP2yJ9DgBxaMU+18JzqaCZorZUwvUzbr1DW5dZyJVd1LYnmQ2MAVrdeRZAJ5e/5icf/cmn/xZ9i2WLo1wRewCsifixFeINl59y7akWkfsQ=
+	t=1721010067; cv=none; b=dNpUKOn0dPSVneMOxvfbMnPbpMRQHS3b6EsvWF9A+8TbPtu3M8WoO6TZlIYkztAlNBJ44n21Z8UNvInAdRt4nQiM5YwkOezzCAofG5nB+4g03t2I0c1dA3O9CLXonFo5F4QvIcVRAONIidhGVIozlzhZaEFKx7jrKbJX0/wfmC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721008090; c=relaxed/simple;
-	bh=6NBogB+15y8/cr5/SGFVD66tjydLDWAtv8bQFiwBn3Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MHmJPCopfGrKjsRVKvVU7CFoxx0adjlqHfkQRO/YYmp13uZ7LEOjhs3yEl7j4GQo+/Tm6gS5iQ/+ahBlkiSuMF4+BLZmMMAlrR6Sf2i52QTfEn+6uLiZkFPXvSISiyBcWZ11/2wGLoJ0pzYtIwZejCdvXaTKCugLegYCG1Iduas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Kl6xOXQQ; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1721010067; c=relaxed/simple;
+	bh=rcefzzYqvfPvMclZvpRsAmAmLokPfoE0S8KCmyX6qDQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IHymupz166UvOUjn8YXiydZSYf+lvRaP5t6Api2B7UNxEHmOyMdDv1jH2yPtQQdl92MXt+dUGmF9P2tLUkoZ6z6k3xYJ+msV4VdIH7CvuGg79z4GwNA3n62tB9GdateXkr3JG1jVAjap4rG6ScfyoYrf//ewLTJxtG0io64Cdfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Bmnb+5TB; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1721008081;
-	bh=BPaM86IV8DbjzzQhxMJepkxYYERbWk091giJrL2Zc9I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Kl6xOXQQU1NVZYq/orjR4IVXpmayif5cjiNsqPXSTYQZcnUe5EsLYBNVBXPB8oLPe
-	 dR7wmLECPPfX6gm2jrPI0V12Xr7bjdlbQD8vZo22YN4P2+yTawmJjZIGpn9aDHr+Ra
-	 DR6h43t0FUnrwAJvc2i/Mllb17IZ8TK3HhJix3WqJP6uCbDNj6R1zqrTT4dsNDTIrM
-	 UzoKHZs5hlbbJFiHiQFnHuYf3OcGhGuWEQY9nQvY6LF6rhUP4Vo3fC2SqWzg6HSehw
-	 tQOoKV8gi0lv3eLVvVqTlbmAhiAAcoIzV2IVvKugWnueO5R/Of6xYMP03WUdLdxHET
-	 HYVS7aVtuYuAQ==
+	s=201702; t=1721010061;
+	bh=wvT0CJPB0yLw+hllkbYKOiDylZDMHD9c1R7qQnPpDdw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Bmnb+5TBm9bK4bihiRA8l8LCf3Sbz6qmGqsWCNMHY0U+ve1PQ5+4O5eo9FVed5ACU
+	 AicIpnnp5kUw4jdIy8VUh42fvvXbo0xIzSWvKyGpHcyaLbcALMe435I3oC77bMbOhr
+	 gog4DiGa0EfjDwby8Wp4ZaC/shkIdRl5CkzXshO2BlB8YMCzQK1EQCWz1e7LjL7Brx
+	 acgFQAiS+RBe/3Tf9RBLULPVWbs3SnOzhX2gHSi6BKlSIe+BkmFaD2fR4apKtIqnsv
+	 uoAEXF4JdFPd6tNIyIeEtTly1zTSxR2N1X3W7XeHgI4PmqprpkqHcQzD5RTfwxGRhi
+	 HIX1uOu/1pVBw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WMlTF0cHNz4wbh;
-	Mon, 15 Jul 2024 11:48:00 +1000 (AEST)
-Date: Mon, 15 Jul 2024 11:47:59 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WMmCK37H7z4wbh;
+	Mon, 15 Jul 2024 12:21:01 +1000 (AEST)
+Date: Mon, 15 Jul 2024 12:21:00 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Anna Schumaker <Anna.Schumaker@Netapp.com>, Trond Myklebust
- <trondmy@gmail.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Christoph Hellwig <hch@lst.de>, Kairui Song <kasong@tencent.com>, NFS
- Mailing List <linux-nfs@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the nfs-anna tree with the
- mm-stable tree
-Message-ID: <20240715114759.16a86e78@canb.auug.org.au>
-In-Reply-To: <20240715105836.6d6e6e50@canb.auug.org.au>
-References: <20240715105836.6d6e6e50@canb.auug.org.au>
+To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
+ <johan.hedberg@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the bluetooth tree
+Message-ID: <20240715122100.1defde20@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gb.QN8J2+=7iLZbOJIgbFxI";
+Content-Type: multipart/signed; boundary="Sig_/3usN7rIjpT2jFBmL7STcsJQ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/gb.QN8J2+=7iLZbOJIgbFxI
+--Sig_/3usN7rIjpT2jFBmL7STcsJQ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 15 Jul 2024 10:58:36 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the fs-next tree got conflicts in:
->=20
->   fs/nfs/nfstrace.h
->   fs/nfs/write.c
->=20
-> between commit:
->=20
->   237d29075ca7 ("nfs: drop usage of folio_file_pos")
->=20
-> from the mm-stable tree and commit:
->=20
->   64568b27b2d2 ("nfs: pass explicit offset/count to trace events")
->=20
-> from the nfs-anna tree.
->=20
-> I fixed it up (for the nfstrace.h file I just used the latter, and see
-> below) and can carry the fix as necessary. This is now fixed as far as
-> linux-next is concerned, but any non trivial conflicts should be mentioned
-> to your upstream maintainer when your tree is submitted for merging.
-> You may also want to consider cooperating with the maintainer of the
-> conflicting tree to minimise any particularly complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc fs/nfs/write.c
-> index 3573cdc4b28f,680505d664f0..000000000000
-> --- a/fs/nfs/write.c
-> +++ b/fs/nfs/write.c
-> @@@ -279,9 -180,9 +180,9 @@@ static void nfs_grow_file(struct folio=20
->   	spin_lock(&inode->i_lock);
->   	i_size =3D i_size_read(inode);
->   	end_index =3D ((i_size - 1) >> folio_shift(folio)) << folio_order(foli=
-o);
-> - 	if (i_size > 0 && folio_index(folio) < end_index)
-> + 	if (i_size > 0 && folio->index < end_index)
->   		goto out;
->  -	end =3D folio_file_pos(folio) + (loff_t)offset + (loff_t)count;
->  +	end =3D folio_pos(folio) + (loff_t)offset + (loff_t)count;
->   	if (i_size >=3D end)
->   		goto out;
->   	trace_nfs_size_grow(inode, end);
-> @@@ -2073,8 -2062,8 +2062,8 @@@ int nfs_wb_folio_cancel(struct inode *i
->    */
->   int nfs_wb_folio(struct inode *inode, struct folio *folio)
->   {
->  -	loff_t range_start =3D folio_file_pos(folio);
->  +	loff_t range_start =3D folio_pos(folio);
-> - 	loff_t range_end =3D range_start + (loff_t)folio_size(folio) - 1;
-> + 	size_t len =3D folio_size(folio);
->   	struct writeback_control wbc =3D {
->   		.sync_mode =3D WB_SYNC_ALL,
->   		.nr_to_write =3D 0,
+Commits
 
-Due to commit
+  ead30f3a1bae ("power: pwrseq: add a driver for the PMU module on the QCom=
+ WCN chipsets")
+  e6491bb4ba98 ("power: sequencing: implement the pwrseq core")
 
-  564a2ee9f9f6 ("mm: remove page_file_offset and folio_file_pos")
-
-in the mm-stable tree, this also required the following merge fix patch:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 15 Jul 2024 11:23:30 +1000
-Subject: [PATCH] fixup for "nfs: pass explicit offset/count to trace events"
-
-interacting with commit
-
-  564a2ee9f9f6 ("mm: remove page_file_offset and folio_file_pos")
-
-from the mm-stable tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- fs/nfs/read.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/nfs/read.c b/fs/nfs/read.c
-index 6355a777e428..a6103333b666 100644
---- a/fs/nfs/read.c
-+++ b/fs/nfs/read.c
-@@ -367,7 +367,7 @@ static int nfs_do_read_folio(struct file *file, struct =
-folio *folio)
- int nfs_read_folio(struct file *file, struct folio *folio)
- {
- 	struct inode *inode =3D file_inode(file);
--	loff_t pos =3D folio_file_pos(folio);
-+	loff_t pos =3D folio_pos(folio);
- 	size_t len =3D folio_size(folio);
- 	int ret;
-=20
---=20
-2.43.0
+are missing a Signed-off-by from their committers.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gb.QN8J2+=7iLZbOJIgbFxI
+--Sig_/3usN7rIjpT2jFBmL7STcsJQ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaUf88ACgkQAVBC80lX
-0GwkUQf9E6IG7ZpMGdegQzcym8LVON/5In03s4669LGHAG0PkVnWmdFF7Lfrduwv
-dFjIeUyeodVDCgGSxPGT/vaWgpu0zyj9h7vkPfw3g7PGH6ddmf5/cFgQiSqmUEsv
-ZFCPdL3HJxa5uJ1K6Ec00xgiXxH7i437U5PKi1g3caJk2OZfbQFti5Z6HrXPSggK
-8/ltBwKkz+SmiKDQ7RPl3Z4EoaynRdPdE13CxbamzUc6IjxsAezoXzzBCLy1HzOz
-wTz7yu0O5YZab8IOmUWhHgyKsoxKF/yAnzj7/AleUOP+o5HbKdR7LApeEuJsSHQN
-fG1Nwo+HZAKg1xYd72NLZCkiOMcHjQ==
-=pZGy
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaUh4wACgkQAVBC80lX
+0Gx42wf9Fd7ugz0rdBU8NwGx2fGS5cjDzpOtJuAigo5np1nS8JI7FXYV6w4lGAS+
+No5rPMfm5LK6wPMgnwsKWnQ9fNyRpiCLtSdOVUmFx1OhM/C4cYOXUmiwawQcMO8/
+T77BOGYCw74tG1qSPr8+iuj51h1pyibvbio9P1Q+FeBB3W2cCpflsdwAiepjiYaY
+qSyUX5MaMZISPQfLXwktazYI0nxEPOHWlb2QXNTjgxFHoTVq7/AslOU/PzqKgw15
+k+i6D+TdRMv2a/6FzD37cT18d3Hr+CHrPvSS5wQ6gZ9OPaNYxOvgyB95Rb8cJTW/
+3h3RXvownnEfftQNTylUWPgd2L+9BA==
+=rWEZ
 -----END PGP SIGNATURE-----
 
---Sig_/gb.QN8J2+=7iLZbOJIgbFxI--
+--Sig_/3usN7rIjpT2jFBmL7STcsJQ--
 

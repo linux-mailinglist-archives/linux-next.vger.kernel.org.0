@@ -1,90 +1,90 @@
-Return-Path: <linux-next+bounces-3004-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3005-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2337D930D68
-	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 07:12:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F01D930DA7
+	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 07:40:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 484EF1C20DDB
-	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 05:12:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FDC81F2116F
+	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 05:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 371E5136E17;
-	Mon, 15 Jul 2024 05:12:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F31A713A252;
+	Mon, 15 Jul 2024 05:40:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="V1GdjuzB"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="n3mKhjJu"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D30A219E0;
-	Mon, 15 Jul 2024 05:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152A049647;
+	Mon, 15 Jul 2024 05:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721020351; cv=none; b=pB21t6Yj8W09kbdJTEgDYQuPgI9DKlPYOlPnZJhfQoYVVS7dRpEOQ6t/0+h8CgqQMkyf+fJF6s6+g5nBZyPvILgenkwHZ1oMm5AJaLR58WXF6ZOtzhhI5vbMTf02XhlbAXiGjVnd17WgSAld0JMt/aHbPSOcJ4igfubFmoRoC8k=
+	t=1721022052; cv=none; b=hbCzZrecBix9IRvIfEzuXTSYvaRAVGOuGtDCDAVhENkwwKgTiw/YqfPOjfCgTIiyGrPikKFCIetJ5ocHwJesCg/rUkBb0H3qcEQ5qDn/j+FK/g5NwhntP+u/1wq0cA1xUuo15dRGZAtxAdt71VrqgpQb+dwWXS4xd+TJtJ1VZbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721020351; c=relaxed/simple;
-	bh=s4smvUtfjge8MiG+WBcMp7zbES6h+Q60YGHe3IhFZyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iip9ISiDRzarmU1Bnorb3sfs/RQJ+P1oMssNJjevV0u2yES2jbmcRrUPmgCFhQZ0mvHPzh6baqU2BBacKtKZnLQLaVyzPBPUWELpBuG58yWDcN0iV8vIHvhxtbBjMOkLNqiF8L/JwE1Qp1kY/VNUgLXS/N8/ZkcRlx+7Og5y8B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=V1GdjuzB; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1721022052; c=relaxed/simple;
+	bh=Z4BY5bdw1yPNxSvUxgu1QhUmZBflIXg9+tUmE+Lreyg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eD2+L8g9veERpWCuZd7//txPaN3HYtr5eytCZ73oNpzSAAHGGLTk9n+9Wa6P7X/5fWuCCwo5C6lJksehyN1eXB2tziIDDDL/U0ya/u/jiXOll6LV3Kjuuu/Of4dV194qotAiRag7UIlDxFZ78VTyYNyUkNXlZMsMN8meVFl08lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=n3mKhjJu; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1721020344;
-	bh=+dnRGsvrizd4gNnE0mwBEQyLtJcJvW4ANThyhxWhe3Y=;
+	s=201702; t=1721022046;
+	bh=DMitF8soCoWuK+OB/uxZXPf5xQLPYXiprhb2r5M6oww=;
 	h=Date:From:To:Cc:Subject:From;
-	b=V1GdjuzBshnDbVFb2jeFM8v7C5+eVjAAfiy7zOzOiZ4ar4jqn5woI9m2Yzr8pumzH
-	 /m/EtIF1i8Dvupg7OrxBVvoUHy321sRC1qHd8Fds52EeJfmeKP3LHAYm/heGSlBvJq
-	 PFnBqO3KGe07v+Yok7BVKNXpHN3Qf/uO6L60y5YnwRiFub9upqtBKoBf/u3JFaYRhK
-	 BWNR84dvV1yCgJldokmeTOqCPHUTn4k9fTWeDSpfZVOeKMjQc/zmAZvgVBwMmIJ9mz
-	 PADIhc83Eer+6mkQrm7H8cRw5i80F4Tf16tOnYkphr1W3VvOdm4O7kWn5S+kpkoyNu
-	 St1ImlWijFCbQ==
+	b=n3mKhjJufXvXIp0hi4cVGNCBzM9dpmTAdxxPXOZzPc4rchvLQHM3hcRkPRTxGvNx4
+	 uGD15dSDB1xLj4veXPlJL2oBbypLr2NBy8ymvTiDdpSWGlT72YF4Z/YkMEtr70ppyg
+	 QPFZJCcMoTm2EdPUh4XzdP29xrNpZ8x/vMD55TLezUifwdMszrUta6xsTEQl8AwgLu
+	 dCTl5kLBXxnxZsn/dETV4SwYiwZU5020qm8ptDe8MneeLzAJjjw2XcbvE3hSONV1Ee
+	 cbjqIgLnYBwuPZinVlmOrq7mp/7OC1mObKKEXQekxtp6RlSy4zo2n5hoXC0lnTZMib
+	 lmnIg/ANKSvqA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WMr14098Lz4x04;
-	Mon, 15 Jul 2024 15:12:23 +1000 (AEST)
-Date: Mon, 15 Jul 2024 15:12:22 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WMrdp31gVz4wbh;
+	Mon, 15 Jul 2024 15:40:46 +1000 (AEST)
+Date: Mon, 15 Jul 2024 15:40:45 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kishon Vijay Abraham I <kishon@kernel.org>, Vinod Koul
- <vkoul@kernel.org>, David Miller <davem@davemloft.net>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: linux-next: manual merge of the phy-next tree with the net-next
- tree
-Message-ID: <20240715151222.5131118f@canb.auug.org.au>
+To: "Michael S. Tsirkin" <mst@redhat.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Nithin Dabilpuram
+ <ndabilpuram@marvell.com>, Shijith Thotton <sthotton@marvell.com>, Srujana
+ Challa <schalla@marvell.com>, Vamsi Attunuru <vattunuru@marvell.com>
+Subject: linux-next: manual merge of the vhost tree with the char-misc tree
+Message-ID: <20240715154045.0f319b32@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EpXU1WFtm6i3v9buMom2pnc";
+Content-Type: multipart/signed; boundary="Sig_/cMdl2pQQbD1nLSFBcq8TbCB";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/EpXU1WFtm6i3v9buMom2pnc
+--Sig_/cMdl2pQQbD1nLSFBcq8TbCB
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the phy-next tree got a conflict in:
+Today's linux-next merge of the vhost tree got a conflict in:
 
   MAINTAINERS
 
 between commit:
 
-  23020f049327 ("net: airoha: Introduce ethernet support for EN7581 SoC")
+  5f67eef6dff3 ("misc: mrvl-cn10k-dpi: add Octeon CN10K DPI administrative =
+driver")
 
-from the net-next tree and commit:
+from the char-misc tree and commit:
 
-  d7d2818b9383 ("phy: airoha: Add PCIe PHY driver for EN7581 SoC.")
+  8b6c724cdab8 ("virtio: vdpa: vDPA driver for Marvell OCTEON DPU devices")
 
-from the phy-next tree.
+from the vhost tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -98,49 +98,42 @@ Cheers,
 Stephen Rothwell
 
 diff --cc MAINTAINERS
-index d739d07fb234,269c2144bedb..000000000000
+index eb7433a8ce3d,8eefd032c87e..000000000000
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@@ -693,15 -682,14 +693,23 @@@ S:	Supporte
-  F:	fs/aio.c
-  F:	include/linux/*aio*.h
+@@@ -13642,11 -13459,11 +13642,16 @@@ S:	Supporte
+  F:	Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+  F:	drivers/mmc/host/sdhci-xenon*
  =20
- +AIROHA ETHERNET DRIVER
- +M:	Lorenzo Bianconi <lorenzo@kernel.org>
- +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- +L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
- +L:	netdev@vger.kernel.org
- +S:	Maintained
- +F:	Documentation/devicetree/bindings/net/airoha,en7581-eth.yaml
- +F:	drivers/net/ethernet/mediatek/airoha_eth.c
+ +MARVELL OCTEON CN10K DPI DRIVER
+ +M:	Vamsi Attunuru <vattunuru@marvell.com>
+ +S:	Supported
+ +F:	drivers/misc/mrvl_cn10k_dpi.c
  +
-+ AIROHA PCIE PHY DRIVER
-+ M:	Lorenzo Bianconi <lorenzo@kernel.org>
-+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+ S:	Maintained
-+ F:	Documentation/devicetree/bindings/phy/airoha,en7581-pcie-phy.yaml
-+ F:	drivers/phy/phy-airoha-pcie-regs.h
-+ F:	drivers/phy/phy-airoha-pcie.c
++ MARVELL OCTEON ENDPOINT VIRTIO DATA PATH ACCELERATOR
++ R:	schalla@marvell.com
++ R:	vattunuru@marvell.com
++ F:	drivers/vdpa/octeon_ep/
 +=20
-  AIROHA SPI SNFI DRIVER
-  M:	Lorenzo Bianconi <lorenzo@kernel.org>
-  M:	Ray Liu <ray.liu@airoha.com>
+  MATROX FRAMEBUFFER DRIVER
+  L:	linux-fbdev@vger.kernel.org
+  S:	Orphan
 
---Sig_/EpXU1WFtm6i3v9buMom2pnc
+--Sig_/cMdl2pQQbD1nLSFBcq8TbCB
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaUr7YACgkQAVBC80lX
-0GyOiAgAlx0bJv0NrcG57WqQx55lbwgRIy9J1QY2SbLVkdPtaL2Vm5+dudF0d0xG
-gsRt7emKr/awlcCYHO65dffD9TKJbgo8x/Xh0eA2ef0eW9K291k2LTq3I1fahUvS
-47tt1Qpb3gIkR6tJyTlpVDwsEMRG6Qcww/nuioXTV7R9aElY1nBNQCNNumXmpswW
-IJQ4yvU58eqyINgxoGOvK07H4CKQO9zTAz7p1m09yeK+TR+ovMAg5BRKH6BMDjFO
-+IAClnS9iLsAmQR9ktwmAvFVKULNDeUQtDIdtgO/UutGizIyKA7to6Vs/h5Zmf9+
-QdOyW6clEyUnyBPV8d0s5aQ1ooWFXw==
-=KOWB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaUtl0ACgkQAVBC80lX
+0Gz4+gf+LBiS+qLB9DuLKlFbkkkzWjfow5Ya+e6c/2ZSTcdgkC2VQfK5/0nPpFUJ
+V346TDg65P6WzU0IOkxjXCPdNdEEmtOc+95v/ZaJcmuXQQVnZlYfx5HZ/uWvHUYX
+5xi8ZPYIVzgK1qZ3Af/dlz03RWL3yZyYNjMXRvtN5+ZCKs2m4asyX0r/BlZcUw8S
+fKz1nL3xQWHpoIA9KbqG7UT/MifrQ/dVxY/fQnOnT6sgY0gnXLMTJWfqaajKcStf
+8HIRQ7CP5zZMAaLdOCUVOpqqQiOIHXZwOL7xE+Urn0h2JsnOidFzgyf69R/nnHjd
+N5QQ60/nwduXJylL55GTEVa6wSleGg==
+=lMYp
 -----END PGP SIGNATURE-----
 
---Sig_/EpXU1WFtm6i3v9buMom2pnc--
+--Sig_/cMdl2pQQbD1nLSFBcq8TbCB--
 

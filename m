@@ -1,60 +1,57 @@
-Return-Path: <linux-next+bounces-3007-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3008-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2F04930DEC
-	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 08:26:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3506930E66
+	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 09:01:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EC31281474
-	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 06:26:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E36B31C21033
+	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 07:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E891A136982;
-	Mon, 15 Jul 2024 06:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E076C282FA;
+	Mon, 15 Jul 2024 07:00:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZsAcvM9i"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hJbpwAS5"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8341E89C;
-	Mon, 15 Jul 2024 06:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EA84C9A;
+	Mon, 15 Jul 2024 07:00:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721024781; cv=none; b=EYp5/lNkqVygXS9wu5KstN3GTvm70IFAjZOLL2QajIb4OEaZbam5cwPmEsRZRUGoZidrGLHnU+t2ExP/qRg36qdwMTXiodJjaIqSjT6g3o7dIGYPlpLe6n6yN2XobLpJj1YEenIAZSel8IbZdTmI4m7hKrl1J464gBhDuQzru8w=
+	t=1721026852; cv=none; b=FPNr1vPbhQAn0L3PnoD1bzopzTsMD28bFH0AxRkWlZ58DIryxZrdQ/2P3F/ZirbwSt4puq1673mJIfK7Olz08dwvl6BgU8hN+ebbX9FiCTojycsf/KDg+2v2PiRR8+jo5fZf+nO3gM9g7thk4dcMxi8/9Pu/pyxu6o6QCBVv17Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721024781; c=relaxed/simple;
-	bh=BH6AA3UTbnV/AHbCySuEini3oZ1Z1Oj3VsOPQeCnlyM=;
+	s=arc-20240116; t=1721026852; c=relaxed/simple;
+	bh=XtstTCMFqBcm4zC7Qw0KVNttl7vukKGUuSVNNtMkUjM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MLA5IJ2gjEJV/ssdT69U8WAqstgy+VmTLWgDPgO8yFqpCUCO/jR93IrLZ6r9xsjV9c5SsI1APzjla840nePsKsCXJdGWyG5U2oStkzxGR7FAZdrmS2O/4AT6uycOkhzQk3PcvBDbmRsxH8Bdyd342FTdGQP6OUyv+WneLhgbTzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZsAcvM9i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81710C4AF0B;
-	Mon, 15 Jul 2024 06:26:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721024781;
-	bh=BH6AA3UTbnV/AHbCySuEini3oZ1Z1Oj3VsOPQeCnlyM=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=qXp8vb4OQTvZYXvxxUYFP9rQRzu0cNylffAMDPv4LGH0f70WVFccj96ccUD0F6vLsDzVzGS3/ZxJshnsO6TJ0eP7nZvYoo0SN0Fo+2anH4y0JQmwBngYB33w3wXuKyl0JT1qcE8RpICxNPBkAm8YI+Dpb1FPo2/9wLQDSz+BFr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hJbpwAS5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D14ACC4AF0B;
+	Mon, 15 Jul 2024 07:00:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1721026852;
+	bh=XtstTCMFqBcm4zC7Qw0KVNttl7vukKGUuSVNNtMkUjM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZsAcvM9i/7iz+kaUnKc9cwhG/Ls+XznJEpTelyYICVvJ05Xh45cBOIp6TKVXyXYG2
-	 /7vsQVFs+J/lQ+wpMSjWXnBCBUzjVpZ+FZPyHpL7zXYaA9vDzNBJm6oFHx8cOKnHIf
-	 e2JUab11dDeslR9F+JDG7uAXUSr7GJD/VBoA2kmU0jOZglpsqO6H/IJiwbOrplwLtQ
-	 IBhz66/qPpDaMoZov97QhTXjPBFh3rfUMNttqS0EHApwaZ074BoSyQ8yqIMf73JsM8
-	 xw6QhTvPA/CzItIEhznnL6mK9zqi2w7kBmAifZlbBEfq6IUlhbh64u/WR2poROpBvI
-	 IgYpigXSa+bUQ==
-Date: Mon, 15 Jul 2024 11:56:17 +0530
-From: Vinod Koul <vkoul@kernel.org>
+	b=hJbpwAS5a4p3duz6g6+VW/Rd1ZDdB6GFpVqs9Pql4k6kPzNf9pVQ/auzf9D+0lyft
+	 aSDt9h3y/x5yQfJrxFpl7EEFMYhT5JOTvpY5yD/TVK7e1mLNHqMdZqPhXCLrXBfUTo
+	 eQFicsWOsxB9s/ZSOkkTLgJs4Z4uOxj3aTYXBcOs=
+Date: Mon, 15 Jul 2024 09:00:49 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
-	David Miller <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Networking <netdev@vger.kernel.org>,
+Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: Re: linux-next: manual merge of the phy-next tree with the net-next
+	Nithin Dabilpuram <ndabilpuram@marvell.com>,
+	Shijith Thotton <sthotton@marvell.com>,
+	Srujana Challa <schalla@marvell.com>,
+	Vamsi Attunuru <vattunuru@marvell.com>
+Subject: Re: linux-next: manual merge of the vhost tree with the char-misc
  tree
-Message-ID: <ZpTBCUXx5e24izzR@matsya>
-References: <20240715151222.5131118f@canb.auug.org.au>
+Message-ID: <2024071543-caloric-disbelief-0ca2@gregkh>
+References: <20240715154045.0f319b32@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -63,29 +60,24 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240715151222.5131118f@canb.auug.org.au>
+In-Reply-To: <20240715154045.0f319b32@canb.auug.org.au>
 
-Hi Stephen,
-
-On 15-07-24, 15:12, Stephen Rothwell wrote:
+On Mon, Jul 15, 2024 at 03:40:45PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the phy-next tree got a conflict in:
+> Today's linux-next merge of the vhost tree got a conflict in:
 > 
 >   MAINTAINERS
 > 
 > between commit:
 > 
->   23020f049327 ("net: airoha: Introduce ethernet support for EN7581 SoC")
+>   5f67eef6dff3 ("misc: mrvl-cn10k-dpi: add Octeon CN10K DPI administrative driver")
 > 
-> from the net-next tree and commit:
+> from the char-misc tree and commit:
 > 
->   d7d2818b9383 ("phy: airoha: Add PCIe PHY driver for EN7581 SoC.")
+>   8b6c724cdab8 ("virtio: vdpa: vDPA driver for Marvell OCTEON DPU devices")
 > 
-> from the phy-next tree.
-
-lgtm, thanks for letting us know
-
+> from the vhost tree.
 > 
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -99,36 +91,30 @@ lgtm, thanks for letting us know
 > Stephen Rothwell
 > 
 > diff --cc MAINTAINERS
-> index d739d07fb234,269c2144bedb..000000000000
+> index eb7433a8ce3d,8eefd032c87e..000000000000
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@@ -693,15 -682,14 +693,23 @@@ S:	Supporte
->   F:	fs/aio.c
->   F:	include/linux/*aio*.h
+> @@@ -13642,11 -13459,11 +13642,16 @@@ S:	Supporte
+>   F:	Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+>   F:	drivers/mmc/host/sdhci-xenon*
 >   
->  +AIROHA ETHERNET DRIVER
->  +M:	Lorenzo Bianconi <lorenzo@kernel.org>
->  +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  +L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
->  +L:	netdev@vger.kernel.org
->  +S:	Maintained
->  +F:	Documentation/devicetree/bindings/net/airoha,en7581-eth.yaml
->  +F:	drivers/net/ethernet/mediatek/airoha_eth.c
+>  +MARVELL OCTEON CN10K DPI DRIVER
+>  +M:	Vamsi Attunuru <vattunuru@marvell.com>
+>  +S:	Supported
+>  +F:	drivers/misc/mrvl_cn10k_dpi.c
 >  +
-> + AIROHA PCIE PHY DRIVER
-> + M:	Lorenzo Bianconi <lorenzo@kernel.org>
-> + L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> + S:	Maintained
-> + F:	Documentation/devicetree/bindings/phy/airoha,en7581-pcie-phy.yaml
-> + F:	drivers/phy/phy-airoha-pcie-regs.h
-> + F:	drivers/phy/phy-airoha-pcie.c
+> + MARVELL OCTEON ENDPOINT VIRTIO DATA PATH ACCELERATOR
+> + R:	schalla@marvell.com
+> + R:	vattunuru@marvell.com
+> + F:	drivers/vdpa/octeon_ep/
 > + 
->   AIROHA SPI SNFI DRIVER
->   M:	Lorenzo Bianconi <lorenzo@kernel.org>
->   M:	Ray Liu <ray.liu@airoha.com>
+>   MATROX FRAMEBUFFER DRIVER
+>   L:	linux-fbdev@vger.kernel.org
+>   S:	Orphan
 
 
 
--- 
-~Vinod
+Looks good, thanks!
+
+greg k-h
 

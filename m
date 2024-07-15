@@ -1,166 +1,170 @@
-Return-Path: <linux-next+bounces-3017-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3018-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5691493176E
-	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 17:17:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DA419318FC
+	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 19:11:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D014281ED3
-	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 15:17:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5003B1C21305
+	for <lists+linux-next@lfdr.de>; Mon, 15 Jul 2024 17:11:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4200B18F2FE;
-	Mon, 15 Jul 2024 15:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E8D3AC0D;
+	Mon, 15 Jul 2024 17:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2eczL/Q"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="FLvMxbCq"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D3318F2F6;
-	Mon, 15 Jul 2024 15:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE273B7A8
+	for <linux-next@vger.kernel.org>; Mon, 15 Jul 2024 17:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721056637; cv=none; b=iBMtTBBmnUP0mLs3x2/RRoquCyOClhnSEW5IdnU9vkExY4hoGyyNeIAPBCL8+z8nXLa2J5YYS1cMfRzW7uMjoisxElJ6ni+ylu30T4Y1qcBmOvZtMEYSf6uMPUct/GQjDsh9d9+FXe3HymMr4GbJwX9GMIq8sexPHWq9A6NGDYA=
+	t=1721063499; cv=none; b=HXn4R8gS3U2AQygeS085cNvxU+RIt7G8H2vyBO/JauMF1eJvv219GrvdSaF1FnRR5PdtBnT6E0IITvzFddcRblt0MjeJj9Wkl0bklc/jYQkE+xs5zSXbB34EeIEyfLCCwLFkFalvaf6d4cS70rIcsJggzL8z2ZG70io4dQA9758=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721056637; c=relaxed/simple;
-	bh=SIOvuXasD2Ku5vaG8bCxpnsgoWs+peqYoCOdAGQ44NQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pgijD1zvQXgyLQR1tG3L5OAsRv//HtaAGZXvleLEHP6cYrsQXRIxLehcC2WHyoRW9rB91Ikvrl+BxOLsdcRQbjUOKBIOE8hWJOCyUFsnaPWq8rULyJV2R5HbK/9l+c10tq+KlLJeyfRBZYixhZAdOnLuJb7Lc3DEyxM/T/bZ92I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2eczL/Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30353C32782;
-	Mon, 15 Jul 2024 15:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721056636;
-	bh=SIOvuXasD2Ku5vaG8bCxpnsgoWs+peqYoCOdAGQ44NQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F2eczL/Qs0RNZTJuYSG2IFtar5lB1VfQIb4GWvAa7ToObZ+6AGN6OAT+lIhrqC2Vh
-	 /+HFO2t2F+kKIzAVCcB3KdZ3GhUSMa0rY9dx6OSX6ACXIf8U/X8KqBz4oTBmAdBMOX
-	 GRI+3aFIZiKGm+ScgKXQ1g9cNX6ohTrTaG+mOBx1oStGtgQRqc2yCSflpHgqgEc5kC
-	 Gd1FiaweoqndjLT2OynLEjRVKI4FvDgyP4EMZArQIcuxM7I81qRrgBdr6sva6M8fpo
-	 v75P0aJRwiiqn2V0LNj/4Gj5sDIBrqaOn0nf5UaTlT4ZqY7Sb4kOBecmueu9OwV64z
-	 GLN/Zq48DEAxA==
-Date: Mon, 15 Jul 2024 17:17:12 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Vinod Koul <vkoul@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	David Miller <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Networking <netdev@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the phy-next tree with the net-next
- tree
-Message-ID: <ZpU9eOsMq_ogA7Nr@lore-desk>
-References: <20240715151222.5131118f@canb.auug.org.au>
- <ZpTBCUXx5e24izzR@matsya>
+	s=arc-20240116; t=1721063499; c=relaxed/simple;
+	bh=BcJbKmVKSGDM/WHI+1p7JiS2U0qfJkD2DUYs97sj0vk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QtOR1vJ1zAUfrLde0+rI1Ul0+Dd3yf0aD8ok6T9bGU5qmhd3Fe//XVdIzLcuchPtdDJ3Brz8ZZm4uyqCoBSA2zpIdrVRPRh6t9i9cJXeky7Fbm21PWU1x2qV6nqqy06ptx/u0iITpidhRM2wlSQaFKI8ax39cSLR9IKcb3dVP1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=FLvMxbCq; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-367963ea053so3808529f8f.2
+        for <linux-next@vger.kernel.org>; Mon, 15 Jul 2024 10:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1721063495; x=1721668295; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qSOszyLr52vvd3J2gSBMUHz1uDskXOJN7E3GeY5OGHo=;
+        b=FLvMxbCqDXEVQPhKeJwbYewIZzW2D2mFdr4/X6waE/6LEDoQY5N9oN0RhEkFeqvTrP
+         A7bSxblLMfmcEg+ALIWbJslMGchD5lj5RvK9XEiXumVL4bvmMyf5Hjx+igCagsX9Vb8e
+         OoZXhUbBG10ZMcFh8NvwWv2M8eiOYOvWw3MzC+m5f0VSrnu1Tc7BVkA/jDgZ+gDFFQ0A
+         8RRD5uxOXC4wCe2QedSNZJnp7Bvr9xuIi+Se0Uo4DCkXlC6n5zTkijttVnwuakGjZOAT
+         XeF5XP5fo/lXOO1zDs8DNiP2NowiC7trZnsqGuQfyx9MB1XEOiYFtWIEnSGkkzEcwZOK
+         u8hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721063495; x=1721668295;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qSOszyLr52vvd3J2gSBMUHz1uDskXOJN7E3GeY5OGHo=;
+        b=jVOcDF6ybaD82mG4ZEFyzN74MFErUX+d4zJ/XInIlMLuvPjsBheQcW0bYotIJ6My9D
+         ZY0cGiz8VmjKhXTKSFHEwT+ElN17f/YoYuWYVDhMj4Qcq/DTgjtJ4CEfpx2YPx6PfHOA
+         9ghkmHGP5K125LJeoqIxHGbUXXOyvIuC5PKFPNyTziTgfXCxNKEy0llo8ug/klzovvYy
+         +7qwyjKRr0THcTczywf4t1gJlXCQzYqYvML52U08f2hrITe9ZuteYxo4H5BAc1NnMHyX
+         2bHqOCNoeJVY5sZ4zrxO5bHZm1mL8ENE8Gzd1uMSfSUqhusQjkOKNN8GbM9+XWH5ZjEB
+         vVjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWbrnz+K/5JPIDni9PJS6gbX+cLl6E9L4h2fcE1v/sy1cz0hjTKWjRvPSXCEXHfzBFjzG16wPhcojfiRtR1WVGcPFL2HKbH6B3bLg==
+X-Gm-Message-State: AOJu0Yw06ymuU+KX1ZWQHtfbuE2QLb4wmMoTNdBz47Ldc7t1flXoVmH6
+	xIbJGXyBIjDu5qY8Gi8MRtRNJWbmsQqjqGt70TjJaMTBKO1+nzKiO7AMADXcYJU=
+X-Google-Smtp-Source: AGHT+IHOHPisiK8XidFLa4CeSrrPquV4Tt/J8vlYz8N+N7fTL2d+kepabCLUgdbWLlDd4HajJwchgw==
+X-Received: by 2002:adf:f848:0:b0:367:957d:b46d with SMTP id ffacd0b85a97d-368240c1d04mr276813f8f.66.1721063494905;
+        Mon, 15 Jul 2024 10:11:34 -0700 (PDT)
+Received: from [192.168.1.94] (21.31.102.84.rev.sfr.net. [84.102.31.21])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3680dab3f2esm6950148f8f.18.2024.07.15.10.11.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Jul 2024 10:11:34 -0700 (PDT)
+Message-ID: <48e7b828-77f1-4ff3-9ff2-cdb563c14878@baylibre.com>
+Date: Mon, 15 Jul 2024 19:11:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7NU3L9KF/lDLpv0p"
-Content-Disposition: inline
-In-Reply-To: <ZpTBCUXx5e24izzR@matsya>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the mediatek tree
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Mark Brown <broonie@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Nicolas Pitre <npitre@baylibre.com>,
+ "khilman@baylibre.com" <khilman@baylibre.com>
+References: <ZnBn-vSj-ssrJFr2@sirena.org.uk>
+ <01f2ee94-f8b0-449c-aa19-3ee38a2e36a1@baylibre.com>
+ <d87b7376-5ba2-4810-90cb-76648d4a8080@kernel.org>
+ <be5a8b12-b042-48cc-9508-759a2a285a8b@kernel.org>
+ <99b7f55f-2909-450f-88ce-8cbe8f41c7f8@baylibre.com>
+ <9674d79f-83c0-44bf-bcf0-e78f8bdbfbd3@linaro.org>
+ <ebd65254-c0bb-4c07-810a-e46ba7e0b929@kernel.org>
+Content-Language: en-US
+From: Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <ebd65254-c0bb-4c07-810a-e46ba7e0b929@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 6/19/24 09:40, AngeloGioacchino Del Regno wrote:
+> Il 18/06/24 20:03, Daniel Lezcano ha scritto:
+>> On 18/06/2024 18:45, Julien Panis wrote:
+>>> On 6/18/24 12:20, AngeloGioacchino Del Regno wrote:
+>>>> Il 18/06/24 12:03, AngeloGioacchino Del Regno ha scritto:
+>>>>> Il 18/06/24 09:49, Julien Panis ha scritto:
+>>>>>> On 6/17/24 18:44, Mark Brown wrote:
+>>>>>>> Hi all,
+>>>>>>>
+>>>>>>> After merging the mediatek tree, today's linux-next build (arm64
+>>>>>>> defconfig) failed like this:
+>>>>>>>
+>>>>>>> /tmp/next/build/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-display.dtsi:113.6-121.3: 
+>>>>>>> Warning (graph_port): /fragment@4/__overlay__: graph port node name should be 'port'
+>>>>>>> Error: /tmp/next/build/arch/arm64/boot/dts/mediatek/mt8186.dtsi:2399.29-30 syntax error
+>>>>>>> FATAL ERROR: Unable to parse input tree
+>>>>>>> make[4]: *** [/tmp/next/build/scripts/Makefile.lib:431: 
+>>>>>>> arch/arm64/boot/dts/mediatek/mt8186-corsola-magneton-sku393216.dtb] Error 1
+>>>>>>>
+>>>>>>> Caused by commit
+>>>>>>>
+>>>>>>>    d7c1bde38bf37a5 ("arm64: dts: mediatek: mt8186: add default thermal zones")
+>>>>>>>
+>>>>>>> I have used the last version of the mediatek tree from 20240613 instead.
+>>>>>>
+>>>>>> Hello Mark,
+>>>>>>
+>>>>>> Here is the explanation:
+>>>>>> https://lore.kernel.org/all/71d53ff6-fdae-440d-b60d-3ae6f0c881d9@baylibre.com/
+>>>>>> https://lore.kernel.org/all/6d9e0f19-9851-4f23-a8b8-6acc82ae7a3d@baylibre.com/
+>>>>>>
+>>>>>> For some reason, the 2 first commits of the series were not applied
+>>>>>> with the dts. These commits are needed because they contain some
+>>>>>> definitions used by the dts.
+>>>>>>
+>>>>>> Julien
+>>>>>
+>>>>> I'm not sure how should I proceed here.
+>>>>>
+>>>>
+>>>> Reiterating, I'm sure how should I proceed.
+>>>>
+>>>> I'm removing those patches from mediatek for-next until further notice.
+>>>>
+>>>> Regards,
+>>>> Angelo
+>>>
+>>> Just for my information: Should we just wait for another maintainer
+>>> to pick the 2 missing patches ? Who is in charge of doing it ?
+>>
+>> I've picked the 2 first patches but they are going through the validation process through our CI. 
+>> They will be available in a couple of days in linux-next.
+>>
+>> If you want me to drop them and let them go through the Mediatek tree, just let me know.
+>>
+>
+> Thanks but no, thanks :-)
+>
+> Please, keep them in the thermal trees where they belong.
+> I will adjust accordingly.
+>
+> Cheers,
+> Angelo
 
---7NU3L9KF/lDLpv0p
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello Angelo,
 
-> Hi Stephen,
->=20
-> On 15-07-24, 15:12, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Today's linux-next merge of the phy-next tree got a conflict in:
-> >=20
-> >   MAINTAINERS
-> >=20
-> > between commit:
-> >=20
-> >   23020f049327 ("net: airoha: Introduce ethernet support for EN7581 SoC=
-")
-> >=20
-> > from the net-next tree and commit:
-> >=20
-> >   d7d2818b9383 ("phy: airoha: Add PCIe PHY driver for EN7581 SoC.")
-> >=20
-> > from the phy-next tree.
->=20
-> lgtm, thanks for letting us know
+AFAICS, the dt-bindings patches are now in v6.10.
+Would it be possible to re-apply the dts patches please ?
 
-Hi Stephen,
-
-LGTM as well. I forgot to mention this conflict, sorry for that.
-
-Regards,
-Lorenzo
-
->=20
-> >=20
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >=20
-> > --=20
-> > Cheers,
-> > Stephen Rothwell
-> >=20
-> > diff --cc MAINTAINERS
-> > index d739d07fb234,269c2144bedb..000000000000
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@@ -693,15 -682,14 +693,23 @@@ S:	Supporte
-> >   F:	fs/aio.c
-> >   F:	include/linux/*aio*.h
-> >  =20
-> >  +AIROHA ETHERNET DRIVER
-> >  +M:	Lorenzo Bianconi <lorenzo@kernel.org>
-> >  +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscriber=
-s)
-> >  +L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
-> >  +L:	netdev@vger.kernel.org
-> >  +S:	Maintained
-> >  +F:	Documentation/devicetree/bindings/net/airoha,en7581-eth.yaml
-> >  +F:	drivers/net/ethernet/mediatek/airoha_eth.c
-> >  +
-> > + AIROHA PCIE PHY DRIVER
-> > + M:	Lorenzo Bianconi <lorenzo@kernel.org>
-> > + L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscriber=
-s)
-> > + S:	Maintained
-> > + F:	Documentation/devicetree/bindings/phy/airoha,en7581-pcie-phy.yaml
-> > + F:	drivers/phy/phy-airoha-pcie-regs.h
-> > + F:	drivers/phy/phy-airoha-pcie.c
-> > +=20
-> >   AIROHA SPI SNFI DRIVER
-> >   M:	Lorenzo Bianconi <lorenzo@kernel.org>
-> >   M:	Ray Liu <ray.liu@airoha.com>
->=20
->=20
->=20
-> --=20
-> ~Vinod
-
---7NU3L9KF/lDLpv0p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZpU9eAAKCRA6cBh0uS2t
-rPtOAQDrCHibxn8g7lD/GZw/vM0OmS+HGcrIpsepQ/Ie1Fe+cgD+I8Sn6vNAbrds
-RmuN5pcMP2TYqDn8VWGwCfdGqYkwkQE=
-=24iA
------END PGP SIGNATURE-----
-
---7NU3L9KF/lDLpv0p--
+Julien
 

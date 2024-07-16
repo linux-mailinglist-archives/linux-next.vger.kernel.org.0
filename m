@@ -1,149 +1,184 @@
-Return-Path: <linux-next+bounces-3025-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3026-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB87093200A
-	for <lists+linux-next@lfdr.de>; Tue, 16 Jul 2024 07:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1DBD932073
+	for <lists+linux-next@lfdr.de>; Tue, 16 Jul 2024 08:34:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76B902833F6
-	for <lists+linux-next@lfdr.de>; Tue, 16 Jul 2024 05:28:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FA2D281D6F
+	for <lists+linux-next@lfdr.de>; Tue, 16 Jul 2024 06:34:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D526E552;
-	Tue, 16 Jul 2024 05:28:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D2F182DB;
+	Tue, 16 Jul 2024 06:34:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="M1JXYKFn"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="s/bDd/XR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2077.outbound.protection.outlook.com [40.107.244.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7396D18028
-	for <linux-next@vger.kernel.org>; Tue, 16 Jul 2024 05:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721107711; cv=none; b=iPfcqUO/t7ArXtR+QtPrODznK3Hm+1SNzzNyhPiOGK/2Q9jGzIXH8W/FRfacuYr1arDdksOssOFfH4FXMffNmrRttY55dxD0oTiSju7bwtTDxv/D2wVTay6YnvpWvM09ci63alNG5wsN5QFL4fnYOEyV3jak+fJLPwgN2D8RZds=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721107711; c=relaxed/simple;
-	bh=kxFUGOqBoHP9cnO+vG35D9DAetjoIaIFwDPcR04TW3E=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=dT1RKtzlJqMrJ6kL23ZWUKjrqB29lBjLDi9lL+9UMxUQGb3xdOrE9/722Tj1LClhqnm4MRRoRESnx66e/M+mNaJl23rdLKpE2Oo/SapqbGh4l5fM50aj9MFd9xFXv4maqCP03LPpibIiC0k3eF4OC+BIfj7/w8tN1xxVaA7Gngk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=M1JXYKFn; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1fb3cf78fcaso34611425ad.1
-        for <linux-next@vger.kernel.org>; Mon, 15 Jul 2024 22:28:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1721107708; x=1721712508; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jjGZZ3xYduWbL4saEqbFBpc4KH4uA1Vq9AjZ5KkTv+M=;
-        b=M1JXYKFn60CUJalJ6mdAPTf83Jg5vp0SePbQKnCBs0YLPzPHo+DYD5JhFoTb/64L3u
-         +X6CqUUpFpoxOCyEo77mT3kPwvYjiK1TxylL5ZslJiEyrEmyAZhRu1ohY5VpzWwTwVlF
-         KHyh5mWivFM+S/dLBZ6E3s1GaltIg9f+H7V/1S7Rgt44yu335zNL8rVSRG06wqabjW0m
-         GZuKH4oOAYtUz3urDlVXPl5im4OcIe3rFtYvhinozgrIIWMozIrptX/a1bfzoQLd6uDg
-         KMyffkJmKF8Q9YDaESyiy8uPuOWuGLXC+Ud516yVt07EoRKjghd/nGTAl/znO15QzeS6
-         WFkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721107708; x=1721712508;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jjGZZ3xYduWbL4saEqbFBpc4KH4uA1Vq9AjZ5KkTv+M=;
-        b=c1trVvkLjt0rzVDHzrtsDDvlY/TGtWcCGUnHmldByCZw2ZASbF72e8F0LH+hwTq79s
-         P6aXJs6L479J1mLm04klO9L/wjOR2MO3Y5RbFrGCqaz6YmrI7/UnYcDa22PQzcV2DxGC
-         IbAAaK8ZTLA7ZuuA0Y8D4WwYKNWQhKz8oGH3NPI7nT3WKO+rT4xI/20cuzgyiksXSv9g
-         V5I4BWlAXYJ9MrKi6ktPXnbAb0Bg4F3HcqDBA79k2mV+Pu5RBfYv4zkPhrJUi1IHPE35
-         nvTNnK2UQlmszQL2SWUFN+Dync4wRMz1lj/z736uXEQUQwTJ3+gKPAYkaji4BJS7ACys
-         lGkQ==
-X-Gm-Message-State: AOJu0Yxx9s4EoRtAILrizdki0DZeIYphoBncsOIGOw5/g17t8F0B+5K2
-	/7ySBMu3xkCb8NtZ5KyY5MLsE3xYOg4E89y6xLDiE6vL+icxLpyfpyUu9bns8EUGU8jqSYAH9RH
-	d
-X-Google-Smtp-Source: AGHT+IGIS+Q5jOpPBxW2rMS0tX6QdsFyDOwdyzyswmzaL5CPn6iqkhTDQxCw3ymzEiLtlXq6Y0Ertg==
-X-Received: by 2002:a17:902:ccc2:b0:1fb:3b30:8cf0 with SMTP id d9443c01a7336-1fc3da011c8mr7870455ad.51.1721107703373;
-        Mon, 15 Jul 2024 22:28:23 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bb74c04sm49732825ad.51.2024.07.15.22.28.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 22:28:22 -0700 (PDT)
-Message-ID: <669604f6.170a0220.f7c54.f1c4@mx.google.com>
-Date: Mon, 15 Jul 2024 22:28:22 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48701E552;
+	Tue, 16 Jul 2024 06:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721111645; cv=fail; b=NaQm8DJFQFY/o0FCBaKZD4uNToUfq9FUZ8A8iSeB/3JRVwj4IDMQUHJ95ZRewDBtJTyWcyQ9gEHu9g49D24rKPEWPeApde1BYDDLWXvw5+dJ+uoyzXqLRrpKeMper5q8o2Nht4KQRc7zAhs6xMYam3UQc4aImX3TTSsDmTc2480=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721111645; c=relaxed/simple;
+	bh=5sMfmA56lZ8jaeaaS+2FgraM3OehAgl9N+JrJxX2YDI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=AttLdKRzk1JCgg1sYlPCa2GO/H6+bjFUUOClJkwxGoUoYs3eZxDuiJNPtkN/mSWoFT82fBCnFScL3lbduYFYsnlYWZ/y+X9No0U0McnYUuwxUP9utLaPsA9s73cZ9ioHtN6RdtfyxdH5FV2D4N2+8gdB1sD8H9ZFWVCDb2dwZK8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=s/bDd/XR; arc=fail smtp.client-ip=40.107.244.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=G/DmcbXjzIsny6jjP6L77nzmI1NyS+5D2sxYYoQaEVRWmavVqHLGPynZPqfBQPThzjyi7o7BdLD+Zqnv6yzqCNAZhLFL9VsGqWuq8zd/RGh11iC0NlB3AFe7F70N9TSvYISt5Wv0AC3UElptCtztoEpvT7EAcc2EcFULI8nSN2GlA/uNEel4cEiPMUfEVDX8zq5qeL3XSJnqyf/0EJgs1Xad+JdWGEaHhoaGlSpnQwbLmaZQIHc2kUo0uy42hCpH0PqH7Fsg+eGpQQ4/nbmGOCeDN0HvbPfeoR5I5Q/6tH+cbnU4Da4krEM00mMFZ7/fujBrr7dflhatpvrs4B7GXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a7ayvUvOcy2L/7ItQ3gu48ayFkIu7zu2WyXIpUvwTAk=;
+ b=Jh+jFNe4hBaaOW1bJJQhN7s38JrgdayRldXnumjcgrI5PxotsTjSpq3bG2OgOxmqgEgbxxhH4d390YkvjCcegYyI+odTc+Iq3427DqsfLdGZ3MEhvjJbGZrG2IoRXVYFc27RKpjkcbZcSo0BNTVWH1x2ho1k18rLVLnw1hNNaZv7WxyTRWPbdgby5+Ga8Rk7QbNyCFfCAi9Iil6HfWgGVMsKiNLuwyrOKK/svjUBUQ48MwSwNS+Gb90VGXc/jvVbOmxoa1RNNNKdGVflOCnnuFRRDKyoqpWehg+znyegAoMi+gGfdeZvfx4lJniyIbj3z74vmVNJLoaeFjYXu3DeTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a7ayvUvOcy2L/7ItQ3gu48ayFkIu7zu2WyXIpUvwTAk=;
+ b=s/bDd/XR5IqYHMfZDquu0tRiILKiDlxk+UgAzZdCebcxrW8YGtgS89L7rgqgh7/SEbU1wc8YGyHpk1A8DJkVDPN6qm0d3Ptt3I7loB8ciFQ54vKb8IiUZf5xbN2otu9qXiTEblYfqF3kL9WMv+f2kWOzlv7tivK636aLf+U/DPKmgBStW5JEanB1ZbNYTYAeYlA5Ns015zzS60A+KXWnfP6uuETJM7UJ60hO8NoYB04EZjSlhGSJsrIDtYyPW4qY4UCukn2/NRwGapXnjL+kJOujjPbSMPAX+pKr5dcFFeggrEfATwALIoe3IQMzGH8BNC/wqMTDXdYFOtQD5GxhCQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH7PR12MB8827.namprd12.prod.outlook.com (2603:10b6:510:26b::12)
+ by DM4PR12MB7670.namprd12.prod.outlook.com (2603:10b6:8:105::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.28; Tue, 16 Jul
+ 2024 06:34:00 +0000
+Received: from PH7PR12MB8827.namprd12.prod.outlook.com
+ ([fe80::8984:89a7:5fa4:5272]) by PH7PR12MB8827.namprd12.prod.outlook.com
+ ([fe80::8984:89a7:5fa4:5272%6]) with mapi id 15.20.7762.027; Tue, 16 Jul 2024
+ 06:34:00 +0000
+Date: Tue, 16 Jul 2024 08:33:41 +0200
+From: Jiri Pirko <jiri@nvidia.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Jiri Pirko <jiri@resnulli.us>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the vhost tree
+Message-ID: <ZpYURX4IrW05U_O5@nanopsycho.orion>
+References: <20240715171041.5d0ec5a1@canb.auug.org.au>
+ <ZpTXa-E1SpFJfVBw@nanopsycho.orion>
+ <20240715045026-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240715045026-mutt-send-email-mst@kernel.org>
+X-ClientProxiedBy: VI1PR04CA0067.eurprd04.prod.outlook.com
+ (2603:10a6:802:2::38) To DS0PR12MB8815.namprd12.prod.outlook.com
+ (2603:10b6:8:14f::16)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-950-g954104d9dd5b
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 75 runs,
- 1 regressions (v6.10-950-g954104d9dd5b)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB8827:EE_|DM4PR12MB7670:EE_
+X-MS-Office365-Filtering-Correlation-Id: 644ed38a-29e5-4026-763a-08dca5614023
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?sU3Ms+S4JfH696I18po8wEkhRKKga0boPMeL0KARep8swJHwQ2q50+CfnUdy?=
+ =?us-ascii?Q?XOfKF4PRyfZFdaYdnrf6SVtegld6PFdYD1RrffjMiK/CgGru79lPSEBMU03l?=
+ =?us-ascii?Q?mGxMUkTf0MBIgZeKA7f3CHDPSG5N7QrYaCSvivkZYRlgFo0jw1NJySKdcVmN?=
+ =?us-ascii?Q?VLOLPFVfjaIBrIvy0StFUWo9BQ+I9/CJxSPb5ZZi+5SuYkBalBAtiOpWs2hU?=
+ =?us-ascii?Q?KZir2DsM0Wkd/gvRE3WWfLM5/rlcZX3/fQScP1pNFoFsbdYXw35ndH4H5U/u?=
+ =?us-ascii?Q?lr8EAcgR2ZkkoQCkuDI53NFRtBXXQbuv833CP4BAApuKd744UGQInLYdjE3H?=
+ =?us-ascii?Q?rOdKVQPeYvi46O8XOhTkvbox8l6QKzBFzV+MP5NT5+R3IjpR8F8pgbRxpVld?=
+ =?us-ascii?Q?REDQ2+yRF/mreKgnA2BFnA4+L0QXbUQxRNyFwC/oTyCDEnxVnazrlwhJjdiB?=
+ =?us-ascii?Q?ypaFmGR8/Js0q1oczoaqcjHOc5BCqYtOFhUGYEGYAxYwfIh5AeESPaWZexUC?=
+ =?us-ascii?Q?H6gSH+Pf4Tj5/UHcfWRQk2gH7UsFr7qgEa1zYgUtd+VNFIFKIupa6dMhPAFn?=
+ =?us-ascii?Q?Ivt8v4ID4T+tXtiMdcUUoZponR/1DBiHBISco8ZL9ljCvArVb+ueXC1u8Qxv?=
+ =?us-ascii?Q?N2kmuzwoDklo372x43b5igf4v3WbrgepNr+a1+cKKrKrK9TTC+7rvwPhVuIo?=
+ =?us-ascii?Q?dLxhGwQxcIObKP2KxLKmjekuW+yysvFlG2xD8xEdCOv4IPUSZAU7/1r1qZRm?=
+ =?us-ascii?Q?g9nf3S8q3PNsAZhdwkpWkoVHkb1AU+nYZsrOrm65UEAfSIX+b282Gd9AtVIN?=
+ =?us-ascii?Q?0YCwbqgmGCoIVDI3ziEX5kjTy22Et8zqu+OOQeJ7RzJzrPlGGjsMdnSADcz9?=
+ =?us-ascii?Q?ACnQZPoHl8resg4VEb4mAZn7x9bQy2mkRsUSnWtBVwMehbXvtKYhZwAQm+2U?=
+ =?us-ascii?Q?HZmGDgblaT/7uRpEZLPe0iltrLqAfR+zrvrYu4sIANItGQHR85pZHMw591TI?=
+ =?us-ascii?Q?pgRXmLfznUMHZMGC8nSU7L8aCRGna2205QZgGD4zG1L57fZPeF2HheRDTTsJ?=
+ =?us-ascii?Q?xrOJWsjhR/rPXilM8WTLRmTcJBUuXCrbZYZvCoMIvdPcKWzoSyeFgypK3bQn?=
+ =?us-ascii?Q?9AFEYoEkwNOFOoY1LjZVOjRl+lHJromhpCm1oaweOXh6pNhdAlJNl/fNkv0+?=
+ =?us-ascii?Q?/c5wP/Ed9Y1W6Un5beBIhq9RCddwgkdhd3uLY6qRyeZGqgfLl9Uswz6rzn+5?=
+ =?us-ascii?Q?mggc/DGh/YQPnE1oSWj+fCxd40zNpZJup3avReR1fwESCALzSmhgkgpznw5k?=
+ =?us-ascii?Q?WvuyLc80jadQNmzAQyTh3lV9VdCY4MXmIMNgvT1BlPedug=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB8827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?kNu1gf1ybcif0FWGC0XWwYqG9jpSTGv+twkihJWJiALQtU8gsonHIkF/WGWW?=
+ =?us-ascii?Q?v4mAoyzfKbg05TnP2r41hRI8a2p+49awEvT22uFlJ2sk0oQzNJS6ob9Omp+V?=
+ =?us-ascii?Q?OU10fYoKv9+X7+lK4vZIR4Zi7gfmg+mHXLDy2Cq57hZS4dgtB4H975lAUiC9?=
+ =?us-ascii?Q?hJVzHWwGKjdWTooqYt57n+HgnskVTMs57aQm98+KWdwXmodUlI7lnOqne7h6?=
+ =?us-ascii?Q?ewZ29/FglFZuWsrwaEMn7aIUV/e4vz/CfLas/YOn71AKoQM5Rbsx1JO3sSfH?=
+ =?us-ascii?Q?+t0DDTGdRe+dqdvogZKlBuZ6K2i9xCaQ4uUlAZwsaLsuoyoNxBg/AUX9iWee?=
+ =?us-ascii?Q?DRU+i5eQC+r5Mh/0OSrkrz/bGOdO92XHzAFciYwH9RQagiBzo2hzmSf4yk9P?=
+ =?us-ascii?Q?SXZHyz+YRHtvVEzpBapNtWf0u2ijCU61eDDmoXRGby3aeLE/SxgELnAwEfwI?=
+ =?us-ascii?Q?aKU8arK/lNha87zFy/+AFUxyd8XYIi7gAVoNG2LrjJ1YeTrOF/riaRCu0/Ve?=
+ =?us-ascii?Q?eWXyZfOLEeMWvzqljrbpdBxQSFxERNx7pxwnWKyt7Vy5vTSD9N1svNSIHInR?=
+ =?us-ascii?Q?TejyrV1uU2cde7slQwnGdwOrVrn9GZa+iSbAtCDlCjYR1nGUfpmcD06M+p1j?=
+ =?us-ascii?Q?G+/Xdsewu1eDGwTIC2xQqHPzU+QII2sz5VKX0rjt2LNvQ+AU3ZvT70Yl2Hln?=
+ =?us-ascii?Q?lHfGKNjEu2EY1TNBhOz5XofucCtXMXTAoaE/Bocg/TrpuX1GN8M4d19l0E4r?=
+ =?us-ascii?Q?aVUPkGUMVU2Htf9NXPAMxsc5QFSLkU+6JLwIAecpgyr03JdVndFqJy3V+0yO?=
+ =?us-ascii?Q?554w4y6FAnFQ8XmzV8YytNQC8qbRZsKSL+TISS1R3QXQro+wfBnL9PlplKhs?=
+ =?us-ascii?Q?GLiJqcWT3kwfOfWOaYjMfKc/8CN2Cpz3kD3ycdQupfV/uEDh3JQOcAhy73fN?=
+ =?us-ascii?Q?EajThMd3raLhowA9SOewbKf1OulIqjpYfkbG0qz+cuddTGQ7QdCiWiim3Zip?=
+ =?us-ascii?Q?ENBMBW/ND7w6EOeBNxDMhSO5j34Bsg3J7epYo7gG/u+u2i8zI27tUWOFyk2E?=
+ =?us-ascii?Q?8T+TMldI0PhyhNC7zlDC66/B+NTLL4ms53aQi+g/iLwMo5Rncur2Z9CNEq+m?=
+ =?us-ascii?Q?xhXq8EfD0smfrPN4Vv03BXy9Dj+so8xoSSzU8la6dvoyiNPyoRZZ343yFKLO?=
+ =?us-ascii?Q?EsRuJBu1TOTvRD2r1E0TWCnsmLweReIsybuOUqujAe4M65OI7KDk5Vt5rPDY?=
+ =?us-ascii?Q?Y1uTagQF8Ss/p6qCvHnQvry0D2LGaGp+EdMyRdlQyO1+Z2HbBvpF7pY3g6JS?=
+ =?us-ascii?Q?p8XobXnP3STw/bitROUseDevSLfbCJenPFLXlLWh6W7PBkmPR4bG00Bpp6o3?=
+ =?us-ascii?Q?BLM2JZiP3uNUiE+fQyy5meN05l0NWDMyR1f75cSwSF7+wIwWlcRpm+tVgUBV?=
+ =?us-ascii?Q?a/B08XwtEz8Sp6cKrD9bnwlQmwe9tcmKvUT946kIo7kFZS4SiPjlKs1HfGf7?=
+ =?us-ascii?Q?06OXOxutudKl4E9jZbDjOfQ7w/bNIJ5Co8Mw5xekS5JTN1jXM3mx/yfWiMZM?=
+ =?us-ascii?Q?luOsKWSqvYHtnEHntlQ=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 644ed38a-29e5-4026-763a-08dca5614023
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB8815.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2024 06:34:00.4210
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vaSnUv6NUtwQrvJzMFsX0xhmV3qAXv8h/MJ7RJwmg5vRtUW/NG2JwHVIkX329dVo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7670
 
-next/pending-fixes baseline: 75 runs, 1 regressions (v6.10-950-g954104d9dd5=
-b)
+Mon, Jul 15, 2024 at 10:50:43AM CEST, mst@redhat.com wrote:
+>On Mon, Jul 15, 2024 at 10:01:47AM +0200, Jiri Pirko wrote:
+>> Mon, Jul 15, 2024 at 09:10:41AM CEST, sfr@canb.auug.org.au wrote:
+>> >Hi all,
+>> >
+>> >After merging the vhost tree, today's linux-next build (htmldocs)
+>> >produced this warning:
+>> >
+>> >include/linux/virtio_config.h:136: warning: Excess struct member 'create_avq' description in 'virtio_config_ops'
+>> >include/linux/virtio_config.h:136: warning: Excess struct member 'destroy_avq' description in 'virtio_config_ops'
+>> >
+>> >Introduced by commit
+>> >
+>> >  e6bb1118f6da ("virtio: create admin queues alongside other virtqueues")
+>> 
+>> Ah, leftover, will send fix. Thx!
+>
+>Better squash it.
 
-Regressions Summary
--------------------
+Does it mean you take care of that in your tree?
 
-platform   | arch | lab           | compiler | defconfig          | regress=
-ions
------------+------+---------------+----------+--------------------+--------=
-----
-odroid-xu3 | arm  | lab-collabora | gcc-12   | multi_v7_defconfig | 1      =
-    =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.10-950-g954104d9dd5b/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.10-950-g954104d9dd5b
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      954104d9dd5bf556aad271bb004b03467e373fc6 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform   | arch | lab           | compiler | defconfig          | regress=
-ions
------------+------+---------------+----------+--------------------+--------=
-----
-odroid-xu3 | arm  | lab-collabora | gcc-12   | multi_v7_defconfig | 1      =
-    =
-
-
-  Details:     https://kernelci.org/test/plan/id/6695d1bf79215eb5627e709b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.10-950-g=
-954104d9dd5b/arm/multi_v7_defconfig/gcc-12/lab-collabora/baseline-odroid-xu=
-3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.10-950-g=
-954104d9dd5b/arm/multi_v7_defconfig/gcc-12/lab-collabora/baseline-odroid-xu=
-3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6695d1bf79215eb5627e7=
-09c
-        new failure (last pass: v6.10-rc7-332-g46c782a1503e) =
-
- =20
+>
+>> >
+>> >-- 
+>> >Cheers,
+>> >Stephen Rothwell
+>> 
+>
 

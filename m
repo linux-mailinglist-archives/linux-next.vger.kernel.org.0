@@ -1,111 +1,176 @@
-Return-Path: <linux-next+bounces-3032-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3033-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E43A9323B4
-	for <lists+linux-next@lfdr.de>; Tue, 16 Jul 2024 12:15:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF3479323D2
+	for <lists+linux-next@lfdr.de>; Tue, 16 Jul 2024 12:21:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A3C2284C99
-	for <lists+linux-next@lfdr.de>; Tue, 16 Jul 2024 10:15:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F0D6B23265
+	for <lists+linux-next@lfdr.de>; Tue, 16 Jul 2024 10:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91C34198A3E;
-	Tue, 16 Jul 2024 10:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="VwSQfmY+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4115E198A36;
+	Tue, 16 Jul 2024 10:16:07 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAA1198E80;
-	Tue, 16 Jul 2024 10:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721124864; cv=pass; b=JT7XAmHfR+f7AtYXvU+6Y/a1g/n81eFnl+7SMQJtyqH7M6+Wuos92cizYQ3vSObwwz7K7UxzZw94Ln2OX/1azO0IbVIZGY6TD/7QIczNMsQEzE66+iw2Z4N5VEH9pskB7TljW+wfc6aaBsDxh0CIak+nq0ksA3eXx9tga+6qxHs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721124864; c=relaxed/simple;
-	bh=auHXyIzMq19o3h1AQgK/QLmEH0d6gJOwKegdbLLXI04=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Dl4Lc2JjdJm1wP8H2LgBtd0txa7QTw4fYKcF0DqfIBifQuj9ltu/PgMisfDEhMCuRXeduHdqDX0Cz7XCySykrDo/ao5zoj4VkX0MfG0Oq31sa4jhnJig1dEqE0Co3vIB+ByHB1tCxLQDHHEIrD2fq11J5g8Qi4hNbszXlST0m+I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=VwSQfmY+; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
-Received: from localhost (83-245-197-232.elisa-laajakaista.fi [83.245.197.232])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sakkinen)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4WNZfz26Dbz49Pv5;
-	Tue, 16 Jul 2024 13:14:18 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1721124859;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vz2BYHAepGUfzGb3RUlq/A9v/BHZkzM6AzuGybD702k=;
-	b=VwSQfmY+Sd2+2AlWuzamso5sMnjPeLMRygKFA0zfpMv+bnebNUF6be3abdDyi+TzjM85vZ
-	MXZsHUVoglqb/IUrjwH28VpkD0G5Hmj8KPvYfA22QnQdeHwO0+Eh3L0OSwSJBCoIGxZ3eX
-	eX4Xpfvo2jeKtpL9bDxEc6nH7rjl+f054tFshnLVyarIcE59NkT3pJUG1DNobRa/258tki
-	ReUsA64BPzqvPq6ucfQi7OIye8qO4VaESeL6iGs/Od72oVZ4dI/g299CORRQd4T97z0oYt
-	d+PtYg+llp83oujWPsRb8klk3dq7G9REkNhx7Tw/yUyGH+LTl9i5XsxEgTh86Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1721124859;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vz2BYHAepGUfzGb3RUlq/A9v/BHZkzM6AzuGybD702k=;
-	b=v2loLBE80vmcksXCNMms9mEeGfpCza2+PN029FuHy/gCrT/66ZQ6iQnMv8BWgg0r+PaUqe
-	gyzx6oN8x/t1ilOkqhn/03VZCKIF6v5dGmgcYk+K60ok3U/ZNJPmScw3qwWxm+YYl4cB/S
-	ucD+38SckXiC3YuelheTYINIEAO/lNhxh7NoRp5wP5cXjN29nwPwUSC36mxSpKstOZKA6N
-	iEx9TYIeGmNxl9m13T5qKBZGsTh/mjNfQ3IndeLkxh8eBIkp1l5YHK0vNHuEAWR/aKYKCb
-	KfAPls43JjIyiqs7ZYpuecbvJwi7H2iwa2a8hziRo/sZjfSCyMFmfNh8few7Jw==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1721124859; a=rsa-sha256;
-	cv=none;
-	b=WdXvUcuVyZzRufikyCshNbB1HPnUcRFSxsubQzkhpExrPfRlt/8iCvhlJMGs0l8cBdsskk
-	SnGNHB1HTy9S7jHXYm+axild+FnWTxYappghfIYXL6bG9AKwe3iTF8TVSRVJCAKNv79hPF
-	k8J2rCOfuoWELHNbb4D3szNdpMzFxVSdk52w6lC1e7DfN0ak7ZsKMJmSTnoZfsNmhwi2gy
-	tdzOrQveFgwWcVrtjP7iQUR6Pl6S3Or+Nkd7vDB01fV5OXyYhrLiGL4w5yDK2oZWkF0Mjc
-	SJktWIQoo/qR0Zf2K/7ocE6MmIwQpMgmLo3mGdyspvZwHflze5YcdPtHVZ4RoQ==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3922A3C3C;
+	Tue, 16 Jul 2024 10:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721124967; cv=none; b=i8UFb6mt0SzvCE9q2xdBOwJ7jTlCqmO/fOEjR5iYMOU89A6xiphLEERWzG+oAZb0ZKBG7hYbSol2U4Uk9vQ5SJfqYfop/eGcp11bET/JCV2CeMEHws64HaV8de21N9MJdDN4an9exlFSVe9cUNNNovUw0qCa83LuPaZk4mIBk14=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721124967; c=relaxed/simple;
+	bh=FS29QGysNhTWVFlH65R2gsjhPUCjUNA7LgGU03WagD4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DhNNDVmZOkvGf8hyaIeGYbAWGXR2nckFBSa2QT5zOhHoorREjbzgGbaAIdb2ljxjF77NMeTgggN+Qyf3mcUoJx1KxFrK5MUKmy6fEDzFQmaNUqtB8a0l7K8MxXqPQ+veCosE0EsyTheYK+Unn8z02UjwH4JJYqX6X9hYJEah0is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6518f8bc182so46487377b3.0;
+        Tue, 16 Jul 2024 03:16:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721124963; x=1721729763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lg82mOlKcZMSt/wtYimCB/hqB+SLV9zQbRzPDFLfmeI=;
+        b=BWwDRi9EErMfAuOS9DCjVUB58d1C7INcJRkORPoSR4ixya2ULSXGLQSy7AKpq8/4fN
+         jdSO8o/IiaGTc+GN/LDM0jpes+cBjRQQS8+vIScd7X1zPFst2UePl5vicu5JZr6Awgok
+         XQ0eQ43Nf+vNeXg3oVy7mx0+CNGmJSQlMrKhFS/ZFuw/VmMb1QBDd3Dzy4fR6XTSia+R
+         vF0Fu0ZJu/vmSDfDyyrb5ZRL9Cin7HHelVp1hl5Yfv2nu9/DCh6F35rvFwjzEz0Bv0wz
+         y++qBmeUV2BF/lyeg5bgYs90as9VKOd37WtgFb2wnPe0lOu1FxH3Gu5Xr7K8SKiEezXi
+         LWWw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBoSM06i2W+f6unIO5zjcOhlA09Jlorq9gKvX0SjK6By7jguxRcXCE0ZUCHIKphOD6GjokRtJChmQSCm2e4Ny4QY7aa6Ap22CliKhlgSxbs3xnICq9wEhQUDjYjMU15LS/QnRAgOgIfw==
+X-Gm-Message-State: AOJu0Yy/uOarfFnM4a6OmQG8rhv/1cFbD/+KvUoKts8deSBlvFXM6Kpr
+	bbBM/wHnuSNOXfpkuV8nA6zHWFx7Nzc9NO9Vbq4yP/xLfcj4s7oHiTe8s98Y
+X-Google-Smtp-Source: AGHT+IF6zK6agLyDoiTALixwtpj9YWIsrlMc8iv4Jr/jHtEQBMOeRx98bdYQSdE1p+OewO27DvAvSA==
+X-Received: by 2002:a81:8886:0:b0:62f:206e:c056 with SMTP id 00721157ae682-663a3647b74mr9565937b3.5.1721124962907;
+        Tue, 16 Jul 2024 03:16:02 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-65fc212b3d7sm11067637b3.14.2024.07.16.03.16.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jul 2024 03:16:01 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e057ae1adbeso3995626276.0;
+        Tue, 16 Jul 2024 03:16:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWPIiGpF9nVey0Tqqv8BnY7mcXWRi6asjvNnvNzeb320B7m3I2JoqxABTfh0JFwYR4Y3Lz0SksHcMILB80uB9EO8YeaunZqsqgtRnaHpq1ZXYz0M31/pD2LUBlLOPPQvASNGiKfJEhE9g==
+X-Received: by 2002:a05:6902:1b82:b0:e03:359a:6a54 with SMTP id
+ 3f1490d57ef6-e05d8057354mr1058940276.6.1721124961376; Tue, 16 Jul 2024
+ 03:16:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <Znm5qDrsqIY8VNTc@sirena.org.uk> <2024062524-numbing-winking-dde5@gregkh>
+In-Reply-To: <2024062524-numbing-winking-dde5@gregkh>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 16 Jul 2024 12:15:48 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWAs-Mm4YKgEJsr7XO4e2ezUD9PY7QE_F8gY6aQaWuyQQ@mail.gmail.com>
+Message-ID: <CAMuHMdWAs-Mm4YKgEJsr7XO4e2ezUD9PY7QE_F8gY6aQaWuyQQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+To: Greg KH <greg@kroah.com>
+Cc: Mark Brown <broonie@kernel.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	=?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
+	Andrew Lunn <andrew@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 16 Jul 2024 13:14:18 +0300
-Message-Id: <D2QVUCH4G25N.XSO2PYWM0AOR@iki.fi>
-Cc: "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>, "Linux Next
- Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the tpmdd tree
-From: "Jarkko Sakkinen" <jarkko.sakkinen@iki.fi>
-To: "Stephen Rothwell" <sfr@canb.auug.org.au>, "Jarkko Sakkinen"
- <jarkko@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240716171927.46b75f4e@canb.auug.org.au>
-In-Reply-To: <20240716171927.46b75f4e@canb.auug.org.au>
 
-On Tue Jul 16, 2024 at 10:19 AM EEST, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Jun 25, 2024 at 7:11=E2=80=AFAM Greg KH <greg@kroah.com> wrote:
+> On Mon, Jun 24, 2024 at 07:23:36PM +0100, Mark Brown wrote:
+> > After merging the driver-core tree, today's linux-next build
+> > (x86_64 allmodconfig) failed like this:
+> >
+> > /tmp/next/build/drivers/net/ethernet/renesas/rtsn.c:1381:27: error: ini=
+tialization of 'void (*)(struct platform_device *)' from incompatible point=
+er type 'int (*)(struct platform_device *)' [-Werror=3Dincompatible-pointer=
+-types]
+> >  1381 |         .remove         =3D rtsn_remove,
+> >       |                           ^~~~~~~~~~~
+> > /tmp/next/build/drivers/net/ethernet/renesas/rtsn.c:1381:27: note: (nea=
+r initialization for 'rtsn_driver.<anonymous>.remove')
+> >
+> > Caused by commit
+> >
+> >   0edb555a65d1e ("platform: Make platform_driver::remove() return void"=
+)
+> >
+> > interacting with
+> >
+> >   b0d3969d2b4db ("net: ethernet: rtsn: Add support for Renesas Ethernet=
+-TSN")
+> >
+> > I have applied the below patch.
+> >
+> > From 8f276c3b5b1be09214cbd5643dd4fe4b2e6c692f Mon Sep 17 00:00:00 2001
+> > From: Mark Brown <broonie@kernel.org>
+> > Date: Mon, 24 Jun 2024 19:02:24 +0100
+> > Subject: [PATCH] net: ethernet: rtsn: Fix up for remove() coversion to =
+return
+> >  void
+> >
+> > Fixes: 0edb555a65d1e ("platform: Make platform_driver::remove() return =
+void")
+> > Signed-off-by: Mark Brown <broonie@kernel.org>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Any chance we can get this fix into net-next?
+I've been cherry-picking it from next-20240624 for the last weeks...
+Thanks!
+
+> > ---
+> >  drivers/net/ethernet/renesas/rtsn.c | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/net/ethernet/renesas/rtsn.c b/drivers/net/ethernet=
+/renesas/rtsn.c
+> > index ad69d47463cbd..5a6cc99e6b35a 100644
+> > --- a/drivers/net/ethernet/renesas/rtsn.c
+> > +++ b/drivers/net/ethernet/renesas/rtsn.c
+> > @@ -1358,7 +1358,7 @@ static int rtsn_probe(struct platform_device *pde=
+v)
+> >       return ret;
+> >  }
+> >
+> > -static int rtsn_remove(struct platform_device *pdev)
+> > +static void rtsn_remove(struct platform_device *pdev)
+> >  {
+> >       struct rtsn_private *priv =3D platform_get_drvdata(pdev);
+> >
+> > @@ -1372,8 +1372,6 @@ static int rtsn_remove(struct platform_device *pd=
+ev)
+> >       pm_runtime_disable(&pdev->dev);
+> >
+> >       free_netdev(priv->ndev);
+> > -
+> > -     return 0;
+> >  }
+> >
+> >  static struct platform_driver rtsn_driver =3D {
+> > --
+> > 2.39.2
+> >
 >
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
->
->   46ebbf4061e2 ("KEYS: trusted: add missing MODULE_DESCRIPTION()")
->   6e9a602077a4 ("tpm_tis_spi: add missing attpm20p SPI device ID entry")
->   732cbb267287 ("char: tpm: Fix possible memory leak in tpm_bios_measurem=
-ents_open()")
->   b270b463aaad ("KEYS: encrypted: add missing MODULE_DESCRIPTION()")
+> Looks good, thanks!
 
-Sorry, I came from holiday to fix some bugs, and forgot to update my
-tree. Now it is fixed.
+Gr{oetje,eeting}s,
 
-BR, Jarkko
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 

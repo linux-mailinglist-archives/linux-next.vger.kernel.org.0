@@ -1,366 +1,98 @@
-Return-Path: <linux-next+bounces-3095-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3096-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35C95938E17
-	for <lists+linux-next@lfdr.de>; Mon, 22 Jul 2024 13:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A4D293964A
+	for <lists+linux-next@lfdr.de>; Tue, 23 Jul 2024 00:11:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAACE1F21BF4
-	for <lists+linux-next@lfdr.de>; Mon, 22 Jul 2024 11:34:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A98E21F21DBC
+	for <lists+linux-next@lfdr.de>; Mon, 22 Jul 2024 22:11:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A18E16C69D;
-	Mon, 22 Jul 2024 11:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D2463C488;
+	Mon, 22 Jul 2024 22:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="FGzaDgxO"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TXSzzb9D"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A4C17597
-	for <linux-next@vger.kernel.org>; Mon, 22 Jul 2024 11:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2903134B6;
+	Mon, 22 Jul 2024 22:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721648059; cv=none; b=UzsYtebqen3X4+cUuTe0jIEyZlQIu8Crs6agLH6E6v2cv5iAucMgiOEDokdqv0yuL6qHtQKT6ssYYJM50ZJfDDLlAm/MSulxao+lDhh37fd970g66e6WfUowNlHwOAHQvpJgPpqHLbqtWN3YY8S5FrC4m7EU7PpE5g9QeRklQuc=
+	t=1721686282; cv=none; b=UYcSOhbJ2FVSE/vdzSzWbemnvoHmAXC2h7AWn03MXsTrsm80v6k1u8n+ZNcKpIKnsi22bssxvOJrfeFvc6YAcbbraPeRsRkQO8LhH1ZqKFvtTaj/STAKrMazPS1ft+uAeQrUvOLuSGgr8GxIR6C9zNFIulZMyqssTAPYVwZmE80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721648059; c=relaxed/simple;
-	bh=A2DuHEy2nFdEFo7Z9uJtTwrVKAD8aZZ9p4BhlRAhefU=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=NDd9lOxw3mBqb7FLKQsIPgF0WFGEkN2Esd1alKL5uwj0a4cgmRtYO5nHQas4u6Na8X0L9tKzvJf+K+WYh4uJMQKK9dp2RlMmnA9NL1Dp1El95ERdnGEB6D0RkJO3KjMKq9QAItCtvIhPboC4qhhL1rGCqWeL95tbE02YnBBgDDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=FGzaDgxO; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1fc4fcbb131so34591765ad.3
-        for <linux-next@vger.kernel.org>; Mon, 22 Jul 2024 04:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1721648056; x=1722252856; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=6wkTpwDZOcXjMTjDlFOR+0C04xUXu/ilUc2tHDwxQUA=;
-        b=FGzaDgxOeDXzfUYAXqlfEnUSHPm2Y47em+E15lHQgjZ3U7pwNIysTmMK0lwwMpXMg/
-         ci2SlM+jtowSaym9r7Cljokt9cXTSOCZLro7QYgJ5mExM8njQDxiPRCU3Sdm02VKta51
-         gSqaYC+7+rnJoYQ6Js949D9reqDI0tyD1Qa8lDNfAgGZU+/Mkh6iyilOaz1QPaW/lrM0
-         tFJ1VCL7ceZmYsG0z8R+SgAd8HM1a+Y73cu27Y2tAWr1v3uOQpPzRBgT5pQoC+VWcwd9
-         uu7pJRSEdypYe5QIIT4739qIfLr4mYodMG60dezLSRmEIPVxbPnCu/yFa0vHDjVlNPGt
-         RBGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721648056; x=1722252856;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6wkTpwDZOcXjMTjDlFOR+0C04xUXu/ilUc2tHDwxQUA=;
-        b=G1u6JzI6+oPz1uLSFqTL+AEh8wpQgofXud+S5zIFNMKSiAKW5gwCKZNjP+wKOoiWTc
-         2gcLBCY3O6ELcybtlhbqIDO+PoVZw/I5re05dtFh9ld7Hp4K3WorlOQbNj6S1WlUZ7AF
-         JciBF5b4pcNCIZ58nHrofIRjx7yXpnhAzuF4MM6eN1J+h7CFVIIqWz/lJKxuvTyWlhG2
-         Uxy9ItU81XNftynelmASGlwjEjB+UIltjy9Cev2CKOARgbLRa1FJhIwF3A1dLh6DQki5
-         UKFDGcjz2NL/5xKgOAPH9pyD3WHUsyLopMbyqlV+j5HGT4D8HDGFYyip55mUkTKfKGqN
-         Q2og==
-X-Gm-Message-State: AOJu0YyraYNcAiOgDe+PIwCv8EBlJTZ7enulotiwzEmWBeZ5obpHTdMp
-	b0kZq3hOfY4LDLRLEX6Dz4n5uHXyUCtMw45OBsqDxNaCRdJqC9jbd5Gjf9ydaKRfql7/4Doa7OP
-	t
-X-Google-Smtp-Source: AGHT+IH1L/tbCA47GW8hfUK/0/VMp0WTidCzYfze3aSwE4vap0GWTUFohO93AhuxNyw6s8B4oZBBqg==
-X-Received: by 2002:a17:902:d48f:b0:1f7:3a4:f66f with SMTP id d9443c01a7336-1fd7462125cmr82116945ad.43.1721648055960;
-        Mon, 22 Jul 2024 04:34:15 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f3181bdsm52370095ad.133.2024.07.22.04.34.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 04:34:15 -0700 (PDT)
-Message-ID: <669e43b7.170a0220.298d9.d3fa@mx.google.com>
-Date: Mon, 22 Jul 2024 04:34:15 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1721686282; c=relaxed/simple;
+	bh=9vZVWygh/jx/N9NoIY5a/jpIqVietZ8ZMjc6JTietAc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IA+Hv0Bx3xyscu5IQovu6q9vmWeqvl5oyCjyLWXcB6l1FEcaz8eOolGaMPbJTjoyRs9sgmnlirBkx+abYy1AO8k2bdS/+RnFsBT9muAe6a7vjtYgXHJugjeFnMcfmb++1RQeOoBdIkao/5EouluOSYDhCw8jSvtdB6xDMTbCv8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TXSzzb9D; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1721686274;
+	bh=kxClKtRtqEAzAbBNGEXeKy0kifIbRl75pcmn0ukBY/4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=TXSzzb9D9nLjLiNHppCwbKF4zltoqduwzuFmZj/WK9QOM4dF7LvPzpozXVIQnd+I4
+	 mWTBHxqd+RKThiir5b9BnuVyakTtA0VWQj/FHIyvQWKCH3fSPgia+YFCIEeJqOameb
+	 uxcZZVNqohbh+sbRF5x1Lb7UScJHtVwdkO/j/fCwqJW+Eu+clKFAYWirPXgKVYPHue
+	 mL4WVnQzm586jLzo71VD1JTvqEy6lRULxmEsyLYjZsFn8cFWO9oYufPrjJIJD4D3Xn
+	 Gc2AtHKkBeSswy6OPilZS9oDC0kO631OxmwM8jv5yfjgOUlUWHyVXBNMz/AtvTlFU8
+	 z/iX8hZkPKFzg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WSZHQ1QWPz4w2D;
+	Tue, 23 Jul 2024 08:11:14 +1000 (AEST)
+Date: Tue, 23 Jul 2024 08:11:13 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the block tree
+Message-ID: <20240723081113.1487a535@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/yDsqY6KQd8X8jzBsizM8dHX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/yDsqY6KQd8X8jzBsizM8dHX
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20240722
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 323 runs, 7 regressions (next-20240722)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/master baseline: 323 runs, 7 regressions (next-20240722)
+Hi all,
 
-Regressions Summary
--------------------
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-platform          | arch  | lab           | compiler | defconfig           =
-| regressions
-------------------+-------+---------------+----------+---------------------=
-+------------
-beagle-xm         | arm   | lab-baylibre  | gcc-12   | omap2plus_defconfig =
-| 1          =
+  2554b855a2f8 ("io_uring: fix lost getsockopt completions")
+  77feb9505ce6 ("io_uring: fix error pbuf checking")
 
-beaglebone-black  | arm   | lab-cip       | gcc-12   | omap2plus_defconfig =
-| 1          =
+--=20
+Cheers,
+Stephen Rothwell
 
-qemu_riscv64      | riscv | lab-broonie   | gcc-12   | defconfig+debug     =
-| 1          =
+--Sig_/yDsqY6KQd8X8jzBsizM8dHX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-qemu_riscv64      | riscv | lab-collabora | gcc-12   | defconfig+debug     =
-| 1          =
+-----BEGIN PGP SIGNATURE-----
 
-qemu_smp8_riscv64 | riscv | lab-broonie   | gcc-12   | defconfig+debug     =
-| 1          =
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmae2QEACgkQAVBC80lX
+0Gy0SQf/Walug1tI8JeXbFVe0tnKeljzX3LypNOEct/LU51Set1izzvrw4zPCgJu
+TB+tizgkoVyZzFsWOaAOpor70Pl0Q1w6RXPAH6CVeWyGbsv+a87Owzt+slmftcQA
+SUrpCViYN3c/tXqu2UzmY0GxpHE0nyj8be0IdZBWi/vQFNv//rEIsmEnGbBd9IXn
+A7QTc85/v6ZObnzqznaeZGnIl7Fv9QXDKAR3Su0NA6cyQ15gnZ4APkl8L6g+3Whp
+6sh+8BAbaklFGOKzO3Qr6lkkyqvAxcAM344pvw4WszGNaACj8SlEbjjmb6fKusYz
+raaTe0G3oWLlb7b+cjcUfrubYnjg1Q==
+=6tpQ
+-----END PGP SIGNATURE-----
 
-qemu_smp8_riscv64 | riscv | lab-collabora | gcc-12   | defconfig+debug     =
-| 1          =
-
-r8a7743-iwg20d-q7 | arm   | lab-cip       | gcc-12   | shmobile_defconfig  =
-| 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-240722/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20240722
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      dee7f101b64219f512bb2f842227bd04c14efe30 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform          | arch  | lab           | compiler | defconfig           =
-| regressions
-------------------+-------+---------------+----------+---------------------=
-+------------
-beagle-xm         | arm   | lab-baylibre  | gcc-12   | omap2plus_defconfig =
-| 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/669e0ae854c084f44a7e7080
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240722/arm/=
-omap2plus_defconfig/gcc-12/lab-baylibre/baseline-beagle-xm.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240722/arm/=
-omap2plus_defconfig/gcc-12/lab-baylibre/baseline-beagle-xm.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/669e0ae854c084f44a7e7=
-081
-        new failure (last pass: next-20240719) =
-
- =
-
-
-
-platform          | arch  | lab           | compiler | defconfig           =
-| regressions
-------------------+-------+---------------+----------+---------------------=
-+------------
-beaglebone-black  | arm   | lab-cip       | gcc-12   | omap2plus_defconfig =
-| 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/669e28ca2715ff42d57e706d
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240722/arm/=
-omap2plus_defconfig/gcc-12/lab-cip/baseline-beaglebone-black.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240722/arm/=
-omap2plus_defconfig/gcc-12/lab-cip/baseline-beaglebone-black.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/669e28ca2715ff42=
-d57e7072
-        new failure (last pass: next-20240719)
-        1 lines
-
-    2024-07-22T09:39:10.157954  / # =
-
-    2024-07-22T09:39:10.164385  =
-
-    2024-07-22T09:39:10.267714  / # #
-    2024-07-22T09:39:10.273355  #
-    2024-07-22T09:39:10.374569  / # export SHELL=3D/bin/sh
-    2024-07-22T09:39:10.380996  export SHELL=3D/bin/sh
-    2024-07-22T09:39:10.481859  / # . /lava-1170917/environment
-    2024-07-22T09:39:10.488277  . /lava-1170917/environment
-    2024-07-22T09:39:10.589319  / # /lava-1170917/bin/lava-test-runner /lav=
-a-1170917/0
-    2024-07-22T09:39:10.594479  /lava-1170917/bin/lava-test-runner /lava-11=
-70917/0 =
-
-    ... (9 line(s) more)  =
-
- =
-
-
-
-platform          | arch  | lab           | compiler | defconfig           =
-| regressions
-------------------+-------+---------------+----------+---------------------=
-+------------
-qemu_riscv64      | riscv | lab-broonie   | gcc-12   | defconfig+debug     =
-| 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/669e12bea1cf5e869c7e7091
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240722/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_riscv64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240722/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_riscv64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/669e12bea1cf5e869c7e7=
-092
-        failing since 5 days (last pass: next-20240712, first fail: next-20=
-240716) =
-
- =
-
-
-
-platform          | arch  | lab           | compiler | defconfig           =
-| regressions
-------------------+-------+---------------+----------+---------------------=
-+------------
-qemu_riscv64      | riscv | lab-collabora | gcc-12   | defconfig+debug     =
-| 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/669e125660cb3757037e7088
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240722/risc=
-v/defconfig+debug/gcc-12/lab-collabora/baseline-qemu_riscv64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240722/risc=
-v/defconfig+debug/gcc-12/lab-collabora/baseline-qemu_riscv64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/669e125660cb3757037e7=
-089
-        failing since 5 days (last pass: next-20240712, first fail: next-20=
-240716) =
-
- =
-
-
-
-platform          | arch  | lab           | compiler | defconfig           =
-| regressions
-------------------+-------+---------------+----------+---------------------=
-+------------
-qemu_smp8_riscv64 | riscv | lab-broonie   | gcc-12   | defconfig+debug     =
-| 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/669e12c072694384987e7082
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240722/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_smp8_riscv64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240722/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_smp8_riscv64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/669e12c072694384987e7=
-083
-        failing since 5 days (last pass: next-20240712, first fail: next-20=
-240716) =
-
- =
-
-
-
-platform          | arch  | lab           | compiler | defconfig           =
-| regressions
-------------------+-------+---------------+----------+---------------------=
-+------------
-qemu_smp8_riscv64 | riscv | lab-collabora | gcc-12   | defconfig+debug     =
-| 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/669e1258ce7f4ddf997e708a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240722/risc=
-v/defconfig+debug/gcc-12/lab-collabora/baseline-qemu_smp8_riscv64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240722/risc=
-v/defconfig+debug/gcc-12/lab-collabora/baseline-qemu_smp8_riscv64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/669e1258ce7f4ddf997e7=
-08b
-        failing since 5 days (last pass: next-20240712, first fail: next-20=
-240716) =
-
- =
-
-
-
-platform          | arch  | lab           | compiler | defconfig           =
-| regressions
-------------------+-------+---------------+----------+---------------------=
-+------------
-r8a7743-iwg20d-q7 | arm   | lab-cip       | gcc-12   | shmobile_defconfig  =
-| 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/669e04ae1b4542e8a77e7076
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: shmobile_defconfig
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240722/arm/=
-shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240722/arm/=
-shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/669e04ae1b4542e8a77e7=
-077
-        failing since 2 days (last pass: next-20240718, first fail: next-20=
-240719) =
-
- =20
+--Sig_/yDsqY6KQd8X8jzBsizM8dHX--
 

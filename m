@@ -1,92 +1,91 @@
-Return-Path: <linux-next+bounces-3109-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3110-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C98293A9AF
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jul 2024 01:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4976293A9B2
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jul 2024 01:17:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E489FB22B88
-	for <lists+linux-next@lfdr.de>; Tue, 23 Jul 2024 23:16:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8325B2115D
+	for <lists+linux-next@lfdr.de>; Tue, 23 Jul 2024 23:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D55DF148312;
-	Tue, 23 Jul 2024 23:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DF0D13D52B;
+	Tue, 23 Jul 2024 23:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="W+8H03OG"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MIIqwRWZ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12E914885D;
-	Tue, 23 Jul 2024 23:15:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1497E28E8;
+	Tue, 23 Jul 2024 23:17:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721776559; cv=none; b=mXDizz7AyTu6yid0IOVBJzjksOTBFX82/bnrwOXeR/ZCKVijPENQhb7b+eZKzNReLoBdyh4zRF1aO1r6Nh5qk72bz2go43DL15sm6YrDjjmizeghIZrPJDJ1TI412wMx6G6pzYLMrIzAH7EQXDUYoELzuOe7WdsqZER0v32I+3c=
+	t=1721776624; cv=none; b=lSHyIlKyo8uyc9wDVqCac2SLwDW+7HzPoroWxotX44F16WF6dk7Op2xKbkebzAfoEPO/oY0gXVe4txbKQTtDXRPmHnrm+R1OHadgcyCGcs/qJQ/0aiWS3TDHKTBXWDhUg8YkSMDDi/Hy+VjLu1yz+7Qi1JaQChIfo1tFpRvxXGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721776559; c=relaxed/simple;
-	bh=CyYzwpdVWfTfXLgu/yla8MlhCX9Ps1DJTbNrZi5Ew1s=;
+	s=arc-20240116; t=1721776624; c=relaxed/simple;
+	bh=3fX37FGxQ3coAlHAEA/tcF8R3lAD0f5uCE8UjqlETu0=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h8FrFQVnBdc28iHJOZcPmwVpiYSXTsLakIeURmfRYGWpE5M7+uJadFrJpSflssH4bpFG36TTS0IXVKDZpBt8nQK3EKm2I1GxwaWB0rjF61bDvJrO86TxQyxRNFhRF9FRYuqOEiAeaaiWo6Q7BiEUVXNRB27ENHRGOYhPZXrz6xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=W+8H03OG; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=MrOxpURjC3TlUJdXlkpwnAwsH2LrDuXJ20SmKSOByn2aBFkKjrSMPcZsGlSpzSJyjZT15EqnXDKsL3Ieyfyns2BivSfVHci7AXNW6bJIpOiXuygjjdqFtldlEG8NA+TyrZfBrsHLcaZY+bRs9TFANn1A9UwqKHPCBuxcR/rVAhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=MIIqwRWZ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1721776556;
-	bh=gg6BnTcQIoW83jNpgXswR9Cycsf32qwRpl2HDMIOddk=;
+	s=201702; t=1721776620;
+	bh=g3bAJbUBVnVLua32mHpwPJkIvWHFht1pn3JE87CWW0Y=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=W+8H03OG4ILaPxTNqht32ECKD4786zSmKChODfca19jxGCptO+S8lPZ91MexLJjuB
-	 a/hYmB4QZQQ0++td5tMcsObwYkbj7C+LZWRQUUXlP0iqXMch+WweUabfeaUqZ5TrVo
-	 V/VgK9YMbwGjlK8nVIzK9aaoHXuOxF+bhd0VnGFDnEcBF6IWWKrMbjvbVeLupyiKJS
-	 rm6V34MD1G3cpy8/R+ogPZ2qKSfOeTah4GqrVp3eDvkL0+jm62FRaCM0Ksipmywp+j
-	 kSgwmJ+t7ws08kUVhpxogyIHBi3j7U35roicjsPjjYhiTA3HVKs/+a24JF691zvIXZ
-	 jdOB/Ja2DBkMg==
+	b=MIIqwRWZpnvQtcPmJyb3v2btpiI+52NYb6ScuxIcTlyyDYcWEGC/mT77WeuQHODCf
+	 Bz2KytPr0xPdHtPlr9Gf0kqBSZ1PctdfcJ7Onj7TqAG3oQdS5YAZ9PE84eG5iC4/go
+	 uognaS1b8qbtu1dnEVnigRqXiMT/LIDERcpauCzlKHtG3HMJWcqAoZ1eJC8O1xoS14
+	 UwQrQQIwn7s5SGn/H8bY+fUcOdhbE/tkqUEsRA3LGJdr6vMWszJ1BYrlc3kp0VZWZM
+	 hRsyq0MbOXzb1xKI7IjbrO2SANNAmVjDVtJaPhrPe46khni1GsGJ072hNOQE+iVTcw
+	 iT/ayq2rwskqQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WTCgb0TyHz4w2K;
-	Wed, 24 Jul 2024 09:15:55 +1000 (AEST)
-Date: Wed, 24 Jul 2024 09:15:54 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WTChr1SCFz4w2K;
+	Wed, 24 Jul 2024 09:17:00 +1000 (AEST)
+Date: Wed, 24 Jul 2024 09:16:59 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Barry Song
- <baohua@kernel.org>, Barry Song <v-songbaohua@oppo.com>, Lance Yang
- <ioworker0@gmail.com>, Linux Kernel Mailing List
+Cc: Andrew Morton <akpm@linux-foundation.org>, Donet Tom
+ <donettom@linux.ibm.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
+ <linux-next@vger.kernel.org>, "Ritesh Harjani (IBM)"
+ <ritesh.list@gmail.com>
 Subject: Re: linux-next: manual merge of the random tree with the mm-stable
  tree
-Message-ID: <20240724091554.497bfed4@canb.auug.org.au>
-In-Reply-To: <20240709174053.051a46a4@canb.auug.org.au>
-References: <20240709174053.051a46a4@canb.auug.org.au>
+Message-ID: <20240724091659.27326953@canb.auug.org.au>
+In-Reply-To: <20240709174340.5c03c2b9@canb.auug.org.au>
+References: <20240709174340.5c03c2b9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yoH4g1BNxiS2m2j.KhhvkY/";
+Content-Type: multipart/signed; boundary="Sig_/vndBiEVGcgd+I/HDrNp5_Cz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/yoH4g1BNxiS2m2j.KhhvkY/
+--Sig_/vndBiEVGcgd+I/HDrNp5_Cz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 9 Jul 2024 17:40:53 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+On Tue, 9 Jul 2024 17:43:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
 rote:
 >=20
 > Today's linux-next merge of the random tree got a conflict in:
 >=20
->   mm/rmap.c
+>   tools/testing/selftests/mm/Makefile
 >=20
-> between commits:
+> between commit:
 >=20
->   26d21b18d971 ("mm/rmap: remove duplicated exit code in pagewalk loop")
->   15bde4abab73 ("mm: extend rmap flags arguments for folio_add_new_anon_r=
-map")
+>   3a103b5315b7 ("selftest: mm: Test if hugepage does not get leaked durin=
+g __bio_release_pages()")
 >=20
 > from the mm-stable tree and commit:
 >=20
@@ -102,69 +101,19 @@ able mappings")
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
-> diff --cc mm/rmap.c
-> index 8616308610b9,1f9b5a9cb121..000000000000
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@@ -1394,27 -1384,26 +1394,30 @@@ void folio_add_anon_rmap_pmd(struct fol
->    *
->    * Like folio_add_anon_rmap_*() but must only be called on *new* folios.
->    * This means the inc-and-test can be bypassed.
->  - * The folio does not have to be locked.
->  + * The folio doesn't necessarily need to be locked while it's exclusive
->  + * unless two threads map it concurrently. However, the folio must be
->  + * locked if it's shared.
->    *
->  - * If the folio is pmd-mappable, it is accounted as a THP.  As the folio
->  - * is new, it's assumed to be mapped exclusively by a single process.
->  + * If the folio is pmd-mappable, it is accounted as a THP.
->    */
->   void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct=
- *vma,
->  -		unsigned long address)
->  +		unsigned long address, rmap_t flags)
->   {
->  -	int nr =3D folio_nr_pages(folio);
->  +	const int nr =3D folio_nr_pages(folio);
->  +	const bool exclusive =3D flags & RMAP_EXCLUSIVE;
->  +	int nr_pmdmapped =3D 0;
+> diff --cc tools/testing/selftests/mm/Makefile
+> index e1aa09ddaa3d,e3e5740e13e1..000000000000
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@@ -75,7 -73,7 +75,8 @@@ TEST_GEN_FILES +=3D ksm_functional_test
+>   TEST_GEN_FILES +=3D mdwe_test
+>   TEST_GEN_FILES +=3D hugetlb_fault_after_madv
+>   TEST_GEN_FILES +=3D hugetlb_madv_vs_map
+>  +TEST_GEN_FILES +=3D hugetlb_dio
+> + TEST_GEN_FILES +=3D droppable
 >  =20
->   	VM_WARN_ON_FOLIO(folio_test_hugetlb(folio), folio);
->  +	VM_WARN_ON_FOLIO(!exclusive && !folio_test_locked(folio), folio);
->   	VM_BUG_ON_VMA(address < vma->vm_start ||
->   			address + (nr << PAGE_SHIFT) > vma->vm_end, vma);
-> -=20
-> - 	if (!folio_test_swapbacked(folio))
-> + 	/*
-> + 	 * VM_DROPPABLE mappings don't swap; instead they're just dropped when
-> + 	 * under memory pressure.
-> + 	 */
->  -	if (!(vma->vm_flags & VM_DROPPABLE))
-> ++	if (!folio_test_swapbacked(folio) && !(vma->vm_flags & VM_DROPPABLE))
->   		__folio_set_swapbacked(folio);
->  -	__folio_set_anon(folio, vma, address, true);
->  +	__folio_set_anon(folio, vma, address, exclusive);
->  =20
->   	if (likely(!folio_test_large(folio))) {
->   		/* increment count (starts at -1) */
-> @@@ -1858,8 -1862,15 +1867,13 @@@ static bool try_to_unmap_one(struct fol
->   				 * discarded. Remap the page to page table.
->   				 */
->   				set_pte_at(mm, address, pvmw.pte, pteval);
-> - 				folio_set_swapbacked(folio);
-> + 				/*
-> + 				 * Unlike MADV_FREE mappings, VM_DROPPABLE ones
-> + 				 * never get swap backed on failure to drop.
-> + 				 */
-> + 				if (!(vma->vm_flags & VM_DROPPABLE))
-> + 					folio_set_swapbacked(folio);
->  -				ret =3D false;
->  -				page_vma_mapped_walk_done(&pvmw);
->  -				break;
->  +				goto walk_abort;
->   			}
->  =20
->   			if (swap_duplicate(entry) < 0) {
+>   ifneq ($(ARCH),arm64)
+>   TEST_GEN_FILES +=3D soft-dirty
 
 This is now a conflict between the random tree and Linus' tree.
 
@@ -172,21 +121,21 @@ This is now a conflict between the random tree and Linus' tree.
 Cheers,
 Stephen Rothwell
 
---Sig_/yoH4g1BNxiS2m2j.KhhvkY/
+--Sig_/vndBiEVGcgd+I/HDrNp5_Cz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmagOaoACgkQAVBC80lX
-0GxKJQf/ZzR40VzIkyAgCtZLTvs4uJmdf7/bHvC1MyJlCWLRDmpJEUU82OZlb46w
-q89w/gEJJCcvoO62afhEY9YHoPEiBgztAyS4TWteSHS/wfabUqO74pv1bpoQyggu
-YxFfzSjxXWHo8ell99Vdql/dDKYaYTj5+beWT2mEU+7C4IKZ/1CPYI22JWK8Th1m
-VPJXgZDAiwQNqeK9uV3gWcUBkHZYg33mBOtzEu4R3APHjGSU/1I67kvpdcB5i8k2
-7YbeIAhyuK7xFNioK1ahW/3JAjP99Xc60lQHdJfnWaJb0eFhEmDfQbmnuNnJWgPY
-k8MXRSIfO4AzKVFJfK4hkyxcorJevQ==
-=lJCZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmagOesACgkQAVBC80lX
+0Gxx4gf/b2r1MSSdJ5o3R8E9n4MH3aA3kYGNSV4cVy+oDym2DhKCEvQrwtkkEa+R
+D3asaD0oXF2KtYjaiFUBqh9ih0Uryx6rbqOM2OHeTeOThSAxH3Sx9TIM38d/QDWJ
+p/A3ThGOo4EOuPS+YoSZPVh8nHsTix+uTxFmyaA5OLwqKB9yDVG3A4VjrTuN5nSU
+AHcBz5SVvuaJTgkHP5kwKYvDG0PGSLq9yAB2TTyFVs1T/6HU/SSqGdNd6P16onzz
+Hp4k4Miy4bTMpjOcsb+uDqxcXD2DNhTOEVljMONG7P0gl1EeH4Qdecy3sgxfMc7C
+Y431hQ3yZXJuIGxt6GIdrEtQzEo/nw==
+=viik
 -----END PGP SIGNATURE-----
 
---Sig_/yoH4g1BNxiS2m2j.KhhvkY/--
+--Sig_/vndBiEVGcgd+I/HDrNp5_Cz--
 

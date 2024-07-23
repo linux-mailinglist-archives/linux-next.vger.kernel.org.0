@@ -1,161 +1,146 @@
-Return-Path: <linux-next+bounces-3107-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3108-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA81393A9A2
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jul 2024 01:11:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D27C93A9AA
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jul 2024 01:15:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62114282C29
-	for <lists+linux-next@lfdr.de>; Tue, 23 Jul 2024 23:11:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BEADB22C10
+	for <lists+linux-next@lfdr.de>; Tue, 23 Jul 2024 23:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B9B146D7E;
-	Tue, 23 Jul 2024 23:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3D5B149C63;
+	Tue, 23 Jul 2024 23:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CVDCKH4y"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AvZl7WZH"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127E413D52B;
-	Tue, 23 Jul 2024 23:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD9C13D52B;
+	Tue, 23 Jul 2024 23:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721776289; cv=none; b=LDsBl9Mmsyrb7zlSyy7Be4Bw7101EeCbfYwrs/3An0KLThnavuymEyttnb2v8rm3sRRww+C6qhbGmpNjQIEKjVw25FC+jaUI/jkTMCHfj/v6Z4TkQLawu/GitMa6I0EGOnm7TGA8TdrJal93uVr2latVKdbi7v+dBat+3YE6/kA=
+	t=1721776503; cv=none; b=RnrtiXdTTENOS3cJVz8mXRVlK+OEVAw541GOdBk6Gj7SKL3hLosCcEA8xwXj7wsYOgy4euKkE95oXVuWkCP1CSNOYIMeTcTkgUsUnB/bC140/nj0tA2DhMJZ1l7Tej71qSMlwgnjWAUUhy++SKeUBA/FPKbHFkOixkgtFew9Ar8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721776289; c=relaxed/simple;
-	bh=08n9rrgh1KFRi2Zwlu391PvfWVZ4vQ3+nZEgj0H+8iI=;
+	s=arc-20240116; t=1721776503; c=relaxed/simple;
+	bh=TJsBEydBJqcIXloHId44CNbYL5gDTZLZhhT/kXZQThw=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VELR24MZSu1YPCMM1lBDAgFkzd4n6Y9Hcw5HssfBz7GSkoP+Wn7cO7ITXNdOkwI2rL0PB8rHeh5E4028kYkS+Emn52a4ilKeJ8+IRl+GalO43yYH0FgXSGfgMmWy3xyJZNhpefkSm2P6qbHuNld5NP/+uc/TWc1pQFsQElh5DSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CVDCKH4y; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=jkG3W8lbWb+271WxxYMKPqvGo3ymWdixImbrJWZfBdNOkTcToCnlokUm7rHi2snbT/fOzPd1aM1ctNvNLCQzza+wjMscYuq795sDyNHaXU3d1Qo+Ia94nei2KQMn+K+FylHAEk8+gb0t+0Stgd7yhPn0rO4J/Tudp2fmSX/c9KI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AvZl7WZH; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1721776285;
-	bh=Fdir779/nJWp3PyuuHGd1vNme0Cd+xbU5W6AKfJLS4Q=;
+	s=201702; t=1721776499;
+	bh=lHrlVazwJprImr0oQBw2SYD7G8B4wRCVINC9aevYsnA=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CVDCKH4y0Gd8dRjbmM4agMpM+t1XN1i1EbDcV4vLI78dJ+Ufbn3C+LWgYSBGKQDFA
-	 pLKT7yDbU1JqbPDOcHJd64MPRdT/FttjlMkqSt0ynDADW/d5AKmeOz7VUkiQvcMPJf
-	 QUx6MCm8LFfVeWaX3Bm/+xFx1N1MzUeZQBujbF9xUjXrHqDnpTYcSlL2Ywq3rrsKKz
-	 QVBBaVQdU10AJ1S5VxEBbtYCslTfTj1x8YSXdly0FtWvb4LxEREo3XlfonUNiajaDn
-	 SsfmlAppKrytIaqQ6ImDmiYYrUxdSHLGg+yzfLhJfbdhl9aN0N1bPHLci09H5V9QcN
-	 O1Hd5cV1qHcog==
+	b=AvZl7WZHqDX6bj7pPBIT76vf55T7+CJGu5D20bw2pfdIvijC4pAxfaV26sYkaimHg
+	 OZCiaYzaXnSBu+bCYO3wPISfny2P9JDUvsW4UM/1+j6v4jHefGNxXO7VND1Zvnd3eQ
+	 Dte7+VmccBFXQABt+Yymrcc1rGp0rTQfY7r0whh3G/3p9FPstaWL+CZitc2IISW1Wn
+	 CmHz63/T8ts3MwfXns8Ai6ihDjILgtL+RnstxZczqwH2ggatWgnxduVrR41D4E6mFs
+	 eJSoMkrh/qHhyk18XtmYd5Xj4UYXwWLZWPv20Zq2KwjV8QHIfp2iYa54FskZlJ/zM2
+	 tYRDa7NTB+Nyw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WTCZN1Ywhz4wZx;
-	Wed, 24 Jul 2024 09:11:24 +1000 (AEST)
-Date: Wed, 24 Jul 2024 09:11:23 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WTCfW3317z4wZx;
+	Wed, 24 Jul 2024 09:14:59 +1000 (AEST)
+Date: Wed, 24 Jul 2024 09:14:58 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mark Brown <broonie@kernel.org>, Ville =?UTF-8?B?U3lyasOkbMOk?=
- <ville.syrjala@linux.intel.com>, Raphael Gallais-Pou
- <raphael.gallais-pou@foss.st.com>, Yannick Fertre
- <yannick.fertre@foss.st.com>, Philippe Cornu <philippe.cornu@foss.st.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm tree
-Message-ID: <20240724091123.0dac1f76@canb.auug.org.au>
-In-Reply-To: <Zn8TKYDCOCtbbNH8@sirena.org.uk>
-References: <Zn8TKYDCOCtbbNH8@sirena.org.uk>
+To: Kishon Vijay Abraham I <kishon@kernel.org>, Vinod Koul
+ <vkoul@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, =?UTF-8?B?QW5kcsOp?= Draszik
+ <andre.draszik@linaro.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Peter Griffin <peter.griffin@linaro.org>
+Subject: Re: linux-next: manual merge of the phy-next tree with the
+ samsung-krzk tree
+Message-ID: <20240724091458.3052dc6f@canb.auug.org.au>
+In-Reply-To: <20240703141932.47e51748@canb.auug.org.au>
+References: <20240703141932.47e51748@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CLkSBKR/AF.1Ojv=uit6KI/";
+Content-Type: multipart/signed; boundary="Sig_/XFjo01nz5p.DP/ajuGG=3e0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/CLkSBKR/AF.1Ojv=uit6KI/
+--Sig_/XFjo01nz5p.DP/ajuGG=3e0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Fri, 28 Jun 2024 20:46:49 +0100 Mark Brown <broonie@kernel.org> wrote:
+On Wed, 3 Jul 2024 14:19:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >=20
-> After merging the drm tree and then some other trees which seem to have
-> allowed the driver to be built much later in the merge process today's
-> linux-next build (x86_64 allmodconfig) failed like this:
+> Today's linux-next merge of the phy-next tree got a conflict in:
 >=20
-> /tmp/next/build/drivers/gpu/drm/stm/lvds.c:1212:19: error: initialization=
- of 'void (*)(struct platform_device *)' from incompatible pointer type 'in=
-t (*)(struct platform_device *)' [-Werror=3Dincompatible-pointer-types]
->  1212 |         .remove =3D lvds_remove,
->       |                   ^~~~~~~~~~~
-> /tmp/next/build/drivers/gpu/drm/stm/lvds.c:1212:19: note: (near initializ=
-ation for 'lvds_platform_driver.<anonymous>.remove')
+>   include/linux/soc/samsung/exynos-regs-pmu.h
 >=20
-> Caused by commit
+> between commit:
 >=20
->   6597efcfc53585d5 ("drm/stm: Allow build with COMPILE_TEST=3Dy")
+>   85863cee8ce0 ("soc: samsung: exynos-pmu: add support for PMU_ALIVE non =
+atomic registers")
 >=20
-> interacting with
+> from the samsung-krzk tree and commit:
 >=20
->   aca1cbc1c9860e39 ("drm/stm: lvds: add new STM32 LVDS Display Interface =
-Transmitter driver")
->   0edb555a65d1ef04 ("platform: Make platform_driver::remove() return void=
-")
+>   32267c29bc7d ("phy: exynos5-usbdrd: support Exynos USBDRD 3.1 combo phy=
+ (HS & SS)")
 >=20
-> I have applied the below fixup patch.
+> from the phy-next tree.
 >=20
-> From 59a5e11f41e93512ca1a5aed36c1c396d175797d Mon Sep 17 00:00:00 2001
-> From: Mark Brown <broonie@kernel.org>
-> Date: Fri, 28 Jun 2024 20:45:16 +0100
-> Subject: [PATCH] drm: Fix up STM LVDS driver for void remove() conversion
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 >=20
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  drivers/gpu/drm/stm/lvds.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/stm/lvds.c b/drivers/gpu/drm/stm/lvds.c
-> index bfc8cb13fbc5c..2fa2c81784e97 100644
-> --- a/drivers/gpu/drm/stm/lvds.c
-> +++ b/drivers/gpu/drm/stm/lvds.c
-> @@ -1186,15 +1186,13 @@ static int lvds_probe(struct platform_device *pde=
-v)
->  	return ret;
->  }
-> =20
-> -static int lvds_remove(struct platform_device *pdev)
-> +static void lvds_remove(struct platform_device *pdev)
->  {
->  	struct stm_lvds *lvds =3D platform_get_drvdata(pdev);
-> =20
->  	lvds_pixel_clk_unregister(lvds);
-> =20
->  	drm_bridge_remove(&lvds->lvds_bridge);
-> -
-> -	return 0;
->  }
-> =20
->  static const struct of_device_id lvds_dt_ids[] =3D {
+> diff --cc include/linux/soc/samsung/exynos-regs-pmu.h
+> index f411c176536d,6765160eaab2..000000000000
+> --- a/include/linux/soc/samsung/exynos-regs-pmu.h
+> +++ b/include/linux/soc/samsung/exynos-regs-pmu.h
+> @@@ -657,8 -657,8 +657,12 @@@
+>   #define EXYNOS5433_PAD_RETENTION_UFS_OPTION			(0x3268)
+>   #define EXYNOS5433_PAD_RETENTION_FSYSGENIO_OPTION		(0x32A8)
+>  =20
+>  +/* For Tensor GS101 */
+>  +#define GS101_SYSIP_DAT0					(0x810)
+>  +#define GS101_SYSTEM_CONFIGURATION				(0x3A00)
+>  +
+> + /* For GS101 */
+> + #define GS101_PHY_CTRL_USB20					0x3eb0
+> + #define GS101_PHY_CTRL_USBDP					0x3eb4
+> +=20
+>   #endif /* __LINUX_SOC_EXYNOS_REGS_PMU_H */
 
-This is now a conflict between the driver-core tree and Linus' tree.
+This is now a conflict between he phy-next tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/CLkSBKR/AF.1Ojv=uit6KI/
+--Sig_/XFjo01nz5p.DP/ajuGG=3e0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmagOJsACgkQAVBC80lX
-0GylMQf/c7uFuQ0py4mDOSU4kA4YBLxI2Tj643yL8QlySuC3JdJI3qm34IX59sje
-oswlY+9aVXA1UgHMehsC+8mgdfDthodgLBwRBa48ZRRLMpzh0/rXD8HWW20DN87A
-pCRtCG+wy2vgFxv6983QhpCQ2ZrOrlJzOTu+WbnhhdICMA/rUqdfBqfzrnSz8dLO
-j8yh7ESE3QMlBceo1gYDwijIERR9d0uYr8UgAFrepTZsm7wNnw/ogeZ4qA8UXDuy
-RSkq32OeFc3yuUwiLbQ4t9VAfE1GsBP26x+KtzdHvtQJ3MKyXJ9zn7jJAVHKYYkK
-CguUz2ti7fk7SghrjLcbjEFfvkSSbg==
-=0aWm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmagOXIACgkQAVBC80lX
+0GwYLggAgSG+82hWbhOZuStZlfZly4kXW/io1/SkYfZCxkXPyX86ZcfiFlJ7gBKE
+GyudHG/iGQkZ1VZUsd6n73ZP5hiUUtEaIPV4jduZ9qtpxcBwOuwO3O/R7stsyFYK
+3TBWNc0LPlp+SvMH4F5YJWdkPyD2lQw2Vfrhfbxh/s7LNRCHK/9xOSCHgKta6W3h
+KlezCKhlgPKJeDijFWGmeb6hXPC0LFxvvkixdeMiB+eDYKwbl2I1+xYwh0WOn+VW
+8Dn6le9ex4/mKbW0ros9jxJCCz/dJO2uJBUiZkkQIn3QZ6bN3j/1ThEMes9SN7tt
+SielzTAr7LHPJwHDWTE1DXosYSP6/w==
+=SZgo
 -----END PGP SIGNATURE-----
 
---Sig_/CLkSBKR/AF.1Ojv=uit6KI/--
+--Sig_/XFjo01nz5p.DP/ajuGG=3e0--
 

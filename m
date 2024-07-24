@@ -1,156 +1,167 @@
-Return-Path: <linux-next+bounces-3118-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3119-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B31B793ACAE
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jul 2024 08:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF91093ACFA
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jul 2024 09:09:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DE5328400D
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jul 2024 06:33:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AF95283AFA
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jul 2024 07:09:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E90F43150;
-	Wed, 24 Jul 2024 06:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8579F1BC4B;
+	Wed, 24 Jul 2024 07:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="gf+gMFo4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Sxj8elBN"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="RAGOYMFR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546094C84;
-	Wed, 24 Jul 2024 06:33:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07684C84
+	for <linux-next@vger.kernel.org>; Wed, 24 Jul 2024 07:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721802815; cv=none; b=rFdLDDB/syuMXogCAEFinPrGSyvYQzWKDRJjCkHRDjcWWewvy/s6Q+miwBryzHAdPQGORU4F9WbzD++SLx9nbK0zc3KUm60cIIj8FG8tRYSykyV92MXziTdwIIq5FNhKc0285eL/chHz1Re00FmCwOzSiSVm5juki9ryxsiGsQA=
+	t=1721804945; cv=none; b=BqQFKiI4T/GKmnLB7XXjRwbSXTV/kgY+qQoxw41eG0fFqcvn0n2BTYUJhtRPHiFFeipUXC3dThQySjy0ToboB/6K3Tkv9zWbZjIJw1e2nmjSqHt6mkFaZtiLpsIfS6IGBjhmr6n5XLhSePj44J8wooIGC2UvwyJMj8V+7NDVrVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721802815; c=relaxed/simple;
-	bh=W7ZTNIZJUDkR1NZOwsq8wBikjL3HfTUvPAPjxUUNtzU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bPmHCcrSWL52aj9d5r9fv1FVC0OlsRHiEPiJm/C2P6ykzfwoR4c14YXLqvt0IFxvScKhQPd1VJwAV82dbAR8ITk+C6BRRrNxUmUyXAumJa+mhuCvPm1NCx/0zHlt26zmYz3aOnNFDnCrl5ji40QwI7GrA51fWD7/ppPm0Z6nGHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=gf+gMFo4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Sxj8elBN; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 03B511140255;
-	Wed, 24 Jul 2024 02:33:32 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 24 Jul 2024 02:33:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1721802812; x=1721889212; bh=ONM4SDJsTW
-	DRgCLQvQuP0fVPbGZsbQsv+eRpfl5HdY4=; b=gf+gMFo4ZFc2c6v50EQd8uu6ok
-	HHMwmCkKOpZuyyZgAE9kFXHXCU1nlGOiJR+EFHx0SpzbOe+uIqywpBIo+YPKdFnz
-	WCHQVKjMRecjwyjhLODx+OYodcsiTOzaUOxr+BJGk9kM7bWJemZ/W/jymjGxl16x
-	swX1CZgAAv1gdMwid/BnYW/6oQ/HG7QCK0Hhd97ZOi8d4KVRKcog3ccNLp1aZFAt
-	l7sqsJkCuYUIVzsyk+9rC5Kf14/Jx9QM9loiFiNJwg4RzOrAbk4sxkI4kmpxDRH/
-	t9fwTRNW97bhs7sEugfIWvz4PTVjd0oSlkcyUXLVeucHMAvdZH1xwYMnpz2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1721802812; x=1721889212; bh=ONM4SDJsTWDRgCLQvQuP0fVPbGZs
-	bQsv+eRpfl5HdY4=; b=Sxj8elBNCdvSk5TZ/PUBL6ylO9EYNHL1t3JZ5pvSHzOg
-	5Oxj0D02hK9+U3xF2KM3smsc1eBz2uc3q9rDGK6Myzdy4ZAJ63TRtIi+Hf1fFdzB
-	AikwT5Kq8RGQPjY397Beezuw1EFwWhzHVU9A9jxAeenES7kAn+Y87ycdVQROXa1s
-	BJxTodqZvcQsa5Ec6ugCM26mhyMy8JkBPlWIelyXVbBSltA2gpOsbILjsGKYu79M
-	bqaKlcPJTspESvXxqp6BFr7Ili1DV8/zKokBm6XhgO4BsMVhYo5YPe4oUw3/Rwds
-	1TxN5S9Tm74eGFZq+dAFUVumXUm5d1jBDZGauCelgQ==
-X-ME-Sender: <xms:O6CgZol3ZSN9qtL5gNwrgM9LaivvN5TaJkYDiu4Nw5E7WuLOwf0OPg>
-    <xme:O6CgZn0X24OEkdzl1505ROet7uvkrPSJGReuZdKzN5lQU17EV2gK2b66iFpuM6J4Y
-    sZU7m7jozLhng>
-X-ME-Received: <xmr:O6CgZmqm___SbQR5AU4deshZWoD0nEGJ41Kbinh28ErxK-X6dcxQYLHd3LXs1qVXJtSHriPsbbgC4IWg6Oq9RgUDQM5OAMB1NxTbGmnA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddriedtgdduudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhmpdhnsggprhgtphhtthhopedt
-X-ME-Proxy: <xmx:O6CgZkmD-Elxp-1hqLARQlSs0Icsp6B5tYA2_KIF6CPpCm02hqc54w>
-    <xmx:O6CgZm1AU1ZWq66mEsoJfGB2T9ZDYyBkkDy98V4WIlKveHSnzXjHMg>
-    <xmx:O6CgZrv4tvh6oKTL_jMKFpSCTOfjvNbtkLlIlJf70r4LlWb_GB8wTg>
-    <xmx:O6CgZiV7YTKN1mmu8didc_exS1daygjKcItpzIPFfFdl1TpJ8ivGlA>
-    <xmx:O6CgZsOOJuFGVWg3VeT-bf7xFtNjLUXxXG7I3aAszg9RSgX1ere5GGMN>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 24 Jul 2024 02:33:30 -0400 (EDT)
-Date: Wed, 24 Jul 2024 08:33:29 +0200
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Subject: Re: linux-next: manual merge of the driver-core tree with the mm tree
-Message-ID: <2024072446-scooter-maritime-4888@gregkh>
-References: <20240612123640.68ae0310@canb.auug.org.au>
- <20240724085721.7fac67d8@canb.auug.org.au>
+	s=arc-20240116; t=1721804945; c=relaxed/simple;
+	bh=Er/rg8rSxWsDaFvK9QgXhu/HitElimPePKw+PyoMCpI=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=XUdiblVAfnbSZywQxgQ7J/5ekHfXJwRxU3rWa17J4xHWdWFzwfC4QR9cTjFbq8Ubq6Keks5zKwOtmbTfc4anXQ2gAhlh7Rx/lOl9NnGooej1gR6pfTofhpmsJDqFYwZj+dLs+1fHdExUhKIw95nCwSyfBEnxmhBpYrCxPHrIjoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=RAGOYMFR; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2c9e37bdd6fso3754976a91.3
+        for <linux-next@vger.kernel.org>; Wed, 24 Jul 2024 00:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1721804942; x=1722409742; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=7w7O6La5DNo0J+vEj4k4QoudfttbcLCT+TbC2To+ACY=;
+        b=RAGOYMFRhyPIvL698YkKwB9mgQW9wP/FT477PD/LtQM2efnTFaosCq9EOgJx80yycW
+         2LDceQfcrFI1UgVx5TJjyP4qva/W5gzzLth2Y+dlJIrFqE/2LFYySv2hkZ9SuNPLTaqh
+         YpTDoVE83gNNhSqCvt427tpjouNTDk9xMeZHC/9+PEAUI/QZkQ8UHi3hPwa9MW7mApmH
+         81a9KuQa/7UlOuerntpgu7ZNzcxkn3NwdNavm8VmZFqfpAamfv29ze1or4WHmKKwTMU8
+         K9h4irJNNoFjZcRUlsfT68VeMkbH7LUlhYA/tUhU4VvOL5KQTnS0WzugFj7yZIOVTj/f
+         W24g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721804942; x=1722409742;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7w7O6La5DNo0J+vEj4k4QoudfttbcLCT+TbC2To+ACY=;
+        b=eU/Q4v3IAdBojrCjq7Ur6cy+PM+qiVwtWqZi+xmEuYeKCxZHPsykRVXRfTmkqExUSI
+         ZUlj7uOyT4G7QocgXOzno3cjCVgb+FW7iUnBRBuxLlD9o4l7pXKUiytuJlA/MxqeaCDJ
+         wO2YB1QexQK5XM14G+QatKKC2mjhkIPO9UsBqG8oa/x2qZ++04HRExiGwR72n5mJPJO3
+         VMFA22L2axRujg2pNh2u2X8AoKNKHO++XbNvGEN8yQdg0aVgUL4qPWomhnwpw2jjIC76
+         HsgvPXB6B4veXSDV2ht1xmsnQ+EEqP5MqwFsULkSJ0W6J69wWQS8YVvVRbOaShryMLS6
+         A0nA==
+X-Gm-Message-State: AOJu0Yys6bDsmCZFQiDpqueFr9wp622liWMJme30KQPBT6QBzkyXSY2K
+	AFZ9/Gp2/ahC7kWZFPUCSqHwaF/jBVntlqZ1SxovakN3RNmbM51IGIqz3aUjkeStV3YTioDxnlH
+	k
+X-Google-Smtp-Source: AGHT+IHGRkvTBcKsIe9FdpWBHw0B5Hmc9CHt28UQIUATGlmaWPRNAFUmgmuBvXyHmcQVfkaOV7WzKw==
+X-Received: by 2002:a17:90a:a00b:b0:2ca:a625:f9e9 with SMTP id 98e67ed59e1d1-2cd274d06b8mr10705241a91.42.1721804941432;
+        Wed, 24 Jul 2024 00:09:01 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cdb73d9b7asm843752a91.22.2024.07.24.00.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jul 2024 00:09:01 -0700 (PDT)
+Message-ID: <66a0a88d.170a0220.30a3bc.21bf@mx.google.com>
+Date: Wed, 24 Jul 2024 00:09:01 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240724085721.7fac67d8@canb.auug.org.au>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-12301-gabc7217b467c
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 40 runs,
+ 1 regressions (v6.10-12301-gabc7217b467c)
+To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+ kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Wed, Jul 24, 2024 at 08:57:21AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Wed, 12 Jun 2024 12:36:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > 
-> > Today's linux-next merge of the driver-core tree got a conflict in:
-> > 
-> >   drivers/fsi/fsi-occ.c
-> > 
-> > between commit:
-> > 
-> >   2d2bf1e680a9 ("fsi: occ: remove usage of the deprecated ida_simple_xx() API")
-> > 
-> > from the mm-nonmm-unstable branch of the mm tree and commit:
-> > 
-> >   29f102dbb11f ("fsi: occ: Convert to platform remove callback returning void")
-> > 
-> > from the driver-core tree.
-> > 
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> > 
-> > diff --cc drivers/fsi/fsi-occ.c
-> > index f7157c1d77d8,21d2666c4195..000000000000
-> > --- a/drivers/fsi/fsi-occ.c
-> > +++ b/drivers/fsi/fsi-occ.c
-> > @@@ -718,9 -719,7 +718,7 @@@ static void occ_remove(struct platform_
-> >   	else
-> >   		device_for_each_child(&pdev->dev, NULL, occ_unregister_of_child);
-> >   
-> >  -	ida_simple_remove(&occ_ida, occ->idx);
-> >  +	ida_free(&occ_ida, occ->idx);
-> > - 
-> > - 	return 0;
-> >   }
-> >   
-> >   static const struct of_device_id occ_match[] = {
-> 
-> This conflict is now between the driver-core tree and Linus tree.
+next/pending-fixes baseline: 40 runs, 1 regressions (v6.10-12301-gabc7217b4=
+67c)
 
-Yeah, there's lots of conflicts now, I was waiting for all of these to
-be merged before submitting my pull request.  I'll do some test builds
-here locally today before submitting it with links to these resolutions
-to give Linus a hint of what to do.
+Regressions Summary
+-------------------
 
-thanks,
+platform         | arch | lab     | compiler | defconfig          | regress=
+ions
+-----------------+------+---------+----------+--------------------+--------=
+----
+beaglebone-black | arm  | lab-cip | gcc-12   | multi_v7_defconfig | 1      =
+    =
 
-greg k-h
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v6.10-12301-gabc7217b467c/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v6.10-12301-gabc7217b467c
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      abc7217b467c17ee95fa4c7d329da71992030320 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform         | arch | lab     | compiler | defconfig          | regress=
+ions
+-----------------+------+---------+----------+--------------------+--------=
+----
+beaglebone-black | arm  | lab-cip | gcc-12   | multi_v7_defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/66a09b6bbfb4b7b3477e706d
+
+  Results:     3 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.10-12301=
+-gabc7217b467c/arm/multi_v7_defconfig/gcc-12/lab-cip/baseline-beaglebone-bl=
+ack.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.10-12301=
+-gabc7217b467c/arm/multi_v7_defconfig/gcc-12/lab-cip/baseline-beaglebone-bl=
+ack.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/66a09b6bbfb4b7b3=
+477e7072
+        new failure (last pass: v6.10-11430-g1694c7db3651)
+        1 lines
+
+    2024-07-24T06:12:43.972794  / # =
+
+    2024-07-24T06:12:43.981742  =
+
+    2024-07-24T06:12:44.086920  / # #
+    2024-07-24T06:12:44.093698  #
+    2024-07-24T06:12:44.211531  / # export SHELL=3D/bin/sh
+    2024-07-24T06:12:44.221692  export SHELL=3D/bin/sh
+    2024-07-24T06:12:44.323527  / # . /lava-1171947/environment
+    2024-07-24T06:12:44.332612  . /lava-1171947/environment
+    2024-07-24T06:12:44.434426  / # /lava-1171947/bin/lava-test-runner /lav=
+a-1171947/0
+    2024-07-24T06:12:44.445477  /lava-1171947/bin/lava-test-runner /lava-11=
+71947/0 =
+
+    ... (9 line(s) more)  =
+
+ =20
 

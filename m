@@ -1,82 +1,111 @@
-Return-Path: <linux-next+bounces-3144-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3145-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C55A93EA24
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jul 2024 01:31:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3138F93EA2D
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jul 2024 01:57:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DC06B20E15
-	for <lists+linux-next@lfdr.de>; Sun, 28 Jul 2024 23:31:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9FEE1F216EC
+	for <lists+linux-next@lfdr.de>; Sun, 28 Jul 2024 23:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499C428DD1;
-	Sun, 28 Jul 2024 23:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4418C6F079;
+	Sun, 28 Jul 2024 23:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="b4tppHge"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="REhnDuyv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E4F1C6BE;
-	Sun, 28 Jul 2024 23:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0844B79F9;
+	Sun, 28 Jul 2024 23:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722209511; cv=none; b=Xh2j0fxWTrKmGuYfwlT0t+38pcXv8dBD8ryLGb8QqpU98w2/oFrwQiNdfqLXShfP2fCpkWUIfbUxjjw/DaXXWIpt1zBkv/cknmtUJ9kXnsssKBwlZ4vmvTli39WXpaU4OLvUa/pH/7P5ncfRKoeHrpbZBkBM72QiVsryrIwLlXs=
+	t=1722211022; cv=none; b=UEAHnfxs1vF1BbtjM3W8MMMU9MMyE49MD2BokgcvJDPymPJUw5bw6LARveCv8WsbzBFA0KMmrolfEp+dW0ml+Ypby/Kq3/lzWOB8curlTybj7Uo/5TpPScisyT+8oTZ81gxH3IapAm6fTBmKHbPI2keIcUayRBbPG/m4tEs3SsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722209511; c=relaxed/simple;
-	bh=Y8SHyl8+2nyyUGf3QWgODrAfgfcH+8A40lMnl+YHWt0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=hpjOVcyTi8uLokudVrQ0qaXlJoHR7/ed56q5zIJMTQjXGWpK2nWzwPxwbGq1TnUVsaa5gZlHRSxAZRi2YggIMYxEQl4wluJVN2qrE2nmVS2CkYXTf8gs1i9k1CVRFfCFZVn7GV09HLREqQDldVUZhUYzIdvhMEYxAA8ZjfUSfr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=b4tppHge; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48EE7C116B1;
-	Sun, 28 Jul 2024 23:31:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1722209510;
-	bh=Y8SHyl8+2nyyUGf3QWgODrAfgfcH+8A40lMnl+YHWt0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=b4tppHgecVWCmlOJDy3pqjl5gK8ug5vJ7huebrRmXx3yt27MiKTIp77RhgHrPFSu3
-	 x6ObazyahJIFFpZNhv7N5zUy3H7qNxmhyrjDWWS/SRJUF3yn8utY1NTQNvuYxO2Mfk
-	 FP6iCkQAuave9XxSr1S3aPVS/QOvrZBPCx5MWgWU=
-Date: Sun, 28 Jul 2024 16:31:49 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>, Wei Yang <richard.weiyang@gmail.com>, Yury
- Norov <yury.norov@gmail.com>
-Subject: Re: linux-next: manual merge of the mm tree with Linus' tree
-Message-Id: <20240728163149.9afe2eeddde34fae5e598047@linux-foundation.org>
-In-Reply-To: <20240729084539.4c501073@canb.auug.org.au>
-References: <20240729084117.3fd74b2c@canb.auug.org.au>
-	<20240729084539.4c501073@canb.auug.org.au>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1722211022; c=relaxed/simple;
+	bh=eygwsaw7PTf96Qus9GPxc+Y6P4QadJ8e5eO2VQt4CjI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TzvZACwiEjqCI77FrxqCK4XIpAArj9cg0EB2NutqUrnGk4O24luNVH35iTKBP6SeNgIR3oJNggLBbd0cT2qnkq6lgRSlZy5DKAHYn7tL3xKhJ6hYJGtaQUwOPWchT0ySQfFAKJPt3ZlmmELgy4f36hKOfmmIgY9ejBA//dKvB4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=REhnDuyv; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1722211014;
+	bh=2fyD/b9DJwq82E/3b+UP3kj4qc9PoQTKTEDFL71sfsU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=REhnDuyv7PbJJB7ubrAMh1y4bBnRzpKTROn3jd9csJh0qdMgx33iJW/S67Upd9aYO
+	 ZPDUGNqswylO2DoejqhMF8uAdbqYsNbe2P0nMOnonnNWcJINpzfYNw4x20XALR0BnW
+	 3QuM6Ja/v3Pe6JR0c+U6WAqKLJWtLwmDmcRQrarrOzJR4U+8A3cumzjwWVoAGr6pPs
+	 zgSLkhD8BXdeU0vWFSm8/ByoNtby20OpEEryfTBGfZkOv/0vgqAmHPixiQazLtVBk0
+	 lSiyq5UIxrghom4UJHw448sJqgqNW1cbEhjIZ52Wn9gOgxsgxNSd1WCTVbD6ulSKoR
+	 2Uc/d71vXH45Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WXJLY2ntPz4wcK;
+	Mon, 29 Jul 2024 09:56:53 +1000 (AEST)
+Date: Mon, 29 Jul 2024 09:56:52 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
+ <johan.hedberg@gmail.com>, David Miller <davem@davemloft.net>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the bluetooth tree
+Message-ID: <20240729095652.383afcc1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/hu+gE6374MzZCcVZ6Pyu9Xq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/hu+gE6374MzZCcVZ6Pyu9Xq
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 29 Jul 2024 08:45:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi all,
 
-> > I fixed it up (I deleted the file) and can carry the fix as
-> > necessary. This is now fixed as far as linux-next is concerned, but any
-> > non trivial conflicts should be mentioned to your upstream maintainer
-> > when your tree is submitted for merging.  You may also want to consider
-> > cooperating with the maintainer of the conflicting tree to minimise any
-> > particularly complex conflicts.
-> 
-> Actually, due to this and the conflict in
-> tools/testing/radix-tree/Makefile, I decided to drop the
-> mm tree for one more day while it gets sorted out.
+The following commits are also in the net tree as different commits
+(but the same patches):
 
-Yup, thanks, Some unknown-about-by-us changes to the radix-tree test
-code have just popped up in mainline.
+  0c9b6e2f7742 ("Bluetooth: btmtk: Fix kernel crash when entering btmtk_usb=
+_suspend")
+  0f6bd069a04a ("Bluetooth: btmtk: Fix btmtk.c undefined reference build er=
+ror harder")
+  3a493d96e81c ("Bluetooth: btmtk: remove #ifdef around declarations")
+  52828ea60dfd ("Bluetooth: btmtk: Fix btmtk.c undefined reference build er=
+ror")
+  54dd4796336d ("Bluetooth: hci_sync: Fix suspending with wrong filter poli=
+cy")
+  7a27b0ac58ab ("Bluetooth: hci_event: Fix setting DISCOVERY_FINDING for pa=
+ssive scanning")
+  e0b0a863028e ("Bluetooth: btintel: Fail setup on error")
 
-I dropped the problematic series for now.  I'll be pushing it all out
-in an hour or so.
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/hu+gE6374MzZCcVZ6Pyu9Xq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmam2sQACgkQAVBC80lX
+0GyWRQf/TR/R8e8gukcHu4CC6sS9/7482NejmCaLi5Akkmmhx/o3EGuNtrcRtWQF
+coTG6CGGJ6epg8tZfktBNXlCmoC694Bh4SOfzGkCiL0gU3X2qinRaCUpdK6N4oXS
+UV4DQoSyQ3kosEWT3gl2U4R9yhLIKrdTg9OFqDJPBxwae0tqsVpb/VJMFyuNh1PY
+kpBAU2b9je0JMdaDHGLYYLEFl1xUDBbqd1HKQQQmwU8Q8ehrF8JY4ZUT6CJ08O77
+F9oi9v2xUZvnDTgZeU10tGM6O10xVvXB2gR8da13moyvKSrumSEQK8sA8V2vGVjU
+i8ShS7/HLtS0uHsEpssCrh77o738/A==
+=P1Dz
+-----END PGP SIGNATURE-----
+
+--Sig_/hu+gE6374MzZCcVZ6Pyu9Xq--
 

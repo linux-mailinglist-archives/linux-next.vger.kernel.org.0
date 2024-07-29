@@ -1,131 +1,124 @@
-Return-Path: <linux-next+bounces-3152-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3153-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2322F940101
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 00:22:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06339940179
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 01:01:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D07EC281D67
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jul 2024 22:22:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A794A1F22F57
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jul 2024 23:01:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0260B18E746;
-	Mon, 29 Jul 2024 22:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B73145A17;
+	Mon, 29 Jul 2024 23:01:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="RsBJFmaV"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Xj731GaX"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8519653;
-	Mon, 29 Jul 2024 22:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8613D9E;
+	Mon, 29 Jul 2024 23:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722291736; cv=none; b=WUmxUkbt0DHn+EVMxPJhY08h92dGWNuqj6pkuMdvCqu2fU+5diNK4BV39dI4EHLdFNk6VtBQmO/+hyyK73qDwhPlvrvJwYwGf/F3xVuXSCciS68LuM+Xl1nhYFSR9P7kONYk8u9eLzJCdzEvoT6rCuMJbDbLBl16fYOHRx7P/q8=
+	t=1722294068; cv=none; b=V6+2oSc5SxB/Z5feFgQ69bLHwRjtJSQ/xpd64gDIdOJxqajwv7z4sCFxjwCXgJd9L5kiIs3hlISqyN3+FGS7niJdY7aCaDynakuiY/oHFxFW9hTk/h8g7iP5D26vEMnFI3Ipa+AbKdV5Z4mt3b1lrfKeyo/NlpwUI/cyyc+2/x4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722291736; c=relaxed/simple;
-	bh=aiX56Qd14p0wSU/aXe+donzenqYCI2p7SOijR9T3pJo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=i1kMpHInWfETUbZK+IVy3naE+xEbTQZlruRg5dIvZ6f0Bg4cNh4s9wqNfPEIbMyNbeQ7ZFV8w5zMKoqPkTPgGn/cgrCRNzrbbNxj8zkFs9F/sil9uQIza5N1YIzC+sYn2VMHsHr0Ex1GhylCVfeZ62eumyGCFVQBFROgc7Z78OY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=RsBJFmaV; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1722294068; c=relaxed/simple;
+	bh=sVc9oNwqCsXx2rmRDVNxqf/CZuaiLa4l8NaPPinvq38=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eURGWIt8Tb39TXbeF6ZTTLjhTBVMAT2iNxnN62xhtO85XpRuVR6yRY5TO4PfrAVo8f4zOAWkg9vzSURvWvxV7ZZQwl0sRTtxdkTCzxvsGZ85jiCzSuosfFYh5mIOy/8jw7AzJK39VHgd2SgjY94NKFpZe1hR6AgwDPX4/ywk+mY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Xj731GaX; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1722291725;
-	bh=c5pNo7Tv4tQrL+8VFSsPzZszF/c5Y9wLE104h3RXJ+4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=RsBJFmaV+S4lq30enTfslGWwJIC/l00HMFC7oaqEwkXEICz5v9wqauiPW+NEzQL2v
-	 HEgS9RzDKQzGfHfVApQOxliu+MdKKNTcsp2iEuGpGhvXYXsFLP2ukmFiHQFqwduw2z
-	 mAv6K5WotYUJ+i1z0KasgWany0fo+Bg5Myys9wJLaRwjrKRWKvWP86dL2pOmIHDEV7
-	 8ICWwL+u4qX1r/LLo81lRRoevm8yn2FBy1GbLdJCR/8m2HH+wfLAySZub7XoLtN77+
-	 Nqf+hv1kA/vu1sXw4Fd+EqrNRlR6Mr4bYI33nntL/OigZH78LrV5A3LxzXiaN0Gkva
-	 V2FWu8w7To3Zg==
+	s=201702; t=1722294060;
+	bh=KsCYJJQihm3eoy9V9x+lN6vEZWKhHmoygszLZjvovAg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Xj731GaXacy92qmoMd3qpUISKzHU+Q/1OBBqDDZbX6HTTrTDO2+VgACWmPJq1U7lH
+	 a9B9RyqF95JLDKFE5ylDZ06M+2ffaVecEdcyWhNO20Ygag+bYbD1h09AJsYoavp571
+	 sQ6ulNG7HMYmEat/QtIcQvxXciXVR8qLebm3vKFiDWtGJqsmacJMgVZBoayjNwI/kZ
+	 cfuVDcozmpnTXqG4mOvkKbZ8hEP0/t1aDaZfQG/ZIeqtOwW6Aye3BpaU13EFX1fsU5
+	 E1G3PG6Cb0BAdGVE/hgV3Q8qZoysVYqBhmP5fB1tNCtu6DZ4zwhtHP+y1dFsfdsFcK
+	 swJcdrGArpN/w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WXtBj4KF5z4x3d;
-	Tue, 30 Jul 2024 08:22:05 +1000 (AEST)
-Date: Tue, 30 Jul 2024 08:22:04 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WXv3c35vnz4x3d;
+	Tue, 30 Jul 2024 09:01:00 +1000 (AEST)
+Date: Tue, 30 Jul 2024 09:00:59 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Linus Torvalds <torvalds@linux-foundation.org>
+To: Christian Brauner <brauner@kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the origin tree
-Message-ID: <20240730082204.57c64765@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
+Message-ID: <20240730090059.721de7cf@canb.auug.org.au>
+In-Reply-To: <20240726100041.142b6e35@canb.auug.org.au>
+References: <20240726100041.142b6e35@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xvJf4oPdAS=I4cQrYfXKqtp";
+Content-Type: multipart/signed; boundary="Sig_/X=vdSS4TR6IfNbo=xg2PegG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/xvJf4oPdAS=I4cQrYfXKqtp
+--Sig_/X=vdSS4TR6IfNbo=xg2PegG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the origin tree, today's linux-next build (powerpc
-ppc64_defconfig) produced these warnings:
+On Fri, 26 Jul 2024 10:00:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the vfs-brauner tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> In file included from fs/smb/server/unicode.c:14:
+> fs/smb/server/smb_common.h:46: error: "F_CREATED" redefined [-Werror]
+>    46 | #define F_CREATED       2
+>       |=20
+> In file included from include/linux/fcntl.h:6,
+>                  from include/linux/fs.h:26,
+>                  from fs/smb/server/unicode.c:9:
+> include/uapi/linux/fcntl.h:20: note: this is the location of the previous=
+ definition
+>    20 | #define F_CREATED       (F_LINUX_SPECIFIC_BASE + 4)
+>       |=20
+> cc1: all warnings being treated as errors
+>=20
+> Caused by commit
+>=20
+>   a621ce4eed14 ("fcntl: add F_CREATED")
+>=20
+> Is that commit really intended for this merge window?
+>=20
+> I have used the vfs-brauner tree from next-20240725 for today.
 
-In file included from include/asm-generic/percpu.h:7,
-                 from arch/powerpc/include/asm/percpu.h:28,
-                 from include/linux/irqflags.h:19,
-                 from include/linux/spinlock.h:59,
-                 from include/linux/mmzone.h:8,
-                 from include/linux/gfp.h:7,
-                 from include/linux/mm.h:7,
-                 from include/linux/memblock.h:12,
-                 from kernel/profile.c:20:
-kernel/profile.c:52:28: warning: 'cpu_profile_flip' defined but not used [-=
-Wunused-variable]
-   52 | static DEFINE_PER_CPU(int, cpu_profile_flip);
-      |                            ^~~~~~~~~~~~~~~~
-include/linux/percpu-defs.h:104:44: note: in definition of macro 'DEFINE_PE=
-R_CPU_SECTION'
-  104 |         __PCPU_ATTRS(sec) __typeof__(type) name
-      |                                            ^~~~
-kernel/profile.c:52:8: note: in expansion of macro 'DEFINE_PER_CPU'
-   52 | static DEFINE_PER_CPU(int, cpu_profile_flip);
-      |        ^~~~~~~~~~~~~~
-kernel/profile.c:51:48: warning: 'cpu_profile_hits' defined but not used [-=
-Wunused-variable]
-   51 | static DEFINE_PER_CPU(struct profile_hit *[2], cpu_profile_hits);
-      |                                                ^~~~~~~~~~~~~~~~
-include/linux/percpu-defs.h:104:44: note: in definition of macro 'DEFINE_PE=
-R_CPU_SECTION'
-  104 |         __PCPU_ATTRS(sec) __typeof__(type) name
-      |                                            ^~~~
-kernel/profile.c:51:8: note: in expansion of macro 'DEFINE_PER_CPU'
-   51 | static DEFINE_PER_CPU(struct profile_hit *[2], cpu_profile_hits);
-      |        ^~~~~~~~~~~~~~
-
-Introduced by commit
-
-  2accfdb7eff6 ("profiling: attempt to remove per-cpu profile flip buffer")
+I am still getting this build failure.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/xvJf4oPdAS=I4cQrYfXKqtp
+--Sig_/X=vdSS4TR6IfNbo=xg2PegG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaoFgwACgkQAVBC80lX
-0GxNtAgAiyd1GMK/d21X4e4mpWK29UNpR6ylHvMbKZhil13O4yeWNurVfO7Or40n
-UQyXh04RDzS3EZjXTYqOyGkKZ/07HLgIXFZBQLl6300d0qIyYbsiMycdF0qXeUx9
-rS1IblRCobLLrXSdpNCZoobNpvTSK1KskDjo5i/nuUjHj7jOZOVhzuhbpWY+1nty
-/hknoiE4NS4nAM/PowZVpjUwMcKW5qOT410b4/qfDLnrkEZquqEr785WjzSQCIwY
-rBpMOlCYm45J/jjwaaJg/31tm+xjcH6ZlQxeannFJe36SFPuMuC/fsUhCrhc6QTX
-UxVWR7/xTdYT8phYlB0w9zpRpN8EBw==
-=cji7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmaoHysACgkQAVBC80lX
+0GyBjwgAmY01w4swNykcajMmtQxkLPfMVYPJqe7bp1HlkHhFqX9xTdcx4A+8WWpJ
+YsBIW2YmPuX5PJzAUQtPBLhZpoirs+yv5kYVov4HkbwRjy3hvd03tfNa+XgDp+kD
+Re4uowX0ahf09OVvaNd5MVFTQbJ1PNHGX0Tr/GDaR5fZmFaycy3O9qx4r0I9gTrP
++S3FITFG3RV5Lu7tF9C+b6gQwmYvLsLkSKgySE708EnkrjUqhll/C/g089E28Knt
+3OxvITR8wPccd/0kOmt6eG+UgiDZ6IIfIyD/EnQ18MuFoYkWIMfGYXtF+6DCL/yZ
+ljPHRWjWpZgLWMgmqoN8qHfOd+nE9A==
+=mlTo
 -----END PGP SIGNATURE-----
 
---Sig_/xvJf4oPdAS=I4cQrYfXKqtp--
+--Sig_/X=vdSS4TR6IfNbo=xg2PegG--
 

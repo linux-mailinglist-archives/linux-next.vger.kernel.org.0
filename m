@@ -1,94 +1,100 @@
-Return-Path: <linux-next+bounces-3168-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3169-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E580A94119B
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 14:12:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38FB69412C7
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 15:05:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99B3C1F21891
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 12:12:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8908284D2F
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 13:05:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E77819DFBF;
-	Tue, 30 Jul 2024 12:12:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0CC19307B;
+	Tue, 30 Jul 2024 13:05:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jKz9gHxE"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SLzi73Ls"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D3186AEE;
-	Tue, 30 Jul 2024 12:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091891E49B;
+	Tue, 30 Jul 2024 13:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722341557; cv=none; b=cPZCK/gmf+Br7pLKjG/aAAEBZHAB+F2ZXeZuI0eQv/4ccDsvKGxj4fztbTPS3uE8uDDTmYqUordKcmfjJijBrwxtZko5vSHoeXtw/PGefaYLbk8voxA+CbiS/Ne5cHKhTJQ7IjVJ6HivvR70/ryBktE9WVIuQ6B1Rk7EOZCC1i4=
+	t=1722344741; cv=none; b=rif74Cy+wuBejLkN6Ejzjwvu5MNW2LdrHnVtg5VRKAc9mBRwCLuKylpCsmm/6Bk3Z8bze/UqI4fw+3XgxlmHtkz1v5ccU8H45WIj3MSGhNbJKpQN6nIY7KF3NR4I59u2ijSIytfykFc2MwBVRupU8Uta+3x4Eog2WoEpJVYsF8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722341557; c=relaxed/simple;
-	bh=YQrm1TvqV0uuelPFISXxIWUf+doyA9P+r6cqTfNL/DA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QW60maRDHdcCiTwFTnfYqriYEmEfbmRddwAVhq48yp8EY1MRMd7GIk+m9O7bxC+oUwjPljGayF4a6WJyifa+Tpx/mh9UfaLnMaen3VjoNUfyVbRyOIjS9bBCMWmqczZVIu2SXXbfNBDN+Id6Qxzfe0XMw+oWSShP6/JDhNupGmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jKz9gHxE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6EAC32782;
-	Tue, 30 Jul 2024 12:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722341556;
-	bh=YQrm1TvqV0uuelPFISXxIWUf+doyA9P+r6cqTfNL/DA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jKz9gHxE8KM8qobqi2rw1AIXk0GNdC0Hp5FGouCf6B1WeiOohFc9uY3mBbngY6Sv3
-	 OsjwmtqWByy72XzHqivuSMlQIbxQoUwM6F3oFgujIJdFzvUsVUIQTkBUUVu3u4Tid0
-	 vd1qtTvA446HQ6IPl5q4l9JAJ9hLe6niW0GeXvF+DcyKw0pXY1yhC8nkYw2+f8z7zI
-	 r9apFvT3MpMldysicqjlKyM4mjTaC1AanehahtIffsXF3X1dvDEfb2e93obKv2uvYv
-	 Zm0m4NEbY+oKUguNnLx4ZgZWYAgrH9K4eKXe0um6vOAjTWktVnFmHHARu9Ls+MOv6O
-	 O2qsZAKQ7sKww==
-Date: Tue, 30 Jul 2024 14:12:33 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20240730-sitzplatz-vollbad-c269e4298a58@brauner>
-References: <20240726100041.142b6e35@canb.auug.org.au>
- <20240730090059.721de7cf@canb.auug.org.au>
+	s=arc-20240116; t=1722344741; c=relaxed/simple;
+	bh=VqjFCD8e+UIbv/2b5/w2G2WUEBnqVMy7Fz6yfwZqW2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=s8g27NsaU8qHr8M3/Z7YMWffHvaFEMztSs0KxJTO4xnOF/gvle8OjcU8lGP+C1mBKTzKHnstYl8fGtBiNTfoIyP+kFy/yI2yjGgx/7sQzA+SN2qF9EGnSzahWtzVxa6wYFW1j7kQY5q6P4Yf0iRXYid2qLiOcHYaCWM86CobIoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SLzi73Ls; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1722344735;
+	bh=BzBgqqtmENruNKpE4HET9aSE1+/c/QOTTv7yxYdVrng=;
+	h=Date:From:To:Cc:Subject:From;
+	b=SLzi73LsgslRKYfGvZqYyHIgbDS9M5M/V/WTerm0xrPsWtDFhT7iOiEyTB5iA/PpT
+	 003ztDtMXau8bLB2y93oaR6W7EUmiQqaPU2GZEQikJLOiyCLhTXCK5Dwo5vdS5UWIr
+	 stFMDBORFkNbbsptEKwd6TUqiYAFtLCQDmSYT6e5Dkq2necQ5uw0+27jtlWBEAxOnU
+	 jXeSL0sRiIO3D/5MiUoKXlw35pZC765otfjnG4TSUpdIqjkiQBWwh8gPOPpH7txKsw
+	 E3BkJ5BiZbtJQQTDAQ4QH6ppYx14JUrQkWZ8vJQnh/InxWnvacRmQqIu7nHEK9a4/C
+	 UbHRciWZIrxhQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WYFp760Cyz4wcK;
+	Tue, 30 Jul 2024 23:05:35 +1000 (AEST)
+Date: Tue, 30 Jul 2024 23:05:35 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the vfs-brauner
+ tree
+Message-ID: <20240730230535.593a97fd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240730090059.721de7cf@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/PL6KSzpgWH5ybFhbbKCXxxJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Jul 30, 2024 at 09:00:59AM GMT, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Fri, 26 Jul 2024 10:00:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > After merging the vfs-brauner tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> > 
-> > In file included from fs/smb/server/unicode.c:14:
-> > fs/smb/server/smb_common.h:46: error: "F_CREATED" redefined [-Werror]
-> >    46 | #define F_CREATED       2
-> >       | 
-> > In file included from include/linux/fcntl.h:6,
-> >                  from include/linux/fs.h:26,
-> >                  from fs/smb/server/unicode.c:9:
-> > include/uapi/linux/fcntl.h:20: note: this is the location of the previous definition
-> >    20 | #define F_CREATED       (F_LINUX_SPECIFIC_BASE + 4)
-> >       | 
-> > cc1: all warnings being treated as errors
-> > 
-> > Caused by commit
-> > 
-> >   a621ce4eed14 ("fcntl: add F_CREATED")
-> > 
-> > Is that commit really intended for this merge window?
-> > 
-> > I have used the vfs-brauner tree from next-20240725 for today.
-> 
-> I am still getting this build failure.
+--Sig_/PL6KSzpgWH5ybFhbbKCXxxJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, this is now fixed!
+Hi all,
+
+Commit
+
+  70c3cb72ef93 ("netfs: Provide an iterator-reset function")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/PL6KSzpgWH5ybFhbbKCXxxJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmao5R8ACgkQAVBC80lX
+0GxhkAf+PR7/ihY0Yp2AAwlC4xZvsY5XbiMx1eN8QEi0h14jgeo5sRqlF8VsLmtc
+/IfeM+gJ4eXEH1ZwjjfrQq71MpJHgFQLj0fqVhoRvpUPzzYsSS3T4e3K5Yq7Hrtp
+eGnsdneLLpHh2Dwk04SSaRfWG0P4rhhwXlwYRABfKkXvDssW/rQXKkTQ2/uCxIUJ
+AWjwSKuDunG2SLyZYA6rJCttv69N7lquDmCvvyMGFNBbFWWkXN+SMyDsMVEk4sb5
+6mW/Vg2+eDgM64YAseond4wd/Pm7NZ/iUc4mtdiVRswqlH12U5ViCkITVmi1uFqD
+TP951CgIbDw1Mc5zDrrW1jlZVLp7kQ==
+=itjX
+-----END PGP SIGNATURE-----
+
+--Sig_/PL6KSzpgWH5ybFhbbKCXxxJ--
 

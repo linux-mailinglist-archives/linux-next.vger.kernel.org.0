@@ -1,123 +1,94 @@
-Return-Path: <linux-next+bounces-3167-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3168-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91DD1941138
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 13:54:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E580A94119B
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 14:12:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BF291F21857
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 11:54:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99B3C1F21891
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jul 2024 12:12:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 936C018C336;
-	Tue, 30 Jul 2024 11:54:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E77819DFBF;
+	Tue, 30 Jul 2024 12:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PbY3Hsxv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jKz9gHxE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1440F18D4D7
-	for <linux-next@vger.kernel.org>; Tue, 30 Jul 2024 11:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D3186AEE;
+	Tue, 30 Jul 2024 12:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722340464; cv=none; b=p40O9kg3L/N4JH9MQWSAkrPX8FiMve5HxjHqdUDVCMfszNocbMqosoleVab53cFymWzxW9l6S/5+JCnUDosCCvUdgTYPxO2AJx1qZBrx9PzHFu6GPrGWDHDSwciDiBxOuiAir7uQ7cAI4haFZ2sZebSoQbLdV9Bf8BSiT4fLaQU=
+	t=1722341557; cv=none; b=cPZCK/gmf+Br7pLKjG/aAAEBZHAB+F2ZXeZuI0eQv/4ccDsvKGxj4fztbTPS3uE8uDDTmYqUordKcmfjJijBrwxtZko5vSHoeXtw/PGefaYLbk8voxA+CbiS/Ne5cHKhTJQ7IjVJ6HivvR70/ryBktE9WVIuQ6B1Rk7EOZCC1i4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722340464; c=relaxed/simple;
-	bh=W/s6nDXLW9d0EML2Z3CPr+n5bAY1YIeECW1FXd1a/Fk=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=qV+p3c4JJmUMB/9CommhEDdc9xKRWcfSkxLPEgPVKuXxP+jOJ+ucaHVkP386IjA+jJhO+K+2SzHRL/OO3/gGWSJd/mibnymFaDGEnWQol7rY8SLDsz7riyP8TJvnPaVbYuPorXuNMh605DxaVkZlQHvIuKzeCSd2JISZ61SO0sM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PbY3Hsxv; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722340462;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oc8dGmgbI4v5yEHmaPEBetOUPJ7JbACJa4DEgTVu/ik=;
-	b=PbY3HsxvbNFkdsB8VINC1pYDX9IIHNNcBE/KupnomotOjKKKxNAgkPJhe7p3xiEE432FIx
-	ICw4YLOhu4soO27QV+pkguong+J4wro0yJV/P2+j38DM+BqJerXqcu+//Ov5jtPTOcfplx
-	1tfoVTOzM/dn9ymDqIpyyajkId+jiFs=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-453-j5PXgc0oMTG87G2xrEWoBg-1; Tue,
- 30 Jul 2024 07:54:17 -0400
-X-MC-Unique: j5PXgc0oMTG87G2xrEWoBg-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5CF071955D4B;
-	Tue, 30 Jul 2024 11:54:15 +0000 (UTC)
-Received: from file1-rdu.file-001.prod.rdu2.dc.redhat.com (unknown [10.11.5.21])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0DB90195605F;
-	Tue, 30 Jul 2024 11:54:14 +0000 (UTC)
-Received: by file1-rdu.file-001.prod.rdu2.dc.redhat.com (Postfix, from userid 12668)
-	id 64E0D30C051D; Tue, 30 Jul 2024 11:54:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-	by file1-rdu.file-001.prod.rdu2.dc.redhat.com (Postfix) with ESMTP id 6087F3E267;
-	Tue, 30 Jul 2024 13:54:13 +0200 (CEST)
-Date: Tue, 30 Jul 2024 13:54:13 +0200 (CEST)
-From: Mikulas Patocka <mpatocka@redhat.com>
+	s=arc-20240116; t=1722341557; c=relaxed/simple;
+	bh=YQrm1TvqV0uuelPFISXxIWUf+doyA9P+r6cqTfNL/DA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QW60maRDHdcCiTwFTnfYqriYEmEfbmRddwAVhq48yp8EY1MRMd7GIk+m9O7bxC+oUwjPljGayF4a6WJyifa+Tpx/mh9UfaLnMaen3VjoNUfyVbRyOIjS9bBCMWmqczZVIu2SXXbfNBDN+Id6Qxzfe0XMw+oWSShP6/JDhNupGmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jKz9gHxE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6EAC32782;
+	Tue, 30 Jul 2024 12:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722341556;
+	bh=YQrm1TvqV0uuelPFISXxIWUf+doyA9P+r6cqTfNL/DA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jKz9gHxE8KM8qobqi2rw1AIXk0GNdC0Hp5FGouCf6B1WeiOohFc9uY3mBbngY6Sv3
+	 OsjwmtqWByy72XzHqivuSMlQIbxQoUwM6F3oFgujIJdFzvUsVUIQTkBUUVu3u4Tid0
+	 vd1qtTvA446HQ6IPl5q4l9JAJ9hLe6niW0GeXvF+DcyKw0pXY1yhC8nkYw2+f8z7zI
+	 r9apFvT3MpMldysicqjlKyM4mjTaC1AanehahtIffsXF3X1dvDEfb2e93obKv2uvYv
+	 Zm0m4NEbY+oKUguNnLx4ZgZWYAgrH9K4eKXe0um6vOAjTWktVnFmHHARu9Ls+MOv6O
+	 O2qsZAKQ7sKww==
+Date: Tue, 30 Jul 2024 14:12:33 +0200
+From: Christian Brauner <brauner@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-cc: Alasdair G Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
-    Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-    Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the device-mapper
- tree
-In-Reply-To: <20240730200737.67bb4d4f@canb.auug.org.au>
-Message-ID: <aa4b337-e1dd-4091-ab2-6b41de205fd1@redhat.com>
-References: <20240709185733.4aac356a@canb.auug.org.au> <49ab648e-3c89-d4d-f2f7-3c1e2aa2cab@redhat.com> <20240710082824.30c8161d@canb.auug.org.au> <622b892-d792-382c-46f8-fe5cfdba4df1@redhat.com> <20240730200737.67bb4d4f@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
+Message-ID: <20240730-sitzplatz-vollbad-c269e4298a58@brauner>
+References: <20240726100041.142b6e35@canb.auug.org.au>
+ <20240730090059.721de7cf@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240730090059.721de7cf@canb.auug.org.au>
 
-
-
-On Tue, 30 Jul 2024, Stephen Rothwell wrote:
-
+On Tue, Jul 30, 2024 at 09:00:59AM GMT, Stephen Rothwell wrote:
 > Hi all,
 > 
-> On Wed, 10 Jul 2024 17:48:39 +0200 (CEST) Mikulas Patocka <mpatocka@redhat.com> wrote:
+> On Fri, 26 Jul 2024 10:00:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > >
-> > On Wed, 10 Jul 2024, Stephen Rothwell wrote:
+> > After merging the vfs-brauner tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
 > > 
-> > > On Tue, 9 Jul 2024 11:56:27 +0200 (CEST) Mikulas Patocka <mpatocka@redhat.com> wrote:  
-> > > >
-> > > > On Tue, 9 Jul 2024, Stephen Rothwell wrote:
-> > > >   
-> > > > > After merging the device-mapper tree, today's linux-next build (htmldocs)
-> > > > > produced this warning:
-> > > > > 
-> > > > > Documentation/admin-guide/device-mapper/dm-crypt.rst:168: ERROR: Unexpected indentation.
-> > > > > 
-> > > > > Introduced by commit
-> > > > > 
-> > > > >   04a1020ad350 ("dm-crypt: limit the size of encryption requests")  
-> > > > 
-> > > > How should it be fixed? Delete the '-' character? Or some other change?  
-> > > 
-> > > Looking a few lines above shows indented paragraphs without the '-'
-> > > which seems to work.  
+> > In file included from fs/smb/server/unicode.c:14:
+> > fs/smb/server/smb_common.h:46: error: "F_CREATED" redefined [-Werror]
+> >    46 | #define F_CREATED       2
+> >       | 
+> > In file included from include/linux/fcntl.h:6,
+> >                  from include/linux/fs.h:26,
+> >                  from fs/smb/server/unicode.c:9:
+> > include/uapi/linux/fcntl.h:20: note: this is the location of the previous definition
+> >    20 | #define F_CREATED       (F_LINUX_SPECIFIC_BASE + 4)
+> >       | 
+> > cc1: all warnings being treated as errors
 > > 
-> > I hopefully fixed that.
+> > Caused by commit
+> > 
+> >   a621ce4eed14 ("fcntl: add F_CREATED")
+> > 
+> > Is that commit really intended for this merge window?
+> > 
+> > I have used the vfs-brauner tree from next-20240725 for today.
 > 
-> I am sill seeing this warning.
+> I am still getting this build failure.
 
-Hi
-
-So, send a patch for it.
-
-I don't know whats wrong with that documentation file.
-
-Mikulas
-
+Sorry, this is now fixed!
 

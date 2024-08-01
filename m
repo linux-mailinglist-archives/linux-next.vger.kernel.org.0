@@ -1,122 +1,108 @@
-Return-Path: <linux-next+bounces-3204-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3205-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CCE294511C
-	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 18:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E917E945148
+	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 19:06:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C97A21C25291
-	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 16:53:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F4FB1C22143
+	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 17:06:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EBCE1B3F25;
-	Thu,  1 Aug 2024 16:52:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B21A1B29AF;
+	Thu,  1 Aug 2024 17:06:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="udpw47V7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KhYohNDw"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986381EB4BF;
-	Thu,  1 Aug 2024 16:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24C23A1DA;
+	Thu,  1 Aug 2024 17:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722531172; cv=none; b=nEWDf/c8MvPXLm7tchUvpYtj0vG72pvgJu2369IotqYtNUm1Lfc+kkzmM5bgEuMhn0P7iSc1jtJNXKjoLRM86OX/4dfZHLmO3lYJauzdVVHKds1MFTh728LKsCeu7IEWsOinh1gADuxqbIPewvhnaat1lg5Uq9TZYqVzdpi8g1w=
+	t=1722531965; cv=none; b=N9f+icMt+zhjZIjuOWAk+96KCGFRjtkIA4wGE+fYM6blcTulFtH8n6Gfi3Y47wNz+i6LwtCtp+9gTIxW905khc9PJh+mePkw1D3nQNv0EPtndbRfnR7B7kJbOg57cKi0qLWOHjfgqONiB0GvNIYfTkrIQVexIdgB9Mf0sP82ASo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722531172; c=relaxed/simple;
-	bh=5pBlWnbJhBefyaHG1Q/6Xrl8J5ET5Y/bv7MzWjGp9P4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qUSO0T6Qt+V2bL6z8cuDdkcFSy8Z5veOtYPzJ5bk566LM9Af7kBzokCuWO78U6tn+IgEH1WUvydjUuk3jyWq+uFln5o7If9sIHkZDj+AWmyeTdR7oJtX1lejlNHpw3GoG2p5LDTg00+yLD4a8fF8PeEjbiqcUQ63Al1hgUj/+gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=udpw47V7; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1722531157; x=1723135957; i=spasswolf@web.de;
-	bh=YXzdAyJuCN+crNIs8n0L2vrv8e4Yz9lRbDuGR0XjS1A=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=udpw47V7SZb4ugBPEOf28X1s/Dbz4h7LAuxELIzXTfLpdyXHJr5stH9gKJIZnVHU
-	 8x098qjDPooFEItibsgJiyXBrApKn6Q/aT3roXsea6iDjhI+oYcZowFnPRJTnQQ0W
-	 qAQYv2U78GBKhUNmStOdrGhNNrC66BJFV0MVo2G43tGq73x5wtl+dI0RL0lvDzrw9
-	 DWtfJ8GdTMEFy9CUVwnAEhJactuHmjELe3xg5pHGpuBxqw/pNDSOdDXmQesmV3pL2
-	 uQGVsfnBnLMl4rUyQJPQuo4sYs5PvMhu9P6yKNUEJathekjsh0B8glYVpVBpAH0sH
-	 DasZ70Xp3DtZ0NASew==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from localhost.localdomain ([84.119.92.193]) by smtp.web.de
- (mrweb106 [213.165.67.124]) with ESMTPSA (Nemesis) id
- 1MVrbz-1sjDXd3vRF-00TU6B; Thu, 01 Aug 2024 18:52:37 +0200
-From: Bert Karwatzki <spasswolf@web.de>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Bert Karwatzki <spasswolf@web.de>,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org
-Subject: commit 9d8c094ddab0 breaks Xorg/xfce4
-Date: Thu,  1 Aug 2024 18:52:32 +0200
-Message-ID: <20240801165234.2806-1-spasswolf@web.de>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1722531965; c=relaxed/simple;
+	bh=vo+1eCpdc7gCfztdUuXlumlZe+6DWz4J/QnO5ZMBwls=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vt84+agA8c2luW/Cc9zwDO5geGUI9W1MKJdIIZO86nn+o+xzMxhr0BPWt8nDyHcSjMqYaNhBzFKn26Xhyb0mlYIDbwSgYmfPFbNE5GDhh1OXimqBPkIVsWnuSfpTuvpCpcwWJBN+XTwhcQaTg3KOl9MXUeTAaRfQwDZOVr7TfbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KhYohNDw; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-70d2ae44790so5193511b3a.2;
+        Thu, 01 Aug 2024 10:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722531963; x=1723136763; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7eIYduuLszwxjPpNe0UZg+cxebfMnyI80jFPJbPpDSU=;
+        b=KhYohNDwCeR2sUsaizUreihtfNN/E3ldLcnrURPLOzquaX8Zyg7lv0cr7NPzMugAHL
+         sOIKA6BnYoyiN1yMZFLYS+3yMpbQCDlpAdYEJekp5YchLnWvIm1636CNUC3f7Nn33X59
+         HNSWUmYol4Wcsd3IG6EkigSVLidDRFq0URaac5rOCwFaoL5XM+h70FPJ7pA+UrQwE38I
+         +36xX68PTWBYNspugkxEwvfKskp/Ni6w1AYfliRkNSG3wiecjqSPjNABE2oFxqdujhEv
+         tUDOl9quZtFbrEZLcdUOtI9h+vgKQS+1czIE66wxNaM0ISgwaMD6g/gMO/2thleV/QuK
+         3Ilw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722531963; x=1723136763;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7eIYduuLszwxjPpNe0UZg+cxebfMnyI80jFPJbPpDSU=;
+        b=U0onkErs35r+YL+S3Oir8Gsvz1l/QVLToSFX8a0J+bTKCX9tfEVNkl3m3g25kn8Zd1
+         FQrzrb9jS94EhTw1rewjYsiyIhJb237VneeEHsE9234oMW5r7YaBWTUkg4hmR093W/O6
+         D4iHywGcD1Jabdkkh5BZCSx1yaNBxOUdaDUhDuSvTCI3HKG/H+XKA2jS5QFpn9+blfjN
+         pfvFTXMCNyASERk9V2BuN1NZshHYuwlS2J9pVM/QePxSQ+QDjBF70w2aOQF7r1yOJ7sw
+         CcEye72EQmEbBu2IhQsAq4I8CsqoB+91ZagRyyGM+KrfvOGhwh4VVp3Ap89b6hialRBi
+         lJQA==
+X-Forwarded-Encrypted: i=1; AJvYcCURK5Wxyt1RBq+UYKWADhVrOtZQB9pynrsXijuMdpRtieQ7OGQd7qAYf/sLQ9SNETVcbxA+bGk0i9PG9zdhiehClP+GSXUnAyhGdPFCaixWs7F2E8lS4EX5QFk3K30FbfhSEAJMQ3GcZw==
+X-Gm-Message-State: AOJu0YwomkO/CZwxnDo7/6UrQPrn3qqS5buSgA39oKi6JI5OUqbTXvt9
+	st4u/RFcjIctlVfWSi4BCMUxg+presvPSs+zdTHRkr9ho9NrhnN69XuTYA==
+X-Google-Smtp-Source: AGHT+IEcWcNRK/hl+P6Sv65Qwqr4TWL7PRq82MZ1mf2DaTfNYj8wdNpRUGjIUJUDR5hGSv4551KkEg==
+X-Received: by 2002:a05:6a00:9282:b0:70e:90fb:49c9 with SMTP id d2e1a72fcca58-7106cf8fcefmr1002509b3a.1.1722531962927;
+        Thu, 01 Aug 2024 10:06:02 -0700 (PDT)
+Received: from localhost (dhcp-141-239-149-160.hawaiiantel.net. [141.239.149.160])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7b76365b69bsm101521a12.35.2024.08.01.10.06.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Aug 2024 10:06:02 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Thu, 1 Aug 2024 07:06:01 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Xavier <xavier_qy@163.com>
+Cc: sfr@canb.auug.org.au, linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org
+Subject: Re: [PATCH v1] Documentation: Fix the compilation errors in
+ union_find.rst
+Message-ID: <ZqvAeam7_iN44C88@slm.duckdns.org>
+References: <20240801154823.358ff7b4@canb.auug.org.au>
+ <20240801071523.463439-1-xavier_qy@163.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:84uszetUgx3rIli4ubyycxiX/XKr4EoFSLGH2U7qZS1I0dx4F1M
- tihI36Ktj+Z9y0jfN4y6puI9HduYSkR5hWRpX/3AQW8+823JtMVrnd4rAl9k1FxpPyZyLbT
- pFUGoHhgXMi3SC5iZc78p5GYQkQM7xpra8xrefoSj+fzbQifjP7ScOmixgRYBq8hhf4FDOv
- sTy/wSwzV3RjSI0QwvYNg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:lasTxSPXQAY=;Hb51Xx4ndBRUOFVKggIffjzDEB7
- F4WiF1d9EJXU1nQxZTAv/2vTlZ32482s57mSTEM6/Rj++NcoBPWfv/SfalHs9Ux1liJGKWT/o
- Ji0NjqrLZx2rAoVDw/PLYP2ZeyWcUbIgwCZP9F/ZT9WIjMlEy8GbH9gy2P3tQ55Wn1/efsXxK
- ItZ0y53bDoBjhM6K7M6xhCAqRvEN28tyUwjPvQnOPkONUgKrbkSSHRhYPhm5ukaCazeDzWDuA
- 6cAbgwoZzzht1i/cf8WRwurmxPS/nLVIjy7KSr3RzfFEXiHJk4iO43MPpLe/+1az6s1SvoasH
- f7DGO952GPrfeeg8pm34goWtYD8WGJgDQnhKFJpkMWmy7ieQLblCftQo3guIH06X7QrtLcPlu
- OD38+mvIgyBqcLnD8x+hU/VL4utSMatYA9aLvUWBOIJgKGoVlWlesGHbKIbt/sltm/svKq4d8
- z/z2MB8MZB2TSLw36nJ3M3A5YnIaD0nS1wXtNu9XEvF5Ht6MDyNOaRChcIhE4cinneoZU57J7
- RXR+DyDrCpd7HcXdskrUwJTSe058tZuSmRNjeBjl6N6Nvy/PC0diJIJ6XDqXVi1V0c0HKGZpH
- hMXWjUztsIhFMnytVmcvUfWuPIS0CwTy+hocN7LigYNxIcOFtc+pALlgsds8rpk5Mlh8LKppX
- DPFPo1J6pGONmMVMSoV3sypnHIlSicx4pBqhg6DpA9VkOaTRcPRkkJ3toY81dFTKVp7ujo5CP
- 41v7m+N8574MIXCWjTspdK6KcE0HemIprZPJwrPA5KEG5xgIbjm+J+59tc1Lia/6w0H9VgyzC
- /qkFqTWBoNkxJXEMJXUqX6RQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240801071523.463439-1-xavier_qy@163.com>
 
-Since linux-next-20240801 starting Xorg/xfce4 fails on my MSI Alpha15 Lapt=
-op.
-I bisected this to the following commit and reverting this in linux-next-2=
-0240801
-fixes the issue for me. Gnome (with Xwayland) works as usual.
+On Thu, Aug 01, 2024 at 03:15:23PM +0800, Xavier wrote:
+> Fix the compilation errors and warnings caused by merging
+> Documentation/core-api/union_find.rst and
+> Documentation/core-api/union_find.rst.
+> 
+> Signed-off-by: Xavier <xavier_qy@163.com>
 
-9d8c094ddab05db88d183ba82e23be807848cad8 is the first bad commit
-commit 9d8c094ddab05db88d183ba82e23be807848cad8
-Author: Mario Limonciello <mario.limonciello@amd.com>
-Date:   Wed Jul 3 00:17:22 2024 -0500
+This patch doesn't apply on top of cgroup/for-6.12.
 
-    drm/amd: Add power_saving_policy drm property to eDP connectors
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-6.12
 
-    When the `power_saving_policy` property is set to bit mask
-    "Require color accuracy" ABM should be disabled immediately and
-    any requests by sysfs to update will return an -EBUSY error.
+Did I apply the wrong version of the union find patch?
 
-    When the `power_saving_policy` property is set to bit mask
-    "Require low latency" PSR should be disabled.
+Thanks.
 
-    When the property is restored to an empty bit mask ABM and PSR
-    can be enabled again.
-
-    Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-    Reviewed-by: Leo Li <sunpeng.li@amd.com>
-    Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-    Link: https://patchwork.freedesktop.org/patch/msgid/20240703051722.328=
--3-mario.limonciello@amd.com
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_display.c       |  4 ++++
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 52 ++++++++++++++++++=
-+++++++++++++++++++++++++++++-----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h |  2 ++
- 3 files changed, 53 insertions(+), 5 deletions(-)
-
-Bert Karwatzki
+-- 
+tejun
 

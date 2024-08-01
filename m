@@ -1,213 +1,101 @@
-Return-Path: <linux-next+bounces-3200-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3201-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6C6A944957
-	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 12:32:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B8E944D0E
+	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 15:21:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69D7C1F23474
-	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 10:32:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FCEB1C20883
+	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 13:21:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10C8D4503A;
-	Thu,  1 Aug 2024 10:32:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BE919DF7D;
+	Thu,  1 Aug 2024 13:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="ux8gIpRT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gQNsy5wB"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D0476034
-	for <linux-next@vger.kernel.org>; Thu,  1 Aug 2024 10:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D2F183CC5
+	for <linux-next@vger.kernel.org>; Thu,  1 Aug 2024 13:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722508345; cv=none; b=FVVUg9rA9FMR0d/czlUvHzQD/vEPL6qV9FeveoBIzmqfj8ESihwHlHx3rrDZeq883pC/7y/Apg7w7GeJqBkSDNNpWzFHkFmSzFFFbgjSxcaExohgQQOmunODesKDkM/FOGXEC1+ag5U/tKHqlWrI68MGcvo1n60Qy4rW7Fu3reQ=
+	t=1722518507; cv=none; b=V7b53Tc7pdllS7MMwo2qVC2KSyrvwidGjpGDda3/0i1gTm2xZ2KMDonCvkrK632kSXdwMWuGz9lTCa686PkyqVszORcetPhKGxAb/BtoIjdTZWvSnLQ61hjR+G3BO5Jb+KHQ09fubIZhHo664q0qxo3SsCAD3NfBTADsGqUhss8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722508345; c=relaxed/simple;
-	bh=tOopnplrETkoYF74dUHlSXtHbw3Wsjt41fWl93Xcp1g=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=Al6YcBBLR4C67fcaYYcv4+XwiowkZdQ6x1KiCS0ZzdyY2lomdt84u4PlOP5Mho0Jb27jtwl1D0DE0LxGeneOJhnVH66EIkN3F05xLG/tHwBEqn/j7vgGyEP4oXTR7p+hwcct5f9/bV4031zUsmIb9yqpK5qdFMgwBnWUcBHPc3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=ux8gIpRT; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7a1be7b5d70so1487318a12.0
-        for <linux-next@vger.kernel.org>; Thu, 01 Aug 2024 03:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1722508343; x=1723113143; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=iNavXP9Pv3O2vRGwAmgnzq79speK17yhRNKERPn+sSQ=;
-        b=ux8gIpRTjl5JRnz0/9FsPbNaVNZn4diAbg71FSJDp/MUnVwXRCrvikoMJUUaPgFbo7
-         4H95pVZvWwx2nJiSihVtkqrTb6ycoZH3cbl8ThffXKXu15AeOJAmD0wlQjhse/cXHD1a
-         sfnDIFd3/TlBAnU8A6GWD/njUgvcJQrW7MDveDlI6cTyx1GvhKx/IqRc87bwEhtwoyuX
-         FPEGsvyKcx1Gcf4LKE0JTI20t47MivPQAm/TMCxo3QhHdfcVEK+iVvjZ9fE4c8IQ8zOg
-         ZoX6mPkYloVuFtY1i+hXLBo6MiKTOFLpYJOVjL4AS8x1j1hgGB/r7ddAlDgzQBkX5UOL
-         XXQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722508343; x=1723113143;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iNavXP9Pv3O2vRGwAmgnzq79speK17yhRNKERPn+sSQ=;
-        b=V6ltclW9+P46OThMZFWyl/kVUngyUwB3vmDtTN638IHvCvDFHFoUfD7JqKyXU4Zr2O
-         z9GqJ8m0kPVZVTfNMhMYIE3OpR7LbosxYEdLilsxE0gqgxfG/g+velcGi9JKoFvhcv4p
-         q3gAKs2lbiB5ONJSmFdzkfL2b4YtCkLK07j3y1SnoO5tuM6KOy7wboCImIQnt94hswtk
-         fEc2uyopHMR6EGqqBQZgWD+D5ufyY0IEk3iYIjEn5pk/8oUm+oxiG4dIXX7EA5sN8YjN
-         qHPpUnfEwenguv5iTAVFAumUaCJWgWiciIs6ESk0wZh7dPB6WQiIwlUDyGgmJVA2VwvN
-         zoCQ==
-X-Gm-Message-State: AOJu0YywXJpHCGvTdZGYzZpJwRGYcX8L9ROkw/dJeib1AMabiZwpnfsT
-	DOz6JZkWpNQJIg+ynUbgumaNI4TvWGs8Q6qdOy1y8Qca5/EejTAOC0WionnjRYLLGZUY+aMTKf6
-	D
-X-Google-Smtp-Source: AGHT+IH8E6w/GGz+mcosEI1OFoRT56lUQCx2np+Dige4mzhOqzdoe96/nV02PPX4jrdtuPsK36UPlg==
-X-Received: by 2002:a17:90a:6d96:b0:2c8:5055:e24f with SMTP id 98e67ed59e1d1-2cff090cae4mr1378470a91.2.1722508342642;
-        Thu, 01 Aug 2024 03:32:22 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cfdc493d3csm2901334a91.36.2024.08.01.03.32.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Aug 2024 03:32:22 -0700 (PDT)
-Message-ID: <66ab6436.170a0220.2606e3.813d@mx.google.com>
-Date: Thu, 01 Aug 2024 03:32:22 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1722518507; c=relaxed/simple;
+	bh=NM2o54m6nuaZC/2nnIwnXBD87uvGvJL2CUXUEzKnSik=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=b7AlOHTkVUw8bDL3Lvhvpa0gqU8sNcmq/66P6Z+QvPybi3mvS7/5OfNermKzt7g8hOc81helP4nY5v62EDt5Bq424iEnYBFUYP0hPYjbkaf+qaQtBy/Vk25bKCcUSKJkVnGh6U8IyLUp/PcUMaAtZgDQLD5Ovb9XytW2XTmWMIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gQNsy5wB; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722518504;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Nf9lnO0AqJLkerk+hhR+NgdJ8Dfb0yzcWRBfTjntk7s=;
+	b=gQNsy5wBBpZaUyLE3+qwWJXOiqNvonP8XRN+jSL6Ksttj7UvauqFDLIB8AoVRJZOypzIMb
+	IdBcDMtiuTtgaOElnLaqlCgSBSvKa5OLVweQtghwxdh7MRnkYMiU7SsCXg2iyCdJiTBVWB
+	Y0LCOXwxIM8vb2gaAp8VSOy3yNliMGo=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-444---0N1t3QMQO1_Z7U6pT-Dw-1; Thu,
+ 01 Aug 2024 09:21:40 -0400
+X-MC-Unique: --0N1t3QMQO1_Z7U6pT-Dw-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 286621955D53;
+	Thu,  1 Aug 2024 13:21:38 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.216])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DD7D71955E80;
+	Thu,  1 Aug 2024 13:21:35 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20240801150113.4826dc18@canb.auug.org.au>
+References: <20240801150113.4826dc18@canb.auug.org.au>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: dhowells@redhat.com, Christian Brauner <brauner@kernel.org>,
+    Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+    Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the vfs-brauner tree
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20240801
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 203 runs, 3 regressions (next-20240801)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <4137943.1722518494.1@warthog.procyon.org.uk>
+Date: Thu, 01 Aug 2024 14:21:34 +0100
+Message-ID: <4137944.1722518494@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-next/master baseline: 203 runs, 3 regressions (next-20240801)
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Regressions Summary
--------------------
+> After merging the vfs-brauner tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Error: Cannot open file fs/netfs/io.c
+> 
+> Introduced by commit
+> 
+>   af6519cfd7c2 ("netfs: Remove fs/netfs/io.c")
 
-platform          | arch  | lab         | compiler | defconfig          | r=
-egressions
-------------------+-------+-------------+----------+--------------------+--=
-----------
-qemu_riscv64      | riscv | lab-broonie | gcc-12   | defconfig+debug    | 1=
-          =
+Ah.
 
-qemu_smp8_riscv64 | riscv | lab-broonie | gcc-12   | defconfig+debug    | 1=
-          =
+Documentation/filesystems/netfs_library.rst:.. kernel-doc:: fs/netfs/io.c
 
-r8a7743-iwg20d-q7 | arm   | lab-cip     | gcc-12   | shmobile_defconfig | 1=
-          =
+That needs removing too.
 
+David
 
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-240801/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20240801
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      048d8cb65cde9fe7534eb4440bcfddcf406bb49c =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform          | arch  | lab         | compiler | defconfig          | r=
-egressions
-------------------+-------+-------------+----------+--------------------+--=
-----------
-qemu_riscv64      | riscv | lab-broonie | gcc-12   | defconfig+debug    | 1=
-          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66ab2b14de9c2995c77e7091
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240801/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_riscv64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240801/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_riscv64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66ab2b14de9c2995c77e7=
-092
-        failing since 15 days (last pass: next-20240712, first fail: next-2=
-0240716) =
-
- =
-
-
-
-platform          | arch  | lab         | compiler | defconfig          | r=
-egressions
-------------------+-------+-------------+----------+--------------------+--=
-----------
-qemu_smp8_riscv64 | riscv | lab-broonie | gcc-12   | defconfig+debug    | 1=
-          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66ab2a99c4c0a56b317e706d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240801/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_smp8_riscv64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240801/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_smp8_riscv64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66ab2a99c4c0a56b317e7=
-06e
-        failing since 15 days (last pass: next-20240712, first fail: next-2=
-0240716) =
-
- =
-
-
-
-platform          | arch  | lab         | compiler | defconfig          | r=
-egressions
-------------------+-------+-------------+----------+--------------------+--=
-----------
-r8a7743-iwg20d-q7 | arm   | lab-cip     | gcc-12   | shmobile_defconfig | 1=
-          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66ab2764cd0d37483f7e7081
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: shmobile_defconfig
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240801/arm/=
-shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240801/arm/=
-shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66ab2764cd0d37483f7e7=
-082
-        new failure (last pass: next-20240730) =
-
- =20
 

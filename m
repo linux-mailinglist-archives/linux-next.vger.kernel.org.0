@@ -1,116 +1,117 @@
-Return-Path: <linux-next+bounces-3193-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3194-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 319809442F0
-	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 07:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CEC549442FF
+	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 08:04:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E69A1283F60
-	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 05:56:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7059A283A63
+	for <lists+linux-next@lfdr.de>; Thu,  1 Aug 2024 06:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510C218E0E;
-	Thu,  1 Aug 2024 05:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FEB61EB49D;
+	Thu,  1 Aug 2024 06:04:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qTZKJk6S"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Fa5EysRO"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9361EB490;
-	Thu,  1 Aug 2024 05:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5B01EB487;
+	Thu,  1 Aug 2024 06:03:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722491805; cv=none; b=Y3T3LMi3AT5TnZi9E1JVHR12Vr77XapzgN+DrIKxw9rqptVPfIk+XiWcK0hasjWbEL2wJCO7U88AVtey6hl87m9Y7aVdt0rRd0VPh/mM5osLclxdtGQJqsWichrHXiWqXUOINw34taRo1wQ9+pZMloGqOaTY8d/9EvAIMe4D/r8=
+	t=1722492243; cv=none; b=bi6uDQnuZ46dMH7G1xaAdMX+z0MqyqlLQbnmrpFE4a29FfiBKT4nvNj7rklbiZXMsTb77MSxrUNtj49gXvDdEiZKi4o09oLr1Bo4nVo8wYE13LpfsPJV65nctSId0ZnhI7phlh+YSjlixlL3bENUP78Psr5D08yc+XlTR44B9cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722491805; c=relaxed/simple;
-	bh=U76Z4puSXDe2HNY7aWD83tgpRgC6EffWKbN3Zxon7fM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ffZbQKboCP+cDihAaY61sG7BsLc1Nt5Ofy/m+GogAy+gduJ64WDGVBPow6FmjVcID6CPLxiC5JZ7KA+1zQNyETQXuIQ4oT9Txu9WL0Ht1ja3gaqKbvQIBwb3Wk/V/hHB4uPXtVT8DgFIhCenHVO/XsYV/NhhFVcKhxj7XyQGqPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qTZKJk6S; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1722492243; c=relaxed/simple;
+	bh=FKlxur0CMqOyOsvecMdO2kRtUQaFDGZ45PtqsROFYbI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dWaOmJ+xP0dl/MIHlu0SZyAzQaonIXxUEsGNurJMBjG4LsmYDM7Vp75d4lVJbWFl4P/qncNU4kujCaIcVuv8J6KoGgZJYq11Tfp0V16C9WupI7A/TK/A1ZPkpBLz9oV0voB/IVpT1pEpGq63yhhkmuJYtIj6RT55NHCKGeA+B+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Fa5EysRO; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1722491801;
-	bh=65bYuY2tf0mE6YDibmIkUR0bVeVkoVP9aiqGIajDhdY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qTZKJk6SN8z8n42W6+R4qgrEjmZEOeNb75P4aTlc/9G+Jvf0yr7gvXHonNuVwt7VA
-	 PYZbAZg4mvDdwvsF6Y+H9HDDTR95tUj7o31QNCxiMctJA0+9Ri5MPC4t57vX7NtoR1
-	 IP1X9F6B6YqCkkS9T/zt2sv+OBTNDjFBufO4Fk2LD+HdPu4R3s9aYJ30O1UIwopzJA
-	 C0UEhr+UBS+9A4k0MAm3ESbe9GkiVxTyml32a0X68GXMtmcnQDJSKGn8FyM87QR2vG
-	 fZBiu5yTxn00u6FGtGjjms9Bxyg7jzgbkIMswBZccmvAUuSptVK+JU738gFJlLHJlg
-	 xuwaKr2QA+Hdw==
+	s=201702; t=1722492238;
+	bh=uVarZMcOO5cTR+tIOWbqIQxx78Q5RYUZs/Sn8X/szxI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Fa5EysROkmNcCbdiutsZFnJJ8L2aV/qiLint8zW4hwAKtqenAHSXrXmCUAM6lf4HR
+	 acAio9ATcAp1jPSLjqS+M7yNOzZk2CiNHcdg88vn0C6SYU8ppVdw5ile39N80jllqW
+	 Aap8FrTxDN8XldoFrrhIJbpUg7JZ4QshA1hIqrb9IuksOeZR/SLxcMH1h9j/6CFdtf
+	 Dvqtss2U++zjHKb3TfGRbTRlk54+Xnf8wBebdjOOhcVa89RPu7X+43Rw5JXA9gphJx
+	 mXdWbrWuYfOhkkWxCts06mAyGlgWeCUB1qo2OG4SZb1PGWcbBuXuYkaPBNStBQl1QO
+	 sLqz8rpx2ZZPA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WZJBK4q2Zz4x6r;
-	Thu,  1 Aug 2024 15:56:41 +1000 (AEST)
-Date: Thu, 1 Aug 2024 15:56:40 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WZJLk0Lqjz4wc1;
+	Thu,  1 Aug 2024 16:03:57 +1000 (AEST)
+Date: Thu, 1 Aug 2024 16:03:57 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jeff Layton <jlayton@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the vfs-brauner tree
-Message-ID: <20240801155640.4c54bbf9@canb.auug.org.au>
-In-Reply-To: <20240801155522.37ba7641@canb.auug.org.au>
-References: <20240801155522.37ba7641@canb.auug.org.au>
+To: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Maxime Ripard <mripard@kernel.org>, Sebastian Wick
+ <sebastian.wick@redhat.com>, Hamza Mahfooz <hamza.mahfooz@amd.com>, Mario
+ Limonciello <mario.limonciello@amd.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the drm-misc tree
+Message-ID: <20240801160357.7ac5f111@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qjhUDPQy_d=d2/vuI=n.cwY";
+Content-Type: multipart/signed; boundary="Sig_/JhW2nqM.dTPOZCGAkE51VId";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/qjhUDPQy_d=d2/vuI=n.cwY
+--Sig_/JhW2nqM.dTPOZCGAkE51VId
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 1 Aug 2024 15:55:22 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the vfs-brauner tree, today's linux-next build (htmldocs)
-> produced this warning:
->=20
-> Documentation/filesystems/multigrain-ts.rst:83: WARNING: duplicate label =
-filesystems/multigrain-ts:multigrain timestamps, other instance in Document=
-ation/filesystems/multigrain-ts.rst
->=20
-> Introduced by commit
->=20
->   f9cb86069bad ("Documentation: add a new file documenting multigrain tim=
-estamps")
+After merging the drm-misc tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-Also:
+Documentation/gpu/drm-kms:538: drivers/gpu/drm/drm_connector.c:1641: ERROR:=
+ Unexpected indentation.
+Documentation/gpu/drm-kms:538: drivers/gpu/drm/drm_connector.c:1643: WARNIN=
+G: Block quote ends without a blank line; unexpected unindent.
+Documentation/gpu/drm-kms:538: drivers/gpu/drm/drm_connector.c:2388: WARNIN=
+G: Definition list ends without a blank line; unexpected unindent.
+Documentation/gpu/drm-kms:538: drivers/gpu/drm/drm_connector.c:2390: ERROR:=
+ Unexpected indentation.
+Documentation/gpu/drm-kms:538: drivers/gpu/drm/drm_connector.c:2412: WARNIN=
+G: Block quote ends without a blank line; unexpected unindent.
+Documentation/gpu/drm-kms:538: drivers/gpu/drm/drm_connector.c:2425: ERROR:=
+ Unexpected indentation.
 
-Documentation/filesystems/multigrain-ts.rst: WARNING: document isn't includ=
-ed in any toctree
+Introduced by commits
+
+  f592e01664b4 ("drm/drm_connector: Document Colorspace property variants")
+  76299a557f36 ("drm: Introduce 'power saving policy' drm property")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/qjhUDPQy_d=d2/vuI=n.cwY
+--Sig_/JhW2nqM.dTPOZCGAkE51VId
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmarI5kACgkQAVBC80lX
-0Gw51ggAia98BOctWF6U4WyPB1ppSUO7Y3nTSMglaB3xRt8AlkWAbJt8qn8JHeM+
-w/e8OLzNex2VOoab7BF2CbRsGithEjx4x56xbBKcmtrvaSOv8630jNH1iejA+fp/
-rZgMlp+QRL+kqIQtc9l1EL+wEoH+chUoS+TCJjmx35zc6S77v8DMAiL6DI1G/MhM
-XSEeXINzBITXP1S7wWAn3yL1H9HYJGoN5WMDq1tX+/ssZj7BSJFghj98y+aA0nsR
-/2rDAIsex3NteUrVzVz0WZOn5ZaQf1Mvi+j1bisla3kOnh0pEsZLYBhHjcFSBFNU
-0A9LYlU07Ipg9HNmq9umdxAq+6UDxQ==
-=OLig
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmarJU0ACgkQAVBC80lX
+0GxPrAf+LZrPefWc8mKaoShDOh3Tvk+rQMIg4gnwDKmg+7sczKv7NGgsA2h9Jc0K
+FhUFGLQJ/AGRJwPnVwLDu+j2zj0CPCXQtxebncJnpb/0gBVeFXBpJtzYiT2urv08
+YQQ7MgDQLZZk47JNAYJTUdihVy+gZlORW2AnM8E/vHHqK1wPIPQJ0t2oveXH5jMl
+2xtDgdJB30oTg2kXq0W86ZxsWxNWqOKNTmITP34tkZ1EoPa1TWxdvTsQRBOBBx2g
+JEo1hJJil2hf/Jav18Y875mtoxC915se64ewU5rASnEcCfID94j+Sbz0trxVxtur
+2L432PU6JN+mPG1pGG/mGvaHakxPpQ==
+=W8co
 -----END PGP SIGNATURE-----
 
---Sig_/qjhUDPQy_d=d2/vuI=n.cwY--
+--Sig_/JhW2nqM.dTPOZCGAkE51VId--
 

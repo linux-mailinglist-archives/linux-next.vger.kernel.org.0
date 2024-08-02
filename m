@@ -1,140 +1,111 @@
-Return-Path: <linux-next+bounces-3216-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3217-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAFB2945DBD
-	for <lists+linux-next@lfdr.de>; Fri,  2 Aug 2024 14:15:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 415C19462C3
+	for <lists+linux-next@lfdr.de>; Fri,  2 Aug 2024 19:57:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F9CC1F23380
-	for <lists+linux-next@lfdr.de>; Fri,  2 Aug 2024 12:15:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E631E2828B9
+	for <lists+linux-next@lfdr.de>; Fri,  2 Aug 2024 17:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F39414C581;
-	Fri,  2 Aug 2024 12:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE79615C126;
+	Fri,  2 Aug 2024 17:57:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="MHalGI8N";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Fj3TSWRc"
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="XrNOS5iI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fhigh2-smtp.messagingengine.com (fhigh2-smtp.messagingengine.com [103.168.172.153])
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8819414A0A0;
-	Fri,  2 Aug 2024 12:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722600951; cv=none; b=kuyk1BwRDphG7hvNCGFh19Yi3ohmzUQZTQZLy0mzHWGnXd3hkZNHijpg767vm888JeLXPmJAzj2uE3H9x7zTx72gFKilIIwKTRFE0E1O+9oijP06r32/SZn2lQSbv2m5x4A9nFTalxhDtkQv/ulK0Ea4gqm5sGAdaTnu4H10xho=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722600951; c=relaxed/simple;
-	bh=v2FZpuYiEUC7FxdAXbRBocoJG8wrCQa6GJSlPZNgKKI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MbGW6W42GvmBrEb+EZkfK3H31xmrrBgDcZAXSNgCX2ib0OMeP77JmezIpb61f7I8pH7WIyOqbXv4yryNGYaN7o6T4ERpQDov9CtUv/KxmkNuU0ezhBXTEH2IQLftt9SMWsbOxeocrfcbpUD0H18nnkvJ+IP9j0zOublslIj5s08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=MHalGI8N; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Fj3TSWRc; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 98F5C1151A8A;
-	Fri,  2 Aug 2024 08:15:47 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 02 Aug 2024 08:15:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1722600947; x=
-	1722687347; bh=W5MJKLNSFe8vyG+t77xLfVk8rQFBLZsl0YWphHlH/s0=; b=M
-	HalGI8N5biCxufXzHVK8Hb6OSJ1nfGI8Y2Mw8aGycD01V73gF96iI1FpdDZAdDbv
-	Q3YJQTaGjwgmoTMb2ZcmYQIA5m3aAPxklBT8pz1gDXg0/7oYXfJFrFewxRfjjuse
-	9FVTxkh3dhP/L0itNGe8HoSIi5CgWLvi3l9YiJwuwjhwlxd8JKYSfiMTgP4VySju
-	lJ5DCXkIXzcVhyHkROMDobE1dILQXU77pCyemiWYPfN3wjzrxIrQ7tQIGyA+PkCo
-	GLjf4VFgc1RWk8VS523ZQyiPLSh08nm9GamyWIb2r+I+QmX4LPtRYvhxw3xVwSmY
-	d8Wbepft+RFpxcSlFQJ2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1722600947; x=1722687347; bh=W5MJKLNSFe8vyG+t77xLfVk8rQFB
-	LZsl0YWphHlH/s0=; b=Fj3TSWRcv5OscV4rFjodk/Ac3xTewrWRm+dckS5QWyO+
-	WvIa5DOtVxiuGvpeuJYlScpZMZX4pe/o6MYTvfmSvwaDG4zuDYT9ll37Xu46PL1a
-	dmfE/t8965mL4h+wjLBUd2I7WEvLeaXtwUPfGYXfjaWFPB1tMtv+g5x9mdacYgwR
-	1oiOtXOAhQXtTrGThpJbHz9Z+fBFX59WMxrXUlf5pTuToq4uOprMADbumMtKvbE3
-	cqGE9HcW5z3+O82kkXX/cQoackvjZughZIk7/K1bvHrthTAA0SHd5IZgNQyPRt1H
-	/Ds3HFYClolB8P1X1hsoqO+C/Y0CUifGLhFdZMpw4A==
-X-ME-Sender: <xms:8s2sZlL9-iUe9UI3qf9LrdHDIk5G0UhIUP8Aqoxe-1EN1_ThBU-WXQ>
-    <xme:8s2sZhKkA5dvzHBNYh5rn-YZMpNwfOEVtqEPLESbZex2S_Xl1nWpdVAzCkcBlsUbt
-    xjE-8AMlAQY-9maX8M>
-X-ME-Received: <xmr:8s2sZttf7WX2TY6anospWwswSgcQNAddNq9NGcHvw_n3Zx9k7O0SbtwPekrw_nZPiKr6DccPi6-hJU3-DtavgYci9rZMGEfZpw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrkedtgdeglecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghkrghs
-    hhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjh
-    hpqeenucggtffrrghtthgvrhhnpeevieelhfdukeffheekffduudevvdefudelleefgeei
-    leejheejuedvgefhteevvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhh
-    ihesshgrkhgrmhhotggthhhirdhjphdpnhgspghrtghpthhtoheptd
-X-ME-Proxy: <xmx:8s2sZmb-9zY26lGli_1wn0oKMvHPPp1bQucBzBaDySxcPSBVEK8gIA>
-    <xmx:8s2sZsa5cmyolk2fbbBfY2VOrxofDUhRRpmj0iErM4YOrQGSknfCiA>
-    <xmx:8s2sZqCZL7f1Al84e0ty35baWqaH29s1Bmue_shevIcrQHSWRmgbfQ>
-    <xmx:8s2sZqa6Z5X12CU67lBIPugxdNSeWfQ5-DhUdpbTfAW5m914csq6dg>
-    <xmx:882sZjW4Oxi6_ViFx9FscbEZGz1EOuVyYLZvGYI0Ts9gp75OOSzOa1wg>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Aug 2024 08:15:45 -0400 (EDT)
-Date: Fri, 2 Aug 2024 21:15:43 +0900
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the ieee1394 tree
-Message-ID: <20240802121543.GA113551@workstation.local>
-Mail-Followup-To: Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	Takashi Iwai <tiwai@suse.de>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240802122120.480789ac@canb.auug.org.au>
- <87mslvig7e.wl-tiwai@suse.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09FF1AE021;
+	Fri,  2 Aug 2024 17:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722621469; cv=pass; b=TLJC0QDH0D4498LNcnl9z98HI9yjnst9VawJ3JfyZAgx0PfhWk5nByn7d0OZ+Helai2YD3OCirfcipK9sikV6tUTEubvOMxf5YJsurybkBlI6uXZyXSvzooAabqoBHQYsdz0D2VkaS0cW8BTdb4Al0oYYtRrGSFZcb2Y0kdbRyU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722621469; c=relaxed/simple;
+	bh=681KljSbvJwnHppaPJRubgSKRRbnRlXy4FZQH8GM2qs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=dGhZa6wHLuIP0M7AYIMjRQas4pmpDxA3m6e8f7wbnfS4of80EuTRvnDskLvtBCzvQimMiUIWIbihuzmA9oPTQ8CQp+5QJGIY6gtcWF8apZF9OU7zwrHo5RNs86rUT8W+nLIv7BEG2L14Cp2djn0lzMAVk0N/mf4UivGK4PDOdlQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=XrNOS5iI; arc=pass smtp.client-ip=185.185.170.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+Received: from localhost (91-154-92-171.elisa-laajakaista.fi [91.154.92.171])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sakkinen)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4WbD7s3VQtz49Pv3;
+	Fri,  2 Aug 2024 20:57:44 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1722621465;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iWd1NH3Yqp6z6FcSD+KgDgLIFvGCTjQTVvXCbKTPUaE=;
+	b=XrNOS5iIi7wk/kHbWysofnSPqHd3dxbfb5CiqF7tf+nLPbOoagHkUmTaDbB1fZs9AfgryB
+	gIvEdDkFk0xRRgsQBq5mQEEpnRiodDxjpwjyOAUpwnZJQNeiicxnQOodp7t7kQRkKEjp7X
+	HFhwLymuf/pWq6EX41TNsuhM2XqHzIouFosKajrwbWEIlqEf2NpyPgMgDB9Ky3WC86fTkY
+	OOVeaKO9gttXQen7cyySC0sdN9DvT838sei2nQwyr4xTb8vQlrR4nSEGF6BROq+uRlrTLt
+	lzJzBTby9HmQj1ekUdog0Mu8IU8ltXwQHFoTN3ee7SPvhV6yZ1MNQRAcefx0Fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1722621465;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iWd1NH3Yqp6z6FcSD+KgDgLIFvGCTjQTVvXCbKTPUaE=;
+	b=iF6MfBw5SPE6pmpltBYInXDZUqSWfy9mnvXzMAcGwpQZa7imSHc42sgyjZX61wE2NbjbFE
+	jMTYgNiLJO7JzpUOU2mLnbSGzP1wfGJqUb5dpTMwufm21y/Uu2rcBy6KBIFcFoOmk8yDcj
+	PVu9QRdSt1rMheReq42uijCZjQlaICMbO+eI+BMZlRROa1OifOVGoCv2iD7ptKlu3ik+RU
+	kE1ixD/iRmwg5iV0vob3pBSJ6/AcZ79cuRvZ8w7349HBvJ6mnb/4fwELqUBNN1DhhwpNu3
+	HxYQYHds7WyEx3Dc2OuZI2sCwR3Isl6D0Qgoc9lplH59ObwO19Ymv3d48e5bfA==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1722621465; a=rsa-sha256;
+	cv=none;
+	b=IDJC5wETE8cYYD8GCVylGd4W5p/4KPGzduwvJVc6ZoJ1BE9g6zlgnKM4BzXhPe82D5rBsT
+	xfTsIumOFhIiEnShhKap+iVnpepLQPL6UDlr8njhZNPZ8Dda13Sca2Qaqd7U+H4y7wbcTf
+	zwRnlU14wJhgpz6NQ8JKoy/nrSjuYcQpcjpOveXIJTvQXCrQUm0koo9fVqv2xeoSpBlVAL
+	Dh61MO0o9NDHAMoZcFt4vQ2HmCj1ySS94M1ICxXgxMxS/XY4n+ldUY2OSd6ixkzsW/6MeK
+	H4GEjTUPPfWfz+8YoH+NSq6JvdERtIHPbPCKvFWAgUIy2nCFHew+2+MqvKZ9Sg==
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mslvig7e.wl-tiwai@suse.de>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 02 Aug 2024 20:57:43 +0300
+Message-Id: <D35MCFF29VT4.2JGEENK5HO6WU@iki.fi>
+Cc: "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>, "Linux Next
+ Mailing List" <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the tpmdd tree
+From: "Jarkko Sakkinen" <jarkko.sakkinen@iki.fi>
+To: "Stephen Rothwell" <sfr@canb.auug.org.au>, "Jarkko Sakkinen"
+ <jarkko@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240802090234.2acf4c25@canb.auug.org.au>
+In-Reply-To: <20240802090234.2acf4c25@canb.auug.org.au>
 
-Hi,
+On Fri Aug 2, 2024 at 2:02 AM EEST, Stephen Rothwell wrote:
+> Hi all,
+>
+> Commit
+>
+>   f6554cbf56be ("KEYS: Remove unused declarations")
+>
+> is missing a Signed-off-by from its committer.
 
-On Fri, Aug 02, 2024 at 08:36:37AM +0200, Takashi Iwai wrote:
-> On Fri, 02 Aug 2024 04:21:20 +0200,
-> Stephen Rothwell wrote:
-> > 
-> > Hi all,
-> > 
-> > The following commits are also in the sound-current tree as different
-> > commits (but the same patches):
-> > 
-> >   c2f9fd3d6ad7 ("Revert "ALSA: firewire-lib: operate for period elapse event in process context"")
-> >   e29ed9a81fd4 ("Revert "ALSA: firewire-lib: obsolete workqueue for period update"")
-> 
-> Sakamoto-san, with your Reviewed-by tag, I thought you gave a sign to
-> put via sound git tree?  I'm going send a PR to Linus in today, so if
-> possible, please drop those from yours.
+Will fix, sorry I came from holidays this week and mbsync failed me.
+Did a lot of stuff yesterday when I got it finally working (tried
+to be careful but shit happens).
 
-Oops. When applying the recent patch[1] to the for-next branch, I
-wrongly pushed these patches under my evaluation to the remote. They
-should be sent by sound side, indeed.
+[1] https://bugzilla.redhat.com/show_bug.cgi?id=3D2302132
 
-I pushed the revised series to the for-next branch. Thanks for noticing
-it, guys.
-
-[1] https://lore.kernel.org/lkml/20240801022629.31857-1-o-takashi@sakamocchi.jp/
-
-
-Regards
-
-Takashi Sakamoto
+BR, Jarkko
 

@@ -1,97 +1,437 @@
-Return-Path: <linux-next+bounces-3221-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3222-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F169A94688C
-	for <lists+linux-next@lfdr.de>; Sat,  3 Aug 2024 09:38:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FD149468C4
+	for <lists+linux-next@lfdr.de>; Sat,  3 Aug 2024 11:02:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 974631F2164D
-	for <lists+linux-next@lfdr.de>; Sat,  3 Aug 2024 07:38:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7EFB1F219BD
+	for <lists+linux-next@lfdr.de>; Sat,  3 Aug 2024 09:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE160136338;
-	Sat,  3 Aug 2024 07:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="KPvG6B0i"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FCDA13D53E;
+	Sat,  3 Aug 2024 09:02:27 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061C2D2EE;
-	Sat,  3 Aug 2024 07:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9472F1C3E
+	for <linux-next@vger.kernel.org>; Sat,  3 Aug 2024 09:02:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722670713; cv=none; b=S26CeeGq9rD7ZAK48ezxx9eWOEccONrbZeUg2lmea6cdEGqeFsCPORNb+IMZBmR7t9Et6X2K0xi36G0DgtZPErnuL2Jw54yCEnQea3P5Zr+ev0DuNC0z7CbyirGgrxkm1jYYu5kOlYndf/czMs35oPjIBjvWU3WVCeVb6HkoZRU=
+	t=1722675747; cv=none; b=fkGbFjnZ9kC27Zxk0AGeBy3/VAI2ZfzDfYTw9M2mDjrkcZSksAm8WXnejCpEwOfKyCePoBtAAvCEl23iNRyx/TTIMznTeQOs0twbyZL4fOiUyGWR5O8gT1sqC0CpuC+qb+txxw5mVN2650FqmK9o3L3Att1gNOH077SX5utPtdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722670713; c=relaxed/simple;
-	bh=n8doIJ/4dFdeGOKckWB1A7HnGQOdLFnIAefL5IyIIvc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XugQUVJaPuL4VkCK8Wvj13JWUHOEhkQiO2lki0z/5yOfT9RQrUEg21GJIsonGUUpwiNXAWC943suHIqXkcktWjx9/IXkOXeijiL5qSSuJkGqY9l4CPmFZDhFkYFOLRktVhtzvCzNX19Cq4JdvJXD2eTWQC/yCjbBvqsHC28fPkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=KPvG6B0i; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1722670707;
-	bh=HcR0a5td/JPNyJ8T94+GL56wlz2LR5fBNgA1C8UPaUM=;
-	h=Date:From:To:Cc:Subject:From;
-	b=KPvG6B0ib+UQDHmWy5fG5SzSb7J8CpZvzUOdK+U43pxoBbV64eoho6qZZGfyYwyM8
-	 qWl32xidcVdRNB5bL7SSrQdd9zGubvwnD4nB0ACOM5R/S36VfLdlyGtEQIx7Em1qCE
-	 LlTNv9Gwfyxq/MvJzvvOhu0W/B2FApkwrNVk0uKdoCwewwUzvvfpSY0+KnS5LI/6kK
-	 2/GF3TBdnp9tpka6tX7D3GMPltp2bU5OO1InwOTSyEAS6aVsnyzRYslQi/OydYdsEc
-	 nlDTAhTP5ynrVqyAi21IvgHtJPQcvlxE0sxnwmfgzEoitbaEY5dHkC8x/IgROtDqcw
-	 P+nuPrZKBrj0Q==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WbZLq3FZRz4wbv;
-	Sat,  3 Aug 2024 17:38:27 +1000 (AEST)
-Date: Sat, 3 Aug 2024 17:38:26 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the asm-generic tree
-Message-ID: <20240803173826.4ace6131@canb.auug.org.au>
+	s=arc-20240116; t=1722675747; c=relaxed/simple;
+	bh=Xv+ITpTDNBqdEaPMSqbvUyRaz4x5RAl0Qpfo4hxVjfs=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=RRotbBQOYT+LA3qEmZxyo7RTUIirVjfJKFEcRG8HZcS1+ADZDrbpvImeZc6vmXW9Kbcogyfioxh9AfnpbEf3dyasXXjhLkOlFOpZa6iOF9274zVbMEyxNZleeSo13E9SWdWfA6qZrhrihpYDUHzyGoK0XwDtjn5QvtsWUF49RY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-81f8c78cc66so1297033539f.2
+        for <linux-next@vger.kernel.org>; Sat, 03 Aug 2024 02:02:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722675745; x=1723280545;
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xc2fuI+z1RqYFlqZps/yPNFiVupn3AY9LHqdTtlmImc=;
+        b=jnSpuGqLlyaHcFBCwEDhjtZzrdcHLDmudkPc6gUUkOnrmianlJ064hG6iSAwTzV+zG
+         TcVZmtPMIrfXSxRM47Dr5/HpK9ukLPNZx/SU10VtcK1QIiuMkwoS+FzLEfMA4woV85Cj
+         aaGxMPKhXFJ/r2hsm26sgzu9p8t3HKYP2tVJgLgC/MaE0VBHp7pM3QOhensnCVnmjQOF
+         2wNEU1ucRy6ed4SYhn5tb6bB5HifZahrUf9EsXdvFXetxtKoE8mKx3BS0mmXDhRMQROV
+         3fr5WyxKUHjMd1BjoKmGlDP6BBIDRuVZiDuDPSO2/e07KcOZIxxgAINeRFIobuWkfBpz
+         IqbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7f3/FCn/CNL/j7xZznUc1QPVl0/kfHA8rxmA6FWZqd7naRJCOsv7P34Iol6JAjgKhI5y76BDE7kxDAmFvuuz5JJ65OEdeLBVWGA==
+X-Gm-Message-State: AOJu0YzjHE6gtPr8OsxCZY3HdTmz2M6CBQukJ3pn1v4jt6E9Q9MuVThj
+	SbPh2WAe+FYn8f4PZf7qZB6RT8l4uO3bl4TRbD+CbEVJtE9rQwIDvdHzvlpVdpkD4HlY+ADl9e0
+	Fp0C44ZbOvqzTvD7lMHrUAuYdsKsYYUjahKgeeCnd7saNNlGivOCN2jQ=
+X-Google-Smtp-Source: AGHT+IFH02iDIfdesbknb+tmiD5sgir+AuFuFndp4LRHo5aX1EQAeXA0m/CMiIZbkHKjhBCBzS9iYOte1/Hmhkyw6SPg5U4nT3Kz
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bUxDDmMu9jGU4y.w+ABU6Pm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/bUxDDmMu9jGU4y.w+ABU6Pm
-Content-Type: text/plain; charset=US-ASCII
+X-Received: by 2002:a05:6638:35ac:b0:4c2:2ad5:bfd0 with SMTP id
+ 8926c6da1cb9f-4c8d53e368fmr194147173.0.1722675744488; Sat, 03 Aug 2024
+ 02:02:24 -0700 (PDT)
+Date: Sat, 03 Aug 2024 02:02:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d04f86061ec3b371@google.com>
+Subject: [syzbot] [kernel?] linux-next test error: WARNING in static_key_enable_cpuslocked
+From: syzbot <syzbot+4465d7d7dc1e86d380eb@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hello,
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+syzbot found the following issue on:
 
-  a73df08ebb5a ("syscalls: fix syscall macros for newfstat/newfstatat")
+HEAD commit:    cd19ac2f9032 Add linux-next specific files for 20240730
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=3D125c5a9d980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dd30cbb2338538ae=
+9
+dashboard link: https://syzkaller.appspot.com/bug?extid=3D4465d7d7dc1e86d38=
+0eb
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debia=
+n) 2.40
 
---=20
-Cheers,
-Stephen Rothwell
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/14c7d22635fe/disk-=
+cd19ac2f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9e6966e715dc/vmlinux-=
+cd19ac2f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/734b6df17249/bzI=
+mage-cd19ac2f.xz
 
---Sig_/bUxDDmMu9jGU4y.w+ABU6Pm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+IMPORTANT: if you fix the issue, please add the following tag to the commit=
+:
+Reported-by: syzbot+4465d7d7dc1e86d380eb@syzkaller.appspotmail.com
 
------BEGIN PGP SIGNATURE-----
+Linux version 6.11.0-rc1-next-20240730-syzkaller (syzkaller@syzkaller) (Deb=
+ian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40) #0 SMP PRE=
+EMPT_DYNAMIC now
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 0 at kernel/static_call_inline.c:153 __static_call_upd=
+ate+0x5ce/0x5e0 kernel/static_call_inline.c:153
+Modules linked in:
+CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.11.0-rc1-next-20240730-syz=
+kaller #0
+Code: 8b 04 25 28 00 00 00 48 3b 84 24 a0 00 00 00 75 1e 48 8d 65 d8 5b 41 =
+5c 41 5d 41 5e 41 5f 5d e9 68 74 04 0a e8 63 e0 d1 ff 90 <0f> 0b 90 eb a8 e=
+8 58 1a fa 09 0f 1f 84 00 00 00 00 00 90 90 90 90
+RSP: 0000:ffffffff8e607d20 EFLAGS: 00010093 ORIG_RAX: 0000000000000000
+RAX: ffffffff81c1da7d RBX: 0000000000000000 RCX: ffffffff8e694680
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffffffff8e607e18 R08: ffffffff81c1d597 R09: 1ffffffff1cc0f94
+R10: dffffc0000000000 R11: fffffbfff1cc0f95 R12: dffffc0000000000
+R13: ffffffff8e30be88 R14: ffffffff8bc6f238 R15: ffffffff8efcb480
+FS:  0000000000000000(0000) GS:ffffffff9174d000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88800008a000 CR3: 000000001193e000 CR4: 00000000000000b0
+Call Trace:
+ <TASK>
+ </TASK>
+irq event stamp: 0
+hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+hardirqs last disabled at (0): [<0000000000000000>] 0x0
+softirqs last  enabled at (0): [<0000000000000000>] 0x0
+softirqs last disabled at (0): [<0000000000000000>] 0x0
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+static_key_enable_cpuslocked(): static key 'security_hook_active_locked_dow=
+n_0+0x0/0x20' used before call to jump_label_init()
+WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:199 static_key_enable_cpusloc=
+ked+0x186/0x260 kernel/jump_label.c:199
+Modules linked in:
+CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W          6.11.0-rc1-=
+next-20240730-syzkaller #0
+Tainted: [W]=3DWARN
+RIP: 0010:static_key_enable_cpuslocked+0x186/0x260 kernel/jump_label.c:199
+Code: 9e 8e 5b 41 5e 41 5f 5d e9 e7 a0 fb 09 e8 d2 8d ca ff 90 48 c7 c7 40 =
+ae 13 8c 48 c7 c6 66 c6 08 8e 4c 89 fa e8 bb 64 8c ff 90 <0f> 0b 90 90 e9 c=
+2 fe ff ff e8 ac 8d ca ff 90 0f 0b 90 e9 21 ff ff
+RSP: 0000:ffffffff8e607e40 EFLAGS: 00010046 ORIG_RAX: 0000000000000000
+RAX: 0000000000000000 RBX: ffffffff95134b80 RCX: ffffffff8e694680
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff81559472 R09: 1ffffffff1d025ef
+R10: dffffc0000000000 R11: fffffbfff1d025f0 R12: ffffffff8e30be80
+R13: dffffc0000000000 R14: dffffc0000000000 R15: ffffffff95134b80
+FS:  0000000000000000(0000) GS:ffffffff9174d000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88800008a000 CR3: 000000001193e000 CR4: 00000000000000b0
+Call Trace:
+ <TASK>
+ </TASK>
+irq event stamp: 0
+hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+hardirqs last disabled at (0): [<0000000000000000>] 0x0
+softirqs last  enabled at (0): [<0000000000000000>] 0x0
+softirqs last disabled at (0): [<0000000000000000>] 0x0
+---[ end trace 0000000000000000 ]---
+Command line: BOOT_IMAGE=3D/boot/bzImage root=3D/dev/sda1 console=3DttyS0
+KERNEL supported cpus:
+  Intel GenuineIntel
+  AMD AuthenticAMD
+BIOS-provided physical RAM map:
+BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+BIOS-e820: [mem 0x0000000000100000-0x00000000bfffcfff] usable
+BIOS-e820: [mem 0x00000000bfffd000-0x00000000bfffffff] reserved
+BIOS-e820: [mem 0x00000000fffbc000-0x00000000ffffffff] reserved
+BIOS-e820: [mem 0x0000000100000000-0x000000023fffffff] usable
+printk: legacy bootconsole [earlyser0] enabled
+ERROR: earlyprintk=3D earlyser already used
+ERROR: earlyprintk=3D earlyser already used
+**********************************************************
+**   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **
+**                                                      **
+** This system shows unhashed kernel memory addresses   **
+** via the console, logs, and other interfaces. This    **
+** might reduce the security of your system.            **
+**                                                      **
+** If you see this message and you are not debugging    **
+** the kernel, report this immediately to your system   **
+** administrator!                                       **
+**                                                      **
+**   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **
+**********************************************************
+Malformed early option 'vsyscall'
+nopcid: PCID feature disabled
+NX (Execute Disable) protection: active
+APIC: Static calls initialized
+SMBIOS 2.4 present.
+DMI: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/27/=
+2024
+DMI: Memory slots populated: 1/1
+Hypervisor detected: KVM
+kvm-clock: Using msrs 4b564d01 and 4b564d00
+kvm-clock: using sched offset of 4749540150 cycles
+clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb,=
+ max_idle_ns: 881590591483 ns
+tsc: Detected 2200.216 MHz processor
+last_pfn =3D 0x240000 max_arch_pfn =3D 0x400000000
+MTRR map: 4 entries (3 fixed + 1 variable; max 19), built from 8 variable M=
+TRRs
+x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT =20
+last_pfn =3D 0xbfffd max_arch_pfn =3D 0x400000000
+found SMP MP-table at [mem 0x000f2a50-0x000f2a5f]
+Using GB pages for direct mapping
+ACPI: Early table checksum verification disabled
+ACPI: RSDP 0x00000000000F27D0 000014 (v00 Google)
+ACPI: RSDT 0x00000000BFFFFFA0 000038 (v01 Google GOOGRSDT 00000001 GOOG 000=
+00001)
+ACPI: FACP 0x00000000BFFFF330 0000F4 (v02 Google GOOGFACP 00000001 GOOG 000=
+00001)
+ACPI: DSDT 0x00000000BFFFD8C0 001A64 (v01 Google GOOGDSDT 00000001 GOOG 000=
+00001)
+ACPI: FACS 0x00000000BFFFD880 000040
+ACPI: FACS 0x00000000BFFFD880 000040
+ACPI: SRAT 0x00000000BFFFFE60 0000C8 (v03 Google GOOGSRAT 00000001 GOOG 000=
+00001)
+ACPI: APIC 0x00000000BFFFFDB0 000076 (v05 Google GOOGAPIC 00000001 GOOG 000=
+00001)
+ACPI: SSDT 0x00000000BFFFF430 000980 (v01 Google GOOGSSDT 00000001 GOOG 000=
+00001)
+ACPI: WAET 0x00000000BFFFFE30 000028 (v01 Google GOOGWAET 00000001 GOOG 000=
+00001)
+ACPI: Reserving FACP table memory at [mem 0xbffff330-0xbffff423]
+ACPI: Reserving DSDT table memory at [mem 0xbfffd8c0-0xbffff323]
+ACPI: Reserving FACS table memory at [mem 0xbfffd880-0xbfffd8bf]
+ACPI: Reserving FACS table memory at [mem 0xbfffd880-0xbfffd8bf]
+ACPI: Reserving SRAT table memory at [mem 0xbffffe60-0xbfffff27]
+ACPI: Reserving APIC table memory at [mem 0xbffffdb0-0xbffffe25]
+ACPI: Reserving SSDT table memory at [mem 0xbffff430-0xbffffdaf]
+ACPI: Reserving WAET table memory at [mem 0xbffffe30-0xbffffe57]
+SRAT: PXM 0 -> APIC 0x00 -> Node 0
+SRAT: PXM 0 -> APIC 0x01 -> Node 0
+ACPI: SRAT: Node 0 PXM 0 [mem 0x00000000-0x0009ffff]
+ACPI: SRAT: Node 0 PXM 0 [mem 0x00100000-0xbfffffff]
+ACPI: SRAT: Node 0 PXM 0 [mem 0x100000000-0x23fffffff]
+NUMA: Node 0 [mem 0x00000000-0x0009ffff] + [mem 0x00100000-0xbfffffff] -> [=
+mem 0x00000000-0xbfffffff]
+NUMA: Node 0 [mem 0x00000000-0xbfffffff] + [mem 0x100000000-0x23fffffff] ->=
+ [mem 0x00000000-0x23fffffff]
+Faking node 0 at [mem 0x0000000000000000-0x000000013fffffff] (5120MB)
+Faking node 1 at [mem 0x0000000140000000-0x000000023fffffff] (4096MB)
+NODE_DATA(0) allocated [mem 0x13fffa000-0x13fffffff]
+NODE_DATA(1) allocated [mem 0x23fff7000-0x23fffcfff]
+Zone ranges:
+  DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+  DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+  Normal   [mem 0x0000000100000000-0x000000023fffffff]
+  Device   empty
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000000001000-0x000000000009efff]
+  node   0: [mem 0x0000000000100000-0x00000000bfffcfff]
+  node   0: [mem 0x0000000100000000-0x000000013fffffff]
+  node   1: [mem 0x0000000140000000-0x000000023fffffff]
+Initmem setup node 0 [mem 0x0000000000001000-0x000000013fffffff]
+Initmem setup node 1 [mem 0x0000000140000000-0x000000023fffffff]
+On node 0, zone DMA: 1 pages in unavailable ranges
+On node 0, zone DMA: 97 pages in unavailable ranges
+On node 0, zone Normal: 3 pages in unavailable ranges
+kasan: KernelAddressSanitizer initialized
+ACPI: PM-Timer IO Port: 0xb008
+ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
+ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+ACPI: Using ACPI (MADT) for SMP configuration information
+CPU topo: Max. logical packages:   1
+CPU topo: Max. logical dies:       1
+CPU topo: Max. dies per package:   1
+CPU topo: Max. threads per core:   2
+CPU topo: Num. cores per package:     1
+CPU topo: Num. threads per package:   2
+CPU topo: Allowing 2 present CPUs plus 0 hotplug CPUs
+PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x0009ffff]
+PM: hibernation: Registered nosave memory: [mem 0x000a0000-0x000effff]
+PM: hibernation: Registered nosave memory: [mem 0x000f0000-0x000fffff]
+PM: hibernation: Registered nosave memory: [mem 0xbfffd000-0xbfffffff]
+PM: hibernation: Registered nosave memory: [mem 0xc0000000-0xfffbbfff]
+PM: hibernation: Registered nosave memory: [mem 0xfffbc000-0xffffffff]
+[mem 0xc0000000-0xfffbbfff] available for PCI devices
+Booting paravirtualized kernel on KVM
+clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_=
+idle_ns: 19112604462750000 ns
+setup_percpu: NR_CPUS:8 nr_cpumask_bits:2 nr_cpu_ids:2 nr_node_ids:2
+percpu: Embedded 74 pages/cpu s264328 r8192 d30584 u1048576
+kvm-guest: PV spinlocks enabled
+PV qspinlock hash table entries: 256 (order: 0, 4096 bytes, linear)
+Kernel command line: earlyprintk=3Dserial net.ifnames=3D0 sysctl.kernel.hun=
+g_task_all_cpu_backtrace=3D1 ima_policy=3Dtcb nf-conntrack-ftp.ports=3D2000=
+0 nf-conntrack-tftp.ports=3D20000 nf-conntrack-sip.ports=3D20000 nf-conntra=
+ck-irc.ports=3D20000 nf-conntrack-sane.ports=3D20000 binder.debug_mask=3D0 =
+rcupdate.rcu_expedited=3D1 rcupdate.rcu_cpu_stall_cputime=3D1 no_hash_point=
+ers page_owner=3Don sysctl.vm.nr_hugepages=3D4 sysctl.vm.nr_overcommit_huge=
+pages=3D4 secretmem.enable=3D1 sysctl.max_rcu_stall_to_panic=3D1 msr.allow_=
+writes=3Doff coredump_filter=3D0xffff root=3D/dev/sda console=3DttyS0 vsysc=
+all=3Dnative numa=3Dfake=3D2 kvm-intel.nested=3D1 spec_store_bypass_disable=
+=3Dprctl nopcid vivid.n_devs=3D16 vivid.multiplanar=3D1,2,1,2,1,2,1,2,1,2,1=
+,2,1,2,1,2 netrom.nr_ndevs=3D16 rose.rose_ndevs=3D16 smp.csd_lock_timeout=
+=3D100000 watchdog_thresh=3D55 workqueue.watchdog_thresh=3D140 sysctl.net.c=
+ore.netdev_unregister_timeout_secs=3D140 dummy_hcd.num=3D8 panic_on_warn=3D=
+1 BOOT_IMAGE=3D/boot/bzImage root=3D/dev/sda1 console=3DttyS0
+Unknown kernel command line parameters "spec_store_bypass_disable=3Dprctl B=
+OOT_IMAGE=3D/boot/bzImage", will be passed to user space.
+random: crng init done
+Fallback order for Node 0: 0 1=20
+Fallback order for Node 1: 1 0=20
+Built 2 zonelists, mobility grouping on.  Total pages: 2097051
+Policy zone: Normal
+mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+stackdepot: allocating hash table via alloc_large_system_hash
+stackdepot hash table entries: 1048576 (order: 12, 16777216 bytes, linear)
+software IO TLB: area num 2.
+SLUB: HWalign=3D64, Order=3D0-3, MinObjects=3D0, CPUs=3D2, Nodes=3D2
+allocated 167772160 bytes of page_ext
+Node 0, zone      DMA: page owner found early allocated 0 pages
+Node 0, zone    DMA32: page owner found early allocated 20582 pages
+Node 0, zone   Normal: page owner found early allocated 0 pages
+Node 1, zone   Normal: page owner found early allocated 20483 pages
+Kernel/User page tables isolation: enabled
+Dynamic Preempt: full
+Running RCU self tests
+Running RCU synchronous self tests
+rcu: Preemptible hierarchical RCU implementation.
+rcu: 	RCU lockdep checking is enabled.
+rcu: 	RCU restricting CPUs from NR_CPUS=3D8 to nr_cpu_ids=3D2.
+rcu: 	RCU callback double-/use-after-free debug is enabled.
+rcu: 	RCU debug extended QS entry/exit.
+	All grace periods are expedited (rcu_expedited).
+	Trampoline variant of Tasks RCU enabled.
+	Tracing variant of Tasks RCU enabled.
+rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+rcu: Adjusting geometry for rcu_fanout_leaf=3D16, nr_cpu_ids=3D2
+Running RCU synchronous self tests
+RCU Tasks: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=3D1.
+RCU Tasks Trace: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=3D1.
+NR_IRQS: 4352, nr_irqs: 440, preallocated irqs: 16
+rcu: srcu_init: Setting srcu_struct sizes based on contention.
+kfence: initialized - using 2097152 bytes for 255 objects at 0xffff88823bc0=
+0000-0xffff88823be00000
+Console: colour VGA+ 80x25
+printk: legacy console [ttyS0] enabled
+printk: legacy console [ttyS0] enabled
+printk: legacy bootconsole [earlyser0] disabled
+printk: legacy bootconsole [earlyser0] disabled
+Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
+... MAX_LOCKDEP_SUBCLASSES:  8
+... MAX_LOCK_DEPTH:          48
+... MAX_LOCKDEP_KEYS:        8192
+... CLASSHASH_SIZE:          4096
+... MAX_LOCKDEP_ENTRIES:     131072
+... MAX_LOCKDEP_CHAINS:      262144
+... CHAINHASH_SIZE:          131072
+ memory used by lock dependency info: 20721 kB
+ memory used for stack traces: 8320 kB
+ per task-struct memory footprint: 1920 bytes
+mempolicy: Enabling automatic NUMA balancing. Configure with numa_balancing=
+=3D or the kernel.numa_balancing sysctl
+ACPI: Core revision 20240322
+APIC: Switch to symmetric I/O mode setup
+x2apic enabled
+APIC: Switched APIC routing to: physical x2apic
+..TIMER: vector=3D0x30 apic1=3D0 pin1=3D0 apic2=3D-1 pin2=3D-1
+clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x1fb6feccdd0,=
+ max_idle_ns: 440795259471 ns
+Calibrating delay loop (skipped) preset value.. 4400.43 BogoMIPS (lpj=3D220=
+02160)
+Last level iTLB entries: 4KB 64, 2MB 8, 4MB 8
+Last level dTLB entries: 4KB 64, 2MB 0, 4MB 0, 1GB 4
+Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer saniti=
+zation
+Spectre V2 : Spectre BHI mitigation: SW BHB clearing on syscall and VM exit
+Spectre V2 : Mitigation: IBRS
+Spectre V2 : Spectre v2 / SpectreRSB mitigation: Filling RSB on context swi=
+tch
+Spectre V2 : Spectre v2 / SpectreRSB : Filling RSB on VMEXIT
+RETBleed: Mitigation: IBRS
+Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Ba=
+rrier
+Spectre V2 : User space: Mitigation: STIBP via prctl
+Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via=
+ prctl
+MDS: Mitigation: Clear CPU buffers
+TAA: Mitigation: Clear CPU buffers
+MMIO Stale Data: Vulnerable: Clear CPU buffers attempted, no microcode
+x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using 'sta=
+ndard' format.
+Freeing SMP alternatives memory: 128K
+pid_max: default: 32768 minimum: 301
+LSM: initializing lsm=3Dlockdown,capability,landlock,yama,safesetid,tomoyo,=
+apparmor,bpf,ima,evm
+landlock: Up and running.
+Yama: becoming mindful.
+TOMOYO Linux initialized
+AppArmor: AppArmor initialized
+LSM support for eBPF active
+Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, vmalloc=
+ hugepage)
+Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, vmalloc h=
+ugepage)
+Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
+Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc=
+)
+Running RCU synchronous self tests
+Running RCU synchronous self tests
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmat3nIACgkQAVBC80lX
-0GxyVQf+O30j9fSujqKPxpK6CkV6j/oa/Quf0xSWkUMkdyufXHC3wHRZpwUJbJuM
-hMWJ9YHxdyj0ku1i1D0z5p+gR9ETYIb3SgOrcexq9YbftyLpj0DtoxAZT4NJUmOr
-JMGpNaK/W/Bq/drETMpkaXgyqt7VASu2bx9IPEWP6ukBRDywwwV/3pNgoz5nG+QD
-4lF3wBk+x0naNiFu3RqwK9IGN2SKqgqBO0P6rt4CxJul3naGA4FDVpLRgKkHzEeN
-s8v0xO35QykBKLXQvXS0cb/0BRZ5cRduTWhXPUVEUltkxsNS5L6eEiGt5l+A+qT7
-Z7asWlEDQMdkYJ3O8TzhmUrcXqWuHg==
-=72h0
------END PGP SIGNATURE-----
 
---Sig_/bUxDDmMu9jGU4y.w+ABU6Pm--
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 

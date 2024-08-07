@@ -1,126 +1,196 @@
-Return-Path: <linux-next+bounces-3246-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3247-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E81E1949B4A
-	for <lists+linux-next@lfdr.de>; Wed,  7 Aug 2024 00:29:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1475F949C8E
+	for <lists+linux-next@lfdr.de>; Wed,  7 Aug 2024 02:04:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D3C01F24603
-	for <lists+linux-next@lfdr.de>; Tue,  6 Aug 2024 22:29:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AABAC1F22934
+	for <lists+linux-next@lfdr.de>; Wed,  7 Aug 2024 00:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11C2170A3C;
-	Tue,  6 Aug 2024 22:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 132AF36C;
+	Wed,  7 Aug 2024 00:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BQvyWgja"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="crVnqlK5"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3258515ADA7
-	for <linux-next@vger.kernel.org>; Tue,  6 Aug 2024 22:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D544A03;
+	Wed,  7 Aug 2024 00:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722983378; cv=none; b=LtFieoZzAsdYv0o8rMPH5K2s7zY8JYi+eEP60+0dcFis3ZBIeZdwERKEoq+CE5SteIK8gWKY3paZOMEtkqFlt9TOZ+gxXj8xIb/Dk9TxpUOyITimysaHoZvg19rxOzBh6jk1/DIllusQlG9FB9B/b2+LMh1D/TB1J1xNaBq4PPw=
+	t=1722989086; cv=none; b=T1jQH1bRrnIm3qX5c9iuLa4wlCecbzqS0mpA9UJoSNV2fkEvecY6n+HEWd/eVTTOTHNBxx8mTcm05gZu7100L2lPCrcMs336UlKIQFWojlnYgOrV20uuybtHSiUbk4gsqZ7LnI0Z6a2sO9JEDn3BVfwFpfTkPCFsYBlbq2hOM8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722983378; c=relaxed/simple;
-	bh=lJWukiyEOezEPrQUk6c2c7g3HFJmueQVSmT1QZqJWcU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bHwDLVhmw4udAKMkugJWKy7IgYzdFp0uRKoGvYf8sgLoJd68juD8M/jdhBK0OsGkxtOUEW+h4AIQFKUlYkuKjc8QwxQ1WAPxRFIzZAQsCexaHM6PVAs1jvJ5pUySl9mWgCDnrJxQoDuG5O75JnDzOdqvT1lWDewK4x0H+M7X8Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BQvyWgja; arc=none smtp.client-ip=209.85.166.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-81f86cebca3so2964939f.2
-        for <linux-next@vger.kernel.org>; Tue, 06 Aug 2024 15:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722983376; x=1723588176; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BUmYPooDKax1SdVUh0CBefLXmkbt7/VGku+jUgP81QU=;
-        b=BQvyWgjagyynNAPVlFYL3QObFRW3ZsOFYojBWW1YdKU6NZrZX2BR2HkX0OcZYxqDX1
-         R7ZyRjlerIJnsnIzIlXNpDs+4QcWS79oSzC9kDreUBmphJh13sKxvN/YOZyt3e2359lU
-         whYBBRbIyKGl1Lf73aCb76YEYh4xKgdizyyiU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722983376; x=1723588176;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BUmYPooDKax1SdVUh0CBefLXmkbt7/VGku+jUgP81QU=;
-        b=ZtzpqfJamt/wxaaGQ4bYgo3HlBp5JfqHJ43IhDTLixJtxj5rN6s5lcg3LfSIGHD0ub
-         vORJrDStqqucPLTQi8hAeoE+b+TlIBf+vZRUy+Vq70Jn+PEGkcoUY9ogDTn4ATjniYBQ
-         E2eR/fndtSf98kTynnRHpUz1zyRD3apfDoy8BjAnOQaCxR29eac3IjXOAgf8M92E6xXT
-         LCsSwXAZQ4zMP4Qct7+OmRlD6uIlI27PxK4VYHsPjEEZyVhP1FnZHbPuK1Gjizv4oDje
-         VaS5CHCBNU7csGXrHns3noKkXNf5oNH/OgNnYW27ghjAu/l6/kN8OImC0s4C9BNaMYsu
-         4SIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+jHeDXQ6bCmehRZrufJ3LQjWeamC40BQrhSXO9LPjzn8QXEoq8d2xIAPgLBpsCTccZr/WkAQ02wWr0f3b5/X4lprBingznq9HXA==
-X-Gm-Message-State: AOJu0YxlwWPrPnXtH/jxVoFDu1h3yjxzStZF/SGXccz2mGAI33s0Fu04
-	5pt9zZnqDzBmV8vgvnlT+bA6/v5s9rxqkKisSNotgb2d3YHbEzobGxD3LvgFi5s=
-X-Google-Smtp-Source: AGHT+IFYEVpw2EALVMQD+7U9Y9zpwag7gZ9SULOondMLHcaYOTDf2ce2qHhIXrZpueCFpR3H+B+vEg==
-X-Received: by 2002:a6b:f415:0:b0:81f:8cd4:2015 with SMTP id ca18e2360f4ac-81fd4395206mr1007903839f.2.1722983376108;
-        Tue, 06 Aug 2024 15:29:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-81fd4d82ef9sm274995839f.52.2024.08.06.15.29.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Aug 2024 15:29:35 -0700 (PDT)
-Message-ID: <ae5edb38-5f77-4104-b541-d2cf2c3011ff@linuxfoundation.org>
-Date: Tue, 6 Aug 2024 16:29:34 -0600
+	s=arc-20240116; t=1722989086; c=relaxed/simple;
+	bh=4Kkhe+inc4ljsIQXc7G2vZ6On64/i5jOImYxQ1okxmE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SY/jfyC5Uqp1Enk5rOylTqYQZoOOod6A2zIb4TtMIlMUbKQbSasIgfDtLPFHPQiAvBgwX5i0p5Sy1EUInx3DrNVzExxcLXdpI3FpP1LytJmXTDNHzp7j0qusb64T1NU5VCohkpMw6RDqFYtDAgofYLD+Tqc93hk/qkvJDML3/90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=crVnqlK5; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1722989074;
+	bh=Jmj0zEwO/2sF8FN834SI9UG12wmU1Vwqshq+i48ODQ8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=crVnqlK5zCvCUoIMp7hbofcaXEa6LfztBxy/SnpSiJXhKm3LEOgzmGgvT8uWIVuRa
+	 a+xgbbh5WGsi3L2AMISeZLT7EcoE/WBSo32un4Gd9JJeDzIvdODuTbBgGo79vuXRMm
+	 1V+RlxpwIlrhi57LOnBgFv1pLos57W4WZTtnEdgYAPzK04FApEmdxwuF5Dwe9m9sfc
+	 gtgFcJEedQ5rZd4HSlv7xisNEbVOyta4VvmorkSa4f+nzxDaSVgZ5BSpqt8U+Ga8qQ
+	 MGGwCHhDdNzdww4LJiHlRl/wIAXmnoySye5A7rMLasesl7h5h82QiL6vcFrZbB1RWM
+	 keJqpRhiH0IfA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wdr5G0fspz4w2F;
+	Wed,  7 Aug 2024 10:04:34 +1000 (AEST)
+Date: Wed, 7 Aug 2024 10:04:33 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>, Al Viro
+ <viro@zeniv.linux.org.uk>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vfs-brauner tree with the vfs-fixes
+ tree
+Message-ID: <20240807100433.16e92156@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the kunit-fixes tree
-To: David Gow <davidgow@google.com>, Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Brendan Higgins <brendanhiggins@google.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240806091818.7b417ee7@canb.auug.org.au>
- <CABVgOSmpcXOKFVYOm4jgJ7STxhA7o2k5SfQgxn=fzkAZYyW-rg@mail.gmail.com>
- <9bd07238-5540-4b6b-9532-8e3590cf2b77@linuxfoundation.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <9bd07238-5540-4b6b-9532-8e3590cf2b77@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/atET8ukcMB/s5z9Ex_1g9K=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 8/6/24 13:20, Shuah Khan wrote:
-> On 8/5/24 20:06, David Gow wrote:
->> On Tue, 6 Aug 2024 at 07:18, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>>
->>> Hi all,
->>>
->>> After merging the kunit-fixes tree, today's linux-next build (powerpc
->>> ppc64_defconfig) failed like this:
->>>
->>> ERROR: modpost: "__start_rodata" [lib/kunit/kunit.ko] undefined!
->>> ERROR: modpost: "__end_rodata" [lib/kunit/kunit.ko] undefined!
->>>
->>> Caused by commit
->>>
->>>    7d3c33b290b1 ("kunit: Device wrappers should also manage driver name")
->>>
->>
-> 
-> David,
-> 
-> Looks like the above patch below is still under review - I can drop
-> 7d3c33b290b1 for now to avoid build failures. Thoughts?
-> 
+--Sig_/atET8ukcMB/s5z9Ex_1g9K=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-7d3c33b290b1 ("kunit: Device wrappers should also manage driver name")
+Hi all,
 
-I did drop this patch for now from linux-kselftest kunit-fixes branch.
+Today's linux-next merge of the vfs-brauner tree got a conflict in:
 
-I will pull the two patches together when the patch below is ready.
+  tools/testing/selftests/core/close_range_test.c
 
-https://lore.kernel.org/linux-kselftest/20240806020136.3481593-1-davidgow@google.com/
+between commit:
 
-thanks,
--- Shuah
+  9a2fa1472083 ("fix bitmap corruption on close_range() with CLOSE_RANGE_UN=
+SHARE")
 
+from the vfs-fixes tree and commit:
+
+  b7fcee976159 ("selftests: add F_CREATED_QUERY tests")
+
+from the vfs-brauner tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/core/close_range_test.c
+index 12b4eb9d0434,3e829666281d..000000000000
+--- a/tools/testing/selftests/core/close_range_test.c
++++ b/tools/testing/selftests/core/close_range_test.c
+@@@ -589,39 -593,39 +593,74 @@@ TEST(close_range_cloexec_unshare_syzbot
+  	EXPECT_EQ(close(fd3), 0);
+  }
+ =20
+ +TEST(close_range_bitmap_corruption)
+ +{
+ +	pid_t pid;
+ +	int status;
+ +	struct __clone_args args =3D {
+ +		.flags =3D CLONE_FILES,
+ +		.exit_signal =3D SIGCHLD,
+ +	};
+ +
+ +	/* get the first 128 descriptors open */
+ +	for (int i =3D 2; i < 128; i++)
+ +		EXPECT_GE(dup2(0, i), 0);
+ +
+ +	/* get descriptor table shared */
+ +	pid =3D sys_clone3(&args, sizeof(args));
+ +	ASSERT_GE(pid, 0);
+ +
+ +	if (pid =3D=3D 0) {
+ +		/* unshare and truncate descriptor table down to 64 */
+ +		if (sys_close_range(64, ~0U, CLOSE_RANGE_UNSHARE))
+ +			exit(EXIT_FAILURE);
+ +
+ +		ASSERT_EQ(fcntl(64, F_GETFD), -1);
+ +		/* ... and verify that the range 64..127 is not
+ +		   stuck "fully used" according to secondary bitmap */
+ +		EXPECT_EQ(dup(0), 64)
+ +			exit(EXIT_FAILURE);
+ +		exit(EXIT_SUCCESS);
+ +	}
+ +
+ +	EXPECT_EQ(waitpid(pid, &status, 0), pid);
+ +	EXPECT_EQ(true, WIFEXITED(status));
+ +	EXPECT_EQ(0, WEXITSTATUS(status));
+ +}
+ +
++ TEST(fcntl_created)
++ {
++ 	for (int i =3D 0; i < 101; i++) {
++ 		int fd;
++ 		char path[PATH_MAX];
++=20
++ 		fd =3D open("/dev/null", O_RDONLY | O_CLOEXEC);
++ 		ASSERT_GE(fd, 0) {
++ 			if (errno =3D=3D ENOENT)
++ 				SKIP(return,
++ 					   "Skipping test since /dev/null does not exist");
++ 		}
++=20
++ 		/* We didn't create "/dev/null". */
++ 		EXPECT_EQ(fcntl(fd, F_CREATED_QUERY, 0), 0);
++ 		close(fd);
++=20
++ 		sprintf(path, "aaaa_%d", i);
++ 		fd =3D open(path, O_CREAT | O_RDONLY | O_CLOEXEC, 0600);
++ 		ASSERT_GE(fd, 0);
++=20
++ 		/* We created "aaaa_%d". */
++ 		EXPECT_EQ(fcntl(fd, F_CREATED_QUERY, 0), 1);
++ 		close(fd);
++=20
++ 		fd =3D open(path, O_RDONLY | O_CLOEXEC);
++ 		ASSERT_GE(fd, 0);
++=20
++ 		/* We're opening it again, so no positive creation check. */
++ 		EXPECT_EQ(fcntl(fd, F_CREATED_QUERY, 0), 0);
++ 		close(fd);
++ 		unlink(path);
++ 	}
++ }
++=20
+  TEST_HARNESS_MAIN
+
+--Sig_/atET8ukcMB/s5z9Ex_1g9K=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmayuhEACgkQAVBC80lX
+0Gztfgf+PGxM2G9Kkj/9G/ydQttjCb6IChCLsYWmiNHA44o2TFp1IZsOJQ9OOPF4
+koY1X3RbOSllqxYX4ZHpk4qumaIVY3AdKgKLsVyWmFWmmOko4XyD2PsvAIzLRBdb
+vuS3CF+G4SejAnxKnH34rde/Emj5SA4o6XS5hIyFUD2f15JsrYgiB0/evGTG2VnX
+F5c4/esi+KvlejJSNx9/mX2kGcSjrh5rYjcCOmbke93xx/c2d7Rb6t/IeES6SxBl
+jKANr6tlNqbi5tUC/LQ4pQzti9e2sNhVbSrAyDLd3QKlh+PrPTgFHCHdKL7NCpaZ
+Uf8yII3FYVePTDy4VgG9Q343FkkZMA==
+=IJJW
+-----END PGP SIGNATURE-----
+
+--Sig_/atET8ukcMB/s5z9Ex_1g9K=--
 

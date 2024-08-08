@@ -1,152 +1,103 @@
-Return-Path: <linux-next+bounces-3256-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3257-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7A5B94B449
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2024 02:44:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C5A194B5AE
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2024 05:58:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A02C91F2215E
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2024 00:44:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 281191F231CE
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2024 03:58:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E532B2107;
-	Thu,  8 Aug 2024 00:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD5B78281;
+	Thu,  8 Aug 2024 03:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="V5IUzPoN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iPjqzQm0"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BDD440C;
-	Thu,  8 Aug 2024 00:43:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976F25FB9C;
+	Thu,  8 Aug 2024 03:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723077841; cv=none; b=EkN5il78/w8942f/eA5cinl1XVOGCfufVQL7MxYDhuQ4B2WT9bh42bRACpSGd2RtyOzDu6n9AsN1tnvqgQo7v642Ua40JVgZbSPkVr/yxbZ0rV+3ESxRdbkOo7I4lSdACsD/4F7/zE8nWYzcQxNgD3orPhSUb8JLAEmHuZqhfmU=
+	t=1723089504; cv=none; b=XYsarZgEF/X37AqmEtadADhYWcLnK0+u+nZHZAofsqK1EKDrL4cD/afwE4gOIso9LzlRZIq/WyW1EoKETMhhB0uhFeB7EdcO2K3Od9NhOFC+T3N/PJZESQs4/3N1yAF5Ms3h4gHNnmTdylZzUrgR1CV7VZy/39z/IliNWtWj0Ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723077841; c=relaxed/simple;
-	bh=7mbApR3ZBwxfpid5b2EvaWwXOxT6ehpKWiF0Mr7vCvg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=UsAZK+0ABmcXjcYr2sBbrFYPoZoNpUw9YIWEk8aeVwXZuBC1iH5pJYS4/iY8/USDQQ4UGJl+EPXQoEkbWTd2Wbq2sPzDj7XJvB9OfMRl5SCUg6IAiZGWbA/Hxbp98qHal9cnA4HkRBvpVIEQHiOuJJ9o2r0HJ+WNA8dXFJzQUtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=V5IUzPoN; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1723089504; c=relaxed/simple;
+	bh=+9rdzBsr0htwR8Hq5XfMsRF4lvKQmew0oWrmgUbM4XQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=l3o7Wo+CF5ON8MOSTodInJD9/LmJE6QfSjhuJqau0eXFPA9MxoukNs/txvsFT3AqlglD6+qzv3oDZ2eJ6ujmltwmtmF5VJKZX2fP8kF97mS8mv69Gk3OsXK4K/FsUFXE/G3DigOlukc/MY+kK+vCjSVf808jHKL7hRyo4hC3SE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iPjqzQm0; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1723077830;
-	bh=D33cx3XCrLB+VT+exOdc1DZTElUFvm/vXNRQtYDViV4=;
+	s=201702; t=1723089497;
+	bh=1xxGJDcK15w64/U6BT43yx1jQ8k6rctFSZN1VAiJOxI=;
 	h=Date:From:To:Cc:Subject:From;
-	b=V5IUzPoNgI6e9IewYkevntNhiw2IncSARxo4EkYhfNEKRVUQ/W25vQt4gyENhsJY1
-	 zF0DMKq1fVGVpaw51rVEyQ+z+/0N4751o4DIHk5l+9AlrZnXJKu+AtOp4iGU6GxK5u
-	 DvF1CRdvvsIxECgQgOnusew7vn98XZKfEFv8xRTfAwemcUcGEa5838bVDhc9mlpGWA
-	 SeapHpQaMNGTJVLlXoYFqvfLpCfRQeR6qaZWVc4dm8mZ1nirjrEjaK42j2Pnx5wE5R
-	 teiJ8SXnCz2z8xjcsjq7mP3uAFRg0tEDMe4gzGzeaJBHiPeewMdUii3yeKijn3QRUn
-	 e9ggo1BeIBHRw==
+	b=iPjqzQm0GoYOy3+eHLduRzmW4/tRiEdMCpqdJwd8yaWsmp1TZdYGkmexgjMyMpo1/
+	 KzybKp50ATv0BMb2PwQ4YcVQloOCIG//nabcY7599jIWjs8j9LqnmJIy15vEbbOv8G
+	 iLki9tgnfBaUsM9DUWHMu/weH06UfPYTS00V28auOLnIWwqioOLwQUiUEE82H5Z2dM
+	 LgA8+kV4Nr89+/Ob+AF3Gm3m2o+y+nwgmRISK3j4/SL/sMGAa0wibySVomzq/aNN98
+	 a3sNVCfUfs4XW4vJco0ymOdwwlIbWzn0MGcxi89iB/4xTVCwpBCh5bbMAkVfyre625
+	 BERXfBFbAsf9g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WfSw62jkjz4x42;
-	Thu,  8 Aug 2024 10:43:50 +1000 (AEST)
-Date: Thu, 8 Aug 2024 10:43:48 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WfYDS6jwjz4wcl;
+	Thu,  8 Aug 2024 13:58:16 +1000 (AEST)
+Date: Thu, 8 Aug 2024 13:58:15 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kalle Valo <kvalo@kernel.org>, Jeff Johnson <jjohnson@kernel.org>
-Cc: Ath10k List <ath10k@lists.infradead.org>, Aditya Kumar Singh
- <quic_adisi@quicinc.com>, Baochen Qiang <quic_bqiang@quicinc.com>, Kalle
- Valo <quic_kvalo@quicinc.com>, Linux Kernel Mailing List
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ath-next tree with the ath tree
-Message-ID: <20240808104348.6846e064@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the mm-hotfixes tree
+Message-ID: <20240808135815.5e3f50b3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aVhgp843wQxgMkM6fC0wQpA";
+Content-Type: multipart/signed; boundary="Sig_/6AdgICgD4593a607BTn_R=W";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/aVhgp843wQxgMkM6fC0wQpA
+--Sig_/6AdgICgD4593a607BTn_R=W
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the ath-next tree got a conflict in:
+After merging the mm-hotfixes tree, today's linux-next build (htmldocs)
+produced this warning:
 
-  drivers/net/wireless/ath/ath12k/hw.c
+mm/memory_hotplug.c:575: warning: Function parameter or struct member 'nid'=
+ not described in '__remove_pages'
 
-between commit:
+Introduced by commit
 
-  38055789d151 ("wifi: ath12k: use 128 bytes aligned iova in transmit path =
-for WCN7850")
-
-from the ath tree and commit:
-
-  8be12629b428 ("wifi: ath12k: restore ASPM for supported hardwares only")
-
-from the ath-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  ff4440b02821 ("mm: keep nid around during hot-remove")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/wireless/ath/ath12k/hw.c
-index 7b0b6a7f4701,76c0e07a88de..000000000000
---- a/drivers/net/wireless/ath/ath12k/hw.c
-+++ b/drivers/net/wireless/ath/ath12k/hw.c
-@@@ -925,7 -925,7 +925,9 @@@ static const struct ath12k_hw_params at
-  		.acpi_guid =3D NULL,
-  		.supports_dynamic_smps_6ghz =3D true,
- =20
- +		.iova_mask =3D 0,
-++
-+ 		.supports_aspm =3D false,
-  	},
-  	{
-  		.name =3D "wcn7850 hw2.0",
-@@@ -1003,7 -1003,7 +1005,9 @@@
-  		.acpi_guid =3D &wcn7850_uuid,
-  		.supports_dynamic_smps_6ghz =3D false,
- =20
- +		.iova_mask =3D ATH12K_PCIE_MAX_PAYLOAD_SIZE - 1,
-++
-+ 		.supports_aspm =3D true,
-  	},
-  	{
-  		.name =3D "qcn9274 hw2.0",
-@@@ -1077,7 -1077,7 +1081,9 @@@
-  		.acpi_guid =3D NULL,
-  		.supports_dynamic_smps_6ghz =3D true,
- =20
- +		.iova_mask =3D 0,
-++
-+ 		.supports_aspm =3D false,
-  	},
-  };
- =20
-
---Sig_/aVhgp843wQxgMkM6fC0wQpA
+--Sig_/6AdgICgD4593a607BTn_R=W
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma0FMQACgkQAVBC80lX
-0GxNfwgAmvMublhZkhutZM2kgnrpMhJ1DZKtE9uXPXf9V40PUz6IvyG7Oa39+4jU
-E3XkSTvGtwuy12vB1jPZ2QLp8LOlgEOl9Q7yIiuIzYBUIB6wN5PrGkpfopnc73nL
-j52fW5k4PbSrk5OJIWRubGJV9SV0LfGJWqRqRFVq/TbbAkpWZ9PazTPEKDLuovCn
-xo2LJmvgeDo9Rj3kDOjaO9CR1qUphGgLz2Xofn4G035396ydAnmtJtKpaq0pDJiM
-lvfInH2V3ptpiHbRPgw/dUkscA3jh+FQFHoOzeariWDzRcxxEafrItaG1qx7BIwo
-dWKdMSt52JI3VMWaQaAzC9s9/fj2dA==
-=BkAT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma0QlcACgkQAVBC80lX
+0GwDMggAgEWC8ymopw7eGy7yfFoHI70Lb3eoottTWNSgGpl0IE5mJ+gFHOfrvPjl
+r7tu8aG31AFGjhZmajv/hVCvnvYbpoAOUXVGANTT9lkXO+AfoGm6O/QzKvHM3Utp
+AnKyKEgUnknV7Wix9G3yGirWOmVLrN3wlUE6A0u9n8IuBCiR9KNBqOaegU7FY6ht
+pvQbaMktyncPf4NZ46APXt583Sxy5z9nHhzA6dV8t43sQ3NvfKDgePM1AgvmLkaV
+qHQsZagmi6nDpt4G9YfUE4PgAzt+LHWiiJLgCdHNAyoICAuIonmUHmp5v/QBrfKa
+QVUch93wpHqPmNSuZKfmQvuMBGf8aQ==
+=XWHc
 -----END PGP SIGNATURE-----
 
---Sig_/aVhgp843wQxgMkM6fC0wQpA--
+--Sig_/6AdgICgD4593a607BTn_R=W--
 

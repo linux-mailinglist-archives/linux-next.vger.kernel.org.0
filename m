@@ -1,196 +1,114 @@
-Return-Path: <linux-next+bounces-3258-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3259-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 091AD94B5B2
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2024 05:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9786094B5BE
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2024 06:07:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 804081F2363D
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2024 03:59:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E545E1F22D41
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2024 04:07:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706A112FB37;
-	Thu,  8 Aug 2024 03:58:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E07667E792;
+	Thu,  8 Aug 2024 04:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="e0SpYyyc"
+	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="V2wEDoT1"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EFB7D3F1;
-	Thu,  8 Aug 2024 03:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F892E419
+	for <linux-next@vger.kernel.org>; Thu,  8 Aug 2024 04:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723089522; cv=none; b=W3WEIg/zVoZJwjUPTXxjnh/Fmt+IWZoWKh00BMcbOeOMM0+3KbGyIQdkLjqDnk0Ob6XKoPlnBH3yA6NLRHtF3eM3SzfphEB12pQyZn6V39zzeqzZ6nIE7XU8tbyLaQBKGlY0Vff2dUWWzMXWoyZm75OVSeYmpWld7QAxGkc2rFw=
+	t=1723090029; cv=none; b=spUvkB95IhWymryDyBnTf/THAlRtoMjt6QJ1zTfs26uy530gQ+F+IniKrZYPUMoKpMjKnpbKRj6oaIQhtid9zMlDmOqva5DxTTpAOmhvnjm9bUiwlpKeCHjytgH9ip5hE9IPAophtjpi40sUULmnsekfQyBfixgnKd7wNj8m8UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723089522; c=relaxed/simple;
-	bh=vJY59zBCJw3KDsmjm4CdnwtPss4yedSaqTtaW4O6nvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Mhz2PQd68yUIJvkIWnufLOdpFqMn+i4CHMmH+uqezYukK6TZPxEarr2Lo7qQVCffdod31GeznPwh9ymSJIYoAQzMQTF0ZZ4o7u/qNXQ0DSyGqQX5l6rr69FadM8YvUYUZTBhfhlnlKXJKz7v2meeVzXu+rX/wbNG4QmQifGCUCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=e0SpYyyc; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1723089517;
-	bh=wGIGZ80trm6iOZCYJunvn40iI28sdFGMuWXzI4QjzJ0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=e0SpYyycTIaSYQLTxiD5RVxOsdEq/UWlQmn3t0GLvvwcWx1LqRi3gWvAjvCSPWC79
-	 Dx+K/4p6yHvnWWlUWROcqtdnGIgOVBpMHQpQvNAi9/DUoOObzhMdkHbreqN6HNtpoq
-	 Oa0VFvX9iFatoUr1QyfR4i1mh3U+/dSBmS4IN7ikyO3jbJBA6vlhs0afbBg3N9QNkV
-	 lAKuILMSuDYp/vT+xRznMxE/SrMJ5kxbPECyLi7SeJ/xHpczG5YDpvxFnsr1+A92zK
-	 K8KtT+RDi6fmhUVJtCAUBQqRrIls1R2BpLShzuGfzfensJgJv+3V71YCuSJXlbDd2o
-	 awcQulz4mP47A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WfYDs2HN9z4wc3;
-	Thu,  8 Aug 2024 13:58:37 +1000 (AEST)
-Date: Thu, 8 Aug 2024 13:58:36 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@de.ibm.com>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Danilo Krummrich <dakr@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the s390 tree
-Message-ID: <20240808135836.740effac@canb.auug.org.au>
+	s=arc-20240116; t=1723090029; c=relaxed/simple;
+	bh=o6mZ+XFuDcchuwZNU7eQbylS4WywOQo4PxleCE7mo6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HDuvcPwkKk0Z1tYrqW1s5egz8B2460RniyZNGcmpvVPOvcOVaX54/gCtizYzvP2BYNWrvkSZq21JH7YXlrp0jPV6b7c+HfDKW0E6g3XN08O0XP9bhz6tmD8BXCORHxN8YOOk5pCQyTV1Xh/RdbxxUTPAIQTTn1v/PTZznZAblEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=V2wEDoT1; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-447d6edc6b1so3184231cf.0
+        for <linux-next@vger.kernel.org>; Wed, 07 Aug 2024 21:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1723090027; x=1723694827; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+GSPLPHttL16sT6tQners2xK8hI4QMogUGmK36uWxcY=;
+        b=V2wEDoT1qMcrKQkuLaE8LmYFBz9X1Ux/NXLwH6oBFWWDhLGY1N9z3COvXLJJSdJ6gr
+         tBVyyZRko+lo1nK/sJFTHQHBt4kZ0zyj5mnCdAnEdVPCEQ20uKjnlgrzHWnakwTFHYMe
+         aGjf86K1GECdjxigN5mVsrq73Lrenlgsv1t4KSWkUz+DieM/qqZHsKV1gODZ+ghcpq14
+         KLI2QqJEthDan9b0T9PcKsP12renx3CCpO1UjKvq/QVUt5hgbuVEtOPehdh62Ghsa6OE
+         j2iYCBdGvSNm0X5FVx1aA5fxyOTfTWwXsOzBlQBeINzEn0OewSwJqyE65Eh9HOeB76RO
+         PfYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723090027; x=1723694827;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+GSPLPHttL16sT6tQners2xK8hI4QMogUGmK36uWxcY=;
+        b=u8lYkN92ZI7bK+LzSBtsrY7qJE0fcfOXGI9kEMUHdfO4eowiA1ZbTrdwRM1bNWBGki
+         2eZMG/k7FtKgNAmbjoaaqTcpbAXLCENcyIMSPpziE07XzIeNX/nFsiqX2MUSI46hMBVi
+         D7g9/sOdE9HbuGp9C1im+tu5BGkETIbTV7wtM0Y4xNWfaosiYXN7AfMq8/YPGfQ87gcU
+         /T5hgCcIwI66EMzXGAmTJD9wlsbwr7b10MJPfNJMuEPbzeqT7YtNrcQmqsoDPQ+nWMA6
+         +zzcStMSci/cYpMBrPM+BFnQN1VOAUUcIjigvTzxuoowwKqOldWOJgmmdRiTnfKj+fOJ
+         Y0Qw==
+X-Forwarded-Encrypted: i=1; AJvYcCWf3SNztcL5xHC3hLhHYBqjsenKkIyEUAtZOtngUADt4jCgY06v851MELllDgvDnHZp1co3uJDlxGXkBLz1MXE7IX4jykMZr8bMew==
+X-Gm-Message-State: AOJu0YwuqOsVOL3pGcMNiz08wESgWplYQhlSuhj/g8RmCXXy3nMO5diw
+	uWMB7jC9nkJZqmoDH90R2FElU9YwyrZOP5o1kKKeO5gmcXNpCq0zhMqmGZihyog53UfjUkUUE0S
+	vUo3D0wYYAGc9ICJWpaq7uHe1VRsw3YUn/2eVC1MzwEqX+CUL+7w=
+X-Google-Smtp-Source: AGHT+IEdpBZquXxDF0TfOERvkZ7eml1/CCIW5IAcvi73rGjE9dkM735b2Uo3Qkrxcfns8UqQwuri2e+EZlVjzbCL6Ik=
+X-Received: by 2002:ac8:774c:0:b0:451:d541:8b77 with SMTP id
+ d75a77b69052e-451d5418c1cmr4374881cf.46.1723090027131; Wed, 07 Aug 2024
+ 21:07:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OJOy.6CHNQZrdZKVIj_1pSu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/OJOy.6CHNQZrdZKVIj_1pSu
-Content-Type: text/plain; charset=US-ASCII
+References: <20240808135815.5e3f50b3@canb.auug.org.au>
+In-Reply-To: <20240808135815.5e3f50b3@canb.auug.org.au>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Thu, 8 Aug 2024 00:06:29 -0400
+Message-ID: <CA+CK2bDs150AbtnJcj5AWkMEtKR_AzY_hjzgscXmBj+yQzpEZw@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the mm-hotfixes tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Wed, Aug 7, 2024 at 11:58=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> After merging the mm-hotfixes tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> mm/memory_hotplug.c:575: warning: Function parameter or struct member 'ni=
+d' not described in '__remove_pages'
+>
+> Introduced by commit
+>
+>   ff4440b02821 ("mm: keep nid around during hot-remove")
 
-After merging the s390 tree, today's linux-next build (s390 defconfig)
-failed like this:
+This patch has been superseded by a new version:
+https://lore.kernel.org/linux-mm/20240730150158.832783-4-pasha.tatashin@sol=
+een.com
 
-In file included from include/linux/percpu.h:5,
-                 from include/linux/percpu_counter.h:14,
-                 from include/linux/mm_types.h:21,
-                 from include/linux/ptdump.h:6,
-                 from arch/s390/mm/dump_pagetables.c:3:
-arch/s390/mm/dump_pagetables.c: In function 'add_marker':
-include/linux/slab.h:848:61: error: too many arguments to function 'kvreall=
-oc_noprof'
-  848 | #define kvrealloc(...)                          alloc_hooks(kvreall=
-oc_noprof(__VA_ARGS__))
-      |                                                             ^~~~~~~=
-~~~~~~~~~
-include/linux/alloc_tag.h:206:16: note: in definition of macro 'alloc_hooks=
-_tag'
-  206 |         typeof(_do_alloc) _res =3D _do_alloc;                      =
-       \
-      |                ^~~~~~~~~
-include/linux/slab.h:848:49: note: in expansion of macro 'alloc_hooks'
-  848 | #define kvrealloc(...)                          alloc_hooks(kvreall=
-oc_noprof(__VA_ARGS__))
-      |                                                 ^~~~~~~~~~~
-arch/s390/mm/dump_pagetables.c:259:27: note: in expansion of macro 'kvreall=
-oc'
-  259 |                 markers =3D kvrealloc(markers, oldsize, newsize, GF=
-P_KERNEL);
-      |                           ^~~~~~~~~
-In file included from include/linux/fs.h:45,
-                 from include/linux/seq_file.h:11,
-                 from arch/s390/mm/dump_pagetables.c:4:
-include/linux/slab.h:846:7: note: declared here
-  846 | void *kvrealloc_noprof(const void *p, size_t size, gfp_t flags)
-      |       ^~~~~~~~~~~~~~~~
-include/linux/slab.h:848:61: error: too many arguments to function 'kvreall=
-oc_noprof'
-  848 | #define kvrealloc(...)                          alloc_hooks(kvreall=
-oc_noprof(__VA_ARGS__))
-      |                                                             ^~~~~~~=
-~~~~~~~~~
-include/linux/alloc_tag.h:206:34: note: in definition of macro 'alloc_hooks=
-_tag'
-  206 |         typeof(_do_alloc) _res =3D _do_alloc;                      =
-       \
-      |                                  ^~~~~~~~~
-include/linux/slab.h:848:49: note: in expansion of macro 'alloc_hooks'
-  848 | #define kvrealloc(...)                          alloc_hooks(kvreall=
-oc_noprof(__VA_ARGS__))
-      |                                                 ^~~~~~~~~~~
-arch/s390/mm/dump_pagetables.c:259:27: note: in expansion of macro 'kvreall=
-oc'
-  259 |                 markers =3D kvrealloc(markers, oldsize, newsize, GF=
-P_KERNEL);
-      |                           ^~~~~~~~~
-include/linux/slab.h:846:7: note: declared here
-  846 | void *kvrealloc_noprof(const void *p, size_t size, gfp_t flags)
-      |       ^~~~~~~~~~~~~~~~
+We do not add nid to __remove_pages() anymore.
 
-Caused by commit
+Pasha
 
-  d0e7915d2ad3 ("s390/mm/ptdump: Generate address marker array dynamically")
-
-interacting with commit
-
-  d4a913add37d ("mm: kvmalloc: align kvrealloc() with krealloc()")
-
-from the mm-unstable branch of the mm tree.
-
-I have applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 8 Aug 2024 13:50:39 +1000
-Subject: [PATCH] fixup for "s390/mm/ptdump: Generate address marker array d=
-ynamically"
-
-interacting with "mm: kvmalloc: align kvrealloc() with krealloc()"
-from the mm tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/s390/mm/dump_pagetables.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/s390/mm/dump_pagetables.c b/arch/s390/mm/dump_pagetables.c
-index 9e2dc42143b3..fa54f3bc0c8d 100644
---- a/arch/s390/mm/dump_pagetables.c
-+++ b/arch/s390/mm/dump_pagetables.c
-@@ -256,7 +256,7 @@ static int add_marker(unsigned long start, unsigned lon=
-g end, const char *name)
- 	if (!oldsize)
- 		markers =3D kvmalloc(newsize, GFP_KERNEL);
- 	else
--		markers =3D kvrealloc(markers, oldsize, newsize, GFP_KERNEL);
-+		markers =3D kvrealloc(markers, newsize, GFP_KERNEL);
- 	if (!markers)
- 		goto error;
- 	markers[markers_cnt].is_start =3D 1;
---=20
-2.43.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OJOy.6CHNQZrdZKVIj_1pSu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma0QmwACgkQAVBC80lX
-0GyeNwgAjGlH1excgkJqP1BVOOLHMEVQQ3N4iTO8tDtET7c2GXx9QTFSwider85+
-DbMamh+oyhkx65MSkMki59Noga+flc61khSgCjjs0Itsa9vkIprv6YmyNhHP3FCj
-4QI1t6EPr082JEKLKomvrRJu4PkgtbPbGIV232c/YP5j7+h3aYdlP+zagOgkagG9
-sX8icBH1rBi+JkoFwm5a1czCaoxcHbzUuEs4VJWQNXeNipyWR5a6vAK3zrDoEUTg
-zonBcqeoLjYtDCUq0SoOnjlmz+ZbD474wvSpzd8S3FxNbLEtYb1S/ZQNmFTqaN4x
-TlPK/DqYSiVaUsk+cjxC+ABchFtyrA==
-=GlRW
------END PGP SIGNATURE-----
-
---Sig_/OJOy.6CHNQZrdZKVIj_1pSu--
+>
+> --
+> Cheers,
+> Stephen Rothwell
 

@@ -1,162 +1,150 @@
-Return-Path: <linux-next+bounces-3283-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3284-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A0D494E3FA
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2024 02:42:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 189B994E419
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2024 02:55:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92FA6281DDF
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2024 00:42:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B72F91F21E4A
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2024 00:54:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A473F3FF1;
-	Mon, 12 Aug 2024 00:42:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA778480;
+	Mon, 12 Aug 2024 00:54:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="YysNNPhV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oCuyvqzF"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C857A3C0B;
-	Mon, 12 Aug 2024 00:42:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14F2847A;
+	Mon, 12 Aug 2024 00:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723423362; cv=none; b=asLRN9lOkeSIhS7093PKtYEFSfVk1zS5uVnNR0yAbQQOaHj43KMPX9Niq2s3PnJSHd/kKOolFUcFFxE3Yve58Qj6BeMiQBFJ7eLljVlKjFayTfWNL6b7jhGlowky6ULxXMgqfLXSP6VcYvz+M5hCWaT6XEWmqb+CxXtcIjm1gUg=
+	t=1723424094; cv=none; b=NHVnPmmcJ3D/c5dShLj/pra6DQ48kWLV2RMs0JouMCAXkyNM4xygu+FpOtWL9ufU42Rsb7xvBK48hnRor9+n0l9tFPC0hbsMT2wSDxDXb8FWnBaK/yPzQuVwOEYNJeeOeWv8cZtbY4vRgMsGIUV0z3DR7veD0NDZ66ibmNUd2tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723423362; c=relaxed/simple;
-	bh=uSBKCVsGn7X4JvvuBZ/PkqJxqwMm0MixGyeT4UxHTsA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RT+pc5AoGylzwhdgSZhh6qamDIOCugMfI5FdLAd5Z72xGh/Fz60gEMhfLhFIYi9rBFvGcoZcXT9Jt4PN1gjfv8evo1QlJUq9LVRc7K+MICcbHDS/yVzTU5A2No+seUQ2E0vd88ngFFvyDNRilNt5iGC7Gx3KePq+FnMkreBCWYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=YysNNPhV; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1723423356;
-	bh=o9Yl88GRdYa0Tf8CKT8WYG+PaxWDkRwNzOvj36oLkdI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=YysNNPhVEnpC+gePl8N+oZCgNFkz3QC8+iDp4EUUti+ZsM/TjxNdowowjUvte3r/y
-	 5EpFYIZusSeiJ1Ap115/Nvyuot3Nl29O0gr94CXjeOEd8/DMUE0UbDAVCMMIhQv6Yj
-	 GKG9/nxWB/wBxTgHouGWvNtqTwryUq6anoiafgaEFjNjYV4B5kaE/NfgeMF5CehIGi
-	 gmc+70fl7TfWeTTTX0XIbSJzSA5HFLybL21XYAnlB8FiGk1H6smM3HrGy8qBta12Mu
-	 GR55V6upAnTwUmNoIuSoWsUgim21FQoLi52TqsD3QyZTmoskfEChQHCU7E0SfAVi6z
-	 HW8EbGi6+HC5g==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Whwhq70JWz4x2g;
-	Mon, 12 Aug 2024 10:42:35 +1000 (AEST)
-Date: Mon, 12 Aug 2024 10:42:35 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Herbert Xu <herbert@gondor.apana.org.au>, Linus Torvalds
- <torvalds@linux-foundation.org>
-Cc: Bhoomika K <bhoomikak@vayavyalabs.com>, Pavitrakumar M
- <pavitrakumarm@vayavyalabs.com>, Linux Crypto List
- <linux-crypto@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the crypto tree
-Message-ID: <20240812104235.6eefb365@canb.auug.org.au>
+	s=arc-20240116; t=1723424094; c=relaxed/simple;
+	bh=9vCm2QQLHHc8gdTjjYZ4IeMay+XY9rlqzzCnFkWnrdM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g20z+Npv06ecEwX5qX4ubzYRWk0wv1tk2/N0A6eDVB69xf4Ouk3dAap06N3iYPz6hM8+vKRgS6y2akjWeHCCdCNEmmv3ixyz3mL+6d4KLsHPyeiIvsd/igTGsGQGS1k12cfu6DMnJlJWtcaRGr4Gf82rADCkkLnXJwO0Oq1M22Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oCuyvqzF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E952C4AF0F;
+	Mon, 12 Aug 2024 00:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723424094;
+	bh=9vCm2QQLHHc8gdTjjYZ4IeMay+XY9rlqzzCnFkWnrdM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=oCuyvqzF6sLPVv2ay/iIzSUG3olpK66YAZBHhvIOnJuERDhEIYo2Q83q+6cAQVEfa
+	 5hRagXFcQt4V8bTkXzkUwoNi7tm7LZvo171WUW/sfcd5vZgfCoK8oeevLPRX1J9VIL
+	 ee+iOMhQOxmWAYfnW+FpBLQVKjdBrk46ocW1sImLhoafbhxhvIkuXWcBKD0w4W2jiW
+	 JZgQX1GApsqGAuXQF40ITXcIB7hRrHlhA/jkZJ7ukeCXK5BhqBddQqPjkMHo4JW+dr
+	 xxkR2hKfnPABGaEiVltj1ojTx1UTC27GfnoEFRC5hNvFHkPnV0rcgETNQlBcxyDwzM
+	 znB/tbh3jLTiQ==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-260dde65a68so2443222fac.2;
+        Sun, 11 Aug 2024 17:54:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUqqn3k2zEQbCxoxlKLhCGPvoZDNGQTyHYtXdxhj8upUnCtfu3dmM0JVLAgz2KT/a5X9hOiqrbADfK/0FQVaGq9883np79pJNGZhBsr4FP8uBCwjmLCDnfqMDE+DPJGq8XHIxIw91C6BQ==
+X-Gm-Message-State: AOJu0Ywrn/KQaXm2dCGNe/Z6SRL0cf8DQPuKVOa4+RDJWcUrlqRkCJAa
+	nGPBzkrMNBbKMAjQnKqL0SkpSIZdd2g5McHcOL3RgVzN2kGYVIfw3fa8doVIq90LrY/X0SNlFFN
+	gwKxhh+t8S+MeB/Pio8tVErE7RCo=
+X-Google-Smtp-Source: AGHT+IE1n0UODjeHKp3o7Zh8H9n0F1A9E7rYuDnukX4P94N3SBkMA21DF7WmgMN4HJVgVLhVB9HrtlE82TPI1INDbcw=
+X-Received: by 2002:a05:6870:e313:b0:25e:1532:fa93 with SMTP id
+ 586e51a60fabf-26c62c68e93mr9048602fac.15.1723424093537; Sun, 11 Aug 2024
+ 17:54:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CAn7uTIb=+uwYmIQa8YeFrK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/CAn7uTIb=+uwYmIQa8YeFrK
-Content-Type: text/plain; charset=US-ASCII
+References: <20240812081046.369bbba5@canb.auug.org.au>
+In-Reply-To: <20240812081046.369bbba5@canb.auug.org.au>
+From: Namjae Jeon <linkinjeon@kernel.org>
+Date: Mon, 12 Aug 2024 09:54:42 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_HNrckYs7R=ObghAovsA=o1ZynV3JwY0Czn2Bd_KGv1w@mail.gmail.com>
+Message-ID: <CAKYAXd_HNrckYs7R=ObghAovsA=o1ZynV3JwY0Czn2Bd_KGv1w@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the exfat tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christian Brauner <brauner@kernel.org>, Dongliang Cui <dongliang.cui@unisoc.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Yuezhang Mo <Yuezhang.Mo@sony.com>, 
+	Zhiguo Niu <zhiguo.niu@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
-
-After merging the crypto tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/crypto/dwc-spacc/spacc_manager.c:5: error: "MIN" redefined [-Werror]
-    5 | #define MIN(x, y) (((x) < (y)) ? (x) : (y))
-      |=20
-In file included from include/linux/kernel.h:28,
-                 from include/linux/interrupt.h:6,
-                 from drivers/crypto/dwc-spacc/spacc_core.h:7,
-                 from drivers/crypto/dwc-spacc/spacc_manager.c:3:
-include/linux/minmax.h:329: note: this is the location of the previous defi=
-nition
-  329 | #define MIN(a,b) __cmp(min,a,b)
-      |=20
-cc1: all warnings being treated as errors
-
-Caused by commit
-
-  c8981d9230d8 ("crypto: spacc - Add SPAcc Skcipher support")
-
-interacting with commit
-
-  1a251f52cfdc ("minmax: make generic MIN() and MAX() macros available ever=
-ywhere")
-
-from Linus' tree (in v6.11-rc2).
-
-I applied the following merge fix patch.  I added the include of
-minmax.h just in case it was not included implicitly for some other
-build config.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 12 Aug 2024 10:36:30 +1000
-Subject: [PATCH] fixup for "crypto: spacc - Add SPAcc Skcipher support"
-
-interacting with commit
-
-  1a251f52cfdc ("minmax: make generic MIN() and MAX() macros available ever=
-ywhere")
-
-from Linus' tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/crypto/dwc-spacc/spacc_manager.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/crypto/dwc-spacc/spacc_manager.c b/drivers/crypto/dwc-=
-spacc/spacc_manager.c
-index 3b26b27a998f..67c4360334e2 100644
---- a/drivers/crypto/dwc-spacc/spacc_manager.c
-+++ b/drivers/crypto/dwc-spacc/spacc_manager.c
-@@ -1,9 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
-=20
-+#include <linux/minmax.h>
- #include "spacc_core.h"
-=20
--#define MIN(x, y) (((x) < (y)) ? (x) : (y))
--
- /* prevent reading past the end of the buffer */
- static void read_from_buf(unsigned char *dst, unsigned char *src,
- 			  int off, int n, int max)
---=20
-2.43.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/CAn7uTIb=+uwYmIQa8YeFrK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma5WnsACgkQAVBC80lX
-0GzB1wf/c//maN1MbBz4zLjJ82Cn94IF8ZQKMXSUNNJuAn/FEvm0Fujg3StoYWJv
-bx3tphyZmHne1wMI070gUn41hDwo5yCaMLF5tkQeglhHxdSGkAlV3gUC38GDa8lg
-qeJkWRWqpIAUZABfsN6auAusVAPikeIdR/wDK+qZpCUWJU/OvE1zIj6L4H4VjsCu
-eor1mW+fNB6Sgd7idPHLbgU8gP5j4TRQUDQdPGYFLa6gfqbNO1oGXx+N/Te7ehs7
-sp7ZnmD4sYA1HJqksk4RVg8TptDEqqq3rx50su+iOb+cce4pv0loAJo3jdOiuZch
-hwkiJ2qcWJGtDy6BbbLxk+cvv6d9+A==
-=9nOS
------END PGP SIGNATURE-----
-
---Sig_/CAn7uTIb=+uwYmIQa8YeFrK--
+2024=EB=85=84 8=EC=9B=94 12=EC=9D=BC (=EC=9B=94) =EC=98=A4=EC=A0=84 7:10, S=
+tephen Rothwell <sfr@canb.auug.org.au>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1=
+:
+>
+> Hi all,
+>
+> Today's linux-next merge of the vfs-brauner tree got a conflict in:
+>
+>   fs/exfat/inode.c
+>
+> between commits:
+>
+>   3e491faa7648 ("exfat: do not fallback to buffered write")
+>   98ad7b9012b5 ("exfat: Implement sops->shutdown and ioctl")
+>
+> from the exfat tree and commits:
+>
+>   a225800f322a ("fs: Convert aops->write_end to take a folio")
+>   1da86618bdce ("fs: Convert aops->write_begin to take a folio")
+>
+> from the vfs-brauner tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+Thanks for your work, Looks good to me:)
+I'll send an exfat PR after making sure it doesn't conflict with these patc=
+hes.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc fs/exfat/inode.c
+> index 7d43a0942911,05f0e07b01d0..000000000000
+> --- a/fs/exfat/inode.c
+> +++ b/fs/exfat/inode.c
+> @@@ -428,11 -452,7 +428,10 @@@ static int exfat_write_begin(struct fil
+>   {
+>         int ret;
+>
+>  +      if (unlikely(exfat_forced_shutdown(mapping->host->i_sb)))
+>  +              return -EIO;
+>  +
+> -       *pagep =3D NULL;
+> -       ret =3D block_write_begin(mapping, pos, len, pagep, exfat_get_blo=
+ck);
+> +       ret =3D block_write_begin(mapping, pos, len, foliop, exfat_get_bl=
+ock);
+>
+>         if (ret < 0)
+>                 exfat_write_failed(mapping, pos+len);
+> @@@ -448,7 -468,15 +447,7 @@@ static int exfat_write_end(struct file
+>         struct exfat_inode_info *ei =3D EXFAT_I(inode);
+>         int err;
+>
+> -       err =3D generic_write_end(file, mapping, pos, len, copied, pagep,=
+ fsdata);
+> +       err =3D generic_write_end(file, mapping, pos, len, copied, folio,=
+ fsdata);
+>  -
+>  -      if (ei->i_size_aligned < i_size_read(inode)) {
+>  -              exfat_fs_error(inode->i_sb,
+>  -                      "invalid size(size(%llu) > aligned(%llu)\n",
+>  -                      i_size_read(inode), ei->i_size_aligned);
+>  -              return -EIO;
+>  -      }
+>  -
+>         if (err < len)
+>                 exfat_write_failed(mapping, pos+len);
+>
 

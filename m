@@ -1,84 +1,119 @@
-Return-Path: <linux-next+bounces-3290-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3291-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BB1494E5D3
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2024 06:40:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ECDC94F7AC
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2024 21:48:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EDD31C214B1
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2024 04:40:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D581A1F21A50
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2024 19:48:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652BE1494BA;
-	Mon, 12 Aug 2024 04:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A456718E03F;
+	Mon, 12 Aug 2024 19:48:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Q/DyDpUB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DU9gEAO1"
 X-Original-To: linux-next@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F8AF1494C2;
-	Mon, 12 Aug 2024 04:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E532F2C;
+	Mon, 12 Aug 2024 19:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723437628; cv=none; b=f7gVqDVolVui2r9UqfdLIWYDB/gMquRqdaalEftIwAANQHJJJKjrJtytY5bP6+VYTIiOU+kMMhyl8P6RHXTyo/KwJ4AuD4nnDrmS0G2Jw6NzjFy2jqUXKx7Oa7SEpFqoV8sJoSYbIGX/RI3btmi1ufjdOCfR/dAHnWXH6Qi9IZQ=
+	t=1723492118; cv=none; b=YDrDJL1zoNYQZJ8WCFbr9Gk5QRIV8SFam3Cbnwe/BdZCTAcMRzkETDp8lyWNddKz2R5veQgF7bPf2f2ZUprWPR3YqJQPyauG9g+awgCIz7tgLa4A+IUWt83VfjAJUEvL97Ect1CkntdZpiL/CUKSlP+WwLkRkUZb5O0i/F2U7+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723437628; c=relaxed/simple;
-	bh=ZVS7/Sig/Z8QibmeD2JxJ4QIyQHtPx4bK1Xsf4GgV4A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uxgU9WGnKcJfhxBRh97FLeQSQmG4MIAQsWnuoNbp3s0fKp7LYsW8fKmvRLYeYUSIvWoBF9OfGdDuulUFN4LaYP9zVyF9BWmOrfruFsCAa5pxBFlZQKoW77SR3rJBQtKl6g/eGVd+voW4WJlpoAtpunHnwO5hABaXvwLqXamYY30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Q/DyDpUB; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-	id BDE2120B7165; Sun, 11 Aug 2024 21:40:26 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BDE2120B7165
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1723437626;
-	bh=wrO4Voywpll3U0JpKOWNr8bhQxc3/WvErevZo90Vifc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q/DyDpUB7Eg5ssQ0V+7+0h1ae3TVGZSsUWRQEDKfT9l9qzVaTiqLU/A28g9B/nSSW
-	 CnrgM37eQ6jc1qsycMCkbFm2JNpOA/40bhB0QsJ9nfoxWaYi1jbkvPabt7X792QQuO
-	 uLIxs6LFN2IEeWwb126QrpmfnKiFqwaB7iZ5OTXw=
-Date: Sun, 11 Aug 2024 21:40:26 -0700
-From: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the mm tree
-Message-ID: <20240812044026.GA9092@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20240812133000.59660575@canb.auug.org.au>
+	s=arc-20240116; t=1723492118; c=relaxed/simple;
+	bh=M/+l4UvQKPZUEX2zTCTBbFnZJ2MokA5NF7Uc4lEDGzo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AybrZ89QcwxYCf5zgiqKUrDZbKoeS17qqR/hW9etCvKVcqJIzkbshbJOX0HsH4AL6p19lAP0cjVltbcsJoSHxgs39k4M2SRCn4PTk+jrlh6oqY9tDT3RF9emwc83FoMsfxwkFpQ7wwv3XeJnXuaAeM0ttdrPIV5hz/qCOuQkzds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DU9gEAO1; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-429d2d7be1eso5908835e9.1;
+        Mon, 12 Aug 2024 12:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723492115; x=1724096915; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cw/hwCwaYZg4odjZMbkHzVBtbwYlPfBk7EjkscUZsNU=;
+        b=DU9gEAO1i7g8gjErCfFjgp+VLEVllbk8uTPQXJnhOvn4abBtC5gWmLPQcZpfNBB0WQ
+         QEc0D4CU+jMy1JO+gP0HpWywucbJR4X8nrjW9i+rTaJQSPpuCrvwNVzyvLrluq3ALBXz
+         2qKv0RrEqgSFwevLk6fO29EgH21nc1cIua/KOuYs5MbY9G+BYIaAbCJtLaO6Ie2a5SVX
+         /S/cx25PaY00hLz3xKS1rBjEcfyhP5fuPG5TGc56+fCsbWX3hhH78QDKFcEzEKzVCxJM
+         klKoI2k3+iROVko9YOcqx9A7z874JlJ8pA3YAExF9eF9n5FkTkQfy5RSkNYMyfEeeTMU
+         OmNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723492115; x=1724096915;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Cw/hwCwaYZg4odjZMbkHzVBtbwYlPfBk7EjkscUZsNU=;
+        b=buhMWNvikUFwvQYVlgGZuT5QX3IGGSG9LWVmkYHStfKskoqs0P0Fpv6W8dihwf6Fw/
+         9xm0uFUrhHW7dJYlq4XFi1Ete/tMjBn1Cv16aI3Ba26GevvZjrjoIUUUllSOZmDg04i9
+         q1u15MNMxEtB6R8qLOUcOwKUVx3EqornGAeC91I4FSvGWysmSjDVtFXqxy/hXyECNtkk
+         e1E22i+mmhBZuT9QwkA8ikw7lbqAWDXomyw6aHPvO+2+YpBrLQ6ZgnihIX5bOyTytFvR
+         ewsLrUCmaqQFxXxBxBV2yo8hOH578gKoy0x8uXl0/FWFJYkKXuTO5L0wHJr/EAPjjJgU
+         JgbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUifvk5PhfaLYbrSbZGS8ES5VLQFCXbnH/lswliIBJioN+CUabf5LT0SMxrjwl//5at0AlpUf7kudRdsRhYpLxiXKDBYToawkUuWn6i2OO5iflDTgzoCHgb0CfQosA7gVqWErISyrJJ6Qgv5ANzGblQLkq9ROEUoqEZDOdf1sx9Vx5UE8OE221klljP2ocSeT1m08wcEw==
+X-Gm-Message-State: AOJu0Yy2J0TgeNtg92I0QHeHANUJUH4xSvhISgh25AwBbjo2Q9ycXCDk
+	wol2jqp2r822rnRAuvbf892IUlmKvkyWNWHUFngIcRTJx2+3ABszBKzuvHk3E99xZgza2juPHFS
+	cwm6vC7voLImPwYxgKYPqBy98Gtqq0OAE
+X-Google-Smtp-Source: AGHT+IFvcic6S2LwPsHZ0M70buDjM+b3il1n0lZmyWamo1M+rZew+BtovoQ4Dff102hw6aWSQLe/23ie33DSGj0BRoE=
+X-Received: by 2002:a05:600c:354f:b0:426:67fa:f7 with SMTP id
+ 5b1f17b1804b1-429d62bf53bmr4694455e9.9.1723492114811; Mon, 12 Aug 2024
+ 12:48:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240812133000.59660575@canb.auug.org.au>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <20240812072803.78139fba@canb.auug.org.au>
+In-Reply-To: <20240812072803.78139fba@canb.auug.org.au>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 12 Aug 2024 12:48:23 -0700
+Message-ID: <CAADnVQLyvv_pYwYbufmxHAxLXa1xVO1khqzX34B5iJi1_91epw@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the bpf-next tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 12, 2024 at 01:30:00PM +1000, Stephen Rothwell wrote:
+On Sun, Aug 11, 2024 at 2:28=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
 > Hi all,
-> 
-> After merging the mm tree, today's linux-next build (x86_64 allnoconfig
-> and various other configs) produced this warning:
-> 
-> mm/vmstat.c:34:12: warning: 'vmstat_late_init_done' defined but not used [-Wunused-variable]
->    34 | static int vmstat_late_init_done;
->       |            ^~~~~~~~~~~~~~~~~~~~~
-> 
-> Introduced by commit
-> 
->   ef534a0d5198 ("mm/vmstat: defer the refresh_zone_stat_thresholds after all CPUs bringup")
-> 
-> from the mm-unstable branch of the mm tree.
-> -- 
-> Cheers,
-> Stephen Rothwell
+>
+> The following commit is also in Linus Torvalds' tree as a different commi=
+t
+> (but the same patch):
+>
+>   1cbe8143fd2f ("bpf: kprobe: Remove unused declaring of bpf_kprobe_overr=
+ide")
+>
+> This is commit
+>
+>   0e8b53979ac8 ("bpf: kprobe: remove unused declaring of bpf_kprobe_overr=
+ide")
+>
+> in Linus' tree.
 
-I will send the V2 for it.
+Masami,
 
-- Saurabh
+What happened here?
+
+Looks like the discussion was suggesting for Menglong to
+send v2, which he did and the patch was clearly targeting bpf-next tree:
+[PATCH bpf-next] bpf: kprobe:
+
+Why did you silently apply it ?
+No one knew that.
+Menglong sent v2 and it was applied to bpf-next :(
 

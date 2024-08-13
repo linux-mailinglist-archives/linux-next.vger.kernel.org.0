@@ -1,78 +1,107 @@
-Return-Path: <linux-next+bounces-3296-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3297-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDA4C94FAD0
-	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2024 02:43:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71B0994FC58
+	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2024 05:40:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EE6C1F21D07
-	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2024 00:43:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF58EB21A0C
+	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2024 03:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A996EEC7;
-	Tue, 13 Aug 2024 00:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986A11B970;
+	Tue, 13 Aug 2024 03:40:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="uie2b65X"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XLot4f/0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82319A38;
-	Tue, 13 Aug 2024 00:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A8318E11;
+	Tue, 13 Aug 2024 03:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723509791; cv=none; b=cTF4fBioO1B0A4xxJVR3hw1tHx1ne1xho3stUiTwT9TJU8LQtq/UrL3NZJixjw9SFj2Tv/qL3aKNz6onMHkZGDk2qRFQTKuz1X8EgSR733Hcv83niQfhjd3gAtfqkAdEEP5FOSc4xf4DguNp7aop4HNFLcmRB5h6SiZy7R6DQz0=
+	t=1723520419; cv=none; b=sYyxCJMEf09BbtC//7UdOySLN3rpw1q8ArVHuc2Kf0EON2BYCFXzyZl+NPd4ISpuU/XEGY1bXhjBX3I93JuAeg9MFEKF4xjSU5Fb8tgxyNyuaRMK9MlwVIYsGmU4gSYKT1hzELRacqRt/aZwUd1FweBsfnAHmeRTXptwB/sCRQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723509791; c=relaxed/simple;
-	bh=RMlTgwdaLR6T5Ksf4+8ZHhXQoYW2DhU52FFvyfCnJP4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=hWToKckJO1fReHq1TyL8F57lwh3etLCRKrUmS045hritc3PN32RPEWu53rSsSJbSSeQtrUq+bUjp9M9XyJYtR9t1iqS9oO0nVVDePYcWCcAYEX1mkVW6eIBtOXEKF8pbubOxvCO3fTL3rfrXQzHAjf4u/o827gNWKmEsmbHmMM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=uie2b65X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B95F8C4AF0E;
-	Tue, 13 Aug 2024 00:43:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1723509791;
-	bh=RMlTgwdaLR6T5Ksf4+8ZHhXQoYW2DhU52FFvyfCnJP4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=uie2b65XSulxQ2UxOcERz1wYDWMNsdYKLWFc9uyUMvUfKt41jUZklX8e0tHyMcV0H
-	 wf/4MLLL7KYak4TDUynGgpzmDA0hh74nhh6FTya4zLnv5jQREBJjmfqPI5uFrnl5bF
-	 qsG4VMxnGqMoX96SM2Dii5xMsvm9ZPgbr7K4DQ3Y=
-Date: Mon, 12 Aug 2024 17:43:10 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, PowerPC
- <linuxppc-dev@lists.ozlabs.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	s=arc-20240116; t=1723520419; c=relaxed/simple;
+	bh=uO9kgFmWrMPj01Urdgt5e3HSPduDZijuUIv+/kaOS4Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=mMTg0exZHK8FXktRGsqxzOEuyJ326TCIwsvGXg6jL2WEUJIETr5YvP6WwbgPDEUy55z4Ul28WmFdj6p2hXS0Wdrt9/bRNTcDEppva+50UPtq4uW5KCu0chkPDgzzAMMRmRV/n2Zb+KVLUMWg5NweO7+MkjUqSJVp09ANuXWs4G8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=XLot4f/0; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1723520412;
+	bh=95J6f3UxfqmOjyq/Es/1xyMSm/+0Mc6gv3knJdguQxM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=XLot4f/00K77MMZFcyPypNjc7JUu7xDhY4JhUn/rmfcC/BozvzRYwqKi8NCrV2QFs
+	 Nko0rA+FEDjaLMm69QJDeYapuKrlkqgzNrlAQ138PVP2uU8ve2UhvogxXd/HzioGY8
+	 gt9W88WOQmLzysP8qcLODKjAERVIsF+zEWtf2DDwaUBLgmmePrxgzvv0CForH3Hu11
+	 4N5XJ6+A+YfczoDpZSwKLc8/0JVDlUvJ4R8t9RZo/pGIEZt7ibdJKjUuALJCsTlF4M
+	 m4wL6tGnrSnOu4uthWHDRvdTKBJZMEbJ7dk5OhHcXscJk7Em7qHOmJipWlFqilx/BP
+	 itXktswOSVb1g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WjcbJ5TCGz4x6l;
+	Tue, 13 Aug 2024 13:40:12 +1000 (AEST)
+Date: Tue, 13 Aug 2024 13:40:10 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Christian =?UTF-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the powerpc-fixes tree
-Message-Id: <20240812174310.968cd1988045662c3b5379c9@linux-foundation.org>
-In-Reply-To: <20240813093207.77fc03d8@canb.auug.org.au>
-References: <20240813093207.77fc03d8@canb.auug.org.au>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Subject: linux-next: build warning after merge of the vfs-brauner tree
+Message-ID: <20240813134010.65d77461@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/7WQCPPCHUpW.0==_OLcK/+6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/7WQCPPCHUpW.0==_OLcK/+6
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 13 Aug 2024 09:32:07 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi all,
 
-> Hi all,
-> 
-> The following commit is also in the mm-hotfixes tree as a different commit
-> (but the same patch):
-> 
->   e7a9af8c93aa ("powerpc/mm: Fix size of allocated PGDIR")
-> 
-> This is commit
-> 
->   6cd04a440f57 ("powerpc/mm: fix size of allocated PGDIR")
-> 
-> in the mm-hot-fixes-unstable branch of the mm-hotfixes tree.
+After merging the vfs-brauner tree, today's linux-next build (arm64
+defconfig) produced this warning:
 
-Thanks, I dropped the mm.git copy.
+<stdin>:1603:2: warning: #warning syscall setxattrat not implemented [-Wcpp]
+<stdin>:1606:2: warning: #warning syscall getxattrat not implemented [-Wcpp]
+<stdin>:1609:2: warning: #warning syscall listxattrat not implemented [-Wcp=
+p]
+<stdin>:1612:2: warning: #warning syscall removexattrat not implemented [-W=
+cpp]
+
+Presumably introduced by commit
+
+  1810bb54fc6e ("fs/xattr: add *at family syscalls")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7WQCPPCHUpW.0==_OLcK/+6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma61ZoACgkQAVBC80lX
+0Gz8bggAn+coFF5RLX4hb/T/bD0w5VMUCSXI7INXiz9IDaVrA9TtjdXit3X5jqUD
+QwhrTj5gaEMhYVfq/C9nqaCvmo74R/TmfIcfwADK5gaMo205YSMlmzM3ZMjX00fi
+cWEcmgiWX4bvx9Y3pq0/UkqF2UJcayYZdBqNIAuDU7fWbqPLowBIT8wq2XnZEyDP
+T5YTt4aoWb/dNrfJdKnJb2ZxTugvtze/Cw01mDOQOiysYvh7C9WTMy+Dpz05eNwy
+NMz3SO4YqGO8/XEd2/RxwEh0+o3bQczJc064qSUKQ1R1Jg8b2j+P3QOmsfg0e3uV
+HE0kgMdFXrWOJxNJgdy6vyZlWOx6DQ==
+=fNxI
+-----END PGP SIGNATURE-----
+
+--Sig_/7WQCPPCHUpW.0==_OLcK/+6--
 

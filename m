@@ -1,105 +1,107 @@
-Return-Path: <linux-next+bounces-3314-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3315-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE61D951410
-	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 07:54:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC56395185A
+	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 12:08:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0564E1C23F3F
-	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 05:54:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48535B243E0
+	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 10:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78FF455887;
-	Wed, 14 Aug 2024 05:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFDFD1AD9DC;
+	Wed, 14 Aug 2024 10:07:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="aIcQ5X+K"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="mDw6wcLA"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE56C6F305;
-	Wed, 14 Aug 2024 05:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD25F1AD9D5;
+	Wed, 14 Aug 2024 10:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723614870; cv=none; b=TnPLeWCWT35K9bq5YD/p2BCkcPVc+IXrojJuo5ct/zShqiSXMAFI3f/F4BfUdUQsNUpaH3D0GT40cs7dq48NmB9TnpzuoIs0EC1z+hOD9t6IyQFmMh/YxJilmfRhJVsy+PRdoGCKzY2TpQdpt3UbfjNbusJsehM0SzquhiAiCqc=
+	t=1723630032; cv=none; b=RvRnzIsoMlRxvF04adopqTL247g+Ix77TzoFqMVbpqav1oIaU4WW2FzJL8xIcASt9t/874XdE64/maUnhERrnaLP4BlxG8/MQXGyfzgXPnMZBjSCMc/K3/p09juzhcEiaVTBAFBzvSccGIolQx5qwqYW8dYpFWYCxn3d0R0bYcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723614870; c=relaxed/simple;
-	bh=Dpoiw2FeVy4ZRATQYWzZsLCziFMJQd38C6Ox+HHgBAc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=P3OTKoEednl3jiIYjrCHlaGmgMFpJYyJdNF9BlczRWZdrgWR++MdLeStbzMNY70aW5382eK5h1kNsSlH8lFJSEkLKeMq6CYcFT9O4PTpImrhUhh956Pw3bSRQuRR0MrWlGnL5UHBZfeiq1lKJtAtxuJyoQP/qlt1vKN2mXCEspc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=aIcQ5X+K; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1723614862;
-	bh=obecI6iyhVqXVJmehG5kIn5dNF9/TeMEbXFH4Hxfp5s=;
-	h=Date:From:To:Cc:Subject:From;
-	b=aIcQ5X+KgNgUvI968+UULwBChoiSgv2DwAwEw+dwDMq82BdLOFiB4944pQbXjK+AX
-	 2+4cOp5Kjxoof8ql2ikl7RVvIC0/J9KhSR1WpgSNci62C8wh52uAVGjYQli4YLAEwW
-	 Jm2Yd8EDNL3HX8/cYrkrhI5V1XExz5C0CS2eKGr6AtiVhhNOeG73hQDa7jMqEdfmYe
-	 d9yBEfKkLVDAjwZeSEVSVTMYmqJejROan360hSpd6AvmYpFWmXMj/4xx61kWaqequ1
-	 k2xzkYcpCQ2H60vRLCNWlNv3Fi+pcZh4lr2Xgg2doniPs0HuYyUXBak1a939CX7Zd2
-	 dwTZQdSnaQYjA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WkHWf0t7cz4x0t;
-	Wed, 14 Aug 2024 15:54:22 +1000 (AEST)
-Date: Wed, 14 Aug 2024 15:54:21 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kees Cook <kees@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the execve tree
-Message-ID: <20240814155421.61d49566@canb.auug.org.au>
+	s=arc-20240116; t=1723630032; c=relaxed/simple;
+	bh=5XsVB9GL2OZJPnbet8x25YvtPAzHgMuoE2yoMAGVXL0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=QT0r1sBnB0H0CF7p/6gWhNVLqLEmu1VAXEIoccuPwXaiGyv01OSCG1LSRaVEbZvlyvTxzPwB2YtzZ8HZLPmgTXrU3BhO1fGTrfad+cnsEQ4AgKTXV1t7fZYfJmg5+gGm/QwgovdmM4kdXpAm0/QLv+MZyPeruPqTcFpUp8NVLLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=mDw6wcLA; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 47EA6lx8118766;
+	Wed, 14 Aug 2024 05:06:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1723630007;
+	bh=Y1bHplFzRvIN1uqp7gkLUfaMsf3OGsV9ARnhFdIWt34=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=mDw6wcLAihrnQ0IKIGf9SKL7zoRzT4tnnkxyq8srXnGV3mLmeozxm5Y6tcRHV1zID
+	 vE7EL/tGfp20m0pT+lB4jqnYP7guAp9hzfG9cJWxgTQlAF0Cw7QLTuLyksjjwxeGia
+	 JFNdS+o6OC37jOzcwyrREogLhJ7YzeYI4tZsPElM=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 47EA6lpO071525
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 14 Aug 2024 05:06:47 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 14
+ Aug 2024 05:06:46 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 14 Aug 2024 05:06:46 -0500
+Received: from [172.24.227.94] (uda0132425.dhcp.ti.com [172.24.227.94])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 47EA6j2B019371;
+	Wed, 14 Aug 2024 05:06:45 -0500
+Message-ID: <51158ec5-9f27-4c3c-b61f-485e6abc2ae6@ti.com>
+Date: Wed, 14 Aug 2024 15:36:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yWIixIGUG7nsX_ypQONEtjO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: trees being removed
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List
+	<linux-next@vger.kernel.org>
+CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20240813085147.786004fb@canb.auug.org.au>
+From: Vignesh Raghavendra <vigneshr@ti.com>
+Content-Language: en-US
+In-Reply-To: <20240813085147.786004fb@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
---Sig_/yWIixIGUG7nsX_ypQONEtjO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen
 
-Hi all,
+On 13/08/24 04:21, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following trees are going to be removed from linux-next because they
+> have not been updated in more than a year.  If you want a tree kept (or
+> later restored), just let me know (and update its branch).
+> 
+> Tree			Last commit date
+>   URL
+>   comits (if any)
+> ----			----------------
+> cfi			2023-07-09 13:53:13 -0700
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git#cfi/next
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
 
-  d5651e09b232 ("binfmt_flat: Fix corruption when not offsetting data start=
-")
+Could you please keep this branch included for a while? I expect active
+contributions (although will just be handful of patches) here.
 
-This is commit
+I will remember to keep this updated to latest rc when there isn't any
+new things to queue for a window. Thanks!
 
-  3eb3cd5992f7 ("binfmt_flat: Fix corruption when not offsetting data start=
-")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/yWIixIGUG7nsX_ypQONEtjO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma8Ro0ACgkQAVBC80lX
-0GxiRAf/as2cZmBPLnyOvAVGFvlXlzTBqZkOdF2FoBpGmwPssREF919Kp7hVVine
-FwAc83sIQ5D3joCf0bDXCYyFtNjD25dHqRGcSyOhmh6Fc4MTOvAzuyImRBRtQq7C
-1YURlg34ITcLr4VrkYtPpijYYiNCTiv1XKK9EwIRi9LRAs8nb7D/aajjc8wfU0XM
-Uz8LtR6Nzp7/wRh1P1/6J2OareNWBgZfdS6Pj96eZL/Dwr/8Azk54181nzdSi3L4
-E3fDv0R+nm3R7Z6O7/Sp/Sj+u6te/otuAcDj8zD8e1qDMa+HfB6F3pk/wy2sdsAw
-DSMnA66uzqshxKHBNORBjxUX7kBv+w==
-=95LN
------END PGP SIGNATURE-----
-
---Sig_/yWIixIGUG7nsX_ypQONEtjO--
+-- 
+Regards
+Vignesh
 

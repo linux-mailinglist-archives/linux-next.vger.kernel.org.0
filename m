@@ -1,118 +1,161 @@
-Return-Path: <linux-next+bounces-3305-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3306-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81789951140
-	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 02:56:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2EE795114E
+	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 03:00:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4BDD1C2295E
-	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 00:56:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 338E5B228ED
+	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 01:00:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA27538A;
-	Wed, 14 Aug 2024 00:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FB098C04;
+	Wed, 14 Aug 2024 01:00:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PCjWXKf8"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="P1aWuNG/"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CBD631;
-	Wed, 14 Aug 2024 00:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069362FB6;
+	Wed, 14 Aug 2024 01:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723596999; cv=none; b=B9tH9j2vc4XMi8rkaS/o6y+S05i1269SmP+6HG5dKubadggmrC4yThjY8h2ttsIU3RoBEglrj2n0pQeLXdlTSaawdUWd0FnDLuM35ImG+avxZ42xC8vy4tUZbhiB2N6unifVbBtpMwzZCvWez2eZbStDIxze+mRkWyphO0KdMLg=
+	t=1723597235; cv=none; b=K3bq8RVonj7OP6zkVz3QJMSx4gbj2DHFyM+MJA7XtOMlM/db0a0uPiJ6Y8OmmYi+SDCG1szFS68RIF4ga5BYKJ3bd5SgtNAiH6VU9k4TCin22bTdyASRpT9wQDOy8mZnCgDtMY6/mEXBUEnDoDvDeqHmhKbxGovFE1vlqQuKmEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723596999; c=relaxed/simple;
-	bh=s26VK5D6rODby0hbFOsWZfmhFOFicsXVKPbKZHObdho=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=a5rXGD7u7vie44fN7AnC2t2JgMc9GCvuIvpNE7VcWTkoIaLhWhBecLV5EXWdV4TMuR3/K1Oqm6gc3GEYoGsKmoVDSQj+mFl1GrD5e/0/tCHyYUGSvlCk9CkG9qYq6wChEjhEpPIpkhSF+ZEpNPU7V/zE3uFyapHitmXNbaKO1Cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PCjWXKf8; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1723597235; c=relaxed/simple;
+	bh=Q4313Nae4Lqc0GNiN7hBuMoANe/tm2lHVmYGLX7lV60=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=vF1gskB7CScQ5oUORewCf030wWY3AUEeqg1W/lkT6JaiLG3xnVK5rY01tj6cTNl5P0bviNuq2N4VzXSvb2P0NfQ9WyKyMi/lb/iIV6M2LZd543rBA8ERSzuxyAPqW/ZYRnJL3NBrgNpafSWvBBefpZwggvy375M5M3EFJtOcTS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=P1aWuNG/; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1723596991;
-	bh=jL3EW3LeDBnw+HJN4rMqLHVzMyLEnU32IiLBXSRaqmg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=PCjWXKf8XQuJ5dIfxLhVe6CgH7OOGst9IJghwBvyuGhZQen02Fea98d7uGib7Ddsy
-	 sQJit2pjjfbJz6GTlgVK01nIZsiFe7GNchIuXl5lu2dRJTKiR06Y3G9LVRW0yaR+8z
-	 vFoCj1rSY0OPWQiID+Dom447lAgMQqaVssi+eDBUrf8BKITniJ63nzAhhHfbIcKLtD
-	 sY9MJt4eoRuEoUN6MpT6BcPiCLbIHxvlp7hRrGR+RXibQfBSznWxB46dBV/+J+DU1/
-	 jzULu7wUGOd7/TJwMkwyvcohjdEK+N/T1uvbLDRulim/eoCEczVgQzvhgiHaT/fT7F
-	 2s1C+M7+UlTtA==
+	s=201702; t=1723597231;
+	bh=hxBR2JKtbxevnnw9USR6AjGTYuarhQrbk0EjhnncH00=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=P1aWuNG/WVcKA6KguPTWjJoM4DHtqO4fa9ZBUKUBhGGk9WbLnL3MIEAh2KFTtDGnS
+	 a9yGCewD3nEqvZYHNh6PBvKuij6LTaRz8H1nbAnoaA1X9av0Pnayu3g7b8ej+m4Ehd
+	 LxfRMmL9X8X/G3rOa10xIYhcabf06uPSpHRfyPCn2cHqCmwI32MmHZfNOMOhkxaV9p
+	 zxDVRHw43FKe9p5dStvaFHWxGdDXWQADbr529hGP1YfPabK0FhMAoVowbYJmDZS6d+
+	 la/I33a/W3AphcMe51DuLEFTcXdi3mm0MvKQuozWZFtTGVDORK0pdk5nDLuK1L2o8f
+	 HeCeZbs9Ug4Ug==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wk8vy4hwKz4x2g;
-	Wed, 14 Aug 2024 10:56:30 +1000 (AEST)
-Date: Wed, 14 Aug 2024 10:56:29 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wk90N03WYz4x2J;
+	Wed, 14 Aug 2024 11:00:19 +1000 (AEST)
+Date: Wed, 14 Aug 2024 11:00:19 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Christian Brauner
- <brauner@kernel.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Aleksa Sarai <cyphar@cyphar.com>, bpf
- <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the vfs-brauner
- tree
-Message-ID: <20240814105629.0ad9631b@canb.auug.org.au>
+To: Kalle Valo <kvalo@kernel.org>, Jeff Johnson <jjohnson@kernel.org>,
+ Johannes Berg <johannes@sipsolutions.net>
+Cc: Ath10k List <ath10k@lists.infradead.org>, Aditya Kumar Singh
+ <quic_adisi@quicinc.com>, Baochen Qiang <quic_bqiang@quicinc.com>, Kalle
+ Valo <quic_kvalo@quicinc.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Wireless <linux-wireless@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the ath-next tree with the ath tree
+Message-ID: <20240814110019.6be39d14@canb.auug.org.au>
+In-Reply-To: <20240808104348.6846e064@canb.auug.org.au>
+References: <20240808104348.6846e064@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/y.4N6Ob3DH9QvXRaBKCbT3J";
+Content-Type: multipart/signed; boundary="Sig_/c825WGxscMug2D7jB7kHQCF";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/y.4N6Ob3DH9QvXRaBKCbT3J
+--Sig_/c825WGxscMug2D7jB7kHQCF
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+On Thu, 8 Aug 2024 10:43:48 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the ath-next tree got a conflict in:
+>=20
+>   drivers/net/wireless/ath/ath12k/hw.c
+>=20
+> between commit:
+>=20
+>   38055789d151 ("wifi: ath12k: use 128 bytes aligned iova in transmit pat=
+h for WCN7850")
+>=20
+> from the ath tree and commit:
+>=20
+>   8be12629b428 ("wifi: ath12k: restore ASPM for supported hardwares only")
+>=20
+> from the ath-next tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc drivers/net/wireless/ath/ath12k/hw.c
+> index 7b0b6a7f4701,76c0e07a88de..000000000000
+> --- a/drivers/net/wireless/ath/ath12k/hw.c
+> +++ b/drivers/net/wireless/ath/ath12k/hw.c
+> @@@ -925,7 -925,7 +925,9 @@@ static const struct ath12k_hw_params at
+>   		.acpi_guid =3D NULL,
+>   		.supports_dynamic_smps_6ghz =3D true,
+>  =20
+>  +		.iova_mask =3D 0,
+> ++
+> + 		.supports_aspm =3D false,
+>   	},
+>   	{
+>   		.name =3D "wcn7850 hw2.0",
+> @@@ -1003,7 -1003,7 +1005,9 @@@
+>   		.acpi_guid =3D &wcn7850_uuid,
+>   		.supports_dynamic_smps_6ghz =3D false,
+>  =20
+>  +		.iova_mask =3D ATH12K_PCIE_MAX_PAYLOAD_SIZE - 1,
+> ++
+> + 		.supports_aspm =3D true,
+>   	},
+>   	{
+>   		.name =3D "qcn9274 hw2.0",
+> @@@ -1077,7 -1077,7 +1081,9 @@@
+>   		.acpi_guid =3D NULL,
+>   		.supports_dynamic_smps_6ghz =3D true,
+>  =20
+>  +		.iova_mask =3D 0,
+> ++
+> + 		.supports_aspm =3D false,
+>   	},
+>   };
+>  =20
 
-  fs/coda/inode.c
-
-between commit:
-
-  626c2be9822d ("coda: use param->file for FSCONFIG_SET_FD")
-
-from the vfs-brauner tree and commit:
-
-  1da91ea87aef ("introduce fd_file(), convert all accessors to it.")
-
-from the bpf-next tree.
-
-I fixed it up (the former removed the code modified by the latter, so I
-used the former) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+This is now a conflict between the wireless-next tree and the ath tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/y.4N6Ob3DH9QvXRaBKCbT3J
+--Sig_/c825WGxscMug2D7jB7kHQCF
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma8AL0ACgkQAVBC80lX
-0GwhuQf8DgEk5BrDWaRWIzqw39VULj1hSejMHDxHAwBCxv8MGhqU2SGEUgz36a1q
-WVev+yjnDD9EocyN2Nyc+rhvrdRUYwgqDuV5UUa23hNJzMa1SlWD0Zr+9z1NrPSp
-lIRaGC5QjW2vrbE0TL8lgssFxnhxNlb3yOtRKQfbv2t5xbbqUGWRqvAF1eBcZUD0
-1VXwt0S/qs8I3aFSq6dVzu3wEkXN05Orn0uOsUcVyocyAkdrRMEWwmxHxd9bWwkM
-8Wej1TMEv8ueBcc6dTzrgmJXVlxEq18P2D7bcanjhEPSbl382cy83a2XNMfc5Cnh
-ampwRYz2FVFRUrseRh2YzPoRDTxyLw==
-=NGE0
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma8AaMACgkQAVBC80lX
+0GzgsQf8CVhJeXJ3Fb5qihfwfTMiMiPTEAec9mao3QEzcMpSj2k4Cx80BPSR4xzc
+9NffwOXVpbfK5lQOlKO5DAL4SHXwjLHJIX2gc4pOy0WmjAygFCY3fpC6i3ivCDv/
+Joy5V1yPBEUXxNKJioQOpK4T1vJsTck7YaYGEdCCOxESEwDo15ebeQBm/155Te+p
+c8llPlZhi9I03Vpc+jE8rpmJRpEzH+sIq4dOUNyhmUga0WV7B/p+CV5Yg+8liKB4
+wRqepGWe2JEWx5SkJqESxGmbTyjdc0TwdTeddtXQcf50fyEV/ODNheI2mJmYQx3w
+hQL2b4cEirIu8JR/TWC1aTVSes6NUA==
+=VV+7
 -----END PGP SIGNATURE-----
 
---Sig_/y.4N6Ob3DH9QvXRaBKCbT3J--
+--Sig_/c825WGxscMug2D7jB7kHQCF--
 

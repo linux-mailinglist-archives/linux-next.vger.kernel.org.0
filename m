@@ -1,81 +1,105 @@
-Return-Path: <linux-next+bounces-3317-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3318-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F35B1951DB5
-	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 16:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C51E952586
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 00:20:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8B4B1F21728
-	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 14:51:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1E501F26DEF
+	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2024 22:20:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26CC1B3751;
-	Wed, 14 Aug 2024 14:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FC81494D9;
+	Wed, 14 Aug 2024 22:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GzIPpQJF"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="e5IuGjwm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF87E1B374E;
-	Wed, 14 Aug 2024 14:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D56A60275;
+	Wed, 14 Aug 2024 22:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723647060; cv=none; b=lSVf+LNEuFwBSRzhUaVvmPik7bBUUITqke77QVsYjJF98ZUMtjfP0OnyCGudfpIkisuLx49uqXwGsDk1wSTqmIk26xBRog1IL8Gk9HTep9J49W/OoM8y2H7hfDHuIaUx4U5J7kXBhprrJDD5/pjzy7eCOWYDAjzKYpT5LyrYn3w=
+	t=1723673958; cv=none; b=bBYehe8oleqQ42DrybInJ9z24UpXA7csnOs6nQ7mJjk4gWOmrI8CSvE+keTfIWJO0cFSFz6dQfjxxnpyTRcEd8QE5/u3003OMT/VEYdlutdlDPT/plI1QeIat7A5Xqa6Kq9skn5yh9K1vpJ9UWFAEH5jGc7VpFOEWtT+BEGWMmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723647060; c=relaxed/simple;
-	bh=N0f1HZX04ynIZfeTBMvBaRDvfUH0YrPtxLoIFyTZvJg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X6GylVwaRDX8XXoDerKDzSKKej00mdm+tXQGiXO7CEEAN5UuMjPnfy4ee+DMCIwmFIRAsl54a6UyG1q0XSODVBxeQn47I0F+V7BI0iqnuy2eN8xYZVVMgL7XgWXgpucx8nmyitjxOat7nY/3qKpmDp4m2iQt4jotjIHbLAmcuxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GzIPpQJF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C903C116B1;
-	Wed, 14 Aug 2024 14:50:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723647059;
-	bh=N0f1HZX04ynIZfeTBMvBaRDvfUH0YrPtxLoIFyTZvJg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GzIPpQJFTzet4Fe5aXSfHcysIoe5/CP+VBNQ/ooVANO0D03QEHEyptfVY1lVCB5t5
-	 ua53mdez7GYyHhRMQSIWk58EnAuE5HuZFCaig+K8EmHRRofulDjgHiaDDXkWOcAP94
-	 /N9UwmiHqPfPuItco2C1w0zt16kpLJ6ZRHZ2s3aWmtTkcmUkFyo7x6sXICHiTJR3OA
-	 1rb8ILGzP7oxm3W3Q4ZpxydMFfnIr+v+2UzFGx2eC/m3SF5pMj1WRQICRcX19LX3x4
-	 eUMR8Jv1IIEREOiNmA3CjxrCDir4M3FlwUXSK1MPVNqOzEVInJuWN20MZF0XZCZNe5
-	 MvmVQF3PZBR1A==
-Date: Wed, 14 Aug 2024 16:50:54 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <20240814-virtuell-diktieren-a08337b312fb@brauner>
-References: <20240814112504.42f77e3c@canb.auug.org.au>
- <20240814014157.GM13701@ZenIV>
+	s=arc-20240116; t=1723673958; c=relaxed/simple;
+	bh=S6HErFk/DjtsY5nOPJL667tA+5ftVzOeF5/3Sj6weLA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YXKQGeL21PQu9u4yD88q2eOpowWF2z6OvAZlzPamZOy+OHXMJ11I2OS0bBq4W5uV8SVrEYJrk7YB/FCqhgj4WybY6BAUda7Z2HSCnmPWUXM0A9cO624uyE9ZkY/fuQu7aByQzE5GfV1G9Wt4vNJIhbIJJXxeva8q/PwgTubYShk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=e5IuGjwm; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1723673950;
+	bh=nilCenmhG9USZYyCQvxka1GV+GVv4b854q4UoQLpfsI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=e5IuGjwmRz08iVc+9YFHkHVQL4ABRrtW1wlQJ3bRVHG5hRixDKpMcqGETRqsgop7S
+	 Hs7og8jje3c2hZ0kYyyhpbLxJoES58VXdXMAfq9xpMaKoPBWva1GjEovs0sodG/KLX
+	 8crz/FmMgElxxG4BwtNveOcnEvV/SnX/wdjL3DqN9lzyXxRCbCUIuBVKvUT26GaiPL
+	 1We5cTLFVyx9oPaQ8odleinIJ99r/ULmqgPUwmz2JceEDNJy+ucUMAYt4h/UBppran
+	 lbXi9z1eMmiubs3RMuDKwJXOP7emKIiN6pFyCy1kVcIrM15SqEVFMh7oeucvLTQjsO
+	 RVUnoS4oJGyQA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WkjMy4hD4z4x11;
+	Thu, 15 Aug 2024 08:19:10 +1000 (AEST)
+Date: Thu, 15 Aug 2024 08:19:09 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the mm-hotfixes tree
+Message-ID: <20240815081909.2047e90c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240814014157.GM13701@ZenIV>
+Content-Type: multipart/signed; boundary="Sig_//fdpAqi0Qk46LeA5Fu4c9Sf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, Aug 14, 2024 at 02:41:57AM GMT, Al Viro wrote:
-> On Wed, Aug 14, 2024 at 11:25:04AM +1000, Stephen Rothwell wrote:
-> >  	if (at_flags & AT_EMPTY_PATH && vfs_empty_path(dfd, pathname)) {
-> >  		CLASS(fd, f)(dfd);
-> > -		if (!f.file)
-> > +		if (!fd_file(f))
-> 
-> 		if (fd_empty(f))
-> 
-> actually, and similar for the rest of it.  Anyway, that'll need to be
-> sorted out in vfs/vfs.git; sorry about the delay.
+--Sig_//fdpAqi0Qk46LeA5Fu4c9Sf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-You should already have a never rebase branch for the basic
-infrastructure. I can just merge that. But I'll just make my usual note
-and just provide the required fixups when I send Linus a pr. That'll
-work too. /me trying not to have his brain melted by the heat.
+Hi all,
+
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
+
+  a94f66324a2a ("Squashfs: sanity check symbolic link size")
+
+from the mm-hotfixes-unstable branch of the mm-hotfixes tree.
+
+This is commit
+
+  810ee43d9cd2 ("Squashfs: sanity check symbolic link size")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_//fdpAqi0Qk46LeA5Fu4c9Sf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma9LV0ACgkQAVBC80lX
+0Gy85wf+KjNbrM0KzqbcDrQUDmM3N3hBZMFKAnuiRYA8Fm9dYWxrANHjRBaSGujU
+ZRfQeMfutAdCEtxtNCfWcnUtFjp+qvP/mknkZqV7kuf2Q9O+VohX1yjCSw9hB40a
+zIeX6hMtxxUcdZRMmlsD/GdGr8ldGg/oqdQMH3ky2yCjX2aMdFsYsMMZdGkd90Rr
+Xf9iTfvB4TnST+6lFKqQPK9HW42FrXbny1WSVnvnFGk4M2oCgaYtaFgvjZrf52qF
+f8BUvDdmMUzlAx/6bTs6t4pQqBfmcdBcekrig1J9nW8cFfY47qbrcknRCvlDwiMb
+u9m9NxdTpj4uXPEhFJ5KMvIm/Tgobg==
+=tOf+
+-----END PGP SIGNATURE-----
+
+--Sig_//fdpAqi0Qk46LeA5Fu4c9Sf--
 

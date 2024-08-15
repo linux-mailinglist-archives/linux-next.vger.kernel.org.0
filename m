@@ -1,237 +1,294 @@
-Return-Path: <linux-next+bounces-3330-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3331-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12985952E3C
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 14:28:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78370953141
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 15:52:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72033B23020
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 12:28:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE36E1F21D84
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 13:52:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A087514884B;
-	Thu, 15 Aug 2024 12:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17991A00CB;
+	Thu, 15 Aug 2024 13:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hu7zM216"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JWrdldnE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7950B17C9AA;
-	Thu, 15 Aug 2024 12:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723724927; cv=none; b=bySIka8xr5RsXAovg6AmOo4TGEPchC8fwms5kE2iV4QozTlCLE15sepQhaICfnbaDsGLtjwHzM4WhmKZkHK8OiAf0XFjEPD1uAQOmcGsUenwpB8dasGnXxc5Uq2/SdY2H9r23jCMDa7enEvLYiFLjCu3UzAUIDLXUK1QlZZyM4o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723724927; c=relaxed/simple;
-	bh=JrFPrJ87Ftrhx6cgiCBPw22H3cmXQRsRa5UrN+y10r0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CM4g8IBqOfL4VXGSR/iLDZ41DXPM03LLEBS8NsGIg+vDGtUxpsLncW7Q6UQunTa2vIqDjq/zNLaUoDpZo13CBhl4YTyR6u2hY94k8RwR6Ofuq5EjxcyoDm87kSJDFAT7j7dkyXI8xjBRQuqKVcL0Xko/E1e1AojkdMJzdpDiDMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hu7zM216; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2f01e9f53e3so13657151fa.1;
-        Thu, 15 Aug 2024 05:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723724923; x=1724329723; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U7ji7Xbpe0QiRxrQIY6BjYXQUxvS4UkrQQS8Vvk9NPA=;
-        b=hu7zM216OM0x8KR3yKzO9UWjXjESPdYx/q5xNBScKxQ2QCxa5lPGvOSMF2Wm3hUkf7
-         t4cJRJNjD8/xH3VsqmBvw87KiV+mtEfZap39BydiauW7tykqc0J1/F0W+bqBNPyxIKWQ
-         UtYmiBYdCHkB/c/JEAUTlAi6+d637Vwb4VvTHxPZESQe5BxjgM99K+HFSatZP1NdD4nF
-         vk+rWHXCeOAhDKlIe3BUxLMZBoQmzwWEbpq7xUnGm4vhBcDRgQ/B+ty3tAMvrvkWL7ED
-         cI3e4rZXSyBl66eRK1I2Kt6Kh7Uc3hJmMwoPJbzOUMdsxqN9NUqS+mMXL7k0FWIGu0UQ
-         uEHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723724923; x=1724329723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U7ji7Xbpe0QiRxrQIY6BjYXQUxvS4UkrQQS8Vvk9NPA=;
-        b=loCBZJFffiVBZpEu8OhFNp8pgx3feygFCs6MHFJ5WOGIVjenikF4B6VHqa6b0z4+5J
-         wVZdiHV8s+4+GQSgN7Xv06hL3TjqG8kzd7U0x3XDby9f0FfFqqRoa2N0ghAdcZIhTMEj
-         w/kQ0ZIDV0uV8UW3SO+8aX4Y6FwmARzj6+822TvT/oG0/p3WVWPh2E8a9C1BzNqxZJ3e
-         FhmS0MFTFygEZ2/LnJrMM09ek32xKL5MsuANw+12rR5VPNukTKjdn1hE6EWkR079Ozxm
-         kh/HyO036Uu99TQrrFMmxazjSrS3ocYaTv/yQ8TYNj585Cj4M6GSYHAHtp7qruGBjB3H
-         m/xg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXcAGSW5d3foLN/lRiJnUSL3g+Gd7mq2jZDSfwumvqFThJvWmiM+Xo8tk3/0+xVxm1Qb+X6DaE/WnAU92eTkcKppWZj3eH59cu1Nv8xb2NuecXcqf104nJpkzRZwvjClyPSMciEH98Jw==
-X-Gm-Message-State: AOJu0YwBkORz8NVovizOwLoDXtfa4Qo/mxh9iXgNGoJKUwLA7kE4XNkA
-	vl2MbABbaYkPTtmOBCJ3zw+UK8vwcP2ReJlwxxxFQtg3ePtwfxD//UqGOKri+C3cSKOJTqX4TUl
-	TUCZyz2aJVOURBzg2u2a7EVf4eO0SlQ==
-X-Google-Smtp-Source: AGHT+IFN3/Tti+ht+OVwgF6hTjfmaJW/vXQBGY6af8yYnxegYHkbgG7upb0ZVxtChhPola27NZIHH2nQ1+KNsjdzpBs=
-X-Received: by 2002:a05:651c:510:b0:2ef:28ed:1ff2 with SMTP id
- 38308e7fff4ca-2f3aa1d8164mr49731521fa.9.1723724922972; Thu, 15 Aug 2024
- 05:28:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932371714A1;
+	Thu, 15 Aug 2024 13:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723729914; cv=fail; b=abDE4mOnH0EE98/EpTX5ZKVqxA6LrBf43lHXVMSTXhlP6rmk4Bq4yNCHBJ1UuyMHSy5z+qi2wMiVgdFkSJOGNUGqeRPpZOSY+SirJZVlTDZxY4qHMtMglJyUXd3NGfRnynD66YHOvVcF2S64SGstgXa7PtlG/vH/1phinonnoQw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723729914; c=relaxed/simple;
+	bh=0iyrzcAy0jw4DGcEoDaodr2tcDNlagt8YNxA0P/STtU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Xxr6gHTpaNaI8uEPS4uAGuocZ0m0EWmICLBV4vWnUBLXeVcxln6qx8ix+XamKXppo17dL4B23EcJwSh4zpC2IQJyXL07CIZNg7hkSMUi+1Bzlw1AvCnHfYTAfSzn69AOE2VG3lK6Tc7J3ARFGJR+JBvTO767ktCFZFs/Wklp+VI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JWrdldnE; arc=fail smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723729912; x=1755265912;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=0iyrzcAy0jw4DGcEoDaodr2tcDNlagt8YNxA0P/STtU=;
+  b=JWrdldnEzM/Qusf7YDZDAdEe5gKN36RBJoqCNVWHB1Kmk14l55ZQL4f7
+   iegxSjr3P89e39lWskHUi6JQdaf48sXc2Ivf8lAKAmvYB2ND1tgEAKEV4
+   F98p+fPvHfBNF3wXXaP1duBoV9I+9++/WbRseC4hCR6YWBlh0pw/iPdaG
+   Q86Dzc35F4NxI0zt76jd+Fm4YnOWu+/o7UCTNjz/rbjyVd7750sLJk74Y
+   UmjbzR0Ip7ISIVP8TIRy/+4D653VBArA/K872iPiFuLUIQRCV4zbLq5Wg
+   jEe9Ekh4rAaxbJfpmeOjSLjVwVTqhR5xBS2cUxYOC848hGOybqN7JdG7j
+   w==;
+X-CSE-ConnectionGUID: 5ZKzTKc3RIuOU9PmRpSl7Q==
+X-CSE-MsgGUID: dnNmaxSnQoSKDde1+9n1Aw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="33393433"
+X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
+   d="scan'208";a="33393433"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 06:51:51 -0700
+X-CSE-ConnectionGUID: hI/0eQQeTD62i5/9MIElMQ==
+X-CSE-MsgGUID: /nuPbEI3TJik/3LYppG0wg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
+   d="scan'208";a="58993697"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 15 Aug 2024 06:51:52 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 15 Aug 2024 06:51:51 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 15 Aug 2024 06:51:50 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Thu, 15 Aug 2024 06:51:50 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.176)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 15 Aug 2024 06:51:50 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=F1kZm5WJvfxumMHXDVQuWWqPy4uAxEcq7s/tOIiotmU6/KaoJJh6eia3/2Lt7Bm4qlcIj+KB1KgzHmhmYowh5g7UBmhAeiUC6VzRdpbR0558x8GxoTl6dHFmfEJpjFptXNmc8t2bFwLIjUz9vkKZgAvVoHmjq+CH9hDP6kJzCX7zcmDGHjLsfn03pVbTznEJOuobQtHMi1wSqKmiZgNNSU0zAo2K4O1QZYHAty2UFi3YXkQblaylaZhArMNZ0xnmCk06x27c7C9k1OBYj/gR1l5W/o88EnhFiHMJxDOnEmV5ZaLZAc/Xbr7cIwIE2ecUBdsbxLlhZGbKX37kb8PIHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8YdeyatExCyHLMAlTjTsOX5F5KwAphegWoPb33CFN/Q=;
+ b=tH4hq1A6gOI5KqdmbmzKO80nzTEmqVuL3w/8tbu4uD1J3rJT8BnByQR7+RJZZlbZhz8/6wel/AQS5gwJdxF8kbQBSHJVmGhsejm27d9zJ3bWHu35WIkJISYNRDMFmJvWC17ogxZ3Wk1vRMw8/okwmnwvwrW1DkjmpxWtrCwbXi0eHx+M4/GRhm9L6jQhIYaRHdfRUt3z/s6voWvcX/C+Ndg9FTY2jVTAAKp2jCZGvybpgPz6LxGIHcsx883zpUE9Zl+WY86233VD9OWLIv7fj3BozFTeBLjh986i7KtBFpAhIX0oTfl2zrdVHwzWSfxGvr1cr440lV6MqaAdBvWIPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by SJ0PR11MB4910.namprd11.prod.outlook.com (2603:10b6:a03:2d7::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.18; Thu, 15 Aug
+ 2024 13:51:48 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44%7]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
+ 13:51:48 +0000
+Date: Thu, 15 Aug 2024 08:51:43 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+CC: Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>, Jani Nikula
+	<jani.nikula@linux.intel.com>, Joonas Lahtinen
+	<joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
+	<dri-devel@lists.freedesktop.org>, DRM XE List
+	<intel-xe@lists.freedesktop.org>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the drm-xe tree with the drm-intel
+ tree
+Message-ID: <sjhsi5wv4g4ewb2f4qfog7drjsc4wvoeeohzxh2spl7pw4njla@svug3iudbdux>
+References: <20240815113717.1c81c44c@canb.auug.org.au>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240815113717.1c81c44c@canb.auug.org.au>
+X-ClientProxiedBy: MW4PR04CA0316.namprd04.prod.outlook.com
+ (2603:10b6:303:82::21) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240815093829.275058c7@canb.auug.org.au> <CAFULd4byjR7fF2wBUJMH=8_p5sE2vK9SkG=O4sUOjS4x9MUyRw@mail.gmail.com>
-In-Reply-To: <CAFULd4byjR7fF2wBUJMH=8_p5sE2vK9SkG=O4sUOjS4x9MUyRw@mail.gmail.com>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Thu, 15 Aug 2024 14:28:34 +0200
-Message-ID: <CAFULd4Y3sqaRZeOGpEVDSi4NWA2OHR+rpiqz0syLWjHrcQQE4w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the mm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SJ0PR11MB4910:EE_
+X-MS-Office365-Filtering-Correlation-Id: 86c2e576-32fb-455d-9654-08dcbd316852
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?CtF2bFmHifteB1D8QFRJOeEbCRtOMmatTxwjYRB3C/DIXpiwXMH3YeiMyIzV?=
+ =?us-ascii?Q?xKmlhA9NnK9t965oBXRavOlkg15jfnNsgY3r8nqjjFJLgaebcPSPp51Su6UT?=
+ =?us-ascii?Q?DldCIvbC5eAwdiiQHv8vd+q5qFMPrJH2+HRQfSLHoJ03GT74vk9VppPduCBq?=
+ =?us-ascii?Q?+ytLYhjc0GdwZEzX9pUg0Rd7yPcrQ+s68JAv70ymgR/PgNmL81NygFyYDZde?=
+ =?us-ascii?Q?gZpPfduYyO2GWa+uBFsLkk5Hd3E4Ho6wOBcpsxdoAbjY8MWcPxsL2mlfKe2u?=
+ =?us-ascii?Q?joBHhzuGB/Qip7UdNMhoiTDCIX+eLgN9xtBIMj3Nsp+7CkU35JAzhwXcuyig?=
+ =?us-ascii?Q?3dXWJmWJGA3Nsv6d4P1xeNPSswT04UfxNiM/QuwJ6noHXgx5PcyI0xSW1C74?=
+ =?us-ascii?Q?X5zqNQ1Gw8dT0e0K81KDiLNokXz5fvEvudg0Y86KsHFeDBKXp/b74tCuNkUS?=
+ =?us-ascii?Q?CInxcYPZSjVWSTX844/+8TmNmYl8yMWfX9/Nc0sZPV9v03PdnfoX/1ZY4beo?=
+ =?us-ascii?Q?nLB61Yx2Urxtz8NjGahCRwSmIizmmxLrYq/zZtmda8vRjTnib4FLajiZ94U1?=
+ =?us-ascii?Q?qM6gfSOG43K/jMg+5jmUqpif0ioBcAU2d8rxaL+Kk4axSQimU6rx7n5MIXvB?=
+ =?us-ascii?Q?+ZS0eITPYXk+mr0o+1LgVuSqRpS+Ngbq+d4jgZ3q4zHCrOE8TO9UK9rmYYyW?=
+ =?us-ascii?Q?0aBT6fVt1sBlff/vvEFF3zjTSmBxwqLBs0ktJx/Ysoc8nP0ReH/Y8j1knhbq?=
+ =?us-ascii?Q?3KtGWthCY6BNW+buh6BkG4hC4qI+Gy4yHRqTzFr/1clSsSNxYaJQymlbobX5?=
+ =?us-ascii?Q?F1zNASnpBfsiBvxg4rnKfyvg8jop93BDG7RnL9aqmDfh2AFJs4Lv9vnc26AI?=
+ =?us-ascii?Q?2nComOAJEq37t6gsBL3XKmEjWsqP6eWR/QtVnQjBH8TDPdFyw7DsuJkIaYmo?=
+ =?us-ascii?Q?Na8n1OOeTYqdSRfvsGhRYRY2VsTKamaWrVIFuRyVbaI0f9gAPWmMDT1TzYj6?=
+ =?us-ascii?Q?c1n0yWJhrs0ZJPTx/sF4J4lq0+0I227dCsf6lICBcDMVLGXwhE6mC/+8I9VV?=
+ =?us-ascii?Q?E3xx89ksuTf2MxDp982Yj/ilQ7ypd0JEJ2MbfMjCE33+zUtz7XMi8BAO/qp4?=
+ =?us-ascii?Q?w2AE0OAQyyDjzTr+j0v6sd2lDbvQyc4Py2Vhdr586xbkzs16Dd9OuPJFreoL?=
+ =?us-ascii?Q?xgrQcHjr96gu6pDWuRSOVdy4xkwBxGdrjhj6K+oVWjTDRRt+t0fKcqHLxdRz?=
+ =?us-ascii?Q?weLwFf5sXQkTXZkF5/UfeuvdDN6YiRAqikNlHuw4DL3lR2tDzOq37T+khXmz?=
+ =?us-ascii?Q?WUe3+VZ5mXpAFtfZkDxGLMzbJxjKS8KyEFiZx5+nGbd+DA=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PfA0LdDnVEIf2j5ShW09h94ap6nkvvDwa58uonHQNXtVm/sq9C3mW2cfVg9c?=
+ =?us-ascii?Q?zdpB5EVa7Ip/ZKkPnLvDW1qG/VMDwRL6hE979hWMdNevxkwDjY6tG7r0QemL?=
+ =?us-ascii?Q?tOiydSH81v9ZRHX7hTo7w/ppTguhSAho2W1tnhfHkxOBZQR5yr8iz4QXX/GU?=
+ =?us-ascii?Q?upfHlB8KWYUd4XcACmUJ91b0+ahgyKeVzoYObp/4Zp5wAa2b6s6yACsm00p8?=
+ =?us-ascii?Q?xbfZksOpqoI5zbd5Hd1TP/d8oAm4y8OXK0YYwO6Q1Tch3D3YU7xDCt3XSHV9?=
+ =?us-ascii?Q?Jh6iZEy031eKm2OatQzvFYt/A8sSxasRJ+gm55GyCGrGYrp28MdJ20xP10BV?=
+ =?us-ascii?Q?rHNbmFHma439cef0pIUcD+XdT/VQMj6xfvxu779f3acjKU957qtPWBOyJoWP?=
+ =?us-ascii?Q?mRJcjdzI4UpX/p0Q3i4LX5UNWy+Nhvq5JkDynrhL/VE5Pxc4UCciKU9NzIho?=
+ =?us-ascii?Q?2b8R3w0Ozu8QTUMWVSwyST0TdTOTTt15WEB/bLbYRPVsAXwD568+VhnuSWCF?=
+ =?us-ascii?Q?J7vNfPkixzdErA39OUObKZxWYU9ozMrbUZIBhH/2dkyNRHwDV18kgQHhgxU0?=
+ =?us-ascii?Q?S8Ygff8zQigGeBJYeMDDAvaKTGd/3oPqPTq+FWVLPTpQmQkab+PPN9bPVjFF?=
+ =?us-ascii?Q?O7siL2CaSq2ggcju1O9K6UHJbHmeMRWeJsGCXRJS99Q/g8Rn6qqw7ccWOsQu?=
+ =?us-ascii?Q?qHqVQo/sHUfFPBZv7KXW0BNxiS72dN1FSl4TjwX/XybQhY1gBrjhCiTCusfn?=
+ =?us-ascii?Q?If44d+Xa0CdikB1L5plmRRMZp5iUFRdrLP8fnpo6kCPiLPgshq67bnzV+zTd?=
+ =?us-ascii?Q?3brKQyd+8nMDJyd4xI2TBnVvx0Z5d+VVBqfaGN1azXzv3ZmcOj8q8ktCRTHr?=
+ =?us-ascii?Q?Q2G/jAJ/Ic8Cp8eCN7rr8oVORqut2T9Vn1jxWHBDuF1SKclt4n2+Bmp1ZhnD?=
+ =?us-ascii?Q?ZNJYS8rbpEmqTDVHDprEoigyX8MelvmIUsDiM6ntkUsrQjZOnVweXkAE1WpS?=
+ =?us-ascii?Q?6u6bwR1czm1xFhmeBsiCxsJrh0lOcHfV6t6QNL6v8RNT5oua5FT+9ah98+gK?=
+ =?us-ascii?Q?FHW695+ot1SdgnL3yJY6A+vrNptEoWp8ucVfQLG0KvYxgYI5YsJEF2ddzI8g?=
+ =?us-ascii?Q?Tuhamv8Kl2xhOazqbuxsbIww/zPkPpl0hv2CdBzZE5YzEmR9osw9YrHhqLPt?=
+ =?us-ascii?Q?n7uOVH4tMkk55HDC1fPQqKJWHpWcVyrtmzXBTMdFgpqwt8WsBx60KGH9HQDV?=
+ =?us-ascii?Q?OcaBfIzIX6On2R5S/c1xSdwDJNc6DpR3DUEM6GUBLx2f2nNDXTJMe6O7sT7/?=
+ =?us-ascii?Q?11UqhYhTsBA00iUFy0vmCw2ePbxhWTJ/J3YKMVsOI7PbBa7Mhac67OieyC4l?=
+ =?us-ascii?Q?xDVJcvhzDRi6SB64M+mxvHM8jwmUH718iJ8GywDzvlfmlsyN3nOUatJQLY3I?=
+ =?us-ascii?Q?guTR9fFmFspFrl8D+kpEuc2zpm5C9HENmOQxYthqDqLBYcQYQH2r2BWV4qCO?=
+ =?us-ascii?Q?bEKIkqiCyjh2n4T1NN8W1KjaMv8GlsrmDHn05JRm5Pju+V8mMx+qTyXbSJJ6?=
+ =?us-ascii?Q?00kY8DNZh9DCyR6Ppq4qYlOehgjbC6FEremH08UHoLVpBB7eRiVgYC+tJoOk?=
+ =?us-ascii?Q?Vg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86c2e576-32fb-455d-9654-08dcbd316852
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 13:51:48.2544
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NbtyRN+24c3YovX28G1/wPXefUpoQp//ojCvgQZf+MDx+0gS2b2fWMHk+0N892HyGik+l6A9XeRiNc7KwLFWwu0up0xnqo3ngxubQRCWeZk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4910
+X-OriginatorOrg: intel.com
 
-On Thu, Aug 15, 2024 at 9:42=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> wro=
-te:
+On Thu, Aug 15, 2024 at 11:37:17AM GMT, Stephen Rothwell wrote:
+>Hi all,
 >
-> On Thu, Aug 15, 2024 at 1:38=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.o=
-rg.au> wrote:
-> >
-> > Hi all,
-> >
-> > After merging the mm tree, today's linux-next build (powerpc
-> > ppc64_defconfig) failed like this:
-> >
-> > In file included from include/linux/kcsan-checks.h:13,
-> >                  from include/linux/instrumented.h:12,
-> >                  from include/asm-generic/bitops/instrumented-atomic.h:=
-14,
-> >                  from arch/powerpc/include/asm/bitops.h:321,
-> >                  from include/linux/bitops.h:68,
-> >                  from arch/powerpc/include/asm/mce.h:12,
-> >                  from arch/powerpc/include/asm/paca.h:32,
-> >                  from arch/powerpc/include/asm/percpu.h:30,
-> >                  from include/linux/err.h:9,
-> >                  from arch/powerpc/include/asm/ptrace.h:22,
-> >                  from arch/powerpc/kernel/vdso/sigtramp64.S:14:
-> > include/linux/compiler_attributes.h:55: warning: "__always_inline" rede=
-fined
-> >    55 | #define __always_inline                 inline __attribute__((_=
-_always_inline__))
-> >       |
-> > In file included from include/linux/stddef.h:5,
-> >                  from include/linux/string.h:9,
-> >                  from arch/powerpc/include/asm/paca.h:16:
-> > include/uapi/linux/stddef.h:8: note: this is the location of the previo=
-us definition
-> >     8 | #define __always_inline inline
-> >       |
-> > include/linux/compiler_attributes.h:91:20: error: missing binary operat=
-or before token "("
-> >    91 | #if __has_attribute(__copy__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:104:20: error: missing binary opera=
-tor before token "("
-> >   104 | #if __has_attribute(__counted_by__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:107: warning: "__counted_by" redefi=
-ned
-> >   107 | # define __counted_by(member)
-> >       |
-> > include/uapi/linux/stddef.h:55: note: this is the location of the previ=
-ous definition
-> >    55 | #define __counted_by(m)
-> >       |
-> > include/linux/compiler_attributes.h:116:20: error: missing binary opera=
-tor before token "("
-> >   116 | #if __has_attribute(__diagnose_as_builtin__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:139:20: error: missing binary opera=
-tor before token "("
-> >   139 | #if __has_attribute(__designated_init__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:150:20: error: missing binary opera=
-tor before token "("
-> >   150 | #if __has_attribute(__error__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:161:20: error: missing binary opera=
-tor before token "("
-> >   161 | #if __has_attribute(__externally_visible__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:198:20: error: missing binary opera=
-tor before token "("
-> >   198 | #if __has_attribute(__no_caller_saved_registers__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:209:20: error: missing binary opera=
-tor before token "("
-> >   209 | #if __has_attribute(__noclone__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:226:20: error: missing binary opera=
-tor before token "("
-> >   226 | #if __has_attribute(__fallthrough__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:252:20: error: missing binary opera=
-tor before token "("
-> >   252 | #if __has_attribute(__nonstring__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:264:20: error: missing binary opera=
-tor before token "("
-> >   264 | #if __has_attribute(__no_profile_instrument_function__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:283:20: error: missing binary opera=
-tor before token "("
-> >   283 | #if __has_attribute(__no_stack_protector__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:294:20: error: missing binary opera=
-tor before token "("
-> >   294 | #if __has_attribute(__overloadable__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:313:20: error: missing binary opera=
-tor before token "("
-> >   313 | #if __has_attribute(__pass_dynamic_object_size__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:318:20: error: missing binary opera=
-tor before token "("
-> >   318 | #if __has_attribute(__pass_object_size__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:342:20: error: missing binary opera=
-tor before token "("
-> >   342 | #if __has_attribute(__uninitialized__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:388:20: error: missing binary opera=
-tor before token "("
-> >   388 | #if __has_attribute(__warning__)
-> >       |                    ^
-> > include/linux/compiler_attributes.h:405:20: error: missing binary opera=
-tor before token "("
-> >   405 | #if __has_attribute(disable_sanitizer_instrumentation)
-> >       |                    ^
-> >
-> > Caused by commit
-> >
-> >   8e53757638ec ("err.h: add ERR_PTR_PCPU(), PTR_ERR_PCPU() and IS_ERR_P=
-CPU() functions")
-> >
-> > Does include/linux/err.h really need to include asm/percpu.h?  __percpu=
- is
-> > defined in compiler_types.h which is included in every c code compile.
+>Today's linux-next merge of the drm-xe tree got a conflict in:
 >
-> Currently it is not needed, but with the proposed patch [1]
+>  drivers/gpu/drm/xe/display/xe_display.c
 >
-> [1] https://lore.kernel.org/lkml/20240812115945.484051-4-ubizjak@gmail.co=
-m/
+>between commit:
 >
-> that repurposes __percpu to also include percpu named address
-> qualifier, it will be needed, because per_cpu_qual will be defined in
-> include/asm-generic/percpu.h.
+>  769b081c18b9 ("drm/i915/opregion: convert to struct intel_display")
 >
-> I looked a bit at the error and noticed that the error happens when
-> building VDSO sigtramp64.S that includes:
+>from the drm-intel tree and commit:
 >
-> #include <asm/ptrace.h> /* XXX for __SIGNAL_FRAMESIZE */
+>  1eda95cba9df ("drm/xe: Rename enable_display module param")
 >
-> The crash happens through this include, so perhaps XXX above marks
-> some expected problem with the include that my change was unlucky
-> enough to trigger?
+>from the drm-xe tree.
+>
+>I fixed it up (see below) and can carry the fix as necessary. This
+>is now fixed as far as linux-next is concerned, but any non trivial
+>conflicts should be mentioned to your upstream maintainer when your tree
+>is submitted for merging.  You may also want to consider cooperating
+>with the maintainer of the conflicting tree to minimise any particularly
+>complex conflicts.
 
-OTOH, powerpc percpu.h includes paca.h that further includes
-linux/string.h. AFAICS, nothing in paca.h requires linux/string.h
-(which includes many other headers), so perhaps removing "#include
-linux/string.h" from paca.h makes the header "light enough" to be
-included in err.h.through percpu.h.
+this matches our current merge and will be resolved when we backmerge
+drm-next, before sending our next pull.
 
-Uros.
+thanks
+Lucas De Marchi
+
+>
+>-- 
+>Cheers,
+>Stephen Rothwell
+>
+>diff --cc drivers/gpu/drm/xe/display/xe_display.c
+>index 0e4adde84cb2,56a940b39412..000000000000
+>--- a/drivers/gpu/drm/xe/display/xe_display.c
+>+++ b/drivers/gpu/drm/xe/display/xe_display.c
+>@@@ -127,9 -126,8 +127,9 @@@ int xe_display_init_nommio(struct xe_de
+>  static void xe_display_fini_noirq(void *arg)
+>  {
+>  	struct xe_device *xe = arg;
+> +	struct intel_display *display = &xe->display;
+>
+>- 	if (!xe->info.enable_display)
+>+ 	if (!xe->info.probe_display)
+>  		return;
+>
+>  	intel_display_driver_remove_noirq(xe);
+>@@@ -138,10 -135,9 +138,10 @@@
+>
+>  int xe_display_init_noirq(struct xe_device *xe)
+>  {
+> +	struct intel_display *display = &xe->display;
+>  	int err;
+>
+>- 	if (!xe->info.enable_display)
+>+ 	if (!xe->info.probe_display)
+>  		return 0;
+>
+>  	intel_display_driver_early_probe(xe);
+>@@@ -252,9 -246,7 +252,9 @@@ void xe_display_irq_handler(struct xe_d
+>
+>  void xe_display_irq_enable(struct xe_device *xe, u32 gu_misc_iir)
+>  {
+> +	struct intel_display *display = &xe->display;
+> +
+>- 	if (!xe->info.enable_display)
+>+ 	if (!xe->info.probe_display)
+>  		return;
+>
+>  	if (gu_misc_iir & GU_MISC_GSE)
+>@@@ -289,9 -296,8 +289,9 @@@ static bool suspend_to_idle(void
+>
+>  void xe_display_pm_suspend(struct xe_device *xe, bool runtime)
+>  {
+> +	struct intel_display *display = &xe->display;
+>  	bool s2idle = suspend_to_idle();
+>- 	if (!xe->info.enable_display)
+>+ 	if (!xe->info.probe_display)
+>  		return;
+>
+>  	/*
+>@@@ -341,9 -347,7 +341,9 @@@ void xe_display_pm_resume_early(struct
+>
+>  void xe_display_pm_resume(struct xe_device *xe, bool runtime)
+>  {
+> +	struct intel_display *display = &xe->display;
+> +
+>- 	if (!xe->info.enable_display)
+>+ 	if (!xe->info.probe_display)
+>  		return;
+>
+>  	intel_dmc_resume(xe);
+
+
 

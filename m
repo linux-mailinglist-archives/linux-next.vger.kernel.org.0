@@ -1,294 +1,139 @@
-Return-Path: <linux-next+bounces-3331-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3332-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78370953141
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 15:52:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F97F953280
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 16:06:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE36E1F21D84
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 13:52:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D1E71C2582E
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 14:06:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17991A00CB;
-	Thu, 15 Aug 2024 13:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F9819FA8D;
+	Thu, 15 Aug 2024 14:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JWrdldnE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="apfbk/hU"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932371714A1;
-	Thu, 15 Aug 2024 13:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723729914; cv=fail; b=abDE4mOnH0EE98/EpTX5ZKVqxA6LrBf43lHXVMSTXhlP6rmk4Bq4yNCHBJ1UuyMHSy5z+qi2wMiVgdFkSJOGNUGqeRPpZOSY+SirJZVlTDZxY4qHMtMglJyUXd3NGfRnynD66YHOvVcF2S64SGstgXa7PtlG/vH/1phinonnoQw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723729914; c=relaxed/simple;
-	bh=0iyrzcAy0jw4DGcEoDaodr2tcDNlagt8YNxA0P/STtU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Xxr6gHTpaNaI8uEPS4uAGuocZ0m0EWmICLBV4vWnUBLXeVcxln6qx8ix+XamKXppo17dL4B23EcJwSh4zpC2IQJyXL07CIZNg7hkSMUi+1Bzlw1AvCnHfYTAfSzn69AOE2VG3lK6Tc7J3ARFGJR+JBvTO767ktCFZFs/Wklp+VI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JWrdldnE; arc=fail smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723729912; x=1755265912;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=0iyrzcAy0jw4DGcEoDaodr2tcDNlagt8YNxA0P/STtU=;
-  b=JWrdldnEzM/Qusf7YDZDAdEe5gKN36RBJoqCNVWHB1Kmk14l55ZQL4f7
-   iegxSjr3P89e39lWskHUi6JQdaf48sXc2Ivf8lAKAmvYB2ND1tgEAKEV4
-   F98p+fPvHfBNF3wXXaP1duBoV9I+9++/WbRseC4hCR6YWBlh0pw/iPdaG
-   Q86Dzc35F4NxI0zt76jd+Fm4YnOWu+/o7UCTNjz/rbjyVd7750sLJk74Y
-   UmjbzR0Ip7ISIVP8TIRy/+4D653VBArA/K872iPiFuLUIQRCV4zbLq5Wg
-   jEe9Ekh4rAaxbJfpmeOjSLjVwVTqhR5xBS2cUxYOC848hGOybqN7JdG7j
-   w==;
-X-CSE-ConnectionGUID: 5ZKzTKc3RIuOU9PmRpSl7Q==
-X-CSE-MsgGUID: dnNmaxSnQoSKDde1+9n1Aw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="33393433"
-X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
-   d="scan'208";a="33393433"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 06:51:51 -0700
-X-CSE-ConnectionGUID: hI/0eQQeTD62i5/9MIElMQ==
-X-CSE-MsgGUID: /nuPbEI3TJik/3LYppG0wg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
-   d="scan'208";a="58993697"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 15 Aug 2024 06:51:52 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 15 Aug 2024 06:51:51 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 15 Aug 2024 06:51:50 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Thu, 15 Aug 2024 06:51:50 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.176)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 15 Aug 2024 06:51:50 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=F1kZm5WJvfxumMHXDVQuWWqPy4uAxEcq7s/tOIiotmU6/KaoJJh6eia3/2Lt7Bm4qlcIj+KB1KgzHmhmYowh5g7UBmhAeiUC6VzRdpbR0558x8GxoTl6dHFmfEJpjFptXNmc8t2bFwLIjUz9vkKZgAvVoHmjq+CH9hDP6kJzCX7zcmDGHjLsfn03pVbTznEJOuobQtHMi1wSqKmiZgNNSU0zAo2K4O1QZYHAty2UFi3YXkQblaylaZhArMNZ0xnmCk06x27c7C9k1OBYj/gR1l5W/o88EnhFiHMJxDOnEmV5ZaLZAc/Xbr7cIwIE2ecUBdsbxLlhZGbKX37kb8PIHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8YdeyatExCyHLMAlTjTsOX5F5KwAphegWoPb33CFN/Q=;
- b=tH4hq1A6gOI5KqdmbmzKO80nzTEmqVuL3w/8tbu4uD1J3rJT8BnByQR7+RJZZlbZhz8/6wel/AQS5gwJdxF8kbQBSHJVmGhsejm27d9zJ3bWHu35WIkJISYNRDMFmJvWC17ogxZ3Wk1vRMw8/okwmnwvwrW1DkjmpxWtrCwbXi0eHx+M4/GRhm9L6jQhIYaRHdfRUt3z/s6voWvcX/C+Ndg9FTY2jVTAAKp2jCZGvybpgPz6LxGIHcsx883zpUE9Zl+WY86233VD9OWLIv7fj3BozFTeBLjh986i7KtBFpAhIX0oTfl2zrdVHwzWSfxGvr1cr440lV6MqaAdBvWIPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by SJ0PR11MB4910.namprd11.prod.outlook.com (2603:10b6:a03:2d7::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.18; Thu, 15 Aug
- 2024 13:51:48 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44%7]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
- 13:51:48 +0000
-Date: Thu, 15 Aug 2024 08:51:43 -0500
-From: Lucas De Marchi <lucas.demarchi@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C8B119F470;
+	Thu, 15 Aug 2024 14:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723730696; cv=none; b=pnwjG+zB9+mQDSvhWxZI4hRWexeRND2CN27VQr6DzlDozAiKWltM8F0k5LszVAoDt25g6q+bD12Z74aJrpW24zwz7MputZ8kzqmWdLJ6+gqRXfRUXJ8kWyLiyPtFgogfdV58fYAU2+1k5bGa4UDnw3QHxkiGLhg9jxJBcmG+Bys=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723730696; c=relaxed/simple;
+	bh=hsIRhn+LY4Ti41CZQ1o9YBVR7CGgFLQpY2GyG4Gwj2w=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=eXX5DRgPBfw02f9xXAowLkxBoc0BZiZKQM5yXRUHLpM33zJB+JqM3PHAAezdct8hO/yysu/bRLT3EGJnZKiWIrXN2Jq75Ez0OjfJ17CLZIYi8S707aJUtidr1G+jKD6iGs91DHL7T91HKMyBghfwHB0ixbFVcKOgdf5brgALnn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=apfbk/hU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB790C4AF0C;
+	Thu, 15 Aug 2024 14:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723730695;
+	bh=hsIRhn+LY4Ti41CZQ1o9YBVR7CGgFLQpY2GyG4Gwj2w=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=apfbk/hUNZ2TsrJyVKKu71e8PEzOCRdAQ40+Krq7oy7t03OJSfheU+Ub7vAt4+fty
+	 kyW7K9fp3CwvosWsK9PgJKILzQDSXf9wjqiRNfKBGjeIKjj94yCMZB8HT1frKoeeug
+	 cNxjj5fXsDzuUCjE+z67Wcpkia3Wg20k9T1qrPBAynOl5Y2S1L8XN9mdRvFkNgBTIk
+	 EOrrcujsnCqiK9Bvy199jpMJXY7q+2ico2PlxTiTIo13UtSfxnKH6LXF4ntWskg0Fj
+	 q+3a5POZVI5wHFJumapD0sy8DkEGsYSWf6Q3DVP4bLB1RofwcOP31yUMl3dHvEGgFd
+	 hJp8tYmcsNumQ==
+From: Kalle Valo <kvalo@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-CC: Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>, Jani Nikula
-	<jani.nikula@linux.intel.com>, Joonas Lahtinen
-	<joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
-	<dri-devel@lists.freedesktop.org>, DRM XE List
-	<intel-xe@lists.freedesktop.org>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
-	<linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm-xe tree with the drm-intel
- tree
-Message-ID: <sjhsi5wv4g4ewb2f4qfog7drjsc4wvoeeohzxh2spl7pw4njla@svug3iudbdux>
-References: <20240815113717.1c81c44c@canb.auug.org.au>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20240815113717.1c81c44c@canb.auug.org.au>
-X-ClientProxiedBy: MW4PR04CA0316.namprd04.prod.outlook.com
- (2603:10b6:303:82::21) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+Cc: Jeff Johnson <jjohnson@kernel.org>,  Johannes Berg
+ <johannes@sipsolutions.net>,  Ath10k List <ath10k@lists.infradead.org>,
+  Aditya Kumar Singh <quic_adisi@quicinc.com>,  Baochen Qiang
+ <quic_bqiang@quicinc.com>,  Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>,  Linux Next Mailing List
+ <linux-next@vger.kernel.org>,  Wireless <linux-wireless@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the ath-next tree with the ath tree
+References: <20240808104348.6846e064@canb.auug.org.au>
+	<20240814110019.6be39d14@canb.auug.org.au>
+Date: Thu, 15 Aug 2024 17:04:52 +0300
+In-Reply-To: <20240814110019.6be39d14@canb.auug.org.au> (Stephen Rothwell's
+	message of "Wed, 14 Aug 2024 11:00:19 +1000")
+Message-ID: <87msldyj97.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SJ0PR11MB4910:EE_
-X-MS-Office365-Filtering-Correlation-Id: 86c2e576-32fb-455d-9654-08dcbd316852
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?CtF2bFmHifteB1D8QFRJOeEbCRtOMmatTxwjYRB3C/DIXpiwXMH3YeiMyIzV?=
- =?us-ascii?Q?xKmlhA9NnK9t965oBXRavOlkg15jfnNsgY3r8nqjjFJLgaebcPSPp51Su6UT?=
- =?us-ascii?Q?DldCIvbC5eAwdiiQHv8vd+q5qFMPrJH2+HRQfSLHoJ03GT74vk9VppPduCBq?=
- =?us-ascii?Q?+ytLYhjc0GdwZEzX9pUg0Rd7yPcrQ+s68JAv70ymgR/PgNmL81NygFyYDZde?=
- =?us-ascii?Q?gZpPfduYyO2GWa+uBFsLkk5Hd3E4Ho6wOBcpsxdoAbjY8MWcPxsL2mlfKe2u?=
- =?us-ascii?Q?joBHhzuGB/Qip7UdNMhoiTDCIX+eLgN9xtBIMj3Nsp+7CkU35JAzhwXcuyig?=
- =?us-ascii?Q?3dXWJmWJGA3Nsv6d4P1xeNPSswT04UfxNiM/QuwJ6noHXgx5PcyI0xSW1C74?=
- =?us-ascii?Q?X5zqNQ1Gw8dT0e0K81KDiLNokXz5fvEvudg0Y86KsHFeDBKXp/b74tCuNkUS?=
- =?us-ascii?Q?CInxcYPZSjVWSTX844/+8TmNmYl8yMWfX9/Nc0sZPV9v03PdnfoX/1ZY4beo?=
- =?us-ascii?Q?nLB61Yx2Urxtz8NjGahCRwSmIizmmxLrYq/zZtmda8vRjTnib4FLajiZ94U1?=
- =?us-ascii?Q?qM6gfSOG43K/jMg+5jmUqpif0ioBcAU2d8rxaL+Kk4axSQimU6rx7n5MIXvB?=
- =?us-ascii?Q?+ZS0eITPYXk+mr0o+1LgVuSqRpS+Ngbq+d4jgZ3q4zHCrOE8TO9UK9rmYYyW?=
- =?us-ascii?Q?0aBT6fVt1sBlff/vvEFF3zjTSmBxwqLBs0ktJx/Ysoc8nP0ReH/Y8j1knhbq?=
- =?us-ascii?Q?3KtGWthCY6BNW+buh6BkG4hC4qI+Gy4yHRqTzFr/1clSsSNxYaJQymlbobX5?=
- =?us-ascii?Q?F1zNASnpBfsiBvxg4rnKfyvg8jop93BDG7RnL9aqmDfh2AFJs4Lv9vnc26AI?=
- =?us-ascii?Q?2nComOAJEq37t6gsBL3XKmEjWsqP6eWR/QtVnQjBH8TDPdFyw7DsuJkIaYmo?=
- =?us-ascii?Q?Na8n1OOeTYqdSRfvsGhRYRY2VsTKamaWrVIFuRyVbaI0f9gAPWmMDT1TzYj6?=
- =?us-ascii?Q?c1n0yWJhrs0ZJPTx/sF4J4lq0+0I227dCsf6lICBcDMVLGXwhE6mC/+8I9VV?=
- =?us-ascii?Q?E3xx89ksuTf2MxDp982Yj/ilQ7ypd0JEJ2MbfMjCE33+zUtz7XMi8BAO/qp4?=
- =?us-ascii?Q?w2AE0OAQyyDjzTr+j0v6sd2lDbvQyc4Py2Vhdr586xbkzs16Dd9OuPJFreoL?=
- =?us-ascii?Q?xgrQcHjr96gu6pDWuRSOVdy4xkwBxGdrjhj6K+oVWjTDRRt+t0fKcqHLxdRz?=
- =?us-ascii?Q?weLwFf5sXQkTXZkF5/UfeuvdDN6YiRAqikNlHuw4DL3lR2tDzOq37T+khXmz?=
- =?us-ascii?Q?WUe3+VZ5mXpAFtfZkDxGLMzbJxjKS8KyEFiZx5+nGbd+DA=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PfA0LdDnVEIf2j5ShW09h94ap6nkvvDwa58uonHQNXtVm/sq9C3mW2cfVg9c?=
- =?us-ascii?Q?zdpB5EVa7Ip/ZKkPnLvDW1qG/VMDwRL6hE979hWMdNevxkwDjY6tG7r0QemL?=
- =?us-ascii?Q?tOiydSH81v9ZRHX7hTo7w/ppTguhSAho2W1tnhfHkxOBZQR5yr8iz4QXX/GU?=
- =?us-ascii?Q?upfHlB8KWYUd4XcACmUJ91b0+ahgyKeVzoYObp/4Zp5wAa2b6s6yACsm00p8?=
- =?us-ascii?Q?xbfZksOpqoI5zbd5Hd1TP/d8oAm4y8OXK0YYwO6Q1Tch3D3YU7xDCt3XSHV9?=
- =?us-ascii?Q?Jh6iZEy031eKm2OatQzvFYt/A8sSxasRJ+gm55GyCGrGYrp28MdJ20xP10BV?=
- =?us-ascii?Q?rHNbmFHma439cef0pIUcD+XdT/VQMj6xfvxu779f3acjKU957qtPWBOyJoWP?=
- =?us-ascii?Q?mRJcjdzI4UpX/p0Q3i4LX5UNWy+Nhvq5JkDynrhL/VE5Pxc4UCciKU9NzIho?=
- =?us-ascii?Q?2b8R3w0Ozu8QTUMWVSwyST0TdTOTTt15WEB/bLbYRPVsAXwD568+VhnuSWCF?=
- =?us-ascii?Q?J7vNfPkixzdErA39OUObKZxWYU9ozMrbUZIBhH/2dkyNRHwDV18kgQHhgxU0?=
- =?us-ascii?Q?S8Ygff8zQigGeBJYeMDDAvaKTGd/3oPqPTq+FWVLPTpQmQkab+PPN9bPVjFF?=
- =?us-ascii?Q?O7siL2CaSq2ggcju1O9K6UHJbHmeMRWeJsGCXRJS99Q/g8Rn6qqw7ccWOsQu?=
- =?us-ascii?Q?qHqVQo/sHUfFPBZv7KXW0BNxiS72dN1FSl4TjwX/XybQhY1gBrjhCiTCusfn?=
- =?us-ascii?Q?If44d+Xa0CdikB1L5plmRRMZp5iUFRdrLP8fnpo6kCPiLPgshq67bnzV+zTd?=
- =?us-ascii?Q?3brKQyd+8nMDJyd4xI2TBnVvx0Z5d+VVBqfaGN1azXzv3ZmcOj8q8ktCRTHr?=
- =?us-ascii?Q?Q2G/jAJ/Ic8Cp8eCN7rr8oVORqut2T9Vn1jxWHBDuF1SKclt4n2+Bmp1ZhnD?=
- =?us-ascii?Q?ZNJYS8rbpEmqTDVHDprEoigyX8MelvmIUsDiM6ntkUsrQjZOnVweXkAE1WpS?=
- =?us-ascii?Q?6u6bwR1czm1xFhmeBsiCxsJrh0lOcHfV6t6QNL6v8RNT5oua5FT+9ah98+gK?=
- =?us-ascii?Q?FHW695+ot1SdgnL3yJY6A+vrNptEoWp8ucVfQLG0KvYxgYI5YsJEF2ddzI8g?=
- =?us-ascii?Q?Tuhamv8Kl2xhOazqbuxsbIww/zPkPpl0hv2CdBzZE5YzEmR9osw9YrHhqLPt?=
- =?us-ascii?Q?n7uOVH4tMkk55HDC1fPQqKJWHpWcVyrtmzXBTMdFgpqwt8WsBx60KGH9HQDV?=
- =?us-ascii?Q?OcaBfIzIX6On2R5S/c1xSdwDJNc6DpR3DUEM6GUBLx2f2nNDXTJMe6O7sT7/?=
- =?us-ascii?Q?11UqhYhTsBA00iUFy0vmCw2ePbxhWTJ/J3YKMVsOI7PbBa7Mhac67OieyC4l?=
- =?us-ascii?Q?xDVJcvhzDRi6SB64M+mxvHM8jwmUH718iJ8GywDzvlfmlsyN3nOUatJQLY3I?=
- =?us-ascii?Q?guTR9fFmFspFrl8D+kpEuc2zpm5C9HENmOQxYthqDqLBYcQYQH2r2BWV4qCO?=
- =?us-ascii?Q?bEKIkqiCyjh2n4T1NN8W1KjaMv8GlsrmDHn05JRm5Pju+V8mMx+qTyXbSJJ6?=
- =?us-ascii?Q?00kY8DNZh9DCyR6Ppq4qYlOehgjbC6FEremH08UHoLVpBB7eRiVgYC+tJoOk?=
- =?us-ascii?Q?Vg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86c2e576-32fb-455d-9654-08dcbd316852
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 13:51:48.2544
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NbtyRN+24c3YovX28G1/wPXefUpoQp//ojCvgQZf+MDx+0gS2b2fWMHk+0N892HyGik+l6A9XeRiNc7KwLFWwu0up0xnqo3ngxubQRCWeZk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4910
-X-OriginatorOrg: intel.com
+Content-Type: text/plain
 
-On Thu, Aug 15, 2024 at 11:37:17AM GMT, Stephen Rothwell wrote:
->Hi all,
->
->Today's linux-next merge of the drm-xe tree got a conflict in:
->
->  drivers/gpu/drm/xe/display/xe_display.c
->
->between commit:
->
->  769b081c18b9 ("drm/i915/opregion: convert to struct intel_display")
->
->from the drm-intel tree and commit:
->
->  1eda95cba9df ("drm/xe: Rename enable_display module param")
->
->from the drm-xe tree.
->
->I fixed it up (see below) and can carry the fix as necessary. This
->is now fixed as far as linux-next is concerned, but any non trivial
->conflicts should be mentioned to your upstream maintainer when your tree
->is submitted for merging.  You may also want to consider cooperating
->with the maintainer of the conflicting tree to minimise any particularly
->complex conflicts.
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-this matches our current merge and will be resolved when we backmerge
-drm-next, before sending our next pull.
+> Hi all,
+>
+> On Thu, 8 Aug 2024 10:43:48 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Today's linux-next merge of the ath-next tree got a conflict in:
+>> 
+>>   drivers/net/wireless/ath/ath12k/hw.c
+>> 
+>> between commit:
+>> 
+>>   38055789d151 ("wifi: ath12k: use 128 bytes aligned iova in transmit path for WCN7850")
+>> 
+>> from the ath tree and commit:
+>> 
+>>   8be12629b428 ("wifi: ath12k: restore ASPM for supported hardwares only")
+>> 
+>> from the ath-next tree.
+>> 
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>> 
+>> diff --cc drivers/net/wireless/ath/ath12k/hw.c
+>> index 7b0b6a7f4701,76c0e07a88de..000000000000
+>> --- a/drivers/net/wireless/ath/ath12k/hw.c
+>> +++ b/drivers/net/wireless/ath/ath12k/hw.c
+>> @@@ -925,7 -925,7 +925,9 @@@ static const struct ath12k_hw_params at
+>>   		.acpi_guid = NULL,
+>>   		.supports_dynamic_smps_6ghz = true,
+>>   
+>>  +		.iova_mask = 0,
+>> ++
+>> + 		.supports_aspm = false,
+>>   	},
+>>   	{
+>>   		.name = "wcn7850 hw2.0",
+>> @@@ -1003,7 -1003,7 +1005,9 @@@
+>>   		.acpi_guid = &wcn7850_uuid,
+>>   		.supports_dynamic_smps_6ghz = false,
+>>   
+>>  +		.iova_mask = ATH12K_PCIE_MAX_PAYLOAD_SIZE - 1,
+>> ++
+>> + 		.supports_aspm = true,
+>>   	},
+>>   	{
+>>   		.name = "qcn9274 hw2.0",
+>> @@@ -1077,7 -1077,7 +1081,9 @@@
+>>   		.acpi_guid = NULL,
+>>   		.supports_dynamic_smps_6ghz = true,
+>>   
+>>  +		.iova_mask = 0,
+>> ++
+>> + 		.supports_aspm = false,
+>>   	},
+>>   };
+>>   
+>
+> This is now a conflict between the wireless-next tree and the ath tree.
 
-thanks
-Lucas De Marchi
+Thanks. The plan is that the network maintainers will fix this once the
+commits "meet" in net-next. We are trying to avoid unnessary merges.
 
->
->-- 
->Cheers,
->Stephen Rothwell
->
->diff --cc drivers/gpu/drm/xe/display/xe_display.c
->index 0e4adde84cb2,56a940b39412..000000000000
->--- a/drivers/gpu/drm/xe/display/xe_display.c
->+++ b/drivers/gpu/drm/xe/display/xe_display.c
->@@@ -127,9 -126,8 +127,9 @@@ int xe_display_init_nommio(struct xe_de
->  static void xe_display_fini_noirq(void *arg)
->  {
->  	struct xe_device *xe = arg;
-> +	struct intel_display *display = &xe->display;
->
->- 	if (!xe->info.enable_display)
->+ 	if (!xe->info.probe_display)
->  		return;
->
->  	intel_display_driver_remove_noirq(xe);
->@@@ -138,10 -135,9 +138,10 @@@
->
->  int xe_display_init_noirq(struct xe_device *xe)
->  {
-> +	struct intel_display *display = &xe->display;
->  	int err;
->
->- 	if (!xe->info.enable_display)
->+ 	if (!xe->info.probe_display)
->  		return 0;
->
->  	intel_display_driver_early_probe(xe);
->@@@ -252,9 -246,7 +252,9 @@@ void xe_display_irq_handler(struct xe_d
->
->  void xe_display_irq_enable(struct xe_device *xe, u32 gu_misc_iir)
->  {
-> +	struct intel_display *display = &xe->display;
-> +
->- 	if (!xe->info.enable_display)
->+ 	if (!xe->info.probe_display)
->  		return;
->
->  	if (gu_misc_iir & GU_MISC_GSE)
->@@@ -289,9 -296,8 +289,9 @@@ static bool suspend_to_idle(void
->
->  void xe_display_pm_suspend(struct xe_device *xe, bool runtime)
->  {
-> +	struct intel_display *display = &xe->display;
->  	bool s2idle = suspend_to_idle();
->- 	if (!xe->info.enable_display)
->+ 	if (!xe->info.probe_display)
->  		return;
->
->  	/*
->@@@ -341,9 -347,7 +341,9 @@@ void xe_display_pm_resume_early(struct
->
->  void xe_display_pm_resume(struct xe_device *xe, bool runtime)
->  {
-> +	struct intel_display *display = &xe->display;
-> +
->- 	if (!xe->info.enable_display)
->+ 	if (!xe->info.probe_display)
->  		return;
->
->  	intel_dmc_resume(xe);
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

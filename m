@@ -1,124 +1,135 @@
-Return-Path: <linux-next+bounces-3325-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3326-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39FA5952720
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 02:47:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C847952764
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 03:09:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD30E1F228F0
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 00:47:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 222841F226A2
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2024 01:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DAAA15C3;
-	Thu, 15 Aug 2024 00:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4FE15CB;
+	Thu, 15 Aug 2024 01:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="U7NHaOIS"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oO4tOq2p"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844431362
-	for <linux-next@vger.kernel.org>; Thu, 15 Aug 2024 00:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD0BA35;
+	Thu, 15 Aug 2024 01:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723682819; cv=none; b=Ps8W3MqHOYR1PZtH7cyh+YP8S5Vtw7gFXfnIs04PTWfgus5anXxesRbHJgBlDrX1dXriHcwbKGcJr2v+GIO+XoOAVxcpI6rhX2glrYAAcDduuyfaO16iZU5vN55KcBZZxG7o2fvV99ntMbrKUWgnLr6xfYaAs7kTKslj53zY3vU=
+	t=1723684183; cv=none; b=aZ7HyGRErGMCQekBDdpdvRP+OLbx8/60dlXjZNsfKZbZ0LLvzeglylMO10y6v0wyPbjgZguQPWBETI4AmpR4QOtp7/xWtTJ7SKex/2kanZ2W576rP/0BgDkABpQo+XoV1+waR3WhHumtJYO4R2s5h2ZhA34tBkRPXCFLWCkPqlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723682819; c=relaxed/simple;
-	bh=3tmMBYGSTidS2J0YNDLYdwAJjKHTKttL1XczPmem7Kk=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=CqAJTWLRV/sc9nj/18ao6yfiqNCMfjF25Js9H6JAkARrW4yzHv8PTZSMkpybkNKMuBM6uF2sHuuflEdDEKjB3fNnQHuiUKmXLJ+M7Y0EBimHBnbWvFFmjAbYabt4fGtDaxyWzXb4SyOZ0ofR4oTmNNrkTEgIFB1q8i+irTd9dJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=U7NHaOIS; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7c6aee8e8daso353804a12.0
-        for <linux-next@vger.kernel.org>; Wed, 14 Aug 2024 17:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1723682817; x=1724287617; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LOiM6bmI1vM/hsAFJvAlGAa9CNK8Dap8ytIn80nwGeA=;
-        b=U7NHaOISJhrLYOauyYOp3CNaDQijiniZQRDzcP1RHQcybcVCSw/0pk5vvgsGIbaRLq
-         QDIBba0vM5pYaPotUwsjwETZel2Wb6BTQWwZYpgdqL5j380DeTnB/0XcfoYZ+yKAN9Kz
-         POACZxUSVmcVeixlQJiCXH/SoC9lsTp+eK2sIRfo/uVd+Mt9t0ixAN4ZY77Q5okVWgLy
-         iVo7J+xVKsLo4+JfMIF8e0ghcdUk2DX6PeI/psvpW9MCxmaY9prprPzPjAzWA+QpRA3I
-         PT5UR7+PVIlOfWji37fasMNJsrl5Bn3ddlE+uyJHWRlnZEd4Y4D55751RyY4CMNMGuvA
-         K9QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723682817; x=1724287617;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LOiM6bmI1vM/hsAFJvAlGAa9CNK8Dap8ytIn80nwGeA=;
-        b=K8hFNhYdJq1Yt6I3ytYSaLTQ26F2wbV07ooIs/YH6gYK2IYGRSlyFhj0xy/Hg3dNrm
-         8tNN1DcKHBiqjjSiI0hx/uFkMu7Q4uQS0WNlkQ/UVlxJiIFKyqJRAPF+8Pyvvz9HFO7K
-         GCQ71Sa5x0tMbfrAUwV6xq1kP8Ec7+GxSbl/HLC4ORBxrCMNKkehN59ttew6eW2cv9+M
-         amHL6oOwIM9EPCV/jl9L6VcHgDGlaFHH2YKwmFxnzIWI3TN0ikH3ah3znPpsws/MGnKg
-         LVe1mryYGBQx71JUxPQ4p909T/gIROVyfP3kU3FTr94gpwr6NkJH35jXry9Hsv363pub
-         q5Cw==
-X-Forwarded-Encrypted: i=1; AJvYcCVDuE2b7HIBtrQXJLwkCWZEBlnrfUlZHJNh83XY/UjPfFlMITSxpZC8E83T7lptstrufaSTeorI3AHts/PiZIRSv1CRdeyPeHm2dQ==
-X-Gm-Message-State: AOJu0Yw3BArlbcI5I/2/KkUpZ1G0OOe1t/efG/fnHu8Rz7qIdElzkhcC
-	uCGPz81/Ii27NtSjBZX3TDXB0xKsPYSN3dAmMWo+Bnzn6ftDR0L5qiqJpgeLi/4cYQm4d245O27
-	E
-X-Google-Smtp-Source: AGHT+IE1x/X30Y48KdsbfRxZW5R9WniMm/D06OqnoW/dXs96xK9iG9nxx6lRPnRd1DEkKDQWTD8vsw==
-X-Received: by 2002:a05:6a20:c88d:b0:1c3:ac70:f579 with SMTP id adf61e73a8af0-1c8eaf7dae0mr6647686637.38.1723682816596;
-        Wed, 14 Aug 2024 17:46:56 -0700 (PDT)
-Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d3c863a671sm263698a91.2.2024.08.14.17.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2024 17:46:56 -0700 (PDT)
-Date: Wed, 14 Aug 2024 17:46:56 -0700 (PDT)
-X-Google-Original-Date: Wed, 14 Aug 2024 17:46:54 PDT (-0700)
-Subject:     Re: linux-next: manual merge of the risc-v tree with the mm-hotfixes tree
-In-Reply-To: <20240815101714.4422f93c@canb.auug.org.au>
-CC: Paul Walmsley <paul@pwsan.com>, akpm@linux-foundation.org, ruanjinjie@huawei.com,
-  linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Message-ID: <mhng-e24991b6-0573-4c36-ac15-bf92a8fa6408@palmer-ri-x1c9>
+	s=arc-20240116; t=1723684183; c=relaxed/simple;
+	bh=vg2Wjc5euDomGCMAqhjZEOHP9uOGK6l6Wt4V4e/gn5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sc2auVL/B2A/5SMyyKL+UDWYKGLqcoFlR5ZTvcxK7+SxAN3QbGMtpVB6D+RRS9+yaq2tN9uU+ovlc7CqqiYaTr4NeRqqw00xeudmmgyw+7i7xTyalPHqVkrHKDoop+duqfJtB6ggOJOPSeJ9HGfmz1/aO7SjCwqsAxbTjWn5PBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oO4tOq2p; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1723684175;
+	bh=DTv7Q17SAzkWVrxCxVb76izIXRqxVHyiQ48h97d/Z1Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=oO4tOq2pl729y4kfvmycq6SgDU+EXhg109kKYU/bmc2MJdAf6zwOM8yyMHViIQqRm
+	 Wwe1H05WkDzG5avyCnagLOqmkt8TZ6FctmHdqZ9OQAuGoHhg22vBBWoGHpIIJdgNRz
+	 2ZQyDVNYyVYqm4XEQ6x3T0LgAvzJpYNCyeTvxA0Q/E+yQrvQGTCPi6bmtIgkzIhU7r
+	 4P/HdQDfRHE6JLpHln1Csy92BfPJdNuePyD6PmwYX9Dc7v4XVE9g4+DY2jtLS1xxNX
+	 D4IXxH5aSYphiICGQxRxejKQoXgxdNItXieWgReclXCgHYjNvSj0tPskjAD2jE0JGX
+	 RqW43/897elZQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wkn8b2Zgjz4wnx;
+	Thu, 15 Aug 2024 11:09:34 +1000 (AEST)
+Date: Thu, 15 Aug 2024 11:09:34 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Frank Li <Frank.Li@nxp.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20240815110934.56ae623a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/MweJaH.HPj2uWi_kKG.3Ooz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, 14 Aug 2024 17:17:14 PDT (-0700), Stephen Rothwell wrote:
-> Hi all,
->
-> Today's linux-next merge of the risc-v tree got a conflict in:
->
->   kernel/crash_reserve.c
->
-> between commit:
->
->   ce24afb8be8f ("crash: fix riscv64 crash memory reserve dead loop")
->
-> from the mm-hotfixes tree and commit:
->
->   e2acf68fb1c5 ("crash: Fix riscv64 crash memory reserve dead loop")
->
-> from the risc-v tree.
->
-> I fixed it up (I used the former one as it seems to be a more recent
-> patch) and can carry the fix as necessary. This is now fixed as far as
-> linux-next is concerned, but any non trivial conflicts should be
-> mentioned to your upstream maintainer when your tree is submitted for
-> merging.  You may also want to consider cooperating with the maintainer
-> of the conflicting tree to minimise any particularly complex conflicts.
+--Sig_/MweJaH.HPj2uWi_kKG.3Ooz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, I think I picked that one up by accident (just saw RISC-V in the 
-name and didn't notice it wasn't for my tree).   I pushed my staging 
-tree to for-next this morning before having my coffee, I bet I'd just 
-forgotten to drop it locally as it'd been sitting there for a week.
+Hi all,
 
-It's gone now.
+Today's linux-next merge of the net-next tree got a conflict in:
 
->
-> -- 
-> Cheers,
-> Stephen Rothwell
+  Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml
+
+between commit:
+
+  c25504a0ba36 ("dt-bindings: net: fsl,qoriq-mc-dpmac: add missed property =
+phys")
+
+from the net tree and commit:
+
+  be034ee6c33d ("dt-bindings: net: fsl,qoriq-mc-dpmac: using unevaluatedPro=
+perties")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml
+index 42f9843d1868,f19c4fa66f18..000000000000
+--- a/Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml
++++ b/Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml
+@@@ -36,12 -30,6 +30,10 @@@ properties
+        A reference to a node representing a PCS PHY device found on
+        the internal MDIO bus.
+ =20
+-   managed: true
+-=20
+ +  phys:
+ +    description: A reference to the SerDes lane(s)
+ +    maxItems: 1
+ +
+  required:
+    - reg
+ =20
+
+--Sig_/MweJaH.HPj2uWi_kKG.3Ooz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAma9VU4ACgkQAVBC80lX
+0Gx21QgAjVl0IcFIAhRPs72zwIHlbEa0WOhhMj1W0m93m5A4f8P2I9RI8xuHO45a
+VyeZKxb/bCOTMvs0vbaWkYART2EFqgWqqQEn/cb3FaFktBif70Ym9Ek+Q6rRQLBK
+E29Ii42U8vUy3FPDw0DQWJY67pq6vUISMAP2k+B4S7B1n+KDA9I3eFGnSW5tM2pT
+GHH7r2SlblrzzkeypnmyxnUiGwq7ZVV9GaSSMeM0Oh98bCDYOxEHw9MeNMSg50wD
+MLcBRtq2dWobjUVMyogNHoVR+1cheE8TtstIj5NebqF7k/V3QxfL8djL8f665JVA
+urwsuTV1fNTvUJkmp/cGzbQKCe3ROw==
+=mDtM
+-----END PGP SIGNATURE-----
+
+--Sig_/MweJaH.HPj2uWi_kKG.3Ooz--
 

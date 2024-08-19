@@ -1,123 +1,115 @@
-Return-Path: <linux-next+bounces-3354-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3355-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CAC7957789
-	for <lists+linux-next@lfdr.de>; Tue, 20 Aug 2024 00:36:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAFCC957850
+	for <lists+linux-next@lfdr.de>; Tue, 20 Aug 2024 01:03:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC54A1F21DFE
-	for <lists+linux-next@lfdr.de>; Mon, 19 Aug 2024 22:36:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 11BB6B2099E
+	for <lists+linux-next@lfdr.de>; Mon, 19 Aug 2024 23:03:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66041DD394;
-	Mon, 19 Aug 2024 22:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3631DD384;
+	Mon, 19 Aug 2024 23:03:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tyyF8BaD"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZvnifwNk"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08CA15AAB8;
-	Mon, 19 Aug 2024 22:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B3314D43D;
+	Mon, 19 Aug 2024 23:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724106976; cv=none; b=FN6y40vb7l9LGkG8fH01c06GorZ+JDao6VPPFw/j0Mrt01iDNmntkFlvHyTuLovZMTaVc2JK4b2JEH/RUFDi3TUAKdjSaNuSPQKGYSpTt3+3kuRWXGed7tO3S3U+vRtgDdS53DqatxC8pNnHhgkCVSlxyCc8o2Ard/BPUAVTfFQ=
+	t=1724108586; cv=none; b=RbvCJe824xTK7lAHeVz+2XhDetRwPLsT1ksGHlqnphmKOOIDNqdj1Ul+dCT/n+hM/bD6P/kbl/KQCRF88EZSkWAZdTLgUPTIa+eLcd/+M8bAkmA1Li/sH4Wwb/bqsWEKAgONKRb79w3EMxsWhvQ16D1YpR8vTKj8Y9/1MJYc/1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724106976; c=relaxed/simple;
-	bh=IVFZPlpEYzn1uOjWxw0TJ+GTSsJiTVwTsxTYDXOFvxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S1AuImXlYWaF1zGEYdhi46Z/vUptF5ss7O5u69EGjnj1eEyGkI0xF7V3elWbiQx7GRxNCpNbeWFV+s2ZNnli4YbUj1rjsaoBIl9iSbcslyEVPCPOCSQYeC+mE8MZlNwDI8KyuhSN65uJy7NPI//WTQVqnb239A1eue6Lgm1JKjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tyyF8BaD; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1724108586; c=relaxed/simple;
+	bh=IBxRX3FxX61SdpyV9Dny06ARjAIqWCAWUGzBRw7wFVc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IN/cyqKmfH3v5iVPs5S5Tc3SWVVBG2aqA/lwm4dD4sb0gnICp8ie89puXugGUgq1gMlJljr/kI/3gKzu/YhyL/mVwSmHyVKmvFB/eoeOO13AbiaGFm5uZA+vc/8joG52q7ducPmvXPIih0KzL/OMXthTTjutv7XUmIHKenGHpK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZvnifwNk; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1724106965;
-	bh=tDe+RAn9vhDRbdSwjCvcijfvMEiIYrq/NQIqWpyVtQ0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=tyyF8BaDtHMiz19a0+RmdEW4YaXhxAn3RS1xpMKmPNcOzNNyQHJ4DTPG9LhjdNBMg
-	 uhAueAihZfN0wgXMoGZm/50chN4gD41O+KXpHadwbdz7r1fNpTiK+w+8k9EwoS3Z8G
-	 w/QXpOD9dWnOaNS2AvzOin9RSVykArCleG1eHSE7qyEW+BSw+J6az+l411bRRzXJD2
-	 8tP9rC6ztasQyYlBN35Kg9StliVIIHbjlcfiHxz7BbzzjsnvG2ViHYdN9Rx6okWH5C
-	 A56Ac/qFJgJCWaxZ2+4GExM0sNlqjbFbePaEiXdcq+szDZxb5Hc290n2mke2RS6fdK
-	 H9VGNlPEJpVig==
+	s=201702; t=1724108581;
+	bh=UqTEZ6PhnHjdy/8LL1nNNbcf5sqyvEDtm+dAnqXjdIc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ZvnifwNkX04zSxMedeEWq38BWyZ6FCTUmCVOKyX9tncFRcoFMsgFVMJp55/SKQMrx
+	 wWjKmvW/oYC6GDKU+zLmVf7Xmsb6oqKv+53ymO2u0VwNVd/DeiIanBiBEAcGSt3J0x
+	 PxHz3OB5jOijbYyScTmd7z8+V4zyor7kJ/LZzIgShcLOVhMV/0kpyqEWWyjdwT0og1
+	 a53bXQBvUMjya7uD51Fb1dOwHj2GUKSKMU8cX2ZvOUqePCRUcoVLQhCJBJ9jbxluWd
+	 sU5l/oqR6c2WbPwusTG224ODt2XMsT2KP/uIqL7Zxt5YAIxrYzREeheKtTH7S2nSCp
+	 B5ucDKWVo2cOQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WnnW63kF2z4w2N;
-	Tue, 20 Aug 2024 08:36:02 +1000 (AEST)
-Date: Tue, 20 Aug 2024 08:36:01 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wnp6F20dpz4w2L;
+	Tue, 20 Aug 2024 09:03:01 +1000 (AEST)
+Date: Tue, 20 Aug 2024 09:03:00 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Christian
- Brauner <brauner@kernel.org>, "Darrick J. Wong" <djwong@kernel.org>, Leo Li
- <leoyang.li@nxp.com>, Peter Rosin <peda@axentia.se>, Richard Weinberger
- <richard@nod.at>, Thierry Reding <thierry.reding@gmail.com>, Vignesh
- Raghavendra <vigneshr@ti.com>
-Subject: Re: linux-next: trees being removed
-Message-ID: <20240820083601.4eb41e96@canb.auug.org.au>
-In-Reply-To: <20240813085147.786004fb@canb.auug.org.au>
-References: <20240813085147.786004fb@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the vfs-brauner tree
+Message-ID: <20240820090300.166d3383@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BPJRJLGA+th83kAl3WhCgcB";
+Content-Type: multipart/signed; boundary="Sig_/EzaF0X+ACdEBiOdFUqJ7njc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/BPJRJLGA+th83kAl3WhCgcB
+--Sig_/EzaF0X+ACdEBiOdFUqJ7njc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 13 Aug 2024 08:51:47 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> The following trees are going to be removed from linux-next because they
-> have not been updated in more than a year.  If you want a tree kept (or
-> later restored), just let me know (and update its branch).
->=20
-> Tree			Last commit date
->   URL
->   comits (if any)
-> ----			----------------
-> djw-vfs			2023-08-04 08:20:57 -0700
->   git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git#vfs-for-next
-> drm-tegra		2023-04-06 14:02:33 +0200
->   https://gitlab.freedesktop.org/drm/tegra.git#for-next
-> pidfd			2023-07-02 11:14:54 -0700
->   git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git#for-next
-> soc-fsl			2023-06-08 17:56:26 -0500
->   git://git.kernel.org/pub/scm/linux/kernel/git/leo/linux.git#next
-> soc-fsl-fixes		2023-07-09 13:53:13 -0700
->   git://git.kernel.org/pub/scm/linux/kernel/git/leo/linux.git#fix
-> uml-fixes		2023-05-10 00:21:30 +0200
->   git://git.kernel.org/pub/scm/linux/kernel/git/uml/linux.git#fixes
+After merging the vfs-brauner tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-The above trees have now been removed from linux-next.
+In file included from include/linux/fs.h:6,
+                 from fs/inode.c:7:
+fs/inode.c: In function 'inode_dio_wait':
+fs/inode.c:2650:45: error: the address of 'inode_dio_finished' will always =
+evaluate as 'true' [-Werror=3Daddress]
+ 2650 |         wait_var_event(&inode->i_dio_count, inode_dio_finished);
+      |                                             ^~~~~~~~~~~~~~~~~~
+include/linux/wait_bit.h:276:13: note: in definition of macro 'wait_var_eve=
+nt'
+  276 |         if (condition)                                             =
+     \
+      |             ^~~~~~~~~
+cc1: all warnings being treated as errors
+
+Caused by commit
+
+  6f87283ed286 ("inode: remove __I_DIO_WAKEUP")
+
+I have used the vfs-brauner tree from next-20240819 for today.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/BPJRJLGA+th83kAl3WhCgcB
+--Sig_/EzaF0X+ACdEBiOdFUqJ7njc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbDyNEACgkQAVBC80lX
-0Gw/0gf9G7/AHKS26BZwMIpOZE3e2xyZJp2WWKL3SjETkXP5KxLedZbs11I9JmrB
-HIRtyA6mDRShJcrTGoqHj3rZOvq/xlswntp2q1iN9ErxZxU5vgoAyQnT1M9S4RYs
-muG7B6iBfeNtbiGonJcKWgPRO+URCytUSyJhGZBG06ePpjoy3/lC21hJE/Q1rDLl
-6Qtxxfr3mYwzKOHI3JEeGrbzFMnxlN6p6C9Gs9Y6j0PqwmKQ4hywOqCNqATmWiRC
-kDwU3UXX2fFMGj/4sifJN7s34V97XFA82xMwkNcoluTbrmZGO+7iSnZ3pk3a8DcA
-mVA0Jd1JrLHXCVDwbPEEzNHzD8/2rg==
-=un2b
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbDzyQACgkQAVBC80lX
+0Gz1aAf/TUHyK6XqiFt6YqkKtOgTorGVbPc7WgMV2dnhJ2X3e/Vp0CppPhD8EO9R
+pJndY3a4I8blZxVwE68g6bl4Xuw2AuNJ0u8iTrNd0OypPghP4Jv8MmSPjnQnvome
+yLNGKdA8G5naG8r1CK5spOt+zLNm4shnZlfgtqcgSSuF8fD7fDTLGvWtuidhYf2i
+SBsCzhxFxG244dRKAn+gaIad++Mg9aAvHagZi4ZSqKEEV1KHpYCJqrYxTcoS5CF1
+RVVslSV/NFSdi3Aq5Q0WaggmMechNlIZrjXKgMgwaHny2hxvsAE0vl4J45I5wpdr
+xH8d9j09F66j6a713/8QRnXQ0MztfQ==
+=Svet
 -----END PGP SIGNATURE-----
 
---Sig_/BPJRJLGA+th83kAl3WhCgcB--
+--Sig_/EzaF0X+ACdEBiOdFUqJ7njc--
 

@@ -1,94 +1,108 @@
-Return-Path: <linux-next+bounces-3360-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3361-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DB77957BF6
-	for <lists+linux-next@lfdr.de>; Tue, 20 Aug 2024 05:41:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BBCC957BF8
+	for <lists+linux-next@lfdr.de>; Tue, 20 Aug 2024 05:44:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 176471F23A76
-	for <lists+linux-next@lfdr.de>; Tue, 20 Aug 2024 03:41:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 272771F226EC
+	for <lists+linux-next@lfdr.de>; Tue, 20 Aug 2024 03:44:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CEDD4D8CC;
-	Tue, 20 Aug 2024 03:41:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A0E4501E;
+	Tue, 20 Aug 2024 03:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="a7KB7wgK"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mta22.hihonor.com (mta22.honor.com [81.70.192.198])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AC34C618;
-	Tue, 20 Aug 2024 03:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.192.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4122E634;
+	Tue, 20 Aug 2024 03:43:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724125310; cv=none; b=tbQs7EZd0VenvCqla2nkkLSXs/I6sdsq7yNmIQKGY1Lzl4MnQ6OQBhfKryZhHcEb8QmQ/6BD3otb+gx+zQfxue6UQBppt92UEjb6/8JAD4/rl2bG9B7eSUHKHiGWHAhDHzY1Yr5SLVf5M6kKYcK8hUVhdpJ72wUaaFkp8EgKlYI=
+	t=1724125443; cv=none; b=mw+TCIPStKCLnsxZ8hK+8izolPAvdcGlQLTsvCZ/b+3+hmmfNRKt6rlZoCkGjDKTbCol3ta+edacqI7f7AlFGgv4VUQxUMmkAoL8E8audJem+Sl6xSUJb0vJDznFwT2vGkWGvE337Y++lLF1EzOwuDDLl8HakSTOnaghFtHZIx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724125310; c=relaxed/simple;
-	bh=+NKPnHArmrMH5TSbooq20XeeTEXdpz3vPx0uEwuR7xw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=OqBqxv+7rrN2QCcB1ZYZ0nPQmiiktA9/q+BtjD9EBRpUrIHqQsAzjYVd+0n9qzIkrWw+q17zv2XiukreHLVt//KFzKR6gC5gvMakUs5txZzzNLGzeTlbvYYJl2cP0Nvf4bfMJ3JKVoW57BWxBCCWJSfe04SnOxNVOCFkQzlvtR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com; spf=pass smtp.mailfrom=honor.com; arc=none smtp.client-ip=81.70.192.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=honor.com
-Received: from w012.hihonor.com (unknown [10.68.27.189])
-	by mta22.hihonor.com (SkyGuard) with ESMTPS id 4WnwF96fthzYl1Fm;
-	Tue, 20 Aug 2024 11:39:25 +0800 (CST)
-Received: from a006.hihonor.com (10.68.23.242) by w012.hihonor.com
- (10.68.27.189) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 20 Aug
- 2024 11:41:45 +0800
-Received: from a007.hihonor.com (10.68.22.31) by a006.hihonor.com
- (10.68.23.242) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 20 Aug
- 2024 11:41:45 +0800
-Received: from a007.hihonor.com ([fe80::4407:dd67:71d7:ea82]) by
- a007.hihonor.com ([fe80::4407:dd67:71d7:ea82%10]) with mapi id
- 15.02.1544.011; Tue, 20 Aug 2024 11:41:45 +0800
-From: gaoxu <gaoxu2@honor.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-CC: Stephen Rothwell <sfr@canb.auug.org.au>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
-	<linux-next@vger.kernel.org>
-Subject: =?utf-8?B?5Zue5aSNOiDlm57lpI06IGxpbnV4LW5leHQ6IFNpZ25lZC1vZmYtYnkgbWlz?=
- =?utf-8?Q?sing_for_commit_in_the_mm_tree?=
-Thread-Topic: =?utf-8?B?5Zue5aSNOiBsaW51eC1uZXh0OiBTaWduZWQtb2ZmLWJ5IG1pc3NpbmcgZm9y?=
- =?utf-8?Q?_commit_in_the_mm_tree?=
-Thread-Index: AQHa8bp8XrklAbKU0UC0hV42PTSzP7It83BwgADUR4CAAJRcoIAAIcHg
-Date: Tue, 20 Aug 2024 03:41:45 +0000
-Message-ID: <e85bad8d463e4f529cabfc24292f47aa@honor.com>
-References: <20240819080327.171fabbe@canb.auug.org.au>
-	<8097d6e2573246f089906db6633e7958@honor.com>
- <20240819173357.425eef9ab459dd02f8d051d4@linux-foundation.org>
- <5cc94991f4a14d56a6c9a19ec42a94cd@honor.com>
-In-Reply-To: <5cc94991f4a14d56a6c9a19ec42a94cd@honor.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1724125443; c=relaxed/simple;
+	bh=bX70gTcou+4R98xJ2Jin+VZVAqjyNeUIGBK2D/BWAso=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cQG6E88h8NLB5J2GCdN7KIz1+khzN8ze3zGv7t3PKpGwEX7lyta33f99Z2AP7Psl3IXHR+df7SOC7D+Y22xMPn9aHIAaqtqoBuZcAmGl+GNCK8gQl2MG9Sq7xtgUmpoI55Toat017n062lQfGyz0FE9s18P50o65tRo8R6DnbXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=a7KB7wgK; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1724125437;
+	bh=Q87pj78yQeYExoXr/H6wFYhMvlf6D47a1BXi7IpUE/4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=a7KB7wgKF8Q4Bcb59FpDmi5UZ93qjmJSewdUpRnep2ZYTqHkGVZlKi63knPmLZxE+
+	 UyOcIxBiUQ+bMZuz08f1c6G3G5iQhyM5OWcnQSlIQIWBuk9K6nR2bO3e4Ot+CxNe9l
+	 KuSWDnA/D/wYtCyNFIiRB1qklky6/udC2nSVTaP5zsPRRWUYJmdgH8bIMSgMKmJJ+T
+	 c7Mxm80BiAEziZFQK+sltdw0iIIDLQGoNMmRURqioLpHYql9PgoplPx/bxaZCwlbFx
+	 MdAMtQcL57ZaRPji5Nd4HetM2rleEtWPW+CCxwYiNrz9940lFdgPsEV2JS0L8HT4bX
+	 XFoR+41WnFp9Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WnwLN0x60z4wcF;
+	Tue, 20 Aug 2024 13:43:55 +1000 (AEST)
+Date: Tue, 20 Aug 2024 13:43:54 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>
+Cc: Jithu Joseph <jithu.joseph@intel.com>, Kuppuswamy Sathyanarayanan
+ <sathyanarayanan.kuppuswamy@linux.intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the drivers-x86 tree
+Message-ID: <20240820134354.2aec355d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/bYQ6iLeq2T6U=vjvAbTmm.m";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-PiA+DQo+ID4gT24gTW9uLCAxOSBBdWcgMjAyNCAwMzo1NjowNCArMDAwMCBnYW94dSA8Z2FveHUy
-QGhvbm9yLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiA+ID4NCj4gPiA+ID4gSGkgYWxsLA0KPiA+ID4g
-Pg0KPiA+ID4gPiBDb21taXQNCj4gPiA+ID4NCj4gPiA+ID4gICBjY2JiMDdiMmEzYTcgKCJtbTog
-YWRkIGxhenlmcmVlIGZvbGlvIHRvIGxydSB0YWlsIikNCj4gPiA+ID4NCj4gPiA+ID4gaXMgbWlz
-c2luZyBhIFNpZ25lZC1vZmYtYnkgZnJvbSBpdHMgYXV0aG9yLg0KPiA+ID4gPg0KPiA+ID4gPiBB
-Y3R1YWxseSB0aGUgQXV0aG9yIGlzICJnYW94dSA8Z2FveHUyQGhvbm9yLmNvbT4iIHdoaWxlIHRo
-ZQ0KPiA+ID4gPiBTaWduZWQtb2ZmLWJ5IGlzICJnYW8geHUgPGdhb3h1MkBoaWhvbm9yLmNvbT4i
-Lg0KPiA+ID4gSSBhcG9sb2dpemUgZm9yIHRoZSBtaXN0YWtlLiBBcmUgdGhlcmUgYW55IHJlbWVk
-aWFsIG1lYXN1cmVzPw0KPiA+ID4gSSB3aWxsIGJlIG1vcmUgY2FyZWZ1bCBuZXh0IHRpbWUuDQo+
-ID4NCj4gPiBXZWxsLCB3aGljaCBhZGRyZXNzIHNob3VsZCB3ZSB1c2U/DQo+IFVzZSBnYW94dSA8
-Z2FveHUyQGhvbm9yLmNvbT4NCk91ciBjb21wYW55IGhhcyByZWNlbnRseSBsYXVuY2hlZCBhIG5l
-dyBkb21haW4gbmFtZTpob25vci5jb20sIHdoaWxlIHRoZSBvcmlnaW5hbCBkb21haW4gbmFtZTpo
-aWhvbm9yLmNvbSB3aWxsIGFsc28gY29udGludWUgdG8gYmUgbWFpbnRhaW5lZC4NClRoZXJlZm9y
-ZSwgdGhlIElUIGRlcGFydG1lbnQgcmVjb21tZW5kcyB1c2luZyBnYW94dTJAaG9ub3IuY29tLiAg
-SG93ZXZlciwgaWYgY29udGludWUgdG8gdXNlIGdhb3h1MkBoaWhvbm9yLmNvbSwgaXQgd2lsbCBh
-bHNvIHdvcmsgZm9yIGNvbW11bmljYXRpb24uDQpTbywgcmVjb21tZW5kcyB1c2UgZ2FveHUgPGdh
-b3h1MkBob25vci5jb20+LCAgSG93ZXZlciB1c2luZyBnYW8geHUgPGdhb3h1MkBoaWhvbm9yLmNv
-bT4gaXMgYWxzbyBmaW5lLg0K
+--Sig_/bYQ6iLeq2T6U=vjvAbTmm.m
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+After merging the drivers-x86 tree, today's linux-next build (htmldocs)
+produced this warning:
+
+Documentation/arch/x86/ifs:2: /home/sfr/next/next/drivers/platform/x86/inte=
+l/ifs/ifs.h:131: WARNING: Title underline too short.
+
+Structural Based Functional Test at Field (SBAF):
+------------------------------------------------
+
+Introduced by commit
+
+  0a3e4e94d137 ("platform/x86/intel/ifs: Add SBAF test image loading suppor=
+t")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/bYQ6iLeq2T6U=vjvAbTmm.m
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbEEPoACgkQAVBC80lX
+0Gy0TQgAkzyRvBJHvmOWnCSL0mhWa05J4va+uPlElKg+K27EzXRvfGAquI8eGKjJ
+/jU76W+4ysDqanh3ZPgfNs6sGkxOu0DcuIVL/xvrZSaEyI73ZJ5PjVRLmHYYWnW4
+cAP8a7N2RSLHuZJPqwDdcsLuUFY50Yf6uElAarTRCdvVH5sAx7TgcByuPzzNKo3B
+LiR+1JPXRzXXtAEqiSdorWfSOUlsahVUlkG44HsHBjAv+KAM2RqrivenR8dD0SX2
+wcnxHDJt/mJ6ua9/W7fzJbuS1y/NHyznQgl+sk/uoN4+6jDbur9kS5afQ4N4x/mE
+lwz24eyogMv7xAhbQA2GW5BSWFN+bw==
+=ZtWH
+-----END PGP SIGNATURE-----
+
+--Sig_/bYQ6iLeq2T6U=vjvAbTmm.m--
 

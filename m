@@ -1,95 +1,103 @@
-Return-Path: <linux-next+bounces-3377-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3378-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC0DC959354
-	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2024 05:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2563D959366
+	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2024 05:45:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 594AE282487
-	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2024 03:28:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7C3628448B
+	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2024 03:45:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1035214C587;
-	Wed, 21 Aug 2024 03:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68D3F1CAB8;
+	Wed, 21 Aug 2024 03:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jC/qNMot"
 X-Original-To: linux-next@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4763FD4;
-	Wed, 21 Aug 2024 03:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846623C0B;
+	Wed, 21 Aug 2024 03:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724210883; cv=none; b=bMZyVmEpH+c1KaoDW5ufiNf6ymzCQ3cVEhBrjIlKdQTm3J+wYeVJT50CRQFDMuFMW13tEQW/h9ppW/f3OElN0tLISzj7TlwIuLexbM2wxbulpopoy7uYrYhIH8b8GgUFW6xIfgx/kksqA1dEgyxiywfa0yRjAuvZ24vgUlx7VlA=
+	t=1724211939; cv=none; b=dHtrZystldOw0AafoObR2qxD8o/DMAyLrrMYGCbIsP6ZwYf2IpzqoXgkgdaEG+agLD/lkZMnrAHpTELtFgAhvkreYDl4PeKeessYwmddlvEm6eEj/I4gWs3kvqezFagCrvi/RdPAeHOFNbTKOnBEfdNQBkN+VfwT2m+KNIaqAFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724210883; c=relaxed/simple;
-	bh=mPbh7uvNfwYVv80IHNN+Lu4uMCiJTIi/Nbx9mSwKh44=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=bFg6CpWOAzg+tURYx9AN2Ct7aACqxij0+ZZoxOM0ipPYs+8k8nwDZP6qF1HCiLftdXtaKV3Tx6I/j0RP6b/LA0Weg3Rvyq7MSLBzoxTNuVMVWCvF8Qpr+RCjOdbfe4gO7nnhv1oRk0MfCAvaB3gKFAYnBLQ5Yyba2g0mnNPiWHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WpWqy01wRz20l3K;
-	Wed, 21 Aug 2024 11:23:10 +0800 (CST)
-Received: from kwepemg500010.china.huawei.com (unknown [7.202.181.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 519781A016C;
-	Wed, 21 Aug 2024 11:27:51 +0800 (CST)
-Received: from [10.67.109.211] (10.67.109.211) by
- kwepemg500010.china.huawei.com (7.202.181.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 21 Aug 2024 11:27:50 +0800
-Message-ID: <368ca167-5f57-4fb4-9208-0016e7e7a6d5@huawei.com>
-Date: Wed, 21 Aug 2024 11:27:50 +0800
+	s=arc-20240116; t=1724211939; c=relaxed/simple;
+	bh=RotE0u7x6HLN8xX66ryWUmslhsqqC8az5ijq2RLmytM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=UqVPn4UeaXR4Rwsr/k09zpzgcQjmyhHvYj0zGazT5PSLkMZ2CG7vhpf8QWif4WI9N0ieJzfuUy6DuJ2wwfAzgotL2om6HPIAI+M2UahFJlX5qYz4W+AGPVFjsW0YYoVbE6bH1sn6VFOSF+ehCa2wlDlBFReDastFvalSgM4VWxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jC/qNMot; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1724211932;
+	bh=mAOAQjAO7XB1qfykD/7FcB6Cn/PzpSugKy7+CfdNRhQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=jC/qNMotXtIqIal5hFU7vivrWUvfUFdrQJ6UbwOQ5VJO04GwhU0hD9F7lswbpLXTM
+	 YSWZNsMc5XdQVCgiBlRxx7kx959+PzEdEgmsLAjeqK4Ah0R1A75a15rwMZNWmtlXjq
+	 KSKy8aEA1RXK56z4T8Fmt89WGhMgeQ240ZimtR/2RO5jGuLtN9RCobz23yeKRHiB1j
+	 WE1HJpb4KdRR81Z/zcMqgJuKVyJX09ZEnCT6QbaN04guhrYnM6spUL0ylhpy/zRnl7
+	 rASLxDIt8Bs20a2hXud4GU6TJFEfdzJJGp4ucmJIt6A0m/3iKlcngHbXIGF0sd5N46
+	 rmdhTscZu4N7w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WpXKl5swqz4wbp;
+	Wed, 21 Aug 2024 13:45:31 +1000 (AEST)
+Date: Wed, 21 Aug 2024 13:45:31 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Tejun Heo <tj@kernel.org>
+Cc: Matthew Brost <matthew.brost@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the workqueues tree
+Message-ID: <20240821134531.1da04ae7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the arm tree
-Content-Language: en-US
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Russell King
-	<linux@armlinux.org.uk>
-CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-References: <20240821093623.5928f361@canb.auug.org.au>
-From: "liuyuntao (F)" <liuyuntao12@huawei.com>
-In-Reply-To: <20240821093623.5928f361@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemg500010.china.huawei.com (7.202.181.71)
+Content-Type: multipart/signed; boundary="Sig_/aXjOh92j3Bg48spW15qTDol";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-After removing the '(' and  ')', kernel builds well.
-The website(https://www.armlinux.org.uk/) is currently inaccessible,
-i will submit new patch to Russell's patch tracker when it is ok.
+--Sig_/aXjOh92j3Bg48spW15qTDol
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> +#ifdef CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-> +#define RELOC_TEXT_NONE (.reloc  .text, R_ARM_NONE, .)
-> +#else
-> +#define RELOC_TEXT_NONE
-> +#endif
-> +
+Hi all,
 
+After merging the workqueues tree, today's linux-next build (htmldocs)
+produced this warning:
 
+include/linux/workqueue.h:547: warning: Excess function parameter '...' des=
+cription in 'alloc_ordered_workqueue_lockdep_map'
 
-On 2024/8/21 7:36, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the arm tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> arch/arm/kernel/entry-armv.S: Assembler messages:
-> arch/arm/kernel/entry-armv.S:1074: Error: junk at end of line, first unrecognized character is `('
-> arch/arm/kernel/entry-armv.S:1088: Error: junk at end of line, first unrecognized character is `('
-> arch/arm/kernel/entry-armv.S:1101: Error: junk at end of line, first unrecognized character is `('
-> 
-> Caused by commit
-> 
->    471fc0d32ab5 ("ARM: 9413/1: Fix build issue with LD_DEAD_CODE_DATA_ELIMINATION")
-> 
-> I have used the arm tree from next-20240820 for today.
-> 
+Presumably introduced by commit
+
+  9b59a85a84dc ("workqueue: Don't call va_start / va_end twice")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/aXjOh92j3Bg48spW15qTDol
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbFYtsACgkQAVBC80lX
+0GxAWwf+LRGBcpZbLYo9vX1BEuxulJbxe7DE7jmaXPUtxMLJHXxtSJWnjzYZ66J9
+M4WVNW9/7N4ZOrcVyfdP/28WFtko3CH7C0No/e6LT8vvPLLScFhVUAfylugX/FGL
+X2TdsvPAn9vGNpzI3DP28UeuTYBjwGKIMRMKjTeffUMFFyvvrM53DzK73nf476v9
+9Exl/uesv+DGZYiZz/BjB45NNIaX9heURvIFeEiHzCJVtdIpmo93lYyXgSLFY0Cc
+5aY3BG8PFIh2I/ae0DAP3kx9TKTKrcHfQLo5uvhwyj4uAkvhaG2Tn8v96LIHkVvb
+XoRsi1ScSpmVRsLQ3QTA+FucHxj4nA==
+=JcEs
+-----END PGP SIGNATURE-----
+
+--Sig_/aXjOh92j3Bg48spW15qTDol--
 

@@ -1,162 +1,109 @@
-Return-Path: <linux-next+bounces-3393-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3394-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DA5A95AC36
-	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2024 05:43:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 309E495AC8F
+	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2024 06:26:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 552081F2514F
-	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2024 03:43:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E19102824EB
+	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2024 04:26:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8326B22611;
-	Thu, 22 Aug 2024 03:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC93D4779D;
+	Thu, 22 Aug 2024 04:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IelVBRjB"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GEnqyGhe"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9AB24205;
-	Thu, 22 Aug 2024 03:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5844500E;
+	Thu, 22 Aug 2024 04:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724298190; cv=none; b=YJxDsseoTUckZRaEO6laDJdTDvvMn4Rn2/4WlDW12DFQQyjXIiNm/FIgKW+0M4AnGI6q6p1ua5gM3/nWqCFFTpyesjR6ZApDUO25EDtLiesBuvoviylRRW2sup/XOSJ6pnkPV2RlRe1vMlkVWttVX0WDPp8Ony8E3LSORyGxVnk=
+	t=1724300770; cv=none; b=WlolhpklkZhE/TeLM0nY6FpmcJQvWwWv2eQnBoyxEfehJui6UtCbdtF5F8TVKr/vCw9fqwxSf/LMQE6akpK1z5sigwCnwhoCIOxn5675W2aEFpXShzxRZ6xDvioxGCvolgFvDtB+bvo5TIIGfHlxsszichNcOhQrqsR35hCznmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724298190; c=relaxed/simple;
-	bh=UuorxCV3+ChjOo7klWeO1cftK5wXw90F3dBFG8aOujU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SUh2GfXd40u98U+U/s8EVqJNnRBX2dQLJ1JB7kMX2rUtFX1LpY9k0wJesgm6LjLWaWdpq114/0qByEMz2apbpq+sNB/THxEjKaoQ9WBE3g0D3hOomNJ7zDTtP1Vqp3t05NgUMW+AIPw2AVHKB0xmf1+oDM5R0dRVBBOkOpwQH0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IelVBRjB; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1724300770; c=relaxed/simple;
+	bh=0WZ4FYM8mmmylAJa5XP131J3PNnSGiy0LDELvBrO1HQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IWU8M/35/0yC/7RlicheyRr/q0IEMdodjbnJ5aui45ad3HDdXTdyVI5vuITIynjPHKtuVmngvPaaXeHZntbETOmfnFP1Y0O7P+3YRwtmNNoMOs4xOCgybiobmeTf7KZsRYNiqX8hdnq1C3RNmeTJO4ZvoSs6ghvCmGJiZ0ddiIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GEnqyGhe; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1724298183;
-	bh=i44euMZuOUfNaH13pwfY/OuPZSrPZ5HSS+JYk10ESfU=;
+	s=201702; t=1724300764;
+	bh=yf1PhCyU7SUcZwXqZMLRrM46PFymuaSELkO92pGjvZ0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=IelVBRjBhEDZkr4VUFgEFA4R2N16B0Ys51ouQTvSMvq762OYbBICOVHouvFO8rAvm
-	 ptJX1U8Cz2GPLbkcqPcO31HV2FVCyJ+93OOVET6JZGj4f3oIjUdizNSZtyjPQE/f5S
-	 J26KrlX8b2TRe/7Ll4fifLJ6SwKHnjmUK2L1J4LXGOS5sYTS+Y2W+/X0P9MtLqcpdU
-	 UliCRIHTlgMeey4MWBY2gkSHNOlNPEg5LeBEm6ImkakwNnpkEIoNWNUyc6lYao2ql+
-	 SwWJ4ApVz88DMpzXqvTyDYT4I708Vbcu31fYY51VrD8GRgqyLpdGL8ywt1Upq8RULg
-	 T1eMV+knj6dhA==
+	b=GEnqyGheuIEW7m6JKmxepjq8ILrUl10DrYmSO/vfAIStUDrnaZsqQaziQr/fLsPBg
+	 QBnoyRdWD2uYzFLd/yMvHZqB0jA1iUyiV69cH1kO1XyYjw6WaN9IQRmxs0DEo4qfJx
+	 Xj+rrG6b1Kd0SBqa+IGYPBRY1bReC2msG8VKGJ6S78V+Tuy9S1QhW14QREq/5MIW3+
+	 u9kILQoRntuf0jt3nFbPIhUD82ernqApueaDTmHNhVXyOMN9tOjbCcbD5Ial/T9X9Z
+	 YC2TYOfg+v1G6rxhLPBUmCWfhPptIlhJaiF32y1qB8Afhy3XtRk4MTcKJKYIvf7PuU
+	 phgrxfVmDrekw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wq8DQ5rDxz4wj2;
-	Thu, 22 Aug 2024 13:43:02 +1000 (AEST)
-Date: Thu, 22 Aug 2024 13:43:01 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wq9B35D0yz4x8Y;
+	Thu, 22 Aug 2024 14:26:03 +1000 (AEST)
+Date: Thu, 22 Aug 2024 14:26:03 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Tejun Heo <tj@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
- <peterz@infradead.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the sched-ext tree with the tip tree
-Message-ID: <20240822134301.73a2a94a@canb.auug.org.au>
+To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier
+ <mathieu.poirier@linaro.org>
+Cc: Andrew Davis <afd@ti.com>, Hari Nagalla <hnagalla@ti.com>, Martyn Welch
+ <martyn.welch@collabora.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the rpmsg tree
+Message-ID: <20240822142603.3608a26d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GrW3Z6VZhTu2AkPigY=6FVp";
+Content-Type: multipart/signed; boundary="Sig_/zxZe+7EeYfAOMKrcAz3ZX9D";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/GrW3Z6VZhTu2AkPigY=6FVp
+--Sig_/zxZe+7EeYfAOMKrcAz3ZX9D
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the sched-ext tree got a semantic conflict in:
+After merging the rpmsg tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-  kernel/sched/ext.c
+WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
+  Depends on [n]: MAILBOX [=3Dy] && (ARCH_OMAP2PLUS || ARCH_K3)
+  Selected by [m]:
+  - TI_K3_M4_REMOTEPROC [=3Dm] && REMOTEPROC [=3Dy] && (ARCH_K3 || COMPILE_=
+TEST [=3Dy])
 
-between commit:
+Probably introduced by commit
 
-  863ccdbb918a ("sched: Allow sched_class::dequeue_task() to fail")
-
-from the tip tree and commit:
-
-  f0e1a0643a59 ("sched_ext: Implement BPF extensible scheduler class")
-
-from the sched-ext tree.
-
-I fixed it up (I applied the following merge fix) and can carry the fix
-as necessary. This is now fixed as far as linux-next is concerned, but
-any non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 22 Aug 2024 13:37:43 +1000
-Subject: [PATCH] fix up for "sched_ext: Implement BPF extensible scheduler
- class"
-
-interacting with "sched: Allow sched_class::dequeue_task() to fail"
-from the tip tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- kernel/sched/ext.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 571a7ea0b5cb..1a9a3cc68a98 100644
---- a/kernel/sched/ext.c
-+++ b/kernel/sched/ext.c
-@@ -2033,11 +2033,11 @@ static void ops_dequeue(struct task_struct *p, u64 =
-deq_flags)
- 	}
- }
-=20
--static void dequeue_task_scx(struct rq *rq, struct task_struct *p, int deq=
-_flags)
-+static bool dequeue_task_scx(struct rq *rq, struct task_struct *p, int deq=
-_flags)
- {
- 	if (!(p->scx.flags & SCX_TASK_QUEUED)) {
- 		WARN_ON_ONCE(task_runnable(p));
--		return;
-+		return true;
- 	}
-=20
- 	ops_dequeue(p, deq_flags);
-@@ -2072,6 +2072,8 @@ static void dequeue_task_scx(struct rq *rq, struct ta=
-sk_struct *p, int deq_flags
- 	sub_nr_running(rq, 1);
-=20
- 	dispatch_dequeue(rq, p);
-+
-+	return true;
- }
-=20
- static void yield_task_scx(struct rq *rq)
---=20
-2.43.0
+  ebcf9008a895 ("remoteproc: k3-m4: Add a remoteproc driver for M4F subsyst=
+em")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/GrW3Z6VZhTu2AkPigY=6FVp
+--Sig_/zxZe+7EeYfAOMKrcAz3ZX9D
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbGs8UACgkQAVBC80lX
-0GzhMAf9HbuL1wGXmjn+p1vy+vt1plbCtxfo4Jknqqq1BqiK0jqYtl0korieyDyX
-2AbnYb2mTCAAqsNXn56jMt2MLmc2hMdfyKu4cZFYevODfN9XMIE4He9sd7yjC9m2
-+JbFbDeMNmGthrj/tkY22A+zpidi8wJFNQ5sy1SiprgeV4eJXOSFMFDOWdWV0LIb
-5uJ7O3Od8j+MG334gMHdf1MLtwSGLfTPRBrJZUa+zbHiXTbT4d1bug2ByIQQZcxi
-eUT1uCiLm2LuqKTSrofNQqXwhKdb3w9sYhyPLsuSJKsJ4DT4mxYWRVPNmHnIqhTd
-eHsGBZQkWdDGgdaFapEBEQ/N39thLA==
-=6cu3
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbGvdsACgkQAVBC80lX
+0Gx2Ywf+N1QlRG8Pjuedx9BheOXu3kXRmwalsCABwlxCsrKtQK4wNXqHMqZOgA5x
+t5xNlummSszChYyB+mLOaOgQB/OR/T7ElLF7LgEBqvGgCD5BtArsEJYbtSxh78+D
+oLdvvyaGB4pR8jYifSRvvpRntbcNoYBtx/R3Mnk3NwAKoPmF7Dc/IsJE17KZl27N
+qiTBfmsdw/TxQgNCTIkkhy7k9jG+Eq2hRK8dSTlVDt9/C+8MAlFKZu9H37+CKqSE
+ME+Llvy/fwk+jIxU1l/FP0mNXX5rDwdeBE3Kd7biFg3L9pkChblamCpZS1ni2VYu
+sch/pM4NhG0oL7+VpL21iTTYgqqNSQ==
+=4QJV
 -----END PGP SIGNATURE-----
 
---Sig_/GrW3Z6VZhTu2AkPigY=6FVp--
+--Sig_/zxZe+7EeYfAOMKrcAz3ZX9D--
 

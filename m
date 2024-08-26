@@ -1,116 +1,148 @@
-Return-Path: <linux-next+bounces-3426-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3427-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E79195F690
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2024 18:31:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24E8695F86E
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2024 19:44:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60AB21C21A2A
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2024 16:31:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6ADB283171
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2024 17:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F7418D64D;
-	Mon, 26 Aug 2024 16:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nSB+SODc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB7F4198E90;
+	Mon, 26 Aug 2024 17:43:25 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517A21865E7;
-	Mon, 26 Aug 2024 16:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EC610E9;
+	Mon, 26 Aug 2024 17:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724689868; cv=none; b=Atvp81Y5mEwj7BZgDdKts8c66AV4NGdkuyVS/Vnf8nIMU7YBZGE7xGVRi7rh76NWwTnfjWZ0jLnRPHEGVg3XeVANY8gPsIyWcUI8FUfJiNFxlscbGeCpck1+BDISzC+fdFkzA9m//pagSOFI2sN9OL+OdY3WpGFAXOv16CbrusU=
+	t=1724694205; cv=none; b=WNZtM9Oy99DWGFay2CAF+K/jMKYe+SIhVQwHOxeixBWXrJwjITF23BcGLEF3Ti0RhKneW8DhaJvn4AcUiS1ESMqdUSU9IaOOTloYbXWsGMKmAksmggAikrmwYlJYdxZFjhAD5J47z0y39xr17dj8YrdzIxgqbsjzma3HKmwVpgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724689868; c=relaxed/simple;
-	bh=uctcGm9llZGS5ckp6lUfEXW4KEe6hjYHQrQX+Z42poc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mwiaq/olUuP//yR3wqVEytjxBMDmgki8GxnoLNWE2xnxU9dTd+RCb26KlF2vkUCBxiwC0NOMezt+/mGIxNiQ6suymKNXzvJUGW7Y2VlPKfKrlJZdFjma4/8KLo1xaikJn8hbO2+Ox0x0/hPzzcsnWrUqFXGQsRSA86kBGqdZlCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nSB+SODc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC6BC52FC0;
-	Mon, 26 Aug 2024 16:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724689867;
-	bh=uctcGm9llZGS5ckp6lUfEXW4KEe6hjYHQrQX+Z42poc=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=nSB+SODc6181g8MX7uHGlBR768/M17xygUHUORi3VQ3qKl+u0fYOm4IUXrvDZGn3J
-	 23ksLGpe5fwFQqjEg+vP+6Bq6f5jDrBLnXnmEE9jeZlJrmQm6j5Heq83hIyEo4ZQVI
-	 +P+DRLvd09c+j77s/BsaH+VUGAEoQHCscA8F8ffIQ+DaPjm9SiHS3+/WNjjg6C6akH
-	 +ogwUAglYnLCVkiDmu/n2Z+BMrnKqxRtwr5x19tpCr1qa3UsJUQADB7RYDR/cnUQX1
-	 XIzADoR8m8nEUg8DjlaJT768DYpiki6q/guXbQsalQ+M1rEMMLyUHA9bw2/dGoWbnm
-	 15WXsi0qEtPtw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 87EC7CE0BC7; Mon, 26 Aug 2024 09:31:07 -0700 (PDT)
-Date: Mon, 26 Aug 2024 09:31:07 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
-Message-ID: <b1824f4a-f5cc-4011-876f-8a73cf752067@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <c28dbc65-7499-41a5-84d0-991843153b1a@paulmck-laptop>
- <20240823074705.GB12053@noisy.programming.kicks-ass.net>
- <xhsmho75fo6e4.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	s=arc-20240116; t=1724694205; c=relaxed/simple;
+	bh=A8eNY16K/NSgNAbWAwsP3VuuSvMTk7DqEMkxYcW5jOM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Zjz+zXWnXBTnrI71dtlFAvCblCd92R7QY9Sb3eeN6Oj2qof4Jp+Qy36khAuf5IIr8KIMYhQ50+cjQ/hb4Ffm+jnFlSyPUY/qA/Vht8lmF1DIRG4+6cvFSEq3gH0CqWvT2/eWGVTtmuu5la4YjPGNKBLyN5so3hPO61ms4yVQ4I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Wsyh94Vn5z9sPd;
+	Mon, 26 Aug 2024 19:43:21 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jHAjDb9YYVls; Mon, 26 Aug 2024 19:43:21 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wsyh93Lnbz9rvV;
+	Mon, 26 Aug 2024 19:43:21 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 5D7778B77B;
+	Mon, 26 Aug 2024 19:43:21 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id mU-Q-zwNOehp; Mon, 26 Aug 2024 19:43:21 +0200 (CEST)
+Received: from [192.168.233.119] (unknown [192.168.233.119])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id D456C8B763;
+	Mon, 26 Aug 2024 19:43:20 +0200 (CEST)
+Message-ID: <b0fe75b4-c1bb-47f7-a7c3-2534b31c1780@csgroup.eu>
+Date: Mon, 26 Aug 2024 19:43:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: boot warning after merge of the vfs-brauner tree
+To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
+ Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christian Brauner <brauner@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Pankaj Raghav <p.raghav@samsung.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>, djwong@kernel.org,
+ ritesh.list@gmail.com, linuxppc-dev@lists.ozlabs.org
+References: <20240826175931.1989f99e@canb.auug.org.au>
+ <20240826154818.hzqnvofdmaxvuwrh@quentin>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20240826154818.hzqnvofdmaxvuwrh@quentin>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <xhsmho75fo6e4.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 
-On Mon, Aug 26, 2024 at 01:44:35PM +0200, Valentin Schneider wrote:
-> On 23/08/24 09:47, Peter Zijlstra wrote:
-> > On Wed, Aug 21, 2024 at 02:57:16PM -0700, Paul E. McKenney wrote:
-> >
-> >> 2e0199df252a ("sched/fair: Prepare exit/cleanup paths for delayed_dequeue")
-> >>
-> >> The preceding commit is very reliable.
-> >>
-> >> Only instead of (or maybe as well as?) introducing the dequeue_rt_stack()
-> >> bug, the 2e0199df252a commit introduced a build bug:
-> >>
-> >> ------------------------------------------------------------------------
-> >>
-> >> In file included from kernel/sched/fair.c:54:
-> >> kernel/sched/fair.c: In function ‘switched_from_fair’:
-> >> kernel/sched/sched.h:2154:58: error: ‘__SCHED_FEAT_DELAY_ZERO’ undeclared (first use in this function); did you mean ‘__SCHED_FEAT_LATENCY_WARN’?
-> >>  2154 | #define sched_feat(x) !!(sysctl_sched_features & (1UL << __SCHED_FEAT_##x))
-> >>       |                                                          ^~~~~~~~~~~~~
-> >> kernel/sched/fair.c:12878:21: note: in expansion of macro ‘sched_feat’
-> >> 12878 |                 if (sched_feat(DELAY_ZERO) && p->se.vlag > 0)
-> >>       |                     ^~~~~~~~~~
-> >> kernel/sched/sched.h:2154:58: note: each undeclared identifier is reported only once for each function it appears in
-> >>  2154 | #define sched_feat(x) !!(sysctl_sched_features & (1UL << __SCHED_FEAT_##x))
-> >>       |                                                          ^~~~~~~~~~~~~
-> >> kernel/sched/fair.c:12878:21: note: in expansion of macro ‘sched_feat’
-> >> 12878 |                 if (sched_feat(DELAY_ZERO) && p->se.vlag > 0)
-> >>       |                     ^~~~~~~~~~
-> >>
-> >
-> > Oh gawd, last minute back-merges :/
-> >
-> > Does the below help any? That's more or less what it was before Valentin
-> > asked me why it was weird like that :-)
+
+
+Le 26/08/2024 à 17:48, Pankaj Raghav (Samsung) a écrit :
+> On Mon, Aug 26, 2024 at 05:59:31PM +1000, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the vfs-brauner tree, today's linux-next boot test (powerpc
+>> pseries_le_defconfig) produced this warning:
 > 
-> Woops...
+> iomap dio calls set_memory_ro() on the page that is used for sub block
+> zeroing.
+> 
+> But looking at powerpc code, they don't support set_memory_ro() for
+> memory region that belongs to the kernel(LINEAR_MAP_REGION_ID).
+> 
+> /*
+>   * On hash, the linear mapping is not in the Linux page table so
+>   * apply_to_existing_page_range() will have no effect. If in the future
+>   * the set_memory_* functions are used on the linear map this will need
+>   * to be updated.
+>   */
+> if (!radix_enabled()) {
+>          int region = get_region_id(addr);
+> 
+>          if (WARN_ON_ONCE(region != VMALLOC_REGION_ID && region != IO_REGION_ID))
+>                  return -EINVAL;
+> }
+> 
+> We call set_memory_ro() on the zero page as a extra security measure.
+> I don't know much about powerpc, but looking at the comment, is it just
+> adding the following to support it in powerpc:
+> 
+> diff --git a/arch/powerpc/mm/pageattr.c b/arch/powerpc/mm/pageattr.c
+> index ac22bf28086fa..e6e0b40ba6db4 100644
+> --- a/arch/powerpc/mm/pageattr.c
+> +++ b/arch/powerpc/mm/pageattr.c
+> @@ -94,7 +94,9 @@ int change_memory_attr(unsigned long addr, int numpages, long action)
+>          if (!radix_enabled()) {
+>                  int region = get_region_id(addr);
+>   
+> -               if (WARN_ON_ONCE(region != VMALLOC_REGION_ID && region != IO_REGION_ID))
+> +               if (WARN_ON_ONCE(region != VMALLOC_REGION_ID &&
+> +                                region != IO_REGION_ID &&
+> +                                region != LINEAR_MAP_REGION_ID))
+>                          return -EINVAL;
+>          }
+>   #endif
 
-On the other hand, removing that dequeue_task() makes next-20240823
-pass light testing.
+By doing this you will just hide the fact that it didn't work.
 
-I have to ask...
+See commit 1f9ad21c3b38 ("powerpc/mm: Implement set_memory() routines") 
+for details. The linear memory region is not mapped using page tables so 
+set_memory_ro() will have no effect on it.
 
-Does it make sense for Valentin to rearrange those commits to fix
-the two build bugs and remove that dequeue_task(), all in the name of
-bisectability.  Or is there something subtle here so that only Peter
-can do this work, shoulder and all?
+You can either use vmalloc'ed pages, or do a const static allocation at 
+buildtime so that it will be allocated in the kernel static rodata area.
 
-							Thanx, Paul
+By the way, your code should check the value returned by 
+set_memory_ro(), there is some work in progress to make it mandatory, 
+see https://github.com/KSPP/linux/issues/7
+
+Christophe
+
+> 
+>   If it involves changing more things and this feature will be added to
+>   powerpc in the future, we could drop the set_memory_ro() call from
+>   iomap.
+> 
+>   CC: Darrick(as he suggested set_memory_ro() on zero page), Leroy,
+>   Ritesh, ppc list
+> 
 

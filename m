@@ -1,67 +1,65 @@
-Return-Path: <linux-next+bounces-3428-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3429-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 578B695FAFA
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2024 22:53:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0361495FB48
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2024 23:11:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D68B1F245A6
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2024 20:53:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27C361C21BB4
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2024 21:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0823E19AA53;
-	Mon, 26 Aug 2024 20:53:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77DD3145344;
+	Mon, 26 Aug 2024 21:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="0aX/dEnD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VYrEMCtc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BE419A296;
-	Mon, 26 Aug 2024 20:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4294A881E;
+	Mon, 26 Aug 2024 21:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724705579; cv=none; b=A6uKOd7c0820Ms2+ctEQUeitM5fL0BiAjM3Ht6rbZUHnCFd7giU4HV0gUd5Iy3zXpVLm0Al9irs5F6XgZV6fCpBsSQ4xrn2ni9Nqq68NlVrXzYAfwW0ljZ7Df48vvQ2Gf6K+IJIbszoI2hhu23JlXLa3nta3VzuUJc14a8O7PuA=
+	t=1724706650; cv=none; b=tewwQL9oXuXjB6bZU8ShQEQ8/YzQpiLcvHgqIsB95pKjchEwvDmZ8OlQ5jwGUx4mpc0ehgY9kzIw0EKk5YwNi+hC8JU4cv0N9ecT1CXOuM46zxIEF37GixvLHHxALYLQixyn71aBnV55+yvW1j6mRkVMbtmWwtzT5LPMyng0Nls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724705579; c=relaxed/simple;
-	bh=PFQU/PS+nzn5AwViaP6bwj645NuPHxPMaIJmLww+gzc=;
+	s=arc-20240116; t=1724706650; c=relaxed/simple;
+	bh=AxCDnE68GkibdBOqxqO4LPCEcA6Whks6cJ8JZTKjBPs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DyX9AOp1F6evKT4Phn88QbrlYucwfo7YIHLqRrQr/i90ezSIHFpqkzBRu+QwJ3UADvNq4hu7eHlnPBerhFCDfqfuafW3W1kIb3q+IC1OPn4ie/GXwc6uqhk/F0fMnrhmJyQ7rWGTXVYrr0reuCX0LhDpe27NVBNmWxYAZyashp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=0aX/dEnD; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-	bh=c73EoVltrEzE0c3SyNvy5fA/Z+sXixymI3hZW3zbr5I=; b=0aX/dEnDFs7ExvKfulvsUlzm08
-	2P0Puk/riOn9G3On2v2UnJNhjLz6qV/Ya6Vv025TYXvaLeIhUszqUAY33XtZ+6vxTtT2kMg5XKO2I
-	OpOYchEen13o/RlJCxpwqDLLqzbZUjCRq6BqftC6Ep4ZvTxvLU3Z7FfL8b0r6GvIEIpp3sIPPMQE5
-	253k68FRucS9fTPXtgKx8gZoGPpZ2ajMjRlk/lFvB4Mevlb1AzCGD4bQIYyierI/DHNtyecvF21X7
-	1ZqyB47bTiI7TtOfw+KGNjUENmigQhZWes0hD7T/xXFe8QIMepEFVIfyyzwalW633Ls6yfJRfGRsz
-	1zM4L9Wg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sighr-00000008hBX-07xX;
-	Mon, 26 Aug 2024 20:52:55 +0000
-Date: Mon, 26 Aug 2024 13:52:54 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=gPgci35Vic75gfsb4M3G2lqzvujJGL94qkQHL9TUQp8kGKRlvnCMXqDPaaguQvjuR+5y2kczB/k00tlIysrbJ0pnQAolhMI77W9SWmw3+q+CaCwmC3JjWP7KffiGRqalv4Mdvli5AsdBeCiWSN8vwKJSQZDPOkdkl5WrwW2AOWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VYrEMCtc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C24C8B7A3;
+	Mon, 26 Aug 2024 21:10:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724706649;
+	bh=AxCDnE68GkibdBOqxqO4LPCEcA6Whks6cJ8JZTKjBPs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VYrEMCtcNUMwRshAkVUKWPuZnPgDNHy323ItS4fI/kicK71U6NPSp1usTwi7354pl
+	 hFopOTgWELk0s96Wk2WT02U2fg62QmmA2FTitwMc7cjHv5NDOJQWZA2v/kUvzC2j3c
+	 buudB2bK1tl/A1SYLsnXin/3siqhcmBAM8c+fUbRsUgMT+sI1NFbgQLlSLWxtPznng
+	 K93QRs8uRRffpzAAycHhUJLuqRMFejV0YShFQMzfS9B1rCrsyuzS4E0LEGpbhW7Hux
+	 kZOS51+4yeu6qHWqaMIcyt5/GP4vthBofNwRGnafqRDxsFTq5RKGU+ULidZc0RWV1a
+	 CFjZys8lpouEQ==
+Date: Mon, 26 Aug 2024 14:10:49 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
 	Mike Rapoport <rppt@kernel.org>, Song Liu <song@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Cc: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
 	Stephen Rothwell <sfr@canb.auug.org.au>,
 	Christian Brauner <brauner@kernel.org>,
 	Pankaj Raghav <p.raghav@samsung.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	djwong@kernel.org, ritesh.list@gmail.com,
-	linuxppc-dev@lists.ozlabs.org
+	ritesh.list@gmail.com, linuxppc-dev@lists.ozlabs.org
 Subject: Re: linux-next: boot warning after merge of the vfs-brauner tree
-Message-ID: <ZszrJkFOpiy5rCma@bombadil.infradead.org>
+Message-ID: <20240826211049.GC6082@frogsfrogsfrogs>
 References: <20240826175931.1989f99e@canb.auug.org.au>
  <20240826154818.hzqnvofdmaxvuwrh@quentin>
  <b0fe75b4-c1bb-47f7-a7c3-2534b31c1780@csgroup.eu>
+ <ZszrJkFOpiy5rCma@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -71,108 +69,112 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b0fe75b4-c1bb-47f7-a7c3-2534b31c1780@csgroup.eu>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <ZszrJkFOpiy5rCma@bombadil.infradead.org>
 
-On Mon, Aug 26, 2024 at 07:43:20PM +0200, Christophe Leroy wrote:
-> 
-> 
-> Le 26/08/2024 à 17:48, Pankaj Raghav (Samsung) a écrit :
-> > On Mon, Aug 26, 2024 at 05:59:31PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
+On Mon, Aug 26, 2024 at 01:52:54PM -0700, Luis Chamberlain wrote:
+> On Mon, Aug 26, 2024 at 07:43:20PM +0200, Christophe Leroy wrote:
+> > 
+> > 
+> > Le 26/08/2024 à 17:48, Pankaj Raghav (Samsung) a écrit :
+> > > On Mon, Aug 26, 2024 at 05:59:31PM +1000, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > > 
+> > > > After merging the vfs-brauner tree, today's linux-next boot test (powerpc
+> > > > pseries_le_defconfig) produced this warning:
 > > > 
-> > > After merging the vfs-brauner tree, today's linux-next boot test (powerpc
-> > > pseries_le_defconfig) produced this warning:
+> > > iomap dio calls set_memory_ro() on the page that is used for sub block
+> > > zeroing.
+> > > 
+> > > But looking at powerpc code, they don't support set_memory_ro() for
+> > > memory region that belongs to the kernel(LINEAR_MAP_REGION_ID).
+> > > 
+> > > /*
+> > >   * On hash, the linear mapping is not in the Linux page table so
+> > >   * apply_to_existing_page_range() will have no effect. If in the future
+> > >   * the set_memory_* functions are used on the linear map this will need
+> > >   * to be updated.
+> > >   */
+> > > if (!radix_enabled()) {
+> > >          int region = get_region_id(addr);
+> > > 
+> > >          if (WARN_ON_ONCE(region != VMALLOC_REGION_ID && region != IO_REGION_ID))
+> > >                  return -EINVAL;
+> > > }
+> > > 
+> > > We call set_memory_ro() on the zero page as a extra security measure.
+> > > I don't know much about powerpc, but looking at the comment, is it just
+> > > adding the following to support it in powerpc:
+> > > 
+> > > diff --git a/arch/powerpc/mm/pageattr.c b/arch/powerpc/mm/pageattr.c
+> > > index ac22bf28086fa..e6e0b40ba6db4 100644
+> > > --- a/arch/powerpc/mm/pageattr.c
+> > > +++ b/arch/powerpc/mm/pageattr.c
+> > > @@ -94,7 +94,9 @@ int change_memory_attr(unsigned long addr, int numpages, long action)
+> > >          if (!radix_enabled()) {
+> > >                  int region = get_region_id(addr);
+> > > -               if (WARN_ON_ONCE(region != VMALLOC_REGION_ID && region != IO_REGION_ID))
+> > > +               if (WARN_ON_ONCE(region != VMALLOC_REGION_ID &&
+> > > +                                region != IO_REGION_ID &&
+> > > +                                region != LINEAR_MAP_REGION_ID))
+> > >                          return -EINVAL;
+> > >          }
+> > >   #endif
 > > 
-> > iomap dio calls set_memory_ro() on the page that is used for sub block
-> > zeroing.
+> > By doing this you will just hide the fact that it didn't work.
 > > 
-> > But looking at powerpc code, they don't support set_memory_ro() for
-> > memory region that belongs to the kernel(LINEAR_MAP_REGION_ID).
+> > See commit 1f9ad21c3b38 ("powerpc/mm: Implement set_memory() routines") for
+> > details. The linear memory region is not mapped using page tables so
+> > set_memory_ro() will have no effect on it.
 > > 
-> > /*
-> >   * On hash, the linear mapping is not in the Linux page table so
-> >   * apply_to_existing_page_range() will have no effect. If in the future
-> >   * the set_memory_* functions are used on the linear map this will need
-> >   * to be updated.
-> >   */
-> > if (!radix_enabled()) {
-> >          int region = get_region_id(addr);
+> > You can either use vmalloc'ed pages, or do a const static allocation at
+> > buildtime so that it will be allocated in the kernel static rodata area.
 > > 
-> >          if (WARN_ON_ONCE(region != VMALLOC_REGION_ID && region != IO_REGION_ID))
-> >                  return -EINVAL;
-> > }
-> > 
-> > We call set_memory_ro() on the zero page as a extra security measure.
-> > I don't know much about powerpc, but looking at the comment, is it just
-> > adding the following to support it in powerpc:
-> > 
-> > diff --git a/arch/powerpc/mm/pageattr.c b/arch/powerpc/mm/pageattr.c
-> > index ac22bf28086fa..e6e0b40ba6db4 100644
-> > --- a/arch/powerpc/mm/pageattr.c
-> > +++ b/arch/powerpc/mm/pageattr.c
-> > @@ -94,7 +94,9 @@ int change_memory_attr(unsigned long addr, int numpages, long action)
-> >          if (!radix_enabled()) {
-> >                  int region = get_region_id(addr);
-> > -               if (WARN_ON_ONCE(region != VMALLOC_REGION_ID && region != IO_REGION_ID))
-> > +               if (WARN_ON_ONCE(region != VMALLOC_REGION_ID &&
-> > +                                region != IO_REGION_ID &&
-> > +                                region != LINEAR_MAP_REGION_ID))
-> >                          return -EINVAL;
-> >          }
-> >   #endif
+> > By the way, your code should check the value returned by set_memory_ro(),
+> > there is some work in progress to make it mandatory, see
+> > https://github.com/KSPP/linux/issues/7
 > 
-> By doing this you will just hide the fact that it didn't work.
+> Our users expect contiguous memory [0] and so we use alloc_pages() here,
+> so if we're architecture limitted by this I'd rather we just remove the
+> set_memory_ro() only for PPC, I don't see why other have to skip this.
+
+Just drop it, then.
+
+--D
+
+> diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
+> index c02b266bba52..aba5cde89e14 100644
+> --- a/fs/iomap/direct-io.c
+> +++ b/fs/iomap/direct-io.c
+> @@ -775,14 +775,22 @@ EXPORT_SYMBOL_GPL(iomap_dio_rw);
+>  
+>  static int __init iomap_dio_init(void)
+>  {
+> +	int ret;
+> +
+>  	zero_page = alloc_pages(GFP_KERNEL | __GFP_ZERO,
+>  				IOMAP_ZERO_PAGE_ORDER);
+>  
+>  	if (!zero_page)
+>  		return -ENOMEM;
+>  
+> -	set_memory_ro((unsigned long)page_address(zero_page),
+> -		      1U << IOMAP_ZERO_PAGE_ORDER);
+> -	return 0;
+> +	if (IS_ENABLED(CONFIG_PPC))
+> +		return 0;
+> +
+> +	ret = set_memory_ro((unsigned long)page_address(zero_page),
+> +			    1U << IOMAP_ZERO_PAGE_ORDER);
+> +	if (ret)
+> +		free_pages((unsigned long) zero_page, IOMAP_ZERO_PAGE_ORDER);
+> +
+> +	return ret;
+>  }
+>  fs_initcall(iomap_dio_init);
 > 
-> See commit 1f9ad21c3b38 ("powerpc/mm: Implement set_memory() routines") for
-> details. The linear memory region is not mapped using page tables so
-> set_memory_ro() will have no effect on it.
+> Thoughts?
 > 
-> You can either use vmalloc'ed pages, or do a const static allocation at
-> buildtime so that it will be allocated in the kernel static rodata area.
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git/commit/?h=vfs.blocksize&id=d940b3b7b76b409b0550fdf2de6dc2183f01526f
 > 
-> By the way, your code should check the value returned by set_memory_ro(),
-> there is some work in progress to make it mandatory, see
-> https://github.com/KSPP/linux/issues/7
-
-Our users expect contiguous memory [0] and so we use alloc_pages() here,
-so if we're architecture limitted by this I'd rather we just remove the
-set_memory_ro() only for PPC, I don't see why other have to skip this.
-
-diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
-index c02b266bba52..aba5cde89e14 100644
---- a/fs/iomap/direct-io.c
-+++ b/fs/iomap/direct-io.c
-@@ -775,14 +775,22 @@ EXPORT_SYMBOL_GPL(iomap_dio_rw);
- 
- static int __init iomap_dio_init(void)
- {
-+	int ret;
-+
- 	zero_page = alloc_pages(GFP_KERNEL | __GFP_ZERO,
- 				IOMAP_ZERO_PAGE_ORDER);
- 
- 	if (!zero_page)
- 		return -ENOMEM;
- 
--	set_memory_ro((unsigned long)page_address(zero_page),
--		      1U << IOMAP_ZERO_PAGE_ORDER);
--	return 0;
-+	if (IS_ENABLED(CONFIG_PPC))
-+		return 0;
-+
-+	ret = set_memory_ro((unsigned long)page_address(zero_page),
-+			    1U << IOMAP_ZERO_PAGE_ORDER);
-+	if (ret)
-+		free_pages((unsigned long) zero_page, IOMAP_ZERO_PAGE_ORDER);
-+
-+	return ret;
- }
- fs_initcall(iomap_dio_init);
-
-Thoughts?
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git/commit/?h=vfs.blocksize&id=d940b3b7b76b409b0550fdf2de6dc2183f01526f
-
-  Luis
+>   Luis
 

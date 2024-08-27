@@ -1,142 +1,111 @@
-Return-Path: <linux-next+bounces-3461-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3462-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AAB6961897
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 22:37:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63F82961A08
+	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2024 00:33:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CA22B21B70
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 20:37:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 969E71C22983
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 22:33:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CBE415B115;
-	Tue, 27 Aug 2024 20:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FCF1D0DE4;
+	Tue, 27 Aug 2024 22:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLV/yiG4"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ef+Ay4sX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83912E62B;
-	Tue, 27 Aug 2024 20:36:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46F0189917;
+	Tue, 27 Aug 2024 22:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724791017; cv=none; b=ogh+dEZ25G1O4b2JX4HiQr4GBoD2JOwFyzWIZ7mn1jD0CGUIJgyPkNZECWoJ4OTRBwKTyJa3/M3DIC/0DxIOQjjsTXbn4skjBR+/bRiC2EZG/RD3fkrRW+ofqN6Rf6WS+kXA3Pjv7G366lwfnCcQ1ogl4WohmcLv/edz8H2z/dI=
+	t=1724798018; cv=none; b=PZ9vAAh0h4UCCVydaMIvWu3nbuJo1koUZioHV8Hh8QdN+lOI0E6YBOAKlBcp6yRh6Bgrl+HkOPOgfhvilIRp9X6hVFJQwFkkE27OlIcB2t4e7Nb06MINAVodCsV+KU5RLrG/vU8t0coH0/jIUCXqJnicTJAP46ZpjIememv0epw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724791017; c=relaxed/simple;
-	bh=J/5rAk+a/kTaug/K6jArIqf4f5xYJLdeFpVdgVVZ5HU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QdRnI47n6cW11+/0T/ClQQU3wSkoRYhS32rQeJt7X+NXdjDLWTcRW8g2WMp0GBq40N4HwspZMSeqOpZ1sE3eyip4CDP9i/4f1ETWZdV9M5QLGntuEG69nHjO1DtioOyrH4Sfamuwt7ECksiGyQ+sMgiJq9HOvc6fJwlnyj93Swo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLV/yiG4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EBE5C4AF0E;
-	Tue, 27 Aug 2024 20:36:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724791017;
-	bh=J/5rAk+a/kTaug/K6jArIqf4f5xYJLdeFpVdgVVZ5HU=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=HLV/yiG4JygcnS6CvW/fxdysmArDpJnSrZYRbRFCN0YpcZOA6/ogWdhr0F56z2mAy
-	 3QsFeU1DTnjRsd6FFwjmzBY+CVJDgPTo44XPq5O+7yzYdv0z8MIoYsIGjXEbO++TC9
-	 Zz/nhhjCkVxMVZbK5uD+Ag0hP0JYaVhTN81/mGcMvuVzIr7RSCXGwMRx2vfLu6eorD
-	 lVb8HpY7/sCwKzgJJkc5b/AKGNiMNFzcPua6JbR4YAcgcSsnhNcl9zCb6Y/MnSMo+W
-	 RvXosehpwpArylZk1bTjhUsUrScbvDc4bDj1F3rRNyxz5mcLWYzkDr5l/AIvnDISfM
-	 3xDBqgQvzAwBQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 0BC15CE11D3; Tue, 27 Aug 2024 13:36:57 -0700 (PDT)
-Date: Tue, 27 Aug 2024 13:36:57 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
-Message-ID: <a19308ed-7252-4119-b891-2a61791bb6e5@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <c28dbc65-7499-41a5-84d0-991843153b1a@paulmck-laptop>
- <20240823074705.GB12053@noisy.programming.kicks-ass.net>
- <xhsmho75fo6e4.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <b1824f4a-f5cc-4011-876f-8a73cf752067@paulmck-laptop>
- <xhsmhle0inuze.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <xhsmhikvmnfb3.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <c83028db-55ad-45b3-a27a-842ed665a882@paulmck-laptop>
- <103b1710-39ca-40d0-947d-fdac32d6e6a0@paulmck-laptop>
- <xhsmhcyltogin.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	s=arc-20240116; t=1724798018; c=relaxed/simple;
+	bh=qWfJM6XtvOX3xyxUJx8orxY3Naoa4F4l1qUESNUOlIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=l+cQ1xyPr+uyD9mhQZysX0Os9BhbaQ04xKrymkh1aH1a8RVKGKUHx+3aVBQD6S2nX5KPax/M8qXxwJB18sz/VUrkY/UnDg+t7ShoLuLVbcqoCPBPRKKErfg3BhMxA2KnBFdjETjXiP7ZggL/OQtWsAyf2ctWorc6fVFkI8ZG0Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ef+Ay4sX; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1724798004;
+	bh=mCbPbc2Lf7lZFFVzeCHqpxdUxsWbdbxjO18xn1V3q5s=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ef+Ay4sXya3S4e4n+HZVhlMytBR5COd084DIXYJ8pqOfgsGZQupglVFB06RcLwN0G
+	 LPMfeOGTty61F3XIMlNLW036AjfiNjEqj+aWMneR1P4kXqCw30gl6I8HaRKYk2BbSf
+	 j4aOl0tdtKFxmcbtmjUdDxx91ljLipgE9tb15IFvhGM6vCoCkYPzNzSyUcFiAEA5gT
+	 23vF4RZE4lRSPXd9ShqRN4Urlw3qkRbVNm3EjqlYI8u0coKaQxJnWBtB1piG9VWeLl
+	 equcFqiovjssldR5Cqd6VZ4SZyDM7EcwM7kYWnWf3ulL+4s1wWGjvSdJyl2kYTpA85
+	 FCA6rz0efPA3A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wtj4N44vpz4x2d;
+	Wed, 28 Aug 2024 08:33:24 +1000 (AEST)
+Date: Wed, 28 Aug 2024 08:33:21 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
+ <johan.hedberg@gmail.com>
+Cc: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the bluetooth tree
+Message-ID: <20240828083321.08802164@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <xhsmhcyltogin.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+Content-Type: multipart/signed; boundary="Sig_/fnSEs7lXinosh5uj7H=qcPe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Aug 27, 2024 at 10:30:24PM +0200, Valentin Schneider wrote:
-> On 27/08/24 11:35, Paul E. McKenney wrote:
-> > On Tue, Aug 27, 2024 at 10:33:13AM -0700, Paul E. McKenney wrote:
-> >> On Tue, Aug 27, 2024 at 05:41:52PM +0200, Valentin Schneider wrote:
-> >> > I've taken tip/sched/core and shuffled hunks around; I didn't re-order any
-> >> > commit. I've also taken out the dequeue from switched_from_fair() and put
-> >> > it at the very top of the branch which should hopefully help bisection.
-> >> >
-> >> > The final delta between that branch and tip/sched/core is empty, so it
-> >> > really is just shuffling inbetween commits.
-> >> >
-> >> > Please find the branch at:
-> >> >
-> >> > https://gitlab.com/vschneid/linux.git -b mainline/sched/eevdf-complete-builderr
-> >> >
-> >> > I'll go stare at the BUG itself now.
-> >>
-> >> Thank you!
-> >>
-> >> I have fired up tests on the "BROKEN?" commit.  If that fails, I will
-> >> try its predecessor, and if that fails, I wlll bisect from e28b5f8bda01
-> >> ("sched/fair: Assert {set_next,put_prev}_entity() are properly balanced"),
-> >> which has stood up to heavy hammering in earlier testing.
-> >
-> > And of 50 runs of TREE03 on the "BROKEN?" commit resulted in 32 failures.
-> > Of these, 29 were the dequeue_rt_stack() failure.  Two more were RCU
-> > CPU stall warnings, and the last one was an oddball "kernel BUG at
-> > kernel/sched/rt.c:1714" followed by an equally oddball "Oops: invalid
-> > opcode: 0000 [#1] PREEMPT SMP PTI".
-> >
-> > Just to be specific, this is commit:
-> >
-> > df8fe34bfa36 ("BROKEN? sched/fair: Dequeue sched_delayed tasks when switching from fair")
-> >
-> > This commit's predecessor is this commit:
-> >
-> > 2f888533d073 ("sched/eevdf: Propagate min_slice up the cgroup hierarchy")
-> >
-> > This predecessor commit passes 50 runs of TREE03 with no failures.
-> >
-> > So that addition of that dequeue_task() call to the switched_from_fair()
-> > function is looking quite suspicious to me.  ;-)
-> >
-> >                                                       Thanx, Paul
-> 
-> Thanks for the testing!
-> 
-> The WARN_ON_ONCE(!rt_se->on_list); hit in __dequeue_rt_entity() feels like
-> a put_prev/set_next kind of issue...
-> 
-> So far I'd assumed a ->sched_delayed task can't be current during
-> switched_from_fair(), I got confused because it's Mond^CCC Tuesday, but I
-> think that still holds: we can't get a balance_dl() or balance_rt() to drop
-> the RQ lock because prev would be fair, and we can't get a
-> newidle_balance() with a ->sched_delayed task because we'd have
-> sched_fair_runnable() := true.
-> 
-> I'll pick this back up tomorrow, this is a task that requires either
-> caffeine or booze and it's too late for either.
+--Sig_/fnSEs7lXinosh5uj7H=qcPe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for chasing this, and get some sleep!  This one is of course
-annoying, but it is not (yet) an emergency.  I look forward to seeing
-what you come up with.
+Hi all,
 
-Also, I would of course be happy to apply debug patches.
+In commit
 
-							Thanx, Paul
+  5785ffa39009 ("Bluetooth: MGMT: Fix not generating command complete for M=
+GMT_OP_DISCONNECT")
+
+Fixes tag
+
+  Fixes: 12d4a3b ("Bluetooth: Move check for MGMT_CONNECTED flag into mgmt.=
+c")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fnSEs7lXinosh5uj7H=qcPe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbOVDEACgkQAVBC80lX
+0Gzq+gf/c87Ma4KT/B1rsSeS8k3i6GDawZYPm1mf+1D639wlP6uDWHvXLpeuWs9T
+7NPwI8TC/48wZvRXMLV8191phyCUsCMXQeCQZHNwEMc9AlkynIWeqr+OG/Mr0JeW
+d11fJj2hj0Vwv+zh57n78n6yABHapsZBxFQf4vnoo8ZGeyMzkeFEzW9BVx4ftDM6
+/St61dGUr39rChzbg8WmBSXa+x9BHVg5KMQGncNTDjSeH7xgoqrnbFvyDCf4fdfO
+fNunYU2F92MEgA6JZFaZTsaFClZVQp1iGKIQY9G+QpVQx5llPlxuOViZtGsZpRdG
+O9hkKldpTrvBs/EKolGQbwJQ/RagxQ==
+=Xxqa
+-----END PGP SIGNATURE-----
+
+--Sig_/fnSEs7lXinosh5uj7H=qcPe--
 

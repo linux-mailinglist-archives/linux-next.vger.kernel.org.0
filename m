@@ -1,108 +1,115 @@
-Return-Path: <linux-next+bounces-3441-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3442-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B213960118
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 07:34:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A351960133
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 07:55:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48FE0282A0A
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 05:34:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CCDD1C21A50
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 05:55:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3680654F87;
-	Tue, 27 Aug 2024 05:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7826A80054;
+	Tue, 27 Aug 2024 05:55:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="aSKbNA0O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMbZytn/"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350862556F;
-	Tue, 27 Aug 2024 05:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1EB2260C;
+	Tue, 27 Aug 2024 05:55:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724736875; cv=none; b=sQsUaKglV1YlstqkEAGUR2s68sbZA1jl2EcmI6ob0tak6yv2i+I6Yn2lTKHWQBfZNvrlVxZJG9+0dK8qOAC/c2KeAskqwuDJnb2v3bS4nVq+QFGzaH14zg5Lujkk9MPWXYNleYCvcLs8QDz5Tm4iJrVZqk6jo/uaVh3H0VQxlKM=
+	t=1724738140; cv=none; b=Ymm3BbhZoIiF11T6a443r5scuDG4gFlMuw992YUTg5T2dW0MZdXiFhRiVe6TpMtIIkCSuOkFVmakj3eu6+UzwxAZNegIL83gl+b/V5EV/KDMfxmujXKqFjlbw10HFCz63Igf5Pbhzsli9i2NOnf9JvdMR+cMdUjLcShnNWPsTIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724736875; c=relaxed/simple;
-	bh=bRCYqkNrmLBBZM54h9z2n9IkgHJSsQjV8dU95ur1bUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=QviVh4fJHlPl0rkIUJisoCjYfuItFfi5IvJ1N5FhZRPQdsL5Kczjc1fk0yg1hOgA8EsN1h2d9a/CoUYWkwz+mA+x//DjPRCPnYIC3Vnc1RIO2QY8nkEtduAsn0znmtk0+31TXPMnsQaKWZ/R9PerppJfPiBmrxIhGA9NCJpxy+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=aSKbNA0O; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1724736868;
-	bh=eMu/Tz9j0lXqoLoZtN20hGgxgSXWGI62feifpivceaI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=aSKbNA0OuA/4JKepom1MOKb44dP8XnnA/2he+Fc4UoFklKKJVXUj39Y+As2QrHAHG
-	 zUpaedcpRac+jdZMCZHEX45M7sbd7nUMRcouG43Ofxlep2PhxHm5onvchvYgS2qFqW
-	 aBVAqTh6rgobrf2dVJ+WNQePpf58CAyrRgzWwd/udUeb9VTcF90ZCVZ7C87mm5inmQ
-	 Cri0UNEPXVnEHl9B77jnEzEn6eJ0OkOxpYszwen9intSV0dg4H+lMqqCj7/bdotzEh
-	 bzd7YazOAqkrZDqlZH46547eNHsKw4f4XXxVqbAgJgp3HHw71Lvwweilvu0q/QcpRN
-	 qeEOUdjoJg7jQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WtGSg3TDdz4x3J;
-	Tue, 27 Aug 2024 15:34:27 +1000 (AEST)
-Date: Tue, 27 Aug 2024 15:34:26 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Jeff Xie <jeff.xie@linux.dev>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the tip tree
-Message-ID: <20240827153426.4499c093@canb.auug.org.au>
+	s=arc-20240116; t=1724738140; c=relaxed/simple;
+	bh=UNUUCvQTms/9iZEo4GfsCDlp2KN6INNumi/aUtPAUsw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sscPRcJhw6TrwcQuU0Hd0PuDc3E8dGfYB9wD7TiN8MoKrOEjO0KcedGVKu/u3fqo5DBPCADnrehtu/820gzVnwaLwkmkoj0OeOielI3V+ct+YdiYbIOTgRCkAKWtxzbeJzsstCUXWJCHDIP6Kp6xl9N54w9bCIMPoMKMBKkd4do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMbZytn/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C286AC8B7A4;
+	Tue, 27 Aug 2024 05:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724738139;
+	bh=UNUUCvQTms/9iZEo4GfsCDlp2KN6INNumi/aUtPAUsw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZMbZytn/IziybM+kw+0P3sab/WKf0I5NwzlFI7IVFzXzCbFZHXD1QcqQiRFvOl9L2
+	 kuTPNW/NkTSPpccRYnnVrYqFpHTN86B+PypYoQ2I/0VLpR8gm/zT+UoUZ0AioG4/2e
+	 vpSEZshcHFujaCfyIL7aLPA1hylOrjz/Rh2ruVI3APVvv2dy5pisd8Skr3CT3Dr6UI
+	 1T+WAkrlnzexX+YxPOrLdgrs/DQRSArPt+q45/KR3xfOIDFazUJ1zaAfYWVHkxYYCh
+	 TAbkj4JA+GJPDKOa7R58vwTA2rT1FHCfRBpS/9Vni3rdxBv4vegLJJI6CuV5gUOiSv
+	 2UfD2/XHf7E6Q==
+Date: Mon, 26 Aug 2024 22:55:39 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: brauner@kernel.org, sfr@canb.auug.org.au, p.raghav@samsung.com,
+	dchinner@redhat.com, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+	linux-next@vger.kernel.org
+Subject: Re: [PATCH] iomap: remove set_memor_ro() on zero page
+Message-ID: <20240827055539.GL865349@frogsfrogsfrogs>
+References: <20240826212632.2098685-1-mcgrof@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9rXTUHFLGuZtA5x7.L6bsvC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240826212632.2098685-1-mcgrof@kernel.org>
 
---Sig_/9rXTUHFLGuZtA5x7.L6bsvC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Aug 26, 2024 at 02:26:32PM -0700, Luis Chamberlain wrote:
+> Stephen reported a boot failure on ppc power8 system where
+> set_memor_ro() on the new zero page failed [0]. Christophe Leroy
+> further clarifies we can't use this on on linear memory on ppc, and
+> so instead of special casing this just for PowerPC [2] remove the
+> call as suggested by Darrick.
+> 
+> [0] https://lore.kernel.org/all/20240826175931.1989f99e@canb.auug.org.au/T/#u
+> [1] https://lore.kernel.org/all/b0fe75b4-c1bb-47f7-a7c3-2534b31c1780@csgroup.eu/
+> [2] https://lore.kernel.org/all/ZszrJkFOpiy5rCma@bombadil.infradead.org/
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Suggested-by: "Darrick J. Wong" <djwong@kernel.org>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Hi all,
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-After merging the tip tree, today's linux-next build (x86_64 allnoconfig
-and others) produced this warning:
+--D
 
-/home/sfr/next/next/kernel/irq/proc.c: In function 'register_irq_proc':
-/home/sfr/next/next/kernel/irq/proc.c:343:17: warning: unused variable 'umo=
-de' [-Wunused-variable]
-  343 |         umode_t umode =3D S_IRUGO;
-      |                 ^~~~~
-
-Introduced by commit
-
-  0b39441eaab8 ("genirq/procfs: Correctly set file permissions for affinity=
- control files")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/9rXTUHFLGuZtA5x7.L6bsvC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbNZWIACgkQAVBC80lX
-0GyTNQf/cHazJ3rlGCxV5tA8qReIjzuiFBSz5Jqp0IKSjFUNAtJjwiSo600MSwV/
-SrI4o4wx0WUMJfWGlW4c27vSy/bijmTEUXvdalsIBQdvjrQQFaeZGJ5sq4C3vQlP
-Zw7cz69rIAryLhHTEZ4vOWB+BoEgHeGfKPGKIY+k/eML1nRV5hS9NQZs71e3bTJ2
-LFTkFxC4pMJqxzOQ/mi64oTEqQJZqGbN9BhxU4UMsnDeJUSysDHCr2A3ZW67M0YO
-/NT2CkkirzW5zRhhAixpH/l3hzeI2uH957dZ/vO8cT/Flpcxb8e8crPEi9B7VMrp
-A0Osjj/V4RJpPQxJaF/xdD5bSQ+qiQ==
-=PYA+
------END PGP SIGNATURE-----
-
---Sig_/9rXTUHFLGuZtA5x7.L6bsvC--
+> ---
+> 
+> This applies to the vfs.blocksize branch on the vfs tree.
+> 
+>  fs/iomap/direct-io.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
+> index c02b266bba52..f637aa0706a3 100644
+> --- a/fs/iomap/direct-io.c
+> +++ b/fs/iomap/direct-io.c
+> @@ -11,7 +11,6 @@
+>  #include <linux/iomap.h>
+>  #include <linux/backing-dev.h>
+>  #include <linux/uio.h>
+> -#include <linux/set_memory.h>
+>  #include <linux/task_io_accounting_ops.h>
+>  #include "trace.h"
+>  
+> @@ -781,8 +780,6 @@ static int __init iomap_dio_init(void)
+>  	if (!zero_page)
+>  		return -ENOMEM;
+>  
+> -	set_memory_ro((unsigned long)page_address(zero_page),
+> -		      1U << IOMAP_ZERO_PAGE_ORDER);
+>  	return 0;
+>  }
+>  fs_initcall(iomap_dio_init);
+> -- 
+> 2.43.0
+> 
+> 
 

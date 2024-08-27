@@ -1,108 +1,112 @@
-Return-Path: <linux-next+bounces-3446-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3447-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 256BF9601A2
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 08:29:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A660C960248
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 08:50:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD0592834F0
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 06:29:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D952C1C213D2
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 06:50:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7223D3A1C4;
-	Tue, 27 Aug 2024 06:28:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BDC9146596;
+	Tue, 27 Aug 2024 06:50:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="lDZzXlr6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uhzXt25e"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E35C63219F;
-	Tue, 27 Aug 2024 06:28:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D1254F87;
+	Tue, 27 Aug 2024 06:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724740138; cv=none; b=lxGuEOrfH0RUcl2PDLPCcSCU5LFKC37VJ+SAZrMf9BVkJ12Co7fk3zDOqc22fkc18MhkDRGnkki4l9bir/6rPNnL+3O/zL29kiQY8FgFggLgL1qnZvUxQyG1IErdCucnsiVTTxXhN7PISH8VBfbknfkdD1y7mroykZcAfBTLfiY=
+	t=1724741447; cv=none; b=OBaukQUVa/rK7T7ZhI551JZGsugAaVO0Z1yW8Jg4AWhNVXKEM2FhUziIb8/6fqb+xFe4bedUzD3oGYQVUM+ZmUOqERyawm5p6QTGsaQEXhU5nYKZ9LeEE7/PVZUwkFxNJnZQcXDXuXmb3jByssTIy71INH5o+V9R0CFp27mumcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724740138; c=relaxed/simple;
-	bh=M46ZbIE7X7bwJGSDypn+AsYvC15J9Ym16oaebmKsx+8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=TTnrs0rPCi1TjkilJIMWuLuRnqZJtOMYatxrD2fNAzr3BfKiq/0weeo9DR0j4japOqYUGG3g7YrNoKpOQfNpB0lMmNWHlbhHyqtry0iG8uVLFIn/+PNk/llbROFORq4Vniycrtfphm0N827T2GLgN0aY9+Ut/s8B9O2aDLj9SIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=lDZzXlr6; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1724740134;
-	bh=z+C8gY7gcEhVPp7kCR51huSkzhJ+q20c1yi/iO/q90U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=lDZzXlr6lwPuFNtfA1Ndz9kbTPGq0s6a7IGnbUxXwjUN7KdO85Hf3/GRT9DUkxjc5
-	 XEoYBERZI102fmKh+HZM1HyV5tp3il3QVRBMKgkQKkuuzS53MrY46VSprpvvseFHXc
-	 Fzsid+Pbmc4aegNE6EprN+C1WpMq3RXpMyrYebYXNUs76bqHvCGbA8Q/gyQfOfG/6e
-	 skKPNFTu1Senc0eK1B4fWLBwfAjWNnFlvLPFIxKa9uURWf9ikJViHfxYaLTdV0whJf
-	 E0AY4oEg2fR2BnXBQ9TkHxPj2bLA92xztsZqmK1DiR2w8V0mde8jZJFpo2RPzCL/ks
-	 UtgS2D0I9vr5Q==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WtHgV1ZqMz4wj2;
-	Tue, 27 Aug 2024 16:28:54 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>, Stephen Rothwell
- <sfr@canb.auug.org.au>
-Cc: Christian Brauner <brauner@kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Pankaj Raghav <p.raghav@samsung.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, djwong@kernel.org, ritesh.list@gmail.com,
- linuxppc-dev@lists.ozlabs.org, christophe.leroy@csgroup.eu
-Subject: Re: linux-next: boot warning after merge of the vfs-brauner tree
-In-Reply-To: <20240826154818.hzqnvofdmaxvuwrh@quentin>
-References: <20240826175931.1989f99e@canb.auug.org.au>
- <20240826154818.hzqnvofdmaxvuwrh@quentin>
-Date: Tue, 27 Aug 2024 16:28:53 +1000
-Message-ID: <877cc2fpi2.fsf@mail.lhotse>
+	s=arc-20240116; t=1724741447; c=relaxed/simple;
+	bh=uhgEUc0qyxh9kvTh8MNjctG2hC0kxBdb8dIPoAI1fMI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eciGaC+hciVvITj/3AXDWWVC9Y/UNeRRWjucFKHsx168w0oiiGWAmZLXix1bc9O5+vahKTQQ2ALP8nMFrO6YDJ9KX4pHf6SS6uFheZ3rqqvMSIh27ZGUJ0vopes4jtZi88R2lWHx9MSwGgHkS6xTE31tbs5AdxrivOLNgK2t34o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uhzXt25e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4422C4DDE5;
+	Tue, 27 Aug 2024 06:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724741446;
+	bh=uhgEUc0qyxh9kvTh8MNjctG2hC0kxBdb8dIPoAI1fMI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=uhzXt25eYOh6Th4RxYvXuIGL9Gve1rkh3OyyEOr6c+d0eKquFrQXyQkuD2SS05FA+
+	 goNGlvcgoduxsRqI3F5tPdjY43rg11wOXsAqfQOkDuwmkya4FhuehxBrIst1XT2snW
+	 HBkQTT2H/GLPpZU9TrBuG+0zpeg1oaYed1BfbimJftyc0YY/X4qnilVi7kfZrw7WLn
+	 Y888eDVpMxfjrUwmSbUVJeJ2W0F2ZdsdgB1k33UqKrKKYGgcHoRbxIhQLoHBetJnCZ
+	 BSVguoKz+dGigf+KNirmQ3W20uKl+9PaVGoLjbavY2nd7pVtSLPhsHPdOneCfB/tRH
+	 qPk8mNqRfEqkw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1siq2O-0077MD-SV;
+	Tue, 27 Aug 2024 07:50:44 +0100
+Date: Tue, 27 Aug 2024 07:50:44 +0100
+Message-ID: <86plpuwjaz.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+In-Reply-To: <20240827131132.5a11f873@canb.auug.org.au>
+References: <20240827125043.57ac444c@canb.auug.org.au>
+	<20240827131132.5a11f873@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com, peterz@infradead.org, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-"Pankaj Raghav (Samsung)" <kernel@pankajraghav.com> writes:
-> On Mon, Aug 26, 2024 at 05:59:31PM +1000, Stephen Rothwell wrote:
->> Hi all,
->> 
->> After merging the vfs-brauner tree, today's linux-next boot test (powerpc
->> pseries_le_defconfig) produced this warning:
->
-> iomap dio calls set_memory_ro() on the page that is used for sub block
-> zeroing.
->
-> But looking at powerpc code, they don't support set_memory_ro() for
-> memory region that belongs to the kernel(LINEAR_MAP_REGION_ID).
->
-> /*
->  * On hash, the linear mapping is not in the Linux page table so
->  * apply_to_existing_page_range() will have no effect. If in the future
->  * the set_memory_* functions are used on the linear map this will need
->  * to be updated.
->  */
-> if (!radix_enabled()) {
->         int region = get_region_id(addr);
->
->         if (WARN_ON_ONCE(region != VMALLOC_REGION_ID && region != IO_REGION_ID))
->                 return -EINVAL;
-> }
+On Tue, 27 Aug 2024 04:11:32 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> Hi all,
+> 
+> On Tue, 27 Aug 2024 12:50:43 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> > failed like this:
+> 
+> In file included from include/asm-generic/percpu.h:7,
+>                  from arch/x86/include/asm/percpu.h:616,
+>                  from arch/x86/include/asm/preempt.h:6,
+>                  from include/linux/preempt.h:79,
+>                  from include/linux/spinlock.h:56,
+>                  from include/linux/irq.h:14,
+>                  from kernel/irq/manage.c:11:
+> kernel/irq/manage.c: In function 'irq_do_set_affinity':
+> include/linux/percpu-defs.h:92:40: error: section attribute cannot be specified for local variables
+>    92 |         extern __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;            \
 
-We should probably just turn that into a printk(), WARN is kind of heavy handed.
+Crap. This seems to be caused by CONFIG_DEBUG_FORCE_WEAK_PER_CPU.
 
-> We call set_memory_ro() on the zero page as a extra security measure.
- 
-Or a data integrity measure. But either way it makes sense.
+I'll respin a new version of this change shortly.
 
-On architectures that do implement set_memory_ro() it potentially breaks
-the linear mapping into small pages, which could have a performance impact.
+Thanks again for the heads up.
 
-cheers
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 

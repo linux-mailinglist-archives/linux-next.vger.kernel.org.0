@@ -1,115 +1,104 @@
-Return-Path: <linux-next+bounces-3442-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3443-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A351960133
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 07:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 87FD896014C
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 08:06:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CCDD1C21A50
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 05:55:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D474F1C21791
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 06:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7826A80054;
-	Tue, 27 Aug 2024 05:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72AA546542;
+	Tue, 27 Aug 2024 06:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMbZytn/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dmbSsA9b"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1EB2260C;
-	Tue, 27 Aug 2024 05:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D2B20E6;
+	Tue, 27 Aug 2024 06:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724738140; cv=none; b=Ymm3BbhZoIiF11T6a443r5scuDG4gFlMuw992YUTg5T2dW0MZdXiFhRiVe6TpMtIIkCSuOkFVmakj3eu6+UzwxAZNegIL83gl+b/V5EV/KDMfxmujXKqFjlbw10HFCz63Igf5Pbhzsli9i2NOnf9JvdMR+cMdUjLcShnNWPsTIo=
+	t=1724738800; cv=none; b=rIGwz53ulE8hpm7IEPMt+xGN4BE2U5VLfSfIS7meowoFKr/h5XT2ZjT7rxvTYgy7ffoQA02pS2n4vynAQb8eUMdqqfRuy9AW5aOHkQANtmwZwUT6t8zdO26aaHzn/Q9L+aUSm5Sxq2s+xA0nDw1dAEr3BPk+jrFlmOkgwCALvWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724738140; c=relaxed/simple;
-	bh=UNUUCvQTms/9iZEo4GfsCDlp2KN6INNumi/aUtPAUsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sscPRcJhw6TrwcQuU0Hd0PuDc3E8dGfYB9wD7TiN8MoKrOEjO0KcedGVKu/u3fqo5DBPCADnrehtu/820gzVnwaLwkmkoj0OeOielI3V+ct+YdiYbIOTgRCkAKWtxzbeJzsstCUXWJCHDIP6Kp6xl9N54w9bCIMPoMKMBKkd4do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMbZytn/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C286AC8B7A4;
-	Tue, 27 Aug 2024 05:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724738139;
-	bh=UNUUCvQTms/9iZEo4GfsCDlp2KN6INNumi/aUtPAUsw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZMbZytn/IziybM+kw+0P3sab/WKf0I5NwzlFI7IVFzXzCbFZHXD1QcqQiRFvOl9L2
-	 kuTPNW/NkTSPpccRYnnVrYqFpHTN86B+PypYoQ2I/0VLpR8gm/zT+UoUZ0AioG4/2e
-	 vpSEZshcHFujaCfyIL7aLPA1hylOrjz/Rh2ruVI3APVvv2dy5pisd8Skr3CT3Dr6UI
-	 1T+WAkrlnzexX+YxPOrLdgrs/DQRSArPt+q45/KR3xfOIDFazUJ1zaAfYWVHkxYYCh
-	 TAbkj4JA+GJPDKOa7R58vwTA2rT1FHCfRBpS/9Vni3rdxBv4vegLJJI6CuV5gUOiSv
-	 2UfD2/XHf7E6Q==
-Date: Mon, 26 Aug 2024 22:55:39 -0700
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: brauner@kernel.org, sfr@canb.auug.org.au, p.raghav@samsung.com,
-	dchinner@redhat.com, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-	linux-next@vger.kernel.org
-Subject: Re: [PATCH] iomap: remove set_memor_ro() on zero page
-Message-ID: <20240827055539.GL865349@frogsfrogsfrogs>
-References: <20240826212632.2098685-1-mcgrof@kernel.org>
+	s=arc-20240116; t=1724738800; c=relaxed/simple;
+	bh=n0IWWBLdLgvxk6pf1IdfZhWz6LYfFUSohTzhGQ9oxzE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kC9CIqjK6DGOBVHmxZ8m2UKT3WZYFBdklxttVEre9/JleX5lX2OP8lFPpkGdX2WHjNe7YX4dckFGNpu7BGR2L0WJ/5euOVaj+zOCmWaUS2Q4tT/IRYAAAIjFCCqYzgeAdZgRfqjZd2eWGFmI90h/EcmaOazLnsyJk/+B2exhBEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dmbSsA9b; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1724738792;
+	bh=uvIAVwjdsEu3ewtqUCbhJwa0D68arXBmD4oV46YD1rM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=dmbSsA9bFZOU4N0/+K7jRkKTmtNOknJSkb3rKu0w5yblT6OzQ7hHNcFB8wj3f56e7
+	 PLEy631msD5dY3XRgaDIcdeiZjDYYkKScD0tADgTkxmng1Qq2mjaZEBx6uEvnRLIKW
+	 cUC0nQ8Oga4LeEees8xefc+DnH395UWQ6Z+iVAbmeBajgJk39kCVE6k0BOfvcKQtZU
+	 E8tjRPEmlxN7kY9X53xDRmtdPFYLImlFuJM60TwOL+IoJAQ0jHCV3mP7TKXk8yYk5c
+	 gL3FKZW2WPlRrwSIZqM1kziSX2FYJ83kJAmmNYT9TAzC/+Tu4YVD73s4DIBU40xsX2
+	 GmvjCnkJ8rb9w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WtH9g6kW1z4w2Q;
+	Tue, 27 Aug 2024 16:06:31 +1000 (AEST)
+Date: Tue, 27 Aug 2024 16:06:31 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Shuah Khan <skhan@linuxfoundation.org>, Brendan Higgins
+ <brendanhiggins@google.com>
+Cc: David Gow <davidgow@google.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the kunit-fixes tree
+Message-ID: <20240827160631.67e121ed@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240826212632.2098685-1-mcgrof@kernel.org>
+Content-Type: multipart/signed; boundary="Sig_/76suHVo/xYAMpGBrAPoy/5V";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, Aug 26, 2024 at 02:26:32PM -0700, Luis Chamberlain wrote:
-> Stephen reported a boot failure on ppc power8 system where
-> set_memor_ro() on the new zero page failed [0]. Christophe Leroy
-> further clarifies we can't use this on on linear memory on ppc, and
-> so instead of special casing this just for PowerPC [2] remove the
-> call as suggested by Darrick.
-> 
-> [0] https://lore.kernel.org/all/20240826175931.1989f99e@canb.auug.org.au/T/#u
-> [1] https://lore.kernel.org/all/b0fe75b4-c1bb-47f7-a7c3-2534b31c1780@csgroup.eu/
-> [2] https://lore.kernel.org/all/ZszrJkFOpiy5rCma@bombadil.infradead.org/
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Suggested-by: "Darrick J. Wong" <djwong@kernel.org>
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+--Sig_/76suHVo/xYAMpGBrAPoy/5V
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Hi all,
 
---D
+After merging the kunit-fixes tree, today's linux-next build (htmldocs)
+produced this warning:
 
-> ---
-> 
-> This applies to the vfs.blocksize branch on the vfs tree.
-> 
->  fs/iomap/direct-io.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
-> index c02b266bba52..f637aa0706a3 100644
-> --- a/fs/iomap/direct-io.c
-> +++ b/fs/iomap/direct-io.c
-> @@ -11,7 +11,6 @@
->  #include <linux/iomap.h>
->  #include <linux/backing-dev.h>
->  #include <linux/uio.h>
-> -#include <linux/set_memory.h>
->  #include <linux/task_io_accounting_ops.h>
->  #include "trace.h"
->  
-> @@ -781,8 +780,6 @@ static int __init iomap_dio_init(void)
->  	if (!zero_page)
->  		return -ENOMEM;
->  
-> -	set_memory_ro((unsigned long)page_address(zero_page),
-> -		      1U << IOMAP_ZERO_PAGE_ORDER);
->  	return 0;
->  }
->  fs_initcall(iomap_dio_init);
-> -- 
-> 2.43.0
-> 
-> 
+include/kunit/test.h:492: warning: Function parameter or struct member 'tes=
+t' not described in 'kunit_kfree_const'
+
+Introduced by commit
+
+  f2c6dbd22017 ("kunit: Device wrappers should also manage driver name")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/76suHVo/xYAMpGBrAPoy/5V
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbNbOcACgkQAVBC80lX
+0GyPjwf7B/+m4agwYwhaDl12srhf4qtobqyLod4+XLMz4H2jdlkXeI1r377VPLWk
+X4Z1/9sldbh6UOAYiOR7YPxbyjnfAXsEit/gEIp1gEj/hEJ79dSMUBjK9zJHIbsN
+4IpGrGQbRDJG19xZCdqcxS/X/Xa6dgxgDpGSspbo3aDQxvX8ktoCMFr3fw1qrqve
+MOuW9iSy5jCSQoX/0W8nswMVoy0usjknD+WexstE5ktaXoAjbheNo1sHw0l54iMV
+Qa7WP2GHsS/Y+9jptbEsnBnRsnulDrolKr47LO3+I4f2708UE0DQ3FLxhca6tgGR
+ABM0KczzlMGw8434zUlmHVmsCTWB3A==
+=oC4M
+-----END PGP SIGNATURE-----
+
+--Sig_/76suHVo/xYAMpGBrAPoy/5V--
 

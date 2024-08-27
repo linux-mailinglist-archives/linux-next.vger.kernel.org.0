@@ -1,114 +1,104 @@
-Return-Path: <linux-next+bounces-3435-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3436-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F386495FE3F
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 03:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77BBC95FF56
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 04:50:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31F641C21A83
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 01:27:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9D641C202F1
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 02:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 948974C83;
-	Tue, 27 Aug 2024 01:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F96B17597;
+	Tue, 27 Aug 2024 02:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="azjP73Th"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oXrfrh84"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50724C8D7;
-	Tue, 27 Aug 2024 01:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA9417543;
+	Tue, 27 Aug 2024 02:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724722058; cv=none; b=SoUEx7ewS2+m88jzGcwI35iuhFdfc5ixsCk+sFVwLJ5JyIfLHpYXf7LRe7Ec8aqlpWACOmlfJnZ2I24RkT+QU2hYPv7AGUQ6FLVc6DSZ4uDPf1N56SvyAOQL5903XtyM5yPKU6Cn+yvn5Aw1AQCtpOypH9tHqa3SyyT8Yu+0KvI=
+	t=1724727051; cv=none; b=Hp5lHbUij+y0HMr3KileXwXw3oFL/diKZ/vc4WmiYlLV0zyLRqFNoyf7mxITJ47igJdmwoL4KiC/1d9+nkD4e/9tmLKXjg9QaIsq5zlV1mNIs2kF14cxfbW1CKkeZ7Kh4dZfNhRq3VArVz5AVQ1dnC2sBlNc7LN0B5oji+Iiktc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724722058; c=relaxed/simple;
-	bh=2HfsTuO4EjdMHYcVYRhIa6erVNqVZZtnlUFRv3PKkE0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=alMV4EEy+kVIwcEIEm1aIfN3RzouwcfM6kzDoGQYTtRSzk6DR4ap+sHwwqDHWjIL+qyNKzlDbMMyDEIwMPhJkMebmkpCICq2Sz6juhajk3V5q9LcmaR4qcHyAT+iLzn7jBSM0IWKJupWh2mkXBZsj0JJAojvq6r4Z/7yAI0H/Fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=azjP73Th; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1724727051; c=relaxed/simple;
+	bh=I/M4SonmI2UXiiKnCYTbxmBfDK3ArplvFubXSuzTiDI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n8CdXAUzZ94Zqd1ytISUn+Ctzht1fnuEkn5sgH2jLhadhaZpAvsvlspRfpxEiV70RYSi2yssuHStpUyPRhbymfcJPeimXf/hrmhZ7ewY0Zy+hpxOp1DBRXgj4kxY0Uo2qCoCUWVR3uW2kkKzS8w+QKnTt41ND8iQoL3dEQSZ6L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oXrfrh84; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1724722054;
-	bh=GxwmqqBGuUCy12ralveGFNVRccgdB1AfwyCMHGMx1J8=;
+	s=201702; t=1724727044;
+	bh=dGowBQ5kI1Hh9+u+DLmSVthYF28sCUgMr3KU8i/jV4Y=;
 	h=Date:From:To:Cc:Subject:From;
-	b=azjP73Th2Qif2TNnQZaxxvVfXo+2d3DSX4nccff4f0Jt9w+AON6NyQGwkFnZ5HqPx
-	 13vtOqurZAtQkCVqsiaD+577WxcGqAbhgKcQC/aV3dbk8WVPbkTl7PqdhFRETdyPJZ
-	 39EoIEvDRPhJ966fCkSn/VBZH/2Anu8HdcRtYNwxW7mzykEW9GGGOxjxzPFiCYPKmQ
-	 nPpD9bVvuADU48LcxPDPZlONXB5gpJl4IQtRxLrGbKGUwk6hi3MVSDfYwlGSOHdIDI
-	 a0MLx2AKFYkfJyWh4DWFLAWWmawRBKbJDSrJsNrAWsq0TwVQDTXlugAn05UQemNTu2
-	 /XnLoeplYq+TQ==
+	b=oXrfrh84cH/K4hS3SwU/x4TqJJAbsqcBx8QbLFiYJQxnwLj2d+3OtE3b0AGeGsX2v
+	 O6vB2cUFcYzwVzQ2O00F31rhvrkDbNgOfVudRLIFeTA32QcibXKTccaxD8Z0L1YEw+
+	 TP/nm3HxS8oO2Kds7lFL62bxXJhvEhKwo+AEOSrgGmZxNmS9lw3HmIHb0vl8CGBhtW
+	 GZ+3DCmPS8oIenfruukFM7nPt7T/qXD5ebNYCTSRWg0B75VhNhdyiSy1dny1UhUt+R
+	 2T1WgHkWVqwu3bAvzH9SICZuZQ5rSTI+cS0Dj5nH4EY1uHCnOY5i+f3FwdYQlpsEdg
+	 QNbETJMostW8A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wt8zn5NQhz4w2F;
-	Tue, 27 Aug 2024 11:27:33 +1000 (AEST)
-Date: Tue, 27 Aug 2024 11:27:32 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WtBqm0ML6z4w2N;
+	Tue, 27 Aug 2024 12:50:43 +1000 (AEST)
+Date: Tue, 27 Aug 2024 12:50:43 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
- <johan.hedberg@gmail.com>, David Miller <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: Marc Zyngier <maz@kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20240827112732.534c3ce0@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the tip tree
+Message-ID: <20240827125043.57ac444c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Xv61S.TvQOl4ajtM87MXSdD";
+Content-Type: multipart/signed; boundary="Sig_/DfD2oeKKOpv.W6JPHQ1TQ_E";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Xv61S.TvQOl4ajtM87MXSdD
+--Sig_/DfD2oeKKOpv.W6JPHQ1TQ_E
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the net tree as different commits
-(but the same patches):
+After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-  7567b7da175b ("Bluetooth: btintel: Allow configuring drive strength of BR=
-I")
-  9f5a21d9963d ("Bluetooth: btnxpuart: Fix random crash seen while removing=
- dri
-  1594ee3e104f ("Bluetooth: hci_core: Fix not handling hibernation actions")
 
-These are commits
+Caused by commit
 
-  eb9e749c0182 ("Bluetooth: btintel: Allow configuring drive strength of BR=
-I")
-  35237475384a ("Bluetooth: btnxpuart: Fix random crash seen while removing=
- driver")
-  18b3256db76b ("Bluetooth: hci_core: Fix not handling hibernation actions")
+  6c70d79f363c ("genirq: Get rid of global lock in irq_do_set_affinity()")
 
-in the net tree.
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Xv61S.TvQOl4ajtM87MXSdD
+--Sig_/DfD2oeKKOpv.W6JPHQ1TQ_E
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbNK4QACgkQAVBC80lX
-0GwdDQf/bZE+TGa9KxejtTvCpRPXY5BkGl0iE1zu2+lEil88olROMj/DOS4CGMHm
-zDmJY5HjUTOubMwLv8yUZ4QguXUltQpEP1BgQjgG4Xphv107EkBl7YlHBokWuiqv
-FGRYEKF1D3g00h8g9SCbOdDbAZXY6mIh7wczrtIEVvg3uUeIrlDi+hD8zkf8L9GC
-+rhuV0mtPNBucVtwKAbZsWkAf/+acUFnheFyypEHp8zj4oDqa/hyVzEeMPdzV/X6
-vYmWU+21+nYeH26pZMtQlptMf/FCAePABzpGdehNwPeHI+UHLprjYJh3V1bHYCLD
-XneTgjbsEIUIzooGj69avWPGVXKmqw==
-=I4au
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbNPwMACgkQAVBC80lX
+0GyGQQf/ZIH4y33bFkUUhndGFI/goXVe+AgyroSyjyCif5bhONnTOpYP+2oOU9rd
+WZVzhZSG0VuMOU54tWiPqBA8gvFJCmxj9zTO8PZ6qKXEvthCAPEqarCHDuhsZTQP
+LWD6BVdxdJfTJSIQ23U0ATjr4haKjgkaM1CKH4CoHefgcqNG86J6Bj3F0gxHjuHK
+iJvtaMg5xKvMwQ+Fuzykn+gXBaLXB2Vs7hhNrEn1pASew9JAHQBT2ZurYK24idpb
+VMPqpqiKnkAfbL5aaH1wlf9zPHabbic2BJ0J4lqexvR7X78C6jCbfJyodG26WpLG
+5nLcxQAz1kLtW03Khri9AhvhYW+4PQ==
+=5wB/
 -----END PGP SIGNATURE-----
 
---Sig_/Xv61S.TvQOl4ajtM87MXSdD--
+--Sig_/DfD2oeKKOpv.W6JPHQ1TQ_E--
 

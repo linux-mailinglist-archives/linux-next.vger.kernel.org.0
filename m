@@ -1,189 +1,128 @@
-Return-Path: <linux-next+bounces-3454-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3455-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21F57961312
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 17:41:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C570A961315
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 17:42:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3BB0281BFD
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 15:41:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BF861F24617
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2024 15:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C17B1C6F40;
-	Tue, 27 Aug 2024 15:41:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15B151C6F55;
+	Tue, 27 Aug 2024 15:42:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A5Nwnhsx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cPtt+5X6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318EA1C3F17;
-	Tue, 27 Aug 2024 15:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B6D1C5788
+	for <linux-next@vger.kernel.org>; Tue, 27 Aug 2024 15:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724773295; cv=none; b=OwqnpzlTYGOnNshlMAT2JRnNwz0uDywSbbbampje5SmwQd2/YyrGswrHezfUbc/15jkkXsaMBqY6isMxHkv/MQBTmZZEtEJ4sjCv65bGUKSXA4mJNzBRbosIbxmiYR2cxcHSr6UwNWiKPhv5X481OSNmY0iO455BImIHVthD4sA=
+	t=1724773320; cv=none; b=q4B/BrEvC6hWekaIimi52w7Yzm9CS88XsegG5KwNq3B0fCx484G3FsQoMYE6x7M4e7ghAk2UyDwwQZM2niibzKuzF3BexSRNBVrDeEG/mBOLkLsNp2SG7/EYjQp6rKH1LXpbWNFHQg54BVAVsDfrcTpT+9I9rzSETToxDnoD9Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724773295; c=relaxed/simple;
-	bh=KGcgnIeqrGXeUGtQ7h7ij+LZBISHnFBEkptDoXmZ614=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LrrAmSaq0WI5M2Yu+ocMmnhlIg8Dr5wMy+btGJ1orpifVFjYN+QSg27S1t95Rhkq8TVdLd3WWJhIz7PbtoJQkc04Oli/DdMq7O197ZvhpSMX4TvJ+5MSx0SuczoxB7z8fwfnIDy5Dfr9pX4aJ1xYOAqbJ7qvQbdm+gIE9NGiMTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A5Nwnhsx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196FAC61075;
-	Tue, 27 Aug 2024 15:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724773294;
-	bh=KGcgnIeqrGXeUGtQ7h7ij+LZBISHnFBEkptDoXmZ614=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A5NwnhsxDPpBnrbg2sO1mAk1tKTuzE6J3XzsrcQoXZo6r7hPqIBRfewcIiDlsB8Wa
-	 GfdntBONSJwQZ11f2xZhLu/Wx8WUjk5D0quEeIcQqgsD/XeF+MbBSY/3iENF4WeCcY
-	 0BIJXxFNT145BB56wigbninpTcZE7aPbxK18bOf764TDKe+62vlB6ifFJUA42Ktz+D
-	 1jxYBU0CCIzpSpeOTqIL2ds92Ba2d38wKFbC4aEKosltvUUXJ5icAyrDTDmNpOT7oR
-	 RCsAyCeRuSroyj88oyz6JoARKaEk+jhjCChcjYGWU8u5CmhfumDw50UU+eHN6kmzRp
-	 b2dDL/qc++tcA==
-Date: Tue, 27 Aug 2024 18:38:57 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Song Liu <song@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	"Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Christian Brauner <brauner@kernel.org>,
-	Pankaj Raghav <p.raghav@samsung.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	djwong@kernel.org, ritesh.list@gmail.com,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: linux-next: boot warning after merge of the vfs-brauner tree
-Message-ID: <Zs3zEcLh5cMykkho@kernel.org>
-References: <20240826175931.1989f99e@canb.auug.org.au>
- <20240826154818.hzqnvofdmaxvuwrh@quentin>
- <b0fe75b4-c1bb-47f7-a7c3-2534b31c1780@csgroup.eu>
- <ZszrJkFOpiy5rCma@bombadil.infradead.org>
+	s=arc-20240116; t=1724773320; c=relaxed/simple;
+	bh=ZAWhcKduUxTafb6/Wx9uvfL0qKweULJ0YIrs2j6Xqe0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=XNGSo5UyY/O+q60fobGe7jkNGOUF+616YzQr3gLkl8LCFugSMUQZSn4LwY2rKzglzIZohaED0cuJVHS6MTMh++lW/YbGZirFkE8NvSWq8w506K1Ts5t5ezmBv02M2iNugADpRC4/YADS8OQKS1StyPx0LRMP6RlRXP516y9obG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cPtt+5X6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724773317;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=u6Px/4/l19JcNl/fwMiblMY++s/BJTa8xB5nFkqhBcc=;
+	b=cPtt+5X6ekdK4gfGcrsXE0801E38PfjPxQQk0mvESndCNdFWsUHi8s5N2xIyaTdJadxyYV
+	7Mo98jwhXAjnhJISRmjVHazULXd56ddKH9eTIHy80+2bKAIoO1U+NuzuVJroaFogL0mhY2
+	GjfgyYlGA8dAgXSkRKorTsZtokefvsY=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-651-Srfx3w53Pk6L7o99YOgVBg-1; Tue, 27 Aug 2024 11:41:55 -0400
+X-MC-Unique: Srfx3w53Pk6L7o99YOgVBg-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-5334af2a79eso5696818e87.1
+        for <linux-next@vger.kernel.org>; Tue, 27 Aug 2024 08:41:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724773314; x=1725378114;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u6Px/4/l19JcNl/fwMiblMY++s/BJTa8xB5nFkqhBcc=;
+        b=L8GPAY8YWWn+CRhU1CKomZdq2A/ZPVfoG/q7D0qsBFow2jUr7D2cPckJK8sMjkAuuF
+         paNAh6V1uk2+e1gm30BEd3ffTK+jKg4fgn1uc6ORL0XFYUCBc+IBc+TfvGzgmz5Gd03c
+         5K0hi0gAIvmpbT0vryEOeUyUOBh5wSTiMaWyz/oYTHfQM0X9G+u9O0595oahTv5SSrGJ
+         OeQOkxfM+ZMCG7EQorFN2CqY2+IXkv+5d23J+LyLGozQsb5hFTxJJWZFecDS8ouYCmcc
+         9OXKKKEYMnzUAHmByOvxQLc4Kq0kIiHL7WzmrDPoOZ09ApzvEUsTal28QgX5Kfaucvxz
+         cphA==
+X-Forwarded-Encrypted: i=1; AJvYcCUvudY65btc3igYS6LkVOYKLSFP9nm6uHT/mxax62zb8pWaB/xsvPqOjSVbAMivU+02UU4C1se4PLZJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcSvuApAdc7Jh+/ZEgVlyUUr/EojOaYCA8zQPp6z9QYahE9SBc
+	r/gMPt+eTAG8sIM93GkyrNJm/9VBdLFmeCYr/ZKu/KXfy9Bti8CcNwr+Vs+LuL6cTq1NiZXOdtu
+	3mdemhxoauBQ2YUN3nmTVnstLNbvcGlZqxziZ/mEKmH6iOTUiLb538gKNffU=
+X-Received: by 2002:a05:6512:1111:b0:530:e0fd:4a97 with SMTP id 2adb3069b0e04-534387e89d7mr10671849e87.0.1724773314272;
+        Tue, 27 Aug 2024 08:41:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGya5Cog7WzH/edbQ2/bZc/cQt4hmmJzKjOW3d0Qk6T3JTXf/LNCy4sxIbNx60ZPcbIN9Vw2w==
+X-Received: by 2002:a05:6512:1111:b0:530:e0fd:4a97 with SMTP id 2adb3069b0e04-534387e89d7mr10671806e87.0.1724773313471;
+        Tue, 27 Aug 2024 08:41:53 -0700 (PDT)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a86e549cd4esm123171166b.55.2024.08.27.08.41.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2024 08:41:53 -0700 (PDT)
+From: Valentin Schneider <vschneid@redhat.com>
+To: paulmck@kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+ sfr@canb.auug.org.au, linux-next@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
+In-Reply-To: <xhsmhle0inuze.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+References: <c28dbc65-7499-41a5-84d0-991843153b1a@paulmck-laptop>
+ <20240823074705.GB12053@noisy.programming.kicks-ass.net>
+ <xhsmho75fo6e4.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <b1824f4a-f5cc-4011-876f-8a73cf752067@paulmck-laptop>
+ <xhsmhle0inuze.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+Date: Tue, 27 Aug 2024 17:41:52 +0200
+Message-ID: <xhsmhikvmnfb3.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZszrJkFOpiy5rCma@bombadil.infradead.org>
+Content-Type: text/plain
 
-On Mon, Aug 26, 2024 at 01:52:54PM -0700, Luis Chamberlain wrote:
-> On Mon, Aug 26, 2024 at 07:43:20PM +0200, Christophe Leroy wrote:
-> > 
-> > 
-> > Le 26/08/2024 à 17:48, Pankaj Raghav (Samsung) a écrit :
-> > > On Mon, Aug 26, 2024 at 05:59:31PM +1000, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > > 
-> > > > After merging the vfs-brauner tree, today's linux-next boot test (powerpc
-> > > > pseries_le_defconfig) produced this warning:
-> > > 
-> > > iomap dio calls set_memory_ro() on the page that is used for sub block
-> > > zeroing.
-> > > 
-> > > But looking at powerpc code, they don't support set_memory_ro() for
-> > > memory region that belongs to the kernel(LINEAR_MAP_REGION_ID).
-> > > 
-> > > /*
-> > >   * On hash, the linear mapping is not in the Linux page table so
-> > >   * apply_to_existing_page_range() will have no effect. If in the future
-> > >   * the set_memory_* functions are used on the linear map this will need
-> > >   * to be updated.
-> > >   */
-> > > if (!radix_enabled()) {
-> > >          int region = get_region_id(addr);
-> > > 
-> > >          if (WARN_ON_ONCE(region != VMALLOC_REGION_ID && region != IO_REGION_ID))
-> > >                  return -EINVAL;
-> > > }
-> > > 
-> > > We call set_memory_ro() on the zero page as a extra security measure.
-> > > I don't know much about powerpc, but looking at the comment, is it just
-> > > adding the following to support it in powerpc:
-> > > 
-> > > diff --git a/arch/powerpc/mm/pageattr.c b/arch/powerpc/mm/pageattr.c
-> > > index ac22bf28086fa..e6e0b40ba6db4 100644
-> > > --- a/arch/powerpc/mm/pageattr.c
-> > > +++ b/arch/powerpc/mm/pageattr.c
-> > > @@ -94,7 +94,9 @@ int change_memory_attr(unsigned long addr, int numpages, long action)
-> > >          if (!radix_enabled()) {
-> > >                  int region = get_region_id(addr);
-> > > -               if (WARN_ON_ONCE(region != VMALLOC_REGION_ID && region != IO_REGION_ID))
-> > > +               if (WARN_ON_ONCE(region != VMALLOC_REGION_ID &&
-> > > +                                region != IO_REGION_ID &&
-> > > +                                region != LINEAR_MAP_REGION_ID))
-> > >                          return -EINVAL;
-> > >          }
-> > >   #endif
-> > 
-> > By doing this you will just hide the fact that it didn't work.
-> > 
-> > See commit 1f9ad21c3b38 ("powerpc/mm: Implement set_memory() routines") for
-> > details. The linear memory region is not mapped using page tables so
-> > set_memory_ro() will have no effect on it.
-> > 
-> > You can either use vmalloc'ed pages, or do a const static allocation at
-> > buildtime so that it will be allocated in the kernel static rodata area.
-> > 
-> > By the way, your code should check the value returned by set_memory_ro(),
-> > there is some work in progress to make it mandatory, see
-> > https://github.com/KSPP/linux/issues/7
-> 
-> Our users expect contiguous memory [0] and so we use alloc_pages() here,
-> so if we're architecture limitted by this I'd rather we just remove the
-> set_memory_ro() only for PPC, I don't see why other have to skip this.
-> 
-> diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
-> index c02b266bba52..aba5cde89e14 100644
-> --- a/fs/iomap/direct-io.c
-> +++ b/fs/iomap/direct-io.c
-> @@ -775,14 +775,22 @@ EXPORT_SYMBOL_GPL(iomap_dio_rw);
->  
->  static int __init iomap_dio_init(void)
->  {
-> +	int ret;
-> +
->  	zero_page = alloc_pages(GFP_KERNEL | __GFP_ZERO,
->  				IOMAP_ZERO_PAGE_ORDER);
->  
->  	if (!zero_page)
->  		return -ENOMEM;
->  
-> -	set_memory_ro((unsigned long)page_address(zero_page),
-> -		      1U << IOMAP_ZERO_PAGE_ORDER);
-> -	return 0;
-> +	if (IS_ENABLED(CONFIG_PPC))
-> +		return 0;
-> +
-> +	ret = set_memory_ro((unsigned long)page_address(zero_page),
-> +			    1U << IOMAP_ZERO_PAGE_ORDER);
-> +	if (ret)
-> +		free_pages((unsigned long) zero_page, IOMAP_ZERO_PAGE_ORDER);
+On 27/08/24 12:03, Valentin Schneider wrote:
+> On 26/08/24 09:31, Paul E. McKenney wrote:
+>> On Mon, Aug 26, 2024 at 01:44:35PM +0200, Valentin Schneider wrote:
+>>>
+>>> Woops...
+>>
+>> On the other hand, removing that dequeue_task() makes next-20240823
+>> pass light testing.
+>>
+>> I have to ask...
+>>
+>> Does it make sense for Valentin to rearrange those commits to fix
+>> the two build bugs and remove that dequeue_task(), all in the name of
+>> bisectability.  Or is there something subtle here so that only Peter
+>> can do this work, shoulder and all?
+>>
+>
+> I suppose at the very least another pair of eyes on this can't hurt, let me
+> get untangled from some other things first and I'll take a jab at it.
 
-arm64 will return -EINVAL here, their code for changing memory attributes
-only works on vmalloc:
+I've taken tip/sched/core and shuffled hunks around; I didn't re-order any
+commit. I've also taken out the dequeue from switched_from_fair() and put
+it at the very top of the branch which should hopefully help bisection.
 
-	 * Let's restrict ourselves to mappings created by vmalloc (or vmap).
-	 * Those are guaranteed to consist entirely of page mappings, and
-	 * splitting is never needed.
+The final delta between that branch and tip/sched/core is empty, so it
+really is just shuffling inbetween commits.
 
+Please find the branch at:
 
-> +
-> +	return ret;
->  }
->  fs_initcall(iomap_dio_init);
-> 
-> Thoughts?
-> 
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git/commit/?h=vfs.blocksize&id=d940b3b7b76b409b0550fdf2de6dc2183f01526f
-> 
->   Luis
+https://gitlab.com/vschneid/linux.git -b mainline/sched/eevdf-complete-builderr
 
--- 
-Sincerely yours,
-Mike.
+I'll go stare at the BUG itself now.
+
 

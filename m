@@ -1,125 +1,99 @@
-Return-Path: <linux-next+bounces-3484-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3485-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D33B3963033
-	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2024 20:39:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0291E9633BA
+	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2024 23:18:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 129371C21691
-	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2024 18:39:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80334B20F34
+	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2024 21:17:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B873E1AAE25;
-	Wed, 28 Aug 2024 18:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418DE1A7074;
+	Wed, 28 Aug 2024 21:17:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cykaUJPo"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="g1N0/FaL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEAB1AAE10;
-	Wed, 28 Aug 2024 18:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877CF45C1C;
+	Wed, 28 Aug 2024 21:17:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724870361; cv=none; b=Yrx83kZVfyHmPASB4zIXOV1yUSXsGXUsik0e0rsJDDcb0gYNCasagt6DC6Eo3rAAFFxWP4QshiCJ2mQaTiO34+1/h0yR8bJSxvltwDrgAJGuZY+TPL0RhDIXDDBtAusfiRC3KfBOQwO4Hn0fVLyKoswbSwol1Rx7RM46UcRMBJg=
+	t=1724879873; cv=none; b=i4azWemKZj38zd5zfeEkCibwy+5dQxBdRz5+pqyxWdlbjELz7RZnoOo4k4y+nU4ItwCns4jeLpYAMRGsMg/t+BIW05OjxVsUig2iIBqEMyQlGd3UvxUFyAXLuA80eH3BGHZexBNGPKbkjgYTDsz6QuHTF2ED1g0ANPaOwL+Kf/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724870361; c=relaxed/simple;
-	bh=I17qLbshTPdE4pTOc+Q+tMjBx/axUlTD72kaH/aSabU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RpDdx248gAl990sq7Kkb2PWOU9ECfvjgeXJk4GljgDTeOV1hwOYhsF9k0mGnX2Ln0Qu8Pm+jwzf4oeilcJls4bHfjTQtctP8mJguHoU2glxK6mOmSlWfXfuFAfWo7PdIl0b2/SSpqCOZxbMGJTxRaWdHCHUnlOCqcXfFmGWQOCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cykaUJPo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22915C4CEC0;
-	Wed, 28 Aug 2024 18:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724870361;
-	bh=I17qLbshTPdE4pTOc+Q+tMjBx/axUlTD72kaH/aSabU=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=cykaUJPoF8fLxsOJch620PY9HQ3stYi++SVN7Fbi7yE5MWiQy5+obHQv2WH8zUSFo
-	 e/7z+KCL5NxIion0tfKA4Vb4LqqqDI5+YV8kqI/SCaKUedfEqetK0Mx9qMh9v+dhEm
-	 xqI5dX9dqjyMb97I5Ecr7g4TbqszhP8jP2X6DxgItFyTJlAvhfemlGfkZTj5D+7O13
-	 G6WE1K/EXula0i+T+4lh5zDdn2LzpmDd1P5gAOYJ1Y1aJH3SDRh+MDQdXNP67mWCYn
-	 Hgx7LifNpZLdildOOJfMTCNp4whgZbsPrShm5hoOKmwpWKJKIR7ka39rJop4G6HRNv
-	 UrApVT3EZdUUw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id BE4A4CE0FF3; Wed, 28 Aug 2024 11:39:19 -0700 (PDT)
-Date: Wed, 28 Aug 2024 11:39:19 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: Chen Yu <yu.c.chen@intel.com>, Peter Zijlstra <peterz@infradead.org>,
-	linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
-	linux-next@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
-Message-ID: <8094db32-5c81-4537-8809-ddfe92a0ac6c@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <xhsmhikvmnfb3.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <c83028db-55ad-45b3-a27a-842ed665a882@paulmck-laptop>
- <103b1710-39ca-40d0-947d-fdac32d6e6a0@paulmck-laptop>
- <xhsmhcyltogin.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <a19308ed-7252-4119-b891-2a61791bb6e5@paulmck-laptop>
- <xhsmha5gwome6.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <Zs8pqJjIYOFuPDiH@chenyu5-mobl2>
- <xhsmh7cc0ogza.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <5ea3658b-5aec-4969-92c5-49a2d23171c3@paulmck-laptop>
- <xhsmh4j74o6l9.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	s=arc-20240116; t=1724879873; c=relaxed/simple;
+	bh=ZVfZ2i/TvdZ0nEAKXIXl8RsahsSdyvK8EQUXKrMhLHo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tHpxcwGvmd22I+dF9obs3DCluGZEex3BAk3KeDtEbatecfNrWf+0AmajibXWnww8roHqMUvlofBDciFdYzco08eF+IijuFt1BliDj3fui//wgukIqWLzJxtZWOWEXiGsgCRPmbDPWTUAU35AO6IQXJ/l8UnDscCvEZRSYeCulA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=g1N0/FaL; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1724879865;
+	bh=5YnuhiLmF5+sM9r7UPT9j2MRL68rin6zmtmR2Z1jufI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=g1N0/FaLIPv7Y+iovPu9dIzkiUAjbhYkV5HDsp1JJRarrLNNA9qTYLmdcsqBRSa95
+	 LnIgqwtyZ9a1BWcYjB5U21ULgJ9tNIMsF32uKFDfBx2Vj9jYvjwpLr5hmhm31VugBo
+	 712L1jOuGJvfDdY/Dy4RXLlh04rqeD3fvpfJlVgofa8jbKHqwz7xwO5wMIH3Mdq+Fo
+	 q55uzrfj2SEPrW++qFHdLn9m7j8YpGmUhOmci1TdTbGazzUIR5T7Xl6WUqZ+59kZk6
+	 0GXgW2CQbUwuQ6nm+uCgw7WkHmglH7bSRAqI9dz2GDCEPaSdoMLeTh9q2l1ZkUdz+s
+	 4x7SPTxQo9V3Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WvHLd1ffTz4wxJ;
+	Thu, 29 Aug 2024 07:17:45 +1000 (AEST)
+Date: Thu, 29 Aug 2024 07:17:43 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, Joel
+ Granados <j.granados@samsung.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the sysctl tree
+Message-ID: <20240829071743.0b1052b9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmh4j74o6l9.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+Content-Type: multipart/signed; boundary="Sig_/CeN5Dwo.Ue4Hf8Xa82Ku/L=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, Aug 28, 2024 at 08:17:06PM +0200, Valentin Schneider wrote:
-> On 28/08/24 09:35, Paul E. McKenney wrote:
-> > On Wed, Aug 28, 2024 at 04:32:41PM +0200, Valentin Schneider wrote:
-> >> On 28/08/24 21:44, Chen Yu wrote:
-> >> >
-> >> > One question, although there is no DEQUEUE_DELAYED flag, it is possible
-> >> > the delayed task could be dequeued from CFS tree. Because the dequeue in
-> >> > set_schedule() does not have DEQUEUE_SLEEP. And in dequeue_entity():
-> >> >
-> >> >       bool sleep = flags & DEQUEUE_SLEEP;
-> >> >
-> >> >       if (flags & DEQUEUE_DELAYED) {
-> >> >
-> >> >       } else {
-> >> >               bool delay = sleep;
-> >> >               if (sched_feat(DELAY_DEQUEUE) && delay &&  //false
-> >> >                  !entity_eligible(cfs_rq, se) {
-> >> >               //do not dequeue
-> >> >               }
-> >> >       }
-> >> >
-> >> >       //dequeue the task    <---- we should reach here?
-> >> >
-> >>
-> >> You're quite right, so really here the main missing bit would be the final
-> >> __block_task() that a DEQUEUE_DELAYED dequeue_entities() would get us.
-> >
-> > 50*TREE03 passed, yay!  Thank you both!!!
-> 
-> Fantastic, I'll hammer this into a "proper" patch then. Thanks again for
-> all the testing!
-> 
-> > I started a 500*TREE03.
-> >
-> > Yes, the odds all 50 passing given the baseline 52% failure rate is
-> > something like 10^-16, but software bugs are not necessarily constrained
-> > by elementary statistics...
-> 
-> :-)
+--Sig_/CeN5Dwo.Ue4Hf8Xa82Ku/L=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The 500*TREE03 run had exactly one failure that was the dreaded
-enqueue_dl_entity() failure, followed by RCU CPU stall warnings.
+Hi all,
 
-But a huge improvement over the prior state!
+Commit
 
-Plus, this failure is likely unrelated (see earlier discussions with
-Peter).  I just started a 5000*TREE03 run, just in case we can now
-reproduce this thing.
+  ed674ae9a6e6 ("sysctl: avoid spurious permanent empty tables")
 
-							Thanx, Paul
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/CeN5Dwo.Ue4Hf8Xa82Ku/L=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbPk/gACgkQAVBC80lX
+0GxFAwf/bwoW7ePIGNYhXSR7F606lM5RglTpxEEwd2xKHTAWzXVjT9p+yV1jf6dV
+wc7gVUCVqkbo5jeQ25vfkkv3F4a41ighSUSY7+XmOqcQTMePBuFPML+J/JNVz93n
+bSXABWHOFeLTqfxcQVlMqzkWjOzOHSxatKVevM38iRw+u3fSBFrIAk5mUqlJi4oW
+0xXRnItdxf7ENLcNpFX8hTV7TmflEqUd2VUcYYfD2IIMgQGQkiRsqC8BSdVqh2qF
+uDHtxukQJJU/ERrNEzaxYWqioy4kgEFI12x8M0peAURaH8lK317fV87JOyZhCQ9l
+kwYNjqYLxuS/ndW/xQek8Mvk8P0mMw==
+=zJA0
+-----END PGP SIGNATURE-----
+
+--Sig_/CeN5Dwo.Ue4Hf8Xa82Ku/L=--
 

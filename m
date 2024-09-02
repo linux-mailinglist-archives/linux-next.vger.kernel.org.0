@@ -1,167 +1,381 @@
-Return-Path: <linux-next+bounces-3542-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3543-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DC9F9688F8
-	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2024 15:35:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F1B0968943
+	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2024 15:57:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D38901F230B7
-	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2024 13:35:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 568912813E1
+	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2024 13:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 819F319C54E;
-	Mon,  2 Sep 2024 13:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFE3205E38;
+	Mon,  2 Sep 2024 13:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lp0zMAJX"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="xvIP0HU9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C60010A0E
-	for <linux-next@vger.kernel.org>; Mon,  2 Sep 2024 13:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5771865F6
+	for <linux-next@vger.kernel.org>; Mon,  2 Sep 2024 13:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725284149; cv=none; b=hTzfHvP0Z7yxuQl/Y5qakCndPgahU38iBjHzKeNnZEIlg//oY/TTaPGp8vFTN6egcmdxpzOFCHJmSdRDqN12xYhHTlL7SL3zkfozeitRNkO+wlzpI3ajnUVz6jNTS0uAosgW2zWeLTTn1FSlzdIKvudc+v3EyIxIYk1uAvLw2b0=
+	t=1725285419; cv=none; b=oSkTkBxlB0ejA2JbwQuPzT3/ZSUw5N9Cth0B/LVnC6WQai+fh97Ak2xnb9Enk+l3I8paFKJo51mVth497bwl8bhegDvi8n1HFvT376E2HKWniawiT1w7xDhL7rTTj7INYpWTgISCuBBsj6uRQ4VGETsdUl3fFZ1KEcdz9MAwsug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725284149; c=relaxed/simple;
-	bh=p424L4ENbgEiNTbvOH1Fvf3J9QSqARQAsDwixJCPrXY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YvrBabHxrWwVmWrKa3IG0K9cnaY2EKYQ8OBlCFOnEcdXGWGT4dckxinIkla/kQ2KSUmSP9SAonLcl0VU/nGChiRV9LsZao9FZwA51uO7uWZQxyt0Y+MLz/YizTCWY7PMQ4JbR1A0A0bpseaHtW3FNySw3wdQ8kKQK9XEoc+XVGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lp0zMAJX; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1725284146;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=5I1ZguwmREVXAP9f5fGwSADsT+ugyzrxjCMFNpweO18=;
-	b=Lp0zMAJX3+q5HCE/YIDNt2XZpUFAEtMLbyDi+KSDMr0+YYxtO+1vufo3Apsir2ObPrFLrp
-	apdhodmy1bXT1H7RZQ/apqcNrTvtVncLkWM5xkNX/zibswqBsIL+Cbo08vsC38bRvPFDJd
-	TI460mLoMEYeiYHHg2TU0wubHl0FhMs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-594-YZt3b4AQOfSAGYv2EdWqzQ-1; Mon, 02 Sep 2024 09:35:45 -0400
-X-MC-Unique: YZt3b4AQOfSAGYv2EdWqzQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-42bb2899d57so39218785e9.3
-        for <linux-next@vger.kernel.org>; Mon, 02 Sep 2024 06:35:45 -0700 (PDT)
+	s=arc-20240116; t=1725285419; c=relaxed/simple;
+	bh=wwiPtmcn5PmyLo74pct6zh97xuwdJZ47kroFcsXRbFQ=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=RBS9AqsYn0Wdka69Z6/wLBiL/tAgOZYYAxrr+oNTnB8TUP+raYpEV7fhRLqigS/bq8Dj7M7DBWF8CyO3SPqEXRyVu44yZbKWlVeVUp4O7v0UxR+2+QhywodUxRDmBuHHH152vVFhJWJNT/ma/PUlgpgR/rg1NNcKQw/UAq35hm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=xvIP0HU9; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-717594b4ce7so783483b3a.0
+        for <linux-next@vger.kernel.org>; Mon, 02 Sep 2024 06:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1725285416; x=1725890216; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=5TELxG2VIMI9dCiuzjcfiYhYHk4H001/y6Ni5Tc00MY=;
+        b=xvIP0HU9ZvgQ0A+zJAExuT7AD904cHyqJxVXEx4XcqU306B+Ob/xfoZpfKdYf53z16
+         jES7uL8iUTPMFGvztYK0ytcf5Y5ztdFqvqXLWzxFl3HZrr9av7+zmYO2OOz2Lg/PSm4e
+         wssjkluoBKJnt1FKCCc2A6cwuQWiVIRM2j8+96ozyvCC0qgaERO5jiLVkJvO7ucVDXk7
+         yXPPxdl/I6NT2UuybbjEkwSuTpDkvg+yfMo/qZaSiRcxeLU3YhAF5ehy11Md8d+WJXVH
+         W7MzZN4q6rTdGvWDH0dI2d2GynAvOs4EoyC6yuyphAbrmkrfTqDQl2v2WF49w1IwV6v5
+         bHpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725284144; x=1725888944;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=5I1ZguwmREVXAP9f5fGwSADsT+ugyzrxjCMFNpweO18=;
-        b=vTXEP+qrG3vYwSL0WhAkXZsyMJ6Da+04AIVEufANuV8jdjX6OcMPX0A0s9r7ne9GmU
-         1c3aslmknioi59n5mCs/20yXSDwUAwqMbiVU262M/Y/zFd8x391IaAAgo8D8l3TD+Tqj
-         011P5UX4Quf2F1sGSvvVFqZ2qLphKBZXCmgDnJ5UHQ0fnviQb9/eK9ORoQ2mOCxuyYOJ
-         IXLdxkqJw1Dvu+5qoDh1lJQF3ZiWiR31yphYprUvEWfXvqMb9x2hvBADE7KtuXPptFrr
-         6ZnNb/teC1GfbDJeJ58FmwndTaM/4Cz8whKZZulcGPlFWsUFrzKbhf9EeJZPRhoLeDuM
-         VTow==
-X-Gm-Message-State: AOJu0YxpKt65sJ+QtmcWYWWaLfAp1W7EfkMANmIaFz8vXEflvDvpIGFK
-	2dRKemNWxzhgw3F0aNaLZKm14Wxdnbmrqst0IcTq/6a3VabZClvDhhN8bSnXfReGBzaUQp3Bute
-	FtKJVYyaGHTNRA1TVH6ddByF4X5D3jqzodEte6QmLDNpOAdZ+edyRnhwvRGc=
-X-Received: by 2002:adf:f40e:0:b0:371:8319:4dcc with SMTP id ffacd0b85a97d-374c945550emr2176962f8f.2.1725284144240;
-        Mon, 02 Sep 2024 06:35:44 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFjozoaHtSeQQflY8WoTmjwivc1NdN1yjUiU9/4O/eSkhEsySo0uU512Lc45erLwNu4qbbSpA==
-X-Received: by 2002:adf:f40e:0:b0:371:8319:4dcc with SMTP id ffacd0b85a97d-374c945550emr2176918f8f.2.1725284143299;
-        Mon, 02 Sep 2024 06:35:43 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-374c7fa443esm4064284f8f.41.2024.09.02.06.35.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Sep 2024 06:35:42 -0700 (PDT)
-Message-ID: <41029f58-1142-4629-b65f-8f919093f016@redhat.com>
-Date: Mon, 2 Sep 2024 15:35:41 +0200
+        d=1e100.net; s=20230601; t=1725285416; x=1725890216;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5TELxG2VIMI9dCiuzjcfiYhYHk4H001/y6Ni5Tc00MY=;
+        b=hxdbZWsJ3wEZvf/NB1s2wVdvHS8HnqYJ5FLGtBJVoXdRfaoMrTAnCC2sypXxjAvQhm
+         n2hvTPQWsWqsUzroqtBMJlRafZHL4N2HD8fcC/TAx3IfL9k/6OSfJY10F1jBFCLTalXy
+         wto55nBZDMgptj1wDpSpIUz3WKuTTDc7EdlXQSOuz8oxLhSXeyOA/nUF02CwKo1loJHS
+         y3xuGZc1nEDNLDO1d1Q9nX/IEkKVzv5T1Vw38xKlq3DlAm5FoeHoSQ6uyFPzvEx6jyew
+         kwxFx5cVbfuSZMIaEC/WkvF7Y0etrgeSMJnzqSiwA//3N+RVlPLAvxE4qhtDPnNYZkDC
+         mIdQ==
+X-Gm-Message-State: AOJu0YydgUiRDW+n5MOc+0i3UbHn5g1DN4Ww8vdlNDhL1EselZWEgTys
+	tfTht01ZBjtLemS44iYqwmv2DaTkCIRhf0AH4LK9JXaO1RC7Fi/O3qf6wykHc/MVOyvQj7XQZAY
+	k
+X-Google-Smtp-Source: AGHT+IHLtoy4UjH791WtK0UHBrnUeubwzvlt8mxqriOYAGls8WlEzaKPN5oIJ547sdbfxD85Y1CR+g==
+X-Received: by 2002:a05:6a21:114d:b0:1ce:cd97:f865 with SMTP id adf61e73a8af0-1cecd9803femr9081539637.31.1725285416258;
+        Mon, 02 Sep 2024 06:56:56 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2053e1261cbsm42347855ad.228.2024.09.02.06.56.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2024 06:56:55 -0700 (PDT)
+Message-ID: <66d5c427.170a0220.1e7c1.ce4d@mx.google.com>
+Date: Mon, 02 Sep 2024 06:56:55 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm: don't convert the page to folio before splitting in
- split_huge_page()
-To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>, brauner@kernel.org,
- sfr@canb.auug.org.au, akpm@linux-foundation.org
-Cc: linux-next@vger.kernel.org, mcgrof@kernel.org, willy@infradead.org,
- ziy@nvidia.com, da.gomez@samsung.com, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, Pankaj Raghav <p.raghav@samsung.com>,
- Sven Schnelle <svens@linux.ibm.com>
-References: <20240902124931.506061-2-kernel@pankajraghav.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20240902124931.506061-2-kernel@pankajraghav.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: next-20240902
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 155 runs, 8 regressions (next-20240902)
+To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+ kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On 02.09.24 14:49, Pankaj Raghav (Samsung) wrote:
-> From: Pankaj Raghav <p.raghav@samsung.com>
-> 
-> Sven reported that a commit from bs > ps series was breaking the ksm ltp
-> test[1].
-> 
-> split_huge_page() takes precisely a page that is locked, and it also
-> expects the folio that contains that page to be locked after that
-> huge page has been split. The changes introduced converted the page to
-> folio, and passed the head page to be split, which might not be locked,
-> resulting in a kernel panic.
-> 
-> This commit fixes it by always passing the correct page to be split from
-> split_huge_page() with the appropriate minimum order for splitting.
+next/master baseline: 155 runs, 8 regressions (next-20240902)
 
-Looks reasonable.
+Regressions Summary
+-------------------
 
--- 
-Cheers,
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+kontron-kbox-a-230-ls        | arm64 | lab-kontron | gcc-12   | defconfig+k=
+selftest | 1          =
 
-David / dhildenb
+kontron-sl28-var3-ads2       | arm64 | lab-kontron | gcc-12   | defconfig+k=
+selftest | 1          =
 
+meson-sm1-s90...libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig+k=
+selftest | 2          =
+
+qemu_riscv64                 | riscv | lab-broonie | gcc-12   | defconfig+d=
+ebug     | 1          =
+
+qemu_smp8_riscv64            | riscv | lab-broonie | gcc-12   | defconfig+d=
+ebug     | 1          =
+
+r8a7743-iwg20d-q7            | arm   | lab-cip     | gcc-12   | shmobile_de=
+fconfig  | 1          =
+
+r8a774c0-ek874               | arm64 | lab-cip     | gcc-12   | defconfig  =
+         | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+240902/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20240902
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      ecc768a84f0b8e631986f9ade3118fa37852fef0 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+kontron-kbox-a-230-ls        | arm64 | lab-kontron | gcc-12   | defconfig+k=
+selftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66d58c897078b91c9fc86864
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240902/arm6=
+4/defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240902/arm6=
+4/defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/66d58c897078b91c9fc86=
+865
+        new failure (last pass: next-20240830) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+kontron-sl28-var3-ads2       | arm64 | lab-kontron | gcc-12   | defconfig+k=
+selftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66d58c9e7f12d069e3c86879
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240902/arm6=
+4/defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-sl28-var3-ads2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240902/arm6=
+4/defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-sl28-var3-ads2.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/66d58c9e7f12d069e3c86=
+87a
+        failing since 3 days (last pass: next-20240827, first fail: next-20=
+240830) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+meson-sm1-s90...libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig+k=
+selftest | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66d58bb81d425a64d4c8686e
+
+  Results:     2 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240902/arm6=
+4/defconfig+kselftest/gcc-12/lab-broonie/baseline-meson-sm1-s905d3-libretec=
+h-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240902/arm6=
+4/defconfig+kselftest/gcc-12/lab-broonie/baseline-meson-sm1-s905d3-libretec=
+h-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/66d58bb81d425a6=
+4d4c86871
+        new failure (last pass: next-20240830)
+        2 lines
+
+    2024-09-02T09:55:51.807399  DABT (current EL), IL =3D 32 bits
+    2024-09-02T09:55:51.807916  kern  :alert :   SET =3D 0, FnV =3D 0
+    2024-09-02T09:55:51.812938  kern  :alert :   EA =3D 0, S1PTW =3D 0
+    2024-09-02T09:55:51.818599  kern  :alert :   FSC =3D 0x04: level 0 tran=
+slation fault
+    2024-09-02T09:55:51.819110  kern  :alert : Data abort info:
+    2024-09-02T09:55:51.824051  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
+004, ISS2 =3D 0x00000000
+    2024-09-02T09:55:51.829589  kern  :alert :   CM =3D 0, WnR =3D 0, TnD =
+=3D 0, TagAccess =3D 0
+    2024-09-02T09:55:51.835105  kern  :alert :   GCS =3D 0, Overlay =3D 0, =
+DirtyBit =3D 0, Xs =3D 0
+    2024-09-02T09:55:51.846169  kern  :alert : <8>[   19.635423] <LAVA_SIGN=
+AL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D=
+2>   =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/66d58bb81d425a6=
+4d4c86872
+        new failure (last pass: next-20240830)
+        12 lines
+
+    2024-09-02T09:55:51.785121  kern  :alert : Unable to handle kernel pagi=
+ng request at virtual address cccccccccccccccc
+    2024-09-02T09:55:51.785666  kern  :alert : Mem abort info:
+    2024-09-02T09:55:51.790727  kern  :alert :   ESR =3D 0x0000000096000004
+    2024-09-02T09:55:51.801789  kern  :alert :   EC =3D 0x25: <8>[   19.592=
+536] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines=
+ MEASUREMENT=3D12>   =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+qemu_riscv64                 | riscv | lab-broonie | gcc-12   | defconfig+d=
+ebug     | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66d583c7358e54ba5ac86861
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240902/risc=
+v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_riscv64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240902/risc=
+v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_riscv64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/riscv/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/66d583c7358e54ba5ac86=
+862
+        failing since 47 days (last pass: next-20240712, first fail: next-2=
+0240716) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+qemu_smp8_riscv64            | riscv | lab-broonie | gcc-12   | defconfig+d=
+ebug     | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66d583dbd129350314c86856
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240902/risc=
+v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_smp8_riscv64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240902/risc=
+v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_smp8_riscv64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/riscv/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/66d583dbd129350314c86=
+857
+        failing since 47 days (last pass: next-20240712, first fail: next-2=
+0240716) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+r8a7743-iwg20d-q7            | arm   | lab-cip     | gcc-12   | shmobile_de=
+fconfig  | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66d57e04985da5f918c8685a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: shmobile_defconfig
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240902/arm/=
+shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240902/arm/=
+shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/66d57e04985da5f918c86=
+85b
+        failing since 12 days (last pass: next-20240820, first fail: next-2=
+0240821) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+r8a774c0-ek874               | arm64 | lab-cip     | gcc-12   | defconfig  =
+         | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66d5831cd18936fd1ec86868
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20240902/arm6=
+4/defconfig/gcc-12/lab-cip/baseline-r8a774c0-ek874.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20240902/arm6=
+4/defconfig/gcc-12/lab-cip/baseline-r8a774c0-ek874.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/66d5831cd18936fd1ec86=
+869
+        new failure (last pass: next-20240830) =
+
+ =20
 

@@ -1,91 +1,220 @@
-Return-Path: <linux-next+bounces-3566-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3567-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 954BF96962F
-	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2024 09:54:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19735969997
+	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2024 11:56:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5173728293F
-	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2024 07:54:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89DCB1F23A8D
+	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2024 09:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC2720011C;
-	Tue,  3 Sep 2024 07:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19A971A4E8D;
+	Tue,  3 Sep 2024 09:56:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JNkzqV9+"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="sxlLfJbL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E7D20011A;
-	Tue,  3 Sep 2024 07:53:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725350027; cv=none; b=edGKOjfyCZihH+wHqd6upgOzGWjBKn/JmGxS72VW86O2DxpCHC3nLsQLmQ/7M+aVxKjZmQ7OxrLAIgls5X5ZtgCoq/cIZYVVA/qMyzZ6kWQmkJfjdGyKL//W4ZnMkwN49F7u/HHMkS1lBVD1nvlfap6ocYktRoxhFbmAcOzrGZ4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725350027; c=relaxed/simple;
-	bh=wi97ztJZt4//LuOM70DFndgCCb8iG8N6VoALz1a2qLQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gUlK+Tv4qfAz/VBeBmGrSw9LyFq50DiWI/pM6OObkpEpONowkRY3jQofloJaBQJHJsWPQiBCxuQ/rs0A8AWNam5AeTlMD+nIoDucZ65PNyalq4yBb1V2ETt+VImEJCEC810qxw+zga3fb+GNorEkAIxOzHQWOEa19uTpLb8+mws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JNkzqV9+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50385C4CEC9;
-	Tue,  3 Sep 2024 07:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725350027;
-	bh=wi97ztJZt4//LuOM70DFndgCCb8iG8N6VoALz1a2qLQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JNkzqV9+zSHQFCYe21kFf+c9yLni+bwTAn8iPnvdizzzOF7w4Q38VVSrF20V3RFwu
-	 AI3ozPaYrQQKnJ1fGGmQIqLAJy0KTTETiyrv3Y5c7Wkh037WDXf3ul6XqgPgenHelx
-	 m09aPF0rW0HuzqE20/ISZ+LK3KlwUtvJjZ17stiaa6FWHGumRYSrUIjbqRa7G0LT8n
-	 uAuOQHXh/F8QGSPChaRctR7SxMwUB62Wdh1lqJh8EIbmmAVVHzpT+QghOlYSd3dFYQ
-	 ZEyCqRVIuv5Z2NlOZ9WWVH0bo0RFMrPPE37/vh2WbeiFyQc0vQlLzAPJqenRJcwKXG
-	 ZCk5TpV81ah1Q==
-Date: Tue, 3 Sep 2024 09:53:41 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>
-Cc: Matthew Wilcox <willy@infradead.org>, sfr@canb.auug.org.au, 
-	akpm@linux-foundation.org, linux-next@vger.kernel.org, mcgrof@kernel.org, ziy@nvidia.com, 
-	da.gomez@samsung.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	Pankaj Raghav <p.raghav@samsung.com>, Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH] mm: don't convert the page to folio before splitting in
- split_huge_page()
-Message-ID: <20240903-eidesstattlich-ununterbrochen-bdda2e9eba98@brauner>
-References: <20240902124931.506061-2-kernel@pankajraghav.com>
- <ZtXFBTgLz3YFHk9T@casper.infradead.org>
- <20240902-wovor-knurren-01ba56e0460e@brauner>
- <20240902144841.gfk4bakvtz6bxdqx@quentin>
- <20240902-leiblich-aufsehen-841e42a5a09d@brauner>
- <20240902193520.hvtjrnyqmosnkfff@quentin>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F86519F41D;
+	Tue,  3 Sep 2024 09:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.79
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725357399; cv=fail; b=FXMTutdu06Stoe7pAC/QpjhkHEithk2R0VUrIEvQF84qTrKuuhJ99bTv3wzE9syWflRJ3d2xwm5nYXEK2Dud8WUEEVK6yYXaCmfD1wV/1wI9ni/pHr5CzOEVXnRUcU+JV5HlRyxlzOnf5n33ydS6FwtwoRgDBjhceboILn+q270=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725357399; c=relaxed/simple;
+	bh=W3zwuradsJ8Yl4KesW/t9Ivz3KjpTnKjhluCmoEcZYw=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=mfDGmY5nkRc3XxLp2ehTXtupUKdcCxrCx6XUyYfFsoVLYE4vw7OqsVZit7XtJt6RcX9jeX3/8q3MMstk2C3JxPF6sk/GUMJs8U7u0ZunIwB8VHbf8ZSz6ldG7XIhQZfIp9SOeRqTivNVQhHyoaLaf4tl7h7PnT4/6WWNBJA/W9o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=sxlLfJbL; arc=fail smtp.client-ip=40.107.220.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=OoG6V7lac8nX+qDR3N2aMKIqH3nC5Vqb+L3aZ4gjNzgVVPWI2e9CdjAzjecy/0rYWfR0fD0SyJrUaWj7S8G12Cz6u+L3WJOZ5U7cFSfTtrbo8TsQenqUM1Kjo/u5ViHmwJDjZFGpcWUN1esP8HAAUeDMrEMkOwE0Onlm4e9TpCOfv9dx9KWV/RVXFUVD9dQfzsJDElFdVFJCYj34CZ2eTOIm8DrCDV4zKoaZwV7pv8wOB0+VJiYZuNHcrPVfgeI1ahtNyoTMLywxvh4MidPIjJ+qPxwEEGzYmqghTvpw0g2TSVDgu9EClj8LmuRQTlq35XpgFJ89g8mSew6nJOQNhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Tc5jtxpEpkMC60FRxGqIpDuWHi9Rl+g2GHjiZEoNrzQ=;
+ b=lNRLxOby0Jc7s3uziZTy6n2/IKYjQqS0eDnY26U8gTnb3jX3VVPOYUspj7sW2kiqNNAZ01BZ5m+xRFSMAxZNUvn77jNQ2Vp1UiSorDuLxlcXJMJNefS09il5LPEF/Z5cBgEKXTmOtf6WglGtU0xRfiNoaQK6c/gQPLToa41OaaDdJJRk0oy9TP19coTSkuvdmcLAZ8Aq12wm0DTpTIotb7l9XoWBFaM8sgbEtGqNbVDFGfwxCntrSdPLjIu32SvXBwScy8K0td0xfG8Gt5FncYs18vLZ+lORNzAhLvFw9jR67Os2QDTYQHNI5wqg5po+CanSEzHBp4Qh8w+9tZnnoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tc5jtxpEpkMC60FRxGqIpDuWHi9Rl+g2GHjiZEoNrzQ=;
+ b=sxlLfJbLs9eajk4oq70+PIHfhuNrWEIPRtRkVS12ILJKo97kjb96qaHxu6sZDO0BApIUpjGxRIL+306T5Ohek0IWz9rARSu9nwgTbiL55mvox270zNJ9hEzM5/ydogLZkbt2Vys0Gg/MDsh4ATbQvBzFHJZwNeb9KKZM1Wg3UHI=
+Received: from DM4PR12MB5086.namprd12.prod.outlook.com (2603:10b6:5:389::9) by
+ DS0PR12MB9038.namprd12.prod.outlook.com (2603:10b6:8:f2::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7918.25; Tue, 3 Sep 2024 09:56:34 +0000
+Received: from DM4PR12MB5086.namprd12.prod.outlook.com
+ ([fe80::70cd:b5c2:596c:5744]) by DM4PR12MB5086.namprd12.prod.outlook.com
+ ([fe80::70cd:b5c2:596c:5744%7]) with mapi id 15.20.7918.024; Tue, 3 Sep 2024
+ 09:56:34 +0000
+From: "V, Narasimhan" <Narasimhan.V@amd.com>
+To: Helge Deller <deller@gmx.de>
+CC: Linux Next Mailing List <linux-next@vger.kernel.org>, Daniel Vetter
+	<daniel@ffwll.ch>, "linux-fbdev@vger.kernel.org"
+	<linux-fbdev@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>, open list <linux-kernel@vger.kernel.org>,
+	"linux@weissschuh.net" <linux@weissschuh.net>, Borislav Petkov
+	<bp@alien8.de>, Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: WARNING: CPU: 0 PID: 8 at drivers/video/fbdev/core/fbmem.c:467
+ unregister_framebuffer+0x45/0x160
+Thread-Topic: WARNING: CPU: 0 PID: 8 at drivers/video/fbdev/core/fbmem.c:467
+ unregister_framebuffer+0x45/0x160
+Thread-Index: AQHa/S0UVvhkZ/Wo30mAWgWYLmKdfbJE1b2dgAAalICAAOPRUQ==
+Date: Tue, 3 Sep 2024 09:56:34 +0000
+Message-ID:
+ <DM4PR12MB50864B3F2396760358F2955589932@DM4PR12MB5086.namprd12.prod.outlook.com>
+References:
+ <DM4PR12MB5086C89FD0EAF070D167733389912@DM4PR12MB5086.namprd12.prod.outlook.com>
+ <20240902084546.GAZtV7Ot58w7D90fwQ@fat_crate.local>
+ <7cf68133-e6f5-4fef-92ae-7a8c30631fb5@suse.de>
+ <DM4PR12MB50863789A621575F937E240F89922@DM4PR12MB5086.namprd12.prod.outlook.com>
+ <d5ed77c9-89ad-4de6-b46b-5865378e029a@gmx.de>
+In-Reply-To: <d5ed77c9-89ad-4de6-b46b-5865378e029a@gmx.de>
+Accept-Language: en-US, en-IN
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2024-09-03T09:56:34.210Z;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
+ Internal Distribution
+ Only;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=0;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB5086:EE_|DS0PR12MB9038:EE_
+x-ms-office365-filtering-correlation-id: cb36f6f0-c421-4e99-5bd5-08dccbfeb1da
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?IS4n4xm/FK01XbbUGizEpgdKTPOeV1nQyTe7CKHBdngabr9szGVekE4ywt?=
+ =?iso-8859-1?Q?7PavmA89rrNyTiBHYHXEi0jmsltRhohJINjjH/5vH+E+BvHGf7kc8urDd0?=
+ =?iso-8859-1?Q?QNyJo/Jz8x154SOc4aLqpOoxn9+g5jgjJA/PgPVYz5yUeFaUR3Z2oaYRAn?=
+ =?iso-8859-1?Q?rYaAWIRgl0X/SSgd5GBPiH8WJPIg1m8QUPh4AvS/SuiBudSi+37kmgxOGq?=
+ =?iso-8859-1?Q?zyi/8hTGUdfrwE/OXRpMstJz85BJ+HopDpovWmIFrNrU+7QbnCc0N7TKDu?=
+ =?iso-8859-1?Q?J1CMUJEYjcqf0VX9HVObk2Y9lNu2Yglw6IaedWDy+x51bhVb36t8KpZCtW?=
+ =?iso-8859-1?Q?/JJhxTEw8EhLJLOm12MF/q8IvEIZ5HvqZLn0YxFuNQSvGwAkdjXA8E4zRI?=
+ =?iso-8859-1?Q?9Uoc7NZL33PUIICtzmJg+6ttZWmIcQA6A6SBWY+iKwMOugZHe1EkqCi5CA?=
+ =?iso-8859-1?Q?a7wRXf+I0RWtHhDeJyMf4nK5mTNXI2ORqXATJlUsNq2ozoWhzZY6Lo4+8c?=
+ =?iso-8859-1?Q?MoiyK0SNxh1sBIOUQr7fnsY6kikZotJxmsY/Kq0Jsl/4DlDsA3KTpM/YdZ?=
+ =?iso-8859-1?Q?an3PPUdqZFHSrVYq9rdzY1ebhfLYn1Hwn4GFZpNiWQT1Q9xVlbiaEg1XXe?=
+ =?iso-8859-1?Q?55kMCoU6thud+AH/N38KYXJv7CVpIJy1XuNfYNdz7qrtRBrptUHTnrn8ud?=
+ =?iso-8859-1?Q?Gon9UCr8oK0Wkn82kzOtcON0TV+7w6emu2ZYBKA2w8CufrHOzK8gSNwBLR?=
+ =?iso-8859-1?Q?lX4J0ys1YoJR8LC5+4NxQ9/XcVAQD/4260xAcJfyoT1MdOZI6mpsi7F43z?=
+ =?iso-8859-1?Q?KMdvodiGZ84RWaBB7wyPi4MrSB9aFc8SaYdGwB4LPuy4T8bMJvVxU4EgNg?=
+ =?iso-8859-1?Q?AF6WkMkuIcwvmiG1rP25sbhG5JCyfB6KVwABCT+dRoFcwyzasFQUZgbmhq?=
+ =?iso-8859-1?Q?UailVmqiqgYSj6SqqXTMzg1jNtmCtz84LFj79Dpkuss+VBLUkZT0IveoAU?=
+ =?iso-8859-1?Q?EPYt5ku64fGX5O5t2uAIaSF1UReFQwuE49TQ7EIBXJ7n6mFlxdcWaqeXCs?=
+ =?iso-8859-1?Q?BmvLiIPwR5S15nqd1qNl83fmDfTQEjzE5TC04qwRu788CrfWM1rDfJjEkP?=
+ =?iso-8859-1?Q?vJlUYlYQZ8sEQgO3OCS7YbqidwPtBu0iJUdXhePGtaOoq3srTMCkX5pYzk?=
+ =?iso-8859-1?Q?vYNQcqRkPoq3eaQpWdYPuWN6nPVVKFfH7mFUJxLYQmloMiolcN/3M6i4eb?=
+ =?iso-8859-1?Q?DTRfm4VI6mL9aIf38ZFLSOhbQ9HOIh+PNaEpqu3P57IEFzTlASIpGIzhx+?=
+ =?iso-8859-1?Q?Az10/+fvie9jMu2nzxC9AoAANCFMrUNfNm/+Rebcm8+CD5cZSIDQ9nefi/?=
+ =?iso-8859-1?Q?9Jqbdkfo1wRVqgBd0+zn+bwNIBkPAYmgjaO/mIkO3dfD3N1UuWQ6Y=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5086.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?IoJwk01CpQqMfNzT6nWxtr27d1W+wE8AarTkhfw9gdW6IBnGvJcwyD2s0x?=
+ =?iso-8859-1?Q?QLljOib5nrqLNrByBaz+QWQhW3JnCexsNq6Xv6WyA6eCeeNzSNczE6xi4K?=
+ =?iso-8859-1?Q?DS/WBAJatTc/mc4n4tI4+lwPu+cBlJBXeokhJggNGGMy94iTlbCOQSY6mz?=
+ =?iso-8859-1?Q?9wnjqmn+TW10SNUP0Q8sLA4vt5/g14rZ8pNN/oiGHgBDdhsK0IBSPH8LyH?=
+ =?iso-8859-1?Q?AkeDfQuld4W/v3+bjoufZ6+j5KUnXYitwjbfATbNyWXTeF7zJTWSaOmkGk?=
+ =?iso-8859-1?Q?fDWZbQstg8QVDVbpyLpmyxT64Iu9z/jCZjlBbY1QIVOXIh4iByJi/rO43S?=
+ =?iso-8859-1?Q?lLE4C6n7sOA9nffdbl+O/H4gFu5PrPv5YDof727yJXMT6A28ATyoAcTKOp?=
+ =?iso-8859-1?Q?7Ryc9UVB06zY954K6L0pQeDwaJnElootPuR7zmpGi8m/nA0dsHxNYSpSuY?=
+ =?iso-8859-1?Q?mqqwM0L9YxxbwO+0GGnuKqZvRTiB1+n5iQFov+YyHZ0gu022TmbHNF1DRt?=
+ =?iso-8859-1?Q?Bu1xOV1anCELbO8+6aQSnFDdJbfGUsZFr7DRvFdFdjN77quNdwSJVgJ6Gx?=
+ =?iso-8859-1?Q?c4AmUjY2IeWAaTDf8VoWQHDEkHqKzxx2fYtRD78Gor4O7MvXjtHv5EbeYP?=
+ =?iso-8859-1?Q?6CVV3dh6zq3WUFmczUXn6+OSqEEidxy1HASrBHbbFSzz/L0HHr9LgqoVRw?=
+ =?iso-8859-1?Q?kb/STTKPYcfrafg0YNqrGOMyA2DKmho8yzaXMUbZIMF1owj9t7gSpzno9F?=
+ =?iso-8859-1?Q?VFmyQgCWAqy2RTZjJuSbju56xa6WufZUjhIJecoDAqEF/DwlePh9wSVxYx?=
+ =?iso-8859-1?Q?800w90pGGi/pyNE4p7Oi8SeQTveT3CgDmFjImKxHc1BtAd0B9mC/fKh4h9?=
+ =?iso-8859-1?Q?pabaw91wIs9NKWR4ciXLpdgNOG+9PNtknCc1NpA8rpaIbuCJY6cGnktpH+?=
+ =?iso-8859-1?Q?M0/lRrumzalKcuoGErVJFt3hzEMsMYGfoWonu/pjesfvR+GvYZUp9iAfhG?=
+ =?iso-8859-1?Q?me7Zw3hVCYKgBl3ra1LqQytw+CCVsY7qpLe12VYxFvc8JpUYIUPkHAKqIZ?=
+ =?iso-8859-1?Q?xqx9Tyln4yb3QaPdfm0VjbTqZmRqN8i4NxIHAFKMJUEjSlP0mlTVsbZfTA?=
+ =?iso-8859-1?Q?GAFb/JIzCZ3tQ61//gx98VKJqSv85iJQTpsuldTjMaLGkHTtfXsnILfG3p?=
+ =?iso-8859-1?Q?tu8UUcRSGLuItrH2XGlJD0pDdt9UR+04I+JY5d504HzubIgapNXdtvbzpz?=
+ =?iso-8859-1?Q?IEyKxGgczKdO012lkTdDCfknzS8d6eEqIUaYfIePIeOXtmcVFH5sYmSQ4P?=
+ =?iso-8859-1?Q?gOqKYjdYWm4kaZXfne269oLNmXGYoyOcEe9MQ4hXuwVPlyNuU5AGOvsNLJ?=
+ =?iso-8859-1?Q?8rVJco+28anCv84lfC4Zf8K/csY+0+4nKSA9ERR0evzHZQP5nOTXqWuqPD?=
+ =?iso-8859-1?Q?ynbHOM9vOLNjqshH4b1E+/FOfyOsUyAnxI0Eenoz9o2Tib+gIuvRBcqO6e?=
+ =?iso-8859-1?Q?ittP5wniMG5R31Z+9WcQHCGtbPSvHLhk9Az5WQ+4hiAcl1QLHN1QwNqDW8?=
+ =?iso-8859-1?Q?0/I2rtemMDNHCAK/iA45BwvIWrdPKDu0bXcEwAqHJNs5lsK/mW4DsrDrA2?=
+ =?iso-8859-1?Q?e5Khtj55NSbKo=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240902193520.hvtjrnyqmosnkfff@quentin>
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5086.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb36f6f0-c421-4e99-5bd5-08dccbfeb1da
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2024 09:56:34.5327
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sMCw2vNKfC9kn5s7Vs4yjfBEE8uXpqgzpHC6o6UFXT4SDDOBPwJYLBSFdKLI9IA+2ZgaKR8SMiQVVscjZe004w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9038
 
-On Mon, Sep 02, 2024 at 07:35:20PM GMT, Pankaj Raghav (Samsung) wrote:
-> > > > > This should be folded into the patch that is broken, not be a separate
-> > > > > fix commit, otherwise it introduces a bisection hazard which are to be
-> > > > > avoided when possible.
-> > > > 
-> > > > Patch folded into "mm: split a folio in minimum folio order chunks"
-> > > > with the Link to this patch. Please double-check.
-> > > Thanks a lot!
-> > > 
-> > > I still don't see it upstream[1]. Maybe it is yet to be pushed?
-> > > 
-> > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git/commit/?h=vfs.blocksize&id=fd031210c9ceb399db1dea001c6a5e98f3b4e2e7
-> > 
-> > Pushed now.
-> 
-> I can see it now. Thanks Christian. :)
-> 
-> This patch has a merge conflict in linux-next. It should be a trivial
-> merge but let me know if you want me to send a patch for it.
+[AMD Official Use Only - AMD Internal Distribution Only]
 
-No need, Linus will usually just sort those out.
+Hi,
+
+
+________________________________________
+From: Helge Deller <deller@gmx.de>
+Sent: Tuesday, September 3, 2024 01:48 AM
+To: V, Narasimhan; Thomas Zimmermann
+Cc: Linux Next Mailing List; Daniel Vetter; linux-fbdev@vger.kernel.org; dr=
+i-devel@lists.freedesktop.org; open list; linux@weissschuh.net; Borislav Pe=
+tkov
+Subject: Re: WARNING: CPU: 0 PID: 8 at drivers/video/fbdev/core/fbmem.c:467=
+ unregister_framebuffer+0x45/0x160
+
+>On 9/2/24 20:56, V, Narasimhan wrote:
+>> From: Thomas Zimmermann <tzimmermann@suse.de>
+>>>>> Seeing the following warning and bug on boot with linux-next-20240829
+>>>>>
+>>>>> WARNING: CPU: 0 PID: 8 at drivers/video/fbdev/core/fbmem.c:467 unregi=
+ster_framebuffer+0x45/0x160
+>>>>> BUG: kernel NULL pointer dereference, address: 0000000000000000
+>>
+>>> Does it work if you revert one of these commits?
+>>
+>>>    c2fe0480cd77 ("fbdev/efifb: Use devm_register_framebuffer()")
+>>
+>>
+>> Reverting this commit fixes the issue.
+
+> Good.
+
+>>> For the latter, there might be a fix at
+>>
+>>> https://patchwork.freedesktop.org/patch/611902/?series=3D138008&rev=3D1
+
+> Current fbdev git tree and for-next series have this newer patch already.
+> I expect that the issue is already resolved with there, but it would
+> be good if you could test.
+
+> Helge
+
+The patch seems to be already into linux-next tree and the issue is no more=
+ seen with today's linux-next build.
+
+--
+Regards
+Narasimhan V
 

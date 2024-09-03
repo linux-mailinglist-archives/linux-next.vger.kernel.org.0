@@ -1,104 +1,157 @@
-Return-Path: <linux-next+bounces-3557-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3558-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B3719690E4
-	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2024 03:27:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22BA596917D
+	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2024 04:41:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B2E9B20B84
-	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2024 01:27:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C73F31F232DD
+	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2024 02:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26A6A35894;
-	Tue,  3 Sep 2024 01:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3555919F100;
+	Tue,  3 Sep 2024 02:41:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VuwAbUFQ"
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="yuOmn9kL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FFC119E989;
-	Tue,  3 Sep 2024 01:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27D41A4E6B;
+	Tue,  3 Sep 2024 02:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725326831; cv=none; b=GM4O+MOxEpmpfWhuBs/C36/K54ItWeqJjObvK/3olKWT5ww4JrkReZt4suopLNQdC8sw1cU94b+E6y02gIMffKFvdcVV5MMY0dESQBGVGgmSBKOMNSiUpYI/z4aL+Qlj0Mt6OSMgJ+wJMRYiytFTLOp0hguSkEzDCFN6HQsTa0k=
+	t=1725331282; cv=none; b=Rgun0Z+/oPMAy//u7NE4quNZronYQPAUIP8H7PCiyWJv4XYF2QIkWbpauxsYAqO4DWZRHEttA8n41+A3Ey28ycwDCZKpJFNKLgr0A4M9iPtmek4bJ0GG0Ugp+aSkwY7tfsNkyqC3jrkXjK1bDuyt3UdkzySn/pVV3y0NZxgjMQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725326831; c=relaxed/simple;
-	bh=Mr46UhT4hkd2HOTt+yzG6o+WAooFRbQ0Pa5ltlxHd8U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=scfSWkmqoSI4Wsv96oTv1yjUDOOjQP6cKyXXm9sKSlCgn9RJ0weJo5mlJBL8Q6TN+BBehTicOfJ4YLe1/uGTNjlp0DY5q1KRAiVy1txKG3zggewqPKKJ82+JlDbdiqKBDJAjKWdqsU9LVY1dzrawFAfo53ZxZaM/jkfQwIxePFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VuwAbUFQ; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1725326825;
-	bh=TT8J1Ll0n0QIgEmFuVx7GxH6V1fn6yLaq1Tev9GRUlU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=VuwAbUFQFPiFezJtanC+flNOHR6xB0+InPkYAB0aH8e7hFtDegx+lHu5xO4wdgYz/
-	 xqeBgANYfDOhOGYtW4SsEhpYB6RjrlmpyVy60ghK1m4Ak6NqEg3I5xl3F6FTKoGIrE
-	 tcJAFTmnu2IIwNO73TyUmJ0jHrb4wvTtbs0gcHL93vtW/WBYpuqE0Y3MQwpQtFUq+R
-	 WTM3FmTs8GkW/4RobmhV1bVSf0si/LJ4UcxkyY2RQuSc7Rx3CLu6mGWXFxYdak51hP
-	 QWZnIZUSAuabDwmnPmeG3z6MXPRlUEvt7TAVwaS/zrsv5Gj6n7OyrAcNfmIXqOwfxV
-	 KBIPoy4RuVxaA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	s=arc-20240116; t=1725331282; c=relaxed/simple;
+	bh=Wa1zM6bNrwR88Y5BC7oBrpAqXdO+Rizt0sscrZ6Kcqo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MqP5HvUJejNT8/pZaiQ7PThZvkMjz1YvLOSNFHHGcfcabHJYJ0ccOxiFKH86EC4D74SZJ7hJJFDhOV/h8lIDWwPND1FyZePVFBRzY+EMujPLUT4WsXi8lwNO9deGxqkw+Tii7ZmWdEpflHQfIhBoDD5NMu/gARdQ6Oa1dGmVedc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=yuOmn9kL; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WySf04hGRz4x1V;
-	Tue,  3 Sep 2024 11:27:04 +1000 (AEST)
-Date: Tue, 3 Sep 2024 11:27:03 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Mike Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the clk tree
-Message-ID: <20240903112703.5e9e68b3@canb.auug.org.au>
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4WyVHb5G1rz9t2M;
+	Tue,  3 Sep 2024 04:41:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1725331275;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cdb+1GKopFYZ6fkeo954uJCwRSa2DekSkoETuvgxvtA=;
+	b=yuOmn9kLmB4ZLT2ZlhiXh0Fn1JT7CvrcOYPoqQ74TshxokKPfxXv2iKZD6W2Q+uJ+QNVAc
+	A1xcXxuqssOGF+D6tglOdvxdall6GBNwTkiREYHp2kymTs4FCvP9JHqIlGeGJIZPe/YlI1
+	sxhxtrI92bpV6ID/gAa5nqw5Ijg0O8c0rnEgQDE632kuIUVQlPEiYKSMR/PuYSxFzmh0gr
+	9KKfjuNDXSiuBJZUjYPAph+0dOD2kGOIiIm2GguTvNRH3EgRHI2VAfNIJEMcfCuJ196GP8
+	guSYDMqFguvdri6aK5y/Ikvk6DXuPXDH++pPjJ/rxzs3LKOZtn7KDHGZHQYVkQ==
+Date: Tue, 3 Sep 2024 12:41:08 +1000
+From: Aleksa Sarai <cyphar@cyphar.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christian Brauner <brauner@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
+Message-ID: <20240903.020556-bouncing.saws.daring.donor-5KuFrSsG4K2W@cyphar.com>
+References: <20240903092745.370fc0c6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rU0nHq6XpQM7s_ZpbKCkjEj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zrzolbxm3amv6sky"
+Content-Disposition: inline
+In-Reply-To: <20240903092745.370fc0c6@canb.auug.org.au>
 
---Sig_/rU0nHq6XpQM7s_ZpbKCkjEj
-Content-Type: text/plain; charset=US-ASCII
+
+--zrzolbxm3amv6sky
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 2024-09-03, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Hi all,
+>=20
+> After merging the vfs-brauner tree, today's linux-next build (native perf)
+> failed like this:
+>=20
+> In file included from trace/beauty/fs_at_flags.c:21:
+> perf/trace/beauty/generated/fs_at_flags_array.c:10:31: error: initialized=
+ field overwritten [-Werror=3Doverride-init]
+>    10 |         [ilog2(0x0001) + 1] =3D "RENAME_NOREPLACE",
+>       |                               ^~~~~~~~~~~~~~~~~~
+> perf/trace/beauty/generated/fs_at_flags_array.c:10:31: note: (near initia=
+lization for 'fs_at_flags[1]')
+> perf/trace/beauty/generated/fs_at_flags_array.c:14:30: error: initialized=
+ field overwritten [-Werror=3Doverride-init]
+>    14 |         [ilog2(0x200) + 1] =3D "HANDLE_FID",
+>       |                              ^~~~~~~~~~~~
+> perf/trace/beauty/generated/fs_at_flags_array.c:14:30: note: (near initia=
+lization for 'fs_at_flags[10]')
+> perf/trace/beauty/generated/fs_at_flags_array.c:15:30: error: initialized=
+ field overwritten [-Werror=3Doverride-init]
+>    15 |         [ilog2(0x001) + 1] =3D "HANDLE_MNT_ID_UNIQUE",
+>       |                              ^~~~~~~~~~~~~~~~~~~~~~
+> perf/trace/beauty/generated/fs_at_flags_array.c:15:30: note: (near initia=
+lization for 'fs_at_flags[1]')
+>=20
+> Caused by commit
+>=20
+>   34cf40849654 ("uapi: explain how per-syscall AT_* flags should be alloc=
+ated")
+>=20
+> I have used the vfs-brauner tree from next-20240902 for today.
 
-The following commit is also in the renesas tree as a different commit
-(but the same patch):
+Ah okay, the overlapping flag definitions in the copied over fcntl.h are
+causing issues. We could just drop that part of the patch, or (since the
+new flags aren't handled by perf/trace/beauty) we could just do
+something simple like:
 
-  042859e80d4b ("dt-bindings: clock: renesas: Document RZ/V2H(P) SoC CPG")
-
-This is commit
-
-  afec1aba0860 ("dt-bindings: clock: renesas: Document RZ/V2H(P) SoC CPG")
-
-in the renesas tree.
+diff --git a/tools/perf/trace/beauty/fs_at_flags.sh b/tools/perf/trace/beau=
+ty/fs_at_flags.sh
+index 456f59addf74..930384029599 100755
+--- a/tools/perf/trace/beauty/fs_at_flags.sh
++++ b/tools/perf/trace/beauty/fs_at_flags.sh
+@@ -13,9 +13,13 @@ printf "static const char *fs_at_flags[] =3D {\n"
+ regex=3D'^[[:space:]]*#[[:space:]]*define[[:space:]]+AT_([^_]+[[:alnum:]_]=
++)[[:space:]]+(0x[[:xdigit:]]+)[[:space:]]*.*'
+ # AT_EACCESS is only meaningful to faccessat, so we will special case it t=
+here...
+ # AT_STATX_SYNC_TYPE is not a bit, its a mask of AT_STATX_SYNC_AS_STAT, AT=
+_STATX_FORCE_SYNC and AT_STATX_DONT_SYNC
++# AT_RENAME_* flags are just aliases of RENAME_* flags and we don't need t=
+o include them.
++# AT_HANDLE_* flags are only meaningful for name_to_handle_at, which we do=
+n't support.
+ grep -E $regex ${linux_fcntl} | \
+        grep -v AT_EACCESS | \
+        grep -v AT_STATX_SYNC_TYPE | \
++       grep -Ev "AT_RENAME_(NOREPLACE|EXCHANGE|WHITEOUT)" | \
++       grep -Ev "AT_HANDLE_(FID|MNT_ID_UNIQUE)" | \
+        sed -r "s/$regex/\2 \1/g"       | \
+        xargs printf "\t[ilog2(%s) + 1] =3D \"%s\",\n"
+ printf "};\n"
 
 --=20
-Cheers,
-Stephen Rothwell
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
---Sig_/rU0nHq6XpQM7s_ZpbKCkjEj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--zrzolbxm3amv6sky
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbWZecACgkQAVBC80lX
-0Gw3wwf8CJo/QlqXTXFiUGaRNAy2Sgg5Y5IIj+HhJavTknn9qpycQWGrOKSUznJi
-TcGqy0a2sgzFfUtlxu8PVKUtYiEq6zLRZEKFvCo5k65u17j/Z4v3Q2paGwK3TtfI
-YU0MvrhuIrkMmxxrE9aAi5mTNQsHJHUX/iMRMiJ6WWozYSrQQ0lpZIbSPRfHqViP
-U9hXp0PAGdb/YqHaW/hJ/RBj0sTXA/jtCbQt+eveBsrbN+CG58zDIkoakzmhbFqw
-hE4/ogspm4aIFdsAQS6rvkqzXpff8X9j9VCaN9FyRlIy31Ks1uqpBQ4fbRsTvGRW
-Q522ByAfKihEisM7N+s8PLyBKPGVGg==
-=/B4u
+iHQEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCZtZ3RAAKCRAol/rSt+lE
+b7sAAQCFtjLgggGfMHrkeCVnkiOyZLLKa9vZcO4TLxkdLdRSawD1GHSqElC0mzao
+duVwVlWVIE/D/kr3RHPhwVPtsqSxCQ==
+=o2D0
 -----END PGP SIGNATURE-----
 
---Sig_/rU0nHq6XpQM7s_ZpbKCkjEj--
+--zrzolbxm3amv6sky--
 

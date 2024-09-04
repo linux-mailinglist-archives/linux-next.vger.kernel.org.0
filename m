@@ -1,372 +1,246 @@
-Return-Path: <linux-next+bounces-3591-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3592-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EACF396BC5F
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 14:32:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9230496BE1D
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 15:18:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 759B11F218D3
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 12:32:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46857288436
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 13:18:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8EAC189F29;
-	Wed,  4 Sep 2024 12:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D84EB1DA2FC;
+	Wed,  4 Sep 2024 13:18:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="mFRhRfvu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DwwL64SQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B0D185935
-	for <linux-next@vger.kernel.org>; Wed,  4 Sep 2024 12:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725453169; cv=none; b=Lm9l+MT9KEfBdnk4knBfPrehycEb++glh/3vhn70NQkCgdZTNma56+KBQx7uyYoyHaJRTYWgywGSR4bcrmqXyCu9fowpYo8FCTuK9X5ql0CdJtNsM4WC604fUUVjfvT9xMFO/B0a+60rT7e7VB3VRKaHK5w7kDbYCY9cVIfHAeU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725453169; c=relaxed/simple;
-	bh=gAi1mdbjuAdFBB5ghJ1i8CPCgB7qal0N8EYMUNPXJlQ=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=a2P24r+DOqVVJKumgzIWbyqY1XfnVgkX6wik4HNFVu4i8LhQfusRTMFsL4TEwer+ttw2uT3ndnHGhT8xMwud0wTjGkv9tdm3385HHttVPfHqFQf8TaByt/XtqIuHsgqACdUuI9sA84ONFPbdLnV5F3j03uXs2w67oJ8CzEGNvcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=mFRhRfvu; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2d5f5d8cc01so532042a91.0
-        for <linux-next@vger.kernel.org>; Wed, 04 Sep 2024 05:32:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1725453166; x=1726057966; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=0le4Mr1CItzj9or4V8nj0VXY/BnUH/XuNtYZuPZRSqA=;
-        b=mFRhRfvujJmnGbfuO2tm2zT1aZ8tzDUTs772QuJ/TbsyImSQFrI9OrqnljZGwuQFqv
-         7Z/DkRecqXgSOw5DvyzB639cWfl0bnIEPbGUA5dO+eDBZ+etT78kgpZi1x9Tx7c8ZxO7
-         b2QIifmvJ+HDhWBixLNONP8FgkBSFx9w1V2S8BInfnjxf8DFf2StYtBGcjMOND/X2oYr
-         V0l4MKHl9cSrtzj6OtOE+2qK3lIeB1CS+csL0EJ5uqELw+ScXkrkbP4s4Ap1KnqptWyS
-         XVgVBBvU+NyTsJKMisDvbdgZD1fo7M4LXEZHeVf0jg4S/Nwqxc12ACCnMUgPRpTYN2gG
-         sMQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725453166; x=1726057966;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0le4Mr1CItzj9or4V8nj0VXY/BnUH/XuNtYZuPZRSqA=;
-        b=V7MCaLMwfskMLrseJvFMW6L7aZM/kI2VEA8sLec+ZCVjVNHFL+n2IIJsgbD/VvvCdI
-         A0dCrc5FuBirw0Chrl7i57BonCWH0MlxVVXd8mt8SLVIa8d6PnImJjQasHKROdI/zAfS
-         bEGQflQgphZWOmUghOHEhYozxbfydIFxln5kLJw0zQpX0sRAIIwHRiXj6DIt4NG8expB
-         +ggYE6hB9YUL+sfwXOyRNRUzQ+Ff7/qzea46seKigb2TADPKcWN9yjzqo5i4MOYxQmHK
-         +VI2dGGfUivNgTRDgmkxY0uAP49XTq0PFlTfnW9qSciMM/nZpMeuKQzubOlbpQX7M4RB
-         PNDA==
-X-Gm-Message-State: AOJu0YxkZExe16ogEYU3ofvwfV/CFa4ydVBOn8/q4QmQRV6vFCoehTln
-	kAtaT+n4Yl2CDYuyKtuaZqZIpJFv8akhVScskB+D1XqtwRS3aAxORE6GjXDJLNKiSuNMA/2efny
-	p
-X-Google-Smtp-Source: AGHT+IGZjEi5yKXTDRUkvxbaYiq/2m/637COeEAbPetCoW9ZmUrHO1Pa1rIRzI3ma6o4+RFgbDvmGQ==
-X-Received: by 2002:a17:90b:1e09:b0:2d8:7a2d:62e1 with SMTP id 98e67ed59e1d1-2da8e9cf8d9mr3543481a91.2.1725453165982;
-        Wed, 04 Sep 2024 05:32:45 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8f1b74a26sm5530852a91.52.2024.09.04.05.32.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 05:32:45 -0700 (PDT)
-Message-ID: <66d8536d.170a0220.1a36b.15ee@mx.google.com>
-Date: Wed, 04 Sep 2024 05:32:45 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4D41D79B2;
+	Wed,  4 Sep 2024 13:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725455884; cv=fail; b=TybuIvkaZQCE7e1NrF2t4ra74N/++mzYLolu001RchyTztjYxwZG1wbmpN2e0W+0R1IQJ4prtJwik+Q2XKgMAjBH2RQO01cwnMULPc01VjDHEBOrndh1LGgEJJ9NxxhEJVZFnNzeSAD72cq1qpMFJ+C1DIrSdRIx26+tFXMyF1g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725455884; c=relaxed/simple;
+	bh=c7MRpl9GVU39f6Dwu+XxNIbVBPOw1DPo2I/fX6NYSUc=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=R9ji/tWc8rQVCHZhA6GqHz0mIvYlNweGxrQpkGvg9ZpHphIOKIJAOEHWZgqJUYOC1wHozTmhFQkyhNhE6q2C65JZ4MR7vl/Qjb0b6Qk7CoSVlym5B6UwxuG5rKyLAc0aeph1M8uivf/euYLpi7+s0ZGQSoGREMU6BBfTkqnbwbI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DwwL64SQ; arc=fail smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725455883; x=1756991883;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=c7MRpl9GVU39f6Dwu+XxNIbVBPOw1DPo2I/fX6NYSUc=;
+  b=DwwL64SQbXF6TfyscZlVhpucvHO1kf9+FAWdRFOlqhAUsZlqZs5shs1m
+   kzs4wvOKWpZQ40fHBiycCFp95k5ae2Vn/yCKAa0A6/tq8VK655hf9QS7g
+   IGqPdmY3DmUEAGQE0c5KTSPgl0I84y7J/3zR200gWCWeglmxJVTVtNASm
+   eH4+NtJhn4Yq6RZP31dA3zyMPQdZdJ3fhuY0sWTgaNSHwqJiEl7Rm6tB+
+   Fu1t+qeuJcb1lJV/JNa1Kp7ZjGHrICrJTzwVGeasWAfxIXKP8XarZuiYD
+   sWBoJFf/NT/oY2jDWFPr4MOyMgRtERMyrY5cEAppKKTAs5hhtkavEPrww
+   A==;
+X-CSE-ConnectionGUID: 985ob5AgSW6XSKGu/tNHuw==
+X-CSE-MsgGUID: oPHkGR6+TXOUizyqckgUIA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="35275832"
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="35275832"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 06:18:02 -0700
+X-CSE-ConnectionGUID: Yi92vIVYRZa+Ah324brI2Q==
+X-CSE-MsgGUID: n+wS5N+hTiun9Cj/8/e62g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="65610051"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orviesa006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Sep 2024 06:18:02 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Wed, 4 Sep 2024 06:18:01 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Wed, 4 Sep 2024 06:18:01 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.41) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 4 Sep 2024 06:18:01 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ypfrhX+r9WycSeol06kbCg4Hm3/BrVgR7vTFKKyCRKsShkORjmqAp8rRqXgS+uFGZI1MQfgIE5eO8bbaakSuEpAWuIy0dyrxFWn0ERYzp0sJq3D3llyv80bqf1Hnx0QKFq4MYW2p1M8E+pJA9Vox9u4W1FOhq8gj+3LwbsckRBTo9jUVTD3MourFULEBVbd9XCCNw95yaSDm+CQT3n+GvQAcq3B/47ehB3lvKfaY5CKKsiNaF2oWaW/IOtINpp4iBJ6tYe87MakvpGfXUty7PEpOXoeLXatrAkDQ5S9/8YjPmKM62HQbnkGyYMu488180sdZ9hVAUBIscIsizTgtkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hRaKUgt+O/kXFomXpQZL96z9+TsJAu5xS+g8C8edc7Q=;
+ b=AEkw2VrvjgfFbraidLaFRU2enyhZA6DxIl3vkLniJcfHyImiS+JwooRzJJsxiqLbQ10sT3qXR6tCZV+rYBmlDUAtA4Kk4vs9Zn+VmmhxeGpy8oRT65lUbO7I1XyoU4UKwo/MF/YagDhUhWcsSJd3UdPSmzlDBWsDPyY/HguUEDoSiL84hc2M1Cg8qdcyb6cumZTMunke+SAb9EWALfXIllqyKO0pOW1rXZDUU0iVUN2pYsYmemxceG3MkujrcXGDtxeuqgGNpkkXSafIMwruxxgHJlFqh6hfIIQtS2XzbtWk/3CrZ89Kw1qK6oYpUUOl3xnX3nORHyfjJdPGt80PYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by DM4PR11MB6551.namprd11.prod.outlook.com (2603:10b6:8:b9::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Wed, 4 Sep
+ 2024 13:17:59 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808%5]) with mapi id 15.20.7875.019; Wed, 4 Sep 2024
+ 13:17:59 +0000
+Message-ID: <4ede8b00-aab9-4be6-a589-98cc0d98b929@intel.com>
+Date: Wed, 4 Sep 2024 15:16:50 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: manual merge of the bpf-next tree with the net-next
+ tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+CC: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+	<ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, David Miller
+	<davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, bpf <bpf@vger.kernel.org>, Networking
+	<netdev@vger.kernel.org>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20240904120221.54e6cfcb@canb.auug.org.au>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <20240904120221.54e6cfcb@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BE1P281CA0386.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:80::28) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: next-20240904
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 215 runs, 7 regressions (next-20240904)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master baseline: 215 runs, 7 regressions (next-20240904)
-
-Regressions Summary
--------------------
-
-platform                     | arch  | lab         | compiler | defconfig  =
-                  | regressions
------------------------------+-------+-------------+----------+------------=
-------------------+------------
-beaglebone-black             | arm   | lab-cip     | gcc-12   | omap2plus_d=
-efconfig          | 1          =
-
-imx8mp-evk                   | arm64 | lab-broonie | gcc-12   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron | gcc-12   | multi_v7_de=
-fconfig+kselftest | 1          =
-
-kontron-kswitch-d10-mmt-8g   | arm   | lab-kontron | gcc-12   | multi_v7_de=
-fconfig+kselftest | 1          =
-
-meson-sm1-s90...libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig+k=
-selftest          | 2          =
-
-r8a7743-iwg20d-q7            | arm   | lab-cip     | gcc-12   | shmobile_de=
-fconfig           | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-240904/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20240904
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      fdadd93817f124fd0ea6ef251d4a1068b7feceba =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig  =
-                  | regressions
------------------------------+-------+-------------+----------+------------=
-------------------+------------
-beaglebone-black             | arm   | lab-cip     | gcc-12   | omap2plus_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66d822eee2ed1e9a95c86870
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240904/arm/=
-omap2plus_defconfig/gcc-12/lab-cip/baseline-beaglebone-black.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240904/arm/=
-omap2plus_defconfig/gcc-12/lab-cip/baseline-beaglebone-black.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/66d822eee2ed1e9a=
-95c86875
-        new failure (last pass: next-20240902)
-        1 lines
-
-    2024-09-04T09:05:43.086035  / # =
-
-    2024-09-04T09:05:43.097640  =
-
-    2024-09-04T09:05:43.199768  / # #
-    2024-09-04T09:05:43.209582  #
-    2024-09-04T09:05:43.310470  / # export SHELL=3D/bin/sh
-    2024-09-04T09:05:43.321455  export SHELL=3D/bin/sh
-    2024-09-04T09:05:43.422178  / # . /lava-1188485/environment
-    2024-09-04T09:05:43.433410  . /lava-1188485/environment
-    2024-09-04T09:05:43.534160  / # /lava-1188485/bin/lava-test-runner /lav=
-a-1188485/0
-    2024-09-04T09:05:43.545348  /lava-1188485/bin/lava-test-runner /lava-11=
-88485/0 =
-
-    ... (9 line(s) more)  =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig  =
-                  | regressions
------------------------------+-------+-------------+----------+------------=
-------------------+------------
-imx8mp-evk                   | arm64 | lab-broonie | gcc-12   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66d81a2c47516eb3e3c86858
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240904/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-12/lab-broonie/baseline-imx8mp-ev=
-k.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240904/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-12/lab-broonie/baseline-imx8mp-ev=
-k.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66d81a2c47516eb3e3c86=
-859
-        new failure (last pass: next-20240902) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig  =
-                  | regressions
------------------------------+-------+-------------+----------+------------=
-------------------+------------
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron | gcc-12   | multi_v7_de=
-fconfig+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66d81f3106348ed268c8685e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240904/arm/=
-multi_v7_defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kswitch-d1=
-0-mmt-6g-2gs.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240904/arm/=
-multi_v7_defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kswitch-d1=
-0-mmt-6g-2gs.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66d81f3106348ed268c86=
-85f
-        failing since 7 days (last pass: next-20240725, first fail: next-20=
-240827) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig  =
-                  | regressions
------------------------------+-------+-------------+----------+------------=
-------------------+------------
-kontron-kswitch-d10-mmt-8g   | arm   | lab-kontron | gcc-12   | multi_v7_de=
-fconfig+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66d81f1c164a5fc0e7c86869
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240904/arm/=
-multi_v7_defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kswitch-d1=
-0-mmt-8g.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240904/arm/=
-multi_v7_defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kswitch-d1=
-0-mmt-8g.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66d81f1c164a5fc0e7c86=
-86a
-        failing since 7 days (last pass: next-20240725, first fail: next-20=
-240827) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig  =
-                  | regressions
------------------------------+-------+-------------+----------+------------=
-------------------+------------
-meson-sm1-s90...libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig+k=
-selftest          | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66d81f19ba9b584e18c86894
-
-  Results:     2 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240904/arm6=
-4/defconfig+kselftest/gcc-12/lab-broonie/baseline-meson-sm1-s905d3-libretec=
-h-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240904/arm6=
-4/defconfig+kselftest/gcc-12/lab-broonie/baseline-meson-sm1-s905d3-libretec=
-h-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/66d81f19ba9b584=
-e18c86897
-        failing since 1 day (last pass: next-20240830, first fail: next-202=
-40902)
-        2 lines
-
-    2024-09-04T08:49:18.842104  DABT (current EL), IL =3D 32 bits
-    2024-09-04T08:49:18.842622  kern  :alert :   SET =3D 0, FnV =3D 0
-    2024-09-04T08:49:18.847702  kern  :alert :   EA =3D 0, S1PTW =3D 0
-    2024-09-04T08:49:18.853229  kern  :alert :   FSC =3D 0x04: level 0 tran=
-slation fault
-    2024-09-04T08:49:18.853768  kern  :alert : Data abort info:
-    2024-09-04T08:49:18.858794  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
-004, ISS2 =3D 0x00000000
-    2024-09-04T08:49:18.864276  kern  :alert :   CM =3D 0, WnR =3D 0, TnD =
-=3D 0, TagAccess =3D 0
-    2024-09-04T08:49:18.869835  kern  :alert :   GCS =3D 0, Overlay =3D 0, =
-DirtyBit =3D 0, Xs =3D 0
-    2024-09-04T08:49:18.880888  kern  :alert<8>[   19.641349] <LAVA_SIGNAL_=
-TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2> =
-  =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/66d81f19ba9b584=
-e18c86898
-        failing since 1 day (last pass: next-20240830, first fail: next-202=
-40902)
-        12 lines
-
-    2024-09-04T08:49:18.819865  kern  :alert : Unable to handle kernel pagi=
-ng request at virtual address cccccccccccccccc
-    2024-09-04T08:49:18.820445  kern  :alert : Mem abort info:
-    2024-09-04T08:49:18.825433  kern  :alert :   ESR =3D 0x0000000096000004
-    2024-09-04T08:49:18.836497  kern  :alert :   EC =3D 0x25: <8>[   19.598=
-808] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines=
- MEASUREMENT=3D12>   =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig  =
-                  | regressions
------------------------------+-------+-------------+----------+------------=
-------------------+------------
-r8a7743-iwg20d-q7            | arm   | lab-cip     | gcc-12   | shmobile_de=
-fconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66d81a29840ab518e4c8685b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: shmobile_defconfig
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20240904/arm/=
-shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20240904/arm/=
-shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66d81a29840ab518e4c86=
-85c
-        failing since 13 days (last pass: next-20240820, first fail: next-2=
-0240821) =
-
- =20
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|DM4PR11MB6551:EE_
+X-MS-Office365-Filtering-Correlation-Id: 20b2e063-3e44-48f2-582c-08dccce3ff73
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?V1FTZythT0l3aUZZV2Jia1kwSjFQTXFrTGFCeHVaMFZCZjdSek4vb29JRGxH?=
+ =?utf-8?B?K1liQi80cExPbFViWkowcXVhMDlCY3hhT3kzRmVGWW44UGc4Y3Q0ZkN2STMz?=
+ =?utf-8?B?Qnd4a3J2T1B4KzRvZEtmSkIxOWJ4NGhWNHVSeXJjWTNSVHdEWVRTQzBTSDk4?=
+ =?utf-8?B?WUJpejN6SXJ5bndPYnJIWVQzVVlkK2V4cjBjZ3VEYy8rVjUxMC9nYkpJS1Iy?=
+ =?utf-8?B?QjBnK1hwZEFyVkdmNExFK3k4YjRpNlVUVVJLV0Nkb05tYXZMb0FTOWN1cFo2?=
+ =?utf-8?B?MzdWcHRvRm9tUmdCQlZ3YmdwZzVLeWdZWC8zWkZSdkJZQ3hLR3JVOVg4YTlM?=
+ =?utf-8?B?Rlg5ZWRBZ1Q5NTQ1dlBGRkgvUzQxNDhGc2xSTFJvMnBFZDBSRUpTMlZHNElW?=
+ =?utf-8?B?a1o3WXA5MEhETTkrYmw4OVBGQVRwbjhXWm9GZnFDUzA0bkxzZHVkOFJTS2VY?=
+ =?utf-8?B?QXN4d3ArK0gxYjFQbjN6VjZXVUowRzlsWUIyTitzT3ZBSjNHRkJlanhrRk45?=
+ =?utf-8?B?d3FJeWgrMjFGQ0hnYmVQdEJGU1NLVjByb1JCQ1FkWHFRWCswOGYxMXBTWlRW?=
+ =?utf-8?B?Vk9tVnRkTXZsSTBnZ05JQ2U5OHhIY2RPWDAyQlhIR240NHBqdnlSdFdTU1Fs?=
+ =?utf-8?B?UFppL2pQQlNGNUh0M1lBeXliejBJRm1SanZqNkY0b3ZrMjI0b0xYS2Fadm1L?=
+ =?utf-8?B?aTJDZjE1QVpRM2Vxb0p6MFlyaDgyd085Z0lTQXY0VDJxSC96VjQyTzhDUW5r?=
+ =?utf-8?B?bjgvSG43QkN2YUxEbUlSUlZSeW14Wi93Y3FvVDhGZVRPQTJZcnBLYS9SS3hw?=
+ =?utf-8?B?SjVRVlpNS0tBZWM2ZHkyc0VEczloeCtFaTRqeHJ3VzVsU3orak1OcC9DcFVN?=
+ =?utf-8?B?WC95c0lMcjNMeS9SVWRPSlRVeFFsVzRwcXQ2QUZBSFpNZ01TOE5Yb3pCd0Fy?=
+ =?utf-8?B?WVFkSTZpc2xzYkY5STBCOCtBUjJQRnpJaE1PNHFLOExsV0R1ekdwVmo2emY2?=
+ =?utf-8?B?SEk3MUZtMkZJUUpGSGV1emdOLzVZTXpYam1iQXRDUFAzUEZ5dDYzYU1jVWIx?=
+ =?utf-8?B?aC96VzI5bXlFNEcrVU81M3MwTHlmcjdKUysxTjVCUEV6UVNTTEd5Z296czht?=
+ =?utf-8?B?VkZmWUdUUHV3UkdoYUhqVzlPWlZLQThRVmJZVThZc3VUM09vQndnZERQWk9U?=
+ =?utf-8?B?V1RXTytnRUFzRHJ0ajNRanZrb0c4UHhZR2dGNmlUSis0TFFtRnVzMFJBZUV4?=
+ =?utf-8?B?QVNJUnhLTVhqNHZnMUlNZlpycG9mclZodm1yaEE0UkhOM2pwL0t5Y2ZYTHQ5?=
+ =?utf-8?B?WDFXempBaWRici9SMHBKTTRUME9pV3NaQ1RuVEhOWXJyWDVqWmlPT0FqT2tv?=
+ =?utf-8?B?bDNIMkFleWo2cmVuNk5YTzltOVhROU9WMGFERUtCRmNkT3Arb3R2blhQYity?=
+ =?utf-8?B?K2s2VlNxWERVMW9uZUloVTJKako2QkxPR0tKWDZKS09qU2hOejhGUy96R3NV?=
+ =?utf-8?B?cUNORGNxVWVXZzNlaUNnWlZrZW5Fdk0rcEwwRnBMcTlHSDZSb1lsdnZSVHNt?=
+ =?utf-8?B?NVJPa2F2MTIwUWhLbmE5ZUVyTTZuREp0YzVxTUJuVlgwZXMwYllhbkJDSGpv?=
+ =?utf-8?B?V1AyajlSRE5BbnJaaXdCdnArd1lvSS9oc0VaU0NCYTl3UStUSkFVLzYrZ1Np?=
+ =?utf-8?B?SnoybXQzYTV4ZlltTjVpVHk0V0hISnpFN1NiWXA4L2wwbVU3NXRSUWZGMllI?=
+ =?utf-8?B?d0EzSXRoVGM4L1BJZVpKczJvQ0JDTE5nMUFPQmRUVHoyMnNOWFJGWEN1LzFt?=
+ =?utf-8?B?SG9CWU1FaDBub1dwVk9kQT09?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OVJaMHNiZ1pOTTZIeGo0OS90eUpXa2lJbUg0Q2lwankrV2d6Mm9renJkT29y?=
+ =?utf-8?B?V3k1VlJtaXBTN3Z5eFh6UXN5aGhwbnAzd04ycFVCNHJCaUppRW5GTEhxcmpB?=
+ =?utf-8?B?bVJaUHAya3J3QnljWjdjcC9aRW9WRm95aFAyYllxRjlsVTFrSXkrdVhYUmYz?=
+ =?utf-8?B?RjlvaDRKZUg3b1lzTkY2WFBBUWNwVXRIN0xiN2QzYlh5VkJaMnVzbE82S1Ry?=
+ =?utf-8?B?cFdlZTBheURDRndUaDU3dlFGWkNERzZjY1hCNU8reFduNHExQTdzWVZhaG1K?=
+ =?utf-8?B?SWwvWTlRb1FxcVBOVWRmYm1NL21QdGQ4VDBqbHU3OFgraXd5S3BlSWZ1VzFn?=
+ =?utf-8?B?RHBuL2NudXdYV3l5MHA5b1FONG15L0o0VzNVeTZyWVNYWkdPMTBXVWM5SjY5?=
+ =?utf-8?B?TUFTMTNUNkE0NGo1czM0Y3VuMjRHTzI0QmhCaDk4ZVZ1ZUZMY0pZZ0dxaEZD?=
+ =?utf-8?B?Y3dtZURRWnlFYm9mS05oVVBDV3IwNmlpRStVeW1mYW5pMHpwVDNoNU5HZGdY?=
+ =?utf-8?B?R3FOTDFkTUlTUEdKSUZkYWZtVkVhYU41dEtsVzJOeHhlK0NTWWZYUmJNNUdq?=
+ =?utf-8?B?SzVuK05pRjhwb2IvVmxkK1ozNTdHQUViKzlzdmd5UTlWZGtjV2crcC9JNlVM?=
+ =?utf-8?B?MEZZa0hXME5Ka0pmWWhDZTZIa1dQN2EzaWpTS1pxLzNKeUtGVmpMSGR2bmRU?=
+ =?utf-8?B?N3J4WW5rODRjclNscnpNSmxzSXB3SnNNY0ZSU0JvVC9naWRsQnFSM3RxL0VU?=
+ =?utf-8?B?UU1EcG5TOUhidTdZS1U0bGIrcEIyZVpaOXhLNGtXcCtnem9qQXVsditnQWRY?=
+ =?utf-8?B?ZEw4UytZR1NXQnhoajdYZTkzS01OQnZ4K200OGFPYXBiL2ZxcXErS1FEMFhF?=
+ =?utf-8?B?VlVkd3l6bzUxMnUrelJKREZRMi9IazVka0NWZGZDZWY1Y25wUkFSNFEyN1lG?=
+ =?utf-8?B?cVJUbHk0d2Y4VC9HMmU5VkZYbEJaUXFveW1tZkFHWHhaemFmVnhlNjkyWUs3?=
+ =?utf-8?B?K3NJbklpd2dKMHZTNWpYU21jV0RBRkljVllvVVVnNkxWdUt2MEdHMU9BZlhH?=
+ =?utf-8?B?Y1RHSnJ4YkFRRER0d3lxU0w3STZ6bFNsc0VXVlRrUlVqVnJ6enB3aHM3eWtW?=
+ =?utf-8?B?L1A4a0hZNUYwZzk4QTVJQzhrb3UwMmhGdlo0UXIybFNIbjNoMllYUEJXQkR0?=
+ =?utf-8?B?MDBrTUdtdnBKWXhFS2g0U3p2eUFSYzE1Nk5wMno1djhMa3d2a1psV2JLd3U1?=
+ =?utf-8?B?R3RTUXNlTXJvV0gyb2JMdTA2UE5CdllhemY3MUFaV1hNelZ3eFA5dHFmdzFY?=
+ =?utf-8?B?RTBSRGRQd1JkQVNvakExK2NPNlJMeDRYcjRMZU5QRFM5VUlyTkdFOGNqeUNi?=
+ =?utf-8?B?SHZTMVlWQjliS2hwMzhZa2dqZS9FNjhGSkVhVTF6R0ZSTHNOdmhPVDNvRXUv?=
+ =?utf-8?B?Z2JYcjJVN24wY0wzZlNIaVJ5azYyWFFUMGdySjhIK1BpZlFLWERYWmV1Vm84?=
+ =?utf-8?B?TjhGdDdVbjJ3cE92MmJwMW1XeXVTcjRLdU9wZTRobDhYVHNsbmhBSWsxUXpy?=
+ =?utf-8?B?V2hXSVAzZUhWY2pPa0gySTV0SElVWEhlSlVNS3FNZHp6VmFKa0VtbnBvMVUx?=
+ =?utf-8?B?Y0cxMGZGQlp0dGkvcUdkend3Z3NubmgwVldsWUQxUXJac3h6OUNRV2NqVDdQ?=
+ =?utf-8?B?V0s0aEZxS3FRWGg5YUFUakxib0Iwc0ZwaGV5VnQ0SHUxRk5Gb2MrQWJlWlA4?=
+ =?utf-8?B?TTk3VXFvWWV5emxDQ21aMHI3NHlrQ0VCN3NHZTEzb1hObGNOcTUxdHcwYVYr?=
+ =?utf-8?B?WGpPMTNQRlVuWVR4SnArL25RT1ZWYW5sb1F6am51QVIxZmFsMVRablQ0a3ZV?=
+ =?utf-8?B?dnNra0pZLzQwZ200RkpXRkdpYzh0a29ZVDNXaHlzemNOaU5qNG5vZm5vNkdC?=
+ =?utf-8?B?Y3FLSlIvUUtvSkNJbmlhNlErVmpoaFdyTy9LN25MVjU5ajd5QkFlYkNuQWtq?=
+ =?utf-8?B?a3dwMXBicC9RTkM1elFVYjhBa0RDU0tNRFJGMkJtaDJWaU9JTkdGbG9zck52?=
+ =?utf-8?B?cWJQMEpwL21RQ2s4TVN6VnU3ZGozekIzS3JuRmZFR2gwOHV6UnlYRE5oNVlL?=
+ =?utf-8?B?SFdwTjFlK3NBNk45V2ZraVRlRlIxMDlqWGpiLzdhTUM3bE9QRW9nMGt0RXdJ?=
+ =?utf-8?B?aGc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20b2e063-3e44-48f2-582c-08dccce3ff73
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2024 13:17:59.7334
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Dr99dbQ/WzKKoEommQi+3+Ucjf4ef/JvPP7+qWX2cKmGI9vQAkVDKvUZWtmEE94VkB2vy0yTV67GB+3Hh65iaimeNrsl6xtHN7i7NFH0DmM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6551
+X-OriginatorOrg: intel.com
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 4 Sep 2024 12:02:21 +1000
+
+> Hi all,
+> 
+> Today's linux-next merge of the bpf-next tree got a conflict in:
+> 
+>   drivers/net/netkit.c
+> 
+> between commit:
+> 
+>   00d066a4d4ed ("netdev_features: convert NETIF_F_LLTX to dev->lltx")
+> 
+> from the net-next tree and commit:
+> 
+>   d96608794889 ("netkit: Disable netpoll support")
+> 
+> from the bpf-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+
+Your fix is technically correct, but maybe swap the lines?
+
+ 	dev->priv_flags |= IFF_NO_QUEUE;
++	dev->priv_flags |= IFF_DISABLE_NETPOLL;
++	dev->lltx = true;
+
+Looks more natural I'd say...
+
+Thanks,
+Olek
 

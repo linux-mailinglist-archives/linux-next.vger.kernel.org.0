@@ -1,134 +1,202 @@
-Return-Path: <linux-next+bounces-3594-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3595-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7173696C0CD
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 16:37:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1C0696C3E1
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 18:19:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CE441F21B9D
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 14:37:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 120691C20E5B
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 16:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49FC31DAC5D;
-	Wed,  4 Sep 2024 14:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C3CE1DFE0F;
+	Wed,  4 Sep 2024 16:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="nL/E0qFG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="S6bTVywN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ROivptP+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADFD1E871;
-	Wed,  4 Sep 2024 14:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F081DFE0B;
+	Wed,  4 Sep 2024 16:18:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725460609; cv=none; b=FDSxKMD35Nuy0+Jk4teSq3zxX7cUwH7I9IXAqLQ9cFesZgxx4R2iRE/bbkFdzQj9Jb2KtQ/Cfj52S4XBAtvZFx/3LPDj4ZjFF8qBL+2yigUXwa71BTjYq2b9zoFU9tkZJMycAxOhEFglGwcB3cLYwM7tkbcspo4NWJiybnlwf8E=
+	t=1725466738; cv=none; b=BnDmt4sc03OevUNFm8+Mrs5Ps3BdGrSk8NlqvfPFFb9o/25u01+tWkNYfLD9xCnpUkJrFEp/BCjb4QNsqRShqnyk5lySbWT9GVhKOJD6c0TnHGPwmTBj193b7bw1LG9dDx/fckCeFambeXoxI5zX9SDr+PfbqRqAXfqXuk87Pyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725460609; c=relaxed/simple;
-	bh=pJxqGv92LWCceBc+JZ0tpIa80nahQlAeKmF6m0/qfEw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=dndyn8ce/DczTXqykwffnfySGwWh0wVANUVSS57BIqxR6P/CUVlspWpcxn9YpWE9XDnJsbyzVrUt8vrQTpz5YDPbJ8JT3KQk0rmtXVs+gCl0EhGIy4PYQp1cw/OaToZbA8S5B7AQUbj9kVIVHxmWbcxH4c2EGQW7TdHhvodhr/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=nL/E0qFG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=S6bTVywN; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id A17DE1140200;
-	Wed,  4 Sep 2024 10:36:46 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-04.internal (MEProxy); Wed, 04 Sep 2024 10:36:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1725460606;
-	 x=1725547006; bh=IZQqsKxMYamNT2ngzYBOlaCRex0vsynuLu2ZlNqHf3c=; b=
-	nL/E0qFG2Ji8vN7+rDxT1AswPgAVvJ1sxaRmnLQnNGX+afE1wPqryPMNac9KwZIZ
-	dHfZXyFO+wHdPBB+Wvcw7sxqFng2uU0vmZ3VQDxshL/Uut32qdLtrPLF8WlNwiG0
-	xexOwLTMddlR9J2c80tafUNujYCjVokcXojFL3TlyTa7lVtbvfomdb30cHqdPfjz
-	ReGRMqdnX7eOuOUWxJSf8BTZ3bAaPeWHMSoEJZ1Bcg7hm7n7LiE8WZoajUKC4u+d
-	6yqAr0D9GpXzDS35vQKExyLvWJLkADSXGqGjK/XtoKZvPg5raxLbxvszuKH+COEP
-	Irmxn9MWgrVZlIME17d3yQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725460606; x=
-	1725547006; bh=IZQqsKxMYamNT2ngzYBOlaCRex0vsynuLu2ZlNqHf3c=; b=S
-	6bTVywNxF0Im68pe0yEkrtei54KmAY3KI2uoVK/6qeAUfy+hbx5aZRWWdeA/9I0p
-	V/RCjbVE/Y8qLtSaeRsgAtwUfcv9MCVOsQmnqskw+xClu//oAzxFzHUgid4wLx3N
-	4H/J7QzRXOjmv/gtPC/MBypUXOaZBbLJ65Jrjc0OACpoIsDVG0VQxT8hndpoJ8Qx
-	x2fdxDtRuApegOMn/jC2PcHG+PRHFmER8nzEDHF13H8ZYMv+/MeBjWVA0yRW1Qu1
-	TWcMF0+XJpVM8uMpg+rytxjQIrRc4UVGMc4ba7KDuRGiNDrCM/IRg81O0tpZ0OAo
-	SWdFyh1qi/85NiM8YgeRQ==
-X-ME-Sender: <xms:fXDYZgMhd7JgbbnhY1HiKnz7My2zyO6AmMXsJbv4oWnt82PecoEDGQ>
-    <xme:fXDYZm_cG1XSXhd_UDGR13bXkytbU6aOPXqyg0pEF_q7EtNYvMZf0VBODun_iA621
-    9SNbC7ao8ohy0ESEE4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehjedgjeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedp
-    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohephhgvrhhvvgdrtghoughinhgrsegsoh
-    hothhlihhnrdgtohhmpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdr
-    rghupdhrtghpthhtoheptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhhouhhprd
-    gvuhdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhn
-    fhhrrgguvggrugdrohhrghdprhgtphhtthhopeholhhofheslhhigihomhdrnhgvthdprh
-    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
-    rhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:fnDYZnTtnLRggR4I9KGpHVYZYNQGKZWAm-H2irDjI9T3bkgRROCE1Q>
-    <xmx:fnDYZou--qfwwlp1VVtOi7nwkzMQvV9J2PX_6rvE6ymJPw1tWyPMhw>
-    <xmx:fnDYZofHWzuW9CsJ1IPOwI00igaen315WAhJP_2X5KYPN4aGXWX9FQ>
-    <xmx:fnDYZs3asT6A4ZDvh7e94TkHavG1xxjUYXPvZIoMjH2bCsSGcWI5fQ>
-    <xmx:fnDYZgTNSv8cVsGjlUHD4hsdZIzTDhoK98kFnOquBamv2vNolaytSPrS>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E2DEF2220083; Wed,  4 Sep 2024 10:36:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1725466738; c=relaxed/simple;
+	bh=0bKyW3fD0KF6qrF+/e2zTkbWl5tvvBYdeZlv0lyicxY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DXnD3+rd5uMPmK0pQ8xW2eB7qN/gqZTcc6a0x6yYkUmngg/nkpKddS2WGuCLrYbxEVkywwiJwIRHsmWPg/2sT5nn//KW0PMjTZAfztPwPUjvEDxDuuut24PWhErJjQXYh9fwAf9cauLKwWvNyrh4aJitcojo7FeCLv1h3YNCxvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ROivptP+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D249FC4CEC5;
+	Wed,  4 Sep 2024 16:18:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725466738;
+	bh=0bKyW3fD0KF6qrF+/e2zTkbWl5tvvBYdeZlv0lyicxY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ROivptP+CrJ38Sw1vOjLCyIuYylERI7RMhwkI5IUtIucs2vPKum0FWDcx1RnJj/4K
+	 /Udyk3HKvxddBaTAnWfoQPdA11A6tUUIMQvCVCD+tiZ2kEDdyQZt67ps1fgvI//q91
+	 Tkya6/k6RTRMCRMrRiffxYvKtaYUywX6W8/fpkigXw1Eux6mbue3ibD2jSuHH/WKMo
+	 F9wqP+Y7Dqquw7ffkPZ/bhvKqj0B6M2kY41FSfPv4NeuPnIm7FAhXL4Mjx939evRTI
+	 sjfXaxuZUi0cyUBfuKCabcv1Fzhb/WF8sQP/YXvQPnahHy+lQv9NMdMuWsp56QW0Xv
+	 1ybbzMxSMv5QQ==
+Message-ID: <04992d68-5cf7-4376-85a6-588a4c26a82c@kernel.org>
+Date: Thu, 5 Sep 2024 01:18:42 +0900
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 04 Sep 2024 14:36:25 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Stephen Rothwell" <sfr@canb.auug.org.au>,
- "Olof Johansson" <olof@lixom.net>
-Cc: "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Herve Codina" <herve.codina@bootlin.com>,
- ARM <linux-arm-kernel@lists.infradead.org>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- linux-next <linux-next@vger.kernel.org>
-Message-Id: <2ac0b88f-2eb0-4d57-a1df-a4e40741fd62@app.fastmail.com>
-In-Reply-To: <20240904104859.020fe3a9@canb.auug.org.au>
-References: <20240904104859.020fe3a9@canb.auug.org.au>
-Subject: Re: linux-next: build failure after merge of the arm-soc tree
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the extcon tree
+To: Hans de Goede <hdegoede@redhat.com>,
+ Stephen Rothwell <sfr@canb.auug.org.au>, Chanwoo Choi
+ <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20240904152421.4e0ad2b7@canb.auug.org.au>
+ <f31f8bea-95da-4d32-afe0-9c2abc69d833@redhat.com>
+From: Chanwoo Choi <chanwoo@kernel.org>
+Content-Language: en-US
+In-Reply-To: <f31f8bea-95da-4d32-afe0-9c2abc69d833@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 4, 2024, at 00:48, Stephen Rothwell wrote:
+24. 9. 4. 18:24에 Hans de Goede 이(가) 쓴 글:
 > Hi all,
->
-> After merging the arm-soc tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/soc/fsl/qe/qmc.c:25:10: fatal error: sysdev/fsl_soc.h: No such 
-> file or directory
->    25 | #include <sysdev/fsl_soc.h>
->       |          ^~~~~~~~~~~~~~~~~~
->
-> Probably caused by commit
->
->   eb680d563089 ("soc: fsl: cpm1: qmc: Add support for QUICC Engine (QE) 
-> implementation")
->
-> I have used the arm-soc tree from next-20240903 for today.
+> 
+> On 9/4/24 7:24 AM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the extcon tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> drivers/extcon/extcon-lc824206xa.c:413:22: error: initialization of 'unsigned int' from 'const enum power_supply_usb_type *' makes integer from pointer without a cast [-Wint-conversion]
+>>   413 |         .usb_types = lc824206xa_psy_usb_types,
+>>       |                      ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/extcon/extcon-lc824206xa.c:413:22: note: (near initialization for 'lc824206xa_psy_desc.usb_types')
+>> drivers/extcon/extcon-lc824206xa.c:413:22: error: initializer element is not computable at load time
+>> drivers/extcon/extcon-lc824206xa.c:413:22: note: (near initialization for 'lc824206xa_psy_desc.usb_types')
+>> drivers/extcon/extcon-lc824206xa.c:414:10: error: 'const struct power_supply_desc' has no member named 'num_usb_types'; did you mean 'usb_types'?
+>>   414 |         .num_usb_types = ARRAY_SIZE(lc824206xa_psy_usb_types),
+>>       |          ^~~~~~~~~~~~~
+>>       |          usb_types
+>> In file included from include/linux/kernel.h:16,
+>>                  from include/linux/cpumask.h:11,
+>>                  from arch/x86/include/asm/paravirt.h:21,
+>>                  from arch/x86/include/asm/cpuid.h:62,
+>>                  from arch/x86/include/asm/processor.h:19,
+>>                  from include/linux/sched.h:13,
+>>                  from include/linux/delay.h:23,
+>>                  from drivers/extcon/extcon-lc824206xa.c:20:
+>> include/linux/array_size.h:11:25: error: initialization of 'const enum power_supply_property *' from 'long unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+>>    11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+>>       |                         ^
+>> drivers/extcon/extcon-lc824206xa.c:414:26: note: in expansion of macro 'ARRAY_SIZE'
+>>   414 |         .num_usb_types = ARRAY_SIZE(lc824206xa_psy_usb_types),
+>>       |                          ^~~~~~~~~~
+>> include/linux/array_size.h:11:25: note: (near initialization for 'lc824206xa_psy_desc.properties')
+>>    11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+>>       |                         ^
+>> drivers/extcon/extcon-lc824206xa.c:414:26: note: in expansion of macro 'ARRAY_SIZE'
+>>   414 |         .num_usb_types = ARRAY_SIZE(lc824206xa_psy_usb_types),
+>>       |                          ^~~~~~~~~~
+>>
+>> Caused by commit
+>>
+>>   e508f2606c0b ("extcon: Add LC824206XA microUSB switch driver")
+>>
+>> interatcing with commit
+>>
+>>   364ea7ccaef9 ("power: supply: Change usb_types from an array into a bitmask")
+>>
+>> from the battery tree.
+> 
+> Since I'm the author of both commits this is my bad, sorry.
+> 
+> Stephen, thank you for fixing this in -next.
+> 
+> Chanwoo, Sebastian send a pull-request for an immutable branch with
+> these changes:
+> 
+> https://lore.kernel.org/linux-pm/ez5ja55dl7w7ynq2wv4efsvvqtk4xyalf4k6agtsuhpgrtlpg3@d6ghlle4cu2q/
+> 
+> Can you please merge the ib-psy-usb-types-signed tag into
+> extcon.git/extcon-next and then apply Stephen's fix so that Linus
+> does not get hit by this build error when he merges the extcon
+> changes for 6.12 ?
 
-Thanks for the report, I have now applied Christophe's fix to address this.
+I pulled "tags/ib-psy-usb-types-signed" and pushed it to extcon.git
+- git pull git://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/ib-psy-usb-types-signed
 
-      Arnd
+And I send the fix-up mail as following:
+https://lkml.org/lkml/2024/9/5/13
+
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> 
+>> I have applied the following merge fix patch.
+>>
+>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Date: Wed, 4 Sep 2024 15:19:19 +1000
+>> Subject: [PATCH] fix up for "extcon: Add LC824206XA microUSB switch driver"
+>>
+>> interacting with "power: supply: Change usb_types from an array into a
+>> bitmask" from het battery tree.
+>>
+>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>> ---
+>>  drivers/extcon/extcon-lc824206xa.c | 15 +++++----------
+>>  1 file changed, 5 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/extcon/extcon-lc824206xa.c b/drivers/extcon/extcon-lc824206xa.c
+>> index d58a2c369018..56938748aea8 100644
+>> --- a/drivers/extcon/extcon-lc824206xa.c
+>> +++ b/drivers/extcon/extcon-lc824206xa.c
+>> @@ -393,14 +393,6 @@ static int lc824206xa_psy_get_prop(struct power_supply *psy,
+>>  	return 0;
+>>  }
+>>  
+>> -static const enum power_supply_usb_type lc824206xa_psy_usb_types[] = {
+>> -	POWER_SUPPLY_USB_TYPE_SDP,
+>> -	POWER_SUPPLY_USB_TYPE_CDP,
+>> -	POWER_SUPPLY_USB_TYPE_DCP,
+>> -	POWER_SUPPLY_USB_TYPE_ACA,
+>> -	POWER_SUPPLY_USB_TYPE_UNKNOWN,
+>> -};
+>> -
+> 
+>>  static const enum power_supply_property lc824206xa_psy_props[] = {
+>>  	POWER_SUPPLY_PROP_ONLINE,
+>>  	POWER_SUPPLY_PROP_USB_TYPE,
+>> @@ -410,8 +402,11 @@ static const enum power_supply_property lc824206xa_psy_props[] = {
+>>  static const struct power_supply_desc lc824206xa_psy_desc = {
+>>  	.name = "lc824206xa-charger-detect",
+>>  	.type = POWER_SUPPLY_TYPE_USB,
+>> -	.usb_types = lc824206xa_psy_usb_types,
+>> -	.num_usb_types = ARRAY_SIZE(lc824206xa_psy_usb_types),
+>> +	.usb_types = BIT(POWER_SUPPLY_USB_TYPE_SDP) |
+>> +		     BIT(POWER_SUPPLY_USB_TYPE_CDP) |
+>> +		     BIT(POWER_SUPPLY_USB_TYPE_DCP) |
+>> +		     BIT(POWER_SUPPLY_USB_TYPE_ACA) |
+>> +		     BIT(POWER_SUPPLY_USB_TYPE_UNKNOWN),
+>>  	.properties = lc824206xa_psy_props,
+>>  	.num_properties = ARRAY_SIZE(lc824206xa_psy_props),
+>>  	.get_property = lc824206xa_psy_get_prop,
+> 
+> 
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
+
 

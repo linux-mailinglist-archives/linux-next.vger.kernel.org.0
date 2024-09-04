@@ -1,112 +1,117 @@
-Return-Path: <linux-next+bounces-3589-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3590-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C84D796B6A2
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 11:28:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFB8D96B78E
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 11:58:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D8A41F21CCA
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 09:28:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BE6F281CDA
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 09:58:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64E61CDA0C;
-	Wed,  4 Sep 2024 09:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04CF51CEE89;
+	Wed,  4 Sep 2024 09:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k51qikJc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ek1/+Prc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043C21CCED1
-	for <linux-next@vger.kernel.org>; Wed,  4 Sep 2024 09:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C537F1CCEE4;
+	Wed,  4 Sep 2024 09:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725442120; cv=none; b=IFeqYXPZaXbQTn765qBD/2bNBW10YB4AoccbhwjNNVQ6rgZNJKJyUGfzL6tq5iW6wb07eb+C2LHjW8/2sl5RrYL8vizG25k8/YOTuff442cmZU1KF6zTBMlXchMSibva4Xc7dtC/HUtN24iy/69493S/nMajZmzuacQpP3S/99w=
+	t=1725443895; cv=none; b=hQmg0yrbOuagFAIby77JXf4of/H1SfJPglSfVrR6kHuvmG8gPdD/5QcKIl+AXW4QJqOeJ8L4uEHRGpLFr0lX1HLAZA5W51ydWq8kbY3tKz0xPtX+2g8wWwPx2Xy1jPLaI84sekK1Su/P6+uSM+XDT+nZYOGHTPd2q8M7SFSB874=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725442120; c=relaxed/simple;
-	bh=SGrjCCtQW4ZdmFMOR4QedGcj3VyM4JSDKs1/b25Au6g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QCQUlBy+ZTjwe/1AhKJ/fC7XVcPr08vh8bJ79IU8j4PZhIVSQpY0o/pyZSiHYC8YXYCovupCJNJVN9ktjS5lM8DG+nJngktCRWJvF7sceOxuDf2NYs39z1ErrtZUALshuH3G126o/hPLLjGbLgFsLJiyYe+G6OrYsn2m4HM70GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k51qikJc; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-533488ffaddso7764527e87.1
-        for <linux-next@vger.kernel.org>; Wed, 04 Sep 2024 02:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725442117; x=1726046917; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xuq/cYf8+71Qm9h4676C8ljwN2DXNbLAaqL8sBoWxfU=;
-        b=k51qikJcjws5Iq+l6qAAxieFZvVepH8HYv+or2seaBH40ji5kdyQ6HJF6u4nJZqa7P
-         UCTxj2FndujwC5UVwL9dRdHTHIHBWRhvYDSA8S2Qe5Ko3/sc8nTbPDFoP4L90AHfYCq9
-         MjqqiGr9tKGYqyOT0VQbXGTWArHXmKMyeeirZFbwAnS989FejUL8tcwkjRE68w1kqL8j
-         2zsvi6cODN3g2VOPdI2GN4VyI3hpgBJZAb7DZU+M1JsFxArTO+Rh3ezzR+xiMPnd5CXh
-         rBQPN3zo4GrLk54yKCENUIIE6xsLrcuRWSWrQNFwfy85QJojV9/GGB1aFyEHJelFSxD5
-         LYbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725442117; x=1726046917;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xuq/cYf8+71Qm9h4676C8ljwN2DXNbLAaqL8sBoWxfU=;
-        b=Lpy5Fj9uqN4oXlxek9qfUC7xh0TrRkPw+8vkiM5i4sLqAuKzqlJexd+qn0LFqKEc/L
-         pDzmnHmR9pMjh09aEZPa4mT0+BwkFgsHud9Oo+3O+3/397rOxjgNz42uNWyOmORXtehv
-         GB4XGfUMpC3FUsczazkz6mEmc+QUus85ACpfMAW1p3sB0l44McocMx9jDP8qsbh9BKlu
-         srq7Nqqmj9fYvGyIkWKNy6VABVyelbR4qp/PzWvOuWqn/rC8m/lmrzsyJM4ZYAYYK6Dm
-         jfmeIQ1vGe98ZP2x3Ltj4V16+ALOEeRKNqPu2oqlfKTE9/zV1YMmKvcDIzPs3MOTgPCy
-         S5lg==
-X-Forwarded-Encrypted: i=1; AJvYcCUqbmGA2X3/kRxdr3l8yQebXj6VFoQrSoV/xkkwDKakyctPgIkdwJaP/sII6J67pxe+0Br070YR6CBo@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZItujU0RU4DQPzl1FU6MlRhiWWN6RBqNtYeJARgfYqzOX0Hgg
-	OkQMueq6c1audShCQh+p9V+ZwoOxJUtPqj+B1GTNFMAruiRV6fR02/z7btp0cCORZlmnJ6A5E59
-	i
-X-Google-Smtp-Source: AGHT+IE2duZdsTgB5bwxuXGiYe/YCnbsFxat+800LtjisZGn1xrJhdX8Dw8rX1FIpkF/8bCDA2G5Kw==
-X-Received: by 2002:a05:6512:3352:b0:535:6992:f2cb with SMTP id 2adb3069b0e04-5356992f407mr628693e87.42.1725442116986;
-        Wed, 04 Sep 2024 02:28:36 -0700 (PDT)
-Received: from [192.168.68.116] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a898919670asm794444066b.140.2024.09.04.02.28.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 02:28:36 -0700 (PDT)
-Message-ID: <679cfd5b-42fb-49c5-833d-05cca34b4ecb@linaro.org>
-Date: Wed, 4 Sep 2024 10:28:35 +0100
+	s=arc-20240116; t=1725443895; c=relaxed/simple;
+	bh=R3f8XqqhzUhpawC1aXctJCl08zl8Q7PA+O00jmQMEOQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=JpGSLh5u4Y3jQ08nGpUcXrUvNxDjHA7nVTCW6C44je/aCE6rnZdYxxT9WZ+nMpdxQ4n5qkSOC9U+uKyU+3JKmWLgp7rqcESOGvRY+GshhVwHr002LQo2bqjqwvqfYuWPA6cB1t+LdGG/P1w1o85ft0AXOADFXyHn4v7cuRhd2dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ek1/+Prc; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725443893; x=1756979893;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=R3f8XqqhzUhpawC1aXctJCl08zl8Q7PA+O00jmQMEOQ=;
+  b=Ek1/+Prcx1wIcIuMRTRUE7bbfX9+dbKIqJcsJicVJG1Hk+6nxlPb3tua
+   HTZx6fLFhfIy2kMgmMBgO+FInHvKkBW0crIFUhp3e6qDro26YRhVn6ZfY
+   cW/I6rU45FsHjPPgnaeYl1wlYQblWvCAagicHeZ9EIoj1HlnONdXdx2yF
+   /+jE5jxG1+Gb+R/EFo5IpgKxQnCPx1xa3uVd0DuL976nzRhrJVg53Es41
+   YK3dqf9yuCuabmk7mY/fYRG6RCLsbw1JUFUofeuuJtWlWBDKBxVdstnDo
+   pku7/PYgfc4LyWqnnTzax154hNkfyRdHdebQlqBkDrnXgAmlONSSsEShB
+   A==;
+X-CSE-ConnectionGUID: HgSW+JTFRuCTT1vO6G8t8Q==
+X-CSE-MsgGUID: vk11CzoUS5WjvVzIv9DDQA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="24248096"
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="24248096"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 02:58:13 -0700
+X-CSE-ConnectionGUID: oiYwld9UQAiVnRI/DkEpYg==
+X-CSE-MsgGUID: zHWxKB9sT2+xBNmaZkZy4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="102626489"
+Received: from cpetruta-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.246.18])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 02:58:10 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Vetter
+ <daniel.vetter@ffwll.ch>
+Cc: Marc Gonzalez <mgonzalez@freebox.fr>, Robert Foss <rfoss@kernel.org>,
+ Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
+ <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+In-Reply-To: <20240904125206.6708daff@canb.auug.org.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240904125206.6708daff@canb.auug.org.au>
+Date: Wed, 04 Sep 2024 12:57:52 +0300
+Message-ID: <87ikvbspun.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: duplicate patch in the fastrpc tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
- Arnd Bergmann <arnd@arndb.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240904153713.4dc28982@canb.auug.org.au>
-Content-Language: en-US
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20240904153713.4dc28982@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-Thanks Stephen,
-
-On 04/09/2024 06:37, Stephen Rothwell wrote:
+On Wed, 04 Sep 2024, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > Hi all,
-> 
-> The following commit is also in the char-misc.current tree as a different
-> commit (but the same patch):
-> 
->    b056e4e23acb ("misc: fastrpc: Fix double free of 'buf' in error path")
-> 
-> This is commit
-> 
->    e8c276d4dc0e ("misc: fastrpc: Fix double free of 'buf' in error path")
-> 
-> in the char-misc.current tree.
+>
+> After merging the drm-misc tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/gpu/drm/bridge/ti-tdp158.c: In function 'tdp158_enable':
+> drivers/gpu/drm/bridge/ti-tdp158.c:31:9: error: implicit declaration of function 'gpiod_set_value_cansleep' [-Wimplicit-function-declaration]
+>    31 |         gpiod_set_value_cansleep(tdp158->enable, 1);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/bridge/ti-tdp158.c: In function 'tdp158_probe':
+> drivers/gpu/drm/bridge/ti-tdp158.c:80:26: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Wimplicit-function-declaration]
+>    80 |         tdp158->enable = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~
+>       |                          devm_regulator_get_optional
+> drivers/gpu/drm/bridge/ti-tdp158.c:80:65: error: 'GPIOD_OUT_LOW' undeclared (first use in this function)
+>    80 |         tdp158->enable = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
+>       |                                                                 ^~~~~~~~~~~~~
+> drivers/gpu/drm/bridge/ti-tdp158.c:80:65: note: each undeclared identifier is reported only once for each function it appears in
+>
+> Caused by commit
+>
+>   a15710027afb ("drm/bridge: add support for TI TDP158")
+>
+> I have used the drm-misc tree from next-20240903 for today.
 
-This is fixed now along with slimbus and nvmem tree.
+Fixed by commit 532f0d109658 ("drm/bridge/tdp158: fix build failure") in
+drm-misc-next.
 
---srini
-> 
+BR,
+Jani.
+
+-- 
+Jani Nikula, Intel
 

@@ -1,153 +1,205 @@
-Return-Path: <linux-next+bounces-3579-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3580-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C802396B043
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 07:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AEB8996B073
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 07:24:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 556A5B21EEB
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 05:05:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13C22B21C8B
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 05:24:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D98C433A9;
-	Wed,  4 Sep 2024 05:05:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD5B08120D;
+	Wed,  4 Sep 2024 05:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fJumvytq"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ugYgRMCs"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CADF82C60;
-	Wed,  4 Sep 2024 05:05:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8C4823AC;
+	Wed,  4 Sep 2024 05:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725426332; cv=none; b=PyQk0WlpOeJzQSqqmTQXx04/bxmtVZ+txjJyx+8RgrdM87GBqtNNf8iL3fh8LG934L3bFMGG1lNLIVPMoH1DlWzh2cJXQtItcrjFIJeUkYbPXjaiuHi/VSH8Axz0Xs6cwfN5hDqQjbDwIBuRJCiyzmdWmXORU6BFHrhsMVY72oE=
+	t=1725427469; cv=none; b=dlCJ07GDdkkOvi3gO5EbglNmyYjLc0AzApwolSRnup+xHQrCuQMGuvDJ/BnUtgFoWROxZyVgRMsPDGC+FcS8mKgA8LqPaVGUPl8w1rX+dkqahI6UZvdjNgH3C7/w9Wz1uKEfOOKNuYk4hA1uPbiVFgtQWewekHwbUXz/tlLvfD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725426332; c=relaxed/simple;
-	bh=PgdvbH11XmsZ5U7OHuKqSafP++l7ZXuPR2HUPocHO6g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=onr40GweJoxW3mT5x5fyUvUubg7a0HfwO1Guxu8fmHzHKPhFkQi9xihcMCPpkFrRpKi/O7CkOFnswnpTqVpJPlk4m8NS0g0CO5MTvrGGwkVbkkNFHFqmknvGpOi3C/YvM8upIg2WecGbhir9QC8gT6fhPyFeozm2tnQC+zK9Des=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fJumvytq; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1725427469; c=relaxed/simple;
+	bh=20wJGgBV96dggmndRmGvNZgOaZ8a+GHftULtTYni4OU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iV6TdgVnm+LPwL4I+6ZqAzeJKbqMj9ciF6u8wQs9xGJKUK63Yb47XOwOo5oANv54wS04WgF4SHHwUnKnQ+hAGuI0IoZg3FBkORG1aFLywg5DRKsyFw4moTWBWqtgd5lOWIncald1fL113oz+Z6XAZCGzaVr6eo8taFhjHVtswCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ugYgRMCs; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1725426324;
-	bh=NAaMoxOCJ8yaps3swDHsqzPY7ywBTbwVbaYo0OgWZ/E=;
+	s=201702; t=1725427462;
+	bh=2LUS4DbO/T0Y/nOqz65vbki2+Dj9Rhda06Pq8xbJULw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=fJumvytqh33Kz6uM64mZdY+0QpLJ+4XesiwENASpCodUhR/lDWzGumdHwNVVLi0Dp
-	 OAvCPunh+pQOTLsx11INh/RvK6qJd3U7s9Cq9yQmcSl5BmW2/2zzZICiwUQF95lztN
-	 iHeGlVGNjhUhMh/0juGbmvPWmceD9weKmSINfiL3H5b4SxB6gQaS88cTHupQFwneti
-	 ypnCFFhWKWW4A5iEkSjonVM+VVjoIAw0vX2CLu1CSVbCxuCETYq8h2MH7IvHPZvz45
-	 kX3joeg0G8/aSrqOyKu9yA1915JR7vUVuwSM1l7U1ccYHEb+/JEinib+6c0lhMrT5x
-	 qB48Pps8PGGXA==
+	b=ugYgRMCsB7cpSENNWYiBwiCHT3XPl8x2fv225WhdLl/14IOiMjbUSwem+erpb+wJL
+	 P15JD8Nr3ymGa7qnihCZI/FA5+d2irL7vLMe9aaTnEDTYM9iEoji+DXdTcGEunhptW
+	 FTEB/y61E6lKDnd7M+MQGSXFJTZY9Pl8RI+FEmJUMkv5kLxeNoj0RyoP6YnTkMG/qH
+	 f66snaZ04yOxY5NlfqWLt+Ibv6dcTAGmMxCaILo+egMm6i7rWra5zu6JVByFNshGPo
+	 w6S7fToQ6Y21OuolGAdqi2AUDbjfHZn9FKYE3mvfj1RO5LI6jNae+ztGGAG/3rO3JH
+	 MIxNYwj3DVdCQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wz9RR5zjSz4wb7;
-	Wed,  4 Sep 2024 15:05:23 +1000 (AEST)
-Date: Wed, 4 Sep 2024 15:05:22 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wz9sL0t2jz4wp0;
+	Wed,  4 Sep 2024 15:24:21 +1000 (AEST)
+Date: Wed, 4 Sep 2024 15:24:21 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Heikki Krogerus
- <heikki.krogerus@linux.intel.com>, Linux Kernel Mailing List
+To: Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>, Sebastian Reichel
+ <sebastian.reichel@collabora.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the usb.current tree
-Message-ID: <20240904150522.0410150f@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the extcon tree
+Message-ID: <20240904152421.4e0ad2b7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DDjeWMXVs/vgKyeH8PMghzo";
+Content-Type: multipart/signed; boundary="Sig_/q6qTto3d5xo5lyCs/LyNhaR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/DDjeWMXVs/vgKyeH8PMghzo
+--Sig_/q6qTto3d5xo5lyCs/LyNhaR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the usb tree got a conflict in:
+After merging the extcon tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  drivers/usb/typec/ucsi/ucsi.c
+drivers/extcon/extcon-lc824206xa.c:413:22: error: initialization of 'unsign=
+ed int' from 'const enum power_supply_usb_type *' makes integer from pointe=
+r without a cast [-Wint-conversion]
+  413 |         .usb_types =3D lc824206xa_psy_usb_types,
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/extcon/extcon-lc824206xa.c:413:22: note: (near initialization for '=
+lc824206xa_psy_desc.usb_types')
+drivers/extcon/extcon-lc824206xa.c:413:22: error: initializer element is no=
+t computable at load time
+drivers/extcon/extcon-lc824206xa.c:413:22: note: (near initialization for '=
+lc824206xa_psy_desc.usb_types')
+drivers/extcon/extcon-lc824206xa.c:414:10: error: 'const struct power_suppl=
+y_desc' has no member named 'num_usb_types'; did you mean 'usb_types'?
+  414 |         .num_usb_types =3D ARRAY_SIZE(lc824206xa_psy_usb_types),
+      |          ^~~~~~~~~~~~~
+      |          usb_types
+In file included from include/linux/kernel.h:16,
+                 from include/linux/cpumask.h:11,
+                 from arch/x86/include/asm/paravirt.h:21,
+                 from arch/x86/include/asm/cpuid.h:62,
+                 from arch/x86/include/asm/processor.h:19,
+                 from include/linux/sched.h:13,
+                 from include/linux/delay.h:23,
+                 from drivers/extcon/extcon-lc824206xa.c:20:
+include/linux/array_size.h:11:25: error: initialization of 'const enum powe=
+r_supply_property *' from 'long unsigned int' makes pointer from integer wi=
+thout a cast [-Wint-conversion]
+   11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be=
+_array(arr))
+      |                         ^
+drivers/extcon/extcon-lc824206xa.c:414:26: note: in expansion of macro 'ARR=
+AY_SIZE'
+  414 |         .num_usb_types =3D ARRAY_SIZE(lc824206xa_psy_usb_types),
+      |                          ^~~~~~~~~~
+include/linux/array_size.h:11:25: note: (near initialization for 'lc824206x=
+a_psy_desc.properties')
+   11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be=
+_array(arr))
+      |                         ^
+drivers/extcon/extcon-lc824206xa.c:414:26: note: in expansion of macro 'ARR=
+AY_SIZE'
+  414 |         .num_usb_types =3D ARRAY_SIZE(lc824206xa_psy_usb_types),
+      |                          ^~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  87eb3cb4ec61 ("usb: typec: ucsi: Fix cable registration")
+  e508f2606c0b ("extcon: Add LC824206XA microUSB switch driver")
 
-from the usb.current tree and commit:
+interatcing with commit
 
-  73910c511b1a ("usb: typec: ucsi: Only assign the identity structure if th=
-e PPM supports it")
+  364ea7ccaef9 ("power: supply: Change usb_types from an array into a bitma=
+sk")
 
-from the usb tree.
+from the battery tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 4 Sep 2024 15:19:19 +1000
+Subject: [PATCH] fix up for "extcon: Add LC824206XA microUSB switch driver"
+
+interacting with "power: supply: Change usb_types from an array into a
+bitmask" from het battery tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/extcon/extcon-lc824206xa.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/extcon/extcon-lc824206xa.c b/drivers/extcon/extcon-lc8=
+24206xa.c
+index d58a2c369018..56938748aea8 100644
+--- a/drivers/extcon/extcon-lc824206xa.c
++++ b/drivers/extcon/extcon-lc824206xa.c
+@@ -393,14 +393,6 @@ static int lc824206xa_psy_get_prop(struct power_supply=
+ *psy,
+ 	return 0;
+ }
+=20
+-static const enum power_supply_usb_type lc824206xa_psy_usb_types[] =3D {
+-	POWER_SUPPLY_USB_TYPE_SDP,
+-	POWER_SUPPLY_USB_TYPE_CDP,
+-	POWER_SUPPLY_USB_TYPE_DCP,
+-	POWER_SUPPLY_USB_TYPE_ACA,
+-	POWER_SUPPLY_USB_TYPE_UNKNOWN,
+-};
+-
+ static const enum power_supply_property lc824206xa_psy_props[] =3D {
+ 	POWER_SUPPLY_PROP_ONLINE,
+ 	POWER_SUPPLY_PROP_USB_TYPE,
+@@ -410,8 +402,11 @@ static const enum power_supply_property lc824206xa_psy=
+_props[] =3D {
+ static const struct power_supply_desc lc824206xa_psy_desc =3D {
+ 	.name =3D "lc824206xa-charger-detect",
+ 	.type =3D POWER_SUPPLY_TYPE_USB,
+-	.usb_types =3D lc824206xa_psy_usb_types,
+-	.num_usb_types =3D ARRAY_SIZE(lc824206xa_psy_usb_types),
++	.usb_types =3D BIT(POWER_SUPPLY_USB_TYPE_SDP) |
++		     BIT(POWER_SUPPLY_USB_TYPE_CDP) |
++		     BIT(POWER_SUPPLY_USB_TYPE_DCP) |
++		     BIT(POWER_SUPPLY_USB_TYPE_ACA) |
++		     BIT(POWER_SUPPLY_USB_TYPE_UNKNOWN),
+ 	.properties =3D lc824206xa_psy_props,
+ 	.num_properties =3D ARRAY_SIZE(lc824206xa_psy_props),
+ 	.get_property =3D lc824206xa_psy_get_prop,
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/usb/typec/ucsi/ucsi.c
-index 17155ed17fdf,f0b5867048e2..000000000000
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@@ -993,11 -929,12 +939,12 @@@ static int ucsi_register_cable(struct u
-  		break;
-  	}
- =20
-- 	desc.identity =3D &con->cable_identity;
-+ 	if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
-+ 		desc.identity =3D &con->cable_identity;
- -	desc.active =3D !!(UCSI_CABLE_PROP_FLAG_ACTIVE_CABLE &
- -			 con->cable_prop.flags);
- -	desc.pd_revision =3D UCSI_CABLE_PROP_FLAG_PD_MAJOR_REV_AS_BCD(
- -	    con->cable_prop.flags);
- +	desc.active =3D !!(UCSI_CABLE_PROP_FLAG_ACTIVE_CABLE & cable_prop.flags);
- +
- +	if (con->ucsi->version >=3D UCSI_VERSION_2_1)
- +		desc.pd_revision =3D UCSI_CABLE_PROP_FLAG_PD_MAJOR_REV_AS_BCD(cable_pro=
-p.flags);
- =20
-  	cable =3D typec_register_cable(con->port, &desc);
-  	if (IS_ERR(cable)) {
-@@@ -1094,8 -1009,10 +1041,9 @@@ static int ucsi_register_partner(struc
-  	if (pwr_opmode =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD)
-  		ucsi_register_device_pdos(con);
- =20
-- 	desc.identity =3D &con->partner_identity;
-+ 	if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
-+ 		desc.identity =3D &con->partner_identity;
-  	desc.usb_pd =3D pwr_opmode =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD;
- -	desc.pd_revision =3D UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->c=
-ap.flags);
- =20
-  	partner =3D typec_register_partner(con->port, &desc);
-  	if (IS_ERR(partner)) {
-
---Sig_/DDjeWMXVs/vgKyeH8PMghzo
+--Sig_/q6qTto3d5xo5lyCs/LyNhaR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbX6pIACgkQAVBC80lX
-0Gw48QgAnNbFLvzNKT3OZZbQntVMNnjWrDIxZoU4975Tv+dmb8UGwcAlpoJhkxr8
-n8DcXopXedL28nvRpkl6mdWg0f7Qfed3gO/YB1oneWgNhvYePZAtHU9JrEe5Hh+E
-95aOeg/odug/9iVgXP7FG0T8ltJ9UvUaSfuh4lwGDTuAq219TZsVZiEJxcNk4rZQ
-nX/6xIwDjJLF+aVtfzSvqnnu5c2D1wbK+/Wg3rea4A90UUjhSxA6CYnqVsq1z6S5
-lAt1KmyGS0yWRYJaZ4lLBAB3dk3hpLJpop5fX7W39y0wcWNwm0MmaUsxx+7c4FyD
-G31l3kS8a9mc2B1aGc3UFI/MwEAcqA==
-=JjGC
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbX7wUACgkQAVBC80lX
+0GzVyAf/Vbv9EUUsefeR849W7tJIfEgOfk7J1myKE38w3xgUY6h0TueHLUshdFfg
+VJDrWZz4U35zQpl4qGtpiCXwFXGOmdA/YEPQy0vXU+oX/ifDvnY/oCIAeUJW/e//
+W/oC6N4TQuiqE7pZe5RGTH18TsNHJM5EGWzuQkcDAasudKt5B8q7Lsc1dGOWokUe
+/TBJuP560E7FBV1HChmB/6CgITiyyhr8SlPDQH9rfaFsWje7zPaFet5yZt/jsNSJ
+jDwSWUfyUtcklphhzyDbAUBwm+gyUnxdLW/1vRQoqgx/TNLsV4psgoqjxRR/5+te
+r8ln+P/P3KM+JTPNYzSofrXyNkUrnQ==
+=nTOH
 -----END PGP SIGNATURE-----
 
---Sig_/DDjeWMXVs/vgKyeH8PMghzo--
+--Sig_/q6qTto3d5xo5lyCs/LyNhaR--
 

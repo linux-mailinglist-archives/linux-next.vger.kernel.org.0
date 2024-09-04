@@ -1,124 +1,134 @@
-Return-Path: <linux-next+bounces-3593-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3594-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACAA296BEE5
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 15:43:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7173696C0CD
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 16:37:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68FDF284D8F
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 13:43:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CE441F21B9D
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 14:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FFDB1DB53C;
-	Wed,  4 Sep 2024 13:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49FC31DAC5D;
+	Wed,  4 Sep 2024 14:36:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Q64chWw4"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="nL/E0qFG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="S6bTVywN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483301DB548;
-	Wed,  4 Sep 2024 13:42:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADFD1E871;
+	Wed,  4 Sep 2024 14:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725457342; cv=none; b=jw93kN8ae8pNRrMM/xDxv4D+VeKvx+TOyylNndZjEjGE/EpRYO8gc5RKBnVyxAoIR8iw4jP8vKQQYIWJo0cXefLdTtC0HExrDPyWi21ppd8M6a5fS8nStfr9krzG0mzNJBzcA83IDxB1R3j0G7v//UDcJ0nV2Oj5GmBZ1/IlB6M=
+	t=1725460609; cv=none; b=FDSxKMD35Nuy0+Jk4teSq3zxX7cUwH7I9IXAqLQ9cFesZgxx4R2iRE/bbkFdzQj9Jb2KtQ/Cfj52S4XBAtvZFx/3LPDj4ZjFF8qBL+2yigUXwa71BTjYq2b9zoFU9tkZJMycAxOhEFglGwcB3cLYwM7tkbcspo4NWJiybnlwf8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725457342; c=relaxed/simple;
-	bh=/ASzd69U6wRR3J6nwKrp2KtuXXCDimEVnLY/BH6+n0I=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=GhumZCG3mjBow4Cg8IEEgvzPS/3dFYPYmqZvrPe1Gy0bWudFmo2tOKrYma7Or1LDY91jy/evQ93dFNt+iAXCxRRLo5zsJtxg7noZSQ+zafuyz+WARJRnue3e9tTgxsJNr5iZxgYcO36n6MJqNIbmGO7reNj/NWhqen2qu2hvvbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Q64chWw4; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=fSkK2piQ4rboJn90vKCg9mac7yDzQYDkwnHIjj5VeI0=; b=Q64chWw4NrXidkFd4ARo43LdHS
-	cwubMw14ms9a0Fxxy6ib7X7oL2i9DNFJeSHWTECAAzZz12i9YM6ATYn1Kxk27zyJpK4AYvrKn1/ct
-	QKLqn50uAi+/vB+9xan7zyG74DG1ZiEY3HwNSND1vuFxyQtiVwhDLthk1J4cF2ogxW6hP7cXl/o5i
-	4Gb0TmV49UocWt7RRMzmylGQ2OWvk022XcrD8wVH/8o7YBzgULFKNi6HZoGadLQkhfW4VD4xcyupU
-	bEcsLP9cZ+exfAfnWznAhT6gYdqUWHReV5uJIcLyLYT2Pe12mlNcArlSWhWWlcs3MAN291Vjp6YVc
-	dwM/ja1Q==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1slqGi-000781-9J; Wed, 04 Sep 2024 15:41:56 +0200
-Received: from [178.197.248.23] (helo=linux.home)
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1slqGh-0005Zy-36;
-	Wed, 04 Sep 2024 15:41:55 +0200
-Subject: Re: linux-next: manual merge of the bpf-next tree with the net-next
- tree
-To: Alexander Lobakin <aleksander.lobakin@intel.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, bpf <bpf@vger.kernel.org>,
- Networking <netdev@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20240904120221.54e6cfcb@canb.auug.org.au>
- <4ede8b00-aab9-4be6-a589-98cc0d98b929@intel.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <2444df33-cd03-a929-9ce8-3cf1376d3f78@iogearbox.net>
-Date: Wed, 4 Sep 2024 15:41:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	s=arc-20240116; t=1725460609; c=relaxed/simple;
+	bh=pJxqGv92LWCceBc+JZ0tpIa80nahQlAeKmF6m0/qfEw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=dndyn8ce/DczTXqykwffnfySGwWh0wVANUVSS57BIqxR6P/CUVlspWpcxn9YpWE9XDnJsbyzVrUt8vrQTpz5YDPbJ8JT3KQk0rmtXVs+gCl0EhGIy4PYQp1cw/OaToZbA8S5B7AQUbj9kVIVHxmWbcxH4c2EGQW7TdHhvodhr/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=nL/E0qFG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=S6bTVywN; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id A17DE1140200;
+	Wed,  4 Sep 2024 10:36:46 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-04.internal (MEProxy); Wed, 04 Sep 2024 10:36:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1725460606;
+	 x=1725547006; bh=IZQqsKxMYamNT2ngzYBOlaCRex0vsynuLu2ZlNqHf3c=; b=
+	nL/E0qFG2Ji8vN7+rDxT1AswPgAVvJ1sxaRmnLQnNGX+afE1wPqryPMNac9KwZIZ
+	dHfZXyFO+wHdPBB+Wvcw7sxqFng2uU0vmZ3VQDxshL/Uut32qdLtrPLF8WlNwiG0
+	xexOwLTMddlR9J2c80tafUNujYCjVokcXojFL3TlyTa7lVtbvfomdb30cHqdPfjz
+	ReGRMqdnX7eOuOUWxJSf8BTZ3bAaPeWHMSoEJZ1Bcg7hm7n7LiE8WZoajUKC4u+d
+	6yqAr0D9GpXzDS35vQKExyLvWJLkADSXGqGjK/XtoKZvPg5raxLbxvszuKH+COEP
+	Irmxn9MWgrVZlIME17d3yQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725460606; x=
+	1725547006; bh=IZQqsKxMYamNT2ngzYBOlaCRex0vsynuLu2ZlNqHf3c=; b=S
+	6bTVywNxF0Im68pe0yEkrtei54KmAY3KI2uoVK/6qeAUfy+hbx5aZRWWdeA/9I0p
+	V/RCjbVE/Y8qLtSaeRsgAtwUfcv9MCVOsQmnqskw+xClu//oAzxFzHUgid4wLx3N
+	4H/J7QzRXOjmv/gtPC/MBypUXOaZBbLJ65Jrjc0OACpoIsDVG0VQxT8hndpoJ8Qx
+	x2fdxDtRuApegOMn/jC2PcHG+PRHFmER8nzEDHF13H8ZYMv+/MeBjWVA0yRW1Qu1
+	TWcMF0+XJpVM8uMpg+rytxjQIrRc4UVGMc4ba7KDuRGiNDrCM/IRg81O0tpZ0OAo
+	SWdFyh1qi/85NiM8YgeRQ==
+X-ME-Sender: <xms:fXDYZgMhd7JgbbnhY1HiKnz7My2zyO6AmMXsJbv4oWnt82PecoEDGQ>
+    <xme:fXDYZm_cG1XSXhd_UDGR13bXkytbU6aOPXqyg0pEF_q7EtNYvMZf0VBODun_iA621
+    9SNbC7ao8ohy0ESEE4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehjedgjeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedp
+    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohephhgvrhhvvgdrtghoughinhgrsegsoh
+    hothhlihhnrdgtohhmpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdr
+    rghupdhrtghpthhtoheptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhhouhhprd
+    gvuhdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhn
+    fhhrrgguvggrugdrohhrghdprhgtphhtthhopeholhhofheslhhigihomhdrnhgvthdprh
+    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:fnDYZnTtnLRggR4I9KGpHVYZYNQGKZWAm-H2irDjI9T3bkgRROCE1Q>
+    <xmx:fnDYZou--qfwwlp1VVtOi7nwkzMQvV9J2PX_6rvE6ymJPw1tWyPMhw>
+    <xmx:fnDYZofHWzuW9CsJ1IPOwI00igaen315WAhJP_2X5KYPN4aGXWX9FQ>
+    <xmx:fnDYZs3asT6A4ZDvh7e94TkHavG1xxjUYXPvZIoMjH2bCsSGcWI5fQ>
+    <xmx:fnDYZgTNSv8cVsGjlUHD4hsdZIzTDhoK98kFnOquBamv2vNolaytSPrS>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E2DEF2220083; Wed,  4 Sep 2024 10:36:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <4ede8b00-aab9-4be6-a589-98cc0d98b929@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Date: Wed, 04 Sep 2024 14:36:25 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Stephen Rothwell" <sfr@canb.auug.org.au>,
+ "Olof Johansson" <olof@lixom.net>
+Cc: "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Herve Codina" <herve.codina@bootlin.com>,
+ ARM <linux-arm-kernel@lists.infradead.org>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ linux-next <linux-next@vger.kernel.org>
+Message-Id: <2ac0b88f-2eb0-4d57-a1df-a4e40741fd62@app.fastmail.com>
+In-Reply-To: <20240904104859.020fe3a9@canb.auug.org.au>
+References: <20240904104859.020fe3a9@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the arm-soc tree
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27388/Wed Sep  4 10:40:46 2024)
 
-On 9/4/24 3:16 PM, Alexander Lobakin wrote:
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Wed, 4 Sep 2024 12:02:21 +1000
-> 
->> Hi all,
->>
->> Today's linux-next merge of the bpf-next tree got a conflict in:
->>
->>    drivers/net/netkit.c
->>
->> between commit:
->>
->>    00d066a4d4ed ("netdev_features: convert NETIF_F_LLTX to dev->lltx")
->>
->> from the net-next tree and commit:
->>
->>    d96608794889 ("netkit: Disable netpoll support")
->>
->> from the bpf-next tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
-> 
-> Your fix is technically correct, but maybe swap the lines?
-> 
->   	dev->priv_flags |= IFF_NO_QUEUE;
-> +	dev->priv_flags |= IFF_DISABLE_NETPOLL;
-> +	dev->lltx = true;
-> 
-> Looks more natural I'd say...
+On Wed, Sep 4, 2024, at 00:48, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the arm-soc tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/soc/fsl/qe/qmc.c:25:10: fatal error: sysdev/fsl_soc.h: No such 
+> file or directory
+>    25 | #include <sysdev/fsl_soc.h>
+>       |          ^~~~~~~~~~~~~~~~~~
+>
+> Probably caused by commit
+>
+>   eb680d563089 ("soc: fsl: cpm1: qmc: Add support for QUICC Engine (QE) 
+> implementation")
+>
+> I have used the arm-soc tree from next-20240903 for today.
 
-Yep, 100%, we'll use that as merge conflict resolution when flushing the
-next PR, thanks!
+Thanks for the report, I have now applied Christophe's fix to address this.
+
+      Arnd
 

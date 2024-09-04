@@ -1,83 +1,117 @@
-Return-Path: <linux-next+bounces-3596-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3597-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC6D896C8F1
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 22:50:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C50A96CA26
+	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 00:20:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67599281126
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 20:50:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 425B31F28880
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 22:20:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B36CF14D2A7;
-	Wed,  4 Sep 2024 20:48:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30BE81547F3;
+	Wed,  4 Sep 2024 22:20:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OB2JHrzz"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dLgJUIB6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A24914A62A;
-	Wed,  4 Sep 2024 20:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7651474BF;
+	Wed,  4 Sep 2024 22:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725482922; cv=none; b=UfnTeSuk5OT2h8Xk0MyuzJtn0+YOXUsMOePMf3GZt/qPeel1LYas61Di4r3cRWzwv6dNpvs6bPihfcORAmIMB810G5HpvDABt9A1Ll1aBT/ek/zFXIx1OaCpgbQlwR6tiGTm0wMEBIHRPFPIgbvJF7OYQbmIhtp2NMFiV7oOSbU=
+	t=1725488438; cv=none; b=oMAGWDx4dPKJYBvvjnvd6YnKjpBKYQnDYQwOpez5IzwA/TgTLaSfhM9isRFi8hwlJOU9IuGn/6Be4hq1ME24Ft/lvzcS/6KTlHdErl399ullVJkLsPx66cdEZzph9pMsWz/6LE4J5YuZdy69fdjPsBTf8zqfjwU0513kT1nicx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725482922; c=relaxed/simple;
-	bh=auWVEqFce+8X3QCOIsAmmjTPExsNK+VOLUhNFp/tZCI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jVNebyh3w7civF6uxJXlyaWsmDmJWsMRizsecsfGIzpGkzrITVIypQd6RQ1BnnjPy2EwvkDEfoCUikAZM2mW80WKHxn/LDGkXnXWzEFlGen8RwHM4QCzqnnBNRBislTLP2B76R9T770Q2eM6jcusa38lClSDaflGMLAVkUpv24Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OB2JHrzz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF42CC4CEC2;
-	Wed,  4 Sep 2024 20:48:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725482922;
-	bh=auWVEqFce+8X3QCOIsAmmjTPExsNK+VOLUhNFp/tZCI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OB2JHrzzpQ646Wp3dLCxpWrGQ0xLuGsC69xfVtJn9D57Rz0J9u1pFfJP/FjFI0TjY
-	 8SlDv2BUO1ua8daZRDzD8u2Ztn73zZ5Nvmuk9x6Ci4iWARQHKqvaqo9II9fXCwF0Ct
-	 xzd8ILpTWayJoqgHndKWWx1k23sTQPnDzHOGaGFwA2+ly+FqZnm/cU69iCiqm31LzB
-	 Lg/q6Ldr5IQiI5CkqaS5KppjjlT3++J3hvHOGqQIqdOhvQBZGLd40yVZsFgZyfCcjr
-	 NNaWqWA32IOrzaoY2EBp7jmVQej2XLKayjX1cfJAm28IEwLrjZKqZ7iRZVPbKNb6LK
-	 kPyqRiKfNxPyA==
-Date: Wed, 4 Sep 2024 10:48:40 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Waiman Long <longman@redhat.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the cgroup tree
-Message-ID: <ZtjHqB32gzZGyZGd@slm.duckdns.org>
-References: <20240902081125.4467945f@canb.auug.org.au>
- <c4c802fb-90d7-4971-9bb6-a37a3f799d59@redhat.com>
+	s=arc-20240116; t=1725488438; c=relaxed/simple;
+	bh=z9lxq0HFgo2q1DGzbWXTsfmuOP7H5na12FXnFGjK8yg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Shr9Idxjzo7NHMgivGrwstvFVYwGlLerw298UaOjFNm2fzV+rwWYQYGi5rhY7vFo/0xjXvn8Zk7Zd8U5oGLMTasuOyYAjAffvzUQFkYDi21JDOPJGKjx9Iwz/J9X8ruFmEyZ8x1rpO73YJHLl9LKjMvpLzGaJoXxghSFldsH+To=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dLgJUIB6; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1725488430;
+	bh=SjBzfwsVsii4wcgUs8pa8wXjYsczDb3ai3j7hSYpzuo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dLgJUIB64ZpEhdiDfGa9U3+r/9G9IzEz5rrsgY2zyl8DRQWlwgJ0eudByGB+qlXqO
+	 2Z/3OGzy+ss1VZ3gpLrOJlr3mlpRhuxOelybVwcvpu4LUT+UMYsgjhoHYB4+NKMhLw
+	 Lsc/z7PlWDfu5TlnJblwE9hztB2XvSwq+jvu0HuGT9OHdZ8U4a19Dd3EAzG2SjXFif
+	 GxGECmUk8mXQLasIcPDv100S6GGjepk4yDVPEV9rCoxsD4Iz66boYQAHWlW6p1i8l3
+	 lBRQJ8MmgB1iOXTZclEBFJ8xLjS7EeXepq2XqiQKLbhDUAsl8xdHXMDDdIDiCyMfuv
+	 xWh0goxCPLXQg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WzcPp3HR1z4wbv;
+	Thu,  5 Sep 2024 08:20:30 +1000 (AEST)
+Date: Thu, 5 Sep 2024 08:20:28 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Sterba <dsterba@suse.cz>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the btrfs tree
+Message-ID: <20240905082028.14012c29@canb.auug.org.au>
+In-Reply-To: <20240903093343.78385cdc@canb.auug.org.au>
+References: <20240903093343.78385cdc@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c4c802fb-90d7-4971-9bb6-a37a3f799d59@redhat.com>
+Content-Type: multipart/signed; boundary="Sig_/6E8MwB4.rAV0gRet0.G=+.I";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Sun, Sep 01, 2024 at 08:52:13PM -0400, Waiman Long wrote:
-> On 9/1/24 18:11, Stephen Rothwell wrote:
-...
-> Commit dd46bd00ab4c does exist in the cgroup tree, but it is missing Tejun's
-> Signed-off. So it is probably in a dead branch. Commit 047b83097448 should
+--Sig_/6E8MwB4.rAV0gRet0.G=+.I
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hmm... I probably force pushed to fix up something?
+Hi all,
 
-> be the right hash for the for-6.12 branch. I don't know how I got the other
-> commit hash though.
-> 
-> Tejun, could you update the commit hash in my patch?
+On Tue, 3 Sep 2024 09:33:43 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> The following commits are also in the btrfs-fixes tree as different
+> commits (but the same patches):
+>=20
+>   d3e969781d9f ("btrfs: fix race between direct IO write and fsync when u=
+sing same fd")
+>   31c104266edb ("btrfs: zoned: handle broken write pointer on zones")
+>   e336770f04a2 ("btrfs: qgroup: don't use extent changeset when not neede=
+d")
+>=20
+> These are commits
+>=20
+>   95b3456f23e3 ("btrfs: fix race between direct IO write and fsync when u=
+sing same fd")
+>   b1934cd60695 ("btrfs: zoned: handle broken write pointer on zones")
+>   c346c629765a ("btrfs: qgroup: don't use extent changeset when not neede=
+d")
 
-Anyways, fixed up.
+These latter commits are now in Linus' tree.
 
-Thanks.
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-tejun
+--Sig_/6E8MwB4.rAV0gRet0.G=+.I
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbY3SwACgkQAVBC80lX
+0Gx9CwgAkbOP8fE6AtQAVYyld873CtEvRln/VqwZKfre8u4wlBUoyNM8PZ/Z1Egx
+MLRp07gJvAwi0p/mhBzeDWj7ZI5qyMCHNsweSv579GFYUtn4anZ/8ULYvg5qzFbg
+Xuz0VW7rZhnH/dl74hmmSIMuMAHpU94o7loUSvrDXA2JJu3+Ede6JLJXCdjfzVZ+
+bk3eza/gLI7BN1A6BkM08RSnUehbpptP7i3mx9XUa9sPo8UBuH5vLrcxBYUDLcRp
+Gx3eaxwQK0yDAiz2+avOt3uWsF/0ufJGCXZ1pVzYbEB/x7QUtkKFeBU1+H3tvc3V
+pXaj+UjXEpEL5kK3yR9XfOlP2SqDRg==
+=pLEp
+-----END PGP SIGNATURE-----
+
+--Sig_/6E8MwB4.rAV0gRet0.G=+.I--
 

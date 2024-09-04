@@ -1,80 +1,75 @@
-Return-Path: <linux-next+bounces-3588-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3589-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 093E196B68B
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 11:26:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C84D796B6A2
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 11:28:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AB401F25131
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 09:26:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D8A41F21CCA
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 09:28:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5811CC16B;
-	Wed,  4 Sep 2024 09:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64E61CDA0C;
+	Wed,  4 Sep 2024 09:28:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i4AVUaFf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k51qikJc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740D01CCB24
-	for <linux-next@vger.kernel.org>; Wed,  4 Sep 2024 09:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043C21CCED1
+	for <linux-next@vger.kernel.org>; Wed,  4 Sep 2024 09:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725441891; cv=none; b=EQH15kxb7Lf8w3thbZ6tg4OJo9jX1IMNeeTesRGm/uamxquML1tVj+WnOiIjqoPvccjmIq/xqB6IKrHsTJxM9AF72ifolrauE415I3V20b2d6ZJv5p/dVss5MqSDuTJIXcWiuhdVsZhLojRdkDN+eNvNViAOU0JP9wYKUNuhGew=
+	t=1725442120; cv=none; b=IFeqYXPZaXbQTn765qBD/2bNBW10YB4AoccbhwjNNVQ6rgZNJKJyUGfzL6tq5iW6wb07eb+C2LHjW8/2sl5RrYL8vizG25k8/YOTuff442cmZU1KF6zTBMlXchMSibva4Xc7dtC/HUtN24iy/69493S/nMajZmzuacQpP3S/99w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725441891; c=relaxed/simple;
-	bh=4nxcKmU6jajiBD6KoLWSyQ9jwCUxguiTh+f/ZG7gKqw=;
+	s=arc-20240116; t=1725442120; c=relaxed/simple;
+	bh=SGrjCCtQW4ZdmFMOR4QedGcj3VyM4JSDKs1/b25Au6g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dGpuEe9n1+Fdu3nCCggX6Hlfmy9cIkTyvWxrKADpTzzC+lSqyH1A/AdBm1dEcXHxJmI6Ipt0g+VGIWFN0GzlkYzcccPdUSb72XVQCsRExmKfRhztrStdXlyll7B+XixNwnfKZ9HztW2yVENs3adoO9C/RL+fmdaZRvBlSZjyqnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i4AVUaFf; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1725441888;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KGFQMJUPYsNlq0LAJVuMgJTw6GHx1CtdiS4TMfy5EFE=;
-	b=i4AVUaFfOnnLmSzYW84ecgX1CxhjpPDVzXWSIc7ZgQaQK/744Pn4TE+bQJT03s4/joigJZ
-	yZYK1ec9xOI10vh5VYRHCBwXmwvP60deOoW84NYbX/uUea02ooV9Jnu54AYgvZovTvsogm
-	Q8YEYynPMii3Xg51/4ntJf7YOP65XCI=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-569-8kaftFtHMZixBKi-uv4e2A-1; Wed, 04 Sep 2024 05:24:47 -0400
-X-MC-Unique: 8kaftFtHMZixBKi-uv4e2A-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a89c91e151dso75114066b.1
-        for <linux-next@vger.kernel.org>; Wed, 04 Sep 2024 02:24:46 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=QCQUlBy+ZTjwe/1AhKJ/fC7XVcPr08vh8bJ79IU8j4PZhIVSQpY0o/pyZSiHYC8YXYCovupCJNJVN9ktjS5lM8DG+nJngktCRWJvF7sceOxuDf2NYs39z1ErrtZUALshuH3G126o/hPLLjGbLgFsLJiyYe+G6OrYsn2m4HM70GM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k51qikJc; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-533488ffaddso7764527e87.1
+        for <linux-next@vger.kernel.org>; Wed, 04 Sep 2024 02:28:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725442117; x=1726046917; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xuq/cYf8+71Qm9h4676C8ljwN2DXNbLAaqL8sBoWxfU=;
+        b=k51qikJcjws5Iq+l6qAAxieFZvVepH8HYv+or2seaBH40ji5kdyQ6HJF6u4nJZqa7P
+         UCTxj2FndujwC5UVwL9dRdHTHIHBWRhvYDSA8S2Qe5Ko3/sc8nTbPDFoP4L90AHfYCq9
+         MjqqiGr9tKGYqyOT0VQbXGTWArHXmKMyeeirZFbwAnS989FejUL8tcwkjRE68w1kqL8j
+         2zsvi6cODN3g2VOPdI2GN4VyI3hpgBJZAb7DZU+M1JsFxArTO+Rh3ezzR+xiMPnd5CXh
+         rBQPN3zo4GrLk54yKCENUIIE6xsLrcuRWSWrQNFwfy85QJojV9/GGB1aFyEHJelFSxD5
+         LYbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725441886; x=1726046686;
+        d=1e100.net; s=20230601; t=1725442117; x=1726046917;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KGFQMJUPYsNlq0LAJVuMgJTw6GHx1CtdiS4TMfy5EFE=;
-        b=DpLB0JcQWNcz6qFbN3+JmdvO7LA1R+7/Fejy/U1H9f0ewJK8kkeYeBXLwby0qmiakj
-         vIMloHGkyVuXZm3CcnTACZlLwxRZWeitu7hPxCn+41LLRU/bGQdmfvnSAhLb4nM39fdr
-         AxKfxko9osGjd1RHChqyqg1f/TaQVyDMFMwCXe5lLp96JTtig0ECvKPSOad01ldR91d3
-         3sxlYYZxmfQTj3SV9WA9Y2udA+zLuE/FUQ8CkNa6qYBTI1Ig4nGTULZMGo8cNvxq54gd
-         7IGxZfkP2vtOy0zqiSLFTdTZAD6ni1aGNpkVw4Fe1hfJLkE2xh4HRFamlpCVmeMc3pUC
-         AflQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGlHLhaLFAHbZw46soJHzkbmWkYSUNRYeUwIeDaJMb//mDBRHCEks34rF3h5W0SpImiEpDfNOZiurh@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0xFuKxvDO6iQS93PA6Z26FqsgwvMFDULGTnQ1SOylNJ+5wJQ8
-	bvdMCKWUj5WWq/laX0DItTDv6OhpzL/P2EwSOImmrvzRcAIprUPenH11ypu/OwjtVzgznB8v57E
-	YioLTW9D6+YC0FwZWg7nQKA61pu6srFDIMYlMjtmJsasHpLsntlIULH4fjDc=
-X-Received: by 2002:a17:906:c146:b0:a80:b016:2525 with SMTP id a640c23a62f3a-a8a4301f534mr128277766b.8.1725441885906;
-        Wed, 04 Sep 2024 02:24:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFDsGede9Yc2gEAKLKlEg1/e3/t0ltuY4f8Y/xq3t26rMqJZZIeQL9fQPB76Fol7KljyrNR4A==
-X-Received: by 2002:a17:906:c146:b0:a80:b016:2525 with SMTP id a640c23a62f3a-a8a4301f534mr128275866b.8.1725441885392;
-        Wed, 04 Sep 2024 02:24:45 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a89891d7482sm779964266b.165.2024.09.04.02.24.44
+        bh=xuq/cYf8+71Qm9h4676C8ljwN2DXNbLAaqL8sBoWxfU=;
+        b=Lpy5Fj9uqN4oXlxek9qfUC7xh0TrRkPw+8vkiM5i4sLqAuKzqlJexd+qn0LFqKEc/L
+         pDzmnHmR9pMjh09aEZPa4mT0+BwkFgsHud9Oo+3O+3/397rOxjgNz42uNWyOmORXtehv
+         GB4XGfUMpC3FUsczazkz6mEmc+QUus85ACpfMAW1p3sB0l44McocMx9jDP8qsbh9BKlu
+         srq7Nqqmj9fYvGyIkWKNy6VABVyelbR4qp/PzWvOuWqn/rC8m/lmrzsyJM4ZYAYYK6Dm
+         jfmeIQ1vGe98ZP2x3Ltj4V16+ALOEeRKNqPu2oqlfKTE9/zV1YMmKvcDIzPs3MOTgPCy
+         S5lg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqbmGA2X3/kRxdr3l8yQebXj6VFoQrSoV/xkkwDKakyctPgIkdwJaP/sII6J67pxe+0Br070YR6CBo@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZItujU0RU4DQPzl1FU6MlRhiWWN6RBqNtYeJARgfYqzOX0Hgg
+	OkQMueq6c1audShCQh+p9V+ZwoOxJUtPqj+B1GTNFMAruiRV6fR02/z7btp0cCORZlmnJ6A5E59
+	i
+X-Google-Smtp-Source: AGHT+IE2duZdsTgB5bwxuXGiYe/YCnbsFxat+800LtjisZGn1xrJhdX8Dw8rX1FIpkF/8bCDA2G5Kw==
+X-Received: by 2002:a05:6512:3352:b0:535:6992:f2cb with SMTP id 2adb3069b0e04-5356992f407mr628693e87.42.1725442116986;
+        Wed, 04 Sep 2024 02:28:36 -0700 (PDT)
+Received: from [192.168.68.116] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a898919670asm794444066b.140.2024.09.04.02.28.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 02:24:45 -0700 (PDT)
-Message-ID: <f31f8bea-95da-4d32-afe0-9c2abc69d833@redhat.com>
-Date: Wed, 4 Sep 2024 11:24:44 +0200
+        Wed, 04 Sep 2024 02:28:36 -0700 (PDT)
+Message-ID: <679cfd5b-42fb-49c5-833d-05cca34b4ecb@linaro.org>
+Date: Wed, 4 Sep 2024 10:28:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -82,136 +77,36 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the extcon tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Subject: Re: linux-next: duplicate patch in the fastrpc tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
+ Arnd Bergmann <arnd@arndb.de>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
  Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240904152421.4e0ad2b7@canb.auug.org.au>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240904152421.4e0ad2b7@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
+References: <20240904153713.4dc28982@canb.auug.org.au>
+Content-Language: en-US
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20240904153713.4dc28982@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi all,
+Thanks Stephen,
 
-On 9/4/24 7:24 AM, Stephen Rothwell wrote:
+On 04/09/2024 06:37, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the extcon tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> The following commit is also in the char-misc.current tree as a different
+> commit (but the same patch):
 > 
-> drivers/extcon/extcon-lc824206xa.c:413:22: error: initialization of 'unsigned int' from 'const enum power_supply_usb_type *' makes integer from pointer without a cast [-Wint-conversion]
->   413 |         .usb_types = lc824206xa_psy_usb_types,
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/extcon/extcon-lc824206xa.c:413:22: note: (near initialization for 'lc824206xa_psy_desc.usb_types')
-> drivers/extcon/extcon-lc824206xa.c:413:22: error: initializer element is not computable at load time
-> drivers/extcon/extcon-lc824206xa.c:413:22: note: (near initialization for 'lc824206xa_psy_desc.usb_types')
-> drivers/extcon/extcon-lc824206xa.c:414:10: error: 'const struct power_supply_desc' has no member named 'num_usb_types'; did you mean 'usb_types'?
->   414 |         .num_usb_types = ARRAY_SIZE(lc824206xa_psy_usb_types),
->       |          ^~~~~~~~~~~~~
->       |          usb_types
-> In file included from include/linux/kernel.h:16,
->                  from include/linux/cpumask.h:11,
->                  from arch/x86/include/asm/paravirt.h:21,
->                  from arch/x86/include/asm/cpuid.h:62,
->                  from arch/x86/include/asm/processor.h:19,
->                  from include/linux/sched.h:13,
->                  from include/linux/delay.h:23,
->                  from drivers/extcon/extcon-lc824206xa.c:20:
-> include/linux/array_size.h:11:25: error: initialization of 'const enum power_supply_property *' from 'long unsigned int' makes pointer from integer without a cast [-Wint-conversion]
->    11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
->       |                         ^
-> drivers/extcon/extcon-lc824206xa.c:414:26: note: in expansion of macro 'ARRAY_SIZE'
->   414 |         .num_usb_types = ARRAY_SIZE(lc824206xa_psy_usb_types),
->       |                          ^~~~~~~~~~
-> include/linux/array_size.h:11:25: note: (near initialization for 'lc824206xa_psy_desc.properties')
->    11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
->       |                         ^
-> drivers/extcon/extcon-lc824206xa.c:414:26: note: in expansion of macro 'ARRAY_SIZE'
->   414 |         .num_usb_types = ARRAY_SIZE(lc824206xa_psy_usb_types),
->       |                          ^~~~~~~~~~
+>    b056e4e23acb ("misc: fastrpc: Fix double free of 'buf' in error path")
 > 
-> Caused by commit
+> This is commit
 > 
->   e508f2606c0b ("extcon: Add LC824206XA microUSB switch driver")
+>    e8c276d4dc0e ("misc: fastrpc: Fix double free of 'buf' in error path")
 > 
-> interatcing with commit
+> in the char-misc.current tree.
+
+This is fixed now along with slimbus and nvmem tree.
+
+--srini
 > 
->   364ea7ccaef9 ("power: supply: Change usb_types from an array into a bitmask")
-> 
-> from the battery tree.
-
-Since I'm the author of both commits this is my bad, sorry.
-
-Stephen, thank you for fixing this in -next.
-
-Chanwoo, Sebastian send a pull-request for an immutable branch with
-these changes:
-
-https://lore.kernel.org/linux-pm/ez5ja55dl7w7ynq2wv4efsvvqtk4xyalf4k6agtsuhpgrtlpg3@d6ghlle4cu2q/
-
-Can you please merge the ib-psy-usb-types-signed tag into
-extcon.git/extcon-next and then apply Stephen's fix so that Linus
-does not get hit by this build error when he merges the extcon
-changes for 6.12 ?
-
-Regards,
-
-Hans
-
-
-
-
-> I have applied the following merge fix patch.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Wed, 4 Sep 2024 15:19:19 +1000
-> Subject: [PATCH] fix up for "extcon: Add LC824206XA microUSB switch driver"
-> 
-> interacting with "power: supply: Change usb_types from an array into a
-> bitmask" from het battery tree.
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/extcon/extcon-lc824206xa.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/extcon/extcon-lc824206xa.c b/drivers/extcon/extcon-lc824206xa.c
-> index d58a2c369018..56938748aea8 100644
-> --- a/drivers/extcon/extcon-lc824206xa.c
-> +++ b/drivers/extcon/extcon-lc824206xa.c
-> @@ -393,14 +393,6 @@ static int lc824206xa_psy_get_prop(struct power_supply *psy,
->  	return 0;
->  }
->  
-> -static const enum power_supply_usb_type lc824206xa_psy_usb_types[] = {
-> -	POWER_SUPPLY_USB_TYPE_SDP,
-> -	POWER_SUPPLY_USB_TYPE_CDP,
-> -	POWER_SUPPLY_USB_TYPE_DCP,
-> -	POWER_SUPPLY_USB_TYPE_ACA,
-> -	POWER_SUPPLY_USB_TYPE_UNKNOWN,
-> -};
-> -
-
->  static const enum power_supply_property lc824206xa_psy_props[] = {
->  	POWER_SUPPLY_PROP_ONLINE,
->  	POWER_SUPPLY_PROP_USB_TYPE,
-> @@ -410,8 +402,11 @@ static const enum power_supply_property lc824206xa_psy_props[] = {
->  static const struct power_supply_desc lc824206xa_psy_desc = {
->  	.name = "lc824206xa-charger-detect",
->  	.type = POWER_SUPPLY_TYPE_USB,
-> -	.usb_types = lc824206xa_psy_usb_types,
-> -	.num_usb_types = ARRAY_SIZE(lc824206xa_psy_usb_types),
-> +	.usb_types = BIT(POWER_SUPPLY_USB_TYPE_SDP) |
-> +		     BIT(POWER_SUPPLY_USB_TYPE_CDP) |
-> +		     BIT(POWER_SUPPLY_USB_TYPE_DCP) |
-> +		     BIT(POWER_SUPPLY_USB_TYPE_ACA) |
-> +		     BIT(POWER_SUPPLY_USB_TYPE_UNKNOWN),
->  	.properties = lc824206xa_psy_props,
->  	.num_properties = ARRAY_SIZE(lc824206xa_psy_props),
->  	.get_property = lc824206xa_psy_get_prop,
-
 

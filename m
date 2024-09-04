@@ -1,95 +1,99 @@
-Return-Path: <linux-next+bounces-3597-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3598-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C50A96CA26
-	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 00:20:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64BC496CA8F
+	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 00:42:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 425B31F28880
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 22:20:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E59462857AB
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 22:42:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30BE81547F3;
-	Wed,  4 Sep 2024 22:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9124A1547D8;
+	Wed,  4 Sep 2024 22:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dLgJUIB6"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GR6zidaI"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7651474BF;
-	Wed,  4 Sep 2024 22:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A051F146D7F;
+	Wed,  4 Sep 2024 22:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725488438; cv=none; b=oMAGWDx4dPKJYBvvjnvd6YnKjpBKYQnDYQwOpez5IzwA/TgTLaSfhM9isRFi8hwlJOU9IuGn/6Be4hq1ME24Ft/lvzcS/6KTlHdErl399ullVJkLsPx66cdEZzph9pMsWz/6LE4J5YuZdy69fdjPsBTf8zqfjwU0513kT1nicx8=
+	t=1725489734; cv=none; b=uG1UQcRbombF8yHC4wHdAsP0O6AwRTB1JrlP+0+EJ/HTXxP568vkBGiYROU8gcJa+EvCR6c4XTPPwlJzMfH6grndg5N6+aqsziwjpsRaDPHSRptcJjnQR8zDEJZYaYAG3nMrB+8jg5OQ6BZkXcGe+Z0WuvKaiNWRZ35N/uoDxIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725488438; c=relaxed/simple;
-	bh=z9lxq0HFgo2q1DGzbWXTsfmuOP7H5na12FXnFGjK8yg=;
+	s=arc-20240116; t=1725489734; c=relaxed/simple;
+	bh=A1QppiQ4BCgg4QDQXK6JibKQMdbtjXSH6rCHs+lp4u4=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Shr9Idxjzo7NHMgivGrwstvFVYwGlLerw298UaOjFNm2fzV+rwWYQYGi5rhY7vFo/0xjXvn8Zk7Zd8U5oGLMTasuOyYAjAffvzUQFkYDi21JDOPJGKjx9Iwz/J9X8ruFmEyZ8x1rpO73YJHLl9LKjMvpLzGaJoXxghSFldsH+To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dLgJUIB6; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=BPmSRVa74VS5QCUABHXEenLYfIHbfsuzesPrgj+b81QqyBYKsgnBEiAAhZPBQauCgBhV0TyQg2I2sURxVEaHXf2hzRjZLP6YLLqOTqzpBA1zE23+d1tUEzzUiANH5d1r+DW5OHwH/GasyCNbwJsPqc1vAtlbnXNj8NfHtoL2Ur0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GR6zidaI; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1725488430;
-	bh=SjBzfwsVsii4wcgUs8pa8wXjYsczDb3ai3j7hSYpzuo=;
+	s=201702; t=1725489729;
+	bh=4EfHIIDWCzyWNu/Kz5sVR2Pj6+7t2drz1rRVzgdtwuA=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dLgJUIB64ZpEhdiDfGa9U3+r/9G9IzEz5rrsgY2zyl8DRQWlwgJ0eudByGB+qlXqO
-	 2Z/3OGzy+ss1VZ3gpLrOJlr3mlpRhuxOelybVwcvpu4LUT+UMYsgjhoHYB4+NKMhLw
-	 Lsc/z7PlWDfu5TlnJblwE9hztB2XvSwq+jvu0HuGT9OHdZ8U4a19Dd3EAzG2SjXFif
-	 GxGECmUk8mXQLasIcPDv100S6GGjepk4yDVPEV9rCoxsD4Iz66boYQAHWlW6p1i8l3
-	 lBRQJ8MmgB1iOXTZclEBFJ8xLjS7EeXepq2XqiQKLbhDUAsl8xdHXMDDdIDiCyMfuv
-	 xWh0goxCPLXQg==
+	b=GR6zidaIsGspKfRrvNdaolPpUIGHhBfEytKlnoWa9UKyaRupfAhA3vB8YNq6VvEf+
+	 51VDTtEMCRfp9OogHY1BvB+Rw63dE+wgmiihDk2xztfCO7wWFxGXRf1swSME7+BAQz
+	 syA+x6qMXOBlVPsveuAwYuHBI24RWTHCg6QlNyNneI2zi11sBqWQX133O4rSa/2qxC
+	 iKq7Y4fm5Ax6l8r5G6yJ7ynh/AXN7hDzdj2/HR1JplSIlYUMqeu9ufxEWF+9PqJmkh
+	 g9HXjglPaqjpkc3wVrGmPr4fK2b+/k6CZBuy3uGnPt0GTL6tkv+UxEjxvtp20gNAxQ
+	 jYc8Qh12XP21Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WzcPp3HR1z4wbv;
-	Thu,  5 Sep 2024 08:20:30 +1000 (AEST)
-Date: Thu, 5 Sep 2024 08:20:28 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wzctn50pQz4wd0;
+	Thu,  5 Sep 2024 08:42:09 +1000 (AEST)
+Date: Thu, 5 Sep 2024 08:42:08 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Sterba <dsterba@suse.cz>
+To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
+ <namhyung@kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the btrfs tree
-Message-ID: <20240905082028.14012c29@canb.auug.org.au>
-In-Reply-To: <20240903093343.78385cdc@canb.auug.org.au>
-References: <20240903093343.78385cdc@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patches in the perf tree
+Message-ID: <20240905084208.78279c14@canb.auug.org.au>
+In-Reply-To: <20240902105121.1a5b25f8@canb.auug.org.au>
+References: <20240902105121.1a5b25f8@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6E8MwB4.rAV0gRet0.G=+.I";
+Content-Type: multipart/signed; boundary="Sig_/acL/h8JtZqiRuMuCfv.eadj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/6E8MwB4.rAV0gRet0.G=+.I
+--Sig_/acL/h8JtZqiRuMuCfv.eadj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 3 Sep 2024 09:33:43 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+On Mon, 2 Sep 2024 10:51:21 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
 rote:
 >
-> The following commits are also in the btrfs-fixes tree as different
+> The following commits are also in the perf-current tree as different
 > commits (but the same patches):
 >=20
->   d3e969781d9f ("btrfs: fix race between direct IO write and fsync when u=
-sing same fd")
->   31c104266edb ("btrfs: zoned: handle broken write pointer on zones")
->   e336770f04a2 ("btrfs: qgroup: don't use extent changeset when not neede=
-d")
+>   6236ebe07131 ("perf daemon: Fix the build on more 32-bit architectures")
+>   2518e13275ab ("perf python: Fix the build on 32-bit arm by including mi=
+ssing "util/sample.h"")
+>   74fd69a35cae ("perf lock contention: Fix spinlock and rwlock accounting=
+")
+>   37e2a19c98bf ("perf test pmu: Set uninitialized PMU alias to null")
 >=20
 > These are commits
 >=20
->   95b3456f23e3 ("btrfs: fix race between direct IO write and fsync when u=
-sing same fd")
->   b1934cd60695 ("btrfs: zoned: handle broken write pointer on zones")
->   c346c629765a ("btrfs: qgroup: don't use extent changeset when not neede=
-d")
+>   478e3c7ebbe7 ("perf daemon: Fix the build on more 32-bit architectures")
+>   4cb80590f12d ("perf python: include "util/sample.h"")
+>   60f47d2c58cb ("perf lock contention: Fix spinlock and rwlock accounting=
+")
+>   387ad33e5410 ("perf test pmu: Set uninitialized PMU alias to null")
+>=20
+> and this last one is causing an unnecessary conflict.
 
 These latter commits are now in Linus' tree.
 
@@ -97,21 +101,21 @@ These latter commits are now in Linus' tree.
 Cheers,
 Stephen Rothwell
 
---Sig_/6E8MwB4.rAV0gRet0.G=+.I
+--Sig_/acL/h8JtZqiRuMuCfv.eadj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbY3SwACgkQAVBC80lX
-0Gx9CwgAkbOP8fE6AtQAVYyld873CtEvRln/VqwZKfre8u4wlBUoyNM8PZ/Z1Egx
-MLRp07gJvAwi0p/mhBzeDWj7ZI5qyMCHNsweSv579GFYUtn4anZ/8ULYvg5qzFbg
-Xuz0VW7rZhnH/dl74hmmSIMuMAHpU94o7loUSvrDXA2JJu3+Ede6JLJXCdjfzVZ+
-bk3eza/gLI7BN1A6BkM08RSnUehbpptP7i3mx9XUa9sPo8UBuH5vLrcxBYUDLcRp
-Gx3eaxwQK0yDAiz2+avOt3uWsF/0ufJGCXZ1pVzYbEB/x7QUtkKFeBU1+H3tvc3V
-pXaj+UjXEpEL5kK3yR9XfOlP2SqDRg==
-=pLEp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbY4kAACgkQAVBC80lX
+0GyPRwgAkKeoxbzLz4zBTJzsc2YAoqeq54et/vXwTFbHq00oRRR1R+/lzBi3PmZG
+3IfpVWA8S5yfbzWfzCUZ5hHWOXfNkkM3Vc7qCG28YmEW6FZD+AIE4m+u2be3COJe
+TXFZjcOR9A2Rr3GSce0Kn0MBYyLoEEY3FWNdQaCjTtxwGqV+8Q5GEFECDK651loj
+1I6IRpOq8FU/s+nFlAFWahaSO4DkyxautJZVTOB7V7+iAODQPTbYNonQEmpwNV05
+FKi+vBw/Gc8w5MQu+ISImVE7WVpywDxXs90WeeFdu0UwbPAMa2SIk/xRW0UPTyrM
+hOEPITSN+90Q2EoBsKrcv0zkvh3vYg==
+=zwpS
 -----END PGP SIGNATURE-----
 
---Sig_/6E8MwB4.rAV0gRet0.G=+.I--
+--Sig_/acL/h8JtZqiRuMuCfv.eadj--
 

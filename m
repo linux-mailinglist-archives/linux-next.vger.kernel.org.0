@@ -1,167 +1,153 @@
-Return-Path: <linux-next+bounces-3578-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3579-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0DAF96B032
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 06:56:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C802396B043
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 07:05:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90288B237A0
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 04:56:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 556A5B21EEB
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2024 05:05:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2779635;
-	Wed,  4 Sep 2024 04:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D98C433A9;
+	Wed,  4 Sep 2024 05:05:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="rfqvfiFe"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fJumvytq"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98ED2E401
-	for <linux-next@vger.kernel.org>; Wed,  4 Sep 2024 04:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CADF82C60;
+	Wed,  4 Sep 2024 05:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725425766; cv=none; b=p9j75Oh9KXaAvJ9BHwbM+y7tyUPA0pCnIQS/XCNhDiRUbkZBUUEBQwGrMG6NlhVwtaOkTGcKPOwmam/nhHXz5kNwLMy1SY9VHwa+q4ABKmmUIAEk/odco3ASp/W+4O2RtsGRZovNIuNi1h3NQ7ayP7+Ox6yLM9pIOd38kVIFy2w=
+	t=1725426332; cv=none; b=PyQk0WlpOeJzQSqqmTQXx04/bxmtVZ+txjJyx+8RgrdM87GBqtNNf8iL3fh8LG934L3bFMGG1lNLIVPMoH1DlWzh2cJXQtItcrjFIJeUkYbPXjaiuHi/VSH8Axz0Xs6cwfN5hDqQjbDwIBuRJCiyzmdWmXORU6BFHrhsMVY72oE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725425766; c=relaxed/simple;
-	bh=pWVVAChwLIWvLTTMHSspXVCeRNS74HPy8sTPHtJkz5k=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=PUQ9SzLiahlyPFtSDIHrsM7t1SUEWHPsuwhJQifz8xbQLI4zCe4dSlmGoltHzxD05ABsTu156yUpbOLJdshUw7fcw3kJ01QQ7Gvw5mjWK3WsO6/17ctJwJK4o1xzPRc/gdHq3iEqMAe+Tw4ZbPUPOHp0aY/8dAAzPK31CwisWG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=rfqvfiFe; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-70f60d73436so3436279a34.1
-        for <linux-next@vger.kernel.org>; Tue, 03 Sep 2024 21:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1725425763; x=1726030563; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=p+V9HbY9DD8i3Zrm10abIHLm1X6uqQbdtSWPXGYdFHs=;
-        b=rfqvfiFe/O1RM1DELZtLyQ3YDCB8KBmwJIzGZHSV5m/4XkZXfdNNAPcLqCpMXrDYfA
-         L22E9fUtVQg8DeUzXDHPUpAqF5iuEhhCUelMzCIPUc4xLU8hdltoi1S3tR9WglI54FVn
-         bLw67kqJeCsWUyenvOTFvAPRCAoAtN5XOlY7xheHBdph9psEKqlDGalmFPfXLgzrXZr2
-         TesaOaDrhqLxHEsOFAGDG4Y0Lyinb6Dz/OzqPS1ZwTJdjuOgG32NvE6ePj4QgJ4vMNJj
-         frQygEKwe++kgU3Acy1HVKRaFoTZP2a66zrjAshprJe946UTBk7TC5SdFWiC+G0lOTot
-         F1og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725425763; x=1726030563;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p+V9HbY9DD8i3Zrm10abIHLm1X6uqQbdtSWPXGYdFHs=;
-        b=LWMMKmC6xSZWVaBhDyMNsSoDN2RKME2706fMUxX7pcgADIAfc7ZdlNAqgANH1Y6yeB
-         JswBK4mg7HDH2JIpk0xOADca1q0fXm7L/ykM3M9IoC4oGN7NZk7QcfzozFxQME5lx7s/
-         Dv6Ljx7IrZEFDnl3a/5bAGD0PvEFwa7gGUQcb+UBztYQovuqB5k1DrlLssZ7n+HNh1YM
-         4wNGe5P+rFoOazFmdrAFEPOHEZKNR/VdnOPBUvasfeUy8IaRYQKJkWAoE9WufONF9Yyl
-         3ErZnzzeTYRIu3Skz+qtWElvPwvoDTg08GkDlied8jqkGiyLQCOK2qkByOodLL5iAX3x
-         3syw==
-X-Gm-Message-State: AOJu0Yzz7YSNNQWEqDr94wo/ZQhz1L+rPa6IvAy+1nDDLKUb7NGcQ0MN
-	RpoQgtE0yWR//t+87wgzSHE4Jm3C8q+ZF2Sn4Va6Ldn7o0vSf4fKh+dcUMq+pLXm0MgXx9brxYo
-	N
-X-Google-Smtp-Source: AGHT+IGGHIItdRGOpNhN0iaZRYX2InyTBDh6C6+z7itFji/niI9FQ9ivZCxrzPisxrw7W3EQNvpw0A==
-X-Received: by 2002:a05:6359:4129:b0:1b5:e9e2:cbe4 with SMTP id e5c5f4694b2df-1b603cd4f0bmr2475295155d.27.1725425763078;
-        Tue, 03 Sep 2024 21:56:03 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71778522984sm726502b3a.31.2024.09.03.21.56.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 21:56:02 -0700 (PDT)
-Message-ID: <66d7e862.050a0220.11b31e.321e@mx.google.com>
-Date: Tue, 03 Sep 2024 21:56:02 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1725426332; c=relaxed/simple;
+	bh=PgdvbH11XmsZ5U7OHuKqSafP++l7ZXuPR2HUPocHO6g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=onr40GweJoxW3mT5x5fyUvUubg7a0HfwO1Guxu8fmHzHKPhFkQi9xihcMCPpkFrRpKi/O7CkOFnswnpTqVpJPlk4m8NS0g0CO5MTvrGGwkVbkkNFHFqmknvGpOi3C/YvM8upIg2WecGbhir9QC8gT6fhPyFeozm2tnQC+zK9Des=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fJumvytq; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1725426324;
+	bh=NAaMoxOCJ8yaps3swDHsqzPY7ywBTbwVbaYo0OgWZ/E=;
+	h=Date:From:To:Cc:Subject:From;
+	b=fJumvytqh33Kz6uM64mZdY+0QpLJ+4XesiwENASpCodUhR/lDWzGumdHwNVVLi0Dp
+	 OAvCPunh+pQOTLsx11INh/RvK6qJd3U7s9Cq9yQmcSl5BmW2/2zzZICiwUQF95lztN
+	 iHeGlVGNjhUhMh/0juGbmvPWmceD9weKmSINfiL3H5b4SxB6gQaS88cTHupQFwneti
+	 ypnCFFhWKWW4A5iEkSjonVM+VVjoIAw0vX2CLu1CSVbCxuCETYq8h2MH7IvHPZvz45
+	 kX3joeg0G8/aSrqOyKu9yA1915JR7vUVuwSM1l7U1ccYHEb+/JEinib+6c0lhMrT5x
+	 qB48Pps8PGGXA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wz9RR5zjSz4wb7;
+	Wed,  4 Sep 2024 15:05:23 +1000 (AEST)
+Date: Wed, 4 Sep 2024 15:05:22 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Heikki Krogerus
+ <heikki.krogerus@linux.intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the usb tree with the usb.current tree
+Message-ID: <20240904150522.0410150f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/DDjeWMXVs/vgKyeH8PMghzo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/DDjeWMXVs/vgKyeH8PMghzo
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.11-rc6-277-g1e62b52fb94b
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 33 runs,
- 1 regressions (v6.11-rc6-277-g1e62b52fb94b)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes baseline: 33 runs, 1 regressions (v6.11-rc6-277-g1e62b52=
-fb94b)
+Hi all,
 
-Regressions Summary
--------------------
+Today's linux-next merge of the usb tree got a conflict in:
 
-platform         | arch | lab     | compiler | defconfig          | regress=
-ions
------------------+------+---------+----------+--------------------+--------=
-----
-beaglebone-black | arm  | lab-cip | gcc-12   | multi_v7_defconfig | 1      =
-    =
+  drivers/usb/typec/ucsi/ucsi.c
 
+between commit:
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.11-rc6-277-g1e62b52fb94b/plan/baseline/
+  87eb3cb4ec61 ("usb: typec: ucsi: Fix cable registration")
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.11-rc6-277-g1e62b52fb94b
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      1e62b52fb94b2c739e136835844af19b087f4a34 =
+from the usb.current tree and commit:
 
+  73910c511b1a ("usb: typec: ucsi: Only assign the identity structure if th=
+e PPM supports it")
 
+from the usb tree.
 
-Test Regressions
----------------- =
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
+--=20
+Cheers,
+Stephen Rothwell
 
-
-platform         | arch | lab     | compiler | defconfig          | regress=
-ions
------------------+------+---------+----------+--------------------+--------=
-----
-beaglebone-black | arm  | lab-cip | gcc-12   | multi_v7_defconfig | 1      =
-    =
-
-
-  Details:     https://kernelci.org/test/plan/id/66d7bcaaa155ec9082c86855
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.11-rc6-2=
-77-g1e62b52fb94b/arm/multi_v7_defconfig/gcc-12/lab-cip/baseline-beaglebone-=
-black.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.11-rc6-2=
-77-g1e62b52fb94b/arm/multi_v7_defconfig/gcc-12/lab-cip/baseline-beaglebone-=
-black.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/66d7bcaaa155ec90=
-82c8685a
-        new failure (last pass: v6.11-rc6-190-g360c419cbea7)
-        1 lines
-
-    2024-09-04T01:49:17.767579  / # =
-
-    2024-09-04T01:49:17.776547  =
-
-    2024-09-04T01:49:17.881542  / # #
-    2024-09-04T01:49:17.888423  #
-    2024-09-04T01:49:18.006211  / # export SHELL=3D/bin/sh
-    2024-09-04T01:49:18.016147  export SHELL=3D/bin/sh
-    2024-09-04T01:49:18.117979  / # . /lava-1188382/environment
-    2024-09-04T01:49:18.128318  . /lava-1188382/environment
-    2024-09-04T01:49:18.230184  / # /lava-1188382/bin/lava-test-runner /lav=
-a-1188382/0
-    2024-09-04T01:49:18.239973  /lava-1188382/bin/lava-test-runner /lava-11=
-88382/0 =
-
-    ... (9 line(s) more)  =
-
+diff --cc drivers/usb/typec/ucsi/ucsi.c
+index 17155ed17fdf,f0b5867048e2..000000000000
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@@ -993,11 -929,12 +939,12 @@@ static int ucsi_register_cable(struct u
+  		break;
+  	}
  =20
+- 	desc.identity =3D &con->cable_identity;
++ 	if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
++ 		desc.identity =3D &con->cable_identity;
+ -	desc.active =3D !!(UCSI_CABLE_PROP_FLAG_ACTIVE_CABLE &
+ -			 con->cable_prop.flags);
+ -	desc.pd_revision =3D UCSI_CABLE_PROP_FLAG_PD_MAJOR_REV_AS_BCD(
+ -	    con->cable_prop.flags);
+ +	desc.active =3D !!(UCSI_CABLE_PROP_FLAG_ACTIVE_CABLE & cable_prop.flags);
+ +
+ +	if (con->ucsi->version >=3D UCSI_VERSION_2_1)
+ +		desc.pd_revision =3D UCSI_CABLE_PROP_FLAG_PD_MAJOR_REV_AS_BCD(cable_pro=
+p.flags);
+ =20
+  	cable =3D typec_register_cable(con->port, &desc);
+  	if (IS_ERR(cable)) {
+@@@ -1094,8 -1009,10 +1041,9 @@@ static int ucsi_register_partner(struc
+  	if (pwr_opmode =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD)
+  		ucsi_register_device_pdos(con);
+ =20
+- 	desc.identity =3D &con->partner_identity;
++ 	if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
++ 		desc.identity =3D &con->partner_identity;
+  	desc.usb_pd =3D pwr_opmode =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD;
+ -	desc.pd_revision =3D UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->c=
+ap.flags);
+ =20
+  	partner =3D typec_register_partner(con->port, &desc);
+  	if (IS_ERR(partner)) {
+
+--Sig_/DDjeWMXVs/vgKyeH8PMghzo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbX6pIACgkQAVBC80lX
+0Gw48QgAnNbFLvzNKT3OZZbQntVMNnjWrDIxZoU4975Tv+dmb8UGwcAlpoJhkxr8
+n8DcXopXedL28nvRpkl6mdWg0f7Qfed3gO/YB1oneWgNhvYePZAtHU9JrEe5Hh+E
+95aOeg/odug/9iVgXP7FG0T8ltJ9UvUaSfuh4lwGDTuAq219TZsVZiEJxcNk4rZQ
+nX/6xIwDjJLF+aVtfzSvqnnu5c2D1wbK+/Wg3rea4A90UUjhSxA6CYnqVsq1z6S5
+lAt1KmyGS0yWRYJaZ4lLBAB3dk3hpLJpop5fX7W39y0wcWNwm0MmaUsxx+7c4FyD
+G31l3kS8a9mc2B1aGc3UFI/MwEAcqA==
+=JjGC
+-----END PGP SIGNATURE-----
+
+--Sig_/DDjeWMXVs/vgKyeH8PMghzo--
 

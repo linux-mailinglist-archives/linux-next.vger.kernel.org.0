@@ -1,165 +1,141 @@
-Return-Path: <linux-next+bounces-3601-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3602-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6A1A96CBF1
-	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 02:59:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFE2696CC69
+	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 03:56:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1741F1C2392C
-	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 00:59:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A3FE285EA9
+	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 01:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086BE440C;
-	Thu,  5 Sep 2024 00:59:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F052E8F66;
+	Thu,  5 Sep 2024 01:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="owcTiT5W"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CQBgLoxi"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73183624;
-	Thu,  5 Sep 2024 00:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F157C8BFF;
+	Thu,  5 Sep 2024 01:55:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725497952; cv=none; b=uh3/4bBS8WqkXP9IDDgDuahlAt3gEUZfRiNm0bq/zmEKRQeftJ/msbEVFgWwUoAc3tguld8yFkLyYznNPm7FFUMIjsmHnD4nr3SmAaAqVkBo5bbCHESg9tMmUaYQvB2JKsewQ8K0jNJNlJLMegL2zQT52Vskq4M/k6QkbAahxcQ=
+	t=1725501355; cv=none; b=Mbvaja55ZDH76GYEtDPX0W/9X5dAvgzbYHETL4uMt0CZ3qycf6svQQauxsmYYnL/umGWeFb08u5Bq5xZ20p6B8Yxjmn+qb2iMJX3xI66BHPTeoNMpJjJFHp9cmfw/knZ4ehDS6xdG/lXPBdxaW0sWk8UAgXq6exuRaSLJ1qBt+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725497952; c=relaxed/simple;
-	bh=aziCVaD/Y6XIrJq9QRJmVBR5Gq+7J7xl3MRy5nTT5jY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Nh7PTSkm1vEikc3RuMCv16KjaX+62MNwpWrQ2qx0yF+t9ZMljSpv+EHkDIey5/ECgQ10OZW8aU1iZDzhE1Q6U8rKiFnnbk13B9YRSh3oJVcZSKxJb8T/oi6TIpcmwzvwwZFdMsuLqL3iKuqHdLvrGNC1UslhP8mYSeP9VeUUT/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=owcTiT5W; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1725501355; c=relaxed/simple;
+	bh=aXDBR6mobi74rtyFl8uzHMf9pd9WPvyhMgT/trGk0LM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aIsU0JF/WaZpDTE4fYxVNU8ave6VAI6O+nZkeaqLuGVtJ4QWEP78BYP3z1uSXCZ0vfbU4QQ0W3uPug+LrKH4vqviv4H10rHAAxNFe0uORyaIOEmqJZQS7PEbGrz1SghguYcO9xPJNgm5NATbyyOu55tOq20vwt2s68Kfmf8bk8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CQBgLoxi; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1725497947;
-	bh=zF0b4z/ll/74yRUk9lTlAYXkg6Y/LXY2t3U+Zxx98I8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=owcTiT5W68tiswMd8691nYR0CfHNi4tsY/2VsfWxoZ47/dnSNG2qHa06GfIH5bBcu
-	 eOnBhXV0CrT5TYVFDlkhDi4i8hWT9OUBIqtcnFfaAz47fxoO9zpld+GywkNu8Yoqdk
-	 SVCdKc22VYfE31rZ9hvmdqu+5/F//l13pFdY4FsCScb2V+4+v2DtAdF42X4tFeMWVj
-	 sTB4i8WS0gkLjTG2C9aYKUaXZksxqzTr5PRSieRhqzqoROsgW1b3iOqQlhBkLG1im6
-	 6BrDC62D8hKnrupDiZSyVsq92nGD8oB47ny7FI/jSDRyDWcQRMhYkiXPfO0F0s84Gn
-	 wjdYs+mr/6kFQ==
+	s=201702; t=1725501349;
+	bh=l10Mn0RRfpFDZQXV/LMbWX+X5CpX+W6dgcGRQwtR10w=;
+	h=Date:From:To:Cc:Subject:From;
+	b=CQBgLoxiIfLLSKGHOEVks3vvGTcOm1r9MSFUAhaFCC5Tx02Ctv/xLYEHc1Fq2YfID
+	 sd1HgLxWN8VEoH964rk4eDXYCnQyUNVWg1F5RIK3UjIP77lDryIxqX/Pb2eO8Uo5Za
+	 z87OcSzzsTRcGIksWpQxU3452/hzJH1ksdqrhqsoIPO28rlwbFN2BJqE4+fYgc9InS
+	 bgyEkIFEG/aaE1ZO7etlFQ5kJ9ie2zMwsUVgwC9lHuLSe3RwkArH4ESQ8S/l4urWEH
+	 m++giaUXD2rJwLXrnDKKjITRG+mshuhphZYiQ6KMj4QtrEqBn5B1qrLgFYebusjaWK
+	 8b1JUJZ1hnTtg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wzgwq2HX7z4wc3;
-	Thu,  5 Sep 2024 10:59:07 +1000 (AEST)
-Date: Thu, 5 Sep 2024 10:58:09 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WzjBF20bmz4wxx;
+	Thu,  5 Sep 2024 11:55:49 +1000 (AEST)
+Date: Thu, 5 Sep 2024 11:55:48 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Aleksa Sarai <cyphar@cyphar.com>, Christian Brauner <brauner@kernel.org>
+To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
+ <namhyung@kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20240905105809.6585eec2@canb.auug.org.au>
-In-Reply-To: <20240903.020556-bouncing.saws.daring.donor-5KuFrSsG4K2W@cyphar.com>
-References: <20240903092745.370fc0c6@canb.auug.org.au>
-	<20240903.020556-bouncing.saws.daring.donor-5KuFrSsG4K2W@cyphar.com>
+Subject: linux-next: build failure after merge of the perf tree
+Message-ID: <20240905115548.745ef16a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IAZJ=U3z_OEBnTstU_q1leB";
+Content-Type: multipart/signed; boundary="Sig_/A.GBAXKg9YC1=DZx6.RruK5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/IAZJ=U3z_OEBnTstU_q1leB
+--Sig_/A.GBAXKg9YC1=DZx6.RruK5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 3 Sep 2024 12:41:08 +1000 Aleksa Sarai <cyphar@cyphar.com> wrote:
->
-> On 2024-09-03, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > Hi all,
-> >=20
-> > After merging the vfs-brauner tree, today's linux-next build (native pe=
-rf)
-> > failed like this:
-> >=20
-> > In file included from trace/beauty/fs_at_flags.c:21:
-> > perf/trace/beauty/generated/fs_at_flags_array.c:10:31: error: initializ=
-ed field overwritten [-Werror=3Doverride-init]
-> >    10 |         [ilog2(0x0001) + 1] =3D "RENAME_NOREPLACE",
-> >       |                               ^~~~~~~~~~~~~~~~~~
-> > perf/trace/beauty/generated/fs_at_flags_array.c:10:31: note: (near init=
-ialization for 'fs_at_flags[1]')
-> > perf/trace/beauty/generated/fs_at_flags_array.c:14:30: error: initializ=
-ed field overwritten [-Werror=3Doverride-init]
-> >    14 |         [ilog2(0x200) + 1] =3D "HANDLE_FID",
-> >       |                              ^~~~~~~~~~~~
-> > perf/trace/beauty/generated/fs_at_flags_array.c:14:30: note: (near init=
-ialization for 'fs_at_flags[10]')
-> > perf/trace/beauty/generated/fs_at_flags_array.c:15:30: error: initializ=
-ed field overwritten [-Werror=3Doverride-init]
-> >    15 |         [ilog2(0x001) + 1] =3D "HANDLE_MNT_ID_UNIQUE",
-> >       |                              ^~~~~~~~~~~~~~~~~~~~~~
-> > perf/trace/beauty/generated/fs_at_flags_array.c:15:30: note: (near init=
-ialization for 'fs_at_flags[1]')
-> >=20
-> > Caused by commit
-> >=20
-> >   34cf40849654 ("uapi: explain how per-syscall AT_* flags should be all=
-ocated")
-> >=20
-> > I have used the vfs-brauner tree from next-20240902 for today. =20
->=20
-> Ah okay, the overlapping flag definitions in the copied over fcntl.h are
-> causing issues. We could just drop that part of the patch, or (since the
-> new flags aren't handled by perf/trace/beauty) we could just do
-> something simple like:
->=20
-> diff --git a/tools/perf/trace/beauty/fs_at_flags.sh b/tools/perf/trace/be=
-auty/fs_at_flags.sh
-> index 456f59addf74..930384029599 100755
-> --- a/tools/perf/trace/beauty/fs_at_flags.sh
-> +++ b/tools/perf/trace/beauty/fs_at_flags.sh
-> @@ -13,9 +13,13 @@ printf "static const char *fs_at_flags[] =3D {\n"
->  regex=3D'^[[:space:]]*#[[:space:]]*define[[:space:]]+AT_([^_]+[[:alnum:]=
-_]+)[[:space:]]+(0x[[:xdigit:]]+)[[:space:]]*.*'
->  # AT_EACCESS is only meaningful to faccessat, so we will special case it=
- there...
->  # AT_STATX_SYNC_TYPE is not a bit, its a mask of AT_STATX_SYNC_AS_STAT, =
-AT_STATX_FORCE_SYNC and AT_STATX_DONT_SYNC
-> +# AT_RENAME_* flags are just aliases of RENAME_* flags and we don't need=
- to include them.
-> +# AT_HANDLE_* flags are only meaningful for name_to_handle_at, which we =
-don't support.
->  grep -E $regex ${linux_fcntl} | \
->         grep -v AT_EACCESS | \
->         grep -v AT_STATX_SYNC_TYPE | \
-> +       grep -Ev "AT_RENAME_(NOREPLACE|EXCHANGE|WHITEOUT)" | \
-> +       grep -Ev "AT_HANDLE_(FID|MNT_ID_UNIQUE)" | \
->         sed -r "s/$regex/\2 \1/g"       | \
->         xargs printf "\t[ilog2(%s) + 1] =3D \"%s\",\n"
->  printf "};\n"
+After merging the perf tree, today's linux-next build (native perf)
+failed like this:
 
-I have applied that by hand for today.  Please submit it and get it
-applied.
+perf/util/bpf-filter-flex.c: In function 'yy_get_previous_state':
+perf/util/bpf-filter-flex.c:1919:9: error: expected expression at end of in=
+put
+ 1919 |         for ( yy_cp =3D (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_b=
+uf_p); ++yy_cp )
+      |         ^~~
+perf/util/bpf-filter-flex.c:1919:9: error: expected declaration or statemen=
+t at end of input
+perf/util/bpf-filter-flex.c:1919:9: error: no return statement in function =
+returning non-void [-Werror=3Dreturn-type]
+perf/util/bpf-filter-flex.c: At top level:
+perf/util/bpf-filter-flex.c:20:31: error: 'perf_bpf_filter_ensure_buffer_st=
+ack' used but never defined [-Werror]
+   20 | #define yyensure_buffer_stack perf_bpf_filter_ensure_buffer_stack
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+perf/util/bpf-filter-flex.c:550:13: note: in expansion of macro 'yyensure_b=
+uffer_stack'
+  550 | static void yyensure_buffer_stack ( void );
+      |             ^~~~~~~~~~~~~~~~~~~~~
+perf/util/bpf-filter-flex.c:16:30: error: 'perf_bpf_filter__load_buffer_sta=
+te' used but never defined [-Werror]
+   16 | #define yy_load_buffer_state perf_bpf_filter__load_buffer_state
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+perf/util/bpf-filter-flex.c:551:13: note: in expansion of macro 'yy_load_bu=
+ffer_state'
+  551 | static void yy_load_buffer_state ( void );
+      |             ^~~~~~~~~~~~~~~~~~~~
+perf/util/bpf-filter-flex.c:604:22: error: 'yy_try_NUL_trans' used but neve=
+r defined [-Werror]
+  604 | static yy_state_type yy_try_NUL_trans ( yy_state_type current_state=
+  );
+      |                      ^~~~~~~~~~~~~~~~
+perf/util/bpf-filter-flex.c:606:24: error: 'yy_fatal_error' used but never =
+defined [-Werror]
+  606 | static void yynoreturn yy_fatal_error ( const char* msg  );
+      |                        ^~~~~~~~~~~~~~
+perf/util/bpf-filter-flex.c:510:15: error: 'yy_buffer_stack_max' defined bu=
+t not used [-Werror=3Dunused-variable]
+  510 | static size_t yy_buffer_stack_max =3D 0; /**< capacity of stack. */
+      |               ^~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+I don't know what caused this, but just redoing the build worked.
+Is there maybe a dependency missing?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/IAZJ=U3z_OEBnTstU_q1leB
+--Sig_/A.GBAXKg9YC1=DZx6.RruK5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbZAiEACgkQAVBC80lX
-0Gx3lAf+N7/+gZu6rn4lZRz+ANHkjL0BzPtqTCa0y8J8ELQzmfaMfeZigJhOWQh5
-u3PtsRrW72n7dU+PJebV2XNIR4n4Uyw/m5TmgcL/UXlh9HTTqC5lUVNOmFVaEbOY
-J8tquQdiPzZ2t/q1SNwORDaNygWkdlPEhwJ5ArwYLdTlOs7b2yRqjFfnQj6sH2Ag
-BF4DQqNppN/eeCpZxC/1g/k8lJPqZPn2OJkVWLMPEVlWeDBjO7x4COWa1DTiffhT
-fVIFuGPI32cTOTfHr0Ul1PU8topvODwTPhX4zRTb3c0LZAXzQrl238qKxYYw09R5
-EKLCBX41wB16BqCAIHBTLtKzaxG3nQ==
-=Qcfh
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbZD6QACgkQAVBC80lX
+0GyIywgAgnHP2XzAjcvyPIz4hGHPU6pPsqv7m7DdpNhizqgtCB4f2vLl+LqzbRKN
+DJS96XXlW1mXk6kENre5F6Y6rXDf7T63+A6lWW26romM2Eld0dbf37aYFn6KMZni
+tUZbAwTKgWScgSA7iKFtUDkIugiNz8lw1tGmNa8xSqOAjKUSnMcMuUQls3Ln/Tr/
+OFsFPDa0Kv8F0em/fHC0q1wibqnJnzYAyG1E8W6IGl1GXf2K2j6vY5Ei5DmbXHM5
+tibHMB1xlhq/CMqCIXxzqw7mtZQirqowyU5DZTbWbHIaSUYmzSzI/fDAEmxPo8jd
+d+unOM4mY/9dbZEHPlBEbpZjdk5l5A==
+=f3yP
 -----END PGP SIGNATURE-----
 
---Sig_/IAZJ=U3z_OEBnTstU_q1leB--
+--Sig_/A.GBAXKg9YC1=DZx6.RruK5--
 

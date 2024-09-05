@@ -1,141 +1,103 @@
-Return-Path: <linux-next+bounces-3602-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3603-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFE2696CC69
-	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 03:56:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26A2B96CD88
+	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 06:00:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A3FE285EA9
-	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 01:55:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9808DB21526
+	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 04:00:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F052E8F66;
-	Thu,  5 Sep 2024 01:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 661F4219E1;
+	Thu,  5 Sep 2024 04:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CQBgLoxi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PqIOHnSt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F157C8BFF;
-	Thu,  5 Sep 2024 01:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EB47FD;
+	Thu,  5 Sep 2024 04:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725501355; cv=none; b=Mbvaja55ZDH76GYEtDPX0W/9X5dAvgzbYHETL4uMt0CZ3qycf6svQQauxsmYYnL/umGWeFb08u5Bq5xZ20p6B8Yxjmn+qb2iMJX3xI66BHPTeoNMpJjJFHp9cmfw/knZ4ehDS6xdG/lXPBdxaW0sWk8UAgXq6exuRaSLJ1qBt+0=
+	t=1725508821; cv=none; b=afQ8Swx20ir1SXIx0RSMqZxhrZKJHz4GuDzhbQLhOQF1t6AA/xznjXEftYFnA3LJFiAasXdz7ycJ2ws0A+Fpt6KV6oA8jjl6SgdU3JBKLSbJ73EY569EHCNzUcBdZHuxHXS3brbpcuWeUd4EXO8N7u1+OE/B1QYC/jnMf9KnQic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725501355; c=relaxed/simple;
-	bh=aXDBR6mobi74rtyFl8uzHMf9pd9WPvyhMgT/trGk0LM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aIsU0JF/WaZpDTE4fYxVNU8ave6VAI6O+nZkeaqLuGVtJ4QWEP78BYP3z1uSXCZ0vfbU4QQ0W3uPug+LrKH4vqviv4H10rHAAxNFe0uORyaIOEmqJZQS7PEbGrz1SghguYcO9xPJNgm5NATbyyOu55tOq20vwt2s68Kfmf8bk8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CQBgLoxi; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1725501349;
-	bh=l10Mn0RRfpFDZQXV/LMbWX+X5CpX+W6dgcGRQwtR10w=;
-	h=Date:From:To:Cc:Subject:From;
-	b=CQBgLoxiIfLLSKGHOEVks3vvGTcOm1r9MSFUAhaFCC5Tx02Ctv/xLYEHc1Fq2YfID
-	 sd1HgLxWN8VEoH964rk4eDXYCnQyUNVWg1F5RIK3UjIP77lDryIxqX/Pb2eO8Uo5Za
-	 z87OcSzzsTRcGIksWpQxU3452/hzJH1ksdqrhqsoIPO28rlwbFN2BJqE4+fYgc9InS
-	 bgyEkIFEG/aaE1ZO7etlFQ5kJ9ie2zMwsUVgwC9lHuLSe3RwkArH4ESQ8S/l4urWEH
-	 m++giaUXD2rJwLXrnDKKjITRG+mshuhphZYiQ6KMj4QtrEqBn5B1qrLgFYebusjaWK
-	 8b1JUJZ1hnTtg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WzjBF20bmz4wxx;
-	Thu,  5 Sep 2024 11:55:49 +1000 (AEST)
-Date: Thu, 5 Sep 2024 11:55:48 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
- <namhyung@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the perf tree
-Message-ID: <20240905115548.745ef16a@canb.auug.org.au>
+	s=arc-20240116; t=1725508821; c=relaxed/simple;
+	bh=e17X/Vtiaq2Ou/rWKrsM1T8duG2MejA2cCY1ViuDvOE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=up1+e7ZhOhq0uBCnGG0m9hm1EsIVh+iqOIv4sly37HsxuOwP17gS5q+YelwmZsyrKSCIwnBMfMKqceHuIKa6kvSs3ZpIipF5q9hb07g1cDIdquctnwmMrZZmZ7rYPKwtcGp0FLCaJLhL8PXAiYw+LnNyveziGxlfArfwV3Qdqd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PqIOHnSt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E32FC4CEC4;
+	Thu,  5 Sep 2024 04:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725508820;
+	bh=e17X/Vtiaq2Ou/rWKrsM1T8duG2MejA2cCY1ViuDvOE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PqIOHnSt9yXRYp6udd7+0ESxkOiKapOn59+ajurcRW0qgBzKG95CRLSvoHbuuwRsI
+	 YCiDQhXtVpArYbyBntaeq0HP8cYLSRir87RSWyC3T3mOz9A2f9IL3FwoVizxqLAOSq
+	 pqLkMn0ilut38VncnG2PCwNWjkTmI5BBYUtAXh5yMKrOiEQgJKJHMRlX8lrVzJvNRj
+	 uVsBL9tmRT3QBqu0Lv7wYBsT9ZJ3axOjASI0+BfjH8EoOcGSPt14EMsE0338DhIMZK
+	 WO5n5TZ95RjAtBt085/4jSURS/VSGDqwo2BpKmEat5fORlzSxUoC2EKbXs397JNFd7
+	 x2bJyqCaX2dzQ==
+Message-ID: <56456d5d-40b0-4d6c-9abf-7cbae1c70b92@kernel.org>
+Date: Thu, 5 Sep 2024 12:00:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A.GBAXKg9YC1=DZx6.RruK5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the f2fs
+ tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Christian Brauner <brauner@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>
+References: <20240902092405.7c26e742@canb.auug.org.au>
+ <20240905101845.0a47926a@canb.auug.org.au>
+Content-Language: en-US
+From: Chao Yu <chao@kernel.org>
+In-Reply-To: <20240905101845.0a47926a@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---Sig_/A.GBAXKg9YC1=DZx6.RruK5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2024/9/5 8:18, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 2 Sep 2024 09:24:05 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Today's linux-next merge of the vfs-brauner tree got a conflict in:
+>>
+>>    fs/f2fs/data.c
+>>
+>> between commits:
+>>
+>>    f13c7184e62e ("f2fs: convert f2fs_write_begin() to use folio")
+>>    357dd8479f8b ("f2fs: convert f2fs_write_end() to use folio")
+>> (and maybe others)
+>>
+>> from the f2fs tree and commits:
+>>
+>>    a0f858d450ce ("f2fs: Convert f2fs_write_end() to use a folio")
+>>    dfd2e81d37e1 ("f2fs: Convert f2fs_write_begin() to use a folio")
+>>    a225800f322a ("fs: Convert aops->write_end to take a folio")
+>>    1da86618bdce ("fs: Convert aops->write_begin to take a folio")
+>>
+>> from the vfs-brauner tree.
+>>
+>> This was too much for me to fix up, so I just used the f2fs tree from
+>> next-20240830 for today.  Please discuss this and fix things up.
+> 
+> I took another shot at this and *I think* I figured it out - see below
+> and I have also attached the final version of this file.  Please check
+> and advise.
 
-Hi all,
+The fix looks fine.
 
-After merging the perf tree, today's linux-next build (native perf)
-failed like this:
+Thanks,
 
-perf/util/bpf-filter-flex.c: In function 'yy_get_previous_state':
-perf/util/bpf-filter-flex.c:1919:9: error: expected expression at end of in=
-put
- 1919 |         for ( yy_cp =3D (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_b=
-uf_p); ++yy_cp )
-      |         ^~~
-perf/util/bpf-filter-flex.c:1919:9: error: expected declaration or statemen=
-t at end of input
-perf/util/bpf-filter-flex.c:1919:9: error: no return statement in function =
-returning non-void [-Werror=3Dreturn-type]
-perf/util/bpf-filter-flex.c: At top level:
-perf/util/bpf-filter-flex.c:20:31: error: 'perf_bpf_filter_ensure_buffer_st=
-ack' used but never defined [-Werror]
-   20 | #define yyensure_buffer_stack perf_bpf_filter_ensure_buffer_stack
-      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-perf/util/bpf-filter-flex.c:550:13: note: in expansion of macro 'yyensure_b=
-uffer_stack'
-  550 | static void yyensure_buffer_stack ( void );
-      |             ^~~~~~~~~~~~~~~~~~~~~
-perf/util/bpf-filter-flex.c:16:30: error: 'perf_bpf_filter__load_buffer_sta=
-te' used but never defined [-Werror]
-   16 | #define yy_load_buffer_state perf_bpf_filter__load_buffer_state
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-perf/util/bpf-filter-flex.c:551:13: note: in expansion of macro 'yy_load_bu=
-ffer_state'
-  551 | static void yy_load_buffer_state ( void );
-      |             ^~~~~~~~~~~~~~~~~~~~
-perf/util/bpf-filter-flex.c:604:22: error: 'yy_try_NUL_trans' used but neve=
-r defined [-Werror]
-  604 | static yy_state_type yy_try_NUL_trans ( yy_state_type current_state=
-  );
-      |                      ^~~~~~~~~~~~~~~~
-perf/util/bpf-filter-flex.c:606:24: error: 'yy_fatal_error' used but never =
-defined [-Werror]
-  606 | static void yynoreturn yy_fatal_error ( const char* msg  );
-      |                        ^~~~~~~~~~~~~~
-perf/util/bpf-filter-flex.c:510:15: error: 'yy_buffer_stack_max' defined bu=
-t not used [-Werror=3Dunused-variable]
-  510 | static size_t yy_buffer_stack_max =3D 0; /**< capacity of stack. */
-      |               ^~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-
-I don't know what caused this, but just redoing the build worked.
-Is there maybe a dependency missing?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/A.GBAXKg9YC1=DZx6.RruK5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbZD6QACgkQAVBC80lX
-0GyIywgAgnHP2XzAjcvyPIz4hGHPU6pPsqv7m7DdpNhizqgtCB4f2vLl+LqzbRKN
-DJS96XXlW1mXk6kENre5F6Y6rXDf7T63+A6lWW26romM2Eld0dbf37aYFn6KMZni
-tUZbAwTKgWScgSA7iKFtUDkIugiNz8lw1tGmNa8xSqOAjKUSnMcMuUQls3Ln/Tr/
-OFsFPDa0Kv8F0em/fHC0q1wibqnJnzYAyG1E8W6IGl1GXf2K2j6vY5Ei5DmbXHM5
-tibHMB1xlhq/CMqCIXxzqw7mtZQirqowyU5DZTbWbHIaSUYmzSzI/fDAEmxPo8jd
-d+unOM4mY/9dbZEHPlBEbpZjdk5l5A==
-=f3yP
------END PGP SIGNATURE-----
-
---Sig_/A.GBAXKg9YC1=DZx6.RruK5--
 

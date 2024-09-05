@@ -1,96 +1,135 @@
-Return-Path: <linux-next+bounces-3611-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3612-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F86296D05D
-	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 09:27:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9363196D1C8
+	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 10:18:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27CC81F23072
-	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 07:27:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5014C281475
+	for <lists+linux-next@lfdr.de>; Thu,  5 Sep 2024 08:18:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1E711925BE;
-	Thu,  5 Sep 2024 07:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20E3019341D;
+	Thu,  5 Sep 2024 08:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e9F2LppP"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6BA83CC1;
-	Thu,  5 Sep 2024 07:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE43D193093;
+	Thu,  5 Sep 2024 08:15:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725521235; cv=none; b=lGClX+KmR01F2NZbo9yyVt3qfLqWC4NsJJxBtypnLm3UYvOX8VXSiO0y0F2+47wPk2NNMWTAGstDOXHG/ofV3NC4qxszh+gbFpHdGcYO0zQsX4JqVIuM+DZ1us9NUC3vYUPF7zr5cxYl0onISoMMLr/BRd4RF6WeIvsj4LALiOI=
+	t=1725524122; cv=none; b=B/sS2r8vJKsjeA48NhGrcpIy+v3X9iGWZUCOKSfWuNJAweJ8GDtr0PAykhwELY4hYFZPB4A3vjJAUnYRtwZ+RmxsN1svUaYVFtyWcDnRCDYxeW2jXvGUc08qX2uhgvtjYk2qQ1+q0bnDCzyLSXJsY2mPOII6R8H1ZrG+7hFmO0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725521235; c=relaxed/simple;
-	bh=BdUYCaUqAyqMdI0qwb8lVQTGEmCdhngFO7G2VLqZrNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ascTHebSptoV5tfGTP175RjDjXA4e0HOO48Nq5U+Q2LAw667HTK5kKZayIfi2pMiQfbPOO/4p48DuM72WKyH7RCv2kcHL5xcrqQu51K8IY6BrtgeSMWbXTbtKDgdX0VGtRVkePDc1OGC9pGLFoVMffcMROxDfJKF8nRhFUPmfjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-714226888dfso369780b3a.1;
-        Thu, 05 Sep 2024 00:27:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725521233; x=1726126033;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hwNixpFRaGOFzJZ48mu9rffSw/yWpbWl+RpttX/sgFc=;
-        b=gMclfJwBTtTdcLoVNEvvgPPoZoB7V8H+qYcTx6fjYJCMFIPFr5xYppzmfOP48x3Wwy
-         rAxuo/AVDMUt5cd66BQS4uhwkFacoynb8+PbDIgjVSEqachmpPbJkTwSvkOhknOFTmNM
-         KhZTzCZyXzXIVIzoKNzqy1ZunYldYwzG/984+S2w/n+incXkdwYcWZAEl1P2cMCc4wRE
-         l94s1yM7ywloHDT9JrVG7TTbGOPAvmETGk5TXpAGRTZhn/OOOIOfhKoMGmL0xcRxfFVE
-         aucaFYzdvnTh9zoTX8wzMTsIiHkkwrsGOCwJE3HIQbpiMQ1XYPtL+caQtvZnRC+Z0fW8
-         xyJg==
-X-Forwarded-Encrypted: i=1; AJvYcCULTWByZifZ21/2tTCXbC8dV7lfSSdF6sNhQ4ptEBmeDmeEHH+g27g4TECkRSh2cc6+gfugXSj3QTayhA==@vger.kernel.org, AJvYcCVDrIA3AzdV3uCrw8sMFjP9dLVTC3rQhc79c3zp+ura3yODr1ldx9TmSsLv2mBfbdv9nKGh+GgJ2nzK/7Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0UphCOOujRVbIYp3JVNZx006lfhPhykeBDSnHbBId5+75nd5g
-	GZVAbjA+nE7SCp5nHxllRcvAj90JXGpWQe+qcB2eHeyeAESuM7lA
-X-Google-Smtp-Source: AGHT+IF314UW0kgEGrkeY4n3/fJtVv4DzP0+7f4M97uL9g9DwqrrEOtN8ERD8tLaboYqmeT9LwKffA==
-X-Received: by 2002:a05:6a00:1acb:b0:70e:98e3:1aef with SMTP id d2e1a72fcca58-715dfc76335mr25537839b3a.29.1725521233302;
-        Thu, 05 Sep 2024 00:27:13 -0700 (PDT)
-Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71791e54585sm329851b3a.182.2024.09.05.00.27.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 00:27:12 -0700 (PDT)
-Date: Thu, 5 Sep 2024 16:27:10 +0900
-From: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+	s=arc-20240116; t=1725524122; c=relaxed/simple;
+	bh=B9SgTLFQCzD/YjL//QQ6wmerqzGa3dydOcmfQmYFl2s=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TWZ0vimo4bfa6oey/7QWIXP/N+9GkGKlUWTQEmSNgUyjzx3sVL704w3a6UpSK6tVJ2aGCUlnkWpxm8uWXol10dfBkb/9ix0DATNoODtiPZ8m8usCPBrKkC72ff6JAuxc8Wl/Q6Q4P2J/NXVx0IXqrjr5Vh+9eYUtPB1zwR6EmPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e9F2LppP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B7D9C4CEC3;
+	Thu,  5 Sep 2024 08:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725524121;
+	bh=B9SgTLFQCzD/YjL//QQ6wmerqzGa3dydOcmfQmYFl2s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=e9F2LppPnPdncLz2j4rUdN9okulzJBIlKRVc/+kfoeLaujwCQ4SYoOZvH4FsZuQ6n
+	 DG+0169PqCI86N91sQLBruW98pytVVbRFD+5pEbJe35IJxdKdrU9hczSSsPQcEsqOk
+	 RsmosQ6rcsefwtiQHr0YWM4l9ZL2bqOgd57rJ64uhssDol32iBobcglgjyCq01tWrG
+	 xdLJyBbgWq0w3j2g0xZfluXO/3SOejQY2KCZAGtzjpeya5k9ragUVbuY+nP5rSs6IN
+	 LsQSmMTcXiSvESrOU0tTdUmZDcV0AXzdsc6BfYiBsoIHWA1oHxlCpOvwt9PZ2p1O6S
+	 03qtfOBh4E4ew==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1sm7eB-009rkP-BK;
+	Thu, 05 Sep 2024 09:15:19 +0100
+Date: Thu, 05 Sep 2024 09:15:18 +0100
+Message-ID: <86le06v7mx.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the devicetree tree
-Message-ID: <20240905072710.GA1538040@rocinante>
-References: <20240905164019.5086e9b1@canb.auug.org.au>
+Cc: Christoffer Dall <cdall@cs.columbia.edu>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+In-Reply-To: <20240905160856.14e95d14@canb.auug.org.au>
+References: <20240905160856.14e95d14@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240905164019.5086e9b1@canb.auug.org.au>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, catalin.marinas@arm.com, will@kernel.org, joey.gouly@arm.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hello,
-
-> The following commit is also in the pci tree as a different commit
-> (but the same patch):
+On Thu, 05 Sep 2024 07:08:56 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > 
->  80cfdfeb8367 ("dt-bindings: PCI: layerscape-pci: Fix property 'fsl,pcie-scfg' type")
+> Hi all,
 > 
-> This is commit
+> Today's linux-next merge of the kvm-arm tree got a conflict in:
 > 
->   f66b63ef10d6 ("dt-bindings: PCI: layerscape-pci: Change property 'fsl,pcie-scfg' type")
+>   arch/arm64/include/asm/kvm_host.h
 > 
-> in the pci tree.
+> between commit:
+> 
+>   b86c9bea6349 ("KVM: arm64: Save/restore POE registers")
+> 
+> from the arm64 tree and commits:
+> 
+>   b55688943597 ("KVM: arm64: Move SVCR into the sysreg array")
+>   7d9c1ed6f4bf ("KVM: arm64: Move FPMR into the sysreg array")
+> 
+> from the kvm-arm tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc arch/arm64/include/asm/kvm_host.h
+> index d5857452a1ec,b9ca899041db..000000000000
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@@ -446,8 -446,10 +446,12 @@@ enum vcpu_sysreg 
+>   	GCR_EL1,	/* Tag Control Register */
+>   	TFSRE0_EL1,	/* Tag Fault Status Register (EL0) */
+>   
+>  +	POR_EL0,	/* Permission Overlay Register 0 (EL0) */
+>  +
+> + 	/* FP/SIMD/SVE */
+> + 	SVCR,
+> + 	FPMR,
+> + 
+>   	/* 32bit specific registers. */
+>   	DACR32_EL2,	/* Domain Access Control Register */
+>   	IFSR32_EL2,	/* Instruction Fault Status Register */
 
-Rob took it some time ago into his tree as we were a bit slow, sadly.  Rob,
-do you mind if we take it?  I would prefer our version given the updated
-commit message, etc.
+All good, thanks Stephen.
 
-Sorry for troubles!
+	M.
 
-	Krzysztof
+-- 
+Without deviation from the norm, progress is not possible.
 

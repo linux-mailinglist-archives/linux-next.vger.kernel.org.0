@@ -1,111 +1,136 @@
-Return-Path: <linux-next+bounces-3665-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3666-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69AA1970B97
-	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 03:57:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA750970C27
+	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 05:11:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 290882821FE
-	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 01:57:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73BD61F224E2
+	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 03:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6324F18C31;
-	Mon,  9 Sep 2024 01:57:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB9B418A6D0;
+	Mon,  9 Sep 2024 03:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PY+IyflN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HzwSmNtI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2019D1862A;
-	Mon,  9 Sep 2024 01:57:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A96C4C81;
+	Mon,  9 Sep 2024 03:11:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725847056; cv=none; b=nWRSKxMBt0dQ+mg8TgaVZqC1Wd/uFKXFhASMHw7XoR9wh2UzOj8yN7MY5Y/A46TlXQEiu4lIkSJSnhUjyASuw/AiIe7SUcCd6LqHVZewkZXc8Z2N0r5HJWlcLFwEt1UfhFJ53i7+iP2LbjOxUXiuxd2jDC+ybDaHgm/6clg5xNA=
+	t=1725851489; cv=none; b=lrIcLbPwxablKoi+Bc6vSGPxYIZDSgy+oBJxfyJnSewGt9+XigwLYbBJmPoSKx/QE/CQVJkGXtTOHFpbIL4/HAwRed3v1PSExFaVy9PlhevFKqYJw+VsagHzfAFR3jc8qqC3Vr8hIbPOzMZZ+knSFliycE0hUcE62tK/ml24eJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725847056; c=relaxed/simple;
-	bh=4z/JGb26gAFsABTHxjzGPpN6+ZoAGK8zsDPYw4EPmUM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=XoFO8i9e2EOsYkXNdSJXXfEgnKFr1S6uRmCq+i4cJZ82qJhCxs6kSw9tlr3BLAAnYEvnJGUK+NUuZQuh5Ehg9ZjRujNkRsXudNADAqT0Q4ticXE05BHzDfR8/bs2n56oebuEylVmKLSWVhkfvCDfe2RWTrELy+eKOpHZPvYE/EM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PY+IyflN; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725847054; x=1757383054;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=4z/JGb26gAFsABTHxjzGPpN6+ZoAGK8zsDPYw4EPmUM=;
-  b=PY+IyflNKo8rnxNU/+ERX26IVSMIev9tc16zRyUdAvdv+6LsBrdBI/VQ
-   wY+nGRVGsSw/z7GAtHDVsl+MmpW09Xv13JKIDTkLxexkqh3jfYJwvCYgc
-   9OQNwGaT/4P1TyFjgkicX5itR21TqIYNdM/e+KaHW7yH+ee8KW4m5wqCl
-   brIzJCJXipwXnEfp5cWCRzZZEWzP3b+NgBFvpSGja69n3xNpcOAPn/IP1
-   lE0vjhGU8T6ISWJKmPqYByA1x40zcsIkeCb/6fGlA97WCbc99k9W0rxjW
-   RyrBNIvAujJgmDoYR6JsA9rJIdARsKd8NwfG2h2bJ0ht4km/KBMRVqZOd
-   w==;
-X-CSE-ConnectionGUID: JPZ8XVo2TgKx/BMrSlrkkQ==
-X-CSE-MsgGUID: a1eChZNpTC6nOzAwMz00Gw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="47043991"
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="47043991"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 18:57:34 -0700
-X-CSE-ConnectionGUID: qCDsMIRWTIWzC7S4AJI8iQ==
-X-CSE-MsgGUID: k39BLQAqTP+PIMekHoumgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="66548920"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 18:57:32 -0700
-From: "Huang, Ying" <ying.huang@intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>,  Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>,  Linux Next Mailing List
- <linux-next@vger.kernel.org>,  Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: linux-next: manual merge of the mm tree with Linus' tree
-In-Reply-To: <20240909100043.60668995@canb.auug.org.au> (Stephen Rothwell's
-	message of "Mon, 9 Sep 2024 10:00:43 +1000")
-References: <20240909100043.60668995@canb.auug.org.au>
-Date: Mon, 09 Sep 2024 09:53:59 +0800
-Message-ID: <87cyld1tjc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1725851489; c=relaxed/simple;
+	bh=h1OmK4hxiuEh6+8aSSIjBkORlrnFntePQiwMmHs3Nls=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=V2pr8tr6u/+59R/FH5MUWGsvJjw2BQ+6rqZO8vkv+lIuFXoHJrNxrxekJ5lZpcpygKWReNqNYxQj3ESj85VGqU8LMGvRJbT0U0xOX+tYsC2uKi0hkzxDqgNPw7baUCVdH146r3nL4FGtKhOdmB7i/0kJA4XyqYDEYgMrRQVfU+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HzwSmNtI; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1725851481;
+	bh=1v72/rcYDS0zRktF/YD11IjuRHLtXhb86rJRmWyRvrY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=HzwSmNtIQZfq7cykQ8/GQjInkwf4LBqXZ9xWyksTatIJuvBEp+hFi4l4qMD/naN3b
+	 kc+zdtv0p5PwAtT6eEzSJfMRyLijMJLNu3kZYa5e/jJ1GHZbKlyz+/PJfCufHdW4nz
+	 dTV41jkbnd/IOVnS8lFTbsEWXRVgC9Q7iBMmVkgJ1LuO+GWj+yl5a6MB1TAoby5Oey
+	 Ho+7r7eQweirYCcwhg5efcKqVd950T7twBcchvfFW0aDG9gryggkNI0ccXH/vdKMg4
+	 G6AOk7C8Zas53QLtEKK611tMKl2n33HlVzSnDvPlMaFMVyvv3IK9ptZ1f+qiSAk1Tc
+	 l+rb1JG2YfIrA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X2BgX4zjpz4wb0;
+	Mon,  9 Sep 2024 13:11:20 +1000 (AEST)
+Date: Mon, 9 Sep 2024 13:11:20 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Dave Airlie <airlied@redhat.com>, DRI <dri-devel@lists.freedesktop.org>
+Cc: Jani Nikula <jani.nikula@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: linux-next: manual merge of the drm tree with Linus' tree
+Message-ID: <20240909131120.030c1d6f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Type: multipart/signed; boundary="Sig_/iVcqoWFXbHt=imaJWxm7oC_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+--Sig_/iVcqoWFXbHt=imaJWxm7oC_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
->
-> Today's linux-next merge of the mm tree got a conflict in:
->
->   kernel/resource.c
->
-> between commit:
->
->   ea72ce5da228 ("x86/kaslr: Expose and use the end of the physical memory address space")
->
-> from Linus' tree and commit:
->
->   e2941fe697c8 ("resource, kunit: add test case for region_intersects()")
->
-> from the mm-unstable branch of the mm tree.
->
-> I fixed it up (I just used the former - and see below) and can carry the
-> fix as necessary. This is now fixed as far as linux-next is concerned,
-> but any non trivial conflicts should be mentioned to your upstream
-> maintainer when your tree is submitted for merging.  You may also want
-> to consider cooperating with the maintainer of the conflicting tree to
-> minimise any particularly complex conflicts.
+Hi all,
 
-The fix looks good to me.  Thanks for your help!
+Today's linux-next merge of the drm tree got a conflict in:
 
---
-Best Regards,
-Huang, Ying
+  drivers/gpu/drm/xe/display/xe_display.c
+
+between commit:
+
+  4bfc9c553f5e ("drm/xe/display: Avoid encoder_suspend at runtime suspend")
+
+from Linus' tree and commit:
+
+  769b081c18b9 ("drm/i915/opregion: convert to struct intel_display")
+
+from the drm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/xe/display/xe_display.c
+index c860fda410c8,710b1e2170c1..000000000000
+--- a/drivers/gpu/drm/xe/display/xe_display.c
++++ b/drivers/gpu/drm/xe/display/xe_display.c
+@@@ -331,12 -345,12 +345,12 @@@ void xe_display_pm_suspend(struct xe_de
+ =20
+  	intel_hpd_cancel_work(xe);
+ =20
+ -	if (!runtime && has_display(xe))
+ +	if (!runtime && has_display(xe)) {
+  		intel_display_driver_suspend_access(xe);
+ -
+ -	intel_encoder_suspend_all(&xe->display);
+ +		intel_encoder_suspend_all(&xe->display);
+ +	}
+ =20
+- 	intel_opregion_suspend(xe, s2idle ? PCI_D1 : PCI_D3cold);
++ 	intel_opregion_suspend(display, s2idle ? PCI_D1 : PCI_D3cold);
+ =20
+  	intel_dmc_suspend(xe);
+  }
+
+--Sig_/iVcqoWFXbHt=imaJWxm7oC_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbeZ1gACgkQAVBC80lX
+0Gzf3wf8CZjsTcUuiP77Xy7iDHdwAFNHY0XIxXJY9sA4X3kCwqXPN76O3aRHPA2x
+3h66J7KyDQH0RKJlat353yL6+742h8nwHDhcahQpG1NuY8yREt8zzfb53sUDff7o
+ZLPIgI6wFUDvy5EuZkRsVvueJg2l9iYQRWGzTx7YhD9E/RPofSVLXyMZIhq96xX0
+QrNXIuVh2nETV9jsBMunZmM+Nd4/9yL4yJP/LUd9RLPPX+wjAn264Wxbm7bvB5qV
+jabkFODKwVuF7cYZMwtIwsQQnD1BVmX6bDFD7r6BwhxHn0A+8d1nRL+WksKiGiOG
+SGfOvtz/vtuaAOwhtFqXEl0fWpO/4A==
+=J+cB
+-----END PGP SIGNATURE-----
+
+--Sig_/iVcqoWFXbHt=imaJWxm7oC_--
 

@@ -1,88 +1,69 @@
-Return-Path: <linux-next+bounces-3696-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3697-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF35397162B
-	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 13:05:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B4A6971638
+	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 13:06:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97A83282D6A
-	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 11:05:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6926B26677
+	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 11:06:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18BB91B5EB8;
-	Mon,  9 Sep 2024 11:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C49C1B5327;
+	Mon,  9 Sep 2024 11:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b="GbISiIXf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0K9QNXA"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65BD167271
-	for <linux-next@vger.kernel.org>; Mon,  9 Sep 2024 11:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF481B3B2E
+	for <linux-next@vger.kernel.org>; Mon,  9 Sep 2024 11:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725879847; cv=none; b=GXAW3RUqA9DR6P+ssHaPeI9VHE+rGpKOcvabIzxf9SvQwkc/vL2U48/06bM4NcCn5pGYHC0Zdxqj3IayHAwxhi4p+69Ku14Jv1dz3jskWPXjDc2b3g0zi51Y1C5Dl7mcqL4xvo3n5kgM4zYP42eifHqJfHXsKooEqlUvpD6PxH0=
+	t=1725879945; cv=none; b=QqGTNM/ktJk3hX87Eb2aSnpzwLDQTycssBnFRsBx6gRQ8l/2EcOaaDbPt4QmXMFnKVnL3usv8tpg2WgMypCCCgXwLL8Hl7cEakim+R4cHWbi6WGVk88B1Pi9Bib41oNN+33F0IxtA92PaondTu0EFEJC5zFM8b6Km7HMeaW9fj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725879847; c=relaxed/simple;
-	bh=B39XqfxWq6qGWFqW28NkpGyphyQYClvyzZy/1Hnm3Lg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GYD+nONDvjSnbuv7C4sSaYu/vRi50bJ/8XHQDah6vYDApApe6Q7u6VIsWAuZ/7e+/N3rYGwGgzvqTPyBOK7zc2nWmSEqWb+p7ytzQjI9ec5zQzDeZm0giPkuIqarRO2WFmmewAO0ok8axnCfA5aGB1+zghn7a/+zDAND5FIXfJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com; spf=pass smtp.mailfrom=mihalicyn.com; dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b=GbISiIXf; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mihalicyn.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f762de00fbso14049971fa.2
-        for <linux-next@vger.kernel.org>; Mon, 09 Sep 2024 04:04:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mihalicyn.com; s=mihalicyn; t=1725879843; x=1726484643; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwX9IlN71BE+VQctPW6y0YoAFUHwe7SnaGz+Bq+n+zU=;
-        b=GbISiIXf/dBSZd1PaZmz/RqzhlXpcpx0r4LXdk802Uy34e4HfKf8FtJb88NN/mDpdJ
-         NDqZIVE9cMh8SX3fEk8cYVFnMunNHK359Mcmqtuty3PyTwSLupzgHFGRD/iLZInemxZj
-         bUv9AVgPNAT7Iv6ZZ0NUVcTKg27kcQoFAlmXQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725879843; x=1726484643;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xwX9IlN71BE+VQctPW6y0YoAFUHwe7SnaGz+Bq+n+zU=;
-        b=unO+wQ0qUlUxQQ/agVtWA5wuUyRrmM42RSIe0zMK+qynRuLfQb8FmcNKVEB7QZQcRo
-         2NTxido3GAcf/0kjw4odMvenNsuTojw9TwmCo+pfWu+1+OftMppaZMNQc9pKpT2NRdgd
-         ojGx8fFdaaN/pny6S5KKICwkgQ061UcKmd1PvCsEyBzLvBy/XoS5BSKfgwSQViV42eum
-         5zO2YHtARHbklfhTThxTVxesE8+/+/ENXEctfUwfzKpnGpPmKBM8pIZ8Pori1P18ckHT
-         Pf2Dz5VJ1z6P50/BXpW/3wvquvuagCubTW+B/ryW4hKkiCug+A3K4FQM53phOOcGc6nr
-         Xg/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW2ZAtdNyHwuJVAzXzMSLXkKqmcsZoMnhAZPOBgiTh8KxR86XvcdBFhL24UZtwYunnKbHvj8TQoEbAf@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpF3H23qtuE+tSklX5mOqqUArkU/0mzutbdp5Gw/sMDSvZtVxj
-	sMloykNo+O6sIjJnPyEQu94RBnQQJeibNVR1M56N4NwjIdf2TdANbZFRtJTBHMvpvRVWPapTFVs
-	QICte/glmP/Ez8EX7yiPk/87UGdbjtHq0e86C+A==
-X-Google-Smtp-Source: AGHT+IH2haw630rmcJEqqC2DQyh/oSf5IAQHUZYscLt2H/17osKN5JFW1GaUMshruCttJGtPSmXXB1k4UsfPaI9iG7U=
-X-Received: by 2002:a2e:744:0:b0:2f6:6d6d:63d1 with SMTP id
- 38308e7fff4ca-2f751f9a8demr72067041fa.44.1725879841747; Mon, 09 Sep 2024
- 04:04:01 -0700 (PDT)
+	s=arc-20240116; t=1725879945; c=relaxed/simple;
+	bh=vmSu9VDetZGE/LkdFi1kqiqVlJXSE8WQwUWMqyRhGg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gdl2Q4DjPmVqR3cPc6vfKJiU7mTvn3AdE59MRQ7Bp0/kAB3dPMZCBIEu8QH3IWaq5yqx0JH6xy45kKZkkvLbCgel+Q3zAAgz8LIIkv4Z9/6/XEcvpqGfFFyWLcHTSEOY6vyRQMlVE2CJwY6Kl6nFhE7FjBo41ojpaVNuf/tO83g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0K9QNXA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CADEC4CEC5;
+	Mon,  9 Sep 2024 11:05:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725879945;
+	bh=vmSu9VDetZGE/LkdFi1kqiqVlJXSE8WQwUWMqyRhGg8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y0K9QNXAf62FZJAubTy3Qvpn6cIytC84a0Zm0xp07B1Xt3I2qqbsVTbctkmkXJYi7
+	 33kG9tYt4MIziAvdayMypyaICgAxewQgo0SMnyVCq6Tlp1ke4l2PprFNzx8+C3ucSh
+	 Jqzc7fzEXWJtXU6UbP18rPd/Wve8TGPLu342BWplyBaGPn/cT7asrqwJR6hEAyufWz
+	 ckYBhoJXNCAGSL/ImmIV7tMG4gndKqESxeQKYdeE0MDakpSUBUOny2QVRkRXN+FG5s
+	 DyxY3CGZZp4998+89sPdoQKZN2NkilYhipbLvebN+2opVz6WtvO53BN+8DRpZh5tqs
+	 6T65u36rM9h9Q==
+Date: Mon, 9 Sep 2024 13:05:41 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Cc: Chandan Babu R <chandanbabu@kernel.org>, linux-next@vger.kernel.org, 
+	mszeredi@redhat.com
+Subject: Re: [BUG REPORT] linux-next/fs-next released on 6th September fails
+ to boot
+Message-ID: <20240909-seenotrettung-skilanglauf-020233fc1838@brauner>
+References: <87v7z586py.fsf@debian-BULLSEYE-live-builder-AMD64>
+ <20240909-einjagen-meterhoch-45c77ca03164@brauner>
+ <CAJqdLrq+pScjJdnrp2jAZMqKEq-SyEjsBdb-=9QAFN6=h1=S5w@mail.gmail.com>
+ <20240909-unwillig-irreal-26bd9fa085c6@brauner>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <87v7z586py.fsf@debian-BULLSEYE-live-builder-AMD64>
- <20240909-einjagen-meterhoch-45c77ca03164@brauner> <CAJqdLrq+pScjJdnrp2jAZMqKEq-SyEjsBdb-=9QAFN6=h1=S5w@mail.gmail.com>
- <20240909-unwillig-irreal-26bd9fa085c6@brauner>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 In-Reply-To: <20240909-unwillig-irreal-26bd9fa085c6@brauner>
-From: Alexander Mikhalitsyn <alexander@mihalicyn.com>
-Date: Mon, 9 Sep 2024 13:03:50 +0200
-Message-ID: <CAJqdLrqjD_vXVm48LG-9HM_wRsSFUg46rrWFL+o24n6dLgQJ6g@mail.gmail.com>
-Subject: Re: [BUG REPORT] linux-next/fs-next released on 6th September fails
- to boot
-To: Christian Brauner <brauner@kernel.org>
-Cc: Chandan Babu R <chandanbabu@kernel.org>, linux-next@vger.kernel.org, mszeredi@redhat.com
-Content-Type: text/plain; charset="UTF-8"
 
-Am Mo., 9. Sept. 2024 um 13:00 Uhr schrieb Christian Brauner
-<brauner@kernel.org>:
->
+On Mon, Sep 09, 2024 at 01:00:27PM GMT, Christian Brauner wrote:
 > On Mon, Sep 09, 2024 at 12:55:53PM GMT, Alexander Mikhalitsyn wrote:
 > > Am Mo., 9. Sept. 2024 um 12:40 Uhr schrieb Christian Brauner
 > > <brauner@kernel.org>:
@@ -137,21 +118,42 @@ Am Mo., 9. Sept. 2024 um 13:00 Uhr schrieb Christian Brauner
 > > >
 > > > and there you have fm->sb->s_iflags & SB_I_NOIDMAP with idmap == NULL
 > > > afaict.
-> >
+> > 
 > > Yeah, but fuse_get_req() is ready for idmap == NULL case:
 > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/fs/fuse/dev.c?h=fs-next#n111
-> >
+> > 
 > > It must be something else. Maybe there is a mistake during merge? I'll check.
->
+> 
 > Oh yeah, I'm blind.
->
+> 
 > Well, this is a background request? In that case can't the idmap go away
 > in the meantime and become freed? If so, then you need mnt_idmap_get()
 > and mnt_idmap_put().
 
-It is a background request, but we handle all idmappings stuff when we
-form fuse_header structure for the userspace.
-So it is *before* all background stuff. Also, we never keep struct
-mnt_idmap pointers anywhere in fuse filesystem data structures.
-=> no need to take references
+So sm like:
+
+diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+index 7885f071fa1e..a7bf7f6d17e6 100644
+--- a/fs/fuse/dev.c
++++ b/fs/fuse/dev.c
+@@ -117,6 +117,10 @@ static struct fuse_req *fuse_get_req(struct mnt_idmap *idmap,
+        int err;
+        atomic_inc(&fc->num_waiting);
+
++       /* Ensure that @idmap can't just go away. */
++       if (for_background)
++               mnt_idmap_get(idmap);
++
+        if (fuse_block_alloc(fc, for_background)) {
+                err = -EINTR;
+                if (wait_event_killable_exclusive(fc->blocked_waitq,
+@@ -166,6 +170,8 @@ static struct fuse_req *fuse_get_req(struct mnt_idmap *idmap,
+                if (unlikely(req->in.h.uid == ((uid_t)-1) ||
+                             req->in.h.gid == ((gid_t)-1))) {
+                        fuse_put_request(req);
++                       if (for_background)
++                               mnt_idmap_put(idmap);
+                        return ERR_PTR(-EOVERFLOW);
+                }
+        } else {
 

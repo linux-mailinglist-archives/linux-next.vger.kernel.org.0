@@ -1,131 +1,98 @@
-Return-Path: <linux-next+bounces-3714-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3715-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33258972108
-	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 19:38:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D99B9724DE
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 00:01:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5AAF2840D7
-	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 17:38:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF3182843CB
+	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2024 22:01:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E229017D340;
-	Mon,  9 Sep 2024 17:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEC5617C7AF;
+	Mon,  9 Sep 2024 22:01:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="nzGDgDG8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3810F192B74;
-	Mon,  9 Sep 2024 17:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FEA8189BB3;
+	Mon,  9 Sep 2024 22:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725902889; cv=none; b=b5bCfC6tX3fvhq+UU0E55E7D4JOIsAxdzVxDgyy7D++piVy307U5yP7vhi5rSYJmiTGPfxpxNeYJzdruLlDDIM65DcoVfv0Ol47c+fWYOWz2fmoDLEiaHm04P5ts48uaLUcHddKt/QLh766q5qxsWyZnT/9RXZJqWGL9CZraTP8=
+	t=1725919277; cv=none; b=B+dj+QKTXPti8VD29oPz2bTn1aoGu9MIv03R+PpcPU47L1r175EbYJaAwJA2CJK5SMF8vSxkjrk5alMdAHDxnebR/2VrwnyLo6FptKlNZRliTHi2nZc4Mr2Sjd5faCCZRuqmW2SZODwY4PQT8IKDduN7g5TA6i5MhRycHhjc1xM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725902889; c=relaxed/simple;
-	bh=O4Iz7mP271R9IfVK4+eCyH7d6Ghv9pm1fo9cOAVTweA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ubtk8jNRrfen0afu/aKbFX0BVqcMi8VdsnNHuKRzOGPcXvm8FOV0i3LazQaezu2nqr566CgMUGWhaTpJWdUJuBftoj+097QLlP1D/GkzijoCXCqHlIha/F6D++qlZR7oQmrM6AYxKSyWmz65YHTasDQFzU9SanRTCzLgWe7MrfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4X2Yh44JjTz9sPd;
-	Mon,  9 Sep 2024 19:28:04 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QisATpZx7e2u; Mon,  9 Sep 2024 19:28:04 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4X2Yh43NNVz9rvV;
-	Mon,  9 Sep 2024 19:28:04 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 5EE818B770;
-	Mon,  9 Sep 2024 19:28:04 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id wkH-WeMfTZ0k; Mon,  9 Sep 2024 19:28:04 +0200 (CEST)
-Received: from [192.168.232.154] (PO25124.IDSI0.si.c-s.fr [192.168.232.154])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 03C138B76C;
-	Mon,  9 Sep 2024 19:28:03 +0200 (CEST)
-Message-ID: <b154ab25-70f6-46cd-99db-ccfbe3e13fb7@csgroup.eu>
-Date: Mon, 9 Sep 2024 19:28:03 +0200
+	s=arc-20240116; t=1725919277; c=relaxed/simple;
+	bh=AnjIpg0d0cZ5femIBnGfwN7xXRAnxaaaeCPxMpFBJxQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OCf5SEfSewqni/lNk4lyNcQXUbfan9Q/r3WSzHTEup6kiERleSpUlwKlHHc/uIJQmnW4lyOUtWV0t+hZ51SXKUdNu/PaOnbKnCVnZn+pO/8yjgqRkxGEMxgKZfJd8Ccf+aoJotAzUC+2CBQfz+85I4S15JPrs3yrtc4+J8m48cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=nzGDgDG8; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1725919265;
+	bh=F7JSY3pWD7hbRDrROI+JG6dACgxf2qZTT56GjDeTXag=;
+	h=Date:From:To:Cc:Subject:From;
+	b=nzGDgDG83pHBBS+lSm0TkbP7PGEwmyfc0usOsHgj4jBtAD5L50ef36+tV9heEb6BY
+	 gZXS7xTlv9u2V07tg/YD4bOTMEENvg2ukMK5W0QhnFhgq2W3ElgabINGG6e61cMgUb
+	 W1OKiE/dGecysXaaV3eN9z5TptBUHm8PXHg/e9NddyZAnVbtN05Xd5PVXnATx5at+f
+	 /kXrJ9FgYmJ0iBLxbq6VmKvgiKGxwteAS5RlaQpIwwD3JhJpCHTKKCy5yWgar0vJSW
+	 hISM8Qxyqi32hc7/MHmLU1LfXZfPEs5E4cwBvdWmUVydH2ggXFXOuAyWeYB0hwGsIs
+	 oK04mVFMGZ+Og==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X2gl54Cv6z4x89;
+	Tue, 10 Sep 2024 08:01:05 +1000 (AEST)
+Date: Tue, 10 Sep 2024 08:01:04 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the bcachefs tree
+Message-ID: <20240910080104.3ab96fd3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the powerpc tree
-To: Masahiro Yamada <masahiroy@kernel.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, "Rob Herring (Arm)"
- <robh@kernel.org>, PowerPC <linuxppc-dev@lists.ozlabs.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240909200948.70087f49@canb.auug.org.au>
- <afa6f06a-8d92-4ac1-b5fe-d5b6ade3f740@csgroup.eu>
- <20240910005808.2e355995@canb.auug.org.au>
- <CAK7LNARMD=PR9x-OMN5QJHmeDdAzDM=2F47ccqdLHHGTxVq5Jg@mail.gmail.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <CAK7LNARMD=PR9x-OMN5QJHmeDdAzDM=2F47ccqdLHHGTxVq5Jg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/RHeH8ALvhTK96Cj_EOBAMWU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/RHeH8ALvhTK96Cj_EOBAMWU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-Le 09/09/2024 à 18:23, Masahiro Yamada a écrit :
-> On Mon, Sep 9, 2024 at 11:58 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Hi Christophe,
->>
->> On Mon, 9 Sep 2024 16:22:26 +0200 Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
->>>
->>> Le 09/09/2024 à 12:09, Stephen Rothwell a écrit :
->>>> Hi all,
->>>>
->>>> After merging the powerpc tree, today's linux-next build (powerpc
->>>> ppc44x_defconfig) failed like this:
->>>>
->>>> make[3]: *** No rule to make target 'arch/powerpc/boot/treeImage.ebony', needed by 'arch/powerpc/boot/zImage'.  Stop.
->>>> make[2]: *** [/home/sfr/next/next/arch/powerpc/Makefile:236: zImage] Error 2
->>>> make[1]: *** [/home/sfr/next/next/Makefile:224: __sub-make] Error 2
->>>> make: *** [Makefile:224: __sub-make] Error 2
->>>>
->>>> It is not obvious to me what change caused this, so I have just left
->>>> the build  broken for today.
->>>>
->>>
->>> Bisected to commit e6abfb536d16 ("kbuild: split device tree build rules into scripts/Makefile.dtbs")
->>
->> Thanks for that.
->>
->> --
->> Cheers,
->> Stephen Rothwell
-> 
-> 
-> I squashed the following fix. Hopefully, it will be ok tomorrow.
-> 
-> 
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 6385e7aa5dbb..8403eba15457 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -444,7 +444,7 @@ ifneq ($(userprogs),)
->   include $(srctree)/scripts/Makefile.userprogs
->   endif
-> 
-> -ifneq ($(need-dtbslist)$(dtb-y)$(dtb-)$(filter %.dtb.o %.dtbo.o,$(targets)),)
-> +ifneq ($(need-dtbslist)$(dtb-y)$(dtb-)$(filter %.dtb %.dtb.o
-> %.dtbo.o,$(targets)),)
->   include $(srctree)/scripts/Makefile.dtbs
->   endif
-> 
+Commit
 
-The build of ppc44x_defconfig is ok with this change
-on top of next-20240909
+  361753bd1195 ("bcachefs: improve "no device to read from" message")
+
+is missing a Signed-off-by from its author and committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/RHeH8ALvhTK96Cj_EOBAMWU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbfcCAACgkQAVBC80lX
+0Gxwgwf/WXnKHEpuSiFj9fzaYPWpshqsvMmPo8vnhxTjNFbv2CDEFBVZ3H0iG1FE
+E7xTzp9cjCnoQWu+axLjFc/WJPQF4zoahU+3kk5IUe0b5okBN/0JfF4PesNvGJha
+WtZTSp83HZbRq986XrhUzM/5xKYV6SBS4AWhbbqlXpEGfmVxyUY+52WPFCusRuiU
+v3xQPOhVQgpihZJbi+SDyPZv/7qV02GQG2yEHtSEx4xfGAp+uCsiGjLSYejA414p
+tFtmk6RbAxx7QaTt081AE+sXu9K9vTMbMydsDROeNsy4uLubmvLJDgjea6PaEgIy
+m/9Tj3XLc7ZJVYhZvq5gF8VeYrzxjQ==
+=Z70G
+-----END PGP SIGNATURE-----
+
+--Sig_/RHeH8ALvhTK96Cj_EOBAMWU--
 

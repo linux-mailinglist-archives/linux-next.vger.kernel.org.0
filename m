@@ -1,143 +1,122 @@
-Return-Path: <linux-next+bounces-3730-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3731-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C5239739CD
-	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 16:26:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F29069743A8
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 21:46:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C1E6281B47
-	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 14:26:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 312B61C24E8C
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 19:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF3118785A;
-	Tue, 10 Sep 2024 14:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070F117B4FC;
+	Tue, 10 Sep 2024 19:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NE5PFkSg"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="HrqvSguV"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FAB2AEF1;
-	Tue, 10 Sep 2024 14:26:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63DD12CD96
+	for <linux-next@vger.kernel.org>; Tue, 10 Sep 2024 19:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725978398; cv=none; b=QMFGrJVgPgrJeTjg1zDwxCCmYRiQSwMMfQkKmSMmpFpIj424FN7pZ0Wmka1ZwAZzGPst6qWbYcz1dbJY0IZ/7iQOE/GgTwW9IxdIQ/O620+mtMX7CPMXj5SyelfiNRRtysTTthHmJwcCF2maRSkRnj21KbDqtJXXnTJP5uPX8Fs=
+	t=1725997567; cv=none; b=uphSj+S16VKGOUbMn5NiN0288wGVAlDYPTE2xz++rMDKVtSLjUyaUCDFU51Zcr7E02BIAynFzEI+BtIMGwKeUHQK9XJXLLESQV0TXhouHASOgqUB6ikhyzgCJHUPM2frLcguZnZskNsKyvEGvKmIvNrj+CP8JFDnv/0tu0NgPLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725978398; c=relaxed/simple;
-	bh=bBMl6pToiyNWX9sPH1obZQpz1aQJ4vu4Oq4rq3zpz5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZQDFIc9RXo5F2d2RnidyTEy9qBcTPDZsBRW10hMm1LdBiXiYiv0blqu915hG/rH3vllQIVxHKcY1/5SR+PMqOUhnEGIr1jLui0Nkeatvv5ZtXvWn9BV6hCYJ1SzsjOP6XL1BEtXQmYbPn143xWCYJdfiw8v6r6rho3/jfoJsG8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NE5PFkSg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676E7C4CEC3;
-	Tue, 10 Sep 2024 14:26:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725978397;
-	bh=bBMl6pToiyNWX9sPH1obZQpz1aQJ4vu4Oq4rq3zpz5I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NE5PFkSgtNA9rSEz9WqsvePNC7KS/8r8TBDWgNqmzUho4apQePRUaZZqNeRGsxL1W
-	 HQCncAecmSIPF07JtvHh7PV0nFrWcVNDBsGq0KFoAK2+ONyQbbG611KrnnhexV/v0Z
-	 Hsnit4oCLt/6M5DYTK2C6qQZGQEdsGAayRwXvCV3/+1rmWv5o8v9TXf7YUjCpeAN/O
-	 CAd6EVYM8FqsIAG8RdgOKjw73qoifbLBfBWhwvmQKlMHxz1HaIyi+Ln1Q9bNc7O+HA
-	 Mx4a0D8sY5730J3oMv1MHIoRgJ8bxH4llgW7gHnxEv//ju6chf3BcQspy7uSNcCdWa
-	 3x4ROtAagBWJg==
-Date: Tue, 10 Sep 2024 11:26:35 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <ZuBXG5FEPF0HnMcq@x1>
-References: <20240903092745.370fc0c6@canb.auug.org.au>
- <20240903.020556-bouncing.saws.daring.donor-5KuFrSsG4K2W@cyphar.com>
- <20240905105809.6585eec2@canb.auug.org.au>
- <20240910102332.4f171bde@canb.auug.org.au>
- <20240910-donnerstag-feucht-2e1aaf9ae8af@brauner>
+	s=arc-20240116; t=1725997567; c=relaxed/simple;
+	bh=QBqw6gziGf23dU8+1mGT+PEGoWX0UtdqDF+Lqa8STv4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=loGUU5gwPe68xepZBfJQplKVaRO5yKWh/y3b39DKoM0I1oToYjEojChHk0lmCiV7k5XU1ka4vq/0AV0zwq9ejhhcx+St4M6wK1Fkh48/KkrfuJj3V56cZFtUDRhUowjRj/C5KYL7/Q9ZiJ37mc/tsVWtN/vOoGG0gCcRju/vzSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=HrqvSguV; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e1a8ae00f5eso6122694276.0
+        for <linux-next@vger.kernel.org>; Tue, 10 Sep 2024 12:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1725997565; x=1726602365; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wGMVJNuYVmspnlv8k2Ek+U++kVby1SW+hA87sFmyA/k=;
+        b=HrqvSguVlwllJrbJOkxGhgbKfouCFXUk34B+t20hs5KGHb9Mxk4C/ZWuRiFYtt6ndi
+         9fh9ppZ0y57Qetz1vA38qmUHXkXKpHNF68hEH35u3ZQcs9CFmY8nCe9CZu4mSnsEyC+e
+         QHHvC4mOzDifwCcGZeKClKnAn7v09p1127uhWvXcvlEN2h1eRSZcN0jbuH58n5SPFexW
+         /KPejj6dWHF2lqnJJ3ubmW7Zb+BlzKYgNl6heoVPAf73yWOpB6Kr2gQdY/o3poBmgMz+
+         IhX2U/oXDqwgNhj0x8hlOWfT/nxkOzb32XL/pW/TBYjxlN0ErnN7bJU0XT5JvzCNpqMu
+         AivQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725997565; x=1726602365;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wGMVJNuYVmspnlv8k2Ek+U++kVby1SW+hA87sFmyA/k=;
+        b=b1B7m8aRZWaOmz+IeG3CT4mxmZVlmOMpOCaSa53J2QZXMYF8N830tfnq4sKlR1wlTc
+         OTfIYg4D1iTZockyZEx3QyNTfrBF8ur/DMvcIVW9U3dOYC1r03eqU753QLPLGWV4NBlw
+         TpXF60po10JCVmLDM9CzPgM6REaE8nRDUCE101WpoCplzZ0mgheGnLk/Nc8IjGa9ZRxv
+         M+afr59RzSSQCK6YSrNK8HS8lIJUWhplCD1xIVkV6RHz2yALCH6fIDNNgziHpVaT3ufA
+         3a76egvC0gHfRbTiw3kdj4Yja00qX1ssT7Z39XOenhMTIyUZGltV5iY+7TymqPSwRHb0
+         OPBw==
+X-Forwarded-Encrypted: i=1; AJvYcCUlaQIilZtUme+KgjwMtbsMLdgv2tG3Dj30wzmpkQpzq/26aQiEfctHP1n5X1mM/r7qnbw9v1+casE9@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaQd6kY++2xn57VH1vIE+zeIQZAWOa9t5ggv+6fowu3QCeWgMI
+	hqtvOKOMXe/j4TJuig1JwnNBsgmn/7HUzfUR5rNS9iiN/NtMi9YhOIIqRboXfwx5QPBM08wSThD
+	ArhQKVfzg6BcfYH8v8x5XKl7B01IzkHOL1TiQ
+X-Google-Smtp-Source: AGHT+IGEY6Db9V+HMZkh01TPbqGXgUQsNjb/9mYCmCy6WgYF3hmTtZMDxdx1lSISAmzW4RleXnfFtRWZYJ2FtLTp6lo=
+X-Received: by 2002:a05:6902:1b89:b0:e1a:824f:1216 with SMTP id
+ 3f1490d57ef6-e1d3487fbe9mr17412009276.13.1725997564624; Tue, 10 Sep 2024
+ 12:46:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240910-donnerstag-feucht-2e1aaf9ae8af@brauner>
+References: <20240910132740.775b92e1@canb.auug.org.au>
+In-Reply-To: <20240910132740.775b92e1@canb.auug.org.au>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 10 Sep 2024 15:45:54 -0400
+Message-ID: <CAHC9VhReKtzhTBbOxDWWeP7Tk=VoxVrYsLPt-v6TPCnwzKEiXA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the security tree with the
+ vfs-brauner tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christian Brauner <brauner@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 10, 2024 at 10:50:39AM +0200, Christian Brauner wrote:
-> On Tue, Sep 10, 2024 at 10:23:32AM GMT, Stephen Rothwell wrote:
-> > On Thu, 5 Sep 2024 10:58:09 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > On Tue, 3 Sep 2024 12:41:08 +1000 Aleksa Sarai <cyphar@cyphar.com> wrote:
-> > > > On 2024-09-03, Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
-> > > > > After merging the vfs-brauner tree, today's linux-next build (native perf)
-> > > > > failed like this:
+On Mon, Sep 9, 2024 at 11:27=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the security tree got a conflict in:
+>
+>   fs/fcntl.c
+>
+> between commit:
+>
+>   1934b212615d ("file: reclaim 24 bytes from f_owner")
+>
+> from the vfs-brauner tree and commit:
+>
+>   26f204380a3c ("fs: Fix file_set_fowner LSM hook inconsistencies")
+>
+> from the security tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-> > > > > In file included from trace/beauty/fs_at_flags.c:21:
-> > > > > perf/trace/beauty/generated/fs_at_flags_array.c:10:31: error: initialized field overwritten [-Werror=override-init]
-> > > > >    10 |         [ilog2(0x0001) + 1] = "RENAME_NOREPLACE",
-> > > > >       |                               ^~~~~~~~~~~~~~~~~~
-> > > > > perf/trace/beauty/generated/fs_at_flags_array.c:10:31: note: (near initialization for 'fs_at_flags[1]')
-> > > > > perf/trace/beauty/generated/fs_at_flags_array.c:14:30: error: initialized field overwritten [-Werror=override-init]
-> > > > >    14 |         [ilog2(0x200) + 1] = "HANDLE_FID",
-> > > > >       |                              ^~~~~~~~~~~~
-> > > > > perf/trace/beauty/generated/fs_at_flags_array.c:14:30: note: (near initialization for 'fs_at_flags[10]')
-> > > > > perf/trace/beauty/generated/fs_at_flags_array.c:15:30: error: initialized field overwritten [-Werror=override-init]
-> > > > >    15 |         [ilog2(0x001) + 1] = "HANDLE_MNT_ID_UNIQUE",
-> > > > >       |                              ^~~~~~~~~~~~~~~~~~~~~~
-> > > > > perf/trace/beauty/generated/fs_at_flags_array.c:15:30: note: (near initialization for 'fs_at_flags[1]')
+Thanks Stephen, the fixup looked from from a LSM perspective.
 
-> > > > > Caused by commit
-
-> > > > >   34cf40849654 ("uapi: explain how per-syscall AT_* flags should be allocated")
-
-> > > > > I have used the vfs-brauner tree from next-20240902 for today.    
-
-> > > > Ah okay, the overlapping flag definitions in the copied over fcntl.h are
-> > > > causing issues. We could just drop that part of the patch, or (since the
-> > > > new flags aren't handled by perf/trace/beauty) we could just do
-> > > > something simple like:
-
-> > > > diff --git a/tools/perf/trace/beauty/fs_at_flags.sh b/tools/perf/trace/beauty/fs_at_flags.sh
-> > > > index 456f59addf74..930384029599 100755
-> > > > --- a/tools/perf/trace/beauty/fs_at_flags.sh
-> > > > +++ b/tools/perf/trace/beauty/fs_at_flags.sh
-> > > > @@ -13,9 +13,13 @@ printf "static const char *fs_at_flags[] = {\n"
-> > > >  regex='^[[:space:]]*#[[:space:]]*define[[:space:]]+AT_([^_]+[[:alnum:]_]+)[[:space:]]+(0x[[:xdigit:]]+)[[:space:]]*.*'
-> > > >  # AT_EACCESS is only meaningful to faccessat, so we will special case it there...
-> > > >  # AT_STATX_SYNC_TYPE is not a bit, its a mask of AT_STATX_SYNC_AS_STAT, AT_STATX_FORCE_SYNC and AT_STATX_DONT_SYNC
-> > > > +# AT_RENAME_* flags are just aliases of RENAME_* flags and we don't need to include them.
-> > > > +# AT_HANDLE_* flags are only meaningful for name_to_handle_at, which we don't support.
-> > > >  grep -E $regex ${linux_fcntl} | \
-> > > >         grep -v AT_EACCESS | \
-> > > >         grep -v AT_STATX_SYNC_TYPE | \
-> > > > +       grep -Ev "AT_RENAME_(NOREPLACE|EXCHANGE|WHITEOUT)" | \
-> > > > +       grep -Ev "AT_HANDLE_(FID|MNT_ID_UNIQUE)" | \
-> > > >         sed -r "s/$regex/\2 \1/g"       | \
-> > > >         xargs printf "\t[ilog2(%s) + 1] = \"%s\",\n"
-> > > >  printf "};\n"  
-
-> > > I have applied that by hand for today.  Please submit it and get it
-> > > applied.
-
-> > I am still applying this build fix patch.
-
-> That's weird as I removed everything that touches tools/ from that
-> commit as the tools/ repository is updated after uapi changes
-> separately. That's what I've been told multiple times. I can add this
-> change but it feels odd.
-
-Right, that is the usual workflow, tools/ should not put any burden on
-kernel development, we need to make these trace/beauty more resilient,
-i.e. if it can't be built then just emit a warning and continue without
-that specific table (generated by
-tools/perf/trace/beauty/fs_at_flags.sh).
-
-Which I'll try to do after LPC, making notes here, so, in this specific
-case here, please add this change as having perf not building on next is
-inconvenient and since the change to make it resilient will take time to
-get implemented, doing it now via the kernel developer seems the
-sensible thing to do, sorry for the incovenience :-\
-
-- Arnaldo
+--=20
+paul-moore.com
 

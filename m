@@ -1,116 +1,194 @@
-Return-Path: <linux-next+bounces-3728-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3729-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98545973612
-	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 13:19:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CE1F973928
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 15:57:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 631E328556D
-	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 11:19:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6D1A1F26136
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 13:57:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD12171671;
-	Tue, 10 Sep 2024 11:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF044192B9C;
+	Tue, 10 Sep 2024 13:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rothwell.id.au header.i=@rothwell.id.au header.b="dMxUQfWq"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hrNbcFcM"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.rothwell.id.au (gimli.rothwell.id.au [103.230.158.156])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF7217D341;
-	Tue, 10 Sep 2024 11:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.230.158.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D9318E11;
+	Tue, 10 Sep 2024 13:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725967174; cv=none; b=R9sHTp6LQYWe/TAYx7e5fZFHsW1kBcqmMmnvK6eLSNM8ZVU11RTs784wgWbiR7JkHlA0TPHkzFQ0PdIIWQny0p1gdHxYjKDjNjP7BJ+aI4TNKDsMAY9Mk9Zt7RpEgmrnFm3+F3DP99dt28vP3yeDyVIORFysELI4YD55MssTVf4=
+	t=1725976622; cv=none; b=iWMghnt1sbmqaZKnqrZWjtTri5alWWoQ52LNm0S20gFlXcrkCescHDHp/sQs9EFw/BnJPixPFolHH3jawbaWhc2R4AB9ovg/aGhKz9Qn6x05Cm5ND/2eMUv6YR0vKv57E61E42IL41VLc+A6i2WKum9l8YWCyQXbgztCZCPAAi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725967174; c=relaxed/simple;
-	bh=gvYbGN5m9KyGDNIgLldowFMfOGC1YzezrFwnf7wx4tM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VuclvAGYpgPdAHomn+pGfWgp6PSsb6dawJd+IuBO2fiTFjcEmFUVhWjwrUtjhk+Qq7vzY2uNIcS965TTRuTBp5cy28E1FLAJXvdoaXkA5D10JEgRrZomTHowDa4Csz5oECP8DUzSxqYHtcQNEB0JggEcXj2lOdK9O2/DgLkvVmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rothwell.id.au; spf=pass smtp.mailfrom=rothwell.id.au; dkim=pass (2048-bit key) header.d=rothwell.id.au header.i=@rothwell.id.au header.b=dMxUQfWq; arc=none smtp.client-ip=103.230.158.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rothwell.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rothwell.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
-	s=201702; t=1725966759;
-	bh=1YSX8ly098Vz8AdfJ2rvkzXzPY1mICGapU9qpEKznOs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dMxUQfWqHHtS0WV0W+a2bjFE+CpVUpAkVzchnqi6HBwfXAfrEV3JtA2ObAuqfIvwH
-	 BLVZaC6bQOchcefpzIPoT3c4N+5cnW6ANiW7ZkPFEmf7fBIeqX453DA3/w4C6V07dC
-	 OdM709zSsFFMuJ2jwoXzw9waMfMB9fCbW48M0Al/+2INl2CpPGohAEF+w6wPQ1yw4/
-	 J2fWHXF1UlZPeAgw43iRoEzBfsV0nu493WzdD8XsSP/VhaC7r2iH43wwMny+OTpDmz
-	 kOmIC3m84090Db8L2HXBtmVVO3Rf1KWt36kLt2nF0zy9945aRS0uvq6AcErB7+rX+d
-	 drJu16sAQLZUQ==
-Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.rothwell.id.au (Postfix) with ESMTPSA id 4X31JP5W12z6k;
-	Tue, 10 Sep 2024 21:12:37 +1000 (AEST)
-Date: Tue, 10 Sep 2024 21:12:36 +1000
-From: Stephen Rothwell <sfr@rothwell.id.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20240910211236.3110457a@oak>
-In-Reply-To: <20240910-donnerstag-feucht-2e1aaf9ae8af@brauner>
-References: <20240903092745.370fc0c6@canb.auug.org.au>
-	<20240903.020556-bouncing.saws.daring.donor-5KuFrSsG4K2W@cyphar.com>
-	<20240905105809.6585eec2@canb.auug.org.au>
-	<20240910102332.4f171bde@canb.auug.org.au>
-	<20240910-donnerstag-feucht-2e1aaf9ae8af@brauner>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1725976622; c=relaxed/simple;
+	bh=tTCBghv41xs9ZjJKwgXRHRlKXz95cpZEmG+choe5cNA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pkzZRf6NMgXMC+q/HilfnLA8trnfH5922cCjXo9bI8r2888mWVlV4M4VSS+dqslHuHKIFzphNXPRQbJ66QvXHUkna7BOewWByLkHwrfZkovCHU2hwSM4wE+5mS0iLnJxoN7hk7bMeUhW9c5UmPx0Xo8x0lAR0itdaI0LiYSoqiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hrNbcFcM; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=kcIXoC8KuI2mGr8wY7QewEsxmtlsomE6vt2blzLRVgM=; b=hrNbcFcMEVhNgIIAH/pYfkw8ia
+	3KzGYTb2gB0Av6htUG7wcjxycls951YukXKmDpyBukJRCPlJlzitapo1n/NUQ/fEDCWzVzGvXB/bu
+	k6jhj7Y81IGCprxjr/JGUQXF70ZjAu4sgxqf/yeAYEzFmbHE1/81YQq2lRiHLWodUeeeybqB5JyVQ
+	k+qtrXhZDAu1lw/OuWFBfeXdEOG9YECtmglqF1ZybGU6sdmsKu+QigBi0S187Q4sZYxEsTKX5OotZ
+	I0ZaL4YHN5qWyR8PtXagETYxK1BBfn6ZNoon86L6NhfXaGQT53GFvsOQhsFPGJvwHSVA0izrmcLSt
+	LMB6myNg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1so1MZ-0000000BW2C-18eU;
+	Tue, 10 Sep 2024 13:56:59 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 58FF230047C; Tue, 10 Sep 2024 15:56:58 +0200 (CEST)
+Date: Tue, 10 Sep 2024 15:56:58 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Bert Karwatzki <spasswolf@web.de>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Darrick J . Wong" <djwong@kernel.org>, x86@kernel.org,
+	chandanbabu@kernel.org, willy@infradead.org
+Subject: Re: commit de752774f38bb causes fatal error on boot
+Message-ID: <20240910135658.GG4723@noisy.programming.kicks-ass.net>
+References: <20240910111111.2591-1-spasswolf@web.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//aPvin6071cTgRQpRjvxsbv";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240910111111.2591-1-spasswolf@web.de>
 
---Sig_//aPvin6071cTgRQpRjvxsbv
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Sep 10, 2024 at 01:11:09PM +0200, Bert Karwatzki wrote:
+> When booting linux-next-20240910 on my MSI alpha 15 Laptop running debian sid (amd64),
+> I get dropped to a shell and get the folllowing error in dmesg. I bisected this to
+> commit de752774f38bb ("jump_label: Fix static_key_slow_dec() yet again").
 
-Hi Christian,
+I've just replaced that commit with the below -- which should be in
+tomorrows tree:
 
-On Tue, 10 Sep 2024 10:50:39 +0200 Christian Brauner <brauner@kernel.org> w=
-rote:
->
-> That's weird as I removed everything that touches tools/ from that
-> commit as the tools/ repository is updated after uapi changes
-> separately. That's what I've been told multiple times. I can add this
-> change but it feels odd.
+---
+commit 1d7f856c2ca449f04a22d876e36b464b7a9d28b6
+Author: Peter Zijlstra <peterz@infradead.org>
+Date:   Mon Sep 9 12:50:09 2024 +0200
 
-I did not notice the removal, sorry.
+    jump_label: Fix static_key_slow_dec() yet again
+    
+    While commit 83ab38ef0a0b ("jump_label: Fix concurrency issues in
+    static_key_slow_dec()") fixed one problem, it created yet another,
+    notably the following is now possible:
+    
+      slow_dec
+        if (try_dec) // dec_not_one-ish, false
+        // enabled == 1
+                                    slow_inc
+                                      if (inc_not_disabled) // inc_not_zero-ish
+                                      // enabled == 2
+                                        return
+    
+        guard((mutex)(&jump_label_mutex);
+        if (atomic_cmpxchg(1,0)==1) // false, we're 2
+    
+                                    slow_dec
+                                      if (try-dec) // dec_not_one, true
+                                      // enabled == 1
+                                        return
+        else
+          try_dec() // dec_not_one, false
+          WARN
+    
+    Use dec_and_test instead of cmpxchg(), like it was prior to
+    83ab38ef0a0b. Add a few WARNs for the paranoid.
+    
+    Fixes: 83ab38ef0a0b ("jump_label: Fix concurrency issues in static_key_slow_dec()")
+    Reported-by: "Darrick J. Wong" <djwong@kernel.org>
+    Tested-by: Klara Modin <klarasmodin@gmail.com>
+    Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Tomorrow I will try without the patch.  I guess my fix patch will
-apply correctly even without the actual commits that caused the build
-failure.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//aPvin6071cTgRQpRjvxsbv
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbgKaQACgkQAVBC80lX
-0GyWygf/fbe6YsSxhsp+dEdwIj7t3+6ito6HMnxL09WS1WGm2tr/wxr3CAb3UKYV
-h+mdvoYtUs3WcV1EfnbfdzHbO9ZxzrNlrCsxqVlkL6tWyjDe/ohqefPBw1wrdfCz
-tF+aYE/6nFDFsh8O0NEZyVD5dVhEAb4Y6vo6nFhsjAJ1vTf6ejuXcVDbpXqDq5nj
-x9s+FVn5JGZ7OBt9RRr2syhXTsdyrwE6WKIt1R4XRD/xFDhd91BOts8EEwD5xoa2
-vzpuvrQCJMZWXStL+ytqMO/ylXqZesIQp/FYJAhlkiSvk09+MjEU7Hr+mdgn8Zkn
-D+1QOCAeyZ768BedgnkW2bgwPoyhNw==
-=5zHy
------END PGP SIGNATURE-----
-
---Sig_//aPvin6071cTgRQpRjvxsbv--
+diff --git a/kernel/jump_label.c b/kernel/jump_label.c
+index 6dc76b590703..93a822d3c468 100644
+--- a/kernel/jump_label.c
++++ b/kernel/jump_label.c
+@@ -168,7 +168,7 @@ bool static_key_slow_inc_cpuslocked(struct static_key *key)
+ 		jump_label_update(key);
+ 		/*
+ 		 * Ensure that when static_key_fast_inc_not_disabled() or
+-		 * static_key_slow_try_dec() observe the positive value,
++		 * static_key_dec_not_one() observe the positive value,
+ 		 * they must also observe all the text changes.
+ 		 */
+ 		atomic_set_release(&key->enabled, 1);
+@@ -250,7 +250,7 @@ void static_key_disable(struct static_key *key)
+ }
+ EXPORT_SYMBOL_GPL(static_key_disable);
+ 
+-static bool static_key_slow_try_dec(struct static_key *key)
++static bool static_key_dec_not_one(struct static_key *key)
+ {
+ 	int v;
+ 
+@@ -274,6 +274,14 @@ static bool static_key_slow_try_dec(struct static_key *key)
+ 		 * enabled. This suggests an ordering problem on the user side.
+ 		 */
+ 		WARN_ON_ONCE(v < 0);
++
++		/*
++		 * Warn about underflow, and lie about success in an attempt to
++		 * not make things worse.
++		 */
++		if (WARN_ON_ONCE(v == 0))
++			return true;
++
+ 		if (v <= 1)
+ 			return false;
+ 	} while (!likely(atomic_try_cmpxchg(&key->enabled, &v, v - 1)));
+@@ -284,15 +292,27 @@ static bool static_key_slow_try_dec(struct static_key *key)
+ static void __static_key_slow_dec_cpuslocked(struct static_key *key)
+ {
+ 	lockdep_assert_cpus_held();
++	int val;
+ 
+-	if (static_key_slow_try_dec(key))
++	if (static_key_dec_not_one(key))
+ 		return;
+ 
+ 	guard(mutex)(&jump_label_mutex);
+-	if (atomic_cmpxchg(&key->enabled, 1, 0) == 1)
++	val = atomic_read(&key->enabled);
++	/*
++	 * It should be impossible to observe -1 with jump_label_mutex held,
++	 * see static_key_slow_inc_cpuslocked().
++	 */
++	if (WARN_ON_ONCE(val == -1))
++		return;
++	/*
++	 * Cannot already be 0, something went sideways.
++	 */
++	if (WARN_ON_ONCE(val == 0))
++		return;
++
++	if (atomic_dec_and_test(&key->enabled))
+ 		jump_label_update(key);
+-	else
+-		WARN_ON_ONCE(!static_key_slow_try_dec(key));
+ }
+ 
+ static void __static_key_slow_dec(struct static_key *key)
+@@ -329,7 +349,7 @@ void __static_key_slow_dec_deferred(struct static_key *key,
+ {
+ 	STATIC_KEY_CHECK_USE(key);
+ 
+-	if (static_key_slow_try_dec(key))
++	if (static_key_dec_not_one(key))
+ 		return;
+ 
+ 	schedule_delayed_work(work, timeout);
 

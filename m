@@ -1,205 +1,102 @@
-Return-Path: <linux-next+bounces-3720-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3721-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CE8B9727A6
-	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 05:27:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D7049729C0
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 08:45:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 389101F24AE7
-	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 03:27:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8403B24472
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 06:45:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87EE515382E;
-	Tue, 10 Sep 2024 03:27:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A57E17AE1C;
+	Tue, 10 Sep 2024 06:45:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GETChhei"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jY5B5E7T"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F9F1CD2A;
-	Tue, 10 Sep 2024 03:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1614E17AE1D
+	for <linux-next@vger.kernel.org>; Tue, 10 Sep 2024 06:45:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725938867; cv=none; b=SwC3wJHvXSBYnNrMylxaObZeOzeIaWKWIeN7KfWKxU252u6T86auFf2Plq+cN1u17TR+htdi2HOdtgZCfxOFMYnzwn4ClRct0YMbO7kpCW91xq5dgD2MWgNIs0HMeT772qpWXhv0/XPkR0GAgeYI4mgQYkrkPcf2uynn5G1Vs7g=
+	t=1725950705; cv=none; b=i46Fo9CcTCAyAjl5lD4Gs+VSv+RM82Eo40CV43lD8F4Cz7v0cpz/Wf/BtlOsjhHGCbfQgyMFBzlNzSovyt18ffxEeEBWMeej0CubLKijLctSy6zSiSMnMz27cLAX3hj72TBq80xN+7SSuvXm/V/GXdwnmoHbV+0Y3t4I82GIaoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725938867; c=relaxed/simple;
-	bh=77BQ0K6c9QEHcwWrpMD++9VEQhdYVfn0dLDEbHXJ0j8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=mxBsLV8bjSmFYRh1z6Cs8ZzfcW98ypKo/5WNr0KS3H9dFtFU93RPjIONL0MMmntCGyNpggqSe6SQLTC3QZ+bwnyjFNMkQdwaHr68TZYw2c0mJqOuB8759vMeet95CLIQyEdT0L3ujmNUSvQXvns6qmhRssGosRtYXA5aJwQwFb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GETChhei; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1725938862;
-	bh=ftPGTq0URl/NRjxwWH3HGAn3hQeblb1FqX68Js9V1+I=;
-	h=Date:From:To:Cc:Subject:From;
-	b=GETChheiOwXg1XbZbtMM3ojiImLdFF5A8mBEHVBv6UCwfNMEnzpAEFkpaRx0B9TaP
-	 EuczgDnTBQA7UJJ+UAyIyQmmUjkEnhVxg18hLzubUqu/AYvcCqa4IuDZaSj9GZtFlA
-	 buy+srjbIXamd3BnxCMKYWW5uFuvLUtqghEUOFXA1CJa7VNVLkoHYbSeWlCxTW3JBw
-	 BxD2nmNWHvvC8rWLKRvBbifmFOIMa3L7erL4m5EqwPhW3H8QUij+yLPX7uxpaKTLVA
-	 SrNVaDMKUBukfernBpRQ/l+CsUDQSiBZ3aHMqpPgtvJ1mKuYsg/M2fhlrgf/EZgFWA
-	 nYcjYRCvEkVag==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X2pzx5ng6z4x8T;
-	Tue, 10 Sep 2024 13:27:41 +1000 (AEST)
-Date: Tue, 10 Sep 2024 13:27:40 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Paul Moore <paul@paul-moore.com>, Christian Brauner <brauner@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?=
- =?UTF-8?B?bg==?= <mic@digikod.net>
-Subject: linux-next: manual merge of the security tree with the vfs-brauner
- tree
-Message-ID: <20240910132740.775b92e1@canb.auug.org.au>
+	s=arc-20240116; t=1725950705; c=relaxed/simple;
+	bh=opiocva7Rai1iD4KldoLr/MHHio9MO1WpdSLvr8wtVI=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=j4zEi+r15SciBeH0r+lLGKFKgv567sMJ1k+t6cI1qtZKVClhKfXXa2GmwdL0IKRV2DcmeaY456zAKBtBM8uEG5kn5O81X7UfpSbRsDKGy55ZfAJb9s0cAM5Dq2ZTVfQwMOutFCwXem9+CqfZHTbPyzv9SiI+ugfyuXa0JDQdkrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jY5B5E7T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 041EEC4CEC3;
+	Tue, 10 Sep 2024 06:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725950704;
+	bh=opiocva7Rai1iD4KldoLr/MHHio9MO1WpdSLvr8wtVI=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+	b=jY5B5E7TcbNBaixSVnV6UC/5VCinppmG/0vgrvnFsWl4G2KroDbz3/Tx5EPJoMtOV
+	 g1xoi8u9sV5Z5oNXEbo3j7oJqW/MDYYK/mvkaZdSkDPu0c9itZI7/HnrFnu8c6tQwq
+	 SmrTLbmxNCxN4VESPJlEOwXGewqtR8yCkhz2YiG+h55k/6Ae9JVVrJBAi55gzVEXTl
+	 ECFEto7Qs7+ycXjwoi3V1//er5lEKXbUW0TzNBxZHU/UE5B6ec0WA5bhXSYM5ktkRe
+	 mGN5F/ZZUROhz4pplgBPqZRT9ATFCKkIGcc6WQoHIoB+QpNz1QRRkPLA3zTORriUBR
+	 4Mtaf5i5NupbA==
+References: <87v7z586py.fsf@debian-BULLSEYE-live-builder-AMD64>
+ <20240909-einjagen-meterhoch-45c77ca03164@brauner>
+ <CAJqdLrq+pScjJdnrp2jAZMqKEq-SyEjsBdb-=9QAFN6=h1=S5w@mail.gmail.com>
+ <20240909-unwillig-irreal-26bd9fa085c6@brauner>
+ <CAJqdLrqjD_vXVm48LG-9HM_wRsSFUg46rrWFL+o24n6dLgQJ6g@mail.gmail.com>
+ <20240909-arterien-zweit-3502f11b9f50@brauner>
+ <CAJqdLrpA4B3rKOWcwYyBA14ofPiSba2qrAggYBE2D_h70zni2A@mail.gmail.com>
+ <20240909-zumal-revision-8af9dc0593e5@brauner>
+ <CAJqdLrrz-DH0YLbMFt951c4jiZMAiCVcS0YR3Mz-y=O3zNn6Kg@mail.gmail.com>
+ <CAJqdLrpwuaPG3PoFwbxPRp8GrbEWooXazrMZgV4Wj=FK=vq=6A@mail.gmail.com>
+ <CAJqdLros2VVCXQ8RK4FeU1+=oX4=K64i7dxbDor+RUepFNJzJA@mail.gmail.com>
+User-agent: mu4e 1.10.8; emacs 29.2
+From: Chandan Babu R <chandanbabu@kernel.org>
+To: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Cc: linux-next@vger.kernel.org, mszeredi@redhat.com, Christian Brauner
+ <brauner@kernel.org>
+Subject: Re: [BUG REPORT] linux-next/fs-next released on 6th September fails
+ to boot
+Date: Tue, 10 Sep 2024 12:09:41 +0530
+In-reply-to: <CAJqdLros2VVCXQ8RK4FeU1+=oX4=K64i7dxbDor+RUepFNJzJA@mail.gmail.com>
+Message-ID: <87frq8atxt.fsf@debian-BULLSEYE-live-builder-AMD64>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PJzWgEfLmy=2kd9swbNFW7p";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 
---Sig_/PJzWgEfLmy=2kd9swbNFW7p
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Sep 09, 2024 at 06:11:29 PM +0200, Alexander Mikhalitsyn wrote:
+> I'll send a patch with this fix a bit later, once
+> https://lore.kernel.org/linux-fsdevel/20240906143453.179506-1-aleksandr.mikhalitsyn@canonical.com/
+> is merged to prevent merge conflicts later on.
+>
+> Am Mo., 9. Sept. 2024 um 17:56 Uhr schrieb Alexander Mikhalitsyn
+> <alexander@mihalicyn.com>:
+>>
+>> Dear Chandan,
+>>
+>> Please can you check if the following patch resolves issue for your
+>> workload:
 
-Hi all,
+Hi Alexander,
 
-Today's linux-next merge of the security tree got a conflict in:
+I am sorry. I now see that the bug is present even after commit
+9dc504f244895def513a0f2982c909103d4ab345 (virtio_fs: allow idmapped mounts) is
+reverted. I was using kexec to boot into new kernels during the bisect
+operation.
 
-  fs/fcntl.c
+However, now when I do a normal kernel installation (i.e. make modules_install
+&& make install) and reboot into the new kernel, I am noticing that the kernel
+fails to boot even with alleged bad commit reverted. I will write back with
+more details.
 
-between commit:
+Apologies, for the inadvertent mistake.
 
-  1934b212615d ("file: reclaim 24 bytes from f_owner")
-
-from the vfs-brauner tree and commit:
-
-  26f204380a3c ("fs: Fix file_set_fowner LSM hook inconsistencies")
-
-from the security tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/fcntl.c
-index f6fde75a3bd5,c28dc6c005f1..000000000000
---- a/fs/fcntl.c
-+++ b/fs/fcntl.c
-@@@ -89,72 -87,24 +89,66 @@@ static int setfl(int fd, struct file *=20
-  	return error;
-  }
- =20
- +/*
- + * Allocate an file->f_owner struct if it doesn't exist, handling racing
- + * allocations correctly.
- + */
- +int file_f_owner_allocate(struct file *file)
- +{
- +	struct fown_struct *f_owner;
- +
- +	f_owner =3D file_f_owner(file);
- +	if (f_owner)
- +		return 0;
- +
- +	f_owner =3D kzalloc(sizeof(struct fown_struct), GFP_KERNEL);
- +	if (!f_owner)
- +		return -ENOMEM;
- +
- +	rwlock_init(&f_owner->lock);
- +	f_owner->file =3D file;
- +	/* If someone else raced us, drop our allocation. */
- +	if (unlikely(cmpxchg(&file->f_owner, NULL, f_owner)))
- +		kfree(f_owner);
- +	return 0;
- +}
- +EXPORT_SYMBOL(file_f_owner_allocate);
- +
- +void file_f_owner_release(struct file *file)
- +{
- +	struct fown_struct *f_owner;
- +
- +	f_owner =3D file_f_owner(file);
- +	if (f_owner) {
- +		put_pid(f_owner->pid);
- +		kfree(f_owner);
- +	}
- +}
- +
-- static void f_modown(struct file *filp, struct pid *pid, enum pid_type ty=
-pe,
--                      int force)
-+ void __f_setown(struct file *filp, struct pid *pid, enum pid_type type,
-+ 		int force)
-  {
- -	write_lock_irq(&filp->f_owner.lock);
- -	if (force || !filp->f_owner.pid) {
- -		put_pid(filp->f_owner.pid);
- -		filp->f_owner.pid =3D get_pid(pid);
- -		filp->f_owner.pid_type =3D type;
- +	struct fown_struct *f_owner;
- +
- +	f_owner =3D file_f_owner(filp);
- +	if (WARN_ON_ONCE(!f_owner))
- +		return;
- +
- +	write_lock_irq(&f_owner->lock);
- +	if (force || !f_owner->pid) {
- +		put_pid(f_owner->pid);
- +		f_owner->pid =3D get_pid(pid);
- +		f_owner->pid_type =3D type;
- =20
-  		if (pid) {
-  			const struct cred *cred =3D current_cred();
-+ 			security_file_set_fowner(filp);
- -			filp->f_owner.uid =3D cred->uid;
- -			filp->f_owner.euid =3D cred->euid;
- +			f_owner->uid =3D cred->uid;
- +			f_owner->euid =3D cred->euid;
-  		}
-  	}
- -	write_unlock_irq(&filp->f_owner.lock);
- +	write_unlock_irq(&f_owner->lock);
-  }
--=20
-- void __f_setown(struct file *filp, struct pid *pid, enum pid_type type,
-- 		int force)
-- {
-- 	security_file_set_fowner(filp);
-- 	f_modown(filp, pid, type, force);
-- }
-  EXPORT_SYMBOL(__f_setown);
- =20
-  int f_setown(struct file *filp, int who, int force)
-
---Sig_/PJzWgEfLmy=2kd9swbNFW7p
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbfvKwACgkQAVBC80lX
-0GybVAf/T+5HWSFFS7Y8OSraDqm23tJCDGuqQBgBxbjsRHlHDhWKGrddrSK1lHxR
-EXRxRpql7j2/ww/SJDfYPK7Z+qIQdXtKEkDHq/w/a1qSeLNWxvl7TxTqG2sVPNzi
-44pp7VjKj7B0a6z/6kYeCnDXyqkdIja3e5jtvywiu9NQCHBFyjfGKv0fvOTU382V
-n72diZoMTd9zf6D3Mh+SLkmrCiTvVjKjJcp2uO/W3R2nMiS16weNqMb3CAArPLaE
-H63kRTKwk2nwdz+hSJIfvGpYUjNJrP/VsDqE1fZ7AULzgY7Z6iXpGos8nE+FQJeK
-x7FEEibOxM78Q//h9fL1vZLDTFsUoA==
-=ed7/
------END PGP SIGNATURE-----
-
---Sig_/PJzWgEfLmy=2kd9swbNFW7p--
+-- 
+Chandan
 

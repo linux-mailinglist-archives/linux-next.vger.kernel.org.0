@@ -1,170 +1,143 @@
-Return-Path: <linux-next+bounces-3718-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3719-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1349972629
-	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 02:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C2C00972757
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 04:51:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B25B6283360
-	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 00:23:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B31928589F
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2024 02:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D673C1CFB9;
-	Tue, 10 Sep 2024 00:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BE2A1422CA;
+	Tue, 10 Sep 2024 02:51:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CGy0r8XB"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="e5qjOxaZ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A16821CD29;
-	Tue, 10 Sep 2024 00:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E204D8B7;
+	Tue, 10 Sep 2024 02:51:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725927820; cv=none; b=RBdYNoyeAcE4O4QOYPckhytTNCXWmwO08p7zqyRq9LC6/OCqBvSDgJA2WFcQY8reApav11cdPpWS7upOZjed+ObQ0PI1p0ImVGz6sAqsmjidA3rPYhZgpcEKYXqVhyc4eTH1vJ3s1K7AmMDd3Tu/iy8P7dIKdH7iq3AHcfD63TA=
+	t=1725936671; cv=none; b=g67j01xi1QCKdtWm8mvo4qqr6mDIBNrZtG4xNDPUZvvgjFjmxf7tMKTqYc/wb/1SfsXxTU4oLdrAthw5MODDVc5TXYcxBLsh1c2ZcrCy3ehOzGpOSLIFLS3TsHbnUU+BAjtDz0hq3zglh/aBnnM1Kft16dQPn/N/vOfDwIih6N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725927820; c=relaxed/simple;
-	bh=eY/Rl7lD1XWTnxw/u8a1BM6K08VMNjQ+Z0x45r6cM+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dvWc+XD8KJN53hkjV1itHq0jA+cksWyzllbVMSGibRDdK5cMLEWhHkrkXuPPr/lWBFI5OsPcclbdhEkaLE0z7lDRPROQg+W0dRNnOWf0uXvyFyRhIyzPGYQ4svoSqM4mMC4EeWTP3iC1Ce1IyZ8vF/dt2JC0QbMXsi/fkb/Vngc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CGy0r8XB; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1725936671; c=relaxed/simple;
+	bh=gvLncmditIpK3W9r0yMaIgEbbTOZ1PiL7Ur115zxZ9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MJFTew12QVWVZ/ZbusqGLDH6GSXIkBtaA1kOIIdLCis04jTBs/+7fm5JvIImcrReB2bBEFfy9PyOrrnKyWvhRANZvKk8s7MxCp5kPZ6gDaVHNItQpjzDivQCCNN+RgsXItOl0zqhk7w3k9pQaN6tMaiMgBr3PZm6jqT/ElIemIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=e5qjOxaZ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1725927813;
-	bh=nBX7GHBzCZ2qhNL60MASnfeZbJIth3IjhvxOSqVuh1A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CGy0r8XBeDS3fjxOS6fC9tLAM/a/tLPkPNgWrRMybus8Q+xo4YWvhkjUv6GPrD7Zt
-	 LjtC37aE6KbRs1fqsmGAlTA5fPnTIK/ccn8oU6FfofvasYQl8ul7mM8/ox1hG0f4z5
-	 nRnWjjORgIiuRdyiQzfFOO2wYaMzoX5tQnzYrjBTxR1K+uPjXYZs8qYTE5b1A6fnG0
-	 ArspvSzx082q1mXElYnbGwPUlGE1fVDQV3MbgE6TsXKvCJ1UbcUAqQq1DxxIaBMSjh
-	 Qx/adBDyq8LO9uTUK+p2wh0Nq6aD3+jkb4z62Mk2OTMSaPziy/FbZNs9Qd43WVkcGk
-	 7UNWsTqcBnmag==
+	s=201702; t=1725936663;
+	bh=IscIEgspsB3jf10GurHepsJMCT3GuysT+pZDGM2xNlQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=e5qjOxaZqrWTHIPmZGVuQ0TJyd87kAFNGsYSg6/V3e3P6vncBmSYkPrsWYBEmo1Av
+	 64G3+4MW6MUbtIfmrHHOhZda9z9lRMhK0z3YRFzg8zPsmIjvxGFe/imoWzOEcEv76m
+	 UX9g+WDDBcKqXvxLQg+s5yrrG2EDMHDKCuZLzYmISSCWIrvUpbcpvsHeflFqw48lsZ
+	 k7iN1WlrrG0zlpBEdkg5r9L2NdsJ+VlrtJFXz6SDhaaIyIe1WjRqD8qwyRrxyyNjhF
+	 /9fXF0o5sThe4tFMbRsYyT9jXikgDlX4JNhpdcGHEkzpFWpI0nFLVyTDhikybsrXsN
+	 cnpW+i6wEmCWA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X2kvS6xwlz4wc3;
-	Tue, 10 Sep 2024 10:23:32 +1000 (AEST)
-Date: Tue, 10 Sep 2024 10:23:32 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X2p9f2Sgcz4wbr;
+	Tue, 10 Sep 2024 12:51:02 +1000 (AEST)
+Date: Tue, 10 Sep 2024 12:51:01 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Aleksa Sarai <cyphar@cyphar.com>, Christian Brauner <brauner@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20240910102332.4f171bde@canb.auug.org.au>
-In-Reply-To: <20240905105809.6585eec2@canb.auug.org.au>
-References: <20240903092745.370fc0c6@canb.auug.org.au>
-	<20240903.020556-bouncing.saws.daring.donor-5KuFrSsG4K2W@cyphar.com>
-	<20240905105809.6585eec2@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Lee Jones <lee@kernel.org>
+Cc: Andre Przywara <andre.przywara@arm.com>, Chris Morgan
+ <macromorgan@hotmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the regulator tree with the mfd tree
+Message-ID: <20240910125101.4057d8f7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dXms8KSbUWNEEYhyoFVNzC4";
+Content-Type: multipart/signed; boundary="Sig_/dwD.PpaGPIHu.SQfcUfXOKY";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/dXms8KSbUWNEEYhyoFVNzC4
+--Sig_/dwD.PpaGPIHu.SQfcUfXOKY
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 5 Sep 2024 10:58:09 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> On Tue, 3 Sep 2024 12:41:08 +1000 Aleksa Sarai <cyphar@cyphar.com> wrote:
-> >
-> > On 2024-09-03, Stephen Rothwell <sfr@canb.auug.org.au> wrote: =20
-> > > Hi all,
-> > >=20
-> > > After merging the vfs-brauner tree, today's linux-next build (native =
-perf)
-> > > failed like this:
-> > >=20
-> > > In file included from trace/beauty/fs_at_flags.c:21:
-> > > perf/trace/beauty/generated/fs_at_flags_array.c:10:31: error: initial=
-ized field overwritten [-Werror=3Doverride-init]
-> > >    10 |         [ilog2(0x0001) + 1] =3D "RENAME_NOREPLACE",
-> > >       |                               ^~~~~~~~~~~~~~~~~~
-> > > perf/trace/beauty/generated/fs_at_flags_array.c:10:31: note: (near in=
-itialization for 'fs_at_flags[1]')
-> > > perf/trace/beauty/generated/fs_at_flags_array.c:14:30: error: initial=
-ized field overwritten [-Werror=3Doverride-init]
-> > >    14 |         [ilog2(0x200) + 1] =3D "HANDLE_FID",
-> > >       |                              ^~~~~~~~~~~~
-> > > perf/trace/beauty/generated/fs_at_flags_array.c:14:30: note: (near in=
-itialization for 'fs_at_flags[10]')
-> > > perf/trace/beauty/generated/fs_at_flags_array.c:15:30: error: initial=
-ized field overwritten [-Werror=3Doverride-init]
-> > >    15 |         [ilog2(0x001) + 1] =3D "HANDLE_MNT_ID_UNIQUE",
-> > >       |                              ^~~~~~~~~~~~~~~~~~~~~~
-> > > perf/trace/beauty/generated/fs_at_flags_array.c:15:30: note: (near in=
-itialization for 'fs_at_flags[1]')
-> > >=20
-> > > Caused by commit
-> > >=20
-> > >   34cf40849654 ("uapi: explain how per-syscall AT_* flags should be a=
-llocated")
-> > >=20
-> > > I have used the vfs-brauner tree from next-20240902 for today.   =20
-> >=20
-> > Ah okay, the overlapping flag definitions in the copied over fcntl.h are
-> > causing issues. We could just drop that part of the patch, or (since the
-> > new flags aren't handled by perf/trace/beauty) we could just do
-> > something simple like:
-> >=20
-> > diff --git a/tools/perf/trace/beauty/fs_at_flags.sh b/tools/perf/trace/=
-beauty/fs_at_flags.sh
-> > index 456f59addf74..930384029599 100755
-> > --- a/tools/perf/trace/beauty/fs_at_flags.sh
-> > +++ b/tools/perf/trace/beauty/fs_at_flags.sh
-> > @@ -13,9 +13,13 @@ printf "static const char *fs_at_flags[] =3D {\n"
-> >  regex=3D'^[[:space:]]*#[[:space:]]*define[[:space:]]+AT_([^_]+[[:alnum=
-:]_]+)[[:space:]]+(0x[[:xdigit:]]+)[[:space:]]*.*'
-> >  # AT_EACCESS is only meaningful to faccessat, so we will special case =
-it there...
-> >  # AT_STATX_SYNC_TYPE is not a bit, its a mask of AT_STATX_SYNC_AS_STAT=
-, AT_STATX_FORCE_SYNC and AT_STATX_DONT_SYNC
-> > +# AT_RENAME_* flags are just aliases of RENAME_* flags and we don't ne=
-ed to include them.
-> > +# AT_HANDLE_* flags are only meaningful for name_to_handle_at, which w=
-e don't support.
-> >  grep -E $regex ${linux_fcntl} | \
-> >         grep -v AT_EACCESS | \
-> >         grep -v AT_STATX_SYNC_TYPE | \
-> > +       grep -Ev "AT_RENAME_(NOREPLACE|EXCHANGE|WHITEOUT)" | \
-> > +       grep -Ev "AT_HANDLE_(FID|MNT_ID_UNIQUE)" | \
-> >         sed -r "s/$regex/\2 \1/g"       | \
-> >         xargs printf "\t[ilog2(%s) + 1] =3D \"%s\",\n"
-> >  printf "};\n" =20
->=20
-> I have applied that by hand for today.  Please submit it and get it
-> applied.
+Today's linux-next merge of the regulator tree got conflicts in:
 
-I am still applying this build fix patch.
+  drivers/mfd/axp20x.c
+  include/linux/mfd/axp20x.h
+
+between commit:
+
+  2e1a57d5b0ad ("mfd: axp20x: Add ADC, BAT, and USB cells for AXP717")
+
+from the mfd tree and commit:
+
+  bb2ac59f8205 ("mfd: axp20x: AXP717: Add support for boost regulator")
+
+from the regulator tree.
+
+The latter change to  include/linux/mfd/axp20x.h is a subset of the
+former change.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/dXms8KSbUWNEEYhyoFVNzC4
+diff --cc drivers/mfd/axp20x.c
+index 4051551757f2,16950c3206d7..000000000000
+--- a/drivers/mfd/axp20x.c
++++ b/drivers/mfd/axp20x.c
+@@@ -209,15 -209,11 +209,17 @@@ static const struct regmap_access_tabl
+  };
+ =20
+  static const struct regmap_range axp717_writeable_ranges[] =3D {
+ +	regmap_reg_range(AXP717_PMU_FAULT, AXP717_MODULE_EN_CONTROL_1),
+ +	regmap_reg_range(AXP717_MIN_SYS_V_CONTROL, AXP717_BOOST_CONTROL),
++ 	regmap_reg_range(AXP717_MODULE_EN_CONTROL_2, AXP717_MODULE_EN_CONTROL_2),
++ 	regmap_reg_range(AXP717_BOOST_CONTROL, AXP717_BOOST_CONTROL),
+ +	regmap_reg_range(AXP717_VSYS_V_POWEROFF, AXP717_VSYS_V_POWEROFF),
+  	regmap_reg_range(AXP717_IRQ0_EN, AXP717_IRQ4_EN),
+  	regmap_reg_range(AXP717_IRQ0_STATE, AXP717_IRQ4_STATE),
+ +	regmap_reg_range(AXP717_ICC_CHG_SET, AXP717_CV_CHG_SET),
+  	regmap_reg_range(AXP717_DCDC_OUTPUT_CONTROL, AXP717_CPUSLDO_CONTROL),
+ +	regmap_reg_range(AXP717_ADC_CH_EN_CONTROL, AXP717_ADC_CH_EN_CONTROL),
+ +	regmap_reg_range(AXP717_ADC_DATA_SEL, AXP717_ADC_DATA_SEL),
+  };
+ =20
+  static const struct regmap_range axp717_volatile_ranges[] =3D {
+
+--Sig_/dwD.PpaGPIHu.SQfcUfXOKY
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbfkYQACgkQAVBC80lX
-0Gxlsgf9Gw3EUBLGQppIzdGj6oYlHBmKmHk5no6zA28uiaeCi7NxfBT3Fa9iu+On
-5cZ0G+cpWONk8aWObYoJpq8PAOWEg1EkkolCZyRCPxMATxkMCuDoPwurGQgZW5oz
-cWmaEuGgIZYcM7Xxm11DILIRRtdiX+q0PIJuV0R03yk5XCXFYMIS50lZK1PY2i6D
-OYRGtTlVlvj91znonT1Sf5E6vhEmTxJbpKNV56Ni+y3pdc/wqZfGkqKkYrXON4sq
-w55ghRB9Dv1bT3taWHo6rtHujtWhW4SlbWeT2HFis0vDV0o2G7yt4vitvV1voltm
-jBz2OPijVQCaeDGNW6LP1/6VjufKzg==
-=uW9f
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbftBUACgkQAVBC80lX
+0Gxx0gf/SlBy++bsbAhD0HL8Azlfyz4pCRWkbj5t5pl9xqTk8punyuHYrOEfCfDn
+liO9wbts0csciXq7mU1hdXTU1xfY3rvNBNbh2KeQV3eQj9cWS/mRIbFBR5Wh6rJc
+c+dvatZI7JuWg4I8sOx1XYTi98TKjAtrJsCeHYte5cM7RJCTzgLAROChm9Klw0Q5
+5zp0FN29Q8ohUtWzcgwk8Q3qMcRWts4RMqKPh+FjxEO35cj/e6FjWD3VIzL9nKcx
+o41K1NP/j7JHYsV3dveOi3ySgRkH/BkJdLU1Uzl0zJsmkVrNfWFANM9cB9n34w5a
+QJgza1AjhHCnCcQcEmP5fv5AL73MmQ==
+=Ij6+
 -----END PGP SIGNATURE-----
 
---Sig_/dXms8KSbUWNEEYhyoFVNzC4--
+--Sig_/dwD.PpaGPIHu.SQfcUfXOKY--
 

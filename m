@@ -1,107 +1,116 @@
-Return-Path: <linux-next+bounces-3753-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3754-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01910974F91
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 12:21:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3CC7974FDD
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 12:40:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A41CE1F2577F
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 10:21:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22D611C229BC
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 10:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E82B617E900;
-	Wed, 11 Sep 2024 10:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B4E0186604;
+	Wed, 11 Sep 2024 10:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HLyIv147"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AeKw8kmq"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE7B42AB4;
-	Wed, 11 Sep 2024 10:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7B81865EA;
+	Wed, 11 Sep 2024 10:40:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726050082; cv=none; b=k3vFThv3XGaube8EKZvCbr1dStlMYDfUxtkD0n+qIZ+TWXOrFyYAozdFh2GGHe/kZHsTxAhP32jJIi+do+c6ekzBFxSXgz5ZLqm9mI4n6SdpkIhFxQ6IFI3aSJRILOBckGbVLgg6w3AGDJctt0zrXMtaIHz8Lrt+GVPikLAbjRM=
+	t=1726051222; cv=none; b=sd/8bJ+ZQCW5F2DjX8FGrANDVPFw1ZUib9rgtFkpYRAT9tbM26rnDrw3dkCnsG6oX23No315AU7RbSy8S0W/ZhVhLwK7TOG5KhQ3bume4FLcwNkScHdSSPLKt6GHHW4yrmU883H4LH97dEEL5r3DvqsCot3ecNOPRX2G1X4J340=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726050082; c=relaxed/simple;
-	bh=p2A2vCVb6pei6YzTYFDois9iFz9dIWj89IQgTLKIV54=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SExa5UsO7XGsXQIIiO9W1+XSfvhK3rtEMVpD/UgouL4k++FjOzMvU/ARLXj9zRP5teenEwDYO2zIw8hEe5WhjRYVjK3HeAcOmG3d1eUKwhdX7SUEicG7Iq6zrOYRqI5ECjLWYfaMPvcHFe+08ona7kqinh51FF+Zwbyp3SPYcMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HLyIv147; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1726051222; c=relaxed/simple;
+	bh=hfQglHT1wIXo6wzXRF0BnFyZVbJeGWanky90jgYWSIE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=f5KuucRxsCHPHbkUX8WbJizldcY0n2wt1Tzoa82vhQq0vCOBW854C0whmTJpoHS6kepTNdQEJLxvNitKHlardq2rR1T8QzqkEUv7Pf0qLe80ngU1IvI+CK3QvEQVM7LoqYpJE6vqCT3TO7QvFcOYfVkOncU7+s/5jqD5RGH+BR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AeKw8kmq; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1726050077;
-	bh=6feN7h7kAlsKXM0hxfEaT/zkwz3k/oL6pEDqw/eJl1E=;
+	s=201702; t=1726051216;
+	bh=EhbBqKqQu9GESOyoqO0D7ZH6mmBRI+YZ6BATIeUU22M=;
 	h=Date:From:To:Cc:Subject:From;
-	b=HLyIv147b08DO30+wNcCbsU6/0FV1kyZGrfj2ZmUXUto5vMczhgmXN0pw/PAqvND4
-	 Cd03fE+ZMlFmYYodXbtN5ox11AAzfOcAHzJgafe4jxyMgVyBN7f2j0NbSvEjyXCyzA
-	 2u2nZbqr0aPhM4jMq+2prT/8ke6cGPPzVtu+btYKjBsy/Z+bF9H2LFpNGxzmx4/Yve
-	 BOypHQqCwLGQ6K1eM0PBgDrW5a701kXXy4l0fZGPpBszslE5kkrFOQORXQAAWpPYSX
-	 8XrHjBi5QLnzRZO/0ZzCKqGgilNW1zG25VphsnuISEHMYgEn/sGxABzPfHq4079nlo
-	 NbGzhWbDz7OxA==
+	b=AeKw8kmq0Ldr5xYEIbk6AMMoXI2007wa/ySEa4QmxNpeJ/ctL7rLV/w+6KXqNrcQI
+	 F/tbYZaKvch9g2OJvMyTzd0+xFjGK5We53XmG7SYtCKW3JyZnqt3VobhmIZb6lYLR2
+	 V6U7U2F2+ozRaC6jNP9bCwxvVnO704yVTqe+eT4NC5OCV5kH8mCLupoo0Ip6kgHhh4
+	 q57RKx24Hn6HkzuKnKbtPsjIpVqOulj/4H7GsLUWBfOibY2+CD85hE7NGD5WYjvDeE
+	 DRJs+4AOfQW2XG9PwaS4XACoMUOdqS5+NwTvcO9hohIDB0Yu4tfkTnWdzoiutyJ7UW
+	 yPjAeFARGTGlw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X3c6j0Zz5z4x6n;
-	Wed, 11 Sep 2024 20:21:16 +1000 (AEST)
-Date: Wed, 11 Sep 2024 20:21:15 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X3cXb4hQ0z4x8D;
+	Wed, 11 Sep 2024 20:40:15 +1000 (AEST)
+Date: Wed, 11 Sep 2024 20:40:15 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Michal Hocko <mhocko@suse.com>, Linux Kernel Mailing List
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: Christian Loehle <christian.loehle@arm.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the mm tree
-Message-ID: <20240911202115.2ff85943@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the tip tree
+Message-ID: <20240911204015.6c5cd861@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/77lDK24Ti0WfLosBUmEnMlc";
+Content-Type: multipart/signed; boundary="Sig_//+ETOTVYcEo_iK8rct6mSju";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/77lDK24Ti0WfLosBUmEnMlc
+--Sig_//+ETOTVYcEo_iK8rct6mSju
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (htmldocs) produced
-these warnings:
+After merging the tip tree, today's linux-next build (arm64 defconfig)
+failed like this:
 
-fs/inode.c:242: warning: expecting prototype for inode_init_always(). Proto=
-type was for inode_init_always_gfp() instead
-security/security.c:749: warning: Function parameter or struct member 'gfp'=
- not described in 'lsm_inode_alloc'
-security/security.c:1689: warning: Function parameter or struct member 'gfp=
-' not described in 'security_inode_alloc'
+drivers/cpufreq/cppc_cpufreq.c: In function 'cppc_freq_invariance_init':
+drivers/cpufreq/cppc_cpufreq.c:227:35: error: 'NSER_PER_MSEC' undeclared (f=
+irst use in this function); did you mean 'NSEC_PER_MSEC'?
+  227 |                 .sched_runtime  =3D NSER_PER_MSEC,
+      |                                   ^~~~~~~~~~~~~
+      |                                   NSEC_PER_MSEC
+drivers/cpufreq/cppc_cpufreq.c:227:35: note: each undeclared identifier is =
+reported only once for each function it appears in
+drivers/cpufreq/cppc_cpufreq.c:229:17: error: request for member 'sched_per=
+iod' in something not a structure or union
+  229 |                 .sched_period   =3D 10 * NSEC_PER_MSEC,
+      |                 ^
 
-Introduced by commit
+Caused by commit
 
-  3346ada04cf5 ("bcachefs: do not use PF_MEMALLOC_NORECLAIM")
+  b3a47ff09554 ("cpufreq/cppc: Use NSEC_PER_MSEC for deadline task")
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/77lDK24Ti0WfLosBUmEnMlc
+--Sig_//+ETOTVYcEo_iK8rct6mSju
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbhbxsACgkQAVBC80lX
-0GzekAf6ApkgLw7Dsyb8alluSSH3K6u/DadwiLM6J5AuWcymTr8ujKEegfxvebTj
-hgX6uTze5Z3U3UuMil8YFcFEzwvbQF6inOQjFWiQBgNpEolra9cnz5aSBQD2Ylai
-7kJVSQ/ZSyQG7nUmNrMiYjv5zMp8kfhrp04tnch1JVsYV7PxsITMuLnajgi3qH6D
-o9FTzBB9sHZ/8bY1A+iyCk5jFFrCiiUXOUeFF/R9fYKcMbsvR+fEuKPOusZanMHM
-w9MRaRx5FAxk1yy0PDJAdBcqrVKJwrw8IoTcosW1fAs8OGcBQOmjxOj+Yr40KuW4
-U6O/dLdLW69cer8IwW7f5VWKuz8fXQ==
-=uTPb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbhc48ACgkQAVBC80lX
+0GxCVQgAoDoNjYrvwveXygpvzt3jWhsuTlIxN8QnQwJmK0e+Dadis7PTjLEPkdad
+xJuxLw83fs4UzUBgxcCX+nESJyiI5C8iQBi2ge17e5ydPtXP6UTMcgZffr0yLx7G
+nb714Cudjsf8TZe+IgkgH58eHYpiOn0dRdZNrPiGDjUoU9IHjTopBmOgK9ddHxMv
+3TYj9sPc6Sj0WRxdRu0cb8LnaMIbYoWL7BBNzQdiXozTuiLdGq+8aYdv1s77oHsP
+e/PAQYI+zoqAEo+N5MpuK7S3CEb/X9hZIhdinaJBvZljD5ysNhP5mqrKtdVHfRxy
+dxp3tU+U4p10vLPoVlMvslEILy9B0w==
+=vXWb
 -----END PGP SIGNATURE-----
 
---Sig_/77lDK24Ti0WfLosBUmEnMlc--
+--Sig_//+ETOTVYcEo_iK8rct6mSju--
 

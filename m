@@ -1,117 +1,124 @@
-Return-Path: <linux-next+bounces-3744-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3745-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 708739749EC
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 07:43:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69191974A14
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 08:04:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28B7A287792
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 05:43:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AD7C1C258A3
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 06:04:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804CB73477;
-	Wed, 11 Sep 2024 05:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 368A043172;
+	Wed, 11 Sep 2024 06:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FZTMjzZg"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MezA2tSs"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885D126AFB;
-	Wed, 11 Sep 2024 05:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D60D2AF18;
+	Wed, 11 Sep 2024 06:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726033415; cv=none; b=H74KMgSb3CVBNjrzsaTQla5ZQWiEG9axa3E9x96JEGhholJLaEch/297nK04YPeb0FRGhZZanIoJaWExmbP77ezMpJ8Xr4gefr4bV3nrLkREEnkFvVYzqURfsXTU6ICY8DzpNDCIJ+VAa0FarJ9KeUjzu4V98FlsxViE6HbZA4I=
+	t=1726034667; cv=none; b=Kheos6foU5uV0M4Pobnwr93cDxL62fYjrK9dXFRzStdkILhgCjh+MfbsDP25lX7tyRyMzYYx87yULvKKH2t0VZuSxbFU3yd3HlYb+XlnxlVeGYny2YbNV32lfHlWWVzdPu+vFUL3p+qoEZCJWsynyZJpcdujvy7b46FWzwhzIjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726033415; c=relaxed/simple;
-	bh=VlS3NsZIzAMxM7KXIII+8oLkym7W/vjEz+ZoPT3s0MU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EFIP0NoO7tkkUWLgWwl3vzs3p2nrnu5XyrPanSBnxhNSNcOxs3cZjD9D/ASg68w9ovK1qOwwvlVnUmYpMfm1B9M7SPmt9zxcswLEpEmEisHu7KSPe7dL/a6FC40cS7+p7155hcjSaCNBjU0ZSiI69fD9PmyUe5dB3W77+UVEVC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FZTMjzZg; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1726034667; c=relaxed/simple;
+	bh=NGccEAzQho7RQQAZ1T44cZ7/ltWa9N79GNW5+mMbXC8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OXw2coyrYHsf2VDhAPBMP6dfQZvFm38A4SObW9nq1iCz7cXUp7MRG88/R2q3edZNeHhosCW1Jdn8c16lrxoAuWPvmp8CKGe+shLb8eL1KO/HWnoNdGAQHZ6LNZism143oZkxFGIz3zyy+H5/i0j4/ArpPmBEeWYf3dbgc5Rkq/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=MezA2tSs; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1726033409;
-	bh=+q4kqaN7a+lvp4ahjs/Kx5nw4NwssQDJorY5CGfUBlU=;
+	s=201702; t=1726034660;
+	bh=9AiLuBNs/7aC54Rkm+IEyIUtDABvpTmRemFLe/DNkpc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=FZTMjzZg0EkSNcgLc02KUq+4PHTv3Wnc1oo17OFb81HA570p7Bjg1vNEzF3u58Shm
-	 DA8jT/zYtRltT1Kzu/+3Vjdz142EaFMkmpgw8pWtolxFFL9AIm3vXBDA0F2CyooTvy
-	 2kKLM+2bvaZxtOqkVR/REV+PzG11Zy4t6CNqHgJt2geXhJTkbaroi/AJmbFAfiOn5J
-	 DvBmbtyQSlZGUlI5GGLkehnOoH5hnyvCm7AsS0wfJBcy2e9d4Lb65gdLxKdBg8Uh4A
-	 km7gJrOIw6Qm+ygjne3EmEwkWKi0ZwzETubOdaKNKjpMN0dZj9R2L9dSzS75jKCu7V
-	 uLZe6p7yd0zEg==
+	b=MezA2tSsLIj4Crg7kfrq3FW/LYnC3ajf+7iFpeoUBAzxRWxPG3uNP09CrIwFLQWtj
+	 mpMGJuwqW1JWApIA2MgcHYHs9+p5EpURjo12OWxqL1dxUVXqwqcPiSL2TB9PhSYr2S
+	 Su+GrsbrcNn4GjRGggvov88r87g76FRbCoXbh4mRqWrHZdJjsrK888H3xNqVmcBW4b
+	 YGLJdfe98mgksJ2BQWhkKKfpdcxU6LkHxFNvC1WNeqdgXekDYhqVFnJyG7stBmW9Ff
+	 ncREL+A+nFrB9zEygqKzteu2lWoH/1AseJamhXqWv6qTIP9GnMdfeLrsobVIOmqsaZ
+	 tfai8Jwr9Vbog==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X3Ty930ZRz4wj1;
-	Wed, 11 Sep 2024 15:43:29 +1000 (AEST)
-Date: Wed, 11 Sep 2024 15:43:28 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X3VQC6sHRz4wj1;
+	Wed, 11 Sep 2024 16:04:19 +1000 (AEST)
+Date: Wed, 11 Sep 2024 16:04:19 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Sean Christopherson <seanjc@google.com>, Christian Borntraeger
- <borntraeger@de.ibm.com>, Janosch Frank <frankja@linux.ibm.com>
-Cc: Christoph Schlameuss <schlameuss@linux.ibm.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kvm-x86 tree with the kvm6390 tree
-Message-ID: <20240911154328.0ad45c38@canb.auug.org.au>
+To: Juergen Gross <jgross@suse.com>, Konrad Rzeszutek Wilk
+ <konrad.wilk@oracle.com>, Stefano Stabellini <sstabellini@kernel.org>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>, Xen Devel
+ <xen-devel@lists.xenproject.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the xen-tip tree
+Message-ID: <20240911160419.20aa64a3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Di1oPHrlNlMz.2k9WYF75V+";
+Content-Type: multipart/signed; boundary="Sig_/582N.9D4_/VhahkMF_TFUjA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Di1oPHrlNlMz.2k9WYF75V+
+--Sig_/582N.9D4_/VhahkMF_TFUjA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-x86 tree got a conflict in:
+After merging the xen-tip tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  tools/testing/selftests/kvm/.gitignore
+In file included from arch/x86/kernel/jailhouse.c:17:
+arch/x86/include/asm/acpi.h:179:42: error: unknown type name 'acpi_physical=
+_address'
+  179 | extern void __iomem * (*acpi_os_ioremap)(acpi_physical_address phys,
+      |                                          ^~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/acpi.h:180:42: error: unknown type name 'acpi_size'
+  180 |                                          acpi_size size);
+      |                                          ^~~~~~~~~
+arch/x86/include/asm/acpi.h:181:35: error: unknown type name 'acpi_physical=
+_address'
+  181 | void __iomem *x86_acpi_os_ioremap(acpi_physical_address phys, acpi_=
+size size);
+      |                                   ^~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/acpi.h:181:63: error: unknown type name 'acpi_size'
+  181 | void __iomem *x86_acpi_os_ioremap(acpi_physical_address phys, acpi_=
+size size);
+      |                                                               ^~~~~=
+~~~~
 
-between commit:
+Caused by commit
 
-  011901fc2224 ("selftests: kvm: s390: Add s390x ucontrol test suite with h=
-page test")
+  9adc485684da ("xen: allow mapping ACPI data using a different physical ad=
+dress")
 
-from the kvm6390 tree and commit:
-
-  9d15171f39f0 ("KVM: selftests: Explicitly include committed one-off asset=
-s in .gitignore")
-
-from the kvm-x86 tree.
-
-I fixed it up (the latter includes the former) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I have used the xen-tip tree from next-20240910 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Di1oPHrlNlMz.2k9WYF75V+
+--Sig_/582N.9D4_/VhahkMF_TFUjA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbhLgAACgkQAVBC80lX
-0GxgMAf/SAmS14BcGLwOtXE6Zr2g76PZoXrGXLKH1JiI2e3uUfTgig1yh9rF3OZX
-VXkNoyiU86rh+u4vgRHxo0rVw6hPPoKPB/XkymlVM6FU3/UbV1YQdBQgsEVcpbeA
-bBHs/v9+tloHPZRbMgiZgvflRHj84ndewWGOA5PbNS3HMi6K/zdOgJ8sCXuchias
-XZ/5ZnHYc7lZlOBuUcpkr6UtxxBxYwtmvJMTfWvTwfQ9mMXLe3iSu1cPaek+8jH8
-ogS0m0UvGettixlaG81mgq2nnE2/UfHFuqDhD/EzKfMG1JuZhOR039aNntTNEDP+
-zRCLaYZJnS54SGbuZBirBgG2YZigZQ==
-=SUMK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbhMuMACgkQAVBC80lX
+0Gx7DQf/RD962o1RDRkEQf9nkOtLj/Uiy/44PMz2jH50hkl9p1Ji6HGiCICqt7lR
+1kXYslR4yv9r0oywo/LaO3/pD+Q6QfgRXIrj8oLwVIVsErscyqBpDwoJI1pufupx
+q21+oHuYInRtSvLOgyDXZAJXeW6jIKumP8INzGJBCVYJhEN9OU1EEkr0tmK64Wh8
+4ZgiJsKsOOfI4B1u40oy0lnRzh2bXin4SdZHBtOIhxmAjrL50cB7aCVrtHG6ykEh
+xjic7GrimIgywqxSRf+1NkiHQa9B02tJzBIZwj+u5ldcHJ8TFnUQIKAmgVmQOsCl
+KbrtiDKRqhEiKVvoLVaj32FFzjLwTA==
+=8S/U
 -----END PGP SIGNATURE-----
 
---Sig_/Di1oPHrlNlMz.2k9WYF75V+--
+--Sig_/582N.9D4_/VhahkMF_TFUjA--
 

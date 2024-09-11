@@ -1,206 +1,143 @@
-Return-Path: <linux-next+bounces-3750-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3751-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 023E2974C38
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 10:10:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CBDB974CEF
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 10:43:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD4D9B21F7B
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 08:10:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C86901F28B8E
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2024 08:43:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC48214A4C5;
-	Wed, 11 Sep 2024 08:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6190B1547FB;
+	Wed, 11 Sep 2024 08:43:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="liF8U9rN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lp/Lu+uf"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7247E137772;
-	Wed, 11 Sep 2024 08:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6188C13C9D3;
+	Wed, 11 Sep 2024 08:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726042205; cv=none; b=sAQWIsMRDYk1Nxy6CZ8lXDQGap8Crg2dLYW0UeMGxdRaqDOiZWTxgurfUD7ljhSq5DKXsMcYqVIfmOCspLouM7jaeMOVYq+7XQ/qByACnnYgwhJjkVml0CZ5eq+iyfPFe1AjhmfkttfFbLThgCSbDOuLUCUKej/WaNKdlHKrmds=
+	t=1726044205; cv=none; b=aTtuOmu6A7rh0RjdvnrSUwVtmjxj0hplu6tI2cAHTzzESyIRGOk9Q1lmzMrwbMz2wVYLH9kFJE5FWnzofq0RlIJIthwuEhuP6YN4wdhXKhZakqLwqctMVMnZ8gnEWH2LxVYgf2DXws3DsIeG31DGOnNrnAVHSOvRbZEXsxDCL6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726042205; c=relaxed/simple;
-	bh=vXEUwXUzgoRd8b9tA21Z0XfB4IfJKQxAWmR6hDpgMQI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rji7B+ZqLMuxPKpAQ7GHPar0uh0fdxf6X57GhUP7vcdz//bw4KppUc/jN2n3FjZMPeEtK9gbjRpbWP64jS1rvG6lhF0HqB35vJSKgqjV65tkZXnRyvPzszPVnXbVG0BpU/+hXn7TYNr+GrbvfAt5quTNO/rNQN5Bm8ySC3jlBlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=liF8U9rN; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1726042200;
-	bh=J92WU9tGhjrjxwGVX33KwIAeP4ckNqFHcn2BPZpwao0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=liF8U9rNIXoFROWMBdfTebkiRsiwH7qFHZlm0Z2/5BcqD2Oaw7IIDYRcuv1T9nxdg
-	 0ay9RMeWNqL+mU0kUnXUmUXzSjZpwktzZ6U9f35fgLS0yCQMOD8DPCtA1BGNqtwPJx
-	 vdBYYWFzI6rWlVDCWkrnxo7gSmfH3lknHV/OhjcesEBVhLHNJw9ENkjF7LlpVo9yHm
-	 n0eji7D0bdDDHFbjSM77FC7Yw1dYDp7HvJ2ERDmqOnHi/5WDveukuw76D/O5qtz+L0
-	 DZNjY3f6Uo3f0TKleW0+uvNRqGRDGOX79NzB9aEorVnI1E11SgiR1NhuTcc2J0GrmG
-	 nG8148LMjOwXg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X3YCD1mp2z4x0K;
-	Wed, 11 Sep 2024 18:10:00 +1000 (AEST)
-Date: Wed, 11 Sep 2024 18:09:59 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@de.ibm.com>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Danilo Krummrich <dakr@kernel.org>, Linux Kernel Mailing List
+	s=arc-20240116; t=1726044205; c=relaxed/simple;
+	bh=pSQDs7KMoH7HaIy4NIvWWkshPAjMFbu930zgWis30To=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=FIqD91GcSk0R0TKYA6LfwP6E/eWIzoaaI1lE7RR+ppW9o3w+bAqgK3TJxzCrat/S485vFpqoQYDIz2PucfuT4cgHHGzg5hgjCu0/lNWWbgEZw1acuQc2oW+7poUlfNf4hYvOqnr+TcMxu0qweDn/hPUgkxDyk0Dr/sylq3c1Y6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lp/Lu+uf; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726044203; x=1757580203;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=pSQDs7KMoH7HaIy4NIvWWkshPAjMFbu930zgWis30To=;
+  b=lp/Lu+ufTVJ2fMnvi6D/6A1TTjEYOZxgOdkWAs1tLf0OUfi/wBeWFSQ4
+   ql3qPkKn105smUzLk6YUje4B8H41/GyF1uulkMyvcPQrcS7iKG4kZ4z4V
+   LWuzUL2ZS1KFL6vgh0rBThiURdmztCp9lYkzNM93oiKxtlF47MkW3R6px
+   T8DSTo0hSOTkuf1+6MJNQGAkC2qyee26xqAkQmMeHUGuHYYXftldDgG21
+   xhT6hOMFNNprmoXb7LDbS6msEQ5ng5sIUC0myrRNYmZ8z/lvM84utiHHL
+   XZPBxgsaXMkmGy7/UkTtjczUM84MPuk0tGMczmiF0djqT9SGdcnejyI3q
+   g==;
+X-CSE-ConnectionGUID: FxdYNn3iRnyDo3J9ALKePw==
+X-CSE-MsgGUID: Mcpz0y4jT3e9Msj+8HAgEg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="24700046"
+X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
+   d="scan'208";a="24700046"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 01:43:23 -0700
+X-CSE-ConnectionGUID: ssBJW64jSTeZXEl5I3m4lg==
+X-CSE-MsgGUID: ZAxfyomMSEOqQal2KBgxSA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
+   d="scan'208";a="66929497"
+Received: from slindbla-desk.ger.corp.intel.com (HELO localhost) ([10.245.246.149])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 01:43:18 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Simona Vetter
+ <simona.vetter@ffwll.ch>, Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Dave Airlie <airlied@redhat.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>, Thomas =?utf-8?Q?Hellstr?=
+ =?utf-8?Q?=C3=B6m?=
+ <thomas.hellstrom@linux.intel.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ DRM XE List <intel-xe@lists.freedesktop.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the s390 tree
-Message-ID: <20240911180959.12c4ad6b@canb.auug.org.au>
-In-Reply-To: <20240808135836.740effac@canb.auug.org.au>
-References: <20240808135836.740effac@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the drm-xe tree with the drm-intel
+ tree
+In-Reply-To: <20240911135249.543da06a@canb.auug.org.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240906131502.7a7d1962@canb.auug.org.au>
+ <20240911135249.543da06a@canb.auug.org.au>
+Date: Wed, 11 Sep 2024 11:43:15 +0300
+Message-ID: <87ed5qk2cc.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Oa2.UPR02sxOHGxv18Ds5=X";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 
---Sig_/Oa2.UPR02sxOHGxv18Ds5=X
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-Just a reminder for the upcoming merge window ...
-
-On Thu, 8 Aug 2024 13:58:36 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On Wed, 11 Sep 2024, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Hi all,
 >
-> After merging the s390 tree, today's linux-next build (s390 defconfig)
-> failed like this:
->=20
-> In file included from include/linux/percpu.h:5,
->                  from include/linux/percpu_counter.h:14,
->                  from include/linux/mm_types.h:21,
->                  from include/linux/ptdump.h:6,
->                  from arch/s390/mm/dump_pagetables.c:3:
-> arch/s390/mm/dump_pagetables.c: In function 'add_marker':
-> include/linux/slab.h:848:61: error: too many arguments to function 'kvrea=
-lloc_noprof'
->   848 | #define kvrealloc(...)                          alloc_hooks(kvrea=
-lloc_noprof(__VA_ARGS__))
->       |                                                             ^~~~~=
-~~~~~~~~~~~
-> include/linux/alloc_tag.h:206:16: note: in definition of macro 'alloc_hoo=
-ks_tag'
->   206 |         typeof(_do_alloc) _res =3D _do_alloc;                    =
-         \
->       |                ^~~~~~~~~
-> include/linux/slab.h:848:49: note: in expansion of macro 'alloc_hooks'
->   848 | #define kvrealloc(...)                          alloc_hooks(kvrea=
-lloc_noprof(__VA_ARGS__))
->       |                                                 ^~~~~~~~~~~
-> arch/s390/mm/dump_pagetables.c:259:27: note: in expansion of macro 'kvrea=
-lloc'
->   259 |                 markers =3D kvrealloc(markers, oldsize, newsize, =
-GFP_KERNEL);
->       |                           ^~~~~~~~~
-> In file included from include/linux/fs.h:45,
->                  from include/linux/seq_file.h:11,
->                  from arch/s390/mm/dump_pagetables.c:4:
-> include/linux/slab.h:846:7: note: declared here
->   846 | void *kvrealloc_noprof(const void *p, size_t size, gfp_t flags)
->       |       ^~~~~~~~~~~~~~~~
-> include/linux/slab.h:848:61: error: too many arguments to function 'kvrea=
-lloc_noprof'
->   848 | #define kvrealloc(...)                          alloc_hooks(kvrea=
-lloc_noprof(__VA_ARGS__))
->       |                                                             ^~~~~=
-~~~~~~~~~~~
-> include/linux/alloc_tag.h:206:34: note: in definition of macro 'alloc_hoo=
-ks_tag'
->   206 |         typeof(_do_alloc) _res =3D _do_alloc;                    =
-         \
->       |                                  ^~~~~~~~~
-> include/linux/slab.h:848:49: note: in expansion of macro 'alloc_hooks'
->   848 | #define kvrealloc(...)                          alloc_hooks(kvrea=
-lloc_noprof(__VA_ARGS__))
->       |                                                 ^~~~~~~~~~~
-> arch/s390/mm/dump_pagetables.c:259:27: note: in expansion of macro 'kvrea=
-lloc'
->   259 |                 markers =3D kvrealloc(markers, oldsize, newsize, =
-GFP_KERNEL);
->       |                           ^~~~~~~~~
-> include/linux/slab.h:846:7: note: declared here
->   846 | void *kvrealloc_noprof(const void *p, size_t size, gfp_t flags)
->       |       ^~~~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   d0e7915d2ad3 ("s390/mm/ptdump: Generate address marker array dynamicall=
-y")
->=20
-> interacting with commit
->=20
->   d4a913add37d ("mm: kvmalloc: align kvrealloc() with krealloc()")
->=20
-> from the mm-unstable branch of the mm tree.
->=20
-> I have applied the following merge fix patch.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 8 Aug 2024 13:50:39 +1000
-> Subject: [PATCH] fixup for "s390/mm/ptdump: Generate address marker array=
- dynamically"
->=20
-> interacting with "mm: kvmalloc: align kvrealloc() with krealloc()"
-> from the mm tree.
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  arch/s390/mm/dump_pagetables.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/s390/mm/dump_pagetables.c b/arch/s390/mm/dump_pagetable=
-s.c
-> index 9e2dc42143b3..fa54f3bc0c8d 100644
-> --- a/arch/s390/mm/dump_pagetables.c
-> +++ b/arch/s390/mm/dump_pagetables.c
-> @@ -256,7 +256,7 @@ static int add_marker(unsigned long start, unsigned l=
-ong end, const char *name)
->  	if (!oldsize)
->  		markers =3D kvmalloc(newsize, GFP_KERNEL);
->  	else
-> -		markers =3D kvrealloc(markers, oldsize, newsize, GFP_KERNEL);
-> +		markers =3D kvrealloc(markers, newsize, GFP_KERNEL);
->  	if (!markers)
->  		goto error;
->  	markers[markers_cnt].is_start =3D 1;
-> --=20
-> 2.43.0
+> On Fri, 6 Sep 2024 13:15:02 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Today's linux-next merge of the drm-xe tree got a conflict in:
+>> 
+>>   drivers/gpu/drm/xe/display/xe_display.c
+>> 
+>> between commit:
+>> 
+>>   11d0613af7c5 ("drm/i915/display: include drm/drm_probe_helper.h where needed")
+>> 
+>> from the drm-intel tree and commit:
+>> 
+>>   87d8ecf01544 ("drm/xe: replace #include <drm/xe_drm.h> with <uapi/drm/xe_drm.h>")
+>> 
+>> from the drm-xe tree.
+>> 
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>> 
+>> -- 
+>> Cheers,
+>> Stephen Rothwell
+>> 
+>> diff --cc drivers/gpu/drm/xe/display/xe_display.c
+>> index 303d00b99a68,75736faf2a80..000000000000
+>> --- a/drivers/gpu/drm/xe/display/xe_display.c
+>> +++ b/drivers/gpu/drm/xe/display/xe_display.c
+>> @@@ -10,8 -10,7 +10,8 @@@
+>>   
+>>   #include <drm/drm_drv.h>
+>>   #include <drm/drm_managed.h>
+>>  +#include <drm/drm_probe_helper.h>
+>> - #include <drm/xe_drm.h>
+>> + #include <uapi/drm/xe_drm.h>
+>>   
+>>   #include "soc/intel_dram.h"
+>>   #include "i915_drv.h"		/* FIXME: HAS_DISPLAY() depends on this */
+>
+> This is now a conflict between the drm-intel and drm trees.
 
---=20
-Cheers,
-Stephen Rothwell
+I backmerged drm-next to drm-intel-next, resolving the conflict.
 
---Sig_/Oa2.UPR02sxOHGxv18Ds5=X
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Thanks,
+Jani.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbhUFcACgkQAVBC80lX
-0Gxxswf9F8u8k+x7hZfh2iG9ZH9OpjWIzebTh1a7qpm8zPCyL94mK1EQukT3VTWo
-pil3oOwkyNfwaWmadkvs7DtwXVoVYNYln8eTnrtTRVfjMqof6Mih9j/4IeUHxazQ
-7R0mvbPwSZ0w9DRxtP8OzY3TvqmPB7JIUcgbCZScyY9Bhi9bf7YwzRVa+3loePK5
-aBV3H6iIN8xCUSe6ZEU0lrsiNIpYQBSYDY81RFEpOV6lh+WWMv6urM4QOEs+vLlb
-VKaI73xvSIcR5Ro3eZtE1LaVqEW9iBaTw2GZQd4lm0VkAZKxrOqO2YIQpN7t4k6B
-VR2O8u6sonvAM3awpHD63Jvp5ieAUQ==
-=4Dej
------END PGP SIGNATURE-----
-
---Sig_/Oa2.UPR02sxOHGxv18Ds5=X--
+-- 
+Jani Nikula, Intel
 

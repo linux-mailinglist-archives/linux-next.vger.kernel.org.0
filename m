@@ -1,154 +1,132 @@
-Return-Path: <linux-next+bounces-3771-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3772-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99806975EA7
-	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 03:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5384975EBB
+	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 04:06:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CE8D1F232B1
-	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 01:50:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FD311F23997
+	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 02:06:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50A1D22094;
-	Thu, 12 Sep 2024 01:50:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EE7A2EAE5;
+	Thu, 12 Sep 2024 02:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/x/IqfD"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SN/OXxpH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2920D3C24;
-	Thu, 12 Sep 2024 01:50:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4069D24211;
+	Thu, 12 Sep 2024 02:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726105833; cv=none; b=HluRq2uIDUQuuuxyrcNWTJdCR7XdF3qZx9Wu3+SNOxpfBCKW8IBfjtcAU65qus2hcGK10yTj/UfxVMaVccY76rW+XAXT9/lIcW/9RG3s5AzQGUz9qph97jumHDDltslgm5eKl8W4cpYcqpRP7nB+ExfK4AKe7OCPbIbHcmrf1nA=
+	t=1726106789; cv=none; b=elii5kHUVTSaEuTq1JR9lt674Wua5XGsBKJI3aoTSGDujxvaO+aismQx5He4Hqug9PFXk4SpFVyvys9iQlbyxyPUlTrcYqKGI2peQRE+mWAbC4ScNeib6ZY7BzmwxOB5eDXnLuBYnUSAhw2zLRzRBcvG/iNiSanBCPcG33pCofE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726105833; c=relaxed/simple;
-	bh=9OVqqAv6azPMpQbxz5bBWG47JD8uqRQOMbjn4mGcBcI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NAJu+wnyjEB+deVsG2MQpXU6u+4OIUldtoLfCSDiqveJ9nEqDiKrvND+mOSlSV21mjhfKwXghBwGUvamr0Sjjfm3fJXg7AStAvWet6/ZR1XvNxRGl+INYXm0alxFPhzh0AyqxYgElkp54Zj7Xsl0YjUD7n96EKF3t1U3ghKIUA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/x/IqfD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33058C4CEC5;
-	Thu, 12 Sep 2024 01:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726105832;
-	bh=9OVqqAv6azPMpQbxz5bBWG47JD8uqRQOMbjn4mGcBcI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=G/x/IqfDAS7YhHrh7/Som2V2v9TIhFh602Mojlt5UUhfa5czPnOYbk+EFXvvJtUJc
-	 ZiS3JrOLbvq3X8bga8h4ej/I2I/yqt89JpAPD/EvsE4OLBcNzMY++dinxUki2ml7fK
-	 EcvIkJ/dvpCZ4P0NHgjh86hoWYG5bjmN/xEVkjSEvK3N0Ezx6Dp+QAB+K97d9w7IG+
-	 mfKGOrNqMqxauUgzgra45WlPnD/oFHer2rzvIJDMvFouNk9MsFXT+2M10oMdbVhvMJ
-	 ZRNAz2zAwis+4dF3uadek9ilUFyKusyd4HLPO5NXxRVgkPLFe6tvR1n/ks1bFzVGqP
-	 U/0xQATTDHZoQ==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53654e2ed93so525852e87.0;
-        Wed, 11 Sep 2024 18:50:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUuKnWqRubbT6w6tX8Lzxz8GehG44PUhyAEeZu36tFZHBaCJduOqprFeADA1jeYutOQO32PwTRxZamR4N8=@vger.kernel.org, AJvYcCXqhVyD7fu2H3IGaGqmeYBgObILC/mCgvhEqXhILmbsOp9BCR65Vtq7vVtUgjz+Le82ABgPKdOY1Qxqsg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywr1+HHw/Wr1meHCZnjAZC1OH6Cy5gALqU/4bCQhYKgoq4eRmjR
-	+xm55Pcn1tlEmvfISt3t7VV8vtEm7WcEizgN4gYXVNUHuD0wfvOIEJVuMwHY9Tkkw7EqhyW+Jiw
-	of3BIWqDaKW+6Am3rdizBRXHroLM=
-X-Google-Smtp-Source: AGHT+IFex/jQ4IJlZS+WQhG16wf7bTblOsEqF8t6ad154optg/TouEhO8MVfuPocfrp4cIs2w79gCCnVgtNQ8QN7mqM=
-X-Received: by 2002:a05:6512:b03:b0:536:53c2:8179 with SMTP id
- 2adb3069b0e04-53678feb22dmr651075e87.37.1726105830863; Wed, 11 Sep 2024
- 18:50:30 -0700 (PDT)
+	s=arc-20240116; t=1726106789; c=relaxed/simple;
+	bh=LxfaDtmUeDEJ2tSU+e8KFxk0LzzOIsxgrteLLAHVnT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=KxM+JBpRugiWli6wA07WkjRBhelJVOZnOQhACGAtJETWdWf00eqd9uRkhZf7BWQMIVQXr+hB3p2FptZovu3/DvKh8THsgura4JonYNb5mopbrKqSaQJFEixbC1Oqtwu6QkMG4TovySkDsxBoaOUTOi5i+eZcgro4rgPhs6Rx5BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SN/OXxpH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1726106780;
+	bh=7EY64P4Wz6Bj+ihgN1jy4vBFG87DVZX4iYu1S5XrSyA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=SN/OXxpH0p8EUgjeRIMTdOzBJXevKHsGVYJ4XFxGKg22TGIRWPUhHhfiJN3MJcO5B
+	 z9NXr+FvFlruZd2kJj0PlZIGXO5FFG36oMH5urPKrE9dp7fvn4Fm/PHv+MHAz9xGNv
+	 TEq/B38eUO8y9I5v19HDV+rYKLiYZy3kq8SOTjYB6j4YLJGHqzfKdIHH7RFwaxSdJP
+	 rUq5UhFmA2dkBT9T32Ss8I8K/gyCiYfxCMPQADg9qN0tdwC6R5ptJVkOf0u+jgSnt+
+	 XciEOTtpDfQClzjdTGHHayK+12RQE16xBJ5uFNuhBWEpcCNDIIb+GhTvUI73R9bWd9
+	 UjUJU90KiXnnA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X4158336Xz4x21;
+	Thu, 12 Sep 2024 12:06:19 +1000 (AEST)
+Date: Thu, 12 Sep 2024 12:06:19 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Leon Romanovsky <leon@kernel.org>
+Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, Yevgeny
+ Kliteynik <kliteyn@nvidia.com>, Yishai Hadas <yishaih@nvidia.com>
+Subject: linux-next: manual merge of the net-next tree with the mlx5-next
+ tree
+Message-ID: <20240912120619.38fa7556@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240911101810.1d5dde08@canb.auug.org.au> <CAK7LNASLc=ik9QdX4K_XuN=cg+1VcUBk-y5EnQEtOG+qOWaY=Q@mail.gmail.com>
- <ZuGZNLHkUm+MOYpk@oracle.com>
-In-Reply-To: <ZuGZNLHkUm+MOYpk@oracle.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 12 Sep 2024 10:49:53 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQTS9mk7q4Z1f7W+z4WOGT_hfOY87_Xe1=Sw99fyoMj4g@mail.gmail.com>
-Message-ID: <CAK7LNAQTS9mk7q4Z1f7W+z4WOGT_hfOY87_Xe1=Sw99fyoMj4g@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kbuild tree
-To: Kris Van Hees <kris.van.hees@oracle.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/yAsEKALhRxOwIVMB0Th_wGg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/yAsEKALhRxOwIVMB0Th_wGg
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 11, 2024 at 10:21=E2=80=AFPM Kris Van Hees <kris.van.hees@oracl=
-e.com> wrote:
->
-> On Wed, Sep 11, 2024 at 06:38:19PM +0900, Masahiro Yamada wrote:
-> > On Wed, Sep 11, 2024 at 9:18???AM Stephen Rothwell <sfr@canb.auug.org.a=
-u> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > After merging the kbuild tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >
-> > > make[3]: *** Deleting file 'modules.builtin.ranges'
-> > > /bin/sh: 1: scripts/generate_builtin_ranges.awk: not found
-> > > make[3]: *** [scripts/Makefile.vmlinux:47: modules.builtin.ranges] Er=
-ror 127
-> > > make[2]: *** [Makefile:1157: vmlinux] Error 2
-> > > make[2]: *** Waiting for unfinished jobs....
-> > > make[1]: *** [Makefile:224: __sub-make] Error 2
-> > > make: *** [Makefile:224: __sub-make] Error 2
-> > > Command exited with non-zero status 2
-> > >
-> > > Caused by commit
-> > >
-> > >   04b15cdd611a ("kbuild: generate offset range data for builtin modul=
-es")
-> > >
-> > > I do not have gawk installed - I do have mawk installed (as awk).  Do=
-es
-> > > this script actually need gawk, or will just plain awk suffice?
->
-> The scripts does need gawk because other flavours like mawk do not have t=
-he
-> features that the scripts depend on.
->
-> > >
-> > > I have installed gawk.
-> > >
-> >
-> >
-> > This is what I was worried about.
-> >
-> > As Documentation/process/changes.rst was modified in that commit,
-> > it specifically requires GNU AWK.
-> >
-> > Anyway, you were able to fix the build error
-> > by installing /usr/bin/gawk.
-> >
-> > If a distro installs gawk somewhere else,
-> > (/usr/local/bin/gawk, for example), it is a problem.
-> > The shebang "#!/usr/bin/gawk -f" will not work.
-> > "#!/usr/bin/env gawk -f" will not work either.
-> >
-> > More people may start complaining about it.
->
-> For the generator script, passing it as a script explicitly to gawk would
-> work because then the regular PATH search will apply, i.e.
->
->         gawk -f scripts/generate_builtin_ranges.awk <args>
->
-> The scripts/verify_builtin_ranges.awk script can be invoked the same way,
-> or simply as an executable script if gawk is installed in the standard pl=
-ace.
->
->
-> Other utilities that are executed during the kernel build seem to depend
-> on being found using the PATH, so perhaps changing the recipe in the make=
-file
-> to use gawk -f <script> <args> would be an acceptable solution?
->
->         Kris
+Hi all,
 
+Today's linux-next merge of the net-next tree got a conflict in:
 
-I think it is better.
+  include/linux/mlx5/mlx5_ifc.h
 
+between commit:
+
+  c772a2c69018 ("net/mlx5: Add IFC related stuff for data direct")
+
+from the mlx5-next tree and commit:
+
+  34c626c3004a ("net/mlx5: Added missing mlx5_ifc definition for HW Steerin=
+g")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
-Best Regards
-Masahiro Yamada
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/mlx5/mlx5_ifc.h
+index 65bbf535b365,b6f8e3834bd3..000000000000
+--- a/include/linux/mlx5/mlx5_ifc.h
++++ b/include/linux/mlx5/mlx5_ifc.h
+@@@ -313,7 -315,7 +315,8 @@@ enum=20
+  	MLX5_CMD_OP_MODIFY_VHCA_STATE             =3D 0xb0e,
+  	MLX5_CMD_OP_SYNC_CRYPTO                   =3D 0xb12,
+  	MLX5_CMD_OP_ALLOW_OTHER_VHCA_ACCESS       =3D 0xb16,
+ +	MLX5_CMD_OPCODE_QUERY_VUID                =3D 0xb22,
++ 	MLX5_CMD_OP_GENERATE_WQE                  =3D 0xb17,
+  	MLX5_CMD_OP_MAX
+  };
+ =20
+
+--Sig_/yAsEKALhRxOwIVMB0Th_wGg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbiTJsACgkQAVBC80lX
+0GwXngf+I5zGCibJDVdqJObnIZJkTTXe44xICnDpKm2rvF9TASWStLrdzzl173k0
+kLaFEWNHDL9EG/u5mDFbGSU9jE1k9GEmhJvy1UvQKfXTC9MyUo5LhvF4XIWh7bjQ
+U5YBbNgMrCy3S5mR6Hp4YnWifVTI97AL/XsgwIKysAoCl/GdDuBiBwm+bHBzHUrS
+1S2MgV7LlSMcQuZom9KZJO1fBp/CSgYtV3O2TSpQCgM8TTJaobg3aSgonQl+P6ZJ
+JTBrdUtOtSTTMYn/B65cLFEbZeItU4TyG21uwLGjm7ExHnAZW8rjzpRIe2ezmJOY
+OrRBeVMA2F5kCctkOKERijjmFVIw/Q==
+=UNJw
+-----END PGP SIGNATURE-----
+
+--Sig_/yAsEKALhRxOwIVMB0Th_wGg--
 

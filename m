@@ -1,145 +1,112 @@
-Return-Path: <linux-next+bounces-3796-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3797-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAA17976935
-	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 14:31:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB5E5976B58
+	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 15:58:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C3261F22D6E
-	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 12:31:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD6851C23566
+	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 13:57:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABE4F1A255A;
-	Thu, 12 Sep 2024 12:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F451A4F2F;
+	Thu, 12 Sep 2024 13:57:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Swn5fGTI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YZJwDmzk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sdjevSe7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0556DA47;
-	Thu, 12 Sep 2024 12:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D70E17966F
+	for <linux-next@vger.kernel.org>; Thu, 12 Sep 2024 13:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726144297; cv=none; b=qZtXRFx8fupGaaVWv1H0SSB98wUjHDHvC9IinNRwfdPjxG+WqWilbUF0m74P665rZwD0wtN94tBiZAZ5I1TC/i/YHdpJS9UFfPBECYctt3rnj6tG74iE18VTWLBPt/IEdG4f9U44dQ25dPvc1UxLWh5Nryiv9dMVg781+BmB3WA=
+	t=1726149476; cv=none; b=uqGOgfE855hiHrcMEWy3HlGl4axsvcZOpLetqmd2OTLCaLddt+qLURpCzZx8mStPZqQeJbntOEbWuNskc/nT8OzZaagD4sXLutF5RbYjvnU5lTVjajOZhSwn+S7GJWIhbbUToA9YfaTjEkPQHvu1m4mksTlBhNmBc7yfUtZrsL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726144297; c=relaxed/simple;
-	bh=q5zGyhNSihhxXuYK0xTUhIyVadAALCa6grEnzu24Ex8=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=mMZNP46lqum29YxoaKZ4hmHQdh5UNaj0sDxTjlPbPLryag33TTC16JZy9X/bYfaUCRjaI0BmpteimMBdBjSyUaZmyklTBNQsgPGpEdncueIaM581ym0nnpQVjs0h5cdc9O2utcRLRidfC2PRyJYCXvUf+pu2hhclhmG9xiffM58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Swn5fGTI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YZJwDmzk; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 253251140128;
-	Thu, 12 Sep 2024 08:31:35 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Thu, 12 Sep 2024 08:31:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1726144295;
-	 x=1726230695; bh=CnvwBBotXnuqrnDpPxLojv5OlDxpU/UsyUOZLrNkPpY=; b=
-	Swn5fGTIrC5/YGFiMe4txbDpad41NofRv5qT/S4IN5j4TYOYibKeYBLrrgUsKjZM
-	gkwdas1PG5bHlxt1cbMKo7KvGeBeztd/hxDNOgWVgMpZv7WlMz3nopGc0AvDsGy1
-	3P7JRRwQYWE2D4FrDNn6lefVTFgd+L0/eJoaxYclILDJt+SqyPa7Jf2tI8B6RC23
-	HJohteQcIqXKxMDTtZLuQel4ZY+Wc9rM32UjTZ0lmW7Ho+KkC7uTPyaumMV47Vmw
-	gX2wHBwBOrKV2IB8ROLQ9ut3xVd2R1zwBJJOuTvgJMvDBi6w+qGxqFVj5+MZi/+a
-	qjk3E3Jnxrr/3iw6uIbgHg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726144295; x=
-	1726230695; bh=CnvwBBotXnuqrnDpPxLojv5OlDxpU/UsyUOZLrNkPpY=; b=Y
-	ZJwDmzkr25ocJySYeKXQBqQqXjkZpp2VohupTJKfpd5upAUpvPku5rudrIiD15yW
-	k7UKTkfpCwrP+TLP7N5O1Eryc23VRfR4GuDXTvPbr9/pHyIQQ/wcq0J1YLw4Jhgf
-	O1ngbiRV7ANk4n33c8PtbtpwANX0++InIpTiG/+U4Ma/vGxEHXRgAbjf8bQMMv3O
-	2wWUSxN+L4CPbj+cNqRjrBwpaYTEMN3fmjj2vE/dN9VemWMrqitf5MNmM/xvGAX+
-	TqNXhG8QBDB5Kg+k2CI25SDORhgBv2h45E9B7ua0Hx4qDOm1hsadDkDpkBGHo6rE
-	ZNuLmC5VHyzBAecx0pNoA==
-X-ME-Sender: <xms:Jt_iZms40TSd42vyMcg0kWimiD55OmvIyP5njuecJBmYHBpB_Ucf-w>
-    <xme:Jt_iZrdDX4pgzASpowuh8pXLOB3QwASAhWe_RDkorq7xAnwiEN9PXP19HfYKMqnWg
-    diXukNyFShFNzNEQlw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejfedgheegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedp
-    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhhtuhhrqhhuvghtthgvsegsrgihlh
-    hisghrvgdrtghomhdprhgtphhtthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgr
-    uhdprhgtphhtthhopehssghohigusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlih
-    hnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdp
-    rhgtphhtthhopeholhhofheslhhigihomhdrnhgvthdprhgtphhtthhopehlihhnuhigqd
-    hkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhig
-    qdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:Jt_iZhyXepdSNvl1MKuN5tNcTUcyn0IjU-7rxUiUcHMxt4s4AMVaiQ>
-    <xmx:Jt_iZhPrqH1VJphYQkOyxZnpxLAxbECagT0_3qSrEIeJDoxRvjML5A>
-    <xmx:Jt_iZm_t5q-3NpfdDM17LUzL-djzwYEi2Of0tVcCezJFpTj-crHABg>
-    <xmx:Jt_iZpVu3wPocytywoWxoi3v4UfXSt8Hs0gmBx8c995XJN3rdeZ3Cg>
-    <xmx:J9_iZmyOeWcz1_sFMq_e3IP35L7BGZi7WNhBnRHnq4em8ld8p5nIi-mz>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 9B5E7222006F; Thu, 12 Sep 2024 08:31:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1726149476; c=relaxed/simple;
+	bh=2t6DDl14FPTQBxdkXhrMD1mgAQ7ENfFgTaBWL8nte+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NnaMu06zJp+xvdL4zwWYOmWnuiwpsUsquAqyIN8a8xL6PKRNherN3aHyLHC8XSX4q11sB45qlgOQZ+xTda4dMDAVzR06zEXuAd4JVvuDi6gB6cwIYO5lnkAxQYeMtHPGHlRh1M03B8AtR5qUQZ4BdgEL0jtMr9bA4GiQ54RgkAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sdjevSe7; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-535694d67eeso1024072e87.0
+        for <linux-next@vger.kernel.org>; Thu, 12 Sep 2024 06:57:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1726149473; x=1726754273; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BquzwUboHzXTtdjd0oA0kjxZhS1hFAwbnuUx4HBJ0HA=;
+        b=sdjevSe7zdUduecM/dZeRauUEqYexVDyD9gGVTnbJ559VjhFxGp+uQN5YdpxU2MtGa
+         a1Jdr2UsOHZPmCTC4z1/KnL0Vkgi8sHbqYfM0dc73fMT7IdX0r3DJzznj/pct9DpMOvH
+         O8P9oWg2YsVx7UeRaf6ISPE1CS1i42PCHppCk3HUpZKrj9A1xRYRxvsNGTGHZ0eYU7D2
+         nsLcG+MdqKDHYzOnf5HeWiHILJp8nYTj+xCbg8c55dZCZhjV+6z0jd2GO/eaetVipP5D
+         gJeJ6NuMQjhmux3yDeZfEEAdRQU5rYJiypAmYgaWrS+mCn8+C80KdyKj4xQtfXn/cZGE
+         9e5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726149473; x=1726754273;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BquzwUboHzXTtdjd0oA0kjxZhS1hFAwbnuUx4HBJ0HA=;
+        b=CfPvCAf0ZogQOveB76YgWgCsYD2Qv2zvEzhl8VB+0S3QLjuEumZdtm3+oetxHSIYqU
+         cmgvTREZQAG4nR7oGO/6R6Fc9mwfheANzlxqod74vosN7if+3ILrxZZ9usQW65rzSyxe
+         5OE+HHnQnPtuu8iDS1C/lRjyeDnkU/4b3BfanakzREUbEcp7/76wi4gRpE6seAV3jTBC
+         9FfEbH9I+gV9Q1h2DCtraXprvK10bVWZWOe48jlo9OAdPnf2+LA+hriw4zSG2obIXf0V
+         WvxmQTSMQjNc6+cZVCj+iB32tZw0ScWY2Edx4NAJFCCJ3C9RDeGcpJAJtV/DXYgmBQse
+         eVgg==
+X-Forwarded-Encrypted: i=1; AJvYcCWq/gArNjYZRU0+0o+pDNNHN5N8DeO5Wr+sfaf2eY0J/UyWkb3y/sPxHpoSKIbH370pGKHH5P7FxUsq@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnvlXIuVtkhY5G1sYlIdFI5/S3ZG5OLeVXMdvN6/0lVltMGxFE
+	mVY2rn4UrHRrLcUFoeheFDuGE2tYsDXkOpwtK99GuU1UTB/TYF+mU34A0oURl6gi3Ohm7OKPgIG
+	5
+X-Google-Smtp-Source: AGHT+IHHjX/elZwmUhRzKmMZTPFW8UNakvXLNck40dZybOYY8Xg9afuQtW40j5sB4fM0Jm7lNQ5O5A==
+X-Received: by 2002:a05:6512:3d93:b0:533:32cf:6420 with SMTP id 2adb3069b0e04-53679075a23mr986727e87.8.1726149472778;
+        Thu, 12 Sep 2024 06:57:52 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5365f868cc4sm1923399e87.33.2024.09.12.06.57.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Sep 2024 06:57:52 -0700 (PDT)
+Date: Thu, 12 Sep 2024 16:57:50 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Simona Vetter <simona.vetter@ffwll.ch>, 
+	Maxime Ripard <mripard@kernel.org>, Intel Graphics <intel-gfx@lists.freedesktop.org>, 
+	DRI <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm-misc-fixes tree
+Message-ID: <porwsaq63pizqyzq7agmt72lmowramhp6z5yqgu4fzs5n624ge@wyvmaahjmx7b>
+References: <20240904163018.214efaa7@canb.auug.org.au>
+ <20240911180741.45311006@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 12 Sep 2024 12:31:14 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Stephen Rothwell" <sfr@canb.auug.org.au>,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>
-Cc: "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- linux-next <linux-next@vger.kernel.org>, "Olof Johansson" <olof@lixom.net>,
- ARM <linux-arm-kernel@lists.infradead.org>
-Message-Id: <a69d050c-598a-48ae-8d39-a050e4ae0ef3@app.fastmail.com>
-In-Reply-To: <1bd91561-73dd-454e-91ab-49fce29eecb0@app.fastmail.com>
-References: <20240912105349.0453d06b@canb.auug.org.au>
- <20240912105551.6e3a33d2@canb.auug.org.au>
- <1bd91561-73dd-454e-91ab-49fce29eecb0@app.fastmail.com>
-Subject: Re: linux-next: duplicate patch in the clk tree
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240911180741.45311006@canb.auug.org.au>
 
-On Thu, Sep 12, 2024, at 12:14, Arnd Bergmann wrote:
-> On Thu, Sep 12, 2024, at 00:55, Stephen Rothwell wrote:
->> Hi all,
->>
->> [just cc'ing the arm-soc contacts]
->>
->> On Thu, 12 Sep 2024 10:53:49 +1000 Stephen Rothwell 
->> <sfr@canb.auug.org.au> wrote:
->>>
->>> Hi all,
->>> 
->>> The following commit is also in the arm-soc tree as a different commit
->>> (but the same patch):
->>> 
->>>   706ae6446494 ("clk: fixed-rate: add devm_clk_hw_register_fixed_rate_parent_data()")
->>> 
->>> This is commit
->>> 
->>>   f579278d690c ("clk: fixed-rate: add devm_clk_hw_register_fixed_rate_parent_data()")
->>> 
->>> in the arm-soc tree.
->
-> Right, this unfortunately has to stay in the soc tree as a dependency
-> of the ep93xx driver.
+On Wed, Sep 11, 2024 at 06:07:41PM GMT, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Wed, 4 Sep 2024 16:30:18 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the drm-misc-fixes tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> > 
+> > Error: Cannot open file drivers/gpu/drm/drm_bridge_connector.c
+> > 
+> > Introduced by commit
+> > 
+> >   9da7ec9b19d8 ("drm/bridge-connector: move to DRM_DISPLAY_HELPER module")
+> 
+> That commit is now in Linus' tree, but I am still getting the warning.
 
-I figured out now that this was originally merged into
-my tree as a shared dependency and I accidentally turned
-that into a separate commit. I've fixed it up now, using the
-commit from the clk tree.
+Pushed out the fix to the drm-misc-fixes branch.
 
-      Arnd
+-- 
+With best wishes
+Dmitry
 

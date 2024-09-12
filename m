@@ -1,123 +1,146 @@
-Return-Path: <linux-next+bounces-3801-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3802-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70746976CC2
-	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 16:53:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2616976DCF
+	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 17:32:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 275D61F25007
-	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 14:53:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 999272824D8
+	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2024 15:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14B9B1B12E8;
-	Thu, 12 Sep 2024 14:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BCA126BF9;
+	Thu, 12 Sep 2024 15:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ua61OiDC"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=martyn.welch@collabora.com header.b="ADnssp9F"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD971AED55;
-	Thu, 12 Sep 2024 14:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726152791; cv=none; b=CM041hoSS49Pmni0FX/faewNC6LwlVSct7fxbh/X5JdKx0aDyPBPl8C9hPW0SoYU3SbGpgU19ruM4okAwCTbhOndUbrsV9GkBQBDiKOQUlPszrGvR93HAouMgaWc6zAqYdD6U+phOTm15VdzYPCYN8NunCZlhx5VNUaTEa4XEVk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726152791; c=relaxed/simple;
-	bh=SFYVUrHvTz1LjiXVaRAeG1Lw5s82K9dKcNaka1jyd70=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dhvh+z9Jt0JJ4FW5XYyDtEHui8HhsMHUTFLdam8BEHft6F2Hw2LBvI61e7eeUSDvWlqgf4HZVQYA9lCjfmZ17+ilGl4LwTb06LFuVCteLRvenS+oirThe5IUAiqfkLEE2VAzTY5S2cUu4g8tZ2gV9VSprz/BZNofZ/KguaSZm64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ua61OiDC; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726152789; x=1757688789;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SFYVUrHvTz1LjiXVaRAeG1Lw5s82K9dKcNaka1jyd70=;
-  b=Ua61OiDCkiQWopc+sfVe7i464gZI7TLWlUQaRRLVgppj3zjogzRXU7qs
-   0eqGPTcnCoG4Um3tHCQ9KdNBW1Uosk+ohfha57pQoZTXeX3A3dZisDni/
-   XfcTnyIJDI1KebE1N9HwoLn88y3mVECP54dvzzTDlIXxkBKqatr3hmo8G
-   4kPCSUA6IcZxDRVQriwEL3Sv6A8nk2HHP2FiVcZ0Qf2UpaH6iPlqG0sVY
-   wdkIR487XmGMn2Dpc56R3vZMRrtXOyc1XWGEEHNx7pCAD2XGSA2xrpILQ
-   TbBRhBa+wYtsO3NF3b4a1I7JKCzX1s0P9IuYUmHfIf33ZolqmJfARlyZ0
-   A==;
-X-CSE-ConnectionGUID: qHgg0mexRQeZRHhM3M817A==
-X-CSE-MsgGUID: Vx2oi0vORLGISSomAfVG6Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="35602281"
-X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="35602281"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 07:52:19 -0700
-X-CSE-ConnectionGUID: Fxu1osJQSjqgDkPKomufOw==
-X-CSE-MsgGUID: KGUj0RxQQoCufEtNIn2Oxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="67568478"
-Received: from linux.intel.com ([10.54.29.200])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 07:52:19 -0700
-Received: from [10.212.20.231] (kliang2-mobl1.ccr.corp.intel.com [10.212.20.231])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by linux.intel.com (Postfix) with ESMTPS id A607720BF401;
-	Thu, 12 Sep 2024 07:52:17 -0700 (PDT)
-Message-ID: <8571bb0e-7f5a-4fd6-80f1-6b66b5110488@linux.intel.com>
-Date: Thu, 12 Sep 2024 10:52:16 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEEC44C8F;
+	Thu, 12 Sep 2024 15:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726155166; cv=pass; b=DqT3Tvus+ClDEbP395QOGJtS9lU14HWNsPQ+u1bUGJX57JwggW4lBH8ry8y+n6nRK66WEcfYvciq8yMjNRjE5mWfNyz09dvvkXXkky7Q8Al6zyrVF5kEQVsbyDrutaZ8VL7DRO3KhZFbQZ6T6ldcnQj85WWUGZZGBwmzKSEleA8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726155166; c=relaxed/simple;
+	bh=YV9YcH/288vAjtNfsh/90bu+74L4xPu9n7Huwp4eayU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=H5apPPptgdrrHAtNKkQdu9ynazAyG3SxXWdEAHmTl8Ipx+/h8LdNmSYBfVwViqsFzbsuZDry16z/+dVGHeqJyUyqGVa+YRHsxHJBFoXey9wBx/02QPanzWVqEuXA7CXk+dtiJALYLD3zznRu4iGWTNV4s5ZjpWmCRIJW6KIOIp4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=martyn.welch@collabora.com header.b=ADnssp9F; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1726155160; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=kscO4jdLhxvHd6mk64ppAKG54LVWJIwn5WsMtgRzjyamuKm+0ixWqlJdImjL5Y2E3kOyC5nFaCqp/T2BvQjPErnu7W65niRQNRdmwv3VOE3PFgAesnRDnGMg1bkgb/tmcpGiIt7FQ8EK6bUDh9uFkMKmcfjVIK/oiU31ylMLpas=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1726155160; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=YV9YcH/288vAjtNfsh/90bu+74L4xPu9n7Huwp4eayU=; 
+	b=eWtSmILYgIo+nqXPJxUq4g4kJE3pz/8ce3XD0sUY4Wn5lg3KR3oeVGe0Eu09XPt+XVs2DbgnvuAs1F9Uj7/CtIllWj/jTfvkUjzvCABKll07oOeHRIB+t81GjXnIhTDnWy5KbDbS847cZrO/PajaNPxylkGNsNllD7c2N/Ci6wE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=martyn.welch@collabora.com;
+	dmarc=pass header.from=<martyn.welch@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726155160;
+	s=zohomail; d=collabora.com; i=martyn.welch@collabora.com;
+	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+	bh=YV9YcH/288vAjtNfsh/90bu+74L4xPu9n7Huwp4eayU=;
+	b=ADnssp9F6hO1o9podZiITeDZ9Qd/+EOSwCCU3vZEPl4g5bNaOQHgcvNs7YSwdfm3
+	Uv/vb2YBiN5rKu1GiQZ4p2wVYUVJrCInIKCZPPP82vKhkVtzn8UvKTHE7qBwI5MMOJ3
+	HeCE7zoOzXQm9XVlgqsYLwf/B76mgETSYGMN2QVU=
+Received: by mx.zohomail.com with SMTPS id 1726155158140886.7487074473904;
+	Thu, 12 Sep 2024 08:32:38 -0700 (PDT)
+Message-ID: <a5f3b6c7029c9d431e28a8ba4ed886a1cf67fff9.camel@collabora.com>
+Subject: Re: linux-next: build warning after merge of the rpmsg tree
+From: Martyn Welch <martyn.welch@collabora.com>
+To: Jassi Brar <jassisinghbrar@gmail.com>, Stephen Rothwell
+	 <sfr@canb.auug.org.au>
+Cc: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier	
+ <mathieu.poirier@linaro.org>, Andrew Davis <afd@ti.com>, Hari Nagalla	
+ <hnagalla@ti.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>,  Linux Next Mailing List
+ <linux-next@vger.kernel.org>, arnd@kernel.org
+Date: Thu, 12 Sep 2024 16:32:34 +0100
+In-Reply-To: <CABb+yY07P0zs6nT2CrZ+TnO+2XxZKYUfEjyRj2wwn+zAx9T0iQ@mail.gmail.com>
+References: <20240822142603.3608a26d@canb.auug.org.au>
+	 <20240828150900.7ffd7588@canb.auug.org.au>
+	 <20240906183621.6c630b7f@canb.auug.org.au>
+	 <12e1eda76baaa67109da3798b1b184b4a94531e6.camel@collabora.com>
+	 <20240912183408.36acc6dd@canb.auug.org.au>
+	 <CABb+yY07P0zs6nT2CrZ+TnO+2XxZKYUfEjyRj2wwn+zAx9T0iQ@mail.gmail.com>
+Organization: Collabora Ltd.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.53.2-1 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warning after merge of the tip tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20240911153854.240bbc1f@canb.auug.org.au>
-Content-Language: en-US
-From: "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20240911153854.240bbc1f@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+
+On Thu, 2024-09-12 at 09:15 -0500, Jassi Brar wrote:
+> On Thu, Sep 12, 2024 at 3:34=E2=80=AFAM Stephen Rothwell
+> <sfr@canb.auug.org.au> wrote:
+> >=20
+> > Hi all,
+> >=20
+> > On Fri, 06 Sep 2024 09:58:23 +0100 Martyn Welch
+> > <martyn.welch@collabora.com> wrote:
+> > >=20
+> > > On Fri, 2024-09-06 at 18:36 +1000, Stephen Rothwell wrote:
+> > > >=20
+> > > > On Wed, 28 Aug 2024 15:09:00 +1000 Stephen Rothwell
+> > > > <sfr@canb.auug.org.au> wrote:
+> > > > >=20
+> > > > > On Thu, 22 Aug 2024 14:26:03 +1000 Stephen Rothwell
+> > > > > <sfr@canb.auug.org.au> wrote:
+> > > > > >=20
+> > > > > > After merging the rpmsg tree, today's linux-next build
+> > > > > > (x86_64
+> > > > > > allmodconfig) produced this warning:
+> > > > > >=20
+> > > > > > WARNING: unmet direct dependencies detected for
+> > > > > > OMAP2PLUS_MBOX
+> > > > > > =C2=A0 Depends on [n]: MAILBOX [=3Dy] && (ARCH_OMAP2PLUS ||
+> > > > > > ARCH_K3)
+> > > > > > =C2=A0 Selected by [m]:
+> > > > > > =C2=A0 - TI_K3_M4_REMOTEPROC [=3Dm] && REMOTEPROC [=3Dy] && (AR=
+CH_K3
+> > > > > > || COMPILE_TEST [=3Dy])
+> > > > > >=20
+> > > > > > Probably introduced by commit
+> > > > > >=20
+> > > > > > =C2=A0 ebcf9008a895 ("remoteproc: k3-m4: Add a remoteproc drive=
+r
+> > > > > > for M4F subsystem")
+> > > > >=20
+> > > > > I am still seeing this warning.
+> > > >=20
+> > > > I am still getting this warning.
+> > >=20
+> > > I believe this is the required fix, but I believe it's waiting
+> > > for
+> > > review/merging:
+> > >=20
+> > > https://lore.kernel.org/all/010201919d8b298f-dd1585dd-7c4d-4865-9483-=
+ff6cd7399a90-000000@eu-west-1.amazonses.com/
+> >=20
+> > I am still getting this warning.
+> >=20
+> =C2=A0This
+> https://lore.kernel.org/lkml/20240909203825.1666947-1-arnd@kernel.org/T/#=
+u
+> =C2=A0 seems like a more complete solution.
+>=20
+> I am ok if it goes through TI or another tree.
+>=20
+> Acked-by: Jassi Brar <jassisinghbrar@gmail.com>
 
 
+That solution works for me.
 
-On 2024-09-11 1:38 a.m., Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the tip tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
-> 
-> kernel/events/core.c: In function 'perf_event_setup_cpumask':
-> kernel/events/core.c:14012:13: warning: the comparison will always evaluate as 'true' for the address of 'thread_sibling' will never be NULL [-Waddress]
-> 14012 |         if (!topology_sibling_cpumask(cpu)) {
->       |             ^
-> In file included from include/linux/topology.h:30,
->                  from include/linux/gfp.h:8,
->                  from include/linux/xarray.h:16,
->                  from include/linux/list_lru.h:14,
->                  from include/linux/fs.h:13,
->                  from kernel/events/core.c:11:
-> include/linux/arch_topology.h:78:19: note: 'thread_sibling' declared here
->    78 |         cpumask_t thread_sibling;
->       |                   ^~~~~~~~~~~~~~
-> 
-> Introduced by commit
-> 
->   4ba4f1afb6a9 ("perf: Generic hotplug support for a PMU with a scope")
-> 
-
-The patch to fix the warning has been posted.
-https://lore.kernel.org/lkml/20240912145025.1574448-1-kan.liang@linux.intel.com/
-
-Please give it a try.
-
-Thanks,
-Kan
+Martyn
 

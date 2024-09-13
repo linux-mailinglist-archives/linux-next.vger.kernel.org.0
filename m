@@ -1,51 +1,73 @@
-Return-Path: <linux-next+bounces-3846-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3847-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0B5A978AEB
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 23:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D22BE978AF5
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 23:56:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 976A81F24551
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 21:55:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 624ED1F242E2
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 21:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58963155A5D;
-	Fri, 13 Sep 2024 21:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D959185B52;
+	Fri, 13 Sep 2024 21:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BftAYHJv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ga52wdaJ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC56154BEC;
-	Fri, 13 Sep 2024 21:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3580A16F84F;
+	Fri, 13 Sep 2024 21:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726264520; cv=none; b=HNFiSW3+M6csNNhXHxF08uh+ameGMMRrYvloKAwuAwpkBG3eLnyuP0v/z2oj2Mwdn1vKyAiL7X5koimFMD1fs3dgzIPw99IXYaiJbKGVEQCeH2GtqBKP3O2f12KYBftf8Cx5sRARMQHfTKU5TIAAdnjk9aESrcNYf7YSRoVgoeI=
+	t=1726264524; cv=none; b=foDjkh7B7aDatEnhpbr36kaMWhuN7QFojsn1TYNM3bXxPegVRdg+T7h/HdreRujee089GHcOXyKNOy38zYQP3QiKcBZTb4AnUmfxMyz2MublgqAbSifo4IJLhrEA4+0Ht0jhrSYh6aEBoXAEtjMZtmhPJRS8uUxVxR5hwANbKRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726264520; c=relaxed/simple;
-	bh=PXZ5bq/R8wismh4l/7Ni+PqfNAENhrhH2dY2aSjTRRs=;
+	s=arc-20240116; t=1726264524; c=relaxed/simple;
+	bh=u+MeCczZIYRaXjrE0FY2iIhDa3bIycs/8aC+H36FxAo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eIuEca9d1kz7FV/fpQc7haKhdgverA3szNeaWYt+qIrFjgyYMcYxPIN6RzWajBwttjpPHbXIh8tE91YMKG21I9ansV8PSaHv9z9K6zfhdTl4BCzJpJrMGjTA2TKmsW4o4CSO/E6KfruJw0M4+eSBTELVMwVDnQwiRJC8EDcB7XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BftAYHJv; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=pYcOiVSFtM6gAUc1DuIBW9ANECfcrc43mQXwHg/pSfc=; b=BftAYHJvgSREGkU7w+OrOJ9pNl
-	l5QOEIvyUe0WReLuZVt+hsrsrsGdc7P9VrJN2u7GJDVsyZxaN2ANANJDephGlR1Nnfg2TKalfM7/o
-	IFN2mXqLRjEM4HS6WB8JVjVI6U+VDt+AyItBtOUZc4tpXtDNsKGkRhEo4SAcrpwy4nKJ/BzKUL3L4
-	oJwTH5wPCpm4CFi3OUFyTE3VGU5IOWXoE4cdhKjkyMiIVxufCwC5J6+jz/eHYJ3jEnV3OAJV8fACB
-	KjzfCS9qsu8m7590IaTeefwPOVOkbtU0fsOWV8k39vRqByFMlVqLcq8VbHgE5Jljv1YpJJZ1RB11T
-	6Zs++nPg==;
-Received: from willy by casper.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1spEG0-0000000H1xl-29kX;
-	Fri, 13 Sep 2024 21:55:12 +0000
-Date: Fri, 13 Sep 2024 22:55:12 +0100
-From: Matthew Wilcox <willy@infradead.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TagWwzh8PngqwSEAK80ceLFgS47Nd4qKfEgf9r6+g9u1OI0ckiM9oMXfBjO0DQ85N2nnFLItCi+SsI4wpgR7cZe8JtSPJveVaF7MU7i4abiO7UQ1tHKwop5YmguQF9PAVT1VEVzKnO+jZ3C49QblBq9QWYnu87bj27jGc0BLR70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ga52wdaJ; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2055136b612so33563845ad.0;
+        Fri, 13 Sep 2024 14:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726264520; x=1726869320; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c4PTjS5fX5Q389WHB/etaU28p0uL2TY5wkUk4Exja9I=;
+        b=Ga52wdaJsZWAA/dqxHtDM8mjfPPeU7CzDAszxUUQhU6FybrcDpH1lEEEJNdyDqIz7X
+         vAIfh2NyiJv9i9G3pln7mdG29AVeKfLal12X08mAP010NDAw9QDFvWgKVJ9Z6icWcQiT
+         bg1ZlUzmRPIanFz+fAw4yYCt/kYBA8/UkVnk300jk3uB5sP/7N17H+XtfepUPqlOlCH+
+         YLq7nwBaiczUdO/OPUgEjaGjnD81XtIpvRq9Xkf7Hz9MnmhMIHj8P/z5rbYG/9yochwY
+         qhC2Yx49Lp2Non7FSE/iboN7bvWu1E05Aasl+B1HlU7W2aVpZNYUZRGO1wKDShaKmGVo
+         APDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726264520; x=1726869320;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c4PTjS5fX5Q389WHB/etaU28p0uL2TY5wkUk4Exja9I=;
+        b=fuR4WJkT82ZXhnzDNAnUwjZ25hLEz0XAPBq6q7EoNgM2nSAqvMI/hyPVAGaYppj3po
+         WHvJTtfY3wa22sklbGI7Rc6eAdsOmlkdO9LSpjYMy6yHYatb3ZtonLT9dymzSkiOG0Xa
+         8J+B9c2A0LUjU8thH3HHAzb3C1KoeEFG5ULPjv9Ilcs4EDCO9+GEFN/INXeUfTbhoVoH
+         aWQ270CfNFRnAbyE5Gf0EX+hHlkgxkscLXaKzqOEr1mF7ETn5/mOIqCL3pX+no/VAR/s
+         BJ1zg1ukmGdL9W2hLEiisp9ae0ftn2Ss+0bB9vNvmzPatEWdcenG/LqMeg4TKtzgeanU
+         GqcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUuLUkTfS2781CePtm/ZyLC5CGYiI9kNF736G8afjzL8l44O/QpNYBMwr47cYVW891Jr2+i2iIskVdkcg==@vger.kernel.org, AJvYcCWeJ5Q3FJFu6jk4m1oYbe4s7wvWp0tRU9Y8p2pzzEZhkp9Dr+8ntdyiumsI37+LFhQWm2SPdgd7WT7RPhA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1XuvLJHQoW7E24a6Su4Tlmc/OOShODiKTFAd+MjmvZvujgvBQ
+	5p8U/Ib69iPtGTrBpd+yDv6FV3Lg/Y+FJ9W0Z0JsKt+v7N28vsM=
+X-Google-Smtp-Source: AGHT+IH5BwiPmrclx07PBc1QAqEq+dk1qo/Lw7Ssd5LW8hV09kF4E4owLL0iuRHRj3mllCztINhnDQ==
+X-Received: by 2002:a17:902:d510:b0:206:b4cf:3107 with SMTP id d9443c01a7336-2076e422055mr128280685ad.49.1726264520410;
+        Fri, 13 Sep 2024 14:55:20 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:2844:3d8f:bf3e:12cc])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207946d668bsm845185ad.141.2024.09.13.14.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2024 14:55:20 -0700 (PDT)
+Date: Fri, 13 Sep 2024 14:55:19 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
@@ -57,9 +79,10 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Stephen Rothwell <sfr@canb.auug.org.au>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	Matthew Wilcox <willy@infradead.org>
 Subject: Re: [PATCH net-next v2] page_pool: fix build on powerpc with GCC 14
-Message-ID: <ZuS0wKBUTSWvD_FZ@casper.infradead.org>
+Message-ID: <ZuS0x5ZRCGyzvTBg@mini-arch>
 References: <20240913213351.3537411-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
@@ -67,11 +90,11 @@ List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <20240913213351.3537411-1-almasrymina@google.com>
 
-On Fri, Sep 13, 2024 at 09:33:51PM +0000, Mina Almasry wrote:
+On 09/13, Mina Almasry wrote:
 > Building net-next with powerpc with GCC 14 compiler results in this
 > build error:
 > 
@@ -83,9 +106,7 @@ On Fri, Sep 13, 2024 at 09:33:51PM +0000, Mina Almasry wrote:
 > 
 > Root caused in this thread:
 > https://lore.kernel.org/netdev/913e2fbd-d318-4c9b-aed2-4d333a1d5cf0@cs-soprasteria.com/
-
-It would be better to include a direct link to the GCC bugzilla.
-
+> 
 > We try to access offset 40 in the pointer returned by this function:
 > 
 > static inline unsigned long _compound_head(const struct page *page)
@@ -165,7 +186,23 @@ It would be better to include a direct link to the GCC bugzilla.
 >  
 >  		/* It is not the last user for the page frag case */
 >  		if (!page_pool_is_last_ref(netmem))
-> -- 
-> 2.46.0.662.g92d0881bb0-goog
-> 
+
+Are we sure this is the only place where we can hit by this?
+Any reason not to hide this inside page_to_netmem?
+
+diff --git a/include/net/netmem.h b/include/net/netmem.h
+index 8a6e20be4b9d..46bc362acec4 100644
+--- a/include/net/netmem.h
++++ b/include/net/netmem.h
+@@ -100,7 +100,7 @@ static inline netmem_ref net_iov_to_netmem(struct net_iov *niov)
+
+ static inline netmem_ref page_to_netmem(struct page *page)
+ {
+-       return (__force netmem_ref)page;
++       return (__force netmem_ref)READ_ONCE(page);
+ }
+
+ static inline int netmem_ref_count(netmem_ref netmem)
+
+Is it gonna generate slower code elsewhere?
 

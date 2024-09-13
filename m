@@ -1,134 +1,180 @@
-Return-Path: <linux-next+bounces-3843-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3844-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 247DC9789E3
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 22:24:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD18E978AAA
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 23:34:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67FCD1C22C81
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 20:24:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D17691C23151
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 21:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3861A146D59;
-	Fri, 13 Sep 2024 20:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37C4156C62;
+	Fri, 13 Sep 2024 21:33:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMbr6xew"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QoFQYjQl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A03D1448F2;
-	Fri, 13 Sep 2024 20:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32ADF149C4A
+	for <linux-next@vger.kernel.org>; Fri, 13 Sep 2024 21:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726259080; cv=none; b=lyuAlExggDyb6eUft4+ZsBSMeFLJ3a9AprmKXkBc6R2Gtna/b2CUVRA07q7ccImyhcbkh8WO+BKYkOJxoetmtikwYmStn8pnlMtq9pfMLjdznf/KFGjO5se71QmnTLO/jG98cJI6tGwmNR1iVGR304ggTwxoXBjgIu50jJBEH8s=
+	t=1726263236; cv=none; b=e6yJZkME50kT8x02arDjUpD6E+XXrd/jDFmiwkPGgj1wdOCBIBxHy8Dq3osF+NruvRt56ERimL9PMWNj6TPyS1WP/MGZ/SiYsCWRscTDA5Pm/UgN/gXMfCafqmcl9c/H5hNi+qe8A8IGU2r+BD6RqY+nameeMHim/x1pLvrhwkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726259080; c=relaxed/simple;
-	bh=SLAQonTzL+ETpOKN32UdFXtUV4JfAqDvyG7i/mcZUuY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fpfm7wamNd8lgKz9QBzJX2MotzM7KQkqBtwsxVKRRcPzXog2fEmKtgg+SLATdNTUMC5clG5TWOIzFeRQUpgGXh89O5dl1XWhdg/toHgaxA03U0CycLKHSaH8hQhFJwrP7v9GgCqdGulzSfvMUx431EC3mzPyEjPCviyAzPujwE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMbr6xew; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39B63C4CEC0;
-	Fri, 13 Sep 2024 20:24:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726259079;
-	bh=SLAQonTzL+ETpOKN32UdFXtUV4JfAqDvyG7i/mcZUuY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZMbr6xewxaHNK3ojM9J9pajyvXeWe5WgsUPGP70h8Yc4iy6AYb1YF3RogVna6Y43l
-	 eX/Wjf3kxcl0yNJpZV4VHvb1N5Hq+IQW3OjMCY0AngOQVPcqbEK5sgh4QkYnkLwSgd
-	 t8kqzXb3u07J+r4Xzx/qOMlPwkbxOln0ZBXWntIKo9gUC5AB7/3opz8rEuxyJrpMGX
-	 jI66HLUDzuayUrQw/4C6+rUMQcRSw01t5/t03SACah6W8x1LwStSwZdXzWz2sFFlkv
-	 VhQOhkT+iOxlhLl2A8Bra8P+gTU+BdYAqgpIdFnoFcSkze/BkELe5gkr45it+JfCBl
-	 2QZv4LSzZaMfg==
-Date: Fri, 13 Sep 2024 13:24:38 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Matthew Wilcox <willy@infradead.org>, Stephen Rothwell
- <sfr@canb.auug.org.au>, christophe.leroy2@cs-soprasteria.com, David Miller
- <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, Networking
- <netdev@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20240913132438.4235abe4@kernel.org>
-In-Reply-To: <CAHS8izNSjZ9z2JfODbpo-ULgOcz1dGe5xe7_LKU-8LzJN_z-iw@mail.gmail.com>
-References: <20240913125302.0a06b4c7@canb.auug.org.au>
-	<20240912200543.2d5ff757@kernel.org>
-	<20240913204138.7cdb762c@canb.auug.org.au>
-	<20240913083426.30aff7f4@kernel.org>
-	<20240913084938.71ade4d5@kernel.org>
-	<913e2fbd-d318-4c9b-aed2-4d333a1d5cf0@cs-soprasteria.com>
-	<CAHS8izPf29T51QB4u46NJRc=C77vVDbR1nXekJ5-ysJJg8fK8g@mail.gmail.com>
-	<20240913113619.4bf2bf16@kernel.org>
-	<CAHS8izNSjZ9z2JfODbpo-ULgOcz1dGe5xe7_LKU-8LzJN_z-iw@mail.gmail.com>
+	s=arc-20240116; t=1726263236; c=relaxed/simple;
+	bh=MkfVfrMFBKZhPzzuv+Q0xVR3iXUZ+B4XFBxm6rOnls0=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=OeLZ0E/tKP909Zt8e2mupHUTrOMdYbGL3xllJi+AydWy1T9jj1dP45IJabHXK/+rlzBtqfz9z3BA93H0vDQpwUCZh+Z78hH3ciLFsruRhepiKduB5EU9Obavx1gvq+FQbKneiJP2ZrFRnIAdcYi2ZdzFsWyji/d8HwAgG9d5BZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QoFQYjQl; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e178e745c49so3683310276.2
+        for <linux-next@vger.kernel.org>; Fri, 13 Sep 2024 14:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1726263234; x=1726868034; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=C2T8h7PkrQu/P499dIgiz7AXqfHfFO+K5APloBO//pM=;
+        b=QoFQYjQl1+5kVQKjtEzm2JVSsopQvSglmU5Q7R2QcEcycNjdPMo01NbasT8U4dK3aq
+         7Vm+wXO5bhQb4dvmaSC1UyigjIy4S7d4zdt5qgWi0kZHi7R9uNlthux8EdlLOwAn3RWS
+         kk99W1ntSiv5iC1w3bl6ge6YaZjGdJrxaYBi1TkxiqrnRsLk0KWwJbFp4VpKm8/LWpL4
+         ai27a1ZQhcohisdk6R6F4RzOus4paD7pdZPZoJvywfe1Ps5TdxP0uIcaFLsgot7y5Wia
+         tja+8MJ4xYy2SKDwU/F9M0Y4mPF/GiEK1/0zM6faXGsc9bFnQ0S3ccQRSlRncCUdKV0Y
+         s7AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726263234; x=1726868034;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C2T8h7PkrQu/P499dIgiz7AXqfHfFO+K5APloBO//pM=;
+        b=GbxF8qI9AMDUJQ7Tzqmhi30XVOR2xKDu5q6tn/IYa9P2wWbHmTn93sroFooy6mGevH
+         jGBT8ShtPrOXTw9fsx4rGCRBJmMlP/7mfwBiGAFL1FyYOrzGUuk9LWxmcJujpF7K3z13
+         HILAcx1//fAF/rqTOifE9g6Bd/iCBofy0+eI1bDDURzu2TbCPIzzvwDpeqECRS2GysRD
+         KTVZEapL1pIB0+6NE0sinQf4Wx4cBGE/85nflDeiI65Vzo/VRr8HstvXPLjMkGMAZSzJ
+         J7Chbm1xdf/daMWjqhq2GhaaMwru7IQeM4MYcPReDZZUzeaxBHqO3up3N4SZK3DmnAcj
+         9bsA==
+X-Forwarded-Encrypted: i=1; AJvYcCWaY7w20WBexQGinX2DxTmdCaLqmQquDrr8QvOi5yQc6kgpbU+K2R/6V9rWc76eC+pGNhfqcqVYh+XS@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvvrnaY7dN75DqWxfl7j8oAOyfb8MiLMrErwPYFPM9yvw1XeWK
+	5xow3mXZH9J76VsJS5M8eLUOU+0etMDWW1ueiGLgrH5USEaiw21QV5rXWUpWfoQo1wuci++JcSA
+	/KjW/rVdFzBXDkEm/BZ2zKQ==
+X-Google-Smtp-Source: AGHT+IGKRzJx5PjSFO3E8tqWdgVC95OAYqJ2OCpdJ9chaj4/FshFhL9QqOypm1YXq6OH+fxO5D7luhUe9GMEMnCStg==
+X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
+ (user=almasrymina job=sendgmr) by 2002:a25:cec3:0:b0:e1a:44fa:f09 with SMTP
+ id 3f1490d57ef6-e1d9db95493mr10461276.2.1726263233997; Fri, 13 Sep 2024
+ 14:33:53 -0700 (PDT)
+Date: Fri, 13 Sep 2024 21:33:51 +0000
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.662.g92d0881bb0-goog
+Message-ID: <20240913213351.3537411-1-almasrymina@google.com>
+Subject: [PATCH net-next v2] page_pool: fix build on powerpc with GCC 14
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Mina Almasry <almasrymina@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 13 Sep 2024 13:05:32 -0700 Mina Almasry wrote:
-> Change, got NAKed:
-> https://lore.kernel.org/netdev/ZuSQ9BT9Vg7O2kXv@casper.infradead.org/
+Building net-next with powerpc with GCC 14 compiler results in this
+build error:
 
-Humpf.
+/home/sfr/next/tmp/ccuSzwiR.s: Assembler messages:
+/home/sfr/next/tmp/ccuSzwiR.s:2579: Error: operand out of domain (39 is
+not a multiple of 4)
+make[5]: *** [/home/sfr/next/next/scripts/Makefile.build:229:
+net/core/page_pool.o] Error 1
 
-> But AFAICT we don't really need to do this inside of mm, affecting
-> things like compound_head. This equivalent change also makes the build
-> pass. Does this look good?
-> 
-> diff --git a/include/net/netmem.h b/include/net/netmem.h
-> index 8a6e20be4b9d..58f2120cd392 100644
-> --- a/include/net/netmem.h
-> +++ b/include/net/netmem.h
-> @@ -100,7 +100,15 @@ static inline netmem_ref net_iov_to_netmem(struct
-> net_iov *niov)
-> 
->  static inline netmem_ref page_to_netmem(struct page *page)
->  {
-> -       return (__force netmem_ref)page;
-> +       /* page* exported from the mm stack would not have the LSB set, but the
-> +        * GCC 14 powerpc compiler will optimize reads into this pointer into
-> +        * unaligned reads as it sees address arthemetic in _compound_head().
-> +        *
-> +        * Explicitly clear the LSB until what looks like a GCC compiler issue
-> +        * is resolved.
-> +        */
-> +       DEBUG_NET_WARN_ON_ONCE((unsigned long)page & 1UL);
-> +       return (__force netmem_ref)page & ~1UL;
->  }
+Root caused in this thread:
+https://lore.kernel.org/netdev/913e2fbd-d318-4c9b-aed2-4d333a1d5cf0@cs-soprasteria.com/
 
-Hmm. Not really, the math this is doing is a bit of a cargo cult,
-AFAIU the operation itself is meaningless. It works because it
-achieves breaking the optimization/register chain in the compiler.
-But the exact ALU op doesn't matter. So pretending LSB is meaningful 
-could be confusing to the reader.
+We try to access offset 40 in the pointer returned by this function:
 
-I think this will achieve the same effect without the spurious ALU
-operations (apologies for broken whitespace):
+static inline unsigned long _compound_head(const struct page *page)
+{
+        unsigned long head = READ_ONCE(page->compound_head);
+
+        if (unlikely(head & 1))
+                return head - 1;
+        return (unsigned long)page_fixed_fake_head(page);
+}
+
+The GCC 14 (but not 11) compiler optimizes this by doing:
+
+ld page + 39
+
+Rather than:
+
+ld (page - 1) + 40
+
+And causing an unaligned load. Get around this by issuing a READ_ONCE as
+we convert the page to netmem.  That disables the compiler optimizing the
+load in this way.
+
+Cc: Simon Horman <horms@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: David Miller <davem@davemloft.net>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Cc: Matthew Wilcox <willy@infradead.org>
+
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Mina Almasry <almasrymina@google.com>
+
+---
+
+v2: https://lore.kernel.org/netdev/20240913192036.3289003-1-almasrymina@google.com/
+
+- Work around this issue as we convert the page to netmem, instead of
+  a generic change that affects compound_head().
+---
+ net/core/page_pool.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index a813d30d2135..b7e0acaed933 100644
+index a813d30d2135..74ea491d0ab2 100644
 --- a/net/core/page_pool.c
 +++ b/net/core/page_pool.c
-@@ -864,7 +864,11 @@ void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-        allow_direct = page_pool_napi_local(pool);
+@@ -859,12 +859,25 @@ void page_pool_put_page_bulk(struct page_pool *pool, void **data,
+ {
+ 	int i, bulk_len = 0;
+ 	bool allow_direct;
++	netmem_ref netmem;
++	struct page *page;
+ 	bool in_softirq;
  
-        for (i = 0; i < count; i++) {
--               netmem_ref netmem = page_to_netmem(virt_to_head_page(data[i]));
-+               struct page *page = virt_to_head_page(data[i]);
-+               netmem_ref netmem;
+ 	allow_direct = page_pool_napi_local(pool);
+ 
+ 	for (i = 0; i < count; i++) {
+-		netmem_ref netmem = page_to_netmem(virt_to_head_page(data[i]));
++		page = virt_to_head_page(data[i]);
 +
-+               /* $explanation */
-+               netmem = page_to_netmem(READ_ONCE(page));
++		/* GCC 14 powerpc compiler will optimize reads into the
++		 * resulting netmem_ref into unaligned reads as it sees address
++		 * arithmetic in _compound_head() call that the page has come
++		 * from.
++		 *
++		 * The READ_ONCE here gets around that by breaking the
++		 * optimization chain between the address arithmetic and later
++		 * indexing.
++		 */
++		netmem = page_to_netmem(READ_ONCE(page));
  
-                /* It is not the last user for the page frag case */
-                if (!page_pool_is_last_ref(netmem))
+ 		/* It is not the last user for the page frag case */
+ 		if (!page_pool_is_last_ref(netmem))
+-- 
+2.46.0.662.g92d0881bb0-goog
 
-If it makes sense could you polish it up and submit?
 

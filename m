@@ -1,122 +1,145 @@
-Return-Path: <linux-next+bounces-3825-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3826-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7ADA977C85
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 11:46:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A93C977DDF
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 12:41:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F5D31F28909
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 09:46:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05FB7B23861
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 10:41:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1A51B9853;
-	Fri, 13 Sep 2024 09:46:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 468B51D7E22;
+	Fri, 13 Sep 2024 10:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nakq5lNk"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XyxoIQDE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3DA1BC9E0;
-	Fri, 13 Sep 2024 09:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186701B9826;
+	Fri, 13 Sep 2024 10:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726220793; cv=none; b=PvIvRe0e6FfaAGOY6MjqrlVYMeX1P+y9QaPH1PHdpXv5fTceegHX/oDy/PAkCqRLG4d1q+bKJH+ooK3PLvCbr3wbm6rrCIHNBaila2hFq9Zdib326xOsXOoaVlQVkMMEBsfrtpAgh+/TKNOy/dILmzxmOHU4KMkIE/bw6LgBEMg=
+	t=1726224107; cv=none; b=tzqnljHX9RUjktaO8VpXWjnf+LDlJPo9H4kfY0DeUxPf7j/hbjrpcxCWLR5yW6XFP5KMAWtQVYUmTJGWlliDcQJ1Gyg4DUgMhrcjARrvh3H+J5NqmAWYrtj16AdVpdczoLvlxuf3QNhJwfYJbl7TXEbPij++LkxpOPkDYlRowFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726220793; c=relaxed/simple;
-	bh=BT6BwnWKIIo6f5KGZ9sOvCPyOrcdsUj54Uor+njpwy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fuxp8zS565xWefK4zAy9K8eVBurMXkA82dK+wPEQMnSbRmKQU5/OsvTCsXM+DY5TmreXhtZKTChUixGRJSNVd6XdAn8GsVT57168aegVSRK6IOFgp7z3+qLgu6kVzz/kbOq+35oitB83/KnwPbm0XOV83xjFmanpKp8Ieke2m0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nakq5lNk; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726220792; x=1757756792;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BT6BwnWKIIo6f5KGZ9sOvCPyOrcdsUj54Uor+njpwy4=;
-  b=Nakq5lNkXNu2CtZ/HV79dBsj2qoNACasyyjNuFMlqsOAx6GOLL42F/JU
-   47MYl5Y+mMj3nZ83QoxEt5C3BQq/v4wH732DWhP7vhHBCNgWINc34nYVG
-   kGFdaAMGcyucD+lUJwA+h+8pbtKk4RS5TEPfoJJnji9rCoXFcK5BJjCak
-   FQc7gRrO75WJo+juPJp+DZgRAiBycDchvvy5q6TELueQaMRB+6HZnYOFp
-   p8jUe4GuR+7F/f1TpcpQ0nyRydfZRVvJAiaVkeHYb4BiBDcB7/F6t4+GA
-   MBebvXfJ+Xrqmy8VkILn6S+2JHa6A8AKXbqKQvJiY8JXea8Duby8yhOMY
-   g==;
-X-CSE-ConnectionGUID: nbVTXvomR+eOp66tTURE4Q==
-X-CSE-MsgGUID: kZa7Ubz2SOys/5CRpZzfdw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="42623337"
-X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
-   d="scan'208";a="42623337"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 02:46:30 -0700
-X-CSE-ConnectionGUID: ye8B9dbuTv2TLSkeGLljIg==
-X-CSE-MsgGUID: g6rVSLVMSFS0WnLd04QiNQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
-   d="scan'208";a="72803170"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 02:46:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sp2sj-00000008FRk-142M;
-	Fri, 13 Sep 2024 12:46:25 +0300
-Date: Fri, 13 Sep 2024 12:46:25 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Olof Johansson <olof@lixom.net>,
-	ARM <linux-arm-kernel@lists.infradead.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	linux-next <linux-next@vger.kernel.org>,
-	Nikita Shubin <nikita.shubin@maquefel.me>
-Subject: Re: linux-next: manual merge of the gpio-brgl tree with the arm-soc
- tree
-Message-ID: <ZuQJ8aGqrF_eMVEH@smile.fi.intel.com>
-References: <20240912174842.57a43921@canb.auug.org.au>
- <a124f713-8cbb-46d3-850c-1dd1b9010258@app.fastmail.com>
+	s=arc-20240116; t=1726224107; c=relaxed/simple;
+	bh=JICNTVqX1nbtOb/rRWVWNUiKb0VIP6ogub7x0oZyFeM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sbz3n+j32br+qpLbXrp+ccDQt2wlXIkx/HVH9wH9nF1S0A18OAqhMJ1eQ1cSoGEmbqyidU2aCdGQj3ugVSgnJMDLP36jvJvIkzzOe1bK2AfXKdlT6xYV37fhWwulvWyUS07fSFmwt/NxTVh4bxBXXbeyjWubqu2i80JSZFKz6WU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=XyxoIQDE; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1726224100;
+	bh=KqjBufrxC1T+9UNimGFrPXe7rI3jiWjqihf9xX0aIeg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=XyxoIQDErSA1qKR62zcOAPzg2joowjqZfj8xhd1SPLWne9anPPVLrnPsDtdLjyoNn
+	 mDBKHofLzOlr+o4Yv0XXu42U9nlvcGc7VPrEQOCeYvtRMqGiqpWGkEyMbt7BSV0oYo
+	 qJedo1H2i9/RxPhw6Ztz+KT519n6LmAMgFDLzp1CmnODXfXswnnwzZDI00nB+GnQm1
+	 n0wlbV8LMRnAy9heSAeCDSvY6qymWPXzCBx5naFxQWj2o4Lhxru0H/VPgvQBx0+LA9
+	 O6cu0X31e1nCzU/gocznUcF+tuswkBy3NU+BX8vfHL/y2U0uXUOXSy6+5jMz1/sQQK
+	 n1H41yt0vrHyw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X4rTH3Yq1z4xD7;
+	Fri, 13 Sep 2024 20:41:39 +1000 (AEST)
+Date: Fri, 13 Sep 2024 20:41:38 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: David Miller <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+ Mina Almasry <almasrymina@google.com>, Networking <netdev@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20240913204138.7cdb762c@canb.auug.org.au>
+In-Reply-To: <20240912200543.2d5ff757@kernel.org>
+References: <20240913125302.0a06b4c7@canb.auug.org.au>
+	<20240912200543.2d5ff757@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a124f713-8cbb-46d3-850c-1dd1b9010258@app.fastmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: multipart/signed; boundary="Sig_/OqNqPcdJGXr8HswA1u3OcDh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Sep 12, 2024 at 12:10:38PM +0000, Arnd Bergmann wrote:
-> On Thu, Sep 12, 2024, at 07:48, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Today's linux-next merge of the gpio-brgl tree got a conflict in:
-> >
-> >   arch/arm/mach-ep93xx/vision_ep9307.c
-> >
-> > between commit:
-> >
-> >   3e0bae7f35c9 ("ARM: ep93xx: delete all boardfiles")
-> >
-> > from the arm-soc tree and commits:
-> >
-> >   4b2b0a2ce815 ("gpiolib: legacy: Kill GPIOF_INIT_* definitions")
-> >   8c045ca534d0 ("gpiolib: legacy: Kill GPIOF_DIR_* definitions")
-> >
-> > from the gpio-brgl tree.
-> >
-> > I fixed it up (I removed the file)
-> 
-> Looks good, thanks,
+--Sig_/OqNqPcdJGXr8HswA1u3OcDh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Confirmed from my side, thanks.
+Hi Jakub,
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Thu, 12 Sep 2024 20:05:43 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Fri, 13 Sep 2024 12:53:02 +1000 Stephen Rothwell wrote:
+> > /home/sfr/next/tmp/ccuSzwiR.s: Assembler messages:
+> > /home/sfr/next/tmp/ccuSzwiR.s:2579: Error: operand out of domain (39 is=
+ not a multiple of 4)
+> > make[5]: *** [/home/sfr/next/next/scripts/Makefile.build:229: net/core/=
+page_pool.o] Error 1 =20
+>=20
+> Ugh, bad times for networking, I just "fixed" the HSR one a few hours
+> ago. Any idea what line of code this is? I'm dusting off my powerpc
+> build but the error is somewhat enigmatic.
 
+I have bisected it (just using the net-next tree) to commit
 
+8ab79ed50cf10f338465c296012500de1081646f is the first bad commit
+commit 8ab79ed50cf10f338465c296012500de1081646f
+Author: Mina Almasry <almasrymina@google.com>
+Date:   Tue Sep 10 17:14:49 2024 +0000
+
+    page_pool: devmem support
+   =20
+
+And it may be pointing at arch/powerpc/include/asm/atomic.h line 200
+which is this:
+
+static __inline__ s64 arch_atomic64_read(const atomic64_t *v)
+{
+        s64 t;
+
+        /* -mprefixed can generate offsets beyond range, fall back hack */
+        if (IS_ENABLED(CONFIG_PPC_KERNEL_PREFIXED))
+                __asm__ __volatile__("ld %0,0(%1)" : "=3Dr"(t) : "b"(&v->co=
+unter))
+;
+        else
+                __asm__ __volatile__("ld%U1%X1 %0,%1" : "=3Dr"(t) : "m<>"(v=
+->counter));
+
+        return t;
+}
+
+The second "asm" above (CONFIG_PPC_KERNEL_PREFIXED is not set).  I am
+guessing by searching for "39" in net/core/page_pool.s
+
+This is maybe called from page_pool_unref_netmem()
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/OqNqPcdJGXr8HswA1u3OcDh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbkFuIACgkQAVBC80lX
+0GzYvwf+My4BrCjgWnAkd9yuW9q9y0XFB9nX8bAWXutRCiTw22e2MPif0yBJptC+
+6mFCLLQUcov4q6REPXui/S6HfFoVSnc4Brl7FK002mDBjkZDRG+/JY9o+NBLECP9
+gfZLmb4gvvcPtWM9i43hI1LG0xL/vFPri3jsRLwnbzMjwDd9QuzL4GVKGZXbSO5C
+bzJGd3+jzVfMYpMSIcSxYmHR1gDr2fuSJObVoDk7hx9bW7RlgKM0tdg2s7qx+pDs
+DSdELdrDXxgAyArQBLUdzkLok1HNpMaqXqinY+jhPlzc1B8FL3T1eyiUrz1FLp4K
+gkIxUT3Wnq93H6SNB1uFO4CMXStdDQ==
+=3Adj
+-----END PGP SIGNATURE-----
+
+--Sig_/OqNqPcdJGXr8HswA1u3OcDh--
 

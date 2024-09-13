@@ -1,145 +1,112 @@
-Return-Path: <linux-next+bounces-3826-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3827-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A93C977DDF
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 12:41:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32019977FC8
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 14:26:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05FB7B23861
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 10:41:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC3DE285694
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 12:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 468B51D7E22;
-	Fri, 13 Sep 2024 10:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7D71C32E8;
+	Fri, 13 Sep 2024 12:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XyxoIQDE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqWdF1Pf"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186701B9826;
-	Fri, 13 Sep 2024 10:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9176F1C2BF;
+	Fri, 13 Sep 2024 12:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726224107; cv=none; b=tzqnljHX9RUjktaO8VpXWjnf+LDlJPo9H4kfY0DeUxPf7j/hbjrpcxCWLR5yW6XFP5KMAWtQVYUmTJGWlliDcQJ1Gyg4DUgMhrcjARrvh3H+J5NqmAWYrtj16AdVpdczoLvlxuf3QNhJwfYJbl7TXEbPij++LkxpOPkDYlRowFo=
+	t=1726230356; cv=none; b=cTuQVN3JJBUuNbtWN3re/gVUazFnNkcoEr1EEJCOl7rP8JZDZvGxjaMImRLhVjAUEQCI2KaPZQexZKaqX+XPM1cRzX7hupCgkGuxfJ1Pv5mgR1iV+UbsbsCN86kJm3V6eCZGuAplsoSkbnrb4bSiqGVVzXZB2SoW8nVBNsPkfYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726224107; c=relaxed/simple;
-	bh=JICNTVqX1nbtOb/rRWVWNUiKb0VIP6ogub7x0oZyFeM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sbz3n+j32br+qpLbXrp+ccDQt2wlXIkx/HVH9wH9nF1S0A18OAqhMJ1eQ1cSoGEmbqyidU2aCdGQj3ugVSgnJMDLP36jvJvIkzzOe1bK2AfXKdlT6xYV37fhWwulvWyUS07fSFmwt/NxTVh4bxBXXbeyjWubqu2i80JSZFKz6WU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=XyxoIQDE; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1726224100;
-	bh=KqjBufrxC1T+9UNimGFrPXe7rI3jiWjqihf9xX0aIeg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XyxoIQDErSA1qKR62zcOAPzg2joowjqZfj8xhd1SPLWne9anPPVLrnPsDtdLjyoNn
-	 mDBKHofLzOlr+o4Yv0XXu42U9nlvcGc7VPrEQOCeYvtRMqGiqpWGkEyMbt7BSV0oYo
-	 qJedo1H2i9/RxPhw6Ztz+KT519n6LmAMgFDLzp1CmnODXfXswnnwzZDI00nB+GnQm1
-	 n0wlbV8LMRnAy9heSAeCDSvY6qymWPXzCBx5naFxQWj2o4Lhxru0H/VPgvQBx0+LA9
-	 O6cu0X31e1nCzU/gocznUcF+tuswkBy3NU+BX8vfHL/y2U0uXUOXSy6+5jMz1/sQQK
-	 n1H41yt0vrHyw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X4rTH3Yq1z4xD7;
-	Fri, 13 Sep 2024 20:41:39 +1000 (AEST)
-Date: Fri, 13 Sep 2024 20:41:38 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: David Miller <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
- Mina Almasry <almasrymina@google.com>, Networking <netdev@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
+	s=arc-20240116; t=1726230356; c=relaxed/simple;
+	bh=MKhVqQn9naKipl16z0G0brZ2rK+2vxoKridIOshtSSM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=meh3Etfzp77n781yDxRgjiMmWJTG15R8WrRzNrj45hy3TUb0338nJ6ZnEuz56AoYWBfUJK5Ih9Gv+GobXiFEkR7yJKgDOrqI8q5uffv0ZYSe2/UTddaGCQvrPWOzo81NelZuXqvz+OyA+GcyQgvyV2x9ISKI0TDFILH8BeJxuOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqWdF1Pf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C76C4CEC0;
+	Fri, 13 Sep 2024 12:25:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726230356;
+	bh=MKhVqQn9naKipl16z0G0brZ2rK+2vxoKridIOshtSSM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dqWdF1Pf5siAOWSfSX6wxCYylknilZIwZfSBj0ojarzojNtTYhN9scUOWtsgBxQvg
+	 y6mNppOfqXLUF9p6uqH4QyHrZgBaN8twMAzdi9p96YcN2sBVqMMv6EStoPSRd38fQ6
+	 mxz5QhQy88EnSeC/m1aeIAsC4oW7FR5o5C9K0Sh881d28eeAfF9VERCmBqQwMnB2+d
+	 5P3AQr8IWy6xUaHlDfdflR2CPR9mZJJHoX2vc9KWVBELfnuceadJRMVSYHBsNz3sca
+	 3kye4WK9q/Sq/LFbtMGidu3zFk2Q96xnhHUAvx+VOKuEkxWzoGP8TuFHgu+I3LwT1M
+	 u0iDseFweMjsg==
+Date: Fri, 13 Sep 2024 13:25:52 +0100
+From: Simon Horman <horms@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jakub Kicinski <kuba@kernel.org>, Mina Almasry <almasrymina@google.com>,
+	David Miller <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+	Networking <netdev@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20240913204138.7cdb762c@canb.auug.org.au>
-In-Reply-To: <20240912200543.2d5ff757@kernel.org>
+Message-ID: <20240913122552.GZ572255@kernel.org>
 References: <20240913125302.0a06b4c7@canb.auug.org.au>
-	<20240912200543.2d5ff757@kernel.org>
+ <20240912200543.2d5ff757@kernel.org>
+ <CAHS8izN0uCbZXqcfCRwL6is6tggt=KZCYyheka4CLBskqhAiog@mail.gmail.com>
+ <20240912210008.35118a91@kernel.org>
+ <20240913141317.3309f1c6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OqNqPcdJGXr8HswA1u3OcDh";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240913141317.3309f1c6@canb.auug.org.au>
 
---Sig_/OqNqPcdJGXr8HswA1u3OcDh
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Sep 13, 2024 at 02:13:17PM +1000, Stephen Rothwell wrote:
+> Hi Jakub,
+> 
+> On Thu, 12 Sep 2024 21:00:08 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
+> >
+> > On Thu, 12 Sep 2024 20:14:06 -0700 Mina Almasry wrote:
+> > > > On Fri, 13 Sep 2024 12:53:02 +1000 Stephen Rothwell wrote:    
+> > > > > /home/sfr/next/tmp/ccuSzwiR.s: Assembler messages:
+> > > > > /home/sfr/next/tmp/ccuSzwiR.s:2579: Error: operand out of domain (39 is not a multiple of 4)
+> > > > > make[5]: *** [/home/sfr/next/next/scripts/Makefile.build:229: net/core/page_pool.o] Error 1    
+> > > >
+> > > > Ugh, bad times for networking, I just "fixed" the HSR one a few hours
+> > > > ago. Any idea what line of code this is? I'm dusting off my powerpc
+> > > > build but the error is somewhat enigmatic.    
+> > > 
+> > > FWIW I couldn't reproduce this with these steps on top of
+> > > net-next/main (devmem TCP is there):
+> > > 
+> > > make ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnu- ppc64_defconfig
+> > > make ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnu- -j80
+> > > 
+> > > (build succeeds)
+> > > 
+> > > What am I doing wrong?  
+> > 
+> > I don't see it either, gcc 11.1. Given the burst of powerpc build
+> > failures that just hit the list I'm wondering if this is real.
+> 
+> $ gcc --version
+> gcc (Debian 14.2.0-3) 14.2.0
+> $ ld --version
+> GNU ld (GNU Binutils for Debian) 2.43.1
+> $ as --version
+> GNU assembler (GNU Binutils for Debian) 2.43.1
+> 
+> All on a Powerpc 64 LE host.
 
-Hi Jakub,
+FIIW, I have been able to reproduce this locally, on x86_64,
+using the powerpc64 GCC-14.2.0 cross compiler from
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
 
-On Thu, 12 Sep 2024 20:05:43 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri, 13 Sep 2024 12:53:02 +1000 Stephen Rothwell wrote:
-> > /home/sfr/next/tmp/ccuSzwiR.s: Assembler messages:
-> > /home/sfr/next/tmp/ccuSzwiR.s:2579: Error: operand out of domain (39 is=
- not a multiple of 4)
-> > make[5]: *** [/home/sfr/next/next/scripts/Makefile.build:229: net/core/=
-page_pool.o] Error 1 =20
->=20
-> Ugh, bad times for networking, I just "fixed" the HSR one a few hours
-> ago. Any idea what line of code this is? I'm dusting off my powerpc
-> build but the error is somewhat enigmatic.
-
-I have bisected it (just using the net-next tree) to commit
-
-8ab79ed50cf10f338465c296012500de1081646f is the first bad commit
-commit 8ab79ed50cf10f338465c296012500de1081646f
-Author: Mina Almasry <almasrymina@google.com>
-Date:   Tue Sep 10 17:14:49 2024 +0000
-
-    page_pool: devmem support
-   =20
-
-And it may be pointing at arch/powerpc/include/asm/atomic.h line 200
-which is this:
-
-static __inline__ s64 arch_atomic64_read(const atomic64_t *v)
-{
-        s64 t;
-
-        /* -mprefixed can generate offsets beyond range, fall back hack */
-        if (IS_ENABLED(CONFIG_PPC_KERNEL_PREFIXED))
-                __asm__ __volatile__("ld %0,0(%1)" : "=3Dr"(t) : "b"(&v->co=
-unter))
-;
-        else
-                __asm__ __volatile__("ld%U1%X1 %0,%1" : "=3Dr"(t) : "m<>"(v=
-->counter));
-
-        return t;
-}
-
-The second "asm" above (CONFIG_PPC_KERNEL_PREFIXED is not set).  I am
-guessing by searching for "39" in net/core/page_pool.s
-
-This is maybe called from page_pool_unref_netmem()
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OqNqPcdJGXr8HswA1u3OcDh
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbkFuIACgkQAVBC80lX
-0GzYvwf+My4BrCjgWnAkd9yuW9q9y0XFB9nX8bAWXutRCiTw22e2MPif0yBJptC+
-6mFCLLQUcov4q6REPXui/S6HfFoVSnc4Brl7FK002mDBjkZDRG+/JY9o+NBLECP9
-gfZLmb4gvvcPtWM9i43hI1LG0xL/vFPri3jsRLwnbzMjwDd9QuzL4GVKGZXbSO5C
-bzJGd3+jzVfMYpMSIcSxYmHR1gDr2fuSJObVoDk7hx9bW7RlgKM0tdg2s7qx+pDs
-DSdELdrDXxgAyArQBLUdzkLok1HNpMaqXqinY+jhPlzc1B8FL3T1eyiUrz1FLp4K
-gkIxUT3Wnq93H6SNB1uFO4CMXStdDQ==
-=3Adj
------END PGP SIGNATURE-----
-
---Sig_/OqNqPcdJGXr8HswA1u3OcDh--
+make ARCH=powerpc CROSS_COMPILE=powerpc64-linux- ppc64_defconfig
+make ARCH=powerpc CROSS_COMPILE=powerpc64-linux-
 

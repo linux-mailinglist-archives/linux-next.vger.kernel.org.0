@@ -1,136 +1,144 @@
-Return-Path: <linux-next+bounces-3816-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3817-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7A179777BC
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 06:13:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35FFE9777DD
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 06:26:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D04951F258D8
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 04:13:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6822B1C244A8
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 04:26:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B631C461C;
-	Fri, 13 Sep 2024 04:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9E71C68A3;
+	Fri, 13 Sep 2024 04:26:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="KmIMA84I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mUZVsg0E"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C7512F34;
-	Fri, 13 Sep 2024 04:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617B713A87C;
+	Fri, 13 Sep 2024 04:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726200804; cv=none; b=b6oAFfG6tBs0oIu6E9d1nCtQhWGKi48mF691n/9wq3ws1utaPjz3wOLQ3uIoxjOy3/QeHFW2zxqXXZ7girE8GpNyJHhDUAT2IK1+tIyFEe3QcQt1X1ITLWf65sDf4sgmc3E9o4bzxJTlxDO9IrVqV/ApYQunqwWczG7bhyPNjno=
+	t=1726201605; cv=none; b=DOSw36UWR/t6/TDpLDXFFZvauH6HQFOZWPgwLfXPnG1DpjNvaCEi4iCxyjzqddTj1rmmtWJ9J/GY3Ab6FYvA3R2r3w95+H61agbSKJh1ISmNQ5yE8FKs3TOZYmtA4Y0NYlSnWx73/NRZxy637fSFWb5Lu7gu/Zi+ROMwRuPalO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726200804; c=relaxed/simple;
-	bh=4XqDGGtz1dCKr7V/BZ88LjM75pJZcMSO9nE8I1H3svo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fW/PipalJVlTNvpdM7OMZ7h7lhrsFEKsL3WS8CwNOHuEnbr3ZA/EeAQ9/dRIfPwJHUBOIlKRDmJ/okXKZsYBjK4Kb/MLAhoQjW6tylvPidC41s8+sNNIAsgdg1qkxXY0qPWAHMjKuwq9N2orgok+1Qf9+4rDBrRQQUiBTb0NUzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=KmIMA84I; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1726200799;
-	bh=X4PBrmZHLei+R69RRoCehgALDzSHVQBLSOFAUmTzQ3c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=KmIMA84IY6t0WB+nrP6u2VJpWtSIdrP9reMzoaCOVR/OLay1GE88JfHNTzJPxnSNI
-	 16Xg+6eCQL3Sjh/DMZiJMIIb9VLF5cfHLo+ZVhTQp/LD9QxtK/wvh2cXj6peYSHFGy
-	 LXGvoUAhJPh9F1Zl4d+PbkRrny0qsUoCuKjm10Mli5FtFviHzyPYZm19QUgVZzJmJL
-	 4zUZ/c6G4Bun63II9FRsg1j6lI+2HKiC9CvYcDFcoiM1pucF9eqzhmZjJg+nrW0B9E
-	 tisGr87MOSvs0SpsEQJX1JUCjvcHQbDQIW4h4YtKdbv0fvGnlj+lQPFjw0cWZ1sa8U
-	 J7uE4okzSBMLQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X4gsB4FZXz4x8v;
-	Fri, 13 Sep 2024 14:13:18 +1000 (AEST)
-Date: Fri, 13 Sep 2024 14:13:17 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Mina Almasry <almasrymina@google.com>, David Miller
- <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, Networking
- <netdev@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20240913141317.3309f1c6@canb.auug.org.au>
-In-Reply-To: <20240912210008.35118a91@kernel.org>
-References: <20240913125302.0a06b4c7@canb.auug.org.au>
-	<20240912200543.2d5ff757@kernel.org>
-	<CAHS8izN0uCbZXqcfCRwL6is6tggt=KZCYyheka4CLBskqhAiog@mail.gmail.com>
-	<20240912210008.35118a91@kernel.org>
+	s=arc-20240116; t=1726201605; c=relaxed/simple;
+	bh=s8y2LxutHw1JNq+rOeyZekzVclfC3r0yw8vj7dA/mZw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E6W4QsiTD/U+xGUnKSUzxeJx9KMRl6VeB2gTSJRObeqmy/XOS5WBBiV/n57r+CiNDHX1Op+a7eADYtG8O/cOSnDfAvTUvUYLo0vGqoo3bp4r6To4aaIN11EEsigYV5+zTUFjzuxxDSPxTwyyTT4F3x5LyNTFi4nJBDmfN3dmEyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mUZVsg0E; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7d4fa972cbeso1408611a12.2;
+        Thu, 12 Sep 2024 21:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726201603; x=1726806403; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5UCSDqZtrxdlfDIyJ4PYB/eyUMcd92kaOx6CvjF7g6Q=;
+        b=mUZVsg0EwYhnVfcoijV8d9hLFYJTm/+8ieqhD8mY4cu9DKfZ7O1zmUJxrIvFSDWfmJ
+         78HtAIZKakLdpJKsqn/AXodpdTMKlMBP7w5oIUsbctitPlJKNRtXYbD8xxN/vSV8RZtw
+         94dKUeHFWLCMNgKJ22DrYMwffXoRiVwMb5TuWbITQfJY3UYlrMVCUcNq7VoE8ZljFNkw
+         jqr8q8H/sxEZRLmCsVigS+zcef5WKMX2ixapRaL7CkklMAg1mBX1zcAk+kJUhjIQYUa2
+         kieuW5cTv5pmHzD+eTsqTvWLDAoHVpX6/sucafaXiyNaRhkYrMp4tix4coSp8K4HgXfR
+         0dcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726201603; x=1726806403;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5UCSDqZtrxdlfDIyJ4PYB/eyUMcd92kaOx6CvjF7g6Q=;
+        b=HwnYjJeTBrqfpBiVZLVoBt5NcsDqVLDQ89SWf/XO33Ra+GbHE3+ZXX3fENSbhR3TaW
+         FL6v3dlAoOi/MhRZsB0L+YWaQkUjbljRzs+EAQ0pOxFXrqrVs4HsSJpOBoVrppGyTEoC
+         L9RPQmrRkUmKiISNIohSfcx5SUYbpAGt3hP0gEsLsNOBKasUCsawsAsdXeu43GAlIqAb
+         yAcUBzOTvJKle/+jGuMYnN2eHBxFU8m/tSv0N9H3nKKv8W+FMVu60Vcx83zGTyFu0hlQ
+         PvlNGRzDckfi+j6uSiDH/xKQrJQmC3Q0FsQ8TSSynCek4l/Re9Ob48awt8NQoT80QOX/
+         GUgA==
+X-Forwarded-Encrypted: i=1; AJvYcCUgPhdvogtUSAJmXILqSBNzubfNx8IMvJyBrY0zjjLuBpYMUjO0uOtD5gX1kQqEEXD0/R8=@vger.kernel.org, AJvYcCVcLOeFLil3lCgEfpOgz2pZRJWJU0KuFinG+LK4833749h2KeGODKsLZt6YdkAcUO6emVAYVJS+WxypTgeU@vger.kernel.org, AJvYcCVqH7cMQuSTe2b5AmNEuq9H71F59DMKplE39K+nkN9Epim3KUvXFf/O8d6scCENpWU9QdCn7b/sg2rPSQ==@vger.kernel.org, AJvYcCWEsWbMseyzJaS01AfkjutTTTdmk6I4mx3aGyHGe4o/Rmtil0ja109lLd4nRZ6NcI1jFmZs0n1U+Re+@vger.kernel.org, AJvYcCXI1yOdfxOSvTVJZ5er3GQmG7ty+q1edADSOAiTaixX1FoUoaD+PIeLM2NJg4CEJCVlQ//LeiEM@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCEP5Uw8tuF5SegdBl6E/OZz3byKAXN5giljnW2wfco3VEGMk1
+	OA75ZrwXnnbV+IY7i5E2J6DhPmveBjTIIfwD4ULmT4am5/G2e6DeXNaclPYvRxa7oAb5qYe9tzo
+	iM/fKQz5Pk6hh5uaMH+4d1NChMIo=
+X-Google-Smtp-Source: AGHT+IHwOdOFteLST4od4RwYt9rmDfY2JPAQXl9/wd1FLajiqtRgjBhS0MTgoNifm/7YfojeHqx1nMXkbHKudo7SzyM=
+X-Received: by 2002:a17:90a:9384:b0:2c9:7e9d:8424 with SMTP id
+ 98e67ed59e1d1-2dba0067fa7mr5810882a91.30.1726201603388; Thu, 12 Sep 2024
+ 21:26:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Y+XH_ig6bj5yTZruu/bMi=S";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/Y+XH_ig6bj5yTZruu/bMi=S
-Content-Type: text/plain; charset=US-ASCII
+References: <20240913135551.4156251c@canb.auug.org.au> <20240913040038.GA2825852@ZenIV>
+In-Reply-To: <20240913040038.GA2825852@ZenIV>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 12 Sep 2024 21:26:31 -0700
+Message-ID: <CAEf4BzashWCozzD7KetgC0Wya-KqUzj0omguAOt+oUVDzHys=Q@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, David Chinner <david@fromorbit.com>, 
+	"Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jakub,
-
-On Thu, 12 Sep 2024 21:00:08 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
+On Thu, Sep 12, 2024 at 9:00=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
+rote:
 >
-> On Thu, 12 Sep 2024 20:14:06 -0700 Mina Almasry wrote:
-> > > On Fri, 13 Sep 2024 12:53:02 +1000 Stephen Rothwell wrote:   =20
-> > > > /home/sfr/next/tmp/ccuSzwiR.s: Assembler messages:
-> > > > /home/sfr/next/tmp/ccuSzwiR.s:2579: Error: operand out of domain (3=
-9 is not a multiple of 4)
-> > > > make[5]: *** [/home/sfr/next/next/scripts/Makefile.build:229: net/c=
-ore/page_pool.o] Error 1   =20
-> > >
-> > > Ugh, bad times for networking, I just "fixed" the HSR one a few hours
-> > > ago. Any idea what line of code this is? I'm dusting off my powerpc
-> > > build but the error is somewhat enigmatic.   =20
-> >=20
-> > FWIW I couldn't reproduce this with these steps on top of
-> > net-next/main (devmem TCP is there):
-> >=20
-> > make ARCH=3Dpowerpc CROSS_COMPILE=3Dpowerpc-linux-gnu- ppc64_defconfig
-> > make ARCH=3Dpowerpc CROSS_COMPILE=3Dpowerpc-linux-gnu- -j80
-> >=20
-> > (build succeeds)
-> >=20
-> > What am I doing wrong? =20
->=20
-> I don't see it either, gcc 11.1. Given the burst of powerpc build
-> failures that just hit the list I'm wondering if this is real.
+> On Fri, Sep 13, 2024 at 01:55:51PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > After merging the bpf-next tree, today's linux-next build (powerpc
+> > ppc64_defconfig) failed like this:
+> >
+> > fs/xfs/xfs_exchrange.c: In function 'xfs_ioc_commit_range':
+> > fs/xfs/xfs_exchrange.c:938:19: error: 'struct fd' has no member named '=
+file'
+> >   938 |         if (!file1.file)
+> >       |                   ^
+> > fs/xfs/xfs_exchrange.c:940:26: error: 'struct fd' has no member named '=
+file'
+> >   940 |         fxr.file1 =3D file1.file;
+> >       |                          ^
+> >
+> > Caused by commit
+> >
+> >   1da91ea87aef ("introduce fd_file(), convert all accessors to it.")
+> >
+> > interacting with commit
+> >
+> >   398597c3ef7f ("xfs: introduce new file range commit ioctls")
+> >
+> > I have applied the following patch for today.
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Fri, 13 Sep 2024 13:53:35 +1000
+> > Subject: [PATCH] fix up 3 for "introduce fd_file(), convert all accesso=
+rs to
+> >  it."
+> >
+> > interacting with commit "xfs: introduce new file range commit ioctls"
+> > from the xfs tree.
+>
+> ... and the same for io_uring/rsrc.c, conflict with "io_uring: add IORING=
+_REGISTER_COPY_BUFFERS method".
+>
+> FWIW, that (sub)series is in viro/vfs.git#for-next - I forgot to put it
+> there, so when bpf tree reorgs had lost their branch on top of that thing=
+,
+> the conflict fixes got dropped from -next.  Sorry... ;-/
 
-$ gcc --version
-gcc (Debian 14.2.0-3) 14.2.0
-$ ld --version
-GNU ld (GNU Binutils for Debian) 2.43.1
-$ as --version
-GNU assembler (GNU Binutils for Debian) 2.43.1
+Should I take out the following from bpf-next/for-next for now?
 
-All on a Powerpc 64 LE host.
---=20
-Cheers,
-Stephen Rothwell
+a8e40fd0f127 ("Merge branch 'bpf-next/struct_fd' into for-next")
 
---Sig_/Y+XH_ig6bj5yTZruu/bMi=S
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbju90ACgkQAVBC80lX
-0GweJQf8Ca95bs0DiLRrvi+xGpDhhoYVs89TRHyQMR03NlBKZikWFmWOFrWyb/Ki
-NFCbTiep4nyWVzx5R8SqbTovHY4WeGgGDrrxUoy+r4UxZP7vwVz3hW8qxvyoBwi5
-dJyMQYZfG2CUSewluk5d89ch/TcFcx76J0qE/f1rTm03RI0KZfjJfQeU+vEar9Gw
-6d0rBVCRQt+MECIGyfa+nVowoz/TL69bwum4aS6oQMk9A7TaJE6Ba3I2MOIclvGy
-GLt77ZW9M3o//aQ3B8zug0rw4OmX2Jxv5WjY9tmJ0m7xf7cCWwSHxWZZsRgv0AWF
-OXk3svuX1SB3UsSwx6wCXXPHAza7aQ==
-=pvdE
------END PGP SIGNATURE-----
-
---Sig_/Y+XH_ig6bj5yTZruu/bMi=S--
+Al, currently I'm basing my patches on top of your stable-struct_fd
+branch. If you need to update it, I think that's fine, I can rebase on
+top of the updated branch, given my patches weren't yet merged
+anywhere. Let me know.
 

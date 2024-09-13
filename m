@@ -1,56 +1,67 @@
-Return-Path: <linux-next+bounces-3836-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3837-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B5AE9786DB
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 19:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40BE8978763
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 20:00:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB89A1F23963
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 17:34:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF5A31F23052
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 18:00:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E10F7DA8B;
-	Fri, 13 Sep 2024 17:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1005BBA50;
+	Fri, 13 Sep 2024 18:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="l0DjuLxv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOz/eLtb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E964F883
-	for <linux-next@vger.kernel.org>; Fri, 13 Sep 2024 17:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC18D22338;
+	Fri, 13 Sep 2024 18:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726248799; cv=none; b=D6chPHdO/nmfXd5yfiRiYfqmnJcMKoSO1cvWqr430I8XNqDdoyzJ+Zi0kKITBtYHwiz30nPASo0X53kwevb4kufhWvw0T/xEp8OdYvgkc2Hq/76qxtnL4oUliTN0jdRQr9G+seH5VZLPSpdENg1QSfSbJ5pASZtx7b7+e62yoEk=
+	t=1726250442; cv=none; b=GmsEmZFlo+TVwMcCB/ju4ibFW9WBGfsCj/ZgzTnNsX8EPzt+D7/DllrZGOkZtsqa2vH5u9/1BmNabjg3ttmZp6VJnzZFR4YRk9x+43MIfwJHBHuHczZDqzNkD7bc+Q1bkAycc8UsQjfBdVDfxrcEELiY64EyocnYL/5TRqgxn3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726248799; c=relaxed/simple;
-	bh=SIqKamNHZz5/uNc+N5jXsYdWxrtaRfUiR9avW5BOBQE=;
+	s=arc-20240116; t=1726250442; c=relaxed/simple;
+	bh=29aFl9piFehCw9up+AP5hiQi8NH9/QrQ7icDqk+Mb9c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fGRU5c97WQRCj/E2AfQyZm5tEHIUh5lrovWJqTfsFZG/RgFLLRmRaLldLQOn/bCzhXMgoEHXiKmK4TxvVfQ2ft9hGuhJ3aCzn8hTxG8IhJUJwunDw60jWLdpXSw4VJFIytn2ppSXD8LhNehmRFBTy2OpqN9rbo6+ZdClOoT+Li4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=l0DjuLxv; arc=none smtp.client-ip=84.16.66.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4X51c70D3jzRtd;
-	Fri, 13 Sep 2024 19:33:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1726248790;
-	bh=c91K7s1c/V3DYCglP+L8gIe2uMVDTi7QkMZAlfXi9Gg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l0DjuLxvABVY9m3WW2eC4vaDwWmgh3xbrBbJAzDprHbTB7pegs6jjzZ/auBMoFUyc
-	 M2OppqZZdnV+i9umQUhYcbGMsk3vIFM5fzXH+xIWXV9LDVn49fwZ8PA77NWCUBUcfH
-	 1R/CPAvjYWAFRYhKyXKQjN76Cfq4ihGzj3z8vxaI=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4X51c63h7jz5bq;
-	Fri, 13 Sep 2024 19:33:09 +0200 (CEST)
-Date: Fri, 13 Sep 2024 19:33:02 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the landlock tree
-Message-ID: <20240913.sohShem6yoh9@digikod.net>
-References: <20240913180641.4a3152ec@canb.auug.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NkCu9GnmHAzXiRJhXPjact+Tkv47rCsV9unJh4MiFVuhhGv4hkACdLVRKsxcjhRpeXa0vn+PXRKAvs3lFJsBHRgKQl0YlDeu1vpNlyNazxum6kqx8OnvuA2CsvYdhxFqZ4JxMGgx9fCzmz8GimzWn661jlgOok1eAyOLWCMy41w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOz/eLtb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D64C4CEC0;
+	Fri, 13 Sep 2024 18:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726250441;
+	bh=29aFl9piFehCw9up+AP5hiQi8NH9/QrQ7icDqk+Mb9c=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=NOz/eLtb+79AkFSgZY4q8TCNWaDUaygKxy076aHYLabAn+3eQ0MD/3W3NePsyC7xF
+	 74PlTpPgYIAF99gpjMQc5amVjfrc1O8nqU/Bx4uQRIdz04WZGOEdLg/pZ8hLN8MVqw
+	 N79bWscaxJA6M4SI5mF1oViibH2k6MveFlegm+/zeZiBIr71KK7A2eLpvf5EPxJhPm
+	 aJGjYn1TvNHPY3f2k2Sxxfnm7cBJCQPJNqqDA5lnaSiEOJNPtibg1REgNeT9D57wQ4
+	 UlmLzI0zhHmLKbH/CNoBgZDgXQC3fIYTPxPxy4AKlR4Atw58n7JixuMjncgxMg67fH
+	 +9pWtmNawXvgA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 42156CE1494; Fri, 13 Sep 2024 11:00:39 -0700 (PDT)
+Date: Fri, 13 Sep 2024 11:00:39 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: Chen Yu <yu.c.chen@intel.com>, Peter Zijlstra <peterz@infradead.org>,
+	linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
+	linux-next@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
+Message-ID: <ac93f995-09bc-4d2c-8159-6afbfbac0598@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <xhsmh7cc0ogza.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <5ea3658b-5aec-4969-92c5-49a2d23171c3@paulmck-laptop>
+ <xhsmh4j74o6l9.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <8094db32-5c81-4537-8809-ddfe92a0ac6c@paulmck-laptop>
+ <4b93e5cf-c71e-4c64-9369-4ab3f43d9693@paulmck-laptop>
+ <xhsmh1q27o2us.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <cc537207-68a3-4dda-a8ec-6dda2fc1985d@paulmck-laptop>
+ <250cde11-650f-4689-9c36-816406f1b9b8@paulmck-laptop>
+ <182ef9c6-63a4-4608-98de-22ef4d35be07@paulmck-laptop>
+ <xhsmh34m38pdl.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -60,57 +71,38 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240913180641.4a3152ec@canb.auug.org.au>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <xhsmh34m38pdl.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 
-Hi,
+On Fri, Sep 13, 2024 at 06:55:34PM +0200, Valentin Schneider wrote:
+> On 13/09/24 07:08, Paul E. McKenney wrote:
+> > On Sun, Sep 08, 2024 at 09:32:18AM -0700, Paul E. McKenney wrote:
+> >>
+> >> Just following up...
+> >>
+> >> For whatever it is worth, on last night's run of next-20240906, I got
+> >> nine failures out of 100 6-hour runs of rcutorture’s TREE03 scenario.
+> >> These failures were often, but not always, shortly followed by a hard hang.
+> >>
+> >> The warning at line 1995 is the WARN_ON_ONCE(on_dl_rq(dl_se))
+> >> in enqueue_dl_entity() and the warning at line 1971 is the
+> >> WARN_ON_ONCE(!RB_EMPTY_NODE(&dl_se->rb_node)) in __enqueue_dl_entity().
+> >>
+> >> The pair of splats is shown below, in case it helps.
+> >
+> > Again following up...
+> >
+> > I am still seeing this on next-20240912, with six failures out of 100
+> > 6-hour runs of rcutorture’s TREE03 scenario.  Statistics suggests that
+> > we not read much into the change in frequency.
+> >
+> > Please let me know if there are any diagnostic patches or options that
+> > I should apply.
+> 
+> Hey, sorry I haven't forgotten about this, I've just spread myself a bit
+> too thin and also apparently I'm supposed to prepare some slides for next
+> week, I'll get back to this soonish.
 
-I minimized the commits required for my -next branch, I hope it will be
-good enough now:
-https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/commit/?h=next&id=24dfe95e493086a99acf7df1ef23d9f21f8cdec7
+I know that feeling!  Just didn't want it to get lost.
 
-Regards,
- Mickaël
-
-On Fri, Sep 13, 2024 at 06:06:41PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commits are also in the vfs-brauner tree as different
-> commits (but the same patches):
-> 
->   45c6e98705e0 ("fs: remove f_version")
->   ce22e70a947f ("pipe: use f_pipe")
->   191021d73803 ("fs: add f_pipe")
->   a6e2141e0b77 ("ubifs: store cookie in private data")
->   3125ec2ef10b ("ufs: store cookie in private data")
->   905fcc3a4ec0 ("udf: store cookie in private data")
->   f2647a4fbe5e ("proc: store cookie in private data")
->   e2f00c032780 ("ocfs2: store cookie in private data")
-> 
-> These are commits
-> 
->   11068e0b64cb ("fs: remove f_version")
->   5a957bbac3ab ("pipe: use f_pipe")
->   5e9b50dea970 ("fs: add f_pipe")
->   1146e5a69efc ("ubifs: store cookie in private data")
->   0bea8287df6c ("ufs: store cookie in private data")
->   3dd4624ffcd2 ("udf: store cookie in private data")
->   b4dba2efa810 ("proc: store cookie in private data")
->   ceaa5e80db7c ("ocfs2: store cookie in private data")
-> 
-> in the vfs-brauner tree.  There is a conflict between commit
-> 
->   61be440b7cc6 ("input: remove f_version abuse")
-> 
-> from the landlock tree and commit
-> 
->   7a7ce8b3ba66 ("input: remove f_version abuse")
-> 
-> from the vfs-brauner tree, so I used the latter version.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-
-
+							Thanx, Paul
 

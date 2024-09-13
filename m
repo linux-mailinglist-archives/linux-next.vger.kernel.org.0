@@ -1,177 +1,139 @@
-Return-Path: <linux-next+bounces-3834-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3835-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE2209785BA
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 18:27:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C02F6978646
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 18:55:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21814B203A2
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 16:27:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8395A282EDD
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 16:55:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0FA61FC4;
-	Fri, 13 Sep 2024 16:27:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7239277F2F;
+	Fri, 13 Sep 2024 16:55:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1lIKr8Ay"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A2ctF0f4"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6420856B72
-	for <linux-next@vger.kernel.org>; Fri, 13 Sep 2024 16:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABCE47E0FF
+	for <linux-next@vger.kernel.org>; Fri, 13 Sep 2024 16:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726244853; cv=none; b=RN9DoFno6Lq+1oFKITBQzpSRskm35JKAqvAH3RugoWX2Sbzye4lux94Ir457V7dSoEi3kLLLgKjobq8bTx2DBtq0JwsqKC7NZRqP1Ilkosrx439GFWiLgPMZfKc0IJSbxshRlXK1zw/u2Vn33eLU2E8EkTuqK10KU/AubnfX0uQ=
+	t=1726246543; cv=none; b=bkD23c85Rt6Bj1I3wOX3SdaLWdtKWAGEu5YKCcak2+8QwYBApibiumhWPittBtE/Ng77IRnPif7tuABxb2R7zPWy+u22Yr03FX0uJamoCEuV64mY//o22xTl5+oIMjd9CRB4ZCdtaUzoX2I1i96wgYGxymQ/Uye48JflVM4SRZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726244853; c=relaxed/simple;
-	bh=8h5Rfxoes1F/EQEOg2e1jm/KAtjsu5tZuD6b6E74r4c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Eia508Prn5WlbQkRxtJ/k0k7oAUokBgSkFmwqvmopC2qnsBpqAJ7zACgt0tofcJ9ft3FkUV9WH00v7quTSZinPL29V4yggz1Dy7/uOaqz9KCk6xhiEUc78v7A17waeC3uCRijxLEZQWU5QHgZ8QN/suHm8MOVB1dDixDipWuLoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1lIKr8Ay; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4581cec6079so289191cf.0
-        for <linux-next@vger.kernel.org>; Fri, 13 Sep 2024 09:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726244850; x=1726849650; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kaogzt0x83O50oW2Cdc8KsfEPIv2RHrKFooPdPcHuF0=;
-        b=1lIKr8AyxHNKFxB554AF19Kd7F/bHOqYVm/pVuG+G0WrUVcZuqqCzq9KxHJfXdWqJp
-         cGNvgw8gg25neqbex5UV34ycxw1WLIcmE6GfKsnv0iABDTaZBAjHKGYHm91kfSq6Eh55
-         YEzW2DX2WJFTqNPrAZ480SCCFDriNj/8NguAiPbhHB/UxKW5c5DLJoGjSJ49iePULnCZ
-         rCvAVpz27l0IM/ee0+s18oZWcS4T/YHEztinmwZB88EVUQ0YlRsM2VeLhmUWaMx9LL1o
-         R1mntdJCnidd2wxb5fhh292QM9LqPd/tbqce61hgmOflFDg0564WrCKQr0DryT1hzS72
-         a5ZQ==
+	s=arc-20240116; t=1726246543; c=relaxed/simple;
+	bh=M63V4u8RmF7+M3N3nDiiF0Dajnihv8lFCdb8FHkCYXU=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WOx0EC6GStMlqciI8YufeNbyq4ghP7yd3XbvkDwkkB1q6m6saUHLjxJ1zkBqkwBRRfghxSv5W0aD0VP4PXrNcrFWRIRoMZNT0lessbAwXKCDa65b0MXbd5gZRf4KK7TGDhZDXa10eukV2ki9mWlit0ZFqIGfUXne8+sAl28LYuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A2ctF0f4; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1726246540;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rMhbGtSuThhbSQXpYh3VPuR4XCfQk2qjBVR7P5AL4lE=;
+	b=A2ctF0f4W5m0udJjioYp1MotWdErEKI9KksL4PxC1l3svXue5h/YsuUrMj2Jf3+wL1q6ob
+	wfIv3BYxOLFmUzrO0cPpeKHIL7oD2vtYC8TBFiLSGPHzSC+SMLkpLQYD+MT/+F41vGRT3k
+	MYBFOHOfSWSMvnjGr3ZaWtuk5Gl+UpM=
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
+ [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-141-nKjz9qGyP6mDkPGVx-uMmQ-1; Fri, 13 Sep 2024 12:55:39 -0400
+X-MC-Unique: nKjz9qGyP6mDkPGVx-uMmQ-1
+Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-50108be7488so811783e0c.1
+        for <linux-next@vger.kernel.org>; Fri, 13 Sep 2024 09:55:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726244850; x=1726849650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kaogzt0x83O50oW2Cdc8KsfEPIv2RHrKFooPdPcHuF0=;
-        b=USm9rimMTlk+FYymSwlW/kLvN0BCKRLj5xwNRR6el3EOhM76XT2EgiB5FVQ02KewHl
-         Dj5uPKa7HOGi6JvorkgLmPyHLSe40Tksy3pekNpF8/bfSREzvvrkU+KIoeRpUuAIbXiQ
-         pTjRXtjyUcr5VBIVN4I+eC8U7ejpWH6bA3Ej16v+vEsK857K5hi8EBuwetpfuyL9mDaw
-         j6KlL3IOfEf2HpxS28qLr5jpiuOFAi2FNbEN35SS09hU0Fm/il/mJar7T5wpPz68htYX
-         wyNR+2Lfkw0shG+8O8UU8qZPx15ImdzHv0MK+cFBdAk+ag1pMGqMr2JpA2VLM0HchMY+
-         x8xg==
-X-Forwarded-Encrypted: i=1; AJvYcCX6CQD0YqfqbnEXujsPUelJr7tYgWM8Xi4XG5c/1A82V/j6M5s7vle6Tct5fxFjYc8vsNjlTCoLZNEY@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiDMGMU40+pbmYU5qkNLgXftg/lUMfSV+PZKSMobO5877x6Vlm
-	/g5Ci0DOG1mtf49WyOxBGJfC7d9zjp998hnH1j4dfO+09lVpxo+Jfc6fwzSL739cXdhI5TuokAm
-	VOUovy5sRhW9wZmbRX+pf5aNQtFv2UYGovndw
-X-Google-Smtp-Source: AGHT+IFLIVO3GAQiV32AIRq5tRq8/+Y6XmNS4xK792rwOjota6Ua04VI9PjqMQ/wHusA5aDseJUdCQZv6B0+BHgZ16k=
-X-Received: by 2002:a05:622a:4cc:b0:456:796b:2fe5 with SMTP id
- d75a77b69052e-45864512051mr7158501cf.9.1726244849858; Fri, 13 Sep 2024
- 09:27:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726246539; x=1726851339;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:to:from:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rMhbGtSuThhbSQXpYh3VPuR4XCfQk2qjBVR7P5AL4lE=;
+        b=lEhspiL8Y6MiSmF3M/whBTh8xDkQXX5S+G3lcuJDDS2vcs4UZW5VkYyGqacda0wLa3
+         dA1SCXjo9qPKiJ5t6BDAmLP8XlJMmPmUhhpMRwyH5BV0vIUj1wUof+ktQuDu3wSbX3P7
+         OE2vvrhRmn00CUjatavKubE+7doPGzTzhRFKAwuJSBB5oUZaRnqbiDujZG0xmAQT+9Z1
+         bcpbSR+FUNH7YSNG8fljUGOoVNJy2kEgK+8q/xnJA7B0sb71++cbatOG7bvWs5wUtu7Y
+         0NXz795UUnb9Qg4qk5r6uIPb3tCrMJYoG4hHr9JtTIIggRMjVAoM8XsiQ/2dI8yxg4Py
+         rbAg==
+X-Forwarded-Encrypted: i=1; AJvYcCXHnouBDmeGdw9uK1HAxqDrWw5LIvmVcmYKbj6WpBVHYU3s35tU75KxUhCPQjFIxbPM71CJBGl3wuIt@vger.kernel.org
+X-Gm-Message-State: AOJu0YyirnPPFzPFqN8qgAuQKrOBvErzk67i65fLo5exdGqwwIMuxzNs
+	wj+mqnJs+nY+Qr3m8uVGqJVRkd+RIVIA/k7gihIkOL2LdJtS1S1XkNQpUoXXiK5kJ4Rl3TGIS6u
+	CL+phaRuxXLuct6CMFVduZIfl06nN9KWfrkG8jbrOn77rrdSbZfNwR4U1b58=
+X-Received: by 2002:a05:6122:8cf:b0:4ef:5b2c:df41 with SMTP id 71dfb90a1353d-5032d4a4fd0mr5917761e0c.9.1726246538900;
+        Fri, 13 Sep 2024 09:55:38 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGridi6K82jf+EuBY9jFj7weDJRRCIARJdUQs7CRVJyyWanQpJWjhHgKxRi1h6aNlvWV/kzng==
+X-Received: by 2002:a05:6122:8cf:b0:4ef:5b2c:df41 with SMTP id 71dfb90a1353d-5032d4a4fd0mr5917723e0c.9.1726246538438;
+        Fri, 13 Sep 2024 09:55:38 -0700 (PDT)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-458320392cbsm54448461cf.61.2024.09.13.09.55.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2024 09:55:37 -0700 (PDT)
+From: Valentin Schneider <vschneid@redhat.com>
+To: paulmck@kernel.org, Chen Yu <yu.c.chen@intel.com>, Peter Zijlstra
+ <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+ sfr@canb.auug.org.au, linux-next@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
+In-Reply-To: <182ef9c6-63a4-4608-98de-22ef4d35be07@paulmck-laptop>
+References: <xhsmha5gwome6.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <Zs8pqJjIYOFuPDiH@chenyu5-mobl2>
+ <xhsmh7cc0ogza.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <5ea3658b-5aec-4969-92c5-49a2d23171c3@paulmck-laptop>
+ <xhsmh4j74o6l9.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <8094db32-5c81-4537-8809-ddfe92a0ac6c@paulmck-laptop>
+ <4b93e5cf-c71e-4c64-9369-4ab3f43d9693@paulmck-laptop>
+ <xhsmh1q27o2us.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <cc537207-68a3-4dda-a8ec-6dda2fc1985d@paulmck-laptop>
+ <250cde11-650f-4689-9c36-816406f1b9b8@paulmck-laptop>
+ <182ef9c6-63a4-4608-98de-22ef4d35be07@paulmck-laptop>
+Date: Fri, 13 Sep 2024 18:55:34 +0200
+Message-ID: <xhsmh34m38pdl.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240913125302.0a06b4c7@canb.auug.org.au> <20240912200543.2d5ff757@kernel.org>
- <20240913204138.7cdb762c@canb.auug.org.au> <20240913083426.30aff7f4@kernel.org>
- <20240913084938.71ade4d5@kernel.org> <913e2fbd-d318-4c9b-aed2-4d333a1d5cf0@cs-soprasteria.com>
-In-Reply-To: <913e2fbd-d318-4c9b-aed2-4d333a1d5cf0@cs-soprasteria.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 13 Sep 2024 09:27:17 -0700
-Message-ID: <CAHS8izPf29T51QB4u46NJRc=C77vVDbR1nXekJ5-ysJJg8fK8g@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-To: christophe.leroy2@cs-soprasteria.com
-Cc: Jakub Kicinski <kuba@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	David Miller <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
-	Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 13, 2024 at 9:13=E2=80=AFAM LEROY Christophe
-<christophe.leroy2@cs-soprasteria.com> wrote:
+On 13/09/24 07:08, Paul E. McKenney wrote:
+> On Sun, Sep 08, 2024 at 09:32:18AM -0700, Paul E. McKenney wrote:
+>>
+>> Just following up...
+>>
+>> For whatever it is worth, on last night's run of next-20240906, I got
+>> nine failures out of 100 6-hour runs of rcutorture=E2=80=99s TREE03 scen=
+ario.
+>> These failures were often, but not always, shortly followed by a hard ha=
+ng.
+>>
+>> The warning at line 1995 is the WARN_ON_ONCE(on_dl_rq(dl_se))
+>> in enqueue_dl_entity() and the warning at line 1971 is the
+>> WARN_ON_ONCE(!RB_EMPTY_NODE(&dl_se->rb_node)) in __enqueue_dl_entity().
+>>
+>> The pair of splats is shown below, in case it helps.
 >
+> Again following up...
 >
+> I am still seeing this on next-20240912, with six failures out of 100
+> 6-hour runs of rcutorture=E2=80=99s TREE03 scenario.  Statistics suggests=
+ that
+> we not read much into the change in frequency.
 >
-> Le 13/09/2024 =C3=A0 17:49, Jakub Kicinski a =C3=A9crit :
-> > On Fri, 13 Sep 2024 08:34:26 -0700 Jakub Kicinski wrote:
-> >>> The second "asm" above (CONFIG_PPC_KERNEL_PREFIXED is not set).  I am
-> >>> guessing by searching for "39" in net/core/page_pool.s
-> >>>
-> >>> This is maybe called from page_pool_unref_netmem()
-> >>
-> >> Thanks! The compiler version helped, I can repro with GCC 14.
-> >>
-> >> It's something special about compound page handling on powerpc64,
-> >> AFAICT. I'm guessing that the assembler is mad that we're doing
-> >> an unaligned read:
-> >>
-> >>     3300         ld 8,39(8)       # MEM[(const struct atomic64_t *)_29=
-].counter, t
-> >>
-> >> which does indeed look unaligned to a naked eye. If I replace
-> >> virt_to_head_page() with virt_to_page() on line 867 in net/core/page_p=
-ool.c
-> >> I get:
-> >>
-> >>     2982         ld 8,40(10)      # MEM[(const struct atomic64_t *)_94=
-].counter, t
-> >>
-> >> and that's what we'd expect. It's reading pp_ref_count which is at
-> >> offset 40 in struct net_iov. I'll try to take a closer look at
-> >> the compound page handling, with powerpc assembly book in hand,
-> >> but perhaps this rings a bell for someone?
-> >
-> > Oh, okay, I think I understand now. My lack of MM knowledge showing.
-> > So if it's a compound head we do:
-> >
-> > static inline unsigned long _compound_head(const struct page *page)
-> > {
-> >          unsigned long head =3D READ_ONCE(page->compound_head);
-> >
-> >          if (unlikely(head & 1))
-> >                  return head - 1;
-> >          return (unsigned long)page_fixed_fake_head(page);
-> > }
-> >
-> > Presumably page->compound_head stores the pointer to the head page.
-> > I'm guessing the compiler is "smart" and decides "why should I do
-> > ld (page - 1) + 40, when I can do ld page + 39 :|
-> >
-> > I think it's a compiler bug...
-> >
->
-> Would it work if you replace it with following ?
->
->         return head & ~1;
+> Please let me know if there are any diagnostic patches or options that
+> I should apply.
 >
 
-I was able to reproduce with the correct compiler version, and yes,
-this fixes the build for me. Thanks!
+Hey, sorry I haven't forgotten about this, I've just spread myself a bit
+too thin and also apparently I'm supposed to prepare some slides for next
+week, I'll get back to this soonish.
 
-Probably healthy to add UL, yes?
+>                                                       Thanx, Paul
+>
 
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 5769fe6e4950..ea4005d2d1a9 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -239,8 +239,8 @@ static inline unsigned long _compound_head(const
-struct page *page)
- {
-        unsigned long head =3D READ_ONCE(page->compound_head);
-
--       if (unlikely(head & 1))
--               return head - 1;
-+       if (unlikely(head & 1UL))
-+               return head & ~1UL;
-        return (unsigned long)page_fixed_fake_head(page);
- }
-
-Other than that I think this is a correct fix. Jakub, what to do here.
-Do I send this fix to the mm tree or to net-next?
-
---=20
-Thanks,
-Mina
 

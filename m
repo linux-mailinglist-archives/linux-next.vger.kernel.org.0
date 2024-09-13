@@ -1,108 +1,129 @@
-Return-Path: <linux-next+bounces-3837-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3838-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40BE8978763
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 20:00:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A24C9787A2
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 20:14:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF5A31F23052
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 18:00:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49A1128A789
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 18:14:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1005BBA50;
-	Fri, 13 Sep 2024 18:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCBD126C01;
+	Fri, 13 Sep 2024 18:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOz/eLtb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqd2bVlN"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC18D22338;
-	Fri, 13 Sep 2024 18:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEAF579B8E;
+	Fri, 13 Sep 2024 18:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726250442; cv=none; b=GmsEmZFlo+TVwMcCB/ju4ibFW9WBGfsCj/ZgzTnNsX8EPzt+D7/DllrZGOkZtsqa2vH5u9/1BmNabjg3ttmZp6VJnzZFR4YRk9x+43MIfwJHBHuHczZDqzNkD7bc+Q1bkAycc8UsQjfBdVDfxrcEELiY64EyocnYL/5TRqgxn3g=
+	t=1726251283; cv=none; b=bNkpJWEyRPXCv87gIBZJTy7o4/qbrJHWBiHbLBAF1q5B5XJxI43gKjyz877SUSxH5sjtNUSAstV5mh7F8k8iEOBNi4oAxu5IqkoP64STuPr1PyedNfTMVS7wVsIr149w4EiUJRYKkdUAmAb74n8KGW8qKIq5R1HwfEiy7ATexF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726250442; c=relaxed/simple;
-	bh=29aFl9piFehCw9up+AP5hiQi8NH9/QrQ7icDqk+Mb9c=;
+	s=arc-20240116; t=1726251283; c=relaxed/simple;
+	bh=TOwLQqvLOjjCMEnl5hRzo9OMtdXKW7OJKj9NQkgh30k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NkCu9GnmHAzXiRJhXPjact+Tkv47rCsV9unJh4MiFVuhhGv4hkACdLVRKsxcjhRpeXa0vn+PXRKAvs3lFJsBHRgKQl0YlDeu1vpNlyNazxum6kqx8OnvuA2CsvYdhxFqZ4JxMGgx9fCzmz8GimzWn661jlgOok1eAyOLWCMy41w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOz/eLtb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D64C4CEC0;
-	Fri, 13 Sep 2024 18:00:41 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=sC2U7o0jTVYi0GxQdswXIsqDOfcZqwqfViUQ2vIizUpPKqNZVPKSCaZ3OZxajbSf+rPknBxeLD8b+gEbXLGYs7ls2q5qCKvof5m9eZHVP/5TZPeGlRY/yxrJFMniwyivvOPUrdFsshaJ/bz6sSRBb7TJwaD3qc1NKKq+YRYlwsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eqd2bVlN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F00C4CEC0;
+	Fri, 13 Sep 2024 18:14:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726250441;
-	bh=29aFl9piFehCw9up+AP5hiQi8NH9/QrQ7icDqk+Mb9c=;
+	s=k20201202; t=1726251283;
+	bh=TOwLQqvLOjjCMEnl5hRzo9OMtdXKW7OJKj9NQkgh30k=;
 	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=NOz/eLtb+79AkFSgZY4q8TCNWaDUaygKxy076aHYLabAn+3eQ0MD/3W3NePsyC7xF
-	 74PlTpPgYIAF99gpjMQc5amVjfrc1O8nqU/Bx4uQRIdz04WZGOEdLg/pZ8hLN8MVqw
-	 N79bWscaxJA6M4SI5mF1oViibH2k6MveFlegm+/zeZiBIr71KK7A2eLpvf5EPxJhPm
-	 aJGjYn1TvNHPY3f2k2Sxxfnm7cBJCQPJNqqDA5lnaSiEOJNPtibg1REgNeT9D57wQ4
-	 UlmLzI0zhHmLKbH/CNoBgZDgXQC3fIYTPxPxy4AKlR4Atw58n7JixuMjncgxMg67fH
-	 +9pWtmNawXvgA==
+	b=eqd2bVlNFsfQrfnT8aBlBEysDazt2FRucGJZ+1o47oX2ry31OBDi/Me81vOfL/KcD
+	 N8toZObrtQL5sGmeNZIe9pXfzTMv2wI19+GoqIc/JlX8xRpcBYqKjb6+6IMdTIq41G
+	 n47kLw0vn8Qv7C4kQh5eQHXI1EJ4UD9y/cNkjAYoEYjvw0vubXsGlV9Aet+mHXsJZZ
+	 f3TSuTcaP1smvoa/b6KUf/4XQb7nSuz4HYQ2glNMuShbQCO91D60edoop4GAnQg84L
+	 RG8jHaBSIkerUAoHgcRNkASXyxXUTgNlXIJ7vj4VLZ8RrVT8bwmolw/M4rlSh+gO+X
+	 wsf/BwDknRZEg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 42156CE1494; Fri, 13 Sep 2024 11:00:39 -0700 (PDT)
-Date: Fri, 13 Sep 2024 11:00:39 -0700
+	id 05AA3CE1494; Fri, 13 Sep 2024 11:14:41 -0700 (PDT)
+Date: Fri, 13 Sep 2024 11:14:41 -0700
 From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: Chen Yu <yu.c.chen@intel.com>, Peter Zijlstra <peterz@infradead.org>,
-	linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
-	linux-next@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
-Message-ID: <ac93f995-09bc-4d2c-8159-6afbfbac0598@paulmck-laptop>
+To: "Liang, Kan" <kan.liang@linux.intel.com>
+Cc: peterz@infradead.org, mingo@redhat.com, linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH] perf: Fix missing RCU reader protection in
+ perf_event_clear_cpumask()
+Message-ID: <56ae5f08-174f-4f96-a454-36c6c3d68075@paulmck-laptop>
 Reply-To: paulmck@kernel.org
-References: <xhsmh7cc0ogza.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <5ea3658b-5aec-4969-92c5-49a2d23171c3@paulmck-laptop>
- <xhsmh4j74o6l9.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <8094db32-5c81-4537-8809-ddfe92a0ac6c@paulmck-laptop>
- <4b93e5cf-c71e-4c64-9369-4ab3f43d9693@paulmck-laptop>
- <xhsmh1q27o2us.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <cc537207-68a3-4dda-a8ec-6dda2fc1985d@paulmck-laptop>
- <250cde11-650f-4689-9c36-816406f1b9b8@paulmck-laptop>
- <182ef9c6-63a4-4608-98de-22ef4d35be07@paulmck-laptop>
- <xhsmh34m38pdl.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+References: <20240913162340.2142976-1-kan.liang@linux.intel.com>
+ <39bb4c06-a8e8-4eef-8659-534939c9987f@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <xhsmh34m38pdl.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+In-Reply-To: <39bb4c06-a8e8-4eef-8659-534939c9987f@linux.intel.com>
 
-On Fri, Sep 13, 2024 at 06:55:34PM +0200, Valentin Schneider wrote:
-> On 13/09/24 07:08, Paul E. McKenney wrote:
-> > On Sun, Sep 08, 2024 at 09:32:18AM -0700, Paul E. McKenney wrote:
-> >>
-> >> Just following up...
-> >>
-> >> For whatever it is worth, on last night's run of next-20240906, I got
-> >> nine failures out of 100 6-hour runs of rcutorture’s TREE03 scenario.
-> >> These failures were often, but not always, shortly followed by a hard hang.
-> >>
-> >> The warning at line 1995 is the WARN_ON_ONCE(on_dl_rq(dl_se))
-> >> in enqueue_dl_entity() and the warning at line 1971 is the
-> >> WARN_ON_ONCE(!RB_EMPTY_NODE(&dl_se->rb_node)) in __enqueue_dl_entity().
-> >>
-> >> The pair of splats is shown below, in case it helps.
-> >
-> > Again following up...
-> >
-> > I am still seeing this on next-20240912, with six failures out of 100
-> > 6-hour runs of rcutorture’s TREE03 scenario.  Statistics suggests that
-> > we not read much into the change in frequency.
-> >
-> > Please let me know if there are any diagnostic patches or options that
-> > I should apply.
+On Fri, Sep 13, 2024 at 12:25:59PM -0400, Liang, Kan wrote:
 > 
-> Hey, sorry I haven't forgotten about this, I've just spread myself a bit
-> too thin and also apparently I'm supposed to prepare some slides for next
-> week, I'll get back to this soonish.
+> 
+> On 2024-09-13 12:23 p.m., kan.liang@linux.intel.com wrote:
+> > From: Kan Liang <kan.liang@linux.intel.com>
+> > 
+> > Running rcutorture scenario TREE05, the below warning is triggered.
+> > 
+> > [   32.604594] WARNING: suspicious RCU usage
+> > [   32.605928] 6.11.0-rc5-00040-g4ba4f1afb6a9 #55238 Not tainted
+> > [   32.607812] -----------------------------
+> > [   32.609140] kernel/events/core.c:13946 RCU-list traversed in non-reader section!!
+> > [   32.611595] other info that might help us debug this:
+> > [   32.614247] rcu_scheduler_active = 2, debug_locks = 1
+> > [   32.616392] 3 locks held by cpuhp/4/35:
+> > [   32.617687]  #0: ffffffffb666a650 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x4e/0x200
+> > [   32.620563]  #1: ffffffffb666cd20 (cpuhp_state-down){+.+.}-{0:0}, at: cpuhp_thread_fun+0x4e/0x200
+> > [   32.623412]  #2: ffffffffb677c288 (pmus_lock){+.+.}-{3:3}, at: perf_event_exit_cpu_context+0x32/0x2f0
+> > 
+> > In perf_event_clear_cpumask(), uses list_for_each_entry_rcu() without an
+> > obvious RCU read-side critical section.
+> > 
+> > Either pmus_srcu or pmus_lock is good enough to protect the pmus list.
+> > In the current context, pmus_lock is already held. The
+> > list_for_each_entry_rcu() is not required.
+> > 
+> > Fixes: 4ba4f1afb6a9 ("perf: Generic hotplug support for a PMU with a scope")
+> > Reported-by: Paul E. McKenney <paulmck@kernel.org>
+> > Closes: https://lore.kernel.org/lkml/2b66dff8-b827-494b-b151-1ad8d56f13e6@paulmck-laptop/
+> > Tested-by: Paul E. McKenney <paulmck@kernel.org>
+> > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > Closes: https://lore.kernel.org/oe-lkp/202409131559.545634cc-oliver.sang@intel.com
+> 
+> Forgot to add the below tag, please fold it.
+> 
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
 
-I know that feeling!  Just didn't want it to get lost.
+Have one of these to go along with it.  ;-)
 
-							Thanx, Paul
+Tested-by: Paul E. McKenney <paulmck@kernel.org>
+
+> Thanks,
+> Kan
+> > Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+> > ---
+> >  kernel/events/core.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index 20e97c1aa4d6..5ba9934b49df 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -13912,7 +13912,7 @@ static void perf_event_clear_cpumask(unsigned int cpu)
+> >  	}
+> >  
+> >  	/* migrate */
+> > -	list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
+> > +	list_for_each_entry(pmu, &pmus, entry) {
+> >  		if (pmu->scope == PERF_PMU_SCOPE_NONE ||
+> >  		    WARN_ON_ONCE(pmu->scope >= PERF_PMU_MAX_SCOPE))
+> >  			continue;
 

@@ -1,145 +1,177 @@
-Return-Path: <linux-next+bounces-3833-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3834-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 126FC9785B0
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 18:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BE2209785BA
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 18:27:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89CC3B2186C
-	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 16:26:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21814B203A2
+	for <lists+linux-next@lfdr.de>; Fri, 13 Sep 2024 16:27:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0F5357CA7;
-	Fri, 13 Sep 2024 16:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0FA61FC4;
+	Fri, 13 Sep 2024 16:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bz+F0br5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1lIKr8Ay"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726E055769;
-	Fri, 13 Sep 2024 16:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6420856B72
+	for <linux-next@vger.kernel.org>; Fri, 13 Sep 2024 16:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726244764; cv=none; b=n5YXnC32YrNS3J149+XkYg0NoxSQ+gsauXrO2JGJwdnGTQRPwFu57YgMmqyOR7iZotgKPDFtRzqjBQhXBwN9NiZHleEPSc4Hh/IcQUQwCo0qhS6xvCekTI50bf+u0Y7mfQhSumVIBdA9dbDsKCkfivEOmerTqdYdCP79uGujF0g=
+	t=1726244853; cv=none; b=RN9DoFno6Lq+1oFKITBQzpSRskm35JKAqvAH3RugoWX2Sbzye4lux94Ir457V7dSoEi3kLLLgKjobq8bTx2DBtq0JwsqKC7NZRqP1Ilkosrx439GFWiLgPMZfKc0IJSbxshRlXK1zw/u2Vn33eLU2E8EkTuqK10KU/AubnfX0uQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726244764; c=relaxed/simple;
-	bh=oFRf8tXKeLenrtsTnrJ7yhMAKhNUViGXhcqFwNqqFj8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aJtBOGv+ERV5S9Z1V56uMsX0/NrwSUl/o5TY0pq7vrW2KA654ViEULwzcHReDXf7byIIu/d9kMALKRwoVrjJ2BdrIOoEu8sw/5ppphVARTtKWMRi57JZBRzwOAfEX7lTGgcldSnkooubma4Ls6opAVfMkPAAyOgDzc7HDxmwrys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bz+F0br5; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726244762; x=1757780762;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oFRf8tXKeLenrtsTnrJ7yhMAKhNUViGXhcqFwNqqFj8=;
-  b=Bz+F0br53Zw+03MDtc06A+QhxsuhR1forzDb6+VMy7ShYOUg5229kRMC
-   yb2DUozK2arL/DhLNNrPaa7zKNnSuVT7O3A/V/QBPIPjStncJq8ypYX6Y
-   gXpp0LRjYoqQP5sYXveTVsyk8TX5IJhEsf+razfkYjvtDCO+d9KJ27lGG
-   65zM6fYwLP4mmCU/wAH7cG2hqYAVx37dt6wC0W4hVFT1DPfTTEtOHSeW2
-   NrLoqNlvnWrf3EiFC8tVb1RjnHcLVZF4Dn1PCGPji5ptbDLSTuTORqMUW
-   YLh4f10XidP0GI4aSUk1pyIXqXtPTCmIChiIoU15AOs/OXmtuTAlLz7ZI
-   Q==;
-X-CSE-ConnectionGUID: 5z62UmenSIGK2aDobYfQkA==
-X-CSE-MsgGUID: KNxFj2h7Qlern5OG+t4/FA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="28898345"
-X-IronPort-AV: E=Sophos;i="6.10,226,1719903600"; 
-   d="scan'208";a="28898345"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 09:26:02 -0700
-X-CSE-ConnectionGUID: Z2rLzcX8Q9OblMD/d2yKGw==
-X-CSE-MsgGUID: AUGOwtgFTdKCTIxj1NShIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,226,1719903600"; 
-   d="scan'208";a="68884213"
-Received: from linux.intel.com ([10.54.29.200])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 09:26:02 -0700
-Received: from [10.212.21.130] (kliang2-mobl1.ccr.corp.intel.com [10.212.21.130])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by linux.intel.com (Postfix) with ESMTPS id CE24220CFEDA;
-	Fri, 13 Sep 2024 09:26:00 -0700 (PDT)
-Message-ID: <39bb4c06-a8e8-4eef-8659-534939c9987f@linux.intel.com>
-Date: Fri, 13 Sep 2024 12:25:59 -0400
+	s=arc-20240116; t=1726244853; c=relaxed/simple;
+	bh=8h5Rfxoes1F/EQEOg2e1jm/KAtjsu5tZuD6b6E74r4c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Eia508Prn5WlbQkRxtJ/k0k7oAUokBgSkFmwqvmopC2qnsBpqAJ7zACgt0tofcJ9ft3FkUV9WH00v7quTSZinPL29V4yggz1Dy7/uOaqz9KCk6xhiEUc78v7A17waeC3uCRijxLEZQWU5QHgZ8QN/suHm8MOVB1dDixDipWuLoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1lIKr8Ay; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4581cec6079so289191cf.0
+        for <linux-next@vger.kernel.org>; Fri, 13 Sep 2024 09:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1726244850; x=1726849650; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kaogzt0x83O50oW2Cdc8KsfEPIv2RHrKFooPdPcHuF0=;
+        b=1lIKr8AyxHNKFxB554AF19Kd7F/bHOqYVm/pVuG+G0WrUVcZuqqCzq9KxHJfXdWqJp
+         cGNvgw8gg25neqbex5UV34ycxw1WLIcmE6GfKsnv0iABDTaZBAjHKGYHm91kfSq6Eh55
+         YEzW2DX2WJFTqNPrAZ480SCCFDriNj/8NguAiPbhHB/UxKW5c5DLJoGjSJ49iePULnCZ
+         rCvAVpz27l0IM/ee0+s18oZWcS4T/YHEztinmwZB88EVUQ0YlRsM2VeLhmUWaMx9LL1o
+         R1mntdJCnidd2wxb5fhh292QM9LqPd/tbqce61hgmOflFDg0564WrCKQr0DryT1hzS72
+         a5ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726244850; x=1726849650;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kaogzt0x83O50oW2Cdc8KsfEPIv2RHrKFooPdPcHuF0=;
+        b=USm9rimMTlk+FYymSwlW/kLvN0BCKRLj5xwNRR6el3EOhM76XT2EgiB5FVQ02KewHl
+         Dj5uPKa7HOGi6JvorkgLmPyHLSe40Tksy3pekNpF8/bfSREzvvrkU+KIoeRpUuAIbXiQ
+         pTjRXtjyUcr5VBIVN4I+eC8U7ejpWH6bA3Ej16v+vEsK857K5hi8EBuwetpfuyL9mDaw
+         j6KlL3IOfEf2HpxS28qLr5jpiuOFAi2FNbEN35SS09hU0Fm/il/mJar7T5wpPz68htYX
+         wyNR+2Lfkw0shG+8O8UU8qZPx15ImdzHv0MK+cFBdAk+ag1pMGqMr2JpA2VLM0HchMY+
+         x8xg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6CQD0YqfqbnEXujsPUelJr7tYgWM8Xi4XG5c/1A82V/j6M5s7vle6Tct5fxFjYc8vsNjlTCoLZNEY@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiDMGMU40+pbmYU5qkNLgXftg/lUMfSV+PZKSMobO5877x6Vlm
+	/g5Ci0DOG1mtf49WyOxBGJfC7d9zjp998hnH1j4dfO+09lVpxo+Jfc6fwzSL739cXdhI5TuokAm
+	VOUovy5sRhW9wZmbRX+pf5aNQtFv2UYGovndw
+X-Google-Smtp-Source: AGHT+IFLIVO3GAQiV32AIRq5tRq8/+Y6XmNS4xK792rwOjota6Ua04VI9PjqMQ/wHusA5aDseJUdCQZv6B0+BHgZ16k=
+X-Received: by 2002:a05:622a:4cc:b0:456:796b:2fe5 with SMTP id
+ d75a77b69052e-45864512051mr7158501cf.9.1726244849858; Fri, 13 Sep 2024
+ 09:27:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] perf: Fix missing RCU reader protection in
- perf_event_clear_cpumask()
-To: peterz@infradead.org, mingo@redhat.com, linux-kernel@vger.kernel.org,
- linux-next@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc: "Paul E . McKenney" <paulmck@kernel.org>,
- kernel test robot <oliver.sang@intel.com>
-References: <20240913162340.2142976-1-kan.liang@linux.intel.com>
-Content-Language: en-US
-From: "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20240913162340.2142976-1-kan.liang@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240913125302.0a06b4c7@canb.auug.org.au> <20240912200543.2d5ff757@kernel.org>
+ <20240913204138.7cdb762c@canb.auug.org.au> <20240913083426.30aff7f4@kernel.org>
+ <20240913084938.71ade4d5@kernel.org> <913e2fbd-d318-4c9b-aed2-4d333a1d5cf0@cs-soprasteria.com>
+In-Reply-To: <913e2fbd-d318-4c9b-aed2-4d333a1d5cf0@cs-soprasteria.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 13 Sep 2024 09:27:17 -0700
+Message-ID: <CAHS8izPf29T51QB4u46NJRc=C77vVDbR1nXekJ5-ysJJg8fK8g@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+To: christophe.leroy2@cs-soprasteria.com
+Cc: Jakub Kicinski <kuba@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	David Miller <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Sep 13, 2024 at 9:13=E2=80=AFAM LEROY Christophe
+<christophe.leroy2@cs-soprasteria.com> wrote:
+>
+>
+>
+> Le 13/09/2024 =C3=A0 17:49, Jakub Kicinski a =C3=A9crit :
+> > On Fri, 13 Sep 2024 08:34:26 -0700 Jakub Kicinski wrote:
+> >>> The second "asm" above (CONFIG_PPC_KERNEL_PREFIXED is not set).  I am
+> >>> guessing by searching for "39" in net/core/page_pool.s
+> >>>
+> >>> This is maybe called from page_pool_unref_netmem()
+> >>
+> >> Thanks! The compiler version helped, I can repro with GCC 14.
+> >>
+> >> It's something special about compound page handling on powerpc64,
+> >> AFAICT. I'm guessing that the assembler is mad that we're doing
+> >> an unaligned read:
+> >>
+> >>     3300         ld 8,39(8)       # MEM[(const struct atomic64_t *)_29=
+].counter, t
+> >>
+> >> which does indeed look unaligned to a naked eye. If I replace
+> >> virt_to_head_page() with virt_to_page() on line 867 in net/core/page_p=
+ool.c
+> >> I get:
+> >>
+> >>     2982         ld 8,40(10)      # MEM[(const struct atomic64_t *)_94=
+].counter, t
+> >>
+> >> and that's what we'd expect. It's reading pp_ref_count which is at
+> >> offset 40 in struct net_iov. I'll try to take a closer look at
+> >> the compound page handling, with powerpc assembly book in hand,
+> >> but perhaps this rings a bell for someone?
+> >
+> > Oh, okay, I think I understand now. My lack of MM knowledge showing.
+> > So if it's a compound head we do:
+> >
+> > static inline unsigned long _compound_head(const struct page *page)
+> > {
+> >          unsigned long head =3D READ_ONCE(page->compound_head);
+> >
+> >          if (unlikely(head & 1))
+> >                  return head - 1;
+> >          return (unsigned long)page_fixed_fake_head(page);
+> > }
+> >
+> > Presumably page->compound_head stores the pointer to the head page.
+> > I'm guessing the compiler is "smart" and decides "why should I do
+> > ld (page - 1) + 40, when I can do ld page + 39 :|
+> >
+> > I think it's a compiler bug...
+> >
+>
+> Would it work if you replace it with following ?
+>
+>         return head & ~1;
+>
 
+I was able to reproduce with the correct compiler version, and yes,
+this fixes the build for me. Thanks!
 
-On 2024-09-13 12:23 p.m., kan.liang@linux.intel.com wrote:
-> From: Kan Liang <kan.liang@linux.intel.com>
-> 
-> Running rcutorture scenario TREE05, the below warning is triggered.
-> 
-> [   32.604594] WARNING: suspicious RCU usage
-> [   32.605928] 6.11.0-rc5-00040-g4ba4f1afb6a9 #55238 Not tainted
-> [   32.607812] -----------------------------
-> [   32.609140] kernel/events/core.c:13946 RCU-list traversed in non-reader section!!
-> [   32.611595] other info that might help us debug this:
-> [   32.614247] rcu_scheduler_active = 2, debug_locks = 1
-> [   32.616392] 3 locks held by cpuhp/4/35:
-> [   32.617687]  #0: ffffffffb666a650 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x4e/0x200
-> [   32.620563]  #1: ffffffffb666cd20 (cpuhp_state-down){+.+.}-{0:0}, at: cpuhp_thread_fun+0x4e/0x200
-> [   32.623412]  #2: ffffffffb677c288 (pmus_lock){+.+.}-{3:3}, at: perf_event_exit_cpu_context+0x32/0x2f0
-> 
-> In perf_event_clear_cpumask(), uses list_for_each_entry_rcu() without an
-> obvious RCU read-side critical section.
-> 
-> Either pmus_srcu or pmus_lock is good enough to protect the pmus list.
-> In the current context, pmus_lock is already held. The
-> list_for_each_entry_rcu() is not required.
-> 
-> Fixes: 4ba4f1afb6a9 ("perf: Generic hotplug support for a PMU with a scope")
-> Reported-by: Paul E. McKenney <paulmck@kernel.org>
-> Closes: https://lore.kernel.org/lkml/2b66dff8-b827-494b-b151-1ad8d56f13e6@paulmck-laptop/
-> Tested-by: Paul E. McKenney <paulmck@kernel.org>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202409131559.545634cc-oliver.sang@intel.com
+Probably healthy to add UL, yes?
 
-Forgot to add the below tag, please fold it.
+diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+index 5769fe6e4950..ea4005d2d1a9 100644
+--- a/include/linux/page-flags.h
++++ b/include/linux/page-flags.h
+@@ -239,8 +239,8 @@ static inline unsigned long _compound_head(const
+struct page *page)
+ {
+        unsigned long head =3D READ_ONCE(page->compound_head);
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+-       if (unlikely(head & 1))
+-               return head - 1;
++       if (unlikely(head & 1UL))
++               return head & ~1UL;
+        return (unsigned long)page_fixed_fake_head(page);
+ }
 
+Other than that I think this is a correct fix. Jakub, what to do here.
+Do I send this fix to the mm tree or to net-next?
+
+--=20
 Thanks,
-Kan
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->  kernel/events/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 20e97c1aa4d6..5ba9934b49df 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -13912,7 +13912,7 @@ static void perf_event_clear_cpumask(unsigned int cpu)
->  	}
->  
->  	/* migrate */
-> -	list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
-> +	list_for_each_entry(pmu, &pmus, entry) {
->  		if (pmu->scope == PERF_PMU_SCOPE_NONE ||
->  		    WARN_ON_ONCE(pmu->scope >= PERF_PMU_MAX_SCOPE))
->  			continue;
+Mina
 

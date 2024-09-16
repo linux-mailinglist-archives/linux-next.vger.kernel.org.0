@@ -1,82 +1,169 @@
-Return-Path: <linux-next+bounces-3877-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3878-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9F8E97A688
-	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2024 19:13:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE7EA97A925
+	for <lists+linux-next@lfdr.de>; Tue, 17 Sep 2024 00:22:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E4D61F263E2
-	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2024 17:13:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5494284EFF
+	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2024 22:22:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42454158870;
-	Mon, 16 Sep 2024 17:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3CD815C131;
+	Mon, 16 Sep 2024 22:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iguana.be header.i=@iguana.be header.b="urL8RVFW"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GduExZPv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from infomag.iguana.be (infomag.iguana.be [185.87.124.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEFAE15852F;
-	Mon, 16 Sep 2024 17:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.124.46
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25E115C123;
+	Mon, 16 Sep 2024 22:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726506831; cv=none; b=Csjf+qTR+30VpcA/9ZO/MUijvnIpel904Ih2yIoBld/P0fN6fYnKV0cUVWleIhKvlGWe4Y7MHTkKbKmrQ7Q+gfwHOaaJ7fuTwZKB/qXNOmWCGkEoST999oMnP3F0hbAC2/6IK/YSJnO1zQEOAUtm/7s+XgY8zoaQENN6X7giNdE=
+	t=1726525353; cv=none; b=bI1hUUXOstCxz0qU8RyXU3BVItCz8MShyF5B/xVHz1/dSDBl82tcsmMPnfkoDBqEJ9/UAlSGgQ1K6U1Y/V3niimWflcz2py9gG2UOKTCkHi0fHxIujVObZxeDyukDX49P/BvVoeC29yIx2pMKkNivR+gNFgDBsKkd6Y+n6nZQzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726506831; c=relaxed/simple;
-	bh=bs6H9LVoKvWDPryXbzuVFI1ASqkGV4XKUggrjo3zfiA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CQ142duhRaX9Mf7+zzTwOay+qKbl5Qy2VdpMtiTi7vNFFA80gtW6H0TgByI4qVH/PKoLjtECKwnPNnfM7LQCsu8+QY/bmJ8AXu4Q8vHhs93MkfPUrBWJhpz9HiCrbw6mclkFPju9/qtjbl30KDuU1owHkFteqcC+WePXuJkAWjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iguana.be; spf=none smtp.mailfrom=iguana.be; dkim=pass (1024-bit key) header.d=iguana.be header.i=@iguana.be header.b=urL8RVFW; arc=none smtp.client-ip=185.87.124.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iguana.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iguana.be
-Received: by infomag.iguana.be (Postfix, from userid 1001)
-	id 7045F603CACE; Mon, 16 Sep 2024 19:04:29 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 infomag.iguana.be 7045F603CACE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iguana.be;
-	s=infomag-20180602; t=1726506269;
-	bh=bs6H9LVoKvWDPryXbzuVFI1ASqkGV4XKUggrjo3zfiA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=urL8RVFWwZBSYYBubkVtaJaoukvFNMA0k+tDNNxUixT17/Fl63ksNXcAiG2WgKXHk
-	 90/txqQl78F+T4Up2uOASzJ9VP9MtBveoj/HPSS8Sj5Kk+HwDACZzuYfwAiQweHZpZ
-	 rxnYNOGWRHb/l3jIcLeJiWQ/9WlZpuLtoWFCIQts=
-Date: Mon, 16 Sep 2024 19:04:29 +0200
-From: Wim Van Sebroeck <wim@iguana.be>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Rob Herring <robh@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the devicetree tree
-Message-ID: <20240916170429.GA16395@infomag.iguana.be>
-References: <20240916160127.60a93bdf@canb.auug.org.au>
+	s=arc-20240116; t=1726525353; c=relaxed/simple;
+	bh=88z1pS1SBfOoYvatR7vnx9K7BaMboS9eXDT1yrNhV8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZLg8fc55IyKVdvCe6BUTz+kLHrdaUykKKkIRhi++4FwMKbqhidDIyENEZqL4OO+CWchEyvEXgL7SCjCerX677TTw6SxQmDe7QEdbV6L2FYFGKr0v8lP68UzeAVAG6vofoUXN8dUfyhMC5T3aj1BGeiXjxXU9YrF5ICbCCbsYVwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GduExZPv; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1726525341;
+	bh=xYLt5HCNuQUCe7iyAXz68X57BxYyGkUeHM1y1wJa034=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=GduExZPvuKUTCnDnYDv6+7mxZwX0AS+pmOPGaC8ePA89JTlAVWMczLwzcp8bj/DAX
+	 d+zG6O0IpbFmQMRo2poR3Zbj7skTmuyMTScfV32pppdd5Ku6RIvFEf9GI6leNAHwfP
+	 SF5PaySybrulqQy2Dgb0oCv9F8HI0wcbAWRTKOqPHwHzR2yHgIGUfr72PNjfgfF1wr
+	 ZOwngr0OQ1Mg8JfFZXYBw/eL0y/ToEQszALbMXV8QQ7DORSZdpmsqwxbUMW1sDYQQ5
+	 3gKXCyGdeH/qe4NiQ+DHUjGfKjptUj01b+Oy+M49o5Gy5Rgd9eNTKq0eGGvV3oZuW/
+	 KFCR3rzdSty2Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X6ztN5P48z4x9G;
+	Tue, 17 Sep 2024 08:22:20 +1000 (AEST)
+Date: Tue, 17 Sep 2024 08:22:19 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Namjae Jeon <linkinjeon@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, Dongliang Cui
+ <dongliang.cui@unisoc.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>, Yuezhang Mo <Yuezhang.Mo@sony.com>, Zhiguo Niu
+ <zhiguo.niu@unisoc.com>
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the exfat
+ tree
+Message-ID: <20240917082219.736ce016@canb.auug.org.au>
+In-Reply-To: <20240812081046.369bbba5@canb.auug.org.au>
+References: <20240812081046.369bbba5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240916160127.60a93bdf@canb.auug.org.au>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: multipart/signed; boundary="Sig_/nUyiXBz_m.Q+fN3GG+Olily";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Stephen,
+--Sig_/nUyiXBz_m.Q+fN3GG+Olily
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
-> 
-> The following commit is also in the watchdog tree as a different commit
-> (but the same patch):
-> 
->   0a543ac529fe ("dt-bindings: watchdog: qcom-wdt: document support on SA8255p")
-> 
-> This is commit
-> 
->   f051e2e409d6 ("dt-bindings: watchdog: qcom-wdt: document support on SA8255p")
-> 
-> in the watchdog tree.
+Hi all,
 
-Patch removed from the linux-watchdog-next tree.
+On Mon, 12 Aug 2024 08:10:46 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the vfs-brauner tree got a conflict in:
+>=20
+>   fs/exfat/inode.c
+>=20
+> between commits:
+>=20
+>   3e491faa7648 ("exfat: do not fallback to buffered write")
+>   98ad7b9012b5 ("exfat: Implement sops->shutdown and ioctl")
+>=20
+> from the exfat tree and commits:
+>=20
+>   a225800f322a ("fs: Convert aops->write_end to take a folio")
+>   1da86618bdce ("fs: Convert aops->write_begin to take a folio")
+>=20
+> from the vfs-brauner tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc fs/exfat/inode.c
+> index 7d43a0942911,05f0e07b01d0..000000000000
+> --- a/fs/exfat/inode.c
+> +++ b/fs/exfat/inode.c
+> @@@ -428,11 -452,7 +428,10 @@@ static int exfat_write_begin(struct fil
+>   {
+>   	int ret;
+>  =20
+>  +	if (unlikely(exfat_forced_shutdown(mapping->host->i_sb)))
+>  +		return -EIO;
+>  +
+> - 	*pagep =3D NULL;
+> - 	ret =3D block_write_begin(mapping, pos, len, pagep, exfat_get_block);
+> + 	ret =3D block_write_begin(mapping, pos, len, foliop, exfat_get_block);
+>  =20
+>   	if (ret < 0)
+>   		exfat_write_failed(mapping, pos+len);
+> @@@ -448,7 -468,15 +447,7 @@@ static int exfat_write_end(struct file=20
+>   	struct exfat_inode_info *ei =3D EXFAT_I(inode);
+>   	int err;
+>  =20
+> - 	err =3D generic_write_end(file, mapping, pos, len, copied, pagep, fsda=
+ta);
+> + 	err =3D generic_write_end(file, mapping, pos, len, copied, folio, fsda=
+ta);
+>  -
+>  -	if (ei->i_size_aligned < i_size_read(inode)) {
+>  -		exfat_fs_error(inode->i_sb,
+>  -			"invalid size(size(%llu) > aligned(%llu)\n",
+>  -			i_size_read(inode), ei->i_size_aligned);
+>  -		return -EIO;
+>  -	}
+>  -
+>   	if (err < len)
+>   		exfat_write_failed(mapping, pos+len);
+>  =20
 
-Kind regards,
-Wim.
+This is now a conflict between the exfat tree and Linus' tree.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nUyiXBz_m.Q+fN3GG+Olily
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbor5sACgkQAVBC80lX
+0Gy4WQf/YhhEKohR1ztog2q9r94G8eEo8/M/VT3SM5BshrN95AP5ivSHy/Le+0Wh
+lWGeloERnxYJt18wsfPlUWIU0kiW6YLWo9Nk3jYmFx8S7ot3Ws2/e/kNvtsnGN46
+59LzhgszgUqNV/8UcbL94Fwh8rs+diIyzO1MPT4pCzX26y5k2JOHJmfsYguKIwjb
+psfdYNaesLqtnqKVMs65np98Wo5j7y1zxxj2CpRmXhbnrmAV4Sx8AvdXgItxTkDd
+lDENqdoXi9IP6M/KFqh0Husz8GyaPwQ7/OL6UoH3Emi4YZz8cpeQ5BuSJMdaCO1W
+9rx88Ls65aAbLj50xirXUrjFbYb1Lg==
+=hN7c
+-----END PGP SIGNATURE-----
+
+--Sig_/nUyiXBz_m.Q+fN3GG+Olily--
 

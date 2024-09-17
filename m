@@ -1,159 +1,83 @@
-Return-Path: <linux-next+bounces-3891-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3892-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0066497AC87
-	for <lists+linux-next@lfdr.de>; Tue, 17 Sep 2024 10:02:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 217EF97AFF3
+	for <lists+linux-next@lfdr.de>; Tue, 17 Sep 2024 14:07:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D3D61F22E19
-	for <lists+linux-next@lfdr.de>; Tue, 17 Sep 2024 08:02:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DECAE28661E
+	for <lists+linux-next@lfdr.de>; Tue, 17 Sep 2024 12:07:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057A27DA91;
-	Tue, 17 Sep 2024 08:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B01711487C8;
+	Tue, 17 Sep 2024 12:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="r6HT0/ry"
+	dkim=pass (1024-bit key) header.d=iguana.be header.i=@iguana.be header.b="u7AdgetM"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390DD12F399;
-	Tue, 17 Sep 2024 08:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+Received: from infomag.iguana.be (infomag.iguana.be [185.87.124.46])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 312A5219ED;
+	Tue, 17 Sep 2024 12:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.124.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726560134; cv=none; b=aJSgDby6g4LrCmTzKlMFXfyiTrRL3rBML+a7WH4wEGHCMrkhavIk+on6e6bjI+3eKyFQE6s6hRF2fTM5vdPuMPbs/cI1l1hS0I5Q1b1ihPOZ4Pa09sG6kqMLhLS/qxRuCT5WccTf2DcixFnzbfYVfgLhXwlKkWBxtyx7Qr0MQ98=
+	t=1726574835; cv=none; b=aMi+vq00pkprOyQ6sSTByJxBeUJ/HxUnqP5DpIFZuhCZao+tCNVuQmTlAzqTJDGd5RbEKRMS9TVr96GNRvgdmCO5GUbVLAxudeQu0aDL67b66TG/AuiYIQkMtx4y2NSs503aU+9DtnecgdWBmoxV2n0QiHGLCZrRZBh3uBmO8XU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726560134; c=relaxed/simple;
-	bh=ESBg/RwXEIF18IhmT97V59aOMlXtn5mQkWw6ywjoOKA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fFg9xYbCJjUqyobi6gUJHdipklLMT2nxzsLLETJJIDy1nJMYwJJErom0+0qY800g2nDtIkpSirm05Uv686u728lNsDKvoOgGz4mJ5Ek7kY0CA+MexQlXoDb2sILaTVuzL+Z0Xx/FnzknJbJzAb5LclooEZ++JNDMVByPs26tuhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=r6HT0/ry; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1726560128;
-	bh=9Zs5rC6LYBPELuXcpw4Ezx66lMlbhg+66YXN2cd6eKo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=r6HT0/ryNJePs7T1/FV0IIVrzv+7elw8Lc8IxLu+Bh0tFGF+6y8ddDzxneunCxyND
-	 8gy0LLPbQpZG035TgsnD19P3xIFVuXfUSAEpiJOYlOrkzPbiibeSYo48hYg+Z+nzPU
-	 Emu22ZeFWb5xsNQfIhIVDhZRnVqv5l6r+nj7TjTYuTj9CEM43lW+GC0AVyO/KLjuJ+
-	 mZ0V33Vj6hvBZysIDUJ/tYsAOOfBuG/IP0tBfYfa8S6bf25pmapf2yg7YCRYnbl6Kg
-	 cZv4m4Tf6Hcv+cUNzlQD3kkQeJwoarZQn7cOEZaAbyiPpQMmca6p7G7p6+lnXFdgIj
-	 /bm5x15+kTBhg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X7DlM69pkz4x8X;
-	Tue, 17 Sep 2024 18:02:07 +1000 (AEST)
-Date: Tue, 17 Sep 2024 18:02:07 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Michal Hocko <mhocko@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Paul Moore
- <paul@paul-moore.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the security tree with the mm tree
-Message-ID: <20240917180207.1f68637c@canb.auug.org.au>
-In-Reply-To: <Zuk06cfmaOT5fltF@tiehlicka>
-References: <20240911142822.7c65e02e@canb.auug.org.au>
-	<20240917093048.71949a8f@canb.auug.org.au>
-	<Zuk06cfmaOT5fltF@tiehlicka>
+	s=arc-20240116; t=1726574835; c=relaxed/simple;
+	bh=jlDZU3JVNnoQT42sJrsjrjqJtbpXIXaL+fwBe4hD65I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cehVqjlATtI+kAvASWLHnp7Qlgg2YbZ0dTtMb5FLJC8cddHq+MSKpNJLGqbu/yd9NyEaMWKBHS6Nzq36q5j8NGLNjbFr8vFXUM1KLl+ihbg3+7xdmXG8myNED1T7ciXQAzxIObEQgYma2dhOOKXC4y2YaJsVitlgMUrz5wXpbMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iguana.be; spf=none smtp.mailfrom=iguana.be; dkim=pass (1024-bit key) header.d=iguana.be header.i=@iguana.be header.b=u7AdgetM; arc=none smtp.client-ip=185.87.124.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iguana.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iguana.be
+Received: by infomag.iguana.be (Postfix, from userid 1001)
+	id 25D91603CACE; Tue, 17 Sep 2024 14:07:09 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 infomag.iguana.be 25D91603CACE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iguana.be;
+	s=infomag-20180602; t=1726574829;
+	bh=jlDZU3JVNnoQT42sJrsjrjqJtbpXIXaL+fwBe4hD65I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=u7AdgetMBhcYxxdVwzjo/tbr8XfIiz+syPQ8DMF6tkGIYGRE/jl2alg3oIuBgu8Of
+	 um6ApQNPSXVvuVDl1zukLbdxoOR5I2aseR85xf4i7WoL9y2YrP/AP5AMUQ+i0XD4Ku
+	 s/LHyT9snsk7BIBK4QvWt3IOfvP3IdW5/RS6Q8Zk=
+Date: Tue, 17 Sep 2024 14:07:09 +0200
+From: Wim Van Sebroeck <wim@iguana.be>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+	ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the watchdog tree
+Message-ID: <20240917120709.GB3555@infomag.iguana.be>
+References: <20240917130325.0460eebf@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KVEd/WIycsNfDgRwmGL9htV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240917130325.0460eebf@canb.auug.org.au>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
---Sig_/KVEd/WIycsNfDgRwmGL9htV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi Michal,
+> Hi all,
+> 
+> The following commit is also in the arm-soc tree as a different commit
+> (but the same patch):
+> 
+>   f0764bb2a7b6 ("wdt: ts72xx: add DT support for ts72xx")
+> 
+> This is commit
+> 
+>   177c20d761c5 ("wdt: ts72xx: add DT support for ts72xx")
+> 
+> in the arm-soc tree.
 
-On Tue, 17 Sep 2024 09:51:05 +0200 Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 17-09-24 09:30:48, Stephen Rothwell wrote:
-> >=20
-> > On Wed, 11 Sep 2024 14:28:22 +1000 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > Today's linux-next merge of the security tree got conflicts in:
-> > >=20
-> > >   include/linux/lsm_hooks.h
-> > >   security/security.c
-> > >=20
-> > > between commit:
-> > >=20
-> > >   3346ada04cf5 ("bcachefs: do not use PF_MEMALLOC_NORECLAIM")
-> > >=20
-> > > from the mm-unstable branch of the mm tree and commit:
-> > >=20
-> > >   711f5c5ce6c2 ("lsm: cleanup lsm_hooks.h")
-> > >=20
-> > > from the security tree.
-> > >=20
-> > > I fixed it up (I used the latter version ofinclude/linux/lsm_hooks.h
-> > > and see below) and can carry the fix as necessary. This is now fixed =
-as
-> > > far as linux-next is concerned, but any non trivial conflicts should =
-be
-> > > mentioned to your upstream maintainer when your tree is submitted for
-> > > merging.  You may also want to consider cooperating with the maintain=
-er
-> > > of the conflicting tree to minimise any particularly complex conflict=
-s.
-> > >=20
-> > > --=20
-> > > Cheers,
-> > > Stephen Rothwell
-> > >=20
-> > > diff --cc security/security.c
-> > > index 3581262da5ee,4564a0a1e4ef..000000000000
-> > > --- a/security/security.c
-> > > +++ b/security/security.c
-> > > @@@ -660,7 -745,7 +745,7 @@@ static int lsm_file_alloc(struct file *
-> > >    *
-> > >    * Returns 0, or -ENOMEM if memory can't be allocated.
-> > >    */
-> > > - int lsm_inode_alloc(struct inode *inode, gfp_t gfp)
-> > >  -static int lsm_inode_alloc(struct inode *inode)
-> > > ++static int lsm_inode_alloc(struct inode *inode, gfp_t gfp)
-> > >   {
-> > >   	if (!lsm_inode_cache) {
-> > >   		inode->i_security =3D NULL; =20
-> >=20
-> > This is now a conflict between the mm tree and Linus' tree. =20
->=20
-> Andrew said he would drop the mm patches and I will resubmit when merge
-> window closes.
+Removed from the linux-watchdog-next tree.
 
-Yeah, I normally drop the unstable parts of the mm tree during the merge
-window, so I will do that from tomorrow.
+Kind regards,
+Wim.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/KVEd/WIycsNfDgRwmGL9htV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbpN38ACgkQAVBC80lX
-0GzsgQf+MLS9yqbDMD8Yc75RSEFXCnAKhHBxaRnHj6OMHpII3nmDaOUEnKis2/0H
-eF3xYNWTfWBAmrvF9dQwbLMyAScrFIMHhKH9oL/vUrcv9xz+3LsBvRkMm3sCrf0G
-HJl3T1jyv5t5g2udaoulolZTgmnRKaEI98mDsI/NBlz8pxrfG2+m0QOI5+f5BXI3
-qzfrBqUSgw3/Ap90GjKI/jV5mvz5qDesbRLHo2b8i92xl4ZTDeq2pA1nQYzX/b2B
-KvgOwTxfwlnZR+cV5bb6q8z5sTFxWH6T3jQmHSzzMbrii0jWl+CXSTLmiPAMDDob
-f5ssCZpmSVUFjG4hGoooJeZCPEVEYw==
-=A8tJ
------END PGP SIGNATURE-----
-
---Sig_/KVEd/WIycsNfDgRwmGL9htV--
 

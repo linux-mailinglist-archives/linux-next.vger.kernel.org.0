@@ -1,96 +1,100 @@
-Return-Path: <linux-next+bounces-3903-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3904-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91E0897B679
-	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2024 02:34:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DCC497B6AC
+	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2024 04:05:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4723B1F21E27
-	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2024 00:34:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 463281F2376B
+	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2024 02:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 155D7291E;
-	Wed, 18 Sep 2024 00:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F523524B0;
+	Wed, 18 Sep 2024 02:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="nMrnuoKz"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="F5J4qpko"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3188475;
-	Wed, 18 Sep 2024 00:34:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B075619A;
+	Wed, 18 Sep 2024 02:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726619659; cv=none; b=B0aecwCtb7mepGZ3SeKEq86wM+kV80VuVZAsO59ydvbYFqJOgODHeLIcAwAkTnuk6fvEj/2z7QQA25pDPEEThYFlKIdqrt1Nh5fbUMJpiviv6LbT6NgSrANDPaTPH7a9b0ladePUG/pg5hK7PMie0YyYwcSm0xxS1XwGes9cFIA=
+	t=1726625151; cv=none; b=hYpjHVVkY40gamFqEDreJXsruxQrhEJO6PVigkF2CX7IJ6p5FlyONJ6PxjPQTPUS9feNc105HxGDE0xtbhuHwwDPQtdfSIUS7/xfP0DGQywtzdBkCw58OsuhMCbEdmqwHrUjXh10LSpUQmr9sDQ6Q+ptVQ7VwbVtTPkdW9VHA5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726619659; c=relaxed/simple;
-	bh=a+BlwGFG+5s4JkwvEWk2YmHRSIaS4zNTEg8TgUmJXD0=;
+	s=arc-20240116; t=1726625151; c=relaxed/simple;
+	bh=Ab2/LOxhpE5niCrUzSebbWT+ZOyvaTATKYrALwMKywI=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oglL58STehSWKLuVE/f3v7nPSB1AEQfX1OduFaCq45irPVsASpbWNXhNt+n/xO/to2TeJo/BpJeF4Y88reMzCEP0lXvHLjSCEmhXB+HZ6HD6T2DJZApkwR/neI/ZFm0lI7tmEeVNSFLYctQXzaTqFY29OFTcv+y2uXFdN9MKNmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=nMrnuoKz; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=jIuz/v7pu+95scc9qSZNYommj8UE46FB2tiaRJ1U82Z5TDfqmzC5MJOOARmDGdNpHuETeuq9+I+rXzB3LoBN1bLWTI/upBB55N5r7ySe4ns6B8hYmjs6jMM0jjqaijyGmsCSKY6GLp47kiyipPV/yx2cKHg93Wst2zc6WeL6qtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=F5J4qpko; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1726619653;
-	bh=Y7RdCaCJSpI7y4dZYGtBSZyboY8YFXb+BALw4dYH4hs=;
+	s=201702; t=1726625145;
+	bh=JFR3RgugFq1YfT4esI9HKKUJ1Z9NhqOrhmEOzHZXTdk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nMrnuoKzCrIUR6mSkQinwuHj9CkRIxJCHXFcdNpL+6TLG5h0ujMkLStgItlfbjp6O
-	 4sJ5dUjJMRMIJ4uEG+ltCeP/VXt8Hck3r7HegYI/4POsTEU4fsWePG8NDdSJZ2MrLC
-	 SZtcMq4yYS/9glZGzLQ4CHd/Qdn9JIiIxW5QLM1+hu207aK2bz7zbIlbMVtaZga0Y4
-	 wmFoc6lUi2SfRK7wCZDa/0OMwM2rka77pA5sZl16hzTNnrLKM0RL4BqCj4H2WUGPZ9
-	 xQd+7qtx1lE91t6i/tGjz79gE93S5dZXqnWw4trtD8buK6Nk+x7J2mZR/fz9HtzMNl
-	 H3NS7tafch/9Q==
+	b=F5J4qpkoeqRlVODclqY0e3gIYcNYzIcZB3Q87vY7qkVw4wAetclSnZKqEUEDFM01V
+	 7z8e0IfbhJ6TRgQvS37s778Edp6zd2ZnVIYxBMh5k255tVGb83cfuH7ONqnfBIFELz
+	 elzhkbg25JtQKurGt8/zieWA+Hc78TlvNC9EvuUkNe9jQC52jyo++D2v++aYmXfSnX
+	 vRl/8/x9sZ27cShcpF3abWurBOnHB+r8UDVs4TOaNFeq60nN1ac2wS7TovhjrlupHc
+	 zA2Q0FszENavgpWkRi7Hea0zOP1a4VmxKIu9e6K3gC92JqnzEAMvSzBStnmrS291ot
+	 JJQ7doc/qhGsQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X7fm46h4Yz4xWm;
-	Wed, 18 Sep 2024 10:34:12 +1000 (AEST)
-Date: Wed, 18 Sep 2024 10:34:12 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X7hnh677hz4xWZ;
+	Wed, 18 Sep 2024 12:05:44 +1000 (AEST)
+Date: Wed, 18 Sep 2024 12:05:44 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Pankaj Raghav <p.raghav@samsung.com>, Usama Arif
- <usamaarif642@gmail.com>
-Subject: Re: linux-next: manual merge of the vfs-brauner tree with the mm
+To: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Lee Jones <lee@kernel.org>
+Cc: Andre Przywara <andre.przywara@arm.com>, Chris Morgan
+ <macromorgan@hotmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the regulator tree with the mfd
  tree
-Message-ID: <20240918103412.0ce158d9@canb.auug.org.au>
-In-Reply-To: <20240902112101.2728f045@canb.auug.org.au>
-References: <20240902112101.2728f045@canb.auug.org.au>
+Message-ID: <20240918120544.0150c844@canb.auug.org.au>
+In-Reply-To: <20240910125101.4057d8f7@canb.auug.org.au>
+References: <20240910125101.4057d8f7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hSuACRlSa+dU/oh.351E_vK";
+Content-Type: multipart/signed; boundary="Sig_/pINKJaHHiIeFY9KtkAwQTF6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/hSuACRlSa+dU/oh.351E_vK
+--Sig_/pINKJaHHiIeFY9KtkAwQTF6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 2 Sep 2024 11:21:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On Tue, 10 Sep 2024 12:51:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> Today's linux-next merge of the fs-next tree got a conflict in:
+> Today's linux-next merge of the regulator tree got conflicts in:
 >=20
->   include/linux/huge_mm.h
+>   drivers/mfd/axp20x.c
+>   include/linux/mfd/axp20x.h
 >=20
 > between commit:
 >=20
->   bc47772ebe8b ("mm: introduce a pageflag for partially mapped folios")
+>   2e1a57d5b0ad ("mfd: axp20x: Add ADC, BAT, and USB cells for AXP717")
 >=20
-> from the mm-unstable branch of the mm tree and commit:
+> from the mfd tree and commit:
 >=20
->   fd031210c9ce ("mm: split a folio in minimum folio order chunks")
+>   bb2ac59f8205 ("mfd: axp20x: AXP717: Add support for boost regulator")
 >=20
-> from the vfs-brauner tree.
+> from the regulator tree.
+>=20
+> The latter change to  include/linux/mfd/axp20x.h is a subset of the
+> former change.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -99,71 +103,51 @@ rote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
-> diff --cc include/linux/huge_mm.h
-> index 0b0539f4ee1a,7c50aeed0522..000000000000
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@@ -326,14 -316,15 +328,15 @@@ unsigned long thp_get_unmapped_area_vmf
->   		unsigned long len, unsigned long pgoff, unsigned long flags,
->   		vm_flags_t vm_flags);
+> diff --cc drivers/mfd/axp20x.c
+> index 4051551757f2,16950c3206d7..000000000000
+> --- a/drivers/mfd/axp20x.c
+> +++ b/drivers/mfd/axp20x.c
+> @@@ -209,15 -209,11 +209,17 @@@ static const struct regmap_access_tabl
+>   };
 >  =20
->  -bool can_split_folio(struct folio *folio, int *pextra_pins);
->  +bool can_split_folio(struct folio *folio, int caller_pins, int *pextra_=
-pins);
->   int split_huge_page_to_list_to_order(struct page *page, struct list_hea=
-d *list,
->   		unsigned int new_order);
-> + int split_folio_to_list(struct folio *folio, struct list_head *list);
->   static inline int split_huge_page(struct page *page)
->   {
-> - 	return split_huge_page_to_list_to_order(page, NULL, 0);
-> + 	return split_folio(page_folio(page));
->   }
->  -void deferred_split_folio(struct folio *folio);
->  +void deferred_split_folio(struct folio *folio, bool partially_mapped);
+>   static const struct regmap_range axp717_writeable_ranges[] =3D {
+>  +	regmap_reg_range(AXP717_PMU_FAULT, AXP717_MODULE_EN_CONTROL_1),
+>  +	regmap_reg_range(AXP717_MIN_SYS_V_CONTROL, AXP717_BOOST_CONTROL),
+> + 	regmap_reg_range(AXP717_MODULE_EN_CONTROL_2, AXP717_MODULE_EN_CONTROL_=
+2),
+> + 	regmap_reg_range(AXP717_BOOST_CONTROL, AXP717_BOOST_CONTROL),
+>  +	regmap_reg_range(AXP717_VSYS_V_POWEROFF, AXP717_VSYS_V_POWEROFF),
+>   	regmap_reg_range(AXP717_IRQ0_EN, AXP717_IRQ4_EN),
+>   	regmap_reg_range(AXP717_IRQ0_STATE, AXP717_IRQ4_STATE),
+>  +	regmap_reg_range(AXP717_ICC_CHG_SET, AXP717_CV_CHG_SET),
+>   	regmap_reg_range(AXP717_DCDC_OUTPUT_CONTROL, AXP717_CPUSLDO_CONTROL),
+>  +	regmap_reg_range(AXP717_ADC_CH_EN_CONTROL, AXP717_ADC_CH_EN_CONTROL),
+>  +	regmap_reg_range(AXP717_ADC_DATA_SEL, AXP717_ADC_DATA_SEL),
+>   };
 >  =20
->   void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
->   		unsigned long address, bool freeze, struct folio *folio);
-> @@@ -502,7 -487,13 +505,13 @@@ static inline int split_huge_page(struc
->   {
->   	return 0;
->   }
-> +=20
-> + static inline int split_folio_to_list(struct folio *folio, struct list_=
-head *list)
-> + {
-> + 	return 0;
-> + }
-> +=20
->  -static inline void deferred_split_folio(struct folio *folio) {}
->  +static inline void deferred_split_folio(struct folio *folio, bool parti=
-ally_mapped) {}
->   #define split_huge_pmd(__vma, __pmd, __address)	\
->   	do { } while (0)
->  =20
+>   static const struct regmap_range axp717_volatile_ranges[] =3D {
 
-This is now a conflict between the vfs-brauner tree and the mm-stable
-tree.
+This is now a conflict between the mfd tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/hSuACRlSa+dU/oh.351E_vK
+--Sig_/pINKJaHHiIeFY9KtkAwQTF6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbqIAQACgkQAVBC80lX
-0Gw5Fwf/XExhKQhqzDndTG6HNeyd4+1EzAgpEsQk2DImaLBEFZDkp8wrbdP0DdLu
-pP89BRyetN9D8el1wQOLktpuEnKgZPUnTe8Ga2r/4zMct6/xcQY0lBu5YgKTQra6
-45Vg454Kun6oQ77CCv9adMJNPuOWAhxwSq7KO44brbxURpj+MMPYfxyqjXvVK4Cj
-5JGli/6PCful+hDAw5pCK/X4FZfPDDOqPBqxLJ3PcGDyFRZCOY9VnCdSIPMqJUkl
-75WV+aBLuOsF345N9WRflYIzLqm3pWqKd0Fd0mEB4Q4aZWuH8diBs1mjHeZdUxbF
-aCocdxaRcuc0+CMmIEkVcuMFCWrpyw==
-=PVJe
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbqNXgACgkQAVBC80lX
+0Gxi5gf8DFtVz2eIcXHU6elV4TNiRfi2bNHYkuh4HuCKXpRcYh5RETu82oKFyubo
+HbRrRKwyMG+i+Fm91lfMv+LFRIsvdJdzKuaFBgisJcPPdzUCOoKb8LXT1aENKuhT
+dXifb8djdwTy3gyvl7TQjKlOCGu1nychJ6+iYX/kWVPDWc4CaM0bag+/6JqiGazm
+rEmdBVByzpnBQTHQ4suO0SNxLoJZs43IwLaFM4puz+/XYGXm5R3dUrCmwJdXthCj
+Cpfkb7ZxBscgpCDaov/jI6Mt2Zo5Dqxa04SYLWHSGt+yqRV/H44o1e2msNjU7Z6I
+HSYbgicyeo3oLbMi44TAD42JiIRIkw==
+=fsbN
 -----END PGP SIGNATURE-----
 
---Sig_/hSuACRlSa+dU/oh.351E_vK--
+--Sig_/pINKJaHHiIeFY9KtkAwQTF6--
 

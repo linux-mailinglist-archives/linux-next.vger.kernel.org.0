@@ -1,146 +1,269 @@
-Return-Path: <linux-next+bounces-3931-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3932-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE0FF97CFBD
-	for <lists+linux-next@lfdr.de>; Fri, 20 Sep 2024 03:15:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E94E97D05A
+	for <lists+linux-next@lfdr.de>; Fri, 20 Sep 2024 05:43:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F04C41C2324C
-	for <lists+linux-next@lfdr.de>; Fri, 20 Sep 2024 01:15:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C01D8283D6D
+	for <lists+linux-next@lfdr.de>; Fri, 20 Sep 2024 03:43:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38BEEAD5B;
-	Fri, 20 Sep 2024 01:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D09791C693;
+	Fri, 20 Sep 2024 03:43:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="j06ngM84"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G2aZzR8q"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EE3182D2;
-	Fri, 20 Sep 2024 01:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726794915; cv=none; b=NU+b3zmKOA0GUoDVKON4ZwZXkUuerEs+4wd0qFHUZj1VWfV5npB/3Cd1JoYT9j+/Mo0ghYImqmlEBs+cXhB3N0FWuy8qCB258CwifBRXIWdgimqS/KV8F2/gK0CAxLTuDHYhVD8Zwu7dqNdFcpuKpkRMRZsksunWMVYWMcif0OQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726794915; c=relaxed/simple;
-	bh=PwiXeYCGvDfGxgFouUHOfx2o8lYt+eicS5wksJA2IPA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oa3niYO3hxHW/6GKPomcnRSuo2MkkrmSVcNbXDAjdxZxZ4/ykMjJhf9KxxGFhUfXhsEHQIi3w3Gx/itj5IUvDCDewJkZ4/HnLJVEDfaRyKU1lUArExQMci+8A+0zPYjpYcnXpjrhvzAMK4DntuPjgt+UnXZ1reUy9i9tp04M0tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=j06ngM84; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1726794908;
-	bh=LhBHkv/COxRlZ/4sqR+vlBkz9MC6ByEpaftHTpa2Sp0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=j06ngM84qDY7IAK6IU6onPh14CZ/DDGVeojz9pkYX8JA9ClazEih1HnG/HZl1Ikh0
-	 poxIgQJbmn4yRPOOdotADLePWah3YTX9a+6jpbCtgk3Nw5ouP4LbqTmxyyHl3HodNL
-	 Uh3Riiu/eVHK29lXmvu++HHk5uHQ4ICjpkVHPuyaq+639HUACICTIfB/0YVBun7o2a
-	 G9g4obVIFTqbBp+3CCuhnsOjENXnkSI+EfDm2Vm2RaD3HyNC5TibXnQrCid6/Oqo6z
-	 +QKqh6JZRMQCFWxHFuPdHByF8zsd/KfClkQZOybssR7z8s3zyNq0uWHUcB+sFH2QzX
-	 QPf+iWOfTuMTw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X8vZM6YQFz4xGl;
-	Fri, 20 Sep 2024 11:15:07 +1000 (AEST)
-Date: Fri, 20 Sep 2024 11:15:07 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Frank Li <Frank.Li@nxp.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Simon Horman <horms@kernel.org>
-Subject: Re: linux-next: manual merge of the devicetree tree with the input
- tree
-Message-ID: <20240920111507.043f84f7@canb.auug.org.au>
-In-Reply-To: <20240911150802.378ccf42@canb.auug.org.au>
-References: <20240911150802.378ccf42@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63DC23A0;
+	Fri, 20 Sep 2024 03:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726803801; cv=fail; b=dxq5mrf/YRBi2gVQsXKKDFI3hKEaTyJDmcGbrN2usGCUro8Yt2ayK3aEjkie+plxv1JbRGdPKdv8IKe7itChInFiZlMHDwHhQ0tayusesJw6+VShtk0yjCof1CqlaWNzhkQRFWWlegFltGx1wrCtDtwyZKuG6oKG/H4N/aOG5Ls=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726803801; c=relaxed/simple;
+	bh=57fyQU1+KsbmoeOalNo+qiJMKe4WK9OYCW+AAFMekuI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qW8GtKBgZs4C/GBjC1pNj1TcXGtgHQRy1sIs4DqKymqz+wHpNJroZAcXGO3+Yqxe3tpqctAFix1eudRYq8L1Kc3yoD+7nMCuE7pKjYsPKKPXQMhmE+Hf5kl7YDjVWwmXOHX1RIz3P5u0tUjzqOHUDyLJDAb1MNZBKu6QdKG18a0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G2aZzR8q; arc=fail smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726803799; x=1758339799;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=57fyQU1+KsbmoeOalNo+qiJMKe4WK9OYCW+AAFMekuI=;
+  b=G2aZzR8qhRnjOxe0ImLg4fMRJW0mWvL1iQTN5NiJYOxkDjYKJPbUgKm/
+   p8cb7CaDXa2Dq5hohPiiISA6gGdCUHKih/5ypUOJZbSyNy4HGiJsJlx+I
+   3vWBLAWzldOkIsQ29Tu03QPvsZYT9TFGQCpuq6Q/aNspSybWNTBkF9mKw
+   JNjdXva/vWvDnSrKtWyVL9cED7y1fBf7vkp0fdKy3PWlv+zawLqo6af/R
+   ZM01hLtMQWw+nAvfOxxhdzHuahADgrG64TXC3/QHU7VnNMpmrPKM3R+lU
+   LGhBNvruPCziR8mQf5chb9DlQhrg8JW4n5cl3zVmzqZ5ND4iOQr3KzZ3H
+   Q==;
+X-CSE-ConnectionGUID: KQlg0aG+SJO3+0j5r91FVw==
+X-CSE-MsgGUID: m3FuBeCCS6y6cj8MfP/mtA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="36367703"
+X-IronPort-AV: E=Sophos;i="6.10,243,1719903600"; 
+   d="scan'208";a="36367703"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2024 20:43:19 -0700
+X-CSE-ConnectionGUID: LIHsAvRSRoyKTuq7qPTysw==
+X-CSE-MsgGUID: 3yoyD8xDSjeGNO8b+3xStg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,243,1719903600"; 
+   d="scan'208";a="70593349"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orviesa007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 19 Sep 2024 20:43:19 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 19 Sep 2024 20:43:18 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 19 Sep 2024 20:43:18 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Thu, 19 Sep 2024 20:43:18 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.46) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 19 Sep 2024 20:43:17 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YP1ZKuGZJsKY/uY4MCFIhNzrAd89YIKXKp0w3L9RJMJ6LOt6OlNEkCWAFsMErNlwCxK/pSZHfMZKqtat/ZqBq1uWJDA+rCP8jewNcvGh8ACL/zG1/pbotFuKJGyuIhT1H/txmzlxjKivdJGtUWcjcz/Z7qBBSOrrRe9fEv/waEgSh6YjU+7cCIUBY7lbbW5Br2BxObSY2wF46AWfwPsr+ZmeDH8Q2Vp9Yp0lfFlHPTC8HXTDl8SVMv1PuaCnv8RYt62C3MKnaBE98t189/cKvd8JDPtI3P/mf1pFheHd1F0rrvZ4osU0BcZ3jgJKNFgghW/W6Dl/qDmy3mzfAvcIxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qm0J1ggnV+0MgLzwObMrvEyfAMF+CHfXZADFI0Pumxo=;
+ b=gb8+oi/jrO/P0RA6BHtpuf09D1kYdICEPEiJGQR5w2RuJbISOxhLUu+7nXgh9E7wGHOsbjp+xYGYTT3T2zSwSLE1kP2Z7jPRimYs304gf0GvkwGuGEYbBAXcv0bfYXk4L1x6uazeU5AcVzRPfIqnz42zlqN9aBsYrVLpdRp0Ye9KssnA382wzp+QFAWW1P1o84I2DVafz6bIJK4cVGDFQEtLrucOi5a/Nzs35NnR9BlslqALxerGtAbEUJPX7P+7g6foAP88p1j56mLaGD1v1n+QVEYJVp7/EdyKLlheBus0y8mKYL9fKBpSm8XCJGyLHG8fK26aPRTJdyZ91DaGuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by SJ0PR11MB5118.namprd11.prod.outlook.com (2603:10b6:a03:2dd::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.17; Fri, 20 Sep
+ 2024 03:43:15 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44%5]) with mapi id 15.20.7982.016; Fri, 20 Sep 2024
+ 03:43:15 +0000
+Date: Thu, 19 Sep 2024 22:43:11 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+CC: Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Kees
+ Cook <kees@kernel.org>, Riana Tauro <riana.tauro@intel.com>, "Rodrigo Vivi"
+	<rodrigo.vivi@intel.com>, Michal Wajdeczko <michal.wajdeczko@intel.com>, DRM
+ XE List <intel-xe@lists.freedesktop.org>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>, Dave Airlie <airlied@redhat.com>, DRI
+	<dri-devel@lists.freedesktop.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <owkmwjhxbhii6devx33npufv3pgrjygbjprba5lby2dq25wvce@nvm4ll6d42h2>
+References: <20240909195939.067c1c13@canb.auug.org.au>
+ <20240919092752.5a832aaa@canb.auug.org.au>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240919092752.5a832aaa@canb.auug.org.au>
+X-ClientProxiedBy: MW4PR04CA0155.namprd04.prod.outlook.com
+ (2603:10b6:303:85::10) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QXaf0HGlDijeiYZ5N8Q0vRj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SJ0PR11MB5118:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7d3e09c7-96a4-4915-3e7a-08dcd9265c05
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?7cJO9KJg3RKmPWC38gqbIunoqlY3rNFWdX+Z0UZSxfobRk43kcbIqhyYRf8v?=
+ =?us-ascii?Q?KBP9nInxjy/rvb+1sDWvzjfdJu23rd6RZnxlSL+nA/oI8POjah/a5EkQyLsj?=
+ =?us-ascii?Q?bGpxafL1GkT0jnyBV8QSD+0FQcwpr8RN9pBoFMZg8pQMLa+Yz8i3kE32v5LR?=
+ =?us-ascii?Q?lir+TLm3wPs0fHmvSDNYcmdWOTwTJ63Xios4vDAaktnhifK9g5e3Pmds/UVw?=
+ =?us-ascii?Q?6mb/ibyVpdaeHcSbAtyx/oknK4PkssBoZnhFRUifI4uxRa6lRjdF8+4Yd+El?=
+ =?us-ascii?Q?k5P/eH/6nbr98kOPKMFiEhHmY/YyrCqP/EGIDJgnDnWjlfME+0mlUquGK8/w?=
+ =?us-ascii?Q?YbOegHTq3Iv0Wc+eC09pckaiSbjdinYFGuuOI9mMWv1Iooe4HF/W57a91Sk2?=
+ =?us-ascii?Q?N7cXH5ukqeOCxou6d3M61nrukg5Cghvy0p+/bb1z/ProgD8b6klllFyTGvp+?=
+ =?us-ascii?Q?cATRursGwTH0iJqaW6YnqIz1MoMozO1+XTJHtUj+rb30WBJXJdIATQMqaGXO?=
+ =?us-ascii?Q?3pSYSuVWjmFQBFYq68OVj/ls3/yRsUl3PzW88stZpYNPUyw/wWwAbDnftCXn?=
+ =?us-ascii?Q?rL5b6eFHvA3I4LtQg1YaoDSaH0eV/7XE5Mvd2uHtrlto4qeqbJH1geHBoOYx?=
+ =?us-ascii?Q?wsm6LX4vXa5Hyq5jMT+rZ+OeSSS//x3hemYvkusw32wTLCTeVSlJi4kYc16q?=
+ =?us-ascii?Q?y/YAT2bJ40MRQF5faWja9CxfQZ/s4NKlz/oUpdQestr2gWe77/i9E6nQz730?=
+ =?us-ascii?Q?StYgT2qQQO924tE8CNQo6Cwt3WCrckajZJmptfSQwsct1EIIfuHEs7zvKjTR?=
+ =?us-ascii?Q?tE3oS7tnjcK/o1r7JhtDy8kH/LeL6taUE4EXnUmBk/JFCK55XPfmbc8AXrQb?=
+ =?us-ascii?Q?CIU1ILCAoAkDD8bcSDREvMMUR24lEpvzpbwQHGzN2Ve1eDBVqZON6NBd1p6h?=
+ =?us-ascii?Q?r3iRL/o+VFCJ3MqVFR993SMFvWd+mBiCy5CBPWQiXN456BB/rmElUNQmPY3q?=
+ =?us-ascii?Q?/y92uCwQoolQz2264kRp+DZ6mBHFarCLxAaSeNGC9uYshQ3fqOhIvTnhtuQz?=
+ =?us-ascii?Q?rIUmCEXKhld0yzE3msTy66oX1s5mFL3UGil1CDq8RHUbvgesbYKcjqYsB/Ke?=
+ =?us-ascii?Q?tSKLBQ6c5OENDXGEHbkpcgShi34LHwSlCVR+clYws/icmX8YqWma34lYJHmf?=
+ =?us-ascii?Q?I8ngfu6FrVozk+Nhj8Bbfv4XeOF7gZ0+TWkt4F6C1eVg6C+QgxnoDFzRnZcp?=
+ =?us-ascii?Q?beSFgNza/J7Lkd6eG4gUS92+Saasp9/Cp15xf4b6Sw=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VWvbhCIkbv486ZKwhSJVBTq+ftiyfIpILC8LLrPNM+Twa66FkYnPzILjMola?=
+ =?us-ascii?Q?lr1aoaK3UCI/+ICv/+hiRYs32+z6bFF37UOyFEtm/FOl2bY/5uXoCm91lVpP?=
+ =?us-ascii?Q?UgW7rmsGoJJ+dlT7X5lhWAwX1zt2MUM11j5SYfSzec+6XGutaPOt+kkWKFLn?=
+ =?us-ascii?Q?v7/eWzR/3mHtHxxMt6Vfw2tZhT/spv5jX17op+0BWCm9xowj40+9xev6SzZe?=
+ =?us-ascii?Q?4CG0GIe8XZp4YZbbuP1LRz1kuW6G3G2sF44WGgfu4ziVmi2G/zzC7bAwKUer?=
+ =?us-ascii?Q?ddT+LzNQji3a3qyN1J0xaTFIw+8Evh/RuI9OoUulF/ci6DHn7Y9SNgIbH6LJ?=
+ =?us-ascii?Q?GDbxqrAb68Llg0IPxEO4XqpBB8JHjVDcV77TOO75HZjs/0O3dBagVtyr+grh?=
+ =?us-ascii?Q?pPwy581mtfF0VqMZaJL5Xl263W01ws3fXIwkY8bLzm8vXwtYwK64WSS6q7Bz?=
+ =?us-ascii?Q?PBAMx+dBpydN4hkAGXSl0ghJsaJDiZ4hmlBvzhB/re722oCxQcP5V+6eYNGI?=
+ =?us-ascii?Q?VGDMM3adhsNg2kkLjO8kSHUUE4orkOyKjM4KgLKobnhvwI3taNY79+xg8usG?=
+ =?us-ascii?Q?/zZ4yimqYRd7ad4aqUJpMLLsJdYx42jfdth72T53Yx7YywpLoGE5TKBHHO/1?=
+ =?us-ascii?Q?FS9xjsTnJaWmcKNK8ssGDFL552WNUT648KJhVRCOJMnKj767uOsFCz6sMURo?=
+ =?us-ascii?Q?wpVJhfChMNM332rFEZHItpRgepZ1tsDM2h9+4gmdUtWChQv0OdgTAhlz224q?=
+ =?us-ascii?Q?Akg8SymN0Tj4bfGQRCZNHiSYvtlOk0mzrhVJ9gfdX0NswsNqQqgPoflh9E5k?=
+ =?us-ascii?Q?BtFDX8W5Tq+c5ekb1g7Xw/SMISXrgqVISRuHSK6oKgFRBD0Ja28NsXsTkwXL?=
+ =?us-ascii?Q?a3xYmVhxEpJJBWkEX8Uah8IYhrTqH3H3+t7aAJIKgkwQuHO7a6asG8RXuLDM?=
+ =?us-ascii?Q?6UN/fAsbMzU+M4f5kPKarHJN+K3VSDOqLVW+aBReHegxQ6o8TwpBOvCA6nVe?=
+ =?us-ascii?Q?jUOFet91YoqBeE0MRtxvKvx6olcH7iUNdsxNyXdkrWcTxG2hduqjW0sHLu6+?=
+ =?us-ascii?Q?hDsgXDefZromdX2NbH5t1kuCh21m3hjoWP0mQZQH+KydO2a9DU6dAHdfbmmu?=
+ =?us-ascii?Q?exNPfiB+wb1BCHMm2bMqwDzB7HDFilIal/WX6PmP9/LoOuS+GGzejAbQBck/?=
+ =?us-ascii?Q?/5mlgpf2jxSgK3ouJPBHrT+xDWnol8nXKeiNRm4di00p8nwhAe5Zrdc/eWiR?=
+ =?us-ascii?Q?DYRw5e/7P6W8P9jaXiGgnaj+dZRL6/jUraM1FHJhtD1gua3ITk8Mc+FdHJaR?=
+ =?us-ascii?Q?aGUSSeQ+efYLfBXbFr3DKOxfDGm44XID7POORNLRMPEdMnyZoSj9KBcEkZ+v?=
+ =?us-ascii?Q?CJdIt3ErXdrN4fWha3IBxK5+g08dx2fqm2ZbMrR7+T18V2xmecIhX3morMcF?=
+ =?us-ascii?Q?1nlY6DsDNFTer9k43bRzWnKdK+zTY01ZAncgE8I96M8kKKK85LKz28dIcVQW?=
+ =?us-ascii?Q?MP5aU5MNVsrXO7sbWSptS2y9aWCOUUzZOBnxseJAS6j8HdSIKFg5XbKt1Ne0?=
+ =?us-ascii?Q?AX8PFFFV/ls4Q3ztpUnGSfkfZyUeRP+y3ALfgQmE9hmU+feARhBzS60LD/Bn?=
+ =?us-ascii?Q?jQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d3e09c7-96a4-4915-3e7a-08dcd9265c05
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2024 03:43:15.7056
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Z8RP9IgZD2MQP23dhhXriLMO5jkAGqLk3JbgZZAu3rbFZFJKzfXPgN2E1JfxMt80+/r4xitlBucjG1sg83VtNe2I8ytJ/qXPI4mNZY/4IZ0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5118
+X-OriginatorOrg: intel.com
 
---Sig_/QXaf0HGlDijeiYZ5N8Q0vRj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Wed, 11 Sep 2024 15:08:02 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Thu, Sep 19, 2024 at 09:27:52AM GMT, Stephen Rothwell wrote:
+>Hi all,
 >
-> Today's linux-next merge of the devicetree tree got a conflict in:
->=20
->   Documentation/devicetree/bindings/power/wakeup-source.txt
->=20
-> between commit:
->=20
->   45d6486d2a5a ("dt-bindings: input: touchscreen: convert ads7846.txt to =
-yaml")
->=20
-> from the input tree and commit:
->=20
->   bb763d7890f6 ("dt-bindings: wakeup-source: update reference to m8921-ke=
-ypad.yaml")
->=20
-> from the devicetree tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc Documentation/devicetree/bindings/power/wakeup-source.txt
-> index 9a4f8310eb67,128b55be67b7..000000000000
-> --- a/Documentation/devicetree/bindings/power/wakeup-source.txt
-> +++ b/Documentation/devicetree/bindings/power/wakeup-source.txt
-> @@@ -25,8 -25,8 +25,8 @@@ List of legacy properties and respectiv
->   2. "has-tpo"			Documentation/devicetree/bindings/rtc/rtc-opal.txt
->   3. "linux,wakeup"		Documentation/devicetree/bindings/input/gpio-matrix-=
-keypad.txt
->   				Documentation/devicetree/bindings/mfd/tc3589x.txt
->  -				Documentation/devicetree/bindings/input/touchscreen/ads7846.txt
->  +				Documentation/devicetree/bindings/input/touchscreen/ti,ads7843.yaml
-> - 4. "linux,keypad-wakeup"	Documentation/devicetree/bindings/input/qcom,p=
-m8xxx-keypad.txt
-> + 4. "linux,keypad-wakeup"	Documentation/devicetree/bindings/input/qcom,p=
-m8921-keypad.yaml
->   5. "linux,input-wakeup"		Documentation/devicetree/bindings/input/samsun=
-g,s3c6410-keypad.yaml
->   6. "nvidia,wakeup-source"	Documentation/devicetree/bindings/input/nvidi=
-a,tegra20-kbc.txt
->  =20
+>On Mon, 9 Sep 2024 19:59:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> After merging the kspp tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> drivers/gpu/drm/xe/xe_gt_idle.c:56:27: error: redefinition of 'str_up_down'
+>>    56 | static inline const char *str_up_down(bool v)
+>>       |                           ^~~~~~~~~~~
+>> In file included from include/linux/string_helpers.h:7,
+>>                  from drivers/gpu/drm/xe/xe_assert.h:9,
+>>                  from drivers/gpu/drm/xe/xe_force_wake.h:9,
+>>                  from drivers/gpu/drm/xe/xe_gt_idle.c:8:
+>> include/linux/string_choices.h:62:27: note: previous definition of 'str_up_down' with type 'const char *(bool)' {aka 'const char *(_Bool)'}
+>>    62 | static inline const char *str_up_down(bool v)
+>>       |                           ^~~~~~~~~~~
+>>
+>> Caused by commit
+>>
+>>   a98ae7f045b2 ("lib/string_choices: Add str_up_down() helper")
+>>
+>> interacting with commit
+>>
+>>   0914c1e45d3a ("drm/xe/xe_gt_idle: add debugfs entry for powergating info")
+>>
+>> from the drm-xe tree.
+>>
+>> I have applied the following patch for today.
+>>
+>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Date: Mon, 9 Sep 2024 19:40:17 +1000
+>> Subject: [PATCH] fix up for "lib/string_choices: Add str_up_down() helper"
+>>
+>> interacting wit commit "drm/xe/xe_gt_idle: add debugfs entry for
+>> powergating info" from the drm-xe tree.
+>>
+>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>> ---
+>>  drivers/gpu/drm/xe/xe_gt_idle.c | 5 -----
+>>  1 file changed, 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/xe/xe_gt_idle.c b/drivers/gpu/drm/xe/xe_gt_idle.c
+>> index 85a35ed153a3..0f98c1539c64 100644
+>> --- a/drivers/gpu/drm/xe/xe_gt_idle.c
+>> +++ b/drivers/gpu/drm/xe/xe_gt_idle.c
+>> @@ -53,11 +53,6 @@ pc_to_xe(struct xe_guc_pc *pc)
+>>  	return gt_to_xe(gt);
+>>  }
+>>
+>> -static inline const char *str_up_down(bool v)
+>> -{
+>> -	return v ? "up" : "down";
+>> -}
+>> -
+>>  static const char *gt_idle_state_to_string(enum xe_gt_idle_state state)
+>>  {
+>>  	switch (state) {
+>> --
+>> 2.45.2
+>
+>This is now needed in the merge between Linus' tree and the drm-xe tree.
 
-This is now a conflict between the input tree and Linus' tree.
+Thanks. This not going to 6.12. It's targeted to 6.13, so we should fix
+it when merging drm-next back to drm-xe-next.
 
---=20
-Cheers,
-Stephen Rothwell
+Lucas De Marchi
 
---Sig_/QXaf0HGlDijeiYZ5N8Q0vRj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+>
+>-- 
+>Cheers,
+>Stephen Rothwell
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbszJsACgkQAVBC80lX
-0GzqIwf+L2uLIIN7yi35cVk3aue5J5KAdiY8U3kSoKjSaUFP+w7gGtABkZ8dZJxA
-n3GeJ6SU/dyI5zpgbmOLIzQrPC8KtouSz+ka0cJOs/WUPbsFfvqd76FwkCuwO1+4
-bzot1B41GUtNPZD+hVj86In/Ac59nKtZeIUk/TBQ6BRDosLASY/7uwIRWDVEpnF8
-GV13cMBmanDf7WIgAqwirCmtuXVp8aWwZQrVBI8C9nNSJbDOnnyG2nJJ5ng+DjOZ
-wlPRRJmAfAd1w/DlR9jfIgf4m6I7dc/cHTPVua9leQxv/Udc29dPesC5daoQ0beT
-fab14/fp9pG4mKiWblJAIDfyRS1Rgg==
-=0FlP
------END PGP SIGNATURE-----
-
---Sig_/QXaf0HGlDijeiYZ5N8Q0vRj--
 

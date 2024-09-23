@@ -1,118 +1,103 @@
-Return-Path: <linux-next+bounces-3941-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3942-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D272797E501
-	for <lists+linux-next@lfdr.de>; Mon, 23 Sep 2024 05:40:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C74C897E515
+	for <lists+linux-next@lfdr.de>; Mon, 23 Sep 2024 05:45:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46580281594
-	for <lists+linux-next@lfdr.de>; Mon, 23 Sep 2024 03:40:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B8EB1F21953
+	for <lists+linux-next@lfdr.de>; Mon, 23 Sep 2024 03:45:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 403564C6E;
-	Mon, 23 Sep 2024 03:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6B7DC2F2;
+	Mon, 23 Sep 2024 03:45:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fHlGOGkl"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tg9pYW67"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3F2139D;
-	Mon, 23 Sep 2024 03:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7730FDDD2;
+	Mon, 23 Sep 2024 03:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727062821; cv=none; b=U/oAzweXWzvUOTsr4/CTUKywdzjPhHJy38rN/ZlNLoIPp1/KVM9aUuywV/tSgIJn/uXZHO6s3YED3WyK4RrJcE8L81Gk3/RXoAY1VRLRIrCUzwZkrehAf2ysqK17d6U1oopZsCRPVteFWpZ1NgHJ8oPqzIk3EWlnIMfYIdPz/+M=
+	t=1727063106; cv=none; b=KUJloIPOVHwNQVT4moP3IHGOk0v66GX/ukdxWx5rAEoH3im/33tvduzKzV0r6qSZSaKj6d2YoYD4y8XkZgl4+lA7f9xjWQt+QFycUxPFsc55kFATsAItq8Y9TqqJmX/d/xVQj6G5solSW/6k6oR7paqz9Qphppw4Wk6Gg1RFI2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727062821; c=relaxed/simple;
-	bh=yEXgOsxAVuCLW/auiNN+DdV5wxEH+cW85821HvN/NnQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=m6PCTUGVkznGTRhyi8KfSN6GaXn+JUABC6VeQZGdmSS7Zi+Qax+hrBqiHWPGsOkmAczvNlhsDYPcR7LS9OTW2sn/dI3hAlQmxLmror2H2ACgv7yOB8mvt+yi+/FLEeZr6u6cv3o3BzRDZ6BbtWQVnPEfr321tNSH3WE/hNkvsLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fHlGOGkl; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1727063106; c=relaxed/simple;
+	bh=30EwT+Tnznh3ySKKlYZkbqMe6G/58vr/AakAFlEQsSY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kd6f9YmtW5GADMjxDAsQ24Tl0qeboWVaXx6Ci7EQXvUaXgHrybRgeLUkEw4sLDKj5SFchsqCbzbk9sSDs31V1qT5kLpZ+HFiMHeDWlvwYz428qs5qKAPA2Km3F5m27mGlly3zIKFBNnU05jjQ9f/MMCLwYqiRmk4pxtyAzGAEbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tg9pYW67; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1727062812;
-	bh=0dLzaAqs0oHdJSuaNkwZ3RqDp3/htZq7XsxpbQHdeU8=;
+	s=201702; t=1727063102;
+	bh=L7zz/WP3wi6yOy9OEYITIs+EwyHuCdZGPVvmr5cBxmI=;
 	h=Date:From:To:Cc:Subject:From;
-	b=fHlGOGkl1Z+9cwYZVDpDdwyltXlD9laPrawa5g0l+bIEfvhbQZxMyxxqGuXs+Cm8k
-	 /T9Zgo3W+QnpLi9GNA2clbeW508Z/b6oMxLIcCVrwlrw1tPyyJUGgGqkVzIkEwDUf8
-	 t1HeNH+Faz/0ns76jF3SBi1BjVDDHU9SiqyKfnaz0RRfYR149FVUI0tVPgNrAX94CG
-	 GNeFXFoJrYI9ikZA1tS8BDNo8LlXFdqcW5QLb5a1S1DaERZ7gG+AkYW+2ct8U6WehC
-	 b9rqzMw3B2151etrCmCJjDzU5qCZ3HN5WP6xM/IKP9Jzk98Lpv6qWEkaktIjOFdg7K
-	 sfODwnPctdMCQ==
+	b=tg9pYW67LG/gAc5nPV86Cse2C14QRFHkpKyjoJN/3y3toO37VbrhQqTS2PQLHxAfH
+	 bvrOWaMTmQYhHFyfNaqTWnmY3xIAbZaLHBje7XGjZHkAHvMt9va6T/2+fJKBzJMO33
+	 Hrt9g+xzISNZhagsxaIBPRiPeQnxe8bet3YdtLPoV9OeOJ80TA40c7ZAY+AEa/tV56
+	 +uEf6H8Sp63XCovW4bJAMIX6QKrCBBCBszSwcUbJ2IkNlld0PzbYBp+0HHZHr/0vdt
+	 qG8/DZ0Dl5IXkJG4NRHi7w5nHKyDXN8i1lqtARvJllwMDQXPl/vl0X34KDE9DT2EZL
+	 Xl6AGkd3bZrVA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XBpfN12Hkz4wcr;
-	Mon, 23 Sep 2024 13:40:11 +1000 (AEST)
-Date: Mon, 23 Sep 2024 13:40:11 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XBplx5xr0z4wd0;
+	Mon, 23 Sep 2024 13:45:01 +1000 (AEST)
+Date: Mon, 23 Sep 2024 13:45:01 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the cxl tree
-Message-ID: <20240923134011.7b11598c@canb.auug.org.au>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>, KVM <kvm@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the kvm tree
+Message-ID: <20240923134501.0a14789c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vfaYGiIGdqPHNAbZgjxvzf2";
+Content-Type: multipart/signed; boundary="Sig_/u.K3LrPiU61iIZLE5Sfydv2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/vfaYGiIGdqPHNAbZgjxvzf2
+--Sig_/u.K3LrPiU61iIZLE5Sfydv2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the cxl tree, today's linux-next build (htmldocs)
-produced these warnings:
+After merging the kvm tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Documentation/driver-api/cxl/access-coordinates.rst:33: WARNING: Block quot=
-e ends without a blank line; unexpected unindent.
-Documentation/driver-api/cxl/access-coordinates.rst:34: WARNING: Block quot=
-e ends without a blank line; unexpected unindent.
-Documentation/driver-api/cxl/access-coordinates.rst:34: WARNING: Inline sub=
-stitution_reference start-string without end-string.
-Documentation/driver-api/cxl/access-coordinates.rst:35: WARNING: Block quot=
-e ends without a blank line; unexpected unindent.
-Documentation/driver-api/cxl/access-coordinates.rst:36: WARNING: Block quot=
-e ends without a blank line; unexpected unindent.
-Documentation/driver-api/cxl/access-coordinates.rst:38: WARNING: Block quot=
-e ends without a blank line; unexpected unindent.
-Documentation/driver-api/cxl/access-coordinates.rst:40: WARNING: Block quot=
-e ends without a blank line; unexpected unindent.
-Documentation/driver-api/cxl/access-coordinates.rst:42: WARNING: Definition=
- list ends without a blank line; unexpected unindent.
+Documentation/virt/kvm/locking.rst:31: ERROR: Unexpected indentation.
 
 Introduced by commit
 
-  43cb008f857f ("cxl: Add documentation to explain the shared link bandwidt=
-h calculation")
+  44d174596260 ("KVM: Use dedicated mutex to protect kvm_usage_count to avo=
+id deadlock")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/vfaYGiIGdqPHNAbZgjxvzf2
+--Sig_/u.K3LrPiU61iIZLE5Sfydv2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbw4xsACgkQAVBC80lX
-0GzMsAf8Dhs/B1TqAlaaWAK56S7pR2liDDik+7vjOVZegb1L76QUrckfLzwOWgJf
-GJuwuimJUqnJVLGKEcNGto+AJZrQwEiRQk1WN7sdk26eoch1ck4Vbqb330QIq2n/
-p2RFzUYomh2VnIJ3knt5J6E3Wlr/iLNptIeBBIxZAI3NQC9hJbWmcezacgDKFX/S
-AssDbrIVTrECBCtWLCpXxzpdovEV1li4qe5CCmlRNXv/jNhzFEwkqptyhdwy0mg7
-Yw/7T1i5pL0I8Yzpl/mO5NniBNoJn+A40SlGRfYKldYeo1lGkdUoqFYj3QD09cUS
-5sCNaTbKMnipdvAuzduHcb3XNiiUuQ==
-=oXc8
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmbw5D0ACgkQAVBC80lX
+0GzZQwf+JPd88Ez2V0UcuMAQZngmXyigjwhvEcW9imqvREPLia1+3UkaQEMnZ1r3
+Xjfds4tsSHiyHTTyEjFzLDOlJLhajO4bRK7TuTnrgBdnbbZGpUh8l83ElwuJZ2ow
+AN2U11OkRgGoI/HlW3oXvYyuI6iKCwucoivUTKF+UbrVSemwhNh5XSYVrXqYBPf8
+V+3dvTR4u5pN4NZ07OKe+QiOnB12sgCLiTM7AF8bijniaYm7H8FJ193izp0aR33s
+vceMBW4ZAqYjk5b9w2LbH9lDSyZXrFA+MMPVqPUeQpLHhdmh/rDzjFsiaD6XGsjT
+QXf9QoT7CFGzSSEQ2TdyRDSKkFYxuQ==
+=qogP
 -----END PGP SIGNATURE-----
 
---Sig_/vfaYGiIGdqPHNAbZgjxvzf2--
+--Sig_/u.K3LrPiU61iIZLE5Sfydv2--
 

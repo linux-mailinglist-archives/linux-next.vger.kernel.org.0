@@ -1,70 +1,70 @@
-Return-Path: <linux-next+bounces-3981-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-3982-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47EB69875D8
-	for <lists+linux-next@lfdr.de>; Thu, 26 Sep 2024 16:44:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6F69987619
+	for <lists+linux-next@lfdr.de>; Thu, 26 Sep 2024 16:58:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE78F1F2239A
-	for <lists+linux-next@lfdr.de>; Thu, 26 Sep 2024 14:44:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 604761F27849
+	for <lists+linux-next@lfdr.de>; Thu, 26 Sep 2024 14:57:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8B713632B;
-	Thu, 26 Sep 2024 14:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F148614D703;
+	Thu, 26 Sep 2024 14:57:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ODPqvmSI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ft1ed3bA"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469EF2AE94;
-	Thu, 26 Sep 2024 14:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D0F14C5AA;
+	Thu, 26 Sep 2024 14:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727361883; cv=none; b=FyDtDOumPFdGiGT1a2y4Lc8LmvYIpY5iPBNaKC+U4QTOICl8MRQ+FmBm6ijAZqxqDZDIYM8eBRIBHWSD3ndsgqFx7SCUnEW/14K6CwLS3YQVGhDziAIAzXyaMEoXxL2rPZuDXh6IovF2d7RXysWduCOeykT/ve3oMfCUMedeKqY=
+	t=1727362653; cv=none; b=ZLEwaVXt3hYhC4kQ/od4Inu1cuL/W/0dfcfpBffn9KX4C2irzz2yC3DkXZlB/FmMGFRXJV38aEViplekxZq1JXST7QzU7pRym5jMJJVTpna2rJk10fYM62AgSaz+AM5l+RhVauk1sg645O52rfu2c/FfQzmnTFJ3LtuBtk7wBs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727361883; c=relaxed/simple;
-	bh=KHiIOMuKFrpmgjeiaWPc6Ffbcb0QLfWDPwZ7Pt1/qMg=;
+	s=arc-20240116; t=1727362653; c=relaxed/simple;
+	bh=XIFLXkDWChXrbCAgba83mOwWjQ0NGHY68nV21beDkJk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QbzekVOw/IMy7OXA6+6T3usSId9U1D2uXk4jkrDyVlXsv2D9HyVr+5rZukMXn8wkqFkR6m9FBNrOMMPetM/W4Ncd2hlMzGkS9Lhpl/6dw+8Ago3wI4M3aW9Y3zIH6a9/6x9uo5mrnxm8ZY1HegnP3RjjTS/Zg4UxGV3Gzf12Xcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ODPqvmSI; arc=none smtp.client-ip=209.85.167.45
+	 To:Cc:Content-Type; b=gOUONWZ3oadC1mtBI/3iKpc+BxlMBaHJYIoHtHjY6jaw7RgA7orQTyDj7eSiPFSI4YC6znNytz94XUiLOVRjrzb0f5ybVK6XQXDb7xmqJbmdrvsy0Azrlb57CZeTml5V77MRD5a3L3yqVj9oR+X45lVEw7TEpQHXCFmu/2/MAOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ft1ed3bA; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53567b4c3f4so1195424e87.2;
-        Thu, 26 Sep 2024 07:44:41 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7191f1875d3so135223b3a.0;
+        Thu, 26 Sep 2024 07:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727361880; x=1727966680; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727362652; x=1727967452; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aEuVELZYPUhfbaLfMAa7ALwlXBOTrHLw6cCw0jRrWMg=;
-        b=ODPqvmSIc1PC0X9GZRcJ2C8dKGRFgeNJtqeR0vR6VTIIP3/44nbmTygoLTla/peHUB
-         azB04aEfV4XzX9PR9d3S2edEcP2mhC6D63uIbMm9EBLEMRp3OvDJXTNtk5NjkyY2HDx3
-         0dQ9I2vOdjoJfvEdN55aL6atOuh5eas37Nbx6lfkWJiF0e86NW+unSX9/P1WZBYwU/Qh
-         JLSnuFYodoodThGg/oKXvW48nZSbsN4HRTEzouVcnqb3dTabLmPv4QOl6sq0oeOfZC+j
-         cqNqF+1BcKfUY4dF7QqEN7UaEX26Xb7nHdEjkryyyixbvcaaaYVN8vDUhNBI8QLc3bZw
-         OBQQ==
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XIFLXkDWChXrbCAgba83mOwWjQ0NGHY68nV21beDkJk=;
+        b=Ft1ed3bA0q6jpIcqHeD4ZptgMsYQeRG1xFHaXDT9GxNMhMCVpJTpYPfXmqDvfFZMyY
+         kgY0zpAGmwvfw8OnEHrZouWUdW9XgvhTTNJKRj0xYrGzoL5xrRO3z3VcZHrjwUmTaUoH
+         GtSv54h0IqPZnWQNmPk6QSUueI6X9F2vij2XZTY5eF3kNjKCZZ/A4fafezY+QpDQa+mp
+         dXE5Lt23Ii7g0B6rJglWOnMewu6IXTIVYUCklUYpmxTdjpEN8/DV1TqB1xZRa2XzzJJZ
+         5qq7DK/byDHExVE600rUanQWJNQZMhaffNinbTdPqcdSTdiOa3AYKgDRtTHPEWgZO6UN
+         bwtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727361880; x=1727966680;
+        d=1e100.net; s=20230601; t=1727362652; x=1727967452;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aEuVELZYPUhfbaLfMAa7ALwlXBOTrHLw6cCw0jRrWMg=;
-        b=ZBgpogubmoTepe5UTJpKZbtGZ61/BFEKEsQGTwult9oMi2rp7OaLrGuePHpnuCRwD0
-         Gf2xrkktOH49KtMj094IRiBr1z1EZhgVCvTBLOa1UWdlYrMw/IPfalwx0gGVhjAPacP6
-         D0OkurE6PIufPjtN5xROLbXUA+/sBMiv7xWPzWdhhzKvLosL6gnkmqL+DB2GIw65nUIN
-         cKhNzVTtcL3B2o/i67e6hQNVC/B97GKbZzEZZ6/3H9E/+ObA6yCILvJ8hprO9IrTIJDH
-         cwSU/oWNReB2gzP+Qjgv+z4y8zHf2CvRYmHGIpJUrtNuAPCk3GBqi1ET9wcaOuQVPq3y
-         VzAg==
-X-Forwarded-Encrypted: i=1; AJvYcCVDkHJmiOq42EpT0hT9xhevIbAtslH/rvl2oSOrdO3Je/WGTqiuFpkBwkJZIRnl36cxwNNICZm0EuqTmA==@vger.kernel.org, AJvYcCXv+rPN8i3T2rYismS/uDJUdSXRY3ZMsL6T99zl9cTqpz6yD0kiJzop3ha5XU+cR10x5poXrbOP6dMlCt4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwarhtpH6QNskEeDBL5u5ngOU3330azb61MmeazwmF5U7UEZaT8
-	s54sHluuF6u1YjvsawWuJSOfjuVgdz9DW3rTcms6e7oktA98YYN55rbilwFLXGjGqXnKkWguKmb
-	L+BJ/Sdz3ia9mmK2WfLW7DbOx47YiLKbT
-X-Google-Smtp-Source: AGHT+IEC6VTjqWuhOwyxsDOfwJGcn9nSY1VJVlaXaxXEnh2WyXWMJNmMC/7ImdpQGecPZkEJNqiMETJe3C2mhQXzUUI=
-X-Received: by 2002:a05:6512:2302:b0:52c:dc6f:75a3 with SMTP id
- 2adb3069b0e04-5387c2b3068mr4574805e87.40.1727361879849; Thu, 26 Sep 2024
- 07:44:39 -0700 (PDT)
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XIFLXkDWChXrbCAgba83mOwWjQ0NGHY68nV21beDkJk=;
+        b=j8/9t0OuqXb1BbEc4BefZVeX4XwIabiTu9nkTNRG8C/ypSr6f04Mbe85v43jhIKB7A
+         XKuDBtmLNeptyMwADSYNhxBd8Lqi6sGZPlcS1g8NISLsyF5Fk2oD3oZ3EXuT/ZTYZXg2
+         wRHENy2DKp8BuIW5W4eGjVkQKiIC0pDHJB7TPCs7ViICOyCzJHfFLUkTjENfcUUQRj+R
+         PZuNWVuc8xjiSU1VQ2yCKSiVaexvXPz53RaFfgx75okM0JsCj+Xfwf9jP800HrC2yaNp
+         cFU8YFzQe16tZ696zvOs0WPPDp9TKnLBEh0t8D6zmoum2bo56AzqixkeU7C0GOLdFagK
+         RjiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWnM/5b5OB1uXN5hXWScmiIuvf+Foob8NHCtC/Z7cGqDcwJHPln1x6XcyjDYdf2pfldbaI2KOKioFZ7fQ==@vger.kernel.org, AJvYcCXN+QehWnx0j4zwGwKbPwnNS36gT2U6iQVWwlmARu72mfTzHHQoGldyuveUU5PxMIwmKfg7KBjTlN9Ww9s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yycx0vkQ7/sLUwD8mqhUQMJU86zVvuE7oRUWpEEwZjIZYFkOWHt
+	Z9RFnyAWNWdpyHWIpqskgQyIylh8TTz6/lsly65ozXxLHzDDXinTSY5nTI2Ka8TpuLNgl/HEopm
+	NWNli0Fw16wil4DOfOUu8SbQGVfE=
+X-Google-Smtp-Source: AGHT+IEpMnyRW32qeNoxUIaOjT9QnKUaBgx2qsROb1O6eSmx3nzpHCE/JFCuH2TMDf3DmEr7nV5FCuZiJQrlsdtDPoQ=
+X-Received: by 2002:aa7:8881:0:b0:70a:efec:6b88 with SMTP id
+ d2e1a72fcca58-71b2605647amr54228b3a.3.1727362651838; Thu, 26 Sep 2024
+ 07:57:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -73,14 +73,14 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240926100434.45d58861@canb.auug.org.au> <CAH5fLgjRVZA3Gmb7Ogs+Y65T38EpNVeVEqmg93ZB4dn0Y7J3aA@mail.gmail.com>
  <20240926181348.3965b040@canb.auug.org.au> <CANiq72kFH125Pk6K-JaswWDFmcvtP2GKx2-3ZAULF4PmpW7M-w@mail.gmail.com>
- <CA+icZUUWBiZj67VxO=LPS5_Bt+i_g6s-HFT9Ts4UmmuPNk2kbA@mail.gmail.com> <CANiq72=dp=+kUHerFvUcL1TDLeuVz=xd781wm7WFmU1Sj-S8LA@mail.gmail.com>
-In-Reply-To: <CANiq72=dp=+kUHerFvUcL1TDLeuVz=xd781wm7WFmU1Sj-S8LA@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Thu, 26 Sep 2024 16:44:03 +0200
-Message-ID: <CA+icZUVVRvXA0G932bsEiEWhdv=Zd0WOPOEMXeHudTzqEp6pKA@mail.gmail.com>
+ <CA+icZUUWBiZj67VxO=LPS5_Bt+i_g6s-HFT9Ts4UmmuPNk2kbA@mail.gmail.com>
+ <CANiq72=dp=+kUHerFvUcL1TDLeuVz=xd781wm7WFmU1Sj-S8LA@mail.gmail.com> <CA+icZUVVRvXA0G932bsEiEWhdv=Zd0WOPOEMXeHudTzqEp6pKA@mail.gmail.com>
+In-Reply-To: <CA+icZUVVRvXA0G932bsEiEWhdv=Zd0WOPOEMXeHudTzqEp6pKA@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 26 Sep 2024 16:57:17 +0200
+Message-ID: <CANiq72kywpi6YzsJXjshEt=h-5YdGWWOiaA3ZT8tcj3mGx6x2A@mail.gmail.com>
 Subject: Re: linux-next: build failure after merge of Linus' tree
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+To: sedat.dilek@gmail.com
 Cc: Nathan Chancellor <nathan@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
 	Alice Ryhl <aliceryhl@google.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
 	Matthew Maurer <mmaurer@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
@@ -92,71 +92,35 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.a
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 26, 2024 at 2:58=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
+On Thu, Sep 26, 2024 at 4:44=E2=80=AFPM Sedat Dilek <sedat.dilek@gmail.com>=
+ wrote:
 >
-> On Thu, Sep 26, 2024 at 2:49=E2=80=AFPM Sedat Dilek <sedat.dilek@gmail.co=
-m> wrote:
-> >
-> > Do you offer a (an optimized - optimized for kernel-builds) prebuilt
-> > RUST toolchain - preferable for x86-64 hosts - like Nathan +
-> > LLVM/Clang folk offer (see [1],[2])?
->
-> Yes, Nathan himself provides those! :)
->
->     https://mirrors.edge.kernel.org/pub/tools/llvm/rust/
->
+> Thanks for the link!
 
-Thanks for the link!
-OK, I darkly remember seeing this somewhere.
+You're welcome!
 
-> He may comment further -- I think the Rust compiler itself is not
-> built (yet?) with PGO etc. like he does for the LLVM side.
+> Asahi or Fedora-Asahi?
+> Do you have a link to a Linux-Live-System or maybe a pointer to a kernel-=
+config?
 >
-> As usual -- thanks Nathan!
->
-> > Maybe I have missed in [3] or overlooked.
->
-> If you go into the Quick Start guide from your link, you will see it
-> linked at the top:
->
->     https://docs.kernel.org/rust/quick-start.html
->
-> I also mentioned these in LPC's Kernel Summit track (sorry, no
-> video/stream yet, as far as I understand):
-> https://lpc.events/event/18/contributions/1912/
->
-> > [ Provocative ]
-> > Can I REALLY use a RUST-compiled Linux-kernel on BARE METAL?
-> > Do I need special hardware?
-> > Do you have a working in sense of bootable linux-config file?
-> > ^^ This is a real question - not interested in any "technical preview".
-> > ^^ You do NOT need to answer all this!
->
-> I am not sure what you mean -- people has been using Linux with Rust
-> enabled in real hardware for quite a while, e.g. Android and Asahi,
-> plus others are upcoming (Fedora, as far as I know), and I regularly
-> test in CI that the kernel boots in QEMU for several architectures and
-> configs that we already have in-tree.
->
+> Is it possible to download a built VM (rustup-binary) and test in QEMU
+> for example?
 
-Asahi or Fedora-Asahi?
-Do you have a link to a Linux-Live-System or maybe a pointer to a kernel-co=
-nfig?
+You should be able to build and boot your own kernels with Rust
+enabled like you would normally do, as long as the requirements are
+met.
 
-> I also regularly test in CI that the kernel can be built with
-> `rustup`'s binaries, with several distro toolchains and with Nathan's
-> toolchains too.
->
+But Rust for Linux is not a Linux distribution, if that is what you are ask=
+ing.
 
-Is it possible to download a built VM (rustup-binary) and test in QEMU
-for example?
+Regarding Asahi and other users/distributions, I would suggest asking
+them directly if you are interested in their setup.
 
-I have NO experiences with RUST - but it looks like things/development
-moved further.
+For help on setting things up etc., I would suggest asking in our
+Zulip -- please see https://rust-for-linux.com/contact.
 
-Before I wanted to test gendwarfksyms-v3 from Sami.
+Thanks!
 
-Best regards and wishes,
--sed@-
+Cheers,
+Miguel
 

@@ -1,156 +1,92 @@
-Return-Path: <linux-next+bounces-4037-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4038-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B4C898B685
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 10:07:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A4F698B77E
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 10:49:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA15B1F25168
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 08:07:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B9031C21C07
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 08:49:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF4271BD005;
-	Tue,  1 Oct 2024 08:07:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YWCZ93Qa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42ED19FA8E;
+	Tue,  1 Oct 2024 08:47:05 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003EF29A1;
-	Tue,  1 Oct 2024 08:07:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD01D19FA86
+	for <linux-next@vger.kernel.org>; Tue,  1 Oct 2024 08:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727770033; cv=none; b=tYx7NZf26nvLW5qdg850ADkOJ+cq7UUVWQQda/Au3Xkl51OmgaoS3g++wDy4LGkMyLq8srqlQ5ghUXiAqCSo2yEdRzyGFOP/mS9cBUmlnnpaWUrvSaA4BTvSvUHBculZAebbbWjqBX/rKp1CdC1Rl9EwcNwOh8BPb68RmCmVQNI=
+	t=1727772425; cv=none; b=GOjuQnd9CuOUCXqLrguMt0sOYmLmoLzIWMAqQdi9k18UE7pLBkPcITYfSVTC3lgN5cfc5POgMrSzNNabtcbmW/7DkOCBrC8jar/Sqpy9bUu4xR/CpNcQTrjhSMkAHDobYwAr1NlBAlZ+zhtAD+2Vu1HyX7xsthz+VUn4PTnBbyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727770033; c=relaxed/simple;
-	bh=DLmkguVWBVtNsTnsLZDKVc+/Z/hHe/fpCablLbt8fo0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M/5UjjH2S/LtBLz+l9PnWpeji1/qC3nUyW6KMTlDNq9XY04imLDJ8loCcVlgN2GCNt6AuLLcwqprU1bbUZE55Iv2rIbaCfXQw6wEfO3FOq7tK6X10FMLbVktRh0afJDEPg78mnAmZxR++/tOofwDcXZi8K+k2d+o5IAVxMDz9hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YWCZ93Qa; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2fad5024b8dso15350691fa.1;
-        Tue, 01 Oct 2024 01:07:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727770030; x=1728374830; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LDGdkPHx0D1j5vHF/c6NOku8EQtRl7HCdp9J72B4+OI=;
-        b=YWCZ93QaNN6Zpac8tw95U0AIAcBWeG2AlvAqtIKtgeJ8ORhMceFOsfDRhUdiy0Giqh
-         g180TeeKFeNcK+jLprXLZqS3hvjdInr7gjnNZRvik6+xC1iTTA/qyZbSSLKUcji5WhO2
-         p9d68/F9H8ypnwssIP/aPAFQuBAPctHnkVb/a46JGMZFtaZ7drU5N0ESn/RhBtAYCzzQ
-         14UILGQ6vXmsAQyHQaebZZgvT80lPrDKRwzmgZXBDWeI1bTiXfWz6dl9JuM9/juZP2ce
-         u+wL6oxeK7FykxpcpYZ6ecmjCZaceUleEcN9JYjykk6N3lMMJmb6C/drwZqnNGprQPiE
-         NNOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727770030; x=1728374830;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LDGdkPHx0D1j5vHF/c6NOku8EQtRl7HCdp9J72B4+OI=;
-        b=uBtA65xI1TT4yWlAK40Bk09SGAwUJzoLgcMokyqBdxhHWZa7VM9TpmUUZ5rasoWT9Z
-         36/Q7OBsRH9jI4I0vgZHy6lCqaP5ZeVb7PlcYc453A4dX5adlKkIdakX0nHLNj10V6vu
-         objPgE+4dhybvpQALpcaevlJK/yHO745AKuyyaoqOtsdETOu3pXWvO9ak120Sbhbfx9l
-         rGLIn1lRtitJ9kTmSb3ZlVZX7LCy5Wi4ikXBg4bDJT6rMimC5QumQtt5BVNGI5vAj5HA
-         EYbxtRuedoBNOc7rOBF3MPT19J1xUnL+19ZTCQOINOM/dBNHxj6XAAYRXJ53FpOqeG0g
-         U2eA==
-X-Forwarded-Encrypted: i=1; AJvYcCUjHEbQQDs+1xMUEudFqG3ALecHW9ZUvLRGewR9dLws9ruffu/BS03xeeXlL0MIDWljV7gWoHTTkuwamA==@vger.kernel.org, AJvYcCXWfUiBDtWQX6ydJig65rYzDA++GIhmriZb3p2C0A4tdHdIGEtoLZG5UWntd5oq5wpr3Z4ScOz98bqQwl8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/rZ33zDdD9XxlZZU/tinJUOk4lEtHRRi9+3q3Qchm5b/6v1PC
-	3aI69EAckWsNucG9pjK03Y6aq9JpLpgKFXA26kSmeZhrMoXhFYJywNXDdvIOlvTYYhQ/hGnL8A6
-	XCoyWs9O3mCEO3pacO9JvDTlhjTDKFIglsKS8Ng==
-X-Google-Smtp-Source: AGHT+IHvOBYxOwUNOdUDNsDNEt0IUTQzFgiYQcsCEoRnAjcabGr8fw/ZklnSkzujELmuW9wahcWEGEQFJ63COsA2Nq0=
-X-Received: by 2002:a2e:b889:0:b0:2fa:d6cf:28f6 with SMTP id
- 38308e7fff4ca-2fad6cf2c81mr19409351fa.3.1727770029640; Tue, 01 Oct 2024
- 01:07:09 -0700 (PDT)
+	s=arc-20240116; t=1727772425; c=relaxed/simple;
+	bh=/fXMwGVaahBsSaPXpcYDcv3WCPF7fsy9WoyEQYI7PTg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fj1akPQFuUQwdRqp/3b/YLWkpWjPG3aPd9XF9Ca+8HY5XZWD5uQBUVNtL3ttOLH7lV+3cNY9udGVwksYByOnh/OXHPKbLjfQZwY4UYUrv3CT2ZUDS7nAqkQ4zYYyePMw/iFgT7B8w9wlIeOrbfF6OU1bdJuHnGMUJtMdMTXZK94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1svYX3-0002EJ-4S; Tue, 01 Oct 2024 10:46:57 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1svYX2-002pqT-75; Tue, 01 Oct 2024 10:46:56 +0200
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1svYX2-000283-0W;
+	Tue, 01 Oct 2024 10:46:56 +0200
+Message-ID: <e9e2f114dd4051e59071768de814a1908f8a207e.camel@pengutronix.de>
+Subject: Re: linux-next: Signed-off-by missing for commit in the reset tree
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+	Mailing List <linux-next@vger.kernel.org>
+Date: Tue, 01 Oct 2024 10:46:56 +0200
+In-Reply-To: <20241001074106.2a545de5@canb.auug.org.au>
+References: <20241001074106.2a545de5@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241001134423.62b12a80@canb.auug.org.au>
-In-Reply-To: <20241001134423.62b12a80@canb.auug.org.au>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Tue, 1 Oct 2024 10:06:58 +0200
-Message-ID: <CAFULd4Yg=VmL5rCdxqbh68TSR04zFHPjxUYN0fqNBBfmdQXkmA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the random tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: "Theodore Ts'o" <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>, 
-	Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	DRM XE List <intel-xe@lists.freedesktop.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-next@vger.kernel.org
 
-On Tue, Oct 1, 2024 at 5:44=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
->
+On Di, 2024-10-01 at 07:41 +1000, Stephen Rothwell wrote:
 > Hi all,
->
-> After merging the random tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
->
-> Caused by commit
->
->   38d1a9d296c8 ("random: Do not include <linux/prandom.h> in <linux/rando=
-m.h>")
->
-> interacting with commit
->
->   5a90b60db5e6 ("drm/xe: Add a xe_bo subtest for shrinking / swapping")
->
-> from the drm-xe tree.
+>=20
+> Commits
+>=20
+>   5b93105afcdc ("reset: amlogic: add auxiliary reset driver support")
+>   e66eebb88564 ("reset: amlogic: split the device core and platform probe=
+")
+>   33e712a6dfc9 ("reset: amlogic: move drivers to a dedicated directory")
+>   2941bb7a8c43 ("reset: amlogic: add reset status support")
+>   85873c151943 ("reset: amlogic: use reset number instead of register cou=
+nt")
+>   1392f6d3692b ("reset: amlogic: add driver parameters")
+>   45d73c01b0a3 ("reset: amlogic: make parameters unsigned")
+>   49ae3e0e55f5 ("reset: amlogic: use generic data matching function")
+>   ac1bc5f19401 ("reset: amlogic: convert driver to regmap")
+>=20
+> are missing a Signed-off-by from their committer.
 
-This was kind of expected when two commits are in flight in the same
-area. IMO, the best way to solve this collision is to change the new
-include in the DRM tree from <linux/random.h> to <linux/prandom.h>, as
-is shown in the proposed patch.
+Thank you, fixed in reset/next.
 
-> I have applied the following merge fix patch for today.
-
-Thanks,
-Uros.
-
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 1 Oct 2024 13:33:48 +1000
-> Subject: [PATCH] fix up for "random: Do not include <linux/prandom.h> in =
-<linux/random.h>"
->
-> interacting with commit
->
->   5a90b60db5e6 ("drm/xe: Add a xe_bo subtest for shrinking / swapping")
->
-> from the drm-xe tree.
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/gpu/drm/xe/tests/xe_bo.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/xe/tests/xe_bo.c b/drivers/gpu/drm/xe/tests/=
-xe_bo.c
-> index 7d3fd720478b..3a14b70f12b8 100644
-> --- a/drivers/gpu/drm/xe/tests/xe_bo.c
-> +++ b/drivers/gpu/drm/xe/tests/xe_bo.c
-> @@ -7,7 +7,7 @@
->  #include <kunit/visibility.h>
->
->  #include <linux/iosys-map.h>
-> -#include <linux/random.h>
-> +#include <linux/prandom.h>
->  #include <linux/swap.h>
->
->  #include <uapi/linux/sysinfo.h>
-> --
-> 2.45.2
->
-> --
-> Cheers,
-> Stephen Rothwell
+regards
+Philipp
 

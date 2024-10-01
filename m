@@ -1,103 +1,70 @@
-Return-Path: <linux-next+bounces-4025-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4026-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE62E98B2C1
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 05:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 87A7298B2C9
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 05:42:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 658CD1F237B9
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 03:39:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D1BB1F23EDC
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 03:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13461A304F;
-	Tue,  1 Oct 2024 03:39:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52DB41A3BAB;
+	Tue,  1 Oct 2024 03:41:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="mHJsaKGd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sdXVQS1i"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED97615688E;
-	Tue,  1 Oct 2024 03:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA37170A18
+	for <linux-next@vger.kernel.org>; Tue,  1 Oct 2024 03:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727753967; cv=none; b=VBxYUBw0MtUvCQenvkfTOc64bRsfZ6fTeYwZXe6VCtdnIzJkfJYvAxjb1ALY7TWhPkt9mWbG3+8r5XEcWLJuVqbTQbnnYJiffceImTIdct77oBkhFckMeoVX+M1LIghbLNSnIaiW4yxxlRcUB5uN81fSFvI/PS2pfgqxtCnRdOI=
+	t=1727754118; cv=none; b=n+I0Mos4q5bo2+g7aUtTDUreBck09qC0NakUWzTTTaPA0fphrEX4JQEjEYWo7DSubuYeSVY6EdsyVonvfsigOMW9H1tmK6Pri7qGw4+Wf7pMYLaXuh92h5hwtccIxNmQueD46cKcujP/DPjGFnCQjUVOan0LFzQhaiIPjh0FBSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727753967; c=relaxed/simple;
-	bh=dpGB6MqtxqP5dWabvrvhIo4fZoTeglA4BD4WSxeblQY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OAXAdF2WtBRbfI1uLh4sRHcmNcEcfov9LBMMec0wzRUSeGQQ+Q2FwY3Ref9emkPD14pa9Gi7lroS8ppDaaRZkDnbpK8g0oc+wuDUfZ7+/X9eozXe7hQz2PYsXSQYhdDnIKqJWBeTRR/GrnIKwRUBjNui+sXNB0GEQF5opcHPH30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=mHJsaKGd; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1727753962;
-	bh=W9IP0JvJ4iWy7hAqr5fcioGo2LxVnpkZfHqORUSMNS0=;
+	s=arc-20240116; t=1727754118; c=relaxed/simple;
+	bh=4mtqjufrGzTh3KTrYNICzXzLUr5PuW+levoNX5ARjUI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=m8LmFVPvrwbOJo9xJL+mcCuHXCqfu4zoDtsYkd6yU5fJZdSQTA+KVqRuN3qasASPQM5KvrMFSa5onnJFRWOkFRzs58VO1UpN8i3u1QuZs1GaypbKgpSqKGd14URlIFVWbyGcdNImCofpwd4cQMKaewK23Z8TsyPHG5c7HBGW/gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sdXVQS1i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1CF5C4CEC6;
+	Tue,  1 Oct 2024 03:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727754118;
+	bh=4mtqjufrGzTh3KTrYNICzXzLUr5PuW+levoNX5ARjUI=;
 	h=Date:From:To:Cc:Subject:From;
-	b=mHJsaKGdyBjO7eqryrCxppMvad7Z19+nRhBl9A7OC8LRXtdwenYYaAaQRSJO7usro
-	 NFH9AsmHeVTF5/ac/nLMeNBHGFGdWRTHhBeujM4sSp8J2Ut+fdRDj7yaDiUhO7IH06
-	 qTvne6ArI0hjjc9oIibj1YzkPNYaYYlqFNNDfsyn0XyRcL5I36qu/6+b4xqlBGyZmp
-	 zygyS7jFBdjlvjoMW5IpEeOODVQvquVoLeViGDdq4/Ii6gjD8U9aSS42hnfFMI0fyb
-	 2Dyyrmcb7WP4LSyX1MgwP94m+W2xJVJxGARPwkEZuShoMwnQItru/vU+Cvv2JwNgof
-	 ggN+GE83HCRgA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XHkFj6RCPz4wb5;
-	Tue,  1 Oct 2024 13:39:21 +1000 (AEST)
-Date: Tue, 1 Oct 2024 13:39:20 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the vfs-brauner tree
-Message-ID: <20241001133920.6e28637b@canb.auug.org.au>
+	b=sdXVQS1iyDz8qwTKLgKYF/J8IjbYK4PZl3uQeht1RC7Yb7kPav5Lj9XO/86HY3WXf
+	 LnAoqLFi6ffK/qLDMidkGWdaD6Qw1nxilf1IF+mFfbJnA0MuQefiJzyDKp/Tyv4A7G
+	 GdkWfGptWKxh4V+wcCppkCxXv+K8POXt8jVJGUret5wErfkTYJq5c/1QgoQ9HwRKx2
+	 QNBR8/2y5OdDtOyD44o+eERED2H0xDn1LKuRmVMxYq2IQ/WjrZ+jJNh3jaZJOVV/82
+	 JYJ6WPROD5wgYRcvjQeaoLtT1HU2e2L7yZVtkq2HIKtrfrsFcP9lvRnX4F2g5jefgM
+	 Pb+5sXjK8H2hQ==
+Date: Mon, 30 Sep 2024 22:41:55 -0500
+From: Serge Hallyn <sergeh@kernel.org>
+To: linux-next@vger.kernel.org
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Please include capabilities tree for testing
+Message-ID: <Zvtvg1SqyMOsgfD3@honeybadger>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IX_zpA2cUniAeXeC0VWTqQa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---Sig_/IX_zpA2cUniAeXeC0VWTqQa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+please add the capabilities-next tree,
 
-After merging the vfs-brauner tree, today's linux-next build (htmldocs)
-produced this warning:
+git://git.kernel.org/pub/scm/linux/kernel/git/sergeh/linux.git  #caps-next
 
-Documentation/core-api/folio_queue.rst: WARNING: document isn't included in=
- any toctree
+to linux-next.  There's just one patch in there right now, and I don't
+expect to ever have much more than that.
 
-Introduced by commit
-
-  28e8c5c095ec ("netfs: Add folio_queue API documentation")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IX_zpA2cUniAeXeC0VWTqQa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmb7bukACgkQAVBC80lX
-0Gx1iAf/f0/4mObOk/oS/zoT8c2/KvqzFa61MsSTWihHsS0oT/u928f75ZL+zF1j
-rv2zfX5odM+PU7KnMrVCh+8BDH4Syx0KzsJvPC+reJ9Fr0ThNQs9ZCVW1kEnLkkB
-02fLqzRr//WMOdvtlnu+L15EUUMbgXBlPrZg2H8s4DgALzvS3vvuwzkbaPB+f/Po
-iP39ZbvLijZv/1ogIRWOblXc9mO8a9BRUkuUDn1ygupiab5S8rvBoPknAJyOLUI1
-qnwydP7YUerMb1gkVRRuPrSm/fs97edZLqC6fMZNpLrGM21u2PwsipvaYi8tsP9N
-5a8MuVCvvA8xfgzxMO+YpGerBW6Hfw==
-=cdON
------END PGP SIGNATURE-----
-
---Sig_/IX_zpA2cUniAeXeC0VWTqQa--
+thanks,
+-serge
 

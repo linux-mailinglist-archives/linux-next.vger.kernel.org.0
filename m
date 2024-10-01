@@ -1,76 +1,81 @@
-Return-Path: <linux-next+bounces-4044-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4045-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA1F498BCD8
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 14:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF94C98BE31
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 15:42:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F23E71C236DE
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 12:54:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1390A1C22351
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 13:42:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1171C3F09;
-	Tue,  1 Oct 2024 12:54:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6A711C5794;
+	Tue,  1 Oct 2024 13:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bj5qk1nu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PmVcjksb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293D419D88D
-	for <linux-next@vger.kernel.org>; Tue,  1 Oct 2024 12:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A1219F110
+	for <linux-next@vger.kernel.org>; Tue,  1 Oct 2024 13:42:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727787243; cv=none; b=CPf3cKUf0ntWl9CVGVxL1JKijWRtu/NHBe/dToCKGqS2y0CrA404Brss2pH33w2H/S/A6o7HRYBcaw9zEgKmmOTAtyJe2dojbPap9eSVCSwLCqDy1FMvdQHipwSb2xN1uDehD1L72YvEQ5nJt3nARboLDK56LGT4dIJEnaa6k2g=
+	t=1727790159; cv=none; b=fLtACJJ7gY/XnIrq/12up8qzMeU7vq20cmP0lm5kMImUG0sHH9zZmygtydK+oe0KlHsY0IVtTZKwrobbWyV2hx0IhfrXwolqyWIrrAnwP5Okb+UN8NhzU2cGj7q2H0WHP/DLQcumkRWuWIbQXr3cbY0FFyMRLP+bd8/5H2OBa7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727787243; c=relaxed/simple;
-	bh=YK//ymCXMNibgnWwiEYPH29kLnqQE7EcO/RQTyKGXO0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fk8YfZvdw06XENHtyDO29SLJPe6zCtXkkQKamq/7slb+duXNeBX+PXndkAEZBRYRSAclv2EN9+/jeQsR+EoqpuCOyQ/PCUEui3sJT5uBJVAqwFrYg2XLrZwI/TXz69t38QVWiI/ymlRHWtTfj1gomtsBcyZ8U2vpp+5hEQ4xaG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bj5qk1nu; arc=none smtp.client-ip=209.85.218.44
+	s=arc-20240116; t=1727790159; c=relaxed/simple;
+	bh=cTHc1snM4K++pQXYqWyob40W/F81fYmVWt73pusIbrE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B1BmT29Z2J3PFWkviYqCCvIYkL8tXIHGFsF6Y+ad562LcTtWU0XzSun+tnEqryH9PLJNLjQBx5ArvjF9Yb5uWgsAcPogFBRrQT7jBDBtQDChjEHnX3tdqcgs3j9OkDYn5yeKOUIomfG8ImNc1RwIVx0o3GnlGfqXgqlA1R7kMW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PmVcjksb; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a8d2b24b7a8so1206616066b.1
-        for <linux-next@vger.kernel.org>; Tue, 01 Oct 2024 05:54:01 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a8d0d0aea3cso843891766b.3
+        for <linux-next@vger.kernel.org>; Tue, 01 Oct 2024 06:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727787240; x=1728392040; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zjap3J0Sw2JAr1hIBNUQRegafiVlUUxh2HbVu57tMmQ=;
-        b=Bj5qk1nuFbB1nTYURo99blBuFrGVYf4BmEmQmAjO0OLWS6fagTasGgWVEIWvWGrNcI
-         4SGjWSGOlPIvWer0mwniX0Hq0CUp4WkW0L2N+F5OqEbfUW3ROV7dcUh9onkn1dnb1Yi6
-         ZArxuwvYpzcFtIEbbRzDnnhqf+3SHUqRl2g3YFPF4O/6HN5gox/HYXD4KomRUPmVdhYC
-         WVvATQON9ldroK6gzJFxNpgXkZgzpidX7zkH3sD3OcvDjlpmt19aqtruChHFHD9pCy0t
-         wUr/7WUuCJRpDHJ+ylsnKieJucMXCXOzl+h7ebfL+nzx+OCrZf5937ihv9suYK0mUcdg
-         FULQ==
+        d=gmail.com; s=20230601; t=1727790156; x=1728394956; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6tazfLf05owGDuI0/0AGwuflyXmDD6Q498Uf7b0Dyc0=;
+        b=PmVcjksbNx2EWAUjlB/z681GQDWZum9gETZLAt+QNPaOSgLBv7PBaSgGD9X4rkLnxb
+         BdvHFyMc/CUkt9PxljRu24w69pcrnbChMuGQja/tksEL/AOw4NLFKyvOGaSD/mm5JgCl
+         wRp3x0ls7e9ikKfZRgKFJABJ7okLXRdwclFWBl9ntKU7BlUHx6D1bJb7q5Dvgaf6umKD
+         rtcV36PHjndkH/060YY8oqhIwgi4M0Tl1YEbQa0WvMRtrMtnqj5Gsfd+a23EHucI7ghu
+         b8EUArgvghp6SeqZQ/wocEUSCw73a/LJRNyruZOOBUbPDj2BHZ0TPFx27oIUB0xuAWwn
+         AS1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727787240; x=1728392040;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1727790156; x=1728394956;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zjap3J0Sw2JAr1hIBNUQRegafiVlUUxh2HbVu57tMmQ=;
-        b=NxEm+wnCxyCldmysU83C21n9iOF6SLgb3WPFExrurPQ1PjuUs+WGoGrsVrMpu0ZjFm
-         bhKklAnvxloasYP8G3PT0gQv7w0B0Hg2bw3XUswRon8c9GYO3jjKKBpmogn3gbgI4y5W
-         GWMIT5bwl409JBKswpuy4d5ebbmfd3H3xxjnz/z+D1qcrvqEPNVnWQ4MBXvOLQn+qr0h
-         JZJsPqv3ON37cB5OodzMN6e+XFUeo49kegKJ69P3QlobvyXYADnBfCk3Pn138TPgymVM
-         iwgyDDHJ3s52fCgcXgfOJlGaEd/bLBp/oPGaOpjc19tc1ZxIw7hIVBmlen41CTZHiZ4P
-         KLQw==
-X-Gm-Message-State: AOJu0YwrN2vPn8GTChyVz/CPD/gXM1TbkHT96RHCoxcd8QptF58wiBmw
-	da7a2E9066iAZF1xvAB3HItbXGBWtD+dshuC6znpyHU5ZXsIik6egFBRX2ra
-X-Google-Smtp-Source: AGHT+IFfKGIT+Qv064KzdDaqC3SeZjbN2N+TdHsisCt/BNMiERmnJp6URhc+XvBk9UOYRXt7nbH5Fw==
-X-Received: by 2002:a17:907:36c2:b0:a8d:6372:2d38 with SMTP id a640c23a62f3a-a967bf4e2bbmr316107966b.18.1727787240111;
-        Tue, 01 Oct 2024 05:54:00 -0700 (PDT)
+        bh=6tazfLf05owGDuI0/0AGwuflyXmDD6Q498Uf7b0Dyc0=;
+        b=TJwasQYJgNAtsoN4hGGYZkiWCshSBGxXZgQgElCeMEu0dcyhJ/Isa0Lxx5yQNJIkaN
+         NuRRjJFWQxLWXSoqnUrgHsgcEJpuerEdCfgp0k+ZXkGDkp73CYScs5RTTeAze20H5VW9
+         9pvSy+MeglLvvJ8UFDX3JDJYEvWJgCISYiamElEN+PqmhzOzV2JfW5lZUOszTScTUMJ8
+         JprcvxVCejnZboE1414vioRpX/9NpyHnJbw4vRSsFu2zjAWxy1Xfb483gpSXLeqmDutz
+         tOTmUm39DG6NH0SnTTF+KuGC3KUS3Q2TbiaqRTpSvZp5xfpNYfjM1HARoO/NHEoeww4Q
+         hL4Q==
+X-Gm-Message-State: AOJu0YwjCg6JG3TJwd8+0F9dwgHH2y6MRSs8IpdFNVOgptYZ+Cl4wr4S
+	FgzUsZHZsO7uem14hpaLguq9tlXUo0hjKto0H10SYe8pH6q7j/PqUOR07M9N
+X-Google-Smtp-Source: AGHT+IGoG2nSUAa38yAeeiTnzJCVzOUOGpyEhEjQQSbJnBu5/0e5i6KEqhxTfYiJcvBsNly18hVgng==
+X-Received: by 2002:a17:907:7ea7:b0:a86:97c0:9bb3 with SMTP id a640c23a62f3a-a93c4a7c552mr1624464366b.51.1727790155912;
+        Tue, 01 Oct 2024 06:42:35 -0700 (PDT)
 Received: from gmail.com ([45.250.247.85])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93c299e5bbsm710925866b.215.2024.10.01.05.53.57
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93c27c5a7dsm716032266b.62.2024.10.01.06.42.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2024 05:53:59 -0700 (PDT)
-Date: Tue, 1 Oct 2024 18:23:53 +0530
+        Tue, 01 Oct 2024 06:42:35 -0700 (PDT)
+Date: Tue, 1 Oct 2024 19:12:30 +0530
 From: Brahmajit <brahmajit.xyz@gmail.com>
 To: Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
 Cc: linux-next <linux-next@vger.kernel.org>
-Subject: Build failure with GCC 15 in
+Subject: Re: Build failure with GCC 15 in
  drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
-Message-ID: <nffy62zhzazkvivoglq3gltwc4asnv5xprwv466qkgjivzbban@acuemw6yuejk>
+Message-ID: <luwsnhcuuv5vzdeswkmtiluxk4oxdrtf7phj4de5hzz4iettm3@qaulgcb7y7kp>
+References: <6pg5msxdt2p3ycdamahhf2ojxtn3nnrilzlnqv7zwv6mfzx3gy@k24avbsop6yq>
+ <sstecaeritl7w2eu5swqmshi5vbvjpeaufwilqdg2jhtnsnpys@iggjwl7wmibo>
+ <Zvv4-bm07rb9rfK_@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -79,30 +84,35 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Zvv4-bm07rb9rfK_@intel.com>
 
-While building the latest stable release with GCC 15 I'm getting an
-build error with (I'm guessing) the drm module. This is probably due to
-combination of GCC 15's introduction of a new warning
--Wunterminated-string-initialization, -Werror and -Wextra
+On 01.10.2024 16:28, Ville Syrjälä wrote:
+> But we could work around by adding room for the '\0' and
+> s/sizeof(...)/DP_DUAL_MODE_HDMI_ID_LEN/ in the memcmp().
+> 
 
-In the drivers/gpu/drm/display/drm_dp_dual_mode_helper.c file there is a
-code section on 163
+Sorry I'm new, but can we do something like this?
 
-static const char dp_dual_mode_hdmi_id[DP_DUAL_MODE_HDMI_ID_LEN] =
-	"DP-HDMI ADAPTOR\x04";
-
-Its from the is_hdmi_adaptor() function.
-I read a little about C strings and it seems like we are assigning more
-than 16 characters to the array dp_dual_mode_hdmi_id, and
-DP_DUAL_MODE_HDMI_ID_LEN is defined as 16.
-
-I'm guessing this has something to do with how termination happens in
-char array vs char* and/or null termination
-
-
-Some references I found:
-- https://lore.kernel.org/linux-btrfs/5mnphkdvheudccjtiatrbjbkqtw54s2wkpeqevj3rqthdqlwyw@sjvn4wn52qki/
-- https://gcc.gnu.org/bugzilla/show_bug.cgi?id=115185
+--- a/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
++++ b/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
+@@ -158,13 +158,13 @@ ssize_t drm_dp_dual_mode_write(struct i2c_adapter *adapter,
+ }
+ EXPORT_SYMBOL(drm_dp_dual_mode_write);
+ 
+-static bool is_hdmi_adaptor(const char hdmi_id[DP_DUAL_MODE_HDMI_ID_LEN])
++static bool is_hdmi_adaptor(const char hdmi_id[DP_DUAL_MODE_HDMI_ID_LEN+1])
+ {
+-	static const char dp_dual_mode_hdmi_id[DP_DUAL_MODE_HDMI_ID_LEN] =
++	static const char dp_dual_mode_hdmi_id[DP_DUAL_MODE_HDMI_ID_LEN+1] =
+ 		"DP-HDMI ADAPTOR\x04";
+ 
+ 	return memcmp(hdmi_id, dp_dual_mode_hdmi_id,
+-		      sizeof(dp_dual_mode_hdmi_id)) == 0;
++		      DP_DUAL_MODE_HDMI_ID_LEN+1) == 0;
+ }
+ 
+ static bool is_type1_adaptor(uint8_t adaptor_id)
 
 -- 
 Regards,

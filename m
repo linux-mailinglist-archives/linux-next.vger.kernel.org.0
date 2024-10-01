@@ -1,107 +1,131 @@
-Return-Path: <linux-next+bounces-4022-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4023-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A35B98B0A8
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 01:12:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA58298B175
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 02:28:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1242B23020
-	for <lists+linux-next@lfdr.de>; Mon, 30 Sep 2024 23:12:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55EBA281855
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 00:28:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A19A2188CC1;
-	Mon, 30 Sep 2024 23:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68658645;
+	Tue,  1 Oct 2024 00:28:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="B1RNi9lJ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oBU1unHC"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2558186E24;
-	Mon, 30 Sep 2024 23:11:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D6628EE;
+	Tue,  1 Oct 2024 00:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727737906; cv=none; b=Wfi1oeNaiQqK5VdOJJNv13S9dIcGSnXmnS1Z41gj62bpSrPGcnl/JjcOdRY4/xPEayDbfGmLjc0r4V+s6L575tEztlEuucjaweZjOYb1XYejXfUJjZhd2IoBl7EuHaus62QnSNSpvIWf0gvqJkdlbHOyyzpkMFyyQObpJWu5nnw=
+	t=1727742528; cv=none; b=Wodm3cJ/GyZL5A+ZPUAThxIRoTReWjD+qREDVXqJlC+ffVrcGIcArKJL3PDhnqPq0xdfWUqhJz4wYERUeDEX6DxNjaqrMCxZb3paoACGjciMrE649O0V2pIQ0dkfP6gGBXiPwd1ltLQkv4Hg+e16o6Ty/OvAWk4oSoCx+L/ZUyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727737906; c=relaxed/simple;
-	bh=NYXnSSeBKk2VTEP/KkCVZOmQvFmKIuNvOkRbY83JZSc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aNfgjDdiSw2QFf1uJCl1m0lp7F+AYtpbRKUCiHSR1ZoTroOt2plq2TIpD+xOpoU9jSfT1RxnbEHOs3btCPqnXc+tYw98CPjY8Tz7R/vsRwahKEjwaTuNEsv5yh7ASHZM/u/dAG2FkRcc9H+/XXQ9e5C8/yQvzdGe5I+1ywKhpV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=B1RNi9lJ; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1727742528; c=relaxed/simple;
+	bh=NQRfHInSRyhNMKkLtYSjGa7i/JV7iU/gWWdIh08HA+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dVug9PTTpvTD3bXJCcZZdcXSwNxT4U63y58kMhn8bR8VbS8/AuYc9Wq2ADxLrwKPXJwwU4R9GhA42BYE5QzCpi5G0j0cLVnBAiV50LemY18cYriiWxPqdRIbRDU7iiIIiL36OvW76OmvTefuDyIncnXF4xRXhBTeJg1kSObgmFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oBU1unHC; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1727737894;
-	bh=1l0TkxmTIAr6jaBDS+uvP74bk2FQ3qnSyXWdIIeS+os=;
+	s=201702; t=1727742520;
+	bh=xhFUxYfUeS/SPCd3Z5CW3b3H52xKBE3imtzIsaJAWZA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=B1RNi9lJlTfgZGFZYIEbPdsl7QE9+0BAH8wh0qXxFKUE2h0Gqha6fjrwadgt1pRaq
-	 io+LFHbY1JqOxhwxkTDcVUe43E1S1F7qh6S5cWM8obpmT/YRi6qGEy9yx45FHitfKh
-	 s+sP7/NRc5+PArOFyAFC0+pFcoGbhCjQ39701srM1QytAiz1s7iLIEolfBCY/7Rw07
-	 tc9QrRpqFtsxg/4Jxa6Vo735rsESnhZC23oMkJKWxcPhcgDUA23C9qZXE+JJmwN509
-	 UzzeCWk57c59mBEpMdnnDkoZXnqUSiKdvuaHOu14mrfP4V1qJFxQIWubz8oxHjMP1d
-	 gCSibexxilXiA==
+	b=oBU1unHCBP5w4fp/G1trX1ZwlgMzW2QYifPU4HyRHozX7e2ealzKBcwvIVHJh6ob5
+	 NJj+SM8HD5L8DVNs9OO/fGoRCwf54Pz+fSCqCFtPrh3UMnOBrCnlSKBxBtcJG4oHuT
+	 RZXQSt13F8euJxzrlf10twnRie3ZCjJK2QqxDiuh8f7Rt0NFuTMBS8UCj1kWX0h83g
+	 NBXkGtfqF/tMuORZtglH23jxgrkg/wZWnpgWeml2/oUrmo46OpNHAQDy/Qkj/EPFck
+	 vOBv3sEsYtbWemXZjMnSLJ/T1KsYt8EfQTbLPJrC+bj655XjPz0l1cwGwrgLd1jnub
+	 Kqe2jWd5ecqNg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XHcJk44LZz4wd6;
-	Tue,  1 Oct 2024 09:11:34 +1000 (AEST)
-Date: Tue, 1 Oct 2024 09:11:34 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XHf1h5DWJz4wbr;
+	Tue,  1 Oct 2024 10:28:40 +1000 (AEST)
+Date: Tue, 1 Oct 2024 10:28:39 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Benjamin Coddington <bcodding@redhat.com>, Linux Kernel Mailing List
+To: Christian Brauner <brauner@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
+Cc: Alice Ryhl <aliceryhl@google.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the vfs-brauner tree
-Message-ID: <20241001091134.1eab47c2@canb.auug.org.au>
+Subject: linux-next: manual merge of the vfs-brauner tree with the
+ rust-fixes tree
+Message-ID: <20241001102839.77211fb8@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eNdsL93BM5u43k.NsR2oK2l";
+Content-Type: multipart/signed; boundary="Sig_/OmpkJ.nUj/wm.QloXFhZjk7";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/eNdsL93BM5u43k.NsR2oK2l
+--Sig_/OmpkJ.nUj/wm.QloXFhZjk7
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the vfs-brauner tree, today's linux-next build (powerpc
-ppc64_defconfig) produced this warning:
+Today's linux-next merge of the fs-next tree got a conflict in:
 
-fs/lockd/svclock.c: In function 'nlmsvc_lock':
-fs/lockd/svclock.c:483:34: warning: unused variable 'inode' [-Wunused-varia=
-ble]
-  483 |         struct inode            *inode =3D nlmsvc_file_inode(file);
-      |                                  ^~~~~
+  rust/kernel/lib.rs
 
-Introduced by commit
+between commit:
 
-  81be05940ccc ("NLM/NFSD: Fix lock notifications for async-capable filesys=
-tems")
+  ece207a83e46 ("rust: kernel: sort Rust modules")
+
+from the rust-fixes tree and commit:
+
+  94d356c0335f ("rust: security: add abstraction for secctx")
+
+from the vfs-brauner tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/eNdsL93BM5u43k.NsR2oK2l
+diff --cc rust/kernel/lib.rs
+index b5f4b3ce6b48,ff7d88022c57..000000000000
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@@ -44,8 -46,9 +46,9 @@@ pub mod net
+  pub mod page;
+  pub mod prelude;
+  pub mod print;
+ -pub mod sizes;
+  pub mod rbtree;
++ pub mod security;
+ +pub mod sizes;
+  mod static_assert;
+  #[doc(hidden)]
+  pub mod std_vendor;
+
+--Sig_/OmpkJ.nUj/wm.QloXFhZjk7
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmb7MCYACgkQAVBC80lX
-0GwkRwgAgGzgC/Dhty7ALD7LrFm4OkjV6zoCXjClpI7ocDiedpCNiIfP4rRCzoLx
-yyFCdu8RDuQL902Pchg6EmiVIi27baaEpeTg2eS6IYB9sdpvXjfscJLTF0Aquler
-JGDcyljE9yHLg+RrfNK/9pzzuVG+LcYknmz2ZJZOne+8norfe5Rcwkw8wxsWOmFC
-CK/zMISFj8eg839HDO1KcRxGlvbEoS4xxV9STjibWjo5IqysELzl0SYCx2D8RdxL
-9lVsTPHv4wYIIEwISeq0ygGz6snnlgbjhdywF8NS6MbUIqxaIRU7YBQlfoe6cESG
-psk8m2ephaLhGv6LxMupuvDAJJ/r+Q==
-=2Tcu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmb7QjcACgkQAVBC80lX
+0GwX6Af9G87aQg+c0eyaHqS8gQDe7eoKaq8ExfhvbN68844NYEz7UP4vDravErRh
+fqzRrL7U3zwMPXybLZ8pSNHt8Frxzukd4VtYD387qSDW/MmpXYEuzhcxYDAt49fy
+4R2stWV6ux5Smfrn5jCvlVL93LxFVo42pubxi62h1PqPMr8Hwn4sbTpYXaEjLCRn
+BY5yQjmOUiMi9y/K3J91ZOaoHi+ANXYR2EOs7anjbRhCbVNZQ267HH1rLOd0ogsC
+L5FsQ86an5OdsQ3vQdPIMcscFbAGu3187MoQsgdyjeF4uipMmsoPzZpOrE82Vf7d
+04hs8ajDxSndZO+XMkJCCYB1A+Fs0w==
+=O4g4
 -----END PGP SIGNATURE-----
 
---Sig_/eNdsL93BM5u43k.NsR2oK2l--
+--Sig_/OmpkJ.nUj/wm.QloXFhZjk7--
 

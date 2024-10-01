@@ -1,131 +1,160 @@
-Return-Path: <linux-next+bounces-4023-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4024-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA58298B175
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 02:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F3D198B1D8
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 03:38:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55EBA281855
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 00:28:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C51D28111C
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2024 01:38:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68658645;
-	Tue,  1 Oct 2024 00:28:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 093A7D26D;
+	Tue,  1 Oct 2024 01:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oBU1unHC"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="S6gJRfsV"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D6628EE;
-	Tue,  1 Oct 2024 00:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8878433E7;
+	Tue,  1 Oct 2024 01:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727742528; cv=none; b=Wodm3cJ/GyZL5A+ZPUAThxIRoTReWjD+qREDVXqJlC+ffVrcGIcArKJL3PDhnqPq0xdfWUqhJz4wYERUeDEX6DxNjaqrMCxZb3paoACGjciMrE649O0V2pIQ0dkfP6gGBXiPwd1ltLQkv4Hg+e16o6Ty/OvAWk4oSoCx+L/ZUyM=
+	t=1727746719; cv=none; b=KTseCJsEJ1XFNs5+zNZQudTpySYC5mrqllCq84+mPokMe7MVgmqe+TPtQWyQbt2D1HbzYyt6CbslpJZyfLX5VulZCwF6Cjlmzl/Ivfl+/wweHCLKKRYwSeQgrXsrIX81gnfS6P6dNtdVSjbdzjxLOepPLbn2tixlOb6eKYNIt+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727742528; c=relaxed/simple;
-	bh=NQRfHInSRyhNMKkLtYSjGa7i/JV7iU/gWWdIh08HA+Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dVug9PTTpvTD3bXJCcZZdcXSwNxT4U63y58kMhn8bR8VbS8/AuYc9Wq2ADxLrwKPXJwwU4R9GhA42BYE5QzCpi5G0j0cLVnBAiV50LemY18cYriiWxPqdRIbRDU7iiIIiL36OvW76OmvTefuDyIncnXF4xRXhBTeJg1kSObgmFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oBU1unHC; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1727746719; c=relaxed/simple;
+	bh=AN5CojhuEy8hzDgnpDjiIxIhnBEgTKQA5UgQTuxnr18=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=H5uFY4Gpx7vxjS//CZxJWnh0/PlKk75oPZiC5FuHfNPl70MZtIi4TWpVpRD4NVNzRoF+uJKBO6iBihi9rheO1dfNNMr2sRiQnoe19j7i64Yo+l89BjaaVdjXaB4bbt8F9/URIsrLYspjAvxKq2DjclFzQOnfu6dg0rSmZ1pz5p0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=S6gJRfsV; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1727742520;
-	bh=xhFUxYfUeS/SPCd3Z5CW3b3H52xKBE3imtzIsaJAWZA=;
+	s=201702; t=1727746712;
+	bh=7AJU3cM5clBinSxqOdEFLA7CLsu9mIr7mYElmD4jpFM=;
 	h=Date:From:To:Cc:Subject:From;
-	b=oBU1unHCBP5w4fp/G1trX1ZwlgMzW2QYifPU4HyRHozX7e2ealzKBcwvIVHJh6ob5
-	 NJj+SM8HD5L8DVNs9OO/fGoRCwf54Pz+fSCqCFtPrh3UMnOBrCnlSKBxBtcJG4oHuT
-	 RZXQSt13F8euJxzrlf10twnRie3ZCjJK2QqxDiuh8f7Rt0NFuTMBS8UCj1kWX0h83g
-	 NBXkGtfqF/tMuORZtglH23jxgrkg/wZWnpgWeml2/oUrmo46OpNHAQDy/Qkj/EPFck
-	 vOBv3sEsYtbWemXZjMnSLJ/T1KsYt8EfQTbLPJrC+bj655XjPz0l1cwGwrgLd1jnub
-	 Kqe2jWd5ecqNg==
+	b=S6gJRfsVMBjeXX39wf0sFrYNyNM8bkz9tQ73G9D9Ecc0PcFIfrYyXBljNBKn/+ADJ
+	 5M8qRvYV0+KPFuMWhf+YHkurv7geHvCWiEHJidTZklxepWDwsY3Xx/aXCX7ChG2C6B
+	 gI5W1+0/w+0isKWOnFqIa9flPLmnBDbDHNjf/0m8xZqpIkPvJ/13Tcweuj5A2IO63N
+	 Y2mP2JEyoX7KCc4iJvWur2c1grfS92POS6xyuVkvwG3xniRmJUXoKf/e13dFocR0bX
+	 JjwGPoJT/sqFm96gvNfk8o5rWETEUORYNfIUGDs/oxzCd+2JjUWOYLcj1bnqg8fnpa
+	 Hzq64DEAQ2Amg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XHf1h5DWJz4wbr;
-	Tue,  1 Oct 2024 10:28:40 +1000 (AEST)
-Date: Tue, 1 Oct 2024 10:28:39 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XHgZG5llRz4wd6;
+	Tue,  1 Oct 2024 11:38:30 +1000 (AEST)
+Date: Tue, 1 Oct 2024 11:38:30 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Linux Kernel Mailing List
+To: Lucas De Marchi <lucas.demarchi@intel.com>, Thomas =?UTF-8?B?SGVsbHN0?=
+ =?UTF-8?B?csO2bQ==?= <thomas.hellstrom@linux.intel.com>, Simona Vetter
+ <simona.vetter@ffwll.ch>, Jani Nikula <jani.nikula@linux.intel.com>, Joonas
+ Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi
+ <rodrigo.vivi@intel.com>
+Cc: Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ DRM XE List <intel-xe@lists.freedesktop.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs-brauner tree with the
- rust-fixes tree
-Message-ID: <20241001102839.77211fb8@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the drm-xe tree
+Message-ID: <20241001113830.4ff4d3e5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OmpkJ.nUj/wm.QloXFhZjk7";
+Content-Type: multipart/signed; boundary="Sig_/9mfbDZ=TY.A9jZJ4sWb9Wd/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/OmpkJ.nUj/wm.QloXFhZjk7
+--Sig_/9mfbDZ=TY.A9jZJ4sWb9Wd/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the fs-next tree got a conflict in:
+After merging the drm-xe tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  rust/kernel/lib.rs
+drivers/gpu/drm/xe/display/xe_display.c: In function 'xe_display_pm_shutdow=
+n':
+drivers/gpu/drm/xe/display/xe_display.c:382:27: error: passing argument 1 o=
+f 'intel_dmc_suspend' from incompatible pointer type [-Wincompatible-pointe=
+r-types]
+  382 |         intel_dmc_suspend(xe);
+      |                           ^~
+      |                           |
+      |                           struct xe_device *
+In file included from drivers/gpu/drm/xe/display/xe_display.c:24:
+drivers/gpu/drm/i915/display/intel_dmc.h:22:46: note: expected 'struct inte=
+l_display *' but argument is of type 'struct xe_device *'
+   22 | void intel_dmc_suspend(struct intel_display *display);
+      |                        ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
 
-between commit:
+Caused by commit
 
-  ece207a83e46 ("rust: kernel: sort Rust modules")
+  501d799a47e2 ("drm/xe: Wire up device shutdown handler")
 
-from the rust-fixes tree and commit:
+interacting with commit
 
-  94d356c0335f ("rust: security: add abstraction for secctx")
+  5c30cfa295cc ("drm/i915/dmc: Convert DMC code to intel_display")
 
-from the vfs-brauner tree.
+from the drm-intel tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have applied the following merge fix patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 1 Oct 2024 11:30:00 +1000
+Subject: [PATCH] fix up for "drm/xe: Wire up device shutdown handler"
+
+interacting with commit
+
+  5c30cfa295cc ("drm/i915/dmc: Convert DMC code to intel_display")
+
+from the drm-intel tree.
+---
+ drivers/gpu/drm/xe/display/xe_display.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/xe/display/xe_display.c b/drivers/gpu/drm/xe/d=
+isplay/xe_display.c
+index 957ae763531d..ca00a365080f 100644
+--- a/drivers/gpu/drm/xe/display/xe_display.c
++++ b/drivers/gpu/drm/xe/display/xe_display.c
+@@ -379,7 +379,7 @@ void xe_display_pm_shutdown(struct xe_device *xe)
+=20
+ 	intel_opregion_suspend(display, PCI_D3cold);
+=20
+-	intel_dmc_suspend(xe);
++	intel_dmc_suspend(display);
+ }
+=20
+ void xe_display_pm_runtime_suspend(struct xe_device *xe)
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc rust/kernel/lib.rs
-index b5f4b3ce6b48,ff7d88022c57..000000000000
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@@ -44,8 -46,9 +46,9 @@@ pub mod net
-  pub mod page;
-  pub mod prelude;
-  pub mod print;
- -pub mod sizes;
-  pub mod rbtree;
-+ pub mod security;
- +pub mod sizes;
-  mod static_assert;
-  #[doc(hidden)]
-  pub mod std_vendor;
-
---Sig_/OmpkJ.nUj/wm.QloXFhZjk7
+--Sig_/9mfbDZ=TY.A9jZJ4sWb9Wd/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmb7QjcACgkQAVBC80lX
-0GwX6Af9G87aQg+c0eyaHqS8gQDe7eoKaq8ExfhvbN68844NYEz7UP4vDravErRh
-fqzRrL7U3zwMPXybLZ8pSNHt8Frxzukd4VtYD387qSDW/MmpXYEuzhcxYDAt49fy
-4R2stWV6ux5Smfrn5jCvlVL93LxFVo42pubxi62h1PqPMr8Hwn4sbTpYXaEjLCRn
-BY5yQjmOUiMi9y/K3J91ZOaoHi+ANXYR2EOs7anjbRhCbVNZQ267HH1rLOd0ogsC
-L5FsQ86an5OdsQ3vQdPIMcscFbAGu3187MoQsgdyjeF4uipMmsoPzZpOrE82Vf7d
-04hs8ajDxSndZO+XMkJCCYB1A+Fs0w==
-=O4g4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmb7UpYACgkQAVBC80lX
+0Gxe8Af9GC2HLN+iD7eWl5fVq5mGoFpjRcByK7GJ24ry3qKhxOjQCuwSm8fBWi9s
+QrZOFShUXufLUJmUO4tCrjI7C+qFKbegIyLMHYDR2kVXqus3asFkt0sVgoR769zm
+6N2QNrra2p8AP8HE6tZ1TmunD6XiOspHItiyudb/+WFVJEiwlA+opFEuBQpmWx+n
+AJ243TnFoc+7Ht/Gn6UI3uz49hwuhIE7sDvUjtp6GdIPsofNX0BIt3qP8tcz6DZX
+yttEXSGnLWw7Loe6fcMjeVYx6SGplO54owBbq4WINrhmwU4FCPjeXtOFOf7E2VZ0
+RiO2fgr7o1zKnLPUKr5SJB8FJ7FM8A==
+=bMbn
 -----END PGP SIGNATURE-----
 
---Sig_/OmpkJ.nUj/wm.QloXFhZjk7--
+--Sig_/9mfbDZ=TY.A9jZJ4sWb9Wd/--
 

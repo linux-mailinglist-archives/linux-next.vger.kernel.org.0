@@ -1,132 +1,120 @@
-Return-Path: <linux-next+bounces-4065-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4066-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A35398E57F
-	for <lists+linux-next@lfdr.de>; Wed,  2 Oct 2024 23:48:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5863298E636
+	for <lists+linux-next@lfdr.de>; Thu,  3 Oct 2024 00:45:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 297082893E7
-	for <lists+linux-next@lfdr.de>; Wed,  2 Oct 2024 21:48:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0427A1F2444A
+	for <lists+linux-next@lfdr.de>; Wed,  2 Oct 2024 22:45:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08FA9194C94;
-	Wed,  2 Oct 2024 21:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19C2E1AAD7;
+	Wed,  2 Oct 2024 22:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="tMfvjxs3"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iZaW5ydl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9EE31957F9
-	for <linux-next@vger.kernel.org>; Wed,  2 Oct 2024 21:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CA1198A0E;
+	Wed,  2 Oct 2024 22:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727905687; cv=none; b=kQIKAHQsPuHOpknM/VKhfFooIzP4v1V61PVe29VFEyt8S2qK8zS9CbzXDscLO5LysscMHoPPDcmJeqvAgiL2MktD7pQO78sB/X4Q754AYLTFlZO8HJ2pknLmyxFgQQMtHH4gSXM2bsMZFPEcOhQU9XfO3cALIXcMQFabCpAFoIQ=
+	t=1727909112; cv=none; b=Od2x08ej6HHBrjxxZl3VIaN/FPY7OuLB2dLd4Rb+tsOrSRuIMkNzWVUtPX/vzRGmhw9kfA50HxP7SX4bkLSd97CHGO/8HIGQCH9pzGvFLWp8Lr+JfYVM7l6i3Q6HwQoGxirZNdi2yqrqlyM8ZLD5Ob/lTMvRr2WrWdPjdF4IyqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727905687; c=relaxed/simple;
-	bh=BZj+UYgW+olu9CJ5ZzrSRBSx/tRZXm10pRIpJbtWNWo=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=lUFmm54uOXZJs2oPyPsr/iFAA93r4alc0tKTW0ZlN06vno3WHiKv6yoK/Gkf7SzLZH+/NSRldtKYjFkaBX/wYM6YT/a4+S9GZS3gPQYJV7YfjWmVbvL1GJcnNpU9aeUYvXclg0y2WaCwrS7rRSMtFJ6RtOs6IHs1kRXYyGWC9GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=tMfvjxs3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 365A0C4CEC2;
-	Wed,  2 Oct 2024 21:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1727905687;
-	bh=BZj+UYgW+olu9CJ5ZzrSRBSx/tRZXm10pRIpJbtWNWo=;
+	s=arc-20240116; t=1727909112; c=relaxed/simple;
+	bh=ZHZ8vrz20n25shKFsdn8lWME/QlXbRoNkTm/lF1O5D0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MiXrVPw4EGmmQJT4CSpIs5Hmq28Y0ieIkOb5Iw5th86r44/lsTLr4Zm6US7IJXgwWwQ49HlpB/6Td7iFCXfgc9/UwQgu2qpQkZZAtaojYL3jku5zmXRD7EnspohCJk7fUVqb7gZ8rJEwqCCt2T/Q63qw7ahXxrqzxMyHqUYDG6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iZaW5ydl; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1727909104;
+	bh=gW3eMhAhFO3rKTas6A7Vn6WaKy9SbLupIddnqOddxgo=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=tMfvjxs3Gi2Fju+QMLd0awIw3aIJvto+YgkC+LP8bsvcm/3znhXwHDQErWxJgqv5A
-	 h5JIvB8FKJHcw9051qqtCYVQdgZnpxuQEninR5zeaNNUitBGDkF0wC76mf3JQhQdpa
-	 6R8jYj36w9uNCvMacAO0Zte64FsSLtLNpXC8iAIs=
-Date: Wed, 2 Oct 2024 14:48:06 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Brahmajit Das <brahmajit.xyz@gmail.com>
-Cc: david@redhat.com, gorcunov@openvz.org, linux-next@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] fs: proc: Fix build with GCC 15 due to
- -Werror=unterminated-string-initialization
-Message-Id: <20241002144806.255d62115286e173bbf42655@linux-foundation.org>
-In-Reply-To: <20241002080914.841071-1-brahmajit.xyz@gmail.com>
-References: <20241002080534.835250-1-brahmajit.xyz@gmail.com>
-	<20241002080914.841071-1-brahmajit.xyz@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	b=iZaW5ydl7qppnSO11F0vFSRLA7um6lbpz2oTp6u+usRDOU3OO6Ss6t4ZoRnCyizYS
+	 clB51McWSyRns2nquOfeTx6uqeYnQ16APtiBp5v+eXUpqfgWlwFXwuk8hvGFlbgtYr
+	 n3/m6QxTfPBS5vWMAJ+CeQkWKz85vPS/p7CESgx7gyfPJPivuhg1IIAmfmHllNEYCE
+	 wXE+99tFtwWAuvzTOxzxyPqURZN6hg8QDp9zcxHWqJASDsRWe4qpMyY0N2kHhZ8iJW
+	 lYJszxYW3Zl8RjDadN7b71EEUk48cdRg2FzkZJ9/NoPD0lWY9WgbWtXJrIGKBx6JVq
+	 Ay1WZZU8UOUGw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XJqdD1647z4w2F;
+	Thu,  3 Oct 2024 08:45:04 +1000 (AEST)
+Date: Thu, 3 Oct 2024 08:45:03 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the vfs-brauner tree
+Message-ID: <20241003084503.47f857c4@canb.auug.org.au>
+In-Reply-To: <20240918152425.3105d1d1@canb.auug.org.au>
+References: <20240906182906.54527fbf@canb.auug.org.au>
+	<20240918152425.3105d1d1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/C=WIbnWdI8LqCkyyrOR9mds";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed,  2 Oct 2024 13:39:14 +0530 Brahmajit Das <brahmajit.xyz@gmail.com> wrote:
+--Sig_/C=WIbnWdI8LqCkyyrOR9mds
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> GCC 15 enables -Werror=unterminated-string-initialization by default.
-> This results in the following build error/s
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
->   917 |                 [0 ... (BITS_PER_LONG-1)] = "??",
->       |                                                 ^~~~
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
-> ...
-> 
-> To fix this, the length of the second argument of arary mnemonics needs
+Hi all,
 
-"array"
+On Wed, 18 Sep 2024 15:24:25 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Fri, 6 Sep 2024 18:29:06 +1000 Stephen Rothwell <sfr@canb.auug.org.au>=
+ wrote:
+> >
+> > After merging the vfs-brauner tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> >=20
+> > Error: Cannot open file /home/sfr/next/next/fs/netfs/io.c
+> >=20
+> > Introduced by commit
+> >=20
+> >   550bc501ff91 ("netfs: Remove fs/netfs/io.c")
+> >=20
+> > $ git grep -w fs/netfs/io.c
+> > Documentation/filesystems/netfs_library.rst:.. kernel-doc:: fs/netfs/io=
+.c =20
+>=20
+> That commit is now in Linus' tree, but I am still getting this warning.
 
-> to be 3 instead of previously set 2 (i.e. from [BITS_PER_LONG][2] to
-> [BITS_PER_LONG][3])
-> 
+I am still seeing that warning.
 
-Yes, I'm not surprised that little party trick we used in there fools
-gcc.  And really it deserves to die.
+--=20
+Cheers,
+Stephen Rothwell
 
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -909,8 +909,15 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
->  {
->  	/*
->  	 * Don't forget to update Documentation/ on changes.
-> +	 *
-> +	 * The length of the second argument of arary mnemonics
+--Sig_/C=WIbnWdI8LqCkyyrOR9mds
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-"array".  But really, just using "mnemonics[]" conveys all we need.
+-----BEGIN PGP SIGNATURE-----
 
-> +	 * needs to be 3 instead of previously set 2
-> +	 * (i.e. from [BITS_PER_LONG][2] to [BITS_PER_LONG][3])
-> +	 * to avoid spurious
-> +	 * -Werror=unterminated-string-initialization warning
-> +	 *  with GCC 15
->  	 */
-> -	static const char mnemonics[BITS_PER_LONG][2] = {
-> +	static const char mnemonics[BITS_PER_LONG][3] = {
->  		/*
->  		 * In case if we meet a flag we don't know about.
->  		 */
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmb9zO8ACgkQAVBC80lX
+0Gz/5wf7BuKjpaB9aIxV04t/c+i3F9kho/TTu85c2q3x5dqrfoabkppKJ4cT/rvE
+ryh23FkjKuLhG55SCqsnDO17iqSnRjtoJ3bp2KyLT9R/zYbqMGDlVzUoy4w1d8Us
+srN0bZVl6OcqPJoWBXq/UbmXzsKXELBQ75H23kRrvAxyUsymjjs3F9e8nrABfnjZ
+YkBvPjndRQ3Dr76HChwob+66BqlQABqNeJ/bmg7rIhy9xs2lERPRNtcRkRdrm9AN
+P60+J+8xo8DklJHc3igjTXDP1vmQ/HIEmNVMDMQgCM/5sPmNPw/2r+l45Ih9f3Lh
+SE3Cu894cYm/43B9KvU5WLXJcxYJgQ==
+=g7XT
+-----END PGP SIGNATURE-----
 
-If we want to preserve the party trick then perhaps we can use
-
--                [0 ... (BITS_PER_LONG-1)] = { "??" },
-+                [0 ... (BITS_PER_LONG-1)] = { '?', '?' },
-
-and this will shut gcc up?
-
-If we do remove the party trick (as you have done) then this:
-
-		if (vma->vm_flags & (1UL << i)) {
-			seq_putc(m, mnemonics[i][0]);
-			seq_putc(m, mnemonics[i][1]);
-			seq_putc(m, ' ');
-		}
-
-can be simplified (and probably sped up) with
-
-		
-		if (vma->vm_flags & (1UL << i))
-			seq_printf(m, "%s ", mnemonics[i]);
-
-yes?
-
+--Sig_/C=WIbnWdI8LqCkyyrOR9mds--
 

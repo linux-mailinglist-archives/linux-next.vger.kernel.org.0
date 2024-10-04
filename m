@@ -1,102 +1,92 @@
-Return-Path: <linux-next+bounces-4108-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4109-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CC6A99040B
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 15:26:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B96A99040E
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 15:27:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B538282006
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 13:26:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 827D81C20F66
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 13:27:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A96E5212EFF;
-	Fri,  4 Oct 2024 13:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 088C22141A5;
+	Fri,  4 Oct 2024 13:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNyAjT7E"
+	dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b="RBi8XgyW";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="f7SyFF7S"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8268F1D6DB1;
-	Fri,  4 Oct 2024 13:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077CE2139D3
+	for <linux-next@vger.kernel.org>; Fri,  4 Oct 2024 13:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728048121; cv=none; b=Lg4f9oOVDjSX99vlkIJhd9reR2jjw9qh8LPEsb7zwtA6rPYTN5Ri+OG7cN5UUnmPnZMlz7BK6mahGLyWCn+E0p5h3hygq58Gmr+CmQrcThm5WI/Xs5+h+7tyQj8N+UQq6zMhAAXBcrHBm8gN3YxC+HTschbHdokcXPPKMfJBmac=
+	t=1728048146; cv=none; b=E7vS9wWtxXhEgg53D1PLxhfK1FCTqpCiLjc8kt8cvO9wRTVDESDrhUw/8VvYiePqiMhoafwbM2ERdZEGLl0dl/iADKPWSawnN2y+KimQpr/rfWimQhqWlUmDiQ3ffkycYw8HySHWtC4iQ06eCfYkXAsunpPG32xLjqtEbYZGCp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728048121; c=relaxed/simple;
-	bh=qCy53I1M0/DdB8Aj+1450EATivvLI4YRoldZLx1+CCc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rqql26AhRBUjMaos3m6eSriVBnpjvKkgDuXUROwKz5XNIllNm3ZD9S+21mqeStakyvwwWQnn2zkezFqwcS7sqIPDjYdN/ONwHC5YiPYfjsS/urOmNVg72qCKI6lXK+rJ3bbKd2rtG66hjY4c6SvUc+pbGMzyjD5xYSG02BXExMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNyAjT7E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFCFC4CEC6;
-	Fri,  4 Oct 2024 13:22:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728048121;
-	bh=qCy53I1M0/DdB8Aj+1450EATivvLI4YRoldZLx1+CCc=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=hNyAjT7ETMEtcZPTEGZI1/bDt4dJerpHB+/iUejbfLIyt30A0Vi1Ab4pj7x6NKQyh
-	 730pjlIlVIesn8xYZPcsznvAFuFwh2eyKcRzBYoay52U1fKzWBeAEhDQsR5HKQEd19
-	 4bYPUVBhW7WZJ/Hkbj0RRej1JFga5yAZ+abWkY66x8+82QX+phLyvgC1at+FsTNbRT
-	 eXp7HhUt7cl1lPYCcoYAR3knDeuW04fUenCzXrCJ3PynHt6h5MSm/uVbD6mnpeE8VZ
-	 BYUSNaHZt730N1nVmq7F0qi2X7FfLA9CKrzzedUN+CXCFoRbsv7ZrLYv9dYoO3AJZ4
-	 HmbNPJOKAZw7w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id B1726CE0E09; Fri,  4 Oct 2024 06:22:00 -0700 (PDT)
-Date: Fri, 4 Oct 2024 06:22:00 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: vschneid@redhat.com, linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
-	linux-next@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
-Message-ID: <6d23bd45-91c8-4a66-95e2-98a6da1b906e@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <c28dbc65-7499-41a5-84d0-991843153b1a@paulmck-laptop>
- <20241003084039.GS5594@noisy.programming.kicks-ass.net>
- <20241003084743.GC33184@noisy.programming.kicks-ass.net>
- <20241003092707.GD33184@noisy.programming.kicks-ass.net>
- <20241003122824.GE33184@noisy.programming.kicks-ass.net>
- <83d29a0c-dab2-4570-8be0-539b43237724@paulmck-laptop>
- <20241003142240.GU5594@noisy.programming.kicks-ass.net>
- <7b14822a-ee98-4e46-9828-1e41b1ce76f3@paulmck-laptop>
- <20241003185037.GA5594@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1728048146; c=relaxed/simple;
+	bh=d34EeO+GWTvbA07bjrTFP1vNGB2N2vUnQMU6mQtG3dE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GWwF3J/rP6DF7BG/XnlaiRH604IBPYi3RkLNipQlwds8Z6GbUw2fcZ1heZQL4SzebCOd9h0RtHhFXFLVpo0qqRcwaI+8oIL5Ymu/fvzl6EpVxMgCb1r/Enl6zBqnt3FBuy+9WF263DpC28/3QWwGlWSOREQ2WjduQcLTe5rtslQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev; spf=pass smtp.mailfrom=lkcamp.dev; dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b=RBi8XgyW; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=f7SyFF7S; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lkcamp.dev
+Authentication-Results: purelymail.com; auth=pass
+DKIM-Signature: a=rsa-sha256; b=RBi8XgyWRaabNeWpxU3NJWrdZol61vjV0w/LyhPBc7n4ZC0l2wqaRIo/zPeOU2Zgtx+vJ7QX7DbMmTFkw1P5zQd7+KvgG0jSd4BcjgDeHL+G7Kbaccbl4nsZJanxdnsWuT7A/af5SIHvLN6gVsGVkIJSFzwTTwms0J/VTjx/UOMbmASW9bEqapGmsHlN1tNjNVDhDxwuvBamo6xnSdWn8JdGB1UI0uTjToPxxvKQ/rk7CVtOqIBqNW5PKXgGdzcorlX4O/WndQqplmon+nOoE7kZqDIxYzSvzHgwQfUA1Axj+ubCyxXn55kf1ygoKb3NnuyeBhOsGAMlxoFQnwLxrA==; s=purelymail2; d=lkcamp.dev; v=1; bh=d34EeO+GWTvbA07bjrTFP1vNGB2N2vUnQMU6mQtG3dE=; h=Received:Date:Subject:To:From;
+DKIM-Signature: a=rsa-sha256; b=f7SyFF7SggfnkT5XuU6DhyaQJuhe994HsbW6riATX6001EiRNb+jbzxa1MrFMPStNgaaZi5LWl7nrZRaM36VcCsPHPC8u3JUuItAixDiSGwKsd0oBCucWNadDz5npT0mbEIgF0PMWDQ0GF0p0FqiGaAcRpBYU1JaFyz1vZZlGju4sbhBARAvvVWnHSB5LpJfxZTB0noAI24IFmiHlBA96avOisc4zkJu5RqpHZoyL+9ZJCk5jebK/znDvN1VMTp4/yG5q+e/jxEgHjDwPYqObqqmn23HnqtmaS5eqO9YhYkAvn26uuGcrmtyY1KDa5fuDwcTaguWP3cXn4SuW50ZDw==; s=purelymail2; d=purelymail.com; v=1; bh=d34EeO+GWTvbA07bjrTFP1vNGB2N2vUnQMU6mQtG3dE=; h=Feedback-ID:Received:Date:Subject:To:From;
+Feedback-ID: 40598:7130:null:purelymail
+X-Pm-Original-To: linux-next@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -453732278;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Fri, 04 Oct 2024 13:22:10 +0000 (UTC)
+Message-ID: <c4ec47c7-5718-49c6-b5cd-53e5d61420a2@lkcamp.dev>
+Date: Fri, 4 Oct 2024 10:26:17 -0300
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241003185037.GA5594@noisy.programming.kicks-ass.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the kunit-next tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: Danilo Pereira <dpereira@lkcamp.dev>, Pedro Orlando
+ <porlando@lkcamp.dev>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20241004141146.3ce262b1@canb.auug.org.au>
+Content-Language: en-US
+From: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
+In-Reply-To: <20241004141146.3ce262b1@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 03, 2024 at 08:50:37PM +0200, Peter Zijlstra wrote:
-> On Thu, Oct 03, 2024 at 09:04:30AM -0700, Paul E. McKenney wrote:
-> > On Thu, Oct 03, 2024 at 04:22:40PM +0200, Peter Zijlstra wrote:
-> > > On Thu, Oct 03, 2024 at 05:45:47AM -0700, Paul E. McKenney wrote:
-> > > 
-> > > > I ran 100*TREE03 for 18 hours each, and got 23 instances of *something*
-> > > > happening (and I need to suppress stalls on the repeat).  One of the
-> > > > earlier bugs happened early, but sadly not this one.
-> > > 
-> > > Damn, I don't have the amount of CPU hours available you mention in your
-> > > later email. I'll just go up the rounds to 20 minutes and see if
-> > > something wants to go bang before I have to shut down the noise
-> > > pollution for the day...
-> > 
-> > Indeed, this was one reason I was soliciting debug patches.  ;-)
+Hi all,
+
+On 10/4/24 1:11 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Sooo... I was contemplating if something like the below might perhaps
-> help some. It's a bit of a mess (I'll try and clean up if/when it
-> actually proves to work), but it compiles and survives a hand full of 1m
-> runs.
+> After merging the kunit-next tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> ERROR: modpost: "utf8nlen" [fs/unicode/tests/utf8_kunit.ko] undefined!
+> ERROR: modpost: "utf8ncursor" [fs/unicode/tests/utf8_kunit.ko] undefined!
+> ERROR: modpost: "utf8byte" [fs/unicode/tests/utf8_kunit.ko] undefined!
+> ERROR: modpost: "utf8version_is_supported" [fs/unicode/tests/utf8_kunit.ko] undefined!
+> 
+> Caused by commit
+> 
+>    94d8a0976d2d ("unicode: kunit: refactor selftest to kunit tests")
+> 
 
-And here is the ftrace dump from one of the failures in the past
-18-hour run.  Idiot here re-enabled RCU CPU stall warnings after doing
-ftrace_dump(), forgetting the asynchronous nature of new-age printk(),
-so I don't have the CPU number that the failure happened on.
+Here should I change the commit and send a new version of it or should I 
+send a new commit fixing the problem?
 
-Of to test your new patch...
+> I have used the kunit-next tree from next-20241003 for today.
+> 
 
-							Thanx, Paul
+Thanks,
+Gabriela
 

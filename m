@@ -1,105 +1,74 @@
-Return-Path: <linux-next+bounces-4095-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4096-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EC9598FC5F
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 04:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1471F98FC8A
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 05:36:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 320EA1F21249
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 02:34:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF19D1F231F8
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 03:36:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFCBFBA4D;
-	Fri,  4 Oct 2024 02:34:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD7F4644E;
+	Fri,  4 Oct 2024 03:36:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="n2nLKqb6"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="chNUpk9E"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192AE1F943;
-	Fri,  4 Oct 2024 02:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162F98C1A
+	for <linux-next@vger.kernel.org>; Fri,  4 Oct 2024 03:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728009264; cv=none; b=NSuTb568y/aQDlV8Ub2FrVhzyROq328L0y63/S97ISWexNQbpQN94JYVbKrLRsZqiAVE4nOQf5Izw7R1wQ/N8cfTH8n4qPMIGmFNlVHRd8vbuvyWd4K4T2Uhml6eCt/XjWMVJ/mB1Z4JcCWzUPGdCWMl+Al4KuSix+mnMHd58Lo=
+	t=1728012968; cv=none; b=scQGRtrMS4gk1+5m1czHupMKijdhcOg/pQv01KkTFhHysO/aIVVfbdaHb4C8iwPjN7g/wOg3C6EIQ820u+UkB00+D5z+IPcixJx7QzkdvTvZu2Jy0wrGAjqEdwQZfUauL0EQujKnszcigjluWqUrQ3hYJhYgRHDIwVoaR3hoZmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728009264; c=relaxed/simple;
-	bh=4t7I7o/UgcBgoHeiluwa0k9fUQa0GBHWaKA0pjjK0/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ESuQmKf8uxMItU726uiWAhIxVtCI0JwylfzT5Qk6uO6zL+H4phk0FzKuLO9M165mto8PBOK+M2DmjsMcQH/c4O0tBXmHZ1SjixKcqA8kWaNmxy+NiVCQK9LrCa83JHebz33AWiSpvG9aii7KLoieArIBUO80FO+p9X5aWkFjAaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=n2nLKqb6; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1728009258;
-	bh=jJaogFdg78TEK7PgXXgsNPNi2Gfol/t1W8lXiBuEWVo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=n2nLKqb6vMoefc9TYs1KbFDwJrYC5GyeNE3x7S0SKh3sDucalq+0lSuwvqY7HSofx
-	 KU6F73YqcZf6v/LavM4LkDXA2fIPkkpH6+YUWDlR7nkwaxP8ShHPRXx4w8oO76H1by
-	 gBKNuChFYohKWTTkFg1nHuFNrdWon5DsuRZbbP2MoxGCE+qwTmPf5uZ3ANVLD1wlBJ
-	 xSvnM0euHoyuwFjxMBRZq9V8nskWypnRKlMs49xS491f2vD1bIV3m/kmbbH0F4W/67
-	 7gS2RCU17zqNR5w3oDhButBTXDE+GHTLxZClFlIRYBCe/G+JhykKFalHRA4qN4R/QY
-	 0fJPxgKgIDKtA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XKXgG0ZBHz4x2g;
-	Fri,  4 Oct 2024 12:34:17 +1000 (AEST)
-Date: Fri, 4 Oct 2024 12:34:17 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the sound tree
-Message-ID: <20241004123417.2dea135f@canb.auug.org.au>
+	s=arc-20240116; t=1728012968; c=relaxed/simple;
+	bh=HI5Wqpc+qhv03Z5ZRig6bMZhU70UUhOAXVLBL2CkJnc=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=QT8mrLsFhFKBjG3GLojoJq8Jll47HlSU4QotW1/kHvvVlWyEt3GA/V4H+BzspSV4sLilAswvFrft2Ax8xtSkrhl24RXfno2nSxViHyCtQzI07JdaAb+hJ+on9t9z1Prk06in/KkxCj1WZawgK1UeOEajhPUpXjsnvmFz50/7LL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=chNUpk9E; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [131.107.174.23])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 7FBEA20DB364;
+	Thu,  3 Oct 2024 20:36:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7FBEA20DB364
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1728012964;
+	bh=T6foSdSwknQFl2GCFf+5C1Rir3XbUgyPSFPEJ7eGw3w=;
+	h=Date:To:Cc:From:Subject:From;
+	b=chNUpk9E7svz97d2tzg3ftT7xFnSzvfZXMdnMqJfqxSYh7ldvJfEpYxhfDxdOB6qe
+	 q0zxAnbJ1/LTG809F41AmXAZ54eqovxBa8WVf3CiGieLYtG826spAS5kicy5CYLACZ
+	 wGTsVQL3CgBlEDRe+KxTHvbvd+p4Uu6SraXrF8dI=
+Message-ID: <991f7b99-25fa-426a-99b1-a161fef3b728@linux.microsoft.com>
+Date: Thu, 3 Oct 2024 20:36:04 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UrHMNPR7SZuIoJxA7v9Jn.g";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: sfr@canb.auug.org.au
+Cc: linux-next@vger.kernel.org
+From: Fan Wu <wufan@linux.microsoft.com>
+Subject: Please add ipe tree for testing
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---Sig_/UrHMNPR7SZuIoJxA7v9Jn.g
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+Please add the ipe tree
 
-The following commit is also in the sound-current tree as a different
-commit (but the same patch):
+https://github.com/microsoft/ipe #next
 
-  3e8800273c4b ("ALSA: hda: Add missing parameter description for snd_hdac_=
-stream_timecounter_init()")
+to linux-next.
 
-This is commit
+ipe is a new lsm we introduced in 6.12. I'm still in the process of 
+setting up a tree in kernel.org, so I have to temporarily use our github 
+repo for hosting patches for the next merge window. I will give you an 
+update once I have the proper tree setup in kernel.org.
 
-  740986edaf2d ("ALSA: hda: Add missing parameter description for snd_hdac_=
-stream_timecounter_init()")
-
-in the sound-current tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/UrHMNPR7SZuIoJxA7v9Jn.g
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmb/VCkACgkQAVBC80lX
-0Gx7Agf9H4cPFQjZPZG5xzW+eAw2xEcadQhj4HPdknAk25xic3Gs7wjF2R/gYMrN
-8fxSf+8bQEJVi7dZwwddBou3FtJchnJ17fK0Tc9Zp1MNQoolpHRTs/IZrExjA2nI
-3VgPZKKJFlvKMkK8uDEj9Tc6r8HbNyWuwHAUHA7/QUirur5v/+ScME8enYinOEM+
-2Iw3+LazIUW1Z3LMUP4y4NLdxosav7rZVNm+vIVRNgYYNMj7+T4ZIo0FMPoVmSw8
-S6b3+3Y3SYjVC3SipiWoevTx9hgVuTCbHaJVSCLTBWWkJw/HAjWiVh8ZHcYRDj/W
-JB41aESfNjo0A9oQujo2mon3BOvxew==
-=JnnI
------END PGP SIGNATURE-----
-
---Sig_/UrHMNPR7SZuIoJxA7v9Jn.g--
+Thanks,
+-Fan
 

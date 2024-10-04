@@ -1,120 +1,127 @@
-Return-Path: <linux-next+bounces-4112-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4113-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2007990F30
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 21:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E90AA991068
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 22:26:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8997328151C
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 19:51:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B100E2825AC
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2024 20:26:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DBAD1E32AA;
-	Fri,  4 Oct 2024 18:36:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8ECD231C85;
+	Fri,  4 Oct 2024 20:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="C0cKWEJT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YoMY3EcO"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D981DAC83
-	for <linux-next@vger.kernel.org>; Fri,  4 Oct 2024 18:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36295231C86
+	for <linux-next@vger.kernel.org>; Fri,  4 Oct 2024 20:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728066969; cv=none; b=QSe64PD7TI0kjDCTkBDoh1UrQgp2eK3hIvNW8BgjVvx9fXq6Nd0rLw00+ZL/UeKkezIhytP+jiSJrNQxYpYPKNfTeoR0b0TNbPEsvK+TK6bBeIDeUna7mP4ZB9NIn5uEblZI3TcsHIEvK4epmVYQf23sWIYMY5CZZBeS8Ppfrgg=
+	t=1728072972; cv=none; b=bp4+xobj77Z36B0PUnMnAyZee2DzEALL50AFH0rA9z17ew6t+7TRXKgxiuCZjAFzX4oMjwYkdBJ2NgnAuo3MydPfC85U2jWnm2dD9UrpaIuqhQylA/pzZbu0n4+b92DD8t0g/JaUyvL3obS8+xoZmjGpTXzZPhgaUSpf5dliriE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728066969; c=relaxed/simple;
-	bh=wRYcOfSWyuDOGGYocBKqUzSJGsw8893hD6kFhivynCk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sSL0dNR0IXjKdMJ0cnF4pgR+/WgUaaLEdfPCCd2LlNgz/rrK9KwS0vSwyYIsVMAqwQHlkalhPO4+q2gg1nJ9H6JW9S2uN/75nRPSi8DzWw0RWFbCrXckLvYFXAQr1I3gxnkOMgspJdwPgoRMmfKwnbPwh8c2y/CPcP2ddj/sDW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=C0cKWEJT; arc=none smtp.client-ip=209.85.166.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-82aab679b7bso98182039f.0
-        for <linux-next@vger.kernel.org>; Fri, 04 Oct 2024 11:36:07 -0700 (PDT)
+	s=arc-20240116; t=1728072972; c=relaxed/simple;
+	bh=gDMYe+jKoEJ8fxe/esZs1wlMYuZnoUAi4RnHGk7Ejd0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dia7rgb13IISOGmddu52s1GH+0glomaW8u9mGtnvGQ3EXqWVwnrcMYuL8Hg/2PG+t5D/+je+4EDOLw8389lr/xzbW/WS1Z7EGsYXfHkKZWsDoikWYU8xdVI0DIgFjvt+KrNTBdHi+kYAhLb8td5jNk/MsKR9707CHeitgDSAIRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YoMY3EcO; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2fabd2c4ac0so29980031fa.1
+        for <linux-next@vger.kernel.org>; Fri, 04 Oct 2024 13:16:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1728066966; x=1728671766; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fJK9cyEzzySVOVcmp8jpRL+G8kVfEdQGwI2HXhkZggw=;
-        b=C0cKWEJTEy3FlsSiXec+dYjqXR6LQeNY5KcY/6XGpJud4xhIO3rATQZssM2J6/gCGu
-         zJavu9q99Y53Lq60jcNmP0FC44+D1uUUc7pY+lSaY4QNUbvc4SqnmpIRrP8r2lclkW2D
-         LVgnGAjCK6eVUsR5YLQfQZ2xiVrHBVhMxVhrc=
+        d=gmail.com; s=20230601; t=1728072969; x=1728677769; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9dHYk+MrPm/hZOoQZZWB+4hUtFxfaMo8hTQTVzlSLR4=;
+        b=YoMY3EcOkGbeBtADMf/J1JV7pzRqvltwzoQwPfnfJW+xtppI5GrVMLR2c66FN/MUIP
+         91ga0PcXpxsZcexxMu9MCuoavqgtr2QTsNTDZu3N0J8hZAsWbm1/GavmQO2WJFEtsEdJ
+         DacNGIoDU8/gCqbiKIuXvSHAnXU1GpRhv2UgKVvtadoX4/FMNC0lnlcxMAX/nQH4kxTU
+         R2BH4CwZXAS+KwgPI7fjFOASc1vl2VM8RjjqWNeYVwbDsS4Cbip9cUq0nJ2bI5B0xJ97
+         h1b6ACH07MFIozkdjhVtb9Z7D2Sn1U+IDb62ULcHFDxyjNqqIwihU0gQLvkIcgv+KtvU
+         q6JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728066966; x=1728671766;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fJK9cyEzzySVOVcmp8jpRL+G8kVfEdQGwI2HXhkZggw=;
-        b=IWudnEXh4v8tALeDGjfcM1mLpNCkmW+gz52fx72ktmdELVFMH57NwRemeE5pgsAR2Z
-         bot9OZUgiYU2eND79XPckJhqXMWiUQGq8d+kvR3zdHEkZHxH7eePDORFU7uJAwRvlQFg
-         7MKewEZMiobvckGYB6eFSWNG8PB/mdF6y6V6lolIFF6dwopuORdWdtCboKrq4+rF7bJ4
-         Nxygf8tzp11BnKSzN3JLG6WGLxMCz/yhlSHQ5YEJNGXbS71nXWb4WXZhtooGFLKBGJwn
-         B/uNh/0tB38xHiCKhj1Dv3VZriq6MWiC1DOhGbTiAzYxYPz/BKEnb2R0dUOwYFYs0dcG
-         RgJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXQQlF7lrb+zxQDri0/lpdm4lkbNklGKNvNvqbSnvPe5ivJ9LO3IhN8kkgZUp9NBqcVmWDg8Iofv48j@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOZiMw7/2c105uUNJZdizuuApqTGemRPQ6Ns4xoCDTXk3hcBJg
-	GqzOZ2LAHsrnMhkoLRJ6uqov4aKWuJ29PrV7bzD2czP6hr3al8SLT1aHdEchzKc=
-X-Google-Smtp-Source: AGHT+IF5rAjqamenXKna2fHP0i8fcs0IQGvuOhlj1XurR0XwN7g08cKxSha53bfhRD8FaPnfCzOn1w==
-X-Received: by 2002:a05:6602:2c13:b0:82a:3552:6b26 with SMTP id ca18e2360f4ac-834f7d9568cmr391811339f.15.1728066966307;
-        Fri, 04 Oct 2024 11:36:06 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4db6ebf0ab6sm80511173.97.2024.10.04.11.36.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Oct 2024 11:36:05 -0700 (PDT)
-Message-ID: <fe9d3f82-0b2f-4f55-ad9f-fb1b8b38ad48@linuxfoundation.org>
-Date: Fri, 4 Oct 2024 12:36:05 -0600
+        d=1e100.net; s=20230601; t=1728072969; x=1728677769;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9dHYk+MrPm/hZOoQZZWB+4hUtFxfaMo8hTQTVzlSLR4=;
+        b=ZDGFujWRt7XJ/JZ/KNP+ACSAnyxuudJNWT+YjjXLgYny21G1XMEJjH7C++94sdl3E4
+         Rr7ETd+IglK9oG/H60fY9Evr+uvUG2nn1Y+vVuDBHHGTgZF9HW6U1AjLsIeGGLnS7/G2
+         p1ZPccMPdj4p5TBpf6zP7ql1I0zwtHr1OZ8KmcbA4zIyhrYegusUCycMNISuRFg5Ynz2
+         qXTSaJy0Ul5MER7luOfyoQlQ89DB3w/dNp+vzZmuK3AwtTZNbJZx+9XPv2t8udnZbMxU
+         7J9SgAFrPajLpAmVsx7iZWiOJol7xKLx6dQ8zIt4CrM8GgW8TnBXA+RI2FA3V6qroXo6
+         lnHA==
+X-Forwarded-Encrypted: i=1; AJvYcCX6RFhT02eUGZMoFSw5SW1Suu+ClpjAgadzWvNsc9LD9tScRT2pa02J12+SiAO/I7ehxO8YlmLFP8WG@vger.kernel.org
+X-Gm-Message-State: AOJu0YziIAKban6emPVYXfj2Cuq0XVOVJgs4WAYrpGegHQ3wQ6CwlleE
+	KfleyrSr60RIDKTBcaaUFdvqBCzTcVxu0rduIr3tzQY1tl9Fw4+D
+X-Google-Smtp-Source: AGHT+IEX02PztMvMHQ7imjsXSnRuts71nOzFgAkuPcHo5NOvXPNxlIchktfzK7y56vrCOXn1neafmQ==
+X-Received: by 2002:a05:6512:108b:b0:539:905c:15ab with SMTP id 2adb3069b0e04-539ab88d66emr2309590e87.32.1728072968969;
+        Fri, 04 Oct 2024 13:16:08 -0700 (PDT)
+Received: from gmail.com ([45.250.247.85])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a992e663f4fsm36857966b.92.2024.10.04.13.16.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2024 13:16:08 -0700 (PDT)
+Date: Sat, 5 Oct 2024 01:46:02 +0530
+From: Brahmajit <brahmajit.xyz@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: david@redhat.com, gorcunov@openvz.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] fs: proc: Fix build with GCC 15 due to
+ -Werror=unterminated-string-initialization
+Message-ID: <znb3jrzhanlnroetszq7uihcxrxuvw5woue63aengsttabfox7@sndkzayruem4>
+References: <20241002080534.835250-1-brahmajit.xyz@gmail.com>
+ <20241002080914.841071-1-brahmajit.xyz@gmail.com>
+ <20241002144806.255d62115286e173bbf42655@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the kunit-next tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Gabriela Bittencourt <gbittencourt@lkcamp.dev>
-Cc: Danilo Pereira <dpereira@lkcamp.dev>, Pedro Orlando
- <porlando@lkcamp.dev>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241004141146.3ce262b1@canb.auug.org.au>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241004141146.3ce262b1@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241002144806.255d62115286e173bbf42655@linux-foundation.org>
 
-On 10/3/24 22:11, Stephen Rothwell wrote:
-> Hi all,
+On 02.10.2024 14:48, Andrew Morton wrote:
+> "array".  But really, just using "mnemonics[]" conveys all we need.
+
+Noted :)
+
+> If we want to preserve the party trick then perhaps we can use
 > 
-> After merging the kunit-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> -                [0 ... (BITS_PER_LONG-1)] = { "??" },
+> +                [0 ... (BITS_PER_LONG-1)] = { '?', '?' },
 > 
-> ERROR: modpost: "utf8nlen" [fs/unicode/tests/utf8_kunit.ko] undefined!
-> ERROR: modpost: "utf8ncursor" [fs/unicode/tests/utf8_kunit.ko] undefined!
-> ERROR: modpost: "utf8byte" [fs/unicode/tests/utf8_kunit.ko] undefined!
-> ERROR: modpost: "utf8version_is_supported" [fs/unicode/tests/utf8_kunit.ko] undefined!
+> and this will shut gcc up?
+
+Wouldn't that mean we would have to split every element of mnemonics[]
+For example, [ilog2(VM_READ)] = "rd" to [ilog2(VM_READ)] = {'r', 'd'}
+and so on.
+
+> If we do remove the party trick (as you have done) then this:
 > 
-> Caused by commit
+> 		if (vma->vm_flags & (1UL << i)) {
+> 			seq_putc(m, mnemonics[i][0]);
+> 			seq_putc(m, mnemonics[i][1]);
+> 			seq_putc(m, ' ');
+> 		}
 > 
->    94d8a0976d2d ("unicode: kunit: refactor selftest to kunit tests")
+> can be simplified (and probably sped up) with
 > 
-> I have used the kunit-next tree from next-20241003 for today.
+> 		
+> 		if (vma->vm_flags & (1UL << i))
+> 			seq_printf(m, "%s ", mnemonics[i]);
 > 
+> yes?
+> 
+That does seems correct.
 
-Sorry about that. I ran other tests - but missed allmodconfig build.
-I will go drop the two patches for now.
-
-Gabriela,
-Please send new patch fixing the problems.
-
-thanks,
--- Shuah
-
-
-
+P.S. Sorry for the late reply.
+-- 
+Regards,
+listout
 

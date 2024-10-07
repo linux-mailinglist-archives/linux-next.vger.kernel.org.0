@@ -1,1918 +1,6728 @@
-Return-Path: <linux-next+bounces-4117-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4118-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E5D599214F
-	for <lists+linux-next@lfdr.de>; Sun,  6 Oct 2024 22:45:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62C1C9924F3
+	for <lists+linux-next@lfdr.de>; Mon,  7 Oct 2024 08:36:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 109A7281D80
-	for <lists+linux-next@lfdr.de>; Sun,  6 Oct 2024 20:44:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BBABB22B20
+	for <lists+linux-next@lfdr.de>; Mon,  7 Oct 2024 06:36:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99BA916F265;
-	Sun,  6 Oct 2024 20:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C45F142077;
+	Mon,  7 Oct 2024 06:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b9456bk+"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ajZNiwL2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2086.outbound.protection.outlook.com [40.107.212.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6B71482E2;
-	Sun,  6 Oct 2024 20:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728247494; cv=none; b=WLMDcxwJhsbMkG3T4CUifqWRuXP8troPaSrhJYj6OXF2kqaJJ0LVgsO354Uj1Pc/jCoYyRB2Kbi7DFd0HLjCF76bKL/roHV0Y3cYB0zNpnOOwuYv7t9GZMUQo7e/ptLlGJAKNH43kzeKbvc0aGrgvfiKIlaf4qaXDobc5uRN7ng=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728247494; c=relaxed/simple;
-	bh=+ulpmZZRsBlxk/M2aiPx/Ygfyl2k1S/lfozgf+5pCaU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m9ZFbb59Km8KYHtfN7GUFfKrLoO+3AK2uF0A4GX+hNw7bxsArIPSq6tJxHaquTv7mAv8OaPSRnMSadpkhuoVeJyzzjrJ4bSE+0A/WO9dvseNC9NDciQF/kszVluwfh4QGZyyKpKrguTpDgWDm37BY7cNSoZfdBV6V0zfOl9y2p8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b9456bk+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A417BC4CEC5;
-	Sun,  6 Oct 2024 20:44:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728247493;
-	bh=+ulpmZZRsBlxk/M2aiPx/Ygfyl2k1S/lfozgf+5pCaU=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=b9456bk+M5B1Hjxka/R7XPZdPBwbROUIFseC/Bc5zaxtV2ABSO+TsDbHwxJfnOaj2
-	 9RNHqnnLSIjopU0HtjtbREqwZ7WZo2zZZuZaPUavAggmwiqIvc4Y8vuLKl4vt5PJUR
-	 VMputoGXoVVz8qtUl5darkVfoiZ8Swg2EYfi841cF/mtZEihDvPW4OJiomtIT4qjYn
-	 MpKDrwimpVGXASHGufvq2hE964KpHdlJx14EjuXw9jkNTgigc3MxIUkCSSOqYWVbto
-	 TC/WNU4ARZ5qJwT+bxzC45Iqtp32n2SGP+1aUv+GSJX6/uPTEuGy+4IZZC1nwUny0H
-	 KcvcNJbD3rzww==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 487F3CE09EE; Sun,  6 Oct 2024 13:44:53 -0700 (PDT)
-Date: Sun, 6 Oct 2024 13:44:53 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: vschneid@redhat.com, linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
-	linux-next@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
-Message-ID: <9961cb9c-70f0-405b-b259-575586905ae0@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <c28dbc65-7499-41a5-84d0-991843153b1a@paulmck-laptop>
- <20241003084039.GS5594@noisy.programming.kicks-ass.net>
- <20241003084743.GC33184@noisy.programming.kicks-ass.net>
- <20241003092707.GD33184@noisy.programming.kicks-ass.net>
- <20241003122824.GE33184@noisy.programming.kicks-ass.net>
- <83d29a0c-dab2-4570-8be0-539b43237724@paulmck-laptop>
- <20241003142240.GU5594@noisy.programming.kicks-ass.net>
- <7b14822a-ee98-4e46-9828-1e41b1ce76f3@paulmck-laptop>
- <20241003185037.GA5594@noisy.programming.kicks-ass.net>
- <20241004133532.GH33184@noisy.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFBF136352
+	for <linux-next@vger.kernel.org>; Mon,  7 Oct 2024 06:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728282957; cv=fail; b=FIYI4BYSZCv4+M04Px7tvauetLaThG54kVbAAvoQO8TzocjRq5BJwzvh/FBNnuyo61YrZmyW/sekeRBLanCSwVZLx1TiQsDIGsog3zhQyzPcom+FfTF+NIV0mgn7fPTZHbNCjUkKIaLexfLA5AjmEdVQYOczzqiEg/Clsf8RkFc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728282957; c=relaxed/simple;
+	bh=jjtRc9DBy1Dg9Q2Gamcug7YBJsNPoiXGKJK8ig+TOTw=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=sqkPMhpLEocoD1GSC482NJa0V/j0HGzaIJlvyQbl9QhZk8fuNd6q3+3sysMCMP0o/saZHy+JoKD6f9VNxZQm/TH/V4bVLfW49GoZdmkHRy6LdWaZssNP1VgF31oKZ7acvuWI8Qgt2XLBC2osCdwbN9oVGmNz3fqluVCy6OBYQ6U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ajZNiwL2; arc=fail smtp.client-ip=40.107.212.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LUcsckVje6o7KK4BCzJetjAO9/tAaI4Aa58fEkikvUPddu8axdogO+3jPLvLEbSQ484mv3dn5NER/kDr9bX0g3iLsAikZ25Sw7L91nlvaD9gIcOdvRrbgtusuFXjnIDRhVg/pbdi+gptHSMqDXkvWLTgyv9vtk+wqU8OXX8gnqQ59KS+3AX6zIRMmy2eo3sN8MW2eHn9aY83w1fWpbPrF+eSps3vWyJjG6unFGsM9G7PhFdajPEIunzHGlfYL1OqOdBUwOsZObDaXfdodSv89GDAQMUqJ+k10EHQ5fUdMDWhiSQrFq2p30/WW4Mk8oASV6cRHdwp0ksnMnbtRnn6nA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jjtRc9DBy1Dg9Q2Gamcug7YBJsNPoiXGKJK8ig+TOTw=;
+ b=ebdWrOJgxM29GoXY8qXPS/fynqxOoEBNWOcmw0krJTPoy/g4BaN7FULKgSi3+EycrFqh45geLYt42rFHTJ8k2FwK1vPQ+sE4Ey8hwPWu6dSxUzNupaJdoqJWgpNRJ3RncilnG6+I8lf6T3VfMyDjkQaYykFz1t3mTdwNWH0Tg6475iiMt6EP1UFUNW8icjD8lF2F6YRJjoD1zaY0zvMVDA4yQ1BEQOGODicHlMzg1TN9whqFVJd6pZiqoKRJOLYlAIKzbKz6/7XjXyqEw2K4kghg88ULi+/jwyad4zZDW6xRlqWc8Ysnz1lT74KnfcAm5I7aLzdE8rucqKQOCHSHlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jjtRc9DBy1Dg9Q2Gamcug7YBJsNPoiXGKJK8ig+TOTw=;
+ b=ajZNiwL21BCSaaSmBXCpuwbRigx7Qodqdv3QnAr0Z1aRBn+SkdrF359rdpUDlAJGwj5WkBrwCGfb4KYG7UpKiTh3bp3jpuWQhpx8ZxsC//PxR4AAhjqy0fXSWpRmpNl8FaRsbZJP1ESQv5zv4Bm04APbJ4eEyqRjSGWV8P+YkQQ=
+Received: from DM4PR12MB5086.namprd12.prod.outlook.com (2603:10b6:5:389::9) by
+ SJ0PR12MB6783.namprd12.prod.outlook.com (2603:10b6:a03:44e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.20; Mon, 7 Oct
+ 2024 06:35:43 +0000
+Received: from DM4PR12MB5086.namprd12.prod.outlook.com
+ ([fe80::70cd:b5c2:596c:5744]) by DM4PR12MB5086.namprd12.prod.outlook.com
+ ([fe80::70cd:b5c2:596c:5744%6]) with mapi id 15.20.8026.020; Mon, 7 Oct 2024
+ 06:35:42 +0000
+From: "V, Narasimhan" <Narasimhan.V@amd.com>
+To: Feng Tang <feng.tang@intel.com>
+CC: Linux Next Mailing List <linux-next@vger.kernel.org>, "linux-mm@kvack.org"
+	<linux-mm@kvack.org>, Borislav Petkov <bp@alien8.de>
+Subject: Re: WARNING: CPU: 43 PID: 2254 at mm/slub.c:4655
+ krealloc_noprof+0x2c7/0x300 with next-20241003
+Thread-Topic: WARNING: CPU: 43 PID: 2254 at mm/slub.c:4655
+ krealloc_noprof+0x2c7/0x300 with next-20241003
+Thread-Index: AQHbFiWr6FFoq7Vs+kSCatt2SUYCV7J2YNGAgAR3qeY=
+Date: Mon, 7 Oct 2024 06:35:42 +0000
+Message-ID:
+ <DM4PR12MB50868A0BEFA31FCFB1FA440C897D2@DM4PR12MB5086.namprd12.prod.outlook.com>
+References:
+ <DM4PR12MB50866964E5363920F072737589722@DM4PR12MB5086.namprd12.prod.outlook.com>
+ <Zv/An5StQOBS7Ais@feng-clx.sh.intel.com>
+In-Reply-To: <Zv/An5StQOBS7Ais@feng-clx.sh.intel.com>
+Accept-Language: en-US, en-IN
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2024-10-07T06:35:42.424Z;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
+ Internal Distribution
+ Only;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=0;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB5086:EE_|SJ0PR12MB6783:EE_
+x-ms-office365-filtering-correlation-id: 3d8a9ba8-f550-4419-a200-08dce69a4482
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?fKyoHGspe/gigj9jLtg8/GQn/gFjCoKzRfF7Ui/oF+1IO56372+KbuliDZ?=
+ =?iso-8859-1?Q?djlIfsvNvJgmNMv7GLKCG5pqWfkD5LytdJmBPc9mPs9flEbP/9zG0YQ9ah?=
+ =?iso-8859-1?Q?nbbAlOggMwIkG84Ay3iinywv5Pp3lepz3gHGAtMAeS41/5Sbj4FzRFuuCU?=
+ =?iso-8859-1?Q?Ry5YuBL7f0xJs3Er/HOOdDuFMVF8myvhkZhUOQrcb0vqXlGaiQpX/+ppgc?=
+ =?iso-8859-1?Q?yOKleBRSnXjyx5Vx9ApqciL3LXdn9maNCguGJRlBqcSQXhoCR6codHtGS1?=
+ =?iso-8859-1?Q?RK0IPz32UyuGvpfj8yejlyI9mh3nBUTEZmsyaM835aWCJybhbfRF+yRYy5?=
+ =?iso-8859-1?Q?dSpvU1CiR/LE6HUxp5oyiHh/Xulkk4kwz2KyEVbSBafKX0Rk1tep3uwiyq?=
+ =?iso-8859-1?Q?FsWaSrJv6Gql6Fy1JIt2dqE2HBLzmnRKMHxUJJPut8+CIjEWg8M3Wi3D3m?=
+ =?iso-8859-1?Q?r6EuxYJ9sChBB8zc5hzwQce3Blk2YthA7Upqdw9finXN/YWBVg3mBthurs?=
+ =?iso-8859-1?Q?79W/TzaJjEh6TlDDjT+bpMe2bx8uFC192ZPSwtSD5/7U5cjvI+i41xyCjF?=
+ =?iso-8859-1?Q?lbSisZftgUSs+EEMY/cvrddz9aXCm35kFmGthehX8eOCnpJ776paYz+rUP?=
+ =?iso-8859-1?Q?hgLFZFwafxFyOHNzrwje1M1YnU9m/sfskO71FZvEndUYOEYyBdWUvygVCk?=
+ =?iso-8859-1?Q?dQccB1LMZLYDD3g3PgZNJT8FcSP6xmWzZY0Itpz9irip2X+vuXcjx3HQMN?=
+ =?iso-8859-1?Q?miEOhPQOJBHAaCW5YmvX/lvkIclqYnFldyWzAmZQ3jA5OT6vH+LrDFrfCR?=
+ =?iso-8859-1?Q?6zu9H5LekJkoyvbiFVbaiX39mkx9cjWGh5cvY0aC2eahVqlJKDIdJCSls3?=
+ =?iso-8859-1?Q?0MWpI90YX/4xIRjr6ABBZg97IjANalJYBpXCQ7LzU7A73oIPHFefadvCfL?=
+ =?iso-8859-1?Q?On0jn0OraAxpDTMw6dOAQ3fliEDjyPoe0isl76eXzJzx0Os3Lzq78d92dL?=
+ =?iso-8859-1?Q?61gKOgqpFQnihEwlwuw/DMwdyA4lzIZSRX1M8JHIAnyxIHtRGfmykZuqg7?=
+ =?iso-8859-1?Q?o9W0vLxbQV8+5O2zmgwXe/K9zvXxu/zKXsznaYQT0XX5A5K+J6nZPTIDn/?=
+ =?iso-8859-1?Q?T24p/L+90vo+3QFVUqoF8DlLfL8NWxq/Qa++pkzZqu54UrI2Pgy2tGVDnV?=
+ =?iso-8859-1?Q?OO+VhzqCtCagI72QhgQxlDa6WKmNJLL7RQe1OOXE0T8oDSx4rna70i+Y1r?=
+ =?iso-8859-1?Q?Ee4XNidU6UkQLlt/sFeYLtSnqUnVfFH8jvk3RLPPzY7Z6THVupR8YGOAlJ?=
+ =?iso-8859-1?Q?/tc99rh2yOBLJlr2FtztyE4GTqVm8hXPNhCx2fu8vwUeZ7JS/Rplm0n+rV?=
+ =?iso-8859-1?Q?nNsrDltnWFUpqeFXhX3yWN6b89MA2NfQ=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5086.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?vAgi6gG8h/1X4R+1j5xRmanDQvxrAay9p7kIZK24NjuRSmt/5yCF1s0bK7?=
+ =?iso-8859-1?Q?+GKl1xn+Xl3vcaz6Eg1raCJBYJP9RTZGzM0cpKbKMMKlW+w1QqIpmLOhzo?=
+ =?iso-8859-1?Q?DZ05IqrZdF07anv+ALqiQqSOfMm4TQJOFw+BLSjxJszFrS24X71Mvmmg5M?=
+ =?iso-8859-1?Q?b5bwsAm7k0k3WkvA5lq3BRFTpcCiqJTSZHAeloW+DKCet71Vk+XT65EsEf?=
+ =?iso-8859-1?Q?9dLl1ECXKUPNHtlzrHum43Pomu5CDUFtk/EUH3xdddHpAbCjZyVJD7nXmX?=
+ =?iso-8859-1?Q?Y/34+08GatQ8aNsVtZj3DI+RXqqWRRMDGbFeuLUnKTdh+lrmaXVmMBwgQZ?=
+ =?iso-8859-1?Q?39890+JLRMduzaS7Q7dPjXFSzNg12lYNSHD9R/8DGr2RWeAiJmI2Tpgiz6?=
+ =?iso-8859-1?Q?J4lLuJOo29n2e0xoMfFUkyDHsQlBlK88EFRCv15aY1DcQUWGFbt91m41rM?=
+ =?iso-8859-1?Q?52RJXZUPGhdKxdky388JvBNXlDhi2Qo1sBmF69o5Q6LPxZLx9JO/DfLQFa?=
+ =?iso-8859-1?Q?EG800E3AcNNvla1UKSraQRa3mzPNhyO89a3ENc4WXWBFYwT5VtOgEHzr03?=
+ =?iso-8859-1?Q?mwzgtsRJLPQjq/Oj5z651xTVdtukO1o8klerNtCmUJds5mzwdmgDD50WKz?=
+ =?iso-8859-1?Q?HRGLwskJKgFfwm0vEMGuyts/P7BJ6c7+OPQrm2jbABLtuKSj9Q0H9DcAp/?=
+ =?iso-8859-1?Q?3x/lAiWaYe5ZPuYSAhL4TF4bLjxwggocWN8PC8ReeHvpp7foGf2yMJ959Q?=
+ =?iso-8859-1?Q?Cp5PIDQsOpmRnSYMdqf6v1JWVI34yufOsM8/JC+n4RY1C2oHORmRMY3Zet?=
+ =?iso-8859-1?Q?PsGMVaveGoBd11HNBGUX+ZZ1XsHSuaSOKsryXVYnE4QsjsOm4sp0O32YCh?=
+ =?iso-8859-1?Q?FJohtgFBgYr9c1vTPlSfuD48CE+ax086N6IwX5lVbxm272wf9jb2lK9Tn6?=
+ =?iso-8859-1?Q?HXkNmfsWFeQCmCYOixLjHb/AMsC5tudT7xsjNRlmimDFT+Vlo5QphR/I0y?=
+ =?iso-8859-1?Q?aAjbY/Ta4qoLvAXIGE8LhYUhiMfsf2/+H4doYawLZh1hsvDdtUJSKOvmqz?=
+ =?iso-8859-1?Q?Jrg22/9uft+z7XICi/xkAdCoKCB0DAMulwAaS8DCJyC9x5eogoE+6Z5CpD?=
+ =?iso-8859-1?Q?lgmEUTkU5l2NtMdwe1XdjHWLlckRSzhEbZapkmMAzzzPRX9kkEikp1BxHX?=
+ =?iso-8859-1?Q?O5Bs6w+wAtDW/IolWR3THU0MVC+l6fzaN0tdrhnUWPMAAMU85KDILIwApo?=
+ =?iso-8859-1?Q?CDvdIvfIteSD2uV53TWAiwPS9GSw8b47VLkCwNHjuXZW4H6OsIAMTM6laK?=
+ =?iso-8859-1?Q?yC09Mykdd2ZlHFMKA3cc2RIdKqvDYxKDAz43hM0ziabDp7C53xBkR8eMJh?=
+ =?iso-8859-1?Q?ItudxH6q5cnLQAcOn4bDh1ZTxW1Wvy6CTL+YeR92Z/OGUZ1Vep7ZTgEAVB?=
+ =?iso-8859-1?Q?rBaDL6HkgvmprKFthEXkQX5R94QG+yU+97nMTXNNqQovXxzRFsrAazFxzu?=
+ =?iso-8859-1?Q?nSDFpuxoOXQ3EIxyf6Vz0KR0U640i5bmeReOBBumXsYmFMYkIe4NBB48ME?=
+ =?iso-8859-1?Q?XUoYIJkiySGTaCVU95CUMpQqYa4XZNGOueUgeBKvsnin2keum/ah5/YviL?=
+ =?iso-8859-1?Q?1I8Zk7O1NDFeE=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241004133532.GH33184@noisy.programming.kicks-ass.net>
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5086.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d8a9ba8-f550-4419-a200-08dce69a4482
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Oct 2024 06:35:42.8458
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QWr0u9uYD1PNFIfH/FbDAUnbquH+JTV5bmfZyv4gtPWwIEQMxcr0VPWemtE5w3j+fftxL7VFo1Twnm6SJJHCxQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6783
 
-On Fri, Oct 04, 2024 at 03:35:32PM +0200, Peter Zijlstra wrote:
-> On Thu, Oct 03, 2024 at 08:50:37PM +0200, Peter Zijlstra wrote:
-> > On Thu, Oct 03, 2024 at 09:04:30AM -0700, Paul E. McKenney wrote:
-> > > On Thu, Oct 03, 2024 at 04:22:40PM +0200, Peter Zijlstra wrote:
-> > > > On Thu, Oct 03, 2024 at 05:45:47AM -0700, Paul E. McKenney wrote:
-> > > > 
-> > > > > I ran 100*TREE03 for 18 hours each, and got 23 instances of *something*
-> > > > > happening (and I need to suppress stalls on the repeat).  One of the
-> > > > > earlier bugs happened early, but sadly not this one.
-> > > > 
-> > > > Damn, I don't have the amount of CPU hours available you mention in your
-> > > > later email. I'll just go up the rounds to 20 minutes and see if
-> > > > something wants to go bang before I have to shut down the noise
-> > > > pollution for the day...
-> > > 
-> > > Indeed, this was one reason I was soliciting debug patches.  ;-)
-> > 
-> > Sooo... I was contemplating if something like the below might perhaps
-> > help some. It's a bit of a mess (I'll try and clean up if/when it
-> > actually proves to work), but it compiles and survives a hand full of 1m
-> > runs.
-> > 
-> > I'll try and give it more runs tomorrow when I can power up the big
-> > machines again -- unless you've already told me it's crap by then :-)
-> 
-> I've given it 200*20m and the worst I got was one dl-server double
-> enqueue. I'll go stare at that I suppose.
+[AMD Official Use Only - AMD Internal Distribution Only]
 
-With your patch, I got 24 failures out of 100 TREE03 runs of 18 hours
-each.  The failures were different, though, mostly involving boost
-failures in which RCU priority boosting didn't actually result in the
-low-priority readers getting boosted.  An ftrace/event-trace dump of
-such a situation is shown below.
+Hi,
 
-There were also a number of "sched: DL replenish lagged too much"
-messages, but it looks like this was a symptom of the ftrace dump.
 
-Given that this now involves priority boosting, I am trying 400*TREE03
-with each guest OS restricted to four CPUs to see if that makes things
-happen more quickly, and will let you know how this goes.
 
-Any other debug I should apply?
+________________________________________
+From: Feng Tang <feng.tang@intel.com>
+Sent: Friday, October 4, 2024 03:47 PM
+To: V, Narasimhan
+Cc: Linux Next Mailing List; linux-mm@kvack.org; Borislav Petkov
+Subject: Re: WARNING: CPU: 43 PID: 2254 at mm/slub.c:4655 krealloc_noprof+0=
+x2c7/0x300 with next-20241003
 
-							Thanx, Paul
+On Fri, Oct 04, 2024 at 02:22:38PM +0800, V, Narasimhan wrote:
+>> [AMD Official Use Only - AMD Internal Distribution Only]
+>>
+>> Hi,
+>>
+>> Seeing the following bug on boot with next-20241003
 
-------------------------------------------------------------------------
+> I think it is caused by my commit d0a38fad51cc "mm/slub: Improve redzone =
+check and zeroing for > krealloc()"
+> that the virt_to_cache() it calls returns NULL
 
-[10363.660761] Dumping ftrace buffer:
-[10363.661231] ---------------------------------
-[10363.661789] CPU:1 [LOST 12570412 EVENTS]
-[10363.661789] rcu_tort-155       1d..2. 10347723897us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=97 prev_state=R+ ==> next_comm=rcub/7 next_pid=17 next_prio=97
-[10363.664164]   rcub/7-17        1d..2. 10347723905us : sched_switch: prev_comm=rcub/7 prev_pid=17 prev_prio=97 prev_state=S ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.665965]   rcuc/1-25        1d..2. 10347723908us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/1 next_pid=26 next_prio=97
-[10363.667819] ksoftirq-26        1d..2. 10347723909us : sched_switch: prev_comm=ksoftirqd/1 prev_pid=26 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.669784] rcu_tort-159       1dNh5. 10347724881us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.670971] rcu_tort-159       1dN.5. 10347724884us : sched_wakeup: comm=ksoftirqd/1 pid=26 prio=97 target_cpu=001
-[10363.672210] rcu_tort-159       1d..2. 10347724942us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.674130]   rcuc/1-25        1d..2. 10347724945us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/1 next_pid=26 next_prio=97
-[10363.675971] ksoftirq-26        1d..2. 10347724947us : sched_switch: prev_comm=ksoftirqd/1 prev_pid=26 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.677935] rcu_tort-159       1DNh3. 10347726881us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.679125] rcu_tort-159       1d..2. 10347726884us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.681048]   rcuc/1-25        1d..2. 10347726887us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.682964] rcu_tort-159       1DNh3. 10347727881us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.684180] rcu_tort-159       1d..2. 10347727887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.686103]   rcuc/1-25        1d..2. 10347727889us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.688026] rcu_tort-159       1dNh3. 10347728881us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.689219] rcu_tort-159       1d..2. 10347728884us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.691150]   rcuc/1-25        1d..2. 10347728886us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.693076] rcu_tort-159       1dNh4. 10347729270us : sched_wakeup: comm=rcu_torture_wri pid=148 prio=120 target_cpu=001
-[10363.694392] rcu_tort-159       1d..2. 10347729272us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_wri next_pid=148 next_prio=120
-[10363.696437] rcu_tort-148       1d..2. 10347729276us : sched_switch: prev_comm=rcu_torture_wri prev_pid=148 prev_prio=120 prev_state=I ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.698467] rcu_tort-159       1dNh4. 10347729777us : sched_wakeup: comm=rcu_torture_wri pid=148 prio=120 target_cpu=001
-[10363.699771] rcu_tort-159       1d..2. 10347729780us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_wri next_pid=148 next_prio=120
-[10363.701821] rcu_tort-148       1dNh4. 10347729881us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.703018] rcu_tort-148       1d..2. 10347729884us : sched_switch: prev_comm=rcu_torture_wri prev_pid=148 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.704940]   rcuc/1-25        1d..2. 10347729886us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_wri next_pid=148 next_prio=120
-[10363.706846] rcu_tort-148       1d..2. 10347730434us : sched_switch: prev_comm=rcu_torture_wri prev_pid=148 prev_prio=120 prev_state=I ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.708880] rcu_tort-159       1dN.4. 10347730882us : sched_wakeup: comm=ksoftirqd/1 pid=26 prio=97 target_cpu=001
-[10363.710126] rcu_tort-159       1d..2. 10347730883us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/1 next_pid=26 next_prio=97
-[10363.712107] ksoftirq-26        1d..2. 10347730886us : sched_switch: prev_comm=ksoftirqd/1 prev_pid=26 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.714095] rcu_tort-159       1d..2. 10347731423us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_exp_par_gp_ next_pid=18 next_prio=97
-[10363.716147] rcu_exp_-18        1d..4. 10347731431us : sched_wakeup: comm=rcu_exp_gp_kthr pid=20 prio=97 target_cpu=008
-[10363.717459] rcu_exp_-18        1d..2. 10347731435us : sched_switch: prev_comm=rcu_exp_par_gp_ prev_pid=18 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.719503] rcu_tort-159       1d..2. 10347731526us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_exp_par_gp_ next_pid=36 next_prio=97
-[10363.721551] rcu_exp_-36        1d..4. 10347731532us : sched_wakeup: comm=rcu_exp_gp_kthr pid=20 prio=97 target_cpu=008
-[10363.722853] rcu_exp_-36        1d..2. 10347731536us : sched_switch: prev_comm=rcu_exp_par_gp_ prev_pid=36 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.724906] rcu_tort-159       1d..2. 10347731568us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_exp_par_gp_ next_pid=18 next_prio=97
-[10363.726968] rcu_exp_-18        1d..2. 10347731577us : sched_switch: prev_comm=rcu_exp_par_gp_ prev_pid=18 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.729019] rcu_tort-159       1d..2. 10347731595us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_exp_par_gp_ next_pid=92 next_prio=97
-[10363.731308] rcu_exp_-92        1d..2. 10347731599us : sched_switch: prev_comm=rcu_exp_par_gp_ prev_pid=92 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.733371] rcu_tort-159       1d..2. 10347731779us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=158 next_prio=97
-[10363.735456] rcu_tort-158       1d..2. 10347731797us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.737541] rcu_tort-159       1DNh4. 10347731882us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.738761] rcu_tort-159       1d..2. 10347731885us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.740720]   rcuc/1-25        1d..2. 10347731888us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10363.742673] rcu_tort-158       1dNh3. 10347732881us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.743883] rcu_tort-158       1d..2. 10347732884us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.745848]   rcuc/1-25        1d..2. 10347732887us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.747813] rcu_tort-159       1dN.3. 10347733882us : sched_wakeup: comm=ksoftirqd/1 pid=26 prio=97 target_cpu=001
-[10363.749078] rcu_tort-159       1d..2. 10347733884us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/1 next_pid=26 next_prio=97
-[10363.751101] ksoftirq-26        1d..2. 10347733888us : sched_switch: prev_comm=ksoftirqd/1 prev_pid=26 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10363.753098] rcu_tort-158       1d..2. 10347733893us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10363.755177] rcu_tort-159       1d..3. 10347733899us : dl_server_stop <-dequeue_entities
-[10363.756172] rcu_tort-159       1d..3. 10347733906us : dl_server_start <-enqueue_task_fair
-[10363.757172] rcu_tort-159       1d..2. 10347733908us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=155 next_prio=139
-[10363.759240] rcu_tort-155       1dNh4. 10347734882us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.760468] rcu_tort-155       1dN.4. 10347734885us : sched_wakeup: comm=ksoftirqd/1 pid=26 prio=97 target_cpu=001
-[10363.761730] rcu_tort-155       1d..2. 10347734887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.763733]   rcuc/1-25        1d..2. 10347734890us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/1 next_pid=26 next_prio=97
-[10363.765611] ksoftirq-26        1d..2. 10347734891us : sched_switch: prev_comm=ksoftirqd/1 prev_pid=26 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=155 next_prio=139
-[10363.767612] rcu_tort-155       1DNh5. 10347735881us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.768825] rcu_tort-155       1d..2. 10347735885us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.770787]   rcuc/1-25        1d..2. 10347735888us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=cpuhp/1 next_pid=23 next_prio=120
-[10363.772636]  cpuhp/1-23        1d..2. 10347735892us : sched_switch: prev_comm=cpuhp/1 prev_pid=23 prev_prio=120 prev_state=D ==> next_comm=rcu_torture_rea next_pid=155 next_prio=139
-[10363.774605] rcu_tort-155       1dN.6. 10347735894us : sched_wakeup: comm=migration/1 pid=24 prio=0 target_cpu=001
-[10363.775851] rcu_tort-155       1d..2. 10347735896us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=migration/1 next_pid=24 next_prio=0
-[10363.777842] migratio-24        1d..4. 10347735898us : dl_server_stop <-dequeue_entities
-[10363.778826] migratio-24        1d..2. 10347735904us : sched_switch: prev_comm=migration/1 prev_pid=24 prev_prio=0 prev_state=S ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.780728]   <idle>-0         1dNh4. 10347736888us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.781930]   <idle>-0         1dN.4. 10347736890us : sched_wakeup: comm=ksoftirqd/1 pid=26 prio=97 target_cpu=001
-[10363.783190]   <idle>-0         1d..2. 10347736892us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.785061]   rcuc/1-25        1d..2. 10347736898us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/1 next_pid=26 next_prio=97
-[10363.786946] ksoftirq-26        1d..2. 10347736899us : sched_switch: prev_comm=ksoftirqd/1 prev_pid=26 prev_prio=97 prev_state=S ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.788870]   <idle>-0         1d..2. 10347736957us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=kworker/1:0 next_pid=18422 next_prio=120
-[10363.790839] kworker/-18422     1d..4. 10347736965us : sched_wakeup: comm=rcu_torture_bar pid=193 prio=139 target_cpu=000
-[10363.792170] kworker/-18422     1d..3. 10347736966us : dl_server_stop <-dequeue_entities
-[10363.793160] kworker/-18422     1d..2. 10347736967us : sched_switch: prev_comm=kworker/1:0 prev_pid=18422 prev_prio=120 prev_state=I ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.795126]   <idle>-0         1dNh4. 10347737886us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.796348]   <idle>-0         1d..2. 10347737889us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.798218]   rcuc/1-25        1d..2. 10347737891us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.800106]   <idle>-0         1dNh4. 10347738885us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.801387]   <idle>-0         1d..2. 10347738888us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.803219]   rcuc/1-25        1d..2. 10347738891us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.805072]   <idle>-0         1d.h4. 10347739243us : sched_wakeup: comm=rcu_torture_wri pid=148 prio=120 target_cpu=000
-[10363.806403]   <idle>-0         1dNh4. 10347739885us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.807610]   <idle>-0         1d..2. 10347739888us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.809453]   rcuc/1-25        1d..2. 10347739889us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.811456]   <idle>-0         1dNh4. 10347740885us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.812866]   <idle>-0         1d..2. 10347740888us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.814750]   rcuc/1-25        1D..5. 10347740890us : dl_server_start <-enqueue_task_fair
-[10363.815764]   rcuc/1-25        1DN.4. 10347740891us : sched_wakeup: comm=cpuhp/1 pid=23 prio=120 target_cpu=001
-[10363.816989]   rcuc/1-25        1d..2. 10347740894us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=cpuhp/1 next_pid=23 next_prio=120
-[10363.818842]  cpuhp/1-23        1d..3. 10347741725us : dl_server_stop <-dequeue_entities
-[10363.819814]  cpuhp/1-23        1d..2. 10347741726us : sched_switch: prev_comm=cpuhp/1 prev_pid=23 prev_prio=120 prev_state=D ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.821679]   <idle>-0         1dNh4. 10347741887us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.822877]   <idle>-0         1d..2. 10347741890us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.824720]   rcuc/1-25        1d..2. 10347741892us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=S ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.826574]   <idle>-0         1d..2. 10347742453us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/1 next_pid=23 next_prio=120
-[10363.828441]  cpuhp/1-23        1d..3. 10347742474us : dl_server_stop <-dequeue_entities
-[10363.829422]  cpuhp/1-23        1d..2. 10347742475us : sched_switch: prev_comm=cpuhp/1 prev_pid=23 prev_prio=120 prev_state=D ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.831290]   <idle>-0         1d..2. 10347742917us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/1 next_pid=23 next_prio=120
-[10363.833165]  cpuhp/1-23        1d..3. 10347742944us : dl_server_stop <-dequeue_entities
-[10363.834139]  cpuhp/1-23        1d..2. 10347742946us : sched_switch: prev_comm=cpuhp/1 prev_pid=23 prev_prio=120 prev_state=D ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.836021]   <idle>-0         1d..2. 10347742969us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/1 next_pid=23 next_prio=120
-[10363.837887]  cpuhp/1-23        1dN.3. 10347743083us : sched_wakeup: comm=ksoftirqd/1 pid=26 prio=97 target_cpu=001
-[10363.839158]  cpuhp/1-23        1d..2. 10347743084us : sched_switch: prev_comm=cpuhp/1 prev_pid=23 prev_prio=120 prev_state=R+ ==> next_comm=ksoftirqd/1 next_pid=26 next_prio=97
-[10363.841086] ksoftirq-26        1d..2. 10347743086us : sched_switch: prev_comm=ksoftirqd/1 prev_pid=26 prev_prio=97 prev_state=P ==> next_comm=cpuhp/1 next_pid=23 next_prio=120
-[10363.842993]  cpuhp/1-23        1dN.3. 10347743087us : sched_wakeup: comm=rcuc/1 pid=25 prio=97 target_cpu=001
-[10363.844212]  cpuhp/1-23        1d..2. 10347743088us : sched_switch: prev_comm=cpuhp/1 prev_pid=23 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/1 next_pid=25 next_prio=97
-[10363.846107]   rcuc/1-25        1d..2. 10347743089us : sched_switch: prev_comm=rcuc/1 prev_pid=25 prev_prio=97 prev_state=P ==> next_comm=cpuhp/1 next_pid=23 next_prio=120
-[10363.847967]  cpuhp/1-23        1d..3. 10347743094us : dl_server_stop <-dequeue_entities
-[10363.848968]  cpuhp/1-23        1d..2. 10347743095us : sched_switch: prev_comm=cpuhp/1 prev_pid=23 prev_prio=120 prev_state=S ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.850869]   <idle>-0         1d..2. 10347743107us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/1 next_pid=23 next_prio=120
-[10363.852779]  cpuhp/1-23        1d..3. 10347743111us : dl_server_stop <-dequeue_entities
-[10363.853770]  cpuhp/1-23        1d..2. 10347743112us : sched_switch: prev_comm=cpuhp/1 prev_pid=23 prev_prio=120 prev_state=P ==> next_comm=swapper/1 next_pid=0 next_prio=120
-[10363.855664]   <idle>-0         1d..2. 10347743122us : sched_switch: prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=migration/1 next_pid=24 next_prio=0
-[10363.857599] CPU:6 [LOST 11447803 EVENTS]
-[10363.857599] kworker/-19976     6d..2. 10354298092us : sched_switch: prev_comm=kworker/6:2 prev_pid=19976 prev_prio=120 prev_state=D ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.860014]   <idle>-0         6dNh2. 10354298095us : sched_wakeup: comm=rcu_exp_gp_kthr pid=20 prio=97 target_cpu=006
-[10363.861315]   <idle>-0         6d..2. 10354298097us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_exp_gp_kthr next_pid=20 next_prio=97
-[10363.863294] rcu_exp_-20        6d..2. 10354298104us : sched_switch: prev_comm=rcu_exp_gp_kthr prev_pid=20 prev_prio=97 prev_state=D ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.865256]   <idle>-0         6dNh2. 10354298111us : sched_wakeup: comm=rcu_exp_gp_kthr pid=20 prio=97 target_cpu=006
-[10363.866598]   <idle>-0         6d..2. 10354298112us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_exp_gp_kthr next_pid=20 next_prio=97
-[10363.868608] rcu_exp_-20        6d..5. 10354298114us : dl_server_start <-enqueue_task_fair
-[10363.869615] rcu_exp_-20        6dN.4. 10354298115us : sched_wakeup: comm=kworker/6:2 pid=19976 prio=120 target_cpu=006
-[10363.870925] rcu_exp_-20        6d..2. 10354298118us : sched_switch: prev_comm=rcu_exp_gp_kthr prev_pid=20 prev_prio=97 prev_state=S ==> next_comm=kworker/6:2 next_pid=19976 next_prio=120
-[10363.872948] kworker/-19976     6d..3. 10354298119us : dl_server_stop <-dequeue_entities
-[10363.873940] kworker/-19976     6d..2. 10354298123us : sched_switch: prev_comm=kworker/6:2 prev_pid=19976 prev_prio=120 prev_state=I ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.875928]   <idle>-0         6d.h3. 10354298479us : dl_server_start <-enqueue_task_fair
-[10363.876955]   <idle>-0         6dNh2. 10354298481us : sched_wakeup: comm=rcu_torture_fak pid=151 prio=139 target_cpu=006
-[10363.878287]   <idle>-0         6d..2. 10354298482us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_fak next_pid=151 next_prio=139
-[10363.880268] rcu_tort-151       6d..3. 10354298485us : dl_server_stop <-dequeue_entities
-[10363.881262] rcu_tort-151       6d..2. 10354298489us : sched_switch: prev_comm=rcu_torture_fak prev_pid=151 prev_prio=139 prev_state=I ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.883949]   <idle>-0         6dN.4. 10354298892us : sched_wakeup: comm=ksoftirqd/6 pid=60 prio=97 target_cpu=006
-[10363.885869]   <idle>-0         6d..2. 10354298893us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ksoftirqd/6 next_pid=60 next_prio=97
-[10363.888185] ksoftirq-60        6d..2. 10354298901us : sched_switch: prev_comm=ksoftirqd/6 prev_pid=60 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.890094]   <idle>-0         6dNh4. 10354299889us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.891310]   <idle>-0         6d..2. 10354299893us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.893182]   rcuc/6-59        6d..2. 10354299899us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.895050]   <idle>-0         6dNh4. 10354300890us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.896255]   <idle>-0         6d..2. 10354300894us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.898162]   rcuc/6-59        6d..2. 10354300899us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.900032]   <idle>-0         6dNh4. 10354302889us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.901248]   <idle>-0         6d..2. 10354302893us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.903132]   rcuc/6-59        6d..3. 10354302906us : dl_server_start <-enqueue_task_fair
-[10363.904144]   rcuc/6-59        6d..2. 10354302908us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10363.906107] rcu_tort-154       6d.h2. 10354302912us : sched_wakeup: comm=cpuhp/6 pid=57 prio=120 target_cpu=006
-[10363.907348] rcu_tort-154       6DNh3. 10354303884us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.908585] rcu_tort-154       6d..2. 10354303889us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.910547]   rcuc/6-59        6d..2. 10354303892us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10363.912408]  cpuhp/6-57        6d..2. 10354303896us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=D ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10363.914357] rcu_tort-154       6dN.6. 10354303899us : sched_wakeup: comm=migration/6 pid=58 prio=0 target_cpu=006
-[10363.915642] rcu_tort-154       6d..2. 10354303901us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=migration/6 next_pid=58 next_prio=0
-[10363.917653] migratio-58        6d..4. 10354303903us : dl_server_stop <-dequeue_entities
-[10363.918641] migratio-58        6d..2. 10354303911us : sched_switch: prev_comm=migration/6 prev_pid=58 prev_prio=0 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.920567]   <idle>-0         6dN.4. 10354304891us : sched_wakeup: comm=ksoftirqd/6 pid=60 prio=97 target_cpu=006
-[10363.921839]   <idle>-0         6d..2. 10354304893us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ksoftirqd/6 next_pid=60 next_prio=97
-[10363.923765] ksoftirq-60        6d..2. 10354304898us : sched_switch: prev_comm=ksoftirqd/6 prev_pid=60 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.925701]   <idle>-0         6d.h4. 10354306531us : sched_wakeup: comm=rcu_torture_wri pid=148 prio=120 target_cpu=000
-[10363.927023]   <idle>-0         6dNh4. 10354306888us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.928233]   <idle>-0         6dN.4. 10354306891us : sched_wakeup: comm=ksoftirqd/6 pid=60 prio=97 target_cpu=006
-[10363.929519]   <idle>-0         6d..2. 10354306892us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.931382]   rcuc/6-59        6d..2. 10354306898us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/6 next_pid=60 next_prio=97
-[10363.933263] ksoftirq-60        6d..2. 10354306900us : sched_switch: prev_comm=ksoftirqd/6 prev_pid=60 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.935176]   <idle>-0         6d.h4. 10354307223us : sched_wakeup: comm=rcu_torture_fak pid=151 prio=139 target_cpu=000
-[10363.936571]   <idle>-0         6dNh4. 10354307888us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.937784]   <idle>-0         6d..2. 10354307892us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.939643]   rcuc/6-59        6d..2. 10354307895us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.941506]   <idle>-0         6dNh4. 10354310888us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.942730]   <idle>-0         6d..2. 10354310892us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.945358]   rcuc/6-59        6d..2. 10354310894us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.948169]   <idle>-0         6d.h4. 10354311779us : sched_wakeup: comm=rcu_torture_fak pid=149 prio=139 target_cpu=000
-[10363.950184]   <idle>-0         6dNh4. 10354311889us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.951973]   <idle>-0         6d..2. 10354311893us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.954758]   rcuc/6-59        6d..2. 10354311896us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.957574]   <idle>-0         6dNh4. 10354312889us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.959410]   <idle>-0         6d..2. 10354312892us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.962196]   rcuc/6-59        6d..2. 10354312895us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.964698]   <idle>-0         6dNh4. 10354314889us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.965895]   <idle>-0         6d..2. 10354314893us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.967749]   rcuc/6-59        6d..2. 10354314895us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.969603]   <idle>-0         6dNh4. 10354315888us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.970803]   <idle>-0         6d..2. 10354315892us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.972722]   rcuc/6-59        6D..5. 10354315894us : dl_server_start <-enqueue_task_fair
-[10363.973722]   rcuc/6-59        6DN.4. 10354315895us : sched_wakeup: comm=cpuhp/6 pid=57 prio=120 target_cpu=006
-[10363.974944]   rcuc/6-59        6d..2. 10354315898us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10363.976794]  cpuhp/6-57        6dNh4. 10354316898us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.977993]  cpuhp/6-57        6d..2. 10354316906us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.979842]   rcuc/6-59        6d..2. 10354316914us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10363.981713]  cpuhp/6-57        6d..3. 10354316922us : dl_server_stop <-dequeue_entities
-[10363.982692]  cpuhp/6-57        6d..2. 10354316924us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=D ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.984567]   <idle>-0         6d..2. 10354317629us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10363.986439]  cpuhp/6-57        6d..3. 10354317656us : dl_server_stop <-dequeue_entities
-[10363.987428]  cpuhp/6-57        6d..2. 10354317658us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=D ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.989289]   <idle>-0         6d..2. 10354317704us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10363.991166]  cpuhp/6-57        6d..3. 10354317735us : dl_server_stop <-dequeue_entities
-[10363.992147]  cpuhp/6-57        6d..2. 10354317736us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=D ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10363.994025]   <idle>-0         6d..2. 10354317766us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10363.995890]  cpuhp/6-57        6dNh3. 10354317882us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10363.997116]  cpuhp/6-57        6d..2. 10354317887us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10363.998993]   rcuc/6-59        6d..2. 10354317889us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=S ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10364.000864]  cpuhp/6-57        6dN.3. 10354317939us : sched_wakeup: comm=ksoftirqd/6 pid=60 prio=97 target_cpu=006
-[10364.002127]  cpuhp/6-57        6d..2. 10354317940us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=R+ ==> next_comm=ksoftirqd/6 next_pid=60 next_prio=97
-[10364.004042] ksoftirq-60        6d..2. 10354317942us : sched_switch: prev_comm=ksoftirqd/6 prev_pid=60 prev_prio=97 prev_state=P ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10364.005956]  cpuhp/6-57        6dN.3. 10354317943us : sched_wakeup: comm=rcuc/6 pid=59 prio=97 target_cpu=006
-[10364.007169]  cpuhp/6-57        6d..2. 10354317944us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/6 next_pid=59 next_prio=97
-[10364.009038]   rcuc/6-59        6d..2. 10354317946us : sched_switch: prev_comm=rcuc/6 prev_pid=59 prev_prio=97 prev_state=P ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10364.010886]  cpuhp/6-57        6d..3. 10354317952us : dl_server_stop <-dequeue_entities
-[10364.011873]  cpuhp/6-57        6d..2. 10354317953us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=S ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10364.013769]   <idle>-0         6d..2. 10354317966us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/6 next_pid=57 next_prio=120
-[10364.015655]  cpuhp/6-57        6d..3. 10354317971us : dl_server_stop <-dequeue_entities
-[10364.016632]  cpuhp/6-57        6d..2. 10354317973us : sched_switch: prev_comm=cpuhp/6 prev_pid=57 prev_prio=120 prev_state=P ==> next_comm=swapper/6 next_pid=0 next_prio=120
-[10364.018520]   <idle>-0         6d..2. 10354317990us : sched_switch: prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=migration/6 next_pid=58 next_prio=0
-[10364.020427] CPU:14 [LOST 11510813 EVENTS]
-[10364.020427] rcu_tort-159      14d..2. 10356469386us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.022985] rcu_tort-154      14dN.4. 10356469885us : sched_wakeup: comm=ksoftirqd/14 pid=116 prio=97 target_cpu=014
-[10364.024259] rcu_tort-154      14d..2. 10356469890us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/14 next_pid=116 next_prio=97
-[10364.026288] ksoftirq-116      14d..2. 10356469892us : sched_switch: prev_comm=ksoftirqd/14 prev_pid=116 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.028390] rcu_tort-159      14dNs5. 10356470886us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=014
-[10364.029686] rcu_tort-159      14d..2. 10356470888us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10364.031723] rcu_pree-16       14d..2. 10356470891us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.033718] rcu_tort-154      14d..2. 10356470895us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.035767] rcu_tort-159      14DNh3. 10356471396us : sched_wakeup: comm=rcu_torture_rea pid=154 prio=139 target_cpu=014
-[10364.037098] rcu_tort-159      14d..2. 10356471399us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.039173] rcu_tort-154      14dN.4. 10356474885us : sched_wakeup: comm=ksoftirqd/14 pid=116 prio=97 target_cpu=014
-[10364.040499] rcu_tort-154      14d..2. 10356474887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/14 next_pid=116 next_prio=97
-[10364.042547] ksoftirq-116      14d.s3. 10356474895us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=012
-[10364.043921] ksoftirq-116      14d..2. 10356474900us : sched_switch: prev_comm=ksoftirqd/14 prev_pid=116 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.045993] rcu_tort-154      14DNh4. 10356475881us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.047224] rcu_tort-154      14d..2. 10356475886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.049195]  rcuc/14-115      14d..2. 10356475890us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.051160] rcu_tort-154      14d..2. 10356476814us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcu_exp_gp_kthr next_pid=20 next_prio=97
-[10364.053183] rcu_exp_-20       14d..4. 10356476825us : sched_wakeup: comm=rcu_exp_par_gp_ pid=92 prio=97 target_cpu=004
-[10364.054490] rcu_exp_-20       14d..4. 10356476836us : sched_wakeup: comm=rcu_exp_par_gp_ pid=106 prio=97 target_cpu=012
-[10364.055795] rcu_exp_-20       14dN.3. 10356476838us : sched_wakeup: comm=rcub/14 pid=119 prio=97 target_cpu=014
-[10364.057017] rcu_exp_-20       14d..2. 10356476840us : sched_switch: prev_comm=rcu_exp_gp_kthr prev_pid=20 prev_prio=97 prev_state=R+ ==> next_comm=rcub/14 next_pid=119 next_prio=97
-[10364.058978]  rcub/14-119      14d..4. 10356476852us : dl_server_stop <-dequeue_entities
-[10364.059959]  rcub/14-119      14d..2. 10356476870us : sched_switch: prev_comm=rcub/14 prev_pid=119 prev_prio=97 prev_state=D ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.061851]   <idle>-0        14dNh2. 10356476890us : sched_wakeup: comm=rcub/14 pid=119 prio=97 target_cpu=014
-[10364.063077]   <idle>-0        14dN.4. 10356476895us : sched_wakeup: comm=ksoftirqd/14 pid=116 prio=97 target_cpu=014
-[10364.064358]   <idle>-0        14d..2. 10356476897us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcub/14 next_pid=119 next_prio=97
-[10364.066245]  rcub/14-119      14d..2. 10356476899us : sched_switch: prev_comm=rcub/14 prev_pid=119 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/14 next_pid=116 next_prio=97
-[10364.068183] ksoftirq-116      14d..2. 10356476907us : sched_switch: prev_comm=ksoftirqd/14 prev_pid=116 prev_prio=97 prev_state=S ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.070137]   <idle>-0        14d.h3. 10356477410us : dl_server_start <-enqueue_task_fair
-[10364.071141]   <idle>-0        14dNh2. 10356477411us : sched_wakeup: comm=rcu_torture_rea pid=159 prio=139 target_cpu=014
-[10364.072488]   <idle>-0        14d..2. 10356477412us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.074485] rcu_tort-159      14dN.3. 10356477885us : sched_wakeup: comm=ksoftirqd/14 pid=116 prio=97 target_cpu=014
-[10364.076345] rcu_tort-159      14d..2. 10356477886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/14 next_pid=116 next_prio=97
-[10364.079470] ksoftirq-116      14d..2. 10356477889us : sched_switch: prev_comm=ksoftirqd/14 prev_pid=116 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.081835] rcu_tort-159      14DNh4. 10356480882us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.083062] rcu_tort-159      14d..2. 10356480887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.085029]  rcuc/14-115      14d..2. 10356480890us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.086997] rcu_tort-159      14dNh4. 10356481881us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.088224] rcu_tort-159      14d..2. 10356481886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.090191]  rcuc/14-115      14d..2. 10356481889us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.092141] rcu_tort-159      14dNh4. 10356483882us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.093362] rcu_tort-159      14d..2. 10356483886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.095321]  rcuc/14-115      14d..2. 10356483895us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.097273] rcu_tort-159      14dNh3. 10356484882us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.098506] rcu_tort-159      14d..2. 10356484886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.100469]  rcuc/14-115      14d..2. 10356484889us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.102423] rcu_tort-159      14dNh3. 10356485882us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.103645] rcu_tort-159      14d..2. 10356485886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.105602]  rcuc/14-115      14d..2. 10356485889us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.107578] rcu_tort-159      14DNh3. 10356486882us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.108820] rcu_tort-159      14d..2. 10356486889us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.110810]  rcuc/14-115      14d..2. 10356486892us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.112782] rcu_tort-159      14dNh4. 10356487882us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.114012] rcu_tort-159      14dN.4. 10356487886us : sched_wakeup: comm=ksoftirqd/14 pid=116 prio=97 target_cpu=014
-[10364.115289] rcu_tort-159      14d..2. 10356487888us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.117256]  rcuc/14-115      14d..2. 10356487892us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/14 next_pid=116 next_prio=97
-[10364.119204] ksoftirq-116      14d..2. 10356487894us : sched_switch: prev_comm=ksoftirqd/14 prev_pid=116 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.121357] rcu_tort-159      14d..3. 10356487898us : dl_server_stop <-dequeue_entities
-[10364.122358] rcu_tort-159      14d..2. 10356487902us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=I ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.124374]   <idle>-0        14d.h3. 10356487918us : dl_server_start <-enqueue_task_fair
-[10364.125388]   <idle>-0        14dNh2. 10356487919us : sched_wakeup: comm=cpuhp/14 pid=113 prio=120 target_cpu=014
-[10364.126664]   <idle>-0        14d..2. 10356487920us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/14 next_pid=113 next_prio=120
-[10364.128613] cpuhp/14-113      14d..3. 10356487924us : dl_server_stop <-dequeue_entities
-[10364.129622] cpuhp/14-113      14d..2. 10356487925us : sched_switch: prev_comm=cpuhp/14 prev_pid=113 prev_prio=120 prev_state=D ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.131560]   <idle>-0        14d.h4. 10356488409us : sched_wakeup: comm=rcu_torture_rea pid=159 prio=139 target_cpu=000
-[10364.132891]   <idle>-0        14dNh4. 10356488887us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.134126]   <idle>-0        14d..2. 10356488891us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.136044]  rcuc/14-115      14d..2. 10356488894us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.137962]   <idle>-0        14dNh4. 10356489888us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.139203]   <idle>-0        14d..2. 10356489892us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.141096]  rcuc/14-115      14d..2. 10356489894us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.142990]   <idle>-0        14dNh4. 10356490888us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.144230]   <idle>-0        14d..2. 10356490892us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.146124]  rcuc/14-115      14d..2. 10356490895us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.148030]   <idle>-0        14dNh4. 10356493889us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.149266]   <idle>-0        14d..2. 10356493892us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.151181]  rcuc/14-115      14D..5. 10356493896us : dl_server_start <-enqueue_task_fair
-[10364.152188]  rcuc/14-115      14DN.4. 10356493897us : sched_wakeup: comm=cpuhp/14 pid=113 prio=120 target_cpu=014
-[10364.153474]  rcuc/14-115      14d..2. 10356493900us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=cpuhp/14 next_pid=113 next_prio=120
-[10364.155363] cpuhp/14-113      14d..3. 10356494772us : dl_server_stop <-dequeue_entities
-[10364.156351] cpuhp/14-113      14d..2. 10356494773us : sched_switch: prev_comm=cpuhp/14 prev_pid=113 prev_prio=120 prev_state=D ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.158274]   <idle>-0        14dNh4. 10356494889us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.159527]   <idle>-0        14d..2. 10356494893us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.161425]  rcuc/14-115      14d..2. 10356494896us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=S ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.163320]   <idle>-0        14d..2. 10356495520us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/14 next_pid=113 next_prio=120
-[10364.165239] cpuhp/14-113      14d..3. 10356495543us : dl_server_stop <-dequeue_entities
-[10364.166220] cpuhp/14-113      14d..2. 10356495544us : sched_switch: prev_comm=cpuhp/14 prev_pid=113 prev_prio=120 prev_state=D ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.168143]   <idle>-0        14d..2. 10356495588us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/14 next_pid=113 next_prio=120
-[10364.170090] cpuhp/14-113      14d..3. 10356495616us : dl_server_stop <-dequeue_entities
-[10364.171074] cpuhp/14-113      14d..2. 10356495617us : sched_switch: prev_comm=cpuhp/14 prev_pid=113 prev_prio=120 prev_state=D ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.172982]   <idle>-0        14d..2. 10356495646us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/14 next_pid=113 next_prio=120
-[10364.174919] cpuhp/14-113      14dN.3. 10356495757us : sched_wakeup: comm=ksoftirqd/14 pid=116 prio=97 target_cpu=014
-[10364.176206] cpuhp/14-113      14d..2. 10356495758us : sched_switch: prev_comm=cpuhp/14 prev_pid=113 prev_prio=120 prev_state=R+ ==> next_comm=ksoftirqd/14 next_pid=116 next_prio=97
-[10364.178173] ksoftirq-116      14d..2. 10356495760us : sched_switch: prev_comm=ksoftirqd/14 prev_pid=116 prev_prio=97 prev_state=P ==> next_comm=cpuhp/14 next_pid=113 next_prio=120
-[10364.180173] cpuhp/14-113      14dN.3. 10356495761us : sched_wakeup: comm=rcuc/14 pid=115 prio=97 target_cpu=014
-[10364.181422] cpuhp/14-113      14d..2. 10356495762us : sched_switch: prev_comm=cpuhp/14 prev_pid=113 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/14 next_pid=115 next_prio=97
-[10364.183318]  rcuc/14-115      14d..2. 10356495763us : sched_switch: prev_comm=rcuc/14 prev_pid=115 prev_prio=97 prev_state=P ==> next_comm=cpuhp/14 next_pid=113 next_prio=120
-[10364.185221] cpuhp/14-113      14d..3. 10356495768us : dl_server_stop <-dequeue_entities
-[10364.186203] cpuhp/14-113      14d..2. 10356495769us : sched_switch: prev_comm=cpuhp/14 prev_pid=113 prev_prio=120 prev_state=S ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.188123]   <idle>-0        14d..2. 10356495783us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/14 next_pid=113 next_prio=120
-[10364.190047] cpuhp/14-113      14d..3. 10356495787us : dl_server_stop <-dequeue_entities
-[10364.191036] cpuhp/14-113      14d..2. 10356495788us : sched_switch: prev_comm=cpuhp/14 prev_pid=113 prev_prio=120 prev_state=P ==> next_comm=swapper/14 next_pid=0 next_prio=120
-[10364.192963]   <idle>-0        14d..2. 10356495837us : sched_switch: prev_comm=swapper/14 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=migration/14 next_pid=114 next_prio=0
-[10364.194901] CPU:4 [LOST 11340756 EVENTS]
-[10364.194901] rcu_tort-154       4d..2. 10358460910us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=I ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.197354]   <idle>-0         4d.h3. 10358460987us : dl_server_start <-enqueue_task_fair
-[10364.198353]   <idle>-0         4dNh2. 10358460988us : sched_wakeup: comm=torture_onoff pid=190 prio=120 target_cpu=004
-[10364.199679]   <idle>-0         4d..2. 10358460990us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=torture_onoff next_pid=190 next_prio=120
-[10364.201647] torture_-190       4d..4. 10358461002us : sched_wakeup: comm=kworker/0:3 pid=10184 prio=120 target_cpu=000
-[10364.202951] torture_-190       4d..3. 10358461005us : dl_server_stop <-dequeue_entities
-[10364.203935] torture_-190       4d..2. 10358461009us : sched_switch: prev_comm=torture_onoff prev_pid=190 prev_prio=120 prev_state=D ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.205917]   <idle>-0         4d.h5. 10358461415us : dl_server_start <-enqueue_task_fair
-[10364.206924]   <idle>-0         4dNh4. 10358461416us : sched_wakeup: comm=rcu_torture_rea pid=154 prio=139 target_cpu=004
-[10364.208248]   <idle>-0         4d..2. 10358461420us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.210223] rcu_tort-154       4DNh3. 10358461884us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.211455] rcu_tort-154       4d..2. 10358461894us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.213415]   rcuc/4-45        4d..2. 10358461897us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.215353] rcu_tort-154       4DNh3. 10358463884us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.216578] rcu_tort-154       4d..2. 10358463896us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.218541]   rcuc/4-45        4d..2. 10358463900us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.220498] rcu_tort-154       4dNh3. 10358464884us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.221711] rcu_tort-154       4d..2. 10358464891us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.223672]   rcuc/4-45        4d..2. 10358464895us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.225631] rcu_tort-154       4d..2. 10358466463us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcu_exp_par_gp_ next_pid=50 next_prio=97
-[10364.227682] rcu_exp_-50        4d..2. 10358466477us : sched_switch: prev_comm=rcu_exp_par_gp_ prev_pid=50 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.229728] rcu_tort-154       4d..2. 10358466485us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcub/9 next_pid=49 next_prio=97
-[10364.231701]   rcub/9-49        4d..2. 10358466488us : sched_switch: prev_comm=rcub/9 prev_pid=49 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.233683] rcu_tort-154       4d..2. 10358466499us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=159 next_prio=97
-[10364.235755] rcu_tort-159       4dN.4. 10358466512us : sched_wakeup: comm=rcub/14 pid=119 prio=97 target_cpu=015
-[10364.236991] rcu_tort-159       4d..2. 10358466514us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10364.239078] rcu_tort-154       4d..2. 10358466736us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcu_exp_par_gp_ next_pid=50 next_prio=97
-[10364.242118] rcu_exp_-50        4d..2. 10358466745us : sched_switch: prev_comm=rcu_exp_par_gp_ prev_pid=50 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.245206] rcu_tort-159       4d..2. 10358466753us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcub/9 next_pid=49 next_prio=97
-[10364.248174]   rcub/9-49        4d..2. 10358466766us : sched_switch: prev_comm=rcub/9 prev_pid=49 prev_prio=97 prev_state=D ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.251095] rcu_tort-159       4d..2. 10358466775us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=162 next_prio=97
-[10364.254239] rcu_tort-162       4d..2. 10358466788us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcub/9 next_pid=49 next_prio=97
-[10364.257164]   rcub/9-49        4d..2. 10358466798us : sched_switch: prev_comm=rcub/9 prev_pid=49 prev_prio=97 prev_state=D ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.260047] rcu_tort-159       4d..2. 10358466818us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcub/9 next_pid=49 next_prio=97
-[10364.261994]   rcub/9-49        4d..2. 10358466824us : sched_switch: prev_comm=rcub/9 prev_pid=49 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.263935] rcu_tort-162       4dNh3. 10358466883us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.265142] rcu_tort-162       4d..2. 10358466887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.267106]   rcuc/4-45        4d..2. 10358466891us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.269067] rcu_tort-159       4dNh4. 10358467884us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.270267] rcu_tort-159       4dN.4. 10358467890us : sched_wakeup: comm=ksoftirqd/4 pid=46 prio=97 target_cpu=004
-[10364.271535] rcu_tort-159       4d..2. 10358467893us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.273486]   rcuc/4-45        4d..2. 10358467900us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/4 next_pid=46 next_prio=97
-[10364.275385] ksoftirq-46        4d..2. 10358467903us : sched_switch: prev_comm=ksoftirqd/4 prev_pid=46 prev_prio=97 prev_state=S ==> next_comm=cpuhp/4 next_pid=43 next_prio=120
-[10364.277285]  cpuhp/4-43        4d..2. 10358467910us : sched_switch: prev_comm=cpuhp/4 prev_pid=43 prev_prio=120 prev_state=D ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10364.279270] rcu_tort-159       4dN.6. 10358467913us : sched_wakeup: comm=migration/4 pid=44 prio=0 target_cpu=004
-[10364.280529] rcu_tort-159       4d..2. 10358467914us : sched_switch: prev_comm=rcu_torture_rea prev_pid=159 prev_prio=139 prev_state=R+ ==> next_comm=migration/4 next_pid=44 next_prio=0
-[10364.282563] migratio-44        4d..4. 10358467918us : dl_server_stop <-dequeue_entities
-[10364.283604] migratio-44        4d..4. 10358467920us : dl_server_start <-enqueue_task_fair
-[10364.284623] migratio-44        4d..2. 10358467926us : sched_switch: prev_comm=migration/4 prev_pid=44 prev_prio=0 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.286537]   <idle>-0         4dNh4. 10358469898us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.287757]   <idle>-0         4dN.4. 10358469903us : sched_wakeup: comm=ksoftirqd/4 pid=46 prio=97 target_cpu=004
-[10364.289032]   <idle>-0         4d..2. 10358469906us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.290926]   rcuc/4-45        4d..2. 10358469913us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/4 next_pid=46 next_prio=97
-[10364.292832] ksoftirq-46        4d..2. 10358469915us : sched_switch: prev_comm=ksoftirqd/4 prev_pid=46 prev_prio=97 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.294838]   <idle>-0         4dNh4. 10358470903us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.296052]   <idle>-0         4d..2. 10358470909us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.297937]   rcuc/4-45        4d..2. 10358470913us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.299826]   <idle>-0         4dNh4. 10358471904us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.301057]   <idle>-0         4dN.4. 10358471909us : sched_wakeup: comm=ksoftirqd/4 pid=46 prio=97 target_cpu=004
-[10364.302324]   <idle>-0         4d..2. 10358471911us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.304185]   rcuc/4-45        4d..2. 10358471917us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/4 next_pid=46 next_prio=97
-[10364.306061] ksoftirq-46        4d..2. 10358471919us : sched_switch: prev_comm=ksoftirqd/4 prev_pid=46 prev_prio=97 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.307999]   <idle>-0         4dNh4. 10358472890us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.309215]   <idle>-0         4d..2. 10358472894us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.311108]   rcuc/4-45        4d..2. 10358472896us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.312984]   <idle>-0         4dNh4. 10358474889us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.314194]   <idle>-0         4d..2. 10358474893us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.316063]   rcuc/4-45        4D..5. 10358474897us : dl_server_start <-enqueue_task_fair
-[10364.317083]   rcuc/4-45        4DN.4. 10358474898us : sched_wakeup: comm=cpuhp/4 pid=43 prio=120 target_cpu=004
-[10364.318335]   rcuc/4-45        4d..2. 10358474901us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=cpuhp/4 next_pid=43 next_prio=120
-[10364.320194]  cpuhp/4-43        4dNh4. 10358476129us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.321427]  cpuhp/4-43        4d..2. 10358476137us : sched_switch: prev_comm=cpuhp/4 prev_pid=43 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.323276]   rcuc/4-45        4d..2. 10358476141us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=cpuhp/4 next_pid=43 next_prio=120
-[10364.325147]  cpuhp/4-43        4d..3. 10358476148us : dl_server_stop <-dequeue_entities
-[10364.326134]  cpuhp/4-43        4d..2. 10358476150us : sched_switch: prev_comm=cpuhp/4 prev_pid=43 prev_prio=120 prev_state=D ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.328012]   <idle>-0         4d..2. 10358476813us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/4 next_pid=43 next_prio=120
-[10364.329904]  cpuhp/4-43        4d..3. 10358476847us : dl_server_stop <-dequeue_entities
-[10364.330895]  cpuhp/4-43        4d..2. 10358476849us : sched_switch: prev_comm=cpuhp/4 prev_pid=43 prev_prio=120 prev_state=D ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.332789]   <idle>-0         4dNh4. 10358476897us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.334003]   <idle>-0         4d..2. 10358476901us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.335877]   rcuc/4-45        4d..2. 10358476905us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.337745]   <idle>-0         4d..2. 10358476929us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/4 next_pid=43 next_prio=120
-[10364.339641]  cpuhp/4-43        4d..3. 10358476963us : dl_server_stop <-dequeue_entities
-[10364.340642]  cpuhp/4-43        4d..2. 10358476964us : sched_switch: prev_comm=cpuhp/4 prev_pid=43 prev_prio=120 prev_state=D ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.342554]   <idle>-0         4d..2. 10358477012us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/4 next_pid=43 next_prio=120
-[10364.344444]  cpuhp/4-43        4dN.3. 10358477164us : sched_wakeup: comm=ksoftirqd/4 pid=46 prio=97 target_cpu=004
-[10364.345727]  cpuhp/4-43        4d..2. 10358477166us : sched_switch: prev_comm=cpuhp/4 prev_pid=43 prev_prio=120 prev_state=R+ ==> next_comm=ksoftirqd/4 next_pid=46 next_prio=97
-[10364.347641] ksoftirq-46        4d..2. 10358477167us : sched_switch: prev_comm=ksoftirqd/4 prev_pid=46 prev_prio=97 prev_state=P ==> next_comm=cpuhp/4 next_pid=43 next_prio=120
-[10364.349557]  cpuhp/4-43        4dN.3. 10358477169us : sched_wakeup: comm=rcuc/4 pid=45 prio=97 target_cpu=004
-[10364.350765]  cpuhp/4-43        4d..2. 10358477170us : sched_switch: prev_comm=cpuhp/4 prev_pid=43 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/4 next_pid=45 next_prio=97
-[10364.352633]   rcuc/4-45        4d..2. 10358477171us : sched_switch: prev_comm=rcuc/4 prev_pid=45 prev_prio=97 prev_state=P ==> next_comm=cpuhp/4 next_pid=43 next_prio=120
-[10364.354488]  cpuhp/4-43        4d..3. 10358477177us : dl_server_stop <-dequeue_entities
-[10364.355483]  cpuhp/4-43        4d..2. 10358477178us : sched_switch: prev_comm=cpuhp/4 prev_pid=43 prev_prio=120 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.357344]   <idle>-0         4d..2. 10358477189us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/4 next_pid=43 next_prio=120
-[10364.359232]  cpuhp/4-43        4d..3. 10358477192us : dl_server_stop <-dequeue_entities
-[10364.360212]  cpuhp/4-43        4d..2. 10358477193us : sched_switch: prev_comm=cpuhp/4 prev_pid=43 prev_prio=120 prev_state=P ==> next_comm=swapper/4 next_pid=0 next_prio=120
-[10364.362106]   <idle>-0         4d..2. 10358477207us : sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=migration/4 next_pid=44 next_prio=0
-[10364.364016] CPU:8 [LOST 11393681 EVENTS]
-[10364.364016]   rcuc/8-73        8d..2. 10358679902us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.366356]   <idle>-0         8dNh4. 10358680889us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.367591]   <idle>-0         8d..2. 10358680893us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.369453]   rcuc/8-73        8d..2. 10358680903us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.371300]   <idle>-0         8dN.4. 10358681891us : sched_wakeup: comm=ksoftirqd/8 pid=74 prio=97 target_cpu=008
-[10364.372587]   <idle>-0         8d..2. 10358681893us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ksoftirqd/8 next_pid=74 next_prio=97
-[10364.374518] ksoftirq-74        8d..2. 10358681904us : sched_switch: prev_comm=ksoftirqd/8 prev_pid=74 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.376435]   <idle>-0         8dNh2. 10358682828us : sched_wakeup: comm=rcu_exp_gp_kthr pid=20 prio=97 target_cpu=008
-[10364.377733]   <idle>-0         8d..2. 10358682829us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_exp_gp_kthr next_pid=20 next_prio=97
-[10364.379685] rcu_exp_-20        8d..4. 10358682843us : sched_wakeup: comm=rcu_exp_par_gp_ pid=18 prio=97 target_cpu=000
-[10364.380988] rcu_exp_-20        8d..4. 10358682847us : sched_wakeup: comm=rcu_exp_par_gp_ pid=36 prio=97 target_cpu=002
-[10364.382284] rcu_exp_-20        8d..4. 10358682851us : sched_wakeup: comm=rcu_exp_par_gp_ pid=50 prio=97 target_cpu=005
-[10364.383611] rcu_exp_-20        8d..4. 10358682857us : sched_wakeup: comm=rcu_exp_par_gp_ pid=64 prio=97 target_cpu=007
-[10364.384914] rcu_exp_-20        8d..4. 10358682862us : sched_wakeup: comm=rcu_exp_par_gp_ pid=78 prio=97 target_cpu=009
-[10364.386226] rcu_exp_-20        8d..4. 10358682866us : sched_wakeup: comm=rcu_exp_par_gp_ pid=92 prio=97 target_cpu=010
-[10364.387546] rcu_exp_-20        8d..4. 10358682872us : sched_wakeup: comm=rcu_exp_par_gp_ pid=106 prio=97 target_cpu=012
-[10364.388915] rcu_exp_-20        8dNh5. 10358682882us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.390123] rcu_exp_-20        8d..2. 10358682887us : sched_switch: prev_comm=rcu_exp_gp_kthr prev_pid=20 prev_prio=97 prev_state=R+ ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.392062]   rcuc/8-73        8d..2. 10358682890us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=rcu_exp_gp_kthr next_pid=20 next_prio=97
-[10364.393996] rcu_exp_-20        8d..3. 10358682898us : sched_wakeup: comm=rcub/14 pid=119 prio=97 target_cpu=015
-[10364.395230] rcu_exp_-20        8d..4. 10358682908us : sched_wakeup: comm=kworker/2:1 pid=18174 prio=120 target_cpu=002
-[10364.396559] rcu_exp_-20        8d..2. 10358682917us : sched_switch: prev_comm=rcu_exp_gp_kthr prev_pid=20 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.398535]   <idle>-0         8dNh2. 10358682920us : sched_wakeup: comm=rcu_exp_gp_kthr pid=20 prio=97 target_cpu=008
-[10364.399841]   <idle>-0         8d..2. 10358682921us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_exp_gp_kthr next_pid=20 next_prio=97
-[10364.401802] rcu_exp_-20        8d..4. 10358682927us : sched_wakeup: comm=rcu_exp_par_gp_ pid=18 prio=97 target_cpu=000
-[10364.403119] rcu_exp_-20        8d..4. 10358682931us : sched_wakeup: comm=rcu_exp_par_gp_ pid=36 prio=97 target_cpu=002
-[10364.404451] rcu_exp_-20        8d..4. 10358682935us : sched_wakeup: comm=rcu_exp_par_gp_ pid=50 prio=97 target_cpu=005
-[10364.405750] rcu_exp_-20        8d..4. 10358682940us : sched_wakeup: comm=rcu_exp_par_gp_ pid=64 prio=97 target_cpu=007
-[10364.407051] rcu_exp_-20        8d..4. 10358682946us : sched_wakeup: comm=rcu_exp_par_gp_ pid=78 prio=97 target_cpu=009
-[10364.408364] rcu_exp_-20        8d..4. 10358682949us : sched_wakeup: comm=rcu_exp_par_gp_ pid=92 prio=97 target_cpu=010
-[10364.409686] rcu_exp_-20        8d..2. 10358682971us : sched_switch: prev_comm=rcu_exp_gp_kthr prev_pid=20 prev_prio=97 prev_state=D ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.411649]   <idle>-0         8dNh2. 10358682973us : sched_wakeup: comm=rcu_exp_gp_kthr pid=20 prio=97 target_cpu=008
-[10364.412963]   <idle>-0         8d..2. 10358682974us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_exp_gp_kthr next_pid=20 next_prio=97
-[10364.414936] rcu_exp_-20        8d..2. 10358682989us : sched_switch: prev_comm=rcu_exp_gp_kthr prev_pid=20 prev_prio=97 prev_state=D ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.416913]   <idle>-0         8dNh2. 10358682991us : sched_wakeup: comm=rcu_exp_gp_kthr pid=20 prio=97 target_cpu=008
-[10364.418212]   <idle>-0         8d..2. 10358682992us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_exp_gp_kthr next_pid=20 next_prio=97
-[10364.420177] rcu_exp_-20        8d..2. 10358683002us : sched_switch: prev_comm=rcu_exp_gp_kthr prev_pid=20 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.422145]   <idle>-0         8dNh4. 10358683890us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.423354]   <idle>-0         8d..2. 10358683894us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.425234]   rcuc/8-73        8d..2. 10358683905us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.427107]   <idle>-0         8dNh4. 10358685890us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.428339]   <idle>-0         8d..2. 10358685894us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.430218]   rcuc/8-73        8d..2. 10358685902us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.432081]   <idle>-0         8dNh4. 10358686889us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.433301]   <idle>-0         8d..2. 10358686893us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.435184]   rcuc/8-73        8D..4. 10358686901us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=015
-[10364.436468]   rcuc/8-73        8d..2. 10358686912us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.438312]   <idle>-0         8dNh4. 10358687890us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.439540]   <idle>-0         8d..2. 10358687894us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.441405]   rcuc/8-73        8d..2. 10358687907us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.443263]   <idle>-0         8dNh4. 10358688890us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.444539]   <idle>-0         8d..2. 10358688894us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.446401]   rcuc/8-73        8d..2. 10358688900us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.448252]   <idle>-0         8d.h3. 10358688906us : dl_server_start <-enqueue_task_fair
-[10364.449258]   <idle>-0         8dNh2. 10358688907us : sched_wakeup: comm=cpuhp/8 pid=71 prio=120 target_cpu=008
-[10364.450502]   <idle>-0         8d..2. 10358688908us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/8 next_pid=71 next_prio=120
-[10364.452389]  cpuhp/8-71        8d..3. 10358688913us : dl_server_stop <-dequeue_entities
-[10364.453360]  cpuhp/8-71        8d..2. 10358688917us : sched_switch: prev_comm=cpuhp/8 prev_pid=71 prev_prio=120 prev_state=D ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.455249]   <idle>-0         8dNh4. 10358689890us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.456486]   <idle>-0         8d..2. 10358689894us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.458341]   rcuc/8-73        8d..2. 10358689896us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.460232]   <idle>-0         8dNh4. 10358690890us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.461454]   <idle>-0         8d..2. 10358690894us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.463299]   rcuc/8-73        8d..2. 10358690896us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.465158]   <idle>-0         8dNh4. 10358693888us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.466361]   <idle>-0         8d..2. 10358693892us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.468226]   rcuc/8-73        8d..2. 10358693895us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.470080]   <idle>-0         8dNh4. 10358694889us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.471287]   <idle>-0         8d..2. 10358694892us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.473145]   rcuc/8-73        8d..2. 10358694895us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.474994]   <idle>-0         8dNh4. 10358695904us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.476201]   <idle>-0         8d..2. 10358695909us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.478074]   rcuc/8-73        8D..5. 10358695912us : dl_server_start <-enqueue_task_fair
-[10364.479084]   rcuc/8-73        8DN.4. 10358695913us : sched_wakeup: comm=cpuhp/8 pid=71 prio=120 target_cpu=008
-[10364.480308]   rcuc/8-73        8d..2. 10358695915us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=cpuhp/8 next_pid=71 next_prio=120
-[10364.482172]  cpuhp/8-71        8dNh4. 10358697094us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.483395]  cpuhp/8-71        8d..2. 10358697102us : sched_switch: prev_comm=cpuhp/8 prev_pid=71 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.485249]   rcuc/8-73        8d..2. 10358697105us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=S ==> next_comm=cpuhp/8 next_pid=71 next_prio=120
-[10364.487109]  cpuhp/8-71        8d..3. 10358697112us : dl_server_stop <-dequeue_entities
-[10364.488096]  cpuhp/8-71        8d..2. 10358697113us : sched_switch: prev_comm=cpuhp/8 prev_pid=71 prev_prio=120 prev_state=D ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.489977]   <idle>-0         8d..2. 10358697856us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/8 next_pid=71 next_prio=120
-[10364.491867]  cpuhp/8-71        8d..3. 10358697887us : dl_server_stop <-dequeue_entities
-[10364.492896]  cpuhp/8-71        8d..2. 10358697888us : sched_switch: prev_comm=cpuhp/8 prev_pid=71 prev_prio=120 prev_state=D ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.494782]   <idle>-0         8d..2. 10358698941us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/8 next_pid=71 next_prio=120
-[10364.496683]  cpuhp/8-71        8d..3. 10358698975us : dl_server_stop <-dequeue_entities
-[10364.497672]  cpuhp/8-71        8d..2. 10358698977us : sched_switch: prev_comm=cpuhp/8 prev_pid=71 prev_prio=120 prev_state=D ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.499548]   <idle>-0         8d..2. 10358699087us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/8 next_pid=71 next_prio=120
-[10364.501427]  cpuhp/8-71        8dN.3. 10358699198us : sched_wakeup: comm=ksoftirqd/8 pid=74 prio=97 target_cpu=008
-[10364.502688]  cpuhp/8-71        8d..2. 10358699200us : sched_switch: prev_comm=cpuhp/8 prev_pid=71 prev_prio=120 prev_state=R+ ==> next_comm=ksoftirqd/8 next_pid=74 next_prio=97
-[10364.504598] ksoftirq-74        8d..2. 10358699202us : sched_switch: prev_comm=ksoftirqd/8 prev_pid=74 prev_prio=97 prev_state=P ==> next_comm=cpuhp/8 next_pid=71 next_prio=120
-[10364.506513]  cpuhp/8-71        8dN.3. 10358699203us : sched_wakeup: comm=rcuc/8 pid=73 prio=97 target_cpu=008
-[10364.507722]  cpuhp/8-71        8d..2. 10358699203us : sched_switch: prev_comm=cpuhp/8 prev_pid=71 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/8 next_pid=73 next_prio=97
-[10364.509583]   rcuc/8-73        8d..2. 10358699204us : sched_switch: prev_comm=rcuc/8 prev_pid=73 prev_prio=97 prev_state=P ==> next_comm=cpuhp/8 next_pid=71 next_prio=120
-[10364.511445]  cpuhp/8-71        8d..3. 10358699209us : dl_server_stop <-dequeue_entities
-[10364.512434]  cpuhp/8-71        8d..2. 10358699210us : sched_switch: prev_comm=cpuhp/8 prev_pid=71 prev_prio=120 prev_state=S ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.514450]   <idle>-0         8d..2. 10358699899us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/8 next_pid=71 next_prio=120
-[10364.517264]  cpuhp/8-71        8d..3. 10358699903us : dl_server_stop <-dequeue_entities
-[10364.518709]  cpuhp/8-71        8d..2. 10358699904us : sched_switch: prev_comm=cpuhp/8 prev_pid=71 prev_prio=120 prev_state=P ==> next_comm=swapper/8 next_pid=0 next_prio=120
-[10364.520877]   <idle>-0         8d..2. 10358699941us : sched_switch: prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=migration/8 next_pid=72 next_prio=0
-[10364.522805] CPU:10 [LOST 11861188 EVENTS]
-[10364.522805] ksoftirq-88       10d..2. 10359438892us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=157 next_prio=139
-[10364.525286] rcu_tort-157      10d..3. 10359440891us : dl_server_stop <-dequeue_entities
-[10364.526273] rcu_tort-157      10d..2. 10359440900us : sched_switch: prev_comm=rcu_torture_rea prev_pid=157 prev_prio=139 prev_state=I ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.528270]   <idle>-0        10d.h5. 10359441399us : dl_server_start <-enqueue_task_fair
-[10364.529780]   <idle>-0        10dNh4. 10359441400us : sched_wakeup: comm=rcu_torture_rea pid=157 prio=139 target_cpu=010
-[10364.531819]   <idle>-0        10d..2. 10359441402us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_rea next_pid=157 next_prio=139
-[10364.534347] rcu_tort-157      10dN.4. 10359445885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.535632] rcu_tort-157      10d..2. 10359445887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=157 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.537640] ksoftirq-88       10d..2. 10359445892us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=157 next_prio=139
-[10364.539631] rcu_tort-157      10dN.4. 10359447885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.540899] rcu_tort-157      10d..2. 10359447887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=157 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.542914] ksoftirq-88       10d..2. 10359447892us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=157 next_prio=139
-[10364.544910] rcu_tort-157      10d..3. 10359451888us : dl_server_stop <-dequeue_entities
-[10364.545882] rcu_tort-157      10d..3. 10359451895us : dl_server_start <-enqueue_task_fair
-[10364.546886] rcu_tort-157      10d..2. 10359451897us : sched_switch: prev_comm=rcu_torture_rea prev_pid=157 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.548947] rcu_tort-158      10d.h3. 10359452390us : sched_wakeup: comm=rcu_torture_rea pid=157 prio=139 target_cpu=010
-[10364.550265] rcu_tort-158      10dN.3. 10359452884us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.551556] rcu_tort-158      10d..2. 10359452886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.553559] ksoftirq-88       10d..2. 10359452892us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=157 next_prio=139
-[10364.555583] rcu_tort-157      10dN.3. 10359453885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.556846] rcu_tort-157      10d..2. 10359453887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=157 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.558848] ksoftirq-88       10d..2. 10359453892us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.560842] rcu_tort-158      10d..2. 10359454888us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=157 next_prio=139
-[10364.562898] rcu_tort-157      10dN.3. 10359456885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.564162] rcu_tort-157      10d..2. 10359456886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=157 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.566174] ksoftirq-88       10d..2. 10359456893us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.568174] rcu_tort-158      10d..3. 10359458891us : dl_server_stop <-dequeue_entities
-[10364.569149] rcu_tort-158      10d..2. 10359458896us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=I ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.571131]   <idle>-0        10d.h5. 10359459398us : dl_server_start <-enqueue_task_fair
-[10364.572130]   <idle>-0        10dNh4. 10359459399us : sched_wakeup: comm=rcu_torture_rea pid=158 prio=139 target_cpu=010
-[10364.573459]   <idle>-0        10d..2. 10359459401us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.575440] rcu_tort-158      10dN.5. 10359459884us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.576717] rcu_tort-158      10d..2. 10359459886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.578728] ksoftirq-88       10d..2. 10359459888us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.580719] rcu_tort-158      10dN.3. 10359461885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.581996] rcu_tort-158      10d..2. 10359461887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.584021] ksoftirq-88       10d..2. 10359461891us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.586023] rcu_tort-158      10dN.5. 10359464885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.587282] rcu_tort-158      10d..2. 10359465079us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.589282] ksoftirq-88       10d..2. 10359465082us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.591269] rcu_tort-158      10DNh3. 10359468882us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.592485] rcu_tort-158      10d..2. 10359468887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.594429]  rcuc/10-87       10d..2. 10359468891us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.596349] rcu_tort-158      10dN.4. 10359469885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.597660] rcu_tort-158      10d..2. 10359469887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.599654] ksoftirq-88       10d..2. 10359469891us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.601639] rcu_tort-158      10d..3. 10359469895us : dl_server_stop <-dequeue_entities
-[10364.602612] rcu_tort-158      10d..2. 10359469900us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=I ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.604576]   <idle>-0        10d.h5. 10359470402us : dl_server_start <-enqueue_task_fair
-[10364.605573]   <idle>-0        10dNh4. 10359470403us : sched_wakeup: comm=rcu_torture_rea pid=158 prio=139 target_cpu=010
-[10364.606884]   <idle>-0        10d..2. 10359470405us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.608852] rcu_tort-158      10dN.4. 10359472885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.610117] rcu_tort-158      10d..2. 10359472887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.612120] ksoftirq-88       10d..2. 10359472891us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.614104] rcu_tort-158      10dN.4. 10359474886us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.615376] rcu_tort-158      10d..2. 10359474888us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.617346] ksoftirq-88       10d..2. 10359474891us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.619337] rcu_tort-158      10dN.3. 10359479885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.620611] rcu_tort-158      10d..2. 10359479886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.622624] ksoftirq-88       10d..2. 10359479891us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.624618] rcu_tort-158      10d..3. 10359480888us : dl_server_stop <-dequeue_entities
-[10364.625612] rcu_tort-158      10d..3. 10359480895us : dl_server_start <-enqueue_task_fair
-[10364.626622] rcu_tort-158      10d..2. 10359480897us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=164 next_prio=139
-[10364.629297] rcu_tort-164      10D.h3. 10359481390us : sched_wakeup: comm=rcu_torture_rea pid=158 prio=139 target_cpu=010
-[10364.631340] rcu_tort-164      10dNh3. 10359481881us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.633161] rcu_tort-164      10dN.3. 10359481885us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.635099] rcu_tort-164      10d..2. 10359481887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=164 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.637988]  rcuc/10-87       10d..2. 10359481890us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.640859] ksoftirq-88       10d..2. 10359481892us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.643888] rcu_tort-158      10DNh4. 10359482981us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.645775] rcu_tort-158      10d..2. 10359482990us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.649302]  rcuc/10-87       10d..2. 10359482992us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=164 next_prio=139
-[10364.651766] rcu_tort-164      10dNh4. 10359483882us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.653287] rcu_tort-164      10d..2. 10359483887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=164 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.655716]  rcuc/10-87       10d..2. 10359483896us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.658108] rcu_tort-158      10dNh3. 10359484882us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.659614] rcu_tort-158      10dN.3. 10359484886us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.661172] rcu_tort-158      10d..2. 10359484887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.663589]  rcuc/10-87       10d..2. 10359484891us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.665923] ksoftirq-88       10d..2. 10359484893us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=164 next_prio=139
-[10364.668400] rcu_tort-164      10d..3. 10359486892us : dl_server_stop <-dequeue_entities
-[10364.669608] rcu_tort-164      10d..2. 10359486897us : sched_switch: prev_comm=rcu_torture_rea prev_pid=164 prev_prio=139 prev_state=I ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.672052]   <idle>-0        10d.h5. 10359487399us : dl_server_start <-enqueue_task_fair
-[10364.673277]   <idle>-0        10dNh4. 10359487400us : sched_wakeup: comm=rcu_torture_rea pid=164 prio=139 target_cpu=010
-[10364.674928]   <idle>-0        10d..2. 10359487403us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_rea next_pid=164 next_prio=139
-[10364.677381] rcu_tort-164      10dNh3. 10359487882us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.678886] rcu_tort-164      10dN.3. 10359487886us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.680454] rcu_tort-164      10d..2. 10359487888us : sched_switch: prev_comm=rcu_torture_rea prev_pid=164 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.682866]  rcuc/10-87       10d..2. 10359487892us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.685203] ksoftirq-88       10d..2. 10359487894us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=164 next_prio=139
-[10364.687671] rcu_tort-164      10dNh3. 10359488882us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.689172] rcu_tort-164      10d..2. 10359488888us : sched_switch: prev_comm=rcu_torture_rea prev_pid=164 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.691582]  rcuc/10-87       10d..2. 10359488891us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=cpuhp/10 next_pid=85 next_prio=120
-[10364.693876] cpuhp/10-85       10d..2. 10359488896us : sched_switch: prev_comm=cpuhp/10 prev_pid=85 prev_prio=120 prev_state=D ==> next_comm=rcu_torture_rea next_pid=164 next_prio=139
-[10364.696290] rcu_tort-164      10dN.6. 10359488898us : sched_wakeup: comm=migration/10 pid=86 prio=0 target_cpu=010
-[10364.697854] rcu_tort-164      10d..2. 10359488900us : sched_switch: prev_comm=rcu_torture_rea prev_pid=164 prev_prio=139 prev_state=R+ ==> next_comm=migration/10 next_pid=86 next_prio=0
-[10364.700315] migratio-86       10d..4. 10359488902us : dl_server_stop <-dequeue_entities
-[10364.701606] migratio-86       10d..2. 10359488911us : sched_switch: prev_comm=migration/10 prev_pid=86 prev_prio=0 prev_state=S ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.704045]   <idle>-0        10dN.4. 10359489890us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.705664]   <idle>-0        10d..2. 10359489892us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.708112] ksoftirq-88       10d..2. 10359489897us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=S ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.710557]   <idle>-0        10dNh4. 10359491888us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.712098]   <idle>-0        10d..2. 10359491892us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.714481]  rcuc/10-87       10d..2. 10359491895us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.716849]   <idle>-0        10dNh4. 10359492888us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.718395]   <idle>-0        10d..2. 10359492891us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.720766]  rcuc/10-87       10d..2. 10359492894us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.723153]   <idle>-0        10dNh4. 10359495888us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.724703]   <idle>-0        10d..2. 10359495892us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.727083]  rcuc/10-87       10d..2. 10359495895us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.729477]   <idle>-0        10dNh4. 10359496889us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.731016]   <idle>-0        10d..2. 10359496893us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.733405]  rcuc/10-87       10d..2. 10359496896us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.735791]   <idle>-0        10dNh4. 10359498888us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.737333]   <idle>-0        10d..2. 10359498892us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.739724]  rcuc/10-87       10D..5. 10359498895us : dl_server_start <-enqueue_task_fair
-[10364.740988]  rcuc/10-87       10DN.4. 10359498896us : sched_wakeup: comm=cpuhp/10 pid=85 prio=120 target_cpu=010
-[10364.742561]  rcuc/10-87       10d..2. 10359498899us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=cpuhp/10 next_pid=85 next_prio=120
-[10364.744920] cpuhp/10-85       10dNh4. 10359500093us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.746473] cpuhp/10-85       10d..2. 10359500101us : sched_switch: prev_comm=cpuhp/10 prev_pid=85 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.748851]  rcuc/10-87       10d..2. 10359500103us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=S ==> next_comm=cpuhp/10 next_pid=85 next_prio=120
-[10364.751225] cpuhp/10-85       10d..3. 10359500110us : dl_server_stop <-dequeue_entities
-[10364.752474] cpuhp/10-85       10d..2. 10359500111us : sched_switch: prev_comm=cpuhp/10 prev_pid=85 prev_prio=120 prev_state=D ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.754882]   <idle>-0        10d..2. 10359501178us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/10 next_pid=85 next_prio=120
-[10364.757289] cpuhp/10-85       10d..3. 10359501202us : dl_server_stop <-dequeue_entities
-[10364.758539] cpuhp/10-85       10d..2. 10359501203us : sched_switch: prev_comm=cpuhp/10 prev_pid=85 prev_prio=120 prev_state=D ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.760947]   <idle>-0        10d..2. 10359501247us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/10 next_pid=85 next_prio=120
-[10364.763353] cpuhp/10-85       10d..3. 10359501280us : dl_server_stop <-dequeue_entities
-[10364.764599] cpuhp/10-85       10d..2. 10359501281us : sched_switch: prev_comm=cpuhp/10 prev_pid=85 prev_prio=120 prev_state=D ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.767007]   <idle>-0        10d..2. 10359501316us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/10 next_pid=85 next_prio=120
-[10364.769417] cpuhp/10-85       10dN.3. 10359501462us : sched_wakeup: comm=ksoftirqd/10 pid=88 prio=97 target_cpu=010
-[10364.771027] cpuhp/10-85       10d..2. 10359501463us : sched_switch: prev_comm=cpuhp/10 prev_pid=85 prev_prio=120 prev_state=R+ ==> next_comm=ksoftirqd/10 next_pid=88 next_prio=97
-[10364.773481] ksoftirq-88       10d..2. 10359501465us : sched_switch: prev_comm=ksoftirqd/10 prev_pid=88 prev_prio=97 prev_state=P ==> next_comm=cpuhp/10 next_pid=85 next_prio=120
-[10364.775907] cpuhp/10-85       10dN.3. 10359501467us : sched_wakeup: comm=rcuc/10 pid=87 prio=97 target_cpu=010
-[10364.777455] cpuhp/10-85       10d..2. 10359501468us : sched_switch: prev_comm=cpuhp/10 prev_pid=85 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/10 next_pid=87 next_prio=97
-[10364.779828]  rcuc/10-87       10d..2. 10359501469us : sched_switch: prev_comm=rcuc/10 prev_pid=87 prev_prio=97 prev_state=P ==> next_comm=cpuhp/10 next_pid=85 next_prio=120
-[10364.782188] cpuhp/10-85       10d..3. 10359501475us : dl_server_stop <-dequeue_entities
-[10364.783432] cpuhp/10-85       10d..2. 10359501476us : sched_switch: prev_comm=cpuhp/10 prev_pid=85 prev_prio=120 prev_state=S ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.785844]   <idle>-0        10d..2. 10359501601us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/10 next_pid=85 next_prio=120
-[10364.788248] cpuhp/10-85       10d..3. 10359501606us : dl_server_stop <-dequeue_entities
-[10364.789494] cpuhp/10-85       10d..2. 10359501608us : sched_switch: prev_comm=cpuhp/10 prev_pid=85 prev_prio=120 prev_state=P ==> next_comm=swapper/10 next_pid=0 next_prio=120
-[10364.791897]   <idle>-0        10d..2. 10359501641us : sched_switch: prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=migration/10 next_pid=86 next_prio=0
-[10364.794329] CPU:12 [LOST 11813902 EVENTS]
-[10364.794329] rcu_tort-162      12d..2. 10360086891us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.797447]  rcuc/12-101      12d..2. 10360086894us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.799934] rcu_tort-162      12dNh3. 10360087882us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.801492] rcu_tort-162      12d..2. 10360087886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.803987]  rcuc/12-101      12d..2. 10360087889us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.806513] rcu_tort-162      12dN.3. 10360088885us : sched_wakeup: comm=ksoftirqd/12 pid=102 prio=97 target_cpu=012
-[10364.808129] rcu_tort-162      12d..2. 10360088887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/12 next_pid=102 next_prio=97
-[10364.810696] ksoftirq-102      12d..2. 10360088892us : sched_switch: prev_comm=ksoftirqd/12 prev_pid=102 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.813279] rcu_tort-162      12DNh3. 10360089882us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.814851] rcu_tort-162      12d..2. 10360089887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.817340]  rcuc/12-101      12d..2. 10360089890us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.819829] rcu_tort-162      12DNh3. 10360090881us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.821390] rcu_tort-162      12d..2. 10360090888us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.823886]  rcuc/12-101      12d..2. 10360090891us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.826366] rcu_tort-162      12dNh3. 10360091882us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.827923] rcu_tort-162      12d..2. 10360091887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.830429]  rcuc/12-101      12d..2. 10360091890us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.832908] rcu_tort-162      12DNh3. 10360092882us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.834470] rcu_tort-162      12d..2. 10360092890us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.836969]  rcuc/12-101      12d..2. 10360092892us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.839471] rcu_tort-162      12dN.3. 10360094884us : sched_wakeup: comm=ksoftirqd/12 pid=102 prio=97 target_cpu=012
-[10364.841095] rcu_tort-162      12d..2. 10360094886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/12 next_pid=102 next_prio=97
-[10364.843669] ksoftirq-102      12d..2. 10360094891us : sched_switch: prev_comm=ksoftirqd/12 prev_pid=102 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.846224] rcu_tort-162      12dNh4. 10360095883us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.847795] rcu_tort-162      12d..2. 10360095887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.850292]  rcuc/12-101      12d..2. 10360095890us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.852785] rcu_tort-162      12d..2. 10360096233us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=155 next_prio=97
-[10364.855399] rcu_tort-155      12d..2. 10360096243us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=158 next_prio=97
-[10364.858003] rcu_tort-158      12dN.4. 10360096407us : sched_wakeup: comm=rcub/13 pid=105 prio=97 target_cpu=013
-[10364.859564] rcu_tort-158      12d..2. 10360096418us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=162 next_prio=97
-[10364.862163] rcu_tort-162      12d..4. 10360096428us : sched_wakeup: comm=rcu_exp_gp_kthr pid=20 prio=97 target_cpu=015
-[10364.863817] rcu_tort-162      12dN.4. 10360096435us : sched_wakeup: comm=rcub/13 pid=105 prio=97 target_cpu=013
-[10364.865377] rcu_tort-162      12d..2. 10360096437us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=155 next_prio=139
-[10364.867991] rcu_tort-155      12dNh3. 10360096884us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.869558] rcu_tort-155      12dN.3. 10360096888us : sched_wakeup: comm=ksoftirqd/12 pid=102 prio=97 target_cpu=012
-[10364.871184] rcu_tort-155      12d..2. 10360096889us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.873684]  rcuc/12-101      12d..2. 10360096894us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/12 next_pid=102 next_prio=97
-[10364.876115] ksoftirq-102      12d..2. 10360096896us : sched_switch: prev_comm=ksoftirqd/12 prev_pid=102 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10364.878701] rcu_tort-162      12d..2. 10360096901us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.881300] rcu_tort-158      12dNh3. 10360098883us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.882859] rcu_tort-158      12dN.3. 10360098887us : sched_wakeup: comm=ksoftirqd/12 pid=102 prio=97 target_cpu=012
-[10364.884486] rcu_tort-158      12d..2. 10360098889us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.886983]  rcuc/12-101      12d..2. 10360098894us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/12 next_pid=102 next_prio=97
-[10364.889425] ksoftirq-102      12d..2. 10360098896us : sched_switch: prev_comm=ksoftirqd/12 prev_pid=102 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=155 next_prio=139
-[10364.891978] rcu_tort-155      12dNh4. 10360099882us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.893556] rcu_tort-155      12d..2. 10360099887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.896048]  rcuc/12-101      12d..2. 10360099889us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=155 next_prio=139
-[10364.898683] rcu_tort-155      12d..2. 10360100609us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.901293] rcu_tort-158      12dN.3. 10360100885us : sched_wakeup: comm=ksoftirqd/12 pid=102 prio=97 target_cpu=012
-[10364.902922] rcu_tort-158      12d..2. 10360100888us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/12 next_pid=102 next_prio=97
-[10364.905489] ksoftirq-102      12d..2. 10360100892us : sched_switch: prev_comm=ksoftirqd/12 prev_pid=102 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=155 next_prio=139
-[10364.908063] rcu_tort-155      12dNh4. 10360101883us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.909630] rcu_tort-155      12dN.4. 10360101886us : sched_wakeup: comm=ksoftirqd/12 pid=102 prio=97 target_cpu=012
-[10364.911245] rcu_tort-155      12d..2. 10360101889us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.913743]  rcuc/12-101      12d..2. 10360101893us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=ksoftirqd/12 next_pid=102 next_prio=97
-[10364.916168] ksoftirq-102      12d..2. 10360101895us : sched_switch: prev_comm=ksoftirqd/12 prev_pid=102 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.918712] rcu_tort-158      12d..2. 10360101903us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=155 next_prio=139
-[10364.921312] rcu_tort-155      12d..3. 10360101905us : dl_server_stop <-dequeue_entities
-[10364.922551] rcu_tort-155      12d..2. 10360101907us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=I ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10364.925058]   <idle>-0        12d.h5. 10360102410us : dl_server_start <-enqueue_task_fair
-[10364.926324]   <idle>-0        12dNh4. 10360102411us : sched_wakeup: comm=rcu_torture_rea pid=158 prio=139 target_cpu=012
-[10364.928003]   <idle>-0        12d..2. 10360102417us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.930508] rcu_tort-158      12DNh3. 10360103077us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.932062] rcu_tort-158      12d..2. 10360103085us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.934566]  rcuc/12-101      12d..2. 10360103087us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.937046] rcu_tort-158      12DNh3. 10360104882us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.938604] rcu_tort-158      12d..2. 10360104889us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.941108]  rcuc/12-101      12d..2. 10360104893us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.943596] rcu_tort-158      12dNh4. 10360105882us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.945150] rcu_tort-158      12d..2. 10360105887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.947646]  rcuc/12-101      12d..2. 10360105891us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=cpuhp/12 next_pid=99 next_prio=120
-[10364.950029] cpuhp/12-99       12d..2. 10360105896us : sched_switch: prev_comm=cpuhp/12 prev_pid=99 prev_prio=120 prev_state=D ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10364.952532] rcu_tort-158      12dN.6. 10360105898us : sched_wakeup: comm=migration/12 pid=100 prio=0 target_cpu=012
-[10364.954137] rcu_tort-158      12d..2. 10360105900us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=migration/12 next_pid=100 next_prio=0
-[10364.956693] migratio-100      12d..4. 10360105903us : dl_server_stop <-dequeue_entities
-[10364.957931] migratio-100      12d..2. 10360105911us : sched_switch: prev_comm=migration/12 prev_pid=100 prev_prio=0 prev_state=S ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10364.960382]   <idle>-0        12dN.4. 10360106892us : sched_wakeup: comm=ksoftirqd/12 pid=102 prio=97 target_cpu=012
-[10364.962008]   <idle>-0        12d..2. 10360106893us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ksoftirqd/12 next_pid=102 next_prio=97
-[10364.964470] ksoftirq-102      12d..2. 10360106898us : sched_switch: prev_comm=ksoftirqd/12 prev_pid=102 prev_prio=97 prev_state=S ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10364.966928]   <idle>-0        12dNh4. 10360107890us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.968492]   <idle>-0        12d..2. 10360107893us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.970884]  rcuc/12-101      12d..2. 10360107896us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10364.973273]   <idle>-0        12dNh4. 10360108890us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.974834]   <idle>-0        12d..2. 10360108894us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.977221]  rcuc/12-101      12d..2. 10360108897us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10364.979622]   <idle>-0        12dNh4. 10360110898us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.981175]   <idle>-0        12d..2. 10360110905us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.983574]  rcuc/12-101      12d..2. 10360110909us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10364.985967]   <idle>-0        12dNh4. 10360111891us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.987526]   <idle>-0        12d..2. 10360111895us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.989919]  rcuc/12-101      12d..2. 10360111899us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10364.992309]   <idle>-0        12dNh4. 10360113888us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10364.993863]   <idle>-0        12d..2. 10360113891us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10364.996255]  rcuc/12-101      12D..5. 10360113894us : dl_server_start <-enqueue_task_fair
-[10364.997527]  rcuc/12-101      12DN.4. 10360113896us : sched_wakeup: comm=cpuhp/12 pid=99 prio=120 target_cpu=012
-[10364.999095]  rcuc/12-101      12D..4. 10360113899us : sched_wakeup: comm=rcu_torture_bar pid=196 prio=120 target_cpu=011
-[10365.000773]  rcuc/12-101      12d..2. 10360113901us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=cpuhp/12 next_pid=99 next_prio=120
-[10365.003153] cpuhp/12-99       12d..3. 10360114795us : dl_server_stop <-dequeue_entities
-[10365.004403] cpuhp/12-99       12d..2. 10360114797us : sched_switch: prev_comm=cpuhp/12 prev_pid=99 prev_prio=120 prev_state=D ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10365.006802]   <idle>-0        12dNh4. 10360114887us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10365.008355]   <idle>-0        12d..2. 10360114891us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10365.010753]  rcuc/12-101      12d..2. 10360114893us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=S ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10365.013167]   <idle>-0        12d..2. 10360115537us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/12 next_pid=99 next_prio=120
-[10365.015578] cpuhp/12-99       12d..3. 10360115560us : dl_server_stop <-dequeue_entities
-[10365.016814] cpuhp/12-99       12d..2. 10360115562us : sched_switch: prev_comm=cpuhp/12 prev_pid=99 prev_prio=120 prev_state=D ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10365.019215]   <idle>-0        12d..2. 10360115627us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/12 next_pid=99 next_prio=120
-[10365.021620] cpuhp/12-99       12d..3. 10360115653us : dl_server_stop <-dequeue_entities
-[10365.022856] cpuhp/12-99       12d..2. 10360115654us : sched_switch: prev_comm=cpuhp/12 prev_pid=99 prev_prio=120 prev_state=D ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10365.025256]   <idle>-0        12d..2. 10360115692us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/12 next_pid=99 next_prio=120
-[10365.027665] cpuhp/12-99       12dN.3. 10360115803us : sched_wakeup: comm=ksoftirqd/12 pid=102 prio=97 target_cpu=012
-[10365.029281] cpuhp/12-99       12d..2. 10360115804us : sched_switch: prev_comm=cpuhp/12 prev_pid=99 prev_prio=120 prev_state=R+ ==> next_comm=ksoftirqd/12 next_pid=102 next_prio=97
-[10365.031743] ksoftirq-102      12d..2. 10360115806us : sched_switch: prev_comm=ksoftirqd/12 prev_pid=102 prev_prio=97 prev_state=P ==> next_comm=cpuhp/12 next_pid=99 next_prio=120
-[10365.034180] cpuhp/12-99       12dN.3. 10360115807us : sched_wakeup: comm=rcuc/12 pid=101 prio=97 target_cpu=012
-[10365.035737] cpuhp/12-99       12d..2. 10360115808us : sched_switch: prev_comm=cpuhp/12 prev_pid=99 prev_prio=120 prev_state=R+ ==> next_comm=rcuc/12 next_pid=101 next_prio=97
-[10365.038126]  rcuc/12-101      12d..2. 10360115809us : sched_switch: prev_comm=rcuc/12 prev_pid=101 prev_prio=97 prev_state=P ==> next_comm=cpuhp/12 next_pid=99 next_prio=120
-[10365.040503] cpuhp/12-99       12d..3. 10360115814us : dl_server_stop <-dequeue_entities
-[10365.041739] cpuhp/12-99       12d..2. 10360115815us : sched_switch: prev_comm=cpuhp/12 prev_pid=99 prev_prio=120 prev_state=S ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10365.044143]   <idle>-0        12d..2. 10360115826us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=cpuhp/12 next_pid=99 next_prio=120
-[10365.046551] cpuhp/12-99       12d..3. 10360115830us : dl_server_stop <-dequeue_entities
-[10365.047800] cpuhp/12-99       12d..2. 10360115832us : sched_switch: prev_comm=cpuhp/12 prev_pid=99 prev_prio=120 prev_state=P ==> next_comm=swapper/12 next_pid=0 next_prio=120
-[10365.050207]   <idle>-0        12d..2. 10360115877us : sched_switch: prev_comm=swapper/12 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=migration/12 next_pid=100 next_prio=0
-[10365.052656] CPU:15 [LOST 11356995 EVENTS]
-[10365.052656] rcu_tort-155      15d..2. 10361405925us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=migration/15 next_pid=122 next_prio=0
-[10365.055826] migratio-122      15d..4. 10361405926us : dl_server_stop <-dequeue_entities
-[10365.057067] migratio-122      15d..2. 10361405930us : sched_switch: prev_comm=migration/15 prev_pid=122 prev_prio=0 prev_state=S ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.059501]  rcuc/15-123      15d..2. 10361405932us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20364 next_prio=98
-[10365.062001] rcu_tort-20364    15dN.6. 10361405933us : sched_wakeup: comm=migration/15 pid=122 prio=0 target_cpu=015
-[10365.063623] rcu_tort-20364    15d..2. 10361405934us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20364 prev_prio=98 prev_state=R+ ==> next_comm=migration/15 next_pid=122 next_prio=0
-[10365.066188] migratio-122      15d..2. 10361405942us : sched_switch: prev_comm=migration/15 prev_pid=122 prev_prio=0 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.068655]   <idle>-0        15dNh4. 10361406888us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.070208]   <idle>-0        15d..2. 10361406892us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.072602]  rcuc/15-123      15D..4. 10361406900us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10365.074195]  rcuc/15-123      15d..2. 10361406905us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.076593]   <idle>-0        15dNh4. 10361407888us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.078148]   <idle>-0        15d..2. 10361407892us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.080543]  rcuc/15-123      15d..2. 10361407894us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.082923]   <idle>-0        15dNh4. 10361408887us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.084486]   <idle>-0        15d..2. 10361408891us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.086879]  rcuc/15-123      15D..4. 10361408900us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10365.088490]  rcuc/15-123      15d..2. 10361408904us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.090884]   <idle>-0        15dNh4. 10361409888us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.092448]   <idle>-0        15d..2. 10361409891us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.094844]  rcuc/15-123      15D..5. 10361409894us : dl_server_start <-enqueue_task_fair
-[10365.096109]  rcuc/15-123      15DN.4. 10361409896us : sched_wakeup: comm=cpuhp/15 pid=121 prio=120 target_cpu=015
-[10365.097699]  rcuc/15-123      15d..2. 10361409897us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=R+ ==> next_comm=cpuhp/15 next_pid=121 next_prio=120
-[10365.100105] cpuhp/15-121      15d..3. 10361411047us : dl_server_stop <-dequeue_entities
-[10365.101343] cpuhp/15-121      15d..2. 10361411049us : sched_switch: prev_comm=cpuhp/15 prev_pid=121 prev_prio=120 prev_state=D ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.103733]  rcuc/15-123      15d..2. 10361411058us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.106124]   <idle>-0        15dNh4. 10361411889us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.107685]   <idle>-0        15d..2. 10361411893us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.110079]  rcuc/15-123      15d..2. 10361411895us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.112478]   <idle>-0        15dNh4. 10361481889us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.114040]   <idle>-0        15d..2. 10361481894us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.116479]  rcuc/15-123      15d..2. 10361481899us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.118860]   <idle>-0        15dNh4. 10361482888us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.120434]   <idle>-0        15d..2. 10361482891us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.122827]  rcuc/15-123      15d..2. 10361482902us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.125222]   <idle>-0        15dNh4. 10361549887us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.126783]   <idle>-0        15d..2. 10361549892us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.129185]  rcuc/15-123      15d..2. 10361549915us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.131589]   <idle>-0        15dNh4. 10361554887us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.133146]   <idle>-0        15d..2. 10361554891us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.135552]  rcuc/15-123      15d..2. 10361554893us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.137946]   <idle>-0        15dNh4. 10361555887us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.139510]   <idle>-0        15d..2. 10361555891us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.141902]  rcuc/15-123      15d..2. 10361555893us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.144277]   <idle>-0        15dNh4. 10362058891us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.145846]   <idle>-0        15d..2. 10362058897us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.148236]  rcuc/15-123      15d..2. 10362058901us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.150635]   <idle>-0        15dNh4. 10362059888us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.152188]   <idle>-0        15d..2. 10362059892us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.154589]  rcuc/15-123      15d..2. 10362059894us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.156977]   <idle>-0        15dN.4. 10362375893us : sched_wakeup: comm=ksoftirqd/15 pid=124 prio=97 target_cpu=015
-[10365.158602]   <idle>-0        15d..2. 10362375896us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ksoftirqd/15 next_pid=124 next_prio=97
-[10365.161054] ksoftirq-124      15d..2. 10362375903us : sched_switch: prev_comm=ksoftirqd/15 prev_pid=124 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.163517]   <idle>-0        15dNh4. 10362518890us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.165069]   <idle>-0        15d..2. 10362518896us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.167919]  rcuc/15-123      15d..2. 10362518901us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.170759]   <idle>-0        15dNh4. 10362519888us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.171987]   <idle>-0        15d..2. 10362519891us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.173866]  rcuc/15-123      15d..2. 10362519894us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.175741]   <idle>-0        15dNh4. 10362558889us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.176967]   <idle>-0        15d..2. 10362558894us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.178844]  rcuc/15-123      15d..2. 10362558898us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.180719]   <idle>-0        15dNh4. 10362559888us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.181940]   <idle>-0        15d..2. 10362559891us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.183819]  rcuc/15-123      15d..2. 10362559894us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.185693]   <idle>-0        15dNh4. 10362570888us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.186914]   <idle>-0        15d..2. 10362570892us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.188810]  rcuc/15-123      15d..2. 10362570894us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.190677]   <idle>-0        15dNh4. 10362571887us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.191888]   <idle>-0        15d..2. 10362571890us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.193759]  rcuc/15-123      15d..2. 10362571893us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.195626]   <idle>-0        15dNh4. 10362592888us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.196848]   <idle>-0        15d..2. 10362592892us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.198726]  rcuc/15-123      15d..2. 10362592894us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.200601]   <idle>-0        15dNh4. 10362593887us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.201830]   <idle>-0        15d..2. 10362593891us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.203732]  rcuc/15-123      15d..2. 10362593893us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.205643] CPU:5 [LOST 11877163 EVENTS]
-[10365.205643] rcu_tort-20362     5d..2. 10362867884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.208125] ksoftirq-54        5d.s3. 10362867889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10365.209380] ksoftirq-54        5d..2. 10362867892us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.211383] CPU:7 [LOST 11917504 EVENTS]
-[10365.211383] rcu_tort-20355     7d..2. 10362881894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.213886] rcu_pree-16        7d..2. 10362881901us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.215876] rcu_tort-20355     7dN.4. 10362886882us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.217131] rcu_tort-20355     7d..2. 10362886883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.219142] ksoftirq-68        7d.s3. 10362886888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10365.220412] ksoftirq-68        7d..2. 10362886891us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.222440]   <idle>-0        15dN.4. 10362887892us : sched_wakeup: comm=ksoftirqd/15 pid=124 prio=97 target_cpu=015
-[10365.223720]   <idle>-0        15d..2. 10362887894us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ksoftirqd/15 next_pid=124 next_prio=97
-[10365.225666] ksoftirq-124      15d.s5. 10362887901us : dl_server_start <-enqueue_task_fair
-[10365.226662] ksoftirq-124      15dNs4. 10362887903us : sched_wakeup: comm=kworker/15:2 pid=18749 prio=120 target_cpu=015
-[10365.227967] ksoftirq-124      15d..2. 10362887906us : sched_switch: prev_comm=ksoftirqd/15 prev_pid=124 prev_prio=97 prev_state=S ==> next_comm=kworker/15:2 next_pid=18749 next_prio=120
-[10365.229979] kworker/-18749    15d..3. 10362887914us : dl_server_stop <-dequeue_entities
-[10365.230959] kworker/-18749    15d..2. 10362887918us : sched_switch: prev_comm=kworker/15:2 prev_pid=18749 prev_prio=120 prev_state=I ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.232919] rcu_tort-20355     7dN.4. 10362888886us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.234172] rcu_tort-20355     7d..2. 10362888888us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.236179] ksoftirq-68        7d.s5. 10362888893us : dl_server_start <-enqueue_task_fair
-[10365.237175] ksoftirq-68        7dNs4. 10362888895us : sched_wakeup: comm=kworker/7:0 pid=19250 prio=120 target_cpu=007
-[10365.238481] ksoftirq-68        7d..2. 10362888898us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.240482] rcu_tort-20355     7d..2. 10362896899us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.242503] rcu_pree-16        7d..2. 10362896913us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.244510] rcu_tort-20355     7dN.4. 10362900887us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.245769] rcu_tort-20355     7d..2. 10362900889us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.247779] ksoftirq-68        7d.s3. 10362900897us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10365.249032] ksoftirq-68        7d..2. 10362900902us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.251032] CPU:9 [LOST 11288286 EVENTS]
-[10365.251032] rcu_tort-20365     9d..2. 10362909888us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10365.253536] ksoftirq-82        9d.s3. 10362909895us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10365.254791] ksoftirq-82        9d..2. 10362909900us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.256805] rcu_tort-20365     9d..2. 10362933893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.258827] rcu_pree-16        9d..2. 10362933905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.260834] rcu_tort-20365     9dN.3. 10362938884us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10365.262092] rcu_tort-20365     9d..2. 10362938887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10365.264108] ksoftirq-82        9d.s3. 10362938895us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10365.265359] ksoftirq-82        9d..2. 10362938899us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.267351] rcu_tort-20362     5d..2. 10362947897us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.269383] rcu_pree-16        5d..2. 10362947910us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.271407] rcu_tort-20362     5dN.3. 10362952884us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.272674] rcu_tort-20362     5d..2. 10362952885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.274684] ksoftirq-54        5d.s3. 10362952892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10365.275945] ksoftirq-54        5d..2. 10362952897us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.277945] rcu_tort-20362     5d..2. 10362972896us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.279970] rcu_pree-16        5d..2. 10362972908us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.281988] rcu_tort-20362     5dN.4. 10362977883us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.283245] rcu_tort-20362     5d..2. 10362977885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.285265] ksoftirq-54        5d.s3. 10362977891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10365.286547] ksoftirq-54        5d..2. 10362977895us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.288558] rcu_tort-20355     7d..2. 10362981897us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.290586] rcu_pree-16        7d..2. 10362981909us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.292597] rcu_tort-20355     7dN.4. 10362986884us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.293848] rcu_tort-20355     7d..2. 10362986885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.295864] ksoftirq-68        7d.s3. 10362986892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10365.297118] CPU:2 [LOST 11706162 EVENTS]
-[10365.297118] rcu_tort-20360     2d..2. 10362986895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.299615] ksoftirq-68        7d..2. 10362986896us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.301619] rcu_pree-16        2d..2. 10362986906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.303612] CPU:0 [LOST 26252193 EVENTS]
-[10365.303612] rcu_tort-173       0d..2. 10362987887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.306058] ksoftirq-15        0d..2. 10362987895us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.308043] rcu_tort-20362     5dN.3. 10362988884us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.309307] rcu_tort-20362     5d..2. 10362988885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.311323] ksoftirq-54        5d..2. 10362988895us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.313309] rcu_tort-20355     7dN.3. 10362989884us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.314565] rcu_tort-20355     7d..2. 10362989885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.316578] ksoftirq-68        7d..2. 10362989892us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.318606] rcu_tort-20360     2dN.3. 10362991882us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.319861] rcu_tort-20360     2d..2. 10362991883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.321866] ksoftirq-32        2d.s3. 10362991887us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10365.323121] ksoftirq-32        2d..2. 10362991891us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.325194] rcu_tort-20365     9d..2. 10362996890us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.327220] rcu_pree-16        9d..2. 10362996895us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.329255] rcu_tort-20365     9dN.3. 10363001885us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10365.330530] rcu_tort-20365     9d..2. 10363001886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10365.332545] ksoftirq-82        9d.s3. 10363001893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10365.333807] rcu_tort-20360     2d..2. 10363001894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.335834] ksoftirq-82        9d..2. 10363001897us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.337856] rcu_pree-16        2d..2. 10363001904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.339865] rcu_tort-20360     2dN.3. 10363005883us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.341125] rcu_tort-20360     2d..2. 10363005884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.343131] ksoftirq-32        2d.s3. 10363005889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10365.344392] ksoftirq-32        2d..2. 10363005893us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.346402] rcu_tort-173       0d..2. 10363005894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.348384] rcu_pree-16        0d..2. 10363005904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.350378] rcu_tort-173       0dN.3. 10363009883us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10365.351644] rcu_tort-173       0d..2. 10363009884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.353636] ksoftirq-15        0d.s3. 10363009892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10365.354895] ksoftirq-15        0d..2. 10363009894us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.356885] rcu_tort-20360     2d..2. 10363009895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.358899] rcu_pree-16        2d..2. 10363009905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.360885] rcu_tort-20360     2dN.3. 10363014884us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.362147] rcu_tort-20360     2d..2. 10363014885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.364166] ksoftirq-32        2d.s3. 10363014891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10365.365443] ksoftirq-32        2d..2. 10363014895us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.367432] rcu_tort-20362     5d..2. 10363018895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.369451] rcu_pree-16        5d..2. 10363018906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.371454] rcu_tort-20362     5dN.3. 10363023884us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.372717] rcu_tort-20362     5d..2. 10363023885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.374725] ksoftirq-54        5d.s3. 10363023891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10365.375980] rcu_tort-173       0d..2. 10363023893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.377982] ksoftirq-54        5d..2. 10363023895us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.379987] rcu_pree-16        0d..2. 10363023903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.381988] rcu_tort-173       0dN.4. 10363027883us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10365.383242] rcu_tort-173       0d..2. 10363027884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.385233] ksoftirq-15        0d.s3. 10363027889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10365.386517] ksoftirq-15        0d..2. 10363027891us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.388514] rcu_tort-20355     7d..2. 10363031893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.390640] rcu_pree-16        7d..2. 10363031903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.392649] rcu_tort-20355     7dN.4. 10363036885us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.393943] rcu_tort-20355     7d..2. 10363036886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.395957] ksoftirq-68        7d.s3. 10363036892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10365.397212] ksoftirq-68        7d..2. 10363036896us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.399224] rcu_tort-20365     9d..2. 10363040896us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.401273] rcu_pree-16        9d..2. 10363040911us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.403313] rcu_tort-20365     9dN.3. 10363044885us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10365.404667] rcu_tort-20365     9d..2. 10363044886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10365.406693] ksoftirq-82        9d.s3. 10363044894us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10365.407949] ksoftirq-82        9d..2. 10363044898us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.409952] rcu_tort-20355     7d..2. 10363053893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.411977] rcu_pree-16        7d..2. 10363053902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.413997] rcu_tort-20355     7dN.3. 10363057885us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.415261] rcu_tort-20355     7d..2. 10363057886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.417290] ksoftirq-68        7d.s3. 10363057893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10365.418584] rcu_tort-20362     5d..2. 10363057897us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.420608] ksoftirq-68        7d..2. 10363057897us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.422641] rcu_pree-16        5d..2. 10363057909us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.424655] rcu_tort-20362     5dN.3. 10363062883us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.425913] rcu_tort-20362     5d..2. 10363062884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.427976] ksoftirq-54        5d.s3. 10363062890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10365.429229] rcu_tort-20360     2d..2. 10363062892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.431266] ksoftirq-54        5d..2. 10363062893us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.433291] rcu_pree-16        2d..2. 10363062902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.435306] rcu_tort-20360     2dN.3. 10363067884us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.436595] rcu_tort-20360     2d..2. 10363067885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.438611] ksoftirq-32        2d.s3. 10363067891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10365.439875] rcu_tort-20362     5d..2. 10363067892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.441892] ksoftirq-32        2d..2. 10363067895us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.443906] rcu_pree-16        5d..2. 10363067902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.445917] rcu_tort-20360     2dN.3. 10363071883us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.447176] rcu_tort-20360     2d..2. 10363071884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.449196] rcu_tort-20362     5dN.3. 10363071890us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.450481] ksoftirq-32        2d..2. 10363071892us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.452489] rcu_tort-20362     5d..2. 10363071892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.454519] ksoftirq-54        5d.s3. 10363071901us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10365.455786] ksoftirq-54        5d..2. 10363071906us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.457793] rcu_tort-173       0d..2. 10363075895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.459787] rcu_pree-16        0d..2. 10363075905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.461871] rcu_tort-173       0dN.3. 10363079885us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10365.463468] rcu_tort-173       0d..2. 10363079886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.465953] ksoftirq-15        0d.s3. 10363079893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10365.467513] ksoftirq-15        0d..2. 10363079895us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.470325] rcu_tort-20362     5d..2. 10363079897us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.473351] rcu_pree-16        5d..2. 10363079912us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.475350] rcu_tort-20362     5dN.3. 10363083890us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.476629] rcu_tort-20362     5d..2. 10363083892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.478635] ksoftirq-54        5d.s3. 10363083902us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10365.479886] rcu_tort-20355     7d..2. 10363083907us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.481891] ksoftirq-54        5d..2. 10363083908us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.483888] rcu_pree-16        7d..2. 10363083919us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.485875] rcu_tort-173       0dN.4. 10363087886us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10365.487126] rcu_tort-173       0d..2. 10363087887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.489100] rcu_tort-20355     7dN.3. 10363087889us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.490348] ksoftirq-15        0d..2. 10363087891us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.492319] rcu_tort-20355     7d..2. 10363087892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.494319] ksoftirq-68        7d.s3. 10363087901us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10365.495579] rcu_tort-20365     9d..2. 10363087904us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.497578] ksoftirq-68        7d..2. 10363087906us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.499572] rcu_pree-16        9d..2. 10363087917us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.501563] rcu_tort-20365     9dN.3. 10363092884us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10365.502814] rcu_tort-20365     9d..2. 10363092886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10365.504811] CPU:13 [LOST 11829010 EVENTS]
-[10365.504811] rcu_tort-154      13d..2. 10363092886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=161 next_prio=139
-[10365.507381] ksoftirq-82        9d.s3. 10363092891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10365.508624] rcu_tort-20362     5d..2. 10363092894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.510624] ksoftirq-82        9d..2. 10363092896us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.512618] rcu_tort-161      13d..2. 10363092897us : sched_switch: prev_comm=rcu_torture_rea prev_pid=161 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10365.514655] rcu_pree-16        5d..3. 10363092903us : sched_wakeup: comm=rcub/8 pid=35 prio=97 target_cpu=002
-[10365.515853] rcu_tort-20360     2d..2. 10363092905us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcub/8 next_pid=35 next_prio=97
-[10365.517797] rcu_pree-16        5d..2. 10363092912us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.519795] rcu_tort-20362     5d..2. 10363092922us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=164 next_prio=97
-[10365.521849]   rcub/8-35        2d..2. 10363092926us : sched_switch: prev_comm=rcub/8 prev_pid=35 prev_prio=97 prev_state=D ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.523785] rcu_tort-164       5d..4. 10363092932us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10365.525036] rcu_tort-20365     9d..2. 10363092934us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.527047] rcu_tort-164       5dN.4. 10363092939us : sched_wakeup: comm=rcub/8 pid=35 prio=97 target_cpu=002
-[10365.528244] rcu_tort-164       5d..2. 10363092941us : sched_switch: prev_comm=rcu_torture_rea prev_pid=164 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.530305] rcu_tort-20360     2d..2. 10363092941us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcub/8 next_pid=35 next_prio=97
-[10365.532306]   rcub/8-35        2d..2. 10363092945us : sched_switch: prev_comm=rcub/8 prev_pid=35 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.534234] rcu_pree-16        9d..2. 10363092957us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.536216] rcu_tort-158      13DNh3. 10363093399us : sched_wakeup: comm=rcu_torture_rea pid=161 prio=139 target_cpu=013
-[10365.537531] rcu_tort-158      13d..2. 10363093403us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=161 next_prio=139
-[10365.539582] rcu_tort-20360     2dNh4. 10363093881us : sched_wakeup: comm=rcuc/2 pid=31 prio=97 target_cpu=002
-[10365.540780] rcu_tort-20362     5dNh4. 10363093881us : sched_wakeup: comm=rcuc/5 pid=53 prio=97 target_cpu=005
-[10365.541977] rcu_tort-20365     9dNh3. 10363093882us : sched_wakeup: comm=rcuc/9 pid=81 prio=97 target_cpu=009
-[10365.543174] rcu_tort-161      13DNh3. 10363093882us : sched_wakeup: comm=rcuc/13 pid=109 prio=97 target_cpu=013
-[10365.544398] rcu_tort-173       0dNh3. 10363093883us : sched_wakeup: comm=rcuc/0 pid=19 prio=97 target_cpu=000
-[10365.545602] rcu_tort-20360     2d..2. 10363093885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/2 next_pid=31 next_prio=97
-[10365.547552] rcu_tort-20362     5d..2. 10363093885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/5 next_pid=53 next_prio=97
-[10365.549510] rcu_tort-20355     7dNh3. 10363093885us : sched_wakeup: comm=rcuc/7 pid=67 prio=97 target_cpu=007
-[10365.550707] rcu_tort-20365     9d..2. 10363093885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/9 next_pid=81 next_prio=97
-[10365.552650] rcu_tort-173       0d..2. 10363093887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/0 next_pid=19 next_prio=97
-[10365.554570]   rcuc/9-81        9d..2. 10363093889us : sched_switch: prev_comm=rcuc/9 prev_pid=81 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.556499]   <idle>-0        15dNh4. 10363093889us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.557716]   rcuc/5-53        5d..2. 10363093891us : sched_switch: prev_comm=rcuc/5 prev_pid=53 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.559650] rcu_tort-20355     7d..2. 10363093892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/7 next_pid=67 next_prio=97
-[10365.561595]   rcuc/2-31        2d..2. 10363093892us : sched_switch: prev_comm=rcuc/2 prev_pid=31 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.563555]   <idle>-0        15d..2. 10363093895us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.565441]   rcuc/0-19        0d..2. 10363093897us : sched_switch: prev_comm=rcuc/0 prev_pid=19 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.567347]  rcuc/15-123      15d..2. 10363093899us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.569218]   rcuc/7-67        7D..4. 10363093903us : sched_wakeup: comm=rcu_torture_fak pid=151 prio=139 target_cpu=007
-[10365.570536]   rcuc/7-67        7d..2. 10363093910us : sched_switch: prev_comm=rcuc/7 prev_pid=67 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.572486] rcu_tort-20360     2dNh3. 10363094881us : sched_wakeup: comm=rcuc/2 pid=31 prio=97 target_cpu=002
-[10365.573700] rcu_tort-20362     5dNh3. 10363094881us : sched_wakeup: comm=rcuc/5 pid=53 prio=97 target_cpu=005
-[10365.574916] rcu_tort-173       0dNh3. 10363094883us : sched_wakeup: comm=rcuc/0 pid=19 prio=97 target_cpu=000
-[10365.576124] rcu_tort-20355     7dNh4. 10363094883us : sched_wakeup: comm=rcuc/7 pid=67 prio=97 target_cpu=007
-[10365.577328] rcu_tort-20362     5d..2. 10363094884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/5 next_pid=53 next_prio=97
-[10365.579296] rcu_tort-20360     2d..2. 10363094884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/2 next_pid=31 next_prio=97
-[10365.581262]   rcuc/5-53        5d..2. 10363094887us : sched_switch: prev_comm=rcuc/5 prev_pid=53 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.583233] rcu_tort-173       0d..2. 10363094887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/0 next_pid=19 next_prio=97
-[10365.585180]   <idle>-0        15dNh4. 10363094887us : sched_wakeup: comm=rcuc/15 pid=123 prio=97 target_cpu=015
-[10365.586422] rcu_tort-20355     7d..2. 10363094888us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/7 next_pid=67 next_prio=97
-[10365.588369]   rcuc/2-31        2d..2. 10363094890us : sched_switch: prev_comm=rcuc/2 prev_pid=31 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.590303]   <idle>-0        15d..2. 10363094891us : sched_switch: prev_comm=swapper/15 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcuc/15 next_pid=123 next_prio=97
-[10365.592194]   rcuc/7-67        7d..2. 10363094893us : sched_switch: prev_comm=rcuc/7 prev_pid=67 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.594145]  rcuc/15-123      15d..2. 10363094894us : sched_switch: prev_comm=rcuc/15 prev_pid=123 prev_prio=97 prev_state=S ==> next_comm=swapper/15 next_pid=0 next_prio=120
-[10365.596042]   rcuc/0-19        0d..2. 10363094896us : sched_switch: prev_comm=rcuc/0 prev_pid=19 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.597971] rcu_tort-161      13d..2. 10363096887us : sched_switch: prev_comm=rcu_torture_rea prev_pid=161 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10365.600039] rcu_tort-158      13d..2. 10363096892us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10365.602093] rcu_tort-154      13d..2. 10363096895us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=161 next_prio=139
-[10365.604146] rcu_tort-161      13dNh3. 10363097395us : sched_wakeup: comm=rcu_torture_rea pid=158 prio=139 target_cpu=013
-[10365.606152] rcu_tort-161      13dNh3. 10363097397us : sched_wakeup: comm=rcu_torture_rea pid=154 prio=139 target_cpu=013
-[10365.608175] rcu_tort-161      13d..2. 10363097400us : sched_switch: prev_comm=rcu_torture_rea prev_pid=161 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10365.610619] rcu_tort-20362     5dN.4. 10363097884us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.614183] rcu_tort-20365     9dN.4. 10363097885us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10365.615957] rcu_tort-20362     5d..2. 10363097885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.617964] rcu_tort-20365     9d..2. 10363097886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10365.619963] ksoftirq-54        5d..2. 10363097891us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.621960] ksoftirq-82        9d.s3. 10363097893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10365.623207] ksoftirq-82        9d..2. 10363097894us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.625193] rcu_tort-20355     7d..2. 10363097898us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.627218] rcu_pree-16        7d..2. 10363097914us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.629206] rcu_tort-154      13d..2. 10363100886us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10365.632564] rcu_tort-20355     7dN.4. 10363101890us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.634201] rcu_tort-20355     7d..2. 10363101892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.637052] ksoftirq-68        7d.s3. 10363101900us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10365.638912] ksoftirq-68        7d..2. 10363101905us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.641827] rcu_tort-158      13d..2. 10363103930us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=161 next_prio=139
-[10365.644579] rcu_tort-161      13d..2. 10363103937us : sched_switch: prev_comm=rcu_torture_rea prev_pid=161 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10365.646611] rcu_tort-158      13dNh3. 10363104439us : sched_wakeup: comm=rcu_torture_rea pid=161 prio=139 target_cpu=013
-[10365.647910] rcu_tort-158      13d..2. 10363104442us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=161 next_prio=139
-[10365.649949] rcu_tort-20365     9d..2. 10363106893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.651938] rcu_pree-16        9d..2. 10363106906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.653925] rcu_tort-161      13d..2. 10363107885us : sched_switch: prev_comm=rcu_torture_rea prev_pid=161 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=158 next_prio=139
-[10365.655964] rcu_tort-158      13d..2. 10363110046us : sched_switch: prev_comm=rcu_torture_rea prev_pid=158 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10365.658042] rcu_tort-154      13d..2. 10363110053us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=161 next_prio=139
-[10365.660100] rcu_tort-161      13dNh3. 10363110557us : sched_wakeup: comm=rcu_torture_rea pid=154 prio=139 target_cpu=013
-[10365.661436] rcu_tort-161      13d..2. 10363110562us : sched_switch: prev_comm=rcu_torture_rea prev_pid=161 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10365.663492] rcu_tort-20365     9dN.4. 10363111884us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10365.664749] rcu_tort-20365     9d..2. 10363111886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10365.666756] rcu_tort-154      13d..2. 10363111892us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10365.668773] ksoftirq-82        9d.s3. 10363111895us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10365.670027] ksoftirq-82        9d..2. 10363111900us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.672021] ksoftirq-110      13d..2. 10363111903us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcuc/13 next_pid=109 next_prio=97
-[10365.673937]  rcuc/13-109      13d..2. 10363111907us : sched_switch: prev_comm=rcuc/13 prev_pid=109 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.675911] rcu_tort-20366    13dNh4. 10363112883us : sched_wakeup: comm=rcuc/13 pid=109 prio=97 target_cpu=013
-[10365.677125] rcu_tort-20366    13d..2. 10363112889us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcuc/13 next_pid=109 next_prio=97
-[10365.679137]  rcuc/13-109      13d..2. 10363112896us : sched_switch: prev_comm=rcuc/13 prev_pid=109 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.681096] rcu_tort-20366    13d..2. 10363116894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.683117] rcu_pree-16       13d..2. 10363116907us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.685132] rcu_tort-20366    13dN.3. 10363121882us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10365.686445] rcu_tort-20366    13d..2. 10363121883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10365.688481] ksoftirq-110      13d.s3. 10363121889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10365.689743] ksoftirq-110      13d..2. 10363121893us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.691763] CPU:11 [LOST 10977971 EVENTS]
-[10365.691763] rcu_tort-20367    11d..2. 10363126886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10365.694261] ksoftirq-96       11d.s3. 10363126891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10365.695548] rcu_tort-173       0d..2. 10363126893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.697542] ksoftirq-96       11d..2. 10363126895us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10365.699583] rcu_pree-16        0d..2. 10363126903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.701579] rcu_tort-173       0dN.3. 10363130886us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10365.702840] rcu_tort-173       0d..2. 10363130887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.704826] ksoftirq-15        0d.s3. 10363130893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10365.706080] rcu_tort-20355     7d..2. 10363130895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.708095] ksoftirq-15        0d..2. 10363130896us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.710066] rcu_pree-16        7d..2. 10363130905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.712060] rcu_tort-20355     7dN.3. 10363135882us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.713319] rcu_tort-20355     7d..2. 10363135883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.715326] ksoftirq-68        7d.s3. 10363135889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10365.716604] rcu_tort-20366    13d..2. 10363135892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.718621] ksoftirq-68        7d..2. 10363135893us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.720627] rcu_pree-16       13d..2. 10363135903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.722630] rcu_tort-20366    13dN.4. 10363140882us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10365.723905] rcu_tort-20366    13d..2. 10363140883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10365.725929] ksoftirq-110      13d.s3. 10363140889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10365.727184] rcu_tort-173       0d..2. 10363140892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.729173] ksoftirq-110      13d..2. 10363140892us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.731175] rcu_pree-16        0d..2. 10363140902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.733146] rcu_tort-173       0dN.3. 10363144885us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10365.734423] rcu_tort-20365     9dN.4. 10363144885us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10365.735702] CPU:3 [LOST 11500515 EVENTS]
-[10365.735702] rcu_tort-20368     3d..2. 10363144886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10365.738210] rcu_tort-173       0d..2. 10363144886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.740204] rcu_tort-20365     9d..2. 10363144888us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10365.742300] ksoftirq-15        0d.s3. 10363144892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10365.743603] rcu_tort-20367    11d..2. 10363144894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.745714] ksoftirq-15        0d..2. 10363144895us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.747716] ksoftirq-82        9d..2. 10363144897us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.749736] ksoftirq-40        3d.s2. 10363144897us : dl_server_stop <-dequeue_entities
-[10365.750718] ksoftirq-40        3d..2. 10363144902us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10365.752722] rcu_pree-16       11d..2. 10363144903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10365.754728] rcu_tort-20367    11dN.3. 10363150918us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10365.756002] rcu_tort-20367    11d..2. 10363150919us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10365.758021] ksoftirq-96       11d.s3. 10363150927us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10365.759307] rcu_tort-20360     2d..2. 10363150930us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.761370] ksoftirq-96       11d..2. 10363150931us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10365.763518] rcu_pree-16        2d..2. 10363150942us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.765622] rcu_tort-20360     2dN.3. 10363155882us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.766881] rcu_tort-20360     2d..2. 10363155883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.768938] ksoftirq-32        2d.s3. 10363155890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10365.770223] rcu_tort-20355     7d..2. 10363155894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.772262] ksoftirq-32        2d..2. 10363155894us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.774268] rcu_pree-16        7d..2. 10363155904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.776256] rcu_tort-20355     7dN.4. 10363159885us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.777565] rcu_tort-20355     7d..2. 10363159886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.779596] ksoftirq-68        7d.s3. 10363159892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10365.780878] rcu_tort-173       0d..2. 10363159894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.782867] ksoftirq-68        7d..2. 10363159896us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.784864] rcu_pree-16        0d..2. 10363159904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.786855] rcu_tort-173       0dN.3. 10363163885us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10365.788125] rcu_tort-173       0d..2. 10363163886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.790102] ksoftirq-15        0d.s3. 10363163891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10365.791360] ksoftirq-15        0d..2. 10363163894us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.793318] rcu_tort-20366    13d..2. 10363163894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.795316] rcu_pree-16       13d..2. 10363163906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.797315] rcu_tort-20366    13dN.3. 10363168883us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10365.798604] rcu_tort-20366    13d..2. 10363168885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10365.800633] ksoftirq-110      13d.s3. 10363168892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10365.801889] rcu_tort-20360     2d..2. 10363168894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.803890] ksoftirq-110      13d..2. 10363168896us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.805911] rcu_pree-16        2d..2. 10363168906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.807916] rcu_tort-20366    13dN.4. 10363172882us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10365.809190] rcu_tort-20366    13d..2. 10363172883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10365.811214] ksoftirq-110      13d..2. 10363172905us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.813234] rcu_tort-20360     2dN.3. 10363173883us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.814515] rcu_tort-20360     2d..2. 10363173884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.816511] ksoftirq-32        2d.s3. 10363173888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10365.817765] rcu_tort-20365     9d..2. 10363173892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.819769] ksoftirq-32        2d..2. 10363173892us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.821762] rcu_pree-16        9d..2. 10363173902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.823759] rcu_tort-20365     9dN.3. 10363178883us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10365.825008] rcu_tort-20365     9d..2. 10363178885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10365.827015] ksoftirq-82        9d.s3. 10363178892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10365.828259] rcu_tort-20366    13d..2. 10363178895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.830269] ksoftirq-82        9d..2. 10363178897us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10365.832270] rcu_pree-16       13d..2. 10363178903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.834282] rcu_tort-20366    13dN.3. 10363183882us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10365.835575] rcu_tort-20366    13d..2. 10363183882us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10365.837650] ksoftirq-110      13d.s3. 10363183887us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10365.838909] rcu_tort-20368     3d..2. 10363183891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.840918] ksoftirq-110      13d..2. 10363183891us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.842933] rcu_pree-16        3d..2. 10363183901us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10365.844989] rcu_tort-20368     3dN.3. 10363188883us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10365.846241] rcu_tort-20368     3d..2. 10363188884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10365.848243] ksoftirq-40        3d.s3. 10363188890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10365.849516] rcu_tort-20360     2d..2. 10363188893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.851517] ksoftirq-40        3d..2. 10363188894us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10365.853513] rcu_pree-16        2d..2. 10363188904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.855513] rcu_tort-173       0dN.3. 10363191884us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10365.856771] rcu_tort-173       0d..2. 10363191885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.858758] ksoftirq-15        0d..2. 10363191888us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.860846] rcu_tort-20360     2dN.3. 10363193882us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.862105] rcu_tort-20360     2d..2. 10363193883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.864180] ksoftirq-32        2d.s3. 10363193889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10365.865501] rcu_tort-20367    11d..2. 10363193892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.867561] ksoftirq-32        2d..2. 10363193893us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.869557] rcu_pree-16       11d..2. 10363193903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10365.871560] rcu_tort-20367    11dN.3. 10363198884us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10365.872825] rcu_tort-20367    11d..2. 10363198885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10365.874843] ksoftirq-96       11d.s3. 10363198890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10365.876094] rcu_tort-20368     3d..2. 10363198892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.878114] ksoftirq-96       11d..2. 10363198894us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10365.880150] rcu_pree-16        3d..2. 10363198899us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10365.882156] rcu_tort-20368     3dN.3. 10363203882us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10365.883416] rcu_tort-20368     3d..2. 10363203882us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10365.885437] ksoftirq-40        3d.s3. 10363203888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10365.886689] ksoftirq-40        3d..2. 10363203891us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10365.888683] rcu_tort-20362     5d..2. 10363203893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.890694] rcu_pree-16        5d..2. 10363203907us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.892698] rcu_tort-20362     5dN.3. 10363208883us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.893964] rcu_tort-20362     5d..2. 10363208884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.895974] ksoftirq-54        5d.s3. 10363208892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10365.897244] rcu_tort-20367    11d..2. 10363208895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.899328] ksoftirq-54        5d..2. 10363208896us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.901385] rcu_pree-16       11d..2. 10363208905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10365.903818] rcu_tort-20367    11dN.4. 10363213883us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10365.905744] rcu_tort-20367    11d..2. 10363213885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10365.908747] ksoftirq-96       11d.s3. 10363213891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10365.910644] rcu_tort-20362     5d..2. 10363213894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.913658] ksoftirq-96       11d..2. 10363213894us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10365.916716] rcu_pree-16        5d..2. 10363213905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.919709] rcu_tort-20362     5dN.3. 10363218883us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.921637] rcu_tort-20362     5d..2. 10363218884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.924425] ksoftirq-54        5d.s3. 10363218890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10365.925687] rcu_tort-20366    13d..2. 10363218892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.927686] ksoftirq-54        5d..2. 10363218894us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.929676] rcu_pree-16       13d..2. 10363218900us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.931655] rcu_tort-20366    13dN.3. 10363223882us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10365.932929] rcu_tort-20366    13d..2. 10363223883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10365.934937] ksoftirq-110      13d.s3. 10363223888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10365.936182] rcu_tort-20362     5d..2. 10363223891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.938259] ksoftirq-110      13d..2. 10363223892us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.940253] rcu_pree-16        5d..2. 10363223901us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.942235] rcu_tort-20362     5dN.3. 10363228882us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10365.943533] rcu_tort-20362     5d..2. 10363228883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10365.945524] ksoftirq-54        5d.s3. 10363228889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10365.946768] ksoftirq-54        5d..2. 10363228892us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10365.948800] rcu_tort-173       0d..2. 10363228893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.950763] rcu_pree-16        0d..2. 10363228905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.952718] rcu_tort-173       0dN.3. 10363232884us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10365.953961] rcu_tort-173       0d..2. 10363232885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10365.955931] ksoftirq-15        0d.s3. 10363232893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10365.957179] rcu_tort-20360     2d..2. 10363232895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.959166] ksoftirq-15        0d..2. 10363232896us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10365.961125] rcu_pree-16        2d..2. 10363232906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.963109] rcu_tort-20360     2dN.4. 10363237883us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.964352] rcu_tort-20360     2d..2. 10363237884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.966335] ksoftirq-32        2d.s3. 10363237890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10365.967587] rcu_tort-20366    13d..2. 10363237893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.969608] ksoftirq-32        2d..2. 10363237894us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.971597] rcu_pree-16       13d..2. 10363237901us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.973598] rcu_tort-20366    13dN.3. 10363242882us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10365.974868] rcu_tort-20366    13d..2. 10363242883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10365.976901] ksoftirq-110      13d.s3. 10363242888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10365.978154] rcu_tort-20355     7d..2. 10363242891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.980188] ksoftirq-110      13d..2. 10363242892us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10365.982297] rcu_pree-16        7d..2. 10363242900us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.984334] rcu_tort-20355     7dN.3. 10363247882us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10365.985714] rcu_tort-20355     7d..2. 10363247883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10365.987736] ksoftirq-68        7d.s3. 10363247889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10365.988995] rcu_tort-20360     2d..2. 10363247892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10365.991006] ksoftirq-68        7d..2. 10363247893us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10365.993054] rcu_pree-16        2d..2. 10363247904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10365.995069] rcu_tort-20360     2dN.3. 10363252882us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10365.996356] rcu_tort-20360     2d..2. 10363252883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10365.998384] ksoftirq-32        2d.s3. 10363252888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10365.999707] rcu_tort-173       0d..2. 10363252892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.001744] ksoftirq-32        2d..2. 10363252892us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.003800] rcu_pree-16        0d..2. 10363252903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.005811] rcu_tort-173       0dN.4. 10363256883us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.007126] rcu_tort-173       0d..2. 10363256885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.009169] ksoftirq-15        0d.s3. 10363256890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.010467] rcu_tort-20368     3d..2. 10363256892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.012491] ksoftirq-15        0d..2. 10363256893us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.014483] rcu_pree-16        3d..2. 10363256903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.016481] rcu_tort-20368     3dN.3. 10363260884us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.017750] rcu_tort-20368     3d..2. 10363260885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.019773] ksoftirq-40        3d.s3. 10363260891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10366.021034] rcu_tort-20355     7d..2. 10363260893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.023050] ksoftirq-40        3d..2. 10363260896us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.025057] rcu_pree-16        7d..2. 10363260902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.027060] rcu_tort-20355     7dN.4. 10363265882us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.028313] rcu_tort-20355     7d..2. 10363265884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.030313] ksoftirq-68        7d.s3. 10363265889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.031588] rcu_tort-20368     3d..2. 10363265891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.033617] ksoftirq-68        7d..2. 10363265892us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.035618] rcu_pree-16        3d..2. 10363265901us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.037628] rcu_tort-20368     3dN.3. 10363269885us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.038973] rcu_tort-20368     3d..2. 10363269887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.040994] ksoftirq-40        3d.s3. 10363269894us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10366.042248] ksoftirq-40        3d..2. 10363269899us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.044246] rcu_tort-20365     9d..2. 10363269899us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.046270] rcu_pree-16        9d..2. 10363269913us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.048280] rcu_tort-20365     9dN.3. 10363274883us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10366.049559] rcu_tort-20365     9d..2. 10363274884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10366.051670] rcu_tort-173       0dN.4. 10363274885us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.052940] rcu_tort-173       0d..2. 10363274887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.054928] ksoftirq-82        9d.s3. 10363274892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10366.056196] ksoftirq-82        9d..2. 10363274894us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.058204] rcu_tort-20360     2d..2. 10363274895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.060223] ksoftirq-15        0d..2. 10363274896us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.062219] rcu_pree-16        2d..2. 10363274911us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.064206] rcu_tort-20362     5dN.3. 10363275884us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10366.065474] rcu_tort-20362     5d..2. 10363275886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10366.067508] ksoftirq-54        5d..2. 10363275896us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.069500] rcu_tort-20355     7dN.3. 10363277884us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.070758] rcu_tort-20355     7d..2. 10363277885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.072772] ksoftirq-68        7d..2. 10363277893us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.074753] rcu_tort-20360     2dN.3. 10363279884us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.076013] rcu_tort-20360     2d..2. 10363279885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.078014] ksoftirq-32        2d.s3. 10363279893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.079259] rcu_tort-20368     3d..2. 10363279896us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.081285] ksoftirq-32        2d..2. 10363279897us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.083302] rcu_pree-16        3d..2. 10363279906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.085304] rcu_tort-20368     3dN.4. 10363283884us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.086603] rcu_tort-20368     3d..2. 10363283886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.088609] ksoftirq-40        3d.s3. 10363283893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10366.089865] rcu_tort-20367    11d..2. 10363283895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.091878] ksoftirq-40        3d..2. 10363283897us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.093885] rcu_pree-16       11d..2. 10363283905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.095895] rcu_tort-20367    11dN.3. 10363284884us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.097158] rcu_tort-20367    11d..2. 10363284885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.099181] ksoftirq-96       11d..2. 10363284893us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.101203] rcu_tort-20367    11dN.3. 10363287883us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.102493] rcu_tort-20367    11d..2. 10363287884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.104528] rcu_tort-20368     3dN.3. 10363287884us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.105786] rcu_tort-20368     3d..2. 10363287885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.107784] ksoftirq-96       11d.s3. 10363287890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10366.109037] ksoftirq-96       11d..2. 10363287892us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.111049] rcu_tort-20355     7d..2. 10363287892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.113065] ksoftirq-40        3d..2. 10363287894us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.115053] rcu_pree-16        7d..2. 10363287901us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.117037] rcu_tort-20355     7dN.3. 10363292882us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.118289] rcu_tort-20355     7d..2. 10363292883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.120275] ksoftirq-68        7d.s3. 10363292888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10366.121535] rcu_tort-20362     5d..2. 10363292891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.123564] ksoftirq-68        7d..2. 10363292892us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.125590] rcu_pree-16        5d..2. 10363292902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.127616] rcu_tort-173       0dN.4. 10363295884us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.128889] rcu_tort-173       0d..2. 10363295886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.130892] ksoftirq-15        0d..2. 10363295890us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.132866] rcu_tort-20362     5dN.3. 10363297882us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10366.134132] rcu_tort-20362     5d..2. 10363297882us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10366.136153] ksoftirq-54        5d.s3. 10363297887us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10366.137412] rcu_tort-20360     2d..2. 10363297889us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.139511] ksoftirq-54        5d..2. 10363297891us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.141515] rcu_pree-16        2d..2. 10363297898us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.143526] rcu_tort-20360     2dN.3. 10363302882us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.144786] rcu_tort-20360     2d..2. 10363302883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.146792] ksoftirq-32        2d.s3. 10363302887us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10366.148053] ksoftirq-32        2d..2. 10363302890us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.150067] rcu_tort-20362     5d..2. 10363302907us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.152084] rcu_pree-16        5d..2. 10363302918us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.154087] rcu_tort-20362     5dN.4. 10363307882us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10366.155343] rcu_tort-20362     5d..2. 10363307883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10366.157395] ksoftirq-54        5d.s3. 10363307887us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.158666] rcu_tort-20368     3d..2. 10363307891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.160675] ksoftirq-54        5d..2. 10363307891us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.162672] rcu_pree-16        3d..2. 10363307902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.164680] rcu_tort-20368     3dN.3. 10363311885us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.165937] rcu_tort-20368     3d..2. 10363311886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.167962] ksoftirq-40        3d.s3. 10363311892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10366.169222] rcu_tort-20366    13d..2. 10363311897us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.171258] ksoftirq-40        3d..2. 10363311897us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.173268] rcu_pree-16       13d..2. 10363311910us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.175270] rcu_tort-20366    13dN.3. 10363315889us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10366.176575] rcu_tort-20366    13d..2. 10363315891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10366.178616] ksoftirq-110      13d.s3. 10363315902us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10366.179891] rcu_tort-20365     9d..2. 10363315906us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.181903] ksoftirq-110      13d..2. 10363315915us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.183923] rcu_pree-16        9d..2. 10363315918us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.185944] rcu_tort-20365     9dN.3. 10363319885us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10366.187205] rcu_tort-20365     9d..2. 10363319887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10366.189225] ksoftirq-82        9d.s3. 10363319894us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.190513] rcu_tort-20368     3d..2. 10363319897us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.192536] ksoftirq-82        9d..2. 10363319899us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.194539] rcu_pree-16        3d..2. 10363319905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.196549] rcu_tort-20368     3dN.3. 10363323884us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.197810] rcu_tort-20368     3d..2. 10363323885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.199848] ksoftirq-40        3d.s3. 10363323890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10366.201100] rcu_tort-173       0d..2. 10363323892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.203094] ksoftirq-40        3d..2. 10363323894us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.205087] rcu_pree-16        0d..2. 10363323903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.207097] rcu_tort-173       0dN.4. 10363327884us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.208364] rcu_tort-173       0d..2. 10363327885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.210335] ksoftirq-15        0d.s3. 10363327891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10366.211606] ksoftirq-15        0d..2. 10363327894us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.213587] rcu_tort-20362     5d..2. 10363327894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.215595] rcu_pree-16        5d..2. 10363327905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.217597] rcu_tort-20362     5dN.4. 10363332883us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10366.218843] rcu_tort-20362     5d..2. 10363332884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10366.220855] ksoftirq-54        5d.s3. 10363332890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10366.222443] rcu_tort-20355     7d..2. 10363332892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.225495] ksoftirq-54        5d..2. 10363332894us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.228559] rcu_pree-16        7d..2. 10363332903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.231530] rcu_tort-20355     7dN.3. 10363337882us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.233459] rcu_tort-20355     7d..2. 10363337883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.236530] ksoftirq-68        7d.s3. 10363337888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10366.238400] rcu_tort-20365     9d..2. 10363337891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.241413] ksoftirq-68        7d..2. 10363337891us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.243686] rcu_pree-16        9d..2. 10363337902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.245676] rcu_tort-20365     9dN.4. 10363342884us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10366.246924] rcu_tort-20365     9d..2. 10363342885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10366.248940] ksoftirq-82        9d.s3. 10363342890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10366.250212] rcu_tort-20362     5d..2. 10363342892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.252225] ksoftirq-82        9d..2. 10363342894us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.254234] rcu_pree-16        5d..2. 10363342901us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.256237] rcu_tort-20362     5dN.3. 10363347882us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10366.257525] rcu_tort-20362     5d..2. 10363347883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10366.259577] ksoftirq-54        5d.s3. 10363347888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10366.260819] rcu_tort-20365     9d..2. 10363347890us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.262829] ksoftirq-54        5d..2. 10363347892us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.264829] rcu_pree-16        9d..2. 10363347901us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.266825] rcu_tort-20365     9dN.3. 10363352883us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10366.268077] rcu_tort-20365     9d..2. 10363352883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10366.270067] ksoftirq-82        9d.s3. 10363352889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10366.271314] rcu_tort-20355     7d..2. 10363352892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.273303] ksoftirq-82        9d..2. 10363352893us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.275292] rcu_pree-16        7d..2. 10363352899us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.277264] rcu_tort-20355     7dN.3. 10363357882us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.278549] rcu_tort-20355     7d..2. 10363357883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.280580] ksoftirq-68        7d.s3. 10363357888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10366.281837] rcu_tort-20367    11d..2. 10363357890us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.283865] ksoftirq-68        7d..2. 10363357891us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.285883] rcu_pree-16       11d..2. 10363357900us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.287890] rcu_tort-20360     2dN.3. 10363358883us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.289143] rcu_tort-20360     2d..2. 10363358885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.291139] ksoftirq-32        2d..2. 10363358894us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.293139] rcu_tort-20367    11dN.3. 10363362885us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.294411] rcu_tort-20367    11d..2. 10363362887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.296430] ksoftirq-96       11d.s3. 10363362893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10366.297686] rcu_tort-20365     9d..2. 10363362896us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.299709] ksoftirq-96       11d..2. 10363362898us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.301729] rcu_pree-16        9d..2. 10363362907us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.303732] rcu_tort-20365     9dN.4. 10363367882us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10366.304986] rcu_tort-20365     9d..2. 10363367883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10366.307001] ksoftirq-82        9d.s3. 10363367889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10366.308245] rcu_tort-20367    11d..2. 10363367892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.310264] ksoftirq-82        9d..2. 10363367893us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.312275] rcu_pree-16       11d..2. 10363367902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.314274] rcu_tort-20367    11dN.3. 10363372885us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.315560] rcu_tort-20367    11d..2. 10363372886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.317577] ksoftirq-96       11d.s3. 10363372893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10366.318832] ksoftirq-96       11d..2. 10363372897us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.320830] rcu_tort-20366    13d..2. 10363372898us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.322861] rcu_pree-16       13d..2. 10363372914us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.324867] rcu_tort-20360     2dN.3. 10363375890us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.326133] rcu_tort-20360     2d..2. 10363375892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.328146] ksoftirq-32        2d..2. 10363375903us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.330146] rcu_tort-20366    13dN.3. 10363377883us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10366.331443] rcu_tort-20366    13d..2. 10363377884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10366.334483] ksoftirq-110      13d.s3. 10363377891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10366.335767] rcu_tort-20367    11d..2. 10363377893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.337782] ksoftirq-110      13d..2. 10363377895us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.339909] rcu_pree-16       11d..2. 10363377903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.341921] rcu_tort-20367    11dN.3. 10363381885us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.343184] rcu_tort-20367    11d..2. 10363381886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.345208] ksoftirq-96       11d.s3. 10363381891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10366.346477] rcu_tort-173       0d..2. 10363381893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.348476] ksoftirq-96       11d..2. 10363381895us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.350506] rcu_pree-16        0d..2. 10363381902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.352493] rcu_tort-173       0dN.3. 10363385884us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.353756] rcu_tort-173       0d..2. 10363385885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.355762] ksoftirq-15        0d.s3. 10363385891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10366.357281] ksoftirq-15        0d..2. 10363385894us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.359307] rcu_tort-20355     7d..2. 10363385894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.361343] rcu_pree-16        7d..2. 10363385906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.363344] rcu_tort-20355     7dN.3. 10363389885us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.364667] rcu_tort-20355     7d..2. 10363389886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.366764] ksoftirq-68        7d.s3. 10363389894us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10366.368052] rcu_tort-20366    13d..2. 10363389896us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.370076] ksoftirq-68        7d..2. 10363389898us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.372097] rcu_pree-16       13d..2. 10363389906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.374121] rcu_tort-20366    13dN.3. 10363393889us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10366.375494] rcu_tort-20366    13d..2. 10363393891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10366.377534] ksoftirq-110      13d.s3. 10363393900us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10366.378789] rcu_tort-173       0d..2. 10363393903us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.380787] ksoftirq-110      13d..2. 10363393905us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.383016] rcu_pree-16        0d..2. 10363393916us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.385006] rcu_tort-173       0dN.3. 10363397884us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.386270] rcu_tort-173       0d..2. 10363397886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.388267] ksoftirq-15        0d.s3. 10363397893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10366.389557] rcu_tort-20365     9d..2. 10363397895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.391581] ksoftirq-15        0d..2. 10363397896us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.393580] rcu_pree-16        9d..2. 10363397906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.395622] rcu_tort-173       0dN.4. 10363399885us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.396878] rcu_tort-173       0d..2. 10363399886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.398877] ksoftirq-15        0d..2. 10363399890us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.400893] rcu_tort-20365     9dN.3. 10363402882us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10366.402155] rcu_tort-20365     9d..2. 10363402883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10366.404163] ksoftirq-82        9d.s3. 10363402888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10366.405434] rcu_tort-20366    13d..2. 10363402891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.407556] ksoftirq-82        9d..2. 10363402891us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.409567] rcu_pree-16       13d..2. 10363402902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.411578] rcu_tort-20366    13dN.4. 10363407883us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10366.412865] rcu_tort-20366    13d..2. 10363407884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10366.414914] ksoftirq-110      13d.s3. 10363407890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10366.416169] rcu_tort-20360     2d..2. 10363407893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.418172] ksoftirq-110      13d..2. 10363407894us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.420186] rcu_pree-16        2d..2. 10363407907us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.422180] rcu_tort-20360     2dN.4. 10363411885us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.423461] rcu_tort-20360     2d..2. 10363411886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.425490] ksoftirq-32        2d.s3. 10363411894us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10366.426813] rcu_tort-20355     7d..2. 10363411899us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.428819] ksoftirq-32        2d..2. 10363411899us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.430827] rcu_pree-16        7d..2. 10363411913us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.432826] rcu_tort-20355     7dN.4. 10363415885us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.434079] rcu_tort-20355     7d..2. 10363415887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.436077] ksoftirq-68        7d.s3. 10363415895us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10366.437338] rcu_tort-173       0d..2. 10363415898us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.439331] ksoftirq-68        7d..2. 10363415899us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.441366] rcu_pree-16        0d..2. 10363415909us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.443332] rcu_tort-173       0d.h3. 10363416913us : sched_wakeup: comm=torture_stutter pid=172 prio=120 target_cpu=000
-[10366.444664] rcu_tort-173       0dN.4. 10363419884us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.445913] rcu_tort-173       0d..2. 10363419886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.447886] ksoftirq-15        0d.s3. 10363419892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10366.449140] rcu_tort-20367    11d..2. 10363419893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.451145] ksoftirq-15        0d..2. 10363419894us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.453108] rcu_pree-16       11d..2. 10363419902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.455107] rcu_tort-20367    11dN.3. 10363424885us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.456363] rcu_tort-20367    11d..2. 10363424886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.458403] ksoftirq-96       11d.s3. 10363424893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10366.459657] rcu_tort-20360     2d..2. 10363424896us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.461657] ksoftirq-96       11d..2. 10363424897us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.463674] rcu_pree-16        2d..2. 10363424907us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.465668] rcu_tort-20360     2dN.3. 10363428884us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.466928] rcu_tort-20360     2d..2. 10363428885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.468980] ksoftirq-32        2d.s3. 10363428891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10366.470234] rcu_tort-20365     9d..2. 10363428893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.472246] ksoftirq-32        2d..2. 10363428895us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.474241] rcu_pree-16        9d..2. 10363428904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.476250] rcu_tort-20365     9dN.3. 10363431883us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10366.477535] rcu_tort-20365     9d..2. 10363431885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10366.479565] ksoftirq-82        9d..2. 10363431899us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.481569] rcu_tort-20365     9dN.3. 10363433884us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10366.482830] rcu_tort-20365     9d..2. 10363433885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10366.484857] ksoftirq-82        9d.s3. 10363433892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10366.486117] rcu_tort-173       0d..2. 10363433896us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.488103] ksoftirq-82        9d..2. 10363433897us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.490168] rcu_pree-16        0d..2. 10363433909us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.492199] rcu_tort-173       0dN.3. 10363437886us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.493454] rcu_tort-173       0d..2. 10363437888us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.495445] ksoftirq-15        0d.s3. 10363437896us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10366.496703] ksoftirq-15        0d..2. 10363437899us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.498690] rcu_tort-20366    13d..2. 10363437899us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.500709] rcu_pree-16       13d..2. 10363437909us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.502700] rcu_tort-20366    13dN.3. 10363442883us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10366.503987] rcu_tort-20366    13d..2. 10363442885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10366.506010] ksoftirq-110      13d.s3. 10363442892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.507264] ksoftirq-110      13d..2. 10363442896us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.509286] rcu_tort-20368     3d..2. 10363442897us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.511292] rcu_pree-16        3d..2. 10363442909us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.513292] rcu_tort-20368     3dN.4. 10363447885us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.514575] rcu_tort-20368     3d..2. 10363447887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.516597] ksoftirq-40        3d.s3. 10363447895us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10366.517858] rcu_tort-20360     2d..2. 10363447898us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.519881] ksoftirq-40        3d..2. 10363447899us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.521886] rcu_pree-16        2d..2. 10363447910us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.523887] rcu_tort-20360     2dN.3. 10363451891us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.525173] rcu_tort-20360     2d..2. 10363451894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.527188] ksoftirq-32        2d.s3. 10363451904us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10366.528510] rcu_tort-20367    11d..2. 10363451907us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.530623] ksoftirq-32        2d..2. 10363451910us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.532699] rcu_pree-16       11d..2. 10363451919us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.534919] rcu_tort-20367    11dN.3. 10363455884us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.536311] rcu_tort-20367    11d..2. 10363455885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.538460] ksoftirq-96       11d.s3. 10363455892us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.539757] rcu_tort-20368     3d..2. 10363455895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.541838] ksoftirq-96       11d..2. 10363455896us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.543820] rcu_pree-16        3d..2. 10363455906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.545795] rcu_tort-20366    13dN.3. 10363459884us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10366.547060] rcu_tort-20366    13d..2. 10363459885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10366.549071] rcu_tort-20368     3dN.3. 10363459890us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.550317] rcu_tort-20368     3d..2. 10363459893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.552317] ksoftirq-110      13d..2. 10363459895us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.554340] ksoftirq-40        3d.s3. 10363459902us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10366.555772] ksoftirq-40        3d..2. 10363459904us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.557921] rcu_tort-20362     5d..2. 10363459913us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.559931] rcu_pree-16        5d..2. 10363459925us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.561948] rcu_tort-20362     5dN.3. 10363464883us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10366.563204] rcu_tort-20362     5d..2. 10363464884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10366.565218] ksoftirq-54        5d.s3. 10363464890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10366.566526] rcu_tort-20367    11d..2. 10363464894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.568619] ksoftirq-54        5d..2. 10363464894us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.570860] rcu_pree-16       11d..2. 10363464904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.573090] rcu_tort-20367    11dN.3. 10363469884us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.574357] rcu_tort-20367    11d..2. 10363469885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.576366] ksoftirq-96       11d.s3. 10363469890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10366.577640] rcu_tort-20362     5d..2. 10363469893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.579669] ksoftirq-96       11d..2. 10363469894us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.581695] rcu_pree-16        5d..2. 10363469904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.583696] rcu_tort-20362     5dN.3. 10363474882us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10366.584951] rcu_tort-20362     5d..2. 10363474883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10366.586964] ksoftirq-54        5d.s3. 10363474887us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10366.588212] rcu_tort-20366    13d..2. 10363474890us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.590240] ksoftirq-54        5d..2. 10363474891us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.592238] rcu_pree-16       13d..2. 10363474906us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.594221] rcu_tort-20366    13dN.3. 10363478889us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10366.595520] rcu_tort-20366    13d..2. 10363478892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10366.597569] ksoftirq-110      13d.s3. 10363478900us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10366.598831] rcu_tort-20362     5d..2. 10363478901us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.600854] ksoftirq-110      13d..2. 10363478906us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.602863] rcu_pree-16        5d..2. 10363478912us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.604861] rcu_tort-20362     5dN.4. 10363483882us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10366.606137] rcu_tort-20362     5d..2. 10363483882us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10366.608164] ksoftirq-54        5d.s3. 10363483887us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10366.609436] ksoftirq-54        5d..2. 10363483890us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.611442] rcu_tort-173       0d..2. 10363483891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.613420] rcu_pree-16        0d..2. 10363483903us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.615362] rcu_tort-173       0dN.3. 10363487885us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.616626] rcu_tort-173       0d..2. 10363487886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.618607] ksoftirq-15        0d.s3. 10363487893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10366.619870] ksoftirq-15        0d..2. 10363487896us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.621843] rcu_tort-20360     2d..2. 10363487897us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.623852] rcu_pree-16        2d..2. 10363487907us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.625858] rcu_tort-20360     2dN.3. 10363492883us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.627110] rcu_tort-20360     2d..2. 10363492883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.629138] ksoftirq-32        2d.s3. 10363492889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=013
-[10366.630437] rcu_tort-20366    13d..2. 10363492892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.632492] ksoftirq-32        2d..2. 10363492893us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.634537] rcu_pree-16       13d..2. 10363492904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.636567] rcu_tort-20366    13dN.3. 10363497884us : sched_wakeup: comm=ksoftirqd/13 pid=110 prio=97 target_cpu=013
-[10366.637861] rcu_tort-20366    13d..2. 10363497885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/13 next_pid=110 next_prio=97
-[10366.639907] ksoftirq-110      13d.s3. 10363497891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10366.641183] rcu_tort-20355     7d..2. 10363497895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.643203] ksoftirq-110      13d..2. 10363497895us : sched_switch: prev_comm=ksoftirqd/13 prev_pid=110 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20366 next_prio=98
-[10366.645240] rcu_pree-16        7d..2. 10363497905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.647519] rcu_tort-20355     7dN.4. 10363501885us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.648862] rcu_tort-20355     7d..2. 10363501886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.650925] ksoftirq-68        7d.s3. 10363501894us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10366.652182] rcu_tort-20360     2d..2. 10363501896us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.654233] ksoftirq-68        7d..2. 10363501899us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.656309] rcu_pree-16        2d..2. 10363501908us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.658306] rcu_tort-173       0dN.3. 10363503884us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.659582] rcu_tort-173       0d..2. 10363503886us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.661564] ksoftirq-15        0d..2. 10363503889us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.663550] rcu_tort-20360     2dN.3. 10363506882us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.664801] rcu_tort-20360     2d..2. 10363506883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.666804] ksoftirq-32        2d.s3. 10363506888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=000
-[10366.668109] ksoftirq-32        2d..2. 10363506892us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.670112] rcu_tort-173       0d..2. 10363506892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.672103] rcu_tort-20367    11d..2. 10363506895us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=kworker/11:1 next_pid=19375 next_prio=120
-[10366.674181] rcu_pree-16        0d..2. 10363506902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.676221] kworker/-19375    11d..3. 10363506905us : dl_server_stop <-dequeue_entities
-[10366.677216] kworker/-19375    11d..2. 10363506911us : sched_switch: prev_comm=kworker/11:1 prev_pid=19375 prev_prio=120 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.679289] rcu_tort-20367    11dN.3. 10363507883us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.680609] rcu_tort-20367    11d..2. 10363507885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.682639] ksoftirq-96       11d..2. 10363507890us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.684671] rcu_tort-173       0dN.3. 10363510884us : sched_wakeup: comm=ksoftirqd/0 pid=15 prio=97 target_cpu=000
-[10366.685932] rcu_tort-173       0d..2. 10363510885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/0 next_pid=15 next_prio=97
-[10366.687937] ksoftirq-15        0d.s3. 10363510891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.689196] ksoftirq-15        0d..2. 10363510893us : sched_switch: prev_comm=ksoftirqd/0 prev_pid=15 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.691179] rcu_tort-20368     3d..2. 10363510894us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.693298] rcu_pree-16        3d..2. 10363510905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.695314] rcu_tort-20368     3dN.3. 10363515883us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.696615] rcu_tort-20368     3d..2. 10363515884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.698627] ksoftirq-40        3d.s3. 10363515890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10366.699902] rcu_tort-20355     7d..2. 10363515892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.701917] ksoftirq-40        3d..2. 10363515893us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.703928] rcu_pree-16        7d..2. 10363515901us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.706138] rcu_tort-20355     7dN.4. 10363520884us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.707410] rcu_tort-20355     7d..2. 10363520885us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.709435] ksoftirq-68        7d.s3. 10363520891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.710703] rcu_tort-20368     3d..2. 10363520892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.712713] ksoftirq-68        7d..2. 10363520895us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.714732] rcu_pree-16        3d..2. 10363520897us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.716755] rcu_tort-20368     3dN.3. 10363525883us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.718019] rcu_tort-20368     3d..2. 10363525884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.720031] ksoftirq-40        3d.s3. 10363525889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=009
-[10366.721278] ksoftirq-40        3d..2. 10363525892us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.723266] rcu_tort-20365     9d..2. 10363525893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.725270] rcu_pree-16        9d..2. 10363525904us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.727258] rcu_tort-20365     9dN.4. 10363530886us : sched_wakeup: comm=ksoftirqd/9 pid=82 prio=97 target_cpu=009
-[10366.728523] rcu_tort-20365     9d..2. 10363530887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/9 next_pid=82 next_prio=97
-[10366.730530] ksoftirq-82        9d.s3. 10363530894us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10366.731788] rcu_tort-20360     2d..2. 10363530898us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.733804] ksoftirq-82        9d..2. 10363530898us : sched_switch: prev_comm=ksoftirqd/9 prev_pid=82 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20365 next_prio=98
-[10366.735807] rcu_pree-16        2d..2. 10363530910us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.737799] rcu_tort-20360     2dN.3. 10363534890us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.739047] rcu_tort-20360     2d..2. 10363534893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.741067] ksoftirq-32        2d.s3. 10363534901us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=003
-[10366.742346] rcu_tort-20368     3d..2. 10363534904us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.744357] ksoftirq-32        2d..2. 10363534907us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.746351] rcu_pree-16        3d..2. 10363534910us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.748349] rcu_tort-20368     3dN.4. 10363539882us : sched_wakeup: comm=ksoftirqd/3 pid=40 prio=97 target_cpu=003
-[10366.749632] rcu_tort-20368     3d..2. 10363539883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/3 next_pid=40 next_prio=97
-[10366.751652] ksoftirq-40        3d.s3. 10363539888us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=011
-[10366.752903] rcu_tort-20367    11d..2. 10363539891us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.754905] ksoftirq-40        3d..2. 10363539892us : sched_switch: prev_comm=ksoftirqd/3 prev_pid=40 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20368 next_prio=98
-[10366.756907] rcu_pree-16       11d..2. 10363539900us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.758905] rcu_tort-20367    11dN.3. 10363544883us : sched_wakeup: comm=ksoftirqd/11 pid=96 prio=97 target_cpu=011
-[10366.760171] rcu_tort-20367    11d..2. 10363544884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/11 next_pid=96 next_prio=97
-[10366.762194] ksoftirq-96       11d.s3. 10363544890us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=007
-[10366.763490] rcu_tort-20355     7d..2. 10363544892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.765526] ksoftirq-96       11d..2. 10363544894us : sched_switch: prev_comm=ksoftirqd/11 prev_pid=96 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20367 next_prio=98
-[10366.767552] rcu_pree-16        7d..2. 10363544902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.769589] rcu_tort-20355     7dN.3. 10363548886us : sched_wakeup: comm=ksoftirqd/7 pid=68 prio=97 target_cpu=007
-[10366.770855] rcu_tort-20355     7d..2. 10363548887us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/7 next_pid=68 next_prio=97
-[10366.772893] ksoftirq-68        7d.s3. 10363548893us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10366.774170] rcu_tort-20362     5d..2. 10363548897us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.776753] ksoftirq-68        7d..2. 10363548898us : sched_switch: prev_comm=ksoftirqd/7 prev_pid=68 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20355 next_prio=98
-[10366.779820] rcu_pree-16        5d..2. 10363548908us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.782066] rcu_tort-20362     5dN.4. 10363553882us : sched_wakeup: comm=ksoftirqd/5 pid=54 prio=97 target_cpu=005
-[10366.783331] rcu_tort-20362     5d..2. 10363553883us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/5 next_pid=54 next_prio=97
-[10366.785358] ksoftirq-54        5d.s3. 10363553889us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=002
-[10366.786653] rcu_tort-20360     2d..2. 10363553892us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.788681] ksoftirq-54        5d..2. 10363553893us : sched_switch: prev_comm=ksoftirqd/5 prev_pid=54 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.790682] rcu_pree-16        2d..2. 10363553905us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.792698] rcu_tort-20360     2dN.3. 10363558883us : sched_wakeup: comm=ksoftirqd/2 pid=32 prio=97 target_cpu=002
-[10366.793954] rcu_tort-20360     2d..2. 10363558884us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=R+ ==> next_comm=ksoftirqd/2 next_pid=32 next_prio=97
-[10366.795958] ksoftirq-32        2d.s3. 10363558891us : sched_wakeup: comm=rcu_preempt pid=16 prio=97 target_cpu=005
-[10366.797285] rcu_tort-20362     5d..2. 10363558893us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=R+ ==> next_comm=rcu_preempt next_pid=16 next_prio=97
-[10366.799405] ksoftirq-32        2d..2. 10363558895us : sched_switch: prev_comm=ksoftirqd/2 prev_pid=32 prev_prio=97 prev_state=S ==> next_comm=rcu_torture_boo next_pid=20360 next_prio=98
-[10366.801559] rcu_pree-16        5d..2. 10363558902us : sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=97 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20362 next_prio=98
-[10366.803628] rcu_tort-173       0d..2. 10363559190us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=R+ ==> next_comm=kworker/0:0 next_pid=20144 next_prio=120
-[10366.805756] kworker/-20144     0d..2. 10363559197us : sched_switch: prev_comm=kworker/0:0 prev_pid=20144 prev_prio=120 prev_state=I ==> next_comm=torture_stutter next_pid=172 next_prio=120
-[10366.807885] torture_-172       0d..2. 10363559201us : sched_switch: prev_comm=torture_stutter prev_pid=172 prev_prio=120 prev_state=I ==> next_comm=rcu_torture_rea next_pid=157 next_prio=139
-[10366.810012] rcu_tort-20355     7d..2. 10363559204us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20355 prev_prio=98 prev_state=I ==> next_comm=rcu_torture_fak next_pid=151 next_prio=139
-[10366.812100] rcu_tort-20368     3d..2. 10363559205us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20368 prev_prio=98 prev_state=I ==> next_comm=rcu_torture_wri next_pid=148 next_prio=120
-[10366.814261] rcu_tort-20362     5d..2. 10363559206us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20362 prev_prio=98 prev_state=I ==> next_comm=rcu_torture_rea next_pid=162 next_prio=139
-[10366.816421] rcu_tort-20366    13d..2. 10363559207us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20366 prev_prio=98 prev_state=I ==> next_comm=rcu_torture_rea next_pid=155 next_prio=139
-[10366.818491] rcu_tort-151       7d..2. 10363559210us : sched_switch: prev_comm=rcu_torture_fak prev_pid=151 prev_prio=139 prev_state=I ==> next_comm=kworker/7:0 next_pid=19250 next_prio=120
-[10366.820538] rcu_tort-148       3dN.3. 10363559210us : dl_server_stop <-dequeue_entities
-[10366.821524] rcu_tort-157       0d..3. 10363559211us : dl_server_stop <-dequeue_entities
-[10366.822504] rcu_tort-162       5d..2. 10363559215us : sched_switch: prev_comm=rcu_torture_rea prev_pid=162 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=164 next_prio=139
-[10366.824556] rcu_tort-157       0d..2. 10363559216us : sched_switch: prev_comm=rcu_torture_rea prev_pid=157 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_boo next_pid=173 next_prio=98
-[10366.826593] rcu_tort-20365     9d..3. 10363559218us : dl_server_start <-enqueue_task_fair
-[10366.827590] kworker/-19250     7d..3. 10363559219us : dl_server_stop <-dequeue_entities
-[10366.828572] rcu_tort-20365     9d..2. 10363559221us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20365 prev_prio=98 prev_state=I ==> next_comm=kcompactd0 next_pid=134 next_prio=120
-[10366.830603] rcu_tort-20360     2d..3. 10363559222us : dl_server_start <-enqueue_task_fair
-[10366.831611] rcu_tort-20367    11d..3. 10363559225us : dl_server_start <-enqueue_task_fair
-[10366.832615] rcu_tort-20360     2d..2. 10363559225us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20360 prev_prio=98 prev_state=I ==> next_comm=kthreadd next_pid=2 next_prio=120
-[10366.834608] rcu_tort-164       5d..2. 10363559225us : sched_switch: prev_comm=rcu_torture_rea prev_pid=164 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_boo next_pid=20364 next_prio=98
-[10366.836703] kcompact-134       9d..3. 10363559225us : dl_server_stop <-dequeue_entities
-[10366.837691] rcu_tort-155      13d..2. 10363559227us : sched_switch: prev_comm=rcu_torture_rea prev_pid=155 prev_prio=139 prev_state=R+ ==> next_comm=rcu_torture_rea next_pid=154 next_prio=139
-[10366.839748] rcu_tort-20367    11d..2. 10363559227us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20367 prev_prio=98 prev_state=I ==> next_comm=rcu_torture_rea next_pid=156 next_prio=139
-[10366.841822] kworker/-19250     7d..3. 10363559232us : dl_server_start <-enqueue_task_fair
-[10366.842856] rcu_tort-156      11d..3. 10363559232us : dl_server_stop <-dequeue_entities
-[10366.843846] rcu_tort-20364     5d..2. 10363559233us : sched_switch: prev_comm=rcu_torture_boo prev_pid=20364 prev_prio=98 prev_state=I ==> next_comm=rcu_torture_fak next_pid=153 next_prio=139
-[10366.845949] kworker/-19250     7d..2. 10363559234us : sched_switch: prev_comm=kworker/7:0 prev_pid=19250 prev_prio=120 prev_state=I ==> next_comm=rcu_torture_fak next_pid=149 next_prio=139
-[10366.847982] rcu_tort-154      13d..2. 10363559236us : sched_switch: prev_comm=rcu_torture_rea prev_pid=154 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_bar next_pid=196 next_prio=120
-[10366.850053] rcu_tort-149       7d..3. 10363559236us : dl_server_stop <-dequeue_entities
-[10366.851038] kcompact-134       9d..2. 10363559237us : sched_switch: prev_comm=kcompactd0 prev_pid=134 prev_prio=120 prev_state=S ==> next_comm=swapper/9 next_pid=0 next_prio=120
-[10366.852970] rcu_tort-153       5d..2. 10363559237us : sched_switch: prev_comm=rcu_torture_fak prev_pid=153 prev_prio=139 prev_state=I ==> next_comm=rcu_torture_rea next_pid=159 next_prio=139
-[10366.855030] rcu_tort-173       0d..3. 10363559240us : dl_server_start <-enqueue_task_fair
-[10366.856025] rcu_tort-159       5d..3. 10363559241us : dl_server_stop <-dequeue_entities
-[10366.856998] rcu_tort-173       0d..2. 10363559244us : sched_switch: prev_comm=rcu_torture_boo prev_pid=173 prev_prio=98 prev_state=I ==> next_comm=rcu_torture_rea next_pid=165 next_prio=139
-[10366.859061] rcu_tort-148       3dN.3. 10363559245us : dl_server_start <-enqueue_task_fair
-[10366.860069] ---------------------------------
-[10366.860683] Dumping ftrace buffer:
-[10366.861094]    (ftrace buffer empty)
-[10368.660736] Boost inversion persisted: No QS from CPU 3
-[10368.660756] rcu-torture: rcu_torture_boost is stopping
-[10368.667675] rcu-torture: rcu_torture_read_exit: End of episode
+> Could you share your kernel config? Is KFENCE enabled?
+
+Yes, KFENCE is enabled.
+
+Here is the kernel config used.
+
+#
+# Automatically generated file; DO NOT EDIT.
+# Linux/x86 6.12.0-rc1 Kernel Configuration
+#
+CONFIG_CC_VERSION_TEXT=3D"gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0"
+CONFIG_CC_IS_GCC=3Dy
+CONFIG_GCC_VERSION=3D110400
+CONFIG_CLANG_VERSION=3D0
+CONFIG_AS_IS_GNU=3Dy
+CONFIG_AS_VERSION=3D23800
+CONFIG_LD_IS_BFD=3Dy
+CONFIG_LD_VERSION=3D23800
+CONFIG_LLD_VERSION=3D0
+CONFIG_RUSTC_VERSION=3D0
+CONFIG_CC_CAN_LINK=3Dy
+CONFIG_CC_CAN_LINK_STATIC=3Dy
+CONFIG_GCC_ASM_GOTO_OUTPUT_BROKEN=3Dy
+CONFIG_TOOLS_SUPPORT_RELR=3Dy
+CONFIG_CC_HAS_ASM_INLINE=3Dy
+CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=3Dy
+CONFIG_PAHOLE_VERSION=3D122
+CONFIG_IRQ_WORK=3Dy
+CONFIG_BUILDTIME_TABLE_SORT=3Dy
+CONFIG_THREAD_INFO_IN_TASK=3Dy
+
+#
+# General setup
+#
+CONFIG_INIT_ENV_ARG_LIMIT=3D32
+# CONFIG_COMPILE_TEST is not set
+# CONFIG_WERROR is not set
+CONFIG_LOCALVERSION=3D""
+# CONFIG_LOCALVERSION_AUTO is not set
+CONFIG_BUILD_SALT=3D""
+CONFIG_HAVE_KERNEL_GZIP=3Dy
+CONFIG_HAVE_KERNEL_BZIP2=3Dy
+CONFIG_HAVE_KERNEL_LZMA=3Dy
+CONFIG_HAVE_KERNEL_XZ=3Dy
+CONFIG_HAVE_KERNEL_LZO=3Dy
+CONFIG_HAVE_KERNEL_LZ4=3Dy
+CONFIG_HAVE_KERNEL_ZSTD=3Dy
+# CONFIG_KERNEL_GZIP is not set
+# CONFIG_KERNEL_BZIP2 is not set
+# CONFIG_KERNEL_LZMA is not set
+# CONFIG_KERNEL_XZ is not set
+# CONFIG_KERNEL_LZO is not set
+# CONFIG_KERNEL_LZ4 is not set
+CONFIG_KERNEL_ZSTD=3Dy
+CONFIG_DEFAULT_INIT=3D""
+CONFIG_DEFAULT_HOSTNAME=3D"(none)"
+CONFIG_SYSVIPC=3Dy
+CONFIG_SYSVIPC_SYSCTL=3Dy
+CONFIG_SYSVIPC_COMPAT=3Dy
+CONFIG_POSIX_MQUEUE=3Dy
+CONFIG_POSIX_MQUEUE_SYSCTL=3Dy
+CONFIG_WATCH_QUEUE=3Dy
+CONFIG_CROSS_MEMORY_ATTACH=3Dy
+CONFIG_USELIB=3Dy
+CONFIG_AUDIT=3Dy
+CONFIG_HAVE_ARCH_AUDITSYSCALL=3Dy
+CONFIG_AUDITSYSCALL=3Dy
+
+#
+# IRQ subsystem
+#
+CONFIG_GENERIC_IRQ_PROBE=3Dy
+CONFIG_GENERIC_IRQ_SHOW=3Dy
+CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK=3Dy
+CONFIG_GENERIC_PENDING_IRQ=3Dy
+CONFIG_GENERIC_IRQ_MIGRATION=3Dy
+CONFIG_HARDIRQS_SW_RESEND=3Dy
+CONFIG_IRQ_DOMAIN=3Dy
+CONFIG_IRQ_DOMAIN_HIERARCHY=3Dy
+CONFIG_GENERIC_MSI_IRQ=3Dy
+CONFIG_IRQ_MSI_IOMMU=3Dy
+CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR=3Dy
+CONFIG_GENERIC_IRQ_RESERVATION_MODE=3Dy
+CONFIG_IRQ_FORCED_THREADING=3Dy
+CONFIG_SPARSE_IRQ=3Dy
+# CONFIG_GENERIC_IRQ_DEBUGFS is not set
+# end of IRQ subsystem
+
+CONFIG_CLOCKSOURCE_WATCHDOG=3Dy
+CONFIG_ARCH_CLOCKSOURCE_INIT=3Dy
+CONFIG_CLOCKSOURCE_VALIDATE_LAST_CYCLE=3Dy
+CONFIG_GENERIC_TIME_VSYSCALL=3Dy
+CONFIG_GENERIC_CLOCKEVENTS=3Dy
+CONFIG_GENERIC_CLOCKEVENTS_BROADCAST=3Dy
+CONFIG_GENERIC_CLOCKEVENTS_BROADCAST_IDLE=3Dy
+CONFIG_GENERIC_CLOCKEVENTS_MIN_ADJUST=3Dy
+CONFIG_GENERIC_CMOS_UPDATE=3Dy
+CONFIG_HAVE_POSIX_CPU_TIMERS_TASK_WORK=3Dy
+CONFIG_POSIX_CPU_TIMERS_TASK_WORK=3Dy
+CONFIG_CONTEXT_TRACKING=3Dy
+CONFIG_CONTEXT_TRACKING_IDLE=3Dy
+
+#
+# Timers subsystem
+#
+CONFIG_TICK_ONESHOT=3Dy
+CONFIG_NO_HZ_COMMON=3Dy
+# CONFIG_HZ_PERIODIC is not set
+CONFIG_NO_HZ_IDLE=3Dy
+# CONFIG_NO_HZ_FULL is not set
+CONFIG_NO_HZ=3Dy
+CONFIG_HIGH_RES_TIMERS=3Dy
+CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US=3D125
+# end of Timers subsystem
+
+CONFIG_BPF=3Dy
+CONFIG_HAVE_EBPF_JIT=3Dy
+CONFIG_ARCH_WANT_DEFAULT_BPF_JIT=3Dy
+
+#
+# BPF subsystem
+#
+CONFIG_BPF_SYSCALL=3Dy
+CONFIG_BPF_JIT=3Dy
+CONFIG_BPF_JIT_ALWAYS_ON=3Dy
+CONFIG_BPF_JIT_DEFAULT_ON=3Dy
+CONFIG_BPF_UNPRIV_DEFAULT_OFF=3Dy
+# CONFIG_BPF_PRELOAD is not set
+CONFIG_BPF_LSM=3Dy
+# end of BPF subsystem
+
+CONFIG_PREEMPT_BUILD=3Dy
+# CONFIG_PREEMPT_NONE is not set
+CONFIG_PREEMPT_VOLUNTARY=3Dy
+# CONFIG_PREEMPT is not set
+# CONFIG_PREEMPT_RT is not set
+CONFIG_PREEMPT_COUNT=3Dy
+CONFIG_PREEMPTION=3Dy
+CONFIG_PREEMPT_DYNAMIC=3Dy
+CONFIG_SCHED_CORE=3Dy
+# CONFIG_SCHED_CLASS_EXT is not set
+
+#
+# CPU/Task time and stats accounting
+#
+CONFIG_TICK_CPU_ACCOUNTING=3Dy
+# CONFIG_VIRT_CPU_ACCOUNTING_GEN is not set
+# CONFIG_IRQ_TIME_ACCOUNTING is not set
+CONFIG_BSD_PROCESS_ACCT=3Dy
+CONFIG_BSD_PROCESS_ACCT_V3=3Dy
+CONFIG_TASKSTATS=3Dy
+CONFIG_TASK_DELAY_ACCT=3Dy
+CONFIG_TASK_XACCT=3Dy
+CONFIG_TASK_IO_ACCOUNTING=3Dy
+CONFIG_PSI=3Dy
+# CONFIG_PSI_DEFAULT_DISABLED is not set
+# end of CPU/Task time and stats accounting
+
+CONFIG_CPU_ISOLATION=3Dy
+
+#
+# RCU Subsystem
+#
+CONFIG_TREE_RCU=3Dy
+CONFIG_PREEMPT_RCU=3Dy
+# CONFIG_RCU_EXPERT is not set
+CONFIG_TREE_SRCU=3Dy
+CONFIG_TASKS_RCU_GENERIC=3Dy
+CONFIG_NEED_TASKS_RCU=3Dy
+CONFIG_TASKS_RCU=3Dy
+CONFIG_TASKS_RUDE_RCU=3Dy
+CONFIG_TASKS_TRACE_RCU=3Dy
+CONFIG_RCU_STALL_COMMON=3Dy
+CONFIG_RCU_NEED_SEGCBLIST=3Dy
+# end of RCU Subsystem
+
+CONFIG_IKCONFIG=3Dm
+# CONFIG_IKCONFIG_PROC is not set
+# CONFIG_IKHEADERS is not set
+CONFIG_LOG_BUF_SHIFT=3D18
+CONFIG_LOG_CPU_MAX_BUF_SHIFT=3D12
+# CONFIG_PRINTK_INDEX is not set
+CONFIG_HAVE_UNSTABLE_SCHED_CLOCK=3Dy
+
+#
+# Scheduler features
+#
+CONFIG_UCLAMP_TASK=3Dy
+CONFIG_UCLAMP_BUCKETS_COUNT=3D5
+# end of Scheduler features
+
+CONFIG_ARCH_SUPPORTS_NUMA_BALANCING=3Dy
+CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH=3Dy
+CONFIG_CC_HAS_INT128=3Dy
+CONFIG_CC_IMPLICIT_FALLTHROUGH=3D"-Wimplicit-fallthrough=3D5"
+CONFIG_GCC10_NO_ARRAY_BOUNDS=3Dy
+CONFIG_CC_NO_ARRAY_BOUNDS=3Dy
+CONFIG_GCC_NO_STRINGOP_OVERFLOW=3Dy
+CONFIG_CC_NO_STRINGOP_OVERFLOW=3Dy
+CONFIG_ARCH_SUPPORTS_INT128=3Dy
+CONFIG_NUMA_BALANCING=3Dy
+CONFIG_NUMA_BALANCING_DEFAULT_ENABLED=3Dy
+CONFIG_SLAB_OBJ_EXT=3Dy
+CONFIG_CGROUPS=3Dy
+CONFIG_PAGE_COUNTER=3Dy
+# CONFIG_CGROUP_FAVOR_DYNMODS is not set
+CONFIG_MEMCG=3Dy
+# CONFIG_MEMCG_V1 is not set
+CONFIG_BLK_CGROUP=3Dy
+CONFIG_CGROUP_WRITEBACK=3Dy
+CONFIG_CGROUP_SCHED=3Dy
+CONFIG_GROUP_SCHED_WEIGHT=3Dy
+CONFIG_FAIR_GROUP_SCHED=3Dy
+CONFIG_CFS_BANDWIDTH=3Dy
+# CONFIG_RT_GROUP_SCHED is not set
+CONFIG_SCHED_MM_CID=3Dy
+CONFIG_UCLAMP_TASK_GROUP=3Dy
+CONFIG_CGROUP_PIDS=3Dy
+CONFIG_CGROUP_RDMA=3Dy
+CONFIG_CGROUP_FREEZER=3Dy
+CONFIG_CGROUP_HUGETLB=3Dy
+CONFIG_CPUSETS=3Dy
+# CONFIG_CPUSETS_V1 is not set
+CONFIG_PROC_PID_CPUSET=3Dy
+CONFIG_CGROUP_DEVICE=3Dy
+CONFIG_CGROUP_CPUACCT=3Dy
+CONFIG_CGROUP_PERF=3Dy
+CONFIG_CGROUP_BPF=3Dy
+CONFIG_CGROUP_MISC=3Dy
+# CONFIG_CGROUP_DEBUG is not set
+CONFIG_SOCK_CGROUP_DATA=3Dy
+CONFIG_NAMESPACES=3Dy
+CONFIG_UTS_NS=3Dy
+CONFIG_TIME_NS=3Dy
+CONFIG_IPC_NS=3Dy
+CONFIG_USER_NS=3Dy
+CONFIG_PID_NS=3Dy
+CONFIG_NET_NS=3Dy
+CONFIG_CHECKPOINT_RESTORE=3Dy
+CONFIG_SCHED_AUTOGROUP=3Dy
+CONFIG_RELAY=3Dy
+CONFIG_BLK_DEV_INITRD=3Dy
+CONFIG_INITRAMFS_SOURCE=3D""
+CONFIG_RD_GZIP=3Dy
+CONFIG_RD_BZIP2=3Dy
+CONFIG_RD_LZMA=3Dy
+CONFIG_RD_XZ=3Dy
+CONFIG_RD_LZO=3Dy
+CONFIG_RD_LZ4=3Dy
+CONFIG_RD_ZSTD=3Dy
+CONFIG_BOOT_CONFIG=3Dy
+# CONFIG_BOOT_CONFIG_FORCE is not set
+# CONFIG_BOOT_CONFIG_EMBED is not set
+CONFIG_INITRAMFS_PRESERVE_MTIME=3Dy
+CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=3Dy
+# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
+CONFIG_LD_ORPHAN_WARN=3Dy
+CONFIG_LD_ORPHAN_WARN_LEVEL=3D"warn"
+CONFIG_SYSCTL=3Dy
+CONFIG_HAVE_UID16=3Dy
+CONFIG_SYSCTL_EXCEPTION_TRACE=3Dy
+CONFIG_HAVE_PCSPKR_PLATFORM=3Dy
+CONFIG_EXPERT=3Dy
+CONFIG_UID16=3Dy
+CONFIG_MULTIUSER=3Dy
+CONFIG_SGETMASK_SYSCALL=3Dy
+CONFIG_SYSFS_SYSCALL=3Dy
+CONFIG_FHANDLE=3Dy
+CONFIG_POSIX_TIMERS=3Dy
+CONFIG_PRINTK=3Dy
+CONFIG_BUG=3Dy
+CONFIG_ELF_CORE=3Dy
+CONFIG_PCSPKR_PLATFORM=3Dy
+# CONFIG_BASE_SMALL is not set
+CONFIG_FUTEX=3Dy
+CONFIG_FUTEX_PI=3Dy
+CONFIG_EPOLL=3Dy
+CONFIG_SIGNALFD=3Dy
+CONFIG_TIMERFD=3Dy
+CONFIG_EVENTFD=3Dy
+CONFIG_SHMEM=3Dy
+CONFIG_AIO=3Dy
+CONFIG_IO_URING=3Dy
+CONFIG_ADVISE_SYSCALLS=3Dy
+CONFIG_MEMBARRIER=3Dy
+CONFIG_KCMP=3Dy
+CONFIG_RSEQ=3Dy
+# CONFIG_DEBUG_RSEQ is not set
+CONFIG_CACHESTAT_SYSCALL=3Dy
+CONFIG_PC104=3Dy
+CONFIG_KALLSYMS=3Dy
+# CONFIG_KALLSYMS_SELFTEST is not set
+CONFIG_KALLSYMS_ALL=3Dy
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=3Dy
+CONFIG_ARCH_HAS_MEMBARRIER_SYNC_CORE=3Dy
+CONFIG_HAVE_PERF_EVENTS=3Dy
+CONFIG_GUEST_PERF_EVENTS=3Dy
+
+#
+# Kernel Performance Events And Counters
+#
+CONFIG_PERF_EVENTS=3Dy
+# CONFIG_DEBUG_PERF_USE_VMALLOC is not set
+# end of Kernel Performance Events And Counters
+
+CONFIG_SYSTEM_DATA_VERIFICATION=3Dy
+CONFIG_PROFILING=3Dy
+CONFIG_TRACEPOINTS=3Dy
+
+#
+# Kexec and crash features
+#
+CONFIG_CRASH_RESERVE=3Dy
+CONFIG_VMCORE_INFO=3Dy
+CONFIG_KEXEC_CORE=3Dy
+CONFIG_HAVE_IMA_KEXEC=3Dy
+CONFIG_KEXEC=3Dy
+CONFIG_KEXEC_FILE=3Dy
+CONFIG_KEXEC_SIG=3Dy
+# CONFIG_KEXEC_SIG_FORCE is not set
+CONFIG_KEXEC_BZIMAGE_VERIFY_SIG=3Dy
+CONFIG_KEXEC_JUMP=3Dy
+CONFIG_CRASH_DUMP=3Dy
+CONFIG_CRASH_HOTPLUG=3Dy
+CONFIG_CRASH_MAX_MEMORY_RANGES=3D8192
+# end of Kexec and crash features
+# end of General setup
+
+CONFIG_64BIT=3Dy
+CONFIG_X86_64=3Dy
+CONFIG_X86=3Dy
+CONFIG_INSTRUCTION_DECODER=3Dy
+CONFIG_OUTPUT_FORMAT=3D"elf64-x86-64"
+CONFIG_LOCKDEP_SUPPORT=3Dy
+CONFIG_STACKTRACE_SUPPORT=3Dy
+CONFIG_MMU=3Dy
+CONFIG_ARCH_MMAP_RND_BITS_MIN=3D28
+CONFIG_ARCH_MMAP_RND_BITS_MAX=3D32
+CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MIN=3D8
+CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=3D16
+CONFIG_GENERIC_ISA_DMA=3Dy
+CONFIG_GENERIC_BUG=3Dy
+CONFIG_GENERIC_BUG_RELATIVE_POINTERS=3Dy
+CONFIG_ARCH_MAY_HAVE_PC_FDC=3Dy
+CONFIG_GENERIC_CALIBRATE_DELAY=3Dy
+CONFIG_ARCH_HAS_CPU_RELAX=3Dy
+CONFIG_ARCH_HIBERNATION_POSSIBLE=3Dy
+CONFIG_ARCH_SUSPEND_POSSIBLE=3Dy
+CONFIG_AUDIT_ARCH=3Dy
+CONFIG_HAVE_INTEL_TXT=3Dy
+CONFIG_X86_64_SMP=3Dy
+CONFIG_ARCH_SUPPORTS_UPROBES=3Dy
+CONFIG_FIX_EARLYCON_MEM=3Dy
+CONFIG_DYNAMIC_PHYSICAL_MASK=3Dy
+CONFIG_PGTABLE_LEVELS=3D5
+CONFIG_CC_HAS_SANE_STACKPROTECTOR=3Dy
+
+#
+# Processor type and features
+#
+CONFIG_SMP=3Dy
+CONFIG_X86_X2APIC=3Dy
+# CONFIG_X86_POSTED_MSI is not set
+CONFIG_X86_MPPARSE=3Dy
+CONFIG_X86_CPU_RESCTRL=3Dy
+# CONFIG_X86_FRED is not set
+CONFIG_X86_EXTENDED_PLATFORM=3Dy
+CONFIG_X86_NUMACHIP=3Dy
+# CONFIG_X86_VSMP is not set
+CONFIG_X86_UV=3Dy
+# CONFIG_X86_GOLDFISH is not set
+# CONFIG_X86_INTEL_MID is not set
+CONFIG_X86_INTEL_LPSS=3Dy
+CONFIG_X86_AMD_PLATFORM_DEVICE=3Dy
+CONFIG_IOSF_MBI=3Dy
+CONFIG_IOSF_MBI_DEBUG=3Dy
+CONFIG_X86_SUPPORTS_MEMORY_FAILURE=3Dy
+CONFIG_SCHED_OMIT_FRAME_POINTER=3Dy
+CONFIG_HYPERVISOR_GUEST=3Dy
+CONFIG_PARAVIRT=3Dy
+CONFIG_PARAVIRT_XXL=3Dy
+# CONFIG_PARAVIRT_DEBUG is not set
+CONFIG_PARAVIRT_SPINLOCKS=3Dy
+CONFIG_X86_HV_CALLBACK_VECTOR=3Dy
+CONFIG_XEN=3Dy
+CONFIG_XEN_PV=3Dy
+CONFIG_XEN_512GB=3Dy
+CONFIG_XEN_PV_SMP=3Dy
+CONFIG_XEN_PV_DOM0=3Dy
+CONFIG_XEN_PVHVM=3Dy
+CONFIG_XEN_PVHVM_SMP=3Dy
+CONFIG_XEN_PVHVM_GUEST=3Dy
+CONFIG_XEN_SAVE_RESTORE=3Dy
+# CONFIG_XEN_DEBUG_FS is not set
+CONFIG_XEN_PVH=3Dy
+CONFIG_XEN_DOM0=3Dy
+CONFIG_XEN_PV_MSR_SAFE=3Dy
+CONFIG_KVM_GUEST=3Dy
+CONFIG_ARCH_CPUIDLE_HALTPOLL=3Dy
+CONFIG_PVH=3Dy
+# CONFIG_PARAVIRT_TIME_ACCOUNTING is not set
+CONFIG_PARAVIRT_CLOCK=3Dy
+CONFIG_JAILHOUSE_GUEST=3Dy
+CONFIG_ACRN_GUEST=3Dy
+# CONFIG_INTEL_TDX_GUEST is not set
+# CONFIG_MK8 is not set
+# CONFIG_MPSC is not set
+# CONFIG_MCORE2 is not set
+# CONFIG_MATOM is not set
+CONFIG_GENERIC_CPU=3Dy
+CONFIG_X86_INTERNODE_CACHE_SHIFT=3D6
+CONFIG_X86_L1_CACHE_SHIFT=3D6
+CONFIG_X86_TSC=3Dy
+CONFIG_X86_HAVE_PAE=3Dy
+CONFIG_X86_CMPXCHG64=3Dy
+CONFIG_X86_CMOV=3Dy
+CONFIG_X86_MINIMUM_CPU_FAMILY=3D64
+CONFIG_X86_DEBUGCTLMSR=3Dy
+CONFIG_IA32_FEAT_CTL=3Dy
+CONFIG_X86_VMX_FEATURE_NAMES=3Dy
+CONFIG_PROCESSOR_SELECT=3Dy
+CONFIG_CPU_SUP_INTEL=3Dy
+CONFIG_CPU_SUP_AMD=3Dy
+CONFIG_CPU_SUP_HYGON=3Dy
+CONFIG_CPU_SUP_CENTAUR=3Dy
+CONFIG_CPU_SUP_ZHAOXIN=3Dy
+CONFIG_HPET_TIMER=3Dy
+CONFIG_HPET_EMULATE_RTC=3Dy
+CONFIG_DMI=3Dy
+CONFIG_GART_IOMMU=3Dy
+CONFIG_BOOT_VESA_SUPPORT=3Dy
+CONFIG_MAXSMP=3Dy
+CONFIG_NR_CPUS_RANGE_BEGIN=3D8192
+CONFIG_NR_CPUS_RANGE_END=3D8192
+CONFIG_NR_CPUS_DEFAULT=3D8192
+CONFIG_NR_CPUS=3D8192
+CONFIG_SCHED_CLUSTER=3Dy
+CONFIG_SCHED_SMT=3Dy
+CONFIG_SCHED_MC=3Dy
+CONFIG_SCHED_MC_PRIO=3Dy
+CONFIG_X86_LOCAL_APIC=3Dy
+CONFIG_ACPI_MADT_WAKEUP=3Dy
+CONFIG_X86_IO_APIC=3Dy
+CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS=3Dy
+CONFIG_X86_MCE=3Dy
+CONFIG_X86_MCELOG_LEGACY=3Dy
+CONFIG_X86_MCE_INTEL=3Dy
+CONFIG_X86_MCE_AMD=3Dy
+CONFIG_X86_MCE_THRESHOLD=3Dy
+# CONFIG_X86_MCE_INJECT is not set
+
+#
+# Performance monitoring
+#
+CONFIG_PERF_EVENTS_INTEL_UNCORE=3Dy
+CONFIG_PERF_EVENTS_INTEL_RAPL=3Dm
+# CONFIG_PERF_EVENTS_INTEL_CSTATE is not set
+# CONFIG_PERF_EVENTS_AMD_POWER is not set
+# CONFIG_PERF_EVENTS_AMD_UNCORE is not set
+# CONFIG_PERF_EVENTS_AMD_BRS is not set
+# end of Performance monitoring
+
+CONFIG_X86_16BIT=3Dy
+CONFIG_X86_ESPFIX64=3Dy
+CONFIG_X86_VSYSCALL_EMULATION=3Dy
+CONFIG_X86_IOPL_IOPERM=3Dy
+CONFIG_MICROCODE=3Dy
+# CONFIG_MICROCODE_LATE_LOADING is not set
+CONFIG_X86_MSR=3Dm
+# CONFIG_X86_CPUID is not set
+CONFIG_X86_5LEVEL=3Dy
+CONFIG_X86_DIRECT_GBPAGES=3Dy
+# CONFIG_X86_CPA_STATISTICS is not set
+CONFIG_X86_MEM_ENCRYPT=3Dy
+CONFIG_AMD_MEM_ENCRYPT=3Dy
+CONFIG_NUMA=3Dy
+CONFIG_AMD_NUMA=3Dy
+CONFIG_X86_64_ACPI_NUMA=3Dy
+CONFIG_NODES_SHIFT=3D10
+CONFIG_ARCH_SPARSEMEM_ENABLE=3Dy
+CONFIG_ARCH_SPARSEMEM_DEFAULT=3Dy
+CONFIG_ARCH_MEMORY_PROBE=3Dy
+CONFIG_ARCH_PROC_KCORE_TEXT=3Dy
+CONFIG_ILLEGAL_POINTER_VALUE=3D0xdead000000000000
+CONFIG_X86_PMEM_LEGACY_DEVICE=3Dy
+CONFIG_X86_PMEM_LEGACY=3Dy
+CONFIG_X86_CHECK_BIOS_CORRUPTION=3Dy
+CONFIG_X86_BOOTPARAM_MEMORY_CORRUPTION_CHECK=3Dy
+CONFIG_MTRR=3Dy
+CONFIG_MTRR_SANITIZER=3Dy
+CONFIG_MTRR_SANITIZER_ENABLE_DEFAULT=3D1
+CONFIG_MTRR_SANITIZER_SPARE_REG_NR_DEFAULT=3D1
+CONFIG_X86_PAT=3Dy
+CONFIG_X86_UMIP=3Dy
+CONFIG_CC_HAS_IBT=3Dy
+CONFIG_X86_CET=3Dy
+CONFIG_X86_KERNEL_IBT=3Dy
+CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS=3Dy
+CONFIG_ARCH_PKEY_BITS=3D4
+CONFIG_X86_INTEL_TSX_MODE_OFF=3Dy
+# CONFIG_X86_INTEL_TSX_MODE_ON is not set
+# CONFIG_X86_INTEL_TSX_MODE_AUTO is not set
+CONFIG_X86_SGX=3Dy
+# CONFIG_X86_USER_SHADOW_STACK is not set
+CONFIG_EFI=3Dy
+CONFIG_EFI_STUB=3Dy
+CONFIG_EFI_HANDOVER_PROTOCOL=3Dy
+CONFIG_EFI_MIXED=3Dy
+CONFIG_EFI_RUNTIME_MAP=3Dy
+# CONFIG_HZ_100 is not set
+CONFIG_HZ_250=3Dy
+# CONFIG_HZ_300 is not set
+# CONFIG_HZ_1000 is not set
+CONFIG_HZ=3D250
+CONFIG_SCHED_HRTICK=3Dy
+CONFIG_ARCH_SUPPORTS_KEXEC=3Dy
+CONFIG_ARCH_SUPPORTS_KEXEC_FILE=3Dy
+CONFIG_ARCH_SELECTS_KEXEC_FILE=3Dy
+CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY=3Dy
+CONFIG_ARCH_SUPPORTS_KEXEC_SIG=3Dy
+CONFIG_ARCH_SUPPORTS_KEXEC_SIG_FORCE=3Dy
+CONFIG_ARCH_SUPPORTS_KEXEC_BZIMAGE_VERIFY_SIG=3Dy
+CONFIG_ARCH_SUPPORTS_KEXEC_JUMP=3Dy
+CONFIG_ARCH_SUPPORTS_CRASH_DUMP=3Dy
+CONFIG_ARCH_SUPPORTS_CRASH_HOTPLUG=3Dy
+CONFIG_ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION=3Dy
+CONFIG_PHYSICAL_START=3D0x1000000
+CONFIG_RELOCATABLE=3Dy
+CONFIG_RANDOMIZE_BASE=3Dy
+CONFIG_X86_NEED_RELOCS=3Dy
+CONFIG_PHYSICAL_ALIGN=3D0x200000
+CONFIG_DYNAMIC_MEMORY_LAYOUT=3Dy
+CONFIG_RANDOMIZE_MEMORY=3Dy
+CONFIG_RANDOMIZE_MEMORY_PHYSICAL_PADDING=3D0xa
+# CONFIG_ADDRESS_MASKING is not set
+CONFIG_HOTPLUG_CPU=3Dy
+# CONFIG_COMPAT_VDSO is not set
+CONFIG_LEGACY_VSYSCALL_XONLY=3Dy
+# CONFIG_LEGACY_VSYSCALL_NONE is not set
+# CONFIG_CMDLINE_BOOL is not set
+CONFIG_MODIFY_LDT_SYSCALL=3Dy
+# CONFIG_STRICT_SIGALTSTACK_SIZE is not set
+CONFIG_HAVE_LIVEPATCH=3Dy
+CONFIG_LIVEPATCH=3Dy
+# end of Processor type and features
+
+CONFIG_CC_HAS_NAMED_AS=3Dy
+CONFIG_USE_X86_SEG_SUPPORT=3Dy
+CONFIG_CC_HAS_SLS=3Dy
+CONFIG_CC_HAS_RETURN_THUNK=3Dy
+CONFIG_CC_HAS_ENTRY_PADDING=3Dy
+CONFIG_FUNCTION_PADDING_CFI=3D11
+CONFIG_FUNCTION_PADDING_BYTES=3D16
+CONFIG_CALL_PADDING=3Dy
+CONFIG_HAVE_CALL_THUNKS=3Dy
+CONFIG_CALL_THUNKS=3Dy
+CONFIG_PREFIX_SYMBOLS=3Dy
+CONFIG_CPU_MITIGATIONS=3Dy
+CONFIG_MITIGATION_PAGE_TABLE_ISOLATION=3Dy
+CONFIG_MITIGATION_RETPOLINE=3Dy
+CONFIG_MITIGATION_RETHUNK=3Dy
+CONFIG_MITIGATION_UNRET_ENTRY=3Dy
+CONFIG_MITIGATION_CALL_DEPTH_TRACKING=3Dy
+# CONFIG_CALL_THUNKS_DEBUG is not set
+CONFIG_MITIGATION_IBPB_ENTRY=3Dy
+CONFIG_MITIGATION_IBRS_ENTRY=3Dy
+CONFIG_MITIGATION_SRSO=3Dy
+# CONFIG_MITIGATION_SLS is not set
+CONFIG_MITIGATION_GDS=3Dy
+CONFIG_MITIGATION_RFDS=3Dy
+CONFIG_MITIGATION_SPECTRE_BHI=3Dy
+CONFIG_MITIGATION_MDS=3Dy
+CONFIG_MITIGATION_TAA=3Dy
+CONFIG_MITIGATION_MMIO_STALE_DATA=3Dy
+CONFIG_MITIGATION_L1TF=3Dy
+CONFIG_MITIGATION_RETBLEED=3Dy
+CONFIG_MITIGATION_SPECTRE_V1=3Dy
+CONFIG_MITIGATION_SPECTRE_V2=3Dy
+CONFIG_MITIGATION_SRBDS=3Dy
+CONFIG_MITIGATION_SSB=3Dy
+CONFIG_ARCH_HAS_ADD_PAGES=3Dy
+
+#
+# Power management and ACPI options
+#
+CONFIG_ARCH_HIBERNATION_HEADER=3Dy
+CONFIG_SUSPEND=3Dy
+CONFIG_SUSPEND_FREEZER=3Dy
+# CONFIG_SUSPEND_SKIP_SYNC is not set
+CONFIG_HIBERNATE_CALLBACKS=3Dy
+CONFIG_HIBERNATION=3Dy
+CONFIG_HIBERNATION_SNAPSHOT_DEV=3Dy
+CONFIG_HIBERNATION_COMP_LZO=3Dy
+CONFIG_HIBERNATION_DEF_COMP=3D"lzo"
+CONFIG_PM_STD_PARTITION=3D""
+CONFIG_PM_SLEEP=3Dy
+CONFIG_PM_SLEEP_SMP=3Dy
+# CONFIG_PM_AUTOSLEEP is not set
+# CONFIG_PM_USERSPACE_AUTOSLEEP is not set
+CONFIG_PM_WAKELOCKS=3Dy
+CONFIG_PM_WAKELOCKS_LIMIT=3D100
+CONFIG_PM_WAKELOCKS_GC=3Dy
+CONFIG_PM=3Dy
+CONFIG_PM_DEBUG=3Dy
+CONFIG_PM_ADVANCED_DEBUG=3Dy
+# CONFIG_PM_TEST_SUSPEND is not set
+CONFIG_PM_SLEEP_DEBUG=3Dy
+# CONFIG_DPM_WATCHDOG is not set
+CONFIG_PM_TRACE=3Dy
+CONFIG_PM_TRACE_RTC=3Dy
+CONFIG_PM_CLK=3Dy
+CONFIG_WQ_POWER_EFFICIENT_DEFAULT=3Dy
+CONFIG_ENERGY_MODEL=3Dy
+CONFIG_ARCH_SUPPORTS_ACPI=3Dy
+CONFIG_ACPI=3Dy
+CONFIG_ACPI_LEGACY_TABLES_LOOKUP=3Dy
+CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC=3Dy
+CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT=3Dy
+CONFIG_ACPI_THERMAL_LIB=3Dy
+CONFIG_ACPI_DEBUGGER=3Dy
+CONFIG_ACPI_DEBUGGER_USER=3Dy
+CONFIG_ACPI_SPCR_TABLE=3Dy
+CONFIG_ACPI_FPDT=3Dy
+CONFIG_ACPI_LPIT=3Dy
+CONFIG_ACPI_SLEEP=3Dy
+CONFIG_ACPI_REV_OVERRIDE_POSSIBLE=3Dy
+# CONFIG_ACPI_EC_DEBUGFS is not set
+CONFIG_ACPI_AC=3Dy
+CONFIG_ACPI_BATTERY=3Dy
+CONFIG_ACPI_BUTTON=3Dy
+# CONFIG_ACPI_VIDEO is not set
+CONFIG_ACPI_FAN=3Dy
+# CONFIG_ACPI_TAD is not set
+CONFIG_ACPI_DOCK=3Dy
+CONFIG_ACPI_CPU_FREQ_PSS=3Dy
+CONFIG_ACPI_PROCESSOR_CSTATE=3Dy
+CONFIG_ACPI_PROCESSOR_IDLE=3Dy
+CONFIG_ACPI_CPPC_LIB=3Dy
+CONFIG_ACPI_PROCESSOR=3Dy
+CONFIG_ACPI_IPMI=3Dm
+CONFIG_ACPI_HOTPLUG_CPU=3Dy
+# CONFIG_ACPI_PROCESSOR_AGGREGATOR is not set
+CONFIG_ACPI_THERMAL=3Dy
+CONFIG_ACPI_CUSTOM_DSDT_FILE=3D""
+CONFIG_ARCH_HAS_ACPI_TABLE_UPGRADE=3Dy
+CONFIG_ACPI_TABLE_UPGRADE=3Dy
+CONFIG_ACPI_DEBUG=3Dy
+CONFIG_ACPI_PCI_SLOT=3Dy
+CONFIG_ACPI_CONTAINER=3Dy
+CONFIG_ACPI_HOTPLUG_MEMORY=3Dy
+CONFIG_ACPI_HOTPLUG_IOAPIC=3Dy
+# CONFIG_ACPI_SBS is not set
+CONFIG_ACPI_HED=3Dy
+CONFIG_ACPI_BGRT=3Dy
+# CONFIG_ACPI_REDUCED_HARDWARE_ONLY is not set
+# CONFIG_ACPI_NFIT is not set
+CONFIG_ACPI_NUMA=3Dy
+CONFIG_ACPI_HMAT=3Dy
+CONFIG_HAVE_ACPI_APEI=3Dy
+CONFIG_HAVE_ACPI_APEI_NMI=3Dy
+CONFIG_ACPI_APEI=3Dy
+CONFIG_ACPI_APEI_GHES=3Dy
+CONFIG_ACPI_APEI_PCIEAER=3Dy
+CONFIG_ACPI_APEI_MEMORY_FAILURE=3Dy
+# CONFIG_ACPI_APEI_EINJ is not set
+# CONFIG_ACPI_APEI_ERST_DEBUG is not set
+CONFIG_ACPI_DPTF=3Dy
+# CONFIG_DPTF_POWER is not set
+# CONFIG_DPTF_PCH_FIVR is not set
+# CONFIG_ACPI_EXTLOG is not set
+# CONFIG_ACPI_CONFIGFS is not set
+# CONFIG_ACPI_PFRUT is not set
+CONFIG_ACPI_PCC=3Dy
+# CONFIG_ACPI_FFH is not set
+CONFIG_PMIC_OPREGION=3Dy
+CONFIG_BYTCRC_PMIC_OPREGION=3Dy
+CONFIG_CHTCRC_PMIC_OPREGION=3Dy
+CONFIG_CHT_WC_PMIC_OPREGION=3Dy
+CONFIG_ACPI_VIOT=3Dy
+CONFIG_ACPI_PRMT=3Dy
+CONFIG_X86_PM_TIMER=3Dy
+
+#
+# CPU Frequency scaling
+#
+CONFIG_CPU_FREQ=3Dy
+CONFIG_CPU_FREQ_GOV_ATTR_SET=3Dy
+CONFIG_CPU_FREQ_GOV_COMMON=3Dy
+CONFIG_CPU_FREQ_STAT=3Dy
+# CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE is not set
+# CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
+# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
+CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL=3Dy
+CONFIG_CPU_FREQ_GOV_PERFORMANCE=3Dy
+CONFIG_CPU_FREQ_GOV_POWERSAVE=3Dy
+CONFIG_CPU_FREQ_GOV_USERSPACE=3Dy
+CONFIG_CPU_FREQ_GOV_ONDEMAND=3Dy
+CONFIG_CPU_FREQ_GOV_CONSERVATIVE=3Dy
+CONFIG_CPU_FREQ_GOV_SCHEDUTIL=3Dy
+
+#
+# CPU frequency scaling drivers
+#
+CONFIG_X86_INTEL_PSTATE=3Dy
+CONFIG_X86_PCC_CPUFREQ=3Dy
+CONFIG_X86_AMD_PSTATE=3Dy
+CONFIG_X86_AMD_PSTATE_DEFAULT_MODE=3D3
+# CONFIG_X86_AMD_PSTATE_UT is not set
+CONFIG_X86_ACPI_CPUFREQ=3Dy
+CONFIG_X86_ACPI_CPUFREQ_CPB=3Dy
+CONFIG_X86_POWERNOW_K8=3Dy
+# CONFIG_X86_AMD_FREQ_SENSITIVITY is not set
+CONFIG_X86_SPEEDSTEP_CENTRINO=3Dy
+# CONFIG_X86_P4_CLOCKMOD is not set
+
+#
+# shared options
+#
+# end of CPU Frequency scaling
+
+#
+# CPU Idle
+#
+CONFIG_CPU_IDLE=3Dy
+CONFIG_CPU_IDLE_GOV_LADDER=3Dy
+CONFIG_CPU_IDLE_GOV_MENU=3Dy
+CONFIG_CPU_IDLE_GOV_TEO=3Dy
+CONFIG_CPU_IDLE_GOV_HALTPOLL=3Dy
+# CONFIG_HALTPOLL_CPUIDLE is not set
+# end of CPU Idle
+
+CONFIG_INTEL_IDLE=3Dy
+# end of Power management and ACPI options
+
+#
+# Bus options (PCI etc.)
+#
+CONFIG_PCI_DIRECT=3Dy
+CONFIG_PCI_MMCONFIG=3Dy
+CONFIG_PCI_XEN=3Dy
+CONFIG_MMCONF_FAM10H=3Dy
+# CONFIG_PCI_CNB20LE_QUIRK is not set
+CONFIG_ISA_BUS=3Dy
+CONFIG_ISA_DMA_API=3Dy
+CONFIG_AMD_NB=3Dy
+# end of Bus options (PCI etc.)
+
+#
+# Binary Emulations
+#
+CONFIG_IA32_EMULATION=3Dy
+# CONFIG_IA32_EMULATION_DEFAULT_DISABLED is not set
+# CONFIG_X86_X32_ABI is not set
+CONFIG_COMPAT_32=3Dy
+CONFIG_COMPAT=3Dy
+CONFIG_COMPAT_FOR_U64_ALIGNMENT=3Dy
+# end of Binary Emulations
+
+CONFIG_KVM_COMMON=3Dy
+CONFIG_HAVE_KVM_PFNCACHE=3Dy
+CONFIG_HAVE_KVM_IRQCHIP=3Dy
+CONFIG_HAVE_KVM_IRQ_ROUTING=3Dy
+CONFIG_HAVE_KVM_DIRTY_RING=3Dy
+CONFIG_HAVE_KVM_DIRTY_RING_TSO=3Dy
+CONFIG_HAVE_KVM_DIRTY_RING_ACQ_REL=3Dy
+CONFIG_KVM_MMIO=3Dy
+CONFIG_KVM_ASYNC_PF=3Dy
+CONFIG_HAVE_KVM_MSI=3Dy
+CONFIG_HAVE_KVM_READONLY_MEM=3Dy
+CONFIG_HAVE_KVM_CPU_RELAX_INTERCEPT=3Dy
+CONFIG_KVM_VFIO=3Dy
+CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT=3Dy
+CONFIG_KVM_GENERIC_PRE_FAULT_MEMORY=3Dy
+CONFIG_KVM_COMPAT=3Dy
+CONFIG_HAVE_KVM_IRQ_BYPASS=3Dy
+CONFIG_HAVE_KVM_NO_POLL=3Dy
+CONFIG_KVM_XFER_TO_GUEST_WORK=3Dy
+CONFIG_HAVE_KVM_PM_NOTIFIER=3Dy
+CONFIG_KVM_GENERIC_HARDWARE_ENABLING=3Dy
+CONFIG_KVM_GENERIC_MMU_NOTIFIER=3Dy
+CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES=3Dy
+CONFIG_KVM_PRIVATE_MEM=3Dy
+CONFIG_KVM_GENERIC_PRIVATE_MEM=3Dy
+CONFIG_HAVE_KVM_ARCH_GMEM_PREPARE=3Dy
+CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE=3Dy
+CONFIG_VIRTUALIZATION=3Dy
+CONFIG_KVM=3Dm
+CONFIG_KVM_WERROR=3Dy
+# CONFIG_KVM_SW_PROTECTED_VM is not set
+# CONFIG_KVM_INTEL is not set
+CONFIG_KVM_AMD=3Dm
+CONFIG_KVM_AMD_SEV=3Dy
+CONFIG_KVM_SMM=3Dy
+CONFIG_KVM_HYPERV=3Dy
+CONFIG_KVM_XEN=3Dy
+# CONFIG_KVM_PROVE_MMU is not set
+CONFIG_KVM_MAX_NR_VCPUS=3D4096
+CONFIG_AS_AVX512=3Dy
+CONFIG_AS_SHA1_NI=3Dy
+CONFIG_AS_SHA256_NI=3Dy
+CONFIG_AS_TPAUSE=3Dy
+CONFIG_AS_GFNI=3Dy
+CONFIG_AS_VAES=3Dy
+CONFIG_AS_VPCLMULQDQ=3Dy
+CONFIG_AS_WRUSS=3Dy
+CONFIG_ARCH_CONFIGURES_CPU_MITIGATIONS=3Dy
+CONFIG_ARCH_HAS_DMA_OPS=3Dy
+
+#
+# General architecture-dependent options
+#
+CONFIG_HOTPLUG_SMT=3Dy
+CONFIG_HOTPLUG_CORE_SYNC=3Dy
+CONFIG_HOTPLUG_CORE_SYNC_DEAD=3Dy
+CONFIG_HOTPLUG_CORE_SYNC_FULL=3Dy
+CONFIG_HOTPLUG_SPLIT_STARTUP=3Dy
+CONFIG_HOTPLUG_PARALLEL=3Dy
+CONFIG_GENERIC_ENTRY=3Dy
+CONFIG_KPROBES=3Dy
+CONFIG_JUMP_LABEL=3Dy
+# CONFIG_STATIC_KEYS_SELFTEST is not set
+# CONFIG_STATIC_CALL_SELFTEST is not set
+CONFIG_OPTPROBES=3Dy
+CONFIG_KPROBES_ON_FTRACE=3Dy
+CONFIG_UPROBES=3Dy
+CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=3Dy
+CONFIG_ARCH_USE_BUILTIN_BSWAP=3Dy
+CONFIG_KRETPROBES=3Dy
+CONFIG_KRETPROBE_ON_RETHOOK=3Dy
+CONFIG_USER_RETURN_NOTIFIER=3Dy
+CONFIG_HAVE_IOREMAP_PROT=3Dy
+CONFIG_HAVE_KPROBES=3Dy
+CONFIG_HAVE_KRETPROBES=3Dy
+CONFIG_HAVE_OPTPROBES=3Dy
+CONFIG_HAVE_KPROBES_ON_FTRACE=3Dy
+CONFIG_ARCH_CORRECT_STACKTRACE_ON_KRETPROBE=3Dy
+CONFIG_HAVE_FUNCTION_ERROR_INJECTION=3Dy
+CONFIG_HAVE_NMI=3Dy
+CONFIG_TRACE_IRQFLAGS_SUPPORT=3Dy
+CONFIG_TRACE_IRQFLAGS_NMI_SUPPORT=3Dy
+CONFIG_HAVE_ARCH_TRACEHOOK=3Dy
+CONFIG_HAVE_DMA_CONTIGUOUS=3Dy
+CONFIG_GENERIC_SMP_IDLE_THREAD=3Dy
+CONFIG_ARCH_HAS_FORTIFY_SOURCE=3Dy
+CONFIG_ARCH_HAS_SET_MEMORY=3Dy
+CONFIG_ARCH_HAS_SET_DIRECT_MAP=3Dy
+CONFIG_ARCH_HAS_CPU_FINALIZE_INIT=3Dy
+CONFIG_ARCH_HAS_CPU_PASID=3Dy
+CONFIG_HAVE_ARCH_THREAD_STRUCT_WHITELIST=3Dy
+CONFIG_ARCH_WANTS_DYNAMIC_TASK_STRUCT=3Dy
+CONFIG_ARCH_WANTS_NO_INSTR=3Dy
+CONFIG_HAVE_ASM_MODVERSIONS=3Dy
+CONFIG_HAVE_REGS_AND_STACK_ACCESS_API=3Dy
+CONFIG_HAVE_RSEQ=3Dy
+CONFIG_HAVE_RUST=3Dy
+CONFIG_HAVE_FUNCTION_ARG_ACCESS_API=3Dy
+CONFIG_HAVE_HW_BREAKPOINT=3Dy
+CONFIG_HAVE_MIXED_BREAKPOINTS_REGS=3Dy
+CONFIG_HAVE_USER_RETURN_NOTIFIER=3Dy
+CONFIG_HAVE_PERF_EVENTS_NMI=3Dy
+CONFIG_HAVE_HARDLOCKUP_DETECTOR_PERF=3Dy
+CONFIG_HAVE_PERF_REGS=3Dy
+CONFIG_HAVE_PERF_USER_STACK_DUMP=3Dy
+CONFIG_HAVE_ARCH_JUMP_LABEL=3Dy
+CONFIG_HAVE_ARCH_JUMP_LABEL_RELATIVE=3Dy
+CONFIG_MMU_GATHER_TABLE_FREE=3Dy
+CONFIG_MMU_GATHER_RCU_TABLE_FREE=3Dy
+CONFIG_MMU_GATHER_MERGE_VMAS=3Dy
+CONFIG_MMU_LAZY_TLB_REFCOUNT=3Dy
+CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG=3Dy
+CONFIG_ARCH_HAVE_EXTRA_ELF_NOTES=3Dy
+CONFIG_ARCH_HAS_NMI_SAFE_THIS_CPU_OPS=3Dy
+CONFIG_HAVE_ALIGNED_STRUCT_PAGE=3Dy
+CONFIG_HAVE_CMPXCHG_LOCAL=3Dy
+CONFIG_HAVE_CMPXCHG_DOUBLE=3Dy
+CONFIG_ARCH_WANT_COMPAT_IPC_PARSE_VERSION=3Dy
+CONFIG_ARCH_WANT_OLD_COMPAT_IPC=3Dy
+CONFIG_HAVE_ARCH_SECCOMP=3Dy
+CONFIG_HAVE_ARCH_SECCOMP_FILTER=3Dy
+CONFIG_SECCOMP=3Dy
+CONFIG_SECCOMP_FILTER=3Dy
+# CONFIG_SECCOMP_CACHE_DEBUG is not set
+CONFIG_HAVE_ARCH_STACKLEAK=3Dy
+CONFIG_HAVE_STACKPROTECTOR=3Dy
+CONFIG_STACKPROTECTOR=3Dy
+CONFIG_STACKPROTECTOR_STRONG=3Dy
+CONFIG_ARCH_SUPPORTS_LTO_CLANG=3Dy
+CONFIG_ARCH_SUPPORTS_LTO_CLANG_THIN=3Dy
+CONFIG_LTO_NONE=3Dy
+CONFIG_ARCH_SUPPORTS_CFI_CLANG=3Dy
+CONFIG_HAVE_ARCH_WITHIN_STACK_FRAMES=3Dy
+CONFIG_HAVE_CONTEXT_TRACKING_USER=3Dy
+CONFIG_HAVE_CONTEXT_TRACKING_USER_OFFSTACK=3Dy
+CONFIG_HAVE_VIRT_CPU_ACCOUNTING_GEN=3Dy
+CONFIG_HAVE_IRQ_TIME_ACCOUNTING=3Dy
+CONFIG_HAVE_MOVE_PUD=3Dy
+CONFIG_HAVE_MOVE_PMD=3Dy
+CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=3Dy
+CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=3Dy
+CONFIG_HAVE_ARCH_HUGE_VMAP=3Dy
+CONFIG_HAVE_ARCH_HUGE_VMALLOC=3Dy
+CONFIG_ARCH_WANT_HUGE_PMD_SHARE=3Dy
+CONFIG_ARCH_WANT_PMD_MKWRITE=3Dy
+CONFIG_HAVE_ARCH_SOFT_DIRTY=3Dy
+CONFIG_HAVE_MOD_ARCH_SPECIFIC=3Dy
+CONFIG_MODULES_USE_ELF_RELA=3Dy
+CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK=3Dy
+CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK=3Dy
+CONFIG_SOFTIRQ_ON_OWN_STACK=3Dy
+CONFIG_ARCH_HAS_ELF_RANDOMIZE=3Dy
+CONFIG_HAVE_ARCH_MMAP_RND_BITS=3Dy
+CONFIG_HAVE_EXIT_THREAD=3Dy
+CONFIG_ARCH_MMAP_RND_BITS=3D28
+CONFIG_HAVE_ARCH_MMAP_RND_COMPAT_BITS=3Dy
+CONFIG_ARCH_MMAP_RND_COMPAT_BITS=3D8
+CONFIG_HAVE_ARCH_COMPAT_MMAP_BASES=3Dy
+CONFIG_HAVE_PAGE_SIZE_4KB=3Dy
+CONFIG_PAGE_SIZE_4KB=3Dy
+CONFIG_PAGE_SIZE_LESS_THAN_64KB=3Dy
+CONFIG_PAGE_SIZE_LESS_THAN_256KB=3Dy
+CONFIG_PAGE_SHIFT=3D12
+CONFIG_HAVE_OBJTOOL=3Dy
+CONFIG_HAVE_JUMP_LABEL_HACK=3Dy
+CONFIG_HAVE_NOINSTR_HACK=3Dy
+CONFIG_HAVE_NOINSTR_VALIDATION=3Dy
+CONFIG_HAVE_UACCESS_VALIDATION=3Dy
+CONFIG_HAVE_STACK_VALIDATION=3Dy
+CONFIG_HAVE_RELIABLE_STACKTRACE=3Dy
+CONFIG_OLD_SIGSUSPEND3=3Dy
+CONFIG_COMPAT_OLD_SIGACTION=3Dy
+CONFIG_COMPAT_32BIT_TIME=3Dy
+CONFIG_ARCH_SUPPORTS_RT=3Dy
+CONFIG_HAVE_ARCH_VMAP_STACK=3Dy
+CONFIG_VMAP_STACK=3Dy
+CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET=3Dy
+CONFIG_RANDOMIZE_KSTACK_OFFSET=3Dy
+CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=3Dy
+CONFIG_ARCH_HAS_STRICT_KERNEL_RWX=3Dy
+CONFIG_STRICT_KERNEL_RWX=3Dy
+CONFIG_ARCH_HAS_STRICT_MODULE_RWX=3Dy
+CONFIG_STRICT_MODULE_RWX=3Dy
+CONFIG_HAVE_ARCH_PREL32_RELOCATIONS=3Dy
+CONFIG_ARCH_USE_MEMREMAP_PROT=3Dy
+# CONFIG_LOCK_EVENT_COUNTS is not set
+CONFIG_ARCH_HAS_MEM_ENCRYPT=3Dy
+CONFIG_ARCH_HAS_CC_PLATFORM=3Dy
+CONFIG_HAVE_STATIC_CALL=3Dy
+CONFIG_HAVE_STATIC_CALL_INLINE=3Dy
+CONFIG_HAVE_PREEMPT_DYNAMIC=3Dy
+CONFIG_HAVE_PREEMPT_DYNAMIC_CALL=3Dy
+CONFIG_ARCH_WANT_LD_ORPHAN_WARN=3Dy
+CONFIG_ARCH_SUPPORTS_DEBUG_PAGEALLOC=3Dy
+CONFIG_ARCH_SUPPORTS_PAGE_TABLE_CHECK=3Dy
+CONFIG_ARCH_HAS_ELFCORE_COMPAT=3Dy
+CONFIG_ARCH_HAS_PARANOID_L1D_FLUSH=3Dy
+CONFIG_DYNAMIC_SIGFRAME=3Dy
+CONFIG_HAVE_ARCH_NODE_DEV_GROUP=3Dy
+CONFIG_ARCH_HAS_HW_PTE_YOUNG=3Dy
+CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG=3Dy
+CONFIG_ARCH_HAS_KERNEL_FPU_SUPPORT=3Dy
+
+#
+# GCOV-based kernel profiling
+#
+# CONFIG_GCOV_KERNEL is not set
+CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=3Dy
+# end of GCOV-based kernel profiling
+
+CONFIG_HAVE_GCC_PLUGINS=3Dy
+CONFIG_FUNCTION_ALIGNMENT_4B=3Dy
+CONFIG_FUNCTION_ALIGNMENT_16B=3Dy
+CONFIG_FUNCTION_ALIGNMENT=3D16
+# end of General architecture-dependent options
+
+CONFIG_RT_MUTEXES=3Dy
+CONFIG_MODULE_SIG_FORMAT=3Dy
+CONFIG_MODULES=3Dy
+# CONFIG_MODULE_DEBUG is not set
+# CONFIG_MODULE_FORCE_LOAD is not set
+CONFIG_MODULE_UNLOAD=3Dy
+# CONFIG_MODULE_FORCE_UNLOAD is not set
+# CONFIG_MODULE_UNLOAD_TAINT_TRACKING is not set
+CONFIG_MODVERSIONS=3Dy
+CONFIG_ASM_MODVERSIONS=3Dy
+CONFIG_MODULE_SRCVERSION_ALL=3Dy
+CONFIG_MODULE_SIG=3Dy
+# CONFIG_MODULE_SIG_FORCE is not set
+CONFIG_MODULE_SIG_ALL=3Dy
+# CONFIG_MODULE_SIG_SHA1 is not set
+# CONFIG_MODULE_SIG_SHA256 is not set
+# CONFIG_MODULE_SIG_SHA384 is not set
+CONFIG_MODULE_SIG_SHA512=3Dy
+# CONFIG_MODULE_SIG_SHA3_256 is not set
+# CONFIG_MODULE_SIG_SHA3_384 is not set
+# CONFIG_MODULE_SIG_SHA3_512 is not set
+CONFIG_MODULE_SIG_HASH=3D"sha512"
+# CONFIG_MODULE_COMPRESS is not set
+# CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is not set
+CONFIG_MODPROBE_PATH=3D"/sbin/modprobe"
+# CONFIG_TRIM_UNUSED_KSYMS is not set
+CONFIG_MODULES_TREE_LOOKUP=3Dy
+CONFIG_BLOCK=3Dy
+CONFIG_BLOCK_LEGACY_AUTOLOAD=3Dy
+CONFIG_BLK_RQ_ALLOC_TIME=3Dy
+CONFIG_BLK_CGROUP_RWSTAT=3Dy
+CONFIG_BLK_CGROUP_PUNT_BIO=3Dy
+CONFIG_BLK_DEV_BSG_COMMON=3Dy
+CONFIG_BLK_DEV_BSGLIB=3Dy
+CONFIG_BLK_DEV_INTEGRITY=3Dy
+CONFIG_BLK_DEV_WRITE_MOUNTED=3Dy
+CONFIG_BLK_DEV_ZONED=3Dy
+CONFIG_BLK_DEV_THROTTLING=3Dy
+CONFIG_BLK_WBT=3Dy
+CONFIG_BLK_WBT_MQ=3Dy
+# CONFIG_BLK_CGROUP_IOLATENCY is not set
+CONFIG_BLK_CGROUP_IOCOST=3Dy
+CONFIG_BLK_CGROUP_IOPRIO=3Dy
+CONFIG_BLK_DEBUG_FS=3Dy
+CONFIG_BLK_SED_OPAL=3Dy
+CONFIG_BLK_INLINE_ENCRYPTION=3Dy
+CONFIG_BLK_INLINE_ENCRYPTION_FALLBACK=3Dy
+
+#
+# Partition Types
+#
+CONFIG_PARTITION_ADVANCED=3Dy
+# CONFIG_ACORN_PARTITION is not set
+CONFIG_AIX_PARTITION=3Dy
+CONFIG_OSF_PARTITION=3Dy
+CONFIG_AMIGA_PARTITION=3Dy
+CONFIG_ATARI_PARTITION=3Dy
+CONFIG_MAC_PARTITION=3Dy
+CONFIG_MSDOS_PARTITION=3Dy
+CONFIG_BSD_DISKLABEL=3Dy
+CONFIG_MINIX_SUBPARTITION=3Dy
+CONFIG_SOLARIS_X86_PARTITION=3Dy
+CONFIG_UNIXWARE_DISKLABEL=3Dy
+CONFIG_LDM_PARTITION=3Dy
+# CONFIG_LDM_DEBUG is not set
+CONFIG_SGI_PARTITION=3Dy
+CONFIG_ULTRIX_PARTITION=3Dy
+CONFIG_SUN_PARTITION=3Dy
+CONFIG_KARMA_PARTITION=3Dy
+CONFIG_EFI_PARTITION=3Dy
+CONFIG_SYSV68_PARTITION=3Dy
+CONFIG_CMDLINE_PARTITION=3Dy
+# end of Partition Types
+
+CONFIG_BLK_MQ_PCI=3Dy
+CONFIG_BLK_MQ_VIRTIO=3Dy
+CONFIG_BLK_PM=3Dy
+CONFIG_BLOCK_HOLDER_DEPRECATED=3Dy
+CONFIG_BLK_MQ_STACKING=3Dy
+
+#
+# IO Schedulers
+#
+CONFIG_MQ_IOSCHED_DEADLINE=3Dy
+# CONFIG_MQ_IOSCHED_KYBER is not set
+# CONFIG_IOSCHED_BFQ is not set
+# end of IO Schedulers
+
+CONFIG_PREEMPT_NOTIFIERS=3Dy
+CONFIG_PADATA=3Dy
+CONFIG_ASN1=3Dy
+CONFIG_UNINLINE_SPIN_UNLOCK=3Dy
+CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=3Dy
+CONFIG_MUTEX_SPIN_ON_OWNER=3Dy
+CONFIG_RWSEM_SPIN_ON_OWNER=3Dy
+CONFIG_LOCK_SPIN_ON_OWNER=3Dy
+CONFIG_ARCH_USE_QUEUED_SPINLOCKS=3Dy
+CONFIG_QUEUED_SPINLOCKS=3Dy
+CONFIG_ARCH_USE_QUEUED_RWLOCKS=3Dy
+CONFIG_QUEUED_RWLOCKS=3Dy
+CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE=3Dy
+CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE=3Dy
+CONFIG_ARCH_HAS_SYSCALL_WRAPPER=3Dy
+CONFIG_FREEZER=3Dy
+
+#
+# Executable file formats
+#
+CONFIG_BINFMT_ELF=3Dy
+CONFIG_COMPAT_BINFMT_ELF=3Dy
+CONFIG_ELFCORE=3Dy
+CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS=3Dy
+CONFIG_BINFMT_SCRIPT=3Dy
+CONFIG_BINFMT_MISC=3Dm
+CONFIG_COREDUMP=3Dy
+# end of Executable file formats
+
+#
+# Memory Management options
+#
+CONFIG_ZPOOL=3Dy
+CONFIG_SWAP=3Dy
+CONFIG_ZSWAP=3Dy
+# CONFIG_ZSWAP_DEFAULT_ON is not set
+# CONFIG_ZSWAP_SHRINKER_DEFAULT_ON is not set
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_DEFLATE is not set
+CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZO=3Dy
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_842 is not set
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4 is not set
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4HC is not set
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD is not set
+CONFIG_ZSWAP_COMPRESSOR_DEFAULT=3D"lzo"
+CONFIG_ZSWAP_ZPOOL_DEFAULT_ZBUD=3Dy
+# CONFIG_ZSWAP_ZPOOL_DEFAULT_Z3FOLD_DEPRECATED is not set
+# CONFIG_ZSWAP_ZPOOL_DEFAULT_ZSMALLOC is not set
+CONFIG_ZSWAP_ZPOOL_DEFAULT=3D"zbud"
+CONFIG_ZBUD=3Dy
+# CONFIG_Z3FOLD_DEPRECATED is not set
+CONFIG_ZSMALLOC=3Dy
+# CONFIG_ZSMALLOC_STAT is not set
+CONFIG_ZSMALLOC_CHAIN_SIZE=3D8
+
+#
+# Slab allocator options
+#
+CONFIG_SLUB=3Dy
+# CONFIG_SLUB_TINY is not set
+CONFIG_SLAB_MERGE_DEFAULT=3Dy
+CONFIG_SLAB_FREELIST_RANDOM=3Dy
+CONFIG_SLAB_FREELIST_HARDENED=3Dy
+CONFIG_SLAB_BUCKETS=3Dy
+# CONFIG_SLUB_STATS is not set
+CONFIG_SLUB_CPU_PARTIAL=3Dy
+# CONFIG_RANDOM_KMALLOC_CACHES is not set
+# end of Slab allocator options
+
+CONFIG_SHUFFLE_PAGE_ALLOCATOR=3Dy
+# CONFIG_COMPAT_BRK is not set
+CONFIG_SPARSEMEM=3Dy
+CONFIG_SPARSEMEM_EXTREME=3Dy
+CONFIG_SPARSEMEM_VMEMMAP_ENABLE=3Dy
+CONFIG_SPARSEMEM_VMEMMAP=3Dy
+CONFIG_ARCH_WANT_OPTIMIZE_DAX_VMEMMAP=3Dy
+CONFIG_ARCH_WANT_OPTIMIZE_HUGETLB_VMEMMAP=3Dy
+CONFIG_HAVE_GUP_FAST=3Dy
+CONFIG_NUMA_KEEP_MEMINFO=3Dy
+CONFIG_MEMORY_ISOLATION=3Dy
+CONFIG_EXCLUSIVE_SYSTEM_RAM=3Dy
+CONFIG_HAVE_BOOTMEM_INFO_NODE=3Dy
+CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=3Dy
+CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=3Dy
+CONFIG_MEMORY_HOTPLUG=3Dy
+CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE=3Dy
+CONFIG_MEMORY_HOTREMOVE=3Dy
+CONFIG_MHP_MEMMAP_ON_MEMORY=3Dy
+CONFIG_ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE=3Dy
+CONFIG_SPLIT_PTE_PTLOCKS=3Dy
+CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK=3Dy
+CONFIG_SPLIT_PMD_PTLOCKS=3Dy
+CONFIG_MEMORY_BALLOON=3Dy
+CONFIG_BALLOON_COMPACTION=3Dy
+CONFIG_COMPACTION=3Dy
+CONFIG_COMPACT_UNEVICTABLE_DEFAULT=3D1
+CONFIG_PAGE_REPORTING=3Dy
+CONFIG_MIGRATION=3Dy
+CONFIG_DEVICE_MIGRATION=3Dy
+CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION=3Dy
+CONFIG_ARCH_ENABLE_THP_MIGRATION=3Dy
+CONFIG_CONTIG_ALLOC=3Dy
+CONFIG_PCP_BATCH_SCALE_MAX=3D5
+CONFIG_PHYS_ADDR_T_64BIT=3Dy
+CONFIG_MMU_NOTIFIER=3Dy
+CONFIG_KSM=3Dy
+CONFIG_DEFAULT_MMAP_MIN_ADDR=3D65536
+CONFIG_ARCH_SUPPORTS_MEMORY_FAILURE=3Dy
+CONFIG_MEMORY_FAILURE=3Dy
+# CONFIG_HWPOISON_INJECT is not set
+CONFIG_ARCH_WANT_GENERAL_HUGETLB=3Dy
+CONFIG_ARCH_WANTS_THP_SWAP=3Dy
+CONFIG_TRANSPARENT_HUGEPAGE=3Dy
+# CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS is not set
+CONFIG_TRANSPARENT_HUGEPAGE_MADVISE=3Dy
+# CONFIG_TRANSPARENT_HUGEPAGE_NEVER is not set
+CONFIG_THP_SWAP=3Dy
+# CONFIG_READ_ONLY_THP_FOR_FS is not set
+CONFIG_PGTABLE_HAS_HUGE_LEAVES=3Dy
+CONFIG_ARCH_SUPPORTS_HUGE_PFNMAP=3Dy
+CONFIG_ARCH_SUPPORTS_PMD_PFNMAP=3Dy
+CONFIG_ARCH_SUPPORTS_PUD_PFNMAP=3Dy
+CONFIG_NEED_PER_CPU_EMBED_FIRST_CHUNK=3Dy
+CONFIG_NEED_PER_CPU_PAGE_FIRST_CHUNK=3Dy
+CONFIG_USE_PERCPU_NUMA_NODE_ID=3Dy
+CONFIG_HAVE_SETUP_PER_CPU_AREA=3Dy
+# CONFIG_CMA is not set
+CONFIG_MEM_SOFT_DIRTY=3Dy
+CONFIG_GENERIC_EARLY_IOREMAP=3Dy
+# CONFIG_DEFERRED_STRUCT_PAGE_INIT is not set
+CONFIG_PAGE_IDLE_FLAG=3Dy
+CONFIG_IDLE_PAGE_TRACKING=3Dy
+CONFIG_ARCH_HAS_CACHE_LINE_SIZE=3Dy
+CONFIG_ARCH_HAS_CURRENT_STACK_POINTER=3Dy
+CONFIG_ARCH_HAS_PTE_DEVMAP=3Dy
+CONFIG_ARCH_HAS_ZONE_DMA_SET=3Dy
+CONFIG_ZONE_DMA=3Dy
+CONFIG_ZONE_DMA32=3Dy
+CONFIG_ZONE_DEVICE=3Dy
+CONFIG_GET_FREE_REGION=3Dy
+CONFIG_DEVICE_PRIVATE=3Dy
+CONFIG_ARCH_USES_HIGH_VMA_FLAGS=3Dy
+CONFIG_ARCH_HAS_PKEYS=3Dy
+CONFIG_ARCH_USES_PG_ARCH_2=3Dy
+CONFIG_VM_EVENT_COUNTERS=3Dy
+# CONFIG_PERCPU_STATS is not set
+# CONFIG_GUP_TEST is not set
+# CONFIG_DMAPOOL_TEST is not set
+CONFIG_ARCH_HAS_PTE_SPECIAL=3Dy
+CONFIG_MEMFD_CREATE=3Dy
+CONFIG_SECRETMEM=3Dy
+# CONFIG_ANON_VMA_NAME is not set
+CONFIG_HAVE_ARCH_USERFAULTFD_WP=3Dy
+CONFIG_HAVE_ARCH_USERFAULTFD_MINOR=3Dy
+CONFIG_USERFAULTFD=3Dy
+CONFIG_PTE_MARKER_UFFD_WP=3Dy
+# CONFIG_LRU_GEN is not set
+CONFIG_ARCH_SUPPORTS_PER_VMA_LOCK=3Dy
+CONFIG_PER_VMA_LOCK=3Dy
+CONFIG_LOCK_MM_AND_FIND_VMA=3Dy
+CONFIG_IOMMU_MM_DATA=3Dy
+CONFIG_EXECMEM=3Dy
+CONFIG_NUMA_MEMBLKS=3Dy
+CONFIG_NUMA_EMU=3Dy
+
+#
+# Data Access Monitoring
+#
+# CONFIG_DAMON is not set
+# end of Data Access Monitoring
+# end of Memory Management options
+
+CONFIG_NET=3Dy
+CONFIG_NET_INGRESS=3Dy
+CONFIG_NET_EGRESS=3Dy
+CONFIG_NET_XGRESS=3Dy
+CONFIG_SKB_DECRYPTED=3Dy
+CONFIG_SKB_EXTENSIONS=3Dy
+CONFIG_NET_DEVMEM=3Dy
+
+#
+# Networking options
+#
+CONFIG_PACKET=3Dy
+# CONFIG_PACKET_DIAG is not set
+CONFIG_UNIX=3Dy
+CONFIG_AF_UNIX_OOB=3Dy
+# CONFIG_UNIX_DIAG is not set
+CONFIG_TLS=3Dm
+CONFIG_TLS_DEVICE=3Dy
+# CONFIG_TLS_TOE is not set
+# CONFIG_XFRM_USER is not set
+# CONFIG_NET_KEY is not set
+CONFIG_XDP_SOCKETS=3Dy
+# CONFIG_XDP_SOCKETS_DIAG is not set
+CONFIG_INET=3Dy
+CONFIG_IP_MULTICAST=3Dy
+CONFIG_IP_ADVANCED_ROUTER=3Dy
+CONFIG_IP_FIB_TRIE_STATS=3Dy
+CONFIG_IP_MULTIPLE_TABLES=3Dy
+CONFIG_IP_ROUTE_MULTIPATH=3Dy
+CONFIG_IP_ROUTE_VERBOSE=3Dy
+# CONFIG_IP_PNP is not set
+# CONFIG_NET_IPIP is not set
+# CONFIG_NET_IPGRE_DEMUX is not set
+CONFIG_IP_MROUTE_COMMON=3Dy
+CONFIG_IP_MROUTE=3Dy
+CONFIG_IP_MROUTE_MULTIPLE_TABLES=3Dy
+CONFIG_IP_PIMSM_V1=3Dy
+CONFIG_IP_PIMSM_V2=3Dy
+CONFIG_SYN_COOKIES=3Dy
+# CONFIG_NET_IPVTI is not set
+# CONFIG_NET_FOU is not set
+# CONFIG_INET_AH is not set
+# CONFIG_INET_ESP is not set
+# CONFIG_INET_IPCOMP is not set
+CONFIG_INET_TABLE_PERTURB_ORDER=3D16
+# CONFIG_INET_DIAG is not set
+CONFIG_TCP_CONG_ADVANCED=3Dy
+# CONFIG_TCP_CONG_BIC is not set
+CONFIG_TCP_CONG_CUBIC=3Dy
+# CONFIG_TCP_CONG_WESTWOOD is not set
+# CONFIG_TCP_CONG_HTCP is not set
+# CONFIG_TCP_CONG_HSTCP is not set
+# CONFIG_TCP_CONG_HYBLA is not set
+# CONFIG_TCP_CONG_VEGAS is not set
+# CONFIG_TCP_CONG_NV is not set
+# CONFIG_TCP_CONG_SCALABLE is not set
+# CONFIG_TCP_CONG_LP is not set
+# CONFIG_TCP_CONG_VENO is not set
+# CONFIG_TCP_CONG_YEAH is not set
+# CONFIG_TCP_CONG_ILLINOIS is not set
+# CONFIG_TCP_CONG_DCTCP is not set
+# CONFIG_TCP_CONG_CDG is not set
+# CONFIG_TCP_CONG_BBR is not set
+CONFIG_DEFAULT_CUBIC=3Dy
+# CONFIG_DEFAULT_RENO is not set
+CONFIG_DEFAULT_TCP_CONG=3D"cubic"
+CONFIG_TCP_SIGPOOL=3Dy
+# CONFIG_TCP_AO is not set
+CONFIG_TCP_MD5SIG=3Dy
+CONFIG_IPV6=3Dy
+CONFIG_IPV6_ROUTER_PREF=3Dy
+CONFIG_IPV6_ROUTE_INFO=3Dy
+# CONFIG_IPV6_OPTIMISTIC_DAD is not set
+# CONFIG_INET6_AH is not set
+# CONFIG_INET6_ESP is not set
+# CONFIG_INET6_IPCOMP is not set
+# CONFIG_IPV6_MIP6 is not set
+# CONFIG_IPV6_ILA is not set
+# CONFIG_IPV6_VTI is not set
+# CONFIG_IPV6_SIT is not set
+# CONFIG_IPV6_TUNNEL is not set
+CONFIG_IPV6_MULTIPLE_TABLES=3Dy
+CONFIG_IPV6_SUBTREES=3Dy
+CONFIG_IPV6_MROUTE=3Dy
+CONFIG_IPV6_MROUTE_MULTIPLE_TABLES=3Dy
+CONFIG_IPV6_PIMSM_V2=3Dy
+CONFIG_IPV6_SEG6_LWTUNNEL=3Dy
+CONFIG_IPV6_SEG6_HMAC=3Dy
+CONFIG_IPV6_SEG6_BPF=3Dy
+# CONFIG_IPV6_RPL_LWTUNNEL is not set
+CONFIG_IPV6_IOAM6_LWTUNNEL=3Dy
+CONFIG_NETLABEL=3Dy
+CONFIG_MPTCP=3Dy
+CONFIG_MPTCP_IPV6=3Dy
+CONFIG_NETWORK_SECMARK=3Dy
+CONFIG_NET_PTP_CLASSIFY=3Dy
+CONFIG_NETWORK_PHY_TIMESTAMPING=3Dy
+CONFIG_NETFILTER=3Dy
+CONFIG_NETFILTER_ADVANCED=3Dy
+# CONFIG_BRIDGE_NETFILTER is not set
+
+#
+# Core Netfilter Configuration
+#
+CONFIG_NETFILTER_INGRESS=3Dy
+CONFIG_NETFILTER_EGRESS=3Dy
+CONFIG_NETFILTER_SKIP_EGRESS=3Dy
+CONFIG_NETFILTER_NETLINK=3Dm
+CONFIG_NETFILTER_FAMILY_ARP=3Dy
+CONFIG_NETFILTER_BPF_LINK=3Dy
+# CONFIG_NETFILTER_NETLINK_HOOK is not set
+# CONFIG_NETFILTER_NETLINK_ACCT is not set
+# CONFIG_NETFILTER_NETLINK_QUEUE is not set
+# CONFIG_NETFILTER_NETLINK_LOG is not set
+# CONFIG_NETFILTER_NETLINK_OSF is not set
+CONFIG_NF_CONNTRACK=3Dm
+# CONFIG_NF_LOG_SYSLOG is not set
+CONFIG_NF_CONNTRACK_MARK=3Dy
+CONFIG_NF_CONNTRACK_SECMARK=3Dy
+CONFIG_NF_CONNTRACK_ZONES=3Dy
+# CONFIG_NF_CONNTRACK_PROCFS is not set
+CONFIG_NF_CONNTRACK_EVENTS=3Dy
+CONFIG_NF_CONNTRACK_TIMEOUT=3Dy
+CONFIG_NF_CONNTRACK_TIMESTAMP=3Dy
+CONFIG_NF_CONNTRACK_LABELS=3Dy
+CONFIG_NF_CT_PROTO_DCCP=3Dy
+CONFIG_NF_CT_PROTO_SCTP=3Dy
+CONFIG_NF_CT_PROTO_UDPLITE=3Dy
+# CONFIG_NF_CONNTRACK_AMANDA is not set
+# CONFIG_NF_CONNTRACK_FTP is not set
+# CONFIG_NF_CONNTRACK_H323 is not set
+# CONFIG_NF_CONNTRACK_IRC is not set
+# CONFIG_NF_CONNTRACK_NETBIOS_NS is not set
+# CONFIG_NF_CONNTRACK_SNMP is not set
+# CONFIG_NF_CONNTRACK_PPTP is not set
+# CONFIG_NF_CONNTRACK_SANE is not set
+# CONFIG_NF_CONNTRACK_SIP is not set
+# CONFIG_NF_CONNTRACK_TFTP is not set
+# CONFIG_NF_CT_NETLINK is not set
+# CONFIG_NF_CT_NETLINK_TIMEOUT is not set
+CONFIG_NF_NAT=3Dm
+CONFIG_NF_NAT_MASQUERADE=3Dy
+CONFIG_NF_TABLES=3Dm
+CONFIG_NF_TABLES_INET=3Dy
+CONFIG_NF_TABLES_NETDEV=3Dy
+# CONFIG_NFT_NUMGEN is not set
+# CONFIG_NFT_CT is not set
+# CONFIG_NFT_CONNLIMIT is not set
+# CONFIG_NFT_LOG is not set
+# CONFIG_NFT_LIMIT is not set
+# CONFIG_NFT_MASQ is not set
+# CONFIG_NFT_REDIR is not set
+CONFIG_NFT_NAT=3Dm
+# CONFIG_NFT_TUNNEL is not set
+# CONFIG_NFT_QUOTA is not set
+# CONFIG_NFT_REJECT is not set
+CONFIG_NFT_COMPAT=3Dm
+# CONFIG_NFT_HASH is not set
+# CONFIG_NFT_SOCKET is not set
+# CONFIG_NFT_OSF is not set
+# CONFIG_NFT_TPROXY is not set
+# CONFIG_NFT_SYNPROXY is not set
+# CONFIG_NF_DUP_NETDEV is not set
+# CONFIG_NFT_DUP_NETDEV is not set
+# CONFIG_NFT_FWD_NETDEV is not set
+# CONFIG_NF_FLOW_TABLE is not set
+CONFIG_NETFILTER_XTABLES=3Dm
+CONFIG_NETFILTER_XTABLES_COMPAT=3Dy
+
+#
+# Xtables combined modules
+#
+# CONFIG_NETFILTER_XT_MARK is not set
+# CONFIG_NETFILTER_XT_CONNMARK is not set
+
+#
+# Xtables targets
+#
+# CONFIG_NETFILTER_XT_TARGET_AUDIT is not set
+CONFIG_NETFILTER_XT_TARGET_CHECKSUM=3Dm
+# CONFIG_NETFILTER_XT_TARGET_CLASSIFY is not set
+# CONFIG_NETFILTER_XT_TARGET_CONNMARK is not set
+# CONFIG_NETFILTER_XT_TARGET_CONNSECMARK is not set
+# CONFIG_NETFILTER_XT_TARGET_CT is not set
+# CONFIG_NETFILTER_XT_TARGET_DSCP is not set
+# CONFIG_NETFILTER_XT_TARGET_HL is not set
+# CONFIG_NETFILTER_XT_TARGET_HMARK is not set
+# CONFIG_NETFILTER_XT_TARGET_IDLETIMER is not set
+# CONFIG_NETFILTER_XT_TARGET_LED is not set
+# CONFIG_NETFILTER_XT_TARGET_LOG is not set
+# CONFIG_NETFILTER_XT_TARGET_MARK is not set
+# CONFIG_NETFILTER_XT_NAT is not set
+# CONFIG_NETFILTER_XT_TARGET_NETMAP is not set
+# CONFIG_NETFILTER_XT_TARGET_NFLOG is not set
+# CONFIG_NETFILTER_XT_TARGET_NFQUEUE is not set
+# CONFIG_NETFILTER_XT_TARGET_RATEEST is not set
+# CONFIG_NETFILTER_XT_TARGET_REDIRECT is not set
+CONFIG_NETFILTER_XT_TARGET_MASQUERADE=3Dm
+# CONFIG_NETFILTER_XT_TARGET_TEE is not set
+# CONFIG_NETFILTER_XT_TARGET_TPROXY is not set
+# CONFIG_NETFILTER_XT_TARGET_SECMARK is not set
+# CONFIG_NETFILTER_XT_TARGET_TCPMSS is not set
+# CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP is not set
+
+#
+# Xtables matches
+#
+# CONFIG_NETFILTER_XT_MATCH_ADDRTYPE is not set
+# CONFIG_NETFILTER_XT_MATCH_BPF is not set
+# CONFIG_NETFILTER_XT_MATCH_CGROUP is not set
+# CONFIG_NETFILTER_XT_MATCH_CLUSTER is not set
+# CONFIG_NETFILTER_XT_MATCH_COMMENT is not set
+# CONFIG_NETFILTER_XT_MATCH_CONNBYTES is not set
+# CONFIG_NETFILTER_XT_MATCH_CONNLABEL is not set
+# CONFIG_NETFILTER_XT_MATCH_CONNLIMIT is not set
+# CONFIG_NETFILTER_XT_MATCH_CONNMARK is not set
+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=3Dm
+# CONFIG_NETFILTER_XT_MATCH_CPU is not set
+# CONFIG_NETFILTER_XT_MATCH_DCCP is not set
+# CONFIG_NETFILTER_XT_MATCH_DEVGROUP is not set
+# CONFIG_NETFILTER_XT_MATCH_DSCP is not set
+# CONFIG_NETFILTER_XT_MATCH_ECN is not set
+# CONFIG_NETFILTER_XT_MATCH_ESP is not set
+# CONFIG_NETFILTER_XT_MATCH_HASHLIMIT is not set
+# CONFIG_NETFILTER_XT_MATCH_HELPER is not set
+# CONFIG_NETFILTER_XT_MATCH_HL is not set
+# CONFIG_NETFILTER_XT_MATCH_IPCOMP is not set
+# CONFIG_NETFILTER_XT_MATCH_IPRANGE is not set
+# CONFIG_NETFILTER_XT_MATCH_L2TP is not set
+# CONFIG_NETFILTER_XT_MATCH_LENGTH is not set
+# CONFIG_NETFILTER_XT_MATCH_LIMIT is not set
+# CONFIG_NETFILTER_XT_MATCH_MAC is not set
+# CONFIG_NETFILTER_XT_MATCH_MARK is not set
+# CONFIG_NETFILTER_XT_MATCH_MULTIPORT is not set
+# CONFIG_NETFILTER_XT_MATCH_NFACCT is not set
+# CONFIG_NETFILTER_XT_MATCH_OSF is not set
+# CONFIG_NETFILTER_XT_MATCH_OWNER is not set
+# CONFIG_NETFILTER_XT_MATCH_PKTTYPE is not set
+# CONFIG_NETFILTER_XT_MATCH_QUOTA is not set
+# CONFIG_NETFILTER_XT_MATCH_RATEEST is not set
+# CONFIG_NETFILTER_XT_MATCH_REALM is not set
+# CONFIG_NETFILTER_XT_MATCH_RECENT is not set
+# CONFIG_NETFILTER_XT_MATCH_SCTP is not set
+# CONFIG_NETFILTER_XT_MATCH_SOCKET is not set
+# CONFIG_NETFILTER_XT_MATCH_STATE is not set
+# CONFIG_NETFILTER_XT_MATCH_STATISTIC is not set
+# CONFIG_NETFILTER_XT_MATCH_STRING is not set
+# CONFIG_NETFILTER_XT_MATCH_TCPMSS is not set
+# CONFIG_NETFILTER_XT_MATCH_TIME is not set
+# CONFIG_NETFILTER_XT_MATCH_U32 is not set
+# end of Core Netfilter Configuration
+
+# CONFIG_IP_SET is not set
+# CONFIG_IP_VS is not set
+
+#
+# IP: Netfilter Configuration
+#
+CONFIG_NF_DEFRAG_IPV4=3Dm
+CONFIG_IP_NF_IPTABLES_LEGACY=3Dm
+# CONFIG_NF_SOCKET_IPV4 is not set
+# CONFIG_NF_TPROXY_IPV4 is not set
+CONFIG_NF_TABLES_IPV4=3Dy
+# CONFIG_NFT_DUP_IPV4 is not set
+# CONFIG_NFT_FIB_IPV4 is not set
+CONFIG_NF_TABLES_ARP=3Dy
+# CONFIG_NF_DUP_IPV4 is not set
+# CONFIG_NF_LOG_ARP is not set
+# CONFIG_NF_LOG_IPV4 is not set
+CONFIG_NF_REJECT_IPV4=3Dm
+CONFIG_IP_NF_IPTABLES=3Dm
+# CONFIG_IP_NF_MATCH_AH is not set
+# CONFIG_IP_NF_MATCH_ECN is not set
+# CONFIG_IP_NF_MATCH_RPFILTER is not set
+# CONFIG_IP_NF_MATCH_TTL is not set
+CONFIG_IP_NF_FILTER=3Dm
+CONFIG_IP_NF_TARGET_REJECT=3Dm
+# CONFIG_IP_NF_TARGET_SYNPROXY is not set
+# CONFIG_IP_NF_NAT is not set
+CONFIG_IP_NF_MANGLE=3Dm
+# CONFIG_IP_NF_TARGET_ECN is not set
+# CONFIG_IP_NF_TARGET_TTL is not set
+# CONFIG_IP_NF_RAW is not set
+# CONFIG_IP_NF_SECURITY is not set
+CONFIG_NFT_COMPAT_ARP=3Dm
+# CONFIG_IP_NF_ARPFILTER is not set
+# CONFIG_IP_NF_ARP_MANGLE is not set
+# end of IP: Netfilter Configuration
+
+#
+# IPv6: Netfilter Configuration
+#
+CONFIG_IP6_NF_IPTABLES_LEGACY=3Dm
+# CONFIG_NF_SOCKET_IPV6 is not set
+# CONFIG_NF_TPROXY_IPV6 is not set
+CONFIG_NF_TABLES_IPV6=3Dy
+# CONFIG_NFT_DUP_IPV6 is not set
+# CONFIG_NFT_FIB_IPV6 is not set
+# CONFIG_NF_DUP_IPV6 is not set
+# CONFIG_NF_REJECT_IPV6 is not set
+# CONFIG_NF_LOG_IPV6 is not set
+CONFIG_IP6_NF_IPTABLES=3Dm
+# CONFIG_IP6_NF_MATCH_AH is not set
+# CONFIG_IP6_NF_MATCH_EUI64 is not set
+# CONFIG_IP6_NF_MATCH_FRAG is not set
+# CONFIG_IP6_NF_MATCH_OPTS is not set
+# CONFIG_IP6_NF_MATCH_HL is not set
+# CONFIG_IP6_NF_MATCH_IPV6HEADER is not set
+# CONFIG_IP6_NF_MATCH_MH is not set
+# CONFIG_IP6_NF_MATCH_RPFILTER is not set
+# CONFIG_IP6_NF_MATCH_RT is not set
+# CONFIG_IP6_NF_MATCH_SRH is not set
+# CONFIG_IP6_NF_TARGET_HL is not set
+# CONFIG_IP6_NF_FILTER is not set
+# CONFIG_IP6_NF_TARGET_REJECT is not set
+# CONFIG_IP6_NF_TARGET_SYNPROXY is not set
+CONFIG_IP6_NF_MANGLE=3Dm
+# CONFIG_IP6_NF_RAW is not set
+# CONFIG_IP6_NF_SECURITY is not set
+# CONFIG_IP6_NF_NAT is not set
+# CONFIG_IP6_NF_TARGET_NPT is not set
+# end of IPv6: Netfilter Configuration
+
+CONFIG_NF_DEFRAG_IPV6=3Dm
+# CONFIG_NF_TABLES_BRIDGE is not set
+# CONFIG_NF_CONNTRACK_BRIDGE is not set
+# CONFIG_BRIDGE_NF_EBTABLES is not set
+# CONFIG_IP_DCCP is not set
+# CONFIG_IP_SCTP is not set
+# CONFIG_RDS is not set
+# CONFIG_TIPC is not set
+# CONFIG_ATM is not set
+# CONFIG_L2TP is not set
+CONFIG_STP=3Dm
+CONFIG_BRIDGE=3Dm
+CONFIG_BRIDGE_IGMP_SNOOPING=3Dy
+CONFIG_BRIDGE_MRP=3Dy
+CONFIG_BRIDGE_CFM=3Dy
+# CONFIG_NET_DSA is not set
+# CONFIG_VLAN_8021Q is not set
+CONFIG_LLC=3Dm
+# CONFIG_LLC2 is not set
+# CONFIG_ATALK is not set
+# CONFIG_X25 is not set
+# CONFIG_LAPB is not set
+# CONFIG_PHONET is not set
+# CONFIG_6LOWPAN is not set
+# CONFIG_IEEE802154 is not set
+CONFIG_NET_SCHED=3Dy
+
+#
+# Queueing/Scheduling
+#
+# CONFIG_NET_SCH_HTB is not set
+# CONFIG_NET_SCH_HFSC is not set
+# CONFIG_NET_SCH_PRIO is not set
+# CONFIG_NET_SCH_MULTIQ is not set
+# CONFIG_NET_SCH_RED is not set
+# CONFIG_NET_SCH_SFB is not set
+# CONFIG_NET_SCH_SFQ is not set
+# CONFIG_NET_SCH_TEQL is not set
+# CONFIG_NET_SCH_TBF is not set
+# CONFIG_NET_SCH_CBS is not set
+# CONFIG_NET_SCH_ETF is not set
+# CONFIG_NET_SCH_TAPRIO is not set
+# CONFIG_NET_SCH_GRED is not set
+# CONFIG_NET_SCH_NETEM is not set
+# CONFIG_NET_SCH_DRR is not set
+# CONFIG_NET_SCH_MQPRIO is not set
+# CONFIG_NET_SCH_SKBPRIO is not set
+# CONFIG_NET_SCH_CHOKE is not set
+# CONFIG_NET_SCH_QFQ is not set
+# CONFIG_NET_SCH_CODEL is not set
+CONFIG_NET_SCH_FQ_CODEL=3Dm
+# CONFIG_NET_SCH_CAKE is not set
+# CONFIG_NET_SCH_FQ is not set
+# CONFIG_NET_SCH_HHF is not set
+# CONFIG_NET_SCH_PIE is not set
+# CONFIG_NET_SCH_INGRESS is not set
+# CONFIG_NET_SCH_PLUG is not set
+# CONFIG_NET_SCH_ETS is not set
+# CONFIG_NET_SCH_DEFAULT is not set
+
+#
+# Classification
+#
+CONFIG_NET_CLS=3Dy
+# CONFIG_NET_CLS_BASIC is not set
+# CONFIG_NET_CLS_ROUTE4 is not set
+# CONFIG_NET_CLS_FW is not set
+# CONFIG_NET_CLS_U32 is not set
+# CONFIG_NET_CLS_FLOW is not set
+# CONFIG_NET_CLS_CGROUP is not set
+# CONFIG_NET_CLS_BPF is not set
+# CONFIG_NET_CLS_FLOWER is not set
+# CONFIG_NET_CLS_MATCHALL is not set
+CONFIG_NET_EMATCH=3Dy
+CONFIG_NET_EMATCH_STACK=3D32
+# CONFIG_NET_EMATCH_CMP is not set
+# CONFIG_NET_EMATCH_NBYTE is not set
+# CONFIG_NET_EMATCH_U32 is not set
+# CONFIG_NET_EMATCH_META is not set
+# CONFIG_NET_EMATCH_TEXT is not set
+# CONFIG_NET_EMATCH_IPT is not set
+CONFIG_NET_CLS_ACT=3Dy
+# CONFIG_NET_ACT_POLICE is not set
+# CONFIG_NET_ACT_GACT is not set
+# CONFIG_NET_ACT_MIRRED is not set
+# CONFIG_NET_ACT_SAMPLE is not set
+# CONFIG_NET_ACT_NAT is not set
+# CONFIG_NET_ACT_PEDIT is not set
+# CONFIG_NET_ACT_SIMP is not set
+# CONFIG_NET_ACT_SKBEDIT is not set
+# CONFIG_NET_ACT_CSUM is not set
+# CONFIG_NET_ACT_MPLS is not set
+# CONFIG_NET_ACT_VLAN is not set
+# CONFIG_NET_ACT_BPF is not set
+# CONFIG_NET_ACT_CONNMARK is not set
+# CONFIG_NET_ACT_CTINFO is not set
+# CONFIG_NET_ACT_SKBMOD is not set
+# CONFIG_NET_ACT_IFE is not set
+# CONFIG_NET_ACT_TUNNEL_KEY is not set
+# CONFIG_NET_ACT_GATE is not set
+CONFIG_NET_TC_SKB_EXT=3Dy
+CONFIG_NET_SCH_FIFO=3Dy
+CONFIG_DCB=3Dy
+CONFIG_DNS_RESOLVER=3Dy
+# CONFIG_BATMAN_ADV is not set
+# CONFIG_OPENVSWITCH is not set
+# CONFIG_VSOCKETS is not set
+# CONFIG_NETLINK_DIAG is not set
+CONFIG_MPLS=3Dy
+# CONFIG_NET_MPLS_GSO is not set
+# CONFIG_MPLS_ROUTING is not set
+# CONFIG_NET_NSH is not set
+# CONFIG_HSR is not set
+CONFIG_NET_SWITCHDEV=3Dy
+CONFIG_NET_L3_MASTER_DEV=3Dy
+# CONFIG_QRTR is not set
+CONFIG_NET_NCSI=3Dy
+CONFIG_NCSI_OEM_CMD_GET_MAC=3Dy
+# CONFIG_NCSI_OEM_CMD_KEEP_PHY is not set
+CONFIG_PCPU_DEV_REFCNT=3Dy
+CONFIG_MAX_SKB_FRAGS=3D17
+CONFIG_RPS=3Dy
+CONFIG_RFS_ACCEL=3Dy
+CONFIG_SOCK_RX_QUEUE_MAPPING=3Dy
+CONFIG_XPS=3Dy
+CONFIG_CGROUP_NET_PRIO=3Dy
+CONFIG_CGROUP_NET_CLASSID=3Dy
+CONFIG_NET_RX_BUSY_POLL=3Dy
+CONFIG_BQL=3Dy
+CONFIG_BPF_STREAM_PARSER=3Dy
+CONFIG_NET_FLOW_LIMIT=3Dy
+
+#
+# Network testing
+#
+# CONFIG_NET_PKTGEN is not set
+CONFIG_NET_DROP_MONITOR=3Dy
+# end of Network testing
+# end of Networking options
+
+CONFIG_HAMRADIO=3Dy
+
+#
+# Packet Radio protocols
+#
+# CONFIG_AX25 is not set
+# CONFIG_CAN is not set
+# CONFIG_BT is not set
+# CONFIG_AF_RXRPC is not set
+# CONFIG_AF_KCM is not set
+CONFIG_STREAM_PARSER=3Dy
+# CONFIG_MCTP is not set
+CONFIG_FIB_RULES=3Dy
+CONFIG_WIRELESS=3Dy
+# CONFIG_CFG80211 is not set
+
+#
+# CFG80211 needs to be enabled for MAC80211
+#
+CONFIG_MAC80211_STA_HASH_MAX_SIZE=3D0
+CONFIG_RFKILL=3Dy
+CONFIG_RFKILL_LEDS=3Dy
+CONFIG_RFKILL_INPUT=3Dy
+# CONFIG_RFKILL_GPIO is not set
+# CONFIG_NET_9P is not set
+# CONFIG_CAIF is not set
+# CONFIG_CEPH_LIB is not set
+# CONFIG_NFC is not set
+# CONFIG_PSAMPLE is not set
+# CONFIG_NET_IFE is not set
+CONFIG_LWTUNNEL=3Dy
+CONFIG_LWTUNNEL_BPF=3Dy
+CONFIG_DST_CACHE=3Dy
+CONFIG_SOCK_VALIDATE_XMIT=3Dy
+CONFIG_NET_SELFTESTS=3Dy
+CONFIG_NET_SOCK_MSG=3Dy
+CONFIG_PAGE_POOL=3Dy
+# CONFIG_PAGE_POOL_STATS is not set
+# CONFIG_FAILOVER is not set
+CONFIG_ETHTOOL_NETLINK=3Dy
+
+#
+# Device Drivers
+#
+CONFIG_HAVE_EISA=3Dy
+CONFIG_EISA=3Dy
+CONFIG_EISA_VLB_PRIMING=3Dy
+CONFIG_EISA_PCI_EISA=3Dy
+CONFIG_EISA_VIRTUAL_ROOT=3Dy
+CONFIG_EISA_NAMES=3Dy
+CONFIG_HAVE_PCI=3Dy
+CONFIG_GENERIC_PCI_IOMAP=3Dy
+CONFIG_PCI=3Dy
+CONFIG_PCI_DOMAINS=3Dy
+CONFIG_PCIEPORTBUS=3Dy
+CONFIG_HOTPLUG_PCI_PCIE=3Dy
+CONFIG_PCIEAER=3Dy
+# CONFIG_PCIEAER_INJECT is not set
+# CONFIG_PCIE_ECRC is not set
+CONFIG_PCIEASPM=3Dy
+CONFIG_PCIEASPM_DEFAULT=3Dy
+# CONFIG_PCIEASPM_POWERSAVE is not set
+# CONFIG_PCIEASPM_POWER_SUPERSAVE is not set
+# CONFIG_PCIEASPM_PERFORMANCE is not set
+CONFIG_PCIE_PME=3Dy
+CONFIG_PCIE_DPC=3Dy
+CONFIG_PCIE_PTM=3Dy
+CONFIG_PCIE_EDR=3Dy
+CONFIG_PCI_MSI=3Dy
+CONFIG_PCI_QUIRKS=3Dy
+# CONFIG_PCI_DEBUG is not set
+CONFIG_PCI_REALLOC_ENABLE_AUTO=3Dy
+# CONFIG_PCI_STUB is not set
+# CONFIG_PCI_PF_STUB is not set
+# CONFIG_XEN_PCIDEV_FRONTEND is not set
+CONFIG_PCI_ATS=3Dy
+CONFIG_PCI_LOCKLESS_CONFIG=3Dy
+CONFIG_PCI_IOV=3Dy
+# CONFIG_PCI_NPEM is not set
+CONFIG_PCI_PRI=3Dy
+CONFIG_PCI_PASID=3Dy
+# CONFIG_PCI_P2PDMA is not set
+CONFIG_PCI_LABEL=3Dy
+# CONFIG_PCIE_BUS_TUNE_OFF is not set
+CONFIG_PCIE_BUS_DEFAULT=3Dy
+# CONFIG_PCIE_BUS_SAFE is not set
+# CONFIG_PCIE_BUS_PERFORMANCE is not set
+# CONFIG_PCIE_BUS_PEER2PEER is not set
+CONFIG_VGA_ARB=3Dy
+CONFIG_VGA_ARB_MAX_GPUS=3D16
+CONFIG_HOTPLUG_PCI=3Dy
+CONFIG_HOTPLUG_PCI_ACPI=3Dy
+# CONFIG_HOTPLUG_PCI_ACPI_IBM is not set
+CONFIG_HOTPLUG_PCI_CPCI=3Dy
+# CONFIG_HOTPLUG_PCI_CPCI_ZT5550 is not set
+# CONFIG_HOTPLUG_PCI_CPCI_GENERIC is not set
+CONFIG_HOTPLUG_PCI_SHPC=3Dy
+
+#
+# PCI controller drivers
+#
+# CONFIG_VMD is not set
+
+#
+# Cadence-based PCIe controllers
+#
+# end of Cadence-based PCIe controllers
+
+#
+# DesignWare-based PCIe controllers
+#
+CONFIG_PCIE_DW=3Dy
+CONFIG_PCIE_DW_HOST=3Dy
+CONFIG_PCIE_DW_EP=3Dy
+# CONFIG_PCI_MESON is not set
+CONFIG_PCIE_DW_PLAT=3Dy
+CONFIG_PCIE_DW_PLAT_HOST=3Dy
+CONFIG_PCIE_DW_PLAT_EP=3Dy
+# end of DesignWare-based PCIe controllers
+
+#
+# Mobiveil-based PCIe controllers
+#
+# end of Mobiveil-based PCIe controllers
+
+#
+# PLDA-based PCIe controllers
+#
+# end of PLDA-based PCIe controllers
+# end of PCI controller drivers
+
+#
+# PCI Endpoint
+#
+CONFIG_PCI_ENDPOINT=3Dy
+CONFIG_PCI_ENDPOINT_CONFIGFS=3Dy
+# CONFIG_PCI_EPF_TEST is not set
+# CONFIG_PCI_EPF_NTB is not set
+# end of PCI Endpoint
+
+#
+# PCI switch controller drivers
+#
+# CONFIG_PCI_SW_SWITCHTEC is not set
+# end of PCI switch controller drivers
+
+# CONFIG_CXL_BUS is not set
+# CONFIG_PCCARD is not set
+CONFIG_RAPIDIO=3Dy
+# CONFIG_RAPIDIO_TSI721 is not set
+CONFIG_RAPIDIO_DISC_TIMEOUT=3D30
+# CONFIG_RAPIDIO_ENABLE_RX_TX_PORTS is not set
+CONFIG_RAPIDIO_DMA_ENGINE=3Dy
+# CONFIG_RAPIDIO_DEBUG is not set
+# CONFIG_RAPIDIO_ENUM_BASIC is not set
+# CONFIG_RAPIDIO_CHMAN is not set
+# CONFIG_RAPIDIO_MPORT_CDEV is not set
+
+#
+# RapidIO Switch drivers
+#
+# CONFIG_RAPIDIO_CPS_XX is not set
+# CONFIG_RAPIDIO_CPS_GEN2 is not set
+# CONFIG_RAPIDIO_RXS_GEN3 is not set
+# end of RapidIO Switch drivers
+
+#
+# Generic Driver Options
+#
+CONFIG_UEVENT_HELPER=3Dy
+CONFIG_UEVENT_HELPER_PATH=3D""
+CONFIG_DEVTMPFS=3Dy
+CONFIG_DEVTMPFS_MOUNT=3Dy
+# CONFIG_DEVTMPFS_SAFE is not set
+# CONFIG_STANDALONE is not set
+CONFIG_PREVENT_FIRMWARE_BUILD=3Dy
+
+#
+# Firmware loader
+#
+CONFIG_FW_LOADER=3Dy
+CONFIG_FW_LOADER_DEBUG=3Dy
+CONFIG_FW_LOADER_PAGED_BUF=3Dy
+CONFIG_FW_LOADER_SYSFS=3Dy
+CONFIG_EXTRA_FIRMWARE=3D""
+CONFIG_FW_LOADER_USER_HELPER=3Dy
+# CONFIG_FW_LOADER_USER_HELPER_FALLBACK is not set
+CONFIG_FW_LOADER_COMPRESS=3Dy
+CONFIG_FW_LOADER_COMPRESS_XZ=3Dy
+CONFIG_FW_LOADER_COMPRESS_ZSTD=3Dy
+CONFIG_FW_CACHE=3Dy
+# CONFIG_FW_UPLOAD is not set
+# end of Firmware loader
+
+CONFIG_WANT_DEV_COREDUMP=3Dy
+CONFIG_ALLOW_DEV_COREDUMP=3Dy
+CONFIG_DEV_COREDUMP=3Dy
+# CONFIG_DEBUG_DRIVER is not set
+# CONFIG_DEBUG_DEVRES is not set
+# CONFIG_DEBUG_TEST_DRIVER_REMOVE is not set
+CONFIG_HMEM_REPORTING=3Dy
+# CONFIG_TEST_ASYNC_DRIVER_PROBE is not set
+CONFIG_SYS_HYPERVISOR=3Dy
+CONFIG_GENERIC_CPU_DEVICES=3Dy
+CONFIG_GENERIC_CPU_AUTOPROBE=3Dy
+CONFIG_GENERIC_CPU_VULNERABILITIES=3Dy
+CONFIG_REGMAP=3Dy
+CONFIG_REGMAP_I2C=3Dy
+CONFIG_REGMAP_SPI=3Dy
+CONFIG_REGMAP_MMIO=3Dy
+CONFIG_REGMAP_IRQ=3Dy
+CONFIG_DMA_SHARED_BUFFER=3Dy
+# CONFIG_DMA_FENCE_TRACE is not set
+# CONFIG_FW_DEVLINK_SYNC_STATE_TIMEOUT is not set
+# end of Generic Driver Options
+
+#
+# Bus devices
+#
+# CONFIG_MHI_BUS is not set
+# CONFIG_MHI_BUS_EP is not set
+# end of Bus devices
+
+#
+# Cache Drivers
+#
+# end of Cache Drivers
+
+CONFIG_CONNECTOR=3Dy
+CONFIG_PROC_EVENTS=3Dy
+
+#
+# Firmware Drivers
+#
+
+#
+# ARM System Control and Management Interface Protocol
+#
+# end of ARM System Control and Management Interface Protocol
+
+CONFIG_EDD=3Dy
+CONFIG_EDD_OFF=3Dy
+CONFIG_FIRMWARE_MEMMAP=3Dy
+CONFIG_DMIID=3Dy
+# CONFIG_DMI_SYSFS is not set
+CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK=3Dy
+# CONFIG_ISCSI_IBFT is not set
+# CONFIG_FW_CFG_SYSFS is not set
+CONFIG_SYSFB=3Dy
+# CONFIG_SYSFB_SIMPLEFB is not set
+# CONFIG_GOOGLE_FIRMWARE is not set
+
+#
+# EFI (Extensible Firmware Interface) Support
+#
+CONFIG_EFI_ESRT=3Dy
+CONFIG_EFI_VARS_PSTORE=3Dm
+# CONFIG_EFI_VARS_PSTORE_DEFAULT_DISABLE is not set
+CONFIG_EFI_SOFT_RESERVE=3Dy
+CONFIG_EFI_DXE_MEM_ATTRIBUTES=3Dy
+CONFIG_EFI_RUNTIME_WRAPPERS=3Dy
+# CONFIG_EFI_BOOTLOADER_CONTROL is not set
+# CONFIG_EFI_CAPSULE_LOADER is not set
+# CONFIG_EFI_TEST is not set
+CONFIG_EFI_DEV_PATH_PARSER=3Dy
+CONFIG_APPLE_PROPERTIES=3Dy
+CONFIG_RESET_ATTACK_MITIGATION=3Dy
+CONFIG_EFI_RCI2_TABLE=3Dy
+# CONFIG_EFI_DISABLE_PCI_DMA is not set
+CONFIG_EFI_EARLYCON=3Dy
+CONFIG_EFI_CUSTOM_SSDT_OVERLAYS=3Dy
+# CONFIG_EFI_DISABLE_RUNTIME is not set
+# CONFIG_EFI_COCO_SECRET is not set
+CONFIG_UNACCEPTED_MEMORY=3Dy
+# end of EFI (Extensible Firmware Interface) Support
+
+CONFIG_UEFI_CPER=3Dy
+CONFIG_UEFI_CPER_X86=3Dy
+
+#
+# Qualcomm firmware drivers
+#
+# end of Qualcomm firmware drivers
+
+#
+# Tegra firmware driver
+#
+# end of Tegra firmware driver
+# end of Firmware Drivers
+
+# CONFIG_GNSS is not set
+# CONFIG_MTD is not set
+# CONFIG_OF is not set
+CONFIG_ARCH_MIGHT_HAVE_PC_PARPORT=3Dy
+# CONFIG_PARPORT is not set
+CONFIG_PNP=3Dy
+# CONFIG_PNP_DEBUG_MESSAGES is not set
+
+#
+# Protocols
+#
+CONFIG_PNPACPI=3Dy
+CONFIG_BLK_DEV=3Dy
+# CONFIG_BLK_DEV_NULL_BLK is not set
+# CONFIG_BLK_DEV_FD is not set
+CONFIG_CDROM=3Dy
+# CONFIG_BLK_DEV_PCIESSD_MTIP32XX is not set
+# CONFIG_ZRAM is not set
+CONFIG_ZRAM_DEF_COMP=3D"unset-value"
+CONFIG_BLK_DEV_LOOP=3Dy
+CONFIG_BLK_DEV_LOOP_MIN_COUNT=3D8
+# CONFIG_BLK_DEV_DRBD is not set
+# CONFIG_BLK_DEV_NBD is not set
+# CONFIG_BLK_DEV_RAM is not set
+# CONFIG_CDROM_PKTCDVD is not set
+# CONFIG_ATA_OVER_ETH is not set
+CONFIG_XEN_BLKDEV_FRONTEND=3Dy
+# CONFIG_XEN_BLKDEV_BACKEND is not set
+# CONFIG_VIRTIO_BLK is not set
+# CONFIG_BLK_DEV_RBD is not set
+# CONFIG_BLK_DEV_UBLK is not set
+
+#
+# NVME Support
+#
+CONFIG_NVME_CORE=3Dm
+CONFIG_BLK_DEV_NVME=3Dm
+CONFIG_NVME_MULTIPATH=3Dy
+# CONFIG_NVME_VERBOSE_ERRORS is not set
+CONFIG_NVME_HWMON=3Dy
+# CONFIG_NVME_FC is not set
+# CONFIG_NVME_TCP is not set
+# CONFIG_NVME_HOST_AUTH is not set
+# CONFIG_NVME_TARGET is not set
+# end of NVME Support
+
+#
+# Misc devices
+#
+# CONFIG_AD525X_DPOT is not set
+# CONFIG_DUMMY_IRQ is not set
+# CONFIG_IBM_ASM is not set
+# CONFIG_PHANTOM is not set
+# CONFIG_RPMB is not set
+# CONFIG_TIFM_CORE is not set
+# CONFIG_ICS932S401 is not set
+# CONFIG_ENCLOSURE_SERVICES is not set
+# CONFIG_SGI_XP is not set
+# CONFIG_HP_ILO is not set
+# CONFIG_SGI_GRU is not set
+# CONFIG_APDS9802ALS is not set
+# CONFIG_ISL29003 is not set
+# CONFIG_ISL29020 is not set
+# CONFIG_SENSORS_TSL2550 is not set
+# CONFIG_SENSORS_BH1770 is not set
+# CONFIG_SENSORS_APDS990X is not set
+# CONFIG_HMC6352 is not set
+# CONFIG_DS1682 is not set
+# CONFIG_LATTICE_ECP3_CONFIG is not set
+CONFIG_SRAM=3Dy
+# CONFIG_DW_XDATA_PCIE is not set
+# CONFIG_PCI_ENDPOINT_TEST is not set
+# CONFIG_XILINX_SDFEC is not set
+# CONFIG_NSM is not set
+# CONFIG_C2PORT is not set
+
+#
+# EEPROM support
+#
+# CONFIG_EEPROM_AT24 is not set
+# CONFIG_EEPROM_AT25 is not set
+# CONFIG_EEPROM_MAX6875 is not set
+# CONFIG_EEPROM_93CX6 is not set
+# CONFIG_EEPROM_93XX46 is not set
+# CONFIG_EEPROM_IDT_89HPESX is not set
+# CONFIG_EEPROM_EE1004 is not set
+# end of EEPROM support
+
+# CONFIG_CB710_CORE is not set
+
+#
+# Texas Instruments shared transport line discipline
+#
+# CONFIG_TI_ST is not set
+# end of Texas Instruments shared transport line discipline
+
+# CONFIG_SENSORS_LIS3_I2C is not set
+# CONFIG_ALTERA_STAPL is not set
+# CONFIG_INTEL_MEI is not set
+# CONFIG_VMWARE_VMCI is not set
+# CONFIG_GENWQE is not set
+# CONFIG_ECHO is not set
+# CONFIG_BCM_VK is not set
+# CONFIG_MISC_ALCOR_PCI is not set
+# CONFIG_MISC_RTSX_PCI is not set
+# CONFIG_MISC_RTSX_USB is not set
+# CONFIG_UACCE is not set
+CONFIG_PVPANIC=3Dy
+# CONFIG_PVPANIC_MMIO is not set
+# CONFIG_PVPANIC_PCI is not set
+# CONFIG_GP_PCI1XXXX is not set
+# CONFIG_KEBA_CP500 is not set
+# end of Misc devices
+
+#
+# SCSI device support
+#
+CONFIG_SCSI_MOD=3Dy
+# CONFIG_RAID_ATTRS is not set
+CONFIG_SCSI_COMMON=3Dy
+CONFIG_SCSI=3Dy
+CONFIG_SCSI_DMA=3Dy
+CONFIG_SCSI_PROC_FS=3Dy
+
+#
+# SCSI support type (disk, tape, CD-ROM)
+#
+CONFIG_BLK_DEV_SD=3Dy
+# CONFIG_CHR_DEV_ST is not set
+CONFIG_BLK_DEV_SR=3Dy
+CONFIG_CHR_DEV_SG=3Dy
+CONFIG_BLK_DEV_BSG=3Dy
+# CONFIG_CHR_DEV_SCH is not set
+CONFIG_SCSI_CONSTANTS=3Dy
+CONFIG_SCSI_LOGGING=3Dy
+CONFIG_SCSI_SCAN_ASYNC=3Dy
+
+#
+# SCSI Transports
+#
+# CONFIG_SCSI_SPI_ATTRS is not set
+# CONFIG_SCSI_FC_ATTRS is not set
+# CONFIG_SCSI_ISCSI_ATTRS is not set
+# CONFIG_SCSI_SAS_ATTRS is not set
+# CONFIG_SCSI_SAS_LIBSAS is not set
+# CONFIG_SCSI_SRP_ATTRS is not set
+# end of SCSI Transports
+
+CONFIG_SCSI_LOWLEVEL=3Dy
+# CONFIG_ISCSI_TCP is not set
+# CONFIG_ISCSI_BOOT_SYSFS is not set
+# CONFIG_SCSI_CXGB3_ISCSI is not set
+# CONFIG_SCSI_CXGB4_ISCSI is not set
+# CONFIG_SCSI_BNX2_ISCSI is not set
+# CONFIG_BE2ISCSI is not set
+# CONFIG_BLK_DEV_3W_XXXX_RAID is not set
+# CONFIG_SCSI_HPSA is not set
+# CONFIG_SCSI_3W_9XXX is not set
+# CONFIG_SCSI_3W_SAS is not set
+# CONFIG_SCSI_ACARD is not set
+# CONFIG_SCSI_AHA1740 is not set
+# CONFIG_SCSI_AACRAID is not set
+# CONFIG_SCSI_AIC7XXX is not set
+# CONFIG_SCSI_AIC79XX is not set
+# CONFIG_SCSI_AIC94XX is not set
+# CONFIG_SCSI_MVSAS is not set
+# CONFIG_SCSI_MVUMI is not set
+# CONFIG_SCSI_ADVANSYS is not set
+# CONFIG_SCSI_ARCMSR is not set
+# CONFIG_SCSI_ESAS2R is not set
+CONFIG_MEGARAID_NEWGEN=3Dy
+# CONFIG_MEGARAID_MM is not set
+# CONFIG_MEGARAID_LEGACY is not set
+# CONFIG_MEGARAID_SAS is not set
+# CONFIG_SCSI_MPT3SAS is not set
+# CONFIG_SCSI_MPT2SAS is not set
+# CONFIG_SCSI_MPI3MR is not set
+# CONFIG_SCSI_SMARTPQI is not set
+# CONFIG_SCSI_HPTIOP is not set
+# CONFIG_SCSI_BUSLOGIC is not set
+# CONFIG_SCSI_MYRB is not set
+# CONFIG_SCSI_MYRS is not set
+# CONFIG_VMWARE_PVSCSI is not set
+# CONFIG_XEN_SCSI_FRONTEND is not set
+# CONFIG_SCSI_SNIC is not set
+# CONFIG_SCSI_DMX3191D is not set
+# CONFIG_SCSI_FDOMAIN_PCI is not set
+# CONFIG_SCSI_ISCI is not set
+# CONFIG_SCSI_IPS is not set
+# CONFIG_SCSI_INITIO is not set
+# CONFIG_SCSI_INIA100 is not set
+# CONFIG_SCSI_STEX is not set
+# CONFIG_SCSI_SYM53C8XX_2 is not set
+# CONFIG_SCSI_IPR is not set
+# CONFIG_SCSI_QLOGIC_1280 is not set
+# CONFIG_SCSI_QLA_ISCSI is not set
+# CONFIG_SCSI_SIM710 is not set
+# CONFIG_SCSI_DC395x is not set
+# CONFIG_SCSI_AM53C974 is not set
+# CONFIG_SCSI_WD719X is not set
+# CONFIG_SCSI_DEBUG is not set
+# CONFIG_SCSI_PMCRAID is not set
+# CONFIG_SCSI_PM8001 is not set
+# CONFIG_SCSI_VIRTIO is not set
+CONFIG_SCSI_DH=3Dy
+CONFIG_SCSI_DH_RDAC=3Dm
+# CONFIG_SCSI_DH_HP_SW is not set
+CONFIG_SCSI_DH_EMC=3Dm
+CONFIG_SCSI_DH_ALUA=3Dm
+# end of SCSI device support
+
+CONFIG_ATA=3Dy
+CONFIG_SATA_HOST=3Dy
+CONFIG_PATA_TIMINGS=3Dy
+CONFIG_ATA_VERBOSE_ERROR=3Dy
+CONFIG_ATA_FORCE=3Dy
+CONFIG_ATA_ACPI=3Dy
+CONFIG_SATA_ZPODD=3Dy
+CONFIG_SATA_PMP=3Dy
+
+#
+# Controllers with non-SFF native interface
+#
+CONFIG_SATA_AHCI=3Dm
+CONFIG_SATA_MOBILE_LPM_POLICY=3D3
+CONFIG_SATA_AHCI_PLATFORM=3Dm
+# CONFIG_AHCI_DWC is not set
+# CONFIG_SATA_INIC162X is not set
+CONFIG_SATA_ACARD_AHCI=3Dm
+# CONFIG_SATA_SIL24 is not set
+CONFIG_ATA_SFF=3Dy
+
+#
+# SFF controllers with custom DMA interface
+#
+# CONFIG_PDC_ADMA is not set
+# CONFIG_SATA_QSTOR is not set
+# CONFIG_SATA_SX4 is not set
+CONFIG_ATA_BMDMA=3Dy
+
+#
+# SATA SFF controllers with BMDMA
+#
+CONFIG_ATA_PIIX=3Dy
+# CONFIG_SATA_DWC is not set
+# CONFIG_SATA_MV is not set
+# CONFIG_SATA_NV is not set
+# CONFIG_SATA_PROMISE is not set
+# CONFIG_SATA_SIL is not set
+# CONFIG_SATA_SIS is not set
+# CONFIG_SATA_SVW is not set
+# CONFIG_SATA_ULI is not set
+# CONFIG_SATA_VIA is not set
+# CONFIG_SATA_VITESSE is not set
+
+#
+# PATA SFF controllers with BMDMA
+#
+# CONFIG_PATA_ALI is not set
+# CONFIG_PATA_AMD is not set
+# CONFIG_PATA_ARTOP is not set
+# CONFIG_PATA_ATIIXP is not set
+# CONFIG_PATA_ATP867X is not set
+# CONFIG_PATA_CMD64X is not set
+# CONFIG_PATA_CYPRESS is not set
+# CONFIG_PATA_EFAR is not set
+# CONFIG_PATA_HPT366 is not set
+# CONFIG_PATA_HPT37X is not set
+# CONFIG_PATA_HPT3X2N is not set
+# CONFIG_PATA_HPT3X3 is not set
+# CONFIG_PATA_IT8213 is not set
+# CONFIG_PATA_IT821X is not set
+# CONFIG_PATA_JMICRON is not set
+# CONFIG_PATA_MARVELL is not set
+# CONFIG_PATA_NETCELL is not set
+# CONFIG_PATA_NINJA32 is not set
+# CONFIG_PATA_NS87415 is not set
+# CONFIG_PATA_OLDPIIX is not set
+# CONFIG_PATA_OPTIDMA is not set
+# CONFIG_PATA_PDC2027X is not set
+# CONFIG_PATA_PDC_OLD is not set
+# CONFIG_PATA_RADISYS is not set
+# CONFIG_PATA_RDC is not set
+# CONFIG_PATA_SCH is not set
+# CONFIG_PATA_SERVERWORKS is not set
+# CONFIG_PATA_SIL680 is not set
+CONFIG_PATA_SIS=3Dy
+# CONFIG_PATA_TOSHIBA is not set
+# CONFIG_PATA_TRIFLEX is not set
+# CONFIG_PATA_VIA is not set
+# CONFIG_PATA_WINBOND is not set
+
+#
+# PIO-only SFF controllers
+#
+# CONFIG_PATA_CMD640_PCI is not set
+# CONFIG_PATA_MPIIX is not set
+# CONFIG_PATA_NS87410 is not set
+# CONFIG_PATA_OPTI is not set
+# CONFIG_PATA_RZ1000 is not set
+
+#
+# Generic fallback / legacy drivers
+#
+# CONFIG_PATA_ACPI is not set
+CONFIG_ATA_GENERIC=3Dy
+# CONFIG_PATA_LEGACY is not set
+CONFIG_MD=3Dy
+CONFIG_BLK_DEV_MD=3Dy
+CONFIG_MD_AUTODETECT=3Dy
+CONFIG_MD_BITMAP_FILE=3Dy
+CONFIG_MD_RAID0=3Dm
+CONFIG_MD_RAID1=3Dm
+CONFIG_MD_RAID10=3Dm
+CONFIG_MD_RAID456=3Dm
+# CONFIG_BCACHE is not set
+CONFIG_BLK_DEV_DM_BUILTIN=3Dy
+CONFIG_BLK_DEV_DM=3Dy
+# CONFIG_DM_DEBUG is not set
+CONFIG_DM_BUFIO=3Dy
+# CONFIG_DM_DEBUG_BLOCK_MANAGER_LOCKING is not set
+# CONFIG_DM_UNSTRIPED is not set
+# CONFIG_DM_CRYPT is not set
+CONFIG_DM_SNAPSHOT=3Dy
+# CONFIG_DM_THIN_PROVISIONING is not set
+# CONFIG_DM_CACHE is not set
+# CONFIG_DM_WRITECACHE is not set
+# CONFIG_DM_EBS is not set
+# CONFIG_DM_ERA is not set
+# CONFIG_DM_CLONE is not set
+# CONFIG_DM_MIRROR is not set
+# CONFIG_DM_RAID is not set
+# CONFIG_DM_ZERO is not set
+CONFIG_DM_MULTIPATH=3Dm
+# CONFIG_DM_MULTIPATH_QL is not set
+# CONFIG_DM_MULTIPATH_ST is not set
+# CONFIG_DM_MULTIPATH_HST is not set
+# CONFIG_DM_MULTIPATH_IOA is not set
+# CONFIG_DM_DELAY is not set
+# CONFIG_DM_DUST is not set
+CONFIG_DM_INIT=3Dy
+CONFIG_DM_UEVENT=3Dy
+# CONFIG_DM_FLAKEY is not set
+# CONFIG_DM_VERITY is not set
+# CONFIG_DM_SWITCH is not set
+# CONFIG_DM_LOG_WRITES is not set
+# CONFIG_DM_INTEGRITY is not set
+# CONFIG_DM_ZONED is not set
+# CONFIG_DM_AUDIT is not set
+# CONFIG_DM_VDO is not set
+# CONFIG_TARGET_CORE is not set
+CONFIG_FUSION=3Dy
+# CONFIG_FUSION_SPI is not set
+# CONFIG_FUSION_SAS is not set
+CONFIG_FUSION_MAX_SGE=3D128
+CONFIG_FUSION_LOGGING=3Dy
+
+#
+# IEEE 1394 (FireWire) support
+#
+# CONFIG_FIREWIRE is not set
+# CONFIG_FIREWIRE_NOSY is not set
+# end of IEEE 1394 (FireWire) support
+
+CONFIG_MACINTOSH_DRIVERS=3Dy
+CONFIG_MAC_EMUMOUSEBTN=3Dm
+CONFIG_NETDEVICES=3Dy
+CONFIG_NET_CORE=3Dy
+# CONFIG_BONDING is not set
+# CONFIG_DUMMY is not set
+# CONFIG_WIREGUARD is not set
+# CONFIG_EQUALIZER is not set
+CONFIG_NET_FC=3Dy
+# CONFIG_NET_TEAM is not set
+# CONFIG_MACVLAN is not set
+# CONFIG_IPVLAN is not set
+# CONFIG_VXLAN is not set
+# CONFIG_GENEVE is not set
+# CONFIG_BAREUDP is not set
+# CONFIG_GTP is not set
+# CONFIG_PFCP is not set
+# CONFIG_AMT is not set
+# CONFIG_MACSEC is not set
+# CONFIG_NETCONSOLE is not set
+# CONFIG_RIONET is not set
+CONFIG_TUN=3Dy
+# CONFIG_TUN_VNET_CROSS_LE is not set
+# CONFIG_VETH is not set
+# CONFIG_VIRTIO_NET is not set
+# CONFIG_NLMON is not set
+# CONFIG_NETKIT is not set
+# CONFIG_NET_VRF is not set
+# CONFIG_ARCNET is not set
+CONFIG_ETHERNET=3Dy
+CONFIG_NET_VENDOR_3COM=3Dy
+# CONFIG_EL3 is not set
+# CONFIG_VORTEX is not set
+# CONFIG_TYPHOON is not set
+CONFIG_NET_VENDOR_ADAPTEC=3Dy
+# CONFIG_ADAPTEC_STARFIRE is not set
+CONFIG_NET_VENDOR_AGERE=3Dy
+# CONFIG_ET131X is not set
+CONFIG_NET_VENDOR_ALACRITECH=3Dy
+# CONFIG_SLICOSS is not set
+CONFIG_NET_VENDOR_ALTEON=3Dy
+# CONFIG_ACENIC is not set
+# CONFIG_ALTERA_TSE is not set
+CONFIG_NET_VENDOR_AMAZON=3Dy
+# CONFIG_ENA_ETHERNET is not set
+CONFIG_NET_VENDOR_AMD=3Dy
+# CONFIG_AMD8111_ETH is not set
+# CONFIG_PCNET32 is not set
+# CONFIG_AMD_XGBE is not set
+# CONFIG_PDS_CORE is not set
+CONFIG_NET_VENDOR_AQUANTIA=3Dy
+# CONFIG_AQTION is not set
+CONFIG_NET_VENDOR_ARC=3Dy
+CONFIG_NET_VENDOR_ASIX=3Dy
+# CONFIG_SPI_AX88796C is not set
+CONFIG_NET_VENDOR_ATHEROS=3Dy
+# CONFIG_ATL2 is not set
+# CONFIG_ATL1 is not set
+# CONFIG_ATL1E is not set
+# CONFIG_ATL1C is not set
+# CONFIG_ALX is not set
+# CONFIG_CX_ECAT is not set
+CONFIG_NET_VENDOR_BROADCOM=3Dy
+# CONFIG_B44 is not set
+# CONFIG_BCMGENET is not set
+# CONFIG_BNX2 is not set
+# CONFIG_CNIC is not set
+CONFIG_TIGON3=3Dm
+CONFIG_TIGON3_HWMON=3Dy
+# CONFIG_BNX2X is not set
+# CONFIG_SYSTEMPORT is not set
+# CONFIG_BNXT is not set
+CONFIG_NET_VENDOR_CADENCE=3Dy
+# CONFIG_MACB is not set
+CONFIG_NET_VENDOR_CAVIUM=3Dy
+# CONFIG_THUNDER_NIC_PF is not set
+# CONFIG_THUNDER_NIC_VF is not set
+# CONFIG_THUNDER_NIC_BGX is not set
+# CONFIG_THUNDER_NIC_RGX is not set
+# CONFIG_CAVIUM_PTP is not set
+# CONFIG_LIQUIDIO is not set
+# CONFIG_LIQUIDIO_VF is not set
+CONFIG_NET_VENDOR_CHELSIO=3Dy
+# CONFIG_CHELSIO_T1 is not set
+# CONFIG_CHELSIO_T3 is not set
+# CONFIG_CHELSIO_T4 is not set
+# CONFIG_CHELSIO_T4VF is not set
+CONFIG_NET_VENDOR_CIRRUS=3Dy
+CONFIG_NET_VENDOR_CISCO=3Dy
+# CONFIG_ENIC is not set
+CONFIG_NET_VENDOR_CORTINA=3Dy
+CONFIG_NET_VENDOR_DAVICOM=3Dy
+# CONFIG_DM9051 is not set
+# CONFIG_DNET is not set
+CONFIG_NET_VENDOR_DEC=3Dy
+CONFIG_NET_TULIP=3Dy
+# CONFIG_DE2104X is not set
+# CONFIG_TULIP is not set
+# CONFIG_WINBOND_840 is not set
+# CONFIG_DM9102 is not set
+# CONFIG_ULI526X is not set
+CONFIG_NET_VENDOR_DLINK=3Dy
+# CONFIG_DL2K is not set
+# CONFIG_SUNDANCE is not set
+CONFIG_NET_VENDOR_EMULEX=3Dy
+# CONFIG_BE2NET is not set
+CONFIG_NET_VENDOR_ENGLEDER=3Dy
+# CONFIG_TSNEP is not set
+CONFIG_NET_VENDOR_EZCHIP=3Dy
+CONFIG_NET_VENDOR_FUNGIBLE=3Dy
+# CONFIG_FUN_ETH is not set
+CONFIG_NET_VENDOR_GOOGLE=3Dy
+# CONFIG_GVE is not set
+CONFIG_NET_VENDOR_HUAWEI=3Dy
+# CONFIG_HINIC is not set
+CONFIG_NET_VENDOR_I825XX=3Dy
+CONFIG_NET_VENDOR_INTEL=3Dy
+# CONFIG_E100 is not set
+# CONFIG_E1000 is not set
+# CONFIG_E1000E is not set
+# CONFIG_IGB is not set
+# CONFIG_IGBVF is not set
+# CONFIG_IXGBE is not set
+# CONFIG_IXGBEVF is not set
+# CONFIG_I40E is not set
+# CONFIG_I40EVF is not set
+# CONFIG_ICE is not set
+# CONFIG_FM10K is not set
+# CONFIG_IGC is not set
+# CONFIG_IDPF is not set
+# CONFIG_JME is not set
+CONFIG_NET_VENDOR_ADI=3Dy
+# CONFIG_ADIN1110 is not set
+CONFIG_NET_VENDOR_LITEX=3Dy
+CONFIG_NET_VENDOR_MARVELL=3Dy
+# CONFIG_MVMDIO is not set
+# CONFIG_SKGE is not set
+# CONFIG_SKY2 is not set
+# CONFIG_OCTEON_EP is not set
+# CONFIG_OCTEON_EP_VF is not set
+CONFIG_NET_VENDOR_MELLANOX=3Dy
+# CONFIG_MLX4_EN is not set
+# CONFIG_MLX5_CORE is not set
+# CONFIG_MLXSW_CORE is not set
+# CONFIG_MLXFW is not set
+CONFIG_NET_VENDOR_META=3Dy
+# CONFIG_FBNIC is not set
+CONFIG_NET_VENDOR_MICREL=3Dy
+# CONFIG_KS8842 is not set
+# CONFIG_KS8851 is not set
+# CONFIG_KS8851_MLL is not set
+# CONFIG_KSZ884X_PCI is not set
+CONFIG_NET_VENDOR_MICROCHIP=3Dy
+# CONFIG_ENC28J60 is not set
+# CONFIG_ENCX24J600 is not set
+# CONFIG_LAN743X is not set
+# CONFIG_LAN865X is not set
+# CONFIG_VCAP is not set
+CONFIG_NET_VENDOR_MICROSEMI=3Dy
+CONFIG_NET_VENDOR_MICROSOFT=3Dy
+CONFIG_NET_VENDOR_MYRI=3Dy
+# CONFIG_MYRI10GE is not set
+# CONFIG_FEALNX is not set
+CONFIG_NET_VENDOR_NI=3Dy
+# CONFIG_NI_XGE_MANAGEMENT_ENET is not set
+CONFIG_NET_VENDOR_NATSEMI=3Dy
+# CONFIG_NATSEMI is not set
+# CONFIG_NS83820 is not set
+CONFIG_NET_VENDOR_NETERION=3Dy
+# CONFIG_S2IO is not set
+CONFIG_NET_VENDOR_NETRONOME=3Dy
+# CONFIG_NFP is not set
+CONFIG_NET_VENDOR_8390=3Dy
+# CONFIG_NE2K_PCI is not set
+CONFIG_NET_VENDOR_NVIDIA=3Dy
+# CONFIG_FORCEDETH is not set
+CONFIG_NET_VENDOR_OKI=3Dy
+# CONFIG_ETHOC is not set
+# CONFIG_OA_TC6 is not set
+CONFIG_NET_VENDOR_PACKET_ENGINES=3Dy
+# CONFIG_HAMACHI is not set
+# CONFIG_YELLOWFIN is not set
+CONFIG_NET_VENDOR_PENSANDO=3Dy
+# CONFIG_IONIC is not set
+CONFIG_NET_VENDOR_QLOGIC=3Dy
+# CONFIG_QLA3XXX is not set
+# CONFIG_QLCNIC is not set
+# CONFIG_NETXEN_NIC is not set
+# CONFIG_QED is not set
+CONFIG_NET_VENDOR_BROCADE=3Dy
+# CONFIG_BNA is not set
+CONFIG_NET_VENDOR_QUALCOMM=3Dy
+# CONFIG_QCOM_EMAC is not set
+# CONFIG_RMNET is not set
+CONFIG_NET_VENDOR_RDC=3Dy
+# CONFIG_R6040 is not set
+CONFIG_NET_VENDOR_REALTEK=3Dy
+# CONFIG_8139CP is not set
+# CONFIG_8139TOO is not set
+# CONFIG_R8169 is not set
+# CONFIG_RTASE is not set
+CONFIG_NET_VENDOR_RENESAS=3Dy
+CONFIG_NET_VENDOR_ROCKER=3Dy
+# CONFIG_ROCKER is not set
+CONFIG_NET_VENDOR_SAMSUNG=3Dy
+# CONFIG_SXGBE_ETH is not set
+CONFIG_NET_VENDOR_SEEQ=3Dy
+CONFIG_NET_VENDOR_SILAN=3Dy
+# CONFIG_SC92031 is not set
+CONFIG_NET_VENDOR_SIS=3Dy
+# CONFIG_SIS900 is not set
+# CONFIG_SIS190 is not set
+CONFIG_NET_VENDOR_SOLARFLARE=3Dy
+# CONFIG_SFC is not set
+# CONFIG_SFC_FALCON is not set
+# CONFIG_SFC_SIENA is not set
+CONFIG_NET_VENDOR_SMSC=3Dy
+# CONFIG_EPIC100 is not set
+# CONFIG_SMSC911X is not set
+# CONFIG_SMSC9420 is not set
+CONFIG_NET_VENDOR_SOCIONEXT=3Dy
+CONFIG_NET_VENDOR_STMICRO=3Dy
+# CONFIG_STMMAC_ETH is not set
+CONFIG_NET_VENDOR_SUN=3Dy
+# CONFIG_HAPPYMEAL is not set
+# CONFIG_SUNGEM is not set
+# CONFIG_CASSINI is not set
+# CONFIG_NIU is not set
+CONFIG_NET_VENDOR_SYNOPSYS=3Dy
+# CONFIG_DWC_XLGMAC is not set
+CONFIG_NET_VENDOR_TEHUTI=3Dy
+# CONFIG_TEHUTI is not set
+# CONFIG_TEHUTI_TN40 is not set
+CONFIG_NET_VENDOR_TI=3Dy
+# CONFIG_TI_CPSW_PHY_SEL is not set
+# CONFIG_TLAN is not set
+CONFIG_NET_VENDOR_VERTEXCOM=3Dy
+# CONFIG_MSE102X is not set
+CONFIG_NET_VENDOR_VIA=3Dy
+# CONFIG_VIA_RHINE is not set
+# CONFIG_VIA_VELOCITY is not set
+CONFIG_NET_VENDOR_WANGXUN=3Dy
+# CONFIG_NGBE is not set
+# CONFIG_TXGBE is not set
+CONFIG_NET_VENDOR_WIZNET=3Dy
+# CONFIG_WIZNET_W5100 is not set
+# CONFIG_WIZNET_W5300 is not set
+CONFIG_NET_VENDOR_XILINX=3Dy
+# CONFIG_XILINX_EMACLITE is not set
+# CONFIG_XILINX_LL_TEMAC is not set
+CONFIG_FDDI=3Dy
+# CONFIG_DEFXX is not set
+# CONFIG_SKFP is not set
+# CONFIG_HIPPI is not set
+CONFIG_PHYLIB=3Dy
+CONFIG_SWPHY=3Dy
+CONFIG_LED_TRIGGER_PHY=3Dy
+CONFIG_FIXED_PHY=3Dy
+
+#
+# MII PHY device drivers
+#
+# CONFIG_AIR_EN8811H_PHY is not set
+# CONFIG_AMD_PHY is not set
+# CONFIG_ADIN_PHY is not set
+# CONFIG_ADIN1100_PHY is not set
+# CONFIG_AQUANTIA_PHY is not set
+# CONFIG_AX88796B_PHY is not set
+# CONFIG_BROADCOM_PHY is not set
+# CONFIG_BCM54140_PHY is not set
+# CONFIG_BCM7XXX_PHY is not set
+CONFIG_BCM84881_PHY=3Dy
+# CONFIG_BCM87XX_PHY is not set
+# CONFIG_CICADA_PHY is not set
+# CONFIG_CORTINA_PHY is not set
+# CONFIG_DAVICOM_PHY is not set
+# CONFIG_ICPLUS_PHY is not set
+# CONFIG_LXT_PHY is not set
+# CONFIG_INTEL_XWAY_PHY is not set
+# CONFIG_LSI_ET1011C_PHY is not set
+# CONFIG_MARVELL_PHY is not set
+# CONFIG_MARVELL_10G_PHY is not set
+# CONFIG_MARVELL_88Q2XXX_PHY is not set
+# CONFIG_MARVELL_88X2222_PHY is not set
+# CONFIG_MAXLINEAR_GPHY is not set
+# CONFIG_MEDIATEK_GE_PHY is not set
+# CONFIG_MICREL_PHY is not set
+# CONFIG_MICROCHIP_T1S_PHY is not set
+# CONFIG_MICROCHIP_PHY is not set
+# CONFIG_MICROCHIP_T1_PHY is not set
+# CONFIG_MICROSEMI_PHY is not set
+# CONFIG_MOTORCOMM_PHY is not set
+# CONFIG_NATIONAL_PHY is not set
+# CONFIG_NXP_CBTX_PHY is not set
+# CONFIG_NXP_C45_TJA11XX_PHY is not set
+# CONFIG_NXP_TJA11XX_PHY is not set
+# CONFIG_NCN26000_PHY is not set
+# CONFIG_AT803X_PHY is not set
+# CONFIG_QCA83XX_PHY is not set
+# CONFIG_QCA808X_PHY is not set
+# CONFIG_QSEMI_PHY is not set
+# CONFIG_REALTEK_PHY is not set
+# CONFIG_RENESAS_PHY is not set
+# CONFIG_ROCKCHIP_PHY is not set
+# CONFIG_SMSC_PHY is not set
+# CONFIG_STE10XP is not set
+# CONFIG_TERANETICS_PHY is not set
+# CONFIG_DP83822_PHY is not set
+# CONFIG_DP83TC811_PHY is not set
+# CONFIG_DP83848_PHY is not set
+# CONFIG_DP83867_PHY is not set
+# CONFIG_DP83869_PHY is not set
+# CONFIG_DP83TD510_PHY is not set
+# CONFIG_DP83TG720_PHY is not set
+# CONFIG_VITESSE_PHY is not set
+# CONFIG_XILINX_GMII2RGMII is not set
+# CONFIG_MICREL_KS8995MA is not set
+# CONFIG_PSE_CONTROLLER is not set
+CONFIG_MDIO_DEVICE=3Dy
+CONFIG_MDIO_BUS=3Dy
+CONFIG_FWNODE_MDIO=3Dy
+CONFIG_ACPI_MDIO=3Dy
+CONFIG_MDIO_DEVRES=3Dy
+# CONFIG_MDIO_BITBANG is not set
+# CONFIG_MDIO_BCM_UNIMAC is not set
+# CONFIG_MDIO_MVUSB is not set
+# CONFIG_MDIO_MSCC_MIIM is not set
+# CONFIG_MDIO_THUNDER is not set
+
+#
+# MDIO Multiplexers
+#
+
+#
+# PCS device drivers
+#
+# CONFIG_PCS_XPCS is not set
+# end of PCS device drivers
+
+CONFIG_PPP=3Dy
+# CONFIG_PPP_BSDCOMP is not set
+# CONFIG_PPP_DEFLATE is not set
+CONFIG_PPP_FILTER=3Dy
+# CONFIG_PPP_MPPE is not set
+CONFIG_PPP_MULTILINK=3Dy
+# CONFIG_PPPOE is not set
+CONFIG_PPPOE_HASH_BITS=3D4
+# CONFIG_PPP_ASYNC is not set
+# CONFIG_PPP_SYNC_TTY is not set
+# CONFIG_SLIP is not set
+CONFIG_SLHC=3Dy
+# CONFIG_USB_NET_DRIVERS is not set
+CONFIG_WLAN=3Dy
+CONFIG_WLAN_VENDOR_ADMTEK=3Dy
+CONFIG_WLAN_VENDOR_ATH=3Dy
+# CONFIG_ATH_DEBUG is not set
+CONFIG_ATH5K_PCI=3Dy
+CONFIG_WLAN_VENDOR_ATMEL=3Dy
+CONFIG_WLAN_VENDOR_BROADCOM=3Dy
+CONFIG_WLAN_VENDOR_INTEL=3Dy
+CONFIG_WLAN_VENDOR_INTERSIL=3Dy
+CONFIG_WLAN_VENDOR_MARVELL=3Dy
+CONFIG_WLAN_VENDOR_MEDIATEK=3Dy
+CONFIG_WLAN_VENDOR_MICROCHIP=3Dy
+CONFIG_WLAN_VENDOR_PURELIFI=3Dy
+CONFIG_WLAN_VENDOR_RALINK=3Dy
+CONFIG_WLAN_VENDOR_REALTEK=3Dy
+CONFIG_WLAN_VENDOR_RSI=3Dy
+CONFIG_WLAN_VENDOR_SILABS=3Dy
+CONFIG_WLAN_VENDOR_ST=3Dy
+CONFIG_WLAN_VENDOR_TI=3Dy
+CONFIG_WLAN_VENDOR_ZYDAS=3Dy
+CONFIG_WLAN_VENDOR_QUANTENNA=3Dy
+CONFIG_WAN=3Dy
+# CONFIG_HDLC is not set
+# CONFIG_FRAMER is not set
+
+#
+# Wireless WAN
+#
+# CONFIG_WWAN is not set
+# end of Wireless WAN
+
+CONFIG_XEN_NETDEV_FRONTEND=3Dy
+# CONFIG_XEN_NETDEV_BACKEND is not set
+# CONFIG_VMXNET3 is not set
+# CONFIG_FUJITSU_ES is not set
+# CONFIG_NETDEVSIM is not set
+# CONFIG_NET_FAILOVER is not set
+CONFIG_ISDN=3Dy
+# CONFIG_MISDN is not set
+
+#
+# Input device support
+#
+CONFIG_INPUT=3Dy
+# CONFIG_INPUT_LEDS is not set
+# CONFIG_INPUT_FF_MEMLESS is not set
+# CONFIG_INPUT_SPARSEKMAP is not set
+# CONFIG_INPUT_MATRIXKMAP is not set
+CONFIG_INPUT_VIVALDIFMAP=3Dy
+
+#
+# Userland interfaces
+#
+CONFIG_INPUT_MOUSEDEV=3Dy
+CONFIG_INPUT_MOUSEDEV_PSAUX=3Dy
+CONFIG_INPUT_MOUSEDEV_SCREEN_X=3D1024
+CONFIG_INPUT_MOUSEDEV_SCREEN_Y=3D768
+# CONFIG_INPUT_JOYDEV is not set
+CONFIG_INPUT_EVDEV=3Dy
+# CONFIG_INPUT_EVBUG is not set
+
+#
+# Input Device Drivers
+#
+CONFIG_INPUT_KEYBOARD=3Dy
+# CONFIG_KEYBOARD_ADP5520 is not set
+# CONFIG_KEYBOARD_ADP5588 is not set
+# CONFIG_KEYBOARD_ADP5589 is not set
+# CONFIG_KEYBOARD_APPLESPI is not set
+CONFIG_KEYBOARD_ATKBD=3Dy
+# CONFIG_KEYBOARD_QT1050 is not set
+# CONFIG_KEYBOARD_QT1070 is not set
+# CONFIG_KEYBOARD_QT2160 is not set
+# CONFIG_KEYBOARD_DLINK_DIR685 is not set
+# CONFIG_KEYBOARD_LKKBD is not set
+# CONFIG_KEYBOARD_GPIO is not set
+# CONFIG_KEYBOARD_GPIO_POLLED is not set
+# CONFIG_KEYBOARD_TCA6416 is not set
+# CONFIG_KEYBOARD_TCA8418 is not set
+# CONFIG_KEYBOARD_MATRIX is not set
+# CONFIG_KEYBOARD_LM8323 is not set
+# CONFIG_KEYBOARD_LM8333 is not set
+# CONFIG_KEYBOARD_MAX7359 is not set
+# CONFIG_KEYBOARD_MPR121 is not set
+# CONFIG_KEYBOARD_NEWTON is not set
+# CONFIG_KEYBOARD_OPENCORES is not set
+# CONFIG_KEYBOARD_PINEPHONE is not set
+# CONFIG_KEYBOARD_SAMSUNG is not set
+# CONFIG_KEYBOARD_STOWAWAY is not set
+# CONFIG_KEYBOARD_SUNKBD is not set
+# CONFIG_KEYBOARD_TM2_TOUCHKEY is not set
+# CONFIG_KEYBOARD_TWL4030 is not set
+# CONFIG_KEYBOARD_XTKBD is not set
+# CONFIG_KEYBOARD_CYPRESS_SF is not set
+CONFIG_INPUT_MOUSE=3Dy
+# CONFIG_MOUSE_PS2 is not set
+# CONFIG_MOUSE_SERIAL is not set
+# CONFIG_MOUSE_APPLETOUCH is not set
+# CONFIG_MOUSE_BCM5974 is not set
+# CONFIG_MOUSE_CYAPA is not set
+# CONFIG_MOUSE_ELAN_I2C is not set
+# CONFIG_MOUSE_VSXXXAA is not set
+# CONFIG_MOUSE_GPIO is not set
+# CONFIG_MOUSE_SYNAPTICS_I2C is not set
+# CONFIG_MOUSE_SYNAPTICS_USB is not set
+CONFIG_INPUT_JOYSTICK=3Dy
+# CONFIG_JOYSTICK_ANALOG is not set
+# CONFIG_JOYSTICK_A3D is not set
+# CONFIG_JOYSTICK_ADI is not set
+# CONFIG_JOYSTICK_COBRA is not set
+# CONFIG_JOYSTICK_GF2K is not set
+# CONFIG_JOYSTICK_GRIP is not set
+# CONFIG_JOYSTICK_GRIP_MP is not set
+# CONFIG_JOYSTICK_GUILLEMOT is not set
+# CONFIG_JOYSTICK_INTERACT is not set
+# CONFIG_JOYSTICK_SIDEWINDER is not set
+# CONFIG_JOYSTICK_TMDC is not set
+# CONFIG_JOYSTICK_IFORCE is not set
+# CONFIG_JOYSTICK_WARRIOR is not set
+# CONFIG_JOYSTICK_MAGELLAN is not set
+# CONFIG_JOYSTICK_SPACEORB is not set
+# CONFIG_JOYSTICK_SPACEBALL is not set
+# CONFIG_JOYSTICK_STINGER is not set
+# CONFIG_JOYSTICK_TWIDJOY is not set
+# CONFIG_JOYSTICK_ZHENHUA is not set
+# CONFIG_JOYSTICK_AS5011 is not set
+# CONFIG_JOYSTICK_JOYDUMP is not set
+# CONFIG_JOYSTICK_XPAD is not set
+# CONFIG_JOYSTICK_PSXPAD_SPI is not set
+# CONFIG_JOYSTICK_PXRC is not set
+# CONFIG_JOYSTICK_QWIIC is not set
+# CONFIG_JOYSTICK_FSIA6B is not set
+# CONFIG_JOYSTICK_SENSEHAT is not set
+# CONFIG_JOYSTICK_SEESAW is not set
+CONFIG_INPUT_TABLET=3Dy
+# CONFIG_TABLET_USB_ACECAD is not set
+# CONFIG_TABLET_USB_AIPTEK is not set
+# CONFIG_TABLET_USB_HANWANG is not set
+# CONFIG_TABLET_USB_KBTAB is not set
+# CONFIG_TABLET_USB_PEGASUS is not set
+# CONFIG_TABLET_SERIAL_WACOM4 is not set
+CONFIG_INPUT_TOUCHSCREEN=3Dy
+# CONFIG_TOUCHSCREEN_88PM860X is not set
+# CONFIG_TOUCHSCREEN_ADS7846 is not set
+# CONFIG_TOUCHSCREEN_AD7877 is not set
+# CONFIG_TOUCHSCREEN_AD7879 is not set
+# CONFIG_TOUCHSCREEN_ATMEL_MXT is not set
+# CONFIG_TOUCHSCREEN_AUO_PIXCIR is not set
+# CONFIG_TOUCHSCREEN_BU21013 is not set
+# CONFIG_TOUCHSCREEN_BU21029 is not set
+# CONFIG_TOUCHSCREEN_CHIPONE_ICN8505 is not set
+# CONFIG_TOUCHSCREEN_CY8CTMA140 is not set
+# CONFIG_TOUCHSCREEN_CY8CTMG110 is not set
+# CONFIG_TOUCHSCREEN_CYTTSP_CORE is not set
+# CONFIG_TOUCHSCREEN_CYTTSP5 is not set
+# CONFIG_TOUCHSCREEN_DA9034 is not set
+# CONFIG_TOUCHSCREEN_DA9052 is not set
+# CONFIG_TOUCHSCREEN_DYNAPRO is not set
+# CONFIG_TOUCHSCREEN_HAMPSHIRE is not set
+# CONFIG_TOUCHSCREEN_EETI is not set
+# CONFIG_TOUCHSCREEN_EGALAX_SERIAL is not set
+# CONFIG_TOUCHSCREEN_EXC3000 is not set
+# CONFIG_TOUCHSCREEN_FUJITSU is not set
+# CONFIG_TOUCHSCREEN_GOODIX is not set
+# CONFIG_TOUCHSCREEN_GOODIX_BERLIN_I2C is not set
+# CONFIG_TOUCHSCREEN_GOODIX_BERLIN_SPI is not set
+# CONFIG_TOUCHSCREEN_HIDEEP is not set
+# CONFIG_TOUCHSCREEN_HYCON_HY46XX is not set
+# CONFIG_TOUCHSCREEN_HYNITRON_CSTXXX is not set
+# CONFIG_TOUCHSCREEN_ILI210X is not set
+# CONFIG_TOUCHSCREEN_ILITEK is not set
+# CONFIG_TOUCHSCREEN_S6SY761 is not set
+# CONFIG_TOUCHSCREEN_GUNZE is not set
+# CONFIG_TOUCHSCREEN_EKTF2127 is not set
+CONFIG_TOUCHSCREEN_ELAN=3Dy
+# CONFIG_TOUCHSCREEN_ELO is not set
+# CONFIG_TOUCHSCREEN_WACOM_W8001 is not set
+# CONFIG_TOUCHSCREEN_WACOM_I2C is not set
+# CONFIG_TOUCHSCREEN_MAX11801 is not set
+# CONFIG_TOUCHSCREEN_MMS114 is not set
+# CONFIG_TOUCHSCREEN_MELFAS_MIP4 is not set
+# CONFIG_TOUCHSCREEN_MSG2638 is not set
+# CONFIG_TOUCHSCREEN_MTOUCH is not set
+# CONFIG_TOUCHSCREEN_NOVATEK_NVT_TS is not set
+# CONFIG_TOUCHSCREEN_IMAGIS is not set
+# CONFIG_TOUCHSCREEN_INEXIO is not set
+# CONFIG_TOUCHSCREEN_PENMOUNT is not set
+# CONFIG_TOUCHSCREEN_EDT_FT5X06 is not set
+# CONFIG_TOUCHSCREEN_TOUCHRIGHT is not set
+# CONFIG_TOUCHSCREEN_TOUCHWIN is not set
+# CONFIG_TOUCHSCREEN_PIXCIR is not set
+# CONFIG_TOUCHSCREEN_WDT87XX_I2C is not set
+# CONFIG_TOUCHSCREEN_WM831X is not set
+# CONFIG_TOUCHSCREEN_USB_COMPOSITE is not set
+# CONFIG_TOUCHSCREEN_TOUCHIT213 is not set
+# CONFIG_TOUCHSCREEN_TSC_SERIO is not set
+# CONFIG_TOUCHSCREEN_TSC2004 is not set
+# CONFIG_TOUCHSCREEN_TSC2005 is not set
+# CONFIG_TOUCHSCREEN_TSC2007 is not set
+# CONFIG_TOUCHSCREEN_PCAP is not set
+# CONFIG_TOUCHSCREEN_RM_TS is not set
+# CONFIG_TOUCHSCREEN_SILEAD is not set
+# CONFIG_TOUCHSCREEN_SIS_I2C is not set
+# CONFIG_TOUCHSCREEN_ST1232 is not set
+# CONFIG_TOUCHSCREEN_STMFTS is not set
+# CONFIG_TOUCHSCREEN_SURFACE3_SPI is not set
+# CONFIG_TOUCHSCREEN_SX8654 is not set
+# CONFIG_TOUCHSCREEN_TPS6507X is not set
+# CONFIG_TOUCHSCREEN_ZET6223 is not set
+# CONFIG_TOUCHSCREEN_ZFORCE is not set
+# CONFIG_TOUCHSCREEN_ROHM_BU21023 is not set
+# CONFIG_TOUCHSCREEN_IQS5XX is not set
+# CONFIG_TOUCHSCREEN_IQS7211 is not set
+# CONFIG_TOUCHSCREEN_ZINITIX is not set
+# CONFIG_TOUCHSCREEN_HIMAX_HX83112B is not set
+CONFIG_INPUT_MISC=3Dy
+# CONFIG_INPUT_88PM860X_ONKEY is not set
+# CONFIG_INPUT_AD714X is not set
+# CONFIG_INPUT_BMA150 is not set
+# CONFIG_INPUT_E3X0_BUTTON is not set
+# CONFIG_INPUT_PCSPKR is not set
+# CONFIG_INPUT_MAX77693_HAPTIC is not set
+# CONFIG_INPUT_MAX8925_ONKEY is not set
+# CONFIG_INPUT_MAX8997_HAPTIC is not set
+# CONFIG_INPUT_MMA8450 is not set
+# CONFIG_INPUT_APANEL is not set
+# CONFIG_INPUT_GPIO_BEEPER is not set
+# CONFIG_INPUT_GPIO_DECODER is not set
+# CONFIG_INPUT_GPIO_VIBRA is not set
+# CONFIG_INPUT_ATLAS_BTNS is not set
+# CONFIG_INPUT_ATI_REMOTE2 is not set
+# CONFIG_INPUT_KEYSPAN_REMOTE is not set
+# CONFIG_INPUT_KXTJ9 is not set
+# CONFIG_INPUT_POWERMATE is not set
+# CONFIG_INPUT_YEALINK is not set
+# CONFIG_INPUT_CM109 is not set
+# CONFIG_INPUT_REGULATOR_HAPTIC is not set
+# CONFIG_INPUT_TWL4030_PWRBUTTON is not set
+# CONFIG_INPUT_TWL4030_VIBRA is not set
+# CONFIG_INPUT_TWL6040_VIBRA is not set
+CONFIG_INPUT_UINPUT=3Dy
+# CONFIG_INPUT_PALMAS_PWRBUTTON is not set
+# CONFIG_INPUT_PCF8574 is not set
+# CONFIG_INPUT_PWM_BEEPER is not set
+# CONFIG_INPUT_PWM_VIBRA is not set
+# CONFIG_INPUT_GPIO_ROTARY_ENCODER is not set
+# CONFIG_INPUT_DA7280_HAPTICS is not set
+# CONFIG_INPUT_DA9052_ONKEY is not set
+# CONFIG_INPUT_DA9055_ONKEY is not set
+# CONFIG_INPUT_DA9063_ONKEY is not set
+# CONFIG_INPUT_WM831X_ON is not set
+# CONFIG_INPUT_PCAP is not set
+# CONFIG_INPUT_ADXL34X is not set
+# CONFIG_INPUT_IMS_PCU is not set
+# CONFIG_INPUT_IQS269A is not set
+# CONFIG_INPUT_IQS626A is not set
+# CONFIG_INPUT_IQS7222 is not set
+# CONFIG_INPUT_CMA3000 is not set
+# CONFIG_INPUT_XEN_KBDDEV_FRONTEND is not set
+# CONFIG_INPUT_IDEAPAD_SLIDEBAR is not set
+# CONFIG_INPUT_DRV260X_HAPTICS is not set
+# CONFIG_INPUT_DRV2665_HAPTICS is not set
+# CONFIG_INPUT_DRV2667_HAPTICS is not set
+# CONFIG_RMI4_CORE is not set
+
+#
+# Hardware I/O ports
+#
+CONFIG_SERIO=3Dy
+CONFIG_ARCH_MIGHT_HAVE_PC_SERIO=3Dy
+CONFIG_SERIO_I8042=3Dy
+# CONFIG_SERIO_SERPORT is not set
+# CONFIG_SERIO_CT82C710 is not set
+# CONFIG_SERIO_PCIPS2 is not set
+CONFIG_SERIO_LIBPS2=3Dy
+# CONFIG_SERIO_RAW is not set
+# CONFIG_SERIO_ALTERA_PS2 is not set
+# CONFIG_SERIO_PS2MULT is not set
+# CONFIG_SERIO_ARC_PS2 is not set
+# CONFIG_SERIO_GPIO_PS2 is not set
+# CONFIG_USERIO is not set
+# CONFIG_GAMEPORT is not set
+# end of Hardware I/O ports
+# end of Input device support
+
+#
+# Character devices
+#
+CONFIG_TTY=3Dy
+CONFIG_VT=3Dy
+CONFIG_CONSOLE_TRANSLATIONS=3Dy
+CONFIG_VT_CONSOLE=3Dy
+CONFIG_VT_CONSOLE_SLEEP=3Dy
+CONFIG_VT_HW_CONSOLE_BINDING=3Dy
+CONFIG_UNIX98_PTYS=3Dy
+CONFIG_LEGACY_PTYS=3Dy
+CONFIG_LEGACY_PTY_COUNT=3D0
+CONFIG_LEGACY_TIOCSTI=3Dy
+CONFIG_LDISC_AUTOLOAD=3Dy
+
+#
+# Serial drivers
+#
+CONFIG_SERIAL_EARLYCON=3Dy
+CONFIG_SERIAL_8250=3Dy
+# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
+CONFIG_SERIAL_8250_PNP=3Dy
+CONFIG_SERIAL_8250_16550A_VARIANTS=3Dy
+CONFIG_SERIAL_8250_FINTEK=3Dy
+CONFIG_SERIAL_8250_CONSOLE=3Dy
+CONFIG_SERIAL_8250_DMA=3Dy
+CONFIG_SERIAL_8250_PCILIB=3Dy
+CONFIG_SERIAL_8250_PCI=3Dy
+# CONFIG_SERIAL_8250_EXAR is not set
+CONFIG_SERIAL_8250_NR_UARTS=3D48
+CONFIG_SERIAL_8250_RUNTIME_UARTS=3D32
+CONFIG_SERIAL_8250_EXTENDED=3Dy
+CONFIG_SERIAL_8250_MANY_PORTS=3Dy
+# CONFIG_SERIAL_8250_PCI1XXXX is not set
+CONFIG_SERIAL_8250_SHARE_IRQ=3Dy
+# CONFIG_SERIAL_8250_DETECT_IRQ is not set
+CONFIG_SERIAL_8250_RSA=3Dy
+# CONFIG_SERIAL_8250_DW is not set
+CONFIG_SERIAL_8250_RT288X=3Dy
+# CONFIG_SERIAL_8250_LPSS is not set
+CONFIG_SERIAL_8250_MID=3Dy
+CONFIG_SERIAL_8250_PERICOM=3Dy
+
+#
+# Non-8250 serial port support
+#
+CONFIG_SERIAL_KGDB_NMI=3Dy
+# CONFIG_SERIAL_MAX3100 is not set
+CONFIG_SERIAL_MAX310X=3Dy
+# CONFIG_SERIAL_UARTLITE is not set
+CONFIG_SERIAL_CORE=3Dy
+CONFIG_SERIAL_CORE_CONSOLE=3Dy
+CONFIG_CONSOLE_POLL=3Dy
+# CONFIG_SERIAL_JSM is not set
+# CONFIG_SERIAL_LANTIQ is not set
+CONFIG_SERIAL_SCCNXP=3Dy
+CONFIG_SERIAL_SCCNXP_CONSOLE=3Dy
+# CONFIG_SERIAL_SC16IS7XX is not set
+# CONFIG_SERIAL_ALTERA_JTAGUART is not set
+# CONFIG_SERIAL_ALTERA_UART is not set
+# CONFIG_SERIAL_ARC is not set
+# CONFIG_SERIAL_RP2 is not set
+# CONFIG_SERIAL_FSL_LPUART is not set
+# CONFIG_SERIAL_FSL_LINFLEXUART is not set
+# CONFIG_SERIAL_SPRD is not set
+# end of Serial drivers
+
+CONFIG_SERIAL_MCTRL_GPIO=3Dy
+CONFIG_SERIAL_NONSTANDARD=3Dy
+# CONFIG_MOXA_INTELLIO is not set
+# CONFIG_MOXA_SMARTIO is not set
+# CONFIG_N_HDLC is not set
+# CONFIG_N_GSM is not set
+# CONFIG_NOZOMI is not set
+# CONFIG_NULL_TTY is not set
+CONFIG_HVC_DRIVER=3Dy
+CONFIG_HVC_IRQ=3Dy
+CONFIG_HVC_XEN=3Dy
+CONFIG_HVC_XEN_FRONTEND=3Dy
+CONFIG_SERIAL_DEV_BUS=3Dy
+CONFIG_SERIAL_DEV_CTRL_TTYPORT=3Dy
+CONFIG_TTY_PRINTK=3Dy
+CONFIG_TTY_PRINTK_LEVEL=3D6
+CONFIG_VIRTIO_CONSOLE=3Dy
+CONFIG_IPMI_HANDLER=3Dm
+CONFIG_IPMI_DMI_DECODE=3Dy
+CONFIG_IPMI_PLAT_DATA=3Dy
+# CONFIG_IPMI_PANIC_EVENT is not set
+CONFIG_IPMI_DEVICE_INTERFACE=3Dm
+CONFIG_IPMI_SI=3Dm
+CONFIG_IPMI_SSIF=3Dm
+# CONFIG_IPMI_WATCHDOG is not set
+# CONFIG_IPMI_POWEROFF is not set
+CONFIG_HW_RANDOM=3Dy
+# CONFIG_HW_RANDOM_TIMERIOMEM is not set
+# CONFIG_HW_RANDOM_INTEL is not set
+# CONFIG_HW_RANDOM_AMD is not set
+# CONFIG_HW_RANDOM_BA431 is not set
+# CONFIG_HW_RANDOM_VIA is not set
+# CONFIG_HW_RANDOM_VIRTIO is not set
+# CONFIG_HW_RANDOM_XIPHERA is not set
+# CONFIG_APPLICOM is not set
+# CONFIG_MWAVE is not set
+CONFIG_DEVMEM=3Dy
+# CONFIG_NVRAM is not set
+CONFIG_DEVPORT=3Dy
+CONFIG_HPET=3Dy
+CONFIG_HPET_MMAP=3Dy
+CONFIG_HPET_MMAP_DEFAULT=3Dy
+# CONFIG_HANGCHECK_TIMER is not set
+# CONFIG_UV_MMTIMER is not set
+CONFIG_TCG_TPM=3Dy
+CONFIG_TCG_TPM2_HMAC=3Dy
+CONFIG_HW_RANDOM_TPM=3Dy
+CONFIG_TCG_TIS_CORE=3Dy
+CONFIG_TCG_TIS=3Dy
+# CONFIG_TCG_TIS_SPI is not set
+# CONFIG_TCG_TIS_I2C is not set
+# CONFIG_TCG_TIS_I2C_CR50 is not set
+# CONFIG_TCG_TIS_I2C_ATMEL is not set
+# CONFIG_TCG_TIS_I2C_INFINEON is not set
+# CONFIG_TCG_TIS_I2C_NUVOTON is not set
+# CONFIG_TCG_NSC is not set
+# CONFIG_TCG_ATMEL is not set
+# CONFIG_TCG_INFINEON is not set
+# CONFIG_TCG_XEN is not set
+CONFIG_TCG_CRB=3Dy
+# CONFIG_TCG_VTPM_PROXY is not set
+# CONFIG_TCG_TIS_ST33ZP24_I2C is not set
+# CONFIG_TCG_TIS_ST33ZP24_SPI is not set
+# CONFIG_TELCLOCK is not set
+# CONFIG_XILLYBUS is not set
+# CONFIG_XILLYUSB is not set
+# end of Character devices
+
+#
+# I2C support
+#
+CONFIG_I2C=3Dy
+CONFIG_ACPI_I2C_OPREGION=3Dy
+CONFIG_I2C_BOARDINFO=3Dy
+CONFIG_I2C_CHARDEV=3Dy
+# CONFIG_I2C_MUX is not set
+CONFIG_I2C_HELPER_AUTO=3Dy
+CONFIG_I2C_SMBUS=3Dm
+CONFIG_I2C_ALGOBIT=3Dm
+
+#
+# I2C Hardware Bus support
+#
+
+#
+# PC SMBus host controller drivers
+#
+# CONFIG_I2C_ALI1535 is not set
+# CONFIG_I2C_ALI1563 is not set
+# CONFIG_I2C_ALI15X3 is not set
+# CONFIG_I2C_AMD756 is not set
+# CONFIG_I2C_AMD8111 is not set
+# CONFIG_I2C_AMD_MP2 is not set
+# CONFIG_I2C_I801 is not set
+# CONFIG_I2C_ISCH is not set
+# CONFIG_I2C_ISMT is not set
+CONFIG_I2C_PIIX4=3Dm
+# CONFIG_I2C_CHT_WC is not set
+# CONFIG_I2C_NFORCE2 is not set
+# CONFIG_I2C_NVIDIA_GPU is not set
+# CONFIG_I2C_SIS5595 is not set
+# CONFIG_I2C_SIS630 is not set
+# CONFIG_I2C_SIS96X is not set
+# CONFIG_I2C_VIA is not set
+# CONFIG_I2C_VIAPRO is not set
+# CONFIG_I2C_ZHAOXIN is not set
+
+#
+# ACPI drivers
+#
+# CONFIG_I2C_SCMI is not set
+
+#
+# I2C system bus drivers (mostly embedded / system-on-chip)
+#
+# CONFIG_I2C_CBUS_GPIO is not set
+CONFIG_I2C_DESIGNWARE_CORE=3Dy
+# CONFIG_I2C_DESIGNWARE_SLAVE is not set
+CONFIG_I2C_DESIGNWARE_PLATFORM=3Dy
+CONFIG_I2C_DESIGNWARE_BAYTRAIL=3Dy
+# CONFIG_I2C_DESIGNWARE_PCI is not set
+# CONFIG_I2C_EMEV2 is not set
+# CONFIG_I2C_GPIO is not set
+# CONFIG_I2C_OCORES is not set
+# CONFIG_I2C_PCA_PLATFORM is not set
+# CONFIG_I2C_SIMTEC is not set
+# CONFIG_I2C_XILINX is not set
+
+#
+# External I2C/SMBus adapter drivers
+#
+# CONFIG_I2C_DIOLAN_U2C is not set
+# CONFIG_I2C_CP2615 is not set
+# CONFIG_I2C_PCI1XXXX is not set
+# CONFIG_I2C_ROBOTFUZZ_OSIF is not set
+# CONFIG_I2C_TAOS_EVM is not set
+# CONFIG_I2C_TINY_USB is not set
+
+#
+# Other I2C/SMBus bus drivers
+#
+# CONFIG_I2C_MLXCPLD is not set
+# CONFIG_I2C_VIRTIO is not set
+# end of I2C Hardware Bus support
+
+# CONFIG_I2C_STUB is not set
+# CONFIG_I2C_SLAVE is not set
+# CONFIG_I2C_DEBUG_CORE is not set
+# CONFIG_I2C_DEBUG_ALGO is not set
+# CONFIG_I2C_DEBUG_BUS is not set
+# end of I2C support
+
+# CONFIG_I3C is not set
+CONFIG_SPI=3Dy
+# CONFIG_SPI_DEBUG is not set
+CONFIG_SPI_MASTER=3Dy
+CONFIG_SPI_MEM=3Dy
+
+#
+# SPI Master Controller Drivers
+#
+# CONFIG_SPI_ALTERA is not set
+# CONFIG_SPI_AXI_SPI_ENGINE is not set
+# CONFIG_SPI_BITBANG is not set
+# CONFIG_SPI_CADENCE is not set
+# CONFIG_SPI_CH341 is not set
+# CONFIG_SPI_DESIGNWARE is not set
+# CONFIG_SPI_GPIO is not set
+# CONFIG_SPI_INTEL_PCI is not set
+# CONFIG_SPI_INTEL_PLATFORM is not set
+# CONFIG_SPI_MICROCHIP_CORE is not set
+# CONFIG_SPI_MICROCHIP_CORE_QSPI is not set
+# CONFIG_SPI_LANTIQ_SSC is not set
+# CONFIG_SPI_OC_TINY is not set
+# CONFIG_SPI_PCI1XXXX is not set
+# CONFIG_SPI_PXA2XX is not set
+# CONFIG_SPI_SC18IS602 is not set
+# CONFIG_SPI_SIFIVE is not set
+# CONFIG_SPI_MXIC is not set
+# CONFIG_SPI_XCOMM is not set
+# CONFIG_SPI_XILINX is not set
+# CONFIG_SPI_ZYNQMP_GQSPI is not set
+# CONFIG_SPI_AMD is not set
+
+#
+# SPI Multiplexer support
+#
+# CONFIG_SPI_MUX is not set
+
+#
+# SPI Protocol Masters
+#
+# CONFIG_SPI_SPIDEV is not set
+# CONFIG_SPI_LOOPBACK_TEST is not set
+# CONFIG_SPI_TLE62X0 is not set
+CONFIG_SPI_SLAVE=3Dy
+# CONFIG_SPI_SLAVE_TIME is not set
+# CONFIG_SPI_SLAVE_SYSTEM_CONTROL is not set
+CONFIG_SPI_DYNAMIC=3Dy
+# CONFIG_SPMI is not set
+# CONFIG_HSI is not set
+CONFIG_PPS=3Dy
+# CONFIG_PPS_DEBUG is not set
+
+#
+# PPS clients support
+#
+# CONFIG_PPS_CLIENT_KTIMER is not set
+# CONFIG_PPS_CLIENT_LDISC is not set
+# CONFIG_PPS_CLIENT_GPIO is not set
+
+#
+# PPS generators support
+#
+
+#
+# PTP clock support
+#
+CONFIG_PTP_1588_CLOCK=3Dy
+CONFIG_PTP_1588_CLOCK_OPTIONAL=3Dy
+# CONFIG_DP83640_PHY is not set
+# CONFIG_PTP_1588_CLOCK_INES is not set
+# CONFIG_PTP_1588_CLOCK_KVM is not set
+# CONFIG_PTP_1588_CLOCK_IDT82P33 is not set
+# CONFIG_PTP_1588_CLOCK_IDTCM is not set
+# CONFIG_PTP_1588_CLOCK_FC3W is not set
+# CONFIG_PTP_1588_CLOCK_MOCK is not set
+# CONFIG_PTP_1588_CLOCK_VMW is not set
+# end of PTP clock support
+
+CONFIG_PINCTRL=3Dy
+CONFIG_PINMUX=3Dy
+CONFIG_PINCONF=3Dy
+CONFIG_GENERIC_PINCONF=3Dy
+# CONFIG_DEBUG_PINCTRL is not set
+CONFIG_PINCTRL_AMD=3Dy
+# CONFIG_PINCTRL_CY8C95X0 is not set
+# CONFIG_PINCTRL_MCP23S08 is not set
+CONFIG_PINCTRL_SX150X=3Dy
+
+#
+# Intel pinctrl drivers
+#
+CONFIG_PINCTRL_BAYTRAIL=3Dy
+CONFIG_PINCTRL_CHERRYVIEW=3Dy
+# CONFIG_PINCTRL_LYNXPOINT is not set
+CONFIG_PINCTRL_INTEL=3Dy
+# CONFIG_PINCTRL_INTEL_PLATFORM is not set
+# CONFIG_PINCTRL_ALDERLAKE is not set
+# CONFIG_PINCTRL_BROXTON is not set
+# CONFIG_PINCTRL_CANNONLAKE is not set
+# CONFIG_PINCTRL_CEDARFORK is not set
+# CONFIG_PINCTRL_DENVERTON is not set
+# CONFIG_PINCTRL_ELKHARTLAKE is not set
+# CONFIG_PINCTRL_EMMITSBURG is not set
+# CONFIG_PINCTRL_GEMINILAKE is not set
+# CONFIG_PINCTRL_ICELAKE is not set
+# CONFIG_PINCTRL_JASPERLAKE is not set
+# CONFIG_PINCTRL_LAKEFIELD is not set
+# CONFIG_PINCTRL_LEWISBURG is not set
+# CONFIG_PINCTRL_METEORLAKE is not set
+# CONFIG_PINCTRL_METEORPOINT is not set
+# CONFIG_PINCTRL_SUNRISEPOINT is not set
+# CONFIG_PINCTRL_TIGERLAKE is not set
+# end of Intel pinctrl drivers
+
+#
+# Renesas pinctrl drivers
+#
+# end of Renesas pinctrl drivers
+
+CONFIG_GPIOLIB=3Dy
+CONFIG_GPIOLIB_FASTPATH_LIMIT=3D512
+CONFIG_GPIO_ACPI=3Dy
+CONFIG_GPIOLIB_IRQCHIP=3Dy
+# CONFIG_DEBUG_GPIO is not set
+CONFIG_GPIO_SYSFS=3Dy
+CONFIG_GPIO_CDEV=3Dy
+CONFIG_GPIO_CDEV_V1=3Dy
+
+#
+# Memory mapped GPIO drivers
+#
+# CONFIG_GPIO_AMDPT is not set
+# CONFIG_GPIO_DWAPB is not set
+# CONFIG_GPIO_GENERIC_PLATFORM is not set
+# CONFIG_GPIO_GRANITERAPIDS is not set
+# CONFIG_GPIO_MB86S7X is not set
+# CONFIG_GPIO_AMD_FCH is not set
+# end of Memory mapped GPIO drivers
+
+#
+# Port-mapped I/O GPIO drivers
+#
+# CONFIG_GPIO_VX855 is not set
+# CONFIG_GPIO_104_DIO_48E is not set
+# CONFIG_GPIO_104_IDIO_16 is not set
+# CONFIG_GPIO_104_IDI_48 is not set
+# CONFIG_GPIO_F7188X is not set
+# CONFIG_GPIO_GPIO_MM is not set
+# CONFIG_GPIO_IT87 is not set
+# CONFIG_GPIO_SCH311X is not set
+# CONFIG_GPIO_WINBOND is not set
+# CONFIG_GPIO_WS16C48 is not set
+# end of Port-mapped I/O GPIO drivers
+
+#
+# I2C GPIO expanders
+#
+# CONFIG_GPIO_FXL6408 is not set
+# CONFIG_GPIO_DS4520 is not set
+# CONFIG_GPIO_MAX7300 is not set
+# CONFIG_GPIO_MAX732X is not set
+# CONFIG_GPIO_PCA953X is not set
+# CONFIG_GPIO_PCA9570 is not set
+# CONFIG_GPIO_PCF857X is not set
+# CONFIG_GPIO_TPIC2810 is not set
+# end of I2C GPIO expanders
+
+#
+# MFD GPIO expanders
+#
+# CONFIG_GPIO_ADP5520 is not set
+CONFIG_GPIO_CRYSTAL_COVE=3Dy
+# CONFIG_GPIO_DA9052 is not set
+# CONFIG_GPIO_DA9055 is not set
+# CONFIG_GPIO_ELKHARTLAKE is not set
+CONFIG_GPIO_PALMAS=3Dy
+CONFIG_GPIO_RC5T583=3Dy
+CONFIG_GPIO_TPS6586X=3Dy
+CONFIG_GPIO_TPS65910=3Dy
+# CONFIG_GPIO_TPS65912 is not set
+# CONFIG_GPIO_TWL4030 is not set
+# CONFIG_GPIO_TWL6040 is not set
+# CONFIG_GPIO_WM831X is not set
+# CONFIG_GPIO_WM8350 is not set
+# end of MFD GPIO expanders
+
+#
+# PCI GPIO expanders
+#
+# CONFIG_GPIO_AMD8111 is not set
+# CONFIG_GPIO_BT8XX is not set
+# CONFIG_GPIO_ML_IOH is not set
+# CONFIG_GPIO_PCI_IDIO_16 is not set
+# CONFIG_GPIO_PCIE_IDIO_24 is not set
+# CONFIG_GPIO_RDC321X is not set
+# end of PCI GPIO expanders
+
+#
+# SPI GPIO expanders
+#
+# CONFIG_GPIO_MAX3191X is not set
+# CONFIG_GPIO_MAX7301 is not set
+# CONFIG_GPIO_MC33880 is not set
+# CONFIG_GPIO_PISOSR is not set
+# CONFIG_GPIO_XRA1403 is not set
+# end of SPI GPIO expanders
+
+#
+# USB GPIO expanders
+#
+# end of USB GPIO expanders
+
+#
+# Virtual GPIO drivers
+#
+# CONFIG_GPIO_AGGREGATOR is not set
+# CONFIG_GPIO_LATCH is not set
+# CONFIG_GPIO_MOCKUP is not set
+# CONFIG_GPIO_VIRTIO is not set
+# CONFIG_GPIO_SIM is not set
+# end of Virtual GPIO drivers
+
+#
+# GPIO Debugging utilities
+#
+# CONFIG_GPIO_SLOPPY_LOGIC_ANALYZER is not set
+# CONFIG_GPIO_VIRTUSER is not set
+# end of GPIO Debugging utilities
+
+# CONFIG_W1 is not set
+CONFIG_POWER_RESET=3Dy
+CONFIG_POWER_RESET_RESTART=3Dy
+# CONFIG_POWER_SEQUENCING is not set
+CONFIG_POWER_SUPPLY=3Dy
+# CONFIG_POWER_SUPPLY_DEBUG is not set
+CONFIG_POWER_SUPPLY_HWMON=3Dy
+# CONFIG_IP5XXX_POWER is not set
+# CONFIG_MAX8925_POWER is not set
+# CONFIG_WM831X_BACKUP is not set
+# CONFIG_WM831X_POWER is not set
+# CONFIG_WM8350_POWER is not set
+# CONFIG_TEST_POWER is not set
+# CONFIG_BATTERY_88PM860X is not set
+# CONFIG_CHARGER_ADP5061 is not set
+# CONFIG_BATTERY_CW2015 is not set
+# CONFIG_BATTERY_DS2780 is not set
+# CONFIG_BATTERY_DS2781 is not set
+# CONFIG_BATTERY_DS2782 is not set
+# CONFIG_BATTERY_SAMSUNG_SDI is not set
+# CONFIG_BATTERY_SBS is not set
+# CONFIG_CHARGER_SBS is not set
+# CONFIG_BATTERY_BQ27XXX is not set
+# CONFIG_BATTERY_DA9030 is not set
+# CONFIG_BATTERY_DA9052 is not set
+# CONFIG_BATTERY_MAX17042 is not set
+# CONFIG_BATTERY_MAX1720X is not set
+# CONFIG_CHARGER_MAX8903 is not set
+# CONFIG_CHARGER_LP8727 is not set
+# CONFIG_CHARGER_GPIO is not set
+CONFIG_CHARGER_MANAGER=3Dy
+# CONFIG_CHARGER_LT3651 is not set
+# CONFIG_CHARGER_LTC4162L is not set
+# CONFIG_CHARGER_MAX14577 is not set
+# CONFIG_CHARGER_MAX77693 is not set
+# CONFIG_CHARGER_MAX77976 is not set
+# CONFIG_CHARGER_BQ2415X is not set
+# CONFIG_CHARGER_BQ24190 is not set
+# CONFIG_CHARGER_BQ24257 is not set
+# CONFIG_CHARGER_BQ24735 is not set
+# CONFIG_CHARGER_BQ2515X is not set
+# CONFIG_CHARGER_BQ25890 is not set
+# CONFIG_CHARGER_BQ25980 is not set
+# CONFIG_CHARGER_BQ256XX is not set
+# CONFIG_CHARGER_SMB347 is not set
+# CONFIG_CHARGER_TPS65090 is not set
+# CONFIG_BATTERY_GAUGE_LTC2941 is not set
+# CONFIG_BATTERY_GOLDFISH is not set
+# CONFIG_BATTERY_RT5033 is not set
+# CONFIG_CHARGER_RT9455 is not set
+# CONFIG_CHARGER_RT9467 is not set
+# CONFIG_CHARGER_RT9471 is not set
+# CONFIG_CHARGER_BD99954 is not set
+# CONFIG_BATTERY_UG3105 is not set
+# CONFIG_FUEL_GAUGE_MM8013 is not set
+CONFIG_HWMON=3Dy
+# CONFIG_HWMON_DEBUG_CHIP is not set
+
+#
+# Native drivers
+#
+# CONFIG_SENSORS_ABITUGURU is not set
+# CONFIG_SENSORS_ABITUGURU3 is not set
+# CONFIG_SENSORS_AD7314 is not set
+# CONFIG_SENSORS_AD7414 is not set
+# CONFIG_SENSORS_AD7418 is not set
+# CONFIG_SENSORS_ADM1025 is not set
+# CONFIG_SENSORS_ADM1026 is not set
+# CONFIG_SENSORS_ADM1029 is not set
+# CONFIG_SENSORS_ADM1031 is not set
+# CONFIG_SENSORS_ADM1177 is not set
+# CONFIG_SENSORS_ADM9240 is not set
+# CONFIG_SENSORS_ADT7310 is not set
+# CONFIG_SENSORS_ADT7410 is not set
+# CONFIG_SENSORS_ADT7411 is not set
+# CONFIG_SENSORS_ADT7462 is not set
+# CONFIG_SENSORS_ADT7470 is not set
+# CONFIG_SENSORS_ADT7475 is not set
+# CONFIG_SENSORS_AHT10 is not set
+# CONFIG_SENSORS_AS370 is not set
+# CONFIG_SENSORS_ASC7621 is not set
+# CONFIG_SENSORS_AXI_FAN_CONTROL is not set
+# CONFIG_SENSORS_K8TEMP is not set
+CONFIG_SENSORS_K10TEMP=3Dm
+# CONFIG_SENSORS_FAM15H_POWER is not set
+# CONFIG_SENSORS_APPLESMC is not set
+# CONFIG_SENSORS_ASB100 is not set
+# CONFIG_SENSORS_ATXP1 is not set
+# CONFIG_SENSORS_CHIPCAP2 is not set
+# CONFIG_SENSORS_DRIVETEMP is not set
+# CONFIG_SENSORS_DS620 is not set
+# CONFIG_SENSORS_DS1621 is not set
+# CONFIG_SENSORS_DELL_SMM is not set
+# CONFIG_SENSORS_DA9052_ADC is not set
+# CONFIG_SENSORS_DA9055 is not set
+# CONFIG_SENSORS_I5K_AMB is not set
+# CONFIG_SENSORS_F71805F is not set
+# CONFIG_SENSORS_F71882FG is not set
+# CONFIG_SENSORS_F75375S is not set
+# CONFIG_SENSORS_FSCHMD is not set
+# CONFIG_SENSORS_FTSTEUTATES is not set
+# CONFIG_SENSORS_GL518SM is not set
+# CONFIG_SENSORS_GL520SM is not set
+# CONFIG_SENSORS_G760A is not set
+# CONFIG_SENSORS_G762 is not set
+# CONFIG_SENSORS_HIH6130 is not set
+# CONFIG_SENSORS_HS3001 is not set
+# CONFIG_SENSORS_IBMAEM is not set
+# CONFIG_SENSORS_IBMPEX is not set
+# CONFIG_SENSORS_I5500 is not set
+# CONFIG_SENSORS_CORETEMP is not set
+# CONFIG_SENSORS_IT87 is not set
+# CONFIG_SENSORS_JC42 is not set
+# CONFIG_SENSORS_POWERZ is not set
+# CONFIG_SENSORS_POWR1220 is not set
+# CONFIG_SENSORS_LENOVO_EC is not set
+# CONFIG_SENSORS_LINEAGE is not set
+# CONFIG_SENSORS_LTC2945 is not set
+# CONFIG_SENSORS_LTC2947_I2C is not set
+# CONFIG_SENSORS_LTC2947_SPI is not set
+# CONFIG_SENSORS_LTC2990 is not set
+# CONFIG_SENSORS_LTC2991 is not set
+# CONFIG_SENSORS_LTC2992 is not set
+# CONFIG_SENSORS_LTC4151 is not set
+# CONFIG_SENSORS_LTC4215 is not set
+# CONFIG_SENSORS_LTC4222 is not set
+# CONFIG_SENSORS_LTC4245 is not set
+# CONFIG_SENSORS_LTC4260 is not set
+# CONFIG_SENSORS_LTC4261 is not set
+# CONFIG_SENSORS_LTC4282 is not set
+# CONFIG_SENSORS_MAX1111 is not set
+# CONFIG_SENSORS_MAX127 is not set
+# CONFIG_SENSORS_MAX16065 is not set
+# CONFIG_SENSORS_MAX1619 is not set
+# CONFIG_SENSORS_MAX1668 is not set
+# CONFIG_SENSORS_MAX197 is not set
+# CONFIG_SENSORS_MAX31722 is not set
+# CONFIG_SENSORS_MAX31730 is not set
+# CONFIG_SENSORS_MAX31760 is not set
+# CONFIG_MAX31827 is not set
+# CONFIG_SENSORS_MAX6620 is not set
+# CONFIG_SENSORS_MAX6621 is not set
+# CONFIG_SENSORS_MAX6639 is not set
+# CONFIG_SENSORS_MAX6650 is not set
+# CONFIG_SENSORS_MAX6697 is not set
+# CONFIG_SENSORS_MAX31790 is not set
+# CONFIG_SENSORS_MC34VR500 is not set
+# CONFIG_SENSORS_MCP3021 is not set
+# CONFIG_SENSORS_MLXREG_FAN is not set
+# CONFIG_SENSORS_TC654 is not set
+# CONFIG_SENSORS_TPS23861 is not set
+# CONFIG_SENSORS_MR75203 is not set
+# CONFIG_SENSORS_ADCXX is not set
+# CONFIG_SENSORS_LM63 is not set
+# CONFIG_SENSORS_LM70 is not set
+# CONFIG_SENSORS_LM73 is not set
+# CONFIG_SENSORS_LM75 is not set
+# CONFIG_SENSORS_LM77 is not set
+# CONFIG_SENSORS_LM78 is not set
+# CONFIG_SENSORS_LM80 is not set
+# CONFIG_SENSORS_LM83 is not set
+# CONFIG_SENSORS_LM85 is not set
+# CONFIG_SENSORS_LM87 is not set
+# CONFIG_SENSORS_LM90 is not set
+# CONFIG_SENSORS_LM92 is not set
+# CONFIG_SENSORS_LM93 is not set
+# CONFIG_SENSORS_LM95234 is not set
+# CONFIG_SENSORS_LM95241 is not set
+# CONFIG_SENSORS_LM95245 is not set
+# CONFIG_SENSORS_PC87360 is not set
+# CONFIG_SENSORS_PC87427 is not set
+# CONFIG_SENSORS_NCT6683 is not set
+# CONFIG_SENSORS_NCT6775 is not set
+# CONFIG_SENSORS_NCT6775_I2C is not set
+# CONFIG_SENSORS_NCT7802 is not set
+# CONFIG_SENSORS_NCT7904 is not set
+# CONFIG_SENSORS_NPCM7XX is not set
+# CONFIG_SENSORS_OCC_P8_I2C is not set
+# CONFIG_SENSORS_OXP is not set
+# CONFIG_SENSORS_PCF8591 is not set
+# CONFIG_PMBUS is not set
+# CONFIG_SENSORS_PT5161L is not set
+# CONFIG_SENSORS_PWM_FAN is not set
+# CONFIG_SENSORS_SBTSI is not set
+# CONFIG_SENSORS_SBRMI is not set
+# CONFIG_SENSORS_SHT15 is not set
+# CONFIG_SENSORS_SHT21 is not set
+# CONFIG_SENSORS_SHT3x is not set
+# CONFIG_SENSORS_SHT4x is not set
+# CONFIG_SENSORS_SHTC1 is not set
+# CONFIG_SENSORS_SIS5595 is not set
+# CONFIG_SENSORS_DME1737 is not set
+# CONFIG_SENSORS_EMC1403 is not set
+# CONFIG_SENSORS_EMC2103 is not set
+# CONFIG_SENSORS_EMC2305 is not set
+# CONFIG_SENSORS_EMC6W201 is not set
+# CONFIG_SENSORS_SMSC47M1 is not set
+# CONFIG_SENSORS_SMSC47M192 is not set
+# CONFIG_SENSORS_SMSC47B397 is not set
+# CONFIG_SENSORS_SCH5627 is not set
+# CONFIG_SENSORS_SCH5636 is not set
+# CONFIG_SENSORS_STTS751 is not set
+# CONFIG_SENSORS_ADC128D818 is not set
+# CONFIG_SENSORS_ADS7828 is not set
+# CONFIG_SENSORS_ADS7871 is not set
+# CONFIG_SENSORS_AMC6821 is not set
+# CONFIG_SENSORS_INA209 is not set
+# CONFIG_SENSORS_INA2XX is not set
+# CONFIG_SENSORS_INA238 is not set
+# CONFIG_SENSORS_INA3221 is not set
+# CONFIG_SENSORS_SPD5118 is not set
+# CONFIG_SENSORS_TC74 is not set
+# CONFIG_SENSORS_THMC50 is not set
+# CONFIG_SENSORS_TMP102 is not set
+# CONFIG_SENSORS_TMP103 is not set
+# CONFIG_SENSORS_TMP108 is not set
+# CONFIG_SENSORS_TMP401 is not set
+# CONFIG_SENSORS_TMP421 is not set
+# CONFIG_SENSORS_TMP464 is not set
+# CONFIG_SENSORS_TMP513 is not set
+# CONFIG_SENSORS_VIA_CPUTEMP is not set
+# CONFIG_SENSORS_VIA686A is not set
+# CONFIG_SENSORS_VT1211 is not set
+# CONFIG_SENSORS_VT8231 is not set
+# CONFIG_SENSORS_W83773G is not set
+# CONFIG_SENSORS_W83781D is not set
+# CONFIG_SENSORS_W83791D is not set
+# CONFIG_SENSORS_W83792D is not set
+# CONFIG_SENSORS_W83793 is not set
+# CONFIG_SENSORS_W83795 is not set
+# CONFIG_SENSORS_W83L785TS is not set
+# CONFIG_SENSORS_W83L786NG is not set
+# CONFIG_SENSORS_W83627HF is not set
+# CONFIG_SENSORS_W83627EHF is not set
+# CONFIG_SENSORS_WM831X is not set
+# CONFIG_SENSORS_WM8350 is not set
+# CONFIG_SENSORS_XGENE is not set
+
+#
+# ACPI drivers
+#
+# CONFIG_SENSORS_ACPI_POWER is not set
+# CONFIG_SENSORS_ATK0110 is not set
+# CONFIG_SENSORS_ASUS_WMI is not set
+# CONFIG_SENSORS_ASUS_EC is not set
+# CONFIG_SENSORS_HP_WMI is not set
+CONFIG_THERMAL=3Dy
+CONFIG_THERMAL_NETLINK=3Dy
+CONFIG_THERMAL_STATISTICS=3Dy
+# CONFIG_THERMAL_DEBUGFS is not set
+# CONFIG_THERMAL_CORE_TESTING is not set
+CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS=3D0
+CONFIG_THERMAL_HWMON=3Dy
+CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE=3Dy
+# CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE is not set
+# CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE is not set
+# CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR is not set
+# CONFIG_THERMAL_DEFAULT_GOV_BANG_BANG is not set
+CONFIG_THERMAL_GOV_FAIR_SHARE=3Dy
+CONFIG_THERMAL_GOV_STEP_WISE=3Dy
+CONFIG_THERMAL_GOV_BANG_BANG=3Dy
+CONFIG_THERMAL_GOV_USER_SPACE=3Dy
+CONFIG_THERMAL_GOV_POWER_ALLOCATOR=3Dy
+CONFIG_DEVFREQ_THERMAL=3Dy
+CONFIG_THERMAL_EMULATION=3Dy
+
+#
+# Intel thermal drivers
+#
+# CONFIG_INTEL_POWERCLAMP is not set
+CONFIG_X86_THERMAL_VECTOR=3Dy
+# CONFIG_X86_PKG_TEMP_THERMAL is not set
+# CONFIG_INTEL_SOC_DTS_THERMAL is not set
+
+#
+# ACPI INT340X thermal drivers
+#
+# CONFIG_INT340X_THERMAL is not set
+# end of ACPI INT340X thermal drivers
+
+# CONFIG_INTEL_PCH_THERMAL is not set
+# CONFIG_INTEL_TCC_COOLING is not set
+# CONFIG_INTEL_HFI_THERMAL is not set
+# end of Intel thermal drivers
+
+CONFIG_WATCHDOG=3Dy
+CONFIG_WATCHDOG_CORE=3Dy
+# CONFIG_WATCHDOG_NOWAYOUT is not set
+CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED=3Dy
+CONFIG_WATCHDOG_OPEN_TIMEOUT=3D0
+CONFIG_WATCHDOG_SYSFS=3Dy
+# CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT is not set
+
+#
+# Watchdog Pretimeout Governors
+#
+CONFIG_WATCHDOG_PRETIMEOUT_GOV=3Dy
+CONFIG_WATCHDOG_PRETIMEOUT_GOV_SEL=3Dm
+CONFIG_WATCHDOG_PRETIMEOUT_GOV_NOOP=3Dy
+# CONFIG_WATCHDOG_PRETIMEOUT_GOV_PANIC is not set
+CONFIG_WATCHDOG_PRETIMEOUT_DEFAULT_GOV_NOOP=3Dy
+
+#
+# Watchdog Device Drivers
+#
+# CONFIG_SOFT_WATCHDOG is not set
+# CONFIG_DA9052_WATCHDOG is not set
+# CONFIG_DA9055_WATCHDOG is not set
+# CONFIG_DA9063_WATCHDOG is not set
+# CONFIG_LENOVO_SE10_WDT is not set
+# CONFIG_WDAT_WDT is not set
+# CONFIG_WM831X_WATCHDOG is not set
+# CONFIG_WM8350_WATCHDOG is not set
+# CONFIG_XILINX_WATCHDOG is not set
+# CONFIG_ZIIRAVE_WATCHDOG is not set
+# CONFIG_MLX_WDT is not set
+# CONFIG_CADENCE_WATCHDOG is not set
+# CONFIG_DW_WATCHDOG is not set
+# CONFIG_TWL4030_WATCHDOG is not set
+# CONFIG_MAX63XX_WATCHDOG is not set
+# CONFIG_ACQUIRE_WDT is not set
+# CONFIG_ADVANTECH_WDT is not set
+# CONFIG_ADVANTECH_EC_WDT is not set
+# CONFIG_ALIM1535_WDT is not set
+# CONFIG_ALIM7101_WDT is not set
+# CONFIG_EBC_C384_WDT is not set
+# CONFIG_EXAR_WDT is not set
+# CONFIG_F71808E_WDT is not set
+# CONFIG_SP5100_TCO is not set
+# CONFIG_SBC_FITPC2_WATCHDOG is not set
+# CONFIG_EUROTECH_WDT is not set
+# CONFIG_IB700_WDT is not set
+# CONFIG_IBMASR is not set
+# CONFIG_WAFER_WDT is not set
+# CONFIG_I6300ESB_WDT is not set
+# CONFIG_IE6XX_WDT is not set
+# CONFIG_ITCO_WDT is not set
+# CONFIG_IT8712F_WDT is not set
+# CONFIG_IT87_WDT is not set
+# CONFIG_HP_WATCHDOG is not set
+# CONFIG_SC1200_WDT is not set
+# CONFIG_PC87413_WDT is not set
+# CONFIG_NV_TCO is not set
+# CONFIG_60XX_WDT is not set
+# CONFIG_CPU5_WDT is not set
+# CONFIG_SMSC_SCH311X_WDT is not set
+# CONFIG_SMSC37B787_WDT is not set
+# CONFIG_TQMX86_WDT is not set
+# CONFIG_VIA_WDT is not set
+# CONFIG_W83627HF_WDT is not set
+# CONFIG_W83877F_WDT is not set
+# CONFIG_W83977F_WDT is not set
+# CONFIG_MACHZ_WDT is not set
+# CONFIG_SBC_EPX_C3_WATCHDOG is not set
+# CONFIG_NI903X_WDT is not set
+# CONFIG_NIC7018_WDT is not set
+# CONFIG_MEN_A21_WDT is not set
+# CONFIG_XEN_WDT is not set
+
+#
+# PCI-based Watchdog Cards
+#
+# CONFIG_PCIPCWATCHDOG is not set
+# CONFIG_WDTPCI is not set
+
+#
+# USB-based Watchdog Cards
+#
+# CONFIG_USBPCWATCHDOG is not set
+CONFIG_SSB_POSSIBLE=3Dy
+# CONFIG_SSB is not set
+CONFIG_BCMA_POSSIBLE=3Dy
+# CONFIG_BCMA is not set
+
+#
+# Multifunction device drivers
+#
+CONFIG_MFD_CORE=3Dy
+CONFIG_MFD_AS3711=3Dy
+# CONFIG_MFD_SMPRO is not set
+CONFIG_PMIC_ADP5520=3Dy
+CONFIG_MFD_AAT2870_CORE=3Dy
+# CONFIG_MFD_BCM590XX is not set
+# CONFIG_MFD_BD9571MWV is not set
+# CONFIG_MFD_AXP20X_I2C is not set
+# CONFIG_MFD_CS42L43_I2C is not set
+# CONFIG_MFD_MADERA is not set
+CONFIG_PMIC_DA903X=3Dy
+CONFIG_PMIC_DA9052=3Dy
+CONFIG_MFD_DA9052_SPI=3Dy
+CONFIG_MFD_DA9052_I2C=3Dy
+CONFIG_MFD_DA9055=3Dy
+# CONFIG_MFD_DA9062 is not set
+CONFIG_MFD_DA9063=3Dy
+# CONFIG_MFD_DA9150 is not set
+# CONFIG_MFD_DLN2 is not set
+# CONFIG_MFD_MC13XXX_SPI is not set
+# CONFIG_MFD_MC13XXX_I2C is not set
+# CONFIG_MFD_MP2629 is not set
+# CONFIG_MFD_INTEL_QUARK_I2C_GPIO is not set
+# CONFIG_LPC_ICH is not set
+# CONFIG_LPC_SCH is not set
+CONFIG_INTEL_SOC_PMIC=3Dy
+CONFIG_INTEL_SOC_PMIC_CHTWC=3Dy
+# CONFIG_INTEL_SOC_PMIC_CHTDC_TI is not set
+# CONFIG_INTEL_SOC_PMIC_MRFLD is not set
+# CONFIG_MFD_INTEL_LPSS_ACPI is not set
+# CONFIG_MFD_INTEL_LPSS_PCI is not set
+# CONFIG_MFD_INTEL_PMC_BXT is not set
+# CONFIG_MFD_IQS62X is not set
+# CONFIG_MFD_JANZ_CMODIO is not set
+# CONFIG_MFD_KEMPLD is not set
+# CONFIG_MFD_88PM800 is not set
+# CONFIG_MFD_88PM805 is not set
+CONFIG_MFD_88PM860X=3Dy
+CONFIG_MFD_MAX14577=3Dy
+# CONFIG_MFD_MAX77541 is not set
+CONFIG_MFD_MAX77693=3Dy
+CONFIG_MFD_MAX77843=3Dy
+# CONFIG_MFD_MAX8907 is not set
+CONFIG_MFD_MAX8925=3Dy
+CONFIG_MFD_MAX8997=3Dy
+CONFIG_MFD_MAX8998=3Dy
+# CONFIG_MFD_MT6360 is not set
+# CONFIG_MFD_MT6370 is not set
+# CONFIG_MFD_MT6397 is not set
+# CONFIG_MFD_MENF21BMC is not set
+# CONFIG_MFD_OCELOT is not set
+CONFIG_EZX_PCAP=3Dy
+# CONFIG_MFD_VIPERBOARD is not set
+# CONFIG_MFD_RETU is not set
+# CONFIG_MFD_PCF50633 is not set
+# CONFIG_MFD_SY7636A is not set
+# CONFIG_MFD_RDC321X is not set
+# CONFIG_MFD_RT4831 is not set
+# CONFIG_MFD_RT5033 is not set
+# CONFIG_MFD_RT5120 is not set
+CONFIG_MFD_RC5T583=3Dy
+# CONFIG_MFD_SI476X_CORE is not set
+# CONFIG_MFD_SM501 is not set
+# CONFIG_MFD_SKY81452 is not set
+CONFIG_MFD_SYSCON=3Dy
+# CONFIG_MFD_LP3943 is not set
+CONFIG_MFD_LP8788=3Dy
+# CONFIG_MFD_TI_LMU is not set
+CONFIG_MFD_PALMAS=3Dy
+# CONFIG_TPS6105X is not set
+# CONFIG_TPS65010 is not set
+# CONFIG_TPS6507X is not set
+# CONFIG_MFD_TPS65086 is not set
+CONFIG_MFD_TPS65090=3Dy
+# CONFIG_MFD_TI_LP873X is not set
+CONFIG_MFD_TPS6586X=3Dy
+CONFIG_MFD_TPS65910=3Dy
+CONFIG_MFD_TPS65912=3Dy
+CONFIG_MFD_TPS65912_I2C=3Dy
+CONFIG_MFD_TPS65912_SPI=3Dy
+# CONFIG_MFD_TPS6594_I2C is not set
+# CONFIG_MFD_TPS6594_SPI is not set
+CONFIG_TWL4030_CORE=3Dy
+CONFIG_MFD_TWL4030_AUDIO=3Dy
+CONFIG_TWL6040_CORE=3Dy
+# CONFIG_MFD_WL1273_CORE is not set
+# CONFIG_MFD_LM3533 is not set
+# CONFIG_MFD_TQMX86 is not set
+# CONFIG_MFD_VX855 is not set
+# CONFIG_MFD_ARIZONA_I2C is not set
+# CONFIG_MFD_ARIZONA_SPI is not set
+CONFIG_MFD_WM8400=3Dy
+CONFIG_MFD_WM831X=3Dy
+CONFIG_MFD_WM831X_I2C=3Dy
+CONFIG_MFD_WM831X_SPI=3Dy
+CONFIG_MFD_WM8350=3Dy
+CONFIG_MFD_WM8350_I2C=3Dy
+# CONFIG_MFD_WM8994 is not set
+# CONFIG_MFD_ATC260X_I2C is not set
+# CONFIG_MFD_CS40L50_I2C is not set
+# CONFIG_MFD_CS40L50_SPI is not set
+# CONFIG_RAVE_SP_CORE is not set
+# CONFIG_MFD_INTEL_M10_BMC_SPI is not set
+# end of Multifunction device drivers
+
+CONFIG_REGULATOR=3Dy
+# CONFIG_REGULATOR_DEBUG is not set
+# CONFIG_REGULATOR_FIXED_VOLTAGE is not set
+# CONFIG_REGULATOR_VIRTUAL_CONSUMER is not set
+# CONFIG_REGULATOR_USERSPACE_CONSUMER is not set
+# CONFIG_REGULATOR_NETLINK_EVENTS is not set
+# CONFIG_REGULATOR_88PG86X is not set
+# CONFIG_REGULATOR_88PM8607 is not set
+# CONFIG_REGULATOR_ACT8865 is not set
+# CONFIG_REGULATOR_AD5398 is not set
+# CONFIG_REGULATOR_AAT2870 is not set
+# CONFIG_REGULATOR_AS3711 is not set
+# CONFIG_REGULATOR_AW37503 is not set
+# CONFIG_REGULATOR_DA903X is not set
+# CONFIG_REGULATOR_DA9052 is not set
+# CONFIG_REGULATOR_DA9055 is not set
+# CONFIG_REGULATOR_DA9210 is not set
+# CONFIG_REGULATOR_DA9211 is not set
+# CONFIG_REGULATOR_FAN53555 is not set
+# CONFIG_REGULATOR_GPIO is not set
+# CONFIG_REGULATOR_ISL9305 is not set
+# CONFIG_REGULATOR_ISL6271A is not set
+# CONFIG_REGULATOR_LP3971 is not set
+# CONFIG_REGULATOR_LP3972 is not set
+# CONFIG_REGULATOR_LP872X is not set
+# CONFIG_REGULATOR_LP8755 is not set
+# CONFIG_REGULATOR_LP8788 is not set
+# CONFIG_REGULATOR_LTC3589 is not set
+# CONFIG_REGULATOR_LTC3676 is not set
+# CONFIG_REGULATOR_MAX14577 is not set
+# CONFIG_REGULATOR_MAX1586 is not set
+# CONFIG_REGULATOR_MAX77503 is not set
+# CONFIG_REGULATOR_MAX77857 is not set
+# CONFIG_REGULATOR_MAX8649 is not set
+# CONFIG_REGULATOR_MAX8660 is not set
+# CONFIG_REGULATOR_MAX8893 is not set
+# CONFIG_REGULATOR_MAX8925 is not set
+# CONFIG_REGULATOR_MAX8952 is not set
+# CONFIG_REGULATOR_MAX8997 is not set
+# CONFIG_REGULATOR_MAX8998 is not set
+# CONFIG_REGULATOR_MAX20086 is not set
+# CONFIG_REGULATOR_MAX20411 is not set
+# CONFIG_REGULATOR_MAX77693 is not set
+# CONFIG_REGULATOR_MAX77826 is not set
+# CONFIG_REGULATOR_MP8859 is not set
+# CONFIG_REGULATOR_MT6311 is not set
+# CONFIG_REGULATOR_PALMAS is not set
+# CONFIG_REGULATOR_PCA9450 is not set
+# CONFIG_REGULATOR_PCAP is not set
+# CONFIG_REGULATOR_PV88060 is not set
+# CONFIG_REGULATOR_PV88080 is not set
+# CONFIG_REGULATOR_PV88090 is not set
+# CONFIG_REGULATOR_PWM is not set
+# CONFIG_REGULATOR_RAA215300 is not set
+# CONFIG_REGULATOR_RC5T583 is not set
+# CONFIG_REGULATOR_RT4801 is not set
+# CONFIG_REGULATOR_RT4803 is not set
+# CONFIG_REGULATOR_RT5190A is not set
+# CONFIG_REGULATOR_RT5739 is not set
+# CONFIG_REGULATOR_RT5759 is not set
+# CONFIG_REGULATOR_RT6160 is not set
+# CONFIG_REGULATOR_RT6190 is not set
+# CONFIG_REGULATOR_RT6245 is not set
+# CONFIG_REGULATOR_RTQ2134 is not set
+# CONFIG_REGULATOR_RTMV20 is not set
+# CONFIG_REGULATOR_RTQ6752 is not set
+# CONFIG_REGULATOR_RTQ2208 is not set
+# CONFIG_REGULATOR_SLG51000 is not set
+# CONFIG_REGULATOR_TPS51632 is not set
+# CONFIG_REGULATOR_TPS62360 is not set
+# CONFIG_REGULATOR_TPS65023 is not set
+# CONFIG_REGULATOR_TPS6507X is not set
+# CONFIG_REGULATOR_TPS65090 is not set
+# CONFIG_REGULATOR_TPS65132 is not set
+# CONFIG_REGULATOR_TPS6524X is not set
+# CONFIG_REGULATOR_TPS6586X is not set
+# CONFIG_REGULATOR_TPS65910 is not set
+# CONFIG_REGULATOR_TPS65912 is not set
+# CONFIG_REGULATOR_TWL4030 is not set
+# CONFIG_REGULATOR_WM831X is not set
+# CONFIG_REGULATOR_WM8350 is not set
+# CONFIG_REGULATOR_WM8400 is not set
+CONFIG_RC_CORE=3Dm
+CONFIG_LIRC=3Dy
+# CONFIG_RC_MAP is not set
+CONFIG_RC_DECODERS=3Dy
+# CONFIG_IR_IMON_DECODER is not set
+# CONFIG_IR_JVC_DECODER is not set
+# CONFIG_IR_MCE_KBD_DECODER is not set
+# CONFIG_IR_NEC_DECODER is not set
+# CONFIG_IR_RC5_DECODER is not set
+# CONFIG_IR_RC6_DECODER is not set
+# CONFIG_IR_RCMM_DECODER is not set
+# CONFIG_IR_SANYO_DECODER is not set
+# CONFIG_IR_SHARP_DECODER is not set
+# CONFIG_IR_SONY_DECODER is not set
+# CONFIG_IR_XMP_DECODER is not set
+CONFIG_RC_DEVICES=3Dy
+# CONFIG_IR_ENE is not set
+# CONFIG_IR_FINTEK is not set
+# CONFIG_IR_IGORPLUGUSB is not set
+# CONFIG_IR_IGUANA is not set
+# CONFIG_IR_IMON is not set
+# CONFIG_IR_IMON_RAW is not set
+# CONFIG_IR_ITE_CIR is not set
+# CONFIG_IR_MCEUSB is not set
+# CONFIG_IR_NUVOTON is not set
+# CONFIG_IR_REDRAT3 is not set
+# CONFIG_IR_SERIAL is not set
+# CONFIG_IR_STREAMZAP is not set
+# CONFIG_IR_TOY is not set
+# CONFIG_IR_TTUSBIR is not set
+# CONFIG_IR_WINBOND_CIR is not set
+# CONFIG_RC_ATI_REMOTE is not set
+# CONFIG_RC_LOOPBACK is not set
+# CONFIG_RC_XBOX_DVD is not set
+
+#
+# CEC support
+#
+CONFIG_MEDIA_CEC_SUPPORT=3Dy
+# CONFIG_CEC_CH7322 is not set
+# CONFIG_CEC_GPIO is not set
+# CONFIG_CEC_SECO is not set
+# CONFIG_USB_PULSE8_CEC is not set
+# CONFIG_USB_RAINSHADOW_CEC is not set
+# end of CEC support
+
+# CONFIG_MEDIA_SUPPORT is not set
+
+#
+# Graphics support
+#
+CONFIG_APERTURE_HELPERS=3Dy
+CONFIG_SCREEN_INFO=3Dy
+CONFIG_VIDEO=3Dy
+CONFIG_AUXDISPLAY=3Dy
+# CONFIG_HD44780 is not set
+# CONFIG_LCD2S is not set
+# CONFIG_CHARLCD_BL_OFF is not set
+# CONFIG_CHARLCD_BL_ON is not set
+CONFIG_CHARLCD_BL_FLASH=3Dy
+# CONFIG_IMG_ASCII_LCD is not set
+# CONFIG_HT16K33 is not set
+# CONFIG_MAX6959 is not set
+# CONFIG_SEG_LED_GPIO is not set
+CONFIG_AGP=3Dy
+CONFIG_AGP_AMD64=3Dy
+CONFIG_AGP_INTEL=3Dy
+# CONFIG_AGP_SIS is not set
+CONFIG_AGP_VIA=3Dy
+CONFIG_INTEL_GTT=3Dy
+CONFIG_VGA_SWITCHEROO=3Dy
+CONFIG_DRM=3Dm
+# CONFIG_DRM_DEBUG_MM is not set
+CONFIG_DRM_KMS_HELPER=3Dm
+# CONFIG_DRM_PANIC is not set
+# CONFIG_DRM_DEBUG_DP_MST_TOPOLOGY_REFS is not set
+# CONFIG_DRM_DEBUG_MODESET_LOCK is not set
+CONFIG_DRM_FBDEV_EMULATION=3Dy
+CONFIG_DRM_FBDEV_OVERALLOC=3D100
+# CONFIG_DRM_FBDEV_LEAK_PHYS_SMEM is not set
+CONFIG_DRM_LOAD_EDID_FIRMWARE=3Dy
+CONFIG_DRM_TTM=3Dm
+CONFIG_DRM_VRAM_HELPER=3Dm
+CONFIG_DRM_TTM_HELPER=3Dm
+CONFIG_DRM_GEM_SHMEM_HELPER=3Dm
+
+#
+# I2C encoder or helper chips
+#
+# CONFIG_DRM_I2C_CH7006 is not set
+# CONFIG_DRM_I2C_SIL164 is not set
+# CONFIG_DRM_I2C_NXP_TDA998X is not set
+# CONFIG_DRM_I2C_NXP_TDA9950 is not set
+# end of I2C encoder or helper chips
+
+#
+# ARM devices
+#
+# end of ARM devices
+
+# CONFIG_DRM_RADEON is not set
+# CONFIG_DRM_AMDGPU is not set
+# CONFIG_DRM_NOUVEAU is not set
+# CONFIG_DRM_I915 is not set
+# CONFIG_DRM_XE is not set
+# CONFIG_DRM_VGEM is not set
+# CONFIG_DRM_VKMS is not set
+# CONFIG_DRM_VMWGFX is not set
+# CONFIG_DRM_GMA500 is not set
+# CONFIG_DRM_UDL is not set
+CONFIG_DRM_AST=3Dm
+# CONFIG_DRM_MGAG200 is not set
+# CONFIG_DRM_QXL is not set
+# CONFIG_DRM_VIRTIO_GPU is not set
+CONFIG_DRM_PANEL=3Dy
+
+#
+# Display Panels
+#
+# CONFIG_DRM_PANEL_AUO_A030JTN01 is not set
+# CONFIG_DRM_PANEL_ILITEK_ILI9341 is not set
+# CONFIG_DRM_PANEL_ORISETECH_OTA5601A is not set
+# CONFIG_DRM_PANEL_WIDECHIPS_WS2401 is not set
+# end of Display Panels
+
+CONFIG_DRM_BRIDGE=3Dy
+CONFIG_DRM_PANEL_BRIDGE=3Dy
+
+#
+# Display Interface Bridges
+#
+# CONFIG_DRM_ANALOGIX_ANX78XX is not set
+# end of Display Interface Bridges
+
+# CONFIG_DRM_ETNAVIV is not set
+CONFIG_DRM_BOCHS=3Dm
+# CONFIG_DRM_CIRRUS_QEMU is not set
+# CONFIG_DRM_GM12U320 is not set
+# CONFIG_DRM_PANEL_MIPI_DBI is not set
+# CONFIG_DRM_SIMPLEDRM is not set
+# CONFIG_TINYDRM_HX8357D is not set
+# CONFIG_TINYDRM_ILI9163 is not set
+# CONFIG_TINYDRM_ILI9225 is not set
+# CONFIG_TINYDRM_ILI9341 is not set
+# CONFIG_TINYDRM_ILI9486 is not set
+# CONFIG_TINYDRM_MI0283QT is not set
+# CONFIG_TINYDRM_REPAPER is not set
+# CONFIG_TINYDRM_ST7586 is not set
+# CONFIG_TINYDRM_ST7735R is not set
+# CONFIG_DRM_XEN_FRONTEND is not set
+# CONFIG_DRM_VBOXVIDEO is not set
+# CONFIG_DRM_GUD is not set
+# CONFIG_DRM_SSD130X is not set
+# CONFIG_DRM_WERROR is not set
+CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=3Dy
+
+#
+# Frame buffer Devices
+#
+CONFIG_FB=3Dy
+# CONFIG_FB_CIRRUS is not set
+# CONFIG_FB_PM2 is not set
+# CONFIG_FB_CYBER2000 is not set
+# CONFIG_FB_ARC is not set
+CONFIG_FB_ASILIANT=3Dy
+CONFIG_FB_IMSTT=3Dy
+# CONFIG_FB_VGA16 is not set
+# CONFIG_FB_UVESA is not set
+CONFIG_FB_VESA=3Dy
+CONFIG_FB_EFI=3Dy
+# CONFIG_FB_N411 is not set
+# CONFIG_FB_HGA is not set
+# CONFIG_FB_OPENCORES is not set
+# CONFIG_FB_S1D13XXX is not set
+# CONFIG_FB_NVIDIA is not set
+# CONFIG_FB_RIVA is not set
+# CONFIG_FB_I740 is not set
+# CONFIG_FB_MATROX is not set
+# CONFIG_FB_RADEON is not set
+# CONFIG_FB_ATY128 is not set
+# CONFIG_FB_ATY is not set
+# CONFIG_FB_S3 is not set
+# CONFIG_FB_SAVAGE is not set
+# CONFIG_FB_SIS is not set
+# CONFIG_FB_VIA is not set
+# CONFIG_FB_NEOMAGIC is not set
+# CONFIG_FB_KYRO is not set
+# CONFIG_FB_3DFX is not set
+# CONFIG_FB_VOODOO1 is not set
+# CONFIG_FB_VT8623 is not set
+# CONFIG_FB_TRIDENT is not set
+# CONFIG_FB_ARK is not set
+# CONFIG_FB_PM3 is not set
+# CONFIG_FB_CARMINE is not set
+# CONFIG_FB_SMSCUFX is not set
+# CONFIG_FB_UDL is not set
+# CONFIG_FB_IBM_GXT4500 is not set
+# CONFIG_FB_VIRTUAL is not set
+# CONFIG_XEN_FBDEV_FRONTEND is not set
+# CONFIG_FB_METRONOME is not set
+# CONFIG_FB_MB862XX is not set
+# CONFIG_FB_SIMPLE is not set
+# CONFIG_FB_SSD1307 is not set
+# CONFIG_FB_SM712 is not set
+CONFIG_FB_CORE=3Dy
+CONFIG_FB_NOTIFY=3Dy
+CONFIG_FIRMWARE_EDID=3Dy
+CONFIG_FB_DEVICE=3Dy
+CONFIG_FB_CFB_FILLRECT=3Dy
+CONFIG_FB_CFB_COPYAREA=3Dy
+CONFIG_FB_CFB_IMAGEBLIT=3Dy
+CONFIG_FB_SYS_FILLRECT=3Dy
+CONFIG_FB_SYS_COPYAREA=3Dy
+CONFIG_FB_SYS_IMAGEBLIT=3Dy
+# CONFIG_FB_FOREIGN_ENDIAN is not set
+CONFIG_FB_SYSMEM_FOPS=3Dy
+CONFIG_FB_DEFERRED_IO=3Dy
+CONFIG_FB_IOMEM_FOPS=3Dy
+CONFIG_FB_IOMEM_HELPERS=3Dy
+CONFIG_FB_SYSMEM_HELPERS=3Dy
+CONFIG_FB_SYSMEM_HELPERS_DEFERRED=3Dy
+CONFIG_FB_MODE_HELPERS=3Dy
+CONFIG_FB_TILEBLITTING=3Dy
+# end of Frame buffer Devices
+
+#
+# Backlight & LCD device support
+#
+# CONFIG_LCD_CLASS_DEVICE is not set
+CONFIG_BACKLIGHT_CLASS_DEVICE=3Dy
+# CONFIG_BACKLIGHT_KTD253 is not set
+# CONFIG_BACKLIGHT_KTD2801 is not set
+# CONFIG_BACKLIGHT_KTZ8866 is not set
+# CONFIG_BACKLIGHT_PWM is not set
+# CONFIG_BACKLIGHT_DA903X is not set
+# CONFIG_BACKLIGHT_DA9052 is not set
+# CONFIG_BACKLIGHT_MAX8925 is not set
+# CONFIG_BACKLIGHT_APPLE is not set
+# CONFIG_BACKLIGHT_QCOM_WLED is not set
+# CONFIG_BACKLIGHT_SAHARA is not set
+# CONFIG_BACKLIGHT_WM831X is not set
+# CONFIG_BACKLIGHT_ADP5520 is not set
+# CONFIG_BACKLIGHT_ADP8860 is not set
+# CONFIG_BACKLIGHT_ADP8870 is not set
+# CONFIG_BACKLIGHT_88PM860X is not set
+# CONFIG_BACKLIGHT_AAT2870 is not set
+# CONFIG_BACKLIGHT_LM3509 is not set
+# CONFIG_BACKLIGHT_LM3630A is not set
+# CONFIG_BACKLIGHT_LM3639 is not set
+# CONFIG_BACKLIGHT_LP855X is not set
+# CONFIG_BACKLIGHT_LP8788 is not set
+# CONFIG_BACKLIGHT_MP3309C is not set
+# CONFIG_BACKLIGHT_PANDORA is not set
+# CONFIG_BACKLIGHT_AS3711 is not set
+# CONFIG_BACKLIGHT_GPIO is not set
+# CONFIG_BACKLIGHT_LV5207LP is not set
+# CONFIG_BACKLIGHT_BD6107 is not set
+# CONFIG_BACKLIGHT_ARCXCNN is not set
+# end of Backlight & LCD device support
+
+CONFIG_HDMI=3Dy
+
+#
+# Console display driver support
+#
+CONFIG_VGA_CONSOLE=3Dy
+CONFIG_DUMMY_CONSOLE=3Dy
+CONFIG_DUMMY_CONSOLE_COLUMNS=3D80
+CONFIG_DUMMY_CONSOLE_ROWS=3D25
+CONFIG_FRAMEBUFFER_CONSOLE=3Dy
+# CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION is not set
+CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=3Dy
+CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=3Dy
+CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER=3Dy
+# end of Console display driver support
+
+# CONFIG_LOGO is not set
+# end of Graphics support
+
+# CONFIG_DRM_ACCEL is not set
+# CONFIG_SOUND is not set
+CONFIG_HID_SUPPORT=3Dy
+# CONFIG_HID is not set
+
+#
+# USB HID support
+#
+# CONFIG_USB_HID is not set
+CONFIG_HID_PID=3Dy
+
+#
+# USB HID Boot Protocol drivers
+#
+# CONFIG_USB_KBD is not set
+# CONFIG_USB_MOUSE is not set
+# end of USB HID Boot Protocol drivers
+# end of USB HID support
+
+#
+# Intel ISH HID support
+#
+# end of Intel ISH HID support
+
+#
+# AMD SFH HID Support
+#
+# end of AMD SFH HID Support
+
+CONFIG_USB_OHCI_LITTLE_ENDIAN=3Dy
+CONFIG_USB_SUPPORT=3Dy
+CONFIG_USB_COMMON=3Dy
+CONFIG_USB_LED_TRIG=3Dy
+# CONFIG_USB_ULPI_BUS is not set
+# CONFIG_USB_CONN_GPIO is not set
+CONFIG_USB_ARCH_HAS_HCD=3Dy
+CONFIG_USB=3Dy
+CONFIG_USB_PCI=3Dy
+CONFIG_USB_PCI_AMD=3Dy
+CONFIG_USB_ANNOUNCE_NEW_DEVICES=3Dy
+
+#
+# Miscellaneous USB options
+#
+CONFIG_USB_DEFAULT_PERSIST=3Dy
+# CONFIG_USB_FEW_INIT_RETRIES is not set
+CONFIG_USB_DYNAMIC_MINORS=3Dy
+# CONFIG_USB_OTG is not set
+# CONFIG_USB_OTG_PRODUCTLIST is not set
+# CONFIG_USB_OTG_DISABLE_EXTERNAL_HUB is not set
+# CONFIG_USB_LEDS_TRIGGER_USBPORT is not set
+CONFIG_USB_AUTOSUSPEND_DELAY=3D2
+CONFIG_USB_DEFAULT_AUTHORIZATION_MODE=3D1
+# CONFIG_USB_MON is not set
+
+#
+# USB Host Controller Drivers
+#
+# CONFIG_USB_C67X00_HCD is not set
+CONFIG_USB_XHCI_HCD=3Dy
+CONFIG_USB_XHCI_DBGCAP=3Dy
+CONFIG_USB_XHCI_PCI=3Dy
+CONFIG_USB_XHCI_PCI_RENESAS=3Dm
+# CONFIG_USB_XHCI_PLATFORM is not set
+CONFIG_USB_EHCI_HCD=3Dy
+CONFIG_USB_EHCI_ROOT_HUB_TT=3Dy
+CONFIG_USB_EHCI_TT_NEWSCHED=3Dy
+CONFIG_USB_EHCI_PCI=3Dy
+# CONFIG_USB_EHCI_FSL is not set
+CONFIG_USB_EHCI_HCD_PLATFORM=3Dy
+# CONFIG_USB_OXU210HP_HCD is not set
+# CONFIG_USB_ISP116X_HCD is not set
+# CONFIG_USB_MAX3421_HCD is not set
+CONFIG_USB_OHCI_HCD=3Dy
+CONFIG_USB_OHCI_HCD_PCI=3Dy
+CONFIG_USB_OHCI_HCD_PLATFORM=3Dy
+CONFIG_USB_UHCI_HCD=3Dy
+# CONFIG_USB_SL811_HCD is not set
+# CONFIG_USB_R8A66597_HCD is not set
+# CONFIG_USB_HCD_TEST_MODE is not set
+# CONFIG_USB_XEN_HCD is not set
+
+#
+# USB Device Class drivers
+#
+# CONFIG_USB_ACM is not set
+# CONFIG_USB_PRINTER is not set
+# CONFIG_USB_WDM is not set
+# CONFIG_USB_TMC is not set
+
+#
+# NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may
+#
+
+#
+# also be needed; see USB_STORAGE Help for more info
+#
+# CONFIG_USB_STORAGE is not set
+
+#
+# USB Imaging devices
+#
+# CONFIG_USB_MDC800 is not set
+# CONFIG_USB_MICROTEK is not set
+# CONFIG_USBIP_CORE is not set
+
+#
+# USB dual-mode controller drivers
+#
+# CONFIG_USB_CDNS_SUPPORT is not set
+# CONFIG_USB_MUSB_HDRC is not set
+# CONFIG_USB_DWC3 is not set
+CONFIG_USB_DWC2=3Dy
+CONFIG_USB_DWC2_HOST=3Dy
+
+#
+# Gadget/Dual-role mode requires USB Gadget support to be enabled
+#
+# CONFIG_USB_DWC2_PCI is not set
+# CONFIG_USB_DWC2_DEBUG is not set
+# CONFIG_USB_DWC2_TRACK_MISSED_SOFS is not set
+# CONFIG_USB_CHIPIDEA is not set
+# CONFIG_USB_ISP1760 is not set
+
+#
+# USB port drivers
+#
+# CONFIG_USB_SERIAL is not set
+
+#
+# USB Miscellaneous drivers
+#
+# CONFIG_USB_EMI62 is not set
+# CONFIG_USB_EMI26 is not set
+# CONFIG_USB_ADUTUX is not set
+# CONFIG_USB_SEVSEG is not set
+# CONFIG_USB_LEGOTOWER is not set
+# CONFIG_USB_LCD is not set
+# CONFIG_USB_CYPRESS_CY7C63 is not set
+# CONFIG_USB_CYTHERM is not set
+# CONFIG_USB_IDMOUSE is not set
+# CONFIG_USB_APPLEDISPLAY is not set
+# CONFIG_APPLE_MFI_FASTCHARGE is not set
+# CONFIG_USB_LJCA is not set
+# CONFIG_USB_SISUSBVGA is not set
+# CONFIG_USB_LD is not set
+# CONFIG_USB_TRANCEVIBRATOR is not set
+# CONFIG_USB_IOWARRIOR is not set
+# CONFIG_USB_TEST is not set
+# CONFIG_USB_EHSET_TEST_FIXTURE is not set
+# CONFIG_USB_ISIGHTFW is not set
+# CONFIG_USB_YUREX is not set
+# CONFIG_USB_EZUSB_FX2 is not set
+# CONFIG_USB_HUB_USB251XB is not set
+# CONFIG_USB_HSIC_USB3503 is not set
+# CONFIG_USB_HSIC_USB4604 is not set
+# CONFIG_USB_LINK_LAYER_TEST is not set
+# CONFIG_USB_CHAOSKEY is not set
+
+#
+# USB Physical Layer drivers
+#
+# CONFIG_NOP_USB_XCEIV is not set
+# CONFIG_USB_GPIO_VBUS is not set
+# CONFIG_USB_ISP1301 is not set
+# end of USB Physical Layer drivers
+
+# CONFIG_USB_GADGET is not set
+# CONFIG_TYPEC is not set
+CONFIG_USB_ROLE_SWITCH=3Dy
+# CONFIG_USB_ROLES_INTEL_XHCI is not set
+CONFIG_MMC=3Dy
+# CONFIG_MMC_BLOCK is not set
+# CONFIG_SDIO_UART is not set
+# CONFIG_MMC_TEST is not set
+CONFIG_MMC_CRYPTO=3Dy
+
+#
+# MMC/SD/SDIO Host Controller Drivers
+#
+# CONFIG_MMC_DEBUG is not set
+# CONFIG_MMC_SDHCI is not set
+# CONFIG_MMC_WBSD is not set
+# CONFIG_MMC_TIFM_SD is not set
+# CONFIG_MMC_SPI is not set
+# CONFIG_MMC_CB710 is not set
+# CONFIG_MMC_VIA_SDMMC is not set
+# CONFIG_MMC_VUB300 is not set
+# CONFIG_MMC_USHC is not set
+# CONFIG_MMC_USDHI6ROL0 is not set
+# CONFIG_MMC_CQHCI is not set
+# CONFIG_MMC_HSQ is not set
+# CONFIG_MMC_TOSHIBA_PCI is not set
+# CONFIG_MMC_MTK is not set
+# CONFIG_SCSI_UFSHCD is not set
+# CONFIG_MEMSTICK is not set
+CONFIG_NEW_LEDS=3Dy
+CONFIG_LEDS_CLASS=3Dy
+# CONFIG_LEDS_CLASS_FLASH is not set
+# CONFIG_LEDS_CLASS_MULTICOLOR is not set
+CONFIG_LEDS_BRIGHTNESS_HW_CHANGED=3Dy
+
+#
+# LED drivers
+#
+# CONFIG_LEDS_88PM860X is not set
+# CONFIG_LEDS_APU is not set
+# CONFIG_LEDS_AW200XX is not set
+# CONFIG_LEDS_CHT_WCOVE is not set
+# CONFIG_LEDS_LM3530 is not set
+# CONFIG_LEDS_LM3532 is not set
+# CONFIG_LEDS_LM3642 is not set
+# CONFIG_LEDS_PCA9532 is not set
+# CONFIG_LEDS_GPIO is not set
+# CONFIG_LEDS_LP3944 is not set
+# CONFIG_LEDS_LP3952 is not set
+# CONFIG_LEDS_LP8788 is not set
+# CONFIG_LEDS_PCA955X is not set
+# CONFIG_LEDS_PCA963X is not set
+# CONFIG_LEDS_PCA995X is not set
+# CONFIG_LEDS_WM831X_STATUS is not set
+# CONFIG_LEDS_WM8350 is not set
+# CONFIG_LEDS_DA903X is not set
+# CONFIG_LEDS_DA9052 is not set
+# CONFIG_LEDS_DAC124S085 is not set
+# CONFIG_LEDS_PWM is not set
+# CONFIG_LEDS_REGULATOR is not set
+# CONFIG_LEDS_BD2606MVV is not set
+# CONFIG_LEDS_BD2802 is not set
+# CONFIG_LEDS_INTEL_SS4200 is not set
+# CONFIG_LEDS_LT3593 is not set
+# CONFIG_LEDS_ADP5520 is not set
+# CONFIG_LEDS_TCA6507 is not set
+# CONFIG_LEDS_TLC591XX is not set
+# CONFIG_LEDS_MAX8997 is not set
+# CONFIG_LEDS_LM355x is not set
+# CONFIG_LEDS_IS31FL319X is not set
+
+#
+# LED driver for blink(1) USB RGB LED is under Special HID drivers (HID_THI=
+NGM)
+#
+# CONFIG_LEDS_BLINKM is not set
+# CONFIG_LEDS_MLXCPLD is not set
+# CONFIG_LEDS_MLXREG is not set
+# CONFIG_LEDS_USER is not set
+# CONFIG_LEDS_NIC78BX is not set
+# CONFIG_LEDS_SPI_BYTE is not set
+
+#
+# Flash and Torch LED drivers
+#
+
+#
+# RGB LED drivers
+#
+
+#
+# LED Triggers
+#
+CONFIG_LEDS_TRIGGERS=3Dy
+# CONFIG_LEDS_TRIGGER_TIMER is not set
+# CONFIG_LEDS_TRIGGER_ONESHOT is not set
+CONFIG_LEDS_TRIGGER_DISK=3Dy
+# CONFIG_LEDS_TRIGGER_HEARTBEAT is not set
+# CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
+CONFIG_LEDS_TRIGGER_CPU=3Dy
+# CONFIG_LEDS_TRIGGER_ACTIVITY is not set
+# CONFIG_LEDS_TRIGGER_GPIO is not set
+# CONFIG_LEDS_TRIGGER_DEFAULT_ON is not set
+
+#
+# iptables trigger is under Netfilter config (LED target)
+#
+# CONFIG_LEDS_TRIGGER_TRANSIENT is not set
+# CONFIG_LEDS_TRIGGER_CAMERA is not set
+CONFIG_LEDS_TRIGGER_PANIC=3Dy
+# CONFIG_LEDS_TRIGGER_NETDEV is not set
+# CONFIG_LEDS_TRIGGER_PATTERN is not set
+# CONFIG_LEDS_TRIGGER_TTY is not set
+# CONFIG_LEDS_TRIGGER_INPUT_EVENTS is not set
+
+#
+# Simple LED drivers
+#
+CONFIG_ACCESSIBILITY=3Dy
+# CONFIG_A11Y_BRAILLE_CONSOLE is not set
+
+#
+# Speakup console speech
+#
+# CONFIG_SPEAKUP is not set
+# end of Speakup console speech
+
+# CONFIG_INFINIBAND is not set
+CONFIG_EDAC_ATOMIC_SCRUB=3Dy
+CONFIG_EDAC_SUPPORT=3Dy
+CONFIG_EDAC=3Dy
+# CONFIG_EDAC_LEGACY_SYSFS is not set
+# CONFIG_EDAC_DEBUG is not set
+CONFIG_EDAC_DECODE_MCE=3Dm
+CONFIG_EDAC_GHES=3Dy
+CONFIG_EDAC_AMD64=3Dm
+# CONFIG_EDAC_E752X is not set
+# CONFIG_EDAC_I82975X is not set
+# CONFIG_EDAC_I3000 is not set
+# CONFIG_EDAC_I3200 is not set
+# CONFIG_EDAC_IE31200 is not set
+# CONFIG_EDAC_X38 is not set
+# CONFIG_EDAC_I5400 is not set
+# CONFIG_EDAC_I7CORE is not set
+# CONFIG_EDAC_I5100 is not set
+# CONFIG_EDAC_I7300 is not set
+# CONFIG_EDAC_SBRIDGE is not set
+# CONFIG_EDAC_SKX is not set
+# CONFIG_EDAC_I10NM is not set
+# CONFIG_EDAC_PND2 is not set
+# CONFIG_EDAC_IGEN6 is not set
+CONFIG_RTC_LIB=3Dy
+CONFIG_RTC_MC146818_LIB=3Dy
+CONFIG_RTC_CLASS=3Dy
+CONFIG_RTC_HCTOSYS=3Dy
+CONFIG_RTC_HCTOSYS_DEVICE=3D"rtc0"
+CONFIG_RTC_SYSTOHC=3Dy
+CONFIG_RTC_SYSTOHC_DEVICE=3D"rtc0"
+# CONFIG_RTC_DEBUG is not set
+CONFIG_RTC_NVMEM=3Dy
+
+#
+# RTC interfaces
+#
+CONFIG_RTC_INTF_SYSFS=3Dy
+CONFIG_RTC_INTF_PROC=3Dy
+CONFIG_RTC_INTF_DEV=3Dy
+# CONFIG_RTC_INTF_DEV_UIE_EMUL is not set
+# CONFIG_RTC_DRV_TEST is not set
+
+#
+# I2C RTC drivers
+#
+# CONFIG_RTC_DRV_88PM860X is not set
+# CONFIG_RTC_DRV_ABB5ZES3 is not set
+# CONFIG_RTC_DRV_ABEOZ9 is not set
+# CONFIG_RTC_DRV_ABX80X is not set
+# CONFIG_RTC_DRV_DS1307 is not set
+# CONFIG_RTC_DRV_DS1374 is not set
+# CONFIG_RTC_DRV_DS1672 is not set
+# CONFIG_RTC_DRV_LP8788 is not set
+# CONFIG_RTC_DRV_MAX6900 is not set
+# CONFIG_RTC_DRV_MAX8925 is not set
+# CONFIG_RTC_DRV_MAX8998 is not set
+# CONFIG_RTC_DRV_MAX8997 is not set
+# CONFIG_RTC_DRV_MAX31335 is not set
+# CONFIG_RTC_DRV_RS5C372 is not set
+# CONFIG_RTC_DRV_ISL1208 is not set
+# CONFIG_RTC_DRV_ISL12022 is not set
+# CONFIG_RTC_DRV_X1205 is not set
+# CONFIG_RTC_DRV_PCF8523 is not set
+# CONFIG_RTC_DRV_PCF85063 is not set
+# CONFIG_RTC_DRV_PCF85363 is not set
+# CONFIG_RTC_DRV_PCF8563 is not set
+# CONFIG_RTC_DRV_PCF8583 is not set
+# CONFIG_RTC_DRV_M41T80 is not set
+# CONFIG_RTC_DRV_BQ32K is not set
+# CONFIG_RTC_DRV_PALMAS is not set
+# CONFIG_RTC_DRV_TPS6586X is not set
+# CONFIG_RTC_DRV_TPS65910 is not set
+# CONFIG_RTC_DRV_RC5T583 is not set
+# CONFIG_RTC_DRV_S35390A is not set
+# CONFIG_RTC_DRV_FM3130 is not set
+# CONFIG_RTC_DRV_RX8010 is not set
+# CONFIG_RTC_DRV_RX8111 is not set
+# CONFIG_RTC_DRV_RX8581 is not set
+# CONFIG_RTC_DRV_RX8025 is not set
+# CONFIG_RTC_DRV_EM3027 is not set
+# CONFIG_RTC_DRV_RV3028 is not set
+# CONFIG_RTC_DRV_RV3032 is not set
+# CONFIG_RTC_DRV_RV8803 is not set
+# CONFIG_RTC_DRV_SD2405AL is not set
+# CONFIG_RTC_DRV_SD3078 is not set
+
+#
+# SPI RTC drivers
+#
+# CONFIG_RTC_DRV_M41T93 is not set
+# CONFIG_RTC_DRV_M41T94 is not set
+# CONFIG_RTC_DRV_DS1302 is not set
+# CONFIG_RTC_DRV_DS1305 is not set
+# CONFIG_RTC_DRV_DS1343 is not set
+# CONFIG_RTC_DRV_DS1347 is not set
+# CONFIG_RTC_DRV_DS1390 is not set
+# CONFIG_RTC_DRV_MAX6916 is not set
+# CONFIG_RTC_DRV_R9701 is not set
+# CONFIG_RTC_DRV_RX4581 is not set
+# CONFIG_RTC_DRV_RS5C348 is not set
+# CONFIG_RTC_DRV_MAX6902 is not set
+# CONFIG_RTC_DRV_PCF2123 is not set
+# CONFIG_RTC_DRV_MCP795 is not set
+CONFIG_RTC_I2C_AND_SPI=3Dy
+
+#
+# SPI and I2C RTC drivers
+#
+# CONFIG_RTC_DRV_DS3232 is not set
+# CONFIG_RTC_DRV_PCF2127 is not set
+# CONFIG_RTC_DRV_RV3029C2 is not set
+# CONFIG_RTC_DRV_RX6110 is not set
+
+#
+# Platform RTC drivers
+#
+CONFIG_RTC_DRV_CMOS=3Dy
+# CONFIG_RTC_DRV_DS1286 is not set
+# CONFIG_RTC_DRV_DS1511 is not set
+# CONFIG_RTC_DRV_DS1553 is not set
+# CONFIG_RTC_DRV_DS1685_FAMILY is not set
+# CONFIG_RTC_DRV_DS1742 is not set
+# CONFIG_RTC_DRV_DS2404 is not set
+# CONFIG_RTC_DRV_DA9052 is not set
+# CONFIG_RTC_DRV_DA9055 is not set
+# CONFIG_RTC_DRV_DA9063 is not set
+# CONFIG_RTC_DRV_STK17TA8 is not set
+# CONFIG_RTC_DRV_M48T86 is not set
+# CONFIG_RTC_DRV_M48T35 is not set
+# CONFIG_RTC_DRV_M48T59 is not set
+# CONFIG_RTC_DRV_MSM6242 is not set
+# CONFIG_RTC_DRV_RP5C01 is not set
+# CONFIG_RTC_DRV_WM831X is not set
+# CONFIG_RTC_DRV_WM8350 is not set
+
+#
+# on-CPU RTC drivers
+#
+# CONFIG_RTC_DRV_FTRTC010 is not set
+# CONFIG_RTC_DRV_PCAP is not set
+
+#
+# HID Sensor RTC drivers
+#
+# CONFIG_RTC_DRV_GOLDFISH is not set
+CONFIG_DMADEVICES=3Dy
+# CONFIG_DMADEVICES_DEBUG is not set
+
+#
+# DMA Devices
+#
+CONFIG_DMA_ENGINE=3Dy
+CONFIG_DMA_VIRTUAL_CHANNELS=3Dy
+CONFIG_DMA_ACPI=3Dy
+# CONFIG_ALTERA_MSGDMA is not set
+# CONFIG_INTEL_IDMA64 is not set
+# CONFIG_INTEL_IDXD is not set
+# CONFIG_INTEL_IDXD_COMPAT is not set
+# CONFIG_INTEL_IOATDMA is not set
+# CONFIG_PLX_DMA is not set
+# CONFIG_XILINX_DMA is not set
+# CONFIG_XILINX_XDMA is not set
+# CONFIG_AMD_QDMA is not set
+# CONFIG_AMD_PTDMA is not set
+# CONFIG_QCOM_HIDMA_MGMT is not set
+# CONFIG_QCOM_HIDMA is not set
+# CONFIG_DW_DMAC is not set
+# CONFIG_DW_DMAC_PCI is not set
+# CONFIG_DW_EDMA is not set
+CONFIG_HSU_DMA=3Dy
+# CONFIG_SF_PDMA is not set
+CONFIG_INTEL_LDMA=3Dy
+
+#
+# DMA Clients
+#
+CONFIG_ASYNC_TX_DMA=3Dy
+# CONFIG_DMATEST is not set
+
+#
+# DMABUF options
+#
+CONFIG_SYNC_FILE=3Dy
+CONFIG_SW_SYNC=3Dy
+CONFIG_UDMABUF=3Dy
+# CONFIG_DMABUF_MOVE_NOTIFY is not set
+# CONFIG_DMABUF_DEBUG is not set
+# CONFIG_DMABUF_SELFTESTS is not set
+CONFIG_DMABUF_HEAPS=3Dy
+# CONFIG_DMABUF_SYSFS_STATS is not set
+CONFIG_DMABUF_HEAPS_SYSTEM=3Dy
+# end of DMABUF options
+
+# CONFIG_UIO is not set
+CONFIG_VFIO=3Dy
+CONFIG_VFIO_GROUP=3Dy
+CONFIG_VFIO_CONTAINER=3Dy
+CONFIG_VFIO_IOMMU_TYPE1=3Dy
+CONFIG_VFIO_NOIOMMU=3Dy
+CONFIG_VFIO_VIRQFD=3Dy
+# CONFIG_VFIO_DEBUGFS is not set
+
+#
+# VFIO support for PCI devices
+#
+CONFIG_VFIO_PCI_CORE=3Dy
+CONFIG_VFIO_PCI_MMAP=3Dy
+CONFIG_VFIO_PCI_INTX=3Dy
+CONFIG_VFIO_PCI=3Dy
+CONFIG_VFIO_PCI_VGA=3Dy
+CONFIG_VFIO_PCI_IGD=3Dy
+# CONFIG_VIRTIO_VFIO_PCI is not set
+# end of VFIO support for PCI devices
+
+CONFIG_IRQ_BYPASS_MANAGER=3Dy
+CONFIG_VIRT_DRIVERS=3Dy
+CONFIG_VMGENID=3Dy
+# CONFIG_VBOXGUEST is not set
+# CONFIG_NITRO_ENCLAVES is not set
+# CONFIG_ACRN_HSM is not set
+CONFIG_TSM_REPORTS=3Dm
+# CONFIG_EFI_SECRET is not set
+CONFIG_SEV_GUEST=3Dm
+CONFIG_VIRTIO_ANCHOR=3Dy
+CONFIG_VIRTIO=3Dy
+CONFIG_VIRTIO_PCI_LIB=3Dy
+CONFIG_VIRTIO_PCI_LIB_LEGACY=3Dy
+CONFIG_VIRTIO_MENU=3Dy
+CONFIG_VIRTIO_PCI=3Dy
+CONFIG_VIRTIO_PCI_ADMIN_LEGACY=3Dy
+CONFIG_VIRTIO_PCI_LEGACY=3Dy
+# CONFIG_VIRTIO_PMEM is not set
+CONFIG_VIRTIO_BALLOON=3Dy
+# CONFIG_VIRTIO_MEM is not set
+# CONFIG_VIRTIO_INPUT is not set
+CONFIG_VIRTIO_MMIO=3Dy
+CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=3Dy
+# CONFIG_VIRTIO_DEBUG is not set
+# CONFIG_VDPA is not set
+CONFIG_VHOST_MENU=3Dy
+# CONFIG_VHOST_NET is not set
+# CONFIG_VHOST_CROSS_ENDIAN_LEGACY is not set
+
+#
+# Microsoft Hyper-V guest support
+#
+# CONFIG_HYPERV is not set
+# end of Microsoft Hyper-V guest support
+
+#
+# Xen driver support
+#
+CONFIG_XEN_BALLOON=3Dy
+CONFIG_XEN_BALLOON_MEMORY_HOTPLUG=3Dy
+CONFIG_XEN_MEMORY_HOTPLUG_LIMIT=3D512
+CONFIG_XEN_SCRUB_PAGES_DEFAULT=3Dy
+# CONFIG_XEN_DEV_EVTCHN is not set
+CONFIG_XEN_BACKEND=3Dy
+# CONFIG_XENFS is not set
+CONFIG_XEN_SYS_HYPERVISOR=3Dy
+CONFIG_XEN_XENBUS_FRONTEND=3Dy
+# CONFIG_XEN_GNTDEV is not set
+# CONFIG_XEN_GRANT_DEV_ALLOC is not set
+CONFIG_XEN_GRANT_DMA_ALLOC=3Dy
+CONFIG_SWIOTLB_XEN=3Dy
+# CONFIG_XEN_PCIDEV_BACKEND is not set
+# CONFIG_XEN_PVCALLS_FRONTEND is not set
+# CONFIG_XEN_PVCALLS_BACKEND is not set
+# CONFIG_XEN_PRIVCMD is not set
+CONFIG_XEN_ACPI_PROCESSOR=3Dy
+CONFIG_XEN_MCE_LOG=3Dy
+CONFIG_XEN_HAVE_PVMMU=3Dy
+CONFIG_XEN_EFI=3Dy
+CONFIG_XEN_AUTO_XLATE=3Dy
+CONFIG_XEN_ACPI=3Dy
+CONFIG_XEN_HAVE_VPMU=3Dy
+CONFIG_XEN_UNPOPULATED_ALLOC=3Dy
+# CONFIG_XEN_VIRTIO is not set
+# end of Xen driver support
+
+# CONFIG_GREYBUS is not set
+# CONFIG_COMEDI is not set
+CONFIG_STAGING=3Dy
+# CONFIG_RTLLIB is not set
+# CONFIG_RTS5208 is not set
+# CONFIG_FB_SM750 is not set
+CONFIG_STAGING_MEDIA=3Dy
+# CONFIG_LTE_GDM724X is not set
+# CONFIG_FB_TFT is not set
+# CONFIG_FIELDBUS_DEV is not set
+CONFIG_VME_BUS=3Dy
+
+#
+# VME Bridge Drivers
+#
+# CONFIG_VME_TSI148 is not set
+# CONFIG_VME_FAKE is not set
+
+#
+# VME Device Drivers
+#
+# CONFIG_VME_USER is not set
+# CONFIG_GOLDFISH is not set
+CONFIG_CHROME_PLATFORMS=3Dy
+# CONFIG_CHROMEOS_ACPI is not set
+# CONFIG_CHROMEOS_LAPTOP is not set
+# CONFIG_CHROMEOS_PSTORE is not set
+# CONFIG_CHROMEOS_TBMC is not set
+# CONFIG_CROS_EC is not set
+# CONFIG_CROS_KBD_LED_BACKLIGHT is not set
+# CONFIG_CHROMEOS_PRIVACY_SCREEN is not set
+# CONFIG_CZNIC_PLATFORMS is not set
+CONFIG_MELLANOX_PLATFORM=3Dy
+# CONFIG_MLXREG_HOTPLUG is not set
+# CONFIG_MLXREG_IO is not set
+# CONFIG_MLXREG_LC is not set
+# CONFIG_NVSW_SN2201 is not set
+CONFIG_SURFACE_PLATFORMS=3Dy
+# CONFIG_SURFACE3_WMI is not set
+# CONFIG_SURFACE_3_POWER_OPREGION is not set
+# CONFIG_SURFACE_GPE is not set
+# CONFIG_SURFACE_HOTPLUG is not set
+# CONFIG_SURFACE_PRO3_BUTTON is not set
+# CONFIG_SURFACE_AGGREGATOR is not set
+CONFIG_X86_PLATFORM_DEVICES=3Dy
+CONFIG_ACPI_WMI=3Dm
+CONFIG_WMI_BMOF=3Dm
+# CONFIG_HUAWEI_WMI is not set
+# CONFIG_UV_SYSFS is not set
+# CONFIG_MXM_WMI is not set
+# CONFIG_XIAOMI_WMI is not set
+# CONFIG_GIGABYTE_WMI is not set
+# CONFIG_YOGABOOK is not set
+# CONFIG_YT2_1380 is not set
+# CONFIG_ACERHDF is not set
+# CONFIG_ACER_WIRELESS is not set
+# CONFIG_ACER_WMI is not set
+# CONFIG_AMD_PMC is not set
+# CONFIG_AMD_HSMP is not set
+# CONFIG_AMD_WBRF is not set
+# CONFIG_ADV_SWBUTTON is not set
+# CONFIG_APPLE_GMUX is not set
+# CONFIG_ASUS_LAPTOP is not set
+# CONFIG_ASUS_WIRELESS is not set
+# CONFIG_ASUS_WMI is not set
+# CONFIG_EEEPC_LAPTOP is not set
+CONFIG_X86_PLATFORM_DRIVERS_DELL=3Dy
+# CONFIG_ALIENWARE_WMI is not set
+# CONFIG_DCDBAS is not set
+# CONFIG_DELL_RBU is not set
+# CONFIG_DELL_RBTN is not set
+# CONFIG_DELL_SMBIOS is not set
+# CONFIG_DELL_SMO8800 is not set
+# CONFIG_DELL_WMI_AIO is not set
+CONFIG_DELL_WMI_DDV=3Dm
+# CONFIG_DELL_WMI_LED is not set
+# CONFIG_DELL_WMI_SYSMAN is not set
+# CONFIG_AMILO_RFKILL is not set
+# CONFIG_FUJITSU_LAPTOP is not set
+# CONFIG_FUJITSU_TABLET is not set
+# CONFIG_GPD_POCKET_FAN is not set
+CONFIG_X86_PLATFORM_DRIVERS_HP=3Dy
+# CONFIG_HP_ACCEL is not set
+# CONFIG_HP_WMI is not set
+CONFIG_HP_BIOSCFG=3Dm
+# CONFIG_WIRELESS_HOTKEY is not set
+# CONFIG_IBM_RTL is not set
+# CONFIG_IDEAPAD_LAPTOP is not set
+# CONFIG_SENSORS_HDAPS is not set
+# CONFIG_THINKPAD_ACPI is not set
+# CONFIG_THINKPAD_LMI is not set
+# CONFIG_INTEL_ATOMISP2_PM is not set
+# CONFIG_INTEL_IFS is not set
+# CONFIG_INTEL_SAR_INT1092 is not set
+# CONFIG_INTEL_SKL_INT3472 is not set
+
+#
+# Intel Speed Select Technology interface support
+#
+# CONFIG_INTEL_SPEED_SELECT_INTERFACE is not set
+# end of Intel Speed Select Technology interface support
+
+# CONFIG_INTEL_WMI_SBL_FW_UPDATE is not set
+# CONFIG_INTEL_WMI_THUNDERBOLT is not set
+
+#
+# Intel Uncore Frequency Control
+#
+# CONFIG_INTEL_UNCORE_FREQ_CONTROL is not set
+# end of Intel Uncore Frequency Control
+
+# CONFIG_INTEL_HID_EVENT is not set
+# CONFIG_INTEL_VBTN is not set
+# CONFIG_INTEL_INT0002_VGPIO is not set
+# CONFIG_INTEL_OAKTRAIL is not set
+# CONFIG_INTEL_BYTCRC_PWRSRC is not set
+# CONFIG_INTEL_PUNIT_IPC is not set
+# CONFIG_INTEL_RST is not set
+# CONFIG_INTEL_SMARTCONNECT is not set
+CONFIG_INTEL_TURBO_MAX_3=3Dy
+# CONFIG_INTEL_VSEC is not set
+# CONFIG_ACPI_QUICKSTART is not set
+# CONFIG_MEEGOPAD_ANX7428 is not set
+# CONFIG_MSI_EC is not set
+# CONFIG_MSI_LAPTOP is not set
+# CONFIG_MSI_WMI is not set
+# CONFIG_MSI_WMI_PLATFORM is not set
+# CONFIG_PCENGINES_APU2 is not set
+# CONFIG_BARCO_P50_GPIO is not set
+# CONFIG_SAMSUNG_LAPTOP is not set
+# CONFIG_SAMSUNG_Q10 is not set
+# CONFIG_TOSHIBA_BT_RFKILL is not set
+# CONFIG_TOSHIBA_HAPS is not set
+# CONFIG_TOSHIBA_WMI is not set
+# CONFIG_ACPI_CMPC is not set
+# CONFIG_COMPAL_LAPTOP is not set
+# CONFIG_LG_LAPTOP is not set
+# CONFIG_PANASONIC_LAPTOP is not set
+# CONFIG_SONY_LAPTOP is not set
+# CONFIG_SYSTEM76_ACPI is not set
+# CONFIG_TOPSTAR_LAPTOP is not set
+# CONFIG_SERIAL_MULTI_INSTANTIATE is not set
+# CONFIG_MLX_PLATFORM is not set
+# CONFIG_INSPUR_PLATFORM_PROFILE is not set
+# CONFIG_LENOVO_WMI_CAMERA is not set
+# CONFIG_X86_ANDROID_TABLETS is not set
+CONFIG_FW_ATTR_CLASS=3Dm
+# CONFIG_INTEL_IPS is not set
+CONFIG_INTEL_SCU_IPC=3Dy
+CONFIG_INTEL_SCU=3Dy
+CONFIG_INTEL_SCU_PCI=3Dy
+# CONFIG_INTEL_SCU_PLATFORM is not set
+# CONFIG_INTEL_SCU_IPC_UTIL is not set
+# CONFIG_SIEMENS_SIMATIC_IPC is not set
+# CONFIG_WINMATE_FM07_KEYS is not set
+CONFIG_HAVE_CLK=3Dy
+CONFIG_HAVE_CLK_PREPARE=3Dy
+CONFIG_COMMON_CLK=3Dy
+# CONFIG_COMMON_CLK_WM831X is not set
+# CONFIG_LMK04832 is not set
+# CONFIG_COMMON_CLK_MAX9485 is not set
+# CONFIG_COMMON_CLK_SI5341 is not set
+# CONFIG_COMMON_CLK_SI5351 is not set
+# CONFIG_COMMON_CLK_SI544 is not set
+# CONFIG_COMMON_CLK_CDCE706 is not set
+# CONFIG_COMMON_CLK_CS2000_CP is not set
+# CONFIG_CLK_TWL is not set
+# CONFIG_CLK_TWL6040 is not set
+# CONFIG_COMMON_CLK_PALMAS is not set
+# CONFIG_COMMON_CLK_PWM is not set
+# CONFIG_XILINX_VCU is not set
+CONFIG_HWSPINLOCK=3Dy
+
+#
+# Clock Source drivers
+#
+CONFIG_CLKEVT_I8253=3Dy
+CONFIG_I8253_LOCK=3Dy
+CONFIG_CLKBLD_I8253=3Dy
+# end of Clock Source drivers
+
+CONFIG_MAILBOX=3Dy
+CONFIG_PCC=3Dy
+# CONFIG_ALTERA_MBOX is not set
+CONFIG_IOMMU_IOVA=3Dy
+CONFIG_IOMMU_API=3Dy
+CONFIG_IOMMU_SUPPORT=3Dy
+
+#
+# Generic IOMMU Pagetable Support
+#
+CONFIG_IOMMU_IO_PGTABLE=3Dy
+# end of Generic IOMMU Pagetable Support
+
+# CONFIG_IOMMU_DEBUGFS is not set
+# CONFIG_IOMMU_DEFAULT_DMA_STRICT is not set
+CONFIG_IOMMU_DEFAULT_DMA_LAZY=3Dy
+# CONFIG_IOMMU_DEFAULT_PASSTHROUGH is not set
+CONFIG_IOMMU_DMA=3Dy
+CONFIG_IOMMU_SVA=3Dy
+CONFIG_IOMMU_IOPF=3Dy
+CONFIG_AMD_IOMMU=3Dy
+CONFIG_DMAR_TABLE=3Dy
+CONFIG_INTEL_IOMMU=3Dy
+CONFIG_INTEL_IOMMU_SVM=3Dy
+# CONFIG_INTEL_IOMMU_DEFAULT_ON is not set
+CONFIG_INTEL_IOMMU_FLOPPY_WA=3Dy
+# CONFIG_INTEL_IOMMU_SCALABLE_MODE_DEFAULT_ON is not set
+CONFIG_INTEL_IOMMU_PERF_EVENTS=3Dy
+# CONFIG_IOMMUFD is not set
+CONFIG_IRQ_REMAP=3Dy
+CONFIG_VIRTIO_IOMMU=3Dy
+
+#
+# Remoteproc drivers
+#
+CONFIG_REMOTEPROC=3Dy
+CONFIG_REMOTEPROC_CDEV=3Dy
+# end of Remoteproc drivers
+
+#
+# Rpmsg drivers
+#
+# CONFIG_RPMSG_QCOM_GLINK_RPM is not set
+# CONFIG_RPMSG_VIRTIO is not set
+# end of Rpmsg drivers
+
+# CONFIG_SOUNDWIRE is not set
+
+#
+# SOC (System On Chip) specific Drivers
+#
+
+#
+# Amlogic SoC drivers
+#
+# end of Amlogic SoC drivers
+
+#
+# Broadcom SoC drivers
+#
+# end of Broadcom SoC drivers
+
+#
+# NXP/Freescale QorIQ SoC drivers
+#
+# end of NXP/Freescale QorIQ SoC drivers
+
+#
+# fujitsu SoC drivers
+#
+# end of fujitsu SoC drivers
+
+#
+# i.MX SoC drivers
+#
+# end of i.MX SoC drivers
+
+#
+# Enable LiteX SoC Builder specific drivers
+#
+# end of Enable LiteX SoC Builder specific drivers
+
+# CONFIG_WPCM450_SOC is not set
+
+#
+# Qualcomm SoC drivers
+#
+# end of Qualcomm SoC drivers
+
+CONFIG_SOC_TI=3Dy
+
+#
+# Xilinx SoC drivers
+#
+# end of Xilinx SoC drivers
+# end of SOC (System On Chip) specific Drivers
+
+#
+# PM Domains
+#
+
+#
+# Amlogic PM Domains
+#
+# end of Amlogic PM Domains
+
+#
+# Broadcom PM Domains
+#
+# end of Broadcom PM Domains
+
+#
+# i.MX PM Domains
+#
+# end of i.MX PM Domains
+
+#
+# Qualcomm PM Domains
+#
+# end of Qualcomm PM Domains
+# end of PM Domains
+
+CONFIG_PM_DEVFREQ=3Dy
+
+#
+# DEVFREQ Governors
+#
+CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=3Dy
+CONFIG_DEVFREQ_GOV_PERFORMANCE=3Dy
+CONFIG_DEVFREQ_GOV_POWERSAVE=3Dy
+CONFIG_DEVFREQ_GOV_USERSPACE=3Dy
+CONFIG_DEVFREQ_GOV_PASSIVE=3Dy
+
+#
+# DEVFREQ Drivers
+#
+CONFIG_PM_DEVFREQ_EVENT=3Dy
+CONFIG_EXTCON=3Dy
+
+#
+# Extcon Device Drivers
+#
+# CONFIG_EXTCON_FSA9480 is not set
+# CONFIG_EXTCON_GPIO is not set
+# CONFIG_EXTCON_INTEL_INT3496 is not set
+# CONFIG_EXTCON_INTEL_CHT_WC is not set
+# CONFIG_EXTCON_LC824206XA is not set
+# CONFIG_EXTCON_MAX14577 is not set
+# CONFIG_EXTCON_MAX3355 is not set
+# CONFIG_EXTCON_MAX77693 is not set
+# CONFIG_EXTCON_MAX77843 is not set
+# CONFIG_EXTCON_MAX8997 is not set
+# CONFIG_EXTCON_PALMAS is not set
+# CONFIG_EXTCON_PTN5150 is not set
+# CONFIG_EXTCON_RT8973A is not set
+# CONFIG_EXTCON_SM5502 is not set
+# CONFIG_EXTCON_USB_GPIO is not set
+CONFIG_MEMORY=3Dy
+# CONFIG_IIO is not set
+# CONFIG_NTB is not set
+CONFIG_PWM=3Dy
+# CONFIG_PWM_DEBUG is not set
+# CONFIG_PWM_CLK is not set
+CONFIG_PWM_CRC=3Dy
+# CONFIG_PWM_DWC is not set
+# CONFIG_PWM_GPIO is not set
+CONFIG_PWM_LPSS=3Dy
+CONFIG_PWM_LPSS_PCI=3Dy
+CONFIG_PWM_LPSS_PLATFORM=3Dy
+# CONFIG_PWM_PCA9685 is not set
+# CONFIG_PWM_TWL is not set
+# CONFIG_PWM_TWL_LED is not set
+
+#
+# IRQ chip support
+#
+# CONFIG_LAN966X_OIC is not set
+# end of IRQ chip support
+
+# CONFIG_IPACK_BUS is not set
+CONFIG_RESET_CONTROLLER=3Dy
+# CONFIG_RESET_GPIO is not set
+# CONFIG_RESET_SIMPLE is not set
+# CONFIG_RESET_TI_SYSCON is not set
+# CONFIG_RESET_TI_TPS380X is not set
+
+#
+# PHY Subsystem
+#
+CONFIG_GENERIC_PHY=3Dy
+# CONFIG_USB_LGM_PHY is not set
+# CONFIG_PHY_CAN_TRANSCEIVER is not set
+
+#
+# PHY drivers for Broadcom platforms
+#
+# CONFIG_BCM_KONA_USB2_PHY is not set
+# end of PHY drivers for Broadcom platforms
+
+# CONFIG_PHY_PXA_28NM_HSIC is not set
+# CONFIG_PHY_PXA_28NM_USB2 is not set
+# CONFIG_PHY_SAMSUNG_USB2 is not set
+# CONFIG_PHY_INTEL_LGM_EMMC is not set
+# end of PHY Subsystem
+
+CONFIG_POWERCAP=3Dy
+CONFIG_INTEL_RAPL_CORE=3Dm
+CONFIG_INTEL_RAPL=3Dm
+CONFIG_IDLE_INJECT=3Dy
+# CONFIG_MCB is not set
+
+#
+# Performance monitor support
+#
+# CONFIG_DWC_PCIE_PMU is not set
+# end of Performance monitor support
+
+CONFIG_RAS=3Dy
+CONFIG_RAS_CEC=3Dy
+# CONFIG_RAS_CEC_DEBUG is not set
+CONFIG_AMD_ATL=3Dm
+CONFIG_AMD_ATL_PRM=3Dy
+CONFIG_RAS_FMPM=3Dm
+# CONFIG_USB4 is not set
+
+#
+# Android
+#
+# CONFIG_ANDROID_BINDER_IPC is not set
+# end of Android
+
+CONFIG_LIBNVDIMM=3Dy
+# CONFIG_BLK_DEV_PMEM is not set
+CONFIG_ND_CLAIM=3Dy
+CONFIG_BTT=3Dy
+CONFIG_NVDIMM_PFN=3Dy
+CONFIG_NVDIMM_DAX=3Dy
+CONFIG_NVDIMM_KEYS=3Dy
+# CONFIG_NVDIMM_SECURITY_TEST is not set
+CONFIG_DAX=3Dy
+# CONFIG_DEV_DAX is not set
+# CONFIG_DEV_DAX_HMEM is not set
+CONFIG_NVMEM=3Dy
+CONFIG_NVMEM_SYSFS=3Dy
+# CONFIG_NVMEM_LAYOUTS is not set
+# CONFIG_NVMEM_RMEM is not set
+
+#
+# HW tracing support
+#
+# CONFIG_STM is not set
+# CONFIG_INTEL_TH is not set
+# end of HW tracing support
+
+# CONFIG_FPGA is not set
+# CONFIG_TEE is not set
+CONFIG_PM_OPP=3Dy
+# CONFIG_SIOX is not set
+# CONFIG_SLIMBUS is not set
+CONFIG_INTERCONNECT=3Dy
+# CONFIG_COUNTER is not set
+# CONFIG_MOST is not set
+# CONFIG_PECI is not set
+# CONFIG_HTE is not set
+# end of Device Drivers
+
+#
+# File systems
+#
+CONFIG_DCACHE_WORD_ACCESS=3Dy
+CONFIG_VALIDATE_FS_PARSER=3Dy
+CONFIG_FS_IOMAP=3Dy
+CONFIG_FS_STACK=3Dy
+CONFIG_BUFFER_HEAD=3Dy
+CONFIG_LEGACY_DIRECT_IO=3Dy
+# CONFIG_EXT2_FS is not set
+# CONFIG_EXT3_FS is not set
+CONFIG_EXT4_FS=3Dy
+CONFIG_EXT4_USE_FOR_EXT2=3Dy
+CONFIG_EXT4_FS_POSIX_ACL=3Dy
+CONFIG_EXT4_FS_SECURITY=3Dy
+# CONFIG_EXT4_DEBUG is not set
+CONFIG_JBD2=3Dy
+# CONFIG_JBD2_DEBUG is not set
+CONFIG_FS_MBCACHE=3Dy
+# CONFIG_REISERFS_FS is not set
+# CONFIG_JFS_FS is not set
+CONFIG_XFS_FS=3Dy
+CONFIG_XFS_SUPPORT_V4=3Dy
+CONFIG_XFS_SUPPORT_ASCII_CI=3Dy
+# CONFIG_XFS_QUOTA is not set
+# CONFIG_XFS_POSIX_ACL is not set
+# CONFIG_XFS_RT is not set
+# CONFIG_XFS_ONLINE_SCRUB is not set
+# CONFIG_XFS_WARN is not set
+# CONFIG_XFS_DEBUG is not set
+# CONFIG_GFS2_FS is not set
+# CONFIG_OCFS2_FS is not set
+CONFIG_BTRFS_FS=3Dm
+CONFIG_BTRFS_FS_POSIX_ACL=3Dy
+# CONFIG_BTRFS_FS_RUN_SANITY_TESTS is not set
+# CONFIG_BTRFS_DEBUG is not set
+# CONFIG_BTRFS_ASSERT is not set
+# CONFIG_BTRFS_FS_REF_VERIFY is not set
+# CONFIG_NILFS2_FS is not set
+# CONFIG_F2FS_FS is not set
+# CONFIG_BCACHEFS_FS is not set
+# CONFIG_ZONEFS_FS is not set
+CONFIG_FS_DAX=3Dy
+CONFIG_FS_DAX_PMD=3Dy
+CONFIG_FS_POSIX_ACL=3Dy
+CONFIG_EXPORTFS=3Dy
+CONFIG_EXPORTFS_BLOCK_OPS=3Dy
+CONFIG_FILE_LOCKING=3Dy
+CONFIG_FS_ENCRYPTION=3Dy
+CONFIG_FS_ENCRYPTION_ALGS=3Dy
+CONFIG_FS_ENCRYPTION_INLINE_CRYPT=3Dy
+CONFIG_FS_VERITY=3Dy
+CONFIG_FS_VERITY_BUILTIN_SIGNATURES=3Dy
+CONFIG_FSNOTIFY=3Dy
+CONFIG_DNOTIFY=3Dy
+CONFIG_INOTIFY_USER=3Dy
+CONFIG_FANOTIFY=3Dy
+CONFIG_FANOTIFY_ACCESS_PERMISSIONS=3Dy
+CONFIG_QUOTA=3Dy
+CONFIG_QUOTA_NETLINK_INTERFACE=3Dy
+# CONFIG_QUOTA_DEBUG is not set
+# CONFIG_QFMT_V1 is not set
+# CONFIG_QFMT_V2 is not set
+CONFIG_QUOTACTL=3Dy
+CONFIG_AUTOFS_FS=3Dm
+CONFIG_FUSE_FS=3Dy
+# CONFIG_CUSE is not set
+# CONFIG_VIRTIO_FS is not set
+CONFIG_FUSE_PASSTHROUGH=3Dy
+# CONFIG_OVERLAY_FS is not set
+
+#
+# Caches
+#
+# end of Caches
+
+#
+# CD-ROM/DVD Filesystems
+#
+# CONFIG_ISO9660_FS is not set
+# CONFIG_UDF_FS is not set
+# end of CD-ROM/DVD Filesystems
+
+#
+# DOS/FAT/EXFAT/NT Filesystems
+#
+CONFIG_FAT_FS=3Dy
+# CONFIG_MSDOS_FS is not set
+CONFIG_VFAT_FS=3Dy
+CONFIG_FAT_DEFAULT_CODEPAGE=3D437
+CONFIG_FAT_DEFAULT_IOCHARSET=3D"iso8859-1"
+# CONFIG_FAT_DEFAULT_UTF8 is not set
+# CONFIG_EXFAT_FS is not set
+# CONFIG_NTFS3_FS is not set
+# CONFIG_NTFS_FS is not set
+# end of DOS/FAT/EXFAT/NT Filesystems
+
+#
+# Pseudo filesystems
+#
+CONFIG_PROC_FS=3Dy
+CONFIG_PROC_KCORE=3Dy
+CONFIG_PROC_VMCORE=3Dy
+CONFIG_PROC_VMCORE_DEVICE_DUMP=3Dy
+CONFIG_PROC_SYSCTL=3Dy
+CONFIG_PROC_PAGE_MONITOR=3Dy
+CONFIG_PROC_CHILDREN=3Dy
+CONFIG_PROC_PID_ARCH_STATUS=3Dy
+CONFIG_PROC_CPU_RESCTRL=3Dy
+CONFIG_KERNFS=3Dy
+CONFIG_SYSFS=3Dy
+CONFIG_TMPFS=3Dy
+CONFIG_TMPFS_POSIX_ACL=3Dy
+CONFIG_TMPFS_XATTR=3Dy
+CONFIG_TMPFS_INODE64=3Dy
+# CONFIG_TMPFS_QUOTA is not set
+CONFIG_HUGETLBFS=3Dy
+# CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON is not set
+CONFIG_HUGETLB_PAGE=3Dy
+CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP=3Dy
+CONFIG_HUGETLB_PMD_PAGE_TABLE_SHARING=3Dy
+CONFIG_ARCH_HAS_GIGANTIC_PAGE=3Dy
+CONFIG_CONFIGFS_FS=3Dy
+CONFIG_EFIVAR_FS=3Dy
+# end of Pseudo filesystems
+
+CONFIG_MISC_FILESYSTEMS=3Dy
+# CONFIG_ORANGEFS_FS is not set
+# CONFIG_ADFS_FS is not set
+# CONFIG_AFFS_FS is not set
+CONFIG_ECRYPT_FS=3Dy
+CONFIG_ECRYPT_FS_MESSAGING=3Dy
+# CONFIG_HFS_FS is not set
+# CONFIG_HFSPLUS_FS is not set
+# CONFIG_BEFS_FS is not set
+# CONFIG_BFS_FS is not set
+# CONFIG_EFS_FS is not set
+# CONFIG_CRAMFS is not set
+CONFIG_SQUASHFS=3Dy
+# CONFIG_SQUASHFS_FILE_CACHE is not set
+CONFIG_SQUASHFS_FILE_DIRECT=3Dy
+CONFIG_SQUASHFS_DECOMP_SINGLE=3Dy
+# CONFIG_SQUASHFS_CHOICE_DECOMP_BY_MOUNT is not set
+CONFIG_SQUASHFS_COMPILE_DECOMP_SINGLE=3Dy
+# CONFIG_SQUASHFS_COMPILE_DECOMP_MULTI is not set
+# CONFIG_SQUASHFS_COMPILE_DECOMP_MULTI_PERCPU is not set
+CONFIG_SQUASHFS_XATTR=3Dy
+CONFIG_SQUASHFS_ZLIB=3Dy
+CONFIG_SQUASHFS_LZ4=3Dy
+CONFIG_SQUASHFS_LZO=3Dy
+CONFIG_SQUASHFS_XZ=3Dy
+CONFIG_SQUASHFS_ZSTD=3Dy
+# CONFIG_SQUASHFS_4K_DEVBLK_SIZE is not set
+# CONFIG_SQUASHFS_EMBEDDED is not set
+CONFIG_SQUASHFS_FRAGMENT_CACHE_SIZE=3D3
+# CONFIG_VXFS_FS is not set
+# CONFIG_MINIX_FS is not set
+# CONFIG_OMFS_FS is not set
+# CONFIG_HPFS_FS is not set
+# CONFIG_QNX4FS_FS is not set
+# CONFIG_QNX6FS_FS is not set
+# CONFIG_ROMFS_FS is not set
+CONFIG_PSTORE=3Dy
+CONFIG_PSTORE_DEFAULT_KMSG_BYTES=3D10240
+CONFIG_PSTORE_COMPRESS=3Dy
+# CONFIG_PSTORE_CONSOLE is not set
+# CONFIG_PSTORE_PMSG is not set
+# CONFIG_PSTORE_FTRACE is not set
+# CONFIG_PSTORE_RAM is not set
+# CONFIG_PSTORE_BLK is not set
+# CONFIG_SYSV_FS is not set
+# CONFIG_UFS_FS is not set
+# CONFIG_EROFS_FS is not set
+CONFIG_NETWORK_FILESYSTEMS=3Dy
+# CONFIG_NFS_FS is not set
+# CONFIG_NFSD is not set
+# CONFIG_CEPH_FS is not set
+# CONFIG_CIFS is not set
+# CONFIG_SMB_SERVER is not set
+# CONFIG_CODA_FS is not set
+# CONFIG_AFS_FS is not set
+CONFIG_NLS=3Dy
+CONFIG_NLS_DEFAULT=3D"utf8"
+CONFIG_NLS_CODEPAGE_437=3Dy
+# CONFIG_NLS_CODEPAGE_737 is not set
+# CONFIG_NLS_CODEPAGE_775 is not set
+# CONFIG_NLS_CODEPAGE_850 is not set
+# CONFIG_NLS_CODEPAGE_852 is not set
+# CONFIG_NLS_CODEPAGE_855 is not set
+# CONFIG_NLS_CODEPAGE_857 is not set
+# CONFIG_NLS_CODEPAGE_860 is not set
+# CONFIG_NLS_CODEPAGE_861 is not set
+# CONFIG_NLS_CODEPAGE_862 is not set
+# CONFIG_NLS_CODEPAGE_863 is not set
+# CONFIG_NLS_CODEPAGE_864 is not set
+# CONFIG_NLS_CODEPAGE_865 is not set
+# CONFIG_NLS_CODEPAGE_866 is not set
+# CONFIG_NLS_CODEPAGE_869 is not set
+# CONFIG_NLS_CODEPAGE_936 is not set
+# CONFIG_NLS_CODEPAGE_950 is not set
+# CONFIG_NLS_CODEPAGE_932 is not set
+# CONFIG_NLS_CODEPAGE_949 is not set
+# CONFIG_NLS_CODEPAGE_874 is not set
+# CONFIG_NLS_ISO8859_8 is not set
+# CONFIG_NLS_CODEPAGE_1250 is not set
+# CONFIG_NLS_CODEPAGE_1251 is not set
+# CONFIG_NLS_ASCII is not set
+CONFIG_NLS_ISO8859_1=3Dm
+# CONFIG_NLS_ISO8859_2 is not set
+# CONFIG_NLS_ISO8859_3 is not set
+# CONFIG_NLS_ISO8859_4 is not set
+# CONFIG_NLS_ISO8859_5 is not set
+# CONFIG_NLS_ISO8859_6 is not set
+# CONFIG_NLS_ISO8859_7 is not set
+# CONFIG_NLS_ISO8859_9 is not set
+# CONFIG_NLS_ISO8859_13 is not set
+# CONFIG_NLS_ISO8859_14 is not set
+# CONFIG_NLS_ISO8859_15 is not set
+# CONFIG_NLS_KOI8_R is not set
+# CONFIG_NLS_KOI8_U is not set
+# CONFIG_NLS_MAC_ROMAN is not set
+# CONFIG_NLS_MAC_CELTIC is not set
+# CONFIG_NLS_MAC_CENTEURO is not set
+# CONFIG_NLS_MAC_CROATIAN is not set
+# CONFIG_NLS_MAC_CYRILLIC is not set
+# CONFIG_NLS_MAC_GAELIC is not set
+# CONFIG_NLS_MAC_GREEK is not set
+# CONFIG_NLS_MAC_ICELAND is not set
+# CONFIG_NLS_MAC_INUIT is not set
+# CONFIG_NLS_MAC_ROMANIAN is not set
+# CONFIG_NLS_MAC_TURKISH is not set
+# CONFIG_NLS_UTF8 is not set
+# CONFIG_DLM is not set
+CONFIG_UNICODE=3Dy
+# CONFIG_UNICODE_NORMALIZATION_SELFTEST is not set
+CONFIG_IO_WQ=3Dy
+# end of File systems
+
+#
+# Security options
+#
+CONFIG_KEYS=3Dy
+CONFIG_KEYS_REQUEST_CACHE=3Dy
+CONFIG_PERSISTENT_KEYRINGS=3Dy
+CONFIG_TRUSTED_KEYS=3Dy
+CONFIG_HAVE_TRUSTED_KEYS=3Dy
+CONFIG_TRUSTED_KEYS_TPM=3Dy
+CONFIG_ENCRYPTED_KEYS=3Dy
+# CONFIG_USER_DECRYPTED_DATA is not set
+CONFIG_KEY_DH_OPERATIONS=3Dy
+CONFIG_KEY_NOTIFICATIONS=3Dy
+CONFIG_SECURITY_DMESG_RESTRICT=3Dy
+CONFIG_PROC_MEM_ALWAYS_FORCE=3Dy
+# CONFIG_PROC_MEM_FORCE_PTRACE is not set
+# CONFIG_PROC_MEM_NO_FORCE is not set
+CONFIG_SECURITY=3Dy
+CONFIG_SECURITYFS=3Dy
+CONFIG_SECURITY_NETWORK=3Dy
+CONFIG_SECURITY_PATH=3Dy
+CONFIG_INTEL_TXT=3Dy
+CONFIG_LSM_MMAP_MIN_ADDR=3D0
+CONFIG_HARDENED_USERCOPY=3Dy
+CONFIG_FORTIFY_SOURCE=3Dy
+# CONFIG_STATIC_USERMODEHELPER is not set
+CONFIG_SECURITY_SELINUX=3Dy
+CONFIG_SECURITY_SELINUX_BOOTPARAM=3Dy
+CONFIG_SECURITY_SELINUX_DEVELOP=3Dy
+CONFIG_SECURITY_SELINUX_AVC_STATS=3Dy
+CONFIG_SECURITY_SELINUX_SIDTAB_HASH_BITS=3D9
+CONFIG_SECURITY_SELINUX_SID2STR_CACHE_SIZE=3D256
+# CONFIG_SECURITY_SELINUX_DEBUG is not set
+CONFIG_SECURITY_SMACK=3Dy
+# CONFIG_SECURITY_SMACK_BRINGUP is not set
+CONFIG_SECURITY_SMACK_NETFILTER=3Dy
+CONFIG_SECURITY_SMACK_APPEND_SIGNALS=3Dy
+CONFIG_SECURITY_TOMOYO=3Dy
+# CONFIG_SECURITY_TOMOYO_LKM is not set
+CONFIG_SECURITY_TOMOYO_MAX_ACCEPT_ENTRY=3D2048
+CONFIG_SECURITY_TOMOYO_MAX_AUDIT_LOG=3D1024
+# CONFIG_SECURITY_TOMOYO_OMIT_USERSPACE_LOADER is not set
+CONFIG_SECURITY_TOMOYO_POLICY_LOADER=3D"/sbin/tomoyo-init"
+CONFIG_SECURITY_TOMOYO_ACTIVATION_TRIGGER=3D"/sbin/init"
+# CONFIG_SECURITY_TOMOYO_INSECURE_BUILTIN_SETTING is not set
+CONFIG_SECURITY_APPARMOR=3Dy
+# CONFIG_SECURITY_APPARMOR_DEBUG is not set
+CONFIG_SECURITY_APPARMOR_INTROSPECT_POLICY=3Dy
+CONFIG_SECURITY_APPARMOR_HASH=3Dy
+CONFIG_SECURITY_APPARMOR_HASH_DEFAULT=3Dy
+CONFIG_SECURITY_APPARMOR_EXPORT_BINARY=3Dy
+CONFIG_SECURITY_APPARMOR_PARANOID_LOAD=3Dy
+# CONFIG_SECURITY_LOADPIN is not set
+CONFIG_SECURITY_YAMA=3Dy
+CONFIG_SECURITY_SAFESETID=3Dy
+CONFIG_SECURITY_LOCKDOWN_LSM=3Dy
+CONFIG_SECURITY_LOCKDOWN_LSM_EARLY=3Dy
+CONFIG_LOCK_DOWN_KERNEL_FORCE_NONE=3Dy
+# CONFIG_LOCK_DOWN_KERNEL_FORCE_INTEGRITY is not set
+# CONFIG_LOCK_DOWN_KERNEL_FORCE_CONFIDENTIALITY is not set
+CONFIG_SECURITY_LANDLOCK=3Dy
+# CONFIG_SECURITY_IPE is not set
+CONFIG_INTEGRITY=3Dy
+CONFIG_INTEGRITY_SIGNATURE=3Dy
+CONFIG_INTEGRITY_ASYMMETRIC_KEYS=3Dy
+CONFIG_INTEGRITY_TRUSTED_KEYRING=3Dy
+CONFIG_INTEGRITY_PLATFORM_KEYRING=3Dy
+# CONFIG_INTEGRITY_MACHINE_KEYRING is not set
+CONFIG_LOAD_UEFI_KEYS=3Dy
+CONFIG_INTEGRITY_AUDIT=3Dy
+CONFIG_IMA=3Dy
+# CONFIG_IMA_KEXEC is not set
+CONFIG_IMA_MEASURE_PCR_IDX=3D10
+CONFIG_IMA_LSM_RULES=3Dy
+CONFIG_IMA_NG_TEMPLATE=3Dy
+# CONFIG_IMA_SIG_TEMPLATE is not set
+CONFIG_IMA_DEFAULT_TEMPLATE=3D"ima-ng"
+CONFIG_IMA_DEFAULT_HASH_SHA1=3Dy
+# CONFIG_IMA_DEFAULT_HASH_SHA256 is not set
+# CONFIG_IMA_DEFAULT_HASH_SHA512 is not set
+CONFIG_IMA_DEFAULT_HASH=3D"sha1"
+# CONFIG_IMA_WRITE_POLICY is not set
+# CONFIG_IMA_READ_POLICY is not set
+CONFIG_IMA_APPRAISE=3Dy
+# CONFIG_IMA_ARCH_POLICY is not set
+# CONFIG_IMA_APPRAISE_BUILD_POLICY is not set
+CONFIG_IMA_APPRAISE_BOOTPARAM=3Dy
+CONFIG_IMA_APPRAISE_MODSIG=3Dy
+# CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY is not set
+# CONFIG_IMA_BLACKLIST_KEYRING is not set
+# CONFIG_IMA_LOAD_X509 is not set
+CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS=3Dy
+CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS=3Dy
+# CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT is not set
+# CONFIG_IMA_DISABLE_HTABLE is not set
+CONFIG_EVM=3Dy
+CONFIG_EVM_ATTR_FSUUID=3Dy
+CONFIG_EVM_EXTRA_SMACK_XATTRS=3Dy
+CONFIG_EVM_ADD_XATTRS=3Dy
+# CONFIG_EVM_LOAD_X509 is not set
+# CONFIG_DEFAULT_SECURITY_SELINUX is not set
+# CONFIG_DEFAULT_SECURITY_SMACK is not set
+# CONFIG_DEFAULT_SECURITY_TOMOYO is not set
+CONFIG_DEFAULT_SECURITY_APPARMOR=3Dy
+# CONFIG_DEFAULT_SECURITY_DAC is not set
+CONFIG_LSM=3D"landlock,lockdown,yama,integrity,apparmor"
+
+#
+# Kernel hardening options
+#
+
+#
+# Memory initialization
+#
+CONFIG_INIT_STACK_NONE=3Dy
+CONFIG_INIT_ON_ALLOC_DEFAULT_ON=3Dy
+# CONFIG_INIT_ON_FREE_DEFAULT_ON is not set
+CONFIG_CC_HAS_ZERO_CALL_USED_REGS=3Dy
+# CONFIG_ZERO_CALL_USED_REGS is not set
+# end of Memory initialization
+
+#
+# Hardening of kernel data structures
+#
+# CONFIG_LIST_HARDENED is not set
+# CONFIG_BUG_ON_DATA_CORRUPTION is not set
+# end of Hardening of kernel data structures
+
+CONFIG_RANDSTRUCT_NONE=3Dy
+# end of Kernel hardening options
+# end of Security options
+
+CONFIG_XOR_BLOCKS=3Dm
+CONFIG_ASYNC_CORE=3Dm
+CONFIG_ASYNC_MEMCPY=3Dm
+CONFIG_ASYNC_XOR=3Dm
+CONFIG_ASYNC_PQ=3Dm
+CONFIG_ASYNC_RAID6_RECOV=3Dm
+CONFIG_CRYPTO=3Dy
+
+#
+# Crypto core or helper
+#
+CONFIG_CRYPTO_ALGAPI=3Dy
+CONFIG_CRYPTO_ALGAPI2=3Dy
+CONFIG_CRYPTO_AEAD=3Dy
+CONFIG_CRYPTO_AEAD2=3Dy
+CONFIG_CRYPTO_SIG=3Dy
+CONFIG_CRYPTO_SIG2=3Dy
+CONFIG_CRYPTO_SKCIPHER=3Dy
+CONFIG_CRYPTO_SKCIPHER2=3Dy
+CONFIG_CRYPTO_HASH=3Dy
+CONFIG_CRYPTO_HASH2=3Dy
+CONFIG_CRYPTO_RNG=3Dy
+CONFIG_CRYPTO_RNG2=3Dy
+CONFIG_CRYPTO_RNG_DEFAULT=3Dy
+CONFIG_CRYPTO_AKCIPHER2=3Dy
+CONFIG_CRYPTO_AKCIPHER=3Dy
+CONFIG_CRYPTO_KPP2=3Dy
+CONFIG_CRYPTO_KPP=3Dy
+CONFIG_CRYPTO_ACOMP2=3Dy
+CONFIG_CRYPTO_MANAGER=3Dy
+CONFIG_CRYPTO_MANAGER2=3Dy
+# CONFIG_CRYPTO_USER is not set
+CONFIG_CRYPTO_MANAGER_DISABLE_TESTS=3Dy
+CONFIG_CRYPTO_NULL=3Dy
+CONFIG_CRYPTO_NULL2=3Dy
+# CONFIG_CRYPTO_PCRYPT is not set
+CONFIG_CRYPTO_CRYPTD=3Dm
+# CONFIG_CRYPTO_AUTHENC is not set
+# CONFIG_CRYPTO_TEST is not set
+CONFIG_CRYPTO_SIMD=3Dm
+# end of Crypto core or helper
+
+#
+# Public-key cryptography
+#
+CONFIG_CRYPTO_RSA=3Dy
+CONFIG_CRYPTO_DH=3Dy
+# CONFIG_CRYPTO_DH_RFC7919_GROUPS is not set
+CONFIG_CRYPTO_ECC=3Dy
+CONFIG_CRYPTO_ECDH=3Dy
+# CONFIG_CRYPTO_ECDSA is not set
+# CONFIG_CRYPTO_ECRDSA is not set
+# CONFIG_CRYPTO_CURVE25519 is not set
+# end of Public-key cryptography
+
+#
+# Block ciphers
+#
+CONFIG_CRYPTO_AES=3Dy
+# CONFIG_CRYPTO_AES_TI is not set
+# CONFIG_CRYPTO_ARIA is not set
+# CONFIG_CRYPTO_BLOWFISH is not set
+# CONFIG_CRYPTO_CAMELLIA is not set
+# CONFIG_CRYPTO_CAST5 is not set
+# CONFIG_CRYPTO_CAST6 is not set
+# CONFIG_CRYPTO_DES is not set
+# CONFIG_CRYPTO_FCRYPT is not set
+# CONFIG_CRYPTO_SERPENT is not set
+# CONFIG_CRYPTO_SM4_GENERIC is not set
+# CONFIG_CRYPTO_TWOFISH is not set
+# end of Block ciphers
+
+#
+# Length-preserving ciphers and modes
+#
+# CONFIG_CRYPTO_ADIANTUM is not set
+# CONFIG_CRYPTO_CHACHA20 is not set
+CONFIG_CRYPTO_CBC=3Dy
+CONFIG_CRYPTO_CTR=3Dy
+CONFIG_CRYPTO_CTS=3Dy
+CONFIG_CRYPTO_ECB=3Dy
+# CONFIG_CRYPTO_HCTR2 is not set
+# CONFIG_CRYPTO_KEYWRAP is not set
+# CONFIG_CRYPTO_LRW is not set
+# CONFIG_CRYPTO_PCBC is not set
+CONFIG_CRYPTO_XTS=3Dy
+# end of Length-preserving ciphers and modes
+
+#
+# AEAD (authenticated encryption with associated data) ciphers
+#
+# CONFIG_CRYPTO_AEGIS128 is not set
+# CONFIG_CRYPTO_CHACHA20POLY1305 is not set
+# CONFIG_CRYPTO_CCM is not set
+CONFIG_CRYPTO_GCM=3Dy
+CONFIG_CRYPTO_GENIV=3Dy
+CONFIG_CRYPTO_SEQIV=3Dy
+# CONFIG_CRYPTO_ECHAINIV is not set
+# CONFIG_CRYPTO_ESSIV is not set
+# end of AEAD (authenticated encryption with associated data) ciphers
+
+#
+# Hashes, digests, and MACs
+#
+CONFIG_CRYPTO_BLAKE2B=3Dm
+# CONFIG_CRYPTO_CMAC is not set
+CONFIG_CRYPTO_GHASH=3Dy
+CONFIG_CRYPTO_HMAC=3Dy
+# CONFIG_CRYPTO_MD4 is not set
+CONFIG_CRYPTO_MD5=3Dy
+# CONFIG_CRYPTO_MICHAEL_MIC is not set
+# CONFIG_CRYPTO_POLY1305 is not set
+# CONFIG_CRYPTO_RMD160 is not set
+CONFIG_CRYPTO_SHA1=3Dy
+CONFIG_CRYPTO_SHA256=3Dy
+CONFIG_CRYPTO_SHA512=3Dy
+CONFIG_CRYPTO_SHA3=3Dy
+# CONFIG_CRYPTO_SM3_GENERIC is not set
+# CONFIG_CRYPTO_STREEBOG is not set
+# CONFIG_CRYPTO_VMAC is not set
+# CONFIG_CRYPTO_WP512 is not set
+# CONFIG_CRYPTO_XCBC is not set
+CONFIG_CRYPTO_XXHASH=3Dm
+# end of Hashes, digests, and MACs
+
+#
+# CRCs (cyclic redundancy checks)
+#
+CONFIG_CRYPTO_CRC32C=3Dy
+# CONFIG_CRYPTO_CRC32 is not set
+CONFIG_CRYPTO_CRCT10DIF=3Dy
+CONFIG_CRYPTO_CRC64_ROCKSOFT=3Dy
+# end of CRCs (cyclic redundancy checks)
+
+#
+# Compression
+#
+CONFIG_CRYPTO_DEFLATE=3Dy
+CONFIG_CRYPTO_LZO=3Dy
+# CONFIG_CRYPTO_842 is not set
+# CONFIG_CRYPTO_LZ4 is not set
+# CONFIG_CRYPTO_LZ4HC is not set
+# CONFIG_CRYPTO_ZSTD is not set
+# end of Compression
+
+#
+# Random number generation
+#
+# CONFIG_CRYPTO_ANSI_CPRNG is not set
+CONFIG_CRYPTO_DRBG_MENU=3Dy
+CONFIG_CRYPTO_DRBG_HMAC=3Dy
+CONFIG_CRYPTO_DRBG_HASH=3Dy
+CONFIG_CRYPTO_DRBG_CTR=3Dy
+CONFIG_CRYPTO_DRBG=3Dy
+CONFIG_CRYPTO_JITTERENTROPY=3Dy
+CONFIG_CRYPTO_JITTERENTROPY_MEMORY_BLOCKS=3D64
+CONFIG_CRYPTO_JITTERENTROPY_MEMORY_BLOCKSIZE=3D32
+CONFIG_CRYPTO_JITTERENTROPY_OSR=3D1
+CONFIG_CRYPTO_KDF800108_CTR=3Dy
+# end of Random number generation
+
+#
+# Userspace interface
+#
+# CONFIG_CRYPTO_USER_API_HASH is not set
+# CONFIG_CRYPTO_USER_API_SKCIPHER is not set
+# CONFIG_CRYPTO_USER_API_RNG is not set
+# CONFIG_CRYPTO_USER_API_AEAD is not set
+# end of Userspace interface
+
+CONFIG_CRYPTO_HASH_INFO=3Dy
+
+#
+# Accelerated Cryptographic Algorithms for CPU (x86)
+#
+# CONFIG_CRYPTO_CURVE25519_X86 is not set
+CONFIG_CRYPTO_AES_NI_INTEL=3Dm
+# CONFIG_CRYPTO_BLOWFISH_X86_64 is not set
+# CONFIG_CRYPTO_CAMELLIA_X86_64 is not set
+# CONFIG_CRYPTO_CAMELLIA_AESNI_AVX_X86_64 is not set
+# CONFIG_CRYPTO_CAMELLIA_AESNI_AVX2_X86_64 is not set
+# CONFIG_CRYPTO_CAST5_AVX_X86_64 is not set
+# CONFIG_CRYPTO_CAST6_AVX_X86_64 is not set
+# CONFIG_CRYPTO_DES3_EDE_X86_64 is not set
+# CONFIG_CRYPTO_SERPENT_SSE2_X86_64 is not set
+# CONFIG_CRYPTO_SERPENT_AVX_X86_64 is not set
+# CONFIG_CRYPTO_SERPENT_AVX2_X86_64 is not set
+# CONFIG_CRYPTO_SM4_AESNI_AVX_X86_64 is not set
+# CONFIG_CRYPTO_SM4_AESNI_AVX2_X86_64 is not set
+# CONFIG_CRYPTO_TWOFISH_X86_64 is not set
+# CONFIG_CRYPTO_TWOFISH_X86_64_3WAY is not set
+# CONFIG_CRYPTO_TWOFISH_AVX_X86_64 is not set
+# CONFIG_CRYPTO_ARIA_AESNI_AVX_X86_64 is not set
+# CONFIG_CRYPTO_ARIA_AESNI_AVX2_X86_64 is not set
+# CONFIG_CRYPTO_ARIA_GFNI_AVX512_X86_64 is not set
+# CONFIG_CRYPTO_CHACHA20_X86_64 is not set
+# CONFIG_CRYPTO_AEGIS128_AESNI_SSE2 is not set
+# CONFIG_CRYPTO_NHPOLY1305_SSE2 is not set
+# CONFIG_CRYPTO_NHPOLY1305_AVX2 is not set
+CONFIG_CRYPTO_BLAKE2S_X86=3Dy
+# CONFIG_CRYPTO_POLYVAL_CLMUL_NI is not set
+# CONFIG_CRYPTO_POLY1305_X86_64 is not set
+CONFIG_CRYPTO_SHA1_SSSE3=3Dm
+CONFIG_CRYPTO_SHA256_SSSE3=3Dm
+# CONFIG_CRYPTO_SHA512_SSSE3 is not set
+# CONFIG_CRYPTO_SM3_AVX_X86_64 is not set
+CONFIG_CRYPTO_GHASH_CLMUL_NI_INTEL=3Dm
+CONFIG_CRYPTO_CRC32C_INTEL=3Dy
+CONFIG_CRYPTO_CRC32_PCLMUL=3Dm
+CONFIG_CRYPTO_CRCT10DIF_PCLMUL=3Dm
+# end of Accelerated Cryptographic Algorithms for CPU (x86)
+
+CONFIG_CRYPTO_HW=3Dy
+CONFIG_CRYPTO_DEV_PADLOCK=3Dy
+# CONFIG_CRYPTO_DEV_PADLOCK_AES is not set
+# CONFIG_CRYPTO_DEV_PADLOCK_SHA is not set
+# CONFIG_CRYPTO_DEV_ATMEL_ECC is not set
+# CONFIG_CRYPTO_DEV_ATMEL_SHA204A is not set
+CONFIG_CRYPTO_DEV_CCP=3Dy
+CONFIG_CRYPTO_DEV_CCP_DD=3Dm
+CONFIG_CRYPTO_DEV_SP_CCP=3Dy
+# CONFIG_CRYPTO_DEV_CCP_CRYPTO is not set
+CONFIG_CRYPTO_DEV_SP_PSP=3Dy
+# CONFIG_CRYPTO_DEV_CCP_DEBUGFS is not set
+# CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
+# CONFIG_CRYPTO_DEV_QAT_DH895xCC is not set
+# CONFIG_CRYPTO_DEV_QAT_C3XXX is not set
+# CONFIG_CRYPTO_DEV_QAT_C62X is not set
+# CONFIG_CRYPTO_DEV_QAT_4XXX is not set
+# CONFIG_CRYPTO_DEV_QAT_420XX is not set
+# CONFIG_CRYPTO_DEV_QAT_DH895xCCVF is not set
+# CONFIG_CRYPTO_DEV_QAT_C3XXXVF is not set
+# CONFIG_CRYPTO_DEV_QAT_C62XVF is not set
+# CONFIG_CRYPTO_DEV_VIRTIO is not set
+# CONFIG_CRYPTO_DEV_SAFEXCEL is not set
+# CONFIG_CRYPTO_DEV_AMLOGIC_GXL is not set
+CONFIG_ASYMMETRIC_KEY_TYPE=3Dy
+CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=3Dy
+CONFIG_X509_CERTIFICATE_PARSER=3Dy
+# CONFIG_PKCS8_PRIVATE_KEY_PARSER is not set
+CONFIG_PKCS7_MESSAGE_PARSER=3Dy
+# CONFIG_PKCS7_TEST_KEY is not set
+CONFIG_SIGNED_PE_FILE_VERIFICATION=3Dy
+# CONFIG_FIPS_SIGNATURE_SELFTEST is not set
+
+#
+# Certificates for signature checking
+#
+CONFIG_MODULE_SIG_KEY=3D"certs/mycert.pem"
+CONFIG_MODULE_SIG_KEY_TYPE_RSA=3Dy
+# CONFIG_MODULE_SIG_KEY_TYPE_ECDSA is not set
+CONFIG_SYSTEM_TRUSTED_KEYRING=3Dy
+CONFIG_SYSTEM_TRUSTED_KEYS=3D"certs/mycert.pem"
+CONFIG_SYSTEM_EXTRA_CERTIFICATE=3Dy
+CONFIG_SYSTEM_EXTRA_CERTIFICATE_SIZE=3D4096
+CONFIG_SECONDARY_TRUSTED_KEYRING=3Dy
+# CONFIG_SECONDARY_TRUSTED_KEYRING_SIGNED_BY_BUILTIN is not set
+CONFIG_SYSTEM_BLACKLIST_KEYRING=3Dy
+CONFIG_SYSTEM_BLACKLIST_HASH_LIST=3D""
+# CONFIG_SYSTEM_REVOCATION_LIST is not set
+# CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE is not set
+# end of Certificates for signature checking
+
+CONFIG_BINARY_PRINTF=3Dy
+
+#
+# Library routines
+#
+CONFIG_RAID6_PQ=3Dm
+CONFIG_RAID6_PQ_BENCHMARK=3Dy
+CONFIG_LINEAR_RANGES=3Dy
+CONFIG_PACKING=3Dy
+CONFIG_BITREVERSE=3Dy
+CONFIG_GENERIC_STRNCPY_FROM_USER=3Dy
+CONFIG_GENERIC_STRNLEN_USER=3Dy
+CONFIG_GENERIC_NET_UTILS=3Dy
+# CONFIG_CORDIC is not set
+# CONFIG_PRIME_NUMBERS is not set
+CONFIG_RATIONAL=3Dy
+CONFIG_GENERIC_IOMAP=3Dy
+CONFIG_ARCH_USE_CMPXCHG_LOCKREF=3Dy
+CONFIG_ARCH_HAS_FAST_MULTIPLIER=3Dy
+CONFIG_ARCH_USE_SYM_ANNOTATIONS=3Dy
+
+#
+# Crypto library routines
+#
+CONFIG_CRYPTO_LIB_UTILS=3Dy
+CONFIG_CRYPTO_LIB_AES=3Dy
+CONFIG_CRYPTO_LIB_AESCFB=3Dy
+CONFIG_CRYPTO_LIB_GF128MUL=3Dy
+CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S=3Dy
+CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=3Dy
+# CONFIG_CRYPTO_LIB_CHACHA is not set
+# CONFIG_CRYPTO_LIB_CURVE25519 is not set
+CONFIG_CRYPTO_LIB_POLY1305_RSIZE=3D11
+# CONFIG_CRYPTO_LIB_POLY1305 is not set
+# CONFIG_CRYPTO_LIB_CHACHA20POLY1305 is not set
+CONFIG_CRYPTO_LIB_SHA1=3Dy
+CONFIG_CRYPTO_LIB_SHA256=3Dy
+# end of Crypto library routines
+
+CONFIG_CRC_CCITT=3Dy
+CONFIG_CRC16=3Dy
+CONFIG_CRC_T10DIF=3Dy
+CONFIG_CRC64_ROCKSOFT=3Dy
+# CONFIG_CRC_ITU_T is not set
+CONFIG_CRC32=3Dy
+# CONFIG_CRC32_SELFTEST is not set
+CONFIG_CRC32_SLICEBY8=3Dy
+# CONFIG_CRC32_SLICEBY4 is not set
+# CONFIG_CRC32_SARWATE is not set
+# CONFIG_CRC32_BIT is not set
+CONFIG_CRC64=3Dy
+# CONFIG_CRC4 is not set
+# CONFIG_CRC7 is not set
+CONFIG_LIBCRC32C=3Dy
+# CONFIG_CRC8 is not set
+CONFIG_XXHASH=3Dy
+# CONFIG_RANDOM32_SELFTEST is not set
+CONFIG_ZLIB_INFLATE=3Dy
+CONFIG_ZLIB_DEFLATE=3Dy
+CONFIG_LZO_COMPRESS=3Dy
+CONFIG_LZO_DECOMPRESS=3Dy
+CONFIG_LZ4_DECOMPRESS=3Dy
+CONFIG_ZSTD_COMMON=3Dy
+CONFIG_ZSTD_COMPRESS=3Dy
+CONFIG_ZSTD_DECOMPRESS=3Dy
+CONFIG_XZ_DEC=3Dy
+CONFIG_XZ_DEC_X86=3Dy
+CONFIG_XZ_DEC_POWERPC=3Dy
+CONFIG_XZ_DEC_ARM=3Dy
+CONFIG_XZ_DEC_ARMTHUMB=3Dy
+CONFIG_XZ_DEC_ARM64=3Dy
+CONFIG_XZ_DEC_SPARC=3Dy
+CONFIG_XZ_DEC_RISCV=3Dy
+# CONFIG_XZ_DEC_MICROLZMA is not set
+CONFIG_XZ_DEC_BCJ=3Dy
+# CONFIG_XZ_DEC_TEST is not set
+CONFIG_DECOMPRESS_GZIP=3Dy
+CONFIG_DECOMPRESS_BZIP2=3Dy
+CONFIG_DECOMPRESS_LZMA=3Dy
+CONFIG_DECOMPRESS_XZ=3Dy
+CONFIG_DECOMPRESS_LZO=3Dy
+CONFIG_DECOMPRESS_LZ4=3Dy
+CONFIG_DECOMPRESS_ZSTD=3Dy
+CONFIG_GENERIC_ALLOCATOR=3Dy
+CONFIG_INTERVAL_TREE=3Dy
+CONFIG_XARRAY_MULTI=3Dy
+CONFIG_ASSOCIATIVE_ARRAY=3Dy
+CONFIG_HAS_IOMEM=3Dy
+CONFIG_HAS_IOPORT=3Dy
+CONFIG_HAS_IOPORT_MAP=3Dy
+CONFIG_HAS_DMA=3Dy
+CONFIG_DMA_OPS_HELPERS=3Dy
+CONFIG_NEED_SG_DMA_FLAGS=3Dy
+CONFIG_NEED_SG_DMA_LENGTH=3Dy
+CONFIG_NEED_DMA_MAP_STATE=3Dy
+CONFIG_ARCH_DMA_ADDR_T_64BIT=3Dy
+CONFIG_ARCH_HAS_FORCE_DMA_UNENCRYPTED=3Dy
+CONFIG_SWIOTLB=3Dy
+# CONFIG_SWIOTLB_DYNAMIC is not set
+CONFIG_DMA_NEED_SYNC=3Dy
+CONFIG_DMA_COHERENT_POOL=3Dy
+# CONFIG_DMA_API_DEBUG is not set
+# CONFIG_DMA_MAP_BENCHMARK is not set
+CONFIG_SGL_ALLOC=3Dy
+CONFIG_IOMMU_HELPER=3Dy
+CONFIG_CPUMASK_OFFSTACK=3Dy
+CONFIG_CPU_RMAP=3Dy
+CONFIG_DQL=3Dy
+CONFIG_GLOB=3Dy
+# CONFIG_GLOB_SELFTEST is not set
+CONFIG_NLATTR=3Dy
+CONFIG_CLZ_TAB=3Dy
+CONFIG_IRQ_POLL=3Dy
+CONFIG_MPILIB=3Dy
+CONFIG_SIGNATURE=3Dy
+CONFIG_DIMLIB=3Dy
+CONFIG_OID_REGISTRY=3Dy
+CONFIG_UCS2_STRING=3Dy
+CONFIG_HAVE_GENERIC_VDSO=3Dy
+CONFIG_GENERIC_GETTIMEOFDAY=3Dy
+CONFIG_GENERIC_VDSO_TIME_NS=3Dy
+CONFIG_GENERIC_VDSO_OVERFLOW_PROTECT=3Dy
+CONFIG_VDSO_GETRANDOM=3Dy
+CONFIG_FONT_SUPPORT=3Dy
+CONFIG_FONTS=3Dy
+CONFIG_FONT_8x8=3Dy
+CONFIG_FONT_8x16=3Dy
+# CONFIG_FONT_6x11 is not set
+# CONFIG_FONT_7x14 is not set
+# CONFIG_FONT_PEARL_8x8 is not set
+CONFIG_FONT_ACORN_8x8=3Dy
+# CONFIG_FONT_MINI_4x6 is not set
+CONFIG_FONT_6x10=3Dy
+# CONFIG_FONT_10x18 is not set
+# CONFIG_FONT_SUN8x16 is not set
+# CONFIG_FONT_SUN12x22 is not set
+CONFIG_FONT_TER16x32=3Dy
+# CONFIG_FONT_6x8 is not set
+CONFIG_SG_POOL=3Dy
+CONFIG_ARCH_HAS_PMEM_API=3Dy
+CONFIG_MEMREGION=3Dy
+CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION=3Dy
+CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE=3Dy
+CONFIG_ARCH_HAS_COPY_MC=3Dy
+CONFIG_ARCH_STACKWALK=3Dy
+CONFIG_STACKDEPOT=3Dy
+CONFIG_STACKDEPOT_MAX_FRAMES=3D64
+CONFIG_SBITMAP=3Dy
+# CONFIG_LWQ_TEST is not set
+# end of Library routines
+
+CONFIG_ASN1_ENCODER=3Dy
+CONFIG_FIRMWARE_TABLE=3Dy
+
+#
+# Kernel hacking
+#
+
+#
+# printk and dmesg options
+#
+CONFIG_PRINTK_TIME=3Dy
+# CONFIG_PRINTK_CALLER is not set
+# CONFIG_STACKTRACE_BUILD_ID is not set
+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=3D7
+CONFIG_CONSOLE_LOGLEVEL_QUIET=3D4
+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=3D4
+CONFIG_BOOT_PRINTK_DELAY=3Dy
+CONFIG_DYNAMIC_DEBUG=3Dy
+CONFIG_DYNAMIC_DEBUG_CORE=3Dy
+CONFIG_SYMBOLIC_ERRNAME=3Dy
+CONFIG_DEBUG_BUGVERBOSE=3Dy
+# end of printk and dmesg options
+
+CONFIG_DEBUG_KERNEL=3Dy
+CONFIG_DEBUG_MISC=3Dy
+
+#
+# Compile-time checks and compiler options
+#
+CONFIG_DEBUG_INFO=3Dy
+CONFIG_AS_HAS_NON_CONST_ULEB128=3Dy
+# CONFIG_DEBUG_INFO_NONE is not set
+# CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
+# CONFIG_DEBUG_INFO_DWARF4 is not set
+CONFIG_DEBUG_INFO_DWARF5=3Dy
+# CONFIG_DEBUG_INFO_REDUCED is not set
+CONFIG_DEBUG_INFO_COMPRESSED_NONE=3Dy
+# CONFIG_DEBUG_INFO_COMPRESSED_ZLIB is not set
+# CONFIG_DEBUG_INFO_SPLIT is not set
+CONFIG_DEBUG_INFO_BTF=3Dy
+CONFIG_PAHOLE_HAS_SPLIT_BTF=3Dy
+CONFIG_DEBUG_INFO_BTF_MODULES=3Dy
+# CONFIG_MODULE_ALLOW_BTF_MISMATCH is not set
+CONFIG_GDB_SCRIPTS=3Dy
+CONFIG_FRAME_WARN=3D1024
+# CONFIG_STRIP_ASM_SYMS is not set
+# CONFIG_READABLE_ASM is not set
+# CONFIG_HEADERS_INSTALL is not set
+# CONFIG_DEBUG_SECTION_MISMATCH is not set
+CONFIG_SECTION_MISMATCH_WARN_ONLY=3Dy
+# CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B is not set
+CONFIG_ARCH_WANT_FRAME_POINTERS=3Dy
+CONFIG_FRAME_POINTER=3Dy
+CONFIG_OBJTOOL=3Dy
+CONFIG_STACK_VALIDATION=3Dy
+CONFIG_VMLINUX_MAP=3Dy
+# CONFIG_BUILTIN_MODULE_RANGES is not set
+# CONFIG_DEBUG_FORCE_WEAK_PER_CPU is not set
+# end of Compile-time checks and compiler options
+
+#
+# Generic Kernel Debugging Instruments
+#
+CONFIG_MAGIC_SYSRQ=3Dy
+CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=3D0x01b6
+CONFIG_MAGIC_SYSRQ_SERIAL=3Dy
+CONFIG_MAGIC_SYSRQ_SERIAL_SEQUENCE=3D""
+CONFIG_DEBUG_FS=3Dy
+CONFIG_DEBUG_FS_ALLOW_ALL=3Dy
+# CONFIG_DEBUG_FS_DISALLOW_MOUNT is not set
+# CONFIG_DEBUG_FS_ALLOW_NONE is not set
+CONFIG_HAVE_ARCH_KGDB=3Dy
+CONFIG_KGDB=3Dy
+CONFIG_KGDB_HONOUR_BLOCKLIST=3Dy
+CONFIG_KGDB_SERIAL_CONSOLE=3Dy
+# CONFIG_KGDB_TESTS is not set
+CONFIG_KGDB_LOW_LEVEL_TRAP=3Dy
+CONFIG_KGDB_KDB=3Dy
+CONFIG_KDB_DEFAULT_ENABLE=3D0x1
+CONFIG_KDB_KEYBOARD=3Dy
+CONFIG_KDB_CONTINUE_CATASTROPHIC=3D0
+CONFIG_ARCH_HAS_EARLY_DEBUG=3Dy
+CONFIG_ARCH_HAS_UBSAN=3Dy
+CONFIG_UBSAN=3Dy
+# CONFIG_UBSAN_TRAP is not set
+CONFIG_CC_HAS_UBSAN_BOUNDS_STRICT=3Dy
+CONFIG_UBSAN_BOUNDS=3Dy
+CONFIG_UBSAN_BOUNDS_STRICT=3Dy
+CONFIG_UBSAN_SHIFT=3Dy
+# CONFIG_UBSAN_DIV_ZERO is not set
+CONFIG_UBSAN_SIGNED_WRAP=3Dy
+CONFIG_UBSAN_BOOL=3Dy
+CONFIG_UBSAN_ENUM=3Dy
+# CONFIG_UBSAN_ALIGNMENT is not set
+# CONFIG_TEST_UBSAN is not set
+CONFIG_HAVE_ARCH_KCSAN=3Dy
+CONFIG_HAVE_KCSAN_COMPILER=3Dy
+# CONFIG_KCSAN is not set
+# end of Generic Kernel Debugging Instruments
+
+#
+# Networking Debugging
+#
+# CONFIG_NET_DEV_REFCNT_TRACKER is not set
+# CONFIG_NET_NS_REFCNT_TRACKER is not set
+# CONFIG_DEBUG_NET is not set
+# end of Networking Debugging
+
+#
+# Memory Debugging
+#
+# CONFIG_PAGE_EXTENSION is not set
+# CONFIG_DEBUG_PAGEALLOC is not set
+CONFIG_SLUB_DEBUG=3Dy
+# CONFIG_SLUB_DEBUG_ON is not set
+# CONFIG_PAGE_OWNER is not set
+# CONFIG_PAGE_TABLE_CHECK is not set
+CONFIG_PAGE_POISONING=3Dy
+# CONFIG_DEBUG_PAGE_REF is not set
+# CONFIG_DEBUG_RODATA_TEST is not set
+CONFIG_ARCH_HAS_DEBUG_WX=3Dy
+CONFIG_DEBUG_WX=3Dy
+CONFIG_GENERIC_PTDUMP=3Dy
+CONFIG_PTDUMP_CORE=3Dy
+# CONFIG_PTDUMP_DEBUGFS is not set
+CONFIG_HAVE_DEBUG_KMEMLEAK=3Dy
+# CONFIG_DEBUG_KMEMLEAK is not set
+# CONFIG_PER_VMA_LOCK_STATS is not set
+# CONFIG_DEBUG_OBJECTS is not set
+# CONFIG_SHRINKER_DEBUG is not set
+# CONFIG_DEBUG_STACK_USAGE is not set
+CONFIG_SCHED_STACK_END_CHECK=3Dy
+CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE=3Dy
+# CONFIG_DEBUG_VM is not set
+# CONFIG_DEBUG_VM_PGTABLE is not set
+CONFIG_ARCH_HAS_DEBUG_VIRTUAL=3Dy
+# CONFIG_DEBUG_VIRTUAL is not set
+# CONFIG_DEBUG_MEMORY_INIT is not set
+# CONFIG_DEBUG_PER_CPU_MAPS is not set
+# CONFIG_MEM_ALLOC_PROFILING is not set
+CONFIG_HAVE_ARCH_KASAN=3Dy
+CONFIG_HAVE_ARCH_KASAN_VMALLOC=3Dy
+CONFIG_CC_HAS_KASAN_GENERIC=3Dy
+CONFIG_CC_HAS_WORKING_NOSANITIZE_ADDRESS=3Dy
+# CONFIG_KASAN is not set
+CONFIG_HAVE_ARCH_KFENCE=3Dy
+CONFIG_KFENCE=3Dy
+CONFIG_KFENCE_SAMPLE_INTERVAL=3D0
+CONFIG_KFENCE_NUM_OBJECTS=3D255
+# CONFIG_KFENCE_DEFERRABLE is not set
+# CONFIG_KFENCE_STATIC_KEYS is not set
+CONFIG_KFENCE_STRESS_TEST_FAULTS=3D0
+CONFIG_HAVE_ARCH_KMSAN=3Dy
+# end of Memory Debugging
+
+# CONFIG_DEBUG_SHIRQ is not set
+
+#
+# Debug Oops, Lockups and Hangs
+#
+# CONFIG_PANIC_ON_OOPS is not set
+CONFIG_PANIC_ON_OOPS_VALUE=3D0
+CONFIG_PANIC_TIMEOUT=3D0
+CONFIG_LOCKUP_DETECTOR=3Dy
+CONFIG_SOFTLOCKUP_DETECTOR=3Dy
+# CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
+CONFIG_HAVE_HARDLOCKUP_DETECTOR_BUDDY=3Dy
+CONFIG_HARDLOCKUP_DETECTOR=3Dy
+# CONFIG_HARDLOCKUP_DETECTOR_PREFER_BUDDY is not set
+CONFIG_HARDLOCKUP_DETECTOR_PERF=3Dy
+# CONFIG_HARDLOCKUP_DETECTOR_BUDDY is not set
+# CONFIG_HARDLOCKUP_DETECTOR_ARCH is not set
+CONFIG_HARDLOCKUP_DETECTOR_COUNTS_HRTIMER=3Dy
+CONFIG_HARDLOCKUP_CHECK_TIMESTAMP=3Dy
+# CONFIG_BOOTPARAM_HARDLOCKUP_PANIC is not set
+CONFIG_DETECT_HUNG_TASK=3Dy
+CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=3D120
+# CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
+# CONFIG_WQ_WATCHDOG is not set
+# CONFIG_WQ_CPU_INTENSIVE_REPORT is not set
+# CONFIG_TEST_LOCKUP is not set
+# end of Debug Oops, Lockups and Hangs
+
+#
+# Scheduler Debugging
+#
+CONFIG_SCHED_DEBUG=3Dy
+CONFIG_SCHED_INFO=3Dy
+CONFIG_SCHEDSTATS=3Dy
+# end of Scheduler Debugging
+
+# CONFIG_DEBUG_TIMEKEEPING is not set
+# CONFIG_DEBUG_PREEMPT is not set
+
+#
+# Lock Debugging (spinlocks, mutexes, etc...)
+#
+CONFIG_LOCK_DEBUGGING_SUPPORT=3Dy
+# CONFIG_PROVE_LOCKING is not set
+# CONFIG_LOCK_STAT is not set
+# CONFIG_DEBUG_RT_MUTEXES is not set
+# CONFIG_DEBUG_SPINLOCK is not set
+# CONFIG_DEBUG_MUTEXES is not set
+# CONFIG_DEBUG_WW_MUTEX_SLOWPATH is not set
+# CONFIG_DEBUG_RWSEMS is not set
+# CONFIG_DEBUG_LOCK_ALLOC is not set
+# CONFIG_DEBUG_ATOMIC_SLEEP is not set
+# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
+# CONFIG_LOCK_TORTURE_TEST is not set
+# CONFIG_WW_MUTEX_SELFTEST is not set
+# CONFIG_SCF_TORTURE_TEST is not set
+# CONFIG_CSD_LOCK_WAIT_DEBUG is not set
+# end of Lock Debugging (spinlocks, mutexes, etc...)
+
+# CONFIG_NMI_CHECK_CPU is not set
+# CONFIG_DEBUG_IRQFLAGS is not set
+CONFIG_STACKTRACE=3Dy
+# CONFIG_WARN_ALL_UNSEEDED_RANDOM is not set
+# CONFIG_DEBUG_KOBJECT is not set
+
+#
+# Debug kernel data structures
+#
+# CONFIG_DEBUG_LIST is not set
+# CONFIG_DEBUG_PLIST is not set
+# CONFIG_DEBUG_SG is not set
+# CONFIG_DEBUG_NOTIFIERS is not set
+# CONFIG_DEBUG_MAPLE_TREE is not set
+# end of Debug kernel data structures
+
+#
+# RCU Debugging
+#
+CONFIG_TORTURE_TEST=3Dm
+# CONFIG_RCU_SCALE_TEST is not set
+CONFIG_RCU_TORTURE_TEST=3Dm
+# CONFIG_RCU_REF_SCALE_TEST is not set
+CONFIG_RCU_CPU_STALL_TIMEOUT=3D60
+CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=3D0
+# CONFIG_RCU_CPU_STALL_CPUTIME is not set
+# CONFIG_RCU_TRACE is not set
+# CONFIG_RCU_EQS_DEBUG is not set
+# end of RCU Debugging
+
+# CONFIG_DEBUG_WQ_FORCE_RR_CPU is not set
+# CONFIG_CPU_HOTPLUG_STATE_CONTROL is not set
+# CONFIG_LATENCYTOP is not set
+# CONFIG_DEBUG_CGROUP_REF is not set
+CONFIG_USER_STACKTRACE_SUPPORT=3Dy
+CONFIG_NOP_TRACER=3Dy
+CONFIG_HAVE_RETHOOK=3Dy
+CONFIG_RETHOOK=3Dy
+CONFIG_HAVE_FUNCTION_TRACER=3Dy
+CONFIG_HAVE_FUNCTION_GRAPH_TRACER=3Dy
+CONFIG_HAVE_FUNCTION_GRAPH_RETVAL=3Dy
+CONFIG_HAVE_DYNAMIC_FTRACE=3Dy
+CONFIG_HAVE_DYNAMIC_FTRACE_WITH_REGS=3Dy
+CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS=3Dy
+CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS=3Dy
+CONFIG_HAVE_DYNAMIC_FTRACE_NO_PATCHABLE=3Dy
+CONFIG_HAVE_FTRACE_MCOUNT_RECORD=3Dy
+CONFIG_HAVE_SYSCALL_TRACEPOINTS=3Dy
+CONFIG_HAVE_FENTRY=3Dy
+CONFIG_HAVE_OBJTOOL_MCOUNT=3Dy
+CONFIG_HAVE_OBJTOOL_NOP_MCOUNT=3Dy
+CONFIG_HAVE_C_RECORDMCOUNT=3Dy
+CONFIG_HAVE_BUILDTIME_MCOUNT_SORT=3Dy
+CONFIG_BUILDTIME_MCOUNT_SORT=3Dy
+CONFIG_TRACER_MAX_TRACE=3Dy
+CONFIG_TRACE_CLOCK=3Dy
+CONFIG_RING_BUFFER=3Dy
+CONFIG_EVENT_TRACING=3Dy
+CONFIG_CONTEXT_SWITCH_TRACER=3Dy
+CONFIG_TRACING=3Dy
+CONFIG_GENERIC_TRACER=3Dy
+CONFIG_TRACING_SUPPORT=3Dy
+CONFIG_FTRACE=3Dy
+CONFIG_BOOTTIME_TRACING=3Dy
+CONFIG_FUNCTION_TRACER=3Dy
+CONFIG_FUNCTION_GRAPH_TRACER=3Dy
+# CONFIG_FUNCTION_GRAPH_RETVAL is not set
+CONFIG_DYNAMIC_FTRACE=3Dy
+CONFIG_DYNAMIC_FTRACE_WITH_REGS=3Dy
+CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS=3Dy
+CONFIG_DYNAMIC_FTRACE_WITH_ARGS=3Dy
+# CONFIG_FPROBE is not set
+CONFIG_FUNCTION_PROFILER=3Dy
+CONFIG_STACK_TRACER=3Dy
+# CONFIG_IRQSOFF_TRACER is not set
+# CONFIG_PREEMPT_TRACER is not set
+CONFIG_SCHED_TRACER=3Dy
+CONFIG_HWLAT_TRACER=3Dy
+CONFIG_OSNOISE_TRACER=3Dy
+CONFIG_TIMERLAT_TRACER=3Dy
+CONFIG_MMIOTRACE=3Dy
+CONFIG_FTRACE_SYSCALLS=3Dy
+CONFIG_TRACER_SNAPSHOT=3Dy
+# CONFIG_TRACER_SNAPSHOT_PER_CPU_SWAP is not set
+CONFIG_BRANCH_PROFILE_NONE=3Dy
+# CONFIG_PROFILE_ANNOTATED_BRANCHES is not set
+CONFIG_BLK_DEV_IO_TRACE=3Dy
+CONFIG_PROBE_EVENTS_BTF_ARGS=3Dy
+CONFIG_KPROBE_EVENTS=3Dy
+# CONFIG_KPROBE_EVENTS_ON_NOTRACE is not set
+CONFIG_UPROBE_EVENTS=3Dy
+CONFIG_BPF_EVENTS=3Dy
+CONFIG_DYNAMIC_EVENTS=3Dy
+CONFIG_PROBE_EVENTS=3Dy
+CONFIG_BPF_KPROBE_OVERRIDE=3Dy
+CONFIG_FTRACE_MCOUNT_RECORD=3Dy
+CONFIG_FTRACE_MCOUNT_USE_CC=3Dy
+CONFIG_TRACING_MAP=3Dy
+CONFIG_SYNTH_EVENTS=3Dy
+# CONFIG_USER_EVENTS is not set
+CONFIG_HIST_TRIGGERS=3Dy
+CONFIG_TRACE_EVENT_INJECT=3Dy
+# CONFIG_TRACEPOINT_BENCHMARK is not set
+# CONFIG_RING_BUFFER_BENCHMARK is not set
+# CONFIG_TRACE_EVAL_MAP_FILE is not set
+# CONFIG_FTRACE_RECORD_RECURSION is not set
+# CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING is not set
+# CONFIG_FTRACE_STARTUP_TEST is not set
+# CONFIG_FTRACE_SORT_STARTUP_TEST is not set
+# CONFIG_RING_BUFFER_STARTUP_TEST is not set
+# CONFIG_RING_BUFFER_VALIDATE_TIME_DELTAS is not set
+# CONFIG_MMIOTRACE_TEST is not set
+# CONFIG_PREEMPTIRQ_DELAY_TEST is not set
+# CONFIG_SYNTH_EVENT_GEN_TEST is not set
+# CONFIG_KPROBE_EVENT_GEN_TEST is not set
+# CONFIG_HIST_TRIGGERS_DEBUG is not set
+# CONFIG_RV is not set
+# CONFIG_PROVIDE_OHCI1394_DMA_INIT is not set
+CONFIG_SAMPLES=3Dy
+# CONFIG_SAMPLE_AUXDISPLAY is not set
+# CONFIG_SAMPLE_TRACE_EVENTS is not set
+# CONFIG_SAMPLE_TRACE_CUSTOM_EVENTS is not set
+# CONFIG_SAMPLE_TRACE_PRINTK is not set
+# CONFIG_SAMPLE_FTRACE_DIRECT is not set
+# CONFIG_SAMPLE_FTRACE_DIRECT_MULTI is not set
+# CONFIG_SAMPLE_FTRACE_OPS is not set
+# CONFIG_SAMPLE_TRACE_ARRAY is not set
+# CONFIG_SAMPLE_KOBJECT is not set
+# CONFIG_SAMPLE_KPROBES is not set
+# CONFIG_SAMPLE_HW_BREAKPOINT is not set
+# CONFIG_SAMPLE_KFIFO is not set
+# CONFIG_SAMPLE_KDB is not set
+# CONFIG_SAMPLE_LIVEPATCH is not set
+# CONFIG_SAMPLE_CONFIGFS is not set
+# CONFIG_SAMPLE_VFIO_MDEV_MTTY is not set
+# CONFIG_SAMPLE_VFIO_MDEV_MDPY is not set
+# CONFIG_SAMPLE_VFIO_MDEV_MDPY_FB is not set
+# CONFIG_SAMPLE_VFIO_MDEV_MBOCHS is not set
+# CONFIG_SAMPLE_WATCHDOG is not set
+CONFIG_HAVE_SAMPLE_FTRACE_DIRECT=3Dy
+CONFIG_HAVE_SAMPLE_FTRACE_DIRECT_MULTI=3Dy
+CONFIG_ARCH_HAS_DEVMEM_IS_ALLOWED=3Dy
+CONFIG_STRICT_DEVMEM=3Dy
+# CONFIG_IO_STRICT_DEVMEM is not set
+
+#
+# x86 Debugging
+#
+CONFIG_EARLY_PRINTK_USB=3Dy
+# CONFIG_X86_VERBOSE_BOOTUP is not set
+CONFIG_EARLY_PRINTK=3Dy
+CONFIG_EARLY_PRINTK_DBGP=3Dy
+CONFIG_EARLY_PRINTK_USB_XDBC=3Dy
+# CONFIG_EFI_PGT_DUMP is not set
+# CONFIG_DEBUG_TLBFLUSH is not set
+# CONFIG_IOMMU_DEBUG is not set
+CONFIG_HAVE_MMIOTRACE_SUPPORT=3Dy
+# CONFIG_X86_DECODER_SELFTEST is not set
+# CONFIG_IO_DELAY_0X80 is not set
+CONFIG_IO_DELAY_0XED=3Dy
+# CONFIG_IO_DELAY_UDELAY is not set
+# CONFIG_IO_DELAY_NONE is not set
+# CONFIG_DEBUG_BOOT_PARAMS is not set
+# CONFIG_CPA_DEBUG is not set
+# CONFIG_DEBUG_ENTRY is not set
+# CONFIG_DEBUG_NMI_SELFTEST is not set
+CONFIG_X86_DEBUG_FPU=3Dy
+# CONFIG_PUNIT_ATOM_DEBUG is not set
+# CONFIG_UNWINDER_ORC is not set
+CONFIG_UNWINDER_FRAME_POINTER=3Dy
+# end of x86 Debugging
+
+#
+# Kernel Testing and Coverage
+#
+# CONFIG_KUNIT is not set
+# CONFIG_NOTIFIER_ERROR_INJECTION is not set
+CONFIG_FUNCTION_ERROR_INJECTION=3Dy
+# CONFIG_FAULT_INJECTION is not set
+CONFIG_ARCH_HAS_KCOV=3Dy
+CONFIG_CC_HAS_SANCOV_TRACE_PC=3Dy
+# CONFIG_KCOV is not set
+CONFIG_RUNTIME_TESTING_MENU=3Dy
+# CONFIG_TEST_DHRY is not set
+# CONFIG_LKDTM is not set
+# CONFIG_TEST_MIN_HEAP is not set
+# CONFIG_TEST_DIV64 is not set
+# CONFIG_TEST_MULDIV64 is not set
+# CONFIG_BACKTRACE_SELF_TEST is not set
+# CONFIG_TEST_REF_TRACKER is not set
+# CONFIG_RBTREE_TEST is not set
+# CONFIG_REED_SOLOMON_TEST is not set
+# CONFIG_INTERVAL_TREE_TEST is not set
+# CONFIG_PERCPU_TEST is not set
+# CONFIG_ATOMIC64_SELFTEST is not set
+# CONFIG_ASYNC_RAID6_TEST is not set
+# CONFIG_TEST_HEXDUMP is not set
+# CONFIG_TEST_KSTRTOX is not set
+# CONFIG_TEST_PRINTF is not set
+# CONFIG_TEST_SCANF is not set
+# CONFIG_TEST_BITMAP is not set
+# CONFIG_TEST_UUID is not set
+# CONFIG_TEST_XARRAY is not set
+# CONFIG_TEST_MAPLE_TREE is not set
+# CONFIG_TEST_RHASHTABLE is not set
+# CONFIG_TEST_IDA is not set
+# CONFIG_TEST_LKM is not set
+# CONFIG_TEST_BITOPS is not set
+# CONFIG_TEST_VMALLOC is not set
+# CONFIG_TEST_BPF is not set
+# CONFIG_TEST_BLACKHOLE_DEV is not set
+# CONFIG_FIND_BIT_BENCHMARK is not set
+# CONFIG_TEST_FIRMWARE is not set
+# CONFIG_TEST_SYSCTL is not set
+# CONFIG_TEST_UDELAY is not set
+# CONFIG_TEST_STATIC_KEYS is not set
+# CONFIG_TEST_DYNAMIC_DEBUG is not set
+# CONFIG_TEST_KMOD is not set
+# CONFIG_TEST_MEMCAT_P is not set
+# CONFIG_TEST_MEMINIT is not set
+# CONFIG_TEST_HMM is not set
+# CONFIG_TEST_FREE_PAGES is not set
+# CONFIG_TEST_FPU is not set
+# CONFIG_TEST_CLOCKSOURCE_WATCHDOG is not set
+# CONFIG_TEST_OBJPOOL is not set
+CONFIG_ARCH_USE_MEMTEST=3Dy
+CONFIG_MEMTEST=3Dy
+# end of Kernel Testing and Coverage
+
+#
+# Rust hacking
+#
+# end of Rust hacking
+# end of Kernel hacking
+
+
+--
+Regards
+Narasimhan V
 

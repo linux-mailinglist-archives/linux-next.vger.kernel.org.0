@@ -1,131 +1,142 @@
-Return-Path: <linux-next+bounces-4131-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4132-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A6AE993D1C
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 04:56:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CEEA993D8B
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 05:32:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EE471C21119
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 02:56:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5350D1F2390F
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 03:32:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8D9224F0;
-	Tue,  8 Oct 2024 02:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1DAD20B20;
+	Tue,  8 Oct 2024 03:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EnL3ZCc0"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZYgGJVoc"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126F225776;
-	Tue,  8 Oct 2024 02:56:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158B51DFD1;
+	Tue,  8 Oct 2024 03:32:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728356173; cv=none; b=jr81hgSRLf5xoX2yTDy8fWa0FsHLX36r438a7vbKComxYrToP3wLdFyO53977pdlwylOKZghKtCl04dnemzKCUZRwPM6laE0+TCWy/Zy6vAKuEwoxXxq1eyQRj+PM5cB6Yjh15+pH6GLzzzSGRhiiSjfRlVv2FMFh8ooHcQeur0=
+	t=1728358328; cv=none; b=odid/5vgUVvok1SQewQpCBxJ2CnCoXUaeDalmo1zTE0QYyuz7D9uuejyHVUpxsaeYLYfoHLbDcNM2bdC9zZCDp0JQ05eYyQTl1xUHyK7AyCqOqjFN1ggCrAKqjlylO/h+LJCHz14RKj+2tTP4S/sNA9Q7L8eiJtxKD+l8Mfzayw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728356173; c=relaxed/simple;
-	bh=qDvtI3FBlfsCp+4pG55+Z53hhOF72cax8+07yIKJDBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WRrQUT9k5VUwyDy3wRJ7o+7x6WWA/+CNCTYZ7Oei0ph+9kn/LM3km11lRoOwsREwN6qseq0ZMNuX0iZy+sRLbpIlc/159fxWgQC8VEXVzetGpj9OZLx7L/6HutzWiQdPQtRlumXdSRq1G5RVWB5wiRPCVomVxJMvyg3k5NDcf/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EnL3ZCc0; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1728358328; c=relaxed/simple;
+	bh=FN10PuVDaVlGrGnxjoWDkn1qjkRGHM7dYMWr7KGEh54=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=qVld6QNz7HYH7Sr3Id1sv+37J8bE8A+oF9/CJmQbGH+OX28u7woyaXRqhKz4Va3mQQmhMM2WV1/Gi1kHMpy6IwKcebBkM1iGF/pLIbO+D4DxwJtqHULtaDYPWhu5RHIt+vqkYYPkljtkSG5X0KV0n8Oj7ZCI7wh6eeoBU1/9bU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZYgGJVoc; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1728356166;
-	bh=Q9hw3VWnq5n8q8kr84lH2u9PEXoVwQT3hLwaCwDhZKI=;
+	s=201702; t=1728358320;
+	bh=i03PF6w3CmS7llHF+GNcSOf/R8cqhDofQwzNz9sR7gY=;
 	h=Date:From:To:Cc:Subject:From;
-	b=EnL3ZCc0bae55zUIMqVhuaFcloAUq8aHuL36DvvCGKrFKS0s4U/InyTF6qxcDditY
-	 v5h/rhahunZbFzw5rNvwx3avP87fzPpLThMG7CBhKLN3/SnpoH/IglUoNxB+tgCyx0
-	 r4AJPwP7WbSYJvHkMjVo6k6n+NxV48A8E5rYOgP8A9l2mSS/BzV99XDL7+kUEJP4F5
-	 E9xN+rU5yrtmw4ZVdhqIk7ok1QrWOsTAh6TjbBwNEikqDzgXlENHOhlTmQLkMH+2oj
-	 UQKOAMgToJx/dzvECDx6GDi7DgQXyENIk0KvZtj5VvAAgXA4fnlCgf0NsRIYndkgtJ
-	 HaUFv5BF3OxJg==
+	b=ZYgGJVoc6MTtDC7KQgrgFkBfhE3rh0SIyXcfb2AZ4AXVmRPd6BpF32mixCmo1KoL3
+	 CQq01QnvjGuTF+djg7QBF0ZyXOgOlP22ina90/dwHRfA4CNQPuQUGCMaxEdbGY3Sbk
+	 ONSCqQtI4rjQFu6nYnypggSqS2fcDfnOTIKIxcw4VDtEgGUdZwKjzRO5Ih5X9cWwgb
+	 OD+H+kO0fjDfThVw4XtEBOpSRW2+guu0VfCKagleEVNzNLDv6KcqTGcd0jLMbWHZOf
+	 gO3B1QFiDyGWAHGSnJx8C+5Nty1epKnKYnz3LhwBobk3uLus4xU26C/n3H37/6U5zO
+	 86ehmAvRdaiBg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XN0yZ4Khbz4x6k;
-	Tue,  8 Oct 2024 13:56:06 +1100 (AEDT)
-Date: Tue, 8 Oct 2024 13:56:06 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XN1m001SQz4wc3;
+	Tue,  8 Oct 2024 14:31:59 +1100 (AEDT)
+Date: Tue, 8 Oct 2024 14:31:59 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Deucher <alexdeucher@gmail.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>, Sunil Khatri
- <sunil.khatri@amd.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20241008135606.3e440dd5@canb.auug.org.au>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Avri Altman <avri.altman@wdc.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mmc tree
+Message-ID: <20241008143159.35e26d8e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/V7XMSDD/xJhamB99UW27RQx";
+Content-Type: multipart/signed; boundary="Sig_/wl2d6V4dLjtPexrsNrkDHpC";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/V7XMSDD/xJhamB99UW27RQx
+--Sig_/wl2d6V4dLjtPexrsNrkDHpC
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmocdonfig) failed like this:
+After merging the mmc tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 's=
-3_debug_store':
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:5209:35: error:=
- passing argument 1 of 'dm_resume' from incompatible pointer type [-Wincomp=
-atible-pointer-types]
- 5209 |                         dm_resume(adev);
-      |                                   ^~~~
-      |                                   |
-      |                                   struct amdgpu_device *
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:3152:46: note: =
-expected 'struct amdgpu_ip_block *' but argument is of type 'struct amdgpu_=
-device *'
- 3152 | static int dm_resume(struct amdgpu_ip_block *ip_block)
-      |                      ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:5212:36: error:=
- passing argument 1 of 'dm_suspend' from incompatible pointer type [-Wincom=
-patible-pointer-types]
- 5212 |                         dm_suspend(adev);
-      |                                    ^~~~
-      |                                    |
-      |                                    struct amdgpu_device *
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:2963:47: note: =
-expected 'struct amdgpu_ip_block *' but argument is of type 'struct amdgpu_=
-device *'
- 2963 | static int dm_suspend(struct amdgpu_ip_block *ip_block)
-      |                       ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+drivers/mmc/core/block.c:53:10: fatal error: asm/unaligned.h: No such file =
+or directory
+   53 | #include <asm/unaligned.h>
+      |          ^~~~~~~~~~~~~~~~~
 
-Caused by commits
+Caused by commit
 
-  982d7f9bfe4a ("drm/amdgpu: update the handle ptr in suspend")
-  7feb4f3ad8be ("drm/amdgpu: update the handle ptr in resume")
+  251377c52fde ("mmc: core: Adjust ACMD22 to SDUC")
 
-I have used the amdgpu tree from next-20241004 for today.
+interatcing with commit
+
+  5f60d5f6bbc1 ("move asm/unaligned.h to linux/unaligned.h")
+
+from Linus' tree (in v6.12-rc2).
+
+I applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 8 Oct 2024 14:25:34 +1100
+Subject: [PATCH] fix up for "mmc: core: Adjust ACMD22 to SDUC"
+
+interacting with "move asm/unaligned.h to linux/unaligned.h" from
+Linus' tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/mmc/core/block.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 66de5ccbb432..9752ecac6c5b 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -50,7 +50,7 @@
+ #include <linux/mmc/sd.h>
+=20
+ #include <linux/uaccess.h>
+-#include <asm/unaligned.h>
++#include <linux/unaligned.h>
+=20
+ #include "queue.h"
+ #include "block.h"
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/V7XMSDD/xJhamB99UW27RQx
+
+--Sig_/wl2d6V4dLjtPexrsNrkDHpC
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcEn0YACgkQAVBC80lX
-0GxU4Af9FsOg61ozLF17z9y6mhdh4biPogXYBMQYWkMoSg4xaCIlf0yo2UVS8sfL
-J5pqRYSgkaFWYuu7MUuOT7HgvxPjYmwQQj/1m/O8bYdIQtCI9VOy7VK5kOPl9JV4
-pUaf6Rwy13hI4Z/1l65ypPPq/+kqAMVDcqPXk3zS0GS1wh2R5XAM1UIdIYJ6Xrwp
-zTvERKAJGHVcz2TesaMxCVr4fPhhIcPHTbAk+ovlnZiWvrkxPFvVD8NqqZIZX7dF
-OkFhxr8ljR8aZwTyGd0x04vs6EjNEBJPG1WDabrKt7pGTrwm+4STZxtVyI6Nj8lz
-S23GWkSpavLX7znNmc2D27uhwcABqg==
-=V6M8
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcEp68ACgkQAVBC80lX
+0GwmAgf/Vwe49gdSq9ydIlJT9A/dNEG7ebN9B4Vb7oFFRGS3sDXd9a80n2r5wEi2
+u6ndnx4NEU1/GBobF/rd9pIzS51Q00P8kbhVkcJ6NKkyXpJ/9y8LQZ/h4Jlia7CV
+jiPUYugDUeigynuuK968nVLhJDrAnEPLVlnc/+zBTDD50VzboCxtGTUj8kwYHpUp
+F9tl9ZNyMyRCPdN48UZyPNFO6oINpNnjkZNIxsFpo6E887gGcY9iKVHvYRnGhANI
+LMIIrih4dk42OEZDdMH45HrDxMJgLPesqo35GMnAyyuUtn/u0qCLs4zrY4Kip84o
+oCyoT7BmdxcGmX3AEnHvoaJqPXDrng==
+=RIKX
 -----END PGP SIGNATURE-----
 
---Sig_/V7XMSDD/xJhamB99UW27RQx--
+--Sig_/wl2d6V4dLjtPexrsNrkDHpC--
 

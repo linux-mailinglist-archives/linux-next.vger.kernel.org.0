@@ -1,90 +1,101 @@
-Return-Path: <linux-next+bounces-4141-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4142-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68DD3994418
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 11:22:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ADE2994480
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 11:42:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E9251F22D68
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 09:22:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D4DCB22E1E
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 09:41:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F40B158205;
-	Tue,  8 Oct 2024 09:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F35FB18308A;
+	Tue,  8 Oct 2024 09:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=iiitd.ac.in header.i=@iiitd.ac.in header.b="UpYzFhen"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mailout1.hostsharing.net (mailout1.hostsharing.net [83.223.95.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D98F1422A8;
-	Tue,  8 Oct 2024 09:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D970013AA4E
+	for <linux-next@vger.kernel.org>; Tue,  8 Oct 2024 09:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728379337; cv=none; b=XE0TWHpkMMHsgOP8LaECXd+dRxvd1g30Tgv9VDuPpQ/iZbYOQOMG0FDQdVrBNLhdktnNqJdfIAqXGQhqm/KlG4COJMvMZvJfJYRYgueQwZd7rFzs5GJAooS3GHjx8h5c4K5rBw5w2mhpG1g8FzsP8y6YMtsEaV1Gh5F2yaNVx60=
+	t=1728380514; cv=none; b=s0v8MGIPScWzZzy1mmCscXdkXtBMP2cbpTXicZHkM32mAbe3WI+yO2OI2QfpunDfg/yNYnUsoAGov+UkuW2KKJ5a8e7ehntyQ2j7TRnDrNssRknfc2tJaB+qfwxcZCfSyU6kpCxJenNnMWaAVjA+n7UUpthfXbQd3uhmVljbuhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728379337; c=relaxed/simple;
-	bh=sx2bYHHOLMoqNBBAD2+N3p3EeNsNG2rOO0solnU55E4=;
-	h=Message-ID:In-Reply-To:References:From:Date:Subject:To:Cc; b=ig9p6vvmYx2fH86Nw4K+TqgoSlHPuOJMqgqafAWwg7noMNbEMHVSscofnvSYaJP5ZfqZobDuI1UNzUVCFcZk8GxVB7oQVhf65VySytSWZOpW9vVNuU9vw3ElTpox2r2jIVhheJvn52k0dOVx/0s1Ix9sUciwV3xpR+rui0eColA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=pass smtp.mailfrom=wunner.de; arc=none smtp.client-ip=83.223.95.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by mailout1.hostsharing.net (Postfix) with ESMTPS id 2013D101917BB;
-	Tue,  8 Oct 2024 11:13:12 +0200 (CEST)
-Received: from localhost (unknown [89.246.108.87])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by h08.hostsharing.net (Postfix) with ESMTPSA id DA15C602DD59;
-	Tue,  8 Oct 2024 11:13:11 +0200 (CEST)
-X-Mailbox-Line: From 89d99476b2b57bcd3e306996ec4a60db1706253f Mon Sep 17 00:00:00 2001
-Message-ID: <89d99476b2b57bcd3e306996ec4a60db1706253f.1728378559.git.lukas@wunner.de>
-In-Reply-To: <20241008172926.0b995ea7@canb.auug.org.au>
-References: <20241008172926.0b995ea7@canb.auug.org.au>
-From: Lukas Wunner <lukas@wunner.de>
-Date: Tue, 8 Oct 2024 11:12:01 +0200
-Subject: [PATCH cryptodev-2.6] crypto: doc - Fix akcipher title reference
-To: Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+	s=arc-20240116; t=1728380514; c=relaxed/simple;
+	bh=Mo2e9NcdYS31B/vIw3xECB9NV30Pu2FvtUdn6fYteX8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gVEh09nRzSbAoYLr5G8iUaGyb0XN36C0jUTN2hRSC+PACbkU/hkcTW3KHYEr3UZwPy8BS9r92N0RmK9SVoktcUBVQYaKjMGSr1fGCXRBdn26wgBEdGMkn3vzQVMoc8hOaS5bQslwCP6rAZEFsw51zlJDmMdoU9K8NShDiq4d7aU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iiitd.ac.in; spf=pass smtp.mailfrom=iiitd.ac.in; dkim=pass (1024-bit key) header.d=iiitd.ac.in header.i=@iiitd.ac.in header.b=UpYzFhen; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iiitd.ac.in
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iiitd.ac.in
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7ea24595bccso142596a12.2
+        for <linux-next@vger.kernel.org>; Tue, 08 Oct 2024 02:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=iiitd.ac.in; s=google; t=1728380511; x=1728985311; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P0nlWa2ec/d6j0ayZKA64vJRenf3pukJl1StuKCsSzE=;
+        b=UpYzFhenOV96QdrzTVBexAZ1uNW4bIsI/ioF1STQxBxKezKu3FCMOnNimpeATPAhpA
+         UzVnNXTfzCY+RY82/IJVEceta+OO+zaPM9DJJeERTkrLVGO5+ZJpQAQR0J7/qNJ3SK9J
+         xQlfH3XjXRIUkxZy+EnmozN/KC0yFIWHib8mY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728380511; x=1728985311;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P0nlWa2ec/d6j0ayZKA64vJRenf3pukJl1StuKCsSzE=;
+        b=LCoUJtgaRiHpwlNoQ4HNluGm6HDlj3vSfVpwFEmmuAhH5wHFXe74PUN2jZotBSGCQ1
+         /zgMudmMONqJglsEplVCk5lPMitUnpy+UeYTT+QiO0dTrgEw4ctEICxd1cltFqWXsyfz
+         PstyNZas9UtgnKtZ0h7wtHUJueE1t964s96kSR47SQwvQaMdOZ5f91TqVgtHaQJKnRrl
+         5d8YfllNXSCq+tYVo1Int0DR3XDSv5kwQB7ihua2bJSGGngx12qRcs6G7ViYtZOzl/SV
+         h+f1s5s0220E2PKt67qCy6BKq1CpIFt5Ru0afOe8hhRQWmFmBukOUU6HLMlr9ySyWDWO
+         jbPg==
+X-Forwarded-Encrypted: i=1; AJvYcCW3ow3yf3asoQcq/LvQPPgJFhpgOBpha+unJY5sJeLutOk3zcRtUcDsHGmUzp/JpMPD7l5TGwFf7CbK@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRrEhoNMIMyPtntTGkKXJOcZeZHzol6Qf/irzrt+8LO9hOx1NP
+	Sf9snk1P5p+3gUDZp4u6v36JniY0L8Yclbt7aVmzqctstPcNu7mG8UctIye4adk=
+X-Google-Smtp-Source: AGHT+IHf0bVYhdGwPLwPXuj7BNLWoONxtuBYeGxYm25ifrcUMzWiS6UprDQ5Dxhaf8AHR6liCx6HXg==
+X-Received: by 2002:a05:6a20:438c:b0:1d6:2378:58ea with SMTP id adf61e73a8af0-1d6df73047emr22517140637.0.1728380511096;
+        Tue, 08 Oct 2024 02:41:51 -0700 (PDT)
+Received: from fedora ([103.3.204.151])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c13968d98sm52088485ad.184.2024.10.08.02.41.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2024 02:41:50 -0700 (PDT)
+Date: Tue, 8 Oct 2024 15:11:45 +0530
+From: Manas <manas18244@iiitd.ac.in>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the mm-hotfixes
+ tree
+Message-ID: <5y2aqwtuqyrfze6mrinnynhrbfrjtd5bsu6yb7quyzr6lqknd4@qiyaxleyj2ax>
+References: <20241008074720.1a18a325@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20241008074720.1a18a325@canb.auug.org.au>
 
-Stephen reports a documentation build warning for "make htmldocs"
-introduced by recent commit 6b34562f0cfe ("crypto: akcipher - Drop
-sign/verify operations").
+On 08.10.2024 07:47, Stephen Rothwell wrote:
+>Hi all,
+>
+>Commit
+>
+>  922e46ae7737 ("mm: fix null pointer dereference in pfnmap_lockdep_assert")
+>
+>is missing a Signed-off-by from its author.
+>
+Hi all, I am the author of this patch. I forgot to sign it. Should I send a new
+patch version to amend the mistake?
 
-The commit renamed a paragraph title in a header file, but neglected to
-amend the title reference in the API documentation.  Fix it.
+Sorry, I am new to kernel development.
 
-Fixes: 6b34562f0cfe ("crypto: akcipher - Drop sign/verify operations")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/all/20241008172926.0b995ea7@canb.auug.org.au/
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
----
- Documentation/crypto/api-akcipher.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/crypto/api-akcipher.rst b/Documentation/crypto/api-akcipher.rst
-index 6f47cc70eca0..ca1ecdd4a7d3 100644
---- a/Documentation/crypto/api-akcipher.rst
-+++ b/Documentation/crypto/api-akcipher.rst
-@@ -8,7 +8,7 @@ Asymmetric Cipher API
- ---------------------
- 
- .. kernel-doc:: include/crypto/akcipher.h
--   :doc: Generic Public Key API
-+   :doc: Generic Public Key Cipher API
- 
- .. kernel-doc:: include/crypto/akcipher.h
-    :functions: crypto_alloc_akcipher crypto_free_akcipher crypto_akcipher_set_pub_key crypto_akcipher_set_priv_key crypto_akcipher_maxsize crypto_akcipher_encrypt crypto_akcipher_decrypt
 -- 
-2.43.0
-
+Manas
 

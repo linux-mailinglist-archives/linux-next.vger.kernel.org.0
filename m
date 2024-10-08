@@ -1,107 +1,231 @@
-Return-Path: <linux-next+bounces-4134-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4135-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C6A1993E38
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 07:14:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAB13993E80
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 07:56:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FF2D286083
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 05:13:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7951C1F237C7
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 05:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21EBD13D298;
-	Tue,  8 Oct 2024 05:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C7613B2B8;
+	Tue,  8 Oct 2024 05:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="f7eXYb48"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rQVX3tlh"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74D613AD37;
-	Tue,  8 Oct 2024 05:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0F42905;
+	Tue,  8 Oct 2024 05:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728364421; cv=none; b=F5SZvN8zZT6Nuk5DbNODX+MxkHz5ClbtY68j+0gcmhRB/wDEMQa0YuWM9LwarGMi2xSYfi0oCBmsqjZUC55u6AD583ezVI0IRSfzr1qpg3u17AyU1OhjJJ/FwzFsygInxKlK8Jnu1VsE28biTOlkC+37cg3F8+GIkyEqQsVJjME=
+	t=1728367003; cv=none; b=IkO9glxVG+Y7NCKHEWA/2Ty1r2K6dlVPwFIDhly2a+EkdrB8pHnMfzG2L7Fj+7Bz1AwD6aQWbyHB+95+pQRW4bmcsjSOq6JsGVcbyTlLXSt4DVq7AxDfrYkLKf/sHP/BbbVdA+F3z7X6pb7+VjHgFO1F3xAyRn3kpvFSjC8Zjfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728364421; c=relaxed/simple;
-	bh=666mmuV7IOu85rjREQk7r9Lew8v/JlZ/Qt2XWadUR9c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=m0VTnPHmlgpnldmLrBeQ5d5R6ZZ//Dhfi2P0KYO9DcdZJUZeqJZe+BXg01sinXW1rVaR7gjCjIi+dkk6zIBCwywPS4jeFWyVdnY4f4uBfWamoKrPD/FahK94I9P9Nxp4qIhN8AQlb82wrrfozVhvLQlnoFlNzOw5VtoV0ddjYTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=f7eXYb48; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1728367003; c=relaxed/simple;
+	bh=UmHzq8+lelGAlPH9pd82mtqLGKgeP7kR6xHYM/WlLYQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=I6cP450NI/VObwCn7Ba4WWZKcBN93d5MqpSN9p+efc6uxGAWsnh1z9fBHG7SakDBrVhCI8723U6v1og+DLkrwpPlaTNGcrc1/CJWc8Sd/qqdklT0lhXwavkLM1rU0bduNnii6XFBxxntjw/DXw7HRpLhgXCym/6jWRBrEGrx0FE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rQVX3tlh; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1728364414;
-	bh=i6LNvXjnCnJzf8XDg8jnUsuyvofZyiWKtQoL3PGWkqs=;
+	s=201702; t=1728366996;
+	bh=FEgyFMxR6IYvbg3waLB423wN8QvwNFIdtHgZJ8dpKNU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=f7eXYb48ofvIpMwZvW8ZKxEELKZVHOxr4KMBgRtC9v9kx80ZmFJQ7UXYI50pxthxW
-	 ccsPzR4HVFpGC+ihRh+GDOGMP2PyQ63H7XfeD9D7tDP0/kRF5qwcXVXbpZIs7kkKSx
-	 NWc3exx6K82j63I8PVchGrY/zI6cQuhXIkaaHX2IKAaL/fNAShQ2orYVT7a6ebMBSG
-	 HNVwfKRKMU+41REC7fEllp+FtrrrPIjjaYktE300VaTlD/en/vzt7XivBgofph5Lr+
-	 e7eB8V5ytIk/BVIBHiooYc8dT0WdFvkSszzRooEnyH11EDtf0FNwpN+xSyOMg3bnuH
-	 ZyvwQSv8SPPlA==
+	b=rQVX3tlhEX+xZahQcq8BpkFYT0pOtO4O7I0A0qidQn6WMDiwoQlN7LHkofMqICUSH
+	 KGDRgAh6Olahfp042SHCI7EFKHUvVnRiV/fsOOgiiVpsEw6Sl6RYy5358eWprAnYHl
+	 8QG9zsojeooPsw6+os+F+1pm9ye9tGy0G8krRsOxpcSps3cn7Ie5KILNWpvNEagV55
+	 69Q7/bHJaP8LITAJthjy8mXJTt+aFUWstys17/7F5wgAt7k67f51zH8wL+lghvZU4s
+	 fkIDIv31urGRDldUFkzHJj0lU83MIeZlavmwbw/mKDPjFpDQZMv7qNrLkQOMfevei7
+	 gaOFPPa9FWD7g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XN41B5sHYz4wnw;
-	Tue,  8 Oct 2024 16:13:34 +1100 (AEDT)
-Date: Tue, 8 Oct 2024 16:13:34 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XN4yr4Mz0z4wcr;
+	Tue,  8 Oct 2024 16:56:36 +1100 (AEDT)
+Date: Tue, 8 Oct 2024 16:56:36 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pinctrl tree
-Message-ID: <20241008161334.483211e9@canb.auug.org.au>
+To: Miguel Ojeda <ojeda@kernel.org>, Christian Brauner <brauner@kernel.org>
+Cc: Alice Ryhl <aliceryhl@google.com>, Aliet Exposito Garcia
+ <aliet.exposito@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the rust tree with the vfs-brauner tree
+Message-ID: <20241008165636.0e8d0d4e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/I4uSr6JCD=m7+46+T3U2+hP";
+Content-Type: multipart/signed; boundary="Sig_/=TaquIC/0_.amr5+WKZXvow";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/I4uSr6JCD=m7+46+T3U2+hP
+--Sig_/=TaquIC/0_.amr5+WKZXvow
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pinctrl tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the rust tree got a conflict in:
 
-drivers/pinctrl/pinctrl-aw9523.c: In function 'aw9523_probe':
-drivers/pinctrl/pinctrl-aw9523.c:988:17: error: label 'err_disable_vregs' u=
-sed but not defined
-  988 |                 goto err_disable_vregs;
-      |                 ^~~~
+  rust/kernel/types.rs
 
-Caused by commit
+between commit:
 
-  8498e6b2b852 ("Merge branch 'devel' into for-next")
+  e7572e5deaf3 ("rust: types: add `NotThreadSafe`")
 
-I have used the pinctrl tree from next-20241004 for today.
+from the vfs-brauner tree and commits:
+
+  567cdff53e71 ("rust: types: avoid repetition in `{As,From}Bytes` impls")
+  67b3fa4288fa ("rust: kernel: move `FromBytes` and `AsBytes` traits to a n=
+ew `transmute` module")
+
+from the rust tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/I4uSr6JCD=m7+46+T3U2+hP
+diff --cc rust/kernel/types.rs
+index 3238ffaab031,5ea9126c8c93..000000000000
+--- a/rust/kernel/types.rs
++++ b/rust/kernel/types.rs
+@@@ -468,88 -329,3 +329,24 @@@ pub enum Either<L, R>=20
+      /// Constructs an instance of [`Either`] containing a value of type `=
+R`.
+      Right(R),
+  }
+ +
+- /// Types for which any bit pattern is valid.
+- ///
+- /// Not all types are valid for all values. For example, a `bool` must be=
+ either zero or one, so
+- /// reading arbitrary bytes into something that contains a `bool` is not =
+okay.
+- ///
+- /// It's okay for the type to have padding, as initializing those bytes h=
+as no effect.
+- ///
+- /// # Safety
+- ///
+- /// All bit-patterns must be valid for this type. This type must not have=
+ interior mutability.
+- pub unsafe trait FromBytes {}
+-=20
+- // SAFETY: All bit patterns are acceptable values of the types below.
+- unsafe impl FromBytes for u8 {}
+- unsafe impl FromBytes for u16 {}
+- unsafe impl FromBytes for u32 {}
+- unsafe impl FromBytes for u64 {}
+- unsafe impl FromBytes for usize {}
+- unsafe impl FromBytes for i8 {}
+- unsafe impl FromBytes for i16 {}
+- unsafe impl FromBytes for i32 {}
+- unsafe impl FromBytes for i64 {}
+- unsafe impl FromBytes for isize {}
+- // SAFETY: If all bit patterns are acceptable for individual values in an=
+ array, then all bit
+- // patterns are also acceptable for arrays of that type.
+- unsafe impl<T: FromBytes> FromBytes for [T] {}
+- unsafe impl<T: FromBytes, const N: usize> FromBytes for [T; N] {}
+-=20
+- /// Types that can be viewed as an immutable slice of initialized bytes.
+- ///
+- /// If a struct implements this trait, then it is okay to copy it byte-fo=
+r-byte to userspace. This
+- /// means that it should not have any padding, as padding bytes are unini=
+tialized. Reading
+- /// uninitialized memory is not just undefined behavior, it may even lead=
+ to leaking sensitive
+- /// information on the stack to userspace.
+- ///
+- /// The struct should also not hold kernel pointers, as kernel pointer ad=
+dresses are also considered
+- /// sensitive. However, leaking kernel pointers is not considered undefin=
+ed behavior by Rust, so
+- /// this is a correctness requirement, but not a safety requirement.
+- ///
+- /// # Safety
+- ///
+- /// Values of this type may not contain any uninitialized bytes. This typ=
+e must not have interior
+- /// mutability.
+- pub unsafe trait AsBytes {}
+-=20
+- // SAFETY: Instances of the following types have no uninitialized portion=
+s.
+- unsafe impl AsBytes for u8 {}
+- unsafe impl AsBytes for u16 {}
+- unsafe impl AsBytes for u32 {}
+- unsafe impl AsBytes for u64 {}
+- unsafe impl AsBytes for usize {}
+- unsafe impl AsBytes for i8 {}
+- unsafe impl AsBytes for i16 {}
+- unsafe impl AsBytes for i32 {}
+- unsafe impl AsBytes for i64 {}
+- unsafe impl AsBytes for isize {}
+- unsafe impl AsBytes for bool {}
+- unsafe impl AsBytes for char {}
+- unsafe impl AsBytes for str {}
+- // SAFETY: If individual values in an array have no uninitialized portion=
+s, then the array itself
+- // does not have any uninitialized portions either.
+- unsafe impl<T: AsBytes> AsBytes for [T] {}
+- unsafe impl<T: AsBytes, const N: usize> AsBytes for [T; N] {}
+-=20
+ +/// Zero-sized type to mark types not [`Send`].
+ +///
+ +/// Add this type as a field to your struct if your type should not be se=
+nt to a different task.
+ +/// Since [`Send`] is an auto trait, adding a single field that is `!Send=
+` will ensure that the
+ +/// whole type is `!Send`.
+ +///
+ +/// If a type is `!Send` it is impossible to give control over an instanc=
+e of the type to another
+ +/// task. This is useful to include in types that store or reference task=
+-local information. A file
+ +/// descriptor is an example of such task-local information.
+ +///
+ +/// This type also makes the type `!Sync`, which prevents immutable acces=
+s to the value from
+ +/// several threads in parallel.
+ +pub type NotThreadSafe =3D PhantomData<*mut ()>;
+ +
+ +/// Used to construct instances of type [`NotThreadSafe`] similar to how =
+`PhantomData` is
+ +/// constructed.
+ +///
+ +/// [`NotThreadSafe`]: type@NotThreadSafe
+ +#[allow(non_upper_case_globals)]
+ +pub const NotThreadSafe: NotThreadSafe =3D PhantomData;
+
+--Sig_/=TaquIC/0_.amr5+WKZXvow
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcEv34ACgkQAVBC80lX
-0Gyz6gf9GSkQ/cGcnFHeDnLYGeoyuOMoZL3v5AehVgme150Dm4WYeuamfKoSdI5K
-6D89rVBls6zW20BmlNPWLCp6Oly/j4hGiCeUsjqorwhiq1+zHXn+0J4/CMqQZPf4
-Vzc45T48Iv7QuUw3fvQ6i9MM8w4ZI0pHpAFQTj+kEoTx/Ipy78ZPW0WQBqXIO7Za
-Fc6J0KAmh1RJ7FAcX3aCpcxYOXZBay+tRPfwzIaY6bcZRlMHyxD7M7MEX3Xjno7V
-zzWl27+FMEkPl2tcs2iTrJCzDDKxljoJIgY59GBq2MxzCwX2U37cm5nPU3la1G8a
-AZVpAnPGFg963ICu7GEOu2Q+/I7IfA==
-=2q+e
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcEyZQACgkQAVBC80lX
+0GxL5Af+L6xVjhjy8fHB7yMsg0Uuow+y3RkTVImzHZmGCBuxtsE3IKDf5u6JrNnv
+Ob6+v7ujU+N0wmvQHT3DfLwf0Btdj1YuHLMaLSV7GQOCyXR+DifJr/yvxCJQq44b
+pghjHui6JwpDsOlsrmuAmCYCceBKLu0c9zWteEkb8YM5KKYwi03Rkqcwhw93hs6Q
+hpvTUbmxMGO23ASVnnr9HkiLGbNCmNGTYU8FUuuWMEy9CcBvDOlNoUDj/0Uv0uiE
+jZnYqIlS/wABgUQx1JFpbkN+FJJu3wZ54HKVfohfUYWo8+yFku6+Z70nr2Roy4J5
+EwtxAtXNX+Eik+vjJABojYOn8i22+A==
+=jVHr
 -----END PGP SIGNATURE-----
 
---Sig_/I4uSr6JCD=m7+46+T3U2+hP--
+--Sig_/=TaquIC/0_.amr5+WKZXvow--
 

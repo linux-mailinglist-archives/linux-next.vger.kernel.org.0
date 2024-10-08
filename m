@@ -1,139 +1,131 @@
-Return-Path: <linux-next+bounces-4130-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4131-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57D4E993CA6
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 04:08:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A6AE993D1C
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 04:56:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE3C61F2229A
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 02:08:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EE471C21119
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2024 02:56:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8423C1CD0C;
-	Tue,  8 Oct 2024 02:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8D9224F0;
+	Tue,  8 Oct 2024 02:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="aYk30I3I"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EnL3ZCc0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C93B125A9
-	for <linux-next@vger.kernel.org>; Tue,  8 Oct 2024 02:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126F225776;
+	Tue,  8 Oct 2024 02:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728353295; cv=none; b=CS/6iLMoCIuuBDi0Tz9RKrawdOi6fzb+74ILIXueDZRLKmMYFCu9wJ0ELuN4KxD3Lmwvnn0ZFkT52d9IlXpkB9NIeHHAYFd1fPzVC81AyokUG4gcp0bi8nyjip3hIhJoOvB4DDPwWg2RJGBavoeNGvL6kvYmOa8e/vHXs8SZSK0=
+	t=1728356173; cv=none; b=jr81hgSRLf5xoX2yTDy8fWa0FsHLX36r438a7vbKComxYrToP3wLdFyO53977pdlwylOKZghKtCl04dnemzKCUZRwPM6laE0+TCWy/Zy6vAKuEwoxXxq1eyQRj+PM5cB6Yjh15+pH6GLzzzSGRhiiSjfRlVv2FMFh8ooHcQeur0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728353295; c=relaxed/simple;
-	bh=txEjyYwDK6Dw0nPvpf+z5iHXSCsXbk9TAgRwz00w2K8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=gr9ItPagBMEm3xv23NP8GLedmLOnARF5I6HfstxbCPJCaSsadb02y1o1CsKxhr4FfaLiLKvY5HSNlvDeyP4+hfgA2HfHydSvEkvN7f5ShPGIZ9CVwZY7SglEZBf5LNs2yTTNcZ7v91WiuqWcNX6Nn6Pvdg+tZGFQPttijjBGpi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=aYk30I3I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA45EC4CEC6;
-	Tue,  8 Oct 2024 02:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1728353293;
-	bh=txEjyYwDK6Dw0nPvpf+z5iHXSCsXbk9TAgRwz00w2K8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=aYk30I3IMZEsQ6GcC6UWU8MtLxoxVpySrqACVXrYHIh/EXMB8YAUObhdSJxZEq2Ls
-	 6leWejhe8yBGRfWWzhk1n0GgHGmiUHt9R2pvLh4+Gt1ngjSqta66GndwID0f+8lRw4
-	 N8NOQAVUBiieDd4ZFHJHWK5ftNIZI44RMqRRS/Jo=
-Date: Mon, 7 Oct 2024 19:08:13 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Brahmajit Das <brahmajit.xyz@gmail.com>
-Cc: david@redhat.com, gorcunov@openvz.org, linux-next@vger.kernel.org,
- sfr@canb.auug.org.au
-Subject: Re: [PATCH v3 1/1] fs/proc: Fix build with GCC 15 due to
- -Werror=unterminated-string-initialization
-Message-Id: <20241007190813.f4effd5788cf7362a4fda19f@linux-foundation.org>
-In-Reply-To: <20241005063700.2241027-1-brahmajit.xyz@gmail.com>
-References: <20241004145804.57278eac01c2601abb20c671@linux-foundation.org>
-	<20241005063700.2241027-1-brahmajit.xyz@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1728356173; c=relaxed/simple;
+	bh=qDvtI3FBlfsCp+4pG55+Z53hhOF72cax8+07yIKJDBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WRrQUT9k5VUwyDy3wRJ7o+7x6WWA/+CNCTYZ7Oei0ph+9kn/LM3km11lRoOwsREwN6qseq0ZMNuX0iZy+sRLbpIlc/159fxWgQC8VEXVzetGpj9OZLx7L/6HutzWiQdPQtRlumXdSRq1G5RVWB5wiRPCVomVxJMvyg3k5NDcf/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EnL3ZCc0; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1728356166;
+	bh=Q9hw3VWnq5n8q8kr84lH2u9PEXoVwQT3hLwaCwDhZKI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=EnL3ZCc0bae55zUIMqVhuaFcloAUq8aHuL36DvvCGKrFKS0s4U/InyTF6qxcDditY
+	 v5h/rhahunZbFzw5rNvwx3avP87fzPpLThMG7CBhKLN3/SnpoH/IglUoNxB+tgCyx0
+	 r4AJPwP7WbSYJvHkMjVo6k6n+NxV48A8E5rYOgP8A9l2mSS/BzV99XDL7+kUEJP4F5
+	 E9xN+rU5yrtmw4ZVdhqIk7ok1QrWOsTAh6TjbBwNEikqDzgXlENHOhlTmQLkMH+2oj
+	 UQKOAMgToJx/dzvECDx6GDi7DgQXyENIk0KvZtj5VvAAgXA4fnlCgf0NsRIYndkgtJ
+	 HaUFv5BF3OxJg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XN0yZ4Khbz4x6k;
+	Tue,  8 Oct 2024 13:56:06 +1100 (AEDT)
+Date: Tue, 8 Oct 2024 13:56:06 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alex Deucher <alexdeucher@gmail.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>, Sunil Khatri
+ <sunil.khatri@amd.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20241008135606.3e440dd5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/V7XMSDD/xJhamB99UW27RQx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Sat,  5 Oct 2024 12:07:00 +0530 Brahmajit Das <brahmajit.xyz@gmail.com> wrote:
+--Sig_/V7XMSDD/xJhamB99UW27RQx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> show show_smap_vma_flags() has been using misspelled initializer in
-> mnemonics[] - it needed to initialize 2 element array of char and it
-> used NUL-padded 2 character string literals (i.e. 3-element
-> initializer).
-> 
-> This has been spotted by gcc-15[*]; prior to that gcc quietly dropped
-> the 3rd eleemnt of initializers. To fix this we are increasing the size
-> of mnemonics[] (from mnemonics[BITS_PER_LONG][2] to
-> mnemonics[BITS_PER_LONG][3]) to accomodate the NUL-padded string
-> literals.
-> 
-> This also helps us in simplyfying the logic for printing of the flags as
-> instead of printing each character from the mnemonics[], we can just
-> print the mnemonics[] using seq_printf.
-> 
-> [*]: fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
->   917 |                 [0 ... (BITS_PER_LONG-1)] = "??",
->       |                                                 ^~~~
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
-> fs/proc/task_mmu.c:917:49: error: initializer-string for array of ‘char’ is too long [-Werror=unterminate d-string-initialization]
+Hi all,
 
-> Cc: david@redhat.com, gorcunov@openvz.org, linux-next@vger.kernel.org, sfr@canb.auug.org.au
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmocdonfig) failed like this:
 
-It is strange to cc only linux-next.  It isn't really a development
-mailing list.  Please include an appropriate development list and/or
-linux-kernel on patches.
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 's=
+3_debug_store':
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:5209:35: error:=
+ passing argument 1 of 'dm_resume' from incompatible pointer type [-Wincomp=
+atible-pointer-types]
+ 5209 |                         dm_resume(adev);
+      |                                   ^~~~
+      |                                   |
+      |                                   struct amdgpu_device *
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:3152:46: note: =
+expected 'struct amdgpu_ip_block *' but argument is of type 'struct amdgpu_=
+device *'
+ 3152 | static int dm_resume(struct amdgpu_ip_block *ip_block)
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:5212:36: error:=
+ passing argument 1 of 'dm_suspend' from incompatible pointer type [-Wincom=
+patible-pointer-types]
+ 5212 |                         dm_suspend(adev);
+      |                                    ^~~~
+      |                                    |
+      |                                    struct amdgpu_device *
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:2963:47: note: =
+expected 'struct amdgpu_ip_block *' but argument is of type 'struct amdgpu_=
+device *'
+ 2963 | static int dm_suspend(struct amdgpu_ip_block *ip_block)
+      |                       ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
 
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -909,8 +909,15 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
->  {
->  	/*
->  	 * Don't forget to update Documentation/ on changes.
-> +	 *
-> +	 * The length of the second argument of mnemonics[]
-> +	 * needs to be 3 instead of previously set 2
-> +	 * (i.e. from [BITS_PER_LONG][2] to [BITS_PER_LONG][3])
-> +	 * to avoid spurious
-> +	 * -Werror=unterminated-string-initialization warning
-> +	 *  with GCC 15
->  	 */
-> -	static const char mnemonics[BITS_PER_LONG][2] = {
-> +	static const char mnemonics[BITS_PER_LONG][3] = {
->  		/*
->  		 * In case if we meet a flag we don't know about.
->  		 */
-> @@ -987,11 +994,8 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
->  	for (i = 0; i < BITS_PER_LONG; i++) {
->  		if (!mnemonics[i][0])
->  			continue;
-> -		if (vma->vm_flags & (1UL << i)) {
-> -			seq_putc(m, mnemonics[i][0]);
-> -			seq_putc(m, mnemonics[i][1]);
-> -			seq_putc(m, ' ');
-> -		}
-> +		if (vma->vm_flags & (1UL << i))
-> +			seq_printf(m, "%s ", mnemonics[i]);
->  	}
->  	seq_putc(m, '\n');
->  }
+Caused by commits
 
-Patch looks good.  I'll add this to the changelog:
+  982d7f9bfe4a ("drm/amdgpu: update the handle ptr in suspend")
+  7feb4f3ad8be ("drm/amdgpu: update the handle ptr in resume")
 
+I have used the amdgpu tree from next-20241004 for today.
 
-Stephen pointed out:
+--=20
+Cheers,
+Stephen Rothwell
 
-: The C standard explicitly allows for a string initializer to be too long
-: due to the NUL byte at the end ...  so this warning may be overzealous.
+--Sig_/V7XMSDD/xJhamB99UW27RQx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-but let's make the warning go away anwyay.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcEn0YACgkQAVBC80lX
+0GxU4Af9FsOg61ozLF17z9y6mhdh4biPogXYBMQYWkMoSg4xaCIlf0yo2UVS8sfL
+J5pqRYSgkaFWYuu7MUuOT7HgvxPjYmwQQj/1m/O8bYdIQtCI9VOy7VK5kOPl9JV4
+pUaf6Rwy13hI4Z/1l65ypPPq/+kqAMVDcqPXk3zS0GS1wh2R5XAM1UIdIYJ6Xrwp
+zTvERKAJGHVcz2TesaMxCVr4fPhhIcPHTbAk+ovlnZiWvrkxPFvVD8NqqZIZX7dF
+OkFhxr8ljR8aZwTyGd0x04vs6EjNEBJPG1WDabrKt7pGTrwm+4STZxtVyI6Nj8lz
+S23GWkSpavLX7znNmc2D27uhwcABqg==
+=V6M8
+-----END PGP SIGNATURE-----
 
+--Sig_/V7XMSDD/xJhamB99UW27RQx--
 

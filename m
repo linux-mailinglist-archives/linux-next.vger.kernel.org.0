@@ -1,94 +1,140 @@
-Return-Path: <linux-next+bounces-4191-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4192-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AC9E9976FC
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 22:54:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0827699771D
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 23:00:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F441B2134F
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 20:54:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A21C71F232AC
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 21:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1E7A1E282B;
-	Wed,  9 Oct 2024 20:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 785DA18E374;
+	Wed,  9 Oct 2024 21:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RGdLAoHq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ISxUQcYx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DD41E261C;
-	Wed,  9 Oct 2024 20:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95955199FA5
+	for <linux-next@vger.kernel.org>; Wed,  9 Oct 2024 21:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728507215; cv=none; b=RSX/Ag+zUOX61Wv2+iLri5NvNiuH4E4SNJvzGIUQiOw9sVILBI70HFZ8fuj54kUMlWdvN+VnVE0CDRM+2nt2sutYhutw4Co8t36hbhgIzoFpIUN9NefJc8FO6G07vG8ZX/UwWmQ3LMjVuzhAG/y9o1V1trBz7RdsYmazYqoWJFo=
+	t=1728507623; cv=none; b=gw90ZpFDvJfWkJ8u6jbs+MC10Ohm0IaDi6fErqNEIael4oT4aJeP4ZkAFRHkzueZup/ED6iA7Ril8rYpW+Gr6vMsWNMCbDx7hBc7MgcmybLtYRjYdbk6w11ooZEJrxjsuAEgOl8iaDGOqP/fnWPK9bOP3MTbargo5RyUECT6lys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728507215; c=relaxed/simple;
-	bh=FcJRErXKWZeyLJXsOZFTRdu9dQaNgwhiRsBx9Yx1msw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iozhX8U413859+ykRDnU6uaUZ3B9/IAAHn9cmj3KzNCuzITbrSHNwvA5cRI4CtL3r/oT9AyPrmKX1lnNDmZvAmlLQ3VLld4KzvtF1cZWpYfgYXaZ4H8M6vgJHJ90BUQeV+rG223fs2kfMlGVJ+VvdbgRIzkAErWVCnerhbtvuI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RGdLAoHq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7CEFC4CEC3;
-	Wed,  9 Oct 2024 20:53:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728507215;
-	bh=FcJRErXKWZeyLJXsOZFTRdu9dQaNgwhiRsBx9Yx1msw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RGdLAoHqDhMPhThS6WboV0n8T0pbrH2j5Ccj7HZxLCbGXgIaPwUxsjisE08oYVC+Y
-	 qahBh2nuv8HxDP+HP3o/jKtufyEey8tPUCsfR2hnsR59JobBzNgA3k4s1gahzXrAce
-	 JDWUme9qd72FY8x/f542eVq2Wmz/kfYrBCwL/lpA=
-Date: Wed, 9 Oct 2024 16:53:33 -0400
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Hsin-Te Yuan <yuanhsinte@chromium.org>, Daolong Zhu <jg_daolongzhu@mediatek.corp-partner.google.com>, 
-	Hsin-Yi Wang <hsinyi@chromium.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the mediatek tree
-Message-ID: <20241009-prudent-pompous-sheep-40ed20@lemur>
-References: <20241009071543.5230cf79@canb.auug.org.au>
- <c97da0be-6924-48de-9cf3-0ba9d5e6a73e@kernel.org>
+	s=arc-20240116; t=1728507623; c=relaxed/simple;
+	bh=quI890ksGiqXNH1rYbAaqlJeRI1+XEwtVJa9OjJDJkM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FywKVzWE8dRc8ijsZgoRpTeUzCUSZBw/Akwsr+KThy84WguN0AhW4gxo5LchlprKIFtVyj99AGMhJc04ZN/M1OVUU120HYkOYg7BaeYrP3f08H75T9IszrGtbYk1Ert8YXuwnwlcYF2XNkkTIFWeubcc6LWrNkILkRVFMtA3Vm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ISxUQcYx; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-8354851fbfaso10580339f.3
+        for <linux-next@vger.kernel.org>; Wed, 09 Oct 2024 14:00:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1728507620; x=1729112420; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zINN3iZzRZJ0xbXZuWjulTszejXrwevNaI0bh4OztJc=;
+        b=ISxUQcYxRwbZhsROwz1wOAE2MiEtoEurGiwRgtX8YUMQ1PPPYXEeOHyYJOrxQDXqvK
+         EGEwdPTSO+ygVvvC5i3dmYLvo/cbvxV6tnm/UrEP2NHKOEFJktpVWi13p7HzcBfvVTnZ
+         a1Vm+zm6pXFrXTcyGB9dPwiugq1CPIGo05Ny4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728507620; x=1729112420;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zINN3iZzRZJ0xbXZuWjulTszejXrwevNaI0bh4OztJc=;
+        b=jbthWBjrHsbLWRfDgP/wz22HqS0RXb1RTgUzAwru/SAYSg2zBzrV3PWiUKcbzbH0hs
+         wcQZdEdPQvjAafn+Bu8CF1RJB6IULes0HExQ7EbREyEnWlPuuvx/7+uCM61RXSyRpDBD
+         s+yRUvB0OiWVO1eQSkAvTG913GistTiv1eU998NGfvPif5xe6j0ByPAmwgtratHXODa5
+         tn1zke2BraOOmtI6ehIQCEJHDS4PFZ4bisQJ89/kvc+6laqyBUxAPWPaNBZ9d2Fd6BEC
+         3iKoUZ73USO+f8lUC6gMgjgQc9JLhs+40jHQtebEsNd5jwDVUHFseKT65QnLMEz9gMVT
+         vb+w==
+X-Forwarded-Encrypted: i=1; AJvYcCVrC8JMwW0AYVwV0YKSb6m8pro+ynuY8jb+9+S+pWJ9Ath2iGXpYtwkfEFpm75TM+LSELkVTYh7pUiy@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiBkaidaK+hjUsjqsfR9dlK0/17JD3usLv5SqWJgKC2VGIvcWx
+	JXm6E3Y6IVC9k+mBPXp28Z+4CH3E+767YzmjoMy71QRhsrxMS9HE+T2e8VM/ArFviMOemqJLLCm
+	d
+X-Google-Smtp-Source: AGHT+IGyYNs3bWMLM3gU5TNi7rwVu+BFafc9sxHpnqCuT6rRhpD+QYd3VTN5oSNO5tc0NONkLuNd8Q==
+X-Received: by 2002:a05:6602:13d3:b0:82a:a403:f0df with SMTP id ca18e2360f4ac-83547b4fd10mr135930839f.2.1728507620573;
+        Wed, 09 Oct 2024 14:00:20 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4db6ebf0da0sm2164978173.110.2024.10.09.14.00.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Oct 2024 14:00:20 -0700 (PDT)
+Message-ID: <2dda047a-199f-406d-9998-fa85939e8106@linuxfoundation.org>
+Date: Wed, 9 Oct 2024 15:00:19 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c97da0be-6924-48de-9cf3-0ba9d5e6a73e@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: manual merge of the kunit-next tree with the mm tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Brendan Higgins <brendanhiggins@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, David Gow <davidgow@google.com>
+Cc: Kuan-Wei Chiu <visitorckw@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+References: <20241009162719.0adaea37@canb.auug.org.au>
+ <b005d39f-2b75-4a26-a78c-5cd8f7076399@linuxfoundation.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <b005d39f-2b75-4a26-a78c-5cd8f7076399@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 09, 2024 at 09:52:14AM GMT, AngeloGioacchino Del Regno wrote:
-> >    65b99309a9c1 ("arm64: dts: mt8183: Damu: add i2c2's i2c-scl-internal-delay-ns")
-> >    025869564bf8 ("arm64: dts: mt8183: cozmo: add i2c2's i2c-scl-internal-delay-ns")
-> >    3d3bc7cb46e8 ("arm64: dts: mt8183: burnet: add i2c2's i2c-scl-internal-delay-ns")
-> >    5bbddfd0470f ("arm64: dts: mt8183: fennel: add i2c2's i2c-scl-internal-delay-ns")
-> > (The above also has an empty Reviewed-by tag)
-> >    ca80f75083f6 ("arm64: dts: mt8183: set DMIC one-wire mode on Damu")
-> > 
-> > are missing a Signed-off-by from their authors.
-> > 
+On 10/9/24 10:28, Shuah Khan wrote:
+> On 10/8/24 23:27, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the kunit-next tree got a conflict in:
+>>
+>>    lib/Kconfig.debug
+>>
+>> between commit:
+>>
+>>    0f2016a962f0 ("lib/Kconfig.debug: move int_pow test option to runtime testing section")
+>>
+>> from the mm-nonmm-unstable branch of the mm tree and commit:
+>>
+>>    f099bda563dd ("lib: math: Move kunit tests into tests/ subdir")
+>>
+>> from the kunit-next tree.
+>>
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>>
 > 
-> The empty R-b happened because b4 didn't interpret "<email>2" correctly
-> and dropped the email entirely. We should probably report that to the authors.
+> Andrew,
+> Another one related to move from lib/ lib/tests/
+> 
+> If you would like to take these patches - it is perfectly
+> fine with me. If not I can handle these.
 
-Consider it reported. :) However, I'm not sure I understand what the situation
-is. When I pull that series with ``b4 -slH shazam``, all the trailers are
-properly preserved as far as I can tell:
+Andrew,
 
-    arm64: dts: mt8183: Damu: add i2c2's i2c-scl-internal-delay-ns
+I dropped this one from linux-kselftest kunit branch.
+The link to this patch if it isn't in your Inbox:
 
-    Add i2c2's i2c-scl-internal-delay-ns.
+https://lore.kernel.org/all/20240924032200.167622-1-luis.hernandez093@gmail.com/
+> 
+> Adding David as well for feedback on this
 
-    Fixes: cabc71b08eb5 ("arm64: dts: mt8183: Add kukui-jacuzzi-damu board")
-    Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-    Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-    Signed-off-by: Daolong Zhu <jg_daolongzhu@mediatek.corp-partner.google.com>
-    Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
-    Link: https://lore.kernel.org/r/20241009-i2c-delay-v1-4-6cf59721c1d1@chromium.org
-    Signed-off-by: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+David, I think lib/ kunit patches can go through Andrew's tree.
+Renaming is causing merge conflicts.
 
--K
+thanks,
+-- Shuah
+
 

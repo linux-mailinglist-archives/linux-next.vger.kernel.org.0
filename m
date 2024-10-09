@@ -1,90 +1,128 @@
-Return-Path: <linux-next+bounces-4184-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4185-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 974AD996543
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 11:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B48E9969E0
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 14:22:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FDB0281D35
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 09:26:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BF14285004
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 12:22:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA3718E02A;
-	Wed,  9 Oct 2024 09:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFB71192B63;
+	Wed,  9 Oct 2024 12:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VnZXh9Pl"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ngUaTiSb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FCA18DF9B;
-	Wed,  9 Oct 2024 09:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48AFF192D98;
+	Wed,  9 Oct 2024 12:22:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728465856; cv=none; b=umX9dahKiJR2/2NWcZR+q4Ks89NU27QE6IhxSQYEzSnwIWDXiytBD23en7S4gGGKtNcDHWj+Ki9l3v3e7djsFwWhPQu92nmCjgptf2B3RNxk5lKond7la3NguatbnHE2pc3h5xGorz3xudg8jXuQvbxD2R+V3rwnBDdE8kY3aQ8=
+	t=1728476544; cv=none; b=I3tYwtgU8ux5I6tk+T9dJMq8PA5I4pqPkv9v9s4RuEhMZ5R3t5qAe8lYrpy1m4jVCt2CTuIFQTrMfKivySTZyELe7iG34Q4woDI0+UGhxFuDBHaBYKjm1ToUzHPQNUXDtJGWkrjvbUHElPuUC25ITIhiFSACZEhgDaNQX9y+F0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728465856; c=relaxed/simple;
-	bh=CeAcCFSG0upiX0sX8oPnUv4FroqjC4xoAZb4ww6hE4U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DjNDbZpeJfwFSJckwKYNqvs3trJ6zbqwCiGpKjSlvcplvUVl9gSDTimkeGDtP3WRELXdX9jmdMQz1i4oQTnOwsZSxvTgY0i66Lx7cvpTs6ca6gteEB8GUr2NNARpM01D+YXL9Ye/52e1a6oNE+RSIek9APoCd0A1oH4bcMDcJTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VnZXh9Pl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB039C4CEC5;
-	Wed,  9 Oct 2024 09:24:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728465855;
-	bh=CeAcCFSG0upiX0sX8oPnUv4FroqjC4xoAZb4ww6hE4U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VnZXh9PlavE2pdP76iGTSNwmJc8hDYzG+Y+4bSTpEdREplm5vPLgqy4MAt5Pc5FWC
-	 0gDTJ6+BwWhrnDy46rByfRHf2nTjPRMY/pSnFcb9+SnZYJGrCYbuhomA5PiVUwjfjT
-	 4LlumT1vdqgc4HJnMi725mj1g+cXH0y7+QPz8QeM=
-Date: Wed, 9 Oct 2024 11:24:12 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Kalle Valo <kvalo@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Wireless <linux-wireless@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Tree Davies <tdavies@darkphysics.net>
-Subject: Re: linux-next: manual merge of the wireless-next tree with Linus'
- tree
-Message-ID: <2024100941-gulp-tasty-f969@gregkh>
-References: <20241009114455.52db31ad@canb.auug.org.au>
- <2024100945-engross-appraisal-d1f0@gregkh>
- <317aeb02110105be1483d13c204bfb48d4d19c61.camel@sipsolutions.net>
- <2024100917-footsie-anatomist-fd06@gregkh>
- <e572bee3a1c2600b09cb2fd5d09a2e95b4e0faa0.camel@sipsolutions.net>
- <2024100941-gaining-sprang-826b@gregkh>
- <287ad9eeb94f1e326c22fdcb74c94ef3fde84115.camel@sipsolutions.net>
+	s=arc-20240116; t=1728476544; c=relaxed/simple;
+	bh=wdUq5MDohMublc/kPXtZ9axSNDUJAPcxhxPzm4aYqcY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WwRYae8VjiN29gr5+uGxy+E96lKyHQrrnH7glLwToJBKYsaMpkub6fFrJzUuSVwntJo64H6HcsKKWbTsMKD+SuWn1RMZrWPMpoUHe/9HPKR6RnfWmUP0SEYYponzNtXg+6Tje6KOnDUdoTFM+3ZjYhxlDbdmi1iWxx28LS7Tspo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ngUaTiSb; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1728476537;
+	bh=O3MKXyKtlhW/Kiyuoa7eHLUbo2P+V6k1ppGeFCZHfFQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ngUaTiSbZL2eZ5sQIH8XPXZvvcrH83BrYqnV9CN2txFEzm4GAeLQhy48wvbCL/k1t
+	 GMlT2U+T6xYmdegKGCF2Wq3QPtMOeRVHHXiKEL8lsr2NFuC1B54W7A/9PmcgRDaEFQ
+	 S6hJpsZIEENsknQonXKn/kyBhm+4PcUW2NzHMB4+y4lgVB5+NEosHx3ojOFpvjivVh
+	 EkNk7k6UZQJVFqYu8W/h3X2kzRTWYLq4AtcS2B2a4m0b/Un7Xakja0n8oINfM8j8GF
+	 +oFmjpgrDZ3QD3ZZdyaiObxpIYqYzdOQVEhBCJVF7f5KE7SkPE/bnLPQpwxtm82p1p
+	 2fyWanLMQq2iA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XNsTN28XMz4x8p;
+	Wed,  9 Oct 2024 23:22:16 +1100 (AEDT)
+Date: Wed, 9 Oct 2024 23:22:16 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Christian Brauner
+ <brauner@kernel.org>
+Subject: linux-next: simple boot test failure (Was: linux-next: Tree for Oct
+ 9)
+Message-ID: <20241009232216.6f0a28e5@canb.auug.org.au>
+In-Reply-To: <20241009182016.61736424@canb.auug.org.au>
+References: <20241009182016.61736424@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <287ad9eeb94f1e326c22fdcb74c94ef3fde84115.camel@sipsolutions.net>
+Content-Type: multipart/signed; boundary="Sig_/57PlGHg5OYSq_.y=OLIgM+8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, Oct 09, 2024 at 10:30:12AM +0200, Johannes Berg wrote:
-> On Wed, 2024-10-09 at 09:27 +0200, Greg Kroah-Hartman wrote:
-> > > 
-> > > I can push out the net-next merge (& revert) soon, and then it'll all be
-> > > cleaner?
-> > 
-> > Sure, I'll wait, just let me know what commit to merge at, from what
-> > tree, whenever you have it ready.
-> > 
-> 
-> I've done all that now, so you could merge wireless-next/main up to its
-> head, which right now is a0efa2f362a6 ("Merge net-next/main to resolve
-> conflicts").
+--Sig_/57PlGHg5OYSq_.y=OLIgM+8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sure, will do so now.  That branch has a lot of non-staging stuff in it
-but git can figure it out when it's all merged together so all is good!
+Hi all,
 
-thanks,
+On Wed, 9 Oct 2024 18:20:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> News: this release fails my very simple qemu boot test.  It looks normal
+> up to user mode and I even get a login prompt, but when I log in I get
+> dumped back to the login prompt - presumably the shell is failing to run.
 
-greg k-h
+Bisected to
+
+218a562f273bec7731af4e713df72d2c8c8816e8 is the first bad commit
+commit 218a562f273bec7731af4e713df72d2c8c8816e8
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Mon Oct 7 18:43:57 2024 +0100
+
+    make __set_open_fd() set cloexec state as well
+   =20
+    ->close_on_exec[] state is maintained only for opened descriptors;
+    as the result, anything that marks a descriptor opened has to
+    set its cloexec state explicitly.
+   =20
+    As the result, all calls of __set_open_fd() are followed by
+    __set_close_on_exec(); might as well fold it into __set_open_fd()
+    so that cloexec state is defined as soon as the descriptor is
+    marked opened.
+   =20
+    Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+    Link: https://lore.kernel.org/r/20241007174358.396114-10-viro@zeniv.lin=
+ux.org.uk
+    Signed-off-by: Christian Brauner <brauner@kernel.org>
+
+And reverting that commit from today's linux-next fixes my problem.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/57PlGHg5OYSq_.y=OLIgM+8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcGdXgACgkQAVBC80lX
+0GwJWQf8DSdnxWeAr+efyAuaakOibnuGTVLbzE5BlDgCPWz4SRvh2/d7j0UnJXRX
++VgdC8AoLntlaF/GxDfW/6GT6DxxwG5QAguGlayOtlf6u/9LqRIqGnBGKH+Xnffv
+W2DKXZ5N37JGaB0p6PbgSHt4FhJuNecGsg8EkkJiMcsmH4BItIO/eYVwGHkW/tpS
+dudAI0zP4vQ3GcrVOSIUe8mmvU+hBHT5k7KVpHxYpL9cMX6rm388aVqJH2hLQo0L
+pb/O9ZJQ3tNehqBQ4quP5+ZD5xyOZwl8qsHbRHDXaYmHP9WEVYWaNObYSwD3Ht34
+ZhjSl3fJWgjbKkbiL0Sts52lsVyA7g==
+=V1ff
+-----END PGP SIGNATURE-----
+
+--Sig_/57PlGHg5OYSq_.y=OLIgM+8--
 

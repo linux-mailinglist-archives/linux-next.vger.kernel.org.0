@@ -1,116 +1,134 @@
-Return-Path: <linux-next+bounces-4157-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4158-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91C94995C59
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 02:38:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C1ED995C6C
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 02:45:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F40EB22B51
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 00:38:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E33AE28677E
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 00:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2E8953AC;
-	Wed,  9 Oct 2024 00:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 344679476;
+	Wed,  9 Oct 2024 00:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Cwjtu7tt"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="QnPfjmpA"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE152F29;
-	Wed,  9 Oct 2024 00:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5C179EA;
+	Wed,  9 Oct 2024 00:44:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728434295; cv=none; b=CEdiQR4Il3MMzQJ17VbmNY9hJ/JmloG1P4OeSEk8xuY1wWQTC0kiTsKQ/SbMJSspsNa09MoxmPdiZ0u5P6p9GertDWoazPGeo+xzqMN38jP49ky+y2qD83vmRZUBUus6pkqdUS3UvVkAxGMaehYvFcCVYZJLSvoduB7iopfEmm8=
+	t=1728434700; cv=none; b=jtm7RMQ7t4MAV1NF5/oay75cdabuCW/OdzUkwLOOoK25SQ9RZwWytQk7xh4NMN22XVVVNNePTvgKzx18Sxe9ODZWo1yfJmSOH17SSE/ke6g/Jvi5R/qLgsykBNPBdgLfpL1XdNRtYGgX1I56MldF3vjr8xoTeK8vJKZEKL5EIbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728434295; c=relaxed/simple;
-	bh=cFg1g/et9BU8Qj45SQLrUl9ATZqm04ySlBfiOZbGGjI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ivzp/Y6QHdHOVfTUelzFbUshEWkUKnUxCbKIuKUK0fs6+2jCEoedttAi3uTTa14TPT3TKhsdtRqO3vUkr6qVXGaSvcGh832P5lmGMKA4+nb9ZZTK7EBstozBb+QW+AnYwZOEotN2TnSIxaRx1eLw+TRS8+60wyEiUk9uGZpEjk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Cwjtu7tt; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1728434700; c=relaxed/simple;
+	bh=LcYBSAt2WmfbTdrkbUFEBmpBqWEGTUpWfgCGzhGqpwA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gM1Z9PC5dwkyGyQcbKlbTRRkT1fJyKKLvfpKLa49pov2VxVcLeUxRSKVusFTeeuHkxiTD+kPPMG5kfM88Hfws09snMs7hf4RsIxcGfnMwJ0hAOiIHMD57cPbZ3lwt2IiNGnjWStp9L8Ns33S9xgTJzP4pW1JSBRnH5u7JiS94uA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=QnPfjmpA; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1728434291;
-	bh=HDu01CeWqVR+Il/yZAdEBNfJ3edcScmEJNEt9NKBZL0=;
+	s=201702; t=1728434695;
+	bh=RXN51MLDI2R2QyOtshsJQTkJZtwKN8Dmf1gBWRzdo1Y=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Cwjtu7ttC8W+wsOI7TI+P7wwn9DMbTZ/3CoJsCte/AiT4M+Zu7vy8QoV+W4bJa2UC
-	 l6b15HEPJ21BE+ls7uTUH8LA3Tw0H422e0RgkuYN/YOGCQtDCuqOT6lSmavkCVs3sb
-	 yazKt+fXwmjlpnhV/GDJX3C16eUFq4bJMEuGCCbZcbFR37+tbdGkuRU+L4DyZ4M1un
-	 JbM/1F+mzBC/NqPjAMxzSKAezOjnhBJYbohkqZcCDUWL0+29hR+13NvLcIzrD/nsG8
-	 56WxUw/eQOC4LY2BsQH0wNunucCcsfg7USWiLYaseEBGu1fwvpGL+96CYNZ3h6MAgx
-	 HErPbEu8bcAWA==
+	b=QnPfjmpAFLaCq0lLbEG6wTtcLo1k+oQm1amnP+1B0Vk9IGCJ+kZLlk9gRTAQQ0Koj
+	 chywpKedz2Kn2mNxgWto2bsY4YJdo1WQhSBZPQIUCVhMwT5lkYFA8fID9/KDRz7vMd
+	 O7j+VH3U6wTZXG4N9jaEiHrE1Y+vXUjoWmmkIS4tbv/AJ9QuIg0AwXRT+geiEsk8Po
+	 7WiUtZExF5WQa6vlqb83J2cZXypLV1i/6DY45apGbuZiOKY0WAdCjr7Cz41DvEBJcn
+	 iFsb6iH6hZsvmc4LUFnDtDpaqWn5UIYozVgs3mrPk2GvShXl1RLuJW/K0Au+m1GyT4
+	 18FAyiorjnlog==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XNYrz0J8Rz4wc1;
-	Wed,  9 Oct 2024 11:38:11 +1100 (AEDT)
-Date: Wed, 9 Oct 2024 11:38:11 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XNZ0l2PZRz4wcy;
+	Wed,  9 Oct 2024 11:44:55 +1100 (AEDT)
+Date: Wed, 9 Oct 2024 11:44:55 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Kalle Valo <kvalo@kernel.org>, Johannes Berg <johannes@sipsolutions.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Johannes Berg
- <johannes.berg@intel.com>, Wireless <linux-wireless@vger.kernel.org>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Philipp Hortmann
- <philipp.g.hortmann@gmail.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Johannes Berg <johannes.berg@intel.com>,
+ Wireless <linux-wireless@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Tree Davies <tdavies@darkphysics.net>
 Subject: linux-next: manual merge of the wireless-next tree with Linus' tree
-Message-ID: <20241009113811.1e84de60@canb.auug.org.au>
+Message-ID: <20241009114455.52db31ad@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Rn0UiJTZ=aoPi81aK7YpV_t";
+Content-Type: multipart/signed; boundary="Sig_/cy25zv_kQV4WXhV.NuxvSfa";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Rn0UiJTZ=aoPi81aK7YpV_t
+--Sig_/cy25zv_kQV4WXhV.NuxvSfa
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the wireless-next tree got a conflict in:
+Today's linux-next merge of the wireless-next tree got conflicts in:
 
-  drivers/staging/ks7010/TODO
+  drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
+  drivers/staging/rtl8192e/rtl8192e/r8192E_cmdpkt.c
+  drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+  drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+  drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+  drivers/staging/rtl8192e/rtl8192e/r8192E_phy.h
+  drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+  drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+  drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+  drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+  drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
+  drivers/staging/rtl8192e/rtl819x_BAProc.c
+  drivers/staging/rtl8192e/rtl819x_HTProc.c
+  drivers/staging/rtl8192e/rtl819x_TSProc.c
+  drivers/staging/rtl8192e/rtllib.h
+  drivers/staging/rtl8192e/rtllib_rx.c
+  drivers/staging/rtl8192e/rtllib_softmac_wx.c
 
-between commit:
+between commits:
 
-  d93e795b8621 ("staging: ks7010: Remove unused driver")
+  5f60d5f6bbc1 ("move asm/unaligned.h to linux/unaligned.h")
+  5e6bf74d63c2 ("Staging: rtl8192e: Rename variable RxDrvInfoSize")
+and many others
 
-from Linus' tree and commit:
+from Linus' tree (pre v6.12-rc2) and commit:
 
-  4991d2e7ad38 ("staging: don't recommend using lib80211")
+  be9be9f54f22 ("staging: rtl8192e: delete the driver")
 
 from the wireless-next tree.
 
-I fixed it up (I just removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Rn0UiJTZ=aoPi81aK7YpV_t
+--Sig_/cy25zv_kQV4WXhV.NuxvSfa
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcF0HMACgkQAVBC80lX
-0GxnqQf6AoOvxR0AXUsgmbJqzWtGQrpNiqt/Puq0zzPOIwX8/B2OH/ycd7iCgW1z
-l+lYAPxQmPror/1aggEMB9p4vrAWM/dLtkE29ZmKSJRhcqYsVzJ3V9draReXXwx5
-XOs8CHj9qk22lUzkEj00yL2IEOiRrb6Uzy98T4R0RrbKI4pB85Jun3hrWvjs5oJR
-Jkgq6s8yDmWdisDjjhFkswfjfx4FifW9EwutTF3TeU/iKK1A1acSSnQxzzN3geAK
-3QjULXqhosc9NpGi5m+QNOxm4nQoikr/ZmeR9fGGMMbjy6965yio01dWdVPTdfyy
-ESHl7mqU1dYEvoS85FFN8P6nqAnYyQ==
-=7D4S
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcF0gcACgkQAVBC80lX
+0GwZ+AgAmGKzGKsTtfw9LQ6bQvROvaiJBeB3qIJHyM2CsAfO/LYIiZovU7Fk14bF
+gOLZocY6URxj2pIjgVXn0dZ7yuEGCppFDXpyVyojEzkOhJHmuREkl/jJ4Kigi1mu
+/KNV6cJGGH2amyxTCzxGo+H/0rkR8ziA19g87gWXA0lFhct0nJaaSS2asw61VUTc
+YfXqOJpTkh3MRL+7k9Kt51dHfgCW61fIijVervmDdsjFviPCHe9/DnvyoJQ+cKVL
+z+i0u6r+1NDLCFrHBOPqaRfE5auFkOdn4OOF1qx+jp5FWT7Xbd8bW2JQeJfNDNH9
+te/TGQajZHf84B1NwL23AhxerfTgaA==
+=HIPM
 -----END PGP SIGNATURE-----
 
---Sig_/Rn0UiJTZ=aoPi81aK7YpV_t--
+--Sig_/cy25zv_kQV4WXhV.NuxvSfa--
 

@@ -1,127 +1,120 @@
-Return-Path: <linux-next+bounces-4188-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4189-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 683049971A6
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 18:34:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71906997658
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 22:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 871081C228FF
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 16:34:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D02571F22487
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 20:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 729081DF25B;
-	Wed,  9 Oct 2024 16:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63CA11E1C09;
+	Wed,  9 Oct 2024 20:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YJCkUtZ1"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Js5NuLIY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D5C1C9B77
-	for <linux-next@vger.kernel.org>; Wed,  9 Oct 2024 16:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8B818A6B9
+	for <linux-next@vger.kernel.org>; Wed,  9 Oct 2024 20:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728491329; cv=none; b=u/pA7O7C+0OURfm+ILTU0hTGbDGOhaWLpD67PfDnqhSxUEYn6xFEk5Ji164qatnDT3zaC4+h7LXe0a4FsMabjwJHGT2SXAu0/JV9aOTs7V52uWXRQD/sEf4l4O5zggyxWA4GCuywMgU9dfxWLEMtPBljH9IchY/VkEBzCT4kOWI=
+	t=1728505353; cv=none; b=jc7l5KSzMT803Fe1LzB/o6uP8hqtt2JO1/tQHLBOvYaoXuXG7r/pTXMy7W//HPrSGOMuRciNWFARGhnVmvloOrxucQm/WqrZxtJYTcOqZkLP7rHWgQo4O7icZ61XAeUhh2E44zRQhoMuXsGY4B/pWyqCsZZHASRh+TZElkdqxYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728491329; c=relaxed/simple;
-	bh=HytH0a+TvKdghziQH301cLAcvE7eKXxs5D5r18dSmCM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ba69QlKbqYcV4YBSfd7UHKFac2XPLkeEWxC4278tbSOlN5Tf+AWjXP7Cp7+9UemC4TqtwqR1iS24AGpG8IohTCDDolzvndOj8ObIY1ATLo+l7GvNCoDm4hd6+EqvhHlmR9k6ycVIYW9zgVSyBh+WpJWgUNaO8/0cnqsAf704cjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YJCkUtZ1; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-8354599fd8aso23368739f.1
-        for <linux-next@vger.kernel.org>; Wed, 09 Oct 2024 09:28:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1728491327; x=1729096127; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dNftbaEiQh9mE7mlmkhwkRTz4TXqRx66rcdG98vrs5o=;
-        b=YJCkUtZ1A2rIiK6UoSOQVj/HibNUUwpky9YwYuAJFUqQsI32SEm46tbsCfEEmq42Zg
-         K519jHAUMcGhJt4OBziL02o7kvARpth1a4AlRd3a6sGTHO+4wQBEtvn94JXtF/x4+lOR
-         U8o5gXDTcXaJvSuviLNrzd8eV6jcOXnj5NRhY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728491327; x=1729096127;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dNftbaEiQh9mE7mlmkhwkRTz4TXqRx66rcdG98vrs5o=;
-        b=IcD5/NAw46HqE1A/H78xWuIZpKY88iEwEFkBhE9vmjoTULlYVd3OoKW1kz6onHGhgU
-         vYfxjeieAT6zfcF/BxfeP8LINJ8854DZaUaaiLWwt1k8M2mloKJ1qhUwSvRxhGLVQd9F
-         TCYNpyJjfcqewrk46fDgASdzqChr8TXpQaqzmgPub7CM5gU9xM1xXt7xK9elL8J3ylvf
-         Om4IeRgM4Y7mZOaLW6L6e46zjqmHFB+scQBkH6lgpp86KqimhDFpi7AP+SghpjV/Mwb/
-         3BsXk9J8+5fvwRBQ0C2tg3OiFi9ef5HM/znJ4PKnhSVejby+Wr+XHvKC1avv07KerkmR
-         6Wkg==
-X-Forwarded-Encrypted: i=1; AJvYcCXztuYXv/CYaS8HT+o3bknGbUiuttOx7IKxMmyh+MmZ10XcnLfr+UCFpUmFmQ8hQF7OBS2X1IE2ElPR@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMRVB4idHYLYf2C4tHj+CtUj525y5hi1KGuPRwt0PSKntEX4bS
-	JRWhq5iC8Fg2dcq05R2Ep7AdtgajQkLaqptf4OjuzWUAtvR7nyIXEXGm/IJKMrY=
-X-Google-Smtp-Source: AGHT+IF4qaTbAUXvCWOH6J2ilLA5tAude2CmsDNaCsJCv5yRbmKh0OIK/2bHki8dSyRC/sQA3W8P8w==
-X-Received: by 2002:a05:6602:29d1:b0:835:2ef4:3aa4 with SMTP id ca18e2360f4ac-8353d4ad3b6mr351227739f.8.1728491326617;
-        Wed, 09 Oct 2024 09:28:46 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4db6ebf0da0sm2079336173.110.2024.10.09.09.28.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2024 09:28:46 -0700 (PDT)
-Message-ID: <b005d39f-2b75-4a26-a78c-5cd8f7076399@linuxfoundation.org>
-Date: Wed, 9 Oct 2024 10:28:45 -0600
+	s=arc-20240116; t=1728505353; c=relaxed/simple;
+	bh=LQ7mQHruZvR8JdQbO1q7AUg9Cp5niugiM82nbTgMjdo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vi08PtbS9ZL9oN9s2IrNlSvpD36FwbeBOIITe7PyAeUFKHv+XsZyITv5ZIOZmNUxj6CKlwGctb2I0UwFirmy1lDGeNOr/8/f8DZ4cDTB1Y1znPIbOzFCJvOgpiqvT2CK47P/pPwP24Bl7QVk2IahwzXVO21wILnNmY8KWO+sYpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Js5NuLIY; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Wed, 9 Oct 2024 16:22:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1728505345;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TMdJPknoQhOpdik0XyKdYuoQBC817io3wy0gsr9UXr8=;
+	b=Js5NuLIYl4OAOpDhVd5X9ZVKK1azgZ6epJ1C0hFCQkMTG4dfIagaiBH2e8d6lMftzL28ju
+	oiuc5OuuzEHkDLLbJk8JABqIu0V3KfoWsVTySgfUCC2Ug7cPdL6n0nazJIgGfJaS9jlApG
+	/qTOtoitdZEuYuqNPvi1Mvqw4aNbD30=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: NeilBrown <neilb@suse.de>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <7qhvutk56llzwn3uwutbipkl3lzjnakr5ffphwumf3gm7qv33z@gujs4v4monj7>
+References: <20241009144511.5fd62c94@canb.auug.org.au>
+ <172844652013.444407.16580824583469743404@noble.neil.brown.name>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the kunit-next tree with the mm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Brendan Higgins <brendanhiggins@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, David Gow <davidgow@google.com>
-Cc: Kuan-Wei Chiu <visitorckw@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241009162719.0adaea37@canb.auug.org.au>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241009162719.0adaea37@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <172844652013.444407.16580824583469743404@noble.neil.brown.name>
+X-Migadu-Flow: FLOW_OUT
 
-On 10/8/24 23:27, Stephen Rothwell wrote:
-> Hi all,
+On Wed, Oct 09, 2024 at 03:02:00PM GMT, NeilBrown wrote:
+> On Wed, 09 Oct 2024, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> > failed like this:
+> > 
+> > In file included from include/linux/fs.h:6,
+> >                  from include/linux/highmem.h:5,
+> >                  from include/linux/bvec.h:10,
+> >                  from include/linux/blk_types.h:10,
+> >                  from include/linux/bio.h:10,
+> >                  from fs/bcachefs/bcachefs.h:188,
+> >                  from fs/bcachefs/fs.c:4:
+> > fs/bcachefs/fs.c: In function '__wait_on_freeing_inode':
+> > fs/bcachefs/fs.c:281:31: error: initialization of 'long unsigned int *' from incompatible pointer type 'u32 *' {aka 'unsigned int *'} [-Wincompatible-pointer-types]
+> >   281 |         DEFINE_WAIT_BIT(wait, &inode->v.i_state, __I_NEW);
 > 
-> Today's linux-next merge of the kunit-next tree got a conflict in:
+> The fix we want is to replace that line with
+>    struct wait_bit_queue_entry wait;
+> I should have checked more carefully - sorry.
 > 
->    lib/Kconfig.debug
+> I guess we wait for rc3?
 > 
-> between commit:
-> 
->    0f2016a962f0 ("lib/Kconfig.debug: move int_pow test option to runtime testing section")
-> 
-> from the mm-nonmm-unstable branch of the mm tree and commit:
-> 
->    f099bda563dd ("lib: math: Move kunit tests into tests/ subdir")
-> 
-> from the kunit-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+> Kent: could you please make that change?  The inode_bit_waitqueue() does
+> initialisation equivalent of DEFINE_WAIT_BIT() so you only need the declaration.
 
-Andrew,
-Another one related to move from lib/ lib/tests/
+Alright, this is now in my for-next branch:
 
-If you would like to take these patches - it is perfectly
-fine with me. If not I can handle these.
+From 07b246b3b97c96dd81c22849656b0f920fb9c1e8 Mon Sep 17 00:00:00 2001
+From: Kent Overstreet <kent.overstreet@linux.dev>
+Date: Wed, 9 Oct 2024 16:21:00 -0400
+Subject: [PATCH] bcachefs: __wait_for_freeing_inode: Switch to
+ wait_bit_queue_entry
 
-Adding David as well for feedback on this
+inode_bit_waitqueue() is changing - this update clears the way for
+sched changes.
 
-thanks,
--- Shuah
+Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+
+diff --git a/fs/bcachefs/fs.c b/fs/bcachefs/fs.c
+index 0630bbb87590..2d3e134e847c 100644
+--- a/fs/bcachefs/fs.c
++++ b/fs/bcachefs/fs.c
+@@ -278,7 +278,8 @@ static void __wait_on_freeing_inode(struct bch_fs *c,
+ 				    subvol_inum inum)
+ {
+ 	wait_queue_head_t *wq;
+-	DEFINE_WAIT_BIT(wait, &inode->v.i_state, __I_NEW);
++	struct wait_bit_queue_entry wait;
++
+ 	wq = inode_bit_waitqueue(&wait, &inode->v, __I_NEW);
+ 	prepare_to_wait(wq, &wait.wq_entry, TASK_UNINTERRUPTIBLE);
+ 	spin_unlock(&inode->v.i_lock);
 

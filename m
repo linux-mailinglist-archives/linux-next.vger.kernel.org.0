@@ -1,128 +1,171 @@
-Return-Path: <linux-next+bounces-4185-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4186-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B48E9969E0
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 14:22:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83AB0996F83
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 17:19:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BF14285004
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 12:22:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD18A1F22CA3
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 15:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFB71192B63;
-	Wed,  9 Oct 2024 12:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0985B1E3DE2;
+	Wed,  9 Oct 2024 15:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ngUaTiSb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XbplJ/kb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48AFF192D98;
-	Wed,  9 Oct 2024 12:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1196D1E3DDB
+	for <linux-next@vger.kernel.org>; Wed,  9 Oct 2024 15:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728476544; cv=none; b=I3tYwtgU8ux5I6tk+T9dJMq8PA5I4pqPkv9v9s4RuEhMZ5R3t5qAe8lYrpy1m4jVCt2CTuIFQTrMfKivySTZyELe7iG34Q4woDI0+UGhxFuDBHaBYKjm1ToUzHPQNUXDtJGWkrjvbUHElPuUC25ITIhiFSACZEhgDaNQX9y+F0o=
+	t=1728486683; cv=none; b=An6N3htwhI0NxS/T8Wyz1lhv9ZHEeFUch1QShpe/9sUmtFl+fWOxCk0HmqvnJ7KMpcL3yw2B+xnuu8xdaGYvTH6XQvwjn72PHOjrlTQco/9wvX9kVNDck29Y+biCo7KBcH4bxO7f0haIVSXu6gA5fxLyzJxUxNKl8/9fdzU+KaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728476544; c=relaxed/simple;
-	bh=wdUq5MDohMublc/kPXtZ9axSNDUJAPcxhxPzm4aYqcY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WwRYae8VjiN29gr5+uGxy+E96lKyHQrrnH7glLwToJBKYsaMpkub6fFrJzUuSVwntJo64H6HcsKKWbTsMKD+SuWn1RMZrWPMpoUHe/9HPKR6RnfWmUP0SEYYponzNtXg+6Tje6KOnDUdoTFM+3ZjYhxlDbdmi1iWxx28LS7Tspo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ngUaTiSb; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1728476537;
-	bh=O3MKXyKtlhW/Kiyuoa7eHLUbo2P+V6k1ppGeFCZHfFQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ngUaTiSbZL2eZ5sQIH8XPXZvvcrH83BrYqnV9CN2txFEzm4GAeLQhy48wvbCL/k1t
-	 GMlT2U+T6xYmdegKGCF2Wq3QPtMOeRVHHXiKEL8lsr2NFuC1B54W7A/9PmcgRDaEFQ
-	 S6hJpsZIEENsknQonXKn/kyBhm+4PcUW2NzHMB4+y4lgVB5+NEosHx3ojOFpvjivVh
-	 EkNk7k6UZQJVFqYu8W/h3X2kzRTWYLq4AtcS2B2a4m0b/Un7Xakja0n8oINfM8j8GF
-	 +oFmjpgrDZ3QD3ZZdyaiObxpIYqYzdOQVEhBCJVF7f5KE7SkPE/bnLPQpwxtm82p1p
-	 2fyWanLMQq2iA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XNsTN28XMz4x8p;
-	Wed,  9 Oct 2024 23:22:16 +1100 (AEDT)
-Date: Wed, 9 Oct 2024 23:22:16 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Christian Brauner
- <brauner@kernel.org>
-Subject: linux-next: simple boot test failure (Was: linux-next: Tree for Oct
- 9)
-Message-ID: <20241009232216.6f0a28e5@canb.auug.org.au>
-In-Reply-To: <20241009182016.61736424@canb.auug.org.au>
-References: <20241009182016.61736424@canb.auug.org.au>
+	s=arc-20240116; t=1728486683; c=relaxed/simple;
+	bh=YAyjDXg/x8EITUJ5Pcg/OnP6hSOdHCLesdCNNW49cFQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DkUa2acFwp82hSiv0cF+ji8jV/7ac2cP+Jqk5sXitiD6PlfE2WhWesBZOIaqGKzKGDDw8Y2sTU8MUBfgnboeibJIP+dNR2cVWiT6XCY3mYPM2xuSafzj1mS/wCd0GEN+Ha8S/rq+tes1nze0QBn+X3Pw2S8j90AptDIvnneHK9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XbplJ/kb; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-831e62bfa98so289723039f.1
+        for <linux-next@vger.kernel.org>; Wed, 09 Oct 2024 08:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1728486681; x=1729091481; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ICvUOk0W3V9cUGd1HaodpXuUIaBC/7ub9mNShcqtKD8=;
+        b=XbplJ/kbHPPNIg39GT/mjwmWi6Yi0FWJiwl5TdRVuOobCfTUz6IVeBhiZB9yphmvF9
+         uxYsZ3zz7AhC7Iyitmu93Pvsaz0EveTFajMtpQQmPGcDHkpNMWNRWDUyH8F9iS/jKMtj
+         Vf/Q53p3HOeiwHvLpnn2uv64OcrltDsx+xaBQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728486681; x=1729091481;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ICvUOk0W3V9cUGd1HaodpXuUIaBC/7ub9mNShcqtKD8=;
+        b=CUUspc4hKPrKk6cF2LTrcb12yLRzSI7x5Qf2hrqL5Zxc+x/tUJi7xG79IFg0pRm7y8
+         jLB2KhfC8xQ1fuGoHwCnlwvrbOIZUJLB785bTZ+LPOkRuF+sf1+4Ft+5sA2xw+7obDiB
+         gvAKay2bivDJrz+ZNn/rOUu2eJHTqyq+vi3hmhIxNO5PTGvKwYd6ovrnh491+4WNe+ua
+         AEkQDS7z7jVVbweAOZ9C3z11bl8UacJAMPN6wquHFCMdMi86U8lUPBWXPIUnP4kwgHO3
+         i/v1nCLdatzBj7jjUdghvHxd1qKQp/9jXBeBeSrlpoXis+765ZM3FpxXmipqWx2t1Axe
+         /tzw==
+X-Forwarded-Encrypted: i=1; AJvYcCWx7FxO8GYs+VQt/AO04+YHMVhWAyvljGSMHvi7lUSYksUMmkBvirKJoS4d+r0jmKU2d/x+gr92yjFh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCreTV5U1PO7F3ItBQdoqi3qPgxeSGn8coWr4Bp7iLAcL8vf/7
+	UxHdfobtlz0Wt4IaQ1ywyoWVtyjrRowOh7OH8jaxWRfGKgG0g/mtdfr9f/1Vn44=
+X-Google-Smtp-Source: AGHT+IHIQd+4JF1Rw+2n1rqjmSLdY5D1Feb6AJJuqJ8U/pxlyZdWcx3DsZ8GtvW2sFwFI79OyN+YFw==
+X-Received: by 2002:a05:6602:2dc6:b0:82c:f517:dc9e with SMTP id ca18e2360f4ac-8353d4b7702mr426808539f.8.1728486680884;
+        Wed, 09 Oct 2024 08:11:20 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4db8dac7279sm1107567173.33.2024.10.09.08.11.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Oct 2024 08:11:20 -0700 (PDT)
+Message-ID: <51d2cb33-c0d3-4837-a22c-9c42a7a4818e@linuxfoundation.org>
+Date: Wed, 9 Oct 2024 09:11:19 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/57PlGHg5OYSq_.y=OLIgM+8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: manual merge of the kunit-next tree with the mm tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Brendan Higgins <brendanhiggins@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, David Gow <davidgow@google.com>
+Cc: =?UTF-8?Q?Bruno_Sobreira_Fran=C3=A7a?= <brunofrancadevsec@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241004135527.1e2fc747@canb.auug.org.au>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241004135527.1e2fc747@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---Sig_/57PlGHg5OYSq_.y=OLIgM+8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 10/3/24 21:55, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the kunit-next tree got conflicts in:
+> 
+>    lib/math/Makefile
+>    lib/math/tests/Makefile
+> 
+> between commit:
+> 
+>    aa2cc84cfeb0 ("lib/math: add int_log test suite")
+> 
+> from the mm-nonmm-unstable branch of the mm tree and commit:
+> 
+>    f099bda563dd ("lib: math: Move kunit tests into tests/ subdir")
+> 
+> from the kunit-next tree.
+> 
+> I fixed it up (I used the latter version of lib/math/Makefile and see
+> below the signature by the patch immediately below) and can carry the
+> fix as necessary. This is now fixed as far as linux-next is concerned,
+> but any non trivial conflicts should be mentioned to your upstream
+> maintainer when your tree is submitted for merging.  You may also want
+> to consider cooperating with the maintainer of the conflicting tree to
+> minimise any particularly complex conflicts.
 
-Hi all,
+Sorry for the delay on this. Thank you for fixing this up.
 
-On Wed, 9 Oct 2024 18:20:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> News: this release fails my very simple qemu boot test.  It looks normal
-> up to user mode and I even get a login prompt, but when I log in I get
-> dumped back to the login prompt - presumably the shell is failing to run.
+Andrew,
 
-Bisected to
+Looks like we might see more conflicts between mm and kunit trees
+with the move from lib/ lib/tests/
 
-218a562f273bec7731af4e713df72d2c8c8816e8 is the first bad commit
-commit 218a562f273bec7731af4e713df72d2c8c8816e8
-Author: Al Viro <viro@zeniv.linux.org.uk>
-Date:   Mon Oct 7 18:43:57 2024 +0100
+I dropped a couple of patches I couldn't apply. Would you like
+me to drop this from kunit tree?
 
-    make __set_open_fd() set cloexec state as well
-   =20
-    ->close_on_exec[] state is maintained only for opened descriptors;
-    as the result, anything that marks a descriptor opened has to
-    set its cloexec state explicitly.
-   =20
-    As the result, all calls of __set_open_fd() are followed by
-    __set_close_on_exec(); might as well fold it into __set_open_fd()
-    so that cloexec state is defined as soon as the descriptor is
-    marked opened.
-   =20
-    Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-    Link: https://lore.kernel.org/r/20241007174358.396114-10-viro@zeniv.lin=
-ux.org.uk
-    Signed-off-by: Christian Brauner <brauner@kernel.org>
+Adding David as well for feedback on this.
 
-And reverting that commit from today's linux-next fixes my problem.
---=20
-Cheers,
-Stephen Rothwell
+> 
+> rom: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 4 Oct 2024 13:51:56 +1000
+> Subject: [PATCH] fix up for "lib: math: Move kunit tests into tests/ subdir"
+> 
+> interacting with "lib/math: add int_log test suite" from the mm tree.
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>   lib/Kconfig.debug       | 2 +-
+>   lib/math/tests/Makefile | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 9ed36fec4390..d3e44b17876d 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -3105,7 +3105,7 @@ config INT_POW_KUNIT_TEST
+>   
+>   	  If unsure, say N
+>   
+> -config INT_LOG_TEST
+> +config INT_LOG_KUNIT_TEST
+>   	tristate "Integer log (int_log) test" if !KUNIT_ALL_TESTS
+>   	depends on KUNIT
+>   	default KUNIT_ALL_TESTS
+> diff --git a/lib/math/tests/Makefile b/lib/math/tests/Makefile
+> index 64b9bfe3381d..89a266241e98 100644
+> --- a/lib/math/tests/Makefile
+> +++ b/lib/math/tests/Makefile
+> @@ -2,6 +2,6 @@
+>   
+>   obj-$(CONFIG_DIV64_KUNIT_TEST)    += div64_kunit.o
+>   obj-$(CONFIG_INT_POW_KUNIT_TEST)  += int_pow_kunit.o
+> -obj-$(CONFIG_INT_LOG_TEST) += int_log_kunit.o
+> +obj-$(CONFIG_INT_LOG_KUNIT_TEST)  += int_log_kunit.o
+>   obj-$(CONFIG_MULDIV64_KUNIT_TEST) += mul_u64_u64_div_u64_kunit.o
+>   obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational_kunit.o
 
---Sig_/57PlGHg5OYSq_.y=OLIgM+8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcGdXgACgkQAVBC80lX
-0GwJWQf8DSdnxWeAr+efyAuaakOibnuGTVLbzE5BlDgCPWz4SRvh2/d7j0UnJXRX
-+VgdC8AoLntlaF/GxDfW/6GT6DxxwG5QAguGlayOtlf6u/9LqRIqGnBGKH+Xnffv
-W2DKXZ5N37JGaB0p6PbgSHt4FhJuNecGsg8EkkJiMcsmH4BItIO/eYVwGHkW/tpS
-dudAI0zP4vQ3GcrVOSIUe8mmvU+hBHT5k7KVpHxYpL9cMX6rm388aVqJH2hLQo0L
-pb/O9ZJQ3tNehqBQ4quP5+ZD5xyOZwl8qsHbRHDXaYmHP9WEVYWaNObYSwD3Ht34
-ZhjSl3fJWgjbKkbiL0Sts52lsVyA7g==
-=V1ff
------END PGP SIGNATURE-----
-
---Sig_/57PlGHg5OYSq_.y=OLIgM+8--
+thanks,
+-- Shuah
 

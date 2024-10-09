@@ -1,107 +1,93 @@
-Return-Path: <linux-next+bounces-4174-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4175-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AB3D9960CE
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 09:27:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7175399616D
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 09:52:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C38A9B21D54
-	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 07:27:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 277C91F21599
+	for <lists+linux-next@lfdr.de>; Wed,  9 Oct 2024 07:52:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC9317C7CC;
-	Wed,  9 Oct 2024 07:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604AD183CD1;
+	Wed,  9 Oct 2024 07:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="qq4cMrRA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNpT/imY"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C08142070;
-	Wed,  9 Oct 2024 07:27:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3689B17C7A3;
+	Wed,  9 Oct 2024 07:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728458827; cv=none; b=QDuyKg5yLffE1MKW3vDA/Hb6iCY4GdBMpO/HsVLW+adD17bd15sY9z7yFJeUZo9OzEna8RQ4arZWCQ7jqH6WeYI6w6Sk9kZErPGoI8Qzu7jwE9bS/hJX2lgzqOEKPWFYjEJItAgfvD/dEdCVY1MIYAlM1BMxopkWa4BiBSFut7U=
+	t=1728460339; cv=none; b=KfJ7KxeoyiEmH+aMTQtXQ+PtePD7xBMBURgDJv1ENm7gFrOq//q6gUdWJ592ZW2goN/rclWGGquJDUsXcQ43dAEldMlwCxUWJ4AlaNMlr6GIpg44yB+akkuadWTop2sQx3IJ22NwwFsVe81G6yZEoBaiC3forUytPB0L043aucE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728458827; c=relaxed/simple;
-	bh=GBFBg0sEKBmtN4hXfjdfnCUTzVJ67hl4jwYYPj+Qp0g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RsNQfqyBR6UvGPFhNhzqcE5XxGbr/6cr31c3Xzom8Xg/rO0BXNJk8Pf9esQ8vdspSFIjMrM/uoPzBNkFirwDEnmBkmbSnHA05Qj7sUSOWoBAtbgsv0U3cXd/xODg1g65iYAYki8rMwAr6xwQhi5bVKHnhD3aJ3wq9q0rplVK2Ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=qq4cMrRA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E2DC4CEC5;
-	Wed,  9 Oct 2024 07:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728458826;
-	bh=GBFBg0sEKBmtN4hXfjdfnCUTzVJ67hl4jwYYPj+Qp0g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qq4cMrRAGTdRgs57WxeBmft29M4EL2YMExW3S5DG0GJUiAIvYSOgSrufz64z93NI3
-	 C8ItshSY4ql3gfl29enhHT2JpEL7yc0doud3K5nccK5jP4ZYLbi7z8pPATHbWnxj3U
-	 TUljyw2TbhI4LZIqyI8X3X54jbZz6s/Nk98zQ860=
-Date: Wed, 9 Oct 2024 09:27:03 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Kalle Valo <kvalo@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Wireless <linux-wireless@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Tree Davies <tdavies@darkphysics.net>
-Subject: Re: linux-next: manual merge of the wireless-next tree with Linus'
- tree
-Message-ID: <2024100941-gaining-sprang-826b@gregkh>
-References: <20241009114455.52db31ad@canb.auug.org.au>
- <2024100945-engross-appraisal-d1f0@gregkh>
- <317aeb02110105be1483d13c204bfb48d4d19c61.camel@sipsolutions.net>
- <2024100917-footsie-anatomist-fd06@gregkh>
- <e572bee3a1c2600b09cb2fd5d09a2e95b4e0faa0.camel@sipsolutions.net>
+	s=arc-20240116; t=1728460339; c=relaxed/simple;
+	bh=JA6rBMPyxQNoe4zKoQbofT+23r4z3tXhBEaBCamQqJU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QFklHY4PqlrZ7aVO8K9w1BdmEVX21UVvX8xL6EcXCXsDcqVldVATvU2dRMF7lvd87CucyHTSAMA52TokhenjFYn4dwJEjo9YFic6FBSuq8EbROsumOUF2tEE+sFO3ItYtlg1N26NdTTgEQibPmUQhvYgDgk8M4TBZzVyFs8mr7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNpT/imY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6D92C4CEC5;
+	Wed,  9 Oct 2024 07:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728460338;
+	bh=JA6rBMPyxQNoe4zKoQbofT+23r4z3tXhBEaBCamQqJU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=hNpT/imY9NzpPaMdgQsSxexdQm3+P2Uyxoj0VWptJolF3PQOFLb8V5mzcU6+M0PIn
+	 iMsmXcjDwUXKWKe5HCVxBRW59BG9HPgq+3bmlWCUpMefbsdjAHkdAD9rfORsKNhRe1
+	 +iLB6L66OC29FswA5+vONQABzU4FUSs0EM7aMoN131OZdZJYdk4EzBNiJWzmoGTXf4
+	 ffYaXQT1WbmluSE9a4ydYzLFNGSYbG/2+c5F4qb2ylD+XvxfU0awXycr71RO2G8UBC
+	 3NNRXuHPLil31yvEAasuCE7qEQKtT36XYcYh0s6qhDcfBQxEubFeM2cBrRJGXcA5Ku
+	 CxqpgneZUsSCg==
+Message-ID: <c97da0be-6924-48de-9cf3-0ba9d5e6a73e@kernel.org>
+Date: Wed, 9 Oct 2024 09:52:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e572bee3a1c2600b09cb2fd5d09a2e95b4e0faa0.camel@sipsolutions.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Signed-off-by missing for commit in the mediatek tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Hsin-Te Yuan <yuanhsinte@chromium.org>,
+ Daolong Zhu <jg_daolongzhu@mediatek.corp-partner.google.com>
+Cc: Hsin-Yi Wang <hsinyi@chromium.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>
+References: <20241009071543.5230cf79@canb.auug.org.au>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20241009071543.5230cf79@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 09, 2024 at 09:19:40AM +0200, Johannes Berg wrote:
-> On Wed, 2024-10-09 at 09:13 +0200, Greg Kroah-Hartman wrote:
+Il 08/10/24 22:15, Stephen Rothwell ha scritto:
+> Hi all,
 > 
-> > > But if the conflict is to Linus's tree, is that even going to help?
-> > > Seems like I should pull in -rc2 and solve this one and the ks7010 one
-> > > that way? Just need to check with net-next?
-> > 
-> > I'm not worried about the conflict with Linus's tree, sorry, I now see
-> > that that's what was being reported here also.
+> Commits
 > 
-> Ah OK. But I checked, and I can just pull in net-next to resolve this
-> and two other conflicts (where one appears to be due to git getting
-> confused between moving a file and deleting another copy of it in
-> staging), so I'll probably just do that, just need to sync with Kalle.
+>    65b99309a9c1 ("arm64: dts: mt8183: Damu: add i2c2's i2c-scl-internal-delay-ns")
+>    025869564bf8 ("arm64: dts: mt8183: cozmo: add i2c2's i2c-scl-internal-delay-ns")
+>    3d3bc7cb46e8 ("arm64: dts: mt8183: burnet: add i2c2's i2c-scl-internal-delay-ns")
+>    5bbddfd0470f ("arm64: dts: mt8183: fennel: add i2c2's i2c-scl-internal-delay-ns")
+> (The above also has an empty Reviewed-by tag)
+>    ca80f75083f6 ("arm64: dts: mt8183: set DMIC one-wire mode on Damu")
 > 
-> > I just want to get your
-> > staging driver changes, so I'll pull in up to commit 4991d2e7ad38, which
-> > is all I really care about :)
+> are missing a Signed-off-by from their authors.
 > 
-> Oh OK, so that's mostly unrelated then. Sure, you can pull that in so
-> you have the staging changes I've made in case other staging patches
-> want to touch the files.
-> 
-> 
-> Although ... maybe wait with that too. If you merge that now you'll have
-> to resolve (some of) the conflicts, and if I'm merging net-next now as
-> well we'll have two conflict resolutions for the same thing? That seems
-> a bit strange, even if the resolutions are almost certainly going to be
-> identical.
-> 
-> I can push out the net-next merge (& revert) soon, and then it'll all be
-> cleaner?
 
-Sure, I'll wait, just let me know what commit to merge at, from what
-tree, whenever you have it ready.
+The empty R-b happened because b4 didn't interpret "<email>2" correctly
+and dropped the email entirely. We should probably report that to the authors.
 
-thanks!
+Anyway, dropping these commits until Hsin-Te and Daolong clarify what to do here
+with the S-o-b tags, I didn't notice that the author was different, there.
 
-greg k-h
+Sorry about that.
+
+Regards,
+Angelo
 

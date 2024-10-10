@@ -1,175 +1,210 @@
-Return-Path: <linux-next+bounces-4214-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4215-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 265319984E7
-	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2024 13:24:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1108F9984F7
+	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2024 13:27:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1E5C1F25C28
-	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2024 11:24:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DC271C2424C
+	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2024 11:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22D6B1C2DA3;
-	Thu, 10 Oct 2024 11:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BC27F9CB;
+	Thu, 10 Oct 2024 11:27:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iP+8ZDg5"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="vFZBW2pb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 894D71BFE0F
-	for <linux-next@vger.kernel.org>; Thu, 10 Oct 2024 11:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7FE1C244C
+	for <linux-next@vger.kernel.org>; Thu, 10 Oct 2024 11:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728559468; cv=none; b=Yiigqzu0PNpTfG04nhKYiupr57/CDpvBXlbYeih8uxEcNouGUbuc68Z7LDfUGjmdoCxmMYaQ/smd6Hs0Cob3+5rkRupfl0LniyQpsf+7F7e19CpkQslSeD3tGWc/724XG+8PmjYUA9ggbAF1DtrUZ5MHPOCWej0bAo4U1x0x6JE=
+	t=1728559640; cv=none; b=Y8OA/xjLyLWKBNG9LPRDgX2H4HB5t/Kdr/DpcuAQVl78WkDczBs/fnwQyP83ucbhGVA7MAZcOCaDLyNhuje36oTtwg5vQqBCXao0IwAFhYBJJPl7KJXudZ+HuJ204Fda0FE+ZxKXBYY8q0m/HynuI9l7hlPkm6EHgCd0b0D56kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728559468; c=relaxed/simple;
-	bh=dwloSO3zc/oQIrf41SPMH/Y+ahNgp8HN5eh51Mbhn4c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fi8y59ibI0jSZ2psFGQ+ueIzk/Gz0mQMK6hGBYtMEPhTJdS/tv9krELb0HyU2e1IYUgZHZDEOOqNL3p6EAbdUdWk4orRzP6QBYMiVCbFRCz5Rgd/GplLxfiI26qXWLPaTpdHMSCKLYHRr8MhvN6MJu29UnNwx55pyQgmpL8b9fQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iP+8ZDg5; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728559465;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xWRMaq4FmXBkT0ki+hy9vdRkKTeIRV3Vbjx2gFloAZ0=;
-	b=iP+8ZDg5EFSRM/WB7Tkk1oxR/HU/XqKcxRnTra6Sc8HNn73fmXWO/fSKhgkwntP5/gI5+/
-	PKEGX/AhHRLQQt6FEGt3izN2aTQZqcFNqJvMPUIUDjoHZhoFud4Qx5h03oNwmfRp8IrSs3
-	9VPkRj34FJ+KVXEK6F7hpq9FKZOzlaQ=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-155-KJFChTarOYK50YAQElmWyQ-1; Thu, 10 Oct 2024 07:24:24 -0400
-X-MC-Unique: KJFChTarOYK50YAQElmWyQ-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-a994fb94446so96652966b.1
-        for <linux-next@vger.kernel.org>; Thu, 10 Oct 2024 04:24:24 -0700 (PDT)
+	s=arc-20240116; t=1728559640; c=relaxed/simple;
+	bh=wDBn8//XlshsHNzjxvQXzA8RHLrpwgOZtC7YDJMOhnA=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=JzAku9KozCujKcbmJLZ6SQj6hWWAZ1QRUWTXovMnXU3vZcVGDEBM2gkh7sr9uxt6HjrUTscjlLkWrcxWjVukMHz6WZKvcbVqVWCvyQb+wbWDx9AOL807pz1AU7ceOIXnBs3cjhEoyosWoY/5KXl4HH+76QCD5rp4zIpmIJZO5DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=vFZBW2pb; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71e01eff831so608205b3a.2
+        for <linux-next@vger.kernel.org>; Thu, 10 Oct 2024 04:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1728559637; x=1729164437; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GWZSL+yCeVW19ozWZXbraQutK1PQbkPlQewtbDMx1Io=;
+        b=vFZBW2pbzNCaelZL+amNGUmwk059V8W039h0sFjJD55nd/808/g60b1a7mxm+7dDrG
+         2bVYRXio4l9drcNg5mUgNbEYC1ZlDDnZQH16mII9ui7Veb6WP2XxTqEwsBwHfumJGLQU
+         KuEszHB+HjcC+qmbX8nKqJYoGyRFYy0HEjifKLaRqduG96Dwidlx7fP7C9BPLiA/hIHb
+         GhaXB9a30qu5ApDFTOCDU16J+rvgkextonepz+9Ure1akTBMOINJ7Kteco6hbg9AZsQm
+         poMosQV7e92wdSuOv1waJWs8qy5PPX24oa5s7S7UybbbRl7tCFMS/wIr7PVgemxucWtJ
+         oLoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728559463; x=1729164263;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xWRMaq4FmXBkT0ki+hy9vdRkKTeIRV3Vbjx2gFloAZ0=;
-        b=O8PJLBsjJGXg4QaNwtTMUNz+TqJgghWhJpXIjCSA1uxnJdt1ZgYcGoZ8So7hfvygQW
-         Shs8n3fbDPGJ+jNVSCXZws+5D6+07NAMsb+3wIUwJOOrVKE1+mfdWs3o82I0raJO1R0M
-         huFKTPjwjmBesYplB45pqFxLDH+j8b8kWOvtPHiWthQde+UlCs6+BzsWZ1wj6Ojwb861
-         LYqoLPzdhykW5DUNgZgTe7utNa83lpFqjE7AZN2bOzdZxEzvLgdLFc6Vlq4umpj/2gKs
-         cgpM5cWW2u+SCQCGqJj2APNu/W6AHSNVKkJ34/SRv/xvLiGZ1D4i2rv9CjEsc0onhyS2
-         bz8g==
-X-Forwarded-Encrypted: i=1; AJvYcCX2jpQ/wBA/G8HyyoBgvWjTMNZ4oT+hPK9l+UVZRHuFDmKWB11Tuw3a4E9kQEa2t0kFSNw09GW78z6W@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+U+20GvqhyQJhO8ZHcm68kovUex85smuvlNwL/q49NusAhtrx
-	4m+FpXPQWk+VhF+EyI2Q/AeqzTAo9BW2PehqF2DMYkMKpeCelhdOZcONmVGMF3oJcc5UuQoI4h8
-	2P/wT5iIYu1MqXdsiUuWmd0+S6lEUTdl4gbMOXDTymoQFBqfHt94/O/4VDdOvHRKG3tUOvKo+gZ
-	Qgz+nuzMpYBAYOC9hh70uvTk+qd5l7dFa/6A==
-X-Received: by 2002:a17:907:3f89:b0:a8a:7884:c491 with SMTP id a640c23a62f3a-a99a1109154mr249451266b.17.1728559462922;
-        Thu, 10 Oct 2024 04:24:22 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEkiuf/DgOS8UCjIjLoyr2Ba+uvEmY5SMvf3V2zxB0tFIiBZ5C3ebnTj0Wad8DNA3S1hujxPPCp/XNur92/DJc=
-X-Received: by 2002:a17:907:3f89:b0:a8a:7884:c491 with SMTP id
- a640c23a62f3a-a99a1109154mr249448966b.17.1728559462539; Thu, 10 Oct 2024
- 04:24:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728559637; x=1729164437;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GWZSL+yCeVW19ozWZXbraQutK1PQbkPlQewtbDMx1Io=;
+        b=s5Yto/sTBhNekVfAvq100UW0J3+NEhld7aZR9/ShX5TQdcClyyQ1+WzM4Wc4HmBd8q
+         muPYyzjUPeTAMCCd71P0QRyM1pMi8Te3Wq4hya2jh43jirpoZVfGlxBW3U4/VFi4NlZw
+         N5eGi4IrIqCRqgoS2dqcBf+2sfPYkXaKbKM05AhYtgeUwEEHwhUcUkB55amt4PF+61hg
+         iRQRJeMkpEKZ6GiMLsSzv2fwG0TsgZVq21GDeRV1+W1929X+/VkFe0yjBVaM2wcTenD0
+         Rt92qFv2aa9U8shf3ormpUHMZPGd4Le3OdHzkzmIBjpZNFEMDga3SlfcbOw5lE5LdEUj
+         EuHw==
+X-Gm-Message-State: AOJu0YyW6pegPSFlEKoW42H+FFMqh7YEPCA5vWT5ulX+CVo5fWbe+yww
+	cG5mHZgSWgxCwFabBS/rnLFboDv04559Uv6fvA+tBedi3iaA6895FqFSfN1yvcOEzTkloMXkhPW
+	j
+X-Google-Smtp-Source: AGHT+IGEGTlFEWyX61Dy4gJrGDJnymu6lS5L2ZHl9SslCrxe9kWXIMHVjpsSEtfy8Y/rY3Eq/c7JsA==
+X-Received: by 2002:a05:6a00:4b4b:b0:71e:410:4764 with SMTP id d2e1a72fcca58-71e1db77071mr9902553b3a.8.1728559637153;
+        Thu, 10 Oct 2024 04:27:17 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e2a9f6cb1sm849961b3a.84.2024.10.10.04.27.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2024 04:27:16 -0700 (PDT)
+Message-ID: <6707ba14.050a0220.216ae3.2048@mx.google.com>
+Date: Thu, 10 Oct 2024 04:27:16 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <xhsmh1q27o2us.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <cc537207-68a3-4dda-a8ec-6dda2fc1985d@paulmck-laptop> <250cde11-650f-4689-9c36-816406f1b9b8@paulmck-laptop>
- <182ef9c6-63a4-4608-98de-22ef4d35be07@paulmck-laptop> <xhsmh34m38pdl.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <ac93f995-09bc-4d2c-8159-6afbfbac0598@paulmck-laptop> <43d513c5-7620-481b-ab7e-30e76babbc80@paulmck-laptop>
- <xhsmhed50vplj.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <d6033378-d716-4848-b7a5-dcf1a6b14669@paulmck-laptop> <xhsmhbk04ugru.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <64e92332-09c7-4cae-ac63-e1701b3f3814@paulmck-laptop> <CAP4=nvTtOB+0LVPQ=nA3=XdGLhDiwLjcLAb8YmQ+YqR9L+050Q@mail.gmail.com>
-In-Reply-To: <CAP4=nvTtOB+0LVPQ=nA3=XdGLhDiwLjcLAb8YmQ+YqR9L+050Q@mail.gmail.com>
-From: Tomas Glozar <tglozar@redhat.com>
-Date: Thu, 10 Oct 2024 13:24:11 +0200
-Message-ID: <CAP4=nvTeawTjhWR0jKNGweeQFvcTr8S=bNiLsSbaKiz=od+EOA@mail.gmail.com>
-Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
-To: paulmck@kernel.org
-Cc: Valentin Schneider <vschneid@redhat.com>, Chen Yu <yu.c.chen@intel.com>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, sfr@canb.auug.org.au, 
-	linux-next@vger.kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: next-20241010
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 165 runs, 3 regressions (next-20241010)
+To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+ kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-st 2. 10. 2024 v 11:01 odes=C3=ADlatel Tomas Glozar <tglozar@redhat.com> na=
-psal:
->
-> FYI I have managed to reproduce the bug on our infrastructure after 21
-> hours of 7*TREE03 and I will continue with trying to reproduce it with
-> the tracers we want.
->
-> Tomas
+next/master baseline: 165 runs, 3 regressions (next-20241010)
 
-I successfully reproduced the bug also with the tracers active after a
-few 8-hour test runs on our infrastructure:
+Regressions Summary
+-------------------
 
-[    0.000000] Linux version 6.11.0-g2004cef11ea0-dirty (...) #1 SMP
-PREEMPT_DYNAMIC Wed Oct  9 12:13:40 EDT 2024
-[    0.000000] Command line: debug_boot_weak_hash panic=3D-1 selinux=3D0
-initcall_debug debug console=3DttyS0 rcutorture.n_barrier_cbs=3D4
-rcutorture.stat_interval=3D15 rcutorture.shutdown_secs=3D25200
-rcutorture.test_no_idle_hz=3D1 rcutorture.verbose=3D1
-rcutorture.onoff_interval=3D200 rcutorture.onoff_holdoff=3D30
-rcutree.gp_preinit_delay=3D12 rcutree.gp_init_delay=3D3
-rcutree.gp_cleanup_delay=3D3 rcutree.kthread_prio=3D2 threadirqs
-rcutree.use_softirq=3D0
-trace_event=3Dsched:sched_switch,sched:sched_wakeup
-ftrace_filter=3Ddl_server_start,dl_server_stop trace_buf_size=3D2k
-ftrace=3Dfunction torture.ftrace_dump_at_shutdown=3D1
-...
-[13550.127541] WARNING: CPU: 1 PID: 155 at
-kernel/sched/deadline.c:1971 enqueue_dl_entity+0x554/0x5d0
-[13550.128982] Modules linked in:
-[13550.129528] CPU: 1 UID: 0 PID: 155 Comm: rcu_torture_rea Tainted: G
-       W          6.11.0-g2004cef11ea0-dirty #1
-[13550.131419] Tainted: [W]=3DWARN
-[13550.131979] Hardware name: Red Hat KVM/RHEL, BIOS 1.16.3-2.el9 04/01/201=
-4
-[13550.133230] RIP: 0010:enqueue_dl_entity+0x554/0x5d0
-...
-[13550.151286] Call Trace:
-[13550.151749]  <TASK>
-[13550.152141]  ? __warn+0x88/0x130
-[13550.152717]  ? enqueue_dl_entity+0x554/0x5d0
-[13550.153485]  ? report_bug+0x18e/0x1a0
-[13550.154149]  ? handle_bug+0x54/0x90
-[13550.154792]  ? exc_invalid_op+0x18/0x70
-[13550.155484]  ? asm_exc_invalid_op+0x1a/0x20
-[13550.156249]  ? enqueue_dl_entity+0x554/0x5d0
-[13550.157055]  dl_server_start+0x36/0xf0
-[13550.157709]  enqueue_task_fair+0x220/0x6b0
-[13550.158447]  activate_task+0x26/0x60
-[13550.159131]  attach_task+0x35/0x50
-[13550.159756]  sched_balance_rq+0x663/0xe00
-[13550.160511]  sched_balance_newidle.constprop.0+0x1a5/0x360
-[13550.161520]  pick_next_task_fair+0x2f/0x340
-[13550.162290]  __schedule+0x203/0x900
-[13550.162958]  ? enqueue_hrtimer+0x35/0x90
-[13550.163703]  schedule+0x27/0xd0
-[13550.164299]  schedule_hrtimeout_range_clock+0x99/0x120
-[13550.165239]  ? __pfx_hrtimer_wakeup+0x10/0x10
-[13550.165954]  torture_hrtimeout_us+0x7b/0xe0
-[13550.166624]  rcu_torture_reader+0x139/0x200
-[13550.167284]  ? __pfx_rcu_torture_timer+0x10/0x10
-[13550.168019]  ? __pfx_rcu_torture_reader+0x10/0x10
-[13550.168764]  kthread+0xd6/0x100
-[13550.169262]  ? __pfx_kthread+0x10/0x10
-[13550.169860]  ret_from_fork+0x34/0x50
-[13550.170424]  ? __pfx_kthread+0x10/0x10
-[13550.171020]  ret_from_fork_asm+0x1a/0x30
-[13550.171657]  </TASK>
+platform          | arch  | lab          | compiler | defconfig            =
+        | regressions
+------------------+-------+--------------+----------+----------------------=
+--------+------------
+meson-g12a-u200   | arm64 | lab-baylibre | gcc-12   | defconfig+CON...OMIZE=
+_BASE=3Dy | 2          =
 
-Unfortunately, the following rcu stalls appear to have resulted in
-abnormal termination of the VM, which led to the ftrace buffer not
-being dumped into the console. Currently re-running the same test with
-the addition of "ftrace_dump_on_oops panic_on_warn=3D1" and hoping for
-the best.
+r8a7743-iwg20d-q7 | arm   | lab-cip      | gcc-12   | shmobile_defconfig   =
+        | 1          =
 
-Tomas
 
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+241010/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20241010
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      0cca97bf23640ff68a6e8a74e9b6659fdc27f48c =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform          | arch  | lab          | compiler | defconfig            =
+        | regressions
+------------------+-------+--------------+----------+----------------------=
+--------+------------
+meson-g12a-u200   | arm64 | lab-baylibre | gcc-12   | defconfig+CON...OMIZE=
+_BASE=3Dy | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/670782fe2c82000191c86871
+
+  Results:     2 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241010/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-12/lab-baylibre/baseline-meson-g1=
+2a-u200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241010/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-12/lab-baylibre/baseline-meson-g1=
+2a-u200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/670782fe2c82000=
+191c86874
+        new failure (last pass: next-20241008)
+        2 lines
+
+    2024-10-10T07:31:59.971277  kern  :alert :   ESR =3D 0x0000000096000006
+    2024-10-10T07:31:59.971645  kern  :alert :   EC =3D 0x25: DABT (current=
+ EL), IL =3D 32 bits
+    2024-10-10T07:31:59.972027  kern  :alert :   SET =3D 0, FnV =3D 0
+    2024-10-10T07:31:59.972287  kern  :alert :   EA =3D 0, S1PTW =3D 0
+    2024-10-10T07:31:59.993490  kern  :alert :   FSC =3D 0x06: level 2 tra<=
+8>[   16.088897] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail U=
+NITS=3Dlines MEASUREMENT=3D2>
+    2024-10-10T07:31:59.994029  nslation fault
+    2024-10-10T07:31:59.994455  kern  :<8>[   16.098214] <LAVA_SIGNAL_ENDRU=
+N 0_dmesg 3901942_1.5.2.4.1>
+    2024-10-10T07:31:59.994836  alert : Data abort info:
+    2024-10-10T07:31:59.995275  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
+006, ISS2 =3D 0x00000000   =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/670782fe2c82000=
+191c86875
+        new failure (last pass: next-20241008)
+        13 lines
+
+    2024-10-10T07:31:59.948954  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 00000000000000c8
+    2024-10-10T07:31:59.949205  kern  :alert : Mem abort inf<8>[   16.06130=
+0] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines M=
+EASUREMENT=3D13>
+    2024-10-10T07:31:59.949431  o:   =
+
+ =
+
+
+
+platform          | arch  | lab          | compiler | defconfig            =
+        | regressions
+------------------+-------+--------------+----------+----------------------=
+--------+------------
+r8a7743-iwg20d-q7 | arm   | lab-cip      | gcc-12   | shmobile_defconfig   =
+        | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/67077fa8f0ca2d54e5c86864
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: shmobile_defconfig
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241010/arm/=
+shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241010/arm/=
+shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/67077fa8f0ca2d54e5c86=
+865
+        failing since 9 days (last pass: next-20240930, first fail: next-20=
+241001) =
+
+ =20
 

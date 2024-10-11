@@ -1,130 +1,177 @@
-Return-Path: <linux-next+bounces-4237-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4238-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A92A0999D18
-	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 08:51:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C897F999D39
+	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 08:55:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B088281B0E
-	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 06:51:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56C68B23B3E
+	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 06:55:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8914B209F52;
-	Fri, 11 Oct 2024 06:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF4941C1ABE;
+	Fri, 11 Oct 2024 06:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d+Kh1/Rs"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="I6GMgAru"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048811F4FC2;
-	Fri, 11 Oct 2024 06:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3756C11187;
+	Fri, 11 Oct 2024 06:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728629469; cv=none; b=hTxo402v+rhpE16gFktb7H3aVuFSRvle1nmknEMwAm/uxuOhna4a/9epyzNfDdxULXzyQx7kDCrepBaS0OHGDS/xzMpduFDEPKluL3oMCj2PyW8eCNzU5jrG8+2liD5ASslkxu+d4E/ehie009fA1hKEO4AuEIfdQ93t9IbYieg=
+	t=1728629724; cv=none; b=Avuofn2YvREW134CKB6n+WpByhSr9QWWb5tHv+Dw0DMH5+9laBnhvrZy0MpNrA+L1yQeYCxT8g6PY/DJEtKnhlGROcrkll6yzm2GbbW2CrmoSPVOP3BX+OanE6CrFvNpd6FYLvcQTpqTeCeWqJP+P1llW5K45NJkGYhBQVdBIE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728629469; c=relaxed/simple;
-	bh=8upQEaFMUGPR4asJZ4uMH4mliRD2mg3nCcWceaOMyvg=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=sAm8EzZpb2qFk0Z3MR20STv0RND4ujI6ZbmihG/ZhVs4l06d04N8O+zEN2ph154wS5DqwlOyUOlWGJhoFL8SX7pEzg3n3ZZEiAmmTBEdig5ihzCO21peeOVQSAC/AFCYPTPeumw5YWkW6cfmUhnhMXi5S+qWgqqI7Z7ALiARvN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d+Kh1/Rs; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71e050190ddso1233266b3a.0;
-        Thu, 10 Oct 2024 23:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728629467; x=1729234267; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z/+tjJ7E9JhBsWRHBUSwfhW8GN/uEwBPBEcRmhfyDPM=;
-        b=d+Kh1/Rs+jEQgnaYcI9kwgRYgVcJzKOgUpZs+9+J0BhbN8KteKq264Q4QLvnlrASC8
-         UXI0brGcqLGthVro/+B4Oa0mz9vtwz+e6syFXAZtxNlcgvbyj/LXtj/PFn3eXd4gYQ2Z
-         bYZlsmHUrwxXAmMul/akJNg7T01dkP1sdeYldoqU9nSR5s0uRilMoug+6fB0geuZ7Vz2
-         xbFLRDmIw+hFvX2/04bwlerG50qZpCapSyXM7VUh1GObtNUKCL2kOzCQ5Vuz6A7rdQU4
-         w4rFRge/kD6phn2NSv+pdYMDMdd2wBp08NLKa0OHRyYJ+lKAX1cBw1Nb19zzF1/IFgap
-         PU0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728629467; x=1729234267;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/+tjJ7E9JhBsWRHBUSwfhW8GN/uEwBPBEcRmhfyDPM=;
-        b=vNdM5zW7wX9q2AKJhlawKcRLJCRF5fX4emiau2JeMBc6TmCBQeCm+CuKwFFLHssSy+
-         mFes/4U2Nf2pf41oOS1WQaptfaOguhnXP0pXDjXaYii7PydsesxoiNdmNjPQuz/LsJMi
-         275DqlzjFANiTaXgQPPYlu3xstD8D4rIUvbCYbXM3iE5eb8zbyi2AY7uBswHfn3UXebx
-         J4AtTb4WTcxVmtaLsboI97nsJieHufvcLsk3P7JLXcgStle0uO0CcKvYORGnNvsppgOw
-         fR1uhlfjJ1XNLcPvwMUzwhbPp/07lJdENhFjfdTyzsiP7JhHll2MB/7uq9i0QObe7kz8
-         OV8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVMk9Xzijx4cENWoeZsf47jeSvR5peM6DiN5FRnqS954QMmssIr69r8Di/bZyHsfj8qCxZgpHBc6ikU5A==@vger.kernel.org, AJvYcCXEaASbaKR8YoZYNLGHpcROCUmJE6XJKgnY1VVeOHa0H14PqmIBZVKw5IhETMhs1wmoYwmpZGzg0lSs9DA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGiq3j/0U/AjAwVixs+wpYIg4Mp2tfM9o2ekahDeIEsSP+/E8j
-	++7+XEam8X7QDMkYPtxNEXQZUivZpCySYjyADwTac3+6nFI8blN9
-X-Google-Smtp-Source: AGHT+IGQoHcWQzUGO54cL5ac8Qnj93I5DOK+gnJbwMrgUZtK8PnoPRsYgsD+DxUgF1ccmFnwFivAoA==
-X-Received: by 2002:a05:6a00:1894:b0:71d:fbf3:f769 with SMTP id d2e1a72fcca58-71e380c113dmr2773131b3a.28.1728629466939;
-        Thu, 10 Oct 2024 23:51:06 -0700 (PDT)
-Received: from [10.0.2.15] (KD106167137155.ppp-bb.dion.ne.jp. [106.167.137.155])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e2aa93918sm2035692b3a.135.2024.10.10.23.51.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 23:51:06 -0700 (PDT)
-Message-ID: <b58f2c3b-382f-46ce-b2b8-fb39a5c3b356@gmail.com>
-Date: Fri, 11 Oct 2024 15:51:05 +0900
+	s=arc-20240116; t=1728629724; c=relaxed/simple;
+	bh=wZC6C1ZtWGQtJBe24ty2gAMGDS10CwoLb6BVabdQ7hE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=F+IYz4EBlvGWUVwfNUmxoKb7lS2LyVBWs8KfowO6vocmOWrOPopIhTAuf/I5A/XypPixRmJf38FwgKDVArkCSR1ZfPrV4XrOlWV5Ek0FW9BbIZcxvYnhY6jJU8iVnIx8sR+nZlEArvjsjoYSi1bDfZwL875vkqL6xMuOKWggaiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=I6GMgAru; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1728629718;
+	bh=Qi4iD/zJpL0QLWvm+sFan1S5bXiafXVEvRaUNdox3AQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=I6GMgAruyex4YqJZGgkwNVpc6Rop+GgCTJP1/dxJlxcF5l2+9OGH84in9QCBEc1/l
+	 B0DaKKwaoi3zp/qHEsSg05Xg2QLcIvFdJtQNRci481EVQ7rG/TJawQ8BXawJTqofJT
+	 AbGJo6ynGBSRlR6W6MI8dHeyyyCTiASupHsjKeBil6iBB8ehkSTVwhdRgL785QkW+Q
+	 cwBVBGswHfDSJXoPAnImDwn0PvVO1CHTMNI2EvSstruvADejG7xIXBwfVHeGeHNKPs
+	 4tK8DJhzY+XbWWd8+NuN7MVrkoJRb861yA+5Oe0VgQ74ahnXl97gV44dHEtNQgrE0T
+	 tayid8YAXFF7w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XPy7928C4z4wb1;
+	Fri, 11 Oct 2024 17:55:16 +1100 (AEDT)
+Date: Fri, 11 Oct 2024 17:55:16 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: "Dr. David Alan Gilbert" <linux@treblig.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the tip tree
+Message-ID: <20241011175516.37dc061b@canb.auug.org.au>
+In-Reply-To: <20241011135515.75317b03@canb.auug.org.au>
+References: <20241011135515.75317b03@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: greg@kroah.com, sfr@canb.auug.org.au
-Cc: corbet@lwn.net, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-References: <2024101127-scrubbed-unfilled-8b47@gregkh>
-Subject: Re: linux-next: build warning for a long time
-Content-Language: en-US
-From: Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <2024101127-scrubbed-unfilled-8b47@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/QOyKX8NtVGTer43kIdhPlC/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi,
+--Sig_/QOyKX8NtVGTer43kIdhPlC/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry for the premature reply I just sent...
+Hi all,
 
-On Fri, 11 Oct 2024 08:31:47 +0200, Greg KH wrote:
-> On Fri, Oct 11, 2024 at 05:24:42PM +1100, Stephen Rothwell wrote:
->> Hi all,
->> 
->> From before the git era, an htmldocs build (if we had such a thing back
->> then) would complain like this:
->> 
->> Documentation/driver-api/usb/usb:164: drivers/usb/core/message.c:968: WARNING: Duplicate C declaration, also defined at driver-api/usb/gadget:804.
->> Declaration is '.. c:function:: int usb_string (struct usb_device *dev, int index, char *buf, size_t size)'.
->> 
->> I assume it is confused because we have documented both a function and a
->> data type called "usb_string".  The former in drivers/usb/core/message.c
->> and the latter in include/linux/usb/gadget.h.
->> 
->> There are about 46 references to the function and 105 to the struct.
->> We could rename the function to usb_string_utf8 ...
-> 
-> But usb strings are not in utf8 format :)
-> 
-> As C can handle this just fine, odds are sphinx should also be able to
-> handle this?
-> 
-> thanks,
+On Fri, 11 Oct 2024 13:55:15 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the tip tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
+>=20
+> kernel/time/clocksource.c:1258:13: warning: '__clocksource_change_rating'=
+ defined but not used [-Wunused-function]
+>  1258 | static void __clocksource_change_rating(struct clocksource *cs, i=
+nt rating)
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> Introduced by commit
+>=20
+>   5ce9bb4d5af2 ("clocksource: Remove unused clocksource_change_rating")
+>=20
+> CONFIG_CLOCKSOURCE_WATCHDOG is not set for his build.
 
-This is a well known issue of Sphinx, which is taking a looong time to be
-properly fixed.
+This became a build failure in my powerpc allyesconfig build, so I
+applied the following patch.
 
-For your info, this is a short summary I posted last March:
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 11 Oct 2024 17:26:18 +1100
+Subject: [PATCH] fix up for "clocksource: Remove unused clocksource_change_=
+rating"
 
-  https://lore.kernel.org/f735ce0b-db1e-49bc-86ac-b5ab8e4aec31@gmail.com/
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ kernel/time/clocksource.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-I think we need to wait patiently for a fix(es) of Sphinx.
+diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+index e041ba81c2f7..4a497cf1dff7 100644
+--- a/kernel/time/clocksource.c
++++ b/kernel/time/clocksource.c
+@@ -171,7 +171,6 @@ static inline void clocksource_watchdog_unlock(unsigned=
+ long *flags)
+ }
+=20
+ static int clocksource_watchdog_kthread(void *data);
+-static void __clocksource_change_rating(struct clocksource *cs, int rating=
+);
+=20
+ static void clocksource_watchdog_work(struct work_struct *work)
+ {
+@@ -681,6 +680,15 @@ static void clocksource_dequeue_watchdog(struct clocks=
+ource *cs)
+ 	}
+ }
+=20
++static void clocksource_enqueue(struct clocksource *cs);
++
++static void __clocksource_change_rating(struct clocksource *cs, int rating)
++{
++	list_del(&cs->list);
++	cs->rating =3D rating;
++	clocksource_enqueue(cs);
++}
++
+ static int __clocksource_watchdog_kthread(void)
+ {
+ 	struct clocksource *cs, *tmp;
+@@ -1255,13 +1263,6 @@ int __clocksource_register_scale(struct clocksource =
+*cs, u32 scale, u32 freq)
+ }
+ EXPORT_SYMBOL_GPL(__clocksource_register_scale);
+=20
+-static void __clocksource_change_rating(struct clocksource *cs, int rating)
+-{
+-	list_del(&cs->list);
+-	cs->rating =3D rating;
+-	clocksource_enqueue(cs);
+-}
+-
+ /*
+  * Unbind clocksource @cs. Called with clocksource_mutex held
+  */
+--=20
+2.45.2
 
-HTH,
+--=20
+Cheers,
+Stephen Rothwell
 
-Akira
+--Sig_/QOyKX8NtVGTer43kIdhPlC/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcIy9QACgkQAVBC80lX
+0GzkJwf/cNKxnijbEO1zJElqs30KAmW2YT6PhT6kjdB05bvXL2MUxc0cF3hTivfT
+kH51X25YB+Wnt4hLlgJrpij+/sDLBZJoS+OqHKeWasdMKl2OqoqOicte8v22C7CW
+2ELW14GPFyMQbrqv2F0oY+JEqWXwpbsLHneV5IVbVO9BwJp3XYuJ4StJRTkTQalz
+50dL0TVsPvAtmwtds5HKZpdIqj1PC+ZZ57gT6D1/W0Rjt2BZstjnjCNZiMEs8iOf
+/w2q4Wm5YcfW/q0EzdwaFNOjmtvN/XTsASHb6GskA2BCfvvTPD5ZHQ/nv++l+b1e
+3ejqL5+wnzc7WzowU08mYT/LK83lOA==
+=nH0+
+-----END PGP SIGNATURE-----
+
+--Sig_/QOyKX8NtVGTer43kIdhPlC/--
 

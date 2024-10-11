@@ -1,148 +1,233 @@
-Return-Path: <linux-next+bounces-4240-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4241-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD31A999D6A
-	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 09:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB2CA999DBB
+	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 09:21:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A6A528776D
-	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 07:05:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A42B2858E0
+	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 07:21:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F4BE209F36;
-	Fri, 11 Oct 2024 07:05:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15DAA20968C;
+	Fri, 11 Oct 2024 07:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ztB8wZB8"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="PQWVrayn";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="p3vHxDUZ";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="PQWVrayn";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="p3vHxDUZ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B50209F2D
-	for <linux-next@vger.kernel.org>; Fri, 11 Oct 2024 07:05:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DF01F4FDF;
+	Fri, 11 Oct 2024 07:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728630337; cv=none; b=KJbdf7bVqCNif0XBivd9FrO1jlI8i9KyfOSnzfhVaXFCNt/G5I2G1WtenDeVPMwuXszaCSKw4Q+tZFI7DZYzCjli6Hj5CTyWNDUfZHLMuL9sjQRT7YjNGZKd79e3NJO3BeoTMgoqGfRR2ouKgWh5lOvDlVVCG20I/JILubVa9Aw=
+	t=1728631274; cv=none; b=PKztTsimBIdh1WFOg6bVJ/pLAVr9g519mPci8LZwsjFx+pwN2JnLAoNDkd4tutJZqLoTuX/n3jR3GZxou86dmlrT0PrwdCOBBhclRkJ8SyrxDgSNWr/rWZOXgLFNFU3QEiX7PMEzK0RYdkdNd1Rsph5zLrDJGcl8AxzVexuZXxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728630337; c=relaxed/simple;
-	bh=oQVYIhGbEfAnqbdWbSdyP2ZhcG8OZnwQ2cfbNbhQT3s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rOT4/UvhIa7p2EcMB1r5T8O0xd3FboACwzYYpiS2LNZ8D4hAN3AFJAgGoa0v54CFIJVVjmHlHUSw8l7YzPjLCQvVI3d77aBJIN9Yax9CcYmgl+PKVQfePbmVBfTphs6t6NNF0P7ROuEPF9HKPUhIpLli3pnmZ2xNJamzvadPI5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ztB8wZB8; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3a391fdd53fso138925ab.1
-        for <linux-next@vger.kernel.org>; Fri, 11 Oct 2024 00:05:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728630335; x=1729235135; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=opgRegBAM5FAXU4C8qQl6ZNe0vpoXti1f24qgQ1xEts=;
-        b=ztB8wZB8UecCP1caU8GfVnMr93xdM+IKU6tCAMPlOXnNxv/9JRhUqx1MW5nxEa9NrN
-         lnX+XBC0JPxdulkEItvwOxJte1y9RQ7QWRyBNTBlbSS7v9vjerkTKTnOOOP2H2H9S2mY
-         lBs1JozJSETBtevIez4BDpReiaWnbmhy5/X4jKkhV1EmIkuQJ34wYuxYhKTpnuMm30QW
-         RROM2LlNlMXlU0vyjbht4ZQWl58LtNQKAzo58XR7fpE1Tq/SLolR/BMgerTkDU8VtQ66
-         I8HogpPuhJ+iUcJa0MSw1F1kiPgX9znbq+x1k7wtpLoGHSZf3Gc48ueRIkUr+YE6cmzf
-         XXvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728630335; x=1729235135;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=opgRegBAM5FAXU4C8qQl6ZNe0vpoXti1f24qgQ1xEts=;
-        b=rFmK9FaMOr7v3ERiOvILD5ZVCX3MKEXpuC0nWM4dvpNQ/iAZu+HAAnUbkTUN3oiT3L
-         lhhIGw0+AF6DVhLuyHJCUUmhQRU8rLCduDmS74XDNx13oiMTTGj9Q0gc6eDDBiMoYJ78
-         W7UCpBuUvtNr6vPgzDQOIXYu29BWPzqSBfXbsv7MRCn5UWSbCxumxCeVaqbrJEwRqSgC
-         jfeyxABQsXnNXiwizLxcXLYqMWnIjgJ7yOkBGxWqwVozhbLQGAPTCKmuLQSnCK8Yevf7
-         /bjyXW9EcfBZYUBzdoTlu63lSxZs1lNuUG/TymsTi1m89NLjaAyO0zZN9z5Mq49D76D8
-         v6BQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEC4QE3Tmr87zI4lAx12Rt/z6bcaE2BAGcxuGax9u0OtpqET4UoHBBMIyQ9zmvFMQDNMi9F6tkpr9q@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRf28I0AxQtUwhNQnmE+4SdCcpPz1rwyAzRLKuQJRAQD43boKA
-	ivk8nYu0GqxWKKMvqzn/0j6jK4mRcbv739YLj9m/JodSckzKNOarXTYip5EkgaDH6751foT3aP9
-	y2o1GTLyxIy7ROInvqWasgvLD+Rt3UrR2gVO5
-X-Google-Smtp-Source: AGHT+IH0cRUN2m4kUOQeDT0edggke9x59b9iQG74/GOevsfrpTMX28HFCbrd+U/nm7/WWJ8m/yyh3EXal3MCFR7T4Ic=
-X-Received: by 2002:a05:6e02:1566:b0:3a3:a053:c0ad with SMTP id
- e9e14a558f8ab-3a3b6566f17mr1566875ab.25.1728630334825; Fri, 11 Oct 2024
- 00:05:34 -0700 (PDT)
+	s=arc-20240116; t=1728631274; c=relaxed/simple;
+	bh=ej/yJCXL6Tpz3b0iejZlOHoFCm/VhoZYtdWwJLZWq7I=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tgHmNxbu8BfcpIwb+L6vtTIdOVi51Bs2JMgF75d1OvSeHP6VAE/9Nf8COOFDBHSem8iV9CXsy8dNfq7j/6aURN3wNZ0lq1WIBqw8n7YspteefUwlUzEP6DDFNqLwqTpZdJ9gp7yyho2EvfG76+25opXdh47Ye1agsIRtul1aeiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=PQWVrayn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=p3vHxDUZ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=PQWVrayn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=p3vHxDUZ; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 46D2221D4F;
+	Fri, 11 Oct 2024 07:21:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1728631270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TGvFOPrTi/sc7M6QPbA/dp56ZVzzZnA6kcDSA552HbA=;
+	b=PQWVraynwNE52z78xOF9ztAbjddXMJURmmRvKzPQSOoOe8s/wDSplSL8DAXghIGJVX6MmW
+	DWeIdt42ba3vr+E5rKgtiy8L5gMJ9O7WFf/JCPb2gqzIumjeeY0Iy2jvtEoMJAKiteX4Do
+	1FswlO6w7awqIiRjcBW5a1xMI9OBK00=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1728631270;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TGvFOPrTi/sc7M6QPbA/dp56ZVzzZnA6kcDSA552HbA=;
+	b=p3vHxDUZYi3kWCAy9l6BSfg9fuyN0TC8bgEAwmy1BUoq2kypipz7cf2eQgdTYnRqVJjx7g
+	ZwC3etOWJjxyPZAA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=PQWVrayn;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=p3vHxDUZ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1728631270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TGvFOPrTi/sc7M6QPbA/dp56ZVzzZnA6kcDSA552HbA=;
+	b=PQWVraynwNE52z78xOF9ztAbjddXMJURmmRvKzPQSOoOe8s/wDSplSL8DAXghIGJVX6MmW
+	DWeIdt42ba3vr+E5rKgtiy8L5gMJ9O7WFf/JCPb2gqzIumjeeY0Iy2jvtEoMJAKiteX4Do
+	1FswlO6w7awqIiRjcBW5a1xMI9OBK00=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1728631270;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TGvFOPrTi/sc7M6QPbA/dp56ZVzzZnA6kcDSA552HbA=;
+	b=p3vHxDUZYi3kWCAy9l6BSfg9fuyN0TC8bgEAwmy1BUoq2kypipz7cf2eQgdTYnRqVJjx7g
+	ZwC3etOWJjxyPZAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2317013AAF;
+	Fri, 11 Oct 2024 07:21:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Rfs1BubRCGcqBQAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 11 Oct 2024 07:21:10 +0000
+Date: Fri, 11 Oct 2024 09:22:06 +0200
+Message-ID: <8734l3nly9.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the sound tree
+In-Reply-To: <20241011131046.5eb3905a@canb.auug.org.au>
+References: <20241011131046.5eb3905a@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241011102330.02bece12@canb.auug.org.au> <20241010235743.1356168-1-namhyung@kernel.org>
- <20241011114858.61ff252b@canb.auug.org.au> <ZwjG_ZpqV4h3HifQ@google.com>
-In-Reply-To: <ZwjG_ZpqV4h3HifQ@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 11 Oct 2024 00:05:21 -0700
-Message-ID: <CAP-5=fWm86UcwX+B_XjFSLFJF54QP2trYzJgJF0927h-AzSV_Q@mail.gmail.com>
-Subject: Re: [PATCH] perf tools: Fix build failures on ppc64le
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Queue-Id: 46D2221D4F
+X-Spam-Score: -3.51
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	MIME_TRACE(0.00)[0:+];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	TO_DN_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Thu, Oct 10, 2024 at 11:34=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
- wrote:
->
-> On Fri, Oct 11, 2024 at 11:48:58AM +1100, Stephen Rothwell wrote:
-> > Hi Namhyung,
-> >
-> > On Thu, 10 Oct 2024 16:57:43 -0700 Namhyung Kim <namhyung@kernel.org> w=
-rote:
-> > >
-> > > Hi Stephen, can you please test if this patch fixes it?
-> >
-> > Sorry, I still get the same errors.
->
-> Ok, thanks for the test.  I'll drop the series and rebase the branch.
+On Fri, 11 Oct 2024 04:10:46 +0200,
+Stephen Rothwell wrote:
+> 
+> Hi all,
+> 
+> After merging the sound tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+> 
+> In file included from sound/pci/hda/patch_realtek.c:29:
+> sound/pci/hda/hda_local.h:312:58: error: 'const struct hda_quirk' has no member named 'name'
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                          ^~~~
+> sound/pci/hda/patch_realtek.c:10759:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10759 |         HDA_CODEC_QUIRK(0x17aa, 0x3802, "DuetITL 2021", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:65: warning: excess elements in struct initializer
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                                 ^
+> sound/pci/hda/patch_realtek.c:10759:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10759 |         HDA_CODEC_QUIRK(0x17aa, 0x3802, "DuetITL 2021", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:65: note: (near initialization for 'alc269_fixup_tbl[712]')
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                                 ^
+> sound/pci/hda/patch_realtek.c:10759:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10759 |         HDA_CODEC_QUIRK(0x17aa, 0x3802, "DuetITL 2021", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:58: error: 'const struct hda_quirk' has no member named 'name'
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                          ^~~~
+> sound/pci/hda/patch_realtek.c:10764:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10764 |         HDA_CODEC_QUIRK(0x17aa, 0x3820, "IdeaPad 330-17IKB 81DM", ALC269_FIXUP_ASPIRE_HEADSET_MIC),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:65: warning: excess elements in struct initializer
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                                 ^
+> sound/pci/hda/patch_realtek.c:10764:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10764 |         HDA_CODEC_QUIRK(0x17aa, 0x3820, "IdeaPad 330-17IKB 81DM", ALC269_FIXUP_ASPIRE_HEADSET_MIC),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:65: note: (near initialization for 'alc269_fixup_tbl[717]')
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                                 ^
+> sound/pci/hda/patch_realtek.c:10764:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10764 |         HDA_CODEC_QUIRK(0x17aa, 0x3820, "IdeaPad 330-17IKB 81DM", ALC269_FIXUP_ASPIRE_HEADSET_MIC),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:58: error: 'const struct hda_quirk' has no member named 'name'
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                          ^~~~
+> sound/pci/hda/patch_realtek.c:10779:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10779 |         HDA_CODEC_QUIRK(0x17aa, 0x386e, "Legion Y9000X 2022 IAH7", ALC287_FIXUP_CS35L41_I2C_2),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:65: warning: excess elements in struct initializer
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                                 ^
+> sound/pci/hda/patch_realtek.c:10779:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10779 |         HDA_CODEC_QUIRK(0x17aa, 0x386e, "Legion Y9000X 2022 IAH7", ALC287_FIXUP_CS35L41_I2C_2),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:65: note: (near initialization for 'alc269_fixup_tbl[732]')
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                                 ^
+> sound/pci/hda/patch_realtek.c:10779:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10779 |         HDA_CODEC_QUIRK(0x17aa, 0x386e, "Legion Y9000X 2022 IAH7", ALC287_FIXUP_CS35L41_I2C_2),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:58: error: 'const struct hda_quirk' has no member named 'name'
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                          ^~~~
+> sound/pci/hda/patch_realtek.c:10781:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10781 |         HDA_CODEC_QUIRK(0x17aa, 0x386f, "Legion Pro 7 16ARX8H", ALC287_FIXUP_TAS2781_I2C),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:65: warning: excess elements in struct initializer
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                                 ^
+> sound/pci/hda/patch_realtek.c:10781:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10781 |         HDA_CODEC_QUIRK(0x17aa, 0x386f, "Legion Pro 7 16ARX8H", ALC287_FIXUP_TAS2781_I2C),
+>       |         ^~~~~~~~~~~~~~~
+> sound/pci/hda/hda_local.h:312:65: note: (near initialization for 'alc269_fixup_tbl[734]')
+>   312 |         { _SND_PCI_QUIRK_ID(vend, dev), .value = (val), .name = (xname),\
+>       |                                                                 ^
+> sound/pci/hda/patch_realtek.c:10781:9: note: in expansion of macro 'HDA_CODEC_QUIRK'
+> 10781 |         HDA_CODEC_QUIRK(0x17aa, 0x386f, "Legion Pro 7 16ARX8H", ALC287_FIXUP_TAS2781_I2C),
+>       |         ^~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   5b1913a79c3e ("ALSA: hda: Use own quirk lookup helper")
+> 
+> This build has CONFIG_SND_DEBUG_VERBOSE not set.
+> 
+> I have used the sound tree from next-20241010 for today.
 
-Is this a define issue? I dislike that PPC has a #define
-__SANE_USERSPACE_TYPES__, we might be trying to fix something
-inherently insane.
+Sorry for the trouble, the fix submitted and merged now.
 
-The failure at:
-```
-    138 |         snprintf(path, PATH_MAX, "%s/event-%d-%llu-%d", dir,
-        |                                               ~~~^
-        |                                                  |
-        |                                                  long long
-unsigned int
-        |                                               %lu
-    139 |                  attr->type, attr->config, fd);
-        |                              ~~~~~~~~~~~~
-        |                                  |
-        |                                  __u64 {aka long unsigned int}
-  util/evsel.c:147:41: error: format '%llu' expects argument of type
-'long long unsigned int',
-                       but argument 4 has type '__u64' {aka 'long
-unsigned int'} [-Werror=3Dformat=3D]
-```
-is for code moved from here:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
-ls/perf/tests/attr.c#n77
-```
-snprintf(path, PATH_MAX, "%s/event-%d-%llu-%d", dir,
-attr->type, attr->config, fd);
-```
-ie the code is identical, so why does it compile in one file and not in ano=
-ther?
 
-Elsewhere for PPC we carry:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
-ls/perf/tests/bp_account.c#n3
-```
-/*
- * Powerpc needs __SANE_USERSPACE_TYPES__ before <linux/types.h> to select
- * 'int-ll64.h' and avoid compile warnings when printing __u64 with %llu.
- */
-#define __SANE_USERSPACE_TYPES__
-```
-Given the comment I suspect we need to do similar to fix this.
-Stephen, could you test?
-
-Thanks,
-Ian
+Takashi
 

@@ -1,142 +1,120 @@
-Return-Path: <linux-next+bounces-4243-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4244-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAACB99A04D
-	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 11:42:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6C6499A0C3
+	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 12:05:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EC251F22D23
-	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 09:42:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AB67B2620F
+	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 10:05:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22B3720CCD0;
-	Fri, 11 Oct 2024 09:42:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F230E21018B;
+	Fri, 11 Oct 2024 10:05:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A+SJNIBG"
 X-Original-To: linux-next@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7FF19413B;
-	Fri, 11 Oct 2024 09:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6D420FABF
+	for <linux-next@vger.kernel.org>; Fri, 11 Oct 2024 10:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728639759; cv=none; b=oldONrGTnD7Z9ykteVmBSo6PbnXq538X5aksYk2eEKKFl4quQxKjpDDDw93iujEJEmR8VmejdXFDqR+yslmQySk37BVLU2Gp9XDLfpZLHfNoNr20LuqqyWNOrLOtkRC27KhsR9dGOMH6ioV+SOFMl2cyYEQoWDv8ADX5S17eNpc=
+	t=1728641126; cv=none; b=gj3M//mDpPz0iisuNrOsvbM9IrhdaDg3WoUU8+iU7xHwls7aBRkDBgYnYXmonLc3JjIJ8kI2AOQuDrmVgW3/G7A3lj3DO0kikfPweCUYNXO6vlQckrGskehNdebVgOiNmRyNklsNt4ANSCuNoEZCaZbC4gL/YX3zXg/QDTWgsMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728639759; c=relaxed/simple;
-	bh=/a+9b5ouLrp1o+mJiuqLbe+ifCCr4IT5ucpHB+gPjsM=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qanbhuuqCypPH6DgUHJ/CJJTKc54YzQp4H2iKtum5T6ajKWuf+m809yal6bIA1FQdLEBuZlVVfUL2OmEIqMCF6lqUV1UIg3xMs4rUhZ43WgVz6L2GylrPzuZd0oR4j3xWF3vCF7RrDAoKoOn2XGiR5v8qQdBVCnQrzfTIWzoOvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XQ1qk6BXrz6K9N5;
-	Fri, 11 Oct 2024 17:42:10 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id ED8A014010C;
-	Fri, 11 Oct 2024 17:42:33 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 11 Oct
- 2024 11:42:33 +0200
-Date: Fri, 11 Oct 2024 10:42:32 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-CC: Abhash Jha <abhashkumarjha123@gmail.com>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
-	<linux-next@vger.kernel.org>, <gregkh@linuxfoundation.org>
-Subject: Re: linux-next: build failure after merge of the iio tree
-Message-ID: <20241011104232.000042a9@Huawei.com>
-In-Reply-To: <20241011154241.511878bd@canb.auug.org.au>
-References: <20241011154241.511878bd@canb.auug.org.au>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1728641126; c=relaxed/simple;
+	bh=mxSkfb+dSeKMdtYfSH9lFfkeg4NpOPOdNydr9hLFKcY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VZuvAxg5mpSOggBpDw4ZqLtoZTJW6T991iOGfskXzcEnfRitG2nzs+ap2tCuowDXKKcnm/8p2gCNZv99d+X1uNj0XXJjZYoR0rWnIfPD0SvNeLrLrHGSu3d1Dcfj9MPbwYm+PAAWmd2eUQwRk5PxqNVJAKt2vWP6wfCzzjed6E8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A+SJNIBG; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e2cc47f1d7so1270291a91.0
+        for <linux-next@vger.kernel.org>; Fri, 11 Oct 2024 03:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1728641125; x=1729245925; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mxSkfb+dSeKMdtYfSH9lFfkeg4NpOPOdNydr9hLFKcY=;
+        b=A+SJNIBG+maytfX/eHcVJT6mOdUQRgyHkeKY6oJi8EvbMydFMj9H5V91KQFo4JsMZT
+         I9qErn7zx+RubaBAjt0PAVqYZ96vwzPm+i0RucN4JNzEWibOTO7Z6+HI6Q1RXlau6ROl
+         bkB2C7+jtitzxqYJMA3QHb6QAFG6rCE5bPPUjNtQ+Olq0y76C6xDuBxJ3jsuiSsOOqwI
+         uA1ra2Xnuo8ut3QQ1p/Cscu8K6UrjZMHEQaRHRrbb1W3rDmNypuYdY7KByVsVyubAgAA
+         7x9UQ/+KusJ5YcOwjn5tY49Lq7OsVsphGeR78QHn/sc1HF0Vl6AdctkuKJp+gkWgqIQg
+         KfCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728641125; x=1729245925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mxSkfb+dSeKMdtYfSH9lFfkeg4NpOPOdNydr9hLFKcY=;
+        b=L40qWx6sUqLajBbzhq32TAv1sYd4GR770K6oUR40lxFrGFZ4/SD/QpNieVNEqZXR0x
+         JWdIPK4US/SLiCrxAHST1Hjs1SGb/8kBwpFXCmsjJ/LwGPgL2CEzsSmY6cN7lmN6FwJv
+         CicQO9oXoe5+dJNYUR+OMMUvfGG4yQjBfI+A3bgneRzLjHnwaxUh7yn+DKFkoGhcvXGe
+         ne1ol/r4BXbTsyo5LQ79icpd6UNLUVsbdRcjr0C2F78iS7U32PU2GqYIjmG3lH0drGCZ
+         +iKEHZD1TGMsGqMqeXCSgYOlL1e2UxPEQ1iCmimIPqrJyV0Ydr5UNmtZWEojcPgFT/vA
+         ZfzA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIl9KjLPNW1DNGuxL62VdFJ0VHRjgk4qgplJ6rrb8cCdCDwEc/eQoUDe9qkZ6SX3DSI5Nj4bGdpql/@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcCdDd8FTrm2qfxinkgmQ/V3Qswio4Hq/bGmW9ligHnbUnIF0F
+	7UftCKDVLTa2wfETDIBSnZ0x+shoLJlcMVdh2eu0rYr/2bqobC7RE+bTIZhkrs7QOwhykBohYAh
+	Eo0HgVahzVvbyKAsppEuqHfJJzF0MwbYtGuzV
+X-Google-Smtp-Source: AGHT+IGqT6CGYvtVs012J8Iqe+cx/RkHVOC/5K05DSnZykZN0WrAs6e9bNfrp9WhXtWF1tZIpzf0cxt1al2+qQ6jjyE=
+X-Received: by 2002:a17:90a:4749:b0:2e0:89f2:f60c with SMTP id
+ 98e67ed59e1d1-2e2f0aebd8cmr3477663a91.11.1728641124382; Fri, 11 Oct 2024
+ 03:05:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- frapeml500008.china.huawei.com (7.182.85.71)
+References: <6704d667.050a0220.1e4d62.0082.GAE@google.com> <5e42fd02-1470-4e4e-892b-edefd32fbc5a@redhat.com>
+In-Reply-To: <5e42fd02-1470-4e4e-892b-edefd32fbc5a@redhat.com>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Fri, 11 Oct 2024 12:05:10 +0200
+Message-ID: <CANp29Y5VG=yj1yFgQ+Co_1E+On_F8147s727ynKyuJXoaRQG3w@mail.gmail.com>
+Subject: Re: [syzbot] [mm?] linux-next test error: kernel BUG in folio_add_new_anon_rmap
+To: David Hildenbrand <david@redhat.com>
+Cc: syzbot <syzbot+619c487ed60780dab217@syzkaller.appspotmail.com>, 
+	akpm@linux-foundation.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-next@vger.kernel.org, sfr@canb.auug.org.au, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 11 Oct 2024 15:42:41 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi David,
 
-> Hi all,
+On Tue, Oct 8, 2024 at 3:11=E2=80=AFPM David Hildenbrand <david@redhat.com>=
+ wrote:
 >
-Thanks Stephen,
+> On 08.10.24 08:51, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+< ... >
+> >
+>
+> #syz fix: mm-add-pageanonnotksm-fix
 
-I'll call these out (I think we have 3 of them now) when I send Greg a pull request as
-probably best place to tidy this up is when merging into char-misc which has
-merged rc2 with Al's patch.
+Just curious: this is not the commit title that will be preserved when
+the commit reaches the torvalds tree, right?
 
-Greg, let me know if you'd rather I handled these in the iio tree
-(probably a merge of rc2 as I'd rather not rebase)
+Syzbot uses commit titles to track which fuzzed kernel trees have
+received each bug fix, so in this case the bot will become very
+confused. If the final title is known, it's better to use that in the
+syz fix command.
 
-Jonathan
+Thanks,
+Aleksandr
 
-
-> After merging the iio tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> drivers/iio/dac/ad5770r.c:20:10: fatal error: asm/unaligned.h: No such file or directory
->    20 | #include <asm/unaligned.h>
->       |          ^~~~~~~~~~~~~~~~~
-> drivers/iio/adc/max1363.c:37:10: fatal error: asm/unaligned.h: No such file or directory
->    37 | #include <asm/unaligned.h>
->       |          ^~~~~~~~~~~~~~~~~
-> 
-> Caused by commits
-> 
->   c2c4826cfa46 ("iio: adc: max1363: Convert to get_unaligned_be16")
->   0f87813bc338 ("iio: dac: ad5770r: Convert to get_unaligned_le16")
-> 
-> interacting with commit
-> 
->   5f60d5f6bbc1 ("move asm/unaligned.h to linux/unaligned.h")
-> 
-> from Linus' tree (in v6.12-rc2).
-> 
-> I have applied the following merge fix patch.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 11 Oct 2024 15:35:57 +1100
-> Subject: [PATCH] fix up for asm/unaligned inclusions in ad5770r.c and max1363.c
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/iio/adc/max1363.c | 2 +-
->  drivers/iio/dac/ad5770r.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/max1363.c b/drivers/iio/adc/max1363.c
-> index d59cd638db96..d065b1ade95a 100644
-> --- a/drivers/iio/adc/max1363.c
-> +++ b/drivers/iio/adc/max1363.c
-> @@ -34,7 +34,7 @@
->  #include <linux/iio/trigger_consumer.h>
->  #include <linux/iio/triggered_buffer.h>
->  
-> -#include <asm/unaligned.h>
-> +#include <linux/unaligned.h>
->  
->  #define MAX1363_SETUP_BYTE(a) ((a) | 0x80)
->  
-> diff --git a/drivers/iio/dac/ad5770r.c b/drivers/iio/dac/ad5770r.c
-> index 12c98f3e62a5..7d7f5110d66a 100644
-> --- a/drivers/iio/dac/ad5770r.c
-> +++ b/drivers/iio/dac/ad5770r.c
-> @@ -17,7 +17,7 @@
->  #include <linux/regmap.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/spi/spi.h>
-> -#include <asm/unaligned.h>
-> +#include <linux/unaligned.h>
->  
->  #define ADI_SPI_IF_CONFIG_A		0x00
->  #define ADI_SPI_IF_CONFIG_B		0x01
-
+>
+>
+> --
+> Cheers,
+>
+> David / dhildenb
+>
 

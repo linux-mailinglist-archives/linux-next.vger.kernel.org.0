@@ -1,285 +1,118 @@
-Return-Path: <linux-next+bounces-4247-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4248-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDF8699A3D2
-	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 14:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E8E0199B8F1
+	for <lists+linux-next@lfdr.de>; Sun, 13 Oct 2024 11:30:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4403E1F2566B
-	for <lists+linux-next@lfdr.de>; Fri, 11 Oct 2024 12:26:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6241F1F214AF
+	for <lists+linux-next@lfdr.de>; Sun, 13 Oct 2024 09:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E13D212F13;
-	Fri, 11 Oct 2024 12:26:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D29B084D34;
+	Sun, 13 Oct 2024 09:30:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Noi7Arhe"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NZ0/EhHJ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9961C802
-	for <linux-next@vger.kernel.org>; Fri, 11 Oct 2024 12:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6295781742;
+	Sun, 13 Oct 2024 09:30:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728649580; cv=none; b=RBs6aLS9ci/QzCbD9kx0xuLsas44nhNmifu3GDYvRdo62Hn1qDbL9B1+svsPkc5uK396pgp2yfNjuJqGUYct0CUTAFMo/GzCSMXcXP3rHauRNt4KzfFIPwX/lnbn3fEASquwJACm4odOhPremsTBgwpKhv59i8VuLpTobo9ddkQ=
+	t=1728811816; cv=none; b=HGwQGyDhY7OW1lPvu7k9yMft5YlChAFDoNgLCHzlWzCM439r3/jbhq+qv6Yy6tAm/k7t08GlRwSW9dkvHztpfIT/0cGB5bz8U4QWhm1BQx1HI4Dn69Wn24+YuFdjVBYC6SB2DhWIlIitdJweiehFzUFyXkcBzQ/VYXuFr/euJRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728649580; c=relaxed/simple;
-	bh=U0gw8QbMZdsC9skWcVxw2H4+N3T3yd+ooIoTqF7DQYk=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=srR4vm60ETVQc99GKc1NHAazQJ3ckCtVKvmyGBHwK0SQUxJeE79ECPjnoyBF7oiK1YGQF5WF63G++cn2pMGVpnipoABGERT1EDJjnMVTToR5l99EayDu8Y5r1AwCSha3RJ1PtjoOpqFJhkmgxac5960XKKBmA3+yELodQctUDBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Noi7Arhe; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-20c77459558so15860755ad.0
-        for <linux-next@vger.kernel.org>; Fri, 11 Oct 2024 05:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1728649578; x=1729254378; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZYqrr/UP29W1iSGXfHXa9n/g5WJ1oreuwN70qufF4Bw=;
-        b=Noi7Arheg+UQ9PTBiuH+gsTyIeCVW9QFIAbLlkOb5cc9xPD80c/fZGLFP6mbhQFoMr
-         KJtIsFveaSb0dypkgdcW1UOhDq/9i5PMockaRkFSB/dGpk4ALTiYW+GnU70disHZaNS4
-         OsSGBoAAnj12/IA0SudHLWi+LePPpO8nyhSI4sngqA94iAnfIjBdKnx/uqiYp2Rcwso+
-         OkJDNblNgpa1Z2BOFDzgfmIbpKbtojmTJeBxf5zPBUrh8k1GFL922jxFOa0FtD2jHJXK
-         yRbZV8K4gIsLAWzul8qSRAebqDy2I8to5kqgDPHplE48lID+PUCPyoubgzXHeONVcwgY
-         TJKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728649578; x=1729254378;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZYqrr/UP29W1iSGXfHXa9n/g5WJ1oreuwN70qufF4Bw=;
-        b=rINWOXsHWLtERqDdkUNY4W3fqPRQQzFHT6mm26Rn8HEGxwnZRkEH4LknFjz8GAGKSu
-         ca9pClktUkdF3cdwX7OMeePegEcuSkqNT3w3B0v72XfS6vyplODsQy0jCCQOZ0qSFTsa
-         8KCZ+y5yGEa5IJlrKVvrGKWkEj1xYqAAu5WdmONBGzZqRu4AYwwaHwIMW39eSws0gq+Z
-         daLpK6yIJCKZ40fWB2HPVCe1xrq1w+8vYAc8u4KhM93ilh8ZKeMyP8tFhIszI5sv8yig
-         oada1DcFhT0W1OSreO+l5Jj9k3n6AUx60BZm9K8cHO2iH+DWmSVuhWgQ8z0/yZG0hrdM
-         Hohg==
-X-Gm-Message-State: AOJu0YzMvWuj2ZLRiQAQlpFLHxdg+VE29XRbxrFNW5NrbyRnHkZ1FfzM
-	JlMz7Y8WwwjLwE2Dg0LPvK8pB/jRsGbQ7f8tv77G5zev01E2jumQU51UhWkrLPsmmPNX0k+lpmZ
-	T
-X-Google-Smtp-Source: AGHT+IE8TmKF+YkA8o0z62xyo6fTmOy6Yz8jd8SIbOUyq2LZJMSL/OKTLXVE9cFwTmIR4J27ZUEwBQ==
-X-Received: by 2002:a17:902:db12:b0:20b:c1e4:2d70 with SMTP id d9443c01a7336-20ca147e89bmr31960435ad.23.1728649577701;
-        Fri, 11 Oct 2024 05:26:17 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c0e75f0sm22603555ad.180.2024.10.11.05.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 05:26:17 -0700 (PDT)
-Message-ID: <67091969.170a0220.118c4d.7d89@mx.google.com>
-Date: Fri, 11 Oct 2024 05:26:17 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1728811816; c=relaxed/simple;
+	bh=rnVBMfLkJ/5+OaoRAsTc4xGBbOekviQUwGUt9EUejnw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pXjenchYRXTwb/O93af9/rSzpO717OBVW7DCNY06FwURgFfbk5w5vbB5vCQbpdWldRzGgVL2UpwaOKubW/y7effPU4bcOk6ObGX2NyoWYDc9/A0evuJwdQWhL5weMN7BISa0CCztMwbqA7z+JWa+3BzM4jN2UAyP4OtRQbq9YvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=NZ0/EhHJ; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1728811809;
+	bh=3u4OtcyNblTpacAoKt9ZuttTi7UG/amEqZrR8ZCu5qc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NZ0/EhHJMki2m87OCv7K5FuDYK+65rLF17QFT0zkTEJnJO/p1iLAjvc43vnkG3vgT
+	 J4wqs19CXjWyihkLjT6iub7HunRMGB8EqyAGRK151UNzU8KPehT/jZm/6qPOqWgq4G
+	 hu6xAy+MJmCTpqPJSnGrpZV049Tt4SrVpM4HobWzaGlApfODrNFT6fyKAg3nFlB9+N
+	 rCuMoqa42RxuTHg2CKA4RNnafDzErq3bgTzxSq8TA8lGPuxcVRAh9MZg0tD4XA/Kpp
+	 SXmoq1pTZpn+Ez+l7XTRVtYF/Ft78RkUwKK+WmVjqVVuyZo8g62ZRcQVAaVc5pEbNF
+	 lGsbcewVzPgbA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XRFSx48m9z4x8c;
+	Sun, 13 Oct 2024 20:30:09 +1100 (AEDT)
+Date: Sun, 13 Oct 2024 20:29:44 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Ian Rogers <irogers@google.com>
+Cc: Namhyung Kim <namhyung@kernel.org>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ linux-next@vger.kernel.org
+Subject: Re: [PATCH] perf tools: Fix build failures on ppc64le
+Message-ID: <20241013202925.69aa2314@oak>
+In-Reply-To: <CAP-5=fWm86UcwX+B_XjFSLFJF54QP2trYzJgJF0927h-AzSV_Q@mail.gmail.com>
+References: <20241011102330.02bece12@canb.auug.org.au>
+	<20241010235743.1356168-1-namhyung@kernel.org>
+	<20241011114858.61ff252b@canb.auug.org.au>
+	<ZwjG_ZpqV4h3HifQ@google.com>
+	<CAP-5=fWm86UcwX+B_XjFSLFJF54QP2trYzJgJF0927h-AzSV_Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/C4G2hLin1RLrVaYc_J0TJsO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/C4G2hLin1RLrVaYc_J0TJsO
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: next-20241011
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 147 runs, 5 regressions (next-20241011)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/master baseline: 147 runs, 5 regressions (next-20241011)
+Hi Ian,
 
-Regressions Summary
--------------------
+On Fri, 11 Oct 2024 00:05:21 -0700 Ian Rogers <irogers@google.com> wrote:
+>
+> Elsewhere for PPC we carry:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/t=
+ools/perf/tests/bp_account.c#n3
+> ```
+> /*
+>  * Powerpc needs __SANE_USERSPACE_TYPES__ before <linux/types.h> to select
+>  * 'int-ll64.h' and avoid compile warnings when printing __u64 with %llu.
+>  */
+> #define __SANE_USERSPACE_TYPES__
+> ```
+> Given the comment I suspect we need to do similar to fix this.
+> Stephen, could you test?
 
-platform                     | arch  | lab          | compiler | defconfig =
-                   | regressions
------------------------------+-------+--------------+----------+-----------=
--------------------+------------
-jetson-tk1                   | arm   | lab-baylibre | gcc-12   | multi_v7_d=
-efc...CONFIG_SMP=3Dn | 1          =
+I added that to the start of tools/perf/util/evsel.c and it builds fine.
 
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron  | gcc-12   | multi_v7_d=
-efconfig+kselftest | 1          =
+Thanks
+--=20
+Cheers,
+Stephen Rothwell
 
-kontron-kswitch-d10-mmt-8g   | arm   | lab-kontron  | gcc-12   | multi_v7_d=
-efconfig+kselftest | 1          =
+--Sig_/C4G2hLin1RLrVaYc_J0TJsO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-qemu_riscv64                 | riscv | lab-broonie  | gcc-12   | defconfig+=
-debug              | 1          =
+-----BEGIN PGP SIGNATURE-----
 
-qemu_smp8_riscv64            | riscv | lab-broonie  | gcc-12   | defconfig+=
-debug              | 1          =
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcLkwgACgkQAVBC80lX
+0Gw5IAf/R6wI9WaE+CGhPnEQau459CjjMAxlD1pE0jvc3kXN2/xN8tqPuxmPTIJJ
+ts4Z+6uL5RSv5x3GEyq0O1RgIUuo+Gp5wYoe0eLilHnzjxi2CEyLJC78KnVmd+q3
+VCtz+n9LOGOLJWS1QVeGYExGGdNgKIxRRIz8v6LnLA0NlsvUCSJQfM5IFijQzrJT
+l1s9T6v5beE5Z+vOlDhHZ+sIbRyU9TX051ltRKAHg2cjCq6KQj76JCfyPueMuBAe
+dlHtHWcNF/vzJ08n3yu/ZRueq0I9Oe2gPc2ua22OgvJuEhlS9TskFVjRGMgrbotV
+uWxzqwDYsOlT0VDwsagnFYE8WmUUBg==
+=FAfA
+-----END PGP SIGNATURE-----
 
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-241011/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20241011
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      d61a00525464bfc5fe92c6ad713350988e492b88 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | regressions
------------------------------+-------+--------------+----------+-----------=
--------------------+------------
-jetson-tk1                   | arm   | lab-baylibre | gcc-12   | multi_v7_d=
-efc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6708dd77faf90c2d92c86858
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20241011/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-12/lab-baylibre/baseline-jetson-tk1.t=
-xt
-  HTML log:    https://storage.kernelci.org//next/master/next-20241011/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-12/lab-baylibre/baseline-jetson-tk1.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6708dd77faf90c2d92c86=
-859
-        new failure (last pass: next-20241008) =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | regressions
------------------------------+-------+--------------+----------+-----------=
--------------------+------------
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron  | gcc-12   | multi_v7_d=
-efconfig+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6708dd31f1d2b40800c8686c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20241011/arm/=
-multi_v7_defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kswitch-d1=
-0-mmt-6g-2gs.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20241011/arm/=
-multi_v7_defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kswitch-d1=
-0-mmt-6g-2gs.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6708dd31f1d2b40800c86=
-86d
-        failing since 44 days (last pass: next-20240725, first fail: next-2=
-0240827) =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | regressions
------------------------------+-------+--------------+----------+-----------=
--------------------+------------
-kontron-kswitch-d10-mmt-8g   | arm   | lab-kontron  | gcc-12   | multi_v7_d=
-efconfig+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6708dd302db3132d99c86860
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20241011/arm/=
-multi_v7_defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kswitch-d1=
-0-mmt-8g.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20241011/arm/=
-multi_v7_defconfig+kselftest/gcc-12/lab-kontron/baseline-kontron-kswitch-d1=
-0-mmt-8g.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6708dd302db3132d99c86=
-861
-        failing since 44 days (last pass: next-20240725, first fail: next-2=
-0240827) =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | regressions
------------------------------+-------+--------------+----------+-----------=
--------------------+------------
-qemu_riscv64                 | riscv | lab-broonie  | gcc-12   | defconfig+=
-debug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6708dfdd1358fd4fa4c86870
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20241011/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_riscv64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20241011/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_riscv64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6708dfdd1358fd4fa4c86=
-871
-        new failure (last pass: next-20241010) =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | regressions
------------------------------+-------+--------------+----------+-----------=
--------------------+------------
-qemu_smp8_riscv64            | riscv | lab-broonie  | gcc-12   | defconfig+=
-debug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6708dfc16b12cee7dcc8686b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-12 (riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20241011/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_smp8_riscv64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20241011/risc=
-v/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_smp8_riscv64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6708dfc16b12cee7dcc86=
-86c
-        new failure (last pass: next-20241010) =
-
- =20
+--Sig_/C4G2hLin1RLrVaYc_J0TJsO--
 

@@ -1,272 +1,189 @@
-Return-Path: <linux-next+bounces-4260-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4261-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EE0999D5D1
-	for <lists+linux-next@lfdr.de>; Mon, 14 Oct 2024 19:50:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5376899D6D5
+	for <lists+linux-next@lfdr.de>; Mon, 14 Oct 2024 20:55:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3D9C1F2245B
-	for <lists+linux-next@lfdr.de>; Mon, 14 Oct 2024 17:50:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 453DB1C20FC7
+	for <lists+linux-next@lfdr.de>; Mon, 14 Oct 2024 18:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F4541547F3;
-	Mon, 14 Oct 2024 17:50:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 244CB1C831A;
+	Mon, 14 Oct 2024 18:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="m9bfUf76"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AV/kwmOl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EADD231C8A
-	for <linux-next@vger.kernel.org>; Mon, 14 Oct 2024 17:50:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDAD41AC45F;
+	Mon, 14 Oct 2024 18:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728928242; cv=none; b=QIdhzEeCC0IcBCoZ3wiXunwwQ3Ukj+p4vYzfbsix26XG8XYzOn7Wc2GGJ2acMF0IQ6yeopER4+STdZ4vSgzumUNlK1ZhM8nbrnK/JfS+dclcErT43/hayE14dsGe2e4GjXaT4EeltyARLfmZoUxgKgClzbfgbuL72mRjhly/wVs=
+	t=1728932106; cv=none; b=GW0t3W6DSXaOzTOsBnAFU62RLX7LlZ+6TWH0pZSo1mySouzdNNOjtrWzL81C/EDKFsZgLrCkZ2AteunnnokEyIU5xRJWMhzs3GPyK9sqEkZ7WqkXvEntDhxqP7+jm3cjRj5kuVft2ZqDhstjLe9Z/oss0XAqoPSgElbOAtqHlQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728928242; c=relaxed/simple;
-	bh=SvLJccHxevQM2UNjx+toQFEBx0vGrOPKZgBSenESECE=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=H2zAZZav+gXOvigw6uHpH8Tfx8Y0UoQk4qPfpSAyH7nEg0QfvsDHNB178Iib9ON/7TTE2os7UNj/i/qFHEW5xYmHbB2Qpu3AOZc5ueqSIWMOw1+/rY1BSdHZ1DK4caIqeZQICF9m6PuWbvSGlbfpCLpNkE/R00Cae339xJNwpog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=m9bfUf76; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7ea784aea63so572264a12.3
-        for <linux-next@vger.kernel.org>; Mon, 14 Oct 2024 10:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1728928239; x=1729533039; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=pniQb+aPKotn+T4d01EpzUgjECMdDpSaqx0AJ0tGCgA=;
-        b=m9bfUf76z/UP6RP0mZoiOfeI69R52bZiCzxvxoXh2GvKYpLJ+jBehLhpq3KX1PLvr5
-         VhRpIcbP86wx+3zbyX3WvKGoIjjlS6R6hxEmAP60tEYbh+WFdfoSUai1OhGarAi3xb5c
-         u8OSMWH41MgppXodYQAlgsoXg00shRbW4Z+vlWZXj+Q/KrfxdmWScT+g5ngG9rxp1B8w
-         zq2/2waByEFgTotr3qXfvs0KGdkA9QEMrKphfl0uEw7OqKlLxH8uVkQKmzafe/B0sqbP
-         BH6dVqQAsVu7N6fIG8izj2Khj4YtSpeVNULcfWjXvd2wESsgi4WIRt04vrQVbKclS5wo
-         H/MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728928239; x=1729533039;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pniQb+aPKotn+T4d01EpzUgjECMdDpSaqx0AJ0tGCgA=;
-        b=KQ470zX+YmA0OBPQHmrnSh8A7Y5jjJ0if8vtK1Fve2By4pfl2M1cgbqqSCEi5x1i12
-         IqqfgPtgqRA9Uf6gNY3FnJzQ6LqDO32ZzzHAzutAAe9O4AmkCheUWAhlg6l4iR4sBeRZ
-         z49L7feAQtf3XsFOs4VQ8D5Bn0yIiGwbnHIQJ6az4VJgZn79nQipooMM1nssXgdorsOQ
-         09pq+GdLyLK+sRrmQpJRV+BGh+Dgkuhk20uJLKeP/EL1ErPscTDFKALwVAfFfdHfxsWP
-         zakveyFpXXVRxn4TwKfOm/aYSS/Cy60L8kUljGbGteiu3Q2JYhtuc9etswrhtapRyvaZ
-         60Dg==
-X-Gm-Message-State: AOJu0YwY4Q8g4op+TTq4t7eNRYu7fPuRGbSW27C3t2I3TdrwsPIcHdiI
-	1Om9/eslILfqW6t6+oN+ZVvWf7qMOaR7asOyZJozvGYsHda0oeH7qSAhMuJcaqvgd7yZlkJ23np
-	s
-X-Google-Smtp-Source: AGHT+IFhjkiSYMcO6k3LVeUam5G2LCgi7ajcnL7XThtknPneN8Gs3fuGJy0OBxbB1705gcQ7HkUC5w==
-X-Received: by 2002:a17:90b:4a08:b0:2c9:6a38:54e4 with SMTP id 98e67ed59e1d1-2e2f0dd81efmr13827613a91.41.1728928238996;
-        Mon, 14 Oct 2024 10:50:38 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e2d5dd4084sm9388940a91.12.2024.10.14.10.50.38
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2024 10:50:38 -0700 (PDT)
-Message-ID: <670d59ee.170a0220.e19bd.9fa5@mx.google.com>
-Date: Mon, 14 Oct 2024 10:50:38 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1728932106; c=relaxed/simple;
+	bh=8zP52/Vyia2XoM5u4/Yc0Vbx9/5orkfaOzFGqEIi2YI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KFq26EQ2ChEdPslmVUTMRD2av7rg2n7AZYaL2wcG947qrRadVrvRB7lPOgTMcdmFzCcZ9slEvd2gH4eFI8//XIPk45X8Ue96WnD9ueIn0899IRnXoP9NDwau/dGck1VVSID7STsf2mxsElTj6DY4UGXRM9SMlLUKBF+xKwIWN/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AV/kwmOl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB23C4CEC3;
+	Mon, 14 Oct 2024 18:55:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728932105;
+	bh=8zP52/Vyia2XoM5u4/Yc0Vbx9/5orkfaOzFGqEIi2YI=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=AV/kwmOlhqV5F/7KXGU8RcezH4AIElbtXM/c6yU2tC5AjRSBl9EeDMp4it2ykFf2B
+	 44lrN/TXaNjnewMVr/a4Qi9Z3jF4YzACWwT14UwfYF4FL6G4Wavqhzx1WiehxOP30E
+	 TGBzOpkaJf31OHKRb+prolVQ/3gdp6EC7x52ZJn3Ki0/fKmp7Zl9aUcD/nzPht18BZ
+	 i4vvqVJDT15jrkEl+7fBghK9OaCXmN3WJpGMXdMffzh8ssrpWnYtM5fy2+AbbUwpe1
+	 WacIFLTKsdG4PMo4KRblREb4SK6V2MJGyE5N9yYZxyL6+ekL5csg0jrBWJlXttRfiQ
+	 oiu2OAz1fzD2Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 15D39CE13B1; Mon, 14 Oct 2024 11:55:05 -0700 (PDT)
+Date: Mon, 14 Oct 2024 11:55:05 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Tomas Glozar <tglozar@redhat.com>
+Cc: Valentin Schneider <vschneid@redhat.com>, Chen Yu <yu.c.chen@intel.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
+Message-ID: <b9064ed8-387d-47ce-ad0a-7642ad180fc3@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ac93f995-09bc-4d2c-8159-6afbfbac0598@paulmck-laptop>
+ <43d513c5-7620-481b-ab7e-30e76babbc80@paulmck-laptop>
+ <xhsmhed50vplj.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <d6033378-d716-4848-b7a5-dcf1a6b14669@paulmck-laptop>
+ <xhsmhbk04ugru.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <64e92332-09c7-4cae-ac63-e1701b3f3814@paulmck-laptop>
+ <CAP4=nvTtOB+0LVPQ=nA3=XdGLhDiwLjcLAb8YmQ+YqR9L+050Q@mail.gmail.com>
+ <CAP4=nvTeawTjhWR0jKNGweeQFvcTr8S=bNiLsSbaKiz=od+EOA@mail.gmail.com>
+ <35e44f60-0a2f-49a7-b44b-c6537544a888@paulmck-laptop>
+ <fe2262ff-2c3d-495a-8ebb-c34485cb62a2@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.12-rc3-248-g9d44ec2d5ff9d
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 23 warnings (v6.12-rc3-248-g9d44ec2d5ff9d)
-To: linux-next@vger.kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fe2262ff-2c3d-495a-8ebb-c34485cb62a2@paulmck-laptop>
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 23 warnings (v6.12-=
-rc3-248-g9d44ec2d5ff9d)
+On Thu, Oct 10, 2024 at 04:28:38PM -0700, Paul E. McKenney wrote:
+> On Thu, Oct 10, 2024 at 08:01:35AM -0700, Paul E. McKenney wrote:
+> > On Thu, Oct 10, 2024 at 01:24:11PM +0200, Tomas Glozar wrote:
+> > > st 2. 10. 2024 v 11:01 odesílatel Tomas Glozar <tglozar@redhat.com> napsal:
+> > > >
+> > > > FYI I have managed to reproduce the bug on our infrastructure after 21
+> > > > hours of 7*TREE03 and I will continue with trying to reproduce it with
+> > > > the tracers we want.
+> > > >
+> > > > Tomas
+> > > 
+> > > I successfully reproduced the bug also with the tracers active after a
+> > > few 8-hour test runs on our infrastructure:
+> > > 
+> > > [    0.000000] Linux version 6.11.0-g2004cef11ea0-dirty (...) #1 SMP
+> > > PREEMPT_DYNAMIC Wed Oct  9 12:13:40 EDT 2024
+> > > [    0.000000] Command line: debug_boot_weak_hash panic=-1 selinux=0
+> > > initcall_debug debug console=ttyS0 rcutorture.n_barrier_cbs=4
+> > > rcutorture.stat_interval=15 rcutorture.shutdown_secs=25200
+> > > rcutorture.test_no_idle_hz=1 rcutorture.verbose=1
+> > > rcutorture.onoff_interval=200 rcutorture.onoff_holdoff=30
+> > > rcutree.gp_preinit_delay=12 rcutree.gp_init_delay=3
+> > > rcutree.gp_cleanup_delay=3 rcutree.kthread_prio=2 threadirqs
+> > > rcutree.use_softirq=0
+> > > trace_event=sched:sched_switch,sched:sched_wakeup
+> > > ftrace_filter=dl_server_start,dl_server_stop trace_buf_size=2k
+> > > ftrace=function torture.ftrace_dump_at_shutdown=1
+> > > ...
+> > > [13550.127541] WARNING: CPU: 1 PID: 155 at
+> > > kernel/sched/deadline.c:1971 enqueue_dl_entity+0x554/0x5d0
+> > > [13550.128982] Modules linked in:
+> > > [13550.129528] CPU: 1 UID: 0 PID: 155 Comm: rcu_torture_rea Tainted: G
+> > >        W          6.11.0-g2004cef11ea0-dirty #1
+> > > [13550.131419] Tainted: [W]=WARN
+> > > [13550.131979] Hardware name: Red Hat KVM/RHEL, BIOS 1.16.3-2.el9 04/01/2014
+> > > [13550.133230] RIP: 0010:enqueue_dl_entity+0x554/0x5d0
+> > > ...
+> > > [13550.151286] Call Trace:
+> > > [13550.151749]  <TASK>
+> > > [13550.152141]  ? __warn+0x88/0x130
+> > > [13550.152717]  ? enqueue_dl_entity+0x554/0x5d0
+> > > [13550.153485]  ? report_bug+0x18e/0x1a0
+> > > [13550.154149]  ? handle_bug+0x54/0x90
+> > > [13550.154792]  ? exc_invalid_op+0x18/0x70
+> > > [13550.155484]  ? asm_exc_invalid_op+0x1a/0x20
+> > > [13550.156249]  ? enqueue_dl_entity+0x554/0x5d0
+> > > [13550.157055]  dl_server_start+0x36/0xf0
+> > > [13550.157709]  enqueue_task_fair+0x220/0x6b0
+> > > [13550.158447]  activate_task+0x26/0x60
+> > > [13550.159131]  attach_task+0x35/0x50
+> > > [13550.159756]  sched_balance_rq+0x663/0xe00
+> > > [13550.160511]  sched_balance_newidle.constprop.0+0x1a5/0x360
+> > > [13550.161520]  pick_next_task_fair+0x2f/0x340
+> > > [13550.162290]  __schedule+0x203/0x900
+> > > [13550.162958]  ? enqueue_hrtimer+0x35/0x90
+> > > [13550.163703]  schedule+0x27/0xd0
+> > > [13550.164299]  schedule_hrtimeout_range_clock+0x99/0x120
+> > > [13550.165239]  ? __pfx_hrtimer_wakeup+0x10/0x10
+> > > [13550.165954]  torture_hrtimeout_us+0x7b/0xe0
+> > > [13550.166624]  rcu_torture_reader+0x139/0x200
+> > > [13550.167284]  ? __pfx_rcu_torture_timer+0x10/0x10
+> > > [13550.168019]  ? __pfx_rcu_torture_reader+0x10/0x10
+> > > [13550.168764]  kthread+0xd6/0x100
+> > > [13550.169262]  ? __pfx_kthread+0x10/0x10
+> > > [13550.169860]  ret_from_fork+0x34/0x50
+> > > [13550.170424]  ? __pfx_kthread+0x10/0x10
+> > > [13550.171020]  ret_from_fork_asm+0x1a/0x30
+> > > [13550.171657]  </TASK>
+> > > 
+> > > Unfortunately, the following rcu stalls appear to have resulted in
+> > > abnormal termination of the VM, which led to the ftrace buffer not
+> > > being dumped into the console. Currently re-running the same test with
+> > > the addition of "ftrace_dump_on_oops panic_on_warn=1" and hoping for
+> > > the best.
+> > 
+> > Another approach would be rcupdate.rcu_cpu_stall_suppress=1.
+> > 
+> > We probably need to disable RCU CPU stall warnings automatically while
+> > dumping ftrace buffers, but the asynchronous nature of printk() makes
+> > it difficult to work out when to automatically re-enable them...
+> 
+> And in the meantime, for whatever it is worth...
+> 
+> The pattern of failures motivated me to add to rcutorture a real-time
+> task that randomly preempts a randomly chosen online CPU.  Here are
+> the (new and not-to-be-trusted) commits on -rcu's "dev" branch:
+> 
+> d1b99fa42af7 ("torture: Add dowarn argument to torture_sched_setaffinity()")
+> aed555adc22a ("rcutorture: Add random real-time preemption")
+> b09bcf8e1406 ("rcutorture: Make the TREE03 scenario do preemption")
+> 
+> Given these, the following sort of command, when run on dual-socket
+> systems, reproduces a silent failure within a few minutes:
+> 
+> tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 4h --configs "4*TREE03" --kconfig "CONFIG_NR_CPUS=4" --trust-make
+> 
+> But on my laptop, a 30-minute run resulted in zero failures.  I am now
+> retrying with a four-hour laptop run.
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.12-rc3-248-g9d44ec2d5ff9d/
+And this silent failure was me hurting myself with a change to scripting
+to better handle test hosts disappearing (it does sometimes happen).
+With the scripting fixed, I am getting simple too-short grace periods,
+though only a few per 8-hour 400*TREE03 4-CPU guest-OS run.
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.12-rc3-248-g9d44ec2d5ff9d
-Git Commit: 9d44ec2d5ff9d10254fdd86d4cd23d0d6504e6c9
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+> I am also adjusting the preemption duration and frequency to see if a
+> more edifying failure mode might make itself apparent.  :-/
 
-Warnings Detected:
+But no big wins thus far, so this will be a slow process.  My current test
+disables CPU hotplug.  I will be disabling other things in the hope of
+better identifying the code paths that should be placed under suspicion.
 
-arc:
-    haps_hs_smp_defconfig (gcc-12): 2 warnings
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-12): 3 warnings
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-12): 18 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    kernel/fork.c:3075:2: warning: #warning clone3() entry point is mi=
-ssing, please fix [-Wcpp]
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    2    3075 | #warning clone3() entry point is missing, please fix
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
- missing .note.GNU-stack section implies executable stack
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
-g .note.GNU-stack section implies executable stack
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
-ls' found, but node is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
- is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
-rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
- provider
-    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
-ot an interrupt provider
-    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
-ound, but node is not an interrupt provider
-    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
-er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
-ider
-    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
-te.GNU-stack section implies executable stack
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
-ing .note.GNU-stack section implies executable stack
-    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3075 | #warning clone3() entry point is missing, please fix
-    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3075 | #warning clone3() entry point is missing, please fix
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+							Thanx, Paul
 

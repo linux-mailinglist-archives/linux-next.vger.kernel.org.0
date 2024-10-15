@@ -1,113 +1,230 @@
-Return-Path: <linux-next+bounces-4265-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4266-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C69F199DDA3
-	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 07:45:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9B4699DDC0
+	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 07:55:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 046B01C2179C
-	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 05:45:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DC8BB21D00
+	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 05:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B34175D5A;
-	Tue, 15 Oct 2024 05:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D08F2176FB6;
+	Tue, 15 Oct 2024 05:55:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cP+P+Duf"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MOhm1N+z"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D270176231;
-	Tue, 15 Oct 2024 05:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BD2178362;
+	Tue, 15 Oct 2024 05:55:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728971100; cv=none; b=WuMizTBGQjCdAk0hooMT7XXReD1gegx0VpD5mVSmCE7x8YHOtBnW2a6rw9bt2IUVpCOobN+3fU+mXlVipwXSMVuhqQnpTOUOD/3f4Ni/e3kRoVYNn+40P3uyOKkAHZs6YWQ/hPSRyyW1TD/qCflQerTZiopbNQVTgUghM7yw3o8=
+	t=1728971745; cv=none; b=sSfzwO40zyUfdWaXimENS2Ww/JLfvn+12a5UGk78XiyHqyH143nLjUxbrTXFAmxwzdiYG0k8kDD7ZCRO2TJRwruVfHNXjjHxCZmK9mo0z+N976rRx4VR0EhlCRskhKGPs1cOdjPt+g/C4QMboUdZ5Itowz3l2zZmOa7eEuakobQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728971100; c=relaxed/simple;
-	bh=OJDjE/0wOZFnBB1X+CRQJZha6zmYet5yi3t4PlRmXcI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Bk4G6jQ5HMtHLw19R1Vnu5WKktJpaHBo2ztCU2s2wEmV5AQuXSSkGT+FF5IU1IpixU+V+ElX+HtRuhFV7TPv9gWbiGwhcV+zvJRl/3JM70Han3pT9HS/Zf5AtjJTUqM5ObAtGatPGoq6zc0ov32YjSHdR/TMmmLt8lzftsto4wY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cP+P+Duf; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1728971745; c=relaxed/simple;
+	bh=lBmtohuTDPWE90XRl0KZpe9ndEb6usdKtqvk3d6xLQ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Z8NyqgowHqdRFGys5+i0Imk9TrPzs9bTQtIb/KzcRoiHkLGSOz4fe9XeO1Lcn0iiujjzYPR8W41FHih5ZVjrDzDsbXQmW5kz8Tw1li7MvKO5U4yRAZnKsxCM4z0OTxkIjxHUxWx8SArFj7K8Y5txvIaejOsnQepmLZbKnpnzAEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=MOhm1N+z; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1728971093;
-	bh=0/Ru7NKkCxmEJS1qE1b20E/DUyHvkj6Do1MlzU8Xj2c=;
+	s=201702; t=1728971738;
+	bh=s+8/iAcFNKvwtQu4NVYqQmv9auEE6mJ7XmXb0R+e2yo=;
 	h=Date:From:To:Cc:Subject:From;
-	b=cP+P+DufazSlxZxHfQoaHpd6yhp1UTjhVZMsdBsCfwi6GTBj2BN/9p3uEgE30R/Dm
-	 YVlbaMYXD5MJ8ZIK7fvn4ijQsEN7xpar7JXIdc5R7tiXfvxjVx6F4a53ybKY9bBHq2
-	 0mM5Hz6kPZUMlkQ/TU6GkgLTl4wUbmLa8+Pzl1QxYFS8ambW8iE2Zn66v2iBE+cnYB
-	 J6RNiZl+EF2JjqW8ghz/5W5JPaG9thSx4FKgtD8NSHf1JUZ+BUI81OCin2SeEu6KhM
-	 6UFu1gsbkyOvTsOvmGnCOaVVwLBNf+jRK7uWO+EjL3ZzlBMm7M6S8VJT5c+1/6TVl5
-	 ZHW24zmPLqhEw==
+	b=MOhm1N+z3HIZ6/eHgXzzwB8f7luNK9U6Hd3El+tPK9crRV1QAD2iOo6iJLZVqx07B
+	 oW1rwwVhQDydt5dY2pl264UF2DA7g0/NBy3TsxbFt/Kxn/DMTsNHE4rUvIbpF3QQmP
+	 wJ1MUcNSEe/fd9NFDFxk/7LpDQDRQ+/KmGGDLwPBfDQI1xQ3oUrUwNiV2xflOHtGbn
+	 k2OxLfPRDbDOGSXnNvGdZiGLSVFM72rloh6zQ5WA9COCtg14YiqeOxjPGFpu7Yio1k
+	 AXF05muu7iuidmpyoYomgAjheDzMqiNz4hPmkEBWV9JhKTSbaTwcWT3SCq3xyqCYmW
+	 10XwI7L9M8TRA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XSNN52l0wz4x8W;
-	Tue, 15 Oct 2024 16:44:53 +1100 (AEDT)
-Date: Tue, 15 Oct 2024 16:44:53 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XSNcV3lNgz4wb7;
+	Tue, 15 Oct 2024 16:55:38 +1100 (AEDT)
+Date: Tue, 15 Oct 2024 16:55:38 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Rob Herring <robh@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the devicetree tree
-Message-ID: <20241015164453.09845d09@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>
+Cc: Dave Penkler <dpenkler@gmail.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the staging tree
+Message-ID: <20241015165538.634707e5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j5nb74UNV./s+SWfVgpxL8Z";
+Content-Type: multipart/signed; boundary="Sig_/RHhcJ_.P=z/kWD5EKO.7Z1a";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/j5nb74UNV./s+SWfVgpxL8Z
+--Sig_/RHhcJ_.P=z/kWD5EKO.7Z1a
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the devicetree tree, today's linux-next build (powerpc
-allnoconfig) produced this warning:
+After merging the staging tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-drivers/of/address.c: In function 'of_pci_range_to_resource':
-drivers/of/address.c:244:45: warning: passing argument 1 of 'pci_register_i=
-o_range' discards 'const' qualifier from pointer target type [-Wdiscarded-q=
-ualifiers]
-  244 |                 err =3D pci_register_io_range(&np->fwnode, range->c=
-pu_addr,
-      |                                             ^~~~~~~~~~~
-In file included from drivers/of/address.c:12:
-include/linux/pci.h:2022:63: note: expected 'struct fwnode_handle *' but ar=
-gument is of type 'const struct fwnode_handle *'
- 2022 | static inline int pci_register_io_range(struct fwnode_handle *fwnod=
-e,
-      |                                         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+ld: warning: discarding dynamic section .glink
+ld: warning: discarding dynamic section .plt
+ld: linkage table error against `nec7210_board_online'
+ld: stubs don't match calculated size
+ld: can not build stubs: bad value
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_t1_dela=
+y':
+fmh_gpib.c:(.text+0x5e8): undefined reference to `nec7210_t1_delay'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_serial_=
+poll_status':
+fmh_gpib.c:(.text+0x70c): undefined reference to `nec7210_serial_poll_statu=
+s'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_seconda=
+ry_address':
+fmh_gpib.c:(.text+0x7e4): undefined reference to `nec7210_secondary_address'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_primary=
+_address':
+fmh_gpib.c:(.text+0x898): undefined reference to `nec7210_primary_address'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_update_=
+status':
+fmh_gpib.c:(.text+0x958): undefined reference to `nec7210_update_status'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_paralle=
+l_poll_response':
+fmh_gpib.c:(.text+0xa18): undefined reference to `nec7210_parallel_poll_res=
+ponse'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_paralle=
+l_poll':
+fmh_gpib.c:(.text+0xad8): undefined reference to `nec7210_parallel_poll'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_paralle=
+l_poll_configure':
+fmh_gpib.c:(.text+0xb98): undefined reference to `nec7210_parallel_poll_con=
+figure'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_disable=
+_eos':
+fmh_gpib.c:(.text+0xc4c): undefined reference to `nec7210_disable_eos'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_enable_=
+eos':
+fmh_gpib.c:(.text+0xce4): undefined reference to `nec7210_enable_eos'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_remote_=
+enable':
+fmh_gpib.c:(.text+0xd98): undefined reference to `nec7210_remote_enable'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_interfa=
+ce_clear':
+fmh_gpib.c:(.text+0xe58): undefined reference to `nec7210_interface_clear'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_request=
+_system_control':
+fmh_gpib.c:(.text+0xf18): undefined reference to `nec7210_request_system_co=
+ntrol'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_go_to_s=
+tandby':
+fmh_gpib.c:(.text+0xfcc): undefined reference to `nec7210_go_to_standby'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_take_co=
+ntrol':
+fmh_gpib.c:(.text+0x1098): undefined reference to `nec7210_take_control'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_command=
+':
+fmh_gpib.c:(.text+0x1170): undefined reference to `nec7210_command'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_write':
+fmh_gpib.c:(.text+0x123c): undefined reference to `nec7210_write'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_read':
+fmh_gpib.c:(.text+0x133c): undefined reference to `nec7210_read'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_device_=
+match':
+fmh_gpib.c:(.text+0x15d0): undefined reference to `gpib_match_device_path'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_init.is=
+ra.0':
+fmh_gpib.c:(.text+0x3164): undefined reference to `nec7210_board_reset'
+ld: fmh_gpib.c:(.text+0x31a4): undefined reference to `nec7210_set_handshak=
+e_mode'
+ld: fmh_gpib.c:(.text+0x335c): undefined reference to `nec7210_board_online'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_pci_att=
+ach_impl':
+fmh_gpib.c:(.text+0x35a0): undefined reference to `gpib_pci_get_device'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_pci_det=
+ach':
+fmh_gpib.c:(.text+0x5018): undefined reference to `nec7210_board_reset'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_detach':
+fmh_gpib.c:(.text+0x5508): undefined reference to `nec7210_board_reset'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_fifo_re=
+ad_countable':
+fmh_gpib.c:(.text+0x6168): undefined reference to `nec7210_set_reg_bits'
+ld: fmh_gpib.c:(.text+0x6180): undefined reference to `nec7210_set_reg_bits'
+ld: fmh_gpib.c:(.text+0x6634): undefined reference to `nec7210_set_reg_bits'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_fifo_wr=
+ite_countable':
+fmh_gpib.c:(.text+0x6f1c): undefined reference to `nec7210_set_reg_bits'
+ld: fmh_gpib.c:(.text+0x6f34): undefined reference to `nec7210_set_reg_bits'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o:fmh_gpib.c:(.text+0x6f98): mor=
+e undefined references to `nec7210_set_reg_bits' follow
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_interna=
+l_interrupt':
+fmh_gpib.c:(.text+0x80a4): undefined reference to `push_gpib_event'
+ld: fmh_gpib.c:(.text+0x80c4): undefined reference to `nec7210_interrupt_ha=
+ve_status'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_dma_cal=
+lback':
+fmh_gpib.c:(.text+0x887c): undefined reference to `nec7210_set_reg_bits'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_fifo_re=
+ad':
+fmh_gpib.c:(.text+0x8a84): undefined reference to `nec7210_set_reg_bits'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_dma_wri=
+te':
+fmh_gpib.c:(.text+0x95d8): undefined reference to `nec7210_set_reg_bits'
+ld: fmh_gpib.c:(.text+0x95f0): undefined reference to `nec7210_set_reg_bits'
+ld: fmh_gpib.c:(.text+0x9a88): undefined reference to `nec7210_set_reg_bits'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o:fmh_gpib.c:(.text+0xac38): mor=
+e undefined references to `nec7210_set_reg_bits' follow
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_exit_mo=
+dule':
+fmh_gpib.c:(.exit.text+0x38): undefined reference to `gpib_unregister_drive=
+r'
+ld: fmh_gpib.c:(.exit.text+0x44): undefined reference to `gpib_unregister_d=
+river'
+ld: fmh_gpib.c:(.exit.text+0x50): undefined reference to `gpib_unregister_d=
+river'
+ld: fmh_gpib.c:(.exit.text+0x5c): undefined reference to `gpib_unregister_d=
+river'
+ld: drivers/staging/gpib/fmh_gpib/fmh_gpib.o: in function `fmh_gpib_init_mo=
+dule':
+fmh_gpib.c:(.init.text+0x100): undefined reference to `gpib_register_driver'
+ld: fmh_gpib.c:(.init.text+0x110): undefined reference to `gpib_register_dr=
+iver'
+ld: fmh_gpib.c:(.init.text+0x120): undefined reference to `gpib_register_dr=
+iver'
+ld: fmh_gpib.c:(.init.text+0x130): undefined reference to `gpib_register_dr=
+iver'
 
-Introduced by commit
+Caused by commit
 
-  1957da25d023 ("of: Constify struct device_node function arguments")
+  8e4841a0888c ("staging: gpib: Add Frank Mori Hess FPGA PCI GPIB driver")
+
+I have marked that driver as BROKEN for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/j5nb74UNV./s+SWfVgpxL8Z
+--Sig_/RHhcJ_.P=z/kWD5EKO.7Z1a
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcOAVUACgkQAVBC80lX
-0GwXpAf7BxlAs7Y9H8xDhMtlyCC4Mwxfki5eu+k/fSxzENvMr6M/lu637dVi71zs
-H77HQuP4yO895P3vSSW1n092gDf+fzRKxW5mLYFZRKVGMEMjFw5jP+ItInokt7XQ
-KHuavgfwrvHBJmIZ1k8z7M302wxdDqcMGQfEMTQ0UzxmPAKz6MBG/fa9FW3gleEw
-n+zM3/7QoY8VDCHRPMbedlvlj2sCUOy/GWjqccVcP7ncDpiupy8jfaBa7ODAWzYF
-xNT2VPmEVequmMyELKBLJCRwrSTxUCNfSqLHuSOLDx+xmNNAxs8//Km0R3iudcMv
-Yb68s1oTEGWLBgycn0q6yOQcmiJM6A==
-=58Ma
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcOA9oACgkQAVBC80lX
+0GxwIQf/YlYnm+uL9UoKmExQbFhfpwPr1zGN/QwhWgdmGtbVJXgjun1Nzs7EfolR
+f5qzLvFPOri+iB9114VsSzx5y3Gxl6EYofJVdp5hgC1qmXZZ+B6y5RDRdgtuHd4p
+mzKz5ZYGKa6HUKuadC+CkGcHRMNn1UhKmCUHNn5HULkph22y85OxwEPymSailDmf
+ux9ewdxoezeDBHxx6VGjXn9mCpNXzrfx7wE0n++Rv+YtVNhQ6m1e9ZMvFV1UplAd
+NMDR02jBShHZDPgetT+vExo6f9dYxSxkGtHGeNnD9cFggl06J1tn0s6OL4yJW6kZ
+Y+bG+pZ4FwJwRuMx6l6nO7czp3OFZw==
+=ki0/
 -----END PGP SIGNATURE-----
 
---Sig_/j5nb74UNV./s+SWfVgpxL8Z--
+--Sig_/RHhcJ_.P=z/kWD5EKO.7Z1a--
 

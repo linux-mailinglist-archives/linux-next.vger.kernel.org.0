@@ -1,96 +1,56 @@
-Return-Path: <linux-next+bounces-4268-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4269-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E729A99DF25
-	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 09:15:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C63799E0B6
+	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 10:18:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A672D2834E7
-	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 07:15:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95D061C20F2F
+	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 08:18:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A635916CD1D;
-	Tue, 15 Oct 2024 07:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE671C8774;
+	Tue, 15 Oct 2024 08:17:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WhBr4Z3Y";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KDmLUxXz";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WhBr4Z3Y";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KDmLUxXz"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="K9EIK2av"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11EA09474;
-	Tue, 15 Oct 2024 07:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3921C9B81;
+	Tue, 15 Oct 2024 08:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728976523; cv=none; b=RLzPjU9APhDRcxsp3HPV65GkMH0ZMQW9/4gyKjbsgqInNVk4BY7abf026Vub9xWjOAGK4Fv/QX81m7GgjzCbzr6k7TGk2Ybkw1pM0H22cVkjwSBevsNRw6Fm5f17/FR1iOPJa0ljI0IEwnaUn8ICjBiBL3sg+FX8Na5GkbVDeq0=
+	t=1728980244; cv=none; b=RW2WmavLLi19nQx/WDfVYns/zTWSWGOoUY1Avi3pY/Catsr+8HxVKtPYG35Qj0erHmFrHhhL2DP8fSCb695xfeiQv+WTSLKF4mlg+B8t5HjiF98oLbV55j6sTjRj7GMuQDc2U2Q7KnWJ9myBcZBgkNGxaetzuw621yun2EApP9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728976523; c=relaxed/simple;
-	bh=Rh4vDfFnErtcwj2KDySIjEAn31H97tCrOAltkmY6ssc=;
+	s=arc-20240116; t=1728980244; c=relaxed/simple;
+	bh=R/IeZAKwaTvmee4fCSDVbeOW5LzJGMRTCA8XDNmd73Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mf3HqnMkQCW+vKmaI9dSKLpvNABn86ToQIH33hGXOWQOE4235n+RZJtOlXITMlYyiUgA54r+g9s9FwFJuy/p0L1jlSiZrf9Bt7sMavAk7f3/7AS5VS4pZdqI3km6CLcGecnVM207pQ5jIp2MHJblurPGdHtwzH7WTYWqKkS3Vgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WhBr4Z3Y; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KDmLUxXz; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WhBr4Z3Y; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KDmLUxXz; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2008F21E4E;
-	Tue, 15 Oct 2024 07:15:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1728976520; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ECBV7/4rMkBDqb6FsJM7XT94R1az118+cUHap56/Mpg=;
-	b=WhBr4Z3YxQ003aHraQdYSGaaB++FqhtTa9RJCBLNYsTuOy1VqnGhSVUmmveYp38gcfZGs6
-	p3Mnd/rQifIs3D6hP7G/35dto4xxW0ELvW+apAx6Zv2X/DLU6oCVfsvgmkplFeR4w2vGYN
-	2RFdsdZ7bAlWN7XnsvAh3TlncH4RhfE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1728976520;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ECBV7/4rMkBDqb6FsJM7XT94R1az118+cUHap56/Mpg=;
-	b=KDmLUxXzE+ti24WoYdYxA+B4EyvCZz+7gT5QqH/5wnMPH9eR+Jx8LRAZQG1tHmXaCWyHMe
-	0TPrkmk3SOyNKJDQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=WhBr4Z3Y;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=KDmLUxXz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1728976520; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ECBV7/4rMkBDqb6FsJM7XT94R1az118+cUHap56/Mpg=;
-	b=WhBr4Z3YxQ003aHraQdYSGaaB++FqhtTa9RJCBLNYsTuOy1VqnGhSVUmmveYp38gcfZGs6
-	p3Mnd/rQifIs3D6hP7G/35dto4xxW0ELvW+apAx6Zv2X/DLU6oCVfsvgmkplFeR4w2vGYN
-	2RFdsdZ7bAlWN7XnsvAh3TlncH4RhfE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1728976520;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ECBV7/4rMkBDqb6FsJM7XT94R1az118+cUHap56/Mpg=;
-	b=KDmLUxXzE+ti24WoYdYxA+B4EyvCZz+7gT5QqH/5wnMPH9eR+Jx8LRAZQG1tHmXaCWyHMe
-	0TPrkmk3SOyNKJDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E9BA713A42;
-	Tue, 15 Oct 2024 07:15:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id FVSVN4cWDmf6dwAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Tue, 15 Oct 2024 07:15:19 +0000
-Message-ID: <7df614b3-4b6c-490a-b64b-ceabf7d2d290@suse.de>
-Date: Tue, 15 Oct 2024 09:15:19 +0200
+	 In-Reply-To:Content-Type; b=Gow0w4+bRAArE5D1XzkJW0PoNFkwwS1AG8PU1sR1cyDX4cKTXd4zE72lY739BtVGy0KQXxbTgF0fqkjG9K9L6Xk4ARhNrJVcqj/sUaGvmlR0rcKV2lsfAlZVZUt29j3oFwnQDcPaavRZokrxfhGNAWKq1XtyiNbwg/lcjaiaj/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=K9EIK2av; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1728980237; x=1729585037; i=deller@gmx.de;
+	bh=R/IeZAKwaTvmee4fCSDVbeOW5LzJGMRTCA8XDNmd73Y=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=K9EIK2avcync2NGpa2KpL0wSeaxZLdNZMtsmQ4pgAhySSMsN7XD5NOui/EB6MT1i
+	 UGCu/prBEDHa+DzID97kmUI1oJKcJT+pkUoAtjLoo2vuBM85nyRsciU4Om4aU9L5t
+	 PYG89uXQTlzt+R8tLRdcr1/iidx5DRGwOgzROykQB5wm+nnj+Lm0/JyBesRtogA6/
+	 ZH+z6v3382OY7nhsexD7L7K9iViQ/sSA5zl+Z2H90MHqFdvW+xLOqgFgj2CErBJx6
+	 KPm2wW7j3cS98lcoztHJLdWRogIRE3BawVxmcz6oUrNAiWCwj2IYs8L2JIOX3hMLp
+	 /GFFz2UYWzxueQ++wQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.55] ([109.250.63.79]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MuDbx-1tobcv4Bqf-00z9po; Tue, 15
+ Oct 2024 10:17:17 +0200
+Message-ID: <0d4f76d0-9b67-4956-bd13-ce694585a6fd@gmx.de>
+Date: Tue, 15 Oct 2024 10:17:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -99,115 +59,116 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: linux-next: build failure after merge of the fbdev tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Helge Deller <deller@gmx.de>
+To: Thomas Zimmermann <tzimmermann@suse.de>,
+ Stephen Rothwell <sfr@canb.auug.org.au>
 Cc: Gonzalo Silvalde Blanco <gonzalo.silvalde@gmail.com>,
  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
  Linux Next Mailing List <linux-next@vger.kernel.org>
 References: <20241015120119.533e65e8@canb.auug.org.au>
+ <7df614b3-4b6c-490a-b64b-ceabf7d2d290@suse.de>
 Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <20241015120119.533e65e8@canb.auug.org.au>
+From: Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ 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
+In-Reply-To: <7df614b3-4b6c-490a-b64b-ceabf7d2d290@suse.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 2008F21E4E
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_DN_ALL(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_TO(0.00)[canb.auug.org.au,gmx.de];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	ARC_NA(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.01
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:R4WMAmc/CfqirNbrWBoo+oxjn8TuXPevx2nE+R2HpCB6OdsVK+a
+ HKbMhRvuXtoACAIozVGC/lCndH83Rtp6/dvvbxY9vHNXxBnPZlwuNUBgyOnsWdtTSTvYMp5
+ 4CKJYLX8LYsiF2YAMoNKttHpD+xB4GKO28fgFYI3maYeOu8ztgGnzMc8ZZuF0RoYnwqc1hk
+ LFdu0nknclZUULNsgQNKw==
 X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:dykrvO4qZLE=;znImtFtMsCIlSgQj4OIhiO+6XjB
+ pdF6EyJb2EOwoYgCalodVbpgLNNKQfzyPJguqVc/biwKBpy77QJrZ7wwcu/Uc1p/qqrgUN6St
+ LNH6QXPQh/YRDw5dRi1Feago3aAkSvoi/7bSx7+nPk3nRE66x5iJ/SOc8ghpeqPbdMzg/1imU
+ +jBXOe11s4QP5fH5e0mWozw2yqCSLoCpowoUWfO48quQwb34JMBynVi9OOvOC+GZEDXooQYGU
+ FA2IGVrRRGZgYmrkANhX7auAAwzirZs8xFnx/N8GX0cZGIs8FOwZffvVs84mUX2qtpzX+3r5t
+ 3lfvcMnHx0/JziKSYfcXAHdXpvlo756tS8r7t2JDJcGGjqZ/sgwzTsNV/PtW0l/NucxQaeh8t
+ y0/pQ6sDN6Y4JQ3MbnJ30xf1d6+yjDoWVWLKOqhnic+j9ILsSJ9+pNQTdJz4drhXikX7LJb5z
+ wo0BwYPl2UyEZA3WICmra0FnBSoE2Gp9U6RMbvrGKgGGDhRSqvIDcHKN8ZwRB3XQUji02+cvH
+ 978VUJQIRVuai9xeLJjDDv4fQ66IdFVImgk4QrjT0KQWoLQO1I2DMHOqUZiskSfG8kex2d9FT
+ tYm983zsm4xrGFmkO+SNGEz13hlXd81bVn9TVfo15JIHFZkC2Cr659POxG9CcFR283H5bQoHw
+ NSb1tE0Baxpi3Z2TIfPZ8RiF2GsseKZdWwvnqOOALbmRNfn9xkAFnZHkzphq/N6QTBH4nNY9R
+ Dcx9fte4odPQfLofVKOzF55KJWWZpXMkhxXNYly9rTkKXNfOrA+y2kcFlMX/R4ppba1QR5bz7
+ 1nU1jKxprae0K1OGo9t/ptmQ==
 
-Hi
-
-Am 15.10.24 um 03:01 schrieb Stephen Rothwell:
-> Hi all,
+On 10/15/24 09:15, Thomas Zimmermann wrote:
+> Hi
 >
-> After merging the fbdev tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> Am 15.10.24 um 03:01 schrieb Stephen Rothwell:
+>> Hi all,
+>>
+>> After merging the fbdev tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> drivers/video/fbdev/sstfb.c: In function 'sstfb_probe':
+>> drivers/video/fbdev/sstfb.c:1439:2: error: invalid preprocessing direct=
+ive #fdef; did you mean #ifdef?
+>> =C2=A0 1439 | #fdef CONFIG_FB_DEVICE
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 ^~~~
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 ifdef
+>> drivers/video/fbdev/sstfb.c:1442:2: error: #endif without #if
+>> =C2=A0 1442 | #endif
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 ^~~~~
+>>
+>> Caused by commit
+>>
+>> =C2=A0=C2=A0 7c0510bb3452 ("fbdev: sstfb: Make CONFIG_FB_DEVICE optiona=
+l")
+>>
+>> I have used the fbdev tree from next-20241014 for today.
 >
-> drivers/video/fbdev/sstfb.c: In function 'sstfb_probe':
-> drivers/video/fbdev/sstfb.c:1439:2: error: invalid preprocessing directive #fdef; did you mean #ifdef?
->   1439 | #fdef CONFIG_FB_DEVICE
->        |  ^~~~
->        |  ifdef
-> drivers/video/fbdev/sstfb.c:1442:2: error: #endif without #if
->   1442 | #endif
->        |  ^~~~~
+> Thanks for reporting. While it has my r-b, it wasn't supposed to be merg=
+ed yet. I sent out a fix to address the remaining problems. See
 >
-> Caused by commit
->
->    7c0510bb3452 ("fbdev: sstfb: Make CONFIG_FB_DEVICE optional")
->
-> I have used the fbdev tree from next-20241014 for today.
+> https://lore.kernel.org/linux-fbdev/20241015071029.25639-1-tzimmermann@s=
+use.de/T/#u
 
-Thanks for reporting. While it has my r-b, it wasn't supposed to be 
-merged yet. I sent out a fix to address the remaining problems. See
+Thanks Thomas and Stephen!
 
-https://lore.kernel.org/linux-fbdev/20241015071029.25639-1-tzimmermann@suse.de/T/#u
+I've merged Thomas changes into one patch and pushed a new version.
+The issue should be resolved now.
 
-Best regards
-Thomas
-
->
-
--- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
-
+Helge
 

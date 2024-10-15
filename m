@@ -1,151 +1,133 @@
-Return-Path: <linux-next+bounces-4283-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4284-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEAF499FA8A
-	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 23:51:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D1E399FAC7
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 00:02:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C4E61C23C3C
-	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 21:51:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFF83B21793
+	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 22:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6560621E3A3;
-	Tue, 15 Oct 2024 21:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 108311B0F02;
+	Tue, 15 Oct 2024 22:02:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BucKLOAo"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="j2bsjpXL"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B769E21E3B6;
-	Tue, 15 Oct 2024 21:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F2F21E3C4;
+	Tue, 15 Oct 2024 22:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729029097; cv=none; b=bRujKDLr5FUpPwuZp8O9kZQ7ROvx0pmWlL2dOWtINmsRdgxER5aEQ957hDzEHaBatVixYucx9pPwyRWbBkNsZPncJaaHzvD6y66DpqAwskMUozyTngUaRtOSkYQB5Vv665BDa9oG6jwrkub0MTT+F3ttef06+5Qm0Y1RfHyEeRA=
+	t=1729029747; cv=none; b=eKbnBODbI1zPOIJwUGANVsA/bsuNSXkQTrHFL3Oi0YhdCXJqArnwpqTVyt+zGDUacTN9sDiNpp0VsuvvPa53hBI18yXrdnTf2eyh2OufWZVxTiW1jSJvTYcupJdroINVD5y09xhbvpU0Cu2i5aManw7VryoaJEhEmpUtMXFGdAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729029097; c=relaxed/simple;
-	bh=2zI5kAHr+cQNWNYA3yjJUh93aKT+MlDG8tuCMNcopao=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=AFGSDLsAq2uMxXgl0w2/dBfGkLQ6hyHtzPv+6FsJ5CaYUqYn+PZbZWVCu0S3vZxocIMOU4d8gz0r8wphyYJGq4ZBFUESF9lO0isbUDDPEemAd4ugNzMSuSVQkdDD9rujfuteTRUp1TJecaZcf+dSVYVdjR/7IMTtYMz//v31igI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BucKLOAo; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1729029747; c=relaxed/simple;
+	bh=3FMXA06SLyxe4d1QjZ3S8XqjSxoyuM2EDn+/3su358I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DgUZ5jZcc3ycf/E9ShibieOXbfTAxGjNJ54rUD0hKNJm7AYzDNxLO5Sp7wVWFFRJ0xEOBvBppsLFUf0WfBvXTvUS/qq1MKxLgvoFtWMF6UspywTYpgSm7+UsomSxy1xOUgNv5L4xgo9qXNWHCtQLPFiULexeznWj6KCytGen/7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=j2bsjpXL; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1729029090;
-	bh=cJEBS0gJTk8xjY8qdCOtkTutpldCcHDNuFARAduiyss=;
+	s=201702; t=1729029740;
+	bh=amBjm3gdTBfhT3NTOMTN+68x4oxurJ9whoqBomPVaxU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=BucKLOAoyNxPff6/ANG1JhozhZniecJRSPT3josOMKfHOcOXL2EAZtz8/KJkbfqtz
-	 KUcFQC52PYJ7+DXuQwUuksKtjzXzshoTnrz381odQIb9pUDOIWRonlTg/fBz42walt
-	 KmQkwenhACSHkY7ORDqFY117TJ1Jq13SDOn35NzleUxW/397/+6JZ6XxaR//WRDzYO
-	 i51zuznkpbuBwf4jAuzfmvrFqkNO/9yoHqYPo72goThhVwfnjKD4rbobCiuSXqmyyW
-	 puj4Bod32gS8zvHvYvnGig/pWmEYTVlvjv1zQtg/MJQSabgGwYmn5OQm4DBAWzkxbH
-	 dJxe1VAr9Lkpw==
+	b=j2bsjpXLvm3ita8K7ms5RAUPsdEA30DK/bj1Pya6vrry7EjEX7nxfX1Mu9hOQBY4C
+	 HyH7hx14aUjWMljLezK19EP1hP+3Pj99Qepkwuu1iQT2y4rRUNQj4vpgbYy7POHTQu
+	 YzooUpHtui0A5j/6/nSBquTMAp42jTMl78/mu4VYIgBLD+X3o+8C02Yrjf1/Yts4y6
+	 3Q7PUeMwlGGYm0B3adOrJLyT0waraXpVm5jYn3fdF8wFDSs9gIPqNWO2tbHnL2JzSa
+	 IGWZ/MZbdNcqnRwm1jsEppvEgtkPm+fBt1K2TgF5NmTMEMwJ/qzZsAEHjdte9Xb6Be
+	 Q7dYzvH+hCiJw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XSnqP33B4z4wxm;
-	Wed, 16 Oct 2024 08:51:29 +1100 (AEDT)
-Date: Wed, 16 Oct 2024 08:51:29 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XSp3w1r2xz4wx5;
+	Wed, 16 Oct 2024 09:02:20 +1100 (AEDT)
+Date: Wed, 16 Oct 2024 09:02:20 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, David Sterba <dsterba@suse.cz>
-Cc: David Sterba <dsterba@suse.com>, Jeff Layton <jlayton@kernel.org>, Linux
+To: Christian Brauner <brauner@kernel.org>, David Chinner
+ <david@fromorbit.com>, Carlos Maiolino <cem@kernel.org>, "Darrick J. Wong"
+ <djwong@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, <linux-xfs@vger.kernel.org>, Linux
  Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs-brauner tree with the btrfs
- tree
-Message-ID: <20241016085129.3954241d@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the vfs-brauner tree
+Message-ID: <20241016090220.5b67bb5f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6qqZdx1iwV6AKhWd13fNbdS";
+Content-Type: multipart/signed; boundary="Sig_/iXwp_DuUPe4iH51ss3y0KQc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/6qqZdx1iwV6AKhWd13fNbdS
+--Sig_/iXwp_DuUPe4iH51ss3y0KQc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
+The following commits are also in the xfs tree as different commits
+(but the same patches):
 
-  fs/btrfs/file.c
+  c650b5a9028f ("xfs: punch delalloc extents from the COW fork for COW writ=
+es")
+  f8bb8ce211ce ("xfs: set IOMAP_F_SHARED for all COW fork allocations")
+  cd97b59a531d ("xfs: share more code in xfs_buffered_write_iomap_begin")
+  7f6e164457c6 ("xfs: support the COW fork in xfs_bmap_punch_delalloc_range=
+")
+  99c29f16b79f ("xfs: IOMAP_ZERO and IOMAP_UNSHARE already hold invalidate_=
+lock")
+  2f58268678f1 ("xfs: take XFS_MMAPLOCK_EXCL xfs_file_write_zero_eof")
+  71f1cd607850 ("xfs: factor out a xfs_file_write_zero_eof helper")
+  f66815a521bd ("iomap: move locking out of iomap_write_delalloc_release")
+  1eef06039a75 ("iomap: remove iomap_file_buffered_write_punch_delalloc")
+  18f08714e7b2 ("iomap: factor out a iomap_last_written_block helper")
 
-between commit:
+These are commits
 
-  377781e9e6f8 ("btrfs: drop unused parameter iov_iter from btrfs_write_che=
-ck()")
+  f6f91d290c8b ("xfs: punch delalloc extents from the COW fork for COW writ=
+es")
+  7d6fe5c586e6 ("xfs: set IOMAP_F_SHARED for all COW fork allocations")
+  c29440ff66d6 ("xfs: share more code in xfs_buffered_write_iomap_begin")
+  8fe3b21efa07 ("xfs: support the COW fork in xfs_bmap_punch_delalloc_range=
+")
+  abd7d651ad2c ("xfs: IOMAP_ZERO and IOMAP_UNSHARE already hold invalidate_=
+lock")
+  acfbac776496 ("xfs: take XFS_MMAPLOCK_EXCL xfs_file_write_zero_eof")
+  3c399374af28 ("xfs: factor out a xfs_file_write_zero_eof helper")
+  b78495166264 ("iomap: move locking out of iomap_write_delalloc_release")
+  caf0ea451d97 ("iomap: remove iomap_file_buffered_write_punch_delalloc")
+  c0adf8c3a9bf ("iomap: factor out a iomap_last_written_block helper")
 
-from the btrfs tree and commit:
+in the xfs tree.
 
-  e2e801d6e625 ("btrfs: convert to multigrain timestamps")
-
-from the vfs-brauner tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+These are causing at least one conflict due to later commits in the
+vfs-brauner tree.  Maybe you could share a stable branch?
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/btrfs/file.c
-index 033f85ea8c9d,e5384ceb8acf..000000000000
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-@@@ -1124,27 -1120,7 +1124,7 @@@ void btrfs_check_nocow_unlock(struct bt
-  	btrfs_drew_write_unlock(&inode->root->snapshot_lock);
-  }
- =20
-- static void update_time_for_write(struct inode *inode)
-- {
-- 	struct timespec64 now, ts;
--=20
-- 	if (IS_NOCMTIME(inode))
-- 		return;
--=20
-- 	now =3D current_time(inode);
-- 	ts =3D inode_get_mtime(inode);
-- 	if (!timespec64_equal(&ts, &now))
-- 		inode_set_mtime_to_ts(inode, now);
--=20
-- 	ts =3D inode_get_ctime(inode);
-- 	if (!timespec64_equal(&ts, &now))
-- 		inode_set_ctime_to_ts(inode, now);
--=20
-- 	if (IS_I_VERSION(inode))
-- 		inode_inc_iversion(inode);
-- }
--=20
- -int btrfs_write_check(struct kiocb *iocb, struct iov_iter *from, size_t c=
-ount)
- +int btrfs_write_check(struct kiocb *iocb, size_t count)
-  {
-  	struct file *file =3D iocb->ki_filp;
-  	struct inode *inode =3D file_inode(file);
-
---Sig_/6qqZdx1iwV6AKhWd13fNbdS
+--Sig_/iXwp_DuUPe4iH51ss3y0KQc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcO4+EACgkQAVBC80lX
-0GyYcwf+KRWsb+QLU2OfKwoEUwZTVayX8WUc0SHsf9vDKtg7B/lrxp0xzj3jNCo0
-qqsgrBsixy477QOCJb43H+0jNjkDSY9V8uTSVSWnKCDl97SAADuYiJvTSngyiULD
-jDxjZMPEh0o6n/Hv7QitIXeirrheAk2PuOaYuddxGAaPkPUfcVng0JjRwspJCpy+
-3lMhRk2pgLfrI7YHTeYS+SLX9VfHODXaQ8vTrtNKjbjIcaIKRUgUaAmrng/uIzqn
-8DdyHR0jfAKMxpoc9uw+0l/tqhip75yJx8UNh8ir0VQ5s2mKRctL/raC/7z2+5PU
-tFuxf+oRn8mybwACsOpPJcoHbihYbQ==
-=zOv3
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcO5mwACgkQAVBC80lX
+0GzidAf+JGNspgiZBzM0yZqAL3AJA57fy/PyS/sPC3rFNFWD4P2HZSWsanL6UCAg
+NLnSP1eIPnthmEnPYUocNxej86FtSiwPIynStrXymYMjZbFzK8Mi/7E96FEXxuza
+4GHIao4XpY+e/EFjF16ePYoSQmrFPDVtvsPOb2a0WDk7ihxZDDOwttzUvdMZeTTt
+dayu46EIQTI9u7zpEa81zc/paoJYDjlPRssZe2hrAhthEtMMQClbk9YK1orzMNX0
+e46XUVglqtZjzASmhuzuuvQkt5WlllKcIuteOUCfrQ0GgpjHBu+vcPBhY7+HeZQz
+neD4zLba3O5HdKIFxKjy7EnlHhqK4w==
+=125M
 -----END PGP SIGNATURE-----
 
---Sig_/6qqZdx1iwV6AKhWd13fNbdS--
+--Sig_/iXwp_DuUPe4iH51ss3y0KQc--
 

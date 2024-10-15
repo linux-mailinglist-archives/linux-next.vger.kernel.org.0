@@ -1,174 +1,166 @@
-Return-Path: <linux-next+bounces-4269-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4270-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C63799E0B6
-	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 10:18:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FBDA99F016
+	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 16:49:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95D061C20F2F
-	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 08:18:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03C501F24520
+	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2024 14:49:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE671C8774;
-	Tue, 15 Oct 2024 08:17:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE29C1C4A3B;
+	Tue, 15 Oct 2024 14:49:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="K9EIK2av"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Xd3dAV66"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3921C9B81;
-	Tue, 15 Oct 2024 08:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF0F1AF0D5
+	for <linux-next@vger.kernel.org>; Tue, 15 Oct 2024 14:49:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728980244; cv=none; b=RW2WmavLLi19nQx/WDfVYns/zTWSWGOoUY1Avi3pY/Catsr+8HxVKtPYG35Qj0erHmFrHhhL2DP8fSCb695xfeiQv+WTSLKF4mlg+B8t5HjiF98oLbV55j6sTjRj7GMuQDc2U2Q7KnWJ9myBcZBgkNGxaetzuw621yun2EApP9Y=
+	t=1729003786; cv=none; b=Sfxj6YjO33FaRZPljOjFkOwobRjk9Czhc8k1zS9z5/rCLRtq/r6zQlryOGi7suHlbXEvNnzIvZ8/qkjz0qg2TYqPOK4E6qZVAWtBiOkc2At9sheR/V9Cmn93OfWxHdVtVKgtIPynOeNgRQMS9HfDrft2h643qwh2Cefzk53KMYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728980244; c=relaxed/simple;
-	bh=R/IeZAKwaTvmee4fCSDVbeOW5LzJGMRTCA8XDNmd73Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gow0w4+bRAArE5D1XzkJW0PoNFkwwS1AG8PU1sR1cyDX4cKTXd4zE72lY739BtVGy0KQXxbTgF0fqkjG9K9L6Xk4ARhNrJVcqj/sUaGvmlR0rcKV2lsfAlZVZUt29j3oFwnQDcPaavRZokrxfhGNAWKq1XtyiNbwg/lcjaiaj/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=K9EIK2av; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1728980237; x=1729585037; i=deller@gmx.de;
-	bh=R/IeZAKwaTvmee4fCSDVbeOW5LzJGMRTCA8XDNmd73Y=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=K9EIK2avcync2NGpa2KpL0wSeaxZLdNZMtsmQ4pgAhySSMsN7XD5NOui/EB6MT1i
-	 UGCu/prBEDHa+DzID97kmUI1oJKcJT+pkUoAtjLoo2vuBM85nyRsciU4Om4aU9L5t
-	 PYG89uXQTlzt+R8tLRdcr1/iidx5DRGwOgzROykQB5wm+nnj+Lm0/JyBesRtogA6/
-	 ZH+z6v3382OY7nhsexD7L7K9iViQ/sSA5zl+Z2H90MHqFdvW+xLOqgFgj2CErBJx6
-	 KPm2wW7j3cS98lcoztHJLdWRogIRE3BawVxmcz6oUrNAiWCwj2IYs8L2JIOX3hMLp
-	 /GFFz2UYWzxueQ++wQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.55] ([109.250.63.79]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MuDbx-1tobcv4Bqf-00z9po; Tue, 15
- Oct 2024 10:17:17 +0200
-Message-ID: <0d4f76d0-9b67-4956-bd13-ce694585a6fd@gmx.de>
-Date: Tue, 15 Oct 2024 10:17:15 +0200
+	s=arc-20240116; t=1729003786; c=relaxed/simple;
+	bh=jftCcgpGscguxSk6kXzdvDBaiXSUimRLuEL9wKI3/7I=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Ld82M7ns6bE5W6kfpIWD+GtOJ0uiyU3vobf7y+AgJ9uTvGzdN9652E6M961rXOXFSi7t5udyZhP0F+5C2B+QegKGwJQ0ZmCIEYt3EHQudAi4PdGlMl6Lj0UWJUNa+l6nHlmYXw5I5wyT0yAFucbYYehfzZyRrAeJPU/z8z8+4y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Xd3dAV66; arc=none smtp.client-ip=209.85.221.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-50d5804c13aso657018e0c.1
+        for <linux-next@vger.kernel.org>; Tue, 15 Oct 2024 07:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1729003783; x=1729608583; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tvpxbUbkgDaEkuRJpwxPS3JaI9LTJgLeDg7mwmImTTA=;
+        b=Xd3dAV66YNsI9470LoN+9u33Sr9YI8pXUnJZctXxD01wzndeuYyAtvdn1T8liC/9Sh
+         KNFrDozcOj2A7nh4OfL03yxRDQmSWvquzPP7srIsR9lHSEUHKqvl1gD0FCJPs3KkfGnB
+         hBXOvebCMHVZnnqlKAclrjTs4z3NPaJS4tFTqyOaL9y0HyfmSnWrzClh7HHcABSHjbNQ
+         NLlrL4vl/TwJhY7pdtgdLUz9VgJTIWNL1fhtfaTMP4UGwPduo2R2oBsL/b2xF3uwUvqs
+         J5aE52N4dMyWGweuKGrkyjw+UdlWAWlDDwlHPq+kWBoDvd8EA2Sy9vdzy52yOsrs84Gp
+         dAGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729003783; x=1729608583;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tvpxbUbkgDaEkuRJpwxPS3JaI9LTJgLeDg7mwmImTTA=;
+        b=NcIUWOrMyJ5QcR860PLmgLEJOHaR1vQOyr41aKCwoef7+GHAf6wjxTG/uf170nhBRC
+         sqaj2C53WyF1HAvHTtf8dXlXPcmECr74GIv1kTdPLmXangh5M9pH6UuMGqm48nT5nBV3
+         MXhoA+l6ULp311TYcL74DcfNSuIV8nSHPIbThkkXboH0/fA5C60h/RL7jdRqDQeulvqM
+         OsPvg1Uof8mLVdB6Ai+6zKIjyr85ygOJZe1THhZuKu5KERbwGSax2kKxE/PIvunEv9Wq
+         faSC16LEbmljGNXvRVEO53tT5g5qQSSO23r3Zbax9H7rbpdYv6PqTQF5creWlMaAcTCn
+         sgvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVhXe5uiQQWcGf0W9Gp23coXrRW9vBuuP6gN3SICcvr2ZNr7lf7tie6M2cSuMpRh0jzMBY0YWr4HVj1@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjCPGehIBlhxuUu4xrM0xbfOvj2ph2vvyP/IHIRz9LfQrmiAgC
+	QEbs7cxHP5Wgwk6CpveX52KpdViqjRsaw3xjyMRdQL6x2bwRLkkzbfIVbntxfdEs2V7tVQ+NmX3
+	TraCQN+PgxqaGBFE59N9gnWZTp9H80ESuuGLxHA==
+X-Google-Smtp-Source: AGHT+IFyCjZYFgzvRtug/FF7Rkg4BIV5TdPRIQDiRczoqfOkCPSprOtAZ6MVzV6QhnnT962rmYjPy+oKdl/xd0zwff4=
+X-Received: by 2002:a05:6122:3b01:b0:50d:7a14:ddf6 with SMTP id
+ 71dfb90a1353d-50d7a14e8a3mr2075278e0c.10.1729003782861; Tue, 15 Oct 2024
+ 07:49:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the fbdev tree
-To: Thomas Zimmermann <tzimmermann@suse.de>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Gonzalo Silvalde Blanco <gonzalo.silvalde@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20241015120119.533e65e8@canb.auug.org.au>
- <7df614b3-4b6c-490a-b64b-ceabf7d2d290@suse.de>
-Content-Language: en-US
-From: Helge Deller <deller@gmx.de>
-Autocrypt: addr=deller@gmx.de; keydata=
- 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
-In-Reply-To: <7df614b3-4b6c-490a-b64b-ceabf7d2d290@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:R4WMAmc/CfqirNbrWBoo+oxjn8TuXPevx2nE+R2HpCB6OdsVK+a
- HKbMhRvuXtoACAIozVGC/lCndH83Rtp6/dvvbxY9vHNXxBnPZlwuNUBgyOnsWdtTSTvYMp5
- 4CKJYLX8LYsiF2YAMoNKttHpD+xB4GKO28fgFYI3maYeOu8ztgGnzMc8ZZuF0RoYnwqc1hk
- LFdu0nknclZUULNsgQNKw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:dykrvO4qZLE=;znImtFtMsCIlSgQj4OIhiO+6XjB
- pdF6EyJb2EOwoYgCalodVbpgLNNKQfzyPJguqVc/biwKBpy77QJrZ7wwcu/Uc1p/qqrgUN6St
- LNH6QXPQh/YRDw5dRi1Feago3aAkSvoi/7bSx7+nPk3nRE66x5iJ/SOc8ghpeqPbdMzg/1imU
- +jBXOe11s4QP5fH5e0mWozw2yqCSLoCpowoUWfO48quQwb34JMBynVi9OOvOC+GZEDXooQYGU
- FA2IGVrRRGZgYmrkANhX7auAAwzirZs8xFnx/N8GX0cZGIs8FOwZffvVs84mUX2qtpzX+3r5t
- 3lfvcMnHx0/JziKSYfcXAHdXpvlo756tS8r7t2JDJcGGjqZ/sgwzTsNV/PtW0l/NucxQaeh8t
- y0/pQ6sDN6Y4JQ3MbnJ30xf1d6+yjDoWVWLKOqhnic+j9ILsSJ9+pNQTdJz4drhXikX7LJb5z
- wo0BwYPl2UyEZA3WICmra0FnBSoE2Gp9U6RMbvrGKgGGDhRSqvIDcHKN8ZwRB3XQUji02+cvH
- 978VUJQIRVuai9xeLJjDDv4fQ66IdFVImgk4QrjT0KQWoLQO1I2DMHOqUZiskSfG8kex2d9FT
- tYm983zsm4xrGFmkO+SNGEz13hlXd81bVn9TVfo15JIHFZkC2Cr659POxG9CcFR283H5bQoHw
- NSb1tE0Baxpi3Z2TIfPZ8RiF2GsseKZdWwvnqOOALbmRNfn9xkAFnZHkzphq/N6QTBH4nNY9R
- Dcx9fte4odPQfLofVKOzF55KJWWZpXMkhxXNYly9rTkKXNfOrA+y2kcFlMX/R4ppba1QR5bz7
- 1nU1jKxprae0K1OGo9t/ptmQ==
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 15 Oct 2024 20:19:31 +0530
+Message-ID: <CA+G9fYuhS6Ltemvb_EZfq+j3PpTnmo4qb46Gu1s6L47wMsNO3g@mail.gmail.com>
+Subject: next-20241015: drivers/of/address.c:244:31: error: passing 'const
+ struct fwnode_handle *' to parameter of type 'struct fwnode_handle *'
+ discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+To: open list <linux-kernel@vger.kernel.org>, 
+	Linux-Next Mailing List <linux-next@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Cc: Saravana Kannan <saravanak@google.com>, Rob Herring <robh@kernel.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/15/24 09:15, Thomas Zimmermann wrote:
-> Hi
->
-> Am 15.10.24 um 03:01 schrieb Stephen Rothwell:
->> Hi all,
->>
->> After merging the fbdev tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> drivers/video/fbdev/sstfb.c: In function 'sstfb_probe':
->> drivers/video/fbdev/sstfb.c:1439:2: error: invalid preprocessing direct=
-ive #fdef; did you mean #ifdef?
->> =C2=A0 1439 | #fdef CONFIG_FB_DEVICE
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 ^~~~
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 ifdef
->> drivers/video/fbdev/sstfb.c:1442:2: error: #endif without #if
->> =C2=A0 1442 | #endif
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 ^~~~~
->>
->> Caused by commit
->>
->> =C2=A0=C2=A0 7c0510bb3452 ("fbdev: sstfb: Make CONFIG_FB_DEVICE optiona=
-l")
->>
->> I have used the fbdev tree from next-20241014 for today.
->
-> Thanks for reporting. While it has my r-b, it wasn't supposed to be merg=
-ed yet. I sent out a fix to address the remaining problems. See
->
-> https://lore.kernel.org/linux-fbdev/20241015071029.25639-1-tzimmermann@s=
-use.de/T/#u
+A larger set of clang-19 builds failed on arm, mips, riscv and powerpc due to
+following Linux next-20241015 tag and these include tinyconfig, allnoconfig etc.
 
-Thanks Thomas and Stephen!
+And gcc-13 and gcc-12 builds are passed.
 
-I've merged Thomas changes into one patch and pushed a new version.
-The issue should be resolved now.
+First seen on next-20241014
+  GOOD: next-20241014
+  BAD: next-20241015
 
-Helge
+List of build regressions,
+arm:
+  build:
+    * clang-19-sama5_defconfig
+    * clang-nightly-mxs_defconfig
+    * clang-nightly-exynos_defconfig
+    * clang-19-at91_dt_defconfig
+    * clang-19-pxa910_defconfig
+    * clang-nightly-vexpress_defconfig
+    * clang-19-vexpress_defconfig
+    * clang-19-mxs_defconfig
+    * clang-nightly-davinci_all_defconfig
+    * clang-19-allnoconfig
+...
+powerpc:
+  build:
+    * clang-19-tqm8xx_defconfig
+    * clang-19-tinyconfig
+    * clang-nightly-tinyconfig
+    * clang-nightly-tqm8xx_defconfig
+    * clang-19-allnoconfig
+    * clang-19-ppc64e_defconfig
+    * clang-nightly-ppc64e_defconfig
+    * clang-nightly-allnoconfig
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Build log:
+-----------
+drivers/of/address.c:244:31: error: passing 'const struct
+fwnode_handle *' to parameter of type 'struct fwnode_handle *'
+discards qualifiers
+[-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+  244 |                 err = pci_register_io_range(&np->fwnode,
+range->cpu_addr,
+      |                                             ^~~~~~~~~~~
+include/linux/pci.h:2022:63: note: passing argument to parameter 'fwnode' here
+ 2022 | static inline int pci_register_io_range(struct fwnode_handle *fwnode,
+      |                                                               ^
+1 error generated
+
+
+Build link,
+-------
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2nShjJ9pOcjqxIXViYuRI5haZZP/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241015/testrun/25441737/suite/build/test/clang-19-tinyconfig/log
+
+Build history:
+----------
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241015/testrun/25441737/suite/build/test/clang-19-tinyconfig/history/
+
+metadata:
+----
+  git describe: next-20241015
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git sha: b852e1e7a0389ed6168ef1d38eb0bad71a6b11e8
+  kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2nShjJ9pOcjqxIXViYuRI5haZZP/config
+  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2nShjJ9pOcjqxIXViYuRI5haZZP/
+  toolchain: clang-19
+  config: defconfig
+  arch: arm, mips, riscv and powerpc
+
+Steps to reproduce:
+-------
+# tuxmake --runtime podman --target-arch mips --toolchain clang-19
+--kconfig tinyconfig LLVM=1 LLVM_IAS=1
+
+--
+Linaro LKFT
+https://lkft.linaro.org
 

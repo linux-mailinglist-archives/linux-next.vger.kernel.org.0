@@ -1,118 +1,138 @@
-Return-Path: <linux-next+bounces-4307-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4308-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AB9A9A0C4F
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 16:15:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 108EF9A0FA4
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 18:26:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46BF91F23EDE
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 14:15:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9E12282132
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 16:26:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9B61DFF7;
-	Wed, 16 Oct 2024 14:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EBA820FA84;
+	Wed, 16 Oct 2024 16:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YGSM4N0N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QtIBj55w"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF4021E3C1;
-	Wed, 16 Oct 2024 14:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B082E20F5CF;
+	Wed, 16 Oct 2024 16:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729088148; cv=none; b=reLG6EvLYYOF2mWOOMOwiIS+7pZRSQo2Kv1kT5xDPHOqcjVaI2mYjhWPgHvRHdK1f1oD8o9+XXlf/Rpt7QL/JJqZyLzdMvSOY0fNIPtSeMvJMwe6yHrbWPxWMRQsmVmY++6BM4rFB2B/4OpJvXpdTmjNAW76gfsXeG0oVXtrkd4=
+	t=1729095956; cv=none; b=GtJmcHPHtXFTpTTluWMgRJ7Vsr1t3hUOGz3DOZrERqVyTuJFqJVhcQUn7stfZDRRpBkSNssAa9imLxgbgtJtwkvnr+poewZgW8HIhDrlAjmVWv67Lpd51qVrXrJT+ixtXoQqmcarijAE+Z1lUTatXPkGzHHGySICMlYWT5cQoz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729088148; c=relaxed/simple;
-	bh=sPU/i+6j1CmKVIai9BvD0HhO3BfC4s2PkjRj3JHESA8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mGFbt8PsD+QEou7uLv4Z1m9f/ToqSPnWF+5oAHYL7T294/+jLIfYImtrpwvfwwQ4MFsMX4hd84yjx8IrIG+wrX4DvRMcityCLh+pUNayqj9TqtyMkEZ6zmBIbdGgLEpUxVKHzXn8i/8bOcWgfurPIaZxdjT74JOgyqd6SIEeIj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YGSM4N0N; arc=none smtp.client-ip=209.85.221.45
+	s=arc-20240116; t=1729095956; c=relaxed/simple;
+	bh=IdnkNhSAEXmp5sxcZT/I2gew6kZAgvyxl1oAYR5Y4zM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DyeoAzKtjTmDKe7zD3ESfSfyBt4VZunGr68xj2663vEN38V1jj8xc4HXwD7vRcGpJ51bhkHICYI+Mnz8wQ+TtghGwqof2+fCTk8G13ec+8VJYtOLNgPzcMj0xKLJiOtOgyBY5O+JL8AASeOBvz5qLIvaKRV5DUZV7iJ/fblfhLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QtIBj55w; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37d70df0b1aso2805723f8f.3;
-        Wed, 16 Oct 2024 07:15:46 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-37d3e8d923fso4657292f8f.0;
+        Wed, 16 Oct 2024 09:25:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729088145; x=1729692945; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGM7+Q7sexVp4P+1dxWTfIXFggc1UrIVMwvAiyMSuLM=;
-        b=YGSM4N0N6ts6vY132pucDC4HpkDU9GXXaBRAIUK04BixAbZCnsS3AVrTSD7lpZNB7q
-         PNI+Om72fecgnvU3lDy9GigaxJzjFvXkqJV10hH+iX2iFL4ad4Ct0bmWAaPvgCEGpG0S
-         5afcURVWoBIAtQ0Yi33sSyANG3VFNTP54jyBhwWc8X9GBopMnpBFG14op9RO7f6i4TbE
-         k4qgRod44UFei8g7UC6IKm4OThp2UH0f4gIfqCvUwbSHjTNYveCFQbIY5dh7W57OjyO3
-         I28FHcUOW/aTCVlyp9sszkeNuzA7If2hiPB3zVuDwWk4zin1kwNhYO/7zqSRIPta0DUO
-         GyeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729088145; x=1729692945;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1729095953; x=1729700753; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zGM7+Q7sexVp4P+1dxWTfIXFggc1UrIVMwvAiyMSuLM=;
-        b=AmVKnYUab2kUBr8R8n4+uI5N6PjLlSfYm2nOWGU/OFc8WcDhXnQfghLyWfxU21oxwy
-         pxNlubkNPobGoN+cR6zCuHXeDPPwu69n+4ygzSPBUjZweLrHqPm0XOAaMuLaaYL2Ovoo
-         ilR4kVrwQwNMKJZD4IPo3zqa3cfWv+tGYaX5HoH1RFAqbC9dAh40zUI1NuMU2BO8pfs8
-         S7/beJAqVxK8mUk0Lx9N7/xf2vpvD3a2KtnUT+eGmlClU0pCiIz8t0EeeBd5W9eBMfAS
-         uLqNdu/vK8vzSIglyGwBn/qyjFEVxzRjxTu4LL66nQ097gwCOaMcvNdZjRq49f8kRtXY
-         8ymw==
-X-Forwarded-Encrypted: i=1; AJvYcCWlxakDBXwpwXxZOEcbr+VbsbGcwS5n57oMhXPlO89gXpvSj+r44FEEsS2cEpAytBAIunuUak3gGbtRSA==@vger.kernel.org, AJvYcCXAYJxw9xZWw98EZbFoCFY+tROZLzmPIs+R1gKPX5iscWDeix2VGTqPtOoTuSz9TGSw7hCwCDjgILHjtWI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVE5cuno3CB2TfxTWj3lShV1ohNiCW+eUUatzZ+hCfBfbbgkQ8
-	3QxvRrHTMXhMVjNC9bpDd52m/H/LiRiwG6mITrM5Beee0YC4gqBs
-X-Google-Smtp-Source: AGHT+IGzXZWBBbhcqDEcANIBMjfJwHNHsvCKZOE6NwM2X2PuzV5F6ASzd1SFlj6tbS+uwXuqhoE+Rg==
-X-Received: by 2002:a5d:6d0b:0:b0:37d:4ebe:164b with SMTP id ffacd0b85a97d-37d86d557a2mr3318167f8f.44.1729088144462;
-        Wed, 16 Oct 2024 07:15:44 -0700 (PDT)
-Received: from egonzo (82-64-73-52.subs.proxad.net. [82.64.73.52])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d7fa87d56sm4450698f8f.43.2024.10.16.07.15.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2024 07:15:43 -0700 (PDT)
-Date: Wed, 16 Oct 2024 16:15:41 +0200
-From: Dave Penkler <dpenkler@gmail.com>
-To: Greg KH <greg@kroah.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the staging tree
-Message-ID: <Zw_KjYQ7P2Qd8fDb@egonzo>
-References: <20241015165538.634707e5@canb.auug.org.au>
- <2024101623-education-buffoon-0988@gregkh>
+        bh=iR3RsLxzUItppKn1EAT2PNKyiFhGJaytTGKswiLvCnk=;
+        b=QtIBj55wI2ssfoVpTq/cKQMBnN8MYO5rmC2zPTjzF1C1WetvD66rAt5ByLS9DG/PtU
+         aIQzvTfucALiRYhhvxvlfIdzsdM2+NYJqsexF5LPONpRhTmyQ1EfHvTSgXOc2fm4yR6I
+         FazGOsSja3NeBxjN77Kmzpwr7asgMJ5pqmhCX3Kd0BVD1GKG7aX0PcI4p/39cRgYUxsh
+         z6JOz3/EVyxA538NW5nvVLKBbkWyd9LBrvwQ88FS1tEtQGOW0hINQ6E7TIOJeed8d8LB
+         26lAxl/vZUDXe6UXCVB71Dm7E21h5aZH3dE6b+XYGsgJyWVPNL5tjkVfnaZ1EXq2Gm5p
+         PyGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729095953; x=1729700753;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iR3RsLxzUItppKn1EAT2PNKyiFhGJaytTGKswiLvCnk=;
+        b=wLBkJBJnQ+VuWWmgRLGzqv2tseR5cXt36d6N92FLidFFpFp6hqc4QcSkGIf8FLf1Lq
+         rUSnl0gYmi69hOTh0dYLDXRIacU5PKGMa80P8F76GCRt6CqXzsY2xQeJuA0A4rTQNSEw
+         d++2avZ0AU0EhDp3bc+H+Sdh1+REvT9W8xULUIE0Uk1/bqO0mukaBGJMY41fHO2213Ep
+         57DQ7ninAajkv0NF6aPkOcUS6lIdQrAqAkBLwPRx8uA/cuSeqoHQcd18vWI4plj/mFak
+         gFeMJ169z8hzTo3Kfcm8pjwAVpi0qHkbISoavsvCcSTqrOAHDDKa2Rz9r+oUNbz4OXiy
+         UXew==
+X-Forwarded-Encrypted: i=1; AJvYcCVE2htGSkX5Lr7+oU4rfNzxLxtPaMZ547lcgUN2W3z1mxTs1QqSyXatUT5FFVxnzjvJTRyTapja@vger.kernel.org, AJvYcCWIjN4MYqquG63Lclzb3l/2LLKAi/vNxgH5yLG8HwF3sHhinMZC/16i7K0o9K9GqJ4i9XW5pkY2sYaCiA==@vger.kernel.org, AJvYcCXDwro4igwoGP4XBQVcxciDIWIQL2MNbGd5/IFTbFYHBZFk+aCzJAyAl5nexC1avufrifc=@vger.kernel.org, AJvYcCXsuaGJWEfVCqX7OmdjASHbOsTiP7PGfnbDTBkEZaTqJOsg5gjdG4vgMGIml5Mg6S5mvLkYGzmcc047gMHk@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDRG/Zr/yEvdg4KHD+ECiyflF39lB9VuWijp25ObZDm0d9RBYz
+	5g7CWCEKdeabTsy58WG88htKSyIdWl/AnImwuXGXQ3E7GsM+xaSfWokIySMWI+6UGzSdTJD33iN
+	wC6Y0cHF9ns8Sewq5oDuNNn5ptVI=
+X-Google-Smtp-Source: AGHT+IHGey79evvc844ZfIKNi1g2MdcE+aKhvjfz19yoOhZwP8OYIT7m9n40nhWhPFs2cICVI1xPIrMK8SK7QN8Bbwo=
+X-Received: by 2002:a5d:690c:0:b0:37d:633a:b361 with SMTP id
+ ffacd0b85a97d-37d86d6944cmr2992713f8f.51.1729095952917; Wed, 16 Oct 2024
+ 09:25:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024101623-education-buffoon-0988@gregkh>
+References: <20241016170542.7e22b03c@canb.auug.org.au>
+In-Reply-To: <20241016170542.7e22b03c@canb.auug.org.au>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 16 Oct 2024 09:25:41 -0700
+Message-ID: <CAADnVQJ=Woq=82EDvMT1YRLLTvNgFVSbnZDiR5HUgEhcyBLW4Q@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 16, 2024 at 09:40:03AM +0200, Greg KH wrote:
-> On Tue, Oct 15, 2024 at 04:55:38PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the staging tree, today's linux-next build (powerpc
-> > allyesconfig) failed like this:
-> > 
-> > ld: warning: discarding dynamic section .glink
-> > ld: warning: discarding dynamic section .plt
-> > ld: linkage table error against `nec7210_board_online'
-> > ld: stubs don't match calculated size
-> > ld: can not build stubs: bad value
-[skip]
-> > 
-> > Caused by commit
-> > 
-> >   8e4841a0888c ("staging: gpib: Add Frank Mori Hess FPGA PCI GPIB driver")
-> > 
-> > I have marked that driver as BROKEN for today.
-> 
-> Thanks, I'll go take your patch from next and add it to my tree for
-> this, sorry about the build issues.
-> 
-> greg k-h
-Hi,
-All declarations and uses of `nec7210_board_online' match.
+On Tue, Oct 15, 2024 at 11:05=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:
+>
+> Hi all,
+>
+> After merging the bpf-next tree, today's linux-next build (arm64
+> defconfig) failed like this:
+>
+> Building: arm64 defconfig
+> In file included from arch/arm64/include/asm/thread_info.h:17,
+>                  from include/linux/thread_info.h:60,
+>                  from arch/arm64/include/asm/preempt.h:6,
+>                  from include/linux/preempt.h:79,
+>                  from include/linux/spinlock.h:56,
+>                  from include/linux/mmzone.h:8,
+>                  from include/linux/gfp.h:7,
+>                  from include/linux/slab.h:16,
+>                  from mm/slab_common.c:7:
+> mm/slab_common.c: In function 'bpf_get_kmem_cache':
+> arch/arm64/include/asm/memory.h:427:66: error: passing argument 1 of 'vir=
+t_to_pfn' makes pointer from integer without a cast [-Wint-conversion]
+>   427 |         __is_lm_address(__addr) && pfn_is_map_memory(virt_to_pfn(=
+__addr));      \
+>       |                                                                  =
+^~~~~~
+>       |                                                                  =
+|
+>       |                                                                  =
+u64 {aka long long unsigned int}
+> mm/slab_common.c:1260:14: note: in expansion of macro 'virt_addr_valid'
+>  1260 |         if (!virt_addr_valid(addr))
+>       |              ^~~~~~~~~~~~~~~
+> arch/arm64/include/asm/memory.h:382:53: note: expected 'const void *' but=
+ argument is of type 'u64' {aka 'long long unsigned int'}
+>   382 | static inline unsigned long virt_to_pfn(const void *kaddr)
+>       |                                         ~~~~~~~~~~~~^~~~~
+>
+> Caused by commit
+>
+>   04b069ff0181 ("mm/bpf: Add bpf_get_kmem_cache() kfunc")
+>
+> I have reverted commit
+>
+>   08c837461891 ("Merge branch 'bpf-add-kmem_cache-iterator-and-kfunc'")
+>
+> for today.
 
-Could this be a ppc linker problem ?
--Dave
+Thanks for flagging.
+Fixed and force pushed.
 

@@ -1,126 +1,136 @@
-Return-Path: <linux-next+bounces-4295-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4296-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90DC99A00EE
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 07:49:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D45219A0108
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 08:06:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 564842859A4
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 05:49:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F88BB22C6E
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 06:05:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF89718B462;
-	Wed, 16 Oct 2024 05:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741E518C018;
+	Wed, 16 Oct 2024 06:05:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="TaoZhEVt";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gG1mxMCz"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XEhGoTH5"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1539318C009;
-	Wed, 16 Oct 2024 05:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A57156E4;
+	Wed, 16 Oct 2024 06:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729057751; cv=none; b=B06YU5NtKS1L8suYSH7m5h4FrE9z3tlMXOZtqexvx4ZuVC+IoIulwB6jU2ci4003LWJRG4cjYQmKgOyBynhu5r509ckURWVFE/q/ST726SxIXy3IFXVBeZlMQSYnnF4Lw19NmLyD7mQoctpocgPD+DEzFi5mUyAySpucLfoxWp4=
+	t=1729058752; cv=none; b=ge9GRtzO8VXhJ1YyK4XuPqqwQrTxKRolhAf3eVIW5mhwkV9qMKfsTtf3djpZPSDhjbvI3Ud1tp19eVJTvdKay0ZQ4F/Tu7lgWK/U+QDo2jLfJLUjYxRrUoQkmjlOWQAzshyK6WsxQUeOATLHOb+3pZDFgAfY9+xSyGq86lO6mNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729057751; c=relaxed/simple;
-	bh=CWkcxnI1jk2t84JWpgraUHcWI9ULAqacx4zK0DAhfWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l+s//2bbStFX4HgWEXrxxOaLb81+buJUjlSnqCSOJcQgp+YBTfz6pX+AALttcxS7MFKo1BBGv0Tk5D0dVHo0NCJUtZJGfROtcXESLOQmiUwx8rMbFPzscdUsnBT81WlTO8//dHOyh5J/mGWFmTjCUZwjT/DHaP8uH0/Se3FKVsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=TaoZhEVt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gG1mxMCz; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id DE8B8114017E;
-	Wed, 16 Oct 2024 01:49:08 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-10.internal (MEProxy); Wed, 16 Oct 2024 01:49:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1729057748; x=1729144148; bh=KhDWoasjtm
-	2L2ftKVOHUI2NQJxbxaDmQRNOWot0/7pI=; b=TaoZhEVtNj8rRVxkYhOaZlMVE4
-	uV9oTyrHgrtDfltzXYCFi/ml6O9WFf8dDcruTOGe7vOgyMv3e+adXjq6VQYFJCe/
-	T+VPW8pZsF24R2ba7y7GjUPgifMK7mDq7OPS8GVoiAhS1hOGfUMYJR8TmSvPWIY6
-	a6mw2gxjgI9Uj813/o/pTwXjP4n4GEagnSOg4j+V4OmBzf7stbAANK9zIW7LXhNu
-	6M4TP/6wb1RtkXd7tjCPEG9D/unHazFhcbHfvsXn5Fp3gWUALX9amiiXwg6DeGCC
-	zgny9p7iZbuWRlc7ZpvkXuwEz9otlxGNljUqG5a5QKi5iMbt7k+PNhc8eWQg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1729057748; x=1729144148; bh=KhDWoasjtm2L2ftKVOHUI2NQJxbx
-	aDmQRNOWot0/7pI=; b=gG1mxMCzOlpI6bFnkBN40BIkUAlRixtAOzi+H+Ur1+g1
-	7jjHQojxnHX4ZtWfv3bBV00qszJt2urwqaX96xXWXby9tuGAQ5qEt4NgwF3aTVCp
-	hbm1wNu1YzPSWYBP7FOFUJEZWwHZfvfdxED8lUH7Xd9pMG+n6qkOTi6aTqkcqmd2
-	ik6kzzPd8uNa6tr8mxZfuTxiz17yg5/zmMUcJbZm8RECWiP34PdU57CcLK1DKKL1
-	caWgXHgctA9dPSafrPXGVBXoA2XPqrl3QrajaIvDufME0yYfpZGE0qBDTIs12PGc
-	VaINLNc4WY3QQCnWQfLyUgQhbsDki8SgwJCA000fyw==
-X-ME-Sender: <xms:1FMPZzwJrlarAjwnpWWbKNb3ahtCHVQ14CPWosY1iCxKy_MHLdFPmA>
-    <xme:1FMPZ7TyqxeassINGvfDZln_6ui-PLcYg_KqYPhiwsS7rYDXCkuGl3ITN62U8nmpO
-    9qp5MOC7lKT-Q>
-X-ME-Received: <xmr:1FMPZ9VmlF2xGdllTHJp6rjiQ1mkw-3yQm46kFHdSmjJfPhY0Wzs2KWRbGnglOHiQY3zHtwO8ci9tysRfFqE0ZPkWpLteP9UJGeqgQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdegkedguddttdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
-    necuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtf
-    frrghtthgvrhhnpeehgedvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueef
-    hffgheekteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehgrhgvgheskhhrohgrhhdrtghomhdpnhgspghrtghpthhtohepkedpmhhouggvpehs
-    mhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupd
-    hrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgt
-    phhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:1FMPZ9iS0vP48-KacJJegnIEy8ZnC8IYYhlaiyrwPMCre61vLvJ-rQ>
-    <xmx:1FMPZ1Ba-usKjeQ_D7LwypINYj89OUnsSfvuJTX3dlCS5KkB2_FPXA>
-    <xmx:1FMPZ2LwYomvRoo53v49zXNPbIDsrwgG9zTzdCzsQGXsbRqJTce5RQ>
-    <xmx:1FMPZ0D3DWxbbqNn_w9s2DBWKhNCrNIOOEce7r0nsppRfnk2FjZ9ZA>
-    <xmx:1FMPZ52urpuadFdReHqksnzoY7SrcdRf7GonRN5kgP1aAN2ImOoGXAP0>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 16 Oct 2024 01:49:08 -0400 (EDT)
-Date: Wed, 16 Oct 2024 07:49:03 +0200
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the driver-core tree
-Message-ID: <2024101651-craziness-diagram-ddd7@gregkh>
-References: <20241016151230.41896b5b@canb.auug.org.au>
+	s=arc-20240116; t=1729058752; c=relaxed/simple;
+	bh=7Ofs/TgkfLtnxS2xk40tUtc2ZQLrbIJkZXWkqXUiI00=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n42fqSc7O1f3DcOpNl4GdYgGldT3JXLfDEkSXB5/UmNN404a9q9Yhqt4c92TfmiOPJeE3H6JNZWtWUJ6hNf30LsgECT5ftdlQaDIJ5WdmiUKVi6g83wbacCBfWYri4Zsr/cu2lhgctkQ3hvW7oZUQKLUBdIXy3a8cfcdvY8S9vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=XEhGoTH5; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1729058744;
+	bh=TVbOf9/AhfF0p9D9eUG4T+B7BKtPRUhvA0yVfxLDpDk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=XEhGoTH52mSMAA7NPrDBR5RZAnz5ulQAIlRiVW0m0YTL7KfyUTdGbun6q0AWgDMev
+	 fvDfGbYgPEwIP1D137xL+4dDnd8F6CZGIZJuIo/XVw4nPxRAW53fvkhT/nvxXEdmdH
+	 j7woQyIrlFhb9WKqD8u7bOheAK0UqF8N8z8KR+JjNGHJUO0Pc1DUGABkmgjqY0yKPr
+	 Dv/NBeeXbsUzyWz8mPa/MHpBX8vGhJPq5t9G/UteQQpytWpaBhSfrd9e48/rL1RiTg
+	 B65YxsTlDk8GF50lWPTILjoVOA+Rizg/yEQxCDXlyfh7UM8S9n9WBSIWOpkhRbFYXW
+	 WWCLTF+9uI5jw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XT0ng5JB5z4wxm;
+	Wed, 16 Oct 2024 17:05:43 +1100 (AEDT)
+Date: Wed, 16 Oct 2024 17:05:42 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>,
+ Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20241016170542.7e22b03c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241016151230.41896b5b@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/5Pf1JOz7unG6qSw6Vt3251x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, Oct 16, 2024 at 03:12:30PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commits are also in the mm tree as different commits
-> (but the same patches):
-> 
->   9bd133f05b1d ("lib: devres: Simplify API devm_ioport_unmap() implementation")
->   0ee4dcafda95 ("lib: devres: Simplify API devm_iounmap() implementation")
-> 
-> These are commits
-> 
->   a508aa764a55 ("lib: devres: Simplify API devm_ioport_unmap() implementation")
->   e16fbbc11039 ("lib: devres: simplify API devm_iounmap() implementation")
-> 
-> in the mm-nonmm-unstable branch of the mm tree.
+--Sig_/5Pf1JOz7unG6qSw6Vt3251x
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, we both picked these up, all should be fine.
+Hi all,
 
-thanks,
+After merging the bpf-next tree, today's linux-next build (arm64
+defconfig) failed like this:
 
-greg k-h
+Building: arm64 defconfig
+In file included from arch/arm64/include/asm/thread_info.h:17,
+                 from include/linux/thread_info.h:60,
+                 from arch/arm64/include/asm/preempt.h:6,
+                 from include/linux/preempt.h:79,
+                 from include/linux/spinlock.h:56,
+                 from include/linux/mmzone.h:8,
+                 from include/linux/gfp.h:7,
+                 from include/linux/slab.h:16,
+                 from mm/slab_common.c:7:
+mm/slab_common.c: In function 'bpf_get_kmem_cache':
+arch/arm64/include/asm/memory.h:427:66: error: passing argument 1 of 'virt_=
+to_pfn' makes pointer from integer without a cast [-Wint-conversion]
+  427 |         __is_lm_address(__addr) && pfn_is_map_memory(virt_to_pfn(__=
+addr));      \
+      |                                                                  ^~=
+~~~~
+      |                                                                  |
+      |                                                                  u6=
+4 {aka long long unsigned int}
+mm/slab_common.c:1260:14: note: in expansion of macro 'virt_addr_valid'
+ 1260 |         if (!virt_addr_valid(addr))
+      |              ^~~~~~~~~~~~~~~
+arch/arm64/include/asm/memory.h:382:53: note: expected 'const void *' but a=
+rgument is of type 'u64' {aka 'long long unsigned int'}
+  382 | static inline unsigned long virt_to_pfn(const void *kaddr)
+      |                                         ~~~~~~~~~~~~^~~~~
+
+Caused by commit
+
+  04b069ff0181 ("mm/bpf: Add bpf_get_kmem_cache() kfunc")
+
+I have reverted commit
+
+  08c837461891 ("Merge branch 'bpf-add-kmem_cache-iterator-and-kfunc'")
+
+for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/5Pf1JOz7unG6qSw6Vt3251x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcPV7YACgkQAVBC80lX
+0GzzNwf/RIBMPuu2hNEvKh6Jb3c/Eg2WMg25KuC/ixlV32M4y9pfYZJAK/NAlGAN
+R1GYP49Gl7P5gYbxE4oqyTD1s4xB4wYnD8+RIegQVQO957Bb/7POqGBn/yVe+y6P
+bQ4hTGYQVQumrxbIDVewm3jUvxomoushHUYRoQiZV68Tg0ZKQSdA+5dxmaFIsXnk
+UFOaIeiin4Vgd/ZGR0QmE92O21WvZwPjDNIg0oCpUG4o3EyT6nO5UmUyCbhhtCOR
+AgHJ3GF7xVJGf68kSJwEImsR/Qbd56TqDgqf8tjqkPBeh3GE8ioCtsbWeugnnfpj
+hbC984jeivq2/RPKim5SxndwQtF5Jw==
+=BjN8
+-----END PGP SIGNATURE-----
+
+--Sig_/5Pf1JOz7unG6qSw6Vt3251x--
 

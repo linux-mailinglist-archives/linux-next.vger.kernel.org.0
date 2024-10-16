@@ -1,137 +1,120 @@
-Return-Path: <linux-next+bounces-4310-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4311-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAC2E9A116F
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 20:23:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75E869A11A2
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 20:35:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A6CDB23D6E
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 18:23:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C4061F2523C
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 18:35:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6AB210195;
-	Wed, 16 Oct 2024 18:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E78AE212F10;
+	Wed, 16 Oct 2024 18:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X+KUqH5e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T46ZaHFZ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F65520F5BA;
-	Wed, 16 Oct 2024 18:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AECA118C33E;
+	Wed, 16 Oct 2024 18:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729103024; cv=none; b=kyATWmDcWGgwAGd0uJL/7QAsizKeF1+z+RDskJkosYWWVOzm0SeXpxwbd0KjdNMwfbvGC67k/8n4JkIomGSGdCOpjS9fdInVjwRS0HSGRB9RUKvp5Il4CRIKu9ep6gUe5KvR+j9Kv9K+i1qB9ABONCzFwM9CTh4+Ask5J2gLhjo=
+	t=1729103720; cv=none; b=Gct+xvq91Xz9EoG/XC2gYO2J27cuQvHhJ0vey3A+uUS4+cC1mejagGzBGhcvoJhy+p925SuGiCpfdgqMS1/1c8ecoBWAe+rye9auch/4nC90Weckn3mi0QzJtMxj4iVvmHxiUWSZegVpg2eOgH3YCoy/Umg/hrSLL8LSz9O6Pzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729103024; c=relaxed/simple;
-	bh=A4rbUUyX5VHHSLuIcUaeuLPb+NZt6EXbyVP+urSwLtU=;
+	s=arc-20240116; t=1729103720; c=relaxed/simple;
+	bh=Wbzx8WQNkx2LfwF5/9Fel6fTjsfrcYca5cm8SsQhTXM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zom3NBe4/L+CQs9Ijp7XPaifjto7YxVshmVUAnHO8OFNJfm/7pFPz3gPL3FjH3tftPK89RZbhE6droO83mecCrz8fgJKaUBdoIjze1CZXC5I7CGRspvN6DorPcQSMIL021RWlCxSBvXmR9e6bYVwfd3gsEzFlCzcIfe6Y4C8P14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X+KUqH5e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB246C4CEC5;
-	Wed, 16 Oct 2024 18:23:43 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YkNGYjEPESvVsmW4jy+E2MGcm65uow+B5ExA1kA7qs6xazKq9mXoAp4EqD10LCEvaElfQaohEeLPi6U0kbmtGuB124nC5QipEkGLqJyOEZ5M1M4OFrLI17/m55e/gfx57v2yEL5YD3gHoE0gqhHLDkc7tRQQN6RksQYB8oTnG5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T46ZaHFZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC86EC4CEC5;
+	Wed, 16 Oct 2024 18:35:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729103024;
-	bh=A4rbUUyX5VHHSLuIcUaeuLPb+NZt6EXbyVP+urSwLtU=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=X+KUqH5ewlI8/xiz2zl9jGHniOJSmoq5f24YJSlKA/lgAuFe2QJ4tUTEZ5VrHYEzz
-	 R5pV29WQQOuuRNME7LS2js007tr8btQtMlgf5BzK+flvhBD1xXOvdXbYTAk/VR9NSh
-	 zZpm/IIWyoIo2DEAZtCI9mdusx5EIySOkVxIZimD8SwrGz5t14THK79WkbIWWULGRR
-	 mi0Kpjc/ZwZa7+dHSO6qI2C3EdWd9kODyX9axS+S8VCo4t1zn36kAvMArg80pC501S
-	 NM2CH2h5hTr7EogZJuaQXZznmBAv2yyzFcJd6M9lUI6DpFK60LFO9yotOYqfoTs7sm
-	 60HaWijoLoxgg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 90002CE0DCA; Wed, 16 Oct 2024 11:23:43 -0700 (PDT)
-Date: Wed, 16 Oct 2024 11:23:43 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: "Liang, Kan" <kan.liang@linux.intel.com>
-Cc: peterz@infradead.org, mingo@redhat.com, linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH] perf: Fix missing RCU reader protection in
- perf_event_clear_cpumask()
-Message-ID: <fd5f90b2-62b1-4984-8969-41e87322b677@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240913162340.2142976-1-kan.liang@linux.intel.com>
- <39bb4c06-a8e8-4eef-8659-534939c9987f@linux.intel.com>
- <56ae5f08-174f-4f96-a454-36c6c3d68075@paulmck-laptop>
+	s=k20201202; t=1729103720;
+	bh=Wbzx8WQNkx2LfwF5/9Fel6fTjsfrcYca5cm8SsQhTXM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T46ZaHFZPG8Y8J2eE5/mNSEyJWM+ipCnlZ1Fy/sZzxRhW1z/ybed5qvDEB14LbAfH
+	 iAMepQqhxQ9RePBIs11NLkMzD0oai4SAa25TAfvk63W5hnk5Se3rkDq6XOm5LAqgxY
+	 9KEAyPi8VjW0zvkRA132pYG7ngtotf/7r0IggB0vtd+gs+ZPyXuAMYqvC00X/XtbuF
+	 Riw0cALxO2a8aL9qBTMvmbTpU4+BP70ZOf+dJZOKmNf6jG7AfzZTCS5q3tFdjv+zOh
+	 8/Z+1QR3rGVKK9Hvz6menRdqzGue9K+wCjdOqem3m92jY1a9vqoXB4XssgPRKq1Aul
+	 34IOb030opWnw==
+Date: Wed, 16 Oct 2024 11:35:18 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <ZxAHZt8pFjxeOx-U@google.com>
+References: <20241016170542.7e22b03c@canb.auug.org.au>
+ <CAADnVQJ=Woq=82EDvMT1YRLLTvNgFVSbnZDiR5HUgEhcyBLW4Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <56ae5f08-174f-4f96-a454-36c6c3d68075@paulmck-laptop>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJ=Woq=82EDvMT1YRLLTvNgFVSbnZDiR5HUgEhcyBLW4Q@mail.gmail.com>
 
-On Fri, Sep 13, 2024 at 11:14:41AM -0700, Paul E. McKenney wrote:
-> On Fri, Sep 13, 2024 at 12:25:59PM -0400, Liang, Kan wrote:
-> > 
-> > 
-> > On 2024-09-13 12:23 p.m., kan.liang@linux.intel.com wrote:
-> > > From: Kan Liang <kan.liang@linux.intel.com>
-> > > 
-> > > Running rcutorture scenario TREE05, the below warning is triggered.
-> > > 
-> > > [   32.604594] WARNING: suspicious RCU usage
-> > > [   32.605928] 6.11.0-rc5-00040-g4ba4f1afb6a9 #55238 Not tainted
-> > > [   32.607812] -----------------------------
-> > > [   32.609140] kernel/events/core.c:13946 RCU-list traversed in non-reader section!!
-> > > [   32.611595] other info that might help us debug this:
-> > > [   32.614247] rcu_scheduler_active = 2, debug_locks = 1
-> > > [   32.616392] 3 locks held by cpuhp/4/35:
-> > > [   32.617687]  #0: ffffffffb666a650 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x4e/0x200
-> > > [   32.620563]  #1: ffffffffb666cd20 (cpuhp_state-down){+.+.}-{0:0}, at: cpuhp_thread_fun+0x4e/0x200
-> > > [   32.623412]  #2: ffffffffb677c288 (pmus_lock){+.+.}-{3:3}, at: perf_event_exit_cpu_context+0x32/0x2f0
-> > > 
-> > > In perf_event_clear_cpumask(), uses list_for_each_entry_rcu() without an
-> > > obvious RCU read-side critical section.
-> > > 
-> > > Either pmus_srcu or pmus_lock is good enough to protect the pmus list.
-> > > In the current context, pmus_lock is already held. The
-> > > list_for_each_entry_rcu() is not required.
-> > > 
-> > > Fixes: 4ba4f1afb6a9 ("perf: Generic hotplug support for a PMU with a scope")
-> > > Reported-by: Paul E. McKenney <paulmck@kernel.org>
-> > > Closes: https://lore.kernel.org/lkml/2b66dff8-b827-494b-b151-1ad8d56f13e6@paulmck-laptop/
-> > > Tested-by: Paul E. McKenney <paulmck@kernel.org>
-> > > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > > Closes: https://lore.kernel.org/oe-lkp/202409131559.545634cc-oliver.sang@intel.com
-> > 
-> > Forgot to add the below tag, please fold it.
-> > 
-> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+On Wed, Oct 16, 2024 at 09:25:41AM -0700, Alexei Starovoitov wrote:
+> On Tue, Oct 15, 2024 at 11:05 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > After merging the bpf-next tree, today's linux-next build (arm64
+> > defconfig) failed like this:
+> >
+> > Building: arm64 defconfig
+> > In file included from arch/arm64/include/asm/thread_info.h:17,
+> >                  from include/linux/thread_info.h:60,
+> >                  from arch/arm64/include/asm/preempt.h:6,
+> >                  from include/linux/preempt.h:79,
+> >                  from include/linux/spinlock.h:56,
+> >                  from include/linux/mmzone.h:8,
+> >                  from include/linux/gfp.h:7,
+> >                  from include/linux/slab.h:16,
+> >                  from mm/slab_common.c:7:
+> > mm/slab_common.c: In function 'bpf_get_kmem_cache':
+> > arch/arm64/include/asm/memory.h:427:66: error: passing argument 1 of 'virt_to_pfn' makes pointer from integer without a cast [-Wint-conversion]
+> >   427 |         __is_lm_address(__addr) && pfn_is_map_memory(virt_to_pfn(__addr));      \
+> >       |                                                                  ^~~~~~
+> >       |                                                                  |
+> >       |                                                                  u64 {aka long long unsigned int}
+> > mm/slab_common.c:1260:14: note: in expansion of macro 'virt_addr_valid'
+> >  1260 |         if (!virt_addr_valid(addr))
+> >       |              ^~~~~~~~~~~~~~~
+> > arch/arm64/include/asm/memory.h:382:53: note: expected 'const void *' but argument is of type 'u64' {aka 'long long unsigned int'}
+> >   382 | static inline unsigned long virt_to_pfn(const void *kaddr)
+> >       |                                         ~~~~~~~~~~~~^~~~~
+> >
+> > Caused by commit
+> >
+> >   04b069ff0181 ("mm/bpf: Add bpf_get_kmem_cache() kfunc")
+> >
+> > I have reverted commit
+> >
+> >   08c837461891 ("Merge branch 'bpf-add-kmem_cache-iterator-and-kfunc'")
+> >
+> > for today.
 > 
-> Have one of these to go along with it.  ;-)
-> 
-> Tested-by: Paul E. McKenney <paulmck@kernel.org>
+> Thanks for flagging.
+> Fixed and force pushed.
 
-Just following up, seeing how this is not yet in -next.
+Oops, thanks for fixing this.  The virt_addr_valid() was confusing
+whether it takes unsigned long or a pointer.  It seems each arch has
+different expectation.
 
-Is this on its way upstream?
+Thanks,
+Namhyung
 
-							Thanx, Paul
-
-> > Thanks,
-> > Kan
-> > > Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> > > ---
-> > >  kernel/events/core.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > > index 20e97c1aa4d6..5ba9934b49df 100644
-> > > --- a/kernel/events/core.c
-> > > +++ b/kernel/events/core.c
-> > > @@ -13912,7 +13912,7 @@ static void perf_event_clear_cpumask(unsigned int cpu)
-> > >  	}
-> > >  
-> > >  	/* migrate */
-> > > -	list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
-> > > +	list_for_each_entry(pmu, &pmus, entry) {
-> > >  		if (pmu->scope == PERF_PMU_SCOPE_NONE ||
-> > >  		    WARN_ON_ONCE(pmu->scope >= PERF_PMU_MAX_SCOPE))
-> > >  			continue;
 

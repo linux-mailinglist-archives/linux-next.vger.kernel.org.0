@@ -1,138 +1,99 @@
-Return-Path: <linux-next+bounces-4308-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4309-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 108EF9A0FA4
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 18:26:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54D239A1054
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 19:08:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9E12282132
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 16:26:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8482B1C218AB
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 17:08:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EBA820FA84;
-	Wed, 16 Oct 2024 16:25:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D895920FAAA;
+	Wed, 16 Oct 2024 17:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QtIBj55w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gz5VV2f3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B082E20F5CF;
-	Wed, 16 Oct 2024 16:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC435205E23;
+	Wed, 16 Oct 2024 17:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729095956; cv=none; b=GtJmcHPHtXFTpTTluWMgRJ7Vsr1t3hUOGz3DOZrERqVyTuJFqJVhcQUn7stfZDRRpBkSNssAa9imLxgbgtJtwkvnr+poewZgW8HIhDrlAjmVWv67Lpd51qVrXrJT+ixtXoQqmcarijAE+Z1lUTatXPkGzHHGySICMlYWT5cQoz8=
+	t=1729098526; cv=none; b=hQrM4gIZIgyjYqdY77WQf+DBYneDlDjjZ8B8PbE1tCLVHcmxlBBlMU7QUXuCS/MsRe3O/jA7d4Pq/tPHk+pARVfKhPo+yuobUW8QKOl5tdzp0fRn9IO0lkRhjjYYKREwF47zZELUKTmaCFOgMj7eCrf2LWUZsOM9RQhXeQ5ZQvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729095956; c=relaxed/simple;
-	bh=IdnkNhSAEXmp5sxcZT/I2gew6kZAgvyxl1oAYR5Y4zM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DyeoAzKtjTmDKe7zD3ESfSfyBt4VZunGr68xj2663vEN38V1jj8xc4HXwD7vRcGpJ51bhkHICYI+Mnz8wQ+TtghGwqof2+fCTk8G13ec+8VJYtOLNgPzcMj0xKLJiOtOgyBY5O+JL8AASeOBvz5qLIvaKRV5DUZV7iJ/fblfhLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QtIBj55w; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-37d3e8d923fso4657292f8f.0;
-        Wed, 16 Oct 2024 09:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729095953; x=1729700753; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iR3RsLxzUItppKn1EAT2PNKyiFhGJaytTGKswiLvCnk=;
-        b=QtIBj55wI2ssfoVpTq/cKQMBnN8MYO5rmC2zPTjzF1C1WetvD66rAt5ByLS9DG/PtU
-         aIQzvTfucALiRYhhvxvlfIdzsdM2+NYJqsexF5LPONpRhTmyQ1EfHvTSgXOc2fm4yR6I
-         FazGOsSja3NeBxjN77Kmzpwr7asgMJ5pqmhCX3Kd0BVD1GKG7aX0PcI4p/39cRgYUxsh
-         z6JOz3/EVyxA538NW5nvVLKBbkWyd9LBrvwQ88FS1tEtQGOW0hINQ6E7TIOJeed8d8LB
-         26lAxl/vZUDXe6UXCVB71Dm7E21h5aZH3dE6b+XYGsgJyWVPNL5tjkVfnaZ1EXq2Gm5p
-         PyGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729095953; x=1729700753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iR3RsLxzUItppKn1EAT2PNKyiFhGJaytTGKswiLvCnk=;
-        b=wLBkJBJnQ+VuWWmgRLGzqv2tseR5cXt36d6N92FLidFFpFp6hqc4QcSkGIf8FLf1Lq
-         rUSnl0gYmi69hOTh0dYLDXRIacU5PKGMa80P8F76GCRt6CqXzsY2xQeJuA0A4rTQNSEw
-         d++2avZ0AU0EhDp3bc+H+Sdh1+REvT9W8xULUIE0Uk1/bqO0mukaBGJMY41fHO2213Ep
-         57DQ7ninAajkv0NF6aPkOcUS6lIdQrAqAkBLwPRx8uA/cuSeqoHQcd18vWI4plj/mFak
-         gFeMJ169z8hzTo3Kfcm8pjwAVpi0qHkbISoavsvCcSTqrOAHDDKa2Rz9r+oUNbz4OXiy
-         UXew==
-X-Forwarded-Encrypted: i=1; AJvYcCVE2htGSkX5Lr7+oU4rfNzxLxtPaMZ547lcgUN2W3z1mxTs1QqSyXatUT5FFVxnzjvJTRyTapja@vger.kernel.org, AJvYcCWIjN4MYqquG63Lclzb3l/2LLKAi/vNxgH5yLG8HwF3sHhinMZC/16i7K0o9K9GqJ4i9XW5pkY2sYaCiA==@vger.kernel.org, AJvYcCXDwro4igwoGP4XBQVcxciDIWIQL2MNbGd5/IFTbFYHBZFk+aCzJAyAl5nexC1avufrifc=@vger.kernel.org, AJvYcCXsuaGJWEfVCqX7OmdjASHbOsTiP7PGfnbDTBkEZaTqJOsg5gjdG4vgMGIml5Mg6S5mvLkYGzmcc047gMHk@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDRG/Zr/yEvdg4KHD+ECiyflF39lB9VuWijp25ObZDm0d9RBYz
-	5g7CWCEKdeabTsy58WG88htKSyIdWl/AnImwuXGXQ3E7GsM+xaSfWokIySMWI+6UGzSdTJD33iN
-	wC6Y0cHF9ns8Sewq5oDuNNn5ptVI=
-X-Google-Smtp-Source: AGHT+IHGey79evvc844ZfIKNi1g2MdcE+aKhvjfz19yoOhZwP8OYIT7m9n40nhWhPFs2cICVI1xPIrMK8SK7QN8Bbwo=
-X-Received: by 2002:a5d:690c:0:b0:37d:633a:b361 with SMTP id
- ffacd0b85a97d-37d86d6944cmr2992713f8f.51.1729095952917; Wed, 16 Oct 2024
- 09:25:52 -0700 (PDT)
+	s=arc-20240116; t=1729098526; c=relaxed/simple;
+	bh=xPKTHC6TAd6WhauoRzwJwU5j5gcUbdI/FpSG6faFCIA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TO7JxMgnM1hZiqqu+s6jbR6NYsHdGIVfFcCL0ZDMW5+KLgLMR5fha+XKskEbl25K2EEqmUbXcGhcsPk194+iUDq3ttkPEeJWv95p7PSC/ACglBQUICHmTAUtmz9hTb4EeRRcRZfibyT9b1vTHhqtvre5RHPJ9v6wkpme7Xh3uU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gz5VV2f3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2145EC4CEC5;
+	Wed, 16 Oct 2024 17:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729098526;
+	bh=xPKTHC6TAd6WhauoRzwJwU5j5gcUbdI/FpSG6faFCIA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gz5VV2f3aIIgTnJKVfld3Vn6NM4eybTs5bck1xwPO2lR9y2t45j8/p/XpJ7V3QCcN
+	 qVqzY3bzRyn09NZhvUTGMc4NqAHu5H/0dE4Nc3uzkC6bmeHgabB7+/Fs7cs1+v1oy7
+	 O5Iae1g96rYk8w3pL/efYXdUYHfnKy8PTRzPahTWqpb2CqF0DcbNUR9ySFTCGqXX8F
+	 JRifEGOMby8eElTk4hvM6MWYwYFvM1w2+haRkTZbmTCcxS70Ex/kFQKfWtHaWM4bkq
+	 KhI9zi/UUzCylTpWqb0JbqOCB55PJD/lc9U1UxgBcrvPgFy8HUrXzvrMZaAtqW8xkx
+	 skdJ92+1LiKTg==
+Date: Wed, 16 Oct 2024 18:08:42 +0100
+From: Simon Horman <horms@kernel.org>
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	NetFilter <netfilter-devel@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the ipvs-next tree
+Message-ID: <20241016170842.GA214065@kernel.org>
+References: <20241016115741.785992f1@canb.auug.org.au>
+ <Zw9p7_31EESN64RQ@calendula>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241016170542.7e22b03c@canb.auug.org.au>
-In-Reply-To: <20241016170542.7e22b03c@canb.auug.org.au>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 16 Oct 2024 09:25:41 -0700
-Message-ID: <CAADnVQJ=Woq=82EDvMT1YRLLTvNgFVSbnZDiR5HUgEhcyBLW4Q@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zw9p7_31EESN64RQ@calendula>
 
-On Tue, Oct 15, 2024 at 11:05=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
->
-> Hi all,
->
-> After merging the bpf-next tree, today's linux-next build (arm64
-> defconfig) failed like this:
->
-> Building: arm64 defconfig
-> In file included from arch/arm64/include/asm/thread_info.h:17,
->                  from include/linux/thread_info.h:60,
->                  from arch/arm64/include/asm/preempt.h:6,
->                  from include/linux/preempt.h:79,
->                  from include/linux/spinlock.h:56,
->                  from include/linux/mmzone.h:8,
->                  from include/linux/gfp.h:7,
->                  from include/linux/slab.h:16,
->                  from mm/slab_common.c:7:
-> mm/slab_common.c: In function 'bpf_get_kmem_cache':
-> arch/arm64/include/asm/memory.h:427:66: error: passing argument 1 of 'vir=
-t_to_pfn' makes pointer from integer without a cast [-Wint-conversion]
->   427 |         __is_lm_address(__addr) && pfn_is_map_memory(virt_to_pfn(=
-__addr));      \
->       |                                                                  =
-^~~~~~
->       |                                                                  =
-|
->       |                                                                  =
-u64 {aka long long unsigned int}
-> mm/slab_common.c:1260:14: note: in expansion of macro 'virt_addr_valid'
->  1260 |         if (!virt_addr_valid(addr))
->       |              ^~~~~~~~~~~~~~~
-> arch/arm64/include/asm/memory.h:382:53: note: expected 'const void *' but=
- argument is of type 'u64' {aka 'long long unsigned int'}
->   382 | static inline unsigned long virt_to_pfn(const void *kaddr)
->       |                                         ~~~~~~~~~~~~^~~~~
->
-> Caused by commit
->
->   04b069ff0181 ("mm/bpf: Add bpf_get_kmem_cache() kfunc")
->
-> I have reverted commit
->
->   08c837461891 ("Merge branch 'bpf-add-kmem_cache-iterator-and-kfunc'")
->
-> for today.
+On Wed, Oct 16, 2024 at 09:23:27AM +0200, Pablo Neira Ayuso wrote:
+> On Wed, Oct 16, 2024 at 11:57:41AM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > The following commits are also in the netfilter-next tree as different
+> > commits (but the same patches):
+> > 
+> >   3478b99fc515 ("netfilter: nf_tables: prefer nft_trans_elem_alloc helper")
+> >   73e467915aab ("netfilter: nf_tables: replace deprecated strncpy with strscpy_pad")
+> >   0398cffb7459 ("netfilter: nf_tables: Fix percpu address space issues in nf_tables_api.c")
+> >   cb3d289366b0 ("netfilter: Make legacy configs user selectable")
+> > 
+> > These are commits
+> > 
+> >   08e52cccae11 ("netfilter: nf_tables: prefer nft_trans_elem_alloc helper")
+> >   544dded8cb63 ("netfilter: nf_tables: replace deprecated strncpy with strscpy_pad")
+> >   0741f5559354 ("netfilter: nf_tables: Fix percpu address space issues in nf_tables_api.c")
+> >   6c959fd5e173 ("netfilter: Make legacy configs user selectable")
+> > 
+> > in the netfilter-next tree.
+> > 
+> > These have already caused an unnecessary conflict due to further commits
+> > in the ipvs-next tree.  Maybe you could share a stable branch?
+> 
+> That was the result of a rebase, moving forward I will keep PR in a
+> separated branch until they are merged upstream to avoid this
+> situation.
 
-Thanks for flagging.
-Fixed and force pushed.
+Hi,
+
+I have force-pushed ipvs-next so it now matches netfilter-next.
+I expect that should resolve this problem.
+
+Thanks!
 

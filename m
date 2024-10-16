@@ -1,118 +1,251 @@
-Return-Path: <linux-next+bounces-4288-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4289-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6225099FD73
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 02:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 933E799FDFC
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 03:10:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 948381C24248
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 00:57:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B614B1C242E8
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 01:10:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B87B433AB;
-	Wed, 16 Oct 2024 00:57:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A0C1D1E65;
+	Wed, 16 Oct 2024 01:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ntW/JMEd"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="XwlrqAEu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CEF1097B;
-	Wed, 16 Oct 2024 00:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD82F1C2324
+	for <linux-next@vger.kernel.org>; Wed, 16 Oct 2024 01:04:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729040271; cv=none; b=e56IrgXkmljGT7g5DA8Lc9zQkeWhY2ynn8WT2+Vs5RfMi65vw7vk4dYPVNuiHZ7zY5ld/OlyJtY3Pokhb/3SswtEUNPrqwurb9EGMcZiFzNlnc/IKO7ikmHB8u5VIcTSBiuiEh9knsTQSXGQiqHLZd5hhSIIZ3WSVQLBzJH2sk8=
+	t=1729040664; cv=none; b=hbfRmnYZMwQqjOcVDfB/RuuxqjClUPQPdc5oK7vj/w0BA+fpUgy/im4jnPdbkDSuo1pMl+D/57vv7zRig3T7bs9dpJ2tgeHRwe7SxWryKXfos45uGznMicy5xSa6n5QTaD6Oj5C5PA7jVg1G3DnZDo1/QVdYPTXkkCczYHexEuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729040271; c=relaxed/simple;
-	bh=cUnKhKkXjfWul3ilTqcHV8hlqkYS5CiTuIlhw+xHBPE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Flzk3s6yefLWkphDDtSi7m21IoCgcBdn/6scTYd5q9KUKtPBP3umboyY+54vGovP5JWmhajz97KaXAMvFZSO/xXcOIdtkbcZu6WFdJPxZ/G77+C6VxH1Wg6jfXMDcmVpMm87UXulxmQsJr6GJzVCcef99v+iKI2O9QRL0ZnPziU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ntW/JMEd; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1729040262;
-	bh=MRYBgXgUSgi++5OBq9VNbC3h2psOne0GV22uzyKcVR4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ntW/JMEdsYnT/aBlIpSI0lJCNX+5fU99vgf9UVkZQL5r74OI/kACd0bPdRhhL/ulU
-	 HQQvIvlHCsWWqhCKtOE68XGPsKplugWz148UADoXgQnEo7Lyd8+DFNyGQft/D/u9qT
-	 +50QBNR+xlrSgTaf1RQq/9/pucStYbM62GYbdnUhRLXp4OI2xb8mxq/SaxlSPqiKAO
-	 6Hgdr4jE8/QV1A0S6nDqUFpzPj8Lh0f4V9FBdsMQ0avw4nKW3xn9ticRp8k2ss1yhV
-	 3xC9WWkAr48EYq3Pe/ALwHHJcoHtQN8yuklVoxSPLFul0fMfzOsATxwMlIvBZwrH2u
-	 nQqLEfHZ8+88A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XSsyF6kgLz4wx5;
-	Wed, 16 Oct 2024 11:57:41 +1100 (AEDT)
-Date: Wed, 16 Oct 2024 11:57:41 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Simon Horman <horms@verge.net.au>, Pablo Neira Ayuso
- <pablo@netfilter.org>
-Cc: NetFilter <netfilter-devel@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the ipvs-next tree
-Message-ID: <20241016115741.785992f1@canb.auug.org.au>
+	s=arc-20240116; t=1729040664; c=relaxed/simple;
+	bh=xM9Y6ggYV80wh2O/N1ygNQEEkhOa4lv3gKIYq+rcN7w=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=s0gYHWtcoigjFea2Adzuw9Zkp/az3/Xt6ZlPYkrEh0wYkwz0zxvQsVd2xoOLZ71VO7ORwFSEmDsQ6wrwEvcig7ZhN0+geGnD4Rgc34p+3fgSbUflL1gq6jp1CjYkEju0tvLKO+lgb6sVKiHJZ3kzjVmfp4pNcscLAjyZoTqiP6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=XwlrqAEu; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-71e49ef3b2bso3140973b3a.2
+        for <linux-next@vger.kernel.org>; Tue, 15 Oct 2024 18:04:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1729040662; x=1729645462; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=VXOpTSTjq0UA+Y3lleqjVRag0BsPSrG4VfV66hfD14I=;
+        b=XwlrqAEusSf1/I/Rp1tmTnsfVOL+gvXhoLSA5CwKhjJNLWhXajeVtKs1YrdolfyFTj
+         rydBISdxGCEE/9B7fL7uGPQgmil2tErilm/Tp4R39OV0c9gakKNQn+Dm0kk/D1QAU/HR
+         CwDgtsSDuqlt1KK6J5EfnMovtZdC1T4n2qc5PpPISgTjitRF6Y5PV0qOgv5ecCVdC8Q8
+         5ClXEeNpu233XIm6iSh4XJQimcrclkZqi6OxHdjvLV8emoFkvAz2UQzShQH9XqkxkNgP
+         dKF1kynT1g83Hj2nWIqSfohLzzrP35sFqtCrSimdDXNaLlNZP7CZhLTViT9M7GPjNbSS
+         o3qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729040662; x=1729645462;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VXOpTSTjq0UA+Y3lleqjVRag0BsPSrG4VfV66hfD14I=;
+        b=BMISCoBOOlsa/FXA/DnuK4RMp5lv8vU8JeWg5QXIYG8GY7Ecf32zgGxzRXmsYbLt+Y
+         k3BjyBEqtn7IVUclPn7bsVCQvS8swjK62hRCS5cDIYKAczLPWEiYai0chbN9L2EWcQjB
+         eTNa7fv0Ci11492e1S0S6VH7Mi/oC0RdcKm07KxFejn3Y8eSS22zWcEBGrFv6dz4T877
+         NffqVMog8Hz0ddpwN+AUwnHIZqPntYq992ZAb07HPlWXQDjmhmcJjZae177yb4T4QHvg
+         YDMEZRjiumHiKJNQNxpl77lVSHlYsahI4opd1UOvRBEu5Zvg2FMG8LRm+klegUAT9lFc
+         cgaQ==
+X-Gm-Message-State: AOJu0Yy6ESjT3PBdJCuhDDTfOFYYrNu83Ydsp3Nle3rOjHPOq1YnV2KL
+	RZ63FGxskv2YTBcGRpuvy/m0i5rmGqT6INjM1XEBaRoDqE7smSLCmz60IzyivOHXF3YRkk4ABTK
+	WkKQ=
+X-Google-Smtp-Source: AGHT+IHrruVOY4VVouI+KfZnRWB4bZ9X88gFG48Qru4V4FE/EhMWlEbkHmjGblmCiMjbNcsEK7MLSQ==
+X-Received: by 2002:a05:6a00:234c:b0:71e:50ef:20f3 with SMTP id d2e1a72fcca58-71e50ef22a8mr17904839b3a.28.1729040661729;
+        Tue, 15 Oct 2024 18:04:21 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e77370dfdsm1970726b3a.42.2024.10.15.18.04.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2024 18:04:21 -0700 (PDT)
+Message-ID: <670f1115.a70a0220.9a473.805d@mx.google.com>
+Date: Tue, 15 Oct 2024 18:04:21 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/l=e2Vy6GThhGR5jBmb=yWd=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/l=e2Vy6GThhGR5jBmb=yWd=
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: next-20241015
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 186 runs, 4 regressions (next-20241015)
+To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+ kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi all,
+next/master baseline: 186 runs, 4 regressions (next-20241015)
 
-The following commits are also in the netfilter-next tree as different
-commits (but the same patches):
+Regressions Summary
+-------------------
 
-  3478b99fc515 ("netfilter: nf_tables: prefer nft_trans_elem_alloc helper")
-  73e467915aab ("netfilter: nf_tables: replace deprecated strncpy with strs=
-cpy_pad")
-  0398cffb7459 ("netfilter: nf_tables: Fix percpu address space issues in n=
-f_tables_api.c")
-  cb3d289366b0 ("netfilter: Make legacy configs user selectable")
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+jetson-tk1                 | arm   | lab-baylibre | gcc-12   | multi_v7_def=
+c...CONFIG_SMP=3Dn | 1          =
 
-These are commits
+meson-g12a-u200            | arm64 | lab-baylibre | gcc-12   | defconfig+de=
+bug              | 1          =
 
-  08e52cccae11 ("netfilter: nf_tables: prefer nft_trans_elem_alloc helper")
-  544dded8cb63 ("netfilter: nf_tables: replace deprecated strncpy with strs=
-cpy_pad")
-  0741f5559354 ("netfilter: nf_tables: Fix percpu address space issues in n=
-f_tables_api.c")
-  6c959fd5e173 ("netfilter: Make legacy configs user selectable")
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie  | gcc-12   | defconfig+de=
+bug              | 1          =
 
-in the netfilter-next tree.
+r8a7743-iwg20d-q7          | arm   | lab-cip      | gcc-12   | shmobile_def=
+config           | 1          =
 
-These have already caused an unnecessary conflict due to further commits
-in the ipvs-next tree.  Maybe you could share a stable branch?
 
---=20
-Cheers,
-Stephen Rothwell
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+241015/plan/baseline/
 
---Sig_/l=e2Vy6GThhGR5jBmb=yWd=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20241015
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      b852e1e7a0389ed6168ef1d38eb0bad71a6b11e8 =
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcPD4UACgkQAVBC80lX
-0GxQFwf/VZs+GxgXy7HvuXZnZqy2srbQvG4Ezl4qWHUf0GKGVuGR19Wp1TrLm/18
-usoDkcL7wGkhlrJwwPEA3VtrxMlYMJXbhxXlAtXyItTwNSSdxWiruAAE5vmKcigm
-Bd/dgzzwQ7azo0PexghJq9IUX72XM98S2yc8dXtQEG++2aDj752qyQ0XzdekElQp
-5DALjqWXvkVmV0c+UC/ndMuS/+zyXQHj/BeOaCKyO5m2ksnyhzhST+8Z/TZH4V5Z
-S8uo2dSXUUhW9vAG8sFNAWWpqegt7kPYctUOYJPgrBz7W7Ct7uWVPpHYFqy37fQn
-LxO+Sj36vXP8QkXzZmLJTlOUAT0QiQ==
-=MSDA
------END PGP SIGNATURE-----
 
---Sig_/l=e2Vy6GThhGR5jBmb=yWd=--
+Test Regressions
+---------------- =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+jetson-tk1                 | arm   | lab-baylibre | gcc-12   | multi_v7_def=
+c...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/670ed908ee20ff213bc86855
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241015/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-12/lab-baylibre/baseline-jetson-tk1.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241015/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-12/lab-baylibre/baseline-jetson-tk1.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/670ed908ee20ff213bc86=
+856
+        failing since 4 days (last pass: next-20241008, first fail: next-20=
+241011) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+meson-g12a-u200            | arm64 | lab-baylibre | gcc-12   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/670ee09397d213942ec86855
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241015/arm6=
+4/defconfig+debug/gcc-12/lab-baylibre/baseline-meson-g12a-u200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241015/arm6=
+4/defconfig+debug/gcc-12/lab-baylibre/baseline-meson-g12a-u200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/670ee09397d213942ec86=
+856
+        failing since 47 days (last pass: next-20240828, first fail: next-2=
+0240829) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie  | gcc-12   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/670ee0d66ef7c3c901c86862
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241015/arm6=
+4/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241015/arm6=
+4/defconfig+debug/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/670ee0d66ef7c3c901c86=
+863
+        failing since 22 days (last pass: next-20240829, first fail: next-2=
+0240923) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+r8a7743-iwg20d-q7          | arm   | lab-cip      | gcc-12   | shmobile_def=
+config           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/670ed399056c47ca88c8686c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: shmobile_defconfig
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241015/arm/=
+shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241015/arm/=
+shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/670ed399056c47ca88c86=
+86d
+        failing since 14 days (last pass: next-20240930, first fail: next-2=
+0241001) =
+
+ =20
 

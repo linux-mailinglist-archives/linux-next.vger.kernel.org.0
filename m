@@ -1,57 +1,61 @@
-Return-Path: <linux-next+bounces-4309-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4310-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54D239A1054
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 19:08:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAC2E9A116F
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 20:23:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8482B1C218AB
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 17:08:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A6CDB23D6E
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2024 18:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D895920FAAA;
-	Wed, 16 Oct 2024 17:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6AB210195;
+	Wed, 16 Oct 2024 18:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gz5VV2f3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X+KUqH5e"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC435205E23;
-	Wed, 16 Oct 2024 17:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F65520F5BA;
+	Wed, 16 Oct 2024 18:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729098526; cv=none; b=hQrM4gIZIgyjYqdY77WQf+DBYneDlDjjZ8B8PbE1tCLVHcmxlBBlMU7QUXuCS/MsRe3O/jA7d4Pq/tPHk+pARVfKhPo+yuobUW8QKOl5tdzp0fRn9IO0lkRhjjYYKREwF47zZELUKTmaCFOgMj7eCrf2LWUZsOM9RQhXeQ5ZQvY=
+	t=1729103024; cv=none; b=kyATWmDcWGgwAGd0uJL/7QAsizKeF1+z+RDskJkosYWWVOzm0SeXpxwbd0KjdNMwfbvGC67k/8n4JkIomGSGdCOpjS9fdInVjwRS0HSGRB9RUKvp5Il4CRIKu9ep6gUe5KvR+j9Kv9K+i1qB9ABONCzFwM9CTh4+Ask5J2gLhjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729098526; c=relaxed/simple;
-	bh=xPKTHC6TAd6WhauoRzwJwU5j5gcUbdI/FpSG6faFCIA=;
+	s=arc-20240116; t=1729103024; c=relaxed/simple;
+	bh=A4rbUUyX5VHHSLuIcUaeuLPb+NZt6EXbyVP+urSwLtU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TO7JxMgnM1hZiqqu+s6jbR6NYsHdGIVfFcCL0ZDMW5+KLgLMR5fha+XKskEbl25K2EEqmUbXcGhcsPk194+iUDq3ttkPEeJWv95p7PSC/ACglBQUICHmTAUtmz9hTb4EeRRcRZfibyT9b1vTHhqtvre5RHPJ9v6wkpme7Xh3uU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gz5VV2f3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2145EC4CEC5;
-	Wed, 16 Oct 2024 17:08:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zom3NBe4/L+CQs9Ijp7XPaifjto7YxVshmVUAnHO8OFNJfm/7pFPz3gPL3FjH3tftPK89RZbhE6droO83mecCrz8fgJKaUBdoIjze1CZXC5I7CGRspvN6DorPcQSMIL021RWlCxSBvXmR9e6bYVwfd3gsEzFlCzcIfe6Y4C8P14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X+KUqH5e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB246C4CEC5;
+	Wed, 16 Oct 2024 18:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729098526;
-	bh=xPKTHC6TAd6WhauoRzwJwU5j5gcUbdI/FpSG6faFCIA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gz5VV2f3aIIgTnJKVfld3Vn6NM4eybTs5bck1xwPO2lR9y2t45j8/p/XpJ7V3QCcN
-	 qVqzY3bzRyn09NZhvUTGMc4NqAHu5H/0dE4Nc3uzkC6bmeHgabB7+/Fs7cs1+v1oy7
-	 O5Iae1g96rYk8w3pL/efYXdUYHfnKy8PTRzPahTWqpb2CqF0DcbNUR9ySFTCGqXX8F
-	 JRifEGOMby8eElTk4hvM6MWYwYFvM1w2+haRkTZbmTCcxS70Ex/kFQKfWtHaWM4bkq
-	 KhI9zi/UUzCylTpWqb0JbqOCB55PJD/lc9U1UxgBcrvPgFy8HUrXzvrMZaAtqW8xkx
-	 skdJ92+1LiKTg==
-Date: Wed, 16 Oct 2024 18:08:42 +0100
-From: Simon Horman <horms@kernel.org>
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	NetFilter <netfilter-devel@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the ipvs-next tree
-Message-ID: <20241016170842.GA214065@kernel.org>
-References: <20241016115741.785992f1@canb.auug.org.au>
- <Zw9p7_31EESN64RQ@calendula>
+	s=k20201202; t=1729103024;
+	bh=A4rbUUyX5VHHSLuIcUaeuLPb+NZt6EXbyVP+urSwLtU=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=X+KUqH5ewlI8/xiz2zl9jGHniOJSmoq5f24YJSlKA/lgAuFe2QJ4tUTEZ5VrHYEzz
+	 R5pV29WQQOuuRNME7LS2js007tr8btQtMlgf5BzK+flvhBD1xXOvdXbYTAk/VR9NSh
+	 zZpm/IIWyoIo2DEAZtCI9mdusx5EIySOkVxIZimD8SwrGz5t14THK79WkbIWWULGRR
+	 mi0Kpjc/ZwZa7+dHSO6qI2C3EdWd9kODyX9axS+S8VCo4t1zn36kAvMArg80pC501S
+	 NM2CH2h5hTr7EogZJuaQXZznmBAv2yyzFcJd6M9lUI6DpFK60LFO9yotOYqfoTs7sm
+	 60HaWijoLoxgg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 90002CE0DCA; Wed, 16 Oct 2024 11:23:43 -0700 (PDT)
+Date: Wed, 16 Oct 2024 11:23:43 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: "Liang, Kan" <kan.liang@linux.intel.com>
+Cc: peterz@infradead.org, mingo@redhat.com, linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH] perf: Fix missing RCU reader protection in
+ perf_event_clear_cpumask()
+Message-ID: <fd5f90b2-62b1-4984-8969-41e87322b677@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20240913162340.2142976-1-kan.liang@linux.intel.com>
+ <39bb4c06-a8e8-4eef-8659-534939c9987f@linux.intel.com>
+ <56ae5f08-174f-4f96-a454-36c6c3d68075@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -60,40 +64,74 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zw9p7_31EESN64RQ@calendula>
+In-Reply-To: <56ae5f08-174f-4f96-a454-36c6c3d68075@paulmck-laptop>
 
-On Wed, Oct 16, 2024 at 09:23:27AM +0200, Pablo Neira Ayuso wrote:
-> On Wed, Oct 16, 2024 at 11:57:41AM +1100, Stephen Rothwell wrote:
-> > Hi all,
+On Fri, Sep 13, 2024 at 11:14:41AM -0700, Paul E. McKenney wrote:
+> On Fri, Sep 13, 2024 at 12:25:59PM -0400, Liang, Kan wrote:
 > > 
-> > The following commits are also in the netfilter-next tree as different
-> > commits (but the same patches):
 > > 
-> >   3478b99fc515 ("netfilter: nf_tables: prefer nft_trans_elem_alloc helper")
-> >   73e467915aab ("netfilter: nf_tables: replace deprecated strncpy with strscpy_pad")
-> >   0398cffb7459 ("netfilter: nf_tables: Fix percpu address space issues in nf_tables_api.c")
-> >   cb3d289366b0 ("netfilter: Make legacy configs user selectable")
+> > On 2024-09-13 12:23 p.m., kan.liang@linux.intel.com wrote:
+> > > From: Kan Liang <kan.liang@linux.intel.com>
+> > > 
+> > > Running rcutorture scenario TREE05, the below warning is triggered.
+> > > 
+> > > [   32.604594] WARNING: suspicious RCU usage
+> > > [   32.605928] 6.11.0-rc5-00040-g4ba4f1afb6a9 #55238 Not tainted
+> > > [   32.607812] -----------------------------
+> > > [   32.609140] kernel/events/core.c:13946 RCU-list traversed in non-reader section!!
+> > > [   32.611595] other info that might help us debug this:
+> > > [   32.614247] rcu_scheduler_active = 2, debug_locks = 1
+> > > [   32.616392] 3 locks held by cpuhp/4/35:
+> > > [   32.617687]  #0: ffffffffb666a650 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x4e/0x200
+> > > [   32.620563]  #1: ffffffffb666cd20 (cpuhp_state-down){+.+.}-{0:0}, at: cpuhp_thread_fun+0x4e/0x200
+> > > [   32.623412]  #2: ffffffffb677c288 (pmus_lock){+.+.}-{3:3}, at: perf_event_exit_cpu_context+0x32/0x2f0
+> > > 
+> > > In perf_event_clear_cpumask(), uses list_for_each_entry_rcu() without an
+> > > obvious RCU read-side critical section.
+> > > 
+> > > Either pmus_srcu or pmus_lock is good enough to protect the pmus list.
+> > > In the current context, pmus_lock is already held. The
+> > > list_for_each_entry_rcu() is not required.
+> > > 
+> > > Fixes: 4ba4f1afb6a9 ("perf: Generic hotplug support for a PMU with a scope")
+> > > Reported-by: Paul E. McKenney <paulmck@kernel.org>
+> > > Closes: https://lore.kernel.org/lkml/2b66dff8-b827-494b-b151-1ad8d56f13e6@paulmck-laptop/
+> > > Tested-by: Paul E. McKenney <paulmck@kernel.org>
+> > > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > > Closes: https://lore.kernel.org/oe-lkp/202409131559.545634cc-oliver.sang@intel.com
 > > 
-> > These are commits
+> > Forgot to add the below tag, please fold it.
 > > 
-> >   08e52cccae11 ("netfilter: nf_tables: prefer nft_trans_elem_alloc helper")
-> >   544dded8cb63 ("netfilter: nf_tables: replace deprecated strncpy with strscpy_pad")
-> >   0741f5559354 ("netfilter: nf_tables: Fix percpu address space issues in nf_tables_api.c")
-> >   6c959fd5e173 ("netfilter: Make legacy configs user selectable")
-> > 
-> > in the netfilter-next tree.
-> > 
-> > These have already caused an unnecessary conflict due to further commits
-> > in the ipvs-next tree.  Maybe you could share a stable branch?
+> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
 > 
-> That was the result of a rebase, moving forward I will keep PR in a
-> separated branch until they are merged upstream to avoid this
-> situation.
+> Have one of these to go along with it.  ;-)
+> 
+> Tested-by: Paul E. McKenney <paulmck@kernel.org>
 
-Hi,
+Just following up, seeing how this is not yet in -next.
 
-I have force-pushed ipvs-next so it now matches netfilter-next.
-I expect that should resolve this problem.
+Is this on its way upstream?
 
-Thanks!
+							Thanx, Paul
+
+> > Thanks,
+> > Kan
+> > > Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+> > > ---
+> > >  kernel/events/core.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > > index 20e97c1aa4d6..5ba9934b49df 100644
+> > > --- a/kernel/events/core.c
+> > > +++ b/kernel/events/core.c
+> > > @@ -13912,7 +13912,7 @@ static void perf_event_clear_cpumask(unsigned int cpu)
+> > >  	}
+> > >  
+> > >  	/* migrate */
+> > > -	list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
+> > > +	list_for_each_entry(pmu, &pmus, entry) {
+> > >  		if (pmu->scope == PERF_PMU_SCOPE_NONE ||
+> > >  		    WARN_ON_ONCE(pmu->scope >= PERF_PMU_MAX_SCOPE))
+> > >  			continue;
 

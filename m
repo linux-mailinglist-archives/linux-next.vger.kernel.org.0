@@ -1,111 +1,115 @@
-Return-Path: <linux-next+bounces-4325-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4326-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ED5A9A3110
-	for <lists+linux-next@lfdr.de>; Fri, 18 Oct 2024 00:53:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AE489A31D6
+	for <lists+linux-next@lfdr.de>; Fri, 18 Oct 2024 03:01:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8F721F23094
-	for <lists+linux-next@lfdr.de>; Thu, 17 Oct 2024 22:53:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B154D1C221F3
+	for <lists+linux-next@lfdr.de>; Fri, 18 Oct 2024 01:00:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6831D7986;
-	Thu, 17 Oct 2024 22:53:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C242C859;
+	Fri, 18 Oct 2024 01:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Ue3vRRBH"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lUPXq7yX"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C68E1D5142;
-	Thu, 17 Oct 2024 22:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48D820E31E;
+	Fri, 18 Oct 2024 01:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729205616; cv=none; b=Dg7oodX2q0mlsCSihFCDm9a3J+mwgoGcDbFchNBenqC4iUXSF/v9Qmf9J9T2TPQeLYh7kH2aRU+4FT6OgZwmb/rJpyjVINrRKEV+ifFFJUbOixvGDRzjBybpUeXFGm/1NEuuJmScwJJ1tGqpkZFgdD8WhmArZvtQlczsIqhUAxU=
+	t=1729213242; cv=none; b=KC60ws2p41K8zfV3Q8LM5lqzymYWzhDXSc7Wvn/xu6iCp4nz6tbZKtg1XLbx1rHrao7+daQBpN7XDK0rEXMgIUJ6m9uxRIrIeDiLecmrBrM1148JnKKkKsqqDIA3lAVKVSSXAOH/6g6zy6FQ6+CTnXHJiKrjF40U53o4o3t97A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729205616; c=relaxed/simple;
-	bh=LgqItpjD0mf6kBhxr0Sasrv638OCo0uLz/5Jy1K670g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Uqzuz0/6Js8t4nnWsNz7RxmUKtm75+MuB8KxOu1t8xMuQrKlT8vYnAYrDg6XXxlt6oHpjHi4jt8UiPolDzGASOcbj15yR9hzUHMGi8nlBsxZ5zfJYwSONcLnCeImZzq16UeOhDyVJuC5VBg5bLivh/gvLVj4OqziiIt9JChMcB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Ue3vRRBH; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1729213242; c=relaxed/simple;
+	bh=riF7DXKgckTFwLO6Rmx3Cduhzi9go1shd3LNXYG+2eM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=UGCSVdJ0sSWo4km6cDfgIJzayhUHKl8PW1UEw+lp06YP81hAwPASuGKnLiZV9yNvAn4MhyeLFeRYJqy5PspbL64uWb/ene57L0220dWFmirx57uqIidpzijAqse2HEKf0Q/+TKeChItSA6ryoVh18ijkdAKAuLBOrGx3+xOvmIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lUPXq7yX; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1729205607;
-	bh=U0sANCS4iKbMjvA/ppQyEtAYdO2UxG8K5o0zRIkshK8=;
+	s=201702; t=1729213234;
+	bh=6jvh+yTLoiE3AXQemCpDaaZt6WnJOMGM9zDddxp2Jfw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Ue3vRRBHSbQt7sTsI5Uv6XHfurERBhClkFc5cKZRBOvFney6JEho6SwGb3RduHOJC
-	 QUwLEZ3EJuHvrLfgNmOjJQqi6Vy/DIndPVkt7KdjXMoTJ1zsPbtrIBs/fbZUq+kZvo
-	 oWQZ1iqSQuj65kDVD5YBEItxC4pQ1I5JYGa/W+YMUcsrNJgHTy/QxhCcZlIIib3Bs9
-	 VAPRnZwf1p7QvkQcQE5T94sDqiwTqynFcMCxmCwtjJiBwD1Lqj0I4DmJTz3m6qcoLR
-	 BRvBUB0zK8YbsNxm+JsDt25z9O0ZMRkM96Z76BVJgBqKi0zu5/28gfk39aoVeu6REU
-	 EDsKk4xNaWezw==
+	b=lUPXq7yXaDiH+tdVECswBi+Ja7AUX95ldH4P9s/p9qiY62YNkYiHM1Jh9NWs3c1Dl
+	 tgC7u3q7jIT8bGt8sd0avAqrNMuDlw6NcRSDy/wy8KFUydYv2WfdiGhIb3ORx5W+Ed
+	 qFzC9dD5wtF9q6JHiaTK5g+YEt7wB+4aM43Lzs7m5UIHBLO1ypx9y/3VadnDD8k514
+	 OOGT8AI1hAOXJgRnZEuGZ3S60iUNg6F1EPvUnwLLAYqGFiY8m9IELSWrRMmhHOSLNr
+	 wRCLVmJqaExuLfPa+zBTeCt5XzrYy6Rf/pd3uTSrAO80t29lqeRPumcJJlVWJs0ZRP
+	 l7ZAsS2+MxfeA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XV35z3x6Bz4wbx;
-	Fri, 18 Oct 2024 09:53:27 +1100 (AEDT)
-Date: Fri, 18 Oct 2024 09:53:26 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XV5wf38yZz4wb0;
+	Fri, 18 Oct 2024 12:00:33 +1100 (AEDT)
+Date: Fri, 18 Oct 2024 12:00:33 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Sterba <dsterba@suse.cz>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the btrfs tree
-Message-ID: <20241018095326.2a1ae168@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Cosmin Ratiu <cratiu@nvidia.com>, Networking <netdev@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Tariq Toukan <tariqt@nvidia.com>
+Subject: linux-next: manual merge of the net-next tree with Linus' tree
+Message-ID: <20241018120033.03deea3e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Nqz6V2voycNoom5Gi1rvU63";
+Content-Type: multipart/signed; boundary="Sig_/2xv7ZjPuvrOx6LSlDwRAZG7";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Nqz6V2voycNoom5Gi1rvU63
+--Sig_/2xv7ZjPuvrOx6LSlDwRAZG7
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the btrfs-fixes tree as different
-commits (but the same patches):
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  c86fb0ef61d7 ("btrfs: clear force-compress on remount when compress mount=
- option is given")
-  c87222d18145 ("btrfs: fix error propagation of split bios")
-  d2b462521dcb ("btrfs: zoned: fix zone unusable accounting for freed reser=
-ved extent")
+  drivers/net/ethernet/mellanox/mlx5/core/eswitch.c
 
-These are commits
+between commit:
 
-  da15f58ae3ba ("btrfs: clear force-compress on remount when compress mount=
- option is given")
-  dc094af9105b ("btrfs: fix error propagation of split bios")
-  bf9821ba4792 ("btrfs: zoned: fix zone unusable accounting for freed reser=
-ved extent")
+  1da9cfd6c41c ("net/mlx5: Unregister notifier on eswitch init failure")
 
-in the btrfsi-fixes tree.
+from Linus' tree and commit:
+
+  107a034d5c1e ("net/mlx5: qos: Store rate groups in a qos domain")
+
+from the net-next tree.
+
+I fixed it up (the latter contained the former change, so I just used
+that) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be
+mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Nqz6V2voycNoom5Gi1rvU63
+--Sig_/2xv7ZjPuvrOx6LSlDwRAZG7
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcRlWcACgkQAVBC80lX
-0GyvTggAi3MNB2v3izLq2s1ixVrurhlpcfaNIot0J6PDxMZQrD/gbObDrW7kHMC9
-3MpIsQUZD/OmK699LqsKi9WruV9C1BmqgzG6NI2jCbPV449kxtr7jp9Xi78rkcFY
-EAU7iVqAjE4pEu8CkTY8Kt6AQzj/5rIbKA8sE0XnjZ2t4N5VZ1m9xzzDS0woNWXJ
-qCJHuL9HmPS43jC7CS/0CTANkQXRp6XW40KLOK7yS8DAHVZzfHUVELFRq/z6sYAL
-PGMCH80lACBdUQ9zQ5PGgwQiUjuAnyiHEdizcyOTN6ilGxHlKI+v92HtJ+eO/2Wm
-sCJeIyxvEAAzsYG8FSCXt9VdeGQ+kg==
-=FV7i
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcRszIACgkQAVBC80lX
+0GxaXgf+O0f4q7dBxI+lYswTtqOgI2gAKhAY3RwAsOOFYU8XJKAgThv6X6CV5YwN
+S3U3mfhgMq99hNKAymhq9MCVhkh/9rMOBhvizPhTkO/rw91omFWmlxFyFQX5hlVI
+E2nB8dD9WkKSpU6rl/eCwxREIn5tQVDabYSUfRe8NAotSwkxk0Hm/dmeudNa6Ubh
+1YA8YTAvEIuO74pzf9t5DAYiQhQqcsaz8ndAbkW5pQYPklq7XcJdUtx+XZSs8pKz
+BYJAPfVGf4FLXARcy9R81+SeHuqnit3E+LTwBoTu7wVNG8p/fK+gi2t0mTqwjQlQ
+v3Rrc+PMQQ+aaC3rI/kIe/D1EPdiKg==
+=tNpG
 -----END PGP SIGNATURE-----
 
---Sig_/Nqz6V2voycNoom5Gi1rvU63--
+--Sig_/2xv7ZjPuvrOx6LSlDwRAZG7--
 

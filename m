@@ -1,119 +1,105 @@
-Return-Path: <linux-next+bounces-4333-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4334-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 814AB9A526C
-	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2024 06:27:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BCF09A538D
+	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2024 12:54:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8A2B1C2118E
-	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2024 04:27:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B981B20FF7
+	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2024 10:54:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C96B76FB0;
-	Sun, 20 Oct 2024 04:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36FCB823AC;
+	Sun, 20 Oct 2024 10:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mla2AEYA"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="K5lxiTTC"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7F68F5E;
-	Sun, 20 Oct 2024 04:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E322C181
+	for <linux-next@vger.kernel.org>; Sun, 20 Oct 2024 10:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729398432; cv=none; b=S5hjUAx7lpJBEKg/o7PuUPm4ho3+Oy5g2s2l/ZwuMe6WuoRvshlwzemP9CTpKkb7b10SnKmqzWvoJ1ZA+Y3yKX33pfYVsWJ9V5Wvd9eHvzbKBJs1mnUdxnO2xJkHi0ApYw7uYMxIzR3Qrld9tF7VdquKkdedZwsb9ECdlgfsPAc=
+	t=1729421663; cv=none; b=N71PGMm70uwvtSam3Xj8aIORiA85ILkkt9R3gTIN17uDmylbrFWErfwwCJE8glFyxQFVi00LNa4hRNBNpdrSxb3pTRhFl+lqtQCAhFL0FkNptAmk4yJd1P1uhnjXQ6FeRTctCrHIfM9Kb+Z46owpyeA352T6Jc9KZKCNGw4IYlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729398432; c=relaxed/simple;
-	bh=D1RezRlkB9L4TfHEDkozhaaOZUO1U3mlZToPaKXwzXs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZbNWA51Z+MZ36x7CaZ8k5X6JmgiJ5IEx4NgEirsWQHHP5AoBTMUja3vTkGfeqYW1fGCbUl30mg6pMRMfeBWEBazPNsoPwwq1FbVnBaYQYa2o+lxR7YKQcLgIPUT976S968UII5GYPigW2Ve0pIgjt+/celOwecXR5PDAG+t1BT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mla2AEYA; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a9a0472306cso441675466b.3;
-        Sat, 19 Oct 2024 21:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729398429; x=1730003229; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/5hnJw00SHkS8Yg/z28Fwh+SQ2vwZshL2rzFNrvtoN8=;
-        b=Mla2AEYAhyn9vxDQc0/8PyBR5bWG51Av/Vps72N2hisNiRqNlr7qMGv3AXdLTPWKVY
-         AV05IWwc3zJR6ki/hMrHtDejOMZZz+E8MKMCPH/d8jEgq1JJhqNTyjs7FTMTGvXKFgAi
-         OQwGfE4X2CItGWCxPCC+jmmriI7o5TilFMk1yUSkiD/jpByE2ykrffRS6HWa0Fs9A8jL
-         oH2UlQRJNRQAt4P/iC5630R64fp9+sfJVoRutJJGoNkfVOFhdrIgMC5jwvSwTLUQ5bio
-         Uk4P8kIrhjhouKIkR+jHjMznxgUNmbcGbj8waR0T8LmYaVGnIdBJWO+XoyBQeS1Q4QRF
-         +ODQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729398429; x=1730003229;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/5hnJw00SHkS8Yg/z28Fwh+SQ2vwZshL2rzFNrvtoN8=;
-        b=f5UBpYXlylAdDvi9IIyDx4Q3uG9gE2r2JMKf6PLww5Tw4dybsR4GulSX30xg8gjo3G
-         Kppf1a0ydTOHC9RA3KQ7QVl7eucc29TrjDtdymUrmxW0ZRznc5goHGKTg+OVbf15yDlz
-         fyIT+LLV3TW5yTwpHAQbe1+OvSXRPXrGHHnSa3sTdjXojEaLXGxXajLNq/B0olTjlRdQ
-         ReVpnCm29L8KSUAFB1HmYSfkuFga5Dy9kpdxgRaWKUt9o1AxTqWjn5TjM7ea/0d/+yxl
-         SfFQFJi4MYlD38n4Gjf5OU3tVUb/4vOjxVaLpyb1gkP08Pvy3r8jlMbbGBuEH0sgcvdh
-         9IPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUirV9RTuKwSLLbm010kko8iRW/pONy9a6KHvKgWjspDXxQGJiXyQARA9NsX9mGsZsV37M9GDBSg5lH@vger.kernel.org
-X-Gm-Message-State: AOJu0YwO5XaoYZmlYkxwbet/CGFqbuxBtkAaTE0A4p53Mc3Y8RveWnEv
-	5Jk4r/C9o7uONJsoNTHqtyw0YkE0DNzhtSHDxe3aBTpHeMisdiSo
-X-Google-Smtp-Source: AGHT+IEoN4xc5/Tx6bMejoVoteamzsBJhLtm+0tByF4wF1Fd4S52hX2jt8Ei98iyjI+WqELTS1N7MA==
-X-Received: by 2002:a17:906:4fca:b0:a9a:1bb4:800c with SMTP id a640c23a62f3a-a9a6996979amr725802866b.4.1729398428641;
-        Sat, 19 Oct 2024 21:27:08 -0700 (PDT)
-Received: from work.. ([5.250.149.103])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a91597c05sm47221866b.195.2024.10.19.21.27.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2024 21:27:08 -0700 (PDT)
-From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-To: akpm@linux-foundation.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	sfr@canb.auug.org.au,
-	snovitoll@gmail.com
-Subject: [PATCH] Documentation/kasan: fix indentation in translation
-Date: Sun, 20 Oct 2024 09:28:13 +0500
-Message-Id: <20241020042813.3223449-1-snovitoll@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241016131802.3115788-4-snovitoll@gmail.com>
-References: <20241016131802.3115788-4-snovitoll@gmail.com>
+	s=arc-20240116; t=1729421663; c=relaxed/simple;
+	bh=vCtor8nu7nMX7xBu5WX151Qui40IgKj5WqUAsHIvoEo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WLpjppTr2cKjMuaPMmwnpRKKVuGbNFQhpSEk0kpdcxl5GIIm/xNXF24I7GZSUePWW6TdQF8SHw/IpwUr1vIvhJNiT4orUB9kc2M1RRXgsUX+nX0morZcWKhaEnyNz76G0BLWVRZchJ9kyJRSv86asHWWOPpxZC8rrE/l6S0lEO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=K5lxiTTC; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1729421650;
+	bh=vCtor8nu7nMX7xBu5WX151Qui40IgKj5WqUAsHIvoEo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=K5lxiTTCevf91JWof5KSia1fUQKifF6BwuaeDViHJ5DmtJ45q5Gg5WlF4aXaezqci
+	 idNiMaP6mT3pT9Bk1sAovMCWYjjsQ7RxkBA1yzk5gNT17+FPRdL4kOi2emKSGmAAN4
+	 GGBhFS9L1byLYT4cfZV849/p0QE5zmXC5AYfs8SEAJFS8KscYnlus+ro+uQ82B9kuT
+	 IO89gUqsVl4GYBozKvsf7XV8jX7J7kUUjDZVTewj2ZocMh3ws6bxFAZVr3V2NA4Z0F
+	 keif660QpMAwu2aZzHFahFSypb+hiOiTKfuJbYcEydI7R4Oj1wqrY8vch8Fs2iyPqK
+	 URcL7G8M2VJxQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XWb0f3Y8Sz4wbv;
+	Sun, 20 Oct 2024 21:54:10 +1100 (AEDT)
+Date: Sun, 20 Oct 2024 21:53:48 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Fan Wu <wufan@kernel.org>
+Cc: linux-next@vger.kernel.org
+Subject: Re: Please add ipe tree for testing
+Message-ID: <20241020215348.0b7c0fb1@canb.auug.org.au>
+In-Reply-To: <e6729d57-85d9-456a-8f63-3cd5be11b512@kernel.org>
+References: <991f7b99-25fa-426a-99b1-a161fef3b728@linux.microsoft.com>
+	<20241004144539.1adeae43@canb.auug.org.au>
+	<e6729d57-85d9-456a-8f63-3cd5be11b512@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/TzJt_ydxW0N44hy2lrNtE=X";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Fix the warning in linux-next (htmldocs):
+--Sig_/TzJt_ydxW0N44hy2lrNtE=X
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Documentation/translations/zh_TW/dev-tools/kasan.rst:410:
->	ERROR: Unexpected indentation.
+Hi,
 
-This is based on -mm tree (linux-mm-unstable branch).
+On Fri, 18 Oct 2024 15:08:56 -0700 Fan Wu <wufan@kernel.org> wrote:
+>
+> Please update ipe's url to
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/wufan/ipe.git/ #next
+>=20
+> Also please contact me by my kernel.org email for any issue in the future.
 
-Signed-off-by: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
----
- Documentation/translations/zh_TW/dev-tools/kasan.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Done.
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/Documentation/translations/zh_TW/dev-tools/kasan.rst b/Documentation/translations/zh_TW/dev-tools/kasan.rst
-index 35b7fd18a..27fb76451 100644
---- a/Documentation/translations/zh_TW/dev-tools/kasan.rst
-+++ b/Documentation/translations/zh_TW/dev-tools/kasan.rst
-@@ -407,7 +407,7 @@ KASAN連接到vmap基礎架構以懶清理未使用的影子內存。
- 
- 所有 KASAN 測試均與 KUnit 測試框架集成，並且可以啟用
- 透過 ``CONFIG_KASAN_KUNIT_TEST``。可以運行測試並進行部分驗證
-- 以幾種不同的方式自動進行；請參閱下面的說明。
-+以幾種不同的方式自動進行；請參閱下面的說明。
- 
- 如果偵測到錯誤，每個 KASAN 測試都會列印多個 KASAN 報告之一。
- 然後測試列印其編號和狀態。
--- 
-2.34.1
+--Sig_/TzJt_ydxW0N44hy2lrNtE=X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcU4TwACgkQAVBC80lX
+0GwaZwgAi++DOGRLfpAI8EGA2sNrtB4inOYNroGJxFnuxoTMKimze/RTuC1DvD8B
+SUjtl9Rz+V2kb1YzImNQ7KeG74Vxz9dXt46bCHIP8wAP4Tcx+tgWpJau23Je4xsJ
+6p3X6TA0NYlSkeiRnt79G61BVy5UQkSFLBS9VG5fOhE9IuYj65NOuEiCFACLwPBz
+8c6/k88LreMDkyOyrkm93nivyWNzdOSXgSbQogAqpTGN5VluOqNIVRs4/w3jinpU
+NOqszV7Ijjl0r7CXtVCHUUdWXvKo7pcZvCqOhhZ61eYuF1WFR6952Pq+PRk023oI
+5n8n0aELfz4OUhSUBqyQ0EFTZl9K5Q==
+=yv9I
+-----END PGP SIGNATURE-----
+
+--Sig_/TzJt_ydxW0N44hy2lrNtE=X--
 

@@ -1,127 +1,99 @@
-Return-Path: <linux-next+bounces-4335-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4336-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6154B9A53A4
-	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2024 13:08:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE1AD9A56AF
+	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2024 22:38:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F050AB20ECC
-	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2024 11:08:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D62A1F21AAD
+	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2024 20:38:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E537118E028;
-	Sun, 20 Oct 2024 11:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1907819596F;
+	Sun, 20 Oct 2024 20:38:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VQqQ3D9t"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tbsZbRoD"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE43746E;
-	Sun, 20 Oct 2024 11:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7D3EBE;
+	Sun, 20 Oct 2024 20:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729422524; cv=none; b=FI0U3A3W4+fT3kWmKrA4YCM5Rew1Srcy4oGLdQCfwMyawZR7LXaAAIWrbcuN5N21E80ZMz9XYpO3Z76cxEx4TeDT9D+TlCt8oZNGTrBCDpBovBUXRjvb/fHkumGblFetmTSHFsC8X7HG8axSpwe/X6ULbAo+GXSO4i5NWNirDEY=
+	t=1729456712; cv=none; b=Au+OeyKhiWO4e/bUwtWxl85skRdWgKZsYEO1gIrC6934tcJcNUhNW4vWkcwwYCAPQtvHOkMO7irHQ+PT+WzeHYbYDv6K20XovGN6w7MVa2UHvXcyR2tAnVsJG+EO1ky8s5jqVRqA7iE3sXKJfmKqiWCXbT5lRcksq4adjvQ85+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729422524; c=relaxed/simple;
-	bh=TkzU+bFjJt2AW2MQAWssddCY00cPPsLPEuYabftt7W4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gTJ9iuZUvxQiRO3ZMAA5CUdghpCy4sR9TRZ1mmKzxhUflCLohALEodYj1J9A+i4eNPEdQZrlssTpLf2HqwFFV8vCeGVMzdY3W9k8YlYaBjvEkrVNgQizqROIUFT7NAJHw4wK+atYBCnN4g50mBlVDOcYh/fr9Eb528zLI2NNsh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VQqQ3D9t; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1729456712; c=relaxed/simple;
+	bh=zh8WXvb4pOel/M9rWGjzEwB1wBqWIcHGkly/uLp3KfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dScsrGkY56i/lH+6srNIWdEP3LQ3zT+OzzAIC37OuZP49wrnNsQVgzOL1b76OkPWQLyTqNJ7zVwAWbZ9KrUnHg7Fl6M4+OzC1/7QvvsctKjG2sw2D1KrTRGRTZ01jU5ASiyvCL1DRVXojQFLBmRCEJaUKgPCMN/1o5qR0aT4rP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tbsZbRoD; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1729422519;
-	bh=h3pFzlT8kfHBGhfd/bJgi6JXfGK0UKAckuBW4Q7ERm0=;
+	s=201702; t=1729456703;
+	bh=zh8WXvb4pOel/M9rWGjzEwB1wBqWIcHGkly/uLp3KfY=;
 	h=Date:From:To:Cc:Subject:From;
-	b=VQqQ3D9t8hL+gmFJDMsRedc4I9diWiGFv381FGNg8jWTzZ6FgkOshQCsRTNZeTqsC
-	 JL163eDnsAgfL1Uc7u656XDcL4L4HQw3gI8ImLp7ixV5kmI5kY6//ZDe+vaq6NHNJI
-	 xoGBpXX1EooPvLP6lEcwGbfg/xcbSFjJiGNeHgsvNgIkI0V0irYJOjtcE/Hy0Vw6Gb
-	 tyedTW2x87p0oVEiVP4Dmv4f1pfar8GX4pcunsUGCAXfyaxgDbtqsABLBMYOfc4jO2
-	 eCCWdHvXM+Er5bMwXm7hQrz9opKioGQfEoe0dxrdAktz4YwvqpbHJbSjsNQFRe8B2J
-	 zhvzC/kZ4tU6Q==
+	b=tbsZbRoD5ngp+W4wUN/MMzgQi5HRoNnhdcgKmW6UDad8MYePwMcSnCoWNGKz8hUvF
+	 WgNA1Iw1661poQgQn8phd6+8ZEkgp2+wHIEOMP8rc2vkMG85Y8BV45zSI+gIRjJ+dY
+	 3mIyweaMJlNV+FPKpAZ0sHkFNEDPz5n9vfa4ed9iVvyMxC4/iJGrW3uyZigx/yyezZ
+	 2ZVpwNnViSbxwupe7bng/bC/Tv3RsfCxMAC3N0OpV/F8H8W9P+8Zc/H8RyjuaCCZGn
+	 YsxPaULi/XcHFSXfjsqH+bi1ClZZNblrANQ7/5H80zNGf3KPWX1Xid7A93P4fAhVZn
+	 dMg0ObL7JyHXQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XWbKM2bvRz4wbp;
-	Sun, 20 Oct 2024 22:08:39 +1100 (AEDT)
-Date: Sun, 20 Oct 2024 22:08:39 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XWqyl2yMsz4wbv;
+	Mon, 21 Oct 2024 07:38:23 +1100 (AEDT)
+Date: Mon, 21 Oct 2024 07:38:23 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
+To: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the vfs-brauner tree
-Message-ID: <20241020220839.03e0329a@canb.auug.org.au>
+Subject: linux-next: error trying to fetch the bcachefs tree
+Message-ID: <20241021073823.1a89e1fa@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DC5sxJOC5rbCmYPt.Et2U=w";
+Content-Type: multipart/signed; boundary="Sig_/B5hNYQIqPi2eE+kOASZ1UpE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/DC5sxJOC5rbCmYPt.Et2U=w
+--Sig_/B5hNYQIqPi2eE+kOASZ1UpE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+Fetching the bcachefs tree produces this error:
 
-  c650b5a9028f ("xfs: punch delalloc extents from the COW fork for COW writ=
-es")
-  f8bb8ce211ce ("xfs: set IOMAP_F_SHARED for all COW fork allocations")
-  cd97b59a531d ("xfs: share more code in xfs_buffered_write_iomap_begin")
-  7f6e164457c6 ("xfs: support the COW fork in xfs_bmap_punch_delalloc_range=
-")
-  99c29f16b79f ("xfs: IOMAP_ZERO and IOMAP_UNSHARE already hold invalidate_=
-lock")
-  2f58268678f1 ("xfs: take XFS_MMAPLOCK_EXCL xfs_file_write_zero_eof")
-  71f1cd607850 ("xfs: factor out a xfs_file_write_zero_eof helper")
-  f66815a521bd ("iomap: move locking out of iomap_write_delalloc_release")
-  1eef06039a75 ("iomap: remove iomap_file_buffered_write_punch_delalloc")
-  18f08714e7b2 ("iomap: factor out a iomap_last_written_block helper")
+fatal: unable to connect to evilpiepirate.org:
+evilpiepirate.org[0: 5.161.236.196]: errno=3DNo route to host
 
-These are commits
-
-  f6f91d290c8b ("xfs: punch delalloc extents from the COW fork for COW writ=
-es")
-  7d6fe5c586e6 ("xfs: set IOMAP_F_SHARED for all COW fork allocations")
-  c29440ff66d6 ("xfs: share more code in xfs_buffered_write_iomap_begin")
-  8fe3b21efa07 ("xfs: support the COW fork in xfs_bmap_punch_delalloc_range=
-")
-  abd7d651ad2c ("xfs: IOMAP_ZERO and IOMAP_UNSHARE already hold invalidate_=
-lock")
-  acfbac776496 ("xfs: take XFS_MMAPLOCK_EXCL xfs_file_write_zero_eof")
-  3c399374af28 ("xfs: factor out a xfs_file_write_zero_eof helper")
-  b78495166264 ("iomap: move locking out of iomap_write_delalloc_release")
-  caf0ea451d97 ("iomap: remove iomap_file_buffered_write_punch_delalloc")
-  c0adf8c3a9bf ("iomap: factor out a iomap_last_written_block helper")
-
-in Linus' tree.
+This also applies to the header_cleanup tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/DC5sxJOC5rbCmYPt.Et2U=w
+--Sig_/B5hNYQIqPi2eE+kOASZ1UpE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcU5LcACgkQAVBC80lX
-0GzANgf+MCL+Jm6YGCikYP55Qv+3MCR0bEDEAcuBtP5cjNE32QgwaaqVcyra62CW
-3wAKXTAEHpThNC6nq70l4v+9wwzUrmav2kxilU7ro2xrFMU8TtYfjt6cX1l6jFOD
-ISYRbWdyWPo5s1eVnwv8Q5oSsFbuBjo+68lKdtsuQFHnumCNvu8JGpEydnIhBs1r
-FucdVFTkQv/WRJz8OPwjDVb+7vL2G5AtTCWyaO+wAJjnmTdzG2x6Qli9oYf9QGLS
-F9K9JBfx1U6DPIr6QG7vQV0nBGL6qk79qClAOiUFJIX+xm9wV+uPhxte1Y7nyGE0
-oXugDF9T8ndL/ehw7sOtD09Qf4Ec2A==
-=Qnuk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcVaj8ACgkQAVBC80lX
+0Gwu0wgAiIjTQmPepBaLiL+gNQ3Om6G0Xk+FPq8C4lNA8WLK23vZb28P5sSIx2Qk
++he2Y9HYKpcWhMwbPAF5Rmqfjt4fvVBYwioNV0DQCjusO1jwtTgeZT39Ybxruvu/
+pziAoG3YDGZzsu8HalYuxJIkjcri5uumrUyorMIqpjSVJaTvBOu226rB1IGZyQ65
+xRFXAN0WQsaDoto9VHg19Yg0jAeVwO1K2lLV/251a6FvfbhoSAkYfr8+tI4yGtyv
+ZGvxEnGotTv72zg3Mv6qt7UkRE/e/KC9K+rOVfU3DbhiPwIOLe6C7wn4kf1AGxTh
+MgoMlVCrUwSWZIGgm3kDrYvwRXBtkQ==
+=kXfy
 -----END PGP SIGNATURE-----
 
---Sig_/DC5sxJOC5rbCmYPt.Et2U=w--
+--Sig_/B5hNYQIqPi2eE+kOASZ1UpE--
 

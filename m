@@ -1,110 +1,116 @@
-Return-Path: <linux-next+bounces-4369-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4370-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B8429AA127
-	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2024 13:29:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A84D29AA132
+	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2024 13:34:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 493101C21802
-	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2024 11:29:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5ED441F243B6
+	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2024 11:34:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91E0319AD7D;
-	Tue, 22 Oct 2024 11:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A041119C55E;
+	Tue, 22 Oct 2024 11:34:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="knh1Tm8R"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RD4YMDdf"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F4E6F066;
-	Tue, 22 Oct 2024 11:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A6F199FDE
+	for <linux-next@vger.kernel.org>; Tue, 22 Oct 2024 11:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729596589; cv=none; b=BQgOGt7/n+58FV4AwjJ8CIzlsyY6M1Tjr27Z4jHrVahy9zvwQW6Jc/G3C9Rh56aLlHBS53fpHPkDUg7i66fJDbgnIYrn1V30QnIsTNKASI2gq9vyRZIR7x75RnhYrbXCNGh+m4Uq1/mZlcJb7saG4u1o9AP696MwO7QUMmiaxcQ=
+	t=1729596859; cv=none; b=eWNOcjC2TRMvzpoA/1UekvseoAq4IzDaQ/IhYHixRlJMxEZQIdapkbUHtjwtv8NPF/W5CtW2pJS0SpQt/ZdMDsdbzjtKytPJ7pW4nEH7+3+gkU2JwcCcXoLtYKl3Dlzka0r982PVGVQX5BYfUFmkjh4bgqRDk0pGy+zAfguAnPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729596589; c=relaxed/simple;
-	bh=AvRcr1OuM53X9PR/zID+/yywEkwEKsNy6ow7SbV2GUs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=l8EONi64pc2vE8V203fhV+ygZ8HYaeOfMSv51+lI13p2BaYQ06+sjArfddC2xoL02G3nLHWq/7IrqB7NbSHqxXrD5boz3mIJgyyifhMD+6wyihhje8Q64u/M4ZN+HQ2P8bpVytEVh637uDT0ZMrXIm9g0OwKYCFR/+8nRxJZwM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=knh1Tm8R; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1729596579;
-	bh=yRSI65zZHzYMUTqH1Kk9yL4lXnKknG8Nhg42hp0r/u4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=knh1Tm8RWeVxL5bwB7JDHoRjMMZZ6PzVDzOIyCrPMcM8phDlif4wUM9e5nPsWNBfk
-	 sEpfE+ppcM4snwvfxRdd60DfVPT9H5lt/mfNeDmrLZsVfv27YJdkgUTaN47faqL/05
-	 Hp3yS0uiCkSpmf2iWnqlQEQS8OH+izdIA2Sa22BEfBVeFd/s1UK5xKbUkZG0eu5XDl
-	 Ox5a/eiA2tKFtOMmYvcOhoa+4C+5qZUlUHtBnVL7Hd9K9FPp7sOo7S63bcdqV1Vqt9
-	 Q1qlrMnhpcTcyzHMYOgR3aAubwe2sIaF1V3wBfWvt55RwiWhTNFwQvzDi7KnKcLF9C
-	 z2VRJRG1ebXMw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XXqhf698wz4w2F;
-	Tue, 22 Oct 2024 22:29:38 +1100 (AEDT)
-Date: Tue, 22 Oct 2024 22:29:38 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Tejun Heo <tj@kernel.org>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, "kernelci.org bot"
- <bot@kernelci.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the sched-ext tree
-Message-ID: <20241022222938.46a90386@canb.auug.org.au>
+	s=arc-20240116; t=1729596859; c=relaxed/simple;
+	bh=/+hUHMlV4JNYQAVEkfItrJI4PfLd3zpHj7f5QIhbEvY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XqPhKOsJhk6Q3RVKV+SVAQjPOs7NMXf8/YnLm1BKZWT+jHbndfgqFfUDyBngJdfN+55920U2muY4OS/gKLekJ+ACuwBF6XmENSqT5ZohKsDWhNf3XZGtYQKRaq7KaoA3dfmlO/N7UnWi/jfoB/yOG83RwY2NCqLBX4A8M8L2OWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RD4YMDdf; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729596856;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rYYJJdVNJCwxbhCmjgFjbQC/YjUCE2wRyqdqc3yzsQU=;
+	b=RD4YMDdf3RLnguA3id6ZAiYGWeBWr3ketikvPb1qawwY1GKwqoH/XH5InJ4l6bjb3SwfZV
+	PEq0vguMbZFk8MXbwejZWdlfsuFjtAw+cOuUAPliZqvn6syJXyJikRDiqQlkfEstZ0kHvI
+	gVcc/6hLb0lMU8XMmMFTKMHQyS8sl+Q=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-351-diqcN1fcO-KzOpR1WjPwXA-1; Tue, 22 Oct 2024 07:34:15 -0400
+X-MC-Unique: diqcN1fcO-KzOpR1WjPwXA-1
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-20c94c1f692so55482085ad.1
+        for <linux-next@vger.kernel.org>; Tue, 22 Oct 2024 04:34:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729596853; x=1730201653;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rYYJJdVNJCwxbhCmjgFjbQC/YjUCE2wRyqdqc3yzsQU=;
+        b=CK8X6RfHPuRmKSU1Lxo2BgzICqULhPa1F3wytD9z2W5C7SjEl1ooVzxwm3NthUuggO
+         6Rs/8F67XfVxLHqnRut0I/f3VBgKSCmNkbHEgwEXsCf56rayjLDsWJij9MdN8AHIKrnm
+         /ULcRiAQKoruEdDFW38zIAF0M7OJ6u5dg9nj3g1iy+PrtILc+M5oj6+DO0xMySdY61vE
+         QvHam5/5lLATc9DLKq4q2/sscLhNFYiBQqF65tFJbdy6u7b9uYYPgdZfx26ME9xosEll
+         7Ao+OeV6uI6mA5iGDM+0V7CbCOdqslBCQ7rKDDMZbWrssKNAicUzkdG2gC6DvB6E1U1B
+         pkKw==
+X-Forwarded-Encrypted: i=1; AJvYcCV3SZN3W0urVlClpZ3X8c3tALZHKzIpzuraXaM/SFImacqr3x5X++GCP8UVPs4kOare8DOY5H4rQ8/q@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqbCFjM+fcFcEU+bVl46Nh/w8RgEiuFbf/WnPCh1hG/AbUeb0N
+	UNDgTac4SkBnxW4A5rhKoqGTkSb1GFXaUXTQIryktOpcKl9dI0jl/XHKj/5xKrsUAO5eUyucJd+
+	QFcZ1bNWsIqPMW4VfLLppI/BtJ5rN/HY335EdVd7N8RNZyBxENtDXZvuhFPYuRtzbuwAAxqTgPR
+	RfnuousJIrAh3uwuMRpZW8EpLVz9ekgI5Z6iD/HGugNw==
+X-Received: by 2002:a17:903:2449:b0:205:59b7:69c2 with SMTP id d9443c01a7336-20e96ebcf52mr52707585ad.7.1729596852769;
+        Tue, 22 Oct 2024 04:34:12 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGR4ixkc/pOTXmEgGl+yNywLYWqGrOzlIKEWGNYOeoUtNdh78o/7iZa+MwZnDJ8VTnpxDByQzz+Ous3E3GKkIk=
+X-Received: by 2002:a17:903:2449:b0:205:59b7:69c2 with SMTP id
+ d9443c01a7336-20e96ebcf52mr52707355ad.7.1729596852477; Tue, 22 Oct 2024
+ 04:34:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QLcGEWY/wM9vZfUU_WKxlNO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/QLcGEWY/wM9vZfUU_WKxlNO
-Content-Type: text/plain; charset=UTF-8
+References: <20241022075004.3369d8ec@canb.auug.org.au> <F1F8682B-9B60-4674-BF91-ADD15A429F1D@163.com>
+In-Reply-To: <F1F8682B-9B60-4674-BF91-ADD15A429F1D@163.com>
+From: Andreas Gruenbacher <agruenba@redhat.com>
+Date: Tue, 22 Oct 2024 13:34:00 +0200
+Message-ID: <CAHc6FU4DEhijmGR+Fc-RiOeg59sO1t=XnsqmeArQmssOXfDjgg@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the gfs2 tree
+To: Qianqiang Liu <qianqiang.liu@163.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Steven Whitehouse <swhiteho@redhat.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Tue, Oct 22, 2024 at 1:23=E2=80=AFPM Qianqiang Liu <qianqiang.liu@163.co=
+m> wrote:
+> Hi Stephen,
+>
+> > Commit
+> >
+> >  507da2cb5d8a ("KMSAN: uninit-value in inode_go_dump (5)")
+> >
+> > is missing a Signed-off-by from its author.
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+> > <mime-attachment>
+>
+> Yes, you=E2=80=99re right!
+>
+> Do you how to solve this? The commit is already in linux-next tree.
 
-After merging the sched-ext tree, today's linux-next build (i386
-i386_defconfig+kselftest) failed like this:
+Can you resend the patch with a Signed-off-by tag?
 
-kernel/sched/ext.c:6788:45: error: =E2=80=98fmt=E2=80=99 undeclared (first =
-use in this function)
-kernel/sched/ext.c:6809:45: error: =E2=80=98fmt=E2=80=99 undeclared (first =
-use in this function)
-kernel/sched/ext.c:6841:61: error: =E2=80=98fmt=E2=80=99 undeclared (first =
-use in this function)
+Thanks,
+Andreas
 
-Caused by commit
-
-  3e99aee7ce48 ("sched-ext: Use correct annotation for strings in kfuncs")
-
-=46rom the kernel-ci.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QLcGEWY/wM9vZfUU_WKxlNO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcXjKIACgkQAVBC80lX
-0Gz7ggf/WzLKi+/W6FBy/PwqhoyFr0t6hqWVJ8NSZnCOU9/qfUyNkmNZdw5C4VFG
-RaA8XwpbfiV2TMOLIr+X9CXYSSBoZ3bJnTsBXphEnVqPG14A5n7WiAWSoVIpuqGW
-yXzg+0hhY546FDP/MEQ0aQ0p8monF/CRw8wu8Ekus21qdS5BNV8PrSzd6vb9CjD9
-hKW8sVFmFd6iwfftS4FK/agnOJAeawF8xheNfmh/oPNTMiMRfm3iKfCRbB+t/bNa
-TYBc0BfXbeIPxWOtZQf/Er3bFOKmXfMsZCAjlLHCdMYAHQy5B8kWz2RE7zkRWnBs
-lVJBzg0ZWw0Y3RKorXJHFzbl7QmIgQ==
-=1Ezn
------END PGP SIGNATURE-----
-
---Sig_/QLcGEWY/wM9vZfUU_WKxlNO--
 

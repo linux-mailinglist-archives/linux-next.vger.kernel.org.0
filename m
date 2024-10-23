@@ -1,111 +1,113 @@
-Return-Path: <linux-next+bounces-4391-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4392-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 296D09AD6FB
-	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2024 23:57:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0820C9AD77F
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 00:23:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF4F4B217DA
-	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2024 21:57:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CC161F21DAA
+	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2024 22:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1C01E2300;
-	Wed, 23 Oct 2024 21:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C52C1EF08A;
+	Wed, 23 Oct 2024 22:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ez23kiUU"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UtE6Pfi/"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400D617DE16;
-	Wed, 23 Oct 2024 21:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD424D599;
+	Wed, 23 Oct 2024 22:23:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729720628; cv=none; b=Sl8sHfy6RnrlDr6ILFYFfsl+7Tdk7fdPQl51ZTSzrifprW5LkJ+4RGl3GB6GJTUjhO5ss0tBZqFYaHskZSBxLeLRGXOessbSpg9Y4ut5w9ubuBwYwdA8bSEZNGjfCzuVx7iw1ClsxiBJKUijAgA5za5PamYq419R3AiuXkYYdzg=
+	t=1729722225; cv=none; b=sQY72p0Wd+swQ0K6P+1X6RPpAuvHKQymHg4UtkAuBwG/uiXm4a/QVDXga2ovVsnC4m+5tY6nGYlnATxYi8b+NK0FczF+pB5whzL78yTbzWByP8coGOFNfNb5qrb0ZVd9XZxeR8o8b1UzAeYqxz819MZLesrd3X+ZZ6Jzvk8/Rk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729720628; c=relaxed/simple;
-	bh=HuaSP/d2c1coy8FVaLu0lL9lRYfdt/B6FTGRXTg/QlU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=utghj7xPM7OYbhtwQzN6HdHh5vdiY6aiOhtqhxziMVVdtkIc0qq2mGN+awFUm1QkK9Zpk2DTFiObWU96ChakBBcLXY+JbFsg7Sp2z5nSlUznnwIpTWvYDmGfyf4gAG6fxElopz72tV1pcYjLUydUwt+6qktW/T8cirMJ0ytxrxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ez23kiUU; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1729722225; c=relaxed/simple;
+	bh=l/hDO2rsupczTQSDkCShoIw8cjMAFjQC8ud27iPfF1M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=C5WwvzQQmkfLIfch+IzC3fHYSMTDBw0Ve/9JG4QXw4Bd/2lDTV1q+PHTpdBQ0ylBOClWB9ZadghfbDSqF4VvkZZbZ965Wh0uBfCVU3MGuwZoSUq1PjbNs3JT4SRjve6rB4iJxWGpKDru0j3WOXpLm/gKXBIBXAVkHiWfS1YA4jM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UtE6Pfi/; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1729720621;
-	bh=FWu3Ot0ztok0O5FgT0OyakwAINfPQjZ4bFLpRRLaXs4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ez23kiUU3rcuUMy99fdcifNWqbA3MaAsVMfQ39Iz382WNqhJ1mw4jFIe6KYbyEWEt
-	 BeHvJbTCAaOobQ+N3iO0Yf2C7mZIW7yaNtnK3xEF9qAa+VEM8skVWDNLZsrIFNzwvx
-	 6rtyp0GvZOjd2roRYH8xeZL39mKb/8C19eyaNnlvMo06gnYscdnewTdxW5CUqWkXhL
-	 VWXX6zalpOD1lVzT0byglCGakQoLkbW3F5Rt8Da4uZHYTMHN3Q5+rUQj7p72xTx9xW
-	 eiU3hFl327kQf2uYOcPr87Zbpg1xgGlsr8+q/O23LPi2GCwSB9O7T0zTOvbZBN3O/3
-	 bizLBlYtGfd1Q==
+	s=201702; t=1729722218;
+	bh=ZNWZemPN4cKjpnMYimogI8v9Yz5gIj1eyeU3HxF99a0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UtE6Pfi/PKEc+rCagY9f+JCu54EDwnlYQGnFGU3JxGMHODFmuWygF1wLcq1iSAOld
+	 ItbARQw2kbuVs78o0ffOAw9apguKYuTBX52+lRfw3fr56KksPK7/XHi8943t55Xb0G
+	 ZrfpkKikcuro4IV9CtsomLHIqfxvKs8wV7i521ZbxOdvqL2LOOsZNl1wLMZBzkOUHg
+	 0VODHWwu+2XXL2Ry7YAUA4EGsUv30LF09TAIc/Cp8vyO7VsCIFdDkl+p1tURNpNeFF
+	 ci5xchS6XSQUTVx24TyzQWUdEzuUY3Fi192HSMhtWtmtbwjJNnzaZqgOmv9ItpuM/S
+	 1JPMiQir+D1qw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XYjZ54zRFz4wc3;
-	Thu, 24 Oct 2024 08:57:01 +1100 (AEDT)
-Date: Thu, 24 Oct 2024 08:57:01 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XYk8p3R2vz4w2L;
+	Thu, 24 Oct 2024 09:23:38 +1100 (AEDT)
+Date: Thu, 24 Oct 2024 09:23:38 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Sterba <dsterba@suse.cz>
-Cc: David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Su Hua <suhua.tanke@gmail.com>
+Cc: Mike Rapoport <rppt@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the btrfs tree
-Message-ID: <20241024085701.64263a3b@canb.auug.org.au>
+Subject: Re: linux-next: boot failure after merge of the memblock tree
+Message-ID: <20241024092338.6a8f10c7@canb.auug.org.au>
+In-Reply-To: <CALe3CaBU=9Ck-euohNna2hYxYJBbvA=LrmG7qDHTEeQ2rt9XCA@mail.gmail.com>
+References: <20241022173921.6fdbdd38@canb.auug.org.au>
+	<CALe3CaBU=9Ck-euohNna2hYxYJBbvA=LrmG7qDHTEeQ2rt9XCA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/es8fPm8je.Mn58s9UM+A.yr";
+Content-Type: multipart/signed; boundary="Sig_/AjFd7Q9eSGmq2ysPGy3OQXV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/es8fPm8je.Mn58s9UM+A.yr
+--Sig_/AjFd7Q9eSGmq2ysPGy3OQXV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi,
 
-After merging the btrfs tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Wed, 23 Oct 2024 11:20:43 +0800 Su Hua <suhua.tanke@gmail.com> wrote:
+>
+> Thanks, I'd also like to set up the environment for testing; could you
+> please share the command line instructions or XML files used for
+> testing?
 
-fs/btrfs/super.c: In function 'btrfs_reconfigure_for_mount':
-fs/btrfs/super.c:2011:56: error: suggest parentheses around '&&' within '||=
-' [-Werror=3Dparentheses]
- 2011 |         if (!fc->oldapi || !(fc->sb_flags & SB_RDONLY) && (mnt->mnt=
-_sb->s_flags & SB_RDONLY))
-      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+Sorry for the delay.  I run the following qemu command line:
 
-Caused by commit
+qemu-system-ppc64 -M pseries -m 2G -vga none -nographic -kernel $vmlinux -i=
+nitrd $initrd
 
-  4642e430c55b ("btrfs: fix mount failure due to remount races")
-
-I have used the btrfs tree from next-20241023 for today.
+where $vmlinux is the result of a PowerPC pseries_le_defconfig build
+and $initrd is just sufficient to get into user mode and then shutdown
+again.  This latter is not really relevant here since we don't get to
+user mode.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/es8fPm8je.Mn58s9UM+A.yr
+--Sig_/AjFd7Q9eSGmq2ysPGy3OQXV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcZcS4ACgkQAVBC80lX
-0GwwtAf+OCRV/aDSwqgq0w4ZzDEe8ULzvhXFhk1Ax06FG0XX3eQxpXETaJCifAuc
-bz8PU+8jbNs/Hoy5o+y5E0DX87exlRKIewg2Lh80wj5RxWHjl8iVMics3G0CP2+s
-KB74iO9SYZJgmzHKx8PATizj8qhlFvWTOD8eHMLopgxOEWqsrHaCPJaBWFn+7nDv
-Phwl8VbVDmi3enwvzCB2rcv43QjbHmynGBJzbfT7idrxaGV0GfDFrosnU3YBGiaH
-B80/B7SLfnD7Th0Rd/Z1SMX6qHFpixv8b+3YlOaX0yHQJKIvKfYI0clJqvMnWKcF
-UnerztAeEsDKPLOeqOysOKwJgNqGPQ==
-=mLI9
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcZd2oACgkQAVBC80lX
+0GxnFQf7B9rN2DLW8qNubf9JR7kjE3VEOhEHupL00V+QqZIgGnzNS1OGk0o45AX+
++62PXsiypa3xGfj3JJT7GUmEgOXSrfrVTqUDML/U6ZC1lVhdhThArfSev2xOml0s
+zeHXmaoba7d0r8aP+RNvAF5RemiZ8nDLXlEHAnbo626ajdzr4mqGRextMOhHMpU5
+xPfHzIjCB/yCrhF9RUkF0jikse6yd+DCS4eW0Ls4f7MilSzcXUwGt0guydqO+e1G
+Ampd5orjyA9uiWd1ZZ9CrnDqD0nVVeszHp5Ogm3J+4F2fLl9XNeFaRkATcM1BeV4
+aRSZVGuxeTKy5eiKHgt4Mrhuguzl0A==
+=V6SQ
 -----END PGP SIGNATURE-----
 
---Sig_/es8fPm8je.Mn58s9UM+A.yr--
+--Sig_/AjFd7Q9eSGmq2ysPGy3OQXV--
 

@@ -1,151 +1,113 @@
-Return-Path: <linux-next+bounces-4394-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4395-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F2C79AD792
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 00:29:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A82719AD7A6
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 00:35:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCAAE1C20B51
-	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2024 22:29:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CB692844B6
+	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2024 22:35:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542B41FDFB7;
-	Wed, 23 Oct 2024 22:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDEB917C222;
+	Wed, 23 Oct 2024 22:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="F9GH1MaN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gl5R3jrH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCD91EF08A
-	for <linux-next@vger.kernel.org>; Wed, 23 Oct 2024 22:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09A0146A79;
+	Wed, 23 Oct 2024 22:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729722548; cv=none; b=Ja8TR3cbAtPrV1f2EUEScZHABTPLnOzKZQ/kHK0yTlTsCSGlicjq4oPWkshLFI5xfHZt0BUwG4oTjSk16DV3cNGr7hayky5GPMFlLUTyK1rX96HrtuOLSkGwQSQb9xrrbUr4CD0tk8hpBVksPQ7zESHcBrblgBKyLUPtLxO21SY=
+	t=1729722919; cv=none; b=DUFxvKw2EaQ1dBrqqn2ekJSrADpIFf98fDHjqOFgLu6CVqYExLrxvqhkyRWthwuEG5kvYHpmrecLXsITXN2iNuGfyEPGw0MY7xQt1eFzCTu55Cm9LnBCgR4tpSgLBnBUB7mTo904pb8uMg0Yq4hW7IYuZecoIsnXZFITZ8iqCzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729722548; c=relaxed/simple;
-	bh=wlaMWK2D+FUwRw7jYMObS1BQMNE6oLXovXvWeDmFqjs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OLyys5ZGOXoYxmG2jfboW1Atk8jOuj4/Q2pqvl+rJBnGvp+lhwp7SB64dUFIqZX6isF9bT71CE6d6Cs0/hjB9kRNwxuVcmooH+5iMYzFicq22+OKKvlgcqV5Wfn2LPw5AqTOiS4aKbALQi7j/O1Hjx3i/MCkoeLbJ3Ql2LRKHBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=F9GH1MaN; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539f72c913aso362801e87.1
-        for <linux-next@vger.kernel.org>; Wed, 23 Oct 2024 15:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1729722544; x=1730327344; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1BNv+9ccdONtxE/unrWMfm+hHYMEAzpv+OHzE9ABF/A=;
-        b=F9GH1MaNvdOaISSFbWb8fpUjovU7qoiOIfnu+2VwVGurMtPtEkj2dpX6CqWsPbDatl
-         jTwOamsAQMMfiLcOkTOr7gBGu9FZ0eoAnpxlbyXx/OrCoJ10x7tpSR87kSso19GUTIbQ
-         AgIx55tYevw80gUtMIELQbHko2ayzx/On4HW3n7UMm9GotRSJISY6fcbfThv+WJwwqDF
-         6gWFxEmV+CT/fBh0RCs2R/olScc1Cjfv0HDf+YbyvRj/hnar6Hlidh5bcfDH2PuD2aKg
-         KAiXIfs/dmCqw1w8VPv0JL32vDWhZP3NJLcamQJ+kj4ilbDRkmkVtm+Z56oR6j5fRUL8
-         3dkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729722544; x=1730327344;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1BNv+9ccdONtxE/unrWMfm+hHYMEAzpv+OHzE9ABF/A=;
-        b=bWVTPEmQ5GU0gpeiOMNkqnreZlQ7cnWTJpe06En7oDoRveiS77L6CkROTRE3mjJ/qD
-         i0gSDGB+j7PzvRfwqzvZIx7cNxsOG5zl6cavDwPuBz0WMDRe56B/pZcecXQFFEF210zi
-         eu2dXNmmk8CQpS3vRGTvg4XWr6hSWvh7d5dUJPQWfmj54ZG7xvdwipQhn59qePFVRdCd
-         HrzvG2IPHZmxX5/c8sULgSy+hLt+KlXEZxLAKxbhX7ksZSocZW9LJJPc0SD5HE+6nnUi
-         cONBLkEcDe7/zo3/22RlAt9w89ZAE5+eZR9xN2G4lCNnOa55Js1THg638v4tWu0Zf7bp
-         GfAA==
-X-Forwarded-Encrypted: i=1; AJvYcCWPXocNhLVUODm3wTyJ6yGtMRRLHlcwXOf6eUaT5o6bYz8L6kxK9xH5RSaNJVxwm2vVXhPyAeujL117@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyl9V0LbPPLK7GShoV2YHRxq7LOeIcE8+H8jegOa9HDbGa2P5KD
-	kX05t/lmc1I3Ym+TMdOySh6GlmJEVml1XnVbUBL0qrG9ftrpAi7u1r60rxhOk9o7wI9QaSZQEkh
-	Z
-X-Google-Smtp-Source: AGHT+IFeujF+wKbP/nYkWblQ0PgqpM4Q6qB9kDV45S+eyhIfyeKu1LSMz3xFV6fVKkLXfkdjTgbSBQ==
-X-Received: by 2002:a05:651c:221d:b0:2fa:d345:18b9 with SMTP id 38308e7fff4ca-2fca827e963mr137621fa.38.1729722543614;
-        Wed, 23 Oct 2024 15:29:03 -0700 (PDT)
-Received: from ?IPV6:2403:580d:fda1::299? (2403-580d-fda1--299.ip6.aussiebb.net. [2403:580d:fda1::299])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7eaeaafb1e0sm7390048a12.3.2024.10.23.15.29.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 15:29:03 -0700 (PDT)
-Message-ID: <95af7735-cb97-491c-be22-8e9759f4720f@suse.com>
-Date: Thu, 24 Oct 2024 08:58:58 +1030
+	s=arc-20240116; t=1729722919; c=relaxed/simple;
+	bh=kFUZRApfRhwRNnH2g/MMFbF11hdyniiAYG2bhWxegh8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KPM/+EHiYyhfivWTpNhi9u03Vo02490pVhPhduCVqJ8CHVi6E4QruHlHOnDb8ODM9oaftcnkV9HkHtXlDZ2ToptHFteZoEoqWaexej67a4ycGd+rJNle2ULIragvOBU8CG2ln3P7EDIEpKuLbBwOOjK6SYMUDTlVTxjGaYOSk9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gl5R3jrH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D840C4CEC6;
+	Wed, 23 Oct 2024 22:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729722917;
+	bh=kFUZRApfRhwRNnH2g/MMFbF11hdyniiAYG2bhWxegh8=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=Gl5R3jrH8abq0r2FvhAcKDmZSRzQx1/+b2YfZ4Vb7yFs81qBjYwndpR3PFg7WZT2Q
+	 opW4Y3GC/MbsvA/LkMej+Ac8/JL/HdoayvshLSY9XKui0W79ijAHSV/dphTPMEMQc7
+	 jmIFwo2KTOIYf85LUZDZP4PvomwRXnPlSecPPl4kRmOBhT8l1+LonY2HKL20KBha6C
+	 iguhpHVt5pkCLIUO2nYjrsY+zrGiUaji6d1pXjtLTV39gpth5tOUw8m6sd6COqm6SE
+	 +HQ9EynhxHis8K6CWHc6+NZe8NoXBAjPDzvscjFVfBC0ZG6xolWZn2j+SYChKs7ipq
+	 PY0nyjKpqXM8Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id D1CE4CE10F5; Wed, 23 Oct 2024 15:35:16 -0700 (PDT)
+Date: Wed, 23 Oct 2024 15:35:16 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: kobak@nvidia.com
+Cc: mochs@nvidia.com, rui.zhang@intel.com, ardb@kernel.org,
+	rafael.j.wysocki@intel.com, sfr@canb.auug.org.au,
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+	linux-toolchains@vger.kernel.org
+Subject: Re: [BUG] Argument-alignment build error with clang
+Message-ID: <0936dba4-4de5-49ff-b90c-1263e25920d2@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <38508cf1-7d44-4656-8060-973e820b2957@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the btrfs tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, David Sterba <dsterba@suse.cz>
-Cc: David Sterba <dsterba@suse.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20241024085701.64263a3b@canb.auug.org.au>
-Content-Language: en-US
-From: Qu Wenruo <wqu@suse.com>
-Autocrypt: addr=wqu@suse.com; keydata=
- xsBNBFnVga8BCACyhFP3ExcTIuB73jDIBA/vSoYcTyysFQzPvez64TUSCv1SgXEByR7fju3o
- 8RfaWuHCnkkea5luuTZMqfgTXrun2dqNVYDNOV6RIVrc4YuG20yhC1epnV55fJCThqij0MRL
- 1NxPKXIlEdHvN0Kov3CtWA+R1iNN0RCeVun7rmOrrjBK573aWC5sgP7YsBOLK79H3tmUtz6b
- 9Imuj0ZyEsa76Xg9PX9Hn2myKj1hfWGS+5og9Va4hrwQC8ipjXik6NKR5GDV+hOZkktU81G5
- gkQtGB9jOAYRs86QG/b7PtIlbd3+pppT0gaS+wvwMs8cuNG+Pu6KO1oC4jgdseFLu7NpABEB
- AAHNGFF1IFdlbnJ1byA8d3F1QHN1c2UuY29tPsLAlAQTAQgAPgIbAwULCQgHAgYVCAkKCwIE
- FgIDAQIeAQIXgBYhBC3fcuWlpVuonapC4cI9kfOhJf6oBQJnEXVgBQkQ/lqxAAoJEMI9kfOh
- Jf6o+jIH/2KhFmyOw4XWAYbnnijuYqb/obGae8HhcJO2KIGcxbsinK+KQFTSZnkFxnbsQ+VY
- fvtWBHGt8WfHcNmfjdejmy9si2jyy8smQV2jiB60a8iqQXGmsrkuR+AM2V360oEbMF3gVvim
- 2VSX2IiW9KERuhifjseNV1HLk0SHw5NnXiWh1THTqtvFFY+CwnLN2GqiMaSLF6gATW05/sEd
- V17MdI1z4+WSk7D57FlLjp50F3ow2WJtXwG8yG8d6S40dytZpH9iFuk12Sbg7lrtQxPPOIEU
- rpmZLfCNJJoZj603613w/M8EiZw6MohzikTWcFc55RLYJPBWQ+9puZtx1DopW2jOwE0EWdWB
- rwEIAKpT62HgSzL9zwGe+WIUCMB+nOEjXAfvoUPUwk+YCEDcOdfkkM5FyBoJs8TCEuPXGXBO
- Cl5P5B8OYYnkHkGWutAVlUTV8KESOIm/KJIA7jJA+Ss9VhMjtePfgWexw+P8itFRSRrrwyUf
- E+0WcAevblUi45LjWWZgpg3A80tHP0iToOZ5MbdYk7YFBE29cDSleskfV80ZKxFv6koQocq0
- vXzTfHvXNDELAuH7Ms/WJcdUzmPyBf3Oq6mKBBH8J6XZc9LjjNZwNbyvsHSrV5bgmu/THX2n
- g/3be+iqf6OggCiy3I1NSMJ5KtR0q2H2Nx2Vqb1fYPOID8McMV9Ll6rh8S8AEQEAAcLAfAQY
- AQgAJgIbDBYhBC3fcuWlpVuonapC4cI9kfOhJf6oBQJnEXWBBQkQ/lrSAAoJEMI9kfOhJf6o
- cakH+QHwDszsoYvmrNq36MFGgvAHRjdlrHRBa4A1V1kzd4kOUokongcrOOgHY9yfglcvZqlJ
- qfa4l+1oxs1BvCi29psteQTtw+memmcGruKi+YHD7793zNCMtAtYidDmQ2pWaLfqSaryjlzR
- /3tBWMyvIeWZKURnZbBzWRREB7iWxEbZ014B3gICqZPDRwwitHpH8Om3eZr7ygZck6bBa4MU
- o1XgbZcspyCGqu1xF/bMAY2iCDcq6ULKQceuKkbeQ8qxvt9hVxJC2W3lHq8dlK1pkHPDg9wO
- JoAXek8MF37R8gpLoGWl41FIUb3hFiu3zhDDvslYM4BmzI18QgQTQnotJH8=
-In-Reply-To: <20241024085701.64263a3b@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <38508cf1-7d44-4656-8060-973e820b2957@paulmck-laptop>
 
-
-
-在 2024/10/24 08:27, Stephen Rothwell 写道:
-> Hi all,
+On Wed, Oct 23, 2024 at 03:26:57PM -0700, Paul E. McKenney wrote:
+> Hello!
 > 
-> After merging the btrfs tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> Running rcutorture on next-20241023 got me lots of these:
 > 
-> fs/btrfs/super.c: In function 'btrfs_reconfigure_for_mount':
-> fs/btrfs/super.c:2011:56: error: suggest parentheses around '&&' within '||' [-Werror=parentheses]
->   2011 |         if (!fc->oldapi || !(fc->sb_flags & SB_RDONLY) && (mnt->mnt_sb->s_flags & SB_RDONLY))
->        |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+> drivers/acpi/prmt.c:156:29: error: passing 1-byte aligned argument to 4-byte aligned parameter 1 of 'efi_pa_va_lookup' may result in an unaligned pointer access [-Werror,-Walign-mismatch]
+>           156 |                         (void *)efi_pa_va_lookup(&th->guid, handler_info->handler_address);
 > 
-> Caused by commit
-> 
->    4642e430c55b ("btrfs: fix mount failure due to remount races")
+> This is built with CC=clang.  I don't see this diagnostic with GCC.
+> But we are supposed to be able to build with clang, so...
 
-My bad, in fact a new patch is going to remove the oldapi check 
-completely as newer mount using new API will break the per-subvolume 
-RO/RW again.
+Ah, and this might help:
 
-Thus a new patch is needed to remove the oldapi check first 
-(https://lore.kernel.org/linux-btrfs/e1a70aa6dd0fc9ba6c7050a5befb3bd5b75a1377.1729664802.git.wqu@suse.com/), 
-then the newer v2 patch 
-(https://lore.kernel.org/linux-btrfs/08e45ca0-5ed9-4684-940f-1e956a936628@gmx.com/T/#t) 
-will be completely fine.
+clang version 18.1.8 (CentOS 18.1.8-3.el9)
 
-Thanks,
-Qu
+							Thanx, Paul
+
+> The first argument is the address of one of these:
 > 
-> I have used the btrfs tree from next-20241023 for today.
+> typedef struct {
+> 	__u8 b[UUID_SIZE];
+> } guid_t;
 > 
-
+> Where UUID_SIZE is as follows:
+> 
+> #define UUID_SIZE 16
+> 
+> But this guid_t is a member of one of these:
+> 
+> struct prm_handler_info {
+> 	guid_t guid;
+> 	efi_status_t (__efiapi *handler_addr)(u64, void *);
+> 	u64 static_data_buffer_addr;
+> 	u64 acpi_param_buffer_addr;
+> 
+> 	struct list_head handler_list;
+> };
+> 
+> One can argue that this structure must be 16-bit aligned on a
+> 64-bit build.  So maybe this is a bug in clang's diagnostics, hence
+> linux-toolchains on CC.
+> 
+> Thoughts?
+> 
+> 						Thanx, Paul
+> 
 

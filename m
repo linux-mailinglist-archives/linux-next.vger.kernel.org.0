@@ -1,129 +1,143 @@
-Return-Path: <linux-next+bounces-4377-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4378-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CFC79ABAE1
-	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2024 03:14:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B11B9ABB07
+	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2024 03:31:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C5B91C21465
-	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2024 01:14:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 069FC1F244B6
+	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2024 01:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6A9C20328;
-	Wed, 23 Oct 2024 01:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47744288B1;
+	Wed, 23 Oct 2024 01:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="T4d4JAlc"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PQsCqoQ9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C6E29CA
-	for <linux-next@vger.kernel.org>; Wed, 23 Oct 2024 01:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EB31C6A3;
+	Wed, 23 Oct 2024 01:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729646059; cv=none; b=oGmL4Fnz5rB0J+q2MNqHT+E0qMWSotH4kaOCVYzlbXZU6XsH9Fxx+MNCS7v2hvt/s88UD74ymlu6ZHDOxrfybiSZpOdIa2p+XV/1mrcQHaECLNT5WzjfPPcVyhBuR2qNm8hfVVcUOiKO2gBv7WIhdvUw1h7YJBdqwQNi5XEFPm4=
+	t=1729647108; cv=none; b=jiLsFpskQNW0VLCWMPQ3N91b7ucXPoMbUkDMzTWUT3VjaOay7sV6eZ7Uew3u3Rp/5XKy/G0RGuxtWfm9w+gjKw7Zv7a0CV2B7zFg1mRmnTnetK94ZZdYnqr/g3O2fOO79RGwNvUD7iXTR1EDRKTs+QTM8JPte0AW8hSdCKOLxfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729646059; c=relaxed/simple;
-	bh=i/fb2TGN/0hbxeCo+vsMA3TOw8xxxeaJTm/6ddVBNT0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ijD+uSuU2a1SQ2xYqBIJS8fRVL/AGSpP5em5zXacRgaPTBxqGOwogz+IscT5IBs1D2K6Os1QbO5HUlH52IqBJatSlQ2Re1qAM1M+lTWX7qT1QTTr1SQ6clydR2w0PFJDSfsHwL4uS7w2GgGcR2jy2JKmcvNxQS8rrQXFRai49GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=T4d4JAlc; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-718186b5c4eso2317827a34.2
-        for <linux-next@vger.kernel.org>; Tue, 22 Oct 2024 18:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1729646057; x=1730250857; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wBMX9XSvCTqxyEsI8dGZy5i0R+AMQRgfKJfND5aCkw8=;
-        b=T4d4JAlcOsrPhyPyQyRnURh9a619F86BYZHueDmqLBrnyGUCKm+SsJXl/LCA0frI66
-         e5y7n6oCPfXQpFzQ+qubck7TfO89T9VBua5SJK0EJ1HdUBcJwSRFJbBSf/nuPrVSFQAB
-         Ymr602jvbN+0rzaVksnaz2LB+xZ21SN6IPqDdlXfRNhvLqO76bMs9AhUWIiouSWubdAW
-         FdSM257e5YIYf12JJ/4RSVinxElFIerJkNwLrlWWs1mgQFW5fWVyBdbbisES7lMbwy98
-         ZTQptX0H/cTN1lkrrabW1Y+sSukdJ4MbCJIDgAOmOIiPhvRVXChQ+DyXeqz/tA/wucnf
-         ZOpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729646057; x=1730250857;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wBMX9XSvCTqxyEsI8dGZy5i0R+AMQRgfKJfND5aCkw8=;
-        b=vrcXFSgOOwPkIo4kwI4xX1UnDgJWoVrcSP8wm+t2PpefJRsXxa5VKJdLhwdmrL9JUx
-         T1RkuFI1FbmhG10xvFBhJv+bNEFpfeu4Y0hhMSfpsMeEIA0/DdxjvF2qUCdpWKOV2031
-         VkBxbePy0kTN7KOt8WBrhdK0ycBFaFqsJbf+Ym7dfPiKikjXO4maM5c9S+jkF1z2kN4G
-         tqHAyApkF/07zlCb2d+C0o3+34i4K+S83emnWZKvpJJKAAJ226JhmgFdqK4aPG2JNuiI
-         HnldP9El+PWBrtOAy+Lv+J4EQLXK8eO0OgVH+7FAnIURrcQhbaklpxFN5jeRI6lSKsMZ
-         KR6g==
-X-Forwarded-Encrypted: i=1; AJvYcCV/Nf9TqneWSe3s0gDC1oDxT37Bd9/I2y/VYZrudXOcDiElLtjxuXdhaWDxQB97Eq9aexUL5Fh7fqnA@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVl6vGCWU0aEk5fK1y2JZ1P3WNBu9YGTlJhsmGV2F+asprjr2V
-	04htk0vokrQI8PI3QzWN0XAyD9zh0uSMU7/x4EN03cthSx7BD+ijaxSuqnS61X0=
-X-Google-Smtp-Source: AGHT+IGzehqz1HMkN16yEyr/3tx8KtWHL5vnppeJytoAc9iw8z0cLNNK5rz78JbRhFQy3v4j1i1O4g==
-X-Received: by 2002:a05:6830:3494:b0:718:1957:4b88 with SMTP id 46e09a7af769-7184b2a8017mr1021273a34.2.1729646057222;
-        Tue, 22 Oct 2024 18:14:17 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7eaeab1dc6bsm5693234a12.23.2024.10.22.18.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2024 18:14:16 -0700 (PDT)
-Message-ID: <8d057adb-c7e4-4324-a963-7fedc40ceed5@kernel.dk>
-Date: Tue, 22 Oct 2024 19:14:15 -0600
+	s=arc-20240116; t=1729647108; c=relaxed/simple;
+	bh=KKSHl3T02IeGDl4hwhOlKZZ9eorEoQsmVDcBpwJQs2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uyhuq/l2U0vd2MEjQFzrkbSpiYq186Hp+GeaoUUG+qAMCMq88tSJ/iOCQRqpoRn0ocwOhoCNwrX6y0YrYlEW7sV5WGRFVE6FhP0rOndI3VVGQ/lgs+z5MF9+ZT14ueVejZvqzkPu+7ThmQrGBRtCYUwzLkPLcvHfdXfJyzqlbsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PQsCqoQ9; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1729647099;
+	bh=FGhil7diUrAQR5Cbh0J5oYz2NBOTG/tvY530NcHuqLQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=PQsCqoQ94DYrStKJMXi8i99/6tepSEGKCe/wt+gqLwtJKQJFnPUpJNJPzZvKYRKpe
+	 fJqSM1fOeAkIx8pefwjyjqd4aHWUn15wyQIjX/zmkw9jcu1y+DCunxbNxryOwMh5AT
+	 SgkrGl+PLRzNMaZL/lhrNsN4KlYkGtHjZ3P5wIwWy/8L8XRKL9fURJTYy8OnyKUV4J
+	 OOpmAP67t+yIpHvO/Qaeb5hzQgS7WZZTz6SxJE3vhRqTPvsTtSyFCCmKBXR1UmbsRR
+	 eaeTb6Dxxx7rPEWkcdiDjrpM+faIbOIMMrWb1jG5SrXI88+w74j7s0IbknyprrMYHW
+	 yIJpOEhKG/dJg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XYBNC2bFHz4w2K;
+	Wed, 23 Oct 2024 12:31:39 +1100 (AEDT)
+Date: Wed, 23 Oct 2024 12:31:39 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Paul Moore <paul@paul-moore.com>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?=
+ =?UTF-8?B?bg==?= <mic@digikod.net>, Yafang Shao <laoar.shao@gmail.com>
+Subject: linux-next: manual merge of the security tree with the mm tree
+Message-ID: <20241023123139.127ad800@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-To: Bart Van Assche <bvanassche@acm.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20241023095914.61b9eafa@canb.auug.org.au>
- <7aaf90a8-4734-4819-b29c-42f8f8b857ac@acm.org>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <7aaf90a8-4734-4819-b29c-42f8f8b857ac@acm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/WQowSxJqyET+xvMki/SC3l6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 10/22/24 5:31 PM, Bart Van Assche wrote:
-> On 10/22/24 3:59 PM, Stephen Rothwell wrote:
->> Hi all,
->>
->> In commit
->>
->>    6fbd7e0472b7 ("blk-mq: Make blk_mq_quiesce_tagset() hold the tag list mutex less long")
->>
->> Fixes tag
->>
->>    Fixes: commit 414dd48e882c ("blk-mq: add tagset quiesce interface")
->>
->> has these problem(s):
->>
->>    - leading word 'commit' unexpected
-> 
-> Jens, please let me know if you want me to post a second version of that
-> patch.
+--Sig_/WQowSxJqyET+xvMki/SC3l6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I fixed it up - for future reference, I recommend adding:
+Hi all,
 
-[core]
-	abbrev = 12
-[pretty]
-	fixes = Fixes: %h (\"%s\")
+Today's linux-next merge of the security tree got a conflict in:
 
-to ~/.gitconfig and then you can just do:
+  security/lsm_audit.c
 
-axboe@m2max ~/gi/linux (for-next)> git fixes 414dd48e882c5a39e7bd01b096ee6497eb3314b0
-Fixes: 414dd48e882c ("blk-mq: add tagset quiesce interface")
+between commit:
 
-and get the correctly formatted line. Whenever people try and
-make them up, they always get it slightly wrong.
+  b62d29a06242 ("security: replace memcpy() with get_task_comm()")
 
--- 
-Jens Axboe
+from the mm-nonmm-unstable branch of the mm tree and commit:
 
+  cfb1f7e5c9a7 ("lsm: Add audit_log_lsm_data() helper")
+
+from the security tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc security/lsm_audit.c
+index 9a8352972086,de29ce8ff708..000000000000
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@@ -428,6 -422,21 +422,21 @@@ void audit_log_lsm_data(struct audit_bu
+  	} /* switch (a->type) */
+  }
+ =20
++ /**
++  * dump_common_audit_data - helper to dump common audit data
++  * @ab : the audit buffer
++  * @a : common audit data
++  */
++ static void dump_common_audit_data(struct audit_buffer *ab,
++ 				   const struct common_audit_data *a)
++ {
++ 	char comm[sizeof(current->comm)];
++=20
++ 	audit_log_format(ab, " pid=3D%d comm=3D", task_tgid_nr(current));
+ -	audit_log_untrustedstring(ab, memcpy(comm, current->comm, sizeof(comm)));
+++	audit_log_untrustedstring(ab, get_task_comm(comm, current));
++ 	audit_log_lsm_data(ab, a);
++ }
++=20
+  /**
+   * common_lsm_audit - generic LSM auditing function
+   * @a:  auxiliary audit data
+
+--Sig_/WQowSxJqyET+xvMki/SC3l6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcYUfsACgkQAVBC80lX
+0Gw9/Af+MNBvHeK1dfxb2NBbSwPWGBmzrcbiMdDSoeqCdoGa147TTn5rCYYLnzSp
+FWyk9e0iT8+BqanCtARBs725AJ9I1XuBUcb2TvO04grxrfs+bVEm3rNQpvTaEFfx
+OvdV6zLY04OcFP1r+qv1aqmX+p75rgDXHSes8Df5bvea3yQblypIKEhJzuELvtsN
+rJSJSl3cyi8X8H3X9UIKnx1pfiM2QRW7QP7+6VrOWCapQD6nHDyCCbDuqf1rmGr5
+/3p++9dghh7BhD/ohXdcMSeiV9iVEJ3ZQX4aYZBGZbXPxu4nVzJMCUDIn7yn/BJb
+iAAwewRehjOG+xZJNREjvxHH+EQH9A==
+=Cf5z
+-----END PGP SIGNATURE-----
+
+--Sig_/WQowSxJqyET+xvMki/SC3l6--
 

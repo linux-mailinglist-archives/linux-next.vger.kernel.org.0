@@ -1,210 +1,115 @@
-Return-Path: <linux-next+bounces-4404-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4405-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1D629AD918
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 03:05:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ED389ADA60
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 05:19:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E38F81C21745
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 01:05:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8E87B224C1
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 03:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51894175A6;
-	Thu, 24 Oct 2024 01:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66FA15ECD7;
+	Thu, 24 Oct 2024 03:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="COuYb7yf";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Adu8e4QN";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="COuYb7yf";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Adu8e4QN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YYijpAUn"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78BB5223;
-	Thu, 24 Oct 2024 01:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA4D158DC5;
+	Thu, 24 Oct 2024 03:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729731926; cv=none; b=D7nEqQ71NY2/3If21bnd4aeT7NKYxktHSaw/M2RtdgOsSlQhcaRfvhaQ0cPeK8aEoEDzezslIYZMagmUU/F9TfLk4CqeC9mkhG6XjvU2U6s4EcfrIhtZx4C3vwLh2khU+F0drfcQlhH3QrnZS4a7eIMlZ+0aBDOuOGMdBfG6AF0=
+	t=1729739933; cv=none; b=tYh45l+qBKK2PWuka/o2gw8Tq2y+A9f+Evftjt6GwkCo8bYG+qXpVclvroEcj146PRx0Ef1lL19SQH6Bs8y+O5oUVDbehlUafYnd2sApdfYx7DdChBPpqWIcEaB2xHstBdbfkYDi08n2DWxYfrRXJRevHC2aSllvoHrA2MMK2Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729731926; c=relaxed/simple;
-	bh=WdqBYMoNf+Cws36bhXhrD5L/VO7tzGfRJ+73JrOTOec=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l8RZGlpCkFUBJTN2kdDRgcULko1d+1zaZ3+sx27dj1grnNSTxpLWPGKu4SjSRdeK2JXlURxW9Qy0hYaCe29KkUD4PXK94WGQWojGFonu6dQkQLHL8++rrqxtwCAke7un3uNi6Yq5H44C6xfXmHWd3kf40Dayx8ER5qgyrFUj/PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=COuYb7yf; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Adu8e4QN; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=COuYb7yf; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Adu8e4QN; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A85ED21CC2;
-	Thu, 24 Oct 2024 01:05:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729731921;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5j5psG3f2T4wWVD4B7Jco+i4QYf02hyA3fPkukRpTnQ=;
-	b=COuYb7yfsmlXHWk4XO+vf+cwXyq9rdg8CuMW6QhePVyRLo5SFlPfPuVVVdsqVzgf6rOWs2
-	Q6xfCy3tUJrjl9+IMJvu6tHQzzPUKR4Z9tROITlw9ILJDw0gAd+/SeoFLDS+NcNZKkZPuu
-	MKufNy4Z5kn8mM2fNm92cTdlY8wx57A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729731921;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5j5psG3f2T4wWVD4B7Jco+i4QYf02hyA3fPkukRpTnQ=;
-	b=Adu8e4QNZJrekPCLjs3c92iCLMFt+eY2TibuhEWGI7fLc49fIy8xduUB0UDvGcDGUrZQcZ
-	Q5ZSAANpL8Sca8Ag==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=COuYb7yf;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Adu8e4QN
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729731921;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5j5psG3f2T4wWVD4B7Jco+i4QYf02hyA3fPkukRpTnQ=;
-	b=COuYb7yfsmlXHWk4XO+vf+cwXyq9rdg8CuMW6QhePVyRLo5SFlPfPuVVVdsqVzgf6rOWs2
-	Q6xfCy3tUJrjl9+IMJvu6tHQzzPUKR4Z9tROITlw9ILJDw0gAd+/SeoFLDS+NcNZKkZPuu
-	MKufNy4Z5kn8mM2fNm92cTdlY8wx57A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729731921;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5j5psG3f2T4wWVD4B7Jco+i4QYf02hyA3fPkukRpTnQ=;
-	b=Adu8e4QNZJrekPCLjs3c92iCLMFt+eY2TibuhEWGI7fLc49fIy8xduUB0UDvGcDGUrZQcZ
-	Q5ZSAANpL8Sca8Ag==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8380913A63;
-	Thu, 24 Oct 2024 01:05:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id YjzgH1GdGWcjQwAAD6G6ig
-	(envelope-from <dsterba@suse.cz>); Thu, 24 Oct 2024 01:05:21 +0000
-Date: Thu, 24 Oct 2024 03:05:20 +0200
-From: David Sterba <dsterba@suse.cz>
-To: Qu Wenruo <wqu@suse.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	David Sterba <dsterba@suse.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the btrfs tree
-Message-ID: <20241024010520.GG31418@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20241024085701.64263a3b@canb.auug.org.au>
- <95af7735-cb97-491c-be22-8e9759f4720f@suse.com>
- <20241024004729.GF31418@suse.cz>
- <1ecd327d-108d-427a-b964-da46b0496088@suse.com>
+	s=arc-20240116; t=1729739933; c=relaxed/simple;
+	bh=xjGFZNstPrpQ4vgCCp6N/P6IszAehLSi+DkY8vHRawc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ny9R6egIlaQNOJwmFBVMgV/gd2UNqwg4U7HOblbw5zBvE3+ptDr+4FZsaWG9KHqFRiHNUFm0EYFzvUeBnZvZMw2UN/13vfG9LeJVncz5b0NsbTdYcm3NX0MkkmWTZ5i45vCrlKDxnSX3OJdSAscKBdPdv7rRFdDSM8woYMbJfTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YYijpAUn; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2fb58980711so3265731fa.0;
+        Wed, 23 Oct 2024 20:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729739930; x=1730344730; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ofDn4Of286XPlGie6siVpN/v1NCFuionb7yUorFjmQs=;
+        b=YYijpAUnnV0FS7WAVHNNMbce7Fr51YTmcuhOPn3UkflxtdDW3whoEhfCNHF/IgJnhm
+         ttG7L1kTstJ4k8Gdb8GtzONolSs4I9iJg1wjf2M2WRU2KzxZmjUGcqmPZlz0OsFOGBwl
+         3LKd4tpCXA02mhhLrScF/osmDg4Bfx4zTSIZiCTKqblOeQFmjW1qN52+qjo1um2XMthu
+         poQdZSI4ZSbF6yzq+XXYfPKQI3yuzNB2WEUTx0+oJ+ngGLHdLp2DaYtWIIDLD5k96YhC
+         RW/Ul35U9SfbjN3JDCF0eIKmGF3R5YPzopxEFs7/xGib9esmNSQ87MSAvUB78oMhK3XU
+         SNdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729739930; x=1730344730;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ofDn4Of286XPlGie6siVpN/v1NCFuionb7yUorFjmQs=;
+        b=OTkPfbbl9vydzObgla/OkMB5AAGKfPLCTjzS9iWutUhjgXRp1melblfvJX9HVhwcQS
+         XbjqcCHUZB72ilA353l17oB8Y62d7E6VCYt3TaCRzeJxbNa6EWYviAVThuMyfAO75cPi
+         unIFp3ZJBQPEeoYtA3ZQbRYyHVQ3xNin2G576Z9eVn1SLLH3yuDzhyKhfNlPV2j2JR+q
+         UYKj9iH0qJADQebb3hy5JWrKSvHwI9kMBjLPk5R9a1OHOLKi1uGVoUVspRP4rAtdFIWQ
+         PjaXiEyKLRShiyFLqQk4ZyB2p3ugwSSMXsKu8PzZ6W0ZTUeoL+DNbhlE+LKzg7E8HIq1
+         doZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKw2OdIEZ3sb3xFIPfb03EYcL8dY3sR2btGXWNqFcJvJNgcdc1vOKpA8k9tp7Ie0dai+Oo0LDucuSlMMQ=@vger.kernel.org, AJvYcCVlTdryVq4UJ0yeynCyrLE8gjAb5aOdd8ZxiwbWGcar8+TDz0KOJJDFcH9qM0QSr4nHZehX6wXaosFjBA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/AkS8UYjafIyLVlIam1N8tb3Fv8fVO/E4drWJna8rFMQ5c0Dc
+	+Qy0/FmKXrYKwaMsS5+J1eSB6hD9SvzdhnBcScWtS6LtXUxgy+Q0xz+BXEHbA5yO2UoBUUiAnjA
+	qdlVCVgrQgHEJUWtSHKwbLyJfPvU=
+X-Google-Smtp-Source: AGHT+IEX+1b/1qcjFW/0DUOc4KkMr94zN2+ZQjl7RYPzJrE4XM3xToHzN+tw5xMivLTN45nAU+Qx+MGFglcbDnWAa3s=
+X-Received: by 2002:a2e:d12:0:b0:2f3:f358:8657 with SMTP id
+ 38308e7fff4ca-2fca8283ca3mr1782771fa.44.1729739929535; Wed, 23 Oct 2024
+ 20:18:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1ecd327d-108d-427a-b964-da46b0496088@suse.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Rspamd-Queue-Id: A85ED21CC2
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.21 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	HAS_REPLYTO(0.30)[dsterba@suse.cz];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:replyto,suse.cz:dkim,suse.cz:mid];
-	TO_DN_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -4.21
-X-Spam-Flag: NO
+References: <20241022173921.6fdbdd38@canb.auug.org.au> <CALe3CaBU=9Ck-euohNna2hYxYJBbvA=LrmG7qDHTEeQ2rt9XCA@mail.gmail.com>
+ <20241024092338.6a8f10c7@canb.auug.org.au>
+In-Reply-To: <20241024092338.6a8f10c7@canb.auug.org.au>
+From: Su Hua <suhua.tanke@gmail.com>
+Date: Thu, 24 Oct 2024 11:18:13 +0800
+Message-ID: <CALe3CaAH2w7fRwz4vnL_1fPWRNS6RDiD6izbZLpREXSuuw_mdg@mail.gmail.com>
+Subject: Re: linux-next: boot failure after merge of the memblock tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Mike Rapoport <rppt@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 24, 2024 at 11:22:57AM +1030, Qu Wenruo wrote:
-> 
-> 
-> 在 2024/10/24 11:17, David Sterba 写道:
-> > On Thu, Oct 24, 2024 at 08:58:58AM +1030, Qu Wenruo wrote:
-> >>
-> >>
-> >> 在 2024/10/24 08:27, Stephen Rothwell 写道:
-> >>> Hi all,
-> >>>
-> >>> After merging the btrfs tree, today's linux-next build (x86_64
-> >>> allmodconfig) failed like this:
-> >>>
-> >>> fs/btrfs/super.c: In function 'btrfs_reconfigure_for_mount':
-> >>> fs/btrfs/super.c:2011:56: error: suggest parentheses around '&&' within '||' [-Werror=parentheses]
-> >>>    2011 |         if (!fc->oldapi || !(fc->sb_flags & SB_RDONLY) && (mnt->mnt_sb->s_flags & SB_RDONLY))
-> >>>         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>> cc1: all warnings being treated as errors
-> >>>
-> >>> Caused by commit
-> >>>
-> >>>     4642e430c55b ("btrfs: fix mount failure due to remount races")
-> >>
-> >> My bad, in fact a new patch is going to remove the oldapi check
-> >> completely as newer mount using new API will break the per-subvolume
-> >> RO/RW again.
-> >>
-> >> Thus a new patch is needed to remove the oldapi check first
-> >> (https://lore.kernel.org/linux-btrfs/e1a70aa6dd0fc9ba6c7050a5befb3bd5b75a1377.1729664802.git.wqu@suse.com/),
-> >> then the newer v2 patch
-> >> (https://lore.kernel.org/linux-btrfs/08e45ca0-5ed9-4684-940f-1e956a936628@gmx.com/T/#t)
-> >> will be completely fine.
-> > 
-> > I probably missed the v2 and picked the patch with warning that I did
-> > not consider too serious but it seems linux-next builds with -Werrror.
-> > Meanwhile I've updated the for-next snapshot branch and dropped the
-> > patch.
-> 
-> I'd prefer to pick the v2 and its dependency ("btrfs: fix per-subvolume 
-> RO/RW flags with new mount API") for early testing.
-> 
-> As I'm pretty sure the rolling distros are already rolling out new mount 
-> using the fsconfig API, and breaking our per-subvolume RO/RW mount.
-> 
-> The promise that new mount API will solve the per-subvolume RO/RW 
-> without reconfiguration is mostly a lie.
-> The reality is, RO mount is still passed with both 
-> fsconfig(FSCONFIG_SET_FLAG, "ro") and  mount_setattr(MOUNT_ATTR_RDONLY), 
-> doing exactly the same thing as the old mount.
+> Stephen Rothwell <sfr@canb.auug.org.au> =E4=BA=8E2024=E5=B9=B410=E6=9C=88=
+24=E6=97=A5=E5=91=A8=E5=9B=9B 06:23=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > Hi,
+> >
+> > On Wed, 23 Oct 2024 11:20:43 +0800 Su Hua <suhua.tanke@gmail.com> wrote=
+:
+> > >
+> > > Thanks, I'd also like to set up the environment for testing; could yo=
+u
+> > > please share the command line instructions or XML files used for
+> > > testing?
+> >
+> > Sorry for the delay.  I run the following qemu command line:
+> >
+> > qemu-system-ppc64 -M pseries -m 2G -vga none -nographic -kernel $vmlinu=
+x -initrd $initrd
+> >
+> > where $vmlinux is the result of a PowerPC pseries_le_defconfig build
+> > and $initrd is just sufficient to get into user mode and then shutdown
+> > again.  This latter is not really relevant here since we don't get to
+> > user mode.
 
-I'm monitoring the recent mount option problems, it's maybe due to
-syzbot and/or various users noticing what does not work anymore after
-the conversion to the new mount API in 6.8. Once the fixes are tested
-they're on the fast track to be in the next RC. In particular the RO/RW
-for subvolumes is maybe the most contentious change, but we have the use
-case and it ultimately must work. I would not call it a 'lie', I don't
-think there's an evil interest to break it, but we may be missing
-testing coverage so we notice it a few releases later. Anyway, fixes for
-mount option behaviour are always amenable for RC fixes.
+Received, thank you.
+
+Sincerely yours,
+Su
 

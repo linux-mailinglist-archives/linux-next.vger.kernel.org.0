@@ -1,101 +1,105 @@
-Return-Path: <linux-next+bounces-4417-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4418-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CB0D9AEFDC
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 20:50:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6882E9AF3F1
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 22:44:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11B012816ED
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 18:50:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9BD4B21AA2
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 20:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C34851FF7B6;
-	Thu, 24 Oct 2024 18:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76448216A1B;
+	Thu, 24 Oct 2024 20:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="abdE0CM/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DelDPcIM"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992D51FBF4D;
-	Thu, 24 Oct 2024 18:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9430D216A1D;
+	Thu, 24 Oct 2024 20:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729795810; cv=none; b=WxzmW9gKI1QycGU2Rdfkfdr76kmcFX7DC0RGk+DkakdLQug4Oq/RqP1trpfsBIzrHoFtm08tbYn++MKDxyPCSB73dY3rZ4Y2a1sB6GI10G7TZcJ+KtXn855ss7tqk/QBK7uygplRs1Y3XvFgAQdi3WwEjxgjP8YK1Lx0ZPFB28Q=
+	t=1729802674; cv=none; b=b4BXdLzRxdeeMoamnyKuDzu50YwuNPnrtzd4au5WUdTyDIlBf9AudoY2zKiJoQNajWRCzFst7leV4ZHuHG8KcwIBzvq3efYGrPFQaWR37dawumQEIOL0S0p1TIc7llT+OeRKStTzTJetvwgLh0PhWatfi74x/XBxkAAbXvxDYPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729795810; c=relaxed/simple;
-	bh=c4pRXVZZpdrfmz/eJyqa3tSDxrnrf3pd3Cgq4p7YY60=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=UAhcndkR28Qsv/g0oqnY0S2vOBuE2Mjjbvt65QTlkiwcOkegLCoSOBOR0Mci42PtO1g6jXRTAA2okWUnnmfCBiA/HCtWhBtU+87MqOAjfsNhGkMnzzxiJb029omen2BU7FoJwJkuQ2I8Q4SOU+xnnRDjZ4KsMnXBqotVvk4Rfy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=abdE0CM/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4445C4CEC7;
-	Thu, 24 Oct 2024 18:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729795810;
-	bh=c4pRXVZZpdrfmz/eJyqa3tSDxrnrf3pd3Cgq4p7YY60=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=abdE0CM/hOmVHHN017h8Nv8h91/CPeoFzXI3mQtvvEDP6NAR0+g9A4EwMVOdGh8VP
-	 HkRGyOYm4ZXaSpRnpxf8kzPfHyqCKqMXnyIkdyCPnSvA0cmHKs1sUSJkvmNe5gkrvM
-	 SYFdufbjERksrEtrnvypkUfVxJ4kXPUB3hRtJsUxx+AX+/CGydu/xC0lKYz/UnQBQK
-	 po0Dp9HzMcVnO6XN8OBull7wjLCG+5b9d0H82os0+sb0xZHeCpf3oExA4+JLhv4Jvc
-	 1ms8+3Wbcx1GiqqJpS9RoafbqU8u7YdnFK+M37KWTwTv3O3Mm8UzLrMm1ZC+SsyqRE
-	 h8kdZn0ZFQDqQ==
-Date: Thu, 24 Oct 2024 13:50:07 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the pci tree with the pci-current
- tree
-Message-ID: <20241024185007.GA968089@bhelgaas>
+	s=arc-20240116; t=1729802674; c=relaxed/simple;
+	bh=8wwACknesbrl4HhiFNm08tMAcQ68j0NEP49to/xVOec=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XJyGh979fO2IjD7aHr1DaiXV0zuW0SYHy8g1+3tPTMR4ApvNDbSfArIRci+DHJzIftn9B+ZizQx9qesOVQ1LuujTtJ6pYxUnRSpQlvitOBICyy13hZBqTOebq/dArKr5XEIy2jkletMt12n4RFqWL/caSjxHmUJ8GJ9HOWiGb9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DelDPcIM; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1729802663;
+	bh=eCy1E72EdKx5kmymPUg29zxTxGWZ8MgfS/yKdci8LBA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=DelDPcIM78WkDPQuzoCWV4TLdaRD2Xw2YEZdq7ifMAJ0mhpsatBjeFkI0GNHvk/B5
+	 ZqCRtNMSkrGpCNg7kBWC80go3/k25eSeICxxNYkC1OkQXMUqEgL8mBqQdu7gMyTWND
+	 /fC33Tbuf6N9jIagWrdTEjBuTYB+sbMyhw+LU3CUAhlB017mSj6/XqoxOgNmayVWPJ
+	 MlQNY8T9M/PzBlrYeWq7KFowS2WiSMMdZlam+OeuUgcXmfHcR16Uk3UMpoCIjlPoTo
+	 oGFfO0ZFJdD6tIxnNzeqhhTJBhsRZsT9CGhLwpghG0sBASA+uPUZkmSOf0kHHgPWCU
+	 q/lvmeOq/6Dtg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XZHvq1HKtz4wb7;
+	Fri, 25 Oct 2024 07:44:23 +1100 (AEDT)
+Date: Fri, 25 Oct 2024 07:44:22 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the bcachefs tree
+Message-ID: <20241025074422.65ff2e0a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACMJSesMpF9v76Geob83ONLUQUh7DXRYbPV+JOGNkCN=Fd-phw@mail.gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/EGxRJUu9UAZNLD7/oDui08=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Oct 24, 2024 at 08:56:11AM +0200, Bartosz Golaszewski wrote:
-> On Thu, 24 Oct 2024 at 02:25, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > Today's linux-next merge of the pci tree got a conflict in:
-> >
-> >   drivers/pci/pwrctl/pci-pwrctl-pwrseq.c
-> >
-> > between commit:
-> >
-> >   ad783b9f8e78 ("PCI/pwrctl: Abandon QCom WCN probe on pre-pwrseq device-trees")
-> >
-> > from the pci-current tree and commit:
-> >
-> >   98cb476c98e9 ("PCI/pwrctl: Use generic device_get_match_data() instead of OF version")
-> >
-> 
-> This can be dropped from pci-current given that the former will get
-> upstream into v6.12.
+--Sig_/EGxRJUu9UAZNLD7/oDui08=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I dropped 98cb476c98e9 from pci/next, thanks!
+Hi all,
 
-> > from the pci tree.
-> >
-> > I fixed it up (the former commit includes the changes from the latter)
-> > and can carry the fix as necessary. This is now fixed as far as linux-next
-> > is concerned, but any non trivial conflicts should be mentioned to your
-> > upstream maintainer when your tree is submitted for merging.  You may
-> > also want to consider cooperating with the maintainer of the conflicting
-> > tree to minimise any particularly complex conflicts.
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
+
+  07aab0860a91 ("bcachefs: fix incorrect show_options results")
+  932afdd669b2 ("bcachefs: skip mount option handle for empty string.")
+
+These are commits
+
+  489ecc4cfdda ("bcachefs: skip mount option handle for empty string.")
+  07cf8bac2d3e ("bcachefs: fix incorrect show_options results")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/EGxRJUu9UAZNLD7/oDui08=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcasaYACgkQAVBC80lX
+0GxbIgf/bZuXLuwCD1BmedNM7dEtyyLcYlIMAmFPl4TfQhuVha7kL1qwoau/wkXG
+PihfYggrqJRaSZ7Ms9gCSxQDv1C6g/QXdopDmtoDylbGonKOD67zvAdPXlKTBpyZ
+5B7BXFXJciMkKveNVUpa/Y+Ngb6h53LLxAhh9/tlsamFvdiYdRDOx7JRFYvzBLVT
+n8HX+RwbFCMTI5ht76WhQCy0K698f11TVLcJLjENFaJGosQbQu47UdaRVEpUdQdx
+rxL5W8/ZyH8Z6Z1yWMulRJuh19WEcD6AI84W9nTm8yqDoQdsdRVPjeX/RW1txitp
+3SKlAeVHtDUYDLgX2Irislu86Oa1nA==
+=sKBa
+-----END PGP SIGNATURE-----
+
+--Sig_/EGxRJUu9UAZNLD7/oDui08=--
 

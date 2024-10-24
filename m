@@ -1,132 +1,108 @@
-Return-Path: <linux-next+bounces-4402-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4403-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 780DB9AD90C
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 02:55:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7460C9AD90F
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 03:00:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A57321C21940
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 00:55:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B2421F225C9
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 01:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A2E9749A;
-	Thu, 24 Oct 2024 00:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3492848C;
+	Thu, 24 Oct 2024 01:00:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="J+KR9HM4"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fGATxNfq"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430B81BC41;
-	Thu, 24 Oct 2024 00:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2072D46B8;
+	Thu, 24 Oct 2024 01:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729731330; cv=none; b=XhmL3PCZDgJ3/IJdwBRok1DMj8P+fMM2WCU9Ujpaf6c6FmUqxAGDHaC5FmBDpIq32VKe2Kgzw7Qwu37Baz8/GxpAWip+2uy36eBzr/1cnuQ0pJQvFkrkiecQB2C55DPrqIlluXP6bn8OK7g7jZWrfDhbhVdM0e7fyFl7L6rbY6o=
+	t=1729731617; cv=none; b=ltNwbb/1bjnwOURukkLwBxy7f89/7qYG6uh4Bdtf0InK4WwvJKtQOUVw80CS82ePT6UbkIk8YFjst15BKdpZv3ixkeaw7+nNSmrZEAL0xK/h1TKkl54zTIB7bwVM4A1wr8bvveveybRaCmObl0QazqxI1pB2RE+B+sS5yY5yUU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729731330; c=relaxed/simple;
-	bh=ve7awyesf+L2FQP5aITjBG5N/MbRQhV2+bWQg/HIrv8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EjX6UjXuV/Lx8sxPrJpgn36AJRWtdnnW7Ic2ciJUDL/WzXn4K/c/imr/azaN0jWk9QTKOOU/UB2WyA65pbnCykGJTbnq4R02llbZ1QutDHJbSncqSeMxb6uByhWvXUv5/7a7KXrZlEegiv5WnPCXHBfjqQOStsOqZRXQ/qPiZY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=J+KR9HM4; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1729731617; c=relaxed/simple;
+	bh=pJEhqat4uhZwUywU2BDoJdUtwSbtryLXFHlSkR2Bcos=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GcP/jLzSIssFqza1asjtGD8y+7H7395E57OqZObTp4VeTHZmb1ow9/6JgI+rS9av5n/U8bU9Nl7qe7PUjCCAsBGI8AlhDtnungGgf0RnlYmGFWIUObH/qV9SUGxawWuKu9B1x8WyFaA6Tor0slGoZJ2N1fKGaAjRd1Q4fgAONTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fGATxNfq; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1729731323;
-	bh=INF+v9OTMCWoYD6UjquXwU45gu5BOm53e7zA3Gi0bMs=;
-	h=Date:From:To:Cc:Subject:From;
-	b=J+KR9HM4l9G9vfJHh16cm82r+SpBc9Y7wer5O8GrQwIoP6qE/12iiB1lP//H9yeS/
-	 xUsQf2fjWQd1htwTquciIwp7xtL1HyC77PxTMIKWooZcfzMSifGjCfDMRcQCw92Qjb
-	 2J94IXVOknnBDBQ/NO1TZyEeW5xoRw+TXJOxSddHMsgfXzgCwcRvaBARZr+TQUAwKl
-	 z2NAm5YhV7RSm6CkDffxtOBVF4jqj5Cs0EYX23qezETt/G1+UcBUNkTgJHZrHBo01u
-	 6Ke2cKV4a18Hd+whwVWAsw//Bu3MJByclkswVof7XVlMrkBcnZx+H311eAcHBIf4Hq
-	 KdBSEvSaS+AsQ==
+	s=201702; t=1729731610;
+	bh=OV09Vabrlupv12Sz58y9rAPYoJeh++U0XC5FnA9eg6U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fGATxNfqnZG36+wGkik8lfAiHOpoRbjosCBuGUXOElKdDVD/eAH2YyZlsRSf9NSij
+	 t+hskadheUA64MOVEXt2IU/HK3utKPsIlWBQizXsHcjOw+mAfTiSqGjRQ44KNbVyW8
+	 r6Cgnd72mdZoxc/PaILCStN8ssORJw+nbb8lkWwR8DMTs/GGb9+J2Vlm/IU9eN/wFF
+	 vu52i6GjLU5bEGBdzn6MgCf6lcoc8w/QCrIDwb7XKOjqEfaeuFggveffN/NBRiVcWC
+	 xMGa7t/CZbpWHa5IkdUkyXxm/whOOkGQpvTWdoKEKYo5gObP95+64BOsRdDvbgXCb/
+	 jSOBYeM1AGz8Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XYnWt5xmYz4w2R;
-	Thu, 24 Oct 2024 11:55:22 +1100 (AEDT)
-Date: Thu, 24 Oct 2024 11:55:23 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XYndQ42vbz4w2R;
+	Thu, 24 Oct 2024 12:00:10 +1100 (AEDT)
+Date: Thu, 24 Oct 2024 12:00:10 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kalle Valo <kvalo@kernel.org>, Johannes Berg <johannes@sipsolutions.net>
-Cc: Ben Greear <greearb@candelatech.com>, Emmanuel Grumbach
- <emmanuel.grumbach@intel.com>, Johannes Berg <johannes.berg@intel.com>,
- Wireless <linux-wireless@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Miri Korenblit
- <miriam.rachel.korenblit@intel.com>
-Subject: linux-next: manual merge of the wireless-next tree with the
- wireless tree
-Message-ID: <20241024115523.4cd35dde@canb.auug.org.au>
+To: David Sterba <dsterba@suse.cz>
+Cc: Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the btrfs tree
+Message-ID: <20241024120010.6da373b5@canb.auug.org.au>
+In-Reply-To: <20241024004729.GF31418@suse.cz>
+References: <20241024085701.64263a3b@canb.auug.org.au>
+	<95af7735-cb97-491c-be22-8e9759f4720f@suse.com>
+	<20241024004729.GF31418@suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wRwc9EsvMoDoJdweKTHRfR=";
+Content-Type: multipart/signed; boundary="Sig_/jSmwR2DS4vAxxkiPYT8csRE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/wRwc9EsvMoDoJdweKTHRfR=
+--Sig_/jSmwR2DS4vAxxkiPYT8csRE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi David,
 
-Today's linux-next merge of the wireless-next tree got a conflict in:
+On Thu, 24 Oct 2024 02:47:29 +0200 David Sterba <dsterba@suse.cz> wrote:
+>
+> I probably missed the v2 and picked the patch with warning that I did
+> not consider too serious but it seems linux-next builds with -Werrror.
+> Meanwhile I've updated the for-next snapshot branch and dropped the
+> patch.
 
-  net/mac80211/cfg.c
-
-between commit:
-
-  8dd0498983ee ("wifi: mac80211: Fix setting txpower with emulate_chanctx")
-
-from the wireless tree and commit:
-
-  c4382d5ca1af ("wifi: mac80211: update the right link for tx power")
-
-from the wireless-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+All all{mod,yes}config builds enable -Werror theses days (I think).  We
+really don't want to introduce any warnings to the builds.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc net/mac80211/cfg.c
-index 6dfc61a9acd4,6c0b228523cb..000000000000
---- a/net/mac80211/cfg.c
-+++ b/net/mac80211/cfg.c
-@@@ -3046,7 -3070,7 +3070,8 @@@ static int ieee80211_set_tx_power(struc
-  	enum nl80211_tx_power_setting txp_type =3D type;
-  	bool update_txp_type =3D false;
-  	bool has_monitor =3D false;
- +	int old_power =3D local->user_power_level;
-+ 	int user_power_level;
- =20
-  	lockdep_assert_wiphy(local->hw.wiphy);
- =20
-
---Sig_/wRwc9EsvMoDoJdweKTHRfR=
+--Sig_/jSmwR2DS4vAxxkiPYT8csRE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcZmvsACgkQAVBC80lX
-0GyWEAf/WYW2gIK9rSU6Os4+LTBytJGSrY21OVGZNc7sogfQ+Of3UMxc1wxaQ/Jx
-XNnf5Uuhi6fe/BgsGbF3nHstkHgXtioHSwfAhfgg/ecuFdT4e2z79JWZhFnaCpnK
-WTWw32T8Cnqm7lP2/bUYTB2jxiX53FmYYEYEFNh0Oxen+GoC8tMtdexfGn7eE5X1
-bMjwRHvTFYdyHJq7VZ7Qwt9JEasm1KEVv/Oo/Uh/f5DS2QJAuljV+SzkVfxJGU3X
-EixNuaIZuCLEgbzmjp78pOQw+lDiu2q2xaYoDjAvgn+yHd/7zncSoaIgvTAzAkx5
-uvQhVmznkMpSHdj+oTzwt9pdeadq3g==
-=cioX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcZnBoACgkQAVBC80lX
+0GwvjAf/SlwqZmwXoP8wfmpHtTIt3+UtZmMAEixnXncPZwytleQrKrwm7FSWmxw7
+zBj0VNz3Xw6G0mPlC3cWPhZdoCWtSkG246DcMhn3BjyybOHD5VUaQ9hLik/HoLco
+bKbUA/f61QsHWrgWfMkHTs1E86vpIhwE+zhUTclHBOIQus783cxuYNHUDKIfaZhD
+W/hqjOjauKQcstyuQKXBQa6JCZsTND/KAHWZYFiq8NkMSd0NT1FumajpLX/jvv9U
+o72aJXZ7P29Oa6u6BH4V9xJwX89PiJqbvyztpfCjpxOAyjfg5KGaTJtvhFZKwKI2
+Aoyu5TYp5LCv0YMA36Ln0kxO9nGd6Q==
+=9GoB
 -----END PGP SIGNATURE-----
 
---Sig_/wRwc9EsvMoDoJdweKTHRfR=--
+--Sig_/jSmwR2DS4vAxxkiPYT8csRE--
 

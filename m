@@ -1,100 +1,129 @@
-Return-Path: <linux-next+bounces-4409-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4410-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D35839ADB2D
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 06:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B99D9ADB86
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 07:31:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88CC91F218E3
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 04:57:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D06D81F2300E
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 05:31:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055E016D9AF;
-	Thu, 24 Oct 2024 04:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D751B152517;
+	Thu, 24 Oct 2024 05:31:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ROrOUxOq"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtpout01.majordomo.it (smtpout01.majordomo.it [193.41.235.222])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC3E12CD96
-	for <linux-next@vger.kernel.org>; Thu, 24 Oct 2024 04:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.41.235.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A6AC8F0;
+	Thu, 24 Oct 2024 05:30:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729745854; cv=none; b=oOBytKaH9NufengUhp75GkrIQ8goM2/YhLS0bwfvUayIb6X3UtS/a1QFJsXZzUbmaRBzM8dWyaQzrKklNVDxkGTbZTBDTlcN5RwcY7dgatCOUDiXPjMqBuRyIk6JHYYxAuzZNg7giXa6qP9yr60liP24hKUTPC5hkNqOCvfpdC8=
+	t=1729747860; cv=none; b=HP5Vn9NpYR/Ime3wh3nNSywQ0HJgHw+tjGjp2wIaQW0dROdS+rnQcY7h1bcxL/XF+MgRJyBdD4QhxYtTxFiVATHBbaTpAmxq80riesVzrNBtBcFsZhsqptQsbG381LqtQ+TSN/50M+4DDRU9/hHcVoXVjVJBXoNW7S8aV/Cl+ZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729745854; c=relaxed/simple;
-	bh=dmY9rk98dZYfLdW6bypj0F5XOpr4aOaaiRj/+aGkOfI=;
-	h=To:Subject:MIME-Version:Date:From:Content-Type:Message-Id; b=bnAOhC1uEbz7P+VXC9wauwmRarrEZxVA3wBukjco86xw8XenxtioRMImyFzS+BGc9ysd0fe+oFyl64+1/l3+LhhIixklPhXA8lsmGC4TVFsNW5+11RCXNhL4o2GR8Hgjx+qLEYiPyKNN9hH0Vx0E4rPfpORAUEsr/7KqkWb2k0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bonardi1890.com; spf=pass smtp.mailfrom=bonardi1890.com; arc=none smtp.client-ip=193.41.235.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bonardi1890.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bonardi1890.com
-Received: from cl8.proton.it ([194.69.192.54])
-	by srv01.majordomo.it with esmtps (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <info@bonardi1890.com>)
-	id 1t3pc7-00B4go-E5
-	for linux-next@vger.kernel.org; Thu, 24 Oct 2024 06:38:26 +0200
-Received: by cl8.proton.it (Postfix, from userid 10091)
-	id 272FB102F88; Thu, 24 Oct 2024 06:38:23 +0200 (CEST)
-To: linux-next@vger.kernel.org
-Subject: =?UTF-8?B?Qm9uYXJkaSAxODkwIC0gVGhhbmsgeW91IGZvciByZWdpc3RlcmluZw==?=
-X-PHP-Script: www.bonardi1890.com/index.php for 139.180.186.251
-X-PHP-Filename: /var/www/vhosts/bonardi1890.com/httpdocs/index.php
- REMOTE_ADDR: 139.180.186.251
-X-PHP-Originating-Script: 10091:mail.php
+	s=arc-20240116; t=1729747860; c=relaxed/simple;
+	bh=ZCV1tER884byTXVhFdZ2f/nOxNkR/XjtuGdEcrW9ya0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=A8Ygwkn7MGmmdCvThZhyNh/ueuBu1b77RFt6rYEj6xiUEr4ofv9rXMJI812AoU+moscGZTFVX4qw4bvhHpIEF/gZAV1xs7KsEbwT6CWAD+ICahFdlBWfUsSVbMLWawrt8PeLc/RCL8il5QFOMzTgiuG2OwjmdVz/atMjfF/ZuZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ROrOUxOq; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1729747852;
+	bh=+JgXnY1w/ueOEsWHErKS/+gcp1Sh9XSIJWMfsDqcc0Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ROrOUxOqGM1z36a+sS5mIyR98irG0dBDd+3hxN9frukZRTm0DY4/tYKPDw6IzaMkF
+	 UzjXHxwDcbi6ZHVEGDEBy7GWgjWIE3HVEeds1H0jkFVYbZg6ouF52g3xpb/gA58N9m
+	 /HXMcMM3GQAN8na+H8dJO6Wlwo3cy/O8WCwxw3+aB8LiYnlHgRhH+L9Uk1X6RiEyqZ
+	 kUmwwmVcKiQnQpj5EfvQYw76OepiyndYkmAhqziEWencOnrG1eQhBbN1FjfEw/DFhQ
+	 oiIyf8TfpgrgjmNY6cV4q5sUaJ/uhSH6lf8Toh7UrRvaZHNUrGIDvSOE1lv61i+P8n
+	 fMwFeRCLX1dmw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XYvdm13J1z4wc4;
+	Thu, 24 Oct 2024 16:30:52 +1100 (AEDT)
+Date: Thu, 24 Oct 2024 16:30:52 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>
+Cc: Ilpo =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Suma
+ Hegde <suma.hegde@amd.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the drivers-x86 tree
+Message-ID: <20241024163052.32fda0f0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 24 Oct 2024 04:38:22 +0000
-From: =?UTF-8?B?Qm9uYXJkaSAxODkw?= <info@bonardi1890.com>
-Reply-To: =?UTF-8?B?Qm9uYXJkaSAxODkw?= <info@bonardi1890.com>
-X-Mailer: PHP/7.0.33
-Content-Type: multipart/mixed;
- boundary="----=_NextPart_6ee5af8306120272a45a3eaa9a47bc90"
-X-PPP-Message-ID: <172974470306.366533.8975359274932508662@cl8.proton.it>
-X-PPP-Vhost: bonardi1890.com
-Message-Id: <20241024043823.272FB102F88@cl8.proton.it>
-X-PlanetelSpa-Domain: servmail.it
-X-PlanetelSpa-Username: 194.69.192.54
-Authentication-Results: majordomo.it; auth=pass smtp.auth=194.69.192.54@servmail.it
-X-PlanetelSpa-Outgoing-Class: ham
-X-PlanetelSpa-Outgoing-Evidence: Combined (0.15)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9WLQux0N3HQm8ltz8rnu+BPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xV3WYIDmHRmj++kf4Wt638t8C9mOBdONdnsxgsk1D2pw/C
- h5SE4jAyhe1COeASyU8NetLs4QStcOco0EE2Hm8O4ld5rdi2ZxohSIq+dqifZuwfXg3lLHvg5NA5
- Q4UKfXl4PM708iN9U6KpfdhT75DQ8KFDfFSov9UnEJZieq5dX55vFaTtGDLrs66rBK6J7ISXZXO9
- xjyo6Kp4NQ54uxacnJrgScHt+gjdYMBYQipBHr77E21JwZuHj/4EgBs5dt+mvhtyGa1ANxt3Did6
- Bdyhr6mhkieCfQuTEq9f6FWBUy9jyCbkXtEuyOnFV02lgfrVMDpyOiQ7M6U4823O2v4qPpzTBo2K
- OCA4glwG7eLKlCxkiwuppjVR5L7kHRvOzDqsw0lGtGlBJTXVSv8aSbhq8JNTQSYaKsViRwl6faQu
- oKpg5R1ZvnTdxV3bkDvRbH7cG6hsRQZiAIgw+z837AqgX7ewI8e1h7RITgN14BHmGVt/ReJ9Mfhz
- zmbKTH7wI9GEU1utNskUAORCV2WFZX0jlSB/vGmBNi2FkStbPvS5Il7lLXQUcNAszDsnoUOr0BjB
- 2evw9kZekVK4mxTcLS02VIO7W1UXpZJZ4mQdQtWVQpPsKOzu8jnhdIlAmnFG4JAI3NNm+Y5BUKGz
- 7XyDEWSpmkEx9fygkPyRsHlSjbWxiJ2Q2y+yxNI0GOi4TAaATn8wweYBsg2bB3JzkJviJrl4Dr9x
- U97s7tij5PRzDTsdWHLYM3A6BXfvel8OEFDbU53mq8N5rOWwgMRtT/G5W5aIKWq/lEMjYa5KP18I
- c+aZKzOfm9hQb4pbvJcb3RcsD/Ol0wLcntSN7c6B5irM4wBzU0HZxhUYw76AxAsHiuxWtnHxRzJR
- npvHucMACjxAXB5kQqHI0C/U3fmRhZoR2Au6WXI+0Y7Ac4HCnAXewFkQxDEvuGslKTrRIXcXpFg5
- ivY=
-X-Report-Abuse-To: spam@srv01.majordomo.it
+Content-Type: multipart/signed; boundary="Sig_/7C3nmPEYYWc4xx/lH1+bmSj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-------=_NextPart_6ee5af8306120272a45a3eaa9a47bc90
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+--Sig_/7C3nmPEYYWc4xx/lH1+bmSj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Welcome and thank you for registering at Bonardi 1890!
+Hi all,
 
-Your account has now been created and you can log in by using your email address and password by visiting our website or at the following URL:
+After merging the drivers-x86 tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-https://www.bonardi1890.com/index.php?route=account/login
+Documentation/arch/x86/amd_hsmp.rst:86: ERROR: Unexpected indentation.
+Documentation/arch/x86/amd_hsmp.rst:87: WARNING: Block quote ends without a=
+ blank line; unexpected unindent.
+Documentation/arch/x86/amd_hsmp.rst:90: ERROR: Unexpected indentation.
+Documentation/arch/x86/amd_hsmp.rst:91: WARNING: Block quote ends without a=
+ blank line; unexpected unindent.
+Documentation/arch/x86/amd_hsmp.rst:94: ERROR: Unexpected indentation.
+Documentation/arch/x86/amd_hsmp.rst:96: ERROR: Unexpected indentation.
+Documentation/arch/x86/amd_hsmp.rst:97: WARNING: Block quote ends without a=
+ blank line; unexpected unindent.
+Documentation/arch/x86/amd_hsmp.rst:100: ERROR: Unexpected indentation.
+Documentation/arch/x86/amd_hsmp.rst:101: WARNING: Block quote ends without =
+a blank line; unexpected unindent.
+Documentation/arch/x86/amd_hsmp.rst:102: WARNING: Block quote ends without =
+a blank line; unexpected unindent.
+Documentation/arch/x86/amd_hsmp.rst:105: ERROR: Unexpected indentation.
+Documentation/arch/x86/amd_hsmp.rst:107: ERROR: Unexpected indentation.
+Documentation/arch/x86/amd_hsmp.rst:109: WARNING: Block quote ends without =
+a blank line; unexpected unindent.
+Documentation/arch/x86/amd_hsmp.rst:112: ERROR: Unexpected indentation.
+Documentation/arch/x86/amd_hsmp.rst:115: WARNING: Block quote ends without =
+a blank line; unexpected unindent.
+Documentation/arch/x86/amd_hsmp.rst:116: WARNING: Block quote ends without =
+a blank line; unexpected unindent.
+Documentation/arch/x86/amd_hsmp.rst:117: WARNING: Definition list ends with=
+out a blank line; unexpected unindent.
 
-Upon logging in, you will be able to access other services including reviewing past orders, printing invoices and editing your account information.
+Introduced by commit
 
-Thanks,
-Bonardi 1890
+  f9ad7a2843a6 ("platform/x86/amd/hsmp: Create separate ACPI, plat and comm=
+on drivers")
 
-------=_NextPart_6ee5af8306120272a45a3eaa9a47bc90--
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/7C3nmPEYYWc4xx/lH1+bmSj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcZ24wACgkQAVBC80lX
+0Gz1LggAkHpGh/VXHoQyRoFKp8lxOny6QiiHLXxRoeCtGEIYTPLAEh9w0fggyn45
+5LI70kpvLgUsW5vTLPvukIwqTPelXZ8TteqE9fEDBwGnp5SkgpinEyjUtGmqn+I/
+HI34mT8WtBu1N+enwyzlGkGnRSPoZcnSWrCraHwaQeKuL1EG1NKPtbXEFBvJisMd
+jx5ZWYGByr/w401cMuMDAB7XLEa891lf0oJ7uugliRO3GgdPWnA73eHDknKqLrya
+dEenxFHQJndHvvrAnHJ39mPEKFAVgzKDotKsZp6C8OV7SlRwgs0y/+69/xI1g3VO
+fL1aJ76lWfiWwLPN/PJlt3I5WKnLlQ==
+=0Lgh
+-----END PGP SIGNATURE-----
+
+--Sig_/7C3nmPEYYWc4xx/lH1+bmSj--
 

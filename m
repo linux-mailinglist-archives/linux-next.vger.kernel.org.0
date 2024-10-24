@@ -1,83 +1,131 @@
-Return-Path: <linux-next+bounces-4414-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4415-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E63999ADED1
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 10:18:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE8879AEE68
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 19:41:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F8E01F2388F
-	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 08:18:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93BD1280F01
+	for <lists+linux-next@lfdr.de>; Thu, 24 Oct 2024 17:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5641B3945;
-	Thu, 24 Oct 2024 08:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD8A1FC7FE;
+	Thu, 24 Oct 2024 17:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iBEv5Z7j"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30C81AB52D;
-	Thu, 24 Oct 2024 08:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFF01FC7F7;
+	Thu, 24 Oct 2024 17:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729757699; cv=none; b=UDpij/bTdssmEWzxc4UEKltDHJ3Yg+l7kcGHQiIeQf5qXXM9vwCKn68rKizNEF07LdfP+3Mea35F3ocqxhVFgivUTD0SzXM3ccqyJsSitn2GhhuLtpZED91tkgusvynq1yvEAMYUiMDp8EhhUUmSf9f3eawvCudtkX44kM2vcM4=
+	t=1729791676; cv=none; b=NDji7Z3wQb40PIKkqkSR8zGFcMBU4LlbCUi7fvOPZZF2Jwr6kSSPj6ymjEis3aTeTIn4oMG7QusKbBnTEZPg5WmZAzhQ8c8rMiDIyhXM1104KniIWl27pnR3UIY6tj63kIz6BDVx/myAvycaWcqXAiRFDXx3RiC7TJ6YRWpvH1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729757699; c=relaxed/simple;
-	bh=J+572+hNotN9pD5TEI1Zm1GKa05ndya82Ufh3wkdgUc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NCxnDW8Fr5tTVgAOkTkQI0OAwGC4LoxuMxXFYoemGcTAH0GZJvh1zxTqig9L7btb8uPq5YmBxkaNRas1cGAhKbQiGONrD8XSxGlOIoJ/lq78D22WzYqKYoVgKDf5LCaALUmg2wEgZjSZxF3vhBHcN2U6uTuGdGcSxffSXKCnkyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2C3AC4CEE4;
-	Thu, 24 Oct 2024 08:14:56 +0000 (UTC)
-Date: Thu, 24 Oct 2024 09:14:53 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Will Deacon <will@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Steven Price <steven.price@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>
-Subject: Re: linux-next: manual merge of the arm64 tree with the mm tree
-Message-ID: <ZxoB_Zu_KNTuO7sE@arm.com>
-References: <20241024103709.082a6950@canb.auug.org.au>
+	s=arc-20240116; t=1729791676; c=relaxed/simple;
+	bh=VjnOFKGWB+Vsz4mAbhv8vBkTom++FJLCVR2sgrw5c8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sWgFArahlqqg/G8v0AatN67zK2UodcYCLsPoosnkZejtJWwF0sqMspdus/nHBUh2uYfFgx9UZu8kVcTQxdBGZZ0vVkjDNhQQpjaQ0S5F7+5bfTuF3FtoGT57hxMdLuVmGRfdFNjbAbvbK8QUGG3zZEs+EbLREj/Owy1EfdA/m4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iBEv5Z7j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC7EC4CEC7;
+	Thu, 24 Oct 2024 17:41:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729791675;
+	bh=VjnOFKGWB+Vsz4mAbhv8vBkTom++FJLCVR2sgrw5c8U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=iBEv5Z7jpalzMzU8Cv70eDJWsODtcLv8MJpoM975/moa4CRl0mqa2947WAKyw6bou
+	 Dprt7RvYkr0HBN4CirZQqvKfXtL4V9QXaVVdo0q8Izkl6IEtN/O59SOUFm0/1iBcqX
+	 fqvzwFCHezHOzqXUv1ic7BpNj6k3Q/KdcJ+V+zG4zObX8WLuEx3Er9Z/aZYdwnCdU0
+	 cZkUOS9034URL8EeaqBQKhDBJkQF40gOKqXo5tMBrAtQn7jwZcViPjABM6bhTlN9ZW
+	 nm9xu4xKzpJqnBVjI1E3wD6B0XYvIcaJ2ba9d42YR7lueE78RuCwn4jel2qEtLG9jD
+	 +mteokZgcJMvA==
+Date: Thu, 24 Oct 2024 18:41:08 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>, Arnd
+ Bergmann <arnd@arndb.de>, Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: linux-next: manual merge of the char-misc tree with the
+ iio-fixes tree
+Message-ID: <20241024184108.6eb3bdf0@jic23-huawei>
+In-Reply-To: <22f9dbb6-ba5e-4c85-8aa2-6090008e7da4@gmail.com>
+References: <20241023141015.0ec5346d@canb.auug.org.au>
+	<22f9dbb6-ba5e-4c85-8aa2-6090008e7da4@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024103709.082a6950@canb.auug.org.au>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 24, 2024 at 10:37:09AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the arm64 tree got a conflict in:
-> 
->   arch/arm64/mm/pageattr.c
-> 
-> between commit:
-> 
->   040ee4186d6c ("arch: introduce set_direct_map_valid_noflush()")
-> 
-> from the mm-unstable branch of the mm tree and commit:
-> 
->   42be24a4178f ("arm64: Enable memory encrypt for Realms")
-> 
-> from the arm64 tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+On Wed, 23 Oct 2024 20:17:30 +0200
+Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
 
-The resolution looks fine. Thanks Stephen.
+> On 23/10/2024 05:10, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the char-misc tree got a conflict in:
+> > 
+> >   drivers/iio/light/veml6030.c
+> > 
+> > between commit:
+> > 
+> >   de9981636774 ("iio: light: veml6030: fix microlux value calculation")
+> > 
+> > from the iio-fixes tree and commit:
+> > 
+> >   ed59fc90f38a ("iio: light: veml6030: drop processed info for white channel")
+> > 
+> > from the char-misc tree.
+> > 
+> > I fixed it up (the latter removed the line updated by the former) and
+> > can carry the fix as necessary. This is now fixed as far as linux-next
+> > is concerned, but any non trivial conflicts should be mentioned to your
+> > upstream maintainer when your tree is submitted for merging.  You may
+> > also want to consider cooperating with the maintainer of the conflicting
+> > tree to minimise any particularly complex conflicts.
+> >   
+> 
+> 
+> Hi Stephen,
+> 
+> I doubled checked the status of the driver in linux-next, and everything
+> looks as it should: the first commit applied as a single chunk, as its
+> second chunk affects lines that the second commit removed.
+> 
+> Thank you for fixing it up.
 
--- 
-Catalin
+Not quite. This was a lucky merge issue as it highlighted something I'd
+messed up.
+
+A rare case of a fuzzy application of a patch picking the wrong block but still
+giving a very plausible looking diff that fooled me.
+
+I picked up the fix via a different tree from where you expected.
+In char-misc-next / iio/togreg there is only one instance of this code block because
+the larger driver rework removed one of the two that was in the tree that
+iio-fixes is based on (effectively mainline).
+
+The fix got applied to the one that is going away (which is going away because
+the scale makes no sense on the intensity channel) not the illuminance / IIO_LIGHT
+channel that was intended.
+
+I've move it to the right block with the side effect that the merge conflict
+should go away.  Javier, please check iio.git/fixes-togreg to be 100% sure
+I haven't messed it up again.
+
+Thanks Stephen for your hard work on linux-next!
+
+Jonathan
+
+> 
+> Best regards,
+> Javier Carrasco
+
 

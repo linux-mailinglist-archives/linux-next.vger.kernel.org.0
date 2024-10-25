@@ -1,133 +1,12773 @@
-Return-Path: <linux-next+bounces-4449-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4450-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDAAD9B0B94
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 19:31:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71ABE9B0CEC
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 20:15:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 704DF2869D8
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 17:31:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EA78281838
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 18:15:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D32720D518;
-	Fri, 25 Oct 2024 17:21:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3225D20BB3C;
+	Fri, 25 Oct 2024 18:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="nmRgUHNi"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="0Mbup3vh"
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E217120D4F9;
-	Fri, 25 Oct 2024 17:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058E7200B9E
+	for <linux-next@vger.kernel.org>; Fri, 25 Oct 2024 18:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729876885; cv=none; b=UXlx0ENGMgBoAtcQQ6mjTayUHj5/FDNs4u76gqTTIpMqYSU6WDjPsqS6xznmst/wACGDqPqFgZWJy0+MRD/OJWgd8MNsExDLDtOoyL2wU9eselnNEn6fGYoo4VqKqJrUVgzs88ct0w+oXhzt66FvXAeazVh2EEzY7kWhTUAkqZI=
+	t=1729880033; cv=none; b=oSRr7zCXeKl6MGeq1OtKcXzoASG5I1hkU4D9Cy4MPf2a7Q622HrM24CeftqIhYY8y638s/1+98oGgs3hl7udTdyfp5VrK91BT9EcMlOSSeJsDxJE1011Wc5hBs4xFR2ms4U/f/ZnjIVqvabGcVBqbnARu4+clFHsGOTUgf+nNus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729876885; c=relaxed/simple;
-	bh=/ElsOcIvNpeea3zCmVYDdlwrZ+WRwA3Ffa4TCKCOQqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fUlVxMhq5ycIyTKn5X1+5WR2Q41keFyu8YWC8ugtHV12VYSimZF63DdwVAYSPxQwH+dnip0tiig/BUI1fG8F3OX5uWOhYk+rbUJa+geONZmS7EujICdNDjSe6zOId9jkK7BYVrXmRXZVOUlEmwkH8YHFo4QqTWTOPoRvu2QkTrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=nmRgUHNi; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A8C5DE0005;
-	Fri, 25 Oct 2024 17:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1729876880;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EPFpBv2f+D8oeKxd8AG77vQrSZHxbSu+XaDtA9mUygM=;
-	b=nmRgUHNitKZbuVNakV4qZjNLp2eiA1PZRLBmBZi1SLvQ5i29y2L9PZl/HGGRDdQ+Ut1kFx
-	gTFX3a7O9E0+qGoMrrbtstgAz8q/RfsrhTA3l4NREuQXkJPQrf7Kt+QJDBVjxRAD11h7zw
-	HWRP8W3Ob4tZv0IdXmnxQ29jQ0zUuTgbnB5OIDk23TSrSpBbNFW24lqF3idOq7DQe/QVjc
-	vbKWHhDn0PrGdFb/eXyHCNFdHvbhr4bvs/zYAAEdBMUYwJR3hbDEf7iu2w/ZjwwRS9mkEm
-	3DckmdKVzoZ8pf/QBiunZXWLOZuCL0X97cHe7sQpBUGggHm2edINq2M9IrSAOw==
-Date: Fri, 25 Oct 2024 19:21:17 +0200
-From: Herve Codina <herve.codina@bootlin.com>
-To: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Rob Herring <robh@kernel.org>,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, Arnd Bergmann 
- <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2] misc: Silence warning when building the LAN966x
- device tree overlay
-Message-ID: <20241025192117.0cf20075@bootlin.com>
-In-Reply-To: <57793bb01e02f03e215dfa6f8783df18034ae2ea.camel@pengutronix.de>
-References: <20241025161739.3643796-1-p.zabel@pengutronix.de>
-	<57793bb01e02f03e215dfa6f8783df18034ae2ea.camel@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1729880033; c=relaxed/simple;
+	bh=k8WLuqjNKE/5DtuIHCkd/PrYtTkUbEbcQHp/0heoPps=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=I3IitL2q2J+cyjiLqavp1FwdtI5sGtoLxjvk39DTf8PR20ci2S8LU4J3RKhHAGgTkvryYkkOuDPkUYI1ECadvQIgs7bo2ErIEbLUyye1Zcmj0aBqnwdJt7m7YUa72KFnHlrJrJdGCTz6jnzKwsoPkp7V4ieX0E6uKFYksrsEfLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=0Mbup3vh; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-71e8235f0b6so1709299b3a.3
+        for <linux-next@vger.kernel.org>; Fri, 25 Oct 2024 11:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1729879971; x=1730484771; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6j9XThAu+6O83RY1saMwbeaAldxm/h23zVnFRdTqTk=;
+        b=0Mbup3vhDnzuue6m0heTEBVcFLmjNf71WzYLpfixWxep7Sf5PSJSYK5XkpvAU5fzS9
+         2dvKrU2of8m+rcLQKApge0H3EZQmbWjhpshS4SgDXL+6WWwSZ+SsiZlEh0DPdb5xKT+K
+         Zzf6xR3unO4FifH/QxYe43e9KUFVtqa+j4achijBb5/pXVtINpnzyTzUSeh0QRbUeg3R
+         qZWl+WaD4TNn1tqXG1MrPIZDRSgFhwIu/KOBQiMt47KmuhJov3QGc0QOVHmsMP9cYq4b
+         lBEeDDm7WVQtBaQ/ylQL4NVodd2xpVzm/ZdBGrOLaeRfJljIFLLtmVIqP+MUE2osgG/O
+         FfoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729879971; x=1730484771;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E6j9XThAu+6O83RY1saMwbeaAldxm/h23zVnFRdTqTk=;
+        b=knCEIGpL5J4lG+Okan67W70xIMyYhOqTUbSrb1Se/62MNOOLSJVNRdjlUsAs5MfXER
+         jIVHnX7IZyczldjcItxpb2GsjMUI218mJWiSo6caGJPyiT6rs+CaaHgwZOjNhSQBJvE1
+         fA0Nkb8pRIXSS6GRRk7750/rMjv2K34pAhr5P8biNbUReEqLufJz7iMWW1lEPsZAfqO+
+         fkU+uY68jvyO9kOQhG2l/sevsyMQXSFxmkhaBejel9HYCGOh3qUKKaLUVCOt5QtZmCiA
+         yghhpdwlI/gFUaKYlMXb0W7KLaTU2e8ITENOL6f6x4Krfi3hmiA6NesN/w2NzGTJAbjJ
+         vzZA==
+X-Gm-Message-State: AOJu0YzmaotJBx6kjk8x6OlkHn1FisUMeTzA7FVVv8bh9DG2LvyZ/Hso
+	/Vlo3JpYYoF/FSgpGsk5xNg5j4k+F1INrq1b75ZMukGunCQLkEAmHelvuqPDiudv9imcDnhJjA6
+	x
+X-Google-Smtp-Source: AGHT+IF1N5w9pNBoSRefCfCfohwjifcv+VGwBW7oX3SJve5MhfU/lqsvu80jLswquDcR7K0+Y/OLNg==
+X-Received: by 2002:a05:6a00:985:b0:71e:52ec:638d with SMTP id d2e1a72fcca58-72062fb21d1mr616951b3a.10.1729879969133;
+        Fri, 25 Oct 2024 11:12:49 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7205791e468sm1360173b3a.21.2024.10.25.11.12.46
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2024 11:12:47 -0700 (PDT)
+Message-ID: <671bdf9f.050a0220.232167.75a0@mx.google.com>
+Date: Fri, 25 Oct 2024 11:12:47 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: herve.codina@bootlin.com
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20241025
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 181 builds: 4 failed, 177 passed,
+ 5671 warnings (next-20241025)
+To: linux-next@vger.kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Fri, 25 Oct 2024 18:53:46 +0200
-Philipp Zabel <p.zabel@pengutronix.de> wrote:
+next/master build: 181 builds: 4 failed, 177 passed, 5671 warnings (next-20=
+241025)
 
-> On Fr, 2024-10-25 at 18:17 +0200, Philipp Zabel wrote:
-> > Silence the following warning when building the LAN966x device tree overlay:
-> > 
-> > drivers/misc/lan966x_pci.dtso:34.23-40.7: Warning (interrupts_property): /fragment@0/__overlay__/pci-ep-bus@0/oic@e00c0120: Missing interrupt-parent
-> > 
-> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Link: https://lore.kernel.org/all/20241025110919.64b1cffb@canb.auug.org.au/
-> > Fixes: 185686beb464 ("misc: Add support for LAN966x PCI device")
-> > Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-> > ---
-> > The referenced commit is in the reset tree.
-> > Changes in v2:
-> > - Do not handle W=1 warnings.
-> > - Link to v1: https://lore.kernel.org/all/20241025145353.1620806-1-p.zabel@pengutronix.de/
-> > ---
-> >  drivers/misc/Makefile | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> > index 885b22989580..196fb730817e 100644
-> > --- a/drivers/misc/Makefile
-> > +++ b/drivers/misc/Makefile
-> > @@ -72,6 +72,7 @@ obj-$(CONFIG_TPS6594_PFSM)	+= tps6594-pfsm.o
-> >  obj-$(CONFIG_NSM)		+= nsm.o
-> >  obj-$(CONFIG_MARVELL_CN10K_DPI)	+= mrvl_cn10k_dpi.o
-> >  lan966x-pci-objs		:= lan966x_pci.o
-> > +DTC_FLAGS_lan966x_pci		:= -Wno-interrupts_property
-> >  lan966x-pci-objs		+= lan966x_pci.dtbo.o
-> >  obj-$(CONFIG_MCHP_LAN966X_PCI)	+= lan966x-pci.o
-> >  obj-y				+= keba/  
-> 
-> Applied to reset/next to silence the warning until lan966x_pci.dtso is
-> fixed:
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20241025/
 
-This warning 'Missing interrupt-parent' cannot be solved in dtso.
-I cannot reference the interrupt controller (PCI device node itself) which
-is outside the dtso. This PCI device node is the node on which the dtso
-is applied.
+Tree: next
+Branch: master
+Git Describe: next-20241025
+Git Commit: a39230ecf6b3057f5897bc4744a790070cfbe7a8
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-I think the patch you did is the correct one for this warning.
+Build Failures Detected:
 
-Related to other warnings mentionned in v1:
-  Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/cpu_clk: missing or empty reg/ranges property
-  Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/ddr_clk: missing or empty reg/ranges property
-  Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/sys_clk: missing or empty reg/ranges property
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-12) FAIL
 
-I will update the dtso and send the related patch.
+arm64:
+    defconfig+arm64-chromebook: (gcc-12) FAIL
+    defconfig+arm64-chromebook+kselftest: (gcc-12) FAIL
 
-Best regards,
-Hervé
+mips:
+    decstation_64_defconfig: (gcc-12) FAIL
 
-> 
-> [1/1] misc: Silence warning when building the LAN966x device tree overlay
->       https://git.pengutronix.de/cgit/pza/linux/commit/?id=68152eff5240
-> 
-> regards
-> Philipp
+Warnings Detected:
 
+arc:
+    axs103_defconfig (gcc-12): 3 warnings
+    axs103_smp_defconfig (gcc-12): 3 warnings
+    haps_hs_defconfig (gcc-12): 2 warnings
+    haps_hs_smp_defconfig (gcc-12): 2 warnings
+    haps_hs_smp_defconfig+debug (gcc-12): 2 warnings
+    haps_hs_smp_defconfig+kselftest (gcc-12): 2 warnings
+    nsimosci_hs_defconfig (gcc-12): 2 warnings
+    nsimosci_hs_smp_defconfig (gcc-12): 2 warnings
+    vdk_hs38_defconfig (gcc-12): 2 warnings
+    vdk_hs38_smp_defconfig (gcc-12): 2 warnings
+
+arm64:
+
+arm:
+    collie_defconfig (gcc-12): 1 warning
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-12): 3 warnings
+    32r2el_defconfig+debug (gcc-12): 3 warnings
+    32r2el_defconfig+kselftest (gcc-12): 3 warnings
+    ath79_defconfig (gcc-12): 3 warnings
+    bigsur_defconfig (gcc-12): 15 warnings
+    cavium_octeon_defconfig (gcc-12): 12 warnings
+    db1xxx_defconfig (gcc-12): 21 warnings
+    decstation_64_defconfig (gcc-12): 9 warnings
+    decstation_defconfig (gcc-12): 9 warnings
+    decstation_r4k_defconfig (gcc-12): 9 warnings
+    eyeq5_defconfig (gcc-12): 1 warning
+    eyeq6_defconfig (gcc-12): 1 warning
+    fuloong2e_defconfig (gcc-12): 1 warning
+    gpr_defconfig (gcc-12): 1 warning
+    ip22_defconfig (gcc-12): 1 warning
+    ip28_defconfig (gcc-12): 3 warnings
+    ip32_defconfig (gcc-12): 1 warning
+    jazz_defconfig (gcc-12): 5 warnings
+    lemote2f_defconfig (gcc-12): 22 warnings
+    loongson1b_defconfig (gcc-12): 1 warning
+    loongson1c_defconfig (gcc-12): 1 warning
+    loongson2k_defconfig (gcc-12): 5 warnings
+    loongson3_defconfig (gcc-12): 5 warnings
+    maltaaprp_defconfig (gcc-12): 4 warnings
+    omega2p_defconfig (gcc-12): 2 warnings
+    rb532_defconfig (gcc-12): 1 warning
+    rm200_defconfig (gcc-12): 8 warnings
+    rt305x_defconfig (gcc-12): 2 warnings
+    sb1250_swarm_defconfig (gcc-12): 16 warnings
+    vocore2_defconfig (gcc-12): 2 warnings
+
+riscv:
+    defconfig (clang-17): 2 warnings
+    nommu_k210_sdcard_defconfig (clang-17): 5415 warnings
+
+sparc:
+    allnoconfig (gcc-12): 3 warnings
+    sparc32_defconfig (gcc-12): 4 warnings
+    sparc64_defconfig (gcc-12): 18 warnings
+    sparc64_defconfig+debug (gcc-12): 16 warnings
+    sparc64_defconfig+kselftest (gcc-12): 16 warnings
+    tinyconfig (gcc-12): 3 warnings
+
+x86_64:
+    x86_64_defconfig+kselftest (rustc-1.75): 1 warning
+
+
+Warnings summary:
+
+    387  include/asm-generic/io.h:778:2: warning: performing pointer arithm=
+etic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    387  include/asm-generic/io.h:752:2: warning: performing pointer arithm=
+etic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    387  include/asm-generic/io.h:1115:55: warning: performing pointer arit=
+hmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    386  include/asm-generic/io.h:787:2: warning: performing pointer arithm=
+etic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    386  include/asm-generic/io.h:769:2: warning: performing pointer arithm=
+etic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    386  include/asm-generic/io.h:760:2: warning: performing pointer arithm=
+etic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    386  include/asm-generic/io.h:585:33: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    385  include/asm-generic/io.h:548:31: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    384  include/asm-generic/io.h:574:61: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    379  include/asm-generic/io.h:595:59: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    377  include/asm-generic/io.h:605:59: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    373  include/asm-generic/io.h:744:2: warning: performing pointer arithm=
+etic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    372  include/asm-generic/io.h:561:61: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    367  13 warnings generated.
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    9    kernel/fork.c:3075:2: warning: #warning clone3() entry point is mi=
+ssing, please fix [-Wcpp]
+    9    3075 | #warning clone3() entry point is missing, please fix
+    4    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (in=
+terrupt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, bu=
+t node is not an interrupt provider
+    3    warnings generated.
+    3    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
+ missing .note.GNU-stack section implies executable stack
+    3    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
+g .note.GNU-stack section implies executable stack
+    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    3    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =
+=E2=80=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =
+=E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototyp=
+e for =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototyp=
+e for =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous protot=
+ype for =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =
+=E2=80=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =
+=E2=80=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =
+=E2=80=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =
+=E2=80=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =
+=E2=80=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype fo=
+r =E2=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
+    3    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
+ls' found, but node is not an interrupt provider
+    3    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
+ is not an interrupt provider
+    3    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    3    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    3    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    2    {standard input}:152: Warning: macro instruction expanded into mul=
+tiple instructions
+    2    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =
+=E2=80=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
+    2    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous =
+prototype for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototyp=
+e for =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous=
+ prototype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previou=
+s prototype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous=
+ prototype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous pr=
+ototype for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous p=
+rototype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous pr=
+ototype for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for=
+ =E2=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/loongson32/common/platform.c:71:5: warning: no previous =
+prototype for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
+    2    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previou=
+s prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-protot=
+ypes]
+    2    arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dtb: Warning (i=
+nterrupt_map): Failed prerequisite 'interrupt_provider'
+    2    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dts:28.31-36.4:=
+ Warning (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missi=
+ng '#interrupt-cells' in interrupt provider
+    2    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dtb: Warning (i=
+nterrupt_map): Failed prerequisite 'interrupt_provider'
+    2    arch/arc/boot/dts/vdk_axs10x_mb.dtsi:36.18-47.5: Warning (interrup=
+t_provider): /axs10x_mb_vdk/ethernet@18000: '#interrupt-cells' found, but n=
+ode is not an interrupt provider
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    :744:2: warning: performing pointer arithmetic on a null pointer h=
+as undefined behavior [-Wnull-pointer-arithmetic]
+    2    :561:61: warning: performing pointer arithmetic on a null pointer =
+has undefined behavior [-Wnull-pointer-arithmetic]
+    2    : warning: performing pointer arithmetic on a null pointer has und=
+efined behavior [-Wnull-pointer-arithmetic]
+    1    warning: performing pointer arithmetic on a null pointer has undef=
+ined behavior [-Wnull-pointer-arithmetic]
+    1    warning: ../include/asm-generic/io.h:595:59: warning: performing p=
+ointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-=
+arithmetic]
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x14fdc9
+    1    sw(addr, buffer, ../include/asm-generic/io.h:561:61: warning: perf=
+orming pointer arithmetic on a null pointer has undefined behavior [-Wnull-=
+pointer-arithmetic]
+    1    sb(PCI_IOBASE + (add../include/asm-generic/io.hr:561:61: warning: =
+performing pointer arithmetic on a null pointer has undefined behavior [-Wn=
+ull-pointer-arithmetic]
+    1    r,../include/asm-generic/io.h :c574o:u61n:t )warning:  performing =
+pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer=
+-arithmetic]_
+    1    r, buffer, count)../include/asm-generic/io.h:605:59: warning: perf=
+orming pointer arithmetic on a null pointer has undefined behavior [-Wnull-=
+pointer-arithmetic]
+    1    ne outsw(addr, buffer, count) _13_ warnings generated.
+    1    llvm-readelf: warning: 'arch/riscv/kernel/vdso/vdso.so.dbg': inval=
+id PT_DYNAMIC size (0x138)
+    1    llvm-readelf: warning: 'arch/riscv/kernel/vdso/vdso.so.dbg': PT_DY=
+NAMIC dynamic table is invalid: SHT_DYNAMIC will be used
+    1    ine insl(add../include/asm-generic/io.h:595:59: warning: performin=
+g pointer arithmetic on a null pointer has undefined behavior [-Wnull-point=
+er-arithmetic]
+    1    include/uapi/linux/byteorder/little_endian.h:35:51: ../include/asm=
+-generic/io.h:744:2: warning: performing pointer arithmetic on a null point=
+er has undefined behavior [-Wnull-pointer-arithmetic]
+    1    include/asm-generic/io.h__:o769u:t2s:l( Pwarning: CIperforming poi=
+nter arithmetic on a null pointer has undefined behavior [-Wnull-pointer-ar=
+ithmetic]_
+    1    include/asm-generic/io.hIn file included from :744:2: warning: per=
+forming pointer arithmetic on a null pointer has undefined behavior [-Wnull=
+-pointer-arithmetic]
+    1    include/asm-generic/io.h:760:2: warning: 13 warnings generated.
+    1    include/asm-generic/io.h:744:2: warning: performing pointer arithm=
+etic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]In=
+ file included from ../block/partitions/msdos.c:31:
+    1    include/asm-generic/io.h:605:59: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]1=
+3 warnings generated.
+    1    include/asm-generic/io.h:585:33: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]e=
+w((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+    1    include/asm-generic/io.h:574:61../include/asm-generic/io.h:605:59:=
+ warning: performing pointer arithmetic on a null pointer has undefined beh=
+avior [-Wnull-pointer-arithmetic]
+    1    include/asm-generic/io.h:561:61: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]I=
+n file included from ../mm/backing-dev.c:3:
+    1    include/asm-generic/io.h:561:../include/asm-generic/io.h61:744:2: =
+warning: performing pointer arithmetic on a null pointer has undefined beha=
+vior [-Wnull-pointer-arithmetic]
+    1    include/asm-generic/io.h:../include/asm-generic/io.h:744:2: warnin=
+g: performing pointer arithmetic on a null pointer has undefined behavior [=
+-Wnull-pointer-arithmetic]
+    1    include/asm-generic/io.h13 warnings generated.
+    1    include/asm-generic/io.h  :548561 | :        61:v awarning: lperfo=
+rming pointer arithmetic on a null pointer has undefined behavior [-Wnull-p=
+ointer-arithmetic]
+    1    eadl(PCI../include/asm-generic/io.h:605:59: warning: performing po=
+inter arithmetic on a null pointer has undefined behavior [-Wnull-pointer-a=
+rithmetic]
+    1    drivers/watchdog/octeon-wdt-main.c:210:6: warning: no previous pro=
+totype for =E2=80=98octeon_wdt_nmi_stage3=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:565:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_drv_resume=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:548:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_drv_suspend=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:523:6: warning: no previous prototy=
+pe for =E2=80=98au1100fb_drv_remove=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:341:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_fb_mmap=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:294:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_fb_pan_display=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:235:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_fb_setcolreg=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/video/fbdev/au1100fb.c:138:5: warning: no previous prototy=
+pe for =E2=80=98au1100fb_setmode=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous protot=
+ype for =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/net/ethernet/sgi/meth.c:271:5: warning: no previous protot=
+ype for =E2=80=98meth_reset=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/irqchip/irq-ath79-misc.c:26:5: warning: no previous protot=
+ype for =E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/irqchip/irq-ath79-misc.c:181:13: warning: no previous prot=
+otype for =E2=80=98ath79_misc_irq_init=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/irqchip/irq-ath79-cpu.c:89:13: warning: no previous protot=
+ype for =E2=80=98ath79_cpu_irq_init=E2=80=99 [-Wmissing-prototypes]
+    1    d../include/asm-generic/io.hr):,548 :31b:u fwarning: fperforming p=
+ointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-=
+arithmetic]e
+    1    buffer, coun../include/asm-generic/io.h:561:61: warning: performin=
+g pointer arithmetic on a null pointer has undefined behavior [-Wnull-point=
+er-arithmetic]
+    1    arch/riscv/include/asm/io.h:118:../include/asm-generic/io.h:744:2:=
+ warning: performing pointer arithmetic on a null pointer has undefined beh=
+avior [-Wnull-pointer-arithmetic]
+    1    arch/riscv/include/asm/io.h:10413: warnings generated.
+    1    arch/mips/sni/rm200.c:428:6: warning: no previous prototype for =
+=E2=80=98disable_rm200_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/rm200.c:387:13: warning: no previous prototype for =
+=E2=80=98sni_rm200_i8259_irqs=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/rm200.c:331:6: warning: no previous prototype for =
+=E2=80=98sni_rm200_init_8259A=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/rm200.c:211:6: warning: no previous prototype for =
+=E2=80=98sni_rm200_mask_and_ack_8259A=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/reset.c:45:6: warning: no previous prototype for =E2=
+=80=98sni_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/reset.c:28:6: warning: no previous prototype for =E2=
+=80=98sni_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/pcit.c:168:6: warning: no previous prototype for =E2=
+=80=98disable_pcit_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sni/pcimt.c:206:6: warning: no previous prototype for =
+=E2=80=98disable_pcimt_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/time.c:10:13: warning: no previous prototy=
+pe for =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/smp.c:38:6: warning: no previous prototype=
+ for =E2=80=98sb1250_smp_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/smp.c:147:6: warning: no previous prototyp=
+e for =E2=80=98sb1250_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/setup.c:79:5: warning: no previous prototy=
+pe for =E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/setup.c:168:13: warning: no previous proto=
+type for =E2=80=98sb1250_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/irq.c:182:13: warning: no previous prototy=
+pe for =E2=80=98init_sb1250_irqs=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/time.c:10:13: warning: no previous protot=
+ype for =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/smp.c:49:6: warning: no previous prototyp=
+e for =E2=80=98bcm1480_smp_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/smp.c:158:6: warning: no previous prototy=
+pe for =E2=80=98bcm1480_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/setup.c:104:13: warning: no previous prot=
+otype for =E2=80=98bcm1480_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/irq.c:200:13: warning: no previous protot=
+ype for =E2=80=98init_bcm1480_irqs=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sgi-ip22/ip28-berr.c:474:5: warning: no previous prototy=
+pe for =E2=80=98ip28_show_be_info=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/sgi-ip22/ip22-eisa.c:95:12: warning: no previous prototy=
+pe for =E2=80=98ip22_eisa_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/rb532/serial.c:48:12: warning: no previous prototype for=
+ =E2=80=98setup_serial_port=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/pci/pcie-octeon.c:1471:5: warning: no previous prototype=
+ for =E2=80=98octeon_pcie_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/pci/pci-octeon.c:234:12: warning: no previous prototype =
+for =E2=80=98octeon_pci_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/pci/msi-octeon.c:343:12: warning: no previous prototype =
+for =E2=80=98octeon_msi_initialize=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/mm/c-octeon.c:351:17: warning: no previous prototype for=
+ =E2=80=98cache_parity_error_octeon_non_recoverable=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/mm/c-octeon.c:342:17: warning: no previous prototype for=
+ =E2=80=98cache_parity_error_octeon_recoverable=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/mips/mm/c-octeon.c:303:5: warning: no previous prototype for =
+=E2=80=98unregister_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/mm/c-octeon.c:297:5: warning: no previous prototype for =
+=E2=80=98register_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/pm.c:90:5: warning: no previous pr=
+ototype for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/pm.c:52:6: warning: no previous pr=
+ototype for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/pm.c:142:13: warning: no previous =
+prototype for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/pm.c:137:13: warning: no previous =
+prototype for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/lemote-2f/machtype.c:10:13: warning: no prev=
+ious prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/loongson2ef/common/pm.c:66:12: warning: no previous prot=
+otype for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/common/pm.c:59:13: warning: no previous prot=
+otype for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/common/pm.c:118:13: warning: no previous pro=
+totype for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/common/pm.c:114:13: warning: no previous pro=
+totype for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:70:5: warning: n=
+o previous prototype for =E2=80=98pci_ohci_read_reg=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:15:6: warning: n=
+o previous prototype for =E2=80=98pci_ohci_write_reg=E2=80=99 [-Wmissing-pr=
+ototypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:84:6: warning: no=
+ previous prototype for =E2=80=98pci_isa_write_bar=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:228:5: warning: n=
+o previous prototype for =E2=80=98pci_isa_read_reg=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:134:6: warning: n=
+o previous prototype for =E2=80=98pci_isa_write_reg=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:110:5: warning: n=
+o previous prototype for =E2=80=98pci_isa_read_bar=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: warning: no=
+ previous prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Wmissing-proto=
+types]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: warning: no=
+ previous prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:75:5: warning: n=
+o previous prototype for =E2=80=98pci_ehci_read_reg=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:15:6: warning: n=
+o previous prototype for =E2=80=98pci_ehci_write_reg=E2=80=99 [-Wmissing-pr=
+ototypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:62:5: warning: no=
+ previous prototype for =E2=80=98pci_acc_read_reg=E2=80=99 [-Wmissing-proto=
+types]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:15:6: warning: no=
+ previous prototype for =E2=80=98pci_acc_write_reg=E2=80=99 [-Wmissing-prot=
+otypes]
+    1    arch/mips/kernel/vpe-mt.c:226:5: warning: no previous prototype fo=
+r =E2=80=98vpe_free=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/vpe-mt.c:205:5: warning: no previous prototype fo=
+r =E2=80=98vpe_stop=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/vpe-mt.c:195:5: warning: no previous prototype fo=
+r =E2=80=98vpe_start=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/vpe-mt.c:177:7: warning: no previous prototype fo=
+r =E2=80=98vpe_alloc=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/csrc-sb1250.c:53:13: warning: no previous prototy=
+pe for =E2=80=98sb1250_clocksource_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/csrc-bcm1480.c:37:13: warning: no previous protot=
+ype for =E2=80=98sb1480_clocksource_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/cevt-sb1250.c:95:6: warning: no previous prototyp=
+e for =E2=80=98sb1250_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/kernel/cevt-bcm1480.c:96:6: warning: no previous prototy=
+pe for =E2=80=98sb1480_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/setup.c:52:13: warning: no previous prototype for =
+=E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/reset.c:49:6: warning: no previous prototype for =
+=E2=80=98jazz_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/irq.c:55:13: warning: no previous prototype for =E2=
+=80=98init_r4030_ints=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/irq.c:38:6: warning: no previous prototype for =E2=
+=80=98disable_r4030_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/jazz/irq.c:128:13: warning: no previous prototype for =
+=E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/cavium-octeon/smp.c:100:6: warning: no previous prototyp=
+e for =E2=80=98octeon_send_ipi_single=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/cavium-octeon/octeon-platform.c:701:13: warning: no prev=
+ious prototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: w=
+arning: no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en=
+_enable=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/cavium-octeon/executive/cvmx-helper-errata.c:49:6: warni=
+ng: no previous prototype for =E2=80=98__cvmx_helper_errata_qlm_disable_2nd=
+_order_cdr=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/platform.c:68:12: warning: no previous=
+ prototype for =E2=80=98db1x_register_pcmcia_socket=E2=80=99 [-Wmissing-pro=
+totypes]
+    1    arch/mips/alchemy/devboards/platform.c:152:12: warning: no previou=
+s prototype for =E2=80=98db1x_register_norflash=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/mips/alchemy/devboards/db1xxx.c:52:13: warning: no previous p=
+rototype for =E2=80=98get_system_type=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1550.c:582:12: warning: no previous =
+prototype for =E2=80=98db1550_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1550.c:56:12: warning: no previous p=
+rototype for =E2=80=98db1550_board_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1550.c:501:12: warning: no previous =
+prototype for =E2=80=98db1550_pci_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1300.c:855:12: warning: no previous =
+prototype for =E2=80=98db1300_board_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1300.c:786:12: warning: no previous =
+prototype for =E2=80=98db1300_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1200.c:799:12: warning: no previous =
+prototype for =E2=80=98db1200_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1200.c:116:12: warning: no previous =
+prototype for =E2=80=98db1200_board_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1000.c:94:12: warning: no previous p=
+rototype for =E2=80=98db1500_pci_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1000.c:450:12: warning: no previous =
+prototype for =E2=80=98db1000_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/alchemy/devboards/db1000.c:36:12: warning: no previous p=
+rototype for =E2=80=98db1000_board_setup=E2=80=99 [-Wmissing-prototypes]
+    1    arch/arc/boot/dts/vdk_hs38_smp.dtb: Warning (interrupt_map): Faile=
+d prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/vdk_hs38.dtb: Warning (interrupt_map): Failed pr=
+erequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/nsimosci_hs_idu.dts:92.16-96.5: Warning (interru=
+pt_provider): /fpga/pct: '#interrupt-cells' found, but node is not an inter=
+rupt provider
+    1    arch/arc/boot/dts/nsimosci_hs_idu.dtb: Warning (interrupt_map): Fa=
+iled prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/nsimosci_hs.dts:84.16-88.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/nsimosci_hs.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/haps_hs.dts:63.16-67.5: Warning (interrupt_provi=
+der): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt pro=
+vider
+    1    arch/arc/boot/dts/haps_hs.dtb: Warning (interrupt_map): Failed pre=
+requisite 'interrupt_provider'
+    1    arch/arc/boot/dts/axs103_idu.dtb: Warning (interrupt_map): Failed =
+prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/axs103.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+    1    arch/arc/boot/dts/axc003_idu.dtsi:92.16-97.5: Warning (interrupt_p=
+rovider): /cpu_card/pct: '#interrupt-cells' found, but node is not an inter=
+rupt provider
+    1    arch/arc/boot/dts/axc003_idu.dtsi:109.18-111.5: Warning (interrupt=
+_provider): /axs10x_mb/ethernet@18000: '#interrupt-cells' found, but node i=
+s not an interrupt provider
+    1    arch/arc/boot/dts/axc003.dtsi:85.16-90.5: Warning (interrupt_provi=
+der): /cpu_card/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/axc003.dtsi:102.18-104.5: Warning (interrupt_pro=
+vider): /axs10x_mb/ethernet@18000: '#interrupt-cells' found, but node is no=
+t an interrupt provider
+    1    _le../include/asm-generic/io.h:595:59: warning: performing pointer=
+ arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithm=
+etic]
+    1    __l../include/asm-generic/io.h:561:61: warning: performing pointer=
+ arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithm=
+etic]
+    1    OBASE + addr);../include/asm-generic/io.h:605:59: warning: perform=
+ing pointer arithmetic on a null pointer has undefined behavior [-Wnull-poi=
+nter-arithmetic]
+    1    In file included from ../include/linux/swap.h:9../include/asm-gene=
+ric/io.h:605:59: warning: performing pointer arithmetic on a null pointer h=
+as undefined behavior [-Wnull-pointer-arithmetic]
+    1    In file included from ../include/linux/memcontrol.h:13../include/a=
+sm-generic/io.h:561:61: warning: performing pointer arithmetic on a null po=
+inter has undefined behavior [-Wnull-pointer-arithmetic]
+    1    In file included from ../include/linux/io.h../include/asm-generic/=
+io.h::595:59: warning: performing pointer arithmetic on a null pointer has =
+undefined behavior [-Wnull-pointer-arithmetic]
+    1    In file included from ../include/linux/interrupt.h:../include/asm-=
+generic/io.h:744:2: warning: performing pointer arithmetic on a null pointe=
+r has undefined behavior [-Wnull-pointer-arithmetic]
+    1    In file included from ../include/linux/i2c.h:../include/asm-generi=
+c/io.h19:595:59: warning: performing pointer arithmetic on a null pointer h=
+as undefined behavior [-Wnull-pointer-arithmetic]
+    1    In file included from ../include/asm-generic/io.h:787:2: warning: =
+performing pointer arithmetic on a null pointer has undefined behavior [-Wn=
+ull-pointer-arithmetic]
+    1    In file included from ../include/asm-generic/io.h:561:61: warning:=
+ performing pointer arithmetic on a null pointer has undefined behavior [-W=
+null-pointer-arithmetic]
+    1    In file included from ../include/asm-generic/hardirq.h:../include/=
+asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null p=
+ointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1    In file included from ../include/asm-generic/hardirq.h13 warnings =
+generated.
+    1    :605:59: warning: performing pointer arithmetic on a null pointer =
+has undefined behavior [-Wnull-pointer-arithmetic]
+    1    :595:59: warning: performing pointer arithmetic on a null pointer =
+has undefined behavior [-Wnull-pointer-arithmetic]
+    1    : warning: performing pointer arithmetic on a null pointer has und=
+efined behavior [-Wnull-pointer-arithmetic]In file included from ../drivers=
+/i2c/i2c-boardinfo.c:7:
+    1    787 |         outsl(addr,13 warnings generated.
+    1    778 |         outsw(addr../include/asm-generic/io.h:744:2: warning=
+: performing pointer arithmetic on a null pointer has undefined behavior [-=
+Wnull-pointer-arithmetic]
+    1    744 |         insb(addr, buffer13 warnings generated.
+    1    605 | ../include/asm-generic/io.h        __raw_writel((u32 __force=
+)cpu_to_le32(value), PCI_I:595:59: warning: performing pointer arithmetic o=
+n a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1    605 |         __raw_writel((u32 __force)cpu_to_le32(value13 warnin=
+gs generated.
+    1    605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IO=
+B../include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1    605 |         __raw_writel((u13 warnings generated.
+    1    595 |         __raw_writew((u16 __force)cpu_../include/asm-generic=
+/io.h:744:2: warning: performing pointer arithmetic on a null pointer has u=
+ndefined behavior [-Wnull-pointer-arithmetic]
+    1    585 |         __raw_writeb(value, PCI_IOBASE + 13 warnings generat=
+ed.
+    1    574:61: warning: performing pointer arithmetic on a null pointer h=
+as undefined behavior [-Wnull-pointer-arithmetic]
+    1    574 |         val =3D __le32_to../include/asm-generic/io.h:595:59:=
+ warning: performing pointer arithmetic on a null pointer has undefined beh=
+avior [-Wnull-pointer-arithmetic]
+    1    574 |         val =3D __le3../include/asm-generic/io.h:605:59: war=
+ning: performing pointer arithmetic on a null pointer has undefined behavio=
+r [-Wnull-pointer-arithmetic]
+    1    561 |         val =3D __le16_to_cpu((__le16 __force)__raw_readw(PC=
+13 warnings generated.
+    1    561 |         val =3D __le16_to_cpu((__le16 __force)__raw_re13 war=
+nings generated.
+    1    548 |         val =3D __raw_readb(PCI13 warnings generated.
+    1    37 | #define __le16_to_13 warnings generated.
+    1    37 | #define __le16_13to warning_csp generatedu.
+    1    37 | #../include/asm-generic/io.h:561:61: warning: performing poin=
+ter arithmetic on a null pointer has undefined behavior [-Wnull-pointer-ari=
+thmetic]
+    1    16_../include/asm-generic/io.h:605:59: warning: performing pointer=
+ arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithm=
+etic]
+    1    1313 warnings generated.
+    1    13../include/asm-generic/io.h:561:61: warning: performing pointer =
+arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithme=
+tic]
+    1    120 | #define outsl(addr, buffer, count) __ou../include/asm-generi=
+c/io.hts:l561(:P61C:I _warning: Iperforming pointer arithmetic on a null po=
+inter has undefined behavior [-Wnull-pointer-arithmetic]O
+    1    104 | #define insb(addr, buffer../include/asm-generic/io.h:744:2: =
+warning: performing pointer arithmetic on a null pointer has undefined beha=
+vior [-Wnull-pointer-arithmetic]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings,=
+ 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    drivers/irqchip/irq-ath79-cpu.c:89:13: warning: no previous prototype f=
+or =E2=80=98ath79_cpu_irq_init=E2=80=99 [-Wmissing-prototypes]
+    drivers/irqchip/irq-ath79-misc.c:26:5: warning: no previous prototype f=
+or =E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    drivers/irqchip/irq-ath79-misc.c:181:13: warning: no previous prototype=
+ for =E2=80=98ath79_misc_irq_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arc/boot/dts/axc003.dtsi:85.16-90.5: Warning (interrupt_provider):=
+ /cpu_card/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/axc003.dtsi:102.18-104.5: Warning (interrupt_provider=
+): /axs10x_mb/ethernet@18000: '#interrupt-cells' found, but node is not an =
+interrupt provider
+    arch/arc/boot/dts/axs103.dtb: Warning (interrupt_map): Failed prerequis=
+ite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arc/boot/dts/axc003_idu.dtsi:92.16-97.5: Warning (interrupt_provid=
+er): /cpu_card/pct: '#interrupt-cells' found, but node is not an interrupt =
+provider
+    arch/arc/boot/dts/axc003_idu.dtsi:109.18-111.5: Warning (interrupt_prov=
+ider): /axs10x_mb/ethernet@18000: '#interrupt-cells' found, but node is not=
+ an interrupt provider
+    arch/arc/boot/dts/axs103_idu.dtb: Warning (interrupt_map): Failed prere=
+quisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 15 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/mips/sibyte/bcm1480/setup.c:104:13: warning: no previous prototype=
+ for =E2=80=98bcm1480_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/bcm1480/irq.c:200:13: warning: no previous prototype f=
+or =E2=80=98init_bcm1480_irqs=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/bcm1480/time.c:10:13: warning: no previous prototype f=
+or =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/bcm1480/smp.c:49:6: warning: no previous prototype for=
+ =E2=80=98bcm1480_smp_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/bcm1480/smp.c:158:6: warning: no previous prototype fo=
+r =E2=80=98bcm1480_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototype for=
+ =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous prot=
+otype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previous pro=
+totype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous prot=
+otype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous prototy=
+pe for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous protot=
+ype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous prototy=
+pe for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for =E2=
+=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-bcm1480.c:96:6: warning: no previous prototype fo=
+r =E2=80=98sb1480_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/csrc-bcm1480.c:37:13: warning: no previous prototype f=
+or =E2=80=98sb1480_clocksource_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 12 warning=
+s, 0 section mismatches
+
+Warnings:
+    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: warnin=
+g: no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en_enab=
+le=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/cavium-octeon/executive/cvmx-helper-errata.c:49:6: warning: n=
+o previous prototype for =E2=80=98__cvmx_helper_errata_qlm_disable_2nd_orde=
+r_cdr=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/cavium-octeon/octeon-platform.c:701:13: warning: no previous =
+prototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/mips/cavium-octeon/smp.c:100:6: warning: no previous prototype for=
+ =E2=80=98octeon_send_ipi_single=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/c-octeon.c:297:5: warning: no previous prototype for =E2=
+=80=98register_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/c-octeon.c:303:5: warning: no previous prototype for =E2=
+=80=98unregister_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/c-octeon.c:342:17: warning: no previous prototype for =E2=
+=80=98cache_parity_error_octeon_recoverable=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/c-octeon.c:351:17: warning: no previous prototype for =E2=
+=80=98cache_parity_error_octeon_non_recoverable=E2=80=99 [-Wmissing-prototy=
+pes]
+    arch/mips/pci/pci-octeon.c:234:12: warning: no previous prototype for =
+=E2=80=98octeon_pci_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/pci/pcie-octeon.c:1471:5: warning: no previous prototype for =
+=E2=80=98octeon_pcie_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/pci/msi-octeon.c:343:12: warning: no previous prototype for =
+=E2=80=98octeon_msi_initialize=E2=80=99 [-Wmissing-prototypes]
+    drivers/watchdog/octeon-wdt-main.c:210:6: warning: no previous prototyp=
+e for =E2=80=98octeon_wdt_nmi_stage3=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype f=
+or =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 21 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/mips/alchemy/devboards/platform.c:68:12: warning: no previous prot=
+otype for =E2=80=98db1x_register_pcmcia_socket=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/alchemy/devboards/platform.c:152:12: warning: no previous pro=
+totype for =E2=80=98db1x_register_norflash=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1000.c:36:12: warning: no previous protot=
+ype for =E2=80=98db1000_board_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1000.c:94:12: warning: no previous protot=
+ype for =E2=80=98db1500_pci_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1000.c:450:12: warning: no previous proto=
+type for =E2=80=98db1000_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1200.c:116:12: warning: no previous proto=
+type for =E2=80=98db1200_board_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1200.c:799:12: warning: no previous proto=
+type for =E2=80=98db1200_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1300.c:786:12: warning: no previous proto=
+type for =E2=80=98db1300_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1300.c:855:12: warning: no previous proto=
+type for =E2=80=98db1300_board_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1550.c:56:12: warning: no previous protot=
+ype for =E2=80=98db1550_board_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1550.c:501:12: warning: no previous proto=
+type for =E2=80=98db1550_pci_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1550.c:582:12: warning: no previous proto=
+type for =E2=80=98db1550_dev_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/alchemy/devboards/db1xxx.c:52:13: warning: no previous protot=
+ype for =E2=80=98get_system_type=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:138:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_setmode=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:235:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_fb_setcolreg=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:294:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_fb_pan_display=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:341:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_fb_mmap=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:523:6: warning: no previous prototype fo=
+r =E2=80=98au1100fb_drv_remove=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:548:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_drv_suspend=E2=80=99 [-Wmissing-prototypes]
+    drivers/video/fbdev/au1100fb.c:565:5: warning: no previous prototype fo=
+r =E2=80=98au1100fb_drv_resume=E2=80=99 [-Wmissing-prototypes]
+    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous proto=
+type for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-12) =E2=80=94 FAIL, 0 errors, 9 warnings=
+, 0 section mismatches
+
+Warnings:
+    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
+=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
+=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
+=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
+=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
+=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
+ =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
+ =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
+or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
+=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 9 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
+=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
+=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
+=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
+=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
+=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
+ =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
+ =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
+or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
+=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 9 warning=
+s, 0 section mismatches
+
+Warnings:
+    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
+=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
+=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
+=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
+=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
+=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
+ =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
+ =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
+or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
+=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    llvm-readelf: warning: 'arch/riscv/kernel/vdso/vdso.so.dbg': invalid PT=
+_DYNAMIC size (0x138)
+    llvm-readelf: warning: 'arch/riscv/kernel/vdso/vdso.so.dbg': PT_DYNAMIC=
+ dynamic table is invalid: SHT_DYNAMIC will be used
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-12) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-12) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-12) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-12) =E2=80=94 FAIL, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-12) =E2=80=94 FAIL, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+eyeq5_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    {standard input}:152: Warning: macro instruction expanded into multiple=
+ instructions
+
+---------------------------------------------------------------------------=
+-----
+eyeq6_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    {standard input}:152: Warning: macro instruction expanded into multiple=
+ instructions
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previous pro=
+totype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous proto=
+type for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs.dts:63.16-67.5: Warning (interrupt_provider):=
+ /fpga/pct: '#interrupt-cells' found, but node is not an interrupt provider
+    arch/arc/boot/dts/haps_hs.dtb: Warning (interrupt_map): Failed prerequi=
+site 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-12) =E2=80=94 FAIL, 0 errors, 2 w=
+arnings, 0 section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =E2=80=
+=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/sgi-ip22/ip28-berr.c:474:5: warning: no previous prototype fo=
+r =E2=80=98ip28_show_be_info=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sgi-ip22/ip22-eisa.c:95:12: warning: no previous prototype fo=
+r =E2=80=98ip22_eisa_init=E2=80=99 [-Wmissing-prototypes]
+    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =E2=80=
+=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+ip30_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/net/ethernet/sgi/meth.c:271:5: warning: no previous prototype f=
+or =E2=80=98meth_reset=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/jazz/irq.c:38:6: warning: no previous prototype for =E2=80=98=
+disable_r4030_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/jazz/irq.c:55:13: warning: no previous prototype for =E2=80=
+=98init_r4030_ints=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/jazz/irq.c:128:13: warning: no previous prototype for =E2=80=
+=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/jazz/reset.c:49:6: warning: no previous prototype for =E2=80=
+=98jazz_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/jazz/setup.c:52:13: warning: no previous prototype for =E2=80=
+=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 22 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: warning: no prev=
+ious prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: warning: no prev=
+ious prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:15:6: warning: no prev=
+ious prototype for =E2=80=98pci_acc_write_reg=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:62:5: warning: no prev=
+ious prototype for =E2=80=98pci_acc_read_reg=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:15:6: warning: no pre=
+vious prototype for =E2=80=98pci_ohci_write_reg=E2=80=99 [-Wmissing-prototy=
+pes]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:70:5: warning: no pre=
+vious prototype for =E2=80=98pci_ohci_read_reg=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:84:6: warning: no prev=
+ious prototype for =E2=80=98pci_isa_write_bar=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:110:5: warning: no pre=
+vious prototype for =E2=80=98pci_isa_read_bar=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:134:6: warning: no pre=
+vious prototype for =E2=80=98pci_isa_write_reg=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:228:5: warning: no pre=
+vious prototype for =E2=80=98pci_isa_read_reg=E2=80=99 [-Wmissing-prototype=
+s]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:15:6: warning: no pre=
+vious prototype for =E2=80=98pci_ehci_write_reg=E2=80=99 [-Wmissing-prototy=
+pes]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:75:5: warning: no pre=
+vious prototype for =E2=80=98pci_ehci_read_reg=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previous pro=
+totype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/pm.c:59:13: warning: no previous prototype=
+ for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/pm.c:66:12: warning: no previous prototype=
+ for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/pm.c:114:13: warning: no previous prototyp=
+e for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/common/pm.c:118:13: warning: no previous prototyp=
+e for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/lemote-2f/machtype.c:10:13: warning: no previous =
+prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototyp=
+es]
+    arch/mips/loongson2ef/lemote-2f/pm.c:52:6: warning: no previous prototy=
+pe for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/lemote-2f/pm.c:90:5: warning: no previous prototy=
+pe for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/lemote-2f/pm.c:137:13: warning: no previous proto=
+type for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/loongson2ef/lemote-2f/pm.c:142:13: warning: no previous proto=
+type for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/loongson32/common/platform.c:71:5: warning: no previous proto=
+type for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/loongson32/common/platform.c:71:5: warning: no previous proto=
+type for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 5 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (interru=
+pt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, but nod=
+e is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dts:28.31-36.4: Warn=
+ing (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missing '#=
+interrupt-cells' in interrupt provider
+    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dtb: Warning (interr=
+upt_map): Failed prerequisite 'interrupt_provider'
+    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (interru=
+pt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, but nod=
+e is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dtb: Warning (interr=
+upt_map): Failed prerequisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (interru=
+pt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, but nod=
+e is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dts:28.31-36.4: Warn=
+ing (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missing '#=
+interrupt-cells' in interrupt provider
+    arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dtb: Warning (interr=
+upt_map): Failed prerequisite 'interrupt_provider'
+    arch/mips/boot/dts/loongson/ls7a-pch.dtsi:68.16-416.5: Warning (interru=
+pt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, but nod=
+e is not an interrupt provider
+    arch/mips/boot/dts/loongson/loongson64g_4core_ls7a.dtb: Warning (interr=
+upt_map): Failed prerequisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/kernel/vpe-mt.c:177:7: warning: no previous prototype for =E2=
+=80=98vpe_alloc=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/vpe-mt.c:195:5: warning: no previous prototype for =E2=
+=80=98vpe_start=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/vpe-mt.c:205:5: warning: no previous prototype for =E2=
+=80=98vpe_stop=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/vpe-mt.c:226:5: warning: no previous prototype for =E2=
+=80=98vpe_free=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-12) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-12) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-12) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 541=
+5 warnings, 0 section mismatches
+
+Warnings:
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    787 |         outsl(addr,13 warnings generated.
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    37 | #define __le16_13to warning_csp generatedu.
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]In fil=
+e included from ../mm/backing-dev.c:3:
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    561 |         val =3D __le16_to_cpu((__le16 __force)__raw_re13 warnings=
+ generated.
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h  :548561 | :        61:v awarning: lperforming=
+ pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointe=
+r-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    In file included from ../include/linux/io.h../include/asm-generic/io.h:=
+:595:59: warning: performing pointer arithmetic on a null pointer has undef=
+ined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61../include/asm-generic/io.h:605:59: warn=
+ing: performing pointer arithmetic on a null pointer has undefined behavior=
+ [-Wnull-pointer-arithmetic]
+    : warning: performing pointer arithmetic on a null pointer has undefine=
+d behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    595 |         __raw_writew((u16 __force)cpu_../include/asm-generic/io.h=
+:744:2: warning: performing pointer arithmetic on a null pointer has undefi=
+ned behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    warning: ../include/asm-generic/io.h:595:59: warning: performing pointe=
+r arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arith=
+metic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOB../i=
+nclude/asm-generic/io.h:744:2: warning: performing pointer arithmetic on a =
+null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    buffer, coun../include/asm-generic/io.h:561:61: warning: performing poi=
+nter arithmetic on a null pointer has undefined behavior [-Wnull-pointer-ar=
+ithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    ine insl(add../include/asm-generic/io.h:595:59: warning: performing poi=
+nter arithmetic on a null pointer has undefined behavior [-Wnull-pointer-ar=
+ithmetic]
+    r, buffer, count)../include/asm-generic/io.h:605:59: warning: performin=
+g pointer arithmetic on a null pointer has undefined behavior [-Wnull-point=
+er-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    arch/riscv/include/asm/io.h:118:../include/asm-generic/io.h:744:2: warn=
+ing: performing pointer arithmetic on a null pointer has undefined behavior=
+ [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]13 war=
+nings generated.
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    In file included from ../include/asm-generic/io.h:561:61: warning: perf=
+orming pointer arithmetic on a null pointer has undefined behavior [-Wnull-=
+pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    In file included from ../include/linux/memcontrol.h:13../include/asm-ge=
+neric/io.h:561:61: warning: performing pointer arithmetic on a null pointer=
+ has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    :595:59: warning: performing pointer arithmetic on a null pointer has u=
+ndefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    574 |         val =3D __le3../include/asm-generic/io.h:605:59: warning:=
+ performing pointer arithmetic on a null pointer has undefined behavior [-W=
+null-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]In file=
+ included from ../block/partitions/msdos.c:31:
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    In file included from ../include/linux/interrupt.h:../include/asm-gener=
+ic/io.h:744:2: warning: performing pointer arithmetic on a null pointer has=
+ undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1313 warnings generated.
+    warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h13 warnings generated.
+    :561:61: warning: performing pointer arithmetic on a null pointer has u=
+ndefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    :561:61: warning: performing pointer arithmetic on a null pointer has u=
+ndefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    574 |         val =3D __le32_to../include/asm-generic/io.h:595:59: warn=
+ing: performing pointer arithmetic on a null pointer has undefined behavior=
+ [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]ew((u1=
+6 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+    :605:59: warning: performing pointer arithmetic on a null pointer has u=
+ndefined behavior [-Wnull-pointer-arithmetic]
+    605 | ../include/asm-generic/io.h        __raw_writel((u32 __force)cpu_=
+to_le32(value), PCI_I:595:59: warning: performing pointer arithmetic on a n=
+ull pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    OBASE + addr);../include/asm-generic/io.h:605:59: warning: performing p=
+ointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-=
+arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    104 | #define insb(addr, buffer../include/asm-generic/io.h:744:2: warni=
+ng: performing pointer arithmetic on a null pointer has undefined behavior =
+[-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    605 |         __raw_writel((u32 __force)cpu_to_le32(value13 warnings ge=
+nerated.
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    sw(addr, buffer, ../include/asm-generic/io.h:561:61: warning: performin=
+g pointer arithmetic on a null pointer has undefined behavior [-Wnull-point=
+er-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    r,../include/asm-generic/io.h :c574o:u61n:t )warning:  performing point=
+er arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arit=
+hmetic]_
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: 13 warnings generated.
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    585 |         __raw_writeb(value, PCI_IOBASE + 13 warnings generated.
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    37 | #../include/asm-generic/io.h:561:61: warning: performing pointer a=
+rithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmet=
+ic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    _le../include/asm-generic/io.h:595:59: warning: performing pointer arit=
+hmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    16_../include/asm-generic/io.h:605:59: warning: performing pointer arit=
+hmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    605 |         __raw_writel((u13 warnings generated.
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    744 |         insb(addr, buffer13 warnings generated.
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.hIn file included from :744:2: warning: performi=
+ng pointer arithmetic on a null pointer has undefined behavior [-Wnull-poin=
+ter-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    warning: performing pointer arithmetic on a null pointer has undefined =
+behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    warnings generated.
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    In file included from ../include/asm-generic/hardirq.h:../include/asm-g=
+eneric/io.h:561:61: warning: performing pointer arithmetic on a null pointe=
+r has undefined behavior [-Wnull-pointer-arithmetic]
+    In file included from ../include/asm-generic/io.h:787:2: warning: perfo=
+rming pointer arithmetic on a null pointer has undefined behavior [-Wnull-p=
+ointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    __l../include/asm-generic/io.h:561:61: warning: performing pointer arit=
+hmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    eadl(PCI../include/asm-generic/io.h:605:59: warning: performing pointer=
+ arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithm=
+etic]
+    include/uapi/linux/byteorder/little_endian.h:35:51: ../include/asm-gene=
+ric/io.h:744:2: warning: performing pointer arithmetic on a null pointer ha=
+s undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    561 |         val =3D __le16_to_cpu((__le16 __force)__raw_readw(PC13 wa=
+rnings generated.
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    :744:2: warning: performing pointer arithmetic on a null pointer has un=
+defined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    37 | #define __le16_to_13 warnings generated.
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    arch/riscv/include/asm/io.h:10413: warnings generated.
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13../include/asm-generic/io.h:561:61: warning: performing pointer arith=
+metic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    warnings generated.
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:../include/asm-generic/io.h:744:2: warning: pe=
+rforming pointer arithmetic on a null pointer has undefined behavior [-Wnul=
+l-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    574:61: warning: performing pointer arithmetic on a null pointer has un=
+defined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    548 |         val =3D __raw_readb(PCI13 warnings generated.
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    ne outsw(addr, buffer, count) _13_ warnings generated.
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    In file included from ../include/asm-generic/hardirq.h13 warnings gener=
+ated.
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    : warning: performing pointer arithmetic on a null pointer has undefine=
+d behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:../include/asm-generic/io.h61:744:2: warni=
+ng: performing pointer arithmetic on a null pointer has undefined behavior =
+[-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    : warning: performing pointer arithmetic on a null pointer has undefine=
+d behavior [-Wnull-pointer-arithmetic]In file included from ../drivers/i2c/=
+i2c-boardinfo.c:7:
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    sb(PCI_IOBASE + (add../include/asm-generic/io.hr:561:61: warning: perfo=
+rming pointer arithmetic on a null pointer has undefined behavior [-Wnull-p=
+ointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    In file included from ../include/linux/i2c.h:../include/asm-generic/io.=
+h19:595:59: warning: performing pointer arithmetic on a null pointer has un=
+defined behavior [-Wnull-pointer-arithmetic]
+    In file included from ../include/linux/swap.h:9../include/asm-generic/i=
+o.h:605:59: warning: performing pointer arithmetic on a null pointer has un=
+defined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    778 |         outsw(addr../include/asm-generic/io.h:744:2: warning: per=
+forming pointer arithmetic on a null pointer has undefined behavior [-Wnull=
+-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h__:o769u:t2s:l( Pwarning: CIperforming pointer =
+arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithme=
+tic]_
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    :744:2: warning: performing pointer arithmetic on a null pointer has un=
+defined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    d../include/asm-generic/io.hr):,548 :31b:u fwarning: fperforming pointe=
+r arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arith=
+metic]e
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    120 | #define outsl(addr, buffer, count) __ou../include/asm-generic/io.=
+hts:l561(:P61C:I _warning: Iperforming pointer arithmetic on a null pointer=
+ has undefined behavior [-Wnull-pointer-arithmetic]O
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic=
+ on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:744:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:752:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:760:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:769:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:778:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:787:2: warning: performing pointer arithmetic =
+on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    include/asm-generic/io.h:1115:55: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    13 warnings generated.
+    13 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/nsimosci_hs.dts:84.16-88.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/nsimosci_hs.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    arch/arc/boot/dts/nsimosci_hs_idu.dts:92.16-96.5: Warning (interrupt_pr=
+ovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt =
+provider
+    arch/arc/boot/dts/nsimosci_hs_idu.dtb: Warning (interrupt_map): Failed =
+prerequisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
+=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
+=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/rb532/serial.c:48:12: warning: no previous prototype for =E2=
+=80=98setup_serial_port=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 8 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/sni/reset.c:28:6: warning: no previous prototype for =E2=80=
+=98sni_machine_restart=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/reset.c:45:6: warning: no previous prototype for =E2=80=
+=98sni_machine_power_off=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/rm200.c:211:6: warning: no previous prototype for =E2=80=
+=98sni_rm200_mask_and_ack_8259A=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/rm200.c:331:6: warning: no previous prototype for =E2=80=
+=98sni_rm200_init_8259A=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/rm200.c:387:13: warning: no previous prototype for =E2=80=
+=98sni_rm200_i8259_irqs=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/rm200.c:428:6: warning: no previous prototype for =E2=80=
+=98disable_rm200_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/pcimt.c:206:6: warning: no previous prototype for =E2=80=
+=98disable_pcimt_irq=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sni/pcit.c:168:6: warning: no previous prototype for =E2=80=
+=98disable_pcit_irq=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
+=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
+=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 16 warnings=
+, 0 section mismatches
+
+Warnings:
+    arch/mips/sibyte/sb1250/setup.c:79:5: warning: no previous prototype fo=
+r =E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/setup.c:168:13: warning: no previous prototype =
+for =E2=80=98sb1250_setup=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/irq.c:182:13: warning: no previous prototype fo=
+r =E2=80=98init_sb1250_irqs=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/time.c:10:13: warning: no previous prototype fo=
+r =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/smp.c:38:6: warning: no previous prototype for =
+=E2=80=98sb1250_smp_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/sb1250/smp.c:147:6: warning: no previous prototype for=
+ =E2=80=98sb1250_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototype for=
+ =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous prot=
+otype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previous pro=
+totype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous prot=
+otype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous prototy=
+pe for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous protot=
+ype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous prototy=
+pe for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/cevt-sb1250.c:95:6: warning: no previous prototype for=
+ =E2=80=98sb1250_clockevent_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/kernel/csrc-sb1250.c:53:13: warning: no previous prototype fo=
+r =E2=80=98sb1250_clocksource_init=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for =E2=
+=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
+te.GNU-stack section implies executable stack
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
+ing .note.GNU-stack section implies executable stack
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 16 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
+te.GNU-stack section implies executable stack
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
+ing .note.GNU-stack section implies executable stack
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 16 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
+te.GNU-stack section implies executable stack
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
+ing .note.GNU-stack section implies executable stack
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/fork.c:3075:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3075 | #warning clone3() entry point is missing, please fix
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arc/boot/dts/vdk_axs10x_mb.dtsi:36.18-47.5: Warning (interrupt_pro=
+vider): /axs10x_mb_vdk/ethernet@18000: '#interrupt-cells' found, but node i=
+s not an interrupt provider
+    arch/arc/boot/dts/vdk_hs38.dtb: Warning (interrupt_map): Failed prerequ=
+isite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, =
+0 section mismatches
+
+Warnings:
+    arch/arc/boot/dts/vdk_axs10x_mb.dtsi:36.18-47.5: Warning (interrupt_pro=
+vider): /axs10x_mb_vdk/ethernet@18000: '#interrupt-cells' found, but node i=
+s not an interrupt provider
+    arch/arc/boot/dts/vdk_hs38_smp.dtb: Warning (interrupt_map): Failed pre=
+requisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
+=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
+    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
+=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, rustc-1.75) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, rustc-1.75) =E2=80=94 PASS, 0 errors, 1=
+ warning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x14fdc9
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.75) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust-samples (x86_64, rustc-1.75) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-board (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-board+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 err=
+ors, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
 

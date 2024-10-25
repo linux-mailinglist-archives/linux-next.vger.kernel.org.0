@@ -1,158 +1,117 @@
-Return-Path: <linux-next+bounces-4441-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4442-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBAC29B0935
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 18:09:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B1DC9B099E
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 18:17:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B7091F22830
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 16:09:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95BFE1C23ADC
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 16:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB10A170A31;
-	Fri, 25 Oct 2024 16:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72AF415853D;
+	Fri, 25 Oct 2024 16:17:41 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C878816FF44;
-	Fri, 25 Oct 2024 16:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603B470830
+	for <linux-next@vger.kernel.org>; Fri, 25 Oct 2024 16:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729872543; cv=none; b=QUnupwe/ftqBAQuWjyf/C8OY7DrwLelr23CJCxzkTc4Z8zOF0umHHBzUUmcnfhheriSGtKH5u1A20tEbvaFTfINaOo34STX5GXg5yq+nEXj0z07TKnjQzPgDn8FpN/eQIMBPc+Zzu01txIyMrF0i1XZl5Fw2P78w8I+SoaZ5YTg=
+	t=1729873061; cv=none; b=Rd7PQDvrzxA1dK+U7QPk0XHk2bm81deq3SzxTB5lazZY0H3ZYlXP7mbp8pJI1KZStkapYHgZi/ltqrHuhKelo7OxuKtufRZZP4iC2gN7A00aeq05B3FR4r5BCoSsS//5Q3Vf390WoeAf+EOTuxEDVGyGJj7XL2sirwwIgmlOGB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729872543; c=relaxed/simple;
-	bh=zYjnBwvtGTqIrdDRx9LwMu2z0itwomSygbNeb4iemIk=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lhO5VTA/7VGqj4hvlcSg2M2ugGXnD4IqCmFv/x/+xbdmn98qaJDVoIv88EUDaSx1386vUreLk2v8h0S+s5xzVqfjSRzcLEMvh08ECO22qLBlBAWuTBeSATTxOmopP/5Vxirj+VZzoJh9Mfp1tAwPqNMeXuPqXqe2pwnKZdpQAX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XZnj31jzhz6K6Fx;
-	Sat, 26 Oct 2024 00:06:47 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 32D6414039E;
-	Sat, 26 Oct 2024 00:08:57 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 25 Oct
- 2024 18:08:56 +0200
-Date: Fri, 25 Oct 2024 17:08:55 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-CC: Jonathan Cameron <jic23@kernel.org>, Stephen Rothwell
-	<sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>, Arnd Bergmann
-	<arnd@arndb.de>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	<linux-iio@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the char-misc tree with the
- iio-fixes tree
-Message-ID: <20241025170855.00001f0a@Huawei.com>
-In-Reply-To: <d5a57cad-7311-4075-8b6e-04f22ed510f7@gmail.com>
-References: <20241023141015.0ec5346d@canb.auug.org.au>
-	<22f9dbb6-ba5e-4c85-8aa2-6090008e7da4@gmail.com>
-	<20241024184108.6eb3bdf0@jic23-huawei>
-	<d5a57cad-7311-4075-8b6e-04f22ed510f7@gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1729873061; c=relaxed/simple;
+	bh=GV1aYIXwS/aqFerkB9pkXH8XtWSjfwQLzZWXYXdaRsA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=LXzXUcz7TvwIAN6pSeIIqSy4VWNa1M7ChQf1ENoCvxG3jooHRZVwYsRb/oa8nca91I1h2EqcGtvsccmkIN/RNd97uMcID0TrrzOZGedzOD3QvZkX+lB/7LKY6u+loKYdtibYFugtpC/vCB7Hteet5lQ+3FXns0Al1R+QSu9LA7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1t4N0G-0000Zy-HO; Fri, 25 Oct 2024 18:17:32 +0200
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1t4N0E-000OeZ-1x;
+	Fri, 25 Oct 2024 18:17:30 +0200
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1t4N0E-000E9f-1k;
+	Fri, 25 Oct 2024 18:17:30 +0200
+Message-ID: <bf1a5649cd680213d66b249684b18afbc6083b6e.camel@pengutronix.de>
+Subject: Re: [PATCH] misc: Silence warnings when building the LAN966x device
+ tree overlay
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Rob Herring <robh@kernel.org>, Herve Codina <herve.codina@bootlin.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, linux-kernel@vger.kernel.org, 
+ linux-next@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>
+Date: Fri, 25 Oct 2024 18:17:30 +0200
+In-Reply-To: <CAL_JsqKebRL454poAYZ9i=sCsHqGzmocLy0psQcng-79UWJB-A@mail.gmail.com>
+References: <20241025145353.1620806-1-p.zabel@pengutronix.de>
+	 <CAL_JsqKebRL454poAYZ9i=sCsHqGzmocLy0psQcng-79UWJB-A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- frapeml500008.china.huawei.com (7.182.85.71)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-next@vger.kernel.org
 
-On Thu, 24 Oct 2024 20:39:57 +0200
-Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
+On Fr, 2024-10-25 at 10:40 -0500, Rob Herring wrote:
+> On Fri, Oct 25, 2024 at 9:54=E2=80=AFAM Philipp Zabel <p.zabel@pengutroni=
+x.de> wrote:
+> >=20
+> > Silence the following warnings when building the LAN966x device tree
+> > overlay:
+> >=20
+> > drivers/misc/lan966x_pci.dtso:34.23-40.7: Warning (interrupts_property)=
+: /fragment@0/__overlay__/pci-ep-bus@0/oic@e00c0120: Missing interrupt-pare=
+nt
+>=20
+> > drivers/misc/lan966x_pci.dtso:42.22-46.7: Warning (simple_bus_reg): /fr=
+agment@0/__overlay__/pci-ep-bus@0/cpu_clk: missing or empty reg/ranges prop=
+erty
+> > drivers/misc/lan966x_pci.dtso:48.22-52.7: Warning (simple_bus_reg): /fr=
+agment@0/__overlay__/pci-ep-bus@0/ddr_clk: missing or empty reg/ranges prop=
+erty
+> > drivers/misc/lan966x_pci.dtso:54.22-58.7: Warning (simple_bus_reg): /fr=
+agment@0/__overlay__/pci-ep-bus@0/sys_clk: missing or empty reg/ranges prop=
+erty
+>=20
+> These nodes should be moved out of the simple-bus.
 
-> On 24/10/2024 19:41, Jonathan Cameron wrote:
-> > On Wed, 23 Oct 2024 20:17:30 +0200
-> > Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
-> >   
-> >> On 23/10/2024 05:10, Stephen Rothwell wrote:  
-> >>> Hi all,
-> >>>
-> >>> Today's linux-next merge of the char-misc tree got a conflict in:
-> >>>
-> >>>   drivers/iio/light/veml6030.c
-> >>>
-> >>> between commit:
-> >>>
-> >>>   de9981636774 ("iio: light: veml6030: fix microlux value calculation")
-> >>>
-> >>> from the iio-fixes tree and commit:
-> >>>
-> >>>   ed59fc90f38a ("iio: light: veml6030: drop processed info for white channel")
-> >>>
-> >>> from the char-misc tree.
-> >>>
-> >>> I fixed it up (the latter removed the line updated by the former) and
-> >>> can carry the fix as necessary. This is now fixed as far as linux-next
-> >>> is concerned, but any non trivial conflicts should be mentioned to your
-> >>> upstream maintainer when your tree is submitted for merging.  You may
-> >>> also want to consider cooperating with the maintainer of the conflicting
-> >>> tree to minimise any particularly complex conflicts.
-> >>>     
-> >>
-> >>
-> >> Hi Stephen,
-> >>
-> >> I doubled checked the status of the driver in linux-next, and everything
-> >> looks as it should: the first commit applied as a single chunk, as its
-> >> second chunk affects lines that the second commit removed.
-> >>
-> >> Thank you for fixing it up.  
-> > 
-> > Not quite. This was a lucky merge issue as it highlighted something I'd
-> > messed up.
-> > 
-> > A rare case of a fuzzy application of a patch picking the wrong block but still
-> > giving a very plausible looking diff that fooled me.
-> > 
-> > I picked up the fix via a different tree from where you expected.
-> > In char-misc-next / iio/togreg there is only one instance of this code block because
-> > the larger driver rework removed one of the two that was in the tree that
-> > iio-fixes is based on (effectively mainline).
-> > 
-> > The fix got applied to the one that is going away (which is going away because
-> > the scale makes no sense on the intensity channel) not the illuminance / IIO_LIGHT
-> > channel that was intended.
-> > 
-> > I've move it to the right block with the side effect that the merge conflict
-> > should go away.  Javier, please check iio.git/fixes-togreg to be 100% sure
-> > I haven't messed it up again.
-> > 
-> > Thanks Stephen for your hard work on linux-next!
-> > 
-> > Jonathan
-> >   
-> >>
-> >> Best regards,
-> >> Javier Carrasco  
-> >   
-> 
-> What I see in iio.git/fixes-togreg is right in the sense that the fix
-> fro the processed value (commit 63dd163cd61dd) is only applied to the
-> processed value of the IIO_LIGHT channel, and not to IIO_INTENSITY.
-> 
-> The processed value of the IIO_INTENSITY channel should be then dropped
-> at some point with the other patch, as it has already been done in
-> linux-next/master.
-> 
-Yes. We may want to separately chase back dropping the processed
-IIO_INTENSITY later given the issues that are left there.
-Once the change is upstream, I'd be fine with that as a backported
-fix.
+Ah, thank you. Herv=C3=A9, can you send a follow-up to fix these?
 
-Jonathan
+> > drivers/misc/lan966x_pci.dtso:18.15-165.5: Warning (avoid_unnecessary_a=
+ddr_size): /fragment@0/__overlay__: unnecessary #address-cells/#size-cells =
+without "ranges", "dma-ranges" or child "reg" property
+>=20
+> For this one,  dtc should be fixed to also look for child "ranges" proper=
+ty.
 
-> Best regards,
-> Javier Carrasco
+Gave it a shot:
 
+https://lore.kernel.org/devicetree-compiler/20241025161307.3629901-1-p.zabe=
+l@pengutronix.de/T/#u
+
+
+> Aren't these other ones all W=3D1 warnings?
+
+My bad, you are right. I'll drop them from this patch.
+
+regards
+Philipp
 

@@ -1,87 +1,114 @@
-Return-Path: <linux-next+bounces-4446-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4447-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0B8C9B0A1A
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 18:39:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF6169B0A50
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 18:50:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52BB72854BC
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 16:39:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D1DE1C2123B
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2024 16:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D008165EF8;
-	Fri, 25 Oct 2024 16:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="W18eLmgx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFADF1FF04A;
+	Fri, 25 Oct 2024 16:50:42 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB1521A4C6;
-	Fri, 25 Oct 2024 16:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF3F1CF7DB
+	for <linux-next@vger.kernel.org>; Fri, 25 Oct 2024 16:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729874350; cv=none; b=irYL868y8FemgulQ1cIdwsXRy4tD1O1Wux1HlzdycQKlOPIN+0BIB+v97gdfq53BCzqAZO1+nMkl86HXS+8+NcN3kwg5fPOiAT1PEHAfKwxWo4KMK/2EkwOG120y6cb5fqhhPL6Hl3inuLAXybB1ZaDYesvXaOZNhBEE5ibGrB8=
+	t=1729875042; cv=none; b=P3tkNZlZqvUDB17417XcBG+9teKGCL5yNVkmCnODDDitPHmlYHejo1i+Sr01Cb7BgpJcOQJOYJFvn2hl5VrdDLD9HHxs6U5uQ+ELD3t0QLwm3ZPVD3yZ/JCyDeliAUmI9myKjGeCb1xYEh12YOTTF0tlX+ZqeoIfopm0+rbtZhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729874350; c=relaxed/simple;
-	bh=WPmSXAICauXvaPU/TEZw23R9wI2Gm536hOoSi1hHuX4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Bj3SP0iDHuhw0aIjWb+7BpTs0azAKIUZt7H3UvNqZwoRv74S/v4riuyD2mLoMfirJxTPh0x3VX1+Whftlj9tjKeig+6QDH8WDZ3R8L7uUVJZGbI5TTatzWB6ncJC2YwepjDbOUQQJ/p9M5XKST1nEJ8MBQPB527XcBvHqnCT4g8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=W18eLmgx; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7ECF42000A;
-	Fri, 25 Oct 2024 16:38:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1729874340;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GFGEnRIXo0K2bsmQR93Kg5YG69qDnI7KIeei/h8O8v4=;
-	b=W18eLmgx1Vua3Me+oD/1bo27kYrBNXLgUQDRjk1DNjRdx5qTdRp4YrV55iB6DntU3RZm+Z
-	rZg+vcu/W3ciR4pGumDDRQOggbi7SDiYAwC7ubcY+vGb91AOa2iMfti0+mEiyHouZzaE49
-	K/0AZq+8y4m1rYUGYSwsgY09Uzf7wr2awkj2drD7vjQedUUbQxDZx7NEN+SFiqCKkzKW/x
-	EzxOv/N0j81kUhfE8db53nkOy4KYpJjS0/yJut6HzsIAFA1rKuDFArztbtxm4GbL8THWUJ
-	huSlXQVZQ0dNkbV2FzK5DBWQmiQHfef9r+vKM01qHIp8CCaNtw5Xpk2ccU/77A==
-Date: Fri, 25 Oct 2024 18:38:58 +0200
-From: Herve Codina <herve.codina@bootlin.com>
-To: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Rob Herring <robh@kernel.org>,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, Arnd Bergmann
- <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2] misc: Silence warning when building the LAN966x
- device tree overlay
-Message-ID: <20241025183858.2f973f3c@bootlin.com>
-In-Reply-To: <20241025161739.3643796-1-p.zabel@pengutronix.de>
-References: <20241025161739.3643796-1-p.zabel@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1729875042; c=relaxed/simple;
+	bh=oPasYCPFr0s+XvHk6AdFIlrDAzctc3mlxjjeQsYysEk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=py5jUoMPzlrgB54CQ5WsAz39QJJvaTJ6GVvTeciyw9yIvA87bo52X0KGSnTww2wICcPmgufas/oo7wpkW6vFTnTOFS4ztG/0fe8syMYgM0IGo9Rq9n1B8vMY5xjup72m+38Zk+XOVm6CwBo3nhRFZhEWi2rrklOj7YDr/p9WrkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1t4NWC-0002bt-Gw; Fri, 25 Oct 2024 18:50:32 +0200
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1t4NWB-000OlJ-2Z;
+	Fri, 25 Oct 2024 18:50:31 +0200
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1t4NWB-000Er6-2M;
+	Fri, 25 Oct 2024 18:50:31 +0200
+Message-ID: <f8a93830ab97cd8f7043d15d7d063a57a2e0ebbe.camel@pengutronix.de>
+Subject: Re: [PATCH] misc: Silence warnings when building the LAN966x device
+ tree overlay
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Rob Herring <robh@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, Arnd Bergmann
+	 <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date: Fri, 25 Oct 2024 18:50:31 +0200
+In-Reply-To: <20241025183801.0133a0a7@bootlin.com>
+References: <20241025145353.1620806-1-p.zabel@pengutronix.de>
+	 <CAL_JsqKebRL454poAYZ9i=sCsHqGzmocLy0psQcng-79UWJB-A@mail.gmail.com>
+	 <bf1a5649cd680213d66b249684b18afbc6083b6e.camel@pengutronix.de>
+	 <20241025183801.0133a0a7@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: herve.codina@bootlin.com
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-next@vger.kernel.org
 
-On Fri, 25 Oct 2024 18:17:39 +0200
-Philipp Zabel <p.zabel@pengutronix.de> wrote:
+On Fr, 2024-10-25 at 18:38 +0200, Herve Codina wrote:
+> Hi All,
+>=20
+> On Fri, 25 Oct 2024 18:17:30 +0200
+> Philipp Zabel <p.zabel@pengutronix.de> wrote:
+>=20
+> > On Fr, 2024-10-25 at 10:40 -0500, Rob Herring wrote:
+> > > On Fri, Oct 25, 2024 at 9:54=E2=80=AFAM Philipp Zabel <p.zabel@pengut=
+ronix.de> wrote: =20
+> > > >=20
+> > > > Silence the following warnings when building the LAN966x device tre=
+e
+> > > > overlay:
+> > > >=20
+> > > > drivers/misc/lan966x_pci.dtso:34.23-40.7: Warning (interrupts_prope=
+rty): /fragment@0/__overlay__/pci-ep-bus@0/oic@e00c0120: Missing interrupt-=
+parent =20
+> > >  =20
+> > > > drivers/misc/lan966x_pci.dtso:42.22-46.7: Warning (simple_bus_reg):=
+ /fragment@0/__overlay__/pci-ep-bus@0/cpu_clk: missing or empty reg/ranges =
+property
+> > > > drivers/misc/lan966x_pci.dtso:48.22-52.7: Warning (simple_bus_reg):=
+ /fragment@0/__overlay__/pci-ep-bus@0/ddr_clk: missing or empty reg/ranges =
+property
+> > > > drivers/misc/lan966x_pci.dtso:54.22-58.7: Warning (simple_bus_reg):=
+ /fragment@0/__overlay__/pci-ep-bus@0/sys_clk: missing or empty reg/ranges =
+property =20
+> > >=20
+> > > These nodes should be moved out of the simple-bus. =20
+> >=20
+> > Ah, thank you. Herv=C3=A9, can you send a follow-up to fix these?
+>=20
+> Yes, I will do.
+> Is it ok for you if I send the patch on Monday morning?
 
-> Silence the following warning when building the LAN966x device tree overlay:
-> 
-> drivers/misc/lan966x_pci.dtso:34.23-40.7: Warning (interrupts_property): /fragment@0/__overlay__/pci-ep-bus@0/oic@e00c0120: Missing interrupt-parent
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Link: https://lore.kernel.org/all/20241025110919.64b1cffb@canb.auug.org.au/
-> Fixes: 185686beb464 ("misc: Add support for LAN966x PCI device")
-> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Ok, I'll silence the warning until then.
 
-Acked-by: Herve Codina <herve.codina@bootlin.com>
-
-Best regards,
-Hervé
+regards
+Philipp
 

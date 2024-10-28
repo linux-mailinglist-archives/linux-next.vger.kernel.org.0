@@ -1,141 +1,151 @@
-Return-Path: <linux-next+bounces-4493-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4494-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AADB39B342C
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 15:59:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8560C9B3445
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 16:03:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46F82B227BD
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 14:59:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9486B235D4
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 15:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F00F1DE2AF;
-	Mon, 28 Oct 2024 14:59:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D6661DE2B5;
+	Mon, 28 Oct 2024 15:03:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="FrE2zIzh"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xScg+AQ+";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="UebAxn6F";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xScg+AQ+";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="UebAxn6F"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20BEA1D2F6E
-	for <linux-next@vger.kernel.org>; Mon, 28 Oct 2024 14:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02341DD0DB;
+	Mon, 28 Oct 2024 15:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730127586; cv=none; b=P5PwTZh1estU2bUUXeTzCuJM3Ro+QRE+K3mlYh20nzm/mJpL6iwWlERvJ/G3p+UyQEA2OlKDvfZMj0ttI0Cvnh4kqtQ9C9vmYjDrpsFpADeSDfVDrqGKtGxhoeGD11ogy4757EAlpvOjGqY2/qIrSvFBKnbSww8vAHIsVxQPX+c=
+	t=1730127800; cv=none; b=KI3MA6I8fv5TGaQlw4BokiAhGtJL9NdkFYRz3UrumVNKnaw+GU1Hf+2Yw9JoskoG6ItnNFvM36/S+4ukkYrHibCW6wR0QPHvtg94DS0SS12tn+BInA3pGiMnvGAEQPEdV680oX2mhZ4WF802f0PYA/OBeU2dia7vhZIFm52sSns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730127586; c=relaxed/simple;
-	bh=9AsxRqGFng23fH3S0IduwwLh61Te/qc3x6GUNTT0+S8=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=uLKRjA9/KC5CppZZQElbl8hDjLQ+ilXtCx1fcyeykimrRZy0Wu1hAd8lrMjfeg4S5yPqVTuF+k2JcFpBFyaUuRJKqW0tpLjwihwruneUdIqHUdXGybM68RZrg5BrKeqmi4v2N7uJtTWdv1DrIy6eTgyAJkwF67zEnex5AStgDm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=FrE2zIzh; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7ee11ff7210so13308a12.1
-        for <linux-next@vger.kernel.org>; Mon, 28 Oct 2024 07:59:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1730127584; x=1730732384; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=zO2PZjlz4ReUy744A4Hb1ovo+k4k2qjHZ2tmChObl/o=;
-        b=FrE2zIzh8XysZM1z7WJ3m1PWM+L/2TAGBLUJm8zMVlxOnUrW+ioW4eEgRrZ2EOd0wX
-         VGvzrEWt+aClB1uSpykIAPQGGhB5RYvjohe2q8snhK1Gsi/8xT4anWsTPHqehmSZcNVe
-         5px8USS8Ryb/yC2mFaJkEchIDuqz9OS1Fl59Aqp+1BiHphwJmZD3aNlHkarXv56KL0Ey
-         vlVc3RP1uGjI5co//J8gKG/Uf4JZ0luoTgpnsf5SOKQ4y38Q6jSWQwFEvc5vrd9Bi7zx
-         hnFjB95IyQYA2i3+uoA3gSjzwH3wrc0ZmrQw++M7v1hlbjudfyqzhbNz4oZ74Aay1LUt
-         Hb0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730127584; x=1730732384;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zO2PZjlz4ReUy744A4Hb1ovo+k4k2qjHZ2tmChObl/o=;
-        b=xGZZYRSx3kSHeobAexCwja3/FikgW7fDLOGwbZ6qytLt6my84zvm2y4sLPBEIfpapA
-         OK6n77ENukedud78f+0ChyxTzmLhMfW39gUgh+4PIMAdypSe5CHaPBtUCvOkvp3a5+hV
-         t492qMfRa1S/uOrQTjJlqhGuyDj0/3X5RWvoeZrl7p3JtchCv/EBHk4/nF/sUDLN5GAc
-         NnrlOKpLnyG0t9j8NbFBWFEMvaWVTw0T9HixF81BivUKU248eu+iqftB88DUxpMItUnB
-         KWV3ElmuLDJWHV2zkVzbuKhorNGhcUjQEtgabvyRp3sOEVVZ7L9zuZ2OsTE2t6YPakD0
-         zH0A==
-X-Gm-Message-State: AOJu0YyBVEtbiv7fJLBC99tzxfIjujP8QFIlrZsKCQvX8cBf4k0B93y8
-	M3RKqwaKNS+yGMeyPbPB18tcuTht73W/xA1ASo8XVgJA2Km9iqlbLvA4cZ0gVoCkzMqEl59oPXZ
-	l
-X-Google-Smtp-Source: AGHT+IGlBzZGWa88HGvBHDxODlX9PEMyUTIFE+BUV2lJhxLlfrKNHY/MfYzRV1I/y63JtKfXg0UYNg==
-X-Received: by 2002:a05:6a21:3a84:b0:1d9:61b:960c with SMTP id adf61e73a8af0-1d9a83ab113mr10546441637.9.1730127583996;
-        Mon, 28 Oct 2024 07:59:43 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bbf46549sm51116495ad.3.2024.10.28.07.59.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 07:59:43 -0700 (PDT)
-Message-ID: <671fa6df.170a0220.8f1dc.1ffe@mx.google.com>
-Date: Mon, 28 Oct 2024 07:59:43 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1730127800; c=relaxed/simple;
+	bh=FyfUCwFzYkQHmB9U8vscKzqdTeoR6hFWQB3RDlBiCO8=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bbRLep7tkqrK7OAf92b54nONrTnRoFIxF82O9l6jOchUWVOg5JIKfEKstFbqRC9jarvRuSmCwD/UgFiea+qtdbBMg148ZspOU+H2NmvPxn3Ew9lEFC5T2kYGhlEctiflC+BP5AbI9ZX2EI613UWxCLjW7xpGz24OgyZu2f7YmbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xScg+AQ+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=UebAxn6F; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xScg+AQ+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=UebAxn6F; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DEF851FD9B;
+	Mon, 28 Oct 2024 15:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1730127795; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qwjx7KI2wJnXIRsjYCHo7TaA6tPWUHwucJtMHXYI714=;
+	b=xScg+AQ+r9773h88ATgYoqvE9LTLzAVyt21/NiWiZuRS117NTvaFO6NT/4ilr8aDWMr9s7
+	HpPV2GxA9FD469HvT+3LOIaSezXURipz3MaYsubYoG8H0Sp2BQgP6SpxvAB61l6jumiqva
+	/FDxgEPZ+torkH6w+Uzt43Wk85i+jkU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1730127795;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qwjx7KI2wJnXIRsjYCHo7TaA6tPWUHwucJtMHXYI714=;
+	b=UebAxn6FkLO0fi1wKRnqj3UZmwh6Al90gyqtSrXvt+QEzjrs/1pHjUweKTqLydeFpew2wO
+	ATg8vBiD9J0zIlAw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1730127795; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qwjx7KI2wJnXIRsjYCHo7TaA6tPWUHwucJtMHXYI714=;
+	b=xScg+AQ+r9773h88ATgYoqvE9LTLzAVyt21/NiWiZuRS117NTvaFO6NT/4ilr8aDWMr9s7
+	HpPV2GxA9FD469HvT+3LOIaSezXURipz3MaYsubYoG8H0Sp2BQgP6SpxvAB61l6jumiqva
+	/FDxgEPZ+torkH6w+Uzt43Wk85i+jkU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1730127795;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qwjx7KI2wJnXIRsjYCHo7TaA6tPWUHwucJtMHXYI714=;
+	b=UebAxn6FkLO0fi1wKRnqj3UZmwh6Al90gyqtSrXvt+QEzjrs/1pHjUweKTqLydeFpew2wO
+	ATg8vBiD9J0zIlAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 972E9136DC;
+	Mon, 28 Oct 2024 15:03:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id R7rUIrOnH2chDAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Mon, 28 Oct 2024 15:03:15 +0000
+Date: Mon, 28 Oct 2024 16:04:18 +0100
+Message-ID: <878qu8qnf1.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,	Linux Next
+ Mailing List <linux-next@vger.kernel.org>,	Linux Documentation
+ <linux-doc@vger.kernel.org>,	Linux Sound System
+ <linux-sound@vger.kernel.org>,	Jaroslav Kysela <perex@perex.cz>,	Takashi
+ Iwai <tiwai@suse.com>,	Jonathan Corbet <corbet@lwn.net>,	Amadeusz
+ =?ISO-8859-2?Q?S=B3awi=F1ski?= <amadeuszx.slawinski@linux.intel.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH 0/2] Documentation fixes for ALSA Co-processor Acceleration API
+In-Reply-To: <20241028111647.17378-1-bagasdotme@gmail.com>
+References: <20241028111647.17378-1-bagasdotme@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.12-rc4-519-g6560005f01c3
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 42 runs,
- 1 regressions (v6.12-rc4-519-g6560005f01c3)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_DN_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid]
+X-Spam-Score: -3.30
+X-Spam-Flag: NO
 
-next/pending-fixes baseline: 42 runs, 1 regressions (v6.12-rc4-519-g6560005=
-f01c3)
+On Mon, 28 Oct 2024 12:16:45 +0100,
+Bagas Sanjaya wrote:
+> 
+> A small (two-patches) series fixing htmldocs warnings on sound tree that
+> first being noticed in linux-next integration [1].
+> 
+> [1]: https://lore.kernel.org/linux-next/20241028193242.11597640@canb.auug.org.au/
+> 
+> Bagas Sanjaya (2):
+>   ALSA: docs: compress-accel: Format state machine flowchart as code
+>     block
+>   ALSA: docs: Add toctree index entry for co-processor acceleration API
 
-Regressions Summary
--------------------
-
-platform       | arch  | lab     | compiler | defconfig | regressions
----------------+-------+---------+----------+-----------+------------
-r8a774c0-ek874 | arm64 | lab-cip | gcc-12   | defconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.12-rc4-519-g6560005f01c3/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.12-rc4-519-g6560005f01c3
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      6560005f01c3c14aab4c2ce35d97b75796d33d81 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform       | arch  | lab     | compiler | defconfig | regressions
----------------+-------+---------+----------+-----------+------------
-r8a774c0-ek874 | arm64 | lab-cip | gcc-12   | defconfig | 1          =
+Applied both patches now.  Thanks.
 
 
-  Details:     https://kernelci.org/test/plan/id/671f79a810c351e9d5c868e4
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.12-rc4-5=
-19-g6560005f01c3/arm64/defconfig/gcc-12/lab-cip/baseline-r8a774c0-ek874.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.12-rc4-5=
-19-g6560005f01c3/arm64/defconfig/gcc-12/lab-cip/baseline-r8a774c0-ek874.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/671f79a810c351e9d5c86=
-8e5
-        new failure (last pass: v6.12-rc4-373-ga06df994e3b96) =
-
- =20
+Takashi
 

@@ -1,153 +1,110 @@
-Return-Path: <linux-next+bounces-4470-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4471-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E21CE9B24D0
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 07:03:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F09DA9B27D7
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 07:51:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71C32B20A38
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 06:03:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6A1E1F228EC
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 06:51:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9351D17ADF0;
-	Mon, 28 Oct 2024 06:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2FA118E748;
+	Mon, 28 Oct 2024 06:51:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lokTkadu"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="HksDtpUS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9376152E1C;
-	Mon, 28 Oct 2024 06:03:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A110C8837;
+	Mon, 28 Oct 2024 06:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730095397; cv=none; b=D97PC/yX+cMLi/Jp5+nkWFZHgBVfAFP8icJQytnWQi2nBl/p7iIslQZS+8hPqzzs+QLYG6jB5P7dJY8JluKZUQWX2bt67bIsAsvrFkjTGR6K7GxPF3cK0dZVQRj10JlhVTnClB8L3uvvzruuNimf5yJHNWeghn/mfF77g7/ddho=
+	t=1730098300; cv=none; b=Cc9UViX/1vWPwl5eXw1VtnoOhYDEM6p4PRxO+eTTWt1Fga5mm9Et+5S3L8RovV8FiQPTV4XkrJYeFGrk0k7gM8pNoGewOMrzqn5dXUz679L6yDMVOI0STBVHyEvPEa0UAVqA80g6B1/NNTBttkn2D/WTWkC0pcQY7od6mKQvBmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730095397; c=relaxed/simple;
-	bh=TI3ksAMTpWD8gOlvvcnQztCLvbbDM0zXwV43Wxs/9vc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Mju+VQ07Cb4fhtSCGSKVUJfqc33Aeo3u19vW48ThfaET5VvpHvwu89nplx+03XuU1FlvEdswxRdCdS4mCmVP1lB3FLpZBTvdrYduYCvIG3DpZYyFcc19efxAyFsCwSWVMG1/aGeA6pzXUu+ZXRiC+LokCv6r7ObdGh+W8hCqDis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lokTkadu; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1730095391;
-	bh=r5CGirt+k28THwHiOtdhQFTAzLSz32aIval60x2/fnI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=lokTkadufk+xTd5oxYvUiO8Ho4ihlP94oIyUJbG+YFsuhWnyQC9LVLRxlp/yXhbfu
-	 rVvlXoMILLVtigCFD0ToiltB3WRnJThJRRtMWT3ed5UVGZ1EaJ2WnTooEofxHn+34d
-	 246BFJwibKxw6ROf+qo5HRswsQjRaquFYcwhidRl3xiW410nyJovA5wyF6lv3mu6R/
-	 lp/ue2NpITH3Mof+2zEQyVgdoWuD2izMkG/7yOWKRE3M5iHKa9Af3O24t0rRTTuTUn
-	 TTc1cY8hcIXyHVDRcx1ANQQ2dXbemXqcAjgh8jSbt/Mi1qDOCbXa6/R43LzXxCd13N
-	 +GENtMtnSDqlw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XcN996fmYz4wcl;
-	Mon, 28 Oct 2024 17:03:09 +1100 (AEDT)
-Date: Mon, 28 Oct 2024 17:03:10 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Paolo Bonzini <pbonzini@redhat.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: KVM <kvm@vger.kernel.org>, Linux Kernel Mailing List
+	s=arc-20240116; t=1730098300; c=relaxed/simple;
+	bh=vpFGDnzFmS4HBY689blSVBEggXsr5VrdwmrW7HsjB9Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lXRmY/fXiwspRXILeh/V1y4Y4W+IZTSBtwyS09UdQSA40rAHnAZe1Lhww7ikjXrqQrWdrG2F34NRV5Ey4S3AUPGrYoqoqizk3P+NgQ90cG4GtnC7VX1FtS+c3cvN5RvK8lSjGXperaqSUdMxcRQdzcEuKHOiVMsLNZczLUxMJiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=HksDtpUS; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=1csLsnBj4qAR3wFMapmaAnq30l1k7pkCjtVGvRAQb+g=;
+	t=1730098298; x=1731307898; b=HksDtpUSrP6J2WqLYoWOHGVECk7vKkpQWtwEgXKiaYLelHU
+	EgzrUcGc7CmYjvMbi4KC7oyPbZTOGAklUl5gGvHQc32W0elNF5tFlUzOo8aqdjSTi0K5gcPEYpT0N
+	UgtOVUmTygj/LJQ5IVYtPt3X6b8y2F7mQ8E8WaLy7lWp/9Op5g9JIGjRkqpsgWwuefL0NhRCQAKsu
+	BmsG3PQC87SCy/Spp8zySqxXDW2Pq3VOPwNZ55MCXsgfvVzhhdG79Xv84rSPNxOPMsnDHzYuveN7K
+	fP1ANFYAFAqpQNe+0CIsQagmH5xRmKgqXO2XfMSKODImsygi7ds0UAg+NrJpk6mg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1t5Jb6-000000071rz-12vU;
+	Mon, 28 Oct 2024 07:51:28 +0100
+Message-ID: <f93c5419a689c84450c3f89ca4d61b500ef545d8.camel@sipsolutions.net>
+Subject: Re: linux-next: manual merge of the wireless-next tree with the
+ wireless tree
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Kalle Valo <kvalo@kernel.org>
+Cc: Wireless <linux-wireless@vger.kernel.org>, Aditya Kumar Singh
+ <quic_adisi@quicinc.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Sean Christopherson <seanjc@google.com>, Yang
- Shi <yang@os.amperecomputing.com>
-Subject: linux-next: manual merge of the kvm tree with the arm64 tree
-Message-ID: <20241028170310.3051da53@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Miri Korenblit
+ <miriam.rachel.korenblit@intel.com>
+Date: Mon, 28 Oct 2024 07:51:27 +0100
+In-Reply-To: <20241028123621.7bbb131b@canb.auug.org.au>
+References: <20241028123621.7bbb131b@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SoGIVsEPFh=qBQZQubuD=DY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-malware-bazaar: not-scanned
 
---Sig_/SoGIVsEPFh=qBQZQubuD=DY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+> Today's linux-next merge of the wireless-next tree got a conflict in:
+>=20
+>   drivers/net/wireless/intel/iwlwifi/mvm/mld-mac80211.c
+>=20
+> between commit:
+>=20
+>   cbe84e9ad5e2 ("wifi: iwlwifi: mvm: really send iwl_txpower_constraints_=
+cmd")
+>=20
+> from the wireless tree and commit:
+>=20
+>   188a1bf89432 ("wifi: mac80211: re-order assigning channel in activate l=
+inks")
+>=20
+> from the wireless-next tree.
 
-Today's linux-next merge of the kvm tree got a conflict in:
+Yeah, I'm aware, but thanks for the heads-up for everyone :)
 
-  arch/arm64/kvm/guest.c
+> I fixed it up (the latter removed some code that the former moved some
+> other cde around - so I effectively just used the latter)
 
-between commit:
+Not sure that _description_ seems right, IIRC it was something like ABC
+going to ACB in one part, and A'BC in the other part, and should be A'CB
+in the end? In terms of blocks of code there. But the resolution looks
+good, thanks.
 
-  25c17c4b55de ("hugetlb: arm64: add mte support")
+> and can carry
+> the fix as necessary. This is now fixed as far as linux-next is
+> concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.
 
-from the arm64 tree and commit:
+Yeah, still sorting that out :) We'll probably do some merges for the
+resolution ourselves in wireless.
 
-  570d666c11af ("KVM: arm64: Use __gfn_to_page() when copying MTE tags to/f=
-rom userspace")
-
-from the kvm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/kvm/guest.c
-index e738a353b20e,4cd7ffa76794..000000000000
---- a/arch/arm64/kvm/guest.c
-+++ b/arch/arm64/kvm/guest.c
-@@@ -1051,13 -1051,11 +1051,12 @@@ int kvm_vm_ioctl_mte_copy_tags(struct k
-  	}
- =20
-  	while (length > 0) {
-- 		kvm_pfn_t pfn =3D gfn_to_pfn_prot(kvm, gfn, write, NULL);
-+ 		struct page *page =3D __gfn_to_page(kvm, gfn, write);
-  		void *maddr;
-  		unsigned long num_tags;
-- 		struct page *page;
- +		struct folio *folio;
- =20
-- 		if (is_error_noslot_pfn(pfn)) {
-+ 		if (!page) {
-  			ret =3D -EFAULT;
-  			goto out;
-  		}
-@@@ -1099,12 -1090,8 +1097,12 @@@
-  			/* uaccess failed, don't leave stale tags */
-  			if (num_tags !=3D MTE_GRANULES_PER_PAGE)
-  				mte_clear_page_tags(maddr);
- -			set_page_mte_tagged(page);
- +			if (folio_test_hugetlb(folio))
- +				folio_set_hugetlb_mte_tagged(folio);
- +			else
- +				set_page_mte_tagged(page);
- +
-- 			kvm_release_pfn_dirty(pfn);
-+ 			kvm_release_page_dirty(page);
-  		}
- =20
-  		if (num_tags !=3D MTE_GRANULES_PER_PAGE) {
-
---Sig_/SoGIVsEPFh=qBQZQubuD=DY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcfKR4ACgkQAVBC80lX
-0GyNaAf3fOZRAdtjm1v/S4cgiyVo3XKlUSRVdk0AE6B4/IveFjqZ4G0a26tDUhJO
-BivPci/A4XZypbG7We0hNmgBuEhdBgley3XrhQJWwWMd3ye32zrRKEzUj9WgLhBP
-VVVThYO2MpeV0J6Zm00xl5j3dqjWOFb29OmXpnLhCZqR+m+KIXRhY0UsCpEtfnxD
-BpCE/xncVQEBsz1kCMeYin1FuY0AtyPPX4dNNIA+2cNFLAHxeqUHGHkcQrLRFY+e
-eUXsACHgZU0RTd69MWWDO56GIL7RHn5PNFjeruLjyCn8L47n7jeQM+Dnq/AgvJS6
-rMrKHkF0O+FvpFX5GBsLmZknL5Lh
-=xyTl
------END PGP SIGNATURE-----
-
---Sig_/SoGIVsEPFh=qBQZQubuD=DY--
+johannes
 

@@ -1,70 +1,69 @@
-Return-Path: <linux-next+bounces-4491-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4492-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24D6D9B3243
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 14:55:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A76E9B324A
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 14:57:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47F841C219CE
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 13:55:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC7761C22069
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 13:57:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1CE61D88B1;
-	Mon, 28 Oct 2024 13:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BBD51DB54B;
+	Mon, 28 Oct 2024 13:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TnGlkqp9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PfqAiIly"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999EF1D2B1B;
-	Mon, 28 Oct 2024 13:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63363191F91;
+	Mon, 28 Oct 2024 13:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730123739; cv=none; b=rW/1ASUkvWLDJSmVCfsBtQZSU7PazAzkQaUNw5keheX0PWbMM6rOL7wO1ExGAuY9oeLZBhbdFEwVgOSnlRQAIRxQLDNjJTALt2mxgfYQLpQ5IOLLNkhZwqx/7dGDu0pS2Y4efHja7Tzx2aWcNrmD0TMruS7FwZgBiqJ8mQ1LfW8=
+	t=1730123816; cv=none; b=QG3Kbh10ax10pAG607GvoT8wIsNZb1SbiRR13BpucSlD+51HcNRW9WCCtX63GKxxpJPK+OWwXSVBkWdpTEYm00iheiOE3+UBjjwNCBh8s3C0x7c+jokV/pI4adQv6wul1GjKIpnaw2ON1IoNWz/Bs2CvtzP5dRT5rSOQjsWeYds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730123739; c=relaxed/simple;
-	bh=BEk4y2/bGFKxgt2PDJf8zrNHnZDu0Zz5bDwWK372opI=;
+	s=arc-20240116; t=1730123816; c=relaxed/simple;
+	bh=w2zEV9R6B3qSHnWHq7ai+qKl7JxuJaWiiHxpRdEWAJU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OxD9rcSd1TXTCo5fRdmstORtwAFc19DdGDUCcKvmd5brpeN6vqpv2ReYkQQSHwmOmTu01xPlFTb7RtjRs4R7ed74QMR/0GBx0plrtU1fLySQq4JyEC8GBErCnPyj6T3+zR/FvoL43yQjW4HWVt9KYuANAunt4r70xFdhXci8Zcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TnGlkqp9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46005C4CEC3;
-	Mon, 28 Oct 2024 13:55:39 +0000 (UTC)
+	 To:Cc:Content-Type; b=R9m+nOkqtFsTad5cH2ISvp0cHSGYk85y5fR/m6uVNYrmNctB7217BCwVljKfqjnyT0ijakuJogk85gbpyC8YduuZFHnCxxHVf7CBX8rVlPtg1ZF2gCcE4YYUSbrT1DzneppVksZBC+zt5f7MCZml4OUt+BrCeJVgAW5bme4162E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PfqAiIly; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD37C4AF09;
+	Mon, 28 Oct 2024 13:56:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730123739;
-	bh=BEk4y2/bGFKxgt2PDJf8zrNHnZDu0Zz5bDwWK372opI=;
+	s=k20201202; t=1730123816;
+	bh=w2zEV9R6B3qSHnWHq7ai+qKl7JxuJaWiiHxpRdEWAJU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TnGlkqp9dLeRqx7yZE2IAajYzIfUvrdIuDGOCRw3key5ItDRDc+uV1m4DVVf/m3Ln
-	 wCnygrF+Tyj3Bat3Q8GMSf+jQa0SUDl6Z91gjIuyBB4ZKFqvGBAQbQtRmo+ORqkV2a
-	 CHxXga/oINXoh5fqlQNVLrHeaWd9B4bQ1xDPpb3tMTiEz1GZonmUGvXGZy7tTovZAJ
-	 TuJLI6jDoVdE1WWwDdYHl60mqPRPkZ0VIihhIePOYAr57yN6RR4WTnIubduSAHNvbG
-	 e9VJL3nb2XB2OlF8CWNTxteWIbszAaTpdqW9Zme7HF4oyVuzYx5tcpLvXyqBVbXdPg
-	 zScHmXnYTzCow==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539eb97f26aso4314608e87.2;
-        Mon, 28 Oct 2024 06:55:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUx4k+ICCRNobTOwKapo9L9CUVNrT1NngfjVYZRHREH2XCue2DMyCMzlJ2mcSvDhkLPSBjoCkpBIYKofCU=@vger.kernel.org, AJvYcCVliRE25n4fO3RmBSOGV0mP7yzKnj8lCeqv102RF+F5BDnUq/MP5GulLsJ1TATJzKB6E0g7xtORp+1zpA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeOI5zP94pU3uzYR5DY5GsGEx8EbzEV/ci2bi9YrFrLHft4lni
-	CRMGhMDzFpWBgNCz/YB7HCcHZ3NPZ25VVf3jvoRrkWaOHvjfj2/tGJ7YmOqi4MBUWeo3wQmuHLg
-	FDF/vRS1+UOqL2fY1q3CS7k23Jg==
-X-Google-Smtp-Source: AGHT+IGBxw44WtOzb+AQgGTABKdQ9A/JFueQ/3Y5biiY0CiTz2i/poJamA5/AH6uLfebQodVKzYUYP/2ERmhVllkL/A=
-X-Received: by 2002:a05:6512:32c6:b0:539:ee0a:4f8f with SMTP id
- 2adb3069b0e04-53b3491cd35mr3163351e87.44.1730123737670; Mon, 28 Oct 2024
- 06:55:37 -0700 (PDT)
+	b=PfqAiIly+pNSBOHvB2doCwSnDO6E/tN0W95plZM6B95FSCOYMGin4CQXdJYSguc6I
+	 3/KbshXJCOjUrtYtHao4Q7B0CQWDG3sBUoHkAM7bPaLjndcXHxWh8UFj4IjLt+TxbA
+	 TTev6jIt0TCC9yjlvWkqgiQHDpzByHRvU7kbvmywEVZm+GEThyiefXanJZAG9Rkc3h
+	 eXxJw1zSLFdjAVpt0yAjD1T/001frZGTyZdN7WWYHHUSjsiWnj3y+DV4PYjfdM/e56
+	 mwyVNwUrmmEPCzf2RVEPvLyYw7tYhh1gcL9BI8g3Yh1jd9soTmIM4FEunv3YKTGr1R
+	 xhhd7/BuQCDHw==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-539e59dadebso5092214e87.0;
+        Mon, 28 Oct 2024 06:56:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWrwzCIChUX15yqfcURzEOzk2gCo/14/aH59wiUv1nMjCV8VwBi9orBRDvxCnshlfn1ubW1Ex6tryr6R0I=@vger.kernel.org, AJvYcCWxOMzzFme1OqdFcquvwB/JwuL7gYe8jQ3Z19aTwQSLGORPqGdUD1ey5iyFZUTJHRSFPqcjFTD6PSsufQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3JLFEPWKkDxmBDkepf3B4+WrhW1caX6p7SWlVzUBBv3SPMaNF
+	7MgTWSBxZZaB7qDyzFegKQCBozEI0dD1rCGJa03Qppl7VpboT/6ZkngCdxqKqJ+JmrDRvHaao85
+	lYkXBrzI0tIcUiO29ZoyC5+c5sQ==
+X-Google-Smtp-Source: AGHT+IFY0TufIGKFsh37080fzf3R9npLr8DTAgwH7Vp8VPARsO8sw1jEVwigFk5K5MfTti8T0RQu/Ztylb41+pL38jU=
+X-Received: by 2002:a05:6512:3b27:b0:539:de9c:c890 with SMTP id
+ 2adb3069b0e04-53b34c5f9b5mr3091871e87.42.1730123814631; Mon, 28 Oct 2024
+ 06:56:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241028122405.27090-1-herve.codina@bootlin.com> <20241028122405.27090-2-herve.codina@bootlin.com>
-In-Reply-To: <20241028122405.27090-2-herve.codina@bootlin.com>
+References: <20241028122405.27090-1-herve.codina@bootlin.com> <20241028122405.27090-3-herve.codina@bootlin.com>
+In-Reply-To: <20241028122405.27090-3-herve.codina@bootlin.com>
 From: Rob Herring <robh@kernel.org>
-Date: Mon, 28 Oct 2024 08:55:24 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK7SjfJ7Re4k-A8fQB+tNHyM3r2Rcpct_zUfR2yhEj+iQ@mail.gmail.com>
-Message-ID: <CAL_JsqK7SjfJ7Re4k-A8fQB+tNHyM3r2Rcpct_zUfR2yhEj+iQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] misc: lan966x_pci: Fix dtc warns 'missing or empty
- reg/ranges property'
+Date: Mon, 28 Oct 2024 08:56:42 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+doHunzxKroG7m+Ex4Cz-YSwQ7zW2B3tAPi_LFSBfJ_A@mail.gmail.com>
+Message-ID: <CAL_Jsq+doHunzxKroG7m+Ex4Cz-YSwQ7zW2B3tAPi_LFSBfJ_A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] misc: lan966x_pci: Fix dtc warn 'Missing interrupt-parent'
 To: Herve Codina <herve.codina@bootlin.com>
 Cc: Philipp Zabel <p.zabel@pengutronix.de>, Stephen Rothwell <sfr@canb.auug.org.au>, 
 	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
@@ -78,19 +77,18 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Oct 28, 2024 at 7:24=E2=80=AFAM Herve Codina <herve.codina@bootlin.=
 com> wrote:
 >
-> dtc generates the following warnings when building the LAN966x device
-> tree overlay (lan966x_pci.dtso):
->   Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/cpu_clk:=
- missing or empty reg/ranges property
->   Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/ddr_clk:=
- missing or empty reg/ranges property
->   Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/sys_clk:=
- missing or empty reg/ranges property
+> dtc generates the following warning when building the LAN966x devicetree
+> overlay (lan966x_pci.dtso):
+>   Warning (interrupts_property): /fragment@0/__overlay__/pci-ep-bus@0/oic=
+@e00c0120: Missing interrupt-parent
 >
-> Indeed, related nodes are under the pci-ep-bus (simple-bus) which is not
-> correct.
+> The oic interrupt parent is the PCI device itself. The PCI device node
+> is the node on which the dtbo will be applied and this node already has
+> properties needed.
 >
-> Put them outside this node.
+> In order to remove the warning, add the missing properties in the
+> overlay fragment node. Properties in this node will not be added when
+> the overlay is applied (which is what we expect) but makes dtc happy.
 >
 > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > Closes: https://lore.kernel.org/all/20241025110919.64b1cffb@canb.auug.org=
@@ -100,26 +98,8 @@ com> wrote:
 > ---
 > The referenced commit is in the reset tree
 > ---
->  drivers/misc/lan966x_pci.dtso | 36 +++++++++++++++++------------------
->  1 file changed, 18 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dts=
-o
-> index 7282687df25f..5466d013da7d 100644
-> --- a/drivers/misc/lan966x_pci.dtso
-> +++ b/drivers/misc/lan966x_pci.dtso
-> @@ -19,6 +19,24 @@ __overlay__ {
->                         #address-cells =3D <3>;
->                         #size-cells =3D <2>;
->
-> +                       cpu_clk: cpu_clk {
+>  drivers/misc/lan966x_pci.dtso | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-Preferred node name is "clock-<freq-in-hz>"
-
-Also, as a general rule, don't use "_" in node names (and properties).
-
-Isn't there a schema for the device which needs these nodes added to
-it? If not, there should be.
-
-Rob
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 

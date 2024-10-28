@@ -1,107 +1,153 @@
-Return-Path: <linux-next+bounces-4473-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4474-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B927A9B29C9
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 09:06:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B060B9B2A49
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 09:30:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EB2F1F23397
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 08:06:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C3F1281065
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 08:30:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D1D16FF45;
-	Mon, 28 Oct 2024 08:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D09F41925A3;
+	Mon, 28 Oct 2024 08:29:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DFFAuGVt"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZIrsIaZj"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12AF18A6BC
-	for <linux-next@vger.kernel.org>; Mon, 28 Oct 2024 08:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EACC191F82;
+	Mon, 28 Oct 2024 08:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730102529; cv=none; b=bl5g/+MtcO7MnIrS94jYa+gZ8NNgkmlRq1/aTslmXqiFAJ8w8y9Y9dkedGiqJevqmeTzwHrXQ6OdgopBjAs6nrlT15tJakyHF7LP2SVNxl838mdwgscyLz8tNO7H2ggC9JUKCYiFFyxs2YpU7o/y0cpSHXh3gsuUfXVsMV3YE3I=
+	t=1730104194; cv=none; b=eTyiKMf+9lsKl/a8yoFh+Qu1kTptIInRTImxBst+dfqJu9h1iARh6K2Gg7IsybNrcA6tN2YNa8Iy1P4ZEphCywIJhPSy/peW37MxVL6ZYGEDpZZtjjkH65NF/xBralT7FSFvUmF1P7p8eshTjYWZrSjFYUbqDPzjOK5lWpbKTF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730102529; c=relaxed/simple;
-	bh=p9/S3gpqBBFvIF9mqT6Rd/e3myKZ/8lD8rZRfZ+6AKY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mj6+J4dlEGAU7F6Au1TRvcCs5OSeHBLyXG2b5pDsS6wY9daU/65nh4UGdeXXBaXbpYpPKy4+EUMEM1a2o79M9Pk8qTiyYipa99rI/AfSxA4JEAaKYS4VlH1Rvk0Pya3kbfbVPxYHV2SzLsUJ0Oy3SccYK3MCNdpim2xrj2EsO3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DFFAuGVt; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2fb587d0436so39141191fa.2
-        for <linux-next@vger.kernel.org>; Mon, 28 Oct 2024 01:02:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730102526; x=1730707326; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0DAqDGxZpCGVRYKCi2UKLQtM/wwEY6Bui2ZFR9TaWvk=;
-        b=DFFAuGVtoY0JQIKvbVWQACsfIC15C3Ba+qpogvJ+6Dgcmw5Zy6PUj1vVHVOC8XD/Gu
-         q7s2l3XPbkZ1XY9h2AXZbAEUV/vrD1rRmQJPiEgMu+o/YDrasmaMRQV0OMSUz/1S37ND
-         0ea7hUssoeO63BMRbFWv1hCs3JRHkaPFpFEmlquY40Gjsyh0qmZWKcXfpXrUF2reKYmx
-         YJsSyS6D+Oz+HNgE+h8Jjt4ppVAYb11AYiW1jlgZNhPXU+aiyZaB0fUMgRXKRNgm9CEY
-         J3LX26fqLWR18GjcLtY2C3gvxJAvTdVQxRFALbEaqLE5ldGnqLwqicXhcjnf2mOqft/A
-         HQDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730102526; x=1730707326;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0DAqDGxZpCGVRYKCi2UKLQtM/wwEY6Bui2ZFR9TaWvk=;
-        b=eGr0Kxq0h/+193jiiAVH1V0ehqW5/ETJDul1Ge6A1f3hiRetMURxmkq/hFmEolFyu+
-         sw2d6dbYxjLFSIw+njsaCpMbNlVDODt2pBVjfLSX7BXucnYvKXA/iB3nm2Yi6MfmgpLm
-         jWBjgG9u639eHgB5AqNZNO+FZ+6iJmCu5UaWQTvcps8d8yNxFxE0Iv8WHDo7OptCk18z
-         tHQ4mCviUKBGeDu9uu3D7cA/ytnk3JArNWyhlBep8Dw06HZc1WyvG62tJ3hnpSfPrBSM
-         5l0qCP7r9T46qeZ+awqK4DYghE4DvEcR3+uJXe5lMveyQw5kz5egST549T/33NCgbXOZ
-         jnmg==
-X-Forwarded-Encrypted: i=1; AJvYcCWxYxFsKrFbc5XhSN9Ji8Fjt6v/+tQsSPnM/Vu3FYDtJnjIqcB3p+OlvCFmRpGSD6Z54aeGabQyb3to@vger.kernel.org
-X-Gm-Message-State: AOJu0YzE24g3nXJDqBOnocp3ld8uykW3+LiHyzt8GoPTumXdVh3ygVtN
-	LOQGM2gDHRYyervnNReU/S25bT2xqZEFM/+Kn/pFzjlqVvgHtSEr
-X-Google-Smtp-Source: AGHT+IFIXnjDDj5iAGaKQ+Q39+yibCsxzV8DNEB+xRtQY2yw7NI6Bb7ME+PjavOhFYqweVJRHPGd9Q==
-X-Received: by 2002:a05:651c:1a0c:b0:2fa:d67a:ada7 with SMTP id 38308e7fff4ca-2fcc940c781mr10748681fa.23.1730102525572;
-        Mon, 28 Oct 2024 01:02:05 -0700 (PDT)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2fcb4507b9csm10842641fa.28.2024.10.28.01.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 01:02:05 -0700 (PDT)
-Received: by grain.localdomain (Postfix, from userid 1000)
-	id 3F9495A004B; Mon, 28 Oct 2024 11:02:04 +0300 (MSK)
-Date: Mon, 28 Oct 2024 11:02:04 +0300
-From: Cyrill Gorcunov <gorcunov@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Brahmajit Das <brahmajit.xyz@gmail.com>, david@redhat.com,
-	linux-next@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: [PATCH v3 1/1] fs/proc: Fix build with GCC 15 due to
- -Werror=unterminated-string-initialization
-Message-ID: <Zx9E_NI89XSE3H-f@grain>
-References: <20241004145804.57278eac01c2601abb20c671@linux-foundation.org>
- <20241005063700.2241027-1-brahmajit.xyz@gmail.com>
- <20241007190813.f4effd5788cf7362a4fda19f@linux-foundation.org>
+	s=arc-20240116; t=1730104194; c=relaxed/simple;
+	bh=x4deraDO0Gk1qK4wUkrL89y75/dvrsNKNqNVxp86Fts=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iryd4xfePasCzb1Xh3hOG43FHvP55JZsCIBl+rsq1yQLtDokQ+1e74FuVRNSiAVwdxRTQVq9JtciL61+yMSCHnnVQto5ta8319Y2/JhfVOALZLVjmR8GcwFh2INBYjqa0fX+n63GJXEizdRHQL9PgySNkHMa5hhdzHC0MSnELgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZIrsIaZj; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1730104184;
+	bh=9BVxsgUOBsW8yr8S8arOAnJ0UXW6sPo5ixr+nakCZ30=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ZIrsIaZjJW76BLKaqZPW6r6LVKUcSrdgq3Sh31VikpnOe+ebWbYxBcfAsNFQoyxcK
+	 BiGRE69kpTP5ewYCscAF9BQqrCUUj1iMkOj4glz1pzFuDgkmez2l9uXGcAlMvGCzbh
+	 aoDgWZLDEpH5gzzmD2sJoA7lnRzLlWTu7DsqDkv7iEIJsE5VwR6MmsgzxxPuvM57Eu
+	 QSAO20j2ge7gnNT8ckQcQXU0vOcCl9fU6++OR47hfGQy2hgOD5n7636mosw67AX1+4
+	 RRLFEXV7mUHrj8Owp44peOxowjXvBofg9MvQQEO6zl3VtUxRXFLeozynkkSOohfZ5W
+	 FLMXfozzfD8DA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XcRQJ59lrz4x8C;
+	Mon, 28 Oct 2024 19:29:44 +1100 (AEDT)
+Date: Mon, 28 Oct 2024 19:29:45 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>, KVM <kvm@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the kvm tree
+Message-ID: <20241028192945.2f1433fc@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241007190813.f4effd5788cf7362a4fda19f@linux-foundation.org>
-User-Agent: Mutt/2.2.12 (2023-09-09)
+Content-Type: multipart/signed; boundary="Sig_/Vikg07d5ve1SZB4Ur.bXY4L";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, Oct 07, 2024 at 07:08:13PM -0700, Andrew Morton wrote:
-...
-> 
-> > Cc: david@redhat.com, gorcunov@openvz.org, linux-next@vger.kernel.org, sfr@canb.auug.org.au
-> 
-> It is strange to cc only linux-next.  It isn't really a development
-> mailing list.  Please include an appropriate development list and/or
-> linux-kernel on patches.
+--Sig_/Vikg07d5ve1SZB4Ur.bXY4L
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for handling this, Andrew! And sorry for the very late reply :-( I managed to miss
-this email somehow, still patch looks ok, thanks!
+Hi all,
 
-	Cyrill
+After merging the kvm tree, today's linux-next build (htmldocs) produced
+this warning:
+
+Documentation/virt/kvm/locking.rst:157: ERROR: Malformed table.
+
++-------------------------------------------------------------------------+
+| At the beginning::                                                      |
+|                                                                         |
+|       spte.W =3D 0                                                       =
+       |
+|       spte.Accessed =3D 1                                                =
+       |
++-------------------------------------+-----------------------------------+
+| CPU 0:                              | CPU 1:                            |
++-------------------------------------+-----------------------------------+
+| In mmu_spte_update()::              |                                   |
+|                                     |                                   |
+|  old_spte =3D *spte;                  |                                  =
+ |
+|                                     |                                   |
+|                                     |                                   |
+|  /* 'if' condition is satisfied. */ |                                   |
+|  if (old_spte.Accessed =3D=3D 1 &&      |                                =
+   |
+|       old_spte.W =3D=3D 0)              |                                =
+   |
+|     spte =3D new_spte;                |                                  =
+ |
++-------------------------------------+-----------------------------------+
+|                                     | on fast page fault path::         |
+|                                     |                                   |
+|                                     |    spte.W =3D 1                    =
+ |
+|                                     |                                   |
+|                                     | memory write on the spte::        |
+|                                     |                                   |
+|                                     |    spte.Dirty =3D 1                =
+ |
++-------------------------------------+-----------------------------------+
+|  ::                                 |                                   |
+|                                     |                                   |
+|   else                              |                                   |
+|     old_spte =3D xchg(spte, new_spte);|                                  =
+ |
+|   if (old_spte.Accessed &&          |                                   |
+|       !new_spte.Accessed)           |                                   |
+|     flush =3D true;                   |                                  =
+ |
+|   if (old_spte.Dirty &&             |                                   |
+|       !new_spte.Dirty)              |                                   |
+|     flush =3D true;                   |                                  =
+ |
+|     OOPS!!!                         |                                   |
++-------------------------------------+-----------------------------------+
+
+Introduced by commit
+
+  5f6a3badbb74 ("KVM: x86/mmu: Mark page/folio accessed only when zapping l=
+eaf SPTEs")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Vikg07d5ve1SZB4Ur.bXY4L
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcfS3kACgkQAVBC80lX
+0GyqKQf/fQpz2YyVP/bzIvFuL5UioYh+Hf29V91Bh2O9b+LZImJsKW9YLPF9e9Lu
+9IxdDuKjJnSYo9u/2e3X1O863R2s5zOHhKiL7emran48d+1ptG4pgNiSjPE/FUbr
+hyneoC1WrQ48j6+RUoynog9zp+NIYJ1mYzco8a1rnLoo8n7LwDDGVZduOTvl3+sa
+yV7WRIltbltozGJU9Gtyjaxd4Ii6AlKouykx2cznQwxSRX6e0VN0M6VPVQamaqlZ
+44H3BzGh9RAzgUO8yS9P/AhHqleC2N1pQxl0X6IRkspFQUFtBkIfJYtQg6rOJ15A
+SNVTZ06wFjcWPY8fKLRiOGCNUuSztA==
+=eygx
+-----END PGP SIGNATURE-----
+
+--Sig_/Vikg07d5ve1SZB4Ur.bXY4L--
 

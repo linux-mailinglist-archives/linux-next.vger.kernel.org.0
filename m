@@ -1,134 +1,107 @@
-Return-Path: <linux-next+bounces-4472-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4473-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5794F9B285B
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 08:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B927A9B29C9
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 09:06:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 061091F216C4
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 07:05:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EB2F1F23397
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 08:06:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C65A18FDBC;
-	Mon, 28 Oct 2024 07:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D1D16FF45;
+	Mon, 28 Oct 2024 08:02:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hQnhcfcf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DFFAuGVt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C13156960;
-	Mon, 28 Oct 2024 07:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12AF18A6BC
+	for <linux-next@vger.kernel.org>; Mon, 28 Oct 2024 08:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730099118; cv=none; b=V40zx4MWVbD4HvRo49ClxZRve1tk2IGZAI5QlODVPJPA1Xtv1JBRt7AtSxPdEJtsAaJNE937+M/qHK71iMnK+U2/IrZIosDTJ69bbO96VHZ3wROd6ML23EHA/9GY5EWSWlp7TlJe0UfoOAy+R8XgalpaNglO4CK24z2EvYMwXIU=
+	t=1730102529; cv=none; b=bl5g/+MtcO7MnIrS94jYa+gZ8NNgkmlRq1/aTslmXqiFAJ8w8y9Y9dkedGiqJevqmeTzwHrXQ6OdgopBjAs6nrlT15tJakyHF7LP2SVNxl838mdwgscyLz8tNO7H2ggC9JUKCYiFFyxs2YpU7o/y0cpSHXh3gsuUfXVsMV3YE3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730099118; c=relaxed/simple;
-	bh=LDgFDbWbrvmdtGWzpkzZuhjnlSV+9x/PwmMyj+8klfk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=I9RYFfCMcYGVvJKwoqh6nBUbt03ujpqtPbpmRMHZtwGeQnIOo3jDASPUr06qRvWMEh5sgGmOwM/HpI9LW2e37vBRy9fXyB2Ie4mZEhR0PgNvqPjKbbrr5XxZq67/+PeBrq0b1Z18WnrfjxFT7ma0hs6+CwCMhl5LmsNGqF3HBkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=hQnhcfcf; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1730099106;
-	bh=WSlg3RBs3pgZnbbgr7QK7apsg302HA4Unp2DymCiax4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=hQnhcfcfn3uKwi/IZ4EiqUS9/WA3F3msJbowBtrHXDYsAoCvqF8WZR/MSyxSOdNw9
-	 nHgaXvANsmo+dmJP7JZfR7eBvzxkTCTkwb+wRAOgvjXYd4qlHGytYzqT1B/vrQgdwq
-	 MYbSeWjoYAV8IflATPoBIFwO/JcFTrzcaYZWFZuaqdndUTUvWf2EFNomHjsS0Gm2cF
-	 dQhCPVt/vpd16HlFnb7gX+wKsdm26eNDlanYCfLNG92l730bQo9t/9VXqRgNIx5q0v
-	 z5eRqL7lXMBUVSRDa0kg5BqKVx95bxmDcO3M8CqxLxB784wpdE50GohFusvII+bJmv
-	 lH0gaeVBPajGg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XcPXd4sNXz4x8H;
-	Mon, 28 Oct 2024 18:05:05 +1100 (AEDT)
-Date: Mon, 28 Oct 2024 18:05:06 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Bart Van Assche <bvanassche@acm.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Peter Wang <peter.wang@mediatek.com>
-Subject: linux-next: manual merge of the scsi-mkp tree with Linus' tree
-Message-ID: <20241028180506.0ec4d6fc@canb.auug.org.au>
+	s=arc-20240116; t=1730102529; c=relaxed/simple;
+	bh=p9/S3gpqBBFvIF9mqT6Rd/e3myKZ/8lD8rZRfZ+6AKY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mj6+J4dlEGAU7F6Au1TRvcCs5OSeHBLyXG2b5pDsS6wY9daU/65nh4UGdeXXBaXbpYpPKy4+EUMEM1a2o79M9Pk8qTiyYipa99rI/AfSxA4JEAaKYS4VlH1Rvk0Pya3kbfbVPxYHV2SzLsUJ0Oy3SccYK3MCNdpim2xrj2EsO3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DFFAuGVt; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2fb587d0436so39141191fa.2
+        for <linux-next@vger.kernel.org>; Mon, 28 Oct 2024 01:02:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730102526; x=1730707326; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0DAqDGxZpCGVRYKCi2UKLQtM/wwEY6Bui2ZFR9TaWvk=;
+        b=DFFAuGVtoY0JQIKvbVWQACsfIC15C3Ba+qpogvJ+6Dgcmw5Zy6PUj1vVHVOC8XD/Gu
+         q7s2l3XPbkZ1XY9h2AXZbAEUV/vrD1rRmQJPiEgMu+o/YDrasmaMRQV0OMSUz/1S37ND
+         0ea7hUssoeO63BMRbFWv1hCs3JRHkaPFpFEmlquY40Gjsyh0qmZWKcXfpXrUF2reKYmx
+         YJsSyS6D+Oz+HNgE+h8Jjt4ppVAYb11AYiW1jlgZNhPXU+aiyZaB0fUMgRXKRNgm9CEY
+         J3LX26fqLWR18GjcLtY2C3gvxJAvTdVQxRFALbEaqLE5ldGnqLwqicXhcjnf2mOqft/A
+         HQDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730102526; x=1730707326;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0DAqDGxZpCGVRYKCi2UKLQtM/wwEY6Bui2ZFR9TaWvk=;
+        b=eGr0Kxq0h/+193jiiAVH1V0ehqW5/ETJDul1Ge6A1f3hiRetMURxmkq/hFmEolFyu+
+         sw2d6dbYxjLFSIw+njsaCpMbNlVDODt2pBVjfLSX7BXucnYvKXA/iB3nm2Yi6MfmgpLm
+         jWBjgG9u639eHgB5AqNZNO+FZ+6iJmCu5UaWQTvcps8d8yNxFxE0Iv8WHDo7OptCk18z
+         tHQ4mCviUKBGeDu9uu3D7cA/ytnk3JArNWyhlBep8Dw06HZc1WyvG62tJ3hnpSfPrBSM
+         5l0qCP7r9T46qeZ+awqK4DYghE4DvEcR3+uJXe5lMveyQw5kz5egST549T/33NCgbXOZ
+         jnmg==
+X-Forwarded-Encrypted: i=1; AJvYcCWxYxFsKrFbc5XhSN9Ji8Fjt6v/+tQsSPnM/Vu3FYDtJnjIqcB3p+OlvCFmRpGSD6Z54aeGabQyb3to@vger.kernel.org
+X-Gm-Message-State: AOJu0YzE24g3nXJDqBOnocp3ld8uykW3+LiHyzt8GoPTumXdVh3ygVtN
+	LOQGM2gDHRYyervnNReU/S25bT2xqZEFM/+Kn/pFzjlqVvgHtSEr
+X-Google-Smtp-Source: AGHT+IFIXnjDDj5iAGaKQ+Q39+yibCsxzV8DNEB+xRtQY2yw7NI6Bb7ME+PjavOhFYqweVJRHPGd9Q==
+X-Received: by 2002:a05:651c:1a0c:b0:2fa:d67a:ada7 with SMTP id 38308e7fff4ca-2fcc940c781mr10748681fa.23.1730102525572;
+        Mon, 28 Oct 2024 01:02:05 -0700 (PDT)
+Received: from grain.localdomain ([5.18.251.97])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2fcb4507b9csm10842641fa.28.2024.10.28.01.02.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2024 01:02:05 -0700 (PDT)
+Received: by grain.localdomain (Postfix, from userid 1000)
+	id 3F9495A004B; Mon, 28 Oct 2024 11:02:04 +0300 (MSK)
+Date: Mon, 28 Oct 2024 11:02:04 +0300
+From: Cyrill Gorcunov <gorcunov@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Brahmajit Das <brahmajit.xyz@gmail.com>, david@redhat.com,
+	linux-next@vger.kernel.org, sfr@canb.auug.org.au
+Subject: Re: [PATCH v3 1/1] fs/proc: Fix build with GCC 15 due to
+ -Werror=unterminated-string-initialization
+Message-ID: <Zx9E_NI89XSE3H-f@grain>
+References: <20241004145804.57278eac01c2601abb20c671@linux-foundation.org>
+ <20241005063700.2241027-1-brahmajit.xyz@gmail.com>
+ <20241007190813.f4effd5788cf7362a4fda19f@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vib9vbDQ2O61Xr9SXn_pPql";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241007190813.f4effd5788cf7362a4fda19f@linux-foundation.org>
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
---Sig_/vib9vbDQ2O61Xr9SXn_pPql
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 07, 2024 at 07:08:13PM -0700, Andrew Morton wrote:
+...
+> 
+> > Cc: david@redhat.com, gorcunov@openvz.org, linux-next@vger.kernel.org, sfr@canb.auug.org.au
+> 
+> It is strange to cc only linux-next.  It isn't really a development
+> mailing list.  Please include an appropriate development list and/or
+> linux-kernel on patches.
 
-Hi all,
+Thanks for handling this, Andrew! And sorry for the very late reply :-( I managed to miss
+this email somehow, still patch looks ok, thanks!
 
-Today's linux-next merge of the scsi-mkp tree got a conflict in:
-
-  drivers/ufs/core/ufs-mcq.c
-
-between commit:
-
-  bf0c6cc73f7f ("scsi: ufs: core: Fix the issue of ICU failure")
-
-from Linus' tree and commit:
-
-  2c73fb138da5 ("scsi: ufs: core: Improve ufshcd_mcq_sq_cleanup()")
-
-from the scsi-mkp tree.
-
-I fixed it up (see below - I used the former version of the logging
-change) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/ufs/core/ufs-mcq.c
-index dba935c712d6,988400500560..000000000000
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@@ -569,11 -569,10 +569,11 @@@ int ufshcd_mcq_sq_cleanup(struct ufs_hb
-  	opr_sqd_base =3D mcq_opr_base(hba, OPR_SQD, id);
-  	writel(nexus, opr_sqd_base + REG_SQCTI);
- =20
- -	/* SQRTCy.ICU =3D 1 */
- -	writel(SQ_ICU, opr_sqd_base + REG_SQRTC);
- +	/* Initiate Cleanup */
- +	writel(readl(opr_sqd_base + REG_SQRTC) | SQ_ICU,
- +		opr_sqd_base + REG_SQRTC);
- =20
-- 	/* Poll SQRTSy.CUS =3D 1. Return result from SQRTSy.RTC */
-+ 	/* Wait until SQRTSy.CUS =3D 1. Report SQRTSy.RTC. */
-  	reg =3D opr_sqd_base + REG_SQRTS;
-  	err =3D read_poll_timeout(readl, val, val & SQ_CUS, 20,
-  				MCQ_POLL_US, false, reg);
-
---Sig_/vib9vbDQ2O61Xr9SXn_pPql
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcfN6IACgkQAVBC80lX
-0Gz2Dgf/ZIdT8FICGCsngnXi3C7C621sfFMq/AOGRViCF9FDAvbhjlch49DOiuex
-fys4zYSD9udkU6hJ0MEBT1GOCfwsjfT63g4AewnrqQcj5Irn18zx9BZpwRHbJhff
-FxqCMoyfwX+uVD1ToOKXjSKeCzO2ppVCPVgnPiFVznrICkea9lZJqOMZpRWx3nqB
-ETdIbtflKWOAnbYg3M7yZYqAz+i3BTj2HnD7ReKMHFko2f56IYuGgLz3EGvALoXS
-fE+NFUuOWa19+nbtIGJBFSdr1aga9YqqkGT8bKH/lnvX/TAxssDEmG64i8xztjbA
-Zt8SNqW2kd1j7+Hk1GZcgsoSLibTZQ==
-=cNp5
------END PGP SIGNATURE-----
-
---Sig_/vib9vbDQ2O61Xr9SXn_pPql--
+	Cyrill
 

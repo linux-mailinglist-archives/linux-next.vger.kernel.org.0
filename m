@@ -1,180 +1,197 @@
-Return-Path: <linux-next+bounces-4501-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4502-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 068A89B3ACD
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 20:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBE3B9B3B42
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 21:20:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28F421C20B30
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 19:52:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E02EF1C22148
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 20:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8167E18EFEC;
-	Mon, 28 Oct 2024 19:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7044D1DFDB1;
+	Mon, 28 Oct 2024 20:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hy7mVKkO"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="n3HmviBx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFAF524C;
-	Mon, 28 Oct 2024 19:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557001DF753;
+	Mon, 28 Oct 2024 20:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730145145; cv=none; b=puwNduhMEn7vxKhWHMa5JE1Z+GMdPn3lW/2fQK4puzzOewxtKBkMZIBTFYW7IZvbF6vNUVsN03FTbdZFSf+4E5Njf2QFsSz8g/pecpDe4t1lwxBAAdrH/aESOZTus+zsjPrc1GkDmpeBgm1jpznxT/TJs7bCdinf8HC7QzHGQvc=
+	t=1730146847; cv=none; b=J+LtrrmapXQfmHQcx5IbT6sazStqqOMYsYY7dvWaKsTJGbS48h3nDU19G4pWVDYLVDskdgJXHPakq+kkKaex/KHOhr/Z7SK+dVwMUtP2+8eZvWO+pmj+R91rxbOsM+lRQ8hXGxolR3723wnaalHoQdXn91Xb36zoY2zTx59m28w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730145145; c=relaxed/simple;
-	bh=Ul+QBVc+YnNy2tXI88GGtUMlSaX13YfqOBf387SSnCA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=McwsezeSQynOGaVNsQkL2DFIjHKLghYJll83rDHauvYC9bzWGbMFDrQlumK4VvE31dong1UKh2Zvc2sr/68F2tI/6Osh7iQuXLBcShtThstTl+LfhJOPxMmTR81vtibvFIixpyq1if+XCNNKnaNC7KKfZIgsz4u1u3ZnziMtOUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hy7mVKkO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 230D7C4AF0B;
-	Mon, 28 Oct 2024 19:52:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730145145;
-	bh=Ul+QBVc+YnNy2tXI88GGtUMlSaX13YfqOBf387SSnCA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Hy7mVKkO3XRYO8YWVrUTgHYinB3RiMlhYWP11k1m52FZ+ii3U61nFlGXTdSJQjOJs
-	 slNtI7p1h8mB/ZzCQsZo4AFl+/9NWGv7zBc7OOybScNasnNc4ZmgX3B4vauP0vfHE+
-	 6TzsmkQAhm+SVulymqgjaKwf2Q3K4SmddGQF/TYxL/yvK+LgwlHLgpen18QFw5y0cU
-	 UPBupjnkFBG8/AJq9OAkn+O//L3/nWZNwZ+967EW8yx6eBeDz8qD4TcMyZu7TY9JLJ
-	 h7Nb3uhYaEu6BE0rw1ByScNbrHN15rzP1FjYlUoBNf5heDwtKxMaCWICzPiapPsKrh
-	 9pPiJaxhBcjlQ==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-539f72c8fc1so5787892e87.1;
-        Mon, 28 Oct 2024 12:52:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVKgtVq7oAu4oWVIYjJYsh575ox2v+zkCqcbGUuemFZxUSpimL7LvdB4VGT65pG/eoxEL1qLzDTWOLXUQ==@vger.kernel.org, AJvYcCVXjV1Fu3iTcmtTicNB7Bhu6/2ZIPG5uUXoIdZ4dUzigax1YsqXwfNA/OTlVHsbZrcNq/kZKEQaQH/9Bcs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy69gab0qbVIf6LR4DJkOdhlE01eEtIpVKluF6SO5XchyzgNMrd
-	cvYkIckXWz9t9EZlt6A8NRDvxeBbeTzpN+PZo6ARS2WIK8FF7PipG6WMaQ9x5Yjwq2sTDl90q6A
-	WnsPApT+ak4ZxG2w/4GKMTswATQ==
-X-Google-Smtp-Source: AGHT+IHZQIXoMf901p3J/xgrany/8b01LghURtWvew8IISJPoYjj2YNAA8I9ZSkMEW+VoWXGPDwYES18VSeZo2tXQbU=
-X-Received: by 2002:a05:6512:230a:b0:53b:1f7a:9bf8 with SMTP id
- 2adb3069b0e04-53b34a34190mr3665907e87.55.1730145143491; Mon, 28 Oct 2024
- 12:52:23 -0700 (PDT)
+	s=arc-20240116; t=1730146847; c=relaxed/simple;
+	bh=JIAL/B9LSSO2253gj6bdT9YDEY5La0uoIG/9VNNFf7U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hE8Ujm1qoF5CAY1wxKfX9bkcbX7RWXI2PcMhQC18JBcEcyRf9tHmoQabD2XIGB8wC0xWu1yvXvjdxObTRROL62vCYEQu27/T1PsdNQLLs58goPon5yPKERji3C/zbH58kTTzHUTpRZnOPJyOaUToysaAv/cyZ7xgirM/zzqN8m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=n3HmviBx; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1730146839;
+	bh=DmMA20Dp9bgnxIXZhoxHWH21U3W1ORRWukXGjmhfLc4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=n3HmviBxJQQkK+O866NFCKN2UKENemltmh0h9GA0kMblDXB+jLIYWFT3W5u2sSirK
+	 TM+9bWTJukLvTJ3i77zM06G2wBonvemnYwYKAz6TbbW4GXIzwTlnZfAnDPrt0BIw6m
+	 y1jYn3Ch43hN3wf9bDu0CzwHW9LGGp2jlzCNFIKZ0Gq7bgBlcMDFWVBT3IpcrCRSl/
+	 raN15fjdiGZI/BfReO8ZMbYbZL5U8sjLpgcz3GaONWWrH0rrUpjWmOfm4JZWmbMzqP
+	 EVBvcNISjuWplDENmqp6kfN72PZafKCe0/ofYDWfa28t/jHFJUgLayfpMokvs+Qs82
+	 NBh1wYDPx/oiA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XclBb2H6mz4wcj;
+	Tue, 29 Oct 2024 07:20:39 +1100 (AEDT)
+Date: Tue, 29 Oct 2024 07:20:39 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Su Hua <suhua.tanke@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: boot failure after merge of the memblock tree
+Message-ID: <20241029072039.39d850dc@canb.auug.org.au>
+In-Reply-To: <CALe3CaA9cc8fagJwA5ux6-U8mKTK=DEGU1Mb3LeCeKPrUGS5ig@mail.gmail.com>
+References: <20241022173921.6fdbdd38@canb.auug.org.au>
+	<ZxtAWopjlF9unBno@kernel.org>
+	<CALe3CaAehCC6WOpCAGtMX3qsTqMc8jh3kn1Fz_m7_7_M6SMgfQ@mail.gmail.com>
+	<CALe3CaDW9vWcrukmWP+tj-ToSUh8p6==goL+B3aiGvxBDg79Ww@mail.gmail.com>
+	<ZxtZ5q5HH-gu0zeQ@kernel.org>
+	<CALe3CaA9cc8fagJwA5ux6-U8mKTK=DEGU1Mb3LeCeKPrUGS5ig@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241028122405.27090-1-herve.codina@bootlin.com>
- <20241028122405.27090-2-herve.codina@bootlin.com> <CAL_JsqK7SjfJ7Re4k-A8fQB+tNHyM3r2Rcpct_zUfR2yhEj+iQ@mail.gmail.com>
- <20241028184343.74ad5a26@bootlin.com>
-In-Reply-To: <20241028184343.74ad5a26@bootlin.com>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 28 Oct 2024 14:52:09 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+_VHsMKufVwUj3Q0pv1X6d8Xe0FN6A9svCmWJ3cuuUqQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+_VHsMKufVwUj3Q0pv1X6d8Xe0FN6A9svCmWJ3cuuUqQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] misc: lan966x_pci: Fix dtc warns 'missing or empty
- reg/ranges property'
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
-	Steen Hegelund <steen.hegelund@microchip.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/rfjuhZyjcX6L0rF_oF7j93E";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/rfjuhZyjcX6L0rF_oF7j93E
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 28, 2024 at 12:43=E2=80=AFPM Herve Codina <herve.codina@bootlin=
-.com> wrote:
+Hi all,
+
+On Sat, 26 Oct 2024 07:36:13 +0800 Su Hua <suhua.tanke@gmail.com> wrote:
 >
-> Hi Rob,
->
-> On Mon, 28 Oct 2024 08:55:24 -0500
-> Rob Herring <robh@kernel.org> wrote:
->
-> > On Mon, Oct 28, 2024 at 7:24=E2=80=AFAM Herve Codina <herve.codina@boot=
-lin.com> wrote:
-> > >
-> > > dtc generates the following warnings when building the LAN966x device
-> > > tree overlay (lan966x_pci.dtso):
-> > >   Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/cpu_=
-clk: missing or empty reg/ranges property
-> > >   Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/ddr_=
-clk: missing or empty reg/ranges property
-> > >   Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/sys_=
-clk: missing or empty reg/ranges property
-> > >
-> > > Indeed, related nodes are under the pci-ep-bus (simple-bus) which is =
-not
-> > > correct.
-> > >
-> > > Put them outside this node.
-> > >
-> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Closes: https://lore.kernel.org/all/20241025110919.64b1cffb@canb.auug=
-.org.au/
-> > > Fixes: 185686beb464 ("misc: Add support for LAN966x PCI device")
-> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > > ---
-> > > The referenced commit is in the reset tree
-> > > ---
-> > >  drivers/misc/lan966x_pci.dtso | 36 +++++++++++++++++----------------=
---
-> > >  1 file changed, 18 insertions(+), 18 deletions(-)
-> > >
-> > > diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci=
-.dtso
-> > > index 7282687df25f..5466d013da7d 100644
-> > > --- a/drivers/misc/lan966x_pci.dtso
-> > > +++ b/drivers/misc/lan966x_pci.dtso
-> > > @@ -19,6 +19,24 @@ __overlay__ {
-> > >                         #address-cells =3D <3>;
-> > >                         #size-cells =3D <2>;
-> > >
-> > > +                       cpu_clk: cpu_clk {
+> Mike Rapoport <rppt@kernel.org> =E4=BA=8E2024=E5=B9=B410=E6=9C=8825=E6=97=
+=A5=E5=91=A8=E4=BA=94 16:46=E5=86=99=E9=81=93=EF=BC=9A
 > >
-> > Preferred node name is "clock-<freq-in-hz>"
->
-> I based the name on the lan966x.dtsi
-> https://elixir.bootlin.com/linux/v6.12-rc1/source/arch/arm/boot/dts/micro=
-chip/lan966x.dtsi#L38
-
-That should be fixed too.
-
-> Of course, I can rename the cpu_clk, ddr_clk and sys_clk nodes but this w=
-ill create
-> a difference against lan966x.dtsi on some points that should be identical=
-.
-
-Then maybe they should be sharing a .dtsi?
-
-> Let me know with that in mind if I need to rename those nodes in this ser=
-ies.
-
-Yes, easier now than later.
-
-> > Also, as a general rule, don't use "_" in node names (and properties).
+> > On Fri, Oct 25, 2024 at 04:33:16PM +0800, Su Hua wrote: =20
+> > > Su Hua <suhua.tanke@gmail.com> =E4=BA=8E2024=E5=B9=B410=E6=9C=8825=E6=
+=97=A5=E5=91=A8=E4=BA=94 16:19=E5=86=99=E9=81=93=EF=BC=9A =20
+> > > >
+> > > > Appreciate everyone.
+> > > >
+> > > > Mike Rapoport <rppt@kernel.org> =E4=BA=8E2024=E5=B9=B410=E6=9C=8825=
+=E6=97=A5=E5=91=A8=E4=BA=94 14:57=E5=86=99=E9=81=93=EF=BC=9A =20
+> > > > >
+> > > > > Hi Stephen,
+> > > > >
+> > > > > On Tue, Oct 22, 2024 at 05:39:21PM +1100, Stephen Rothwell wrote:=
+ =20
+> > > > > > Hi all,
+> > > > > >
+> > > > > > After merging the memblock tree, today's linux-next build
+> > > > > > (powerpc_pseries_le_defconfig) failed my qemu boot test like th=
+is:
+> > > > > >
+> > > > > > Kernel panic - not syncing: Attempted to kill the idle task!
+> > > > > >
+> > > > > > Caused by commit
+> > > > > >
+> > > > > >   ad48825232a9 ("memblock: uniformly initialize all reserved pa=
+ges to MIGRATE_MOVABLE")
+> > > > > >
+> > > > > > I bisected the failure to this commit and have reverted it for =
+today. =20
+> > > > >
+> > > > > Apparently set_pfnblock_flags_mask() is unhappy when called for
+> > > > > uninitialized struct page. With the patch below
+> > > > >
+> > > > > qemu-system-ppc64el -M pseries -cpu power10 -smp 16 -m 32G -vga n=
+one -nographic -kernel $KERNEL
+> > > > >
+> > > > > boots up to mounting root filesystem.
+> > > > >
+> > > > > diff --git a/mm/mm_init.c b/mm/mm_init.c
+> > > > > index 49dbd30e71ad..2395970314e7 100644
+> > > > > --- a/mm/mm_init.c
+> > > > > +++ b/mm/mm_init.c
+> > > > > @@ -723,10 +723,10 @@ static void __meminit init_reserved_page(un=
+signed long pfn, int nid)
+> > > > >                         break;
+> > > > >         }
+> > > > >
+> > > > > +       __init_single_page(pfn_to_page(pfn), pfn, zid, nid);
+> > > > > +
+> > > > >         if (pageblock_aligned(pfn))
+> > > > >                 set_pageblock_migratetype(pfn_to_page(pfn), MIGRA=
+TE_MOVABLE);
+> > > > > -
+> > > > > -       __init_single_page(pfn_to_page(pfn), pfn, zid, nid); =20
+> > > >
+> > > > Indeed, when #ifdef NODE_NOT_IN_PAGE_FLAGS is defined, there is no
+> > > > problem, and this is why my
+> > > > test environment did not reveal any issues. However, when
+> > > > NODE_NOT_IN_PAGE_FLAGS is not defined,
+> > > > page_to_nid needs to use page->flags to get the node ID, which depe=
+nds
+> > > > on __init_single_page for initialization. =20
+> > >
+> > > Hi Mike
+> > > Could you please advise whether the fix for this issue should be
+> > > submitted by you or me
+> > > as a new patch, or should I submit a patch that adjusts the code
+> > > position, just like this: =20
 > >
-> > Isn't there a schema for the device which needs these nodes added to
-> > it? If not, there should be.
-> >
->
-> No, there is no schema yet for this device.
->
-> How can we describe schema for this kind of devices that are using
-> device-tree overlays?
+> > I've folded the update into your original commit, it's now in for-next
+> > branch of memblock tree =20
+>=20
+> Okay, thank you.
+>=20
+> > > diff --git a/mm/mm_init.c b/mm/mm_init.c
+> > > index 4ba5607aaf19..5a8114fb02ae 100644
+> > > --- a/mm/mm_init.c
+> > > +++ b/mm/mm_init.c
+> > > @@ -723,6 +723,9 @@ static void __meminit init_reserved_page(unsigned
+> > > long pfn, int nid)
+> > >                         break;
+> > >         }
+> > >         __init_single_page(pfn_to_page(pfn), pfn, zid, nid);
+> > > +
+> > > +       if (pageblock_aligned(pfn))
+> > > +               set_pageblock_migratetype(pfn_to_page(pfn), MIGRATE_M=
+OVABLE);
+> > >  }
+> > >  #else
 
-Describing is not the issue. Running the checks is. Though you can run
-the checks at runtime.
+This has returned, so I applied by hand the above discussed fix.
 
-> I mean, this overlay is applied on a PCI device DT node. This DT node is
-> computed at runtime. It is, in the end, available in the base DT before
-> applying the overlay.
-> The compatible string that could be used to check the dtso against schema
-> cannot be set in the overlay (at least not at the correct place in the
-> hierarchy) without causing a property memory leak at runtime. An overlay
-> cannot add a property in a base DT node without generating a memory leak
-> and so, we avoid adding such properties in the base DT from the overlay.
+--=20
+Cheers,
+Stephen Rothwell
 
-That's a problem with overlays in general which we need to solve at some po=
-int.
+--Sig_/rfjuhZyjcX6L0rF_oF7j93E
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> Is this missing schema blocking for this series ?
+-----BEGIN PGP SIGNATURE-----
 
-No.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcf8hcACgkQAVBC80lX
+0GwuRwf9FEiyWziOdmHIyifnqukteOOGzcBvz4Oi3PyoOrkVGSIsfoMGGSfAzXiz
+V+Kb6KSUYOdO/1fUDJ3iyRgdlQWJmXcWTTwsiCFVUsZn8225mt3s9McOb6xMhslU
+VodkGnmP8uS0a+/0ZR/KcDXSKqmi1qv1//JCkv7q9X3u/LtJIq4uEkBKgBlpM28j
+KesnohmGvcPaW0S6KlAKYHG/XTdwQcEXCY5AuLLKEvs5vYCKIH8vU/+VpQXXa5jv
+NY1LFf/FfzHfR1i7IvKFD0YwpJD+LQTdewBKi6dvk7bBkWH1fo/17J/biKBJTvoE
+UUlAz9tsxNrk49CpxVMRDxNH/4uR9g==
+=1KDL
+-----END PGP SIGNATURE-----
 
-Rob
+--Sig_/rfjuhZyjcX6L0rF_oF7j93E--
 

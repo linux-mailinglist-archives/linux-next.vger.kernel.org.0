@@ -1,108 +1,131 @@
-Return-Path: <linux-next+bounces-4477-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4478-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 110AF9B2AC6
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 09:53:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 952AA9B2AD0
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 09:57:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1A241F221F0
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 08:53:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AA8A28122F
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 08:57:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106CC1922E9;
-	Mon, 28 Oct 2024 08:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A531922DA;
+	Mon, 28 Oct 2024 08:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HQHIYhHy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r9J7bE5N"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2426A18C93D;
-	Mon, 28 Oct 2024 08:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A4E155C97;
+	Mon, 28 Oct 2024 08:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730105588; cv=none; b=ERP5FL9gMJAIfXWXvydQ4L42qpUTbik63cnpBAaBG6LF6WywI+e870CtUWYzYq8g3RCKEWaEGlEokaeen30htJiOWLqA0T1sztV85j8B+ZVG3V9glYtsYDvzBi2YGGfb8eC1LuRQXJBLWKH4PnlxiMAmgLr+X6CD0vBrTH9MmHg=
+	t=1730105821; cv=none; b=OuqgZAkElnukYnjk+gc1HG8aGQxIkQf4NGOaLURJBsDhc4lT06LtMU6Rp6bLC5B/ojF3v2qQ6Y+gFNGULSVa+svG9OE/RKonVId3+55sLbgZ8mCbGvhbZiQ7S/SG+TrSouyfzYd0E+3RFMnId2cLJ7x9ZT8aShX/0RGYaaZs8qE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730105588; c=relaxed/simple;
-	bh=RtYn8cdiczrDP8ngYI2J92PSLvPSPzcx2pfCGWGtNDo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=UyCKWDzA+F+9/3whcxp9IcNe8bXT4texuuRisX3PMFCrWU7lWe3YYMh0W74XGVtDiNyTfXbHURjKcSyKN+mT2M15PU/5VQzD/v3RywTLMoaAVGQb1WgqYUiAd8jGRFCL0QB6EFwSjBlQYV1io1+1YzMmoVEH8a4enfwK58Jdqek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HQHIYhHy; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1730105581;
-	bh=lqtSQx2953aHPBP5In47zscgVywYl/Hptd5PYzeE4eo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=HQHIYhHy5PvjL1lVPuBztrvE2dpeX61rQu4/eVsj3/c9vBTvhctEckG/pgven5y4F
-	 0O5IX4djgYY9bMX4QKZEcCjEJBqKU0ySQkGninbVxGafFNn5/j8y+yrEKgkAA3X8wf
-	 Kd9QY04gk6+Fu9BSDHGse/2ooIkH6UJIfhOewPYtSt6GDNaq5R5ji4rlYB2P+vzZIs
-	 iUNOK7huZPM5CMNv22O/b+gsk2pkcOm5EZl24qihz96Tzf2hut1TnORN5UlJikQGMo
-	 PefV/FtI5oE4i6WP4wHEwEmTQdKZpM297h5nMjVW1Who4NIpEhZXL5fa/Cj2n6h8HE
-	 IcA1uLw2Ablfw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XcRx93Fs9z4x6k;
-	Mon, 28 Oct 2024 19:53:01 +1100 (AEDT)
-Date: Mon, 28 Oct 2024 19:53:02 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Maksym Holovach
- <nergzd@nergzd723.xyz>, Markuss Broks <markuss.broks@gmail.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the samsung-krzk tree
-Message-ID: <20241028195302.748c7a5a@canb.auug.org.au>
+	s=arc-20240116; t=1730105821; c=relaxed/simple;
+	bh=3sts8k5+tb3FQXlcmLEg3kWQ357GDylhII0LfM/cohk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NhCA+R/Vi7AGZ5/OqnnfIWYLxq1pOMd8xLob/y3YzOiDmBRQhy389NPsBNJMTqvTQwP084cF+W//uqXAiUrOXf9ikDP63duI+fcCqAaGke7lu5Wi171vZbGNHqpTJFUxQX0qzIYbG9gTRVvXKTVIKFSRndva9WRbn7N7gDb6M3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r9J7bE5N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EF9C4CEC3;
+	Mon, 28 Oct 2024 08:56:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730105821;
+	bh=3sts8k5+tb3FQXlcmLEg3kWQ357GDylhII0LfM/cohk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=r9J7bE5Ne9AYYC+24+fg5K0NZJo/0qjrEd52zjhezn3KMaWIM7k3Cv2HldEy6qNH+
+	 CE2SOqWOnPfyymblWJftdOjrMB79csrM1gEGAc2T7jAIUW5u1/pdZ+yFIYnsbUlA5b
+	 7VS+P7f1GQ6k+t/TvbZPnbK2UFs35rlRIyaeFoB1RlJiqAm3LOxpnwssYUv27dvYHv
+	 xnuSCISqsT5yhW8jy/WeAFyA/l+tDKV6el/SdbR3joEvyL0bHFJK9yrQROV09mXJ8P
+	 MStASTAzmw1X5onqrrhAlCbDmW8eGNp4mKfqkV7tukPPDbtBBHTxWyVikHWKfFFBtw
+	 aCEVpMI6/DAXA==
+Message-ID: <8a46cfac-73c2-411a-b5d0-ba55ab9f544a@kernel.org>
+Date: Mon, 28 Oct 2024 09:56:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kA_dbDnLoHkpPT4uXUAEF/w";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the samsung-krzk tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Maksym Holovach <nergzd@nergzd723.xyz>,
+ Markuss Broks <markuss.broks@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20241028195302.748c7a5a@canb.auug.org.au>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241028195302.748c7a5a@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/kA_dbDnLoHkpPT4uXUAEF/w
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 28/10/2024 09:53, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the samsung-krzk tree, today's linux-next build (arm64
+> defconfig) failed like this:
+> 
+> Error: arch/arm64/boot/dts/exynos/exynos9810-starlte.dts:72.9-10 syntax error
+> FATAL ERROR: Unable to parse input tree
+> 
+> Caused by commit
+> 
+>   229cf465b9f6 ("arm64: dts: exynos: Add initial support for Samsung Galaxy S9 (SM-G960F)")
+> 
+> I have reverted that commit for today.
 
-Hi all,
+Yeah, I spotted it too late. Tomorrow's next will be fine. Thanks for
+fixup and apologies for letting this slip in.
 
-After merging the samsung-krzk tree, today's linux-next build (arm64
-defconfig) failed like this:
+Best regards,
+Krzysztof
 
-Error: arch/arm64/boot/dts/exynos/exynos9810-starlte.dts:72.9-10 syntax err=
-or
-FATAL ERROR: Unable to parse input tree
-
-Caused by commit
-
-  229cf465b9f6 ("arm64: dts: exynos: Add initial support for Samsung Galaxy=
- S9 (SM-G960F)")
-
-I have reverted that commit for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/kA_dbDnLoHkpPT4uXUAEF/w
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcfUO4ACgkQAVBC80lX
-0GyPpgf4iNCMu1lxi1tiFDtJmXm1lmm9C74mTfMijhKTodLl4O1GM2/mNoaTxviO
-BVTx7gPQI2eIuPMZdiOANEHpizxhNFtn/T/wxQaIRzxUx05BXfin7Zz4jR1ov3CC
-BA3vk6f58ViQbN07L/JWfqKA+G+0kgiLD+/JsR/o6LfGe+R3ktcCKUvTmQdZfNPg
-VHNuFPAeExiWKB++tys2j4g/e0RpyfYe14kYkVOFo13wRvLi5eDSAdn9nbdXoL4O
-VlXYWCa7Bak+fHUcGR25HZhPbW6lq+RPMP2w6mqvBIxLidBSWHeAKPykHBWalNS2
-zcCZ+EJsXBbAzwW3BcfTpHSCx56j
-=er4p
------END PGP SIGNATURE-----
-
---Sig_/kA_dbDnLoHkpPT4uXUAEF/w--
 

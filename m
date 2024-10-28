@@ -1,116 +1,192 @@
-Return-Path: <linux-next+bounces-4459-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4460-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAE3E9B2166
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 00:36:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC43B9B217E
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 01:11:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD9FA1C20A2F
-	for <lists+linux-next@lfdr.de>; Sun, 27 Oct 2024 23:36:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0AA1EB20C85
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 00:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A52189528;
-	Sun, 27 Oct 2024 23:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C03636D;
+	Mon, 28 Oct 2024 00:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AVHBpwse"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iNuWMQLe"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D29188A0E;
-	Sun, 27 Oct 2024 23:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25641C14;
+	Mon, 28 Oct 2024 00:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730072208; cv=none; b=TMfRU8KJsn+3hjDNaF/OBhpb4xuRSqZqy/pqG4j6dadDddKo+w3fFKfCrGAF8lxq7Y+19zuOrVAK6pO0SQjo8cSm6QvnvgMXows/VfQkgwGtWbwmtsW7iVDtgDe6EopqqzhN9vLTjMX0D6ulWK+iMbgMYaUDhXiCvdWVidU0Efc=
+	t=1730074265; cv=none; b=t6cRVUCj/jSWx2SoMAOH3pngndmZDDmBTCGQjt9QycViqMyRPWcbROZA3bSEe9KGyqGCCKR3JgCaq8YF0C1IB2Nl2OSXm6A5wGMdF396/2ggqu1OFEu318nG8l7he9CmooAL4J9Fu3EusKJQSVbbozq26fDHD/nllLgcw0i53t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730072208; c=relaxed/simple;
-	bh=NI/0NjJRoSMFb/rVMn3gS2S+ywVIq3W+7xx2YIHD+Vg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ac2vLTarVUJgl1aJgjBDJd7BXGdI77ILeON6L/knfWV3b/PHAnAITQFMEi/OA8zJF88YiJCFXh6b7h8ynqwQWnJyWVWcxBnsK8JYypcHncYmNZN/rlzDoZ5tvz05pvCoBRceBPhSrJE6wObrAZOlJq4txVJyxjW4cEEvX2i7RHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AVHBpwse; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1730074265; c=relaxed/simple;
+	bh=PC9bKQALiYZTqF0bok6kbzuPsfj/mgFgbQFZm68W64o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=duXjvNDkdZIpl4lpU4yOE70ju5VVc16DhGIxpE4YdzVWKgbebTXbJ3hx33KCyUZiogaV42Kp/x6kGv6D0dZnv12GuQ8IBU9T9r2mKWXnv1YtCjl0gcdjeRzK6UaEd8wc8XlKTGV8Otf9izmhOB7PLUrVpzQtrLwJxisuewFS6zQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iNuWMQLe; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1730072198;
-	bh=Oe4Qquk5IkTM08N/SEpAtTh93r0yCVzE4swwv+GL6zo=;
+	s=201702; t=1730074257;
+	bh=hbGF7aUiGqIVN2g21lq8oiyVZdqqDcJaXyUQHQXXHwQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=AVHBpwseRufHsyI3esE8IVklXSA40kksZpixnCdyNuS5t5OpVzeOKI+dx9L5la1rb
-	 ABwYm/X3sqA05fcRYdOJEF3A/LHP3gy/HYuZDMeA/spDF1XUBGhi+Gj9JujUPtq8U/
-	 gD9tTBW8jkQtDlgWDnZksP45D6O5GdU/kL6Ua8sBdbfXospCOQa+OrvUZ55m+UxuaN
-	 pJxd0DNhRBfRicGUYusQ8zHnexJTdbUTXT1NQ//nukQUvPDyMq+/7u/GImc7RFoGBC
-	 8uQFmFiHI4H8mYHDtpuxZQ5dp3NiowTkXrkooXuQk6BXsbpsVf4VIq8/zHb2rCToX6
-	 NxP4fKhbc9A0Q==
+	b=iNuWMQLe1CYX3lJB5aL+RJ54KvdwD/BFoQOWCzFh8j5kf5lRKB6v97zhscm+xjW6J
+	 LMRDYFdFXNY7YLxPpegocK0RKd8pnTYAcCUF9wgF3NCcx/fp09rE0i1oUazTqnGA2I
+	 VI6zxkk3Y/h2CMfyv6tKV+dqnVxRUIAfpxE7i2IDF5zfzX3Fmu2xMBA7/koQzxQCvu
+	 9CUhXNmiLLiVZHtJl2BMFjjWfoVGaJ6jdGOAFhrwzrHiQD98tsaSDv01ZpBEFeOmRR
+	 tbzb6hOaDc/XnRF2idmDF/2eTL+U33Cwtj9ysKRF5kKfFRyFkZijy8xx3BKKjlYq5L
+	 QF3K3zC1bat2A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XcCbB3r4sz4x33;
-	Mon, 28 Oct 2024 10:36:38 +1100 (AEDT)
-Date: Mon, 28 Oct 2024 10:36:38 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XcDLn47L5z4wc4;
+	Mon, 28 Oct 2024 11:10:57 +1100 (AEDT)
+Date: Mon, 28 Oct 2024 11:10:58 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20241028103638.70996727@canb.auug.org.au>
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>
+Subject: linux-next: manual merge of the arm64 tree with the mm tree
+Message-ID: <20241028111058.4419a9ed@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bX.JHr=sY9ePnok.=fz6L5g";
+Content-Type: multipart/signed; boundary="Sig_/0mrtXIushRlvIHX=G.X+.AB";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/bX.JHr=sY9ePnok.=fz6L5g
+--Sig_/0mrtXIushRlvIHX=G.X+.AB
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Today's linux-next merge of the arm64 tree got a conflict in:
 
-mm/workingset.c: In function 'workingset_activation':
-mm/workingset.c:598:38: error: implicit declaration of function 'folio_memc=
-g_charged'; did you mean 'folio_memcg_check'? [-Wimplicit-function-declarat=
-ion]
-  598 |         if (mem_cgroup_disabled() || folio_memcg_charged(folio))
-      |                                      ^~~~~~~~~~~~~~~~~~~
-      |                                      folio_memcg_check
+  include/linux/mm.h
 
-Caused by commit
+between commit:
 
-  b4fa93fbd1dc ("memcg: workingset: remove folio_memcg_rcu usage")
+  e87ec503cf2e ("mm/codetag: uninline and move pgalloc_tag_copy and pgalloc=
+_tag_split")
 
-from the mm-unstable branch of the mm tree.
+from the mm-unstable branch of the mm tree and commit:
 
-this build has
+  91e102e79740 ("prctl: arch-agnostic prctl for shadow stack")
 
-# CONFIG_MEMCG is not set
+from the arm64 tree.
 
-I have reverted that commit for today.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/bX.JHr=sY9ePnok.=fz6L5g
+diff --cc include/linux/mm.h
+index 086ba524d3ba,8852c39c7695..000000000000
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@@ -4166,4 -4174,65 +4178,8 @@@ static inline int do_mseal(unsigned lon
+  }
+  #endif
+ =20
+ -#ifdef CONFIG_MEM_ALLOC_PROFILING
+ -static inline void pgalloc_tag_split(struct folio *folio, int old_order, =
+int new_order)
+ -{
+ -	int i;
+ -	struct alloc_tag *tag;
+ -	unsigned int nr_pages =3D 1 << new_order;
+ -
+ -	if (!mem_alloc_profiling_enabled())
+ -		return;
+ -
+ -	tag =3D pgalloc_tag_get(&folio->page);
+ -	if (!tag)
+ -		return;
+ -
+ -	for (i =3D nr_pages; i < (1 << old_order); i +=3D nr_pages) {
+ -		union codetag_ref *ref =3D get_page_tag_ref(folio_page(folio, i));
+ -
+ -		if (ref) {
+ -			/* Set new reference to point to the original tag */
+ -			alloc_tag_ref_set(ref, tag);
+ -			put_page_tag_ref(ref);
+ -		}
+ -	}
+ -}
+ -
+ -static inline void pgalloc_tag_copy(struct folio *new, struct folio *old)
+ -{
+ -	struct alloc_tag *tag;
+ -	union codetag_ref *ref;
+ -
+ -	tag =3D pgalloc_tag_get(&old->page);
+ -	if (!tag)
+ -		return;
+ -
+ -	ref =3D get_page_tag_ref(&new->page);
+ -	if (!ref)
+ -		return;
+ -
+ -	/* Clear the old ref to the original allocation tag. */
+ -	clear_page_tag_ref(&old->page);
+ -	/* Decrement the counters of the tag on get_new_folio. */
+ -	alloc_tag_sub(ref, folio_nr_pages(new));
+ -
+ -	__alloc_tag_ref_set(ref, tag);
+ -
+ -	put_page_tag_ref(ref);
+ -}
+ -#else /* !CONFIG_MEM_ALLOC_PROFILING */
+ -static inline void pgalloc_tag_split(struct folio *folio, int old_order, =
+int new_order)
+ -{
+ -}
+ -
+ -static inline void pgalloc_tag_copy(struct folio *new, struct folio *old)
+ -{
+ -}
+ -#endif /* CONFIG_MEM_ALLOC_PROFILING */
+ -
++ int arch_get_shadow_stack_status(struct task_struct *t, unsigned long __u=
+ser *status);
++ int arch_set_shadow_stack_status(struct task_struct *t, unsigned long sta=
+tus);
++ int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long st=
+atus);
++=20
+  #endif /* _LINUX_MM_H */
+
+--Sig_/0mrtXIushRlvIHX=G.X+.AB
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcezoYACgkQAVBC80lX
-0Gw6bwf5AbaTm4+x/7IZMnxRrNXx5XxnfmJShvMuFy578u1heN7qMrIf++yWk+z6
-zO0zo3+bjmKf7rnDnkzijo/xlbqVTbWsjQMoDYXUSoXpnkWXwgvcaK/mHtQ/bJqt
-sv2QFLr8kVIG/Stvupkq80P5apsH2AVhOWfkvKWWL/PXXA4rFIe3MExWeZLj+z96
-djOGb1Dqptd9X/mIO6PdN3wnSv1w6/D3yViUZ1WQwMp88RPM/UhOp3fq3IDzSF0F
-RzfXMZTxSghegMuMshTFuIYY5FAxKJyxNrjzfL7zb1TY6sc+v7PEQuDiVGY7rUUI
-QcrLz+slznm6I+Slb6PyODshfI+cxQ==
-=+D56
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmce1pIACgkQAVBC80lX
+0GyySwf7BrPsHhFOn5msLSZWyyZX3T3cJ+9BFSTKLmhvKjWWvIIDM/CTRIfEvq7u
+lsqOTQ92SncGpw2j1uMd31NFQCYoL92mvJLcFSSG79ymIGBrAUSvz9fqqddjL1ZI
+uKdhsNlA0LNQbUWgLCEddcujSJ9jDtdzoAFYb2y6lEWpU0LPPTlPDgx1E7FyQ349
+m1Er01Qgn2OFkfjzSgqEFpN9Bpw4hmm5zMLNUcM9vKzMJzncLePL/xujAXGeIUwV
+Am3Fomjy2Wnr1Ms/nLCKACXSIMxfAqELeYo84d2aSMgY/k7bFcZzlx+XgEIz1hbh
+GX4gBSDw1YPs4WbaTNno7wZe8t+Umg==
+=5HvN
 -----END PGP SIGNATURE-----
 
---Sig_/bX.JHr=sY9ePnok.=fz6L5g--
+--Sig_/0mrtXIushRlvIHX=G.X+.AB--
 

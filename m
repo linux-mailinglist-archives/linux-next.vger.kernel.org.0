@@ -1,128 +1,114 @@
-Return-Path: <linux-next+bounces-4481-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4483-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 825A09B2C0E
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 10:54:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E1B99B2EB3
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 12:22:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B22FF1C2201A
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 09:54:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 311EA2845B6
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 11:22:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2871CC8B2;
-	Mon, 28 Oct 2024 09:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636F71DDC2A;
+	Mon, 28 Oct 2024 11:17:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Z944a2DO";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="C+UY0K0I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I7iQhJO+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02B8199247;
-	Mon, 28 Oct 2024 09:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9040E1D61A2;
+	Mon, 28 Oct 2024 11:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730109221; cv=none; b=VDbBtC6Vf7bo8nB3hNBt4wBQIa/xJ8OkCGozewYLgqZnsLhiGxR0amlnZJ8HS/3XkmLhSZS/OkKbkO+BRJsvsI2c2bNoye9Zgg0eDfWAYuzelwW1mPsmJDw8v3uv4DSpPfi3zYSH0qK6NCpdcnasFotxx9lkp2XZdMdlTgI+QU8=
+	t=1730114225; cv=none; b=fQ/QBj6xTwsBHuWrEIwQNyKvQyrEjqkxs4I3pqQmbgnxKMfLiJVb/ybUNYdGbySwwxbsWOgJSZc4YReoDPtDkxjpm3O1SE50x5+KPEBwUXqlFZ4fR1rLX8A/H1Ml7iDmCfhWJ1AXOQzGuzDCPEKtsiGSXyYcwQPlr7/WTPcA4pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730109221; c=relaxed/simple;
-	bh=ja6FFYNte2Vb2ZOLtbERJhjehkoalIjXKp8WZUsaixg=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=kWzSP/tM9f/0P0MDzZVqjbnw0kT72cbrGH1oYSE3QCcjR1j+2XBEADHCp4UKFpHu8JWmUaxoJS5YIAjP875JLP1SC23wLrbJXzehLXxCDmLxoq3J15JlQYSJ0ZJ1go6SDWQ0Z4B25CzTG0HIY5Y4x/msTEGCjIDSUYqfVBCPD0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Z944a2DO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=C+UY0K0I; arc=none smtp.client-ip=202.12.124.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.stl.internal (Postfix) with ESMTP id 7AD6D11400FC;
-	Mon, 28 Oct 2024 05:53:37 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Mon, 28 Oct 2024 05:53:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1730109217;
-	 x=1730195617; bh=+exzClQswDanihSowa8oY8xkwPi84cs3lQgzY4bgZBg=; b=
-	Z944a2DO2QsMhWE4pQ+z141hUSa5OGqwvzJSx6ux6nsEV/tx7Vly2RL+TsECrlzC
-	d8px0wrAExvDqjEJ3mGGIZ3QxKz5kQ88Y/5Faaje0ujI9eCA++ToahDUcPGjUOU5
-	UQvCWdXl9AlQZw6T1MfQRmbkkEgsJ3FpMBPTI5eFROtZdCiTi6bfMx8Rd6sRF6d1
-	Y0zr/usCRq2gROIrLMSlNgD5kScVkZX279VPkjW/yMlHD6bMEA1gITQSidILqlH2
-	Wo5IargGKSfSDUd21IKqFddiGsLJJR99GyCtBQmjN9cmTq2uBJywFe16nJ+K+QIL
-	SiWOBiBkecnL7J3M70zvUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1730109217; x=
-	1730195617; bh=+exzClQswDanihSowa8oY8xkwPi84cs3lQgzY4bgZBg=; b=C
-	+UY0K0IkWxlgl18/OocpNy0hFM7+Pfp+mqnWaS3r0ToCsDHjyfMUgPj6AZsQccrA
-	FP3hYbgFZqsfFpt+AWpJGh9eAv+bhGOyMXlFRvCkef/eJ7E0+P9+v/LMdgHfdjYs
-	Rf4l2cQX9J+J2240uG1b8C+3+n35WQK6KovszVSB7U62pQS3rvtlgCodjDiKYJCK
-	wY8MItMdPxUDevDNd65DMDY9wwecjMDmERDaWAFkLWq7UGe9RCpvOwDIVUDy287P
-	ftbVviTaqo99eNDSvbKQr1eMjzF9BJsNpLUlxDp+W6QcOG+tIl493f25o/z8kTri
-	CMhmpEF7KG97XH32gk/ZQ==
-X-ME-Sender: <xms:IV8fZz6jSB5azzmFk99blo7JUCmDB45BajZchNnGlAmxkrNVwlth5w>
-    <xme:IV8fZ45RtbCG3icYMS3tCL9YfyxRSu8pPH3a0icPRM-n25i70IoHyWXvz_ps6OPMV
-    OhZwQnsySdVjI-mF0g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdejkedgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepkedp
-    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdroh
-    hrghdrrghupdhrtghpthhtoheprghrnhgusehkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pehstghhnhgvlhhlvgeslhhinhhugidrihgsmhdrtghomhdprhgtphhtthhopegurhhiqd
-    guvghvvghlsehlihhsthhsrdhfrhgvvgguvghskhhtohhprdhorhhgpdhrtghpthhtohep
-    rghirhhlihgvugesrhgvughhrghtrdgtohhmpdhrtghpthhtohepthiiihhmmhgvrhhmrg
-    hnnhesshhushgvrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrd
-    hkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:IV8fZ6elwW4-bSIJfKGxoRiQjlUFy3avmJngN65hgqNs11M6KX593Q>
-    <xmx:IV8fZ0L-HvAaoLOrncFnLR0Ybt6LUp4Zq4yHbLrlZiHUFLl0shJl-g>
-    <xmx:IV8fZ3JSvfLwSXmSj0lRctzm6j_HA1_Jt945ErDcqB-iaoXX7M1P6Q>
-    <xmx:IV8fZ9wirdCdBVR6Kykn74fUfhjNvdd3NcNfEDGx0oEFhMwvhlSwWA>
-    <xmx:IV8fZ0pbbm_NUyMIhsxDzRXZPTZ3WXorJU3rjzBV5mudN0jjACb5GE2C>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id F05DB2220071; Mon, 28 Oct 2024 05:53:36 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1730114225; c=relaxed/simple;
+	bh=Mxx597M/sVwtRXKyXQ3t/slPbGemI4c1oBODxSYTCAE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hlZdehutrBqDNzH3C50M49NGo/Y+GjvMoj4GAUPpSclQcBFVUREgNPMmYIt+2Z/v6DDoY6GsSGzDx5OOKAukNEKf77PnPxTZ2Q0845iy3DspTcP3lu33HJbQLrp4XKX8zvD7xoPaPww6043zAWI3+mAYM6bYMPodmxvM0mCDV7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I7iQhJO+; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-71e8235f0b6so3053051b3a.3;
+        Mon, 28 Oct 2024 04:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730114223; x=1730719023; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ORjMty/TkXC30xWgYYYlVcOJ2nYVBxh1DhXJWSe7Un8=;
+        b=I7iQhJO++w1/FqCCtuO5QJmrbGzXus6voTUwwGldtYDU4W0p0VAOIsyAhUpjmcFvXv
+         WVUEn32MkgTIoOlbbDvr6+yNL52Hd4f8uLMkHqNlBLPU+WhX3YLcq8Vv/rInBiYU6Nsr
+         c7S6pILIHwhYcz5TMP9ZOyzmfZ7NmIUKIJ5meYNxYTMqapkBAI6Fqh1LTyq9d1AwY7PR
+         RJE/SqTXGShnskYcGgIpm3zndvbQAzhlIqQJ5FJRTjOkiTEhbem4UJ6DYWfriW3Yqn4r
+         /u4I/Df62OCHYj3sbugI+yTMLZX0Z2ANlKB9NAQdxCVbaT7zBm5X3n/QJjZ0K4FQod7Q
+         pslw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730114223; x=1730719023;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ORjMty/TkXC30xWgYYYlVcOJ2nYVBxh1DhXJWSe7Un8=;
+        b=pUmTCBU5/kOP6fUOXV+9fiFlomJgrLbo45AO4aEtzoGCWhDbpCXBMMn7irWDlVObEh
+         chde6lXXllPs365u/VBMHS5DckomRS7C3N0JX1s6kx1d6rO5//55qlDBia8U26VxRCQy
+         q95GeUAbcCtDwvnhZy7m+gpKjM6Gn8tteQGzSX++OJi/PDk0yVH9wR+K/NxjqaxToE9T
+         t2avX848NUpHWu0mjR0mJG8i5QAHICI24+Inos09CzFXJBFe3NX5HseA/wQhSNQQAtFF
+         w6M7d4SDTSWqNdbK7ZUue7UhP6h4Q2HV8c0od1urPxTb16Se1K6c4F29Mzb2DSRzDQFT
+         VClQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUYT1yt/6Q/+b6XDTTX9TS/Gaay9v14bTxIahDud88bEuV2r6LrhepxgC+29hAfkvwdS04DykSabO4BA1A=@vger.kernel.org, AJvYcCV+6dDjtiB+pvGd1VD09bPcUEk3HDHHJYWneD1FJKmxEbpEq7YLtyA2F0joNvl0KVOV4H3SYqJdgRPmaw==@vger.kernel.org, AJvYcCWPg8QFNfxwEv8T2HQDqzMHKdSRtN5YSKdw7mRiohi1cAVxHWhKxx5nW68iHPicFhY1v9nz8j8CmNU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhqCivElHwRQ32qidoH6IVD1dcKV/LI2CWcqbEuiR2qfEzjzDK
+	0KQZBnEYhodzT8CZdKgg3fUEWlgm5pr6uUvS3AcazTRkHOkWiMwd
+X-Google-Smtp-Source: AGHT+IEs3xJO2VaS6OLu/ZG4EsgKrQMwterQHy96fotP+n8dGvJPA95DEczzR1ej4HZ3Rlo8vkQqpg==
+X-Received: by 2002:a05:6a00:9286:b0:71e:db72:3c87 with SMTP id d2e1a72fcca58-7206306effemr9510452b3a.20.1730114222596;
+        Mon, 28 Oct 2024 04:17:02 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72083fee549sm1107848b3a.106.2024.10.28.04.17.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2024 04:17:00 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id C2E0F4207D11; Mon, 28 Oct 2024 18:16:57 +0700 (WIB)
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Linux Documentation <linux-doc@vger.kernel.org>,
+	Linux Sound System <linux-sound@vger.kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	=?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= <amadeuszx.slawinski@linux.intel.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH 0/2] Documentation fixes for ALSA Co-processor Acceleration API
+Date: Mon, 28 Oct 2024 18:16:45 +0700
+Message-ID: <20241028111647.17378-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 28 Oct 2024 09:53:16 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Stephen Rothwell" <sfr@canb.auug.org.au>,
- "Dave Airlie" <airlied@redhat.com>
-Cc: DRI <dri-devel@lists.freedesktop.org>, "Arnd Bergmann" <arnd@kernel.org>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- linux-next <linux-next@vger.kernel.org>,
- "Niklas Schnelle" <schnelle@linux.ibm.com>,
- "Thomas Zimmermann" <tzimmermann@suse.de>
-Message-Id: <dae4e7b9-fe13-45a7-bae3-3629ff708a25@app.fastmail.com>
-In-Reply-To: <20241028133441.7b92ee4f@canb.auug.org.au>
-References: <20241028133441.7b92ee4f@canb.auug.org.au>
-Subject: Re: linux-next: manual merge of the drm tree with the asm-generic tree
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=669; i=bagasdotme@gmail.com; h=from:subject; bh=Mxx597M/sVwtRXKyXQ3t/slPbGemI4c1oBODxSYTCAE=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDOnyhYt+6iSZGfYern2XkGP2yPJY1azL75fvVfk+pblwu btDQMXRjlIWBjEuBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAEykoY6R4enETRyH9qVcPHNy 071ZdZeWqbvL/O3751st686r87Te3Yjhn+7tv/sLVPPOhT/zfZyxdsXzlpgz68p8fZgfsrBP9tv KygIA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 28, 2024, at 02:34, Stephen Rothwell wrote:
+A small (two-patches) series fixing htmldocs warnings on sound tree that
+first being noticed in linux-next integration [1].
 
->  -	} else {
->  +	} else if (IS_ENABLED(CONFIG_HAS_IOPORT)) {
->   		ioaddr = VBE_DISPI_IOPORT_INDEX;
->   		iosize = 2;
-> - 		if (!request_region(ioaddr, iosize, "bochs-drm")) {
-> + 		if (!devm_request_region(&pdev->dev, ioaddr, iosize, "bochs-drm")) {
->   			DRM_ERROR("Cannot request ioports\n");
->   			return -EBUSY;
+[1]: https://lore.kernel.org/linux-next/20241028193242.11597640@canb.auug.org.au/
 
-Looks good to me, thanks!
+Bagas Sanjaya (2):
+  ALSA: docs: compress-accel: Format state machine flowchart as code
+    block
+  ALSA: docs: Add toctree index entry for co-processor acceleration API
 
-      Arnd
+ Documentation/sound/designs/compress-accel.rst | 2 +-
+ Documentation/sound/designs/index.rst          | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+
+base-commit: 0216ded72db896b24cbdd8cd6531482571b25cf6
+-- 
+An old man doll... just what I always wanted! - Clara
+
 

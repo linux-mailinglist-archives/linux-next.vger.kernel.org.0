@@ -1,151 +1,180 @@
-Return-Path: <linux-next+bounces-4500-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4501-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE9409B38BB
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 19:07:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 068A89B3ACD
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 20:52:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A235B24837
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 18:07:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28F421C20B30
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2024 19:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED9861DF720;
-	Mon, 28 Oct 2024 18:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8167E18EFEC;
+	Mon, 28 Oct 2024 19:52:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CLxE4szh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hy7mVKkO"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018111534E9
-	for <linux-next@vger.kernel.org>; Mon, 28 Oct 2024 18:07:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFAF524C;
+	Mon, 28 Oct 2024 19:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730138823; cv=none; b=RXat6z+ZwNeoAwly3gM0ytQFjCG1cSt2DQv2iIzMJxOULUOBQS+/q+5Rv/Ss73J+6kyg186H9D7pGm4w1dqWb8GruFNy2B3hhZprI4059JK1eDUAGW3qRf5SCIh2a6UqCvj+aOxPXrAY6emildRMNGLOyGufjVpyLBsKHk7P9c4=
+	t=1730145145; cv=none; b=puwNduhMEn7vxKhWHMa5JE1Z+GMdPn3lW/2fQK4puzzOewxtKBkMZIBTFYW7IZvbF6vNUVsN03FTbdZFSf+4E5Njf2QFsSz8g/pecpDe4t1lwxBAAdrH/aESOZTus+zsjPrc1GkDmpeBgm1jpznxT/TJs7bCdinf8HC7QzHGQvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730138823; c=relaxed/simple;
-	bh=906Xwqc5BLZHTLhmXAaRwWo5+JImUIzliYYeDlqxCT4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=p/jiC5f2DG1cijAIaCDgrgTb2Op0rRw5U8qp6cd0gxsHfzA1Et7kh8IoYuAG7zU1fpgXOdrGJoDw+5YOk3bCMVM9yvjQysW8QxbAJPDJlCxi0zybIbDkOLJYa5ohQ3iLrTtSsZtp97IgbynvJ+doPpI7Nh8HdjlU7xZRDNIy6EQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CLxE4szh; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-71e55c9d23cso3522985b3a.0
-        for <linux-next@vger.kernel.org>; Mon, 28 Oct 2024 11:07:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730138821; x=1730743621; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OSPXfhYXFqsav+wNvpf5kcVIJjv343m6ZpWPKhJ4i1M=;
-        b=CLxE4szhYoLXxWaMp45xVw572QDxCD3LdBzXZEaYmRbyRhCoQVoYHKtZuqGrAAFIbH
-         TUEFfVzXvcyCVemN8oiIgFpc0/6tQiRopSwYnyFpbj01KH90i08OzRCiQXljzVkL0tPY
-         Nf+FUgPy5clE9q/vKmBMgNl5HPzfLKZRKQz8eWrqG9YZQe7hiqVmqZ+h/U5s2iLTPuLD
-         fXQcicHb6GUqYrMWP+tKzHUtBWPtC7n51api8eKkzheu+IGOwSh/YOUMAgr/tkXB5/hb
-         LL12ijvhpgliJ+5vPL3KGoLtWpyjrbpa79steucsYpA0M9+AK1OcMyIlTl4IDcQzAxt+
-         7vWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730138821; x=1730743621;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OSPXfhYXFqsav+wNvpf5kcVIJjv343m6ZpWPKhJ4i1M=;
-        b=sCiIK5eD6EibZ0SE+MDFCg9JsxLXvGKSsR80Ps8ItULz5PoxNrxBqWmMiQnf0IVwdZ
-         hovoNGysKt9wymaIgE+N9fS9/+4831i7hRZbVGNhIWSAL7rs8NjSbWKtM75DeMXeDNFH
-         6TUiNxsz6jTBWpxMo8Q/eBz7JuMAdXuemhbA7dU1oon7kg4CLtknLbJViNDCq0jU9+dj
-         yUFhKGc5s0/na8nBZvHM8AMOGJsqr36yki/dFdvU7GTav8w6rlupbHdnN5tpXDfGeygy
-         mUxqvESuEWm2tnASGYFcta2wis7WCAt/gM3pkQDN0c+JROhTSJzRpvlkHJvfjcpDJsWY
-         u5Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJrE3j5cXNQlo4Dx5p4LqacgHZeUOTg00lOhaWXs593zDAAZOCRb3TEAzlZANiwQfWavynNwRk1Pyr@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqRqI2fDxh92B2Sm9KFjAb15rpwdfjORq2SyCVuvZzaCnLIUhG
-	B6rLDfmP2CVzE/ly+dqfT5beZx6NLUPy6vvLTL3rkkrkmmdwuAJzC6rdEKgs8b7TIlXQIIzOXjF
-	big==
-X-Google-Smtp-Source: AGHT+IGEphgAMJPO1RrBvORQ8s/TYfMNYCHByxWeAm23fw9VpJx73ZRrDNmOoAg0zAywWzMIM+hx0G5Vf7Y=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:6f64:b0:720:3b92:da02 with SMTP id
- d2e1a72fcca58-7209257ee6dmr6558b3a.1.1730138821179; Mon, 28 Oct 2024 11:07:01
- -0700 (PDT)
-Date: Mon, 28 Oct 2024 11:06:59 -0700
-In-Reply-To: <Zx_NgJnjsGIrW4uF@arm.com>
+	s=arc-20240116; t=1730145145; c=relaxed/simple;
+	bh=Ul+QBVc+YnNy2tXI88GGtUMlSaX13YfqOBf387SSnCA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=McwsezeSQynOGaVNsQkL2DFIjHKLghYJll83rDHauvYC9bzWGbMFDrQlumK4VvE31dong1UKh2Zvc2sr/68F2tI/6Osh7iQuXLBcShtThstTl+LfhJOPxMmTR81vtibvFIixpyq1if+XCNNKnaNC7KKfZIgsz4u1u3ZnziMtOUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hy7mVKkO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 230D7C4AF0B;
+	Mon, 28 Oct 2024 19:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730145145;
+	bh=Ul+QBVc+YnNy2tXI88GGtUMlSaX13YfqOBf387SSnCA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Hy7mVKkO3XRYO8YWVrUTgHYinB3RiMlhYWP11k1m52FZ+ii3U61nFlGXTdSJQjOJs
+	 slNtI7p1h8mB/ZzCQsZo4AFl+/9NWGv7zBc7OOybScNasnNc4ZmgX3B4vauP0vfHE+
+	 6TzsmkQAhm+SVulymqgjaKwf2Q3K4SmddGQF/TYxL/yvK+LgwlHLgpen18QFw5y0cU
+	 UPBupjnkFBG8/AJq9OAkn+O//L3/nWZNwZ+967EW8yx6eBeDz8qD4TcMyZu7TY9JLJ
+	 h7Nb3uhYaEu6BE0rw1ByScNbrHN15rzP1FjYlUoBNf5heDwtKxMaCWICzPiapPsKrh
+	 9pPiJaxhBcjlQ==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-539f72c8fc1so5787892e87.1;
+        Mon, 28 Oct 2024 12:52:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVKgtVq7oAu4oWVIYjJYsh575ox2v+zkCqcbGUuemFZxUSpimL7LvdB4VGT65pG/eoxEL1qLzDTWOLXUQ==@vger.kernel.org, AJvYcCVXjV1Fu3iTcmtTicNB7Bhu6/2ZIPG5uUXoIdZ4dUzigax1YsqXwfNA/OTlVHsbZrcNq/kZKEQaQH/9Bcs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy69gab0qbVIf6LR4DJkOdhlE01eEtIpVKluF6SO5XchyzgNMrd
+	cvYkIckXWz9t9EZlt6A8NRDvxeBbeTzpN+PZo6ARS2WIK8FF7PipG6WMaQ9x5Yjwq2sTDl90q6A
+	WnsPApT+ak4ZxG2w/4GKMTswATQ==
+X-Google-Smtp-Source: AGHT+IHZQIXoMf901p3J/xgrany/8b01LghURtWvew8IISJPoYjj2YNAA8I9ZSkMEW+VoWXGPDwYES18VSeZo2tXQbU=
+X-Received: by 2002:a05:6512:230a:b0:53b:1f7a:9bf8 with SMTP id
+ 2adb3069b0e04-53b34a34190mr3665907e87.55.1730145143491; Mon, 28 Oct 2024
+ 12:52:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241028170310.3051da53@canb.auug.org.au> <Zx_NgJnjsGIrW4uF@arm.com>
-Message-ID: <Zx_Sw8XVHeaD4ya6@google.com>
-Subject: Re: linux-next: manual merge of the kvm tree with the arm64 tree
-From: Sean Christopherson <seanjc@google.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, Will Deacon <will@kernel.org>, 
-	KVM <kvm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Yang Shi <yang@os.amperecomputing.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20241028122405.27090-1-herve.codina@bootlin.com>
+ <20241028122405.27090-2-herve.codina@bootlin.com> <CAL_JsqK7SjfJ7Re4k-A8fQB+tNHyM3r2Rcpct_zUfR2yhEj+iQ@mail.gmail.com>
+ <20241028184343.74ad5a26@bootlin.com>
+In-Reply-To: <20241028184343.74ad5a26@bootlin.com>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 28 Oct 2024 14:52:09 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+_VHsMKufVwUj3Q0pv1X6d8Xe0FN6A9svCmWJ3cuuUqQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+_VHsMKufVwUj3Q0pv1X6d8Xe0FN6A9svCmWJ3cuuUqQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] misc: lan966x_pci: Fix dtc warns 'missing or empty
+ reg/ranges property'
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
+	Steen Hegelund <steen.hegelund@microchip.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 28, 2024, Catalin Marinas wrote:
-> On Mon, Oct 28, 2024 at 05:03:10PM +1100, Stephen Rothwell wrote:
-> > Today's linux-next merge of the kvm tree got a conflict in:
-> > 
-> >   arch/arm64/kvm/guest.c
-> > 
-> > between commit:
-> > 
-> >   25c17c4b55de ("hugetlb: arm64: add mte support")
-> > 
-> > from the arm64 tree and commit:
-> > 
-> >   570d666c11af ("KVM: arm64: Use __gfn_to_page() when copying MTE tags to/from userspace")
-> > 
-> > from the kvm tree.
-> [...]
-> > diff --cc arch/arm64/kvm/guest.c
-> > index e738a353b20e,4cd7ffa76794..000000000000
-> > --- a/arch/arm64/kvm/guest.c
-> > +++ b/arch/arm64/kvm/guest.c
-> > @@@ -1051,13 -1051,11 +1051,12 @@@ int kvm_vm_ioctl_mte_copy_tags(struct k
-> >   	}
-> >   
-> >   	while (length > 0) {
-> > - 		kvm_pfn_t pfn = gfn_to_pfn_prot(kvm, gfn, write, NULL);
-> > + 		struct page *page = __gfn_to_page(kvm, gfn, write);
-> >   		void *maddr;
-> >   		unsigned long num_tags;
-> > - 		struct page *page;
-> >  +		struct folio *folio;
-> >   
-> > - 		if (is_error_noslot_pfn(pfn)) {
-> > + 		if (!page) {
-> >   			ret = -EFAULT;
-> >   			goto out;
-> >   		}
-> > @@@ -1099,12 -1090,8 +1097,12 @@@
-> >   			/* uaccess failed, don't leave stale tags */
-> >   			if (num_tags != MTE_GRANULES_PER_PAGE)
-> >   				mte_clear_page_tags(maddr);
-> >  -			set_page_mte_tagged(page);
-> >  +			if (folio_test_hugetlb(folio))
-> >  +				folio_set_hugetlb_mte_tagged(folio);
-> >  +			else
-> >  +				set_page_mte_tagged(page);
-> >  +
-> > - 			kvm_release_pfn_dirty(pfn);
-> > + 			kvm_release_page_dirty(page);
-> >   		}
-> >   
-> >   		if (num_tags != MTE_GRANULES_PER_PAGE) {
-> 
-> Thanks Stephen. The resolution looks fine
+On Mon, Oct 28, 2024 at 12:43=E2=80=AFPM Herve Codina <herve.codina@bootlin=
+.com> wrote:
+>
+> Hi Rob,
+>
+> On Mon, 28 Oct 2024 08:55:24 -0500
+> Rob Herring <robh@kernel.org> wrote:
+>
+> > On Mon, Oct 28, 2024 at 7:24=E2=80=AFAM Herve Codina <herve.codina@boot=
+lin.com> wrote:
+> > >
+> > > dtc generates the following warnings when building the LAN966x device
+> > > tree overlay (lan966x_pci.dtso):
+> > >   Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/cpu_=
+clk: missing or empty reg/ranges property
+> > >   Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/ddr_=
+clk: missing or empty reg/ranges property
+> > >   Warning (simple_bus_reg): /fragment@0/__overlay__/pci-ep-bus@0/sys_=
+clk: missing or empty reg/ranges property
+> > >
+> > > Indeed, related nodes are under the pci-ep-bus (simple-bus) which is =
+not
+> > > correct.
+> > >
+> > > Put them outside this node.
+> > >
+> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Closes: https://lore.kernel.org/all/20241025110919.64b1cffb@canb.auug=
+.org.au/
+> > > Fixes: 185686beb464 ("misc: Add support for LAN966x PCI device")
+> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > > ---
+> > > The referenced commit is in the reset tree
+> > > ---
+> > >  drivers/misc/lan966x_pci.dtso | 36 +++++++++++++++++----------------=
+--
+> > >  1 file changed, 18 insertions(+), 18 deletions(-)
+> > >
+> > > diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci=
+.dtso
+> > > index 7282687df25f..5466d013da7d 100644
+> > > --- a/drivers/misc/lan966x_pci.dtso
+> > > +++ b/drivers/misc/lan966x_pci.dtso
+> > > @@ -19,6 +19,24 @@ __overlay__ {
+> > >                         #address-cells =3D <3>;
+> > >                         #size-cells =3D <2>;
+> > >
+> > > +                       cpu_clk: cpu_clk {
+> >
+> > Preferred node name is "clock-<freq-in-hz>"
+>
+> I based the name on the lan966x.dtsi
+> https://elixir.bootlin.com/linux/v6.12-rc1/source/arch/arm/boot/dts/micro=
+chip/lan966x.dtsi#L38
 
-Looks correct to my eyes, too.  Thanks Stephen!
+That should be fixed too.
 
-> and I'm happy to leave to Linus to fix it up during the merging window.
-> 
-> To the KVM maintainers, if you prefer a conflict-free linux-next, feel
-> free to pull the arm64 for-next/mte branch with the above commit (and a
-> kselftest). The other way around is not something I'd suggest we do,
-> there are over 80 patches in that kvm series.
+> Of course, I can rename the cpu_clk, ddr_clk and sys_clk nodes but this w=
+ill create
+> a difference against lan966x.dtsi on some points that should be identical=
+.
 
-Not feeling lucky today? ;-)
+Then maybe they should be sharing a .dtsi?
+
+> Let me know with that in mind if I need to rename those nodes in this ser=
+ies.
+
+Yes, easier now than later.
+
+> > Also, as a general rule, don't use "_" in node names (and properties).
+> >
+> > Isn't there a schema for the device which needs these nodes added to
+> > it? If not, there should be.
+> >
+>
+> No, there is no schema yet for this device.
+>
+> How can we describe schema for this kind of devices that are using
+> device-tree overlays?
+
+Describing is not the issue. Running the checks is. Though you can run
+the checks at runtime.
+
+> I mean, this overlay is applied on a PCI device DT node. This DT node is
+> computed at runtime. It is, in the end, available in the base DT before
+> applying the overlay.
+> The compatible string that could be used to check the dtso against schema
+> cannot be set in the overlay (at least not at the correct place in the
+> hierarchy) without causing a property memory leak at runtime. An overlay
+> cannot add a property in a base DT node without generating a memory leak
+> and so, we avoid adding such properties in the base DT from the overlay.
+
+That's a problem with overlays in general which we need to solve at some po=
+int.
+
+> Is this missing schema blocking for this series ?
+
+No.
+
+Rob
 

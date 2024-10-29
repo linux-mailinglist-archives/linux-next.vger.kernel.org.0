@@ -1,79 +1,104 @@
-Return-Path: <linux-next+bounces-4507-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4508-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AA129B4192
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 05:30:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 635FA9B41A1
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 05:50:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 740491C21B02
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 04:30:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBFB82836CE
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 04:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBDBE7BB0A;
-	Tue, 29 Oct 2024 04:30:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0677F1DB53A;
+	Tue, 29 Oct 2024 04:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Bh3u1hYa"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HycEWYbr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A268E219E0;
-	Tue, 29 Oct 2024 04:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724602FB2;
+	Tue, 29 Oct 2024 04:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730176241; cv=none; b=RFxUXxF+4yg+fmb/zXkpPH+10MRS0DZF+6N3ijf5PweZKmo0EGsmu8GbsDqj0wliFp2fvAS+Kbdg2E3qnGVhlWbRqsM5z59s6Z5VNT0hCeQXUCpCOOuCS+eA2v1bLZhy6prLwW/+gZGbVi+0vWKNvxj8MxGbJfjQNVJsBjwuRvI=
+	t=1730177429; cv=none; b=mV/BiYFUHwVLlH04SW8uelj1y8+jmajJQrmOHCtGKVIeb4jOScWGJUWoILqA1nbnl9UN4P0aZu//xPuoHsocv4po4TTWgQQELOY11QQvPclEQV4ahfMfYXUcYIySVGTPH0mNtLFbBTbSGh0VSLms2KZPld6m/9HGGFNeSyCducY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730176241; c=relaxed/simple;
-	bh=5JjnfXDvsoE3BbgJnH6j5cpAjWhcDN4wZmcU3KPcmks=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=boFZs+jG/lJ6NgBHflFqvJcjf2GmCIDeWsdXB2rgbGJgPj/rw07QIptBSZnoJHJKuymVKXm7ssN/jRqwsseS4uS7d8VuUT8yj6mVC2ReMNsfdRfR+pXuYK5HopAzcAOuqRc93vFFFUrSZcEp4aTIysrvkhy+igOGVSo9zBJED6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Bh3u1hYa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D681DC4CECD;
-	Tue, 29 Oct 2024 04:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1730176241;
-	bh=5JjnfXDvsoE3BbgJnH6j5cpAjWhcDN4wZmcU3KPcmks=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Bh3u1hYa6fh+rAH1X9TOc5LT+BRl3Tsmya5WSMn81vMx/MhnPG9wYswE6UfbtltxH
-	 +jkmsZHqLYZPOUXF8edQ4V5pq/vM44hnbNAXDi0fYIjiaBP8DyzSpSNpAJBrFUuWeK
-	 lLnxvtBssT7Nb1GcDpIO/SidOR2p69j2uS+FtrnY=
-Date: Mon, 28 Oct 2024 21:30:40 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the tip tree
-Message-Id: <20241028213040.e5d72b2f56971ceb5c80395b@linux-foundation.org>
-In-Reply-To: <20241029133407.3580be1a@canb.auug.org.au>
-References: <20241029133407.3580be1a@canb.auug.org.au>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1730177429; c=relaxed/simple;
+	bh=JyOPmA0BGHCrZsPnJA18OiK/Y00rNK2H572vJYc64Pk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=M+C4n+frknZOjjIvCTq4/u8SEEX2Y81DAXJgdUPXIKG5B4XSIuJS/v4AIkZnNwqxvYjf55mCCdtzdtit//0JYVspyEep6cJNo4YWFNzYGybE5wYUi0qdzDZC1w2olAIZyVQKK8DxMRrFnH6TOS6n4JuwAZ0JninV5sS1CgYArKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HycEWYbr; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1730177421;
+	bh=7zALh7Ps8DFW/WRavaEMiZdhIureRdfwU/hDHdmD4nY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=HycEWYbrGesJTPRrOtFG0tDO+H6Wb9lkpMxE9+UjRIo2Kdbc5B4DJJwu1x4agh8gX
+	 C7BNYBQ/UQ8XqyNptfFcq+51pViseabU65kh8aPD5oR59Dg3hMhqN3noxICp2g8rGH
+	 Fa4tRlm1tIVcvRoauRy7+TrOs2KMF71KsIwcteqyzBh6JkNih/IBpOAbRVHzWsLjsa
+	 4Z+wOnBcHhGyvI72BLP+zX6KTMGIktZ0wbfUqPwROZIs2ikMvgQISGB9q/4XgyeSKh
+	 F9uM+jFseOtltjrxQAg2r51dlPaFZ/03RXnhJPoXF8Iz4oNY5x2SKubaXis4jtBPtP
+	 BXVfBoE0EbNHA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XcyVj3dFSz4wcy;
+	Tue, 29 Oct 2024 15:50:21 +1100 (AEDT)
+Date: Tue, 29 Oct 2024 15:50:22 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: Matteo Martelli <matteomartelli3@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the iio tree
+Message-ID: <20241029155022.5f777572@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/8ovJmLYY7eSq03w5Jf0G=Q8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/8ovJmLYY7eSq03w5Jf0G=Q8
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 29 Oct 2024 13:34:07 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi all,
 
-> Hi all,
-> 
-> The following commit is also in the mm-hotfixes tree as a different commit
-> (but the same patch):
-> 
->   9c70b2a33cd2 ("sched/numa: Fix the potential null pointer dereference in task_numa_work()")
-> 
-> This is commit
-> 
->   82c4d6b6dace ("sched/numa: fix the potential null pointer dereference in task_numa_work()")
-> 
-> in the mm-hotfixes-unstable branch of the mm-hotfixes tree.
+After merging the iio tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Thanks, but...  What tip branch is it in?  Matters because: is that
-branch destined for 6.12.x?
+include/linux/iio/iio.h:555: warning: Function parameter or struct member '=
+read_avail_release_resource' not described in 'iio_info'
+
+Introduced by commit
+
+  8a63e3033e72 ("iio: core: add read_avail_release_resource callback to fix=
+ race")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8ovJmLYY7eSq03w5Jf0G=Q8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcgaY4ACgkQAVBC80lX
+0GzSpwgApICw5cQKfvgazi/jQBU5mWE0lVv6lhEcIN7jGaboW+ZVo7XGITSAdxb6
+tLfn3/agBP9qPW13s3Z1oKoc5M/YkdyTECaC2jYGYlxMgFxdUslrJMFJZCFUa5pO
+G2qGfAQOdInLHj6tyZuN5WDIjZh8GC9hA5ZhSlZeU+Qa5oJgGfanAZ6arDvFH+mk
+fmqymyOMOOy0rXVD/Ntz+t5oYbmMcD07IU3Vi4udH95BEo28LCZ5Vcw2dWckcTkd
+qa/uQkvN2yBxrhxc420JAKXldL/pkbaFb0z1WS1vhDVHyFNfeUNmH4Ikt8GFJ1rH
+Od9vq+onwb66CYPFjRR/lQecPhwouw==
+=ln/w
+-----END PGP SIGNATURE-----
+
+--Sig_/8ovJmLYY7eSq03w5Jf0G=Q8--
 

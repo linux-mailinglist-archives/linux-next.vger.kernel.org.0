@@ -1,104 +1,86 @@
-Return-Path: <linux-next+bounces-4521-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4522-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E5AD9B45C1
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 10:30:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FFA59B45E8
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 10:44:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04BB51F2303E
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 09:30:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34414283DED
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 09:44:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 808AD1DE3C5;
-	Tue, 29 Oct 2024 09:30:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A961204924;
+	Tue, 29 Oct 2024 09:43:58 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECCF1DFE03
-	for <linux-next@vger.kernel.org>; Tue, 29 Oct 2024 09:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C815203708;
+	Tue, 29 Oct 2024 09:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730194254; cv=none; b=JXu35xczD51d17RVFRDmc/u1foW8SsmPUzooMK5HW5MNDo1F6n4hsGGWH0tCUrSTBnL0rtBV6P4EsvcG2Z8n0E3NTxqaXCPfrqRkiW6DsX7gMhGyojxxuVpCYYoR7DlBTdYfbyxvGO/FqThuCNqOKE6BRYDu4SsIUzKq3sMqO0M=
+	t=1730195038; cv=none; b=jolZ0PHsrYzf0XEbJOPIwWlChQAdelWfFli2g2nPJfvvs1RQrP1C3zitrJI/sFothEuBeNeZ4Wqtwvk9JplyHwMg50sN3PzkaJyEczBt0F2Ur5ABPiF+2/BBqGJnGTmlGqrjLmo/faK17b+LHRmWId+pRMdckfz2cf47ZEKe9UA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730194254; c=relaxed/simple;
-	bh=ielk4eocKmhCzJqivE8mNRRvfTZZ9VTMHUilvcNssTI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MQmPXClK6JW3O11cHPAGE+5hV5iCsNuXkHe6rQf/xnlTiv1vYTMJf36B9LUpKubYdBEJ/N+YKrus3eeJ7fABsWN2LWTtE7gp4ZVTY+vQAKKXEBCtHsp1zqfpp4kwZy7N0aaZ7GLHW46JHiVm5uk3MPLRWcE2D/KIkobApAfEEOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:f139:988f:a76d:7a3f])
-	by xavier.telenet-ops.be with cmsmtp
-	id W9Wd2D0085E9xN5019Wdvx; Tue, 29 Oct 2024 10:30:43 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1t5iYN-005noj-La;
-	Tue, 29 Oct 2024 10:30:36 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1t5iYe-002W9M-Qx;
-	Tue, 29 Oct 2024 10:30:36 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Dave Airlie <airlied@redhat.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Matt Roper <matthew.d.roper@intel.com>,
-	Gustavo Sousa <gustavo.sousa@intel.com>,
-	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Simona Vetter <simona@ffwll.ch>,
-	David Airlie <airlied@gmail.com>
-Cc: intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-next@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH drm-next] drm/xe/xe2: Remove duplicate XE2LPM_* register definitions
-Date: Tue, 29 Oct 2024 10:30:33 +0100
-Message-Id: <20241029093033.600098-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1730195038; c=relaxed/simple;
+	bh=DsAJW7VXDhepK48DnllqrO0eBSbIW23+oTWO3Yaj/Pw=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tOyQMIxmnkNOqjqnTm6727iQznUQ15eWJwMey5XDBtdopiKdrYjFp+INJWWv2kkSiHlCvVWf6L/AdoWKga1d/jLpz8QPyr1axkomRTOnpRdAppL9gqyNMcV/N0+s0nVuWpV0odzu3HvHA36VgEWKzsQJgGcqmJ4KYLSZufpg70k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Xd4vp1T8kz6LDCd;
+	Tue, 29 Oct 2024 17:39:02 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id A31FC1404F5;
+	Tue, 29 Oct 2024 17:43:51 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 29 Oct
+ 2024 10:43:51 +0100
+Date: Tue, 29 Oct 2024 09:43:49 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+CC: Matteo Martelli <matteomartelli3@gmail.com>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>, <jic23@kernel.org>, <linux-iio@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the iio tree
+Message-ID: <20241029094349.00001186@Huawei.com>
+In-Reply-To: <20241029155022.5f777572@canb.auug.org.au>
+References: <20241029155022.5f777572@canb.auug.org.au>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-Merging commits e1f813947ccf2326 ("drm/xe/xe2: Extend performance tuning
-to media GT") and 876253165f3eaaac ("drm/xe/xe2: Add performance tuning
-for L3 cache flushing") with their upstream counterparts
-6ef5a04221aaeb85 and 3bf90935aafc750c accidentally left multiple
-identical copies of the XE2LPM_L3SQCREG2, XE2LPM_L3SQCREG3, and
-XE2LPM_SCRATCH3_LBCF register definitions.
+On Tue, 29 Oct 2024 15:50:22 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Fixes: 26bb2dc102783fef ("Merge tag 'drm-xe-next-2024-10-10' of https://gitlab.freedesktop.org/drm/xe/kernel into drm-next")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/gpu/drm/xe/regs/xe_gt_regs.h | 6 ------
- 1 file changed, 6 deletions(-)
+> Hi all,
+> 
+> After merging the iio tree, today's linux-next build (htmldocs) produced
+> this warning:
+> 
+> include/linux/iio/iio.h:555: warning: Function parameter or struct member 'read_avail_release_resource' not described in 'iio_info'
+> 
+> Introduced by commit
+> 
+>   8a63e3033e72 ("iio: core: add read_avail_release_resource callback to fix race")
+> 
 
-diff --git a/drivers/gpu/drm/xe/regs/xe_gt_regs.h b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
-index d428d04164d9d3df..42dc55cb23f4a334 100644
---- a/drivers/gpu/drm/xe/regs/xe_gt_regs.h
-+++ b/drivers/gpu/drm/xe/regs/xe_gt_regs.h
-@@ -410,12 +410,6 @@
- 
- #define XE2LPM_SCRATCH3_LBCF			XE_REG_MCR(0xb654)
- 
--#define XE2LPM_L3SQCREG2			XE_REG_MCR(0xb604)
--
--#define XE2LPM_L3SQCREG3			XE_REG_MCR(0xb608)
--
--#define XE2LPM_SCRATCH3_LBCF			XE_REG_MCR(0xb654)
--
- #define XE2LPM_L3SQCREG5			XE_REG_MCR(0xb658)
- 
- #define XE2_TDF_CTRL				XE_REG(0xb418)
--- 
-2.34.1
+Thanks.  Sorry for number of times I've missed things this cycle!
 
+Will fix this up when on right machine.  Matteo, feel free to send a
+patch if you have time, if not I'll make something suitable up.
+
+Jonathan
 

@@ -1,45 +1,61 @@
-Return-Path: <linux-next+bounces-4513-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4514-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 029409B4283
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 07:43:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07AA19B42F9
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 08:19:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB7D528395F
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 06:43:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 392E61C21C9E
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2024 07:19:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB76B201253;
-	Tue, 29 Oct 2024 06:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC162022D8;
+	Tue, 29 Oct 2024 07:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V4CUGois"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D024320124E
-	for <linux-next@vger.kernel.org>; Tue, 29 Oct 2024 06:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A5F1FCF49;
+	Tue, 29 Oct 2024 07:19:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730184230; cv=none; b=l6O2onjV/1CWFQ+KieVibDt9Z8sF5mqe4nSUJ9slMxw0GIj0136J0Zji2xQkwVqNlAUubS7R3pGu19nsl386+SG6INwiyGB0ACv4vXgMDEpHRlv3VZi+xgKhxbno9SKboODeGcmyBWlt55JiLYfzSeyLRAYa4moDn13x1645hJA=
+	t=1730186374; cv=none; b=ReSN4HID1KWulObDJ6eDWVnBckkQ75uS6nh2/v2pQIbI4Kbuz2K9gWyIjdbTRtTRF7/fPYh7lLWlNIvSM0KMDFP6OHHuvwoF4/NntBNHc3U3zc+9M/Dw1zh8yaombc/mC9BSSUjnTc4y9XZgcmE3aVpQTb+hNooqpf5FlbWow2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730184230; c=relaxed/simple;
-	bh=p6ZYZ9OWhXmmYKnTAhTfRO3HXLVN4aZzxE3EOAuJU4c=;
+	s=arc-20240116; t=1730186374; c=relaxed/simple;
+	bh=eGYztQ6Tgz9tth0fOgGOIMFz3sdierF3me6BWMituiY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gBPmrz1riM4k4ipu9E5kVtIi2z4u2p2f/mSjkPV4YOlFVMo4VoELeFCbI/nMy+Plj0YJ+lrQnDeTXo0ZxLpGpe1Ibspd9fOjq9+7UxdnQuoaRSLIG+WBBbh5W7Po/0lA894uRdtOdvK96LVDTrovbfjUZSc1PEJ7iN/vfemtz6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Date: Tue, 29 Oct 2024 14:43:44 +0800
-From: Yixun Lan <dlan@gentoo.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kV3pcxNQ1NuSR7yXnHW6iKLOzP3eVtInbWM8NQ3O5E4fWtqEEY6ZWl5+XlQAFhTiCL2ecNKGaCaEKZAMsWyhSA2meMOCy/v5r6Fh1bZYYaxi3LqYMlFP3AvZTNlO8lWVxciCeQnr6/Pn5Z7txbLc84AvoABzYczpSORfamnlk/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V4CUGois; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A4AC4CECD;
+	Tue, 29 Oct 2024 07:19:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730186374;
+	bh=eGYztQ6Tgz9tth0fOgGOIMFz3sdierF3me6BWMituiY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V4CUGois7PI+fjDZH4BP9mk3zpME0F1rSNT15riHPY1U5eOrI7FraVTKp2koqhq+a
+	 pBo1PJDh1yQeEmmegdYmSHL6KoeZjucV4LPL70fqVPOzz4tQ5Obn1PMlFCzl/emDhC
+	 33l9U8EWl9P0EucRCGsVe+rnYiOyHcI9JybNqcwmlHcdcQiK8mo4Z5FdanyHmlCj+w
+	 bWZlCBQoQC5i9KgEgQrQlyQhEii5Mj+lz2QNIB/LbvORlki7cqCHNxUOqojQD+l/1q
+	 9GTDjD7xFfAP7QSAAAxacldYMDXi/8C7Qx2276CIb3nzigy8xLC1wizuvyBR18Z5+q
+	 QxUm/dGOBXEZw==
+Date: Tue, 29 Oct 2024 09:15:40 +0200
+From: Mike Rapoport <rppt@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Conor Dooley <conor@kernel.org>,
-	Inochi Amaoto <inochiama@outlook.com>,
-	Jesse Taube <mr.bossman075@gmail.com>, soc@kernel.org
-Subject: Re: Include in next: spacemit/linux
-Message-ID: <20241029064344-GYB97300@gentoo>
-References: <20241029045326-GYA331364@gentoo>
- <20241029173322.4d879601@canb.auug.org.au>
+Cc: Su Hua <suhua.tanke@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: boot failure after merge of the memblock tree
+Message-ID: <ZyCLnJ01aYBlSWPA@kernel.org>
+References: <20241022173921.6fdbdd38@canb.auug.org.au>
+ <ZxtAWopjlF9unBno@kernel.org>
+ <CALe3CaAehCC6WOpCAGtMX3qsTqMc8jh3kn1Fz_m7_7_M6SMgfQ@mail.gmail.com>
+ <CALe3CaDW9vWcrukmWP+tj-ToSUh8p6==goL+B3aiGvxBDg79Ww@mail.gmail.com>
+ <ZxtZ5q5HH-gu0zeQ@kernel.org>
+ <CALe3CaA9cc8fagJwA5ux6-U8mKTK=DEGU1Mb3LeCeKPrUGS5ig@mail.gmail.com>
+ <20241029072039.39d850dc@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -48,53 +64,39 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241029173322.4d879601@canb.auug.org.au>
+In-Reply-To: <20241029072039.39d850dc@canb.auug.org.au>
 
-Hi Stephen:
-
-On 17:33 Tue 29 Oct     , Stephen Rothwell wrote:
-> Hi,
+On Tue, Oct 29, 2024 at 07:20:39AM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On Tue, 29 Oct 2024 12:53:26 +0800 Yixun Lan <dlan@gentoo.org> wrote:
+> On Sat, 26 Oct 2024 07:36:13 +0800 Su Hua <suhua.tanke@gmail.com> wrote:
 > >
-> > Please kindly include spacemit/linux tree into the linux-next:
-> > 
-> > https://github.com/spacemit-com/linux
-> > 
-> > branch for master: for-next
-> > 
-> > branch for pending-fixes: fixes
-> > 
-> > Repo will be use for collecting patches for SpacemiT's SoC
-> > which recently I took over:
-> > 
-> > https://lore.kernel.org/r/20241028-00-k1-maintainer-v2-1-272c9834220d@gentoo.org
-> > 
-> > The patches in the tree will be sent to Arnd Bergmann and soc@kernel.org.
+> > > > diff --git a/mm/mm_init.c b/mm/mm_init.c
+> > > > index 4ba5607aaf19..5a8114fb02ae 100644
+> > > > --- a/mm/mm_init.c
+> > > > +++ b/mm/mm_init.c
+> > > > @@ -723,6 +723,9 @@ static void __meminit init_reserved_page(unsigned
+> > > > long pfn, int nid)
+> > > >                         break;
+> > > >         }
+> > > >         __init_single_page(pfn_to_page(pfn), pfn, zid, nid);
+> > > > +
+> > > > +       if (pageblock_aligned(pfn))
+> > > > +               set_pageblock_migratetype(pfn_to_page(pfn), MIGRATE_MOVABLE);
+> > > >  }
+> > > >  #else
 > 
-> Added from tomorrow.
-> 
-> Thanks for adding your subsystem tree as a participant of linux-next.  As
-> you may know, this is not a judgement of your code.  The purpose of
-> linux-next is for integration testing and to lower the impact of
-> conflicts between subsystems in the next merge window. 
-> 
-> You will need to ensure that the patches/commits in your tree/series have
-> been:
->      * submitted under GPL v2 (or later) and include the Contributor's
->         Signed-off-by,
->      * posted to the relevant mailing list,
->      * reviewed by you (or another maintainer of your subsystem tree),
->      * successfully unit tested, and 
->      * destined for the current or next Linux merge window.
-> 
-> Basically, this should be just what you would send to Linus (or ask him
-> to fetch).  It is allowed to be rebased if you deem it necessary.
-> 
-Yes, I understand and thanks for all the info..
+> This has returned, so I applied by hand the above discussed fix.
+
+Sorry, I forgot to push :/
+ 
+> -- 
+> Cheers,
+> Stephen Rothwell
+
+
 
 -- 
-Yixun Lan (dlan)
-Gentoo Linux Developer
-GPG Key ID AABEFD55
+Sincerely yours,
+Mike.
 

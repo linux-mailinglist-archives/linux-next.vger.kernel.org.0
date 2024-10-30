@@ -1,119 +1,60 @@
-Return-Path: <linux-next+bounces-4543-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4544-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 558D99B703A
-	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2024 00:04:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E44D09B7057
+	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2024 00:11:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13CF328120B
-	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2024 23:04:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 017161F21D1A
+	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2024 23:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 495A61C461C;
-	Wed, 30 Oct 2024 23:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6D11E376B;
+	Wed, 30 Oct 2024 23:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l7/0uMgG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VopkGahq"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3DEE1BD9DF;
-	Wed, 30 Oct 2024 23:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603281BD9EA;
+	Wed, 30 Oct 2024 23:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730329471; cv=none; b=mMDhZ8EtNPEJnUFet1KICvTWwmgJrIQgRYStwP2FF7BIgZRNFj3rVkylIviw6wHDTBQwONDsCA7g9Ig1TdqVGTVo8U6fBOLbyiBUEL9GEyNZsp8FgRa77crcSPnNZOi+q9FDxUkV5SjjLNioXqsseiB2Gtgs7Kzy0vex6YuEgxw=
+	t=1730329860; cv=none; b=AYvxQgJf2xkOb5Ao7KlW44Qm7F0vsaF415o78tdWnk1bvOmVHuY349Ooyy6D1TUJtolZWi8f+r51AIVJ+XIO/L+u7OJ9X3Rrqp1AmtaBycT+1OAdcFXgRvZe+RxiuDbOb5Gxnn6UlW2OBZmwGXr4X8gKgJpuPIv6X6rm4eknA5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730329471; c=relaxed/simple;
-	bh=Ec4D5SyBdaBhg+W6wXsrh9nu22khEYqGIQhe+ODvsks=;
+	s=arc-20240116; t=1730329860; c=relaxed/simple;
+	bh=NobT7qYPgQUDHyh4P5cTe3irZqg7DEUQJbR+GUeX5ac=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mw2h7fMOELVQogpHgPkr0frZpEsENMCa/Ktgu7/3AEpnob7jqRhogDeYtRSTJ7SzKpFcwpuSFrHG3Lhk2/Td3/hQg/ZcsQJIeSskxV7KNdotCDNVpLLqPm0MMWxo4hcJQAiOw94Hkqr5WkLbIFkeWHVZq/CI3HQIEiVuOuGG7FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l7/0uMgG; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4611abb6bd5so2618911cf.1;
-        Wed, 30 Oct 2024 16:04:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730329468; x=1730934268; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PLJJBAKyQj+SNUNmxz2AeNTsEKRK6TwiIX+0O6pGNdQ=;
-        b=l7/0uMgGhfsM/sdsI16tTA72CUkvAhvKgPrZE2zp/8y44vr0MEJ1TPM9X0lASO3mib
-         KQPdeeZ5+XjVLXkqlZ/Gl+yEzIhFCmH3L0a16IHefazeI7BJ7pK6EBwTS3FljgmD7NKY
-         PzkacNugcA3xpJSSJxJAXxZx1mX5p3mLnc/4WBva/T0naDfu1P7Y1ax4EBlWSQ9NgktO
-         9si2CdGnO5US8jYkCSuQcRCJA5MXU3kkGtSow/ogjn1NHhWD1bhx1cG/Xpf6G3dduu4z
-         AfjxacszyJdxLcSfIreB1vA41j/bJnoSkA2gHT130sUCkHYXStbEfqv0gevV8RQ6jceI
-         Xo3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730329468; x=1730934268;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PLJJBAKyQj+SNUNmxz2AeNTsEKRK6TwiIX+0O6pGNdQ=;
-        b=F9EL/fTeq2wf7975Jb7FAbaWbVh8SIF1jLZaSIkLIMsGbABN1b4XjH3Q11Hg+zMdPH
-         YXwVXqBo/yPmJDVgZfQHP5W8rsnGMI3AGjdFus9E8RyqtzqFtzCwiOmb9FCnHkr+5P0X
-         C5BErKyx6lyiFwzoUFZpdmi8nWM0bBpsBULjqYrlS6gmJiH2l7RinYSPD4/jCU6T+5IF
-         67t0S5IKRtgOJEePJ3o2NrBZJZDDPUSHKg5sJegtlFVGV/0YYuyhu+RZxCf16m6/K1se
-         ba5cZMD+hIqFgqKxdefUKnSBCzniX/AzAyws7Q7C7NDUEMSqJMNLJcNtis9xbcqhz43G
-         omgA==
-X-Forwarded-Encrypted: i=1; AJvYcCVSd/ZdXR9gfWfJM0x+OF6YTxgLOKInYi92Kv+d0uf0c18q2JXABy197Kk5EAaqzKiq+RwaMUruPhrr3x8=@vger.kernel.org, AJvYcCXU3Mu9/ApjjQUbi0MWNeSY5ZSkiQmHI8rcAndfFTwYzCIH77kpNgle0YtDWkwkAGYp241ZDjTeT8V56w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyOoegXuelpaPGu6BaRUUPgdBYAd8CGK6uZfJhCS78/6sxtgil
-	NaGXPe0ng+E0nRnasBdwXQbp02vGq3bDxf9xjOCzLCXmeu87WjTF
-X-Google-Smtp-Source: AGHT+IFMAcf+dFBcoD7SGdRauKrebHUvmAG2ECPiTluSnfadQE+H/b/qksVg722bKVaJXipBpbHcLw==
-X-Received: by 2002:a05:622a:58e:b0:461:148b:1884 with SMTP id d75a77b69052e-4613bfd0547mr250096891cf.11.1730329467740;
-        Wed, 30 Oct 2024 16:04:27 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-462ad19b328sm1220441cf.85.2024.10.30.16.04.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2024 16:04:27 -0700 (PDT)
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 72ED31200066;
-	Wed, 30 Oct 2024 19:04:26 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Wed, 30 Oct 2024 19:04:26 -0400
-X-ME-Sender: <xms:ersiZx38nY2ghCYzRWWqgHa3CxJ8ukzFhWb1D2-I3W9RVVnspMWbTA>
-    <xme:ersiZ4GCeBW-Vulbkr8qDM4UuWiVjCkdHBJgw-YzMszDOxocMSwKSjbIGM4CeEbqe
-    H4eTna0cpq3SrGjwQ>
-X-ME-Received: <xmr:ersiZx7P240Dmw5DHoWeDSgttVlOUid3ijnFMigJvHgOZEtIaJqieE4bzM0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekgedgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
-    ucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrd
-    gtohhmqeenucggtffrrghtthgvrhhnpeevgfejgfevfeevteegffdvhedtgfekvefgledv
-    teffgeffveeiuedvieethfdugeenucffohhmrghinhepqhgvmhhurdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgv
-    shhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehhe
-    ehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-    pdhnsggprhgtphhtthhopeduiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepvg
-    hlvhgvrhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvhgsrggskhgrsehsuhhsvgdr
-    tgiipdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    eplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    epkhgrshgrnhdquggvvhesghhoohhglhgvghhrohhuphhsrdgtohhmpdhrtghpthhtohep
-    lhhinhhugidqmhhmsehkvhgrtghkrdhorhhgpdhrtghpthhtohepshhfrhestggrnhgsrd
-    gruhhughdrohhrghdrrghupdhrtghpthhtohepsghighgvrghshieslhhinhhuthhrohhn
-    ihigrdguvg
-X-ME-Proxy: <xmx:ersiZ-2PNxt_8g4rxZhOfvGOkxDK_WrYHRcmNR_UcN51kjb6QqwqfQ>
-    <xmx:ersiZ0H6tvJbvOp1Yq0VQ58WZoMXNeRa8YXDYiiDy1xBICrXxzWIkg>
-    <xmx:ersiZ_-PkU9APVb4QIEFu-fjasOuj7NDUjW8bHId8-blUvHHtXUIAw>
-    <xmx:ersiZxn7CvyI9URkKz8eoySlJ3n1HKFwvXMaND_xGj2HdiVA7_HLpg>
-    <xmx:ersiZ4EsAmAZcD4QUT5YWF0wJIVnUb3L4DRyUgVUBYXId3xVFlLfY0hZ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 30 Oct 2024 19:04:25 -0400 (EDT)
-Date: Wed, 30 Oct 2024 16:04:24 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Icr2CowZgCn6Ho9gK/hkXyNfw2Z3kApIAeYd+ia3iygb7Y951T3Wshlstanni7nK6Zqv3d4KwUsUyobQkMv1/5oP98QxJiymTzLgn1jAFtmvwRnf+lQux2vUOhGzGg5ILk6cXMW4rPo2aZP40RVAh+Ld6y+JLT5SwOWGCycEN7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VopkGahq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBEFCC4CECE;
+	Wed, 30 Oct 2024 23:10:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730329860;
+	bh=NobT7qYPgQUDHyh4P5cTe3irZqg7DEUQJbR+GUeX5ac=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=VopkGahqXCNlTpf7AI+7gIpoBrYuq5ssZSU6uX7UiPnzc+PKC3X1lD6A0oOUF1hTG
+	 atTVsEIE4NoncDheeKu3q6HeLfIqW42kgs2C6u6hsNiKRcfBN9BLc1N7YNSIIZrx/b
+	 lIA25iKdM8Lx9H6QByYehMSl4DlZReZ1aHCd5u6pjCju1Jq80p4ic5TDonx53vZQ4A
+	 4TXtwICbCJn2D0sjy2ALwSr61qLqhpP1D4ZCXseKUEBRwyhmUHGdV4TFQuKMQ0OAfI
+	 QG2Bj/OP+4xoLAapTH//iQaowQ+XgHS1tODxxNrnV1ecO1j/92QCCYMBrWczW+SnAN
+	 k7JPIztZkQOnw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 82F26CE0864; Wed, 30 Oct 2024 16:10:58 -0700 (PDT)
+Date: Wed, 30 Oct 2024 16:10:58 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
 To: Marco Elver <elver@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>, paulmck@kernel.org,
-	linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-mm@kvack.org,
-	sfr@canb.auug.org.au, bigeasy@linutronix.de, longman@redhat.com,
-	cl@linux.com, penberg@kernel.org, rientjes@google.com,
-	iamjoonsoo.kim@lge.com, akpm@linux-foundation.org
+Cc: Vlastimil Babka <vbabka@suse.cz>, linux-next@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-mm@kvack.org, sfr@canb.auug.org.au, bigeasy@linutronix.de,
+	longman@redhat.com, boqun.feng@gmail.com, cl@linux.com,
+	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+	akpm@linux-foundation.org
 Subject: Re: [BUG] -next lockdep invalid wait context
-Message-ID: <ZyK7eGSWfEYzio_u@Boquns-Mac-mini.local>
+Message-ID: <66a745bb-d381-471c-aeee-3800a504f87d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 References: <41619255-cdc2-4573-a360-7794fc3614f7@paulmck-laptop>
  <e06d69c9-f067-45c6-b604-fd340c3bd612@suse.cz>
  <ZyK0YPgtWExT4deh@elver.google.com>
@@ -203,20 +144,6 @@ On Wed, Oct 30, 2024 at 11:34:08PM +0100, Marco Elver wrote:
 > > would mean the backtrace is missing something. And that somebody does a slab
 > > alloc/free from a smp callback, which I'd then assume isn't allowed?
 > 
-
-I think in this particular case, it is queuing a callback for
-smp_call_function_single() which doesn't have an interrupt handle
-thread AKAICT, that means the callback will be executed in non-threaded
-hardirq context, and that makes locks must be taken with real interrupt
-disabled.
-
-Using irq_work might be fine, because it has a handler thread (but the
-torture is for s(mp) c(all) f(unction), so replacing with irq_work is
-not really fixing it ;-)).
-
-Regards,
-Boqun
-
 > Tail-call optimization is hiding the caller. Compiling with
 > -fno-optimize-sibling-calls exposes the caller. This gives the full
 > picture:
@@ -261,4 +188,8 @@ Boqun
 > 			kfree(scfcp);
 > 		}
 > 	}
+
+So I need to avoid calling kfree() within an smp_call_function() handler?
+
+							Thanx, Paul
 

@@ -1,102 +1,99 @@
-Return-Path: <linux-next+bounces-4560-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4561-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB04D9B818F
-	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2024 18:50:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 558A99B8506
+	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2024 22:13:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 189541C20A78
-	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2024 17:50:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA2E2B23AF9
+	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2024 21:13:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77261BFDEC;
-	Thu, 31 Oct 2024 17:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCDE81CCB27;
+	Thu, 31 Oct 2024 21:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bqbme28b"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Tc1qwKw7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D5012D1EA;
-	Thu, 31 Oct 2024 17:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0DE1CCB5E;
+	Thu, 31 Oct 2024 21:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730397030; cv=none; b=rS1t8EQhBYAKS/EaC7EBBvCCbX06neKdKnIPZPwzFdkg403VaGeeOoc1yGoD90vt9eMEdLKOa8dXJS695+xNxyjXATQ+Oisv2jzjGspdFZeXoEG5Jyfc5PF+5VjEGP42BhiCqjZ4aZ4yuBwWg43Yb3fx6vQGH3cX0w3bZiyO/wc=
+	t=1730409179; cv=none; b=SVRiSi5h3MVEHgsaQBGTVVwcDY59JPaBPlsiAMalQ8ir0/kveQHnZaGFeqPojfThrymjR9GMPb9RPzvJJIWi50bF4bvJiEfYnVwV4YZ8Apj0t1fC4ILiAD3LO8KDlYT9Nvs0IJ4aRm7dgsHtAoF4X3M6UbM5IPNNZqc3J3MkI00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730397030; c=relaxed/simple;
-	bh=uJZCR6UeY+j8Umg8Zowzf2L3YgWJ4oZESKAwkNGi0NY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mj0NDJ7LiKsC8jLxiGPWgQkcBcZdbZoJy59EHfGnWODxc8W5iibsjmrTx+xNc42d+99zZOd6V0m89b0tmI7O6y5nUf3lwl8dCnf5yOyOBOhPbZz83J1chM1wrKfF+b6+IDG9/TQgVVD0LEtPqSi7c5MYDR3bUhnlc3bFl3z0PbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bqbme28b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF0FC4CED2;
-	Thu, 31 Oct 2024 17:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730397030;
-	bh=uJZCR6UeY+j8Umg8Zowzf2L3YgWJ4oZESKAwkNGi0NY=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=bqbme28bjkSAIQ2CfLqbSX9OYD3Su7rgYFQrZczDPaT9BOkB3aQ0w70jgc76rjFOQ
-	 ZrUZGENmGuxSNur/pNaDmTIlD8qSTJJ671w17xpt06Wy7i6N7FO/f2+hClfo33IqoQ
-	 iAL37ZIHgb4y6nBkMkB7A5KuDGUUQ+7QZinEKw78yAkItpg8pmrd2WAhZYHhdo5jHo
-	 2Sy8P3K7p+xGCOYplGg3YB3ZBeWyRMjDO/zOVp/81Zc5aqQq2WgW/WJ+81fVPYptOm
-	 kxRdmLtBStEIh98hMNHouqhG1MS2g1U+WeGm6rPcon3Y6oIPgGIovQ8GCdhlShcOy2
-	 kvPmpeT/otW2w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 9393ACE0924; Thu, 31 Oct 2024 10:50:29 -0700 (PDT)
-Date: Thu, 31 Oct 2024 10:50:29 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Marco Elver <elver@google.com>,
-	linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-mm@kvack.org,
-	sfr@canb.auug.org.au, longman@redhat.com, boqun.feng@gmail.com,
-	cl@linux.com, penberg@kernel.org, rientjes@google.com,
-	iamjoonsoo.kim@lge.com, akpm@linux-foundation.org
-Subject: Re: [BUG] -next lockdep invalid wait context
-Message-ID: <186804c5-0ebd-4d38-b9ad-bfb74e39b353@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <41619255-cdc2-4573-a360-7794fc3614f7@paulmck-laptop>
- <e06d69c9-f067-45c6-b604-fd340c3bd612@suse.cz>
- <ZyK0YPgtWExT4deh@elver.google.com>
- <66a745bb-d381-471c-aeee-3800a504f87d@paulmck-laptop>
- <20241031072136.JxDEfP5V@linutronix.de>
- <cca52eaa-28c2-4ed5-9870-b2531ec8b2bc@suse.cz>
- <20241031075509.hCS9Amov@linutronix.de>
+	s=arc-20240116; t=1730409179; c=relaxed/simple;
+	bh=yXCc2Ap9+plk1nHue40x7LnoJUZVnSvQmboiU+KseyY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fMCWBio3HF6SmQ48HWSHlDpSpNpWcrFkTq0EiVNhdhfrkpCGE8RfBn9QBwXEEXUgIOrVpgpVzUj6W1bYWz+qa+nP3rXCZ07+Iu6WWXxObHkpVpBsK78rM3SCd52tlEH4eOay/uIdBgpS2sQMr5KCu/zqMBH/8eElh2knaBjzUaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Tc1qwKw7; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1730409166;
+	bh=sZUD9sXHhwOKXp9F4qGhfBlYPHNRzmP5sVPKxNH6Qjs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Tc1qwKw7i4mPP6Pf2Typmwx2Gpu6pqI0c2/GmofcK8q9mRVYnza1rOBP/iO2KvfBi
+	 4IYKWugB5FwkTs585lZ161NN2vqAZ0p+KUDJcRpbg+YmodR1UGAFe/vz+paW2My/sW
+	 YfN/iJ9oeR75gVHPC/Ry+xmH2H7G6YxydmnEnREKAp2Mkav8zWS8IxlCawSQH87t2C
+	 UOTW3+57E2PQRUkpe7SC0g9x9Q4ThXlt65LF5vzVqFDiO4j7SHNKH6wfZw0DIBZ8+m
+	 UtquRCKje9a257dAhYUTB7dVsrc+wImzzaxjXQmy8170XmivqrvxL3ABYbdhi1x/uP
+	 3d2rYN2au5spQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XfcCL2TDFz4x8g;
+	Fri,  1 Nov 2024 08:12:45 +1100 (AEDT)
+Date: Fri, 1 Nov 2024 08:12:45 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the kvm-arm tree
+Message-ID: <20241101081245.4f49baa9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241031075509.hCS9Amov@linutronix.de>
+Content-Type: multipart/signed; boundary="Sig_/vBm26hZeNAcPO8kMd5+Hw6=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Oct 31, 2024 at 08:55:09AM +0100, Sebastian Andrzej Siewior wrote:
-> On 2024-10-31 08:35:45 [+0100], Vlastimil Babka wrote:
-> > On 10/31/24 08:21, Sebastian Andrzej Siewior wrote:
-> > > On 2024-10-30 16:10:58 [-0700], Paul E. McKenney wrote:
-> > >> 
-> > >> So I need to avoid calling kfree() within an smp_call_function() handler?
-> > > 
-> > > Yes. No kmalloc()/ kfree() in IRQ context.
-> > 
-> > However, isn't this the case that the rule is actually about hardirq context
-> > on RT, and most of these operations that are in IRQ context on !RT become
-> > the threaded interrupt context on RT, so they are actually fine? Or is smp
-> > call callback a hardirq context on RT and thus it really can't do those
-> > operations?
-> 
-> interrupt handlers as of request_irq() are forced-threaded on RT so you
-> can do kmalloc()/ kfree() there. smp_call_function.*() on the other hand
-> are not threaded and invoked directly within the IRQ context.
+--Sig_/vBm26hZeNAcPO8kMd5+Hw6=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-OK, thank you all for the explanation!  I will fix using Boqun's
-suggestion of irq work, but avoiding the issue Boqun raises by invoking
-the irq-work handler from the smp_call_function() handler.
+Hi all,
 
-It will be a few days before I get to this, so if there is a better way,
-please do not keep it a secret!
+Commit
 
-							Thanx, Paul
+  e571ebcff926 ("KVM: arm64: Get rid of userspace_irqchip_in_use")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vBm26hZeNAcPO8kMd5+Hw6=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcj8s4ACgkQAVBC80lX
+0GwSMggApR+kqEasqVBxlzdJjwtpybFolURzxw4pvY4vAoyJRlXSYTN+3umwdAc/
+OdpCqyr7eu6Ab0ohpjaX/FKYPVtHeDS0i4E8NR/74gctraa7dU4SwLryx9+pzXXJ
+vch11WlRJ49bPhqFsM308eQnkUZBv6C1aO8l+CitPQdYtB/X3PAEIa7WW/dA0NZ7
+Ybwj7Vnt91wzrBtWLr+FxFs796JqLAR0rkt6voPDoXGbbf/iQtt/jMl4qW/495Hf
+DIumuwf3AgaV8roZiiJSOGkC0X5VYIuug3NwZoqdxDGwvX2Q9VDVBgbUu/yKr2lN
+JfdgtimI+aGx3TAHANB9Kj0eLoTJ2A==
+=F4WM
+-----END PGP SIGNATURE-----
+
+--Sig_/vBm26hZeNAcPO8kMd5+Hw6=--
 

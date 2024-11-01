@@ -1,160 +1,133 @@
-Return-Path: <linux-next+bounces-4575-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4576-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35F109B90D4
-	for <lists+linux-next@lfdr.de>; Fri,  1 Nov 2024 12:59:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D95A9B9184
+	for <lists+linux-next@lfdr.de>; Fri,  1 Nov 2024 14:08:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6805B1C21089
-	for <lists+linux-next@lfdr.de>; Fri,  1 Nov 2024 11:59:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 330DE1F23169
+	for <lists+linux-next@lfdr.de>; Fri,  1 Nov 2024 13:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC7719C569;
-	Fri,  1 Nov 2024 11:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9CEF19E98D;
+	Fri,  1 Nov 2024 13:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="A0AdBwlw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ylc6i+PX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F020A16F900;
-	Fri,  1 Nov 2024 11:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88932487A7;
+	Fri,  1 Nov 2024 13:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730462368; cv=none; b=ciGAx99xnaw3ncjJ6nCkBLFHlYNMpbezrJ5BtijG9ZzqyQ8Yts5wpMHKFRS/xyHZ5oS0Vt/78D+r2bBJbHiPX8aPk4d5eagRqoBhBKaXnR8eTwqxuSOsw5WobikI5nqytOuokYNex/oKVVHF19kfimsXf3F133I9LMuE2aQEGkU=
+	t=1730466484; cv=none; b=Hx4saZqQ7RfizsqGNdkBrndK+5XQq6zQ3b6slJb0Lk9tPp31DCXYp4yUSH1bLWP5dWQxzwuQ1MaG9Re/QXm5YMURTkSGv3oZ1qdZPFdC67Em6A9kiw1IDaXdtKvIuiuBzlkiI2wSaQUu0lXThXYpv2gTWcVvk95Vi42NqGsnh3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730462368; c=relaxed/simple;
-	bh=Cy17cxS3exMAa5EYxCtbEI6xO583/s41JPE9jXkvWXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bbO99RTYPOdoU5K2SmAjf7LDB4SujwsvhffZkC9AdqMuhP0GcNsatbW6DF+G3Cve15ZKsdMBMhX47sULv3EAyrHN9uWJdmhDH2pJBW1j4yo/5J3fdSzIWCMrFoA6ILIjoIF/cLzR3ps7rn+luTmrBsRm5N/4M2SrfbVI6mNV7h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=A0AdBwlw; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1730462359;
-	bh=PxxK//bLD+jeJ2f15a2lFQhb+K2TaOY8DEpUcye4zX4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=A0AdBwlwSnCruceC5TZQSMYy2U9wtrWwQEt0c2YlPTxqreaVj9FbW9D5JL04jiIqC
-	 jlKZB8sUg6cu+p89HdksEe2URJ4SjLgMpLZaRWGHviFqBzP5J93C++HWq69UwQtS+F
-	 X8fi4Rt41xbMctUb8AVBUkBpPCQ6JBrPcLO7BILKlc4g+glhFaqGPoua0zakWGHyW0
-	 Fq7Q0jEANCp3eiXXbx4+eMM7N8fApkgiiiJ0SMnV6QThAa0nzL5v+Lc64h4brp8/7T
-	 I1DHM5+HvWEsAMs8s51wLZJgMWPvXptL4fJ6cKHtPTgqKgt9fEnO6LpUanKct14Rdt
-	 PYFDG74pSjJ2w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XfztG6Jb6z4x3q;
-	Fri,  1 Nov 2024 22:59:18 +1100 (AEDT)
-Date: Fri, 1 Nov 2024 22:59:16 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, Mark Brown
- <broonie@kernel.org>
-Subject: Re: [PATCH v2] docs: bug-bisect: add a note about bisecting -next
-Message-ID: <20241101225916.075af3aa@canb.auug.org.au>
-In-Reply-To: <0b8245f429a3cb162f8f6c0686081700a9c09cc4.1730441728.git.linux@leemhuis.info>
-References: <0b8245f429a3cb162f8f6c0686081700a9c09cc4.1730441728.git.linux@leemhuis.info>
+	s=arc-20240116; t=1730466484; c=relaxed/simple;
+	bh=2SzPN9eZ9YXTCtIfY58EFEEvjtP/SDawY1JwxmDF++I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uZ4mHE7LU0F4QbugdjkP1e/zqWgqh3lj2xmdEJSgbupXZggFpVOfHtRrTqA4wGBz07zlCxsEUKPGYHZnDdl01NUOzkYbrX7Uiirri5+Jj5f8+S+lpqLD+su3tBqaQC6NF5p5Y/0PqB7AzUXJ1go1zHM0qYgM7Nr2KTpmR7X9tSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ylc6i+PX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B02C4CECD;
+	Fri,  1 Nov 2024 13:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730466484;
+	bh=2SzPN9eZ9YXTCtIfY58EFEEvjtP/SDawY1JwxmDF++I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ylc6i+PXadApsTrC1+EHUyKZIZnnbtk5yPisr6xCT1pFwE9gK/CLFWiHQNRuQI799
+	 kCBO4RxaczMABJO8tQBCqq3YL0ahawM9dTOEu4HAWN5LKPmb7YR2IWZ0jwQk1pw0XW
+	 fSuGXY62Kc12y34/wRKzjUhAHqaGgwCWSHv+8qZG7DO6PHZgTUO6TJQ1XH+Lfb6uQx
+	 iZteyzfKIG8FHUKZz8O690Vi+yn0jR1aQChsU5dqlPHjGkdNYRiCEYHrqO4V6wlO2c
+	 1G7j9vKxDIIR23W/3UhX4PfTe8XXv/4M+wNQtB9QHIteKOd8v86sXg2riL9PpYdU82
+	 Fa14lZg2mx2/w==
+Date: Fri, 1 Nov 2024 13:07:57 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+	Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Andrew Jones <ajones@ventanamicro.com>,
+	James Houghton <jthoughton@google.com>,
+	David Woodhouse <dwmw@amazon.co.uk>, linux-next@vger.kernel.org
+Subject: Re: [PATCH v3 03/14] KVM: selftests: Return a value from
+ vcpu_get_reg() instead of using an out-param
+Message-ID: <39ea24d8-9dae-447a-ae37-e65878c3806f@sirena.org.uk>
+References: <20241009154953.1073471-1-seanjc@google.com>
+ <20241009154953.1073471-4-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/thZGsFuOZvPRq2.M2fnAQ.V";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="YtZ2j2bWyKb0/r3q"
+Content-Disposition: inline
+In-Reply-To: <20241009154953.1073471-4-seanjc@google.com>
+X-Cookie: Sales tax applies.
 
---Sig_/thZGsFuOZvPRq2.M2fnAQ.V
-Content-Type: text/plain; charset=US-ASCII
+
+--YtZ2j2bWyKb0/r3q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Thorsten,
+On Wed, Oct 09, 2024 at 08:49:42AM -0700, Sean Christopherson wrote:
+> Return a uint64_t from vcpu_get_reg() instead of having the caller provide
+> a pointer to storage, as none of the vcpu_get_reg() usage in KVM selftests
+> accesses a register larger than 64 bits, and vcpu_set_reg() only accepts a
+> 64-bit value.  If a use case comes along that needs to get a register that
+> is larger than 64 bits, then a utility can be added to assert success and
+> take a void pointer, but until then, forcing an out param yields ugly code
+> and prevents feeding the output of vcpu_get_reg() into vcpu_set_reg().
 
-Thanks for this.  A couple of comments.
+This commit, which is in today's -next as 5c6c7b71a45c9c, breaks the
+build on arm64:
 
-On Fri,  1 Nov 2024 07:17:06 +0100 Thorsten Leemhuis <linux@leemhuis.info> =
-wrote:
->
-> Explicitly mention how to bisect -next, as nothing in the kernel tree
-> currently explains that bisects between -next versions won't work well
-> and it's better to bisect between mainline and -next.
->=20
-> Co-developed-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
-> ---
-> v2:
-> - slightly change patch descption
-> - make the text more how-toish to better match the rest of the document
->=20
-> v1: https://lore.kernel.org/all/20241022-doc-bisect-next-v1-1-196c0a60d55=
-4@kernel.org/
-> - initial release
-> ---
->  Documentation/admin-guide/bug-bisect.rst | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->=20
-> diff --git a/Documentation/admin-guide/bug-bisect.rst b/Documentation/adm=
-in-guide/bug-bisect.rst
-> index 585630d14581c7..47264c199247e6 100644
-> --- a/Documentation/admin-guide/bug-bisect.rst
-> +++ b/Documentation/admin-guide/bug-bisect.rst
-> @@ -108,6 +108,27 @@ a fully reliable and straight-forward way to reprodu=
-ce the regression, too.*
->  With that the process is complete. Now report the regression as describe=
-d by
->  Documentation/admin-guide/reporting-issues.rst.
-> =20
-> +Bisecting linux-next
-> +--------------------
-> +
-> +If you face a problem only happening in linux-next, bisect between the
-> +linux-next branches 'stable' and 'master'. The following commands will s=
-tart
-> +the process for a linux-next tree you added as a remote called 'next'::
-> +
-> +  git bisect start
-> +  git bisect good next/stable
-> +  git bisect bad next/master
-> +
-> +The 'stable' branch refers to the state of linux-mainline the current
-                                                             ^
-                                                             that the curre=
-nt
+aarch64/psci_test.c: In function =E2=80=98host_test_system_off2=E2=80=99:
+aarch64/psci_test.c:247:9: error: too many arguments to function =E2=80=98v=
+cpu_get_reg=E2=80=99
+  247 |         vcpu_get_reg(target, KVM_REG_ARM_PSCI_VERSION, &psci_versio=
+n);
+      |         ^~~~~~~~~~~~
+In file included from aarch64/psci_test.c:18:
+include/kvm_util.h:705:24: note: declared here
+  705 | static inline uint64_t vcpu_get_reg(struct kvm_vcpu *vcpu, uint64_t=
+ id)
+      |                        ^~~~~~~~~~~~
+At top level:
+cc1: note: unrecognized command-line option =E2=80=98-Wno-gnu-variable-size=
+d-type-not-at
+-end=E2=80=99 may have been intended to silence earlier diagnostics
 
-> +linux-next release (found in the 'master' branch) is based on -- the for=
-mer
-> +thus should be free of any problems that show up in -next, but not in Li=
-nus'
-> +tree.
+since the updates done to that file did not take account of 72be5aa6be4
+("KVM: selftests: Add test for PSCI SYSTEM_OFF2") which has been merged
+in the kvm-arm64 tree.
 
-As you say, 'stable' only works for the current linux-next release.  If
-you are trying to bisect a previous release, you can always find the
-SHA1 associated with the base of any linux-next release using "grep
-origin Next/SHA1s".  Not sure how useful that is.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/thZGsFuOZvPRq2.M2fnAQ.V
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--YtZ2j2bWyKb0/r3q
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmckwpQACgkQAVBC80lX
-0GzWJQf8CSBcTxvbMkxJSEKUQQ05RjNIA9X0dt9R5yolLNcg3sr6PVf3pbTMrLOA
-LtuhKJ+B39CLehUzMEmMnvVcaG1Bwm6PYMCv0kxHw1XcPOOVVOsSJVcX+WG0aqy2
-WXYsDVGGnWffwpBUxsl48wxw6rvu0PZlIatnc76j1S8ckCEV6jlxM0UbK1NCl28l
-TrvfEkVt7HhYizwM259pgQy7yUuBDctdqpTj6cUTJjF7OMkvTNjC4OeiiSznrFuo
-yU/JfWUNxwEETksSUNvYUWf780LNv8T/7p5krYU8Y/OEOdQ3Ubg9+Inj4JADGQUY
-QgdoOaVggPa4jVZCsii3WOFIROyeBg==
-=e0eX
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmck0qwACgkQJNaLcl1U
+h9DFvAf+NFZ+z1aCylPPLFa+zTDz5MmqEcjVpfhQkyHhNKHUjHoiGTKMUmWyQMUR
+zuLXQxeTLLfX2TUAY8iDXERwVa3DJcXBSA8OkTxEQ8duTVgasxJrEH5e9hapL4yw
+qi35won+snSoVC5aal8C4cR5rAV8QUTyUdDDLCrdVGOdxfeeRc2oXXDUgy25kAO4
+qC9GygserSiAkTN4RndpjwI1P1izwqrfOByxZ5gCJhTcODN24/DiVMd5ilqSvEBg
+r0nYU+tZo+ELvY6B+hRDZVbLnfRK15iiJrig9duhfHWMiApgcOywYRahbDV+p6ph
+UabPeoJZ1JqGF4etWEfaIQLkyg6QTg==
+=5qTN
 -----END PGP SIGNATURE-----
 
---Sig_/thZGsFuOZvPRq2.M2fnAQ.V--
+--YtZ2j2bWyKb0/r3q--
 

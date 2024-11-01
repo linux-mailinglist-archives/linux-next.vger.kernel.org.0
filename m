@@ -1,178 +1,222 @@
-Return-Path: <linux-next+bounces-4587-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4588-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 265FA9B9901
-	for <lists+linux-next@lfdr.de>; Fri,  1 Nov 2024 20:51:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78E699B9914
+	for <lists+linux-next@lfdr.de>; Fri,  1 Nov 2024 20:56:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 476A61C21510
-	for <lists+linux-next@lfdr.de>; Fri,  1 Nov 2024 19:51:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37199283074
+	for <lists+linux-next@lfdr.de>; Fri,  1 Nov 2024 19:56:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1671D1753;
-	Fri,  1 Nov 2024 19:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A201C1D0F50;
+	Fri,  1 Nov 2024 19:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bQsuZSTx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E9SE3XB7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0021D1F60;
-	Fri,  1 Nov 2024 19:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02EBA1CEE94;
+	Fri,  1 Nov 2024 19:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730490707; cv=none; b=sNFdPRWgqFEblutSjZNbvntOPNE/WJgAhb+md9LFTSneVTxpI9ZlwrpaWJvDaiZPxTpZHnd64BZFDj9RUD8VvQ0KVUX7kI1agCMLGj3EBaLiK/25CWdFWzhndwoq6NsbsvgiLmm4KAj6aK1nsb6ZoFznIepuYyurp6AmqYjFgRg=
+	t=1730490961; cv=none; b=BWG86V+QlPGBPli8zuvT5r4454hBRVdFKAdyN/0PumLoWSpd6WAyNoAAdjKXe4lCRVYdAgpk+1us7p6h9C69dsQ8DmPWHalDgypgpu0QaUMnKaWWPwzordMvs4nXPDrEFpo6ViZumWc8m9Q7WSGZYB6DinlGj+jQg2ilb29iH/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730490707; c=relaxed/simple;
-	bh=NfdcIPTFkrq1CJZ3O2pc+yXXB1AVvXwj0nKZRMjuS+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jdAi38LaOR++iuHzE6LneKBdyuyvG+elSNWSPx8A0jXgAdpy4bI9iYZpUkx1fCmu9TMDMTwWBXnC7fVNIZS8yfXLC3J47aXTRu46LopTkVEPmjSeFY8mFInQROG+xd3rZZu+f/t+JVbUrIZAn6N8lW/HQ50vF6/g6RK1Kn4WuRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bQsuZSTx; arc=none smtp.client-ip=209.85.222.172
+	s=arc-20240116; t=1730490961; c=relaxed/simple;
+	bh=s3X/5yNWdJSlQ3eMp8Fi41yVK46pfVs/1C/AskeKJM8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nLe74Gx74BvkdPZU4+FyPBzbtbFDIUUX8INS8K5+3ogLR8qsrGcBT3eSMOJTY7NETROWRAbivDh2CO4PDf2tNigzm1BZAhKl9NOvoHrPV1QORfUuCeGSuCXuHsLHFjNoeZc7n2H/vLYX2i4/h4fLML3nROdA1u7WHfvh452Z5wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E9SE3XB7; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7b14f3927ddso169473885a.3;
-        Fri, 01 Nov 2024 12:51:45 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6cbcd8ce5f9so15814526d6.2;
+        Fri, 01 Nov 2024 12:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730490704; x=1731095504; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Zt5Oyq2ZbDc+xfDrPzoymFKTcNzDTK9mifrrmXHggY=;
-        b=bQsuZSTxZ9SizGo9CA/CW0ONTnZM4d1cCW0ESvtcIjkVaxkqO0Y6pMyD5uygTK+2bt
-         f8lJ6TAB7KVJoLnIX/SAoq7TevrH2T4+bQH15oMcy4LLIt0RGMwwh8Au7KvWL4HTO1EM
-         PIPutjYwkTznIFz6QlPZYl3la5s6z5f/WmVLCqyxkI88c/q8rSa/Jb+Wpa4IuE9wFJ3G
-         Z5qNL/Z6Gq8Fh2nStMOmWX+9ph+fsvaxhyW391Jv3CwPbRxojAlk/aCiAOumxvipjy4n
-         fPzOFebzH+yM/sqsS+rhnvcGRKJ6M5MNXzdrwXkaJgjynChX1ud+25fs38KXZAEHld77
-         b0Gw==
+        d=gmail.com; s=20230601; t=1730490959; x=1731095759; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=V/wo6tn5xum2AVMECmALlIc/sY7DW4M/ZUa/SRoull4=;
+        b=E9SE3XB7pMlEyjGJtfRaG4w2ae7PqcuL9a455YvPBCmRs44vtMBTXMYbXomGtl/b6V
+         aeMrb7vepzhuN4S9SFC7ye/ngDFQDAs1HmHQoNIW8ujc89UNkXbN1o0vl0FB5Okvb7gB
+         9MqEnraV3+yb7VthdkNcVgeCjzM5VQ2Q8DDYyz6UdrMXmmBrZKAoemtVc6eT+rf0lO96
+         Yita4IfLf+A8A4KIH1tBC42DpmQYaHjRJdL/0dkNKISUh+fEoWLy16YB3mrTpEKPyLLu
+         2spjz+arFRC6Ieqo2qBpFurZLjWGWeNc8rGwvAUBDhx5aEOG2BeR/YTeHmHoR4OKliQT
+         VFVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730490704; x=1731095504;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Zt5Oyq2ZbDc+xfDrPzoymFKTcNzDTK9mifrrmXHggY=;
-        b=XMnNVUCIYImi35iHlKuItdXRwGcFqoxapAiUH66NAdZGXd1MfY+7knxExTCViEt/5s
-         ESIbwdMgV3UVQLGrxgIN8Ue1gPHDG8VFwU+3dQdSxbJBcSG3wWGiKbRKkYNqvxUHInev
-         ZFaFcQxbPOJfYrvhLvXAAJd38vN8LilK+tW7CAM5H3btvuQzl2Pc9hzQjE83WbCk8KmB
-         MBkX409Cxa03akucCWdSwCny51i0JXlWl84zvSTGYqHXCkGe1dTgCnOEguD8CyY65n67
-         odqLKE2KsjVGrB9YetmR1oESg5jM9m/rKpSlSZso5mcBZ4KGM/+Ji0E4B9nCFyqQV+H0
-         jDzg==
-X-Forwarded-Encrypted: i=1; AJvYcCVu2q4zaz+La5fudz11/OBEFkz+WLbIF3iRomwh5JpOAtc1jyFvZC6JYUm3AhzD6Ql+7TUu6KLmztXcROI=@vger.kernel.org, AJvYcCW4xXGDV+gzqRNfwFhjeVP9qhfEWfs+vEgeL24nQ8i7gNBFIHJPmL3FOuRlhIg94UHxXssl9nikNCmuSQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYQFwV8mbkpVwJuEjGT1OQsVRLzkY9E2qiKOowlEhOEvb63GE4
-	hQG+2Ec1nKB/Yf/oPLPQvueNbMPBgD870LD7ZS7EJHQjuMjIOozj
-X-Google-Smtp-Source: AGHT+IGLRucb60qWSoDzC20ZGsm0aymAio3/wRy2855/uIReTW6N0UKUogGsYjz5TRM/PQshs5hkKQ==
-X-Received: by 2002:a05:620a:2410:b0:7ac:b220:309a with SMTP id af79cd13be357-7b193eea86cmr3366675785a.15.1730490704526;
-        Fri, 01 Nov 2024 12:51:44 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1730490959; x=1731095759;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V/wo6tn5xum2AVMECmALlIc/sY7DW4M/ZUa/SRoull4=;
+        b=RQMgip5cZAHCpbKm6fKntrpMChUfCahF1uBfmPhWwdj87j24Io27YvoMMuKv9AwafF
+         R8fR2IJR4apZzC+8dAsM60Y5Y3ZU8MwPW4aXzqlmcDGLygDziUtOymzzDSOFIq3GoqjX
+         Np3P+RVg1YNG9r74w5Ln/39ZxwmFL+//45PQBRvWI5ZJ7UGyR5egQi3hbM9tBzbIRVAc
+         R3JzgpZSfH4MbToGZZabR0nGW0OvoS2jHv8t6giYVC2UsbGmOtCtjOuU+DHgB+sRoMq3
+         reCMllk7IfUC3xdn7fmCpE6nfaEQeBBUeghoP0wOBSGW+pAnGW1Y6ATJcsrKxIY+M3Yz
+         qhPA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZNMQPtFBIzSQGeEqU7n5PV4Rf4x3j+e1+moFv4N5gX6V7jHjoKwmq45UFgLxWIVgIO9jJU+ZV8vml8eE=@vger.kernel.org, AJvYcCWbE903h5L34eB/96r4kznpKxL5q5uEdgITHj5YEbogpxis2bQ0znxUqliglvYwYD+R5PT+eQxCfJVffg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0frs4818wd2tDkQma1D8684N7feOtNbCvw9aaIRwGmowoQEm5
+	E2RyHpG5CUqpTGtzyEtxqFu6MtIP59CsvbpMc+oViZ0b9Sv6il6y
+X-Google-Smtp-Source: AGHT+IFPagyvh5cj1suOH5cWI+VLHf+AeDKM7KQP+P4BRYdYB9fU3T/yM3NaTN4fYGjak0m3mhjnvQ==
+X-Received: by 2002:a05:6214:5d86:b0:6cb:e52c:c8dd with SMTP id 6a1803df08f44-6d35c1aeed4mr49651226d6.53.1730490958752;
+        Fri, 01 Nov 2024 12:55:58 -0700 (PDT)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b2f3a6fedcsm199163285a.78.2024.11.01.12.51.43
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d353f9e057sm22585066d6.1.2024.11.01.12.55.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 12:51:44 -0700 (PDT)
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 981A91200043;
-	Fri,  1 Nov 2024 15:51:43 -0400 (EDT)
+        Fri, 01 Nov 2024 12:55:58 -0700 (PDT)
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id BFA231200043;
+	Fri,  1 Nov 2024 15:55:57 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Fri, 01 Nov 2024 15:51:43 -0400
-X-ME-Sender: <xms:TzElZ10j-eXrd7GNpv30l4_b_AVMitAXoOkCDnFULD8gWgi_RIgsEw>
-    <xme:TzElZ8G4i0hnOQjyccOf5Asbt-kOIQGYAHZJOnM2Orcm-1A_nAUbIFE12O4nUq4Uz
-    FPmHkfdkBWQqTJlLA>
-X-ME-Received: <xmr:TzElZ15oxxK0Zrjcg731hlviLBQa4qPFHPFtrGMBIOLtBsY33E4wagy65QmUXw>
+  by phl-compute-10.internal (MEProxy); Fri, 01 Nov 2024 15:55:57 -0400
+X-ME-Sender: <xms:TTIlZ8lfSP9MlcD2F7JoHfhkb8lAwhsYzyVpORFeF-VXmzm1x6_U3g>
+    <xme:TTIlZ716IZvAJDG00a88vUMfuZO1KixMaUrh67zEOouvT9PPu68CGYHnE1GlnrCXi
+    D2Cr6mmD9yQvuSetw>
+X-ME-Received: <xmr:TTIlZ6poIyW29YzSYk9Mg8DgHN0SekWjuh3OyvaprNHa2cG_2lZTCKVkxNGH7Q>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekledguddvlecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
+    hnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddt
     necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
-    drtghomheqnecuggftrfgrthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleel
-    ieevtdeguefhgeeuveeiudffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
-    ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
-    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeduiedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtohepsghighgvrghshieslhhinhhuthhrohhnihigrdguvgdprhgtphht
-    thhopehvsggrsghkrgesshhushgvrdgtiidprhgtphhtthhopegvlhhvvghrsehgohhogh
-    hlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehkrghsrghnqdguvghvsehgohhoghhlvghgrhhouhhp
-    shdrtghomhdprhgtphhtthhopehlihhnuhigqdhmmheskhhvrggtkhdrohhrghdprhgtph
-    htthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruh
-X-ME-Proxy: <xmx:TzElZy1QNyYU7a9rf9ekVospA4HpyM0JWbGzyFE7i6FPizV0ba1zeg>
-    <xmx:TzElZ4FVVSPIiUo8miotxDfc1PRWwqUZfddrAhFzE7ra88UEcdhbzQ>
-    <xmx:TzElZz_q-ed8t7TEugZbWFUoVIL_uLcRd3GI0Gxe6JlFo4tm5eVBaQ>
-    <xmx:TzElZ1nojlQs2hENdw7GcQNjwE1Z4ZKj39ynW3uMy_8MwRGEgkOz5Q>
-    <xmx:TzElZ8GwVc57024kIQWEePxJr6WDGBYrLUNkFqB8ed51-kRjzEFBBP57>
+    drtghomheqnecuggftrfgrthhtvghrnhepgffhffevhffhvdfgjefgkedvlefgkeegveeu
+    heelhfeivdegffejgfetuefgheeinecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhn
+    odhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejje
+    ekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhn
+    rghmvgdpnhgspghrtghpthhtohepudekpdhmohguvgepshhmthhpohhuthdprhgtphhtth
+    hopehprghulhhmtghksehkvghrnhgvlhdrohhrghdprhgtphhtthhopegsihhgvggrshih
+    sehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepvhgsrggskhgrsehsuhhsvgdrtg
+    iipdhrtghpthhtohepvghlvhgvrhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhi
+    nhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
+    hugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgr
+    shgrnhdquggvvhesghhoohhglhgvghhrohhuphhsrdgtohhmpdhrtghpthhtoheplhhinh
+    hugidqmhhmsehkvhgrtghkrdhorhhgpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhu
+    ghdrohhrghdrrghu
+X-ME-Proxy: <xmx:TTIlZ4m4t81ppoFkr1cmCCtO-kX1jMBtvxUNA1VDPYPtlSe12f4gAg>
+    <xmx:TTIlZ61slM-2eqUFtvsYX2nqG5HU9amq-00y81a_5kHjGQBtpZ5hkw>
+    <xmx:TTIlZ_tPOHLdbUAWQtUfJZs685NaXBieXXS2vAS5OjSLUN7ldnRMEQ>
+    <xmx:TTIlZ2Uh1xEeem0Q2YRoJ5ZmWADRB6auQXBl0vGA0ksX75uUNSRoXw>
+    <xmx:TTIlZ93CZkjDu_5S3-pgsYBzXqo-5C55WchluOkC13vjJYGwm494Wx2L>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Nov 2024 15:51:43 -0400 (EDT)
-Date: Fri, 1 Nov 2024 12:50:30 -0700
+ 1 Nov 2024 15:55:57 -0400 (EDT)
 From: Boqun Feng <boqun.feng@gmail.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
+To: paulmck@kernel.org
 Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Vlastimil Babka <vbabka@suse.cz>, Marco Elver <elver@google.com>,
-	linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-mm@kvack.org,
-	sfr@canb.auug.org.au, longman@redhat.com, cl@linux.com,
-	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-	akpm@linux-foundation.org
-Subject: Re: [BUG] -next lockdep invalid wait context
-Message-ID: <ZyUxBr5Umbc9odcH@boqun-archlinux>
-References: <41619255-cdc2-4573-a360-7794fc3614f7@paulmck-laptop>
- <e06d69c9-f067-45c6-b604-fd340c3bd612@suse.cz>
- <ZyK0YPgtWExT4deh@elver.google.com>
- <66a745bb-d381-471c-aeee-3800a504f87d@paulmck-laptop>
- <20241031072136.JxDEfP5V@linutronix.de>
- <cca52eaa-28c2-4ed5-9870-b2531ec8b2bc@suse.cz>
- <20241031075509.hCS9Amov@linutronix.de>
- <186804c5-0ebd-4d38-b9ad-bfb74e39b353@paulmck-laptop>
+	Vlastimil Babka <vbabka@suse.cz>,
+	Marco Elver <elver@google.com>,
+	linux-next@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-mm@kvack.org,
+	sfr@canb.auug.org.au,
+	longman@redhat.com,
+	cl@linux.com,
+	penberg@kernel.org,
+	rientjes@google.com,
+	iamjoonsoo.kim@lge.com,
+	akpm@linux-foundation.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>
+Subject: [PATCH] scftorture: Use workqueue to free scf_check
+Date: Fri,  1 Nov 2024 12:54:38 -0700
+Message-ID: <20241101195438.1658633-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <ZyUxBr5Umbc9odcH@boqun-archlinux>
+References: <ZyUxBr5Umbc9odcH@boqun-archlinux>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <186804c5-0ebd-4d38-b9ad-bfb74e39b353@paulmck-laptop>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 31, 2024 at 10:50:29AM -0700, Paul E. McKenney wrote:
-> On Thu, Oct 31, 2024 at 08:55:09AM +0100, Sebastian Andrzej Siewior wrote:
-> > On 2024-10-31 08:35:45 [+0100], Vlastimil Babka wrote:
-> > > On 10/31/24 08:21, Sebastian Andrzej Siewior wrote:
-> > > > On 2024-10-30 16:10:58 [-0700], Paul E. McKenney wrote:
-> > > >> 
-> > > >> So I need to avoid calling kfree() within an smp_call_function() handler?
-> > > > 
-> > > > Yes. No kmalloc()/ kfree() in IRQ context.
-> > > 
-> > > However, isn't this the case that the rule is actually about hardirq context
-> > > on RT, and most of these operations that are in IRQ context on !RT become
-> > > the threaded interrupt context on RT, so they are actually fine? Or is smp
-> > > call callback a hardirq context on RT and thus it really can't do those
-> > > operations?
-> > 
-> > interrupt handlers as of request_irq() are forced-threaded on RT so you
-> > can do kmalloc()/ kfree() there. smp_call_function.*() on the other hand
-> > are not threaded and invoked directly within the IRQ context.
-> 
-> OK, thank you all for the explanation!  I will fix using Boqun's
-> suggestion of irq work, but avoiding the issue Boqun raises by invoking
+Paul reported an invalid wait context issue in scftorture catched by
+lockdep, and the cause of the issue is because scf_handler() may call
+kfree() to free the struct scf_check:
 
-I've tried fixing this with irq work, however, unlike normal
-work_struct, irq_work will still touch the work item header after the
-work function is executed (see irq_work_single()). So it needs more work
-to build an "one-off free" functionality on it.
+	static void scf_handler(void *scfc_in)
+        {
+        [...]
+                } else {
+                        kfree(scfcp);
+                }
+        }
 
-I think we can just use normal workqueue, because queue_work() uses
-local_irq_save() + raw_spin_lock(), so it's irq-safe even for
-non-threaded interrupts.
+(call chain anlysis from Marco Elver)
 
-Sending a patch soon.
+This is problematic because smp_call_function() uses non-threaded
+interrupt and kfree() may acquire a local_lock which is a sleepable lock
+on RT.
 
-Regards,
-Boqun
+The general rule is: do not alloc or free memory in non-threaded
+interrupt conntexts.
 
-> the irq-work handler from the smp_call_function() handler.
-> 
-> It will be a few days before I get to this, so if there is a better way,
-> please do not keep it a secret!
-> 
-> 							Thanx, Paul
+A quick fix is to use workqueue to defer the kfree(). However, this is
+OK only because scftorture is test code. In general the users of
+interrupts should avoid giving interrupt handlers the ownership of
+objects, that is, users should handle the lifetime of objects outside
+and interrupt handlers should only hold references to objects.
+
+Reported-by: "Paul E. McKenney" <paulmck@kernel.org>
+Link: https://lore.kernel.org/lkml/41619255-cdc2-4573-a360-7794fc3614f7@paulmck-laptop/
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+---
+ kernel/scftorture.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/scftorture.c b/kernel/scftorture.c
+index 44e83a646264..ab6dcc7c0116 100644
+--- a/kernel/scftorture.c
++++ b/kernel/scftorture.c
+@@ -127,6 +127,7 @@ static unsigned long scf_sel_totweight;
+ 
+ // Communicate between caller and handler.
+ struct scf_check {
++	struct work_struct work;
+ 	bool scfc_in;
+ 	bool scfc_out;
+ 	int scfc_cpu; // -1 for not _single().
+@@ -252,6 +253,13 @@ static struct scf_selector *scf_sel_rand(struct torture_random_state *trsp)
+ 	return &scf_sel_array[0];
+ }
+ 
++static void kfree_scf_check_work(struct work_struct *w)
++{
++	struct scf_check *scfcp = container_of(w, struct scf_check, work);
++
++	kfree(scfcp);
++}
++
+ // Update statistics and occasionally burn up mass quantities of CPU time,
+ // if told to do so via scftorture.longwait.  Otherwise, occasionally burn
+ // a little bit.
+@@ -296,7 +304,10 @@ static void scf_handler(void *scfc_in)
+ 		if (scfcp->scfc_rpc)
+ 			complete(&scfcp->scfc_completion);
+ 	} else {
+-		kfree(scfcp);
++		// Cannot call kfree() directly, pass it to workqueue. It's OK
++		// only because this is test code, avoid this in real world
++		// usage.
++		queue_work(system_wq, &scfcp->work);
+ 	}
+ }
+ 
+@@ -335,6 +346,7 @@ static void scftorture_invoke_one(struct scf_statistics *scfp, struct torture_ra
+ 			scfcp->scfc_wait = scfsp->scfs_wait;
+ 			scfcp->scfc_out = false;
+ 			scfcp->scfc_rpc = false;
++			INIT_WORK(&scfcp->work, kfree_scf_check_work);
+ 		}
+ 	}
+ 	switch (scfsp->scfs_prim) {
+-- 
+2.45.2
+
 

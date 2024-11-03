@@ -1,198 +1,99 @@
-Return-Path: <linux-next+bounces-4594-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4595-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D0799BA63B
-	for <lists+linux-next@lfdr.de>; Sun,  3 Nov 2024 16:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D6929BA808
+	for <lists+linux-next@lfdr.de>; Sun,  3 Nov 2024 21:51:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40A001C20CA7
-	for <lists+linux-next@lfdr.de>; Sun,  3 Nov 2024 15:03:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF3FF1C20BDB
+	for <lists+linux-next@lfdr.de>; Sun,  3 Nov 2024 20:51:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616C017C9E8;
-	Sun,  3 Nov 2024 15:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B029E18B49D;
+	Sun,  3 Nov 2024 20:51:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qy8gOKmM"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gZUH7K0Z"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DD1C2FB;
-	Sun,  3 Nov 2024 15:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FBA83CD3;
+	Sun,  3 Nov 2024 20:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730646222; cv=none; b=RmaKcZOsZ9uRKOmEZJ8ImKD74jkmbAXT/3q8n0uGLOOH6Psy9gfzInr+AbI1WH8Brm3HZarWKBwvKH+PFBOwFeZgCYnU5eiezg8QwROa9h3Z6krDyLm2VvP/B9mrwhDiMmaiUlX44H1//fste2pGXPvYE7rbA8bzlTXO8oON8To=
+	t=1730667105; cv=none; b=m4FrwtMoQchA9J53tqUzRouhtNg4UYEU2QfJB/sSpA92JmpJLGji4qUCGk7EL8LTA4rsclBXCSVWy+LMDiAMce652NgZyScaigcNUoV9pcf5e1k4Y0cUSe0NzvsaYe03vCDXy6m25N7/agAx1ROjP7vjeumnOWOegGX1wCUWfQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730646222; c=relaxed/simple;
-	bh=563EfkE5D0QNLDN9RLp0kZKWZbAwx5LWLn3gA89ZDCk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hziOWCEHs1xCrVT25uJTwW9Sgyus+rrtAXPi4PqFyjEbu8iUCHErsXQcTrcsKn40mh26qAKjgHeN1wdo2Ze8a7xUbM9Id3/IvOqboLsTBzTAe9cfkUE3nm1DQiPa2yP3a+3nYjcd18DaEBBVL4x6p9bfag2AuOzlv6a450f3sPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qy8gOKmM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB12EC4CECD;
-	Sun,  3 Nov 2024 15:03:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730646221;
-	bh=563EfkE5D0QNLDN9RLp0kZKWZbAwx5LWLn3gA89ZDCk=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=Qy8gOKmMxEPwCYBx5xJgYEuqXaFBWZoeFhihwMlG0nJLISo/ynHbP/XHe1kkbVijj
-	 L+VjC3xqq0QIbPRWAtj3TBf/jMJvnE6Xu73jUwiJKd8cbpNEy12h9edJJ1xGV4CE5R
-	 YWhGr2inXn9zIKScw18blnRbSwnW6HoI4roiDeae+gto1nTIqxUGYQ+VKGg6YEo/KT
-	 EkfYmQgj+N7go4j1tOOZv9yBXc7/73d2gG/FlY56CIbbViyL1ljdffwaKgijVxB2uf
-	 yDCdYmJiVonyR3wdDFG1l6hTnRst0q3+NP3MqUolk7tNLKQ1usq4vPkJgVdeWtLWGa
-	 craUhhQ0Il6cA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 6454ECE0F53; Sun,  3 Nov 2024 07:03:41 -0800 (PST)
-Date: Sun, 3 Nov 2024 07:03:41 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Vlastimil Babka <vbabka@suse.cz>, Marco Elver <elver@google.com>,
-	linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-mm@kvack.org,
-	sfr@canb.auug.org.au, longman@redhat.com, cl@linux.com,
-	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-	akpm@linux-foundation.org, Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] scftorture: Use workqueue to free scf_check
-Message-ID: <88694240-1eea-4f4c-bb7b-80de25f252e7@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ZyUxBr5Umbc9odcH@boqun-archlinux>
- <20241101195438.1658633-1-boqun.feng@gmail.com>
- <37c2ad76-37d1-44da-9532-65d67e849bba@paulmck-laptop>
- <ZybviLZqjw_VYg8A@Boquns-Mac-mini.local>
+	s=arc-20240116; t=1730667105; c=relaxed/simple;
+	bh=jP0nvKevZsqAg7vRnOclR6kOdOBBMrPZ39ZAUeBTCb8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SfxHp8F9rv2/sadHVKC3HccRhIDKvYp4qsd8H5eXkKPO37np+81ogw1JzB89YOzsUFeDklkBiDfWNNunkupEsJyyAqoJxCANE7eI+CMLBNf4h5vFN1XeXsRoMhlZRV8PLef0zR592gjFlOPpVTbXeueRBIl46ypvOiej0za+s+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=gZUH7K0Z; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1730667090;
+	bh=dGLtAyL5N4JAUMT2iZcVDCnNodSdxkpWXNaqwZ2TEDk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=gZUH7K0Z1Q0GbTGXcf7TVzJILD6qJQMAvUn5eq6D9FlYalgeSJZEXVoAJSIJDA3pX
+	 v8CkI4XPi5oo0wl+mbMj4+w9cv4oTP1VRuzR9dDvqryUcLnmVYHbaah8VLb8eRVrl2
+	 sg08Tp+eNA7cWccVbfWsakRT9QDd2uUdEuyGcf5dkwlfRcfRHhpxs3RmKc7NWoiGlq
+	 i34Pfv+yPCQMcLwgEc/pMKeg4NjK+0MejeKS0qOBkCJrENPSPY9ACNAyct9XjRWNfb
+	 YV4rWoeippz2W+zNiGTVMAJiKIHUbMoqxVO8fg/Ybpt2lUxrhWV/hehSdTP0yPpbkj
+	 zyGeYw160VFbA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XhRbQ5fnlz4x7G;
+	Mon,  4 Nov 2024 07:51:30 +1100 (AEDT)
+Date: Mon, 4 Nov 2024 07:51:32 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Kevin Hilman <khilman@baylibre.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the omap tree
+Message-ID: <20241104075132.3e57e17e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZybviLZqjw_VYg8A@Boquns-Mac-mini.local>
+Content-Type: multipart/signed; boundary="Sig_/CkxLg+GGKP66dd4auC92ud9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Sat, Nov 02, 2024 at 08:35:36PM -0700, Boqun Feng wrote:
-> On Fri, Nov 01, 2024 at 04:35:28PM -0700, Paul E. McKenney wrote:
-> > On Fri, Nov 01, 2024 at 12:54:38PM -0700, Boqun Feng wrote:
-> > > Paul reported an invalid wait context issue in scftorture catched by
-> > > lockdep, and the cause of the issue is because scf_handler() may call
-> > > kfree() to free the struct scf_check:
-> > > 
-> > > 	static void scf_handler(void *scfc_in)
-> > >         {
-> > >         [...]
-> > >                 } else {
-> > >                         kfree(scfcp);
-> > >                 }
-> > >         }
-> > > 
-> > > (call chain anlysis from Marco Elver)
-> > > 
-> > > This is problematic because smp_call_function() uses non-threaded
-> > > interrupt and kfree() may acquire a local_lock which is a sleepable lock
-> > > on RT.
-> > > 
-> > > The general rule is: do not alloc or free memory in non-threaded
-> > > interrupt conntexts.
-> > > 
-> > > A quick fix is to use workqueue to defer the kfree(). However, this is
-> > > OK only because scftorture is test code. In general the users of
-> > > interrupts should avoid giving interrupt handlers the ownership of
-> > > objects, that is, users should handle the lifetime of objects outside
-> > > and interrupt handlers should only hold references to objects.
-> > > 
-> > > Reported-by: "Paul E. McKenney" <paulmck@kernel.org>
-> > > Link: https://lore.kernel.org/lkml/41619255-cdc2-4573-a360-7794fc3614f7@paulmck-laptop/
-> > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > 
-> > Thank you!
-> > 
-> > I was worried that putting each kfree() into a separate workqueue handler
-> > would result in freeing not keeping up with allocation for asynchronous
-> > testing (for example, scftorture.weight_single=1), but it seems to be
-> > doing fine in early testing.
-> 
-> I shared the same worry, so it's why I added the comments before
-> queue_work() saying it's only OK because it's test code, it's certainly
-> not something recommended for general use.
-> 
-> But glad it turns out OK so far for scftorture ;-)
+--Sig_/CkxLg+GGKP66dd4auC92ud9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-That said, I have only tried a couple of memory sizes at 64 CPUs, the
-default (512M), which OOMs both with and without this fix and 7G, which
-is selected by torture.sh, which avoids OOMing either way.  It would be
-interesting to vary the memory provided between those limits and see if
-there is any difference in behavior.
+Hi all,
 
-It avoids OOM at the default 512M at 16 CPUs.
+Commit
 
-Ah, and I did not check throughput, which might have changed.  A quick
-test on my laptop says that it dropped by almost a factor of two,
-from not quite 1M invocations/s to a bit more than 500K invocations/s.
-So something more efficient does seem in order.  ;-)
+  a74a1ada3651 ("ARM: dts: am335x-bone-common: Increase MDIO reset deassert=
+ delay to 50ms")
 
-tools/testing/selftests/rcutorture/bin/kvm.sh --torture scf --allcpus --configs PREEMPT --duration 30 --bootargs "scftorture.weight_single=1" --trust-make
+is missing a Signed-off-by from its committer.
 
-							Thanx, Paul
+--=20
+Cheers,
+Stephen Rothwell
 
-> Regards,
-> Boqun
-> 
-> > So I have queued this in my -rcu tree for review and further testing.
-> > 
-> > 							Thanx, Paul
-> > 
-> > > ---
-> > >  kernel/scftorture.c | 14 +++++++++++++-
-> > >  1 file changed, 13 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/kernel/scftorture.c b/kernel/scftorture.c
-> > > index 44e83a646264..ab6dcc7c0116 100644
-> > > --- a/kernel/scftorture.c
-> > > +++ b/kernel/scftorture.c
-> > > @@ -127,6 +127,7 @@ static unsigned long scf_sel_totweight;
-> > >  
-> > >  // Communicate between caller and handler.
-> > >  struct scf_check {
-> > > +	struct work_struct work;
-> > >  	bool scfc_in;
-> > >  	bool scfc_out;
-> > >  	int scfc_cpu; // -1 for not _single().
-> > > @@ -252,6 +253,13 @@ static struct scf_selector *scf_sel_rand(struct torture_random_state *trsp)
-> > >  	return &scf_sel_array[0];
-> > >  }
-> > >  
-> > > +static void kfree_scf_check_work(struct work_struct *w)
-> > > +{
-> > > +	struct scf_check *scfcp = container_of(w, struct scf_check, work);
-> > > +
-> > > +	kfree(scfcp);
-> > > +}
-> > > +
-> > >  // Update statistics and occasionally burn up mass quantities of CPU time,
-> > >  // if told to do so via scftorture.longwait.  Otherwise, occasionally burn
-> > >  // a little bit.
-> > > @@ -296,7 +304,10 @@ static void scf_handler(void *scfc_in)
-> > >  		if (scfcp->scfc_rpc)
-> > >  			complete(&scfcp->scfc_completion);
-> > >  	} else {
-> > > -		kfree(scfcp);
-> > > +		// Cannot call kfree() directly, pass it to workqueue. It's OK
-> > > +		// only because this is test code, avoid this in real world
-> > > +		// usage.
-> > > +		queue_work(system_wq, &scfcp->work);
-> > >  	}
-> > >  }
-> > >  
-> > > @@ -335,6 +346,7 @@ static void scftorture_invoke_one(struct scf_statistics *scfp, struct torture_ra
-> > >  			scfcp->scfc_wait = scfsp->scfs_wait;
-> > >  			scfcp->scfc_out = false;
-> > >  			scfcp->scfc_rpc = false;
-> > > +			INIT_WORK(&scfcp->work, kfree_scf_check_work);
-> > >  		}
-> > >  	}
-> > >  	switch (scfsp->scfs_prim) {
-> > > -- 
-> > > 2.45.2
-> > > 
+--Sig_/CkxLg+GGKP66dd4auC92ud9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcn4lQACgkQAVBC80lX
+0GwfKAf/SgzV5TN/aFc7TR/PdzWULt4tb6Ay5epBEByC1OK4d0omUVZCQ5N4UwQD
+FlAQniL+O5MFJBij9mrFyqVpRjs9xP1YW3HX+Oyy9QbfwYtNC5Bvb+gVIBb9rksh
+m84OxECOD4YxJtwQSYqpD0IqBMR8Iqgb4GDRu/jArTxTIhP9z1r88vq6hEWE8Mfp
+5GhNcPdmLlXORrlg32WxNNnpI8eLLmZpDOm6jhLOy1lm5crWLpd5ePM6SxUFHCV5
+gGMiOSARM5Wwrys+TGQeEAUuQ+o2XZ0jQYHUVsATDblRxoYZAt+373xyw3wX6hxe
+bIqgmCS55MmlYLVeDbZyHxGtFu6rrg==
+=E6YR
+-----END PGP SIGNATURE-----
+
+--Sig_/CkxLg+GGKP66dd4auC92ud9--
 

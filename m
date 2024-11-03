@@ -1,188 +1,239 @@
-Return-Path: <linux-next+bounces-4592-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4593-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1922C9BA09A
-	for <lists+linux-next@lfdr.de>; Sat,  2 Nov 2024 14:45:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E249BA3C7
+	for <lists+linux-next@lfdr.de>; Sun,  3 Nov 2024 04:35:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74682B2112B
-	for <lists+linux-next@lfdr.de>; Sat,  2 Nov 2024 13:45:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3EEC1C20970
+	for <lists+linux-next@lfdr.de>; Sun,  3 Nov 2024 03:35:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DAF916F858;
-	Sat,  2 Nov 2024 13:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569E8535DC;
+	Sun,  3 Nov 2024 03:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="tEYyNh5C"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHnzNS48"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C380F17741;
-	Sat,  2 Nov 2024 13:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9723FC2;
+	Sun,  3 Nov 2024 03:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730555146; cv=none; b=r+b63Of6YKo82FW2JuP7+N0c9FIDWjDdeP5UxY3qWnW5U2hkk4+cROTsOYKRPnuvNj1WkKP2We1VhviHN0EztXijr5IfXgEf4R0aHQZu3p/oNbjOYKOg85ucNYxzyEoENiqcKVEyKhUHsneNe6Bb1QVYgJTcsxNqPDr1xGMU6WA=
+	t=1730604943; cv=none; b=XCZtNw7+T5tohPsfGBh4KhLYU40lOTY/GhTsco3cZyPj41kxXzMQyfG1dCxPxJL2FDJYh4TEulu0v7fFyySjuFm7ZSrfEAkD7YCb79B4DP9b6Ze2Z9ADVz9GG5/UOQorvU96ImG/NzRUOCC8D0IuVsiXR2e8QRF/7PHtk0g6acU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730555146; c=relaxed/simple;
-	bh=e03yKnN3xWXXNqLp+H7ewAvYxlWFLHNk6mNt6rYdGRM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TV/2poyWOWj4fxCrZnEETmEBFwf1SKkuOlaWj9nnwTBJaMn09j8Et3cm4oiU1hvvEEitUWZEvnXjDoW/2hKAM4jZjk9KyxNeF+DczIw7LF9d7xmj1VNUz6dw5Kn695ClgvpMTo5RrolislGB6UCVfWfCCD1RF78HGi8cMlCUNL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=tEYyNh5C; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1730555125; x=1731159925; i=wahrenst@gmx.net;
-	bh=wh8jWE/SuHQZpH1OicaEibZkdDUs8oXsmEh1paiPtHU=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=tEYyNh5C432n6QJ3/ReOh2iXRHf55sXiK2LY0BnUIYoVg4puSzL3VBcGUBYKNDZ+
-	 mZyu8GUlLosI7z9Mt9wLbOeBUdfEt852Jl3vYp8mf77GIgvVBnGDpDjT7x9/A+/WY
-	 ZDr426afeaHkiBiCz7+XdhJsFNbpjpflGXgOCLC+VSnQWnUCtJNM6ETgbGP949MkM
-	 cXE1jMJurUylazlV3qogkEGACC+dnUQYlQlQamBNcV9Kb2xLrHhMFOUFUbxZdQ6Ux
-	 U3m25wyupM0lTY30ejlkxJ5WZGHf4ePp15zOQJLdO1UrIeNCz0zLNddsTecCowRDV
-	 oR3No6AZeKYfuBErQg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MNsw4-1tVVWP2fFY-00Xw0G; Sat, 02
- Nov 2024 14:45:25 +0100
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Philipp Zabel <p.zabel@pengutronix.de>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Marco Felsch <m.felsch@pengutronix.de>,
-	Catalin Popescu <catalin.popescu@leica-geosystems.com>,
-	Mark Brown <broonie@kernel.org>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mmc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	regressions@lists.linux.dev,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH RFC] mmc: pwrseq_simple: Handle !RESET_CONTROLLER properly
-Date: Sat,  2 Nov 2024 14:45:22 +0100
-Message-Id: <20241102134522.333047-1-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1730604943; c=relaxed/simple;
+	bh=r2zs0GDmVRBO/gdS+c9F68vUl67r+vWeXe0X9I8RsCw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FV6AbyI3JQ2toBB0bZpfH8hzUMFE+xJrCuw3DX/CwCzUBsl94B6kkmbGHKvP3GVjMz+Om8/0oPojgodCF0ak4qQNFXePQQdIFX8sSk7dSXMIDlSPJ5a1Zyv4Sg4rgIByC7TYeRGdHqC1SUEKFKgYxhzUtnVLDQxAw/yvFH9jo+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHnzNS48; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6cbcc2bd800so28720566d6.0;
+        Sat, 02 Nov 2024 20:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730604940; x=1731209740; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7Urc9Z86LcjyqhCcm6H0VVQdu+SdtQEzmvHdA+i0O10=;
+        b=NHnzNS48o9pXCEBM1RAPgRcCpLDL7PC4ixH88UwZgQQYxOvtKq4dTj5RE6t4y1I7rv
+         qrlsLUi30T0GB4wAyAKk0H0tlr38m5pQGNVdX1CdX0+z+XdOx2b/FOh9pm9jUxl5lTiZ
+         0WY030Ncn5OH/6LPo7E0WNIq74LWp14RKol0do5KPb0vJ0mT0jsDlk0KgjWSkftbA2WZ
+         W8EtbNp3aB5yAY1M/ZUtjTrSvdhDkEo8fqQm0eVx+5F+8l2Hjg3bBGQVORrZdxkeF//a
+         /wxKUR0soFr58ayDMClzSAhIamVqxs+SEEg6cIkBdID3OIntuZWjQcO9/Yiz8IVnU0y3
+         3d7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730604940; x=1731209740;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7Urc9Z86LcjyqhCcm6H0VVQdu+SdtQEzmvHdA+i0O10=;
+        b=cPNucgYU5/93aDa0/hsGnX4UJwpTITeJ09RHDDuxWFad/qmioj/0mJ/EgiTvkbMAKp
+         itQGxRvcLEEFRkwfKGn1Jq5WaKD3RwVwaUzWQu1dmlWB3AoRhx36cyF1eL43jk7CV1EG
+         6sfABHzqB8q/SnznzKBGxzU2/aZLr1omcH/ARyiHtpiNvZ4l9yFyxQkA9Q256q0Dt1cR
+         LwoGFyzhSyvy/egszLfkInG4/ncgU0CDORKwRr+v4olwpmOCXBHhxHKKjgAWX3SzehR1
+         Ph3mW385W9G2ScVp1wBX6qsqTsmpmVIF/m5u5xCEYB7NF+eQohSKP5G2Mc/WMae/ZYot
+         d61Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUvRpy/e7EF7G1PZnIrgkuCw84jeLwHXOzwGzvD5dhbp0zrHOkyWfuUTbqPRmoaGgjEuebwsQmCpkFK+rE=@vger.kernel.org, AJvYcCV+xCyXiCmBqIdlonojt7BnDocfQnds/JwptFYqqCPN8rspNTKUkpdZtolg2SlDlepLrLbjMXET592xuQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyEf9RfgOA84d2a4STswAEGbSq4KQO2STU7r4szzuV+RUA5OR3
+	BTPhm1iwStdJ6/44XIn9tnk+KCfVLsdFviYAfM05mXfCZtYvbBfB
+X-Google-Smtp-Source: AGHT+IEbzeGYn2+Z6MWmsVVv7YSFNBxFwFumW2eL1yqpcXinGbawh6m18jluX4ZYN/s4hgo2EShoEg==
+X-Received: by 2002:a05:6214:5d0e:b0:6d1:9f1b:b669 with SMTP id 6a1803df08f44-6d3542eddbbmr200542976d6.15.1730604939972;
+        Sat, 02 Nov 2024 20:35:39 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b2f3a718bbsm309375385a.87.2024.11.02.20.35.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Nov 2024 20:35:39 -0700 (PDT)
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 89A4F1200076;
+	Sat,  2 Nov 2024 23:35:38 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Sat, 02 Nov 2024 23:35:38 -0400
+X-ME-Sender: <xms:iu8mZ9g9xRAqgpSsuv468xIJ18NCxzL5b6y2mLAeCASem1XW6oZEvA>
+    <xme:iu8mZyCBofRgAjDFqnIdvWgwDOLWr8q1TJKTkNntMuO6Rz421sRc1cJjrtTxyZpdK
+    F6VeRxhHtLSoXfBzw>
+X-ME-Received: <xmr:iu8mZ9ESpwMuCl-pTWTfpIAjWjHl5PzKT0TnWmdNt3_7yz1UzzRSaeOU7hs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdelvddgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
+    ucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrd
+    gtohhmqeenucggtffrrghtthgvrhhnpefhtedvgfdtueekvdekieetieetjeeihedvteeh
+    uddujedvkedtkeefgedvvdehtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdo
+    mhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejke
+    ehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgr
+    mhgvpdhnsggprhgtphhtthhopedukedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
+    epphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghighgvrghshies
+    lhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehvsggrsghkrgesshhushgvrdgtii
+    dprhgtphhtthhopegvlhhvvghrsehgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhn
+    uhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuh
+    igqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrghs
+    rghnqdguvghvsehgohhoghhlvghgrhhouhhpshdrtghomhdprhgtphhtthhopehlihhnuh
+    igqdhmmheskhhvrggtkhdrohhrghdprhgtphhtthhopehsfhhrsegtrghnsgdrrghuuhhg
+    rdhorhhgrdgruh
+X-ME-Proxy: <xmx:iu8mZyQ1moQKIgbQ5C7gBiQUMnsFQjOHesl3UO3wY02XC8g7xxxk0A>
+    <xmx:iu8mZ6y82nLjVDUhjZjyoVrhkf_8ZVHbfL0lpUtQHFer8UTchH6fPw>
+    <xmx:iu8mZ455GwRqIxBQlyCoTo9iVl2kjeDonsPd0hBGe3_LMmoaQYz4wg>
+    <xmx:iu8mZ_zmbRQkGqS8hxvRnfLnU4jUeoU1M-MF3u4SVsW_6yH7ZMQJzg>
+    <xmx:iu8mZyiOUvEEIEqpkifvVtnQalduFxGP0MgorsiFo2_fLE7n8y_nqzZ3>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 2 Nov 2024 23:35:37 -0400 (EDT)
+Date: Sat, 2 Nov 2024 20:35:36 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Vlastimil Babka <vbabka@suse.cz>, Marco Elver <elver@google.com>,
+	linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-mm@kvack.org,
+	sfr@canb.auug.org.au, longman@redhat.com, cl@linux.com,
+	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+	akpm@linux-foundation.org, Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] scftorture: Use workqueue to free scf_check
+Message-ID: <ZybviLZqjw_VYg8A@Boquns-Mac-mini.local>
+References: <ZyUxBr5Umbc9odcH@boqun-archlinux>
+ <20241101195438.1658633-1-boqun.feng@gmail.com>
+ <37c2ad76-37d1-44da-9532-65d67e849bba@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gR28kxpGv/paCHFYL+WOtD2omK8W76H6OxEFca2yYlzpt/S7qPc
- /02bKimVT4RMVrEYArMy4wu4g8NeZ2V/+caEDXvOpV9bkMQ6rIGVa4GSwcVTPoYteUOG1jB
- QNtiYQEllcjjBk4xs8tysy/1gw3IKr6WpZd1+a5UTJ93K5cOYrX67bgiiGJysPS0+lMlVqA
- B6iBdr4iiHwoZAiAv42ew==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:1HQhTF2m7cY=;vO7nMt2DEIbIhGRCHChaoucxQme
- UfAywgwv5ofAeu82VeQq2WMWl39EncgG4flGt4kuXwaAnCHJ9hFjJxEWBwl0sDbLl0pCfz+Ox
- iRZxRwl28uewevqRjIqZUYy0JBXJaMYrNQEs/kyUkp33Of8hZss46x3/t8HBeQljij1T3plLU
- pau0V5/s6AijvxPDLADhXYQ4B2/Ro6ND2YUcKxLf7lnqZm+gga6PvvZ7pek61pIZ+P6fLCr4X
- YmuC8TY3Q+/pX7WijVMwB1JfGIg6o4l19YtueVR0Y6K3wkGbzDrtxKPML752W6XmpairEuOfK
- NOruHozFz/xVnqG0J4mirtiP8KDXtZEMBW+aNyBx/3qvge3gSl2bkqnJwtYEjNnrABvYWhhXB
- 9Lcp/xDsA1VmOy8Jj7LRp58JqMGQms0IcweMGgNb0IaR3Oos6h+Yv26hWAia+fax7Cm7muAaS
- s4XFWyz8lX/RNd8LUf1+nL9RhMrMiVIhhhQrYqI6GgGqsORzSDJQVMnIJRQnkFxhT/d/Pv6Gs
- t+Z+bMBNFFCHJIUACRJQmOTRO5OTnliwIEut72+xIbv3J8Z5Bk6+2od6egFQCXZO7mPX/DA5n
- /5DDSXQdaENQdzTxSMtXJWznc6MmG2d+kFCr4eyYETjLnA31rXdzIo8JWIoaO5DzovnGup0uy
- 8BXIgkcSu7YLlP0EW9iVG43BVjClP4mSeA11VdIf/qZeCYgzXI7CLh5F5mrCXN+m11Oj7BrDk
- /1cVAb1/HPGyI3BgGe2yvEJ0zrrafdvWfna7iNyZuJbNlEXX9EEu50zc3gp4yjdRbLsCKq0jg
- CKqD7OXfURtqFKqQHXCt2CBQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <37c2ad76-37d1-44da-9532-65d67e849bba@paulmck-laptop>
 
-The recent introduction of reset control in pwrseq_simple introduced
-a regression for platforms without RESET_CONTROLLER support, because
-devm_reset_control_get_optional_shared() would return NULL and make all
-resets no-ops. Instead of enforcing this dependency rely on this behavior
-to determine reset support. As a benefit we can get the rid of the
-use_reset flag.
+On Fri, Nov 01, 2024 at 04:35:28PM -0700, Paul E. McKenney wrote:
+> On Fri, Nov 01, 2024 at 12:54:38PM -0700, Boqun Feng wrote:
+> > Paul reported an invalid wait context issue in scftorture catched by
+> > lockdep, and the cause of the issue is because scf_handler() may call
+> > kfree() to free the struct scf_check:
+> > 
+> > 	static void scf_handler(void *scfc_in)
+> >         {
+> >         [...]
+> >                 } else {
+> >                         kfree(scfcp);
+> >                 }
+> >         }
+> > 
+> > (call chain anlysis from Marco Elver)
+> > 
+> > This is problematic because smp_call_function() uses non-threaded
+> > interrupt and kfree() may acquire a local_lock which is a sleepable lock
+> > on RT.
+> > 
+> > The general rule is: do not alloc or free memory in non-threaded
+> > interrupt conntexts.
+> > 
+> > A quick fix is to use workqueue to defer the kfree(). However, this is
+> > OK only because scftorture is test code. In general the users of
+> > interrupts should avoid giving interrupt handlers the ownership of
+> > objects, that is, users should handle the lifetime of objects outside
+> > and interrupt handlers should only hold references to objects.
+> > 
+> > Reported-by: "Paul E. McKenney" <paulmck@kernel.org>
+> > Link: https://lore.kernel.org/lkml/41619255-cdc2-4573-a360-7794fc3614f7@paulmck-laptop/
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> 
+> Thank you!
+> 
+> I was worried that putting each kfree() into a separate workqueue handler
+> would result in freeing not keeping up with allocation for asynchronous
+> testing (for example, scftorture.weight_single=1), but it seems to be
+> doing fine in early testing.
+> 
 
-Fixes: 73bf4b7381f7 ("mmc: pwrseq_simple: add support for one reset contro=
-l")
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- drivers/mmc/core/pwrseq_simple.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+I shared the same worry, so it's why I added the comments before
+queue_work() saying it's only OK because it's test code, it's certainly
+not something recommended for general use.
 
-Hi,
-will trying to reproduce the Rpi 4 regression from here [1], I found
-the issue above. I'm pretty sure the Rpi 4 regression is caused by the sam=
-e
-commit. Unfortunately I wasn't able to reproduce it.
+But glad it turns out OK so far for scftorture ;-)
 
-[1] - https://lore.kernel.org/linux-next/6724d7d5.170a0220.1281e9.910a@mx.=
-google.com/T/#u
+Regards,
+Boqun
 
-diff --git a/drivers/mmc/core/pwrseq_simple.c b/drivers/mmc/core/pwrseq_si=
-mple.c
-index 24e4e63a5dc8..b8782727750e 100644
-=2D-- a/drivers/mmc/core/pwrseq_simple.c
-+++ b/drivers/mmc/core/pwrseq_simple.c
-@@ -32,7 +32,6 @@ struct mmc_pwrseq_simple {
- 	struct clk *ext_clk;
- 	struct gpio_descs *reset_gpios;
- 	struct reset_control *reset_ctrl;
--	bool use_reset;
- };
-
- #define to_pwrseq_simple(p) container_of(p, struct mmc_pwrseq_simple, pwr=
-seq)
-@@ -71,7 +70,7 @@ static void mmc_pwrseq_simple_pre_power_on(struct mmc_ho=
-st *host)
- 		pwrseq->clk_enabled =3D true;
- 	}
-
--	if (pwrseq->use_reset) {
-+	if (pwrseq->reset_ctrl) {
- 		reset_control_deassert(pwrseq->reset_ctrl);
- 		reset_control_assert(pwrseq->reset_ctrl);
- 	} else
-@@ -82,7 +81,7 @@ static void mmc_pwrseq_simple_post_power_on(struct mmc_h=
-ost *host)
- {
- 	struct mmc_pwrseq_simple *pwrseq =3D to_pwrseq_simple(host->pwrseq);
-
--	if (pwrseq->use_reset)
-+	if (pwrseq->reset_ctrl)
- 		reset_control_deassert(pwrseq->reset_ctrl);
- 	else
- 		mmc_pwrseq_simple_set_gpios_value(pwrseq, 0);
-@@ -95,7 +94,7 @@ static void mmc_pwrseq_simple_power_off(struct mmc_host =
-*host)
- {
- 	struct mmc_pwrseq_simple *pwrseq =3D to_pwrseq_simple(host->pwrseq);
-
--	if (pwrseq->use_reset)
-+	if (pwrseq->reset_ctrl)
- 		reset_control_assert(pwrseq->reset_ctrl);
- 	else
- 		mmc_pwrseq_simple_set_gpios_value(pwrseq, 1);
-@@ -137,15 +136,14 @@ static int mmc_pwrseq_simple_probe(struct platform_d=
-evice *pdev)
- 		return dev_err_probe(dev, PTR_ERR(pwrseq->ext_clk), "external clock not=
- ready\n");
-
- 	ngpio =3D of_count_phandle_with_args(dev->of_node, "reset-gpios", "#gpio=
--cells");
--	if (ngpio =3D=3D 1)
--		pwrseq->use_reset =3D true;
--
--	if (pwrseq->use_reset) {
-+	if (ngpio =3D=3D 1) {
- 		pwrseq->reset_ctrl =3D devm_reset_control_get_optional_shared(dev, NULL=
-);
- 		if (IS_ERR(pwrseq->reset_ctrl))
- 			return dev_err_probe(dev, PTR_ERR(pwrseq->reset_ctrl),
- 					     "reset control not ready\n");
--	} else {
-+	}
-+
-+	if (!pwrseq->reset_ctrl) {
- 		pwrseq->reset_gpios =3D devm_gpiod_get_array(dev, "reset", GPIOD_OUT_HI=
-GH);
- 		if (IS_ERR(pwrseq->reset_gpios) &&
- 		    PTR_ERR(pwrseq->reset_gpios) !=3D -ENOENT &&
-=2D-
-2.34.1
-
+> So I have queued this in my -rcu tree for review and further testing.
+> 
+> 							Thanx, Paul
+> 
+> > ---
+> >  kernel/scftorture.c | 14 +++++++++++++-
+> >  1 file changed, 13 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/scftorture.c b/kernel/scftorture.c
+> > index 44e83a646264..ab6dcc7c0116 100644
+> > --- a/kernel/scftorture.c
+> > +++ b/kernel/scftorture.c
+> > @@ -127,6 +127,7 @@ static unsigned long scf_sel_totweight;
+> >  
+> >  // Communicate between caller and handler.
+> >  struct scf_check {
+> > +	struct work_struct work;
+> >  	bool scfc_in;
+> >  	bool scfc_out;
+> >  	int scfc_cpu; // -1 for not _single().
+> > @@ -252,6 +253,13 @@ static struct scf_selector *scf_sel_rand(struct torture_random_state *trsp)
+> >  	return &scf_sel_array[0];
+> >  }
+> >  
+> > +static void kfree_scf_check_work(struct work_struct *w)
+> > +{
+> > +	struct scf_check *scfcp = container_of(w, struct scf_check, work);
+> > +
+> > +	kfree(scfcp);
+> > +}
+> > +
+> >  // Update statistics and occasionally burn up mass quantities of CPU time,
+> >  // if told to do so via scftorture.longwait.  Otherwise, occasionally burn
+> >  // a little bit.
+> > @@ -296,7 +304,10 @@ static void scf_handler(void *scfc_in)
+> >  		if (scfcp->scfc_rpc)
+> >  			complete(&scfcp->scfc_completion);
+> >  	} else {
+> > -		kfree(scfcp);
+> > +		// Cannot call kfree() directly, pass it to workqueue. It's OK
+> > +		// only because this is test code, avoid this in real world
+> > +		// usage.
+> > +		queue_work(system_wq, &scfcp->work);
+> >  	}
+> >  }
+> >  
+> > @@ -335,6 +346,7 @@ static void scftorture_invoke_one(struct scf_statistics *scfp, struct torture_ra
+> >  			scfcp->scfc_wait = scfsp->scfs_wait;
+> >  			scfcp->scfc_out = false;
+> >  			scfcp->scfc_rpc = false;
+> > +			INIT_WORK(&scfcp->work, kfree_scf_check_work);
+> >  		}
+> >  	}
+> >  	switch (scfsp->scfs_prim) {
+> > -- 
+> > 2.45.2
+> > 
 

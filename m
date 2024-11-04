@@ -1,161 +1,118 @@
-Return-Path: <linux-next+bounces-4601-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4599-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65D099BAC2E
-	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2024 06:47:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE15A9BAC0C
+	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2024 06:30:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D27C281940
-	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2024 05:47:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2002A1C20A9E
+	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2024 05:30:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D83318C028;
-	Mon,  4 Nov 2024 05:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E8F1632C3;
+	Mon,  4 Nov 2024 05:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="he6Shnwu";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QETGRuYT"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FzDv4pgy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9212418BB9F;
-	Mon,  4 Nov 2024 05:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED5323A6;
+	Mon,  4 Nov 2024 05:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730699213; cv=none; b=VpUYv/GBRZWnnizU9m9b1I+3wkox7M2J+ls54SXj/DQx50rvPBBfRmkxBPpVwELzUNOIicL9KIyPZZTzuLGGQzFSrTGkrah6yg4JptI//C4SZevTRrbC4UtpVE1sBQVzx6H4P7nYxVjvY/1r2+6vEdL1Y54H6UzMBnlYS3Hnue0=
+	t=1730698240; cv=none; b=jp1L7HN9uW69jcgJD/YYlyrilobR8LuJmp+Xc0lK0hCg/aTH2DvnDHx5oJH/Xh2O7nAcoPmCk8iQZq1VZEE/aqGGAgtjXfM+KruQE5/nZgFlYYf64OjB17oO12OsbQn39VIfOj9rAKZdr//Dz9WYZV56k0SEXuBAjonDupGpKkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730699213; c=relaxed/simple;
-	bh=Y4e0z+s1I6wZ2rMsngHshmBrcDPlrDkhDKHjrqrKiXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BzC6mR4eRCxuxjLTCuYnlXePRHu8GKdLtijZc/Ym8naJu4eSVusydmfVhDQtFMmMt7nSMa4SgNXUQH5VBtr1NaGriiyCWUJAZFNZ2HoZm6PnlGlG/V7U6qED15RuQ9mtgcEBenvHP/LEOLXcgb+h75qduVMsPqxe9oP6QeBmLcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=he6Shnwu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QETGRuYT; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.stl.internal (Postfix) with ESMTP id 68B1A11400E8;
-	Mon,  4 Nov 2024 00:46:49 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-12.internal (MEProxy); Mon, 04 Nov 2024 00:46:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1730699209; x=1730785609; bh=h715nG4WHE
-	2EG0OwTbYrRA9dFgup8FmWlso6yjLMm3c=; b=he6Shnwuve0jKTUuBXaszvq98d
-	8GSVPiBmLXJFF/4pM4kZeazohSQ5KNOdQCIqe2WhziNzgMkb7/ys/di1GTNbqlTI
-	YbHsDFu3XxXoxhU1cuLTuVdXe5clZ2sU7kknaX7U/sKWXaOUCFZWspyEkAiKqoGA
-	eRxI2Sm2pvH8iFQmDqeJEvniTHHNlfw5Kn4LS2F+hsr0ffKUjdIFp4drlkaa9R2z
-	yxFs9vzTcBhgtu1V6/Lu34zsa9B2MiImGs18rUygFHnYikD/a+iUoDd/uqHhsYEh
-	NiQE8ZdM9HhwkIXY9LXMuVA84DQRl5uBezBXNUXw/12MCso2PNv5TCR+0T8Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1730699209; x=1730785609; bh=h715nG4WHE2EG0OwTbYrRA9dFgup8FmWlso
-	6yjLMm3c=; b=QETGRuYT2xdGDv1HCdnz+TNQCP1s7IMWvxAZQXtesGOd9VjUVJT
-	LwW3RxRSV+q43o0NpSpeevrf+KmVZ3ZB6dtGebErILeOM70OuhkDsZ/9sKBpOUwL
-	Ck0eBBPFP6T+xpcLB48NRDyqYQnz9WrHHp9CMkEkaeZjO9OS5pyojIHM9PFTluhX
-	WvmSXpRsr3UtzdhOVLzZA2oV4oQL328C2/vBy6Baff8VCvEBqKTZzgbzwDRo2d/p
-	c5XpK9teNZMunusrkP0/fp+SKLWeT9DXmr8cWGGZFKIX8d3SjptW9kugTsPW6IHz
-	ILbjtVJvvxoIxUX5M2qYWOVykDAjOio3kVw==
-X-ME-Sender: <xms:yF8oZ0RpaLkXE5bzI9BA973yYMPSVI4BD0QM4YFimU1Qdl8Ig08Lrg>
-    <xme:yF8oZxwGrgrPWIjlJZTSYeHMcbl_dpnnHQ5weVIEkOGgCJjiKyq6Y3WyYeV1j1hxF
-    EGaw6mScMAK1Q>
-X-ME-Received: <xmr:yF8oZx0axsbKpUhBjTIbMpSKQ-I7B0tU6U-KlBUdxjDxZjSokMbHYClw9RTQNY2clpEpwTPVFY_Ir4YHb3gY_vJLAecsQRQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdelhedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
-    ucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrf
-    grthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefh
-    gfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopeekpdhmohguvgepshhm
-    thhpohhuthdprhgtphhtthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprh
-    gtphhtthhopegrmhhithhsugesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhinhhu
-    gidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
-    hugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:yF8oZ4CYbhuPUyntYUDlEuORNKC1c6_JHmlQqpBTDzMCBRzcdxRyog>
-    <xmx:yF8oZ9iyXd1pWZyr00O2wOdOfb62yQEJLBXv9gw3u8gi04LItl6pww>
-    <xmx:yF8oZ0rSmR-UcDLm_IO3y9hHnYxC9DSZhFpL4jUa8TZrr_9-eFF1UA>
-    <xmx:yF8oZwiXQiJuS0eeoH3cx9zmh3OeWKdbjcr1vuYlwLRSu60T-0BmjA>
-    <xmx:yV8oZ-XDU_Hxjk5cWHO6zZZiHyjZNiLr4lbN0galRxWKyAPXfRTHpAs0>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Nov 2024 00:46:48 -0500 (EST)
-Date: Mon, 4 Nov 2024 00:39:39 +0100
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Amit Sunil Dhamne <amitsd@google.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <2024110422-flyable-cautious-383c@gregkh>
-References: <20241101150730.090dc30f@canb.auug.org.au>
+	s=arc-20240116; t=1730698240; c=relaxed/simple;
+	bh=qvywv4i84HAZLPotuvJYvDl4s71VUQ8CS52LsQUJl90=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Gd1u75Q10ib+JeKoMTR27EjaZ3f00xKHt+12qNKLncoEG7RWDwyra4srnjtQ6hJBACvOUSliU9D9XvgAYnUz5ZO9/5qWFhgB7hN9f702BQk5jcfpr9GmJ6V1M/f+3kRIJ1pVvSAY4f669TbJoRQUK8l17DHcCI82e3QAjEpDp3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FzDv4pgy; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1730698231;
+	bh=LdGLsZfaRCHdLDyP+nbDEj6UUqJgvbVO4i4FE6dRPm0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=FzDv4pgyYj4vjp3MRzTtp58Uijlw1kwJXr6IkRw3UdMOKOlGM8zmWCr7+vasGT8ym
+	 w16vGsN+7eWVdjVVWboP0F4aaYuTOgnVEEKXAzYHAMXIGcGTPejzCuewgh1SFd3bPd
+	 Qsqs8488JDAPsL+FL3xB3OdokDZMDuS2d7fvfbs1qqcmIVVFotw8FmwZL+py8R79xi
+	 MHEkcaBVVDEpmhlPXXz+uPi4o2eEotn6T8xoZn+1j0kKdNv1gbIMIfxkXuF9A7Y2AQ
+	 kAjxtnig+BQLjknrXY0YJVe7mMT4+LooyvfX+2XuMYTtAwA4imeQh1ZTDE+0L1RotD
+	 Rknxm2rXCH7YQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xhg6G1SFZz4wbv;
+	Mon,  4 Nov 2024 16:30:29 +1100 (AEDT)
+Date: Mon, 4 Nov 2024 16:30:29 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>
+Cc: Jiri Pirko <jiri@nvidia.com>, Jiri Pirko <jiri@resnulli.us>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the net-next tree
+Message-ID: <20241104163029.73e65994@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241101150730.090dc30f@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/ErO2t_M7Ic+YdiztVBPF4rT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Nov 01, 2024 at 03:07:30PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   drivers/usb/typec/tcpm/tcpm.c
-> 
-> between commit:
-> 
->   afb92ad8733e ("usb: typec: tcpm: restrict SNK_WAIT_CAPABILITIES_TIMEOUT transitions to non self-powered devices")
-> 
-> from the usb.current tree and commit:
-> 
->   33a0302455d6 ("usb: typec: tcpm: Add support for parsing time dt properties")
-> 
-> from the usb tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/usb/typec/tcpm/tcpm.c
-> index 7ae341a40342,a8fcca029e78..000000000000
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@@ -5042,13 -5055,10 +5056,14 @@@ static void run_state_machine(struct tc
->   		if (port->vbus_never_low) {
->   			port->vbus_never_low = false;
->   			tcpm_set_state(port, SNK_SOFT_RESET,
-> - 				       PD_T_SINK_WAIT_CAP);
-> + 				       port->timings.sink_wait_cap_time);
->   		} else {
->  -			tcpm_set_state(port, SNK_WAIT_CAPABILITIES_TIMEOUT,
->  +			if (!port->self_powered)
->  +				upcoming_state = SNK_WAIT_CAPABILITIES_TIMEOUT;
->  +			else
->  +				upcoming_state = hard_reset_state(port);
-> - 			tcpm_set_state(port, upcoming_state, PD_T_SINK_WAIT_CAP);
-> ++			tcpm_set_state(port, upcoming_state,
-> + 				       port->timings.sink_wait_cap_time);
->   		}
->   		break;
->   	case SNK_WAIT_CAPABILITIES_TIMEOUT:
+--Sig_/ErO2t_M7Ic+YdiztVBPF4rT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-Thanks, I"ll handle this when merging them together later this week.
+After merging the net-next tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-greg k-h
+include/uapi/linux/dpll.h:103: warning: Enum value 'DPLL_CLOCK_QUALITY_LEVE=
+L_ITU_OPT1_PRC' not described in enum 'dpll_clock_quality_level'
+include/uapi/linux/dpll.h:103: warning: Enum value 'DPLL_CLOCK_QUALITY_LEVE=
+L_ITU_OPT1_SSU_A' not described in enum 'dpll_clock_quality_level'
+include/uapi/linux/dpll.h:103: warning: Enum value 'DPLL_CLOCK_QUALITY_LEVE=
+L_ITU_OPT1_SSU_B' not described in enum 'dpll_clock_quality_level'
+include/uapi/linux/dpll.h:103: warning: Enum value 'DPLL_CLOCK_QUALITY_LEVE=
+L_ITU_OPT1_EEC1' not described in enum 'dpll_clock_quality_level'
+include/uapi/linux/dpll.h:103: warning: Enum value 'DPLL_CLOCK_QUALITY_LEVE=
+L_ITU_OPT1_PRTC' not described in enum 'dpll_clock_quality_level'
+include/uapi/linux/dpll.h:103: warning: Enum value 'DPLL_CLOCK_QUALITY_LEVE=
+L_ITU_OPT1_EPRTC' not described in enum 'dpll_clock_quality_level'
+include/uapi/linux/dpll.h:103: warning: Enum value 'DPLL_CLOCK_QUALITY_LEVE=
+L_ITU_OPT1_EEEC' not described in enum 'dpll_clock_quality_level'
+include/uapi/linux/dpll.h:103: warning: Enum value 'DPLL_CLOCK_QUALITY_LEVE=
+L_ITU_OPT1_EPRC' not described in enum 'dpll_clock_quality_level'
+
+Introduced by commit
+
+  a1afb959add1 ("dpll: add clock quality level attribute and op")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ErO2t_M7Ic+YdiztVBPF4rT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcoW/UACgkQAVBC80lX
+0GwFkQgAkh2G3fUKKV49+3wAQqDz20IZZz+ZAnLUGsO3FrCwmAgtgRmiLH+zGHCK
+cmzeEELRDGcoUMhufkPq/39VCkwKRXSc0FlB3so+x/z0SdLjFrYkBVjskqQU2d9Y
+joBSeP3L59FiUc0LGGXjqgzcgzO+MuENHmSta5drE7x3TenZU5bgAy0B2fc5DT/j
+89biyYzYjQgejYaQw2EXGo+I7MnzJ4f2QWnnKvDdZ8BmKcNCUTiOoakKaB7ad1ub
+SDaIT8Xj0n34qKn00rsweF+KGgV6mbZKAyjr2d/iNMbKoWIV7xtShYDraICX4tqX
+EIz5fefg+ZPyGhqDTSVIwoJqT5RDiA==
+=VMw1
+-----END PGP SIGNATURE-----
+
+--Sig_/ErO2t_M7Ic+YdiztVBPF4rT--
 

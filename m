@@ -1,128 +1,131 @@
-Return-Path: <linux-next+bounces-4608-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4609-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A709BB6A1
-	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2024 14:48:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 345719BB6FC
+	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2024 15:01:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF2DF1C2221C
-	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2024 13:48:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0CA6B21672
+	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2024 14:01:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDCBB70829;
-	Mon,  4 Nov 2024 13:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D58ED42A9E;
+	Mon,  4 Nov 2024 14:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="c98vcCDI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2730C7EEFD
-	for <linux-next@vger.kernel.org>; Mon,  4 Nov 2024 13:47:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5741A8BEE;
+	Mon,  4 Nov 2024 14:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730728071; cv=none; b=TPcI1HIAAwaLLiYd0acxaN9FBYtIiihusBicP/XOovjSGUUkilWnDT+FcvPYU5p4GhIZ/7R1QnmRsJ2K0TaRFf8oIo4ahnHkEzJqWTeQk0s+eBvugRmAVfQA9swXFBJJ6R0EfEfV2K3Eqiw/5xaoepILmNtTofNSLjk+tzOmUQM=
+	t=1730728874; cv=none; b=tQvEfM0xGBm9vsEKK3hsAarsr8M92+2UcA9I5QTnvn5C6TvPWySMFcs6VoAOI1uze8BCWcZyJB4CbsHw2vqBmNzNJwb2pqZYSzEV4Gd4BZ8osJSXLdqJkD5gk8IdZ+JTlzo8FlCXzZan6y3EUsCvbxFgP0rZy2bqeeGCn1P6UGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730728071; c=relaxed/simple;
-	bh=F8zjRma3PeVfYCzJfvrQelK0l9hyDiCWuPTWjeZFPOQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KzIsA3Y5NpEhKUoxHbiHjiEOfNGVxOzm5fz/VttTT0qc7h8APnaZPFpsqvhimFT8nyAjvwE/lx+ByKvVc1fIkMS1EUvQS3UucdU4tS53FVzhjBhAQfEA3aoa90KDWON++sFlkdO/7ew2+xa2fojqXqOeqlGrR9oItLNmcskuiuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1t7xQj-0004ok-Rl; Mon, 04 Nov 2024 14:47:41 +0100
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1t7xQj-001zYZ-0t;
-	Mon, 04 Nov 2024 14:47:41 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1t7xQj-000EVu-0d;
-	Mon, 04 Nov 2024 14:47:41 +0100
-Message-ID: <6e8b3c1d4c5232e006030f03a9b06a6294970d6c.camel@pengutronix.de>
-Subject: Re: [PATCH v2 0/2] Fix dtc warnings when building the LAN966x
- device tree overlay
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Herve Codina <herve.codina@bootlin.com>, Stephen Rothwell
-	 <sfr@canb.auug.org.au>, Rob Herring <robh@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, Arnd Bergmann
- <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Allan
- Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>,  Steen Hegelund
- <steen.hegelund@microchip.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-Date: Mon, 04 Nov 2024 14:47:41 +0100
-In-Reply-To: <20241031160122.40cf61e0@bootlin.com>
-References: <20241029084338.194942-1-herve.codina@bootlin.com>
-	 <20241031160122.40cf61e0@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1730728874; c=relaxed/simple;
+	bh=hYwWE6NSgcNV54B1JYLg3MC+AgkpywJBzoMNETV4gyQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZXSukgcYABOQPpaWwrxhS4N4OzJEIQRKihDQDO3CU3ipZUcKyR2fDwCYj6UUe+EvCUds6mvXiQBbhMMuVY5ACGB23+FociLlrwZkFNkNe9Znnv/K5gfcab57CSvBkKqJCD0ArvdKcYgb1AAoUXNp5XjPQZGrTNHVeJCXMYsaIrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=c98vcCDI; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=/9WKCT0vx39Ceviq8KsWhLeea2L5rBVepa8c56heqKo=; b=c98vcCDIrWnXOfKLZO0yXX66AJ
+	yVyjghqAnlZKmkWjAC6ruTsEfVlkBhuN8dcgk3DQ77wMlvu2DrlsivAN+m7VaCOdn2QTfLUvqeUPo
+	jHDZu4NmjLEcKKwFd1bOzbs2TwVzv4nkhWcnYp/Q6uB7kTdT8kN8N+AyqRfxwxt5JBHDuXx8Ci7N8
+	b/ha1C0ttMvCMCGMDtbrpay4gt3eoGL6pDW+gobvM86CmUtVEOvzOVJqnR94TJaO3Vhkk86Q18MKB
+	Et5RcE3YOJoHzhuJ+Er3YFRq8C8+cGVxdnNG4L7kcT6j2k42F931LK6hGOOI6N+XuCm91c8sY88h3
+	Jla4Knig==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t7xdi-0000000BLB4-34O0;
+	Mon, 04 Nov 2024 14:01:07 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 6121030042E; Mon,  4 Nov 2024 15:01:06 +0100 (CET)
+Date: Mon, 4 Nov 2024 15:01:06 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>, megi@xff.cz,
+	jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20241104140106.GF24862@noisy.programming.kicks-ass.net>
+References: <20241028165336.7b46ce25@canb.auug.org.au>
+ <20241101141952.4990f238@canb.auug.org.au>
+ <dd740dda-a03e-4f3a-bb46-e551f0799c50@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd740dda-a03e-4f3a-bb46-e551f0799c50@intel.com>
 
-On Do, 2024-10-31 at 16:01 +0100, Herve Codina wrote:
-> Hi Philipp,
->=20
->=20
-> On Tue, 29 Oct 2024 09:43:34 +0100
-> Herve Codina <herve.codina@bootlin.com> wrote:
->=20
-> > dtc generates 3 kinds of warnings when it builds the LAN966x dtso.
-> >=20
-> > - missing or empty reg/ranges property
-> >     .../pci-ep-bus@0/cpu_clk: missing or empty reg/ranges property
-> >     .../pci-ep-bus@0/ddr_clk: missing or empty reg/ranges property
-> >     .../pci-ep-bus@0/sys_clk: missing or empty reg/ranges property
-> >   Patch 1 in this series fixes these warnings
-> >=20
-> > - Missing interrupt-parent
-> >    .../pci-ep-bus@0/oic@e00c0120: Missing interrupt-parent
-> >   This warning was quickly silenced by Philipp [1].
-> >   Patch 2 in this series fixes the warning and should replace the patch
-> >   applied by Philipp to silence the warning.
-> >=20
-> > - Warning (avoid_unnecessary_addr_size)
-> >    /fragment@0/__overlay__: unnecessary #address-cells/#size-cells with=
-out "ranges", "dma-ranges" or child "reg" property
-> >   This warning should be fixed in dtc.
-> >   A patch has already be sent by Philip to fix it [2].
-> >=20
-> > [1] https://lore.kernel.org/all/57793bb01e02f03e215dfa6f8783df18034ae2e=
-a.camel@pengutronix.de/
-> > [2] https://lore.kernel.org/devicetree-compiler/20241025161307.3629901-=
-1-p.zabel@pengutronix.de/T/#u
-> >=20
->=20
-> Both patches in this series have been reviewed by Rob.
->=20
-> I think it is a green light to have them applied in the reset tree.
-> Your opinion?
 
-Applied to reset/next, thanks!
+It might help if we put the relevant maintainers on Cc?
 
-[1/2] misc: lan966x_pci: Fix dtc warns 'missing or empty reg/ranges propert=
-y'
-      https://git.pengutronix.de/cgit/pza/linux/commit/?id=3D344ea0d36b8c
-[2/2] misc: lan966x_pci: Fix dtc warn 'Missing interrupt-parent'
-      https://git.pengutronix.de/cgit/pza/linux/commit/?id=3Dcf3e10cc0e88
-
-I've dropped the Makefile patch ("misc: Silence warning when building
-the LAN966x device tree overlay").
-
-regards
-Philipp
+On Mon, Nov 04, 2024 at 02:37:57PM +0100, Przemek Kitszel wrote:
+> On 11/1/24 04:19, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > On Mon, 28 Oct 2024 16:53:36 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > 
+> > > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> > > failed like this:
+> > > 
+> > > drivers/iio/magnetometer/af8133j.c: In function 'af8133j_set_scale':
+> > > drivers/iio/magnetometer/af8133j.c:315:12: error: suggest explicit braces to avoid ambiguous 'else' [-Werror=dangling-else]
+> > >    315 |         if (!pm_runtime_status_suspended(dev))
+> > >        |            ^
+> > > cc1: all warnings being treated as errors
+> > > 
+> > > Probably caused by commit
+> > > 
+> > >    fcc22ac5baf0 ("cleanup: Adjust scoped_guard() macros to avoid potential warning")
+> > > 
+> > > I have applied the following for today but I wonder if there may be
+> > > others.
+> > > 
+> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Date: Mon, 28 Oct 2024 16:01:15 +1100
+> > > Subject: [PATCH] fix up for "cleanup: Adjust scoped_guard() macros to avoid
+> > >   potential warning"
+> > > 
+> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > ---
+> > >   drivers/iio/magnetometer/af8133j.c | 3 ++-
+> > >   1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/iio/magnetometer/af8133j.c b/drivers/iio/magnetometer/af8133j.c
+> > > index d81d89af6283..acd291f3e792 100644
+> > > --- a/drivers/iio/magnetometer/af8133j.c
+> > > +++ b/drivers/iio/magnetometer/af8133j.c
+> > > @@ -312,10 +312,11 @@ static int af8133j_set_scale(struct af8133j_data *data,
+> > >   	 * When suspended, just store the new range to data->range to be
+> > >   	 * applied later during power up.
+> > >   	 */
+> > > -	if (!pm_runtime_status_suspended(dev))
+> > > +	if (!pm_runtime_status_suspended(dev)) {
+> > >   		scoped_guard(mutex, &data->mutex)
+> > >   			ret = regmap_write(data->regmap,
+> > >   					   AF8133J_REG_RANGE, range);
+> > > +	}
+> > >   	pm_runtime_enable(dev);
+> > 
+> > I am still applying this patch.
+> > 
+> 
+> This patch of yours is necessary, could you make it permanent?
+> 
+> Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>
 

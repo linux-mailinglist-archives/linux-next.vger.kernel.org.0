@@ -1,115 +1,100 @@
-Return-Path: <linux-next+bounces-4617-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4618-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CD789BC404
-	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2024 04:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 529519BC4DD
+	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2024 06:47:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59A47282224
-	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2024 03:44:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17339282FDB
+	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2024 05:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827A5185923;
-	Tue,  5 Nov 2024 03:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97781B0F34;
+	Tue,  5 Nov 2024 05:47:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="E4slBiCB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ivQu1a5d"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D9E183CC9;
-	Tue,  5 Nov 2024 03:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCB83C38;
+	Tue,  5 Nov 2024 05:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730778285; cv=none; b=Sivtvlq2N4OHH1tShnxODbhN0vjaux5j9CX/z/FWvFHKuztDaDZHrw/EouQBrZ72JOHBO8EeNL7gGRX9aF89KFGOBaavdLEu4LEUYJBmkVW9gvt5XiTruaIoSvo3nitpcyVY6NOGz0TuDcCQtqxV+1KZ5OhdfsbUfXSdzs46B2U=
+	t=1730785674; cv=none; b=Vwzehn665rCcb5fptUjxpy3nKzb9LlyRlWBb6ctZQjgShJNgKH9lijQnQDa/pCf91EU3Z92KfnxB2IDV3xcg9Wbx0+Re5tktf8yoybATAempZzXleFvOeA/dHi7dageTRbMUSAXquWwpzW7mbXD9g0FtkCnsUq+g60h+23Lv6fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730778285; c=relaxed/simple;
-	bh=ZMIJ1QMBpMwinYOjDXlgaW4tX7wuHKAf2TSd+YOKoIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Fg0RDPywq0R3O51FJaNNCzVMJk9XHF8tCbtPjrmVJvJ9pM6bdu18ZAccte9fgBsIhufyxLh+LWYIqMYk+rdT2dub+wU+8XiDPDXOkwHFpAfwyigzQEjlV/n5hZDehQ1HnkBtykmzzo+rNtQKsfATmeDjQADZRaDPYEJOmhJUd3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=E4slBiCB; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1730778274;
-	bh=lUctEdvvWTVpaaLlyCFZ0Y/zWHdHD/DQDozK+5zDi3w=;
-	h=Date:From:To:Cc:Subject:From;
-	b=E4slBiCBIsdqkRDfKRAl7PRGvXUEnWu/lLTyX3jx3GM7QyZFlNpKEPwP2ftgc5KiK
-	 IbdbTmTr6VgWvKnoWidCMXvlO5zi7cxdu8bjHT+SfvbTQ58n8zLl9dQTqcabpBVpl0
-	 6ZYRMWXx0fKfl5cmsfeP3kPVGFYsWXvfEGIl6nWjnC1ivVmaIb20cZPY5YlkSbJQjr
-	 Kp4aY+oMmBrd0Gv2xQguS3vM2xV+bH0hAwLYmAe8W84KQXqqIFnBGWcItvvhiAXXxJ
-	 f+P7p7HGZsRijpMnemb3P1uG2EGfTnRadyp/zy8G7lEevbpv1kdKzo59MGsUWYnAA2
-	 mJjPptjdbZvIw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XjDjZ441mz4wy9;
-	Tue,  5 Nov 2024 14:44:34 +1100 (AEDT)
-Date: Tue, 5 Nov 2024 14:44:35 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>
-Cc: Abel Vesa <abel.vesa@linaro.org>, Bjorn Andersson
- <andersson@kernel.org>, Jingyi Wang <quic_jingyw@quicinc.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the devicetree tree with the qcom tree
-Message-ID: <20241105144435.1d80d910@canb.auug.org.au>
+	s=arc-20240116; t=1730785674; c=relaxed/simple;
+	bh=saOb0LiiRQC8rwlm/4KpZ/40NSYsjlgBgeihQIDMbPU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MHmKAGevhn0bvArxQ88hhtIJbNhUPFqHn09EgNioBMN2GPr7VDf5sJ63UXZIiwPsBkOQnE8OXgW96qsZJTjmnP8yr9sCcqN/h/3YrcxWPaiViYYV+bDUGpHacSYfnN6thRGHTtThJZHDf2kASq9d/h82/VlNocNJiJaUDCEIiS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ivQu1a5d; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730785674; x=1762321674;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=saOb0LiiRQC8rwlm/4KpZ/40NSYsjlgBgeihQIDMbPU=;
+  b=ivQu1a5dUJTUxqCQ6mcT9SBR7M53MCNnSxFisI3hTB9nwcoR2vxL9y+t
+   skda7qvKaxhzjexY7tLSUKCpK+frBm2oIxr6bWuz63bR6+2ZwTcnAXzzQ
+   hncIBTTo4Kyo3Kj4gb5oDCQkK2MFSC41RDuMs8LQdTv28aIA431EYLINj
+   ZgP7o7ulIit15gglWiQWQt1MezPbKF01mQV8CpROBoyePuUfBt1iKGUJz
+   jAt9t5iW4XtosrJPhR83/C6jC9POE4deSFaooYFvAtILK370CafpseWdM
+   bXnSxYsJiX49xS8HPLItnJKeiYeiiqR9TAjBi1wpr2ZvdyfAYFvHSLt5j
+   A==;
+X-CSE-ConnectionGUID: UY/RA+yhTQ2gJjmJWT+AOQ==
+X-CSE-MsgGUID: nmo/UcOpQtiR1uiUIiduEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="30628976"
+X-IronPort-AV: E=Sophos;i="6.11,259,1725346800"; 
+   d="scan'208";a="30628976"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 21:47:53 -0800
+X-CSE-ConnectionGUID: oigiAMzpRDuJfLOHm5k6Bw==
+X-CSE-MsgGUID: OmbOSK3SSRSXw/+tDC6o1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,259,1725346800"; 
+   d="scan'208";a="83544454"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 04 Nov 2024 21:47:52 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 822181E0; Tue, 05 Nov 2024 07:47:50 +0200 (EET)
+Date: Tue, 5 Nov 2024 07:47:50 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the
+ pinctrl-intel tree
+Message-ID: <20241105054750.GC275077@black.fi.intel.com>
+References: <20241105081154.54f66e15@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/W5jOo6ftU15nlkQZAvC3=lu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241105081154.54f66e15@canb.auug.org.au>
 
---Sig_/W5jOo6ftU15nlkQZAvC3=lu
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On Tue, Nov 05, 2024 at 08:11:54AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commits
+> 
+>   1bedd6dc7f44 ("pinctrl: elkhartlake: Add support for DSW community")
+>   5d6f65a5cbbc ("pinctrl: intel: Add a human readable decoder for pull bias values")
+> 
+> are missing a Signed-off-by from their committers.
+> 
+> It looks like they were rebased back onto v6.12-rc1 (from -rc4) for some
+> reason, but the new commiter's SOB was missed.
 
-Today's linux-next merge of the devicetree tree got a conflict in:
-
-  Documentation/devicetree/bindings/cache/qcom,llcc.yaml
-
-between commit:
-
-  a83e18ca8358 ("dt-bindings: cache: qcom,llcc: Document the QCS8300 LLCC")
-
-from the qcom tree and commit:
-
-  f9759e2b5704 ("dt-bindings: cache: qcom,llcc: Fix X1E80100 reg entries")
-
-from the devicetree tree.
-
-I fixed it up (the 3 way diff comes out empty) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/W5jOo6ftU15nlkQZAvC3=lu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcplKMACgkQAVBC80lX
-0GxgiAgApk3vNVeWbBgJXyj6PVTp8WXyPzbfaziKBT8EWvf4gXCZNB1PynuPN870
-TT7Qsk9BEoTYxqSqeqzCO9MGpYYAW7o8YnCvMW/kwgfxKOApFo6EC/10phD+Xk3s
-OR3J1qZqwYamBG/ZO5xIv8NV1qDUF48JsZMUK57SnlmMnAZthpa4Wmue0iENrIK4
-7/SIl1WEqqiUDMmxbr4NDNBuQCQEkxHYay8BGG7U0Zo9jkovuybh13mdTblAduFm
-rdWL4RfMIAlSzoa14y4RnvTysTRAPo9drxbQUqhiAWV5L4VCMDaHgqvdmCJluZSh
-EIO/ZrRBaUBdu2gaIib6FF+YA7fUBA==
-=5ulA
------END PGP SIGNATURE-----
-
---Sig_/W5jOo6ftU15nlkQZAvC3=lu--
+Thanks for letting me know! Yes we moved them back to -rc1 as this was
+requested by the GPIO maintainer. I will fix this now.
 

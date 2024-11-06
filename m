@@ -1,143 +1,71 @@
-Return-Path: <linux-next+bounces-4636-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4637-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA8A29BE2F4
-	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 10:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CC379BE339
+	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 10:55:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E543B1C20D98
-	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 09:45:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F1651C2101A
+	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 09:55:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF4881D5AC2;
-	Wed,  6 Nov 2024 09:45:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C291DA618;
+	Wed,  6 Nov 2024 09:55:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NwFXZbfg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="twJj0V/1"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B057C3211;
-	Wed,  6 Nov 2024 09:45:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BEFC1D79A5;
+	Wed,  6 Nov 2024 09:55:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730886319; cv=none; b=UmpnzBr+jCJ4gwKTeackDWqC3YxBO53L07TyeM13M+Vr+RUMZfq8O3+CTTdeubBZUEfRIrxBuEB/6eHHGkpYrDKIIV9uvZ+YJYZv2E0ZYckz3cDryc1mYZG3Slgo2tVVWscv4Wzf9evlEjj6x4rlTBo1RmK5lZzAOe27/yZFMhY=
+	t=1730886919; cv=none; b=Kd/RgBeanEzcFF/DvhVUmUpcsyT//Bqamoihhrt/RSYwIPYFzCOcu6FkALFBf7CejapspzvU4uKpl2NmYPnlXQxMAczefxPa2zpxx+fHC09wXFnWKQM/WpHy0qVDivcYMiwL6ghWc3Bizc0Wt1aWmgJZdd+SiL9rfR8HHBWoc3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730886319; c=relaxed/simple;
-	bh=IrjvnY9pMMzq8Aj0Nx18xgmSSg9tmfrMJz8voL6BzL0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hYOfql4+sOtPBaVgkV6kc3Ar8I4/YJynvP4y41igrtIqe9ta6psjGkDzGGQ45v3RU6MUjAjmsaajdOJ62VwG9uf5JHlynbC+QIslcI7sDQSDuK6hXxWOHS9sPQJu6GEauJFVe0Xn/M8aaB8Lj8DKKnLzCO9mAa6vzaQdcruH3os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NwFXZbfg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D90E6C4CECD;
-	Wed,  6 Nov 2024 09:45:14 +0000 (UTC)
+	s=arc-20240116; t=1730886919; c=relaxed/simple;
+	bh=rYooDJtMHefj1YJza5M0AYt6KFkDApR0jWLlKVi6dPk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FT7xlNWAjuQ7bWRofqQLHzRmDVXc/K5Xhc1UC1XCKlwHv/wTSHpB/oHrd0Y2GLjHFL98raq4cADjZfy0oPmjk0Bt8gqFAHhfkFKrDsfguhMIZq210Y0MgW73Oo5UtLJlsPGol84qqQhL8b/uDWP6j1mZwLXHurNTlRZvZc8khBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=twJj0V/1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D52FAC4CECD;
+	Wed,  6 Nov 2024 09:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730886319;
-	bh=IrjvnY9pMMzq8Aj0Nx18xgmSSg9tmfrMJz8voL6BzL0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NwFXZbfgLDHnYQfA5ZLZmRsRzVvSGmk5PZ6dTEVvZMAe3qGF/ouJWFlg8KZbi0QwD
-	 Mgkj2n7UitYcGtEpu/vwLn4ZTlBXgIxRI0KHwuq5P4lxU5fjXG1q4OrE48btfA9Pyc
-	 saKmiKSP96bwvRi7LTXQjYLS2MLRYiXto+INl4q8MFUBG/ovyLHPJ/FrxJTFXqlj6i
-	 tUd9mEeJhoPmCOlNnIm6Gn78izFnczCLnLMVuz/3cNSbqEt2q4rZnFdjLP/pz0OOSX
-	 pLmgsQxiUk4Fae1k/n2HzKG/vrf23bpd4960xH9DXc4qV5/F2bmRn1DAPeKrUr3SWC
-	 oT/8yVQTUq9Sw==
-Date: Wed, 6 Nov 2024 09:45:10 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>, Stephen Rothwell
- <sfr@canb.auug.org.au>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
- <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, megi@xff.cz, lars@metafoo.de,
- linux-iio@vger.kernel.org
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20241106094510.3234cae1@jic23-huawei>
-In-Reply-To: <20241104140106.GF24862@noisy.programming.kicks-ass.net>
-References: <20241028165336.7b46ce25@canb.auug.org.au>
-	<20241101141952.4990f238@canb.auug.org.au>
-	<dd740dda-a03e-4f3a-bb46-e551f0799c50@intel.com>
-	<20241104140106.GF24862@noisy.programming.kicks-ass.net>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=k20201202; t=1730886919;
+	bh=rYooDJtMHefj1YJza5M0AYt6KFkDApR0jWLlKVi6dPk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=twJj0V/186QifDuvBj7OU1bIyHZff5TB6IkZSLNWQhXHif5jsQnwvRTvQO452720+
+	 mMeHodxe2pauYX96Xwhsm3V2ybyZpL0DtiRLeTYRWpQefh3hnTa31+AFqKzjnuj3vi
+	 uuD1+tJEWqO6XGmGkmqwdHJCEXurgfBLX5hzvuqZD52zoNG4n7zSCFaRn0nV7kbGm5
+	 EBjAseH5fmnMcDup8sYYvJiWYCHrzdYA1TQny5VGCOst6G8Sjj6Ws3vTUqie4a18hu
+	 3whGPD0WE6FAzzS4VAJBLohbkCy9Tok2cACIsq9E1bmvX2vL5WLrnBulQRo8NyXea1
+	 JM9aainBuE4Cw==
+Date: Wed, 6 Nov 2024 10:55:15 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: boot failure after merge of the vfs-brauner tree
+Message-ID: <20241106-manchmal-obrigkeit-a790ff30c8b2@brauner>
+References: <20241030183044.673e14b4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241030183044.673e14b4@canb.auug.org.au>
 
-On Mon, 4 Nov 2024 15:01:06 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
-
-> It might help if we put the relevant maintainers on Cc?
+On Wed, Oct 30, 2024 at 06:30:44PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On Mon, Nov 04, 2024 at 02:37:57PM +0100, Przemek Kitszel wrote:
-> > On 11/1/24 04:19, Stephen Rothwell wrote:  
-> > > Hi all,
-> > > 
-> > > On Mon, 28 Oct 2024 16:53:36 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
-> > > > 
-> > > > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> > > > failed like this:
-> > > > 
-> > > > drivers/iio/magnetometer/af8133j.c: In function 'af8133j_set_scale':
-> > > > drivers/iio/magnetometer/af8133j.c:315:12: error: suggest explicit braces to avoid ambiguous 'else' [-Werror=dangling-else]
-> > > >    315 |         if (!pm_runtime_status_suspended(dev))
-> > > >        |            ^
-> > > > cc1: all warnings being treated as errors
-> > > > 
-> > > > Probably caused by commit
-> > > > 
-> > > >    fcc22ac5baf0 ("cleanup: Adjust scoped_guard() macros to avoid potential warning")
-> > > > 
-> > > > I have applied the following for today but I wonder if there may be
-> > > > others.
-> > > > 
-> > > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > Date: Mon, 28 Oct 2024 16:01:15 +1100
-> > > > Subject: [PATCH] fix up for "cleanup: Adjust scoped_guard() macros to avoid
-> > > >   potential warning"
-> > > > 
-> > > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > ---
-> > > >   drivers/iio/magnetometer/af8133j.c | 3 ++-
-> > > >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/iio/magnetometer/af8133j.c b/drivers/iio/magnetometer/af8133j.c
-> > > > index d81d89af6283..acd291f3e792 100644
-> > > > --- a/drivers/iio/magnetometer/af8133j.c
-> > > > +++ b/drivers/iio/magnetometer/af8133j.c
-> > > > @@ -312,10 +312,11 @@ static int af8133j_set_scale(struct af8133j_data *data,
-> > > >   	 * When suspended, just store the new range to data->range to be
-> > > >   	 * applied later during power up.
-> > > >   	 */
-> > > > -	if (!pm_runtime_status_suspended(dev))
-> > > > +	if (!pm_runtime_status_suspended(dev)) {
-> > > >   		scoped_guard(mutex, &data->mutex)
-> > > >   			ret = regmap_write(data->regmap,
-> > > >   					   AF8133J_REG_RANGE, range);
-> > > > +	}
+> After merging the vfs-brauner tree, today's linux-next build (powerpc
+> pseries_le_defconfig) qemu boot test failed like this:
 
-Might as well flip it to a guard() given the scope is the same and it will
-be a little more readable.
-
-Otherwise I'm fine taking a patch doing this if someone can send on to
-linux-iio@vger.kernel.org
-
-
-I'll get to making a patch at somepoint but just back from travel
-so a lot of other things on my queue today.
-
-
-
-> > > >   	pm_runtime_enable(dev);  
-> > > 
-> > > I am still applying this patch.
-> > >   
-> > 
-> > This patch of yours is necessary, could you make it permanent?
-> > 
-> > Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>  
-
+This should have been fixed for a while now. Sorry, I'm just getting
+slowly back to work as I'm recovering from a rather sever illness. Let
+me know if this is still something you're seeing.
 

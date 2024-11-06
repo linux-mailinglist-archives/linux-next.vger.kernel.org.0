@@ -1,162 +1,111 @@
-Return-Path: <linux-next+bounces-4641-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4642-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC9E29BE483
-	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 11:44:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0079A9BE4F7
+	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 11:57:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 514381F22CA2
-	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 10:44:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B95DE2833EC
+	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 10:57:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3ABA1DE2CC;
-	Wed,  6 Nov 2024 10:44:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB861DE3CD;
+	Wed,  6 Nov 2024 10:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OMBZMFWr"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="i2K/q4KH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609351D6191;
-	Wed,  6 Nov 2024 10:44:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406D31DE3C2;
+	Wed,  6 Nov 2024 10:56:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730889844; cv=none; b=j56S99jkJsB6OQmaGqv+Kq4S4Bp9Xnmzw+R6SZ5rmde0gak5I/FWekDPtbZTmrK2cH5fzT/BdoFNSH5eAFpTFUzOyzi/0USF6CqfDa7c1rdIYdoszwek+SWjv3xKhnQy/Wm5FweELPULbm2MEYLX9Iydkhxiy4SByLZt4vvcDso=
+	t=1730890616; cv=none; b=Mv8zWZYOlnrJaxjMfLLku8wNTYQe31nslacJXQMnxdv4P4j+GIw9YIsyrWo9sHdsbEHNe5PXMeEGICt75YreorZPLv6oo/sGSYfFw/9cd0NVRTnOdydSExpQeNcVDoiVPZT9N/K0PEW/7+T2uF1Kxx/fHTdPz7TMKVhJmQvxTYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730889844; c=relaxed/simple;
-	bh=WNI3xSGo3nesqRlhZePkS2TRbCQNJ8hkYEk6M3sj4uU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eUMIL17ZPghXuOBF9SBrkT0DOmt7UwGREGazNEtBz/z5z5vxOUkiTpPHvfmpxLxqkdwxDaHyh7YbXow6j5O6XKPUbN8HMLoGRjsP/6mHaFHRIPmB3r2gPGfzKe38ZcH4c8CzVzG8IeXWQr1KLkA9oaqW+eeaxZDL7zCARihFtPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OMBZMFWr; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3e604425aa0so3536323b6e.0;
-        Wed, 06 Nov 2024 02:44:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730889842; x=1731494642; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T25HsGVJcAN3ETqyfBc3tR6NSPcizy5l8tnRPPz2tQk=;
-        b=OMBZMFWrtjc3dknioexXcyx7yLj0Vcb/nKVOl2v7lMpbbWIjwzqf4ltKMwvPPWDBCi
-         d9d7vNc6S+WIv123uQW4lTDHNTR5LyfpR6YVftvdvVGZnjBAxxmN7TkFVTgUHjys/Mc+
-         6fNYm5HsW6WAfSJFpzF1c4C2UNQ6atLWJlBr+HkBzNGgNY1QMTRyM+dDBBoN3udC/Z2w
-         3XKd+BlzPLs5L6anwQW5nc69AThUyjMpWASiHMDPOCKWzVKEQjI16AX+uX8M/8X4Skuk
-         VhmCY4IujhdGawEKiy6IjeauvVtfdXnUqtvfw78LM3ARguDnRssB4zs5A4LSB/7pUdrd
-         U8Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730889842; x=1731494642;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T25HsGVJcAN3ETqyfBc3tR6NSPcizy5l8tnRPPz2tQk=;
-        b=e+QszUbxTUxAgl66VK9DJedrIulq1M6W0+Zyfqz2cX2JOFaSOJ2vUO8yaoNbZvXVU+
-         f761EF8yyJvFxjB6sua/684BSaHdXxW34/f4/XkII5d7a82yokQ6qNJ1HiOTaKx8or1Y
-         Zyo9uzkbbGINBXKXZTYM07i9bRggiemaGNA+kFdWuob40CQLnx4RVEnaqT3Rr3k9wLoA
-         LyzbNhF64C+eQ/qDD9eWzavI9bYeq2D49n8Z37gNQ68+XhbopjXAAMuOU0a+BjybxIPx
-         9WUFlojPqkCP3FEbIhLg0WS44xKqwIlTZVscGKSbLBZYOw40sEVTZ4pFHsvk0m1Ke7On
-         mhHg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoZejxojsRelYylftbDA+5aU84o3LCjL6qJjsXNIzDMKuyxOX7/J47Cmgv3Un/P92N6WDmWgLGxrCrCOY=@vger.kernel.org, AJvYcCW+8Oja5Q+zEQZoHaIPp8SSQv2M2sZ8rs+vFs2+6pj12+OxEqnvc/hhkuh6WMOmMNgDbbJdROj5ROJ7bg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjEa6xut7SDYU87fI4t4eKQeVrRxEmDZ7ZSU7rPuDbJCJEZf6o
-	q/M+1CihPQv2ylP46bprtomdl1I6G/iP0LMLKmE8bEU+fIOFw0Hmw6E0hg==
-X-Google-Smtp-Source: AGHT+IHfKkKTotxeeX3JSZaK04Ih4Kl8flPmrwwKt0CbXwfU7tWoFhUoW9SwoLyLj+UFu9asBYaaRg==
-X-Received: by 2002:a05:6808:3c46:b0:3e5:dbb6:4b6b with SMTP id 5614622812f47-3e6384c4da7mr37487332b6e.36.1730889841911;
-        Wed, 06 Nov 2024 02:44:01 -0800 (PST)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ee45298a7dsm10706225a12.6.2024.11.06.02.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 02:44:00 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 70C964613072; Wed, 06 Nov 2024 17:43:57 +0700 (WIB)
-Date: Wed, 6 Nov 2024 17:43:57 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Thorsten Leemhuis <linux@leemhuis.info>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v3] docs: bug-bisect: add a note about bisecting -next
-Message-ID: <ZytIbemd-8FqLfKc@archie.me>
-References: <ec19d5fc503ff7db3d4c4ff9e97fff24cc78f72a.1730808651.git.linux@leemhuis.info>
+	s=arc-20240116; t=1730890616; c=relaxed/simple;
+	bh=dBCBb99ErzyWdTv/DxKCD/8rqxAsx9QyMxDGQQe/nKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eTmASvtMS8kWEJ4+CsaimERoqyLUxJ9lL0nXaMIiXiBbIVjop3+LqCfQtk+CAS/Ub+1dyYsuTH7NrdqIVGd+v21HFgVs08flFZ8IAQUBlqjkZ4zF6ak+EXRna9rWuiodMfsLUnuxmkVNpDz7T+MbNRQf1M0+PSbY4BHjJYHprE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=i2K/q4KH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1730890608;
+	bh=dBCBb99ErzyWdTv/DxKCD/8rqxAsx9QyMxDGQQe/nKs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=i2K/q4KHgwxRSQqNOzvVE9U5jvlUq2HM+hIvzMhpiQI9vdWDl1cXlD+11q31rI8bH
+	 yfwXsF0eCbi6nylcRncP4W1ddlzfE2CLqJ4SBJrLe5c+mcVeO8ad161I5//YJNirvr
+	 anIAOiKSdGfvJq90/wKUcXu+4l71WR2LGBsrOMKdFyYN0ThteodIhxN5OYMlWZCdtC
+	 cBBpIZ291mARVCh/aAJ9YC2HMbUqISZoaOOj2ed7Caq4wtJTvbj109p1lwNyAn23Xp
+	 CLaEt9ZnxU2m6/4wYgDq0CpNzUHoOCIYeYUlVmQuSCvihNwnwuFbm2nDPghbDM+3RE
+	 ru1McXfpxSNGQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xk2Fr3fVLz4x9G;
+	Wed,  6 Nov 2024 21:56:48 +1100 (AEDT)
+Date: Wed, 6 Nov 2024 21:56:49 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: boot failure after merge of the vfs-brauner tree
+Message-ID: <20241106215649.1a3d9a05@canb.auug.org.au>
+In-Reply-To: <20241106-manchmal-obrigkeit-a790ff30c8b2@brauner>
+References: <20241030183044.673e14b4@canb.auug.org.au>
+	<20241106-manchmal-obrigkeit-a790ff30c8b2@brauner>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qgDl1AQ3jO3q4+Tm"
-Content-Disposition: inline
-In-Reply-To: <ec19d5fc503ff7db3d4c4ff9e97fff24cc78f72a.1730808651.git.linux@leemhuis.info>
+Content-Type: multipart/signed; boundary="Sig_/pMWwjicm33py=432zz6A3FS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-
---qgDl1AQ3jO3q4+Tm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--Sig_/pMWwjicm33py=432zz6A3FS
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 05, 2024 at 01:11:08PM +0100, Thorsten Leemhuis wrote:
-> diff --git a/Documentation/admin-guide/bug-bisect.rst b/Documentation/adm=
-in-guide/bug-bisect.rst
-> index 585630d14581c7..f4f867cabb1778 100644
-> --- a/Documentation/admin-guide/bug-bisect.rst
-> +++ b/Documentation/admin-guide/bug-bisect.rst
-> @@ -108,6 +108,27 @@ a fully reliable and straight-forward way to reprodu=
-ce the regression, too.*
->  With that the process is complete. Now report the regression as describe=
-d by
->  Documentation/admin-guide/reporting-issues.rst.
-> =20
-> +Bisecting linux-next
-> +--------------------
-> +
-> +If you face a problem only happening in linux-next, bisect between the
-> +linux-next branches 'stable' and 'master'. The following commands will s=
-tart
-> +the process for a linux-next tree you added as a remote called 'next'::
-> +
-> +  git bisect start
-> +  git bisect good next/stable
-> +  git bisect bad next/master
-> +
-> +The 'stable' branch refers to the state of linux-mainline that the curre=
-nt
-> +linux-next release (found in the 'master' branch) is based on -- the for=
-mer
-> +thus should be free of any problems that show up in -next, but not in Li=
-nus'
-> +tree.
-> +
-> +This will bisect across a wide range of changes, some of which you might=
- have
-> +used in earlier linux-next releases without problems. Sadly there is no =
-simple
-> +way to avoid checking them: bisecting from one linux-next release to a l=
-ater
-> +one (say between 'next-20241020' and 'next-20241021') is impossible, as =
-they
-> +share no common history.
-> =20
->  Additional reading material
->  ---------------------------
+Hi Christian,
+
+On Wed, 6 Nov 2024 10:55:15 +0100 Christian Brauner <brauner@kernel.org> wr=
+ote:
+>
+> On Wed, Oct 30, 2024 at 06:30:44PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the vfs-brauner tree, today's linux-next build (powerpc
+> > pseries_le_defconfig) qemu boot test failed like this: =20
 >=20
+> This should have been fixed for a while now. Sorry, I'm just getting
+> slowly back to work as I'm recovering from a rather sever illness. Let
+> me know if this is still something you're seeing.
 
-Looks good, thanks!
-
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Yeah, this has been fixed.
 
 --=20
-An old man doll... just what I always wanted! - Clara
+Cheers,
+Stephen Rothwell
 
---qgDl1AQ3jO3q4+Tm
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/pMWwjicm33py=432zz6A3FS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZytIbQAKCRD2uYlJVVFO
-o1uGAP4odbwPktbyPDf6WsZp4aCO6ezYhRoW6x7uG4tcGtavWAD/RMicuJOL4/R8
-91bqPk3MOQ7D+9c4JsFbv+jV0Hkh6gI=
-=LodR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcrS3EACgkQAVBC80lX
+0GyqZwf/T3pI+AwwinJCVn75CD+eoZ4HEMrnmx6kWzfyUiEJs8HhASaKWDd54ux0
+6u6MYFplqNwwJ8jod/cfFV/HoBM+0kXQfgxXu3iWivsndjinyIHt8elO0y1Y5Ghn
+CHI+CQzOIMakMW3TpOwe5LQ279jKLTsOZr2VMK1/LPeNUNPlyxoi3nuf3H2koQVD
+rsN3HxN9c/t/55y4u3PTFZwcgcKhlDtQeqZDWBCKT1fZniAPPvXH7rgTLsu1s5Ql
+0x37hR2nmWZMfJDil4FbAi3lC1ucMjiy92pA6oAZyndH94SIAGYn0x0dV3XYH2EA
+FtFSjCGigTjVruJRSuyUrAimJqx4ng==
+=9o0m
 -----END PGP SIGNATURE-----
 
---qgDl1AQ3jO3q4+Tm--
+--Sig_/pMWwjicm33py=432zz6A3FS--
 

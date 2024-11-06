@@ -1,154 +1,135 @@
-Return-Path: <linux-next+bounces-4632-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4633-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD34C9BDD65
-	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 04:04:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19C479BDE46
+	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 06:27:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 699FC2845A3
-	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 03:04:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BA3E1C21F51
+	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2024 05:27:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32AF118D63A;
-	Wed,  6 Nov 2024 03:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3EBC19046E;
+	Wed,  6 Nov 2024 05:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ASsBZCc8"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="zXlLf0FW"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A604523A;
-	Wed,  6 Nov 2024 03:04:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D272F44;
+	Wed,  6 Nov 2024 05:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730862261; cv=none; b=Xo/Wx4PhSv9PkP0it5ECPXG5m70rmNNroiJJGwyazu2gOU185T9HSBtP8NR+ZlGx/GVG7ll6Qnv+sOqeJYJZ1VhOP+CpbryBh+FfYZ0fdTaS24z42hooZ/swGxz6qmkUE0z2UjcWupHmMgslPMKRzM1TYGl6tEpbGsW5aCjBiPI=
+	t=1730870817; cv=none; b=ub6DEorLs0VJLOsVSfSic+cOhhNHJ/J8NmuLyfy5Hg7bNuh+by7XXO63qws0W2fXgmt0nu94VaYbP/vFSQ/TyspIkWys+PEixpS1N8+RIOakvBGqHrgaQrJ3TAwyHItf+hMztfMI08Vxjw6BzMJ4XeCCwHlF1xmkCVebKdiaqg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730862261; c=relaxed/simple;
-	bh=BgZepueDaRZ0YNTrEPqaFTJQmJhrFz7AjejiDrgQ3bc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VBXLOnxemIFcJQ63l6+BbkHgkNxJMUv1smm5KR8X3XR0Mm2VhBJsmve8bj4J6Z0otg5r9eNP0ozsnfLh5Vo8TaXu4/x8yxe9Gv4qyt40hcqixx7KyHi3R3V22lI9r+CG46XdbDW4xS7Bfv7pnxPF8Mgg7B8RTeUdIBwufu88D1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ASsBZCc8; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1730862253;
-	bh=s9b01BRLDdx+kydfCLwn4XCUIydahSsmU7oeUYqYYTY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ASsBZCc8TzsAp7qXjbYNsz7PBkvTpDSMiN2C7d9onxvhX5UDPq6PPHCMrFHtM5HsI
-	 L3EOVz2OMqt9X+RTnHQypBagY0xKe0ilgsF8gOGr51aTfp/p9fteWIjYUsXKvnIWtr
-	 VELWK/5iY7YkD0J2Tn9e0bHkZ1/wj8bi6xtp/EZ3iTeM3SJ+ac3cAlpJ/IhL3Nce5V
-	 RGSV5ObhVWA7GR4UpZecMsb5MdMImtLK2gqjuL4/sfgsV6WuyTztQnmQ6aVUt1FXPi
-	 BsTD+4DYNHlbO9xupcd9OglgedffGBbgjSDlO+4E5r4ElTmi/N/iNR/ChvFIJXbEQ0
-	 J2UjtRmWab9lg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XjqmY0lBsz4x7D;
-	Wed,  6 Nov 2024 14:04:12 +1100 (AEDT)
-Date: Wed, 6 Nov 2024 14:04:14 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>
-Cc: Naveen N Rao <naveen@kernel.org>, PowerPC
- <linuxppc-dev@lists.ozlabs.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the ftrace tree
-Message-ID: <20241106140414.760b502c@canb.auug.org.au>
+	s=arc-20240116; t=1730870817; c=relaxed/simple;
+	bh=8vnVBBdpEmA2j9iXw65y2Q/bK2BDxlaz/SVioFjtHuU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CC0iz6uNU8e+u+gEmTBOePM8t6mOU2mG17s/RAnUop1tAmwnEHkkr6oepjYloEOz1TtO4or9DrAoB+KR2aTNfmwsCCAA0sT4Oht1OgcWiR9Y3Aa0Vt1m49F8cde+Rgj9fFWBYG4a0IuKwPZn/eOeU9wQqROWYW42DDCNeRUbLPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=zXlLf0FW; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=7fY30LO53lwxYrtKV8c3aohnzoqWnNZ4YP6STmTO+U4=; t=1730870815;
+	x=1731302815; b=zXlLf0FWsky5ADB+yWwMqFRvERJWIJdsBQQQaDO7g5+3CZvB61McM7yHbqrgm
+	x+dkyv5FigCRfFhOt/IdVTG6/bZ6RIISqqSb90Moj4NzHcVCRD7D+qj2+JLQ59uMiYC0AD+YNr6nk
+	PhsfcCiSUEgVMGJS8oiZFK6urkWei6lGx2rPK/8083g6NxNNBhGeXzLuqP543qatnkYbEKXllHuH0
+	YG7FKLBZYNMNarfGRqWBHd5T3x0P83OlcIU7R4SfeCzBWrBazkmsHRasafztvD/LdqhlRGGe2a/0W
+	3pgXAEHiqDsk03c8tsg+p+qHuICG++Kynk0RYuNdrLVg8eEQXA==;
+Received: from [2a02:8108:8980:2478:87e9:6c79:5f84:367d]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1t8YZ7-0001h7-He; Wed, 06 Nov 2024 06:26:49 +0100
+Message-ID: <1a3dcbe4-76dd-40c4-bafd-16be33607e77@leemhuis.info>
+Date: Wed, 6 Nov 2024 06:26:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DAq6YdHv5B=ZCDY1RGE2RU.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] docs: bug-bisect: add a note about bisecting -next
+To: Bagas Sanjaya <bagasdotme@gmail.com>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-next@vger.kernel.org, Mark Brown <broonie@kernel.org>
+References: <ec19d5fc503ff7db3d4c4ff9e97fff24cc78f72a.1730808651.git.linux@leemhuis.info>
+ <ZyrAoWSF9KXxtuYL@archie.me>
+From: Thorsten Leemhuis <linux@leemhuis.info>
+Content-Language: en-MW
+Autocrypt: addr=linux@leemhuis.info; keydata=
+ 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 n7RI
+In-Reply-To: <ZyrAoWSF9KXxtuYL@archie.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1730870815;a45aa231;
+X-HE-SMSGID: 1t8YZ7-0001h7-He
 
---Sig_/DAq6YdHv5B=ZCDY1RGE2RU.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 06.11.24 02:04, Bagas Sanjaya wrote:
+> On Tue, Nov 05, 2024 at 01:11:08PM +0100, Thorsten Leemhuis wrote:
+>> +Bisecting linux-next
+>> +--------------------
+>> +
+>> +If you face a problem only happening in linux-next, bisect between the
+>> +linux-next branches 'stable' and 'master'. The following commands will start
+>> +the process for a linux-next tree you added as a remote called 'next'::
+>> +
+> 
+> Has linux-next tree remote addition be covered before?
 
-Hi all,
+No. That document where this is added does not explain at all how to
+clone a git repo or add remotes, it just focuses on the bisection. So I
+don't think we need to explain this here.
 
-After merging the ftrace tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Documentation/admin-guide/verify-bugs-and-bisect-regressions.rst handles
+such things, as it has a different target audience. Should it cover
+-next as well? Not sure. I for now decided to focus on this addition.
 
-In file included from include/linux/ftrace.h:23,
-                 from include/linux/kvm_host.h:32,
-                 from arch/powerpc/include/asm/kvm_ppc.h:19,
-                 from arch/powerpc/include/asm/dbell.h:17,
-                 from arch/powerpc/kernel/asm-offsets.c:36:
-arch/powerpc/include/asm/ftrace.h: In function 'arch_ftrace_set_direct_call=
-er':
-arch/powerpc/include/asm/ftrace.h:141:38: error: invalid use of undefined t=
-ype 'struct ftrace_regs'
-  141 |         struct pt_regs *regs =3D &fregs->regs;
-      |                                      ^~
-
-Caused by commit
-
-  7888af4166d4 ("ftrace: Make ftrace_regs abstract from direct use")
-
-interacting with commit
-
-  a52f6043a223 ("powerpc/ftrace: Add support for DYNAMIC_FTRACE_WITH_DIRECT=
-_CALLS")
-
-from the powerpc tree.
-
-I have applied the following merge fix patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 6 Nov 2024 13:33:53 +1100
-Subject: [PATCH] fix up for "ftrace: Make ftrace_regs abstract from direct =
-use"
-
-from the ftrace tree interacting with "powerpc/ftrace: Add support for
-DYNAMIC_FTRACE_WITH_DIRECT_CALLS" from the powerpc tree
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/powerpc/include/asm/ftrace.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/f=
-trace.h
-index bb2c90997618..db481b336bca 100644
---- a/arch/powerpc/include/asm/ftrace.h
-+++ b/arch/powerpc/include/asm/ftrace.h
-@@ -138,7 +138,7 @@ unsigned long ftrace_call_adjust(unsigned long addr);
-  */
- static inline void arch_ftrace_set_direct_caller(struct ftrace_regs *fregs=
-, unsigned long addr)
- {
--	struct pt_regs *regs =3D &fregs->regs;
-+	struct pt_regs *regs =3D &arch_ftrace_regs(fregs)->regs;
-=20
- 	regs->orig_gpr3 =3D addr;
- }
---=20
-2.45.2
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/DAq6YdHv5B=ZCDY1RGE2RU.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcq3K4ACgkQAVBC80lX
-0Gw0JAf7Bq9qv+tbPiKn8tlsulBba4WywVS6jwuTJH64TQY2YwCql1EcSviO8v/E
-+6rw8LM0Xx0lljiKx38noD4SJghE34EGMO0w5/X6SFUengJ10pMu/3mihJM681r9
-BVlfSqqxR3PMNBQ45oYxTb5zz8yM9rKf/uWzTcumEx824K3Apx3Kd3vG5go6P4sd
-gj9b9YOV6tM46s70zfIJJiarINvA5pbteoMPa20C//GSk5nyj993AVBlQxYarYTn
-dRSekAWryp9OhN+R5FzgTWyy6cpD6fGssnNRmGnB76DuHdYdvxy2NYLmFlGv0ZGS
-9Rj+q+p9bVVvNjqzPjlVbgfzp8zJ7w==
-=J8sY
------END PGP SIGNATURE-----
-
---Sig_/DAq6YdHv5B=ZCDY1RGE2RU.--
+Ciao, Thorsten
 

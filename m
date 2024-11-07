@@ -1,110 +1,112 @@
-Return-Path: <linux-next+bounces-4691-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4692-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A8919C109A
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 22:09:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47CF49C10BA
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 22:12:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C01F1C22741
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 21:09:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D129428442C
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 21:12:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C0B3219CBB;
-	Thu,  7 Nov 2024 21:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B941219CB7;
+	Thu,  7 Nov 2024 21:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="G1vcEhfD";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="G1vcEhfD"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pVPY4NnH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA82219CBA;
-	Thu,  7 Nov 2024 21:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6615A219C98;
+	Thu,  7 Nov 2024 21:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731013229; cv=none; b=qvgkz5Qve+XaMbcvYbdaDRKD2F0d3tjQ76RGJ5IgUBmW/mqZWuc2wQ5pA6twv65q59T0Sd8VO87Z+mDCDlXH9SDjvEKs1GVBdlAVYsLo7itvnhO4v0WIXzpwiEJYWb7VQzU+IT6fsSLLrJKh2VpqnHUdHHwtArCTOB657eyzuaw=
+	t=1731013762; cv=none; b=osDPYEbHJwzFkKc8CLg95OSt7LPqLwiO6KQzQHms5ZAW98AyEi2L2hcaRlDHLDZV+fQFTwAkn3yk3dawGheO8PajiQP1ztqZAsOqlwj8VyLYUYTCcVGOOBlSZ7kJzMzz9LvSSZxKEVOQvfGAqXFkpTXeTkUa7Obj0uNF3+kf5Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731013229; c=relaxed/simple;
-	bh=79k+aX0p8z0mGwxAgCU9izteZfEBeNkpAy0qyfkgnTA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nFjr8tNQvmjNSLwPfDtK9jZVtRwZQikg3ySidERMauwE0o+1Uh4AM+t2ZZFxspj8AYyCecOYTCQG11tIXW3qX3a9kHukr69daOpV8bkYRIBtzfKuSYebSTfaKSPPEKDjp0yVKhr0/AxJjLygU1jZsXfLuZ3SoaGSSuaK75g1dWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=G1vcEhfD; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=G1vcEhfD; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1731013226;
-	bh=79k+aX0p8z0mGwxAgCU9izteZfEBeNkpAy0qyfkgnTA=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=G1vcEhfDhrIfG7m7E1ap+SJ+vPAND71JQ0Nfu/M8lxkwBKb9TKr5o6Wha6qKiVsQj
-	 HvysjhZzW8h+FYNINI3kbbzXO8orKS7Dy98pi95ge86h0Ba2DvkkqYQFZkMhQcxNW7
-	 UXQng9hQ3lLpc5MiwE2/tb1jn8UziXxeqz5BxR1g=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 914B61286D3E;
-	Thu, 07 Nov 2024 16:00:26 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id JpYJ0mJYC36e; Thu,  7 Nov 2024 16:00:26 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1731013226;
-	bh=79k+aX0p8z0mGwxAgCU9izteZfEBeNkpAy0qyfkgnTA=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=G1vcEhfDhrIfG7m7E1ap+SJ+vPAND71JQ0Nfu/M8lxkwBKb9TKr5o6Wha6qKiVsQj
-	 HvysjhZzW8h+FYNINI3kbbzXO8orKS7Dy98pi95ge86h0Ba2DvkkqYQFZkMhQcxNW7
-	 UXQng9hQ3lLpc5MiwE2/tb1jn8UziXxeqz5BxR1g=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	s=arc-20240116; t=1731013762; c=relaxed/simple;
+	bh=vwrdjS8ml8vC4eWdNUR9mftmWuSayLSPCOlzu1j5Orc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=odt94Pr500eTpTxCC/z108Xt2AkIhRkVSuMWIjacka2n8GXKLqTnk5pPG9W4X3tMBhu7dcD1CUHq6AkRnG+LwmzrtLMVXDQ//wW8qSHtkWXzcY0fPPrqzvhwpBLlAN7KutAr0J1dfNmroIND31g0mXFQm7SClXIlKSMa9J3/V5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pVPY4NnH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1731013754;
+	bh=9AOTeKEW0Thc0jC//Nk3O/QqSgPIdB9RMMlryH/gYi8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=pVPY4NnHa1cXkpIcFCYEzng5EDyd9RC/3yPMTAYgPBTTnVrBr7HyCti4VichC2sEY
+	 0IxVp0YngGMPUzGEYigsAjKQMPADtascSAQBQhqX/paaHDkVbTVRZ/l/NZaMd4crcB
+	 3bVJmVhXiPqRm22jD7bHs7FBJ3L8cmB3gZUakDwrvpiMus+wiU1qMAYRKsNi9L5xxp
+	 Fi2B53RJlsixz4JESGuAjsvl8vIuMllbRKdLZupbdnZCbL3zMoj1N/wOt6mtd4E7Be
+	 T08KistAWIFbiVPUpp2XcHucSXUaF0H1pHK6iTVvnF3wbhuRM0BD0cRj1xjr37LSSy
+	 10vxegTnRQI7w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id EFE581286D38;
-	Thu, 07 Nov 2024 16:00:25 -0500 (EST)
-Message-ID: <75eb024e36162cc3a1007ff6b4ca4a3d8d0caa02.camel@HansenPartnership.com>
-Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: "Martin K. Petersen" <martin.petersen@oracle.com>, Stephen Rothwell
-	 <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
-	Mailing List <linux-next@vger.kernel.org>
-Date: Thu, 07 Nov 2024 16:00:24 -0500
-In-Reply-To: <yq1r07mye85.fsf@ca-mkp.ca.oracle.com>
-References: <20241107212954.4da462cf@canb.auug.org.au>
-	 <yq1r07mye85.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xkvp11D3Xz4wj2;
+	Fri,  8 Nov 2024 08:09:12 +1100 (AEDT)
+Date: Fri, 8 Nov 2024 08:09:14 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mike Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>
+Cc: Chuan Liu <chuan.liu@amlogic.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the clk tree
+Message-ID: <20241108080914.65a7a03a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/Yko2e9AoqhcAUASoQxA3V5E";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, 2024-11-07 at 15:47 -0500, Martin K. Petersen wrote:
-> 
-> Hi Stephen!
-> 
-> > After merging the scsi-mkp tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> > 
-> > drivers/ufs/core/ufs-mcq.c: In function 'ufshcd_mcq_sq_cleanup':
-> > drivers/ufs/core/ufs-mcq.c:580:9: error: 'rtc' undeclared (first
-> > use in this function)
-> >   580 |         rtc = FIELD_GET(SQ_ICU_ERR_CODE_MASK, readl(reg));
-> >       |         ^~~
-> > drivers/ufs/core/ufs-mcq.c:580:9: note: each undeclared identifier
-> > is reported only once for each function it appears in
-> 
-> Hrm, I believe I already addressed this conflict in the SCSI tree.
-> 
-> Maybe James' repo has stale bits?
+--Sig_/Yko2e9AoqhcAUASoQxA3V5E
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-No, my tree builds ... or at least the ufs-mcq.c part of it (I checked
-after I got the merge conflict ... although only with the default
-configuration).  I'm still worried about the resolution I flagged on
-the list, though.
+Hi all,
 
-Regards,
+In commit
 
-James
+  5e052ef3c400 ("clk: meson: s4: pll: fix frac maximum value for hifi_pll")
 
+Fixes tag
+
+  Fixes: 80344f4c1a1e ("clk: meson: s4: pll: hifi_pll support fractional mu=
+ltiplier")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: eb61a1264990 ("clk: meson: s4: pll: hifi_pll support fractional mult=
+iplier")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Yko2e9AoqhcAUASoQxA3V5E
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmctLHoACgkQAVBC80lX
+0GxWtAgAoOQGLNq3tgOqPiUWc26o9jmEhUYbd5izTnkubqqO56SZNIbdVouprFwM
+r3/XllS2CWXWJhFqGZ4mFhaHZWpBufpgUYLtScSkSYj9wDhvyaCd8xdDPPr9EIUk
+DG0ORZ5/dX5hW0ttXuq5PETU1yYgh0PAzzpLsdR5gtRnUZ5FY8IC5Wiwsv6HlATz
+m0eRJwBBJSXsv+Rg6r01lOmQPtMjYBwsixZIEDT3C9iPdzWkUROs4C9TZ+s5Lnqt
+u0x6w9eaY0KJ7NeAs5W+qTzxQkXVJCFtLdSqh0mgAMrNtWdTbLveTk+XCkjvGu2v
+3Tc2S44KunxnHTAdYmwsIf7RdWIaFg==
+=jeyW
+-----END PGP SIGNATURE-----
+
+--Sig_/Yko2e9AoqhcAUASoQxA3V5E--
 

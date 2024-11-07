@@ -1,126 +1,642 @@
-Return-Path: <linux-next+bounces-4687-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4688-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A560A9C0C9F
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 18:11:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E36879C0CFE
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 18:35:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A832284C14
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 17:11:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1F2F284F4D
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 17:35:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F980216A2B;
-	Thu,  7 Nov 2024 17:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE16118FDAF;
+	Thu,  7 Nov 2024 17:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IySs1wcO"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="RkTmkpmt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B11215C7D
-	for <linux-next@vger.kernel.org>; Thu,  7 Nov 2024 17:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E6B21315C
+	for <linux-next@vger.kernel.org>; Thu,  7 Nov 2024 17:35:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730999396; cv=none; b=qNDjvqNYMXCOtV1UVZ5h1EXjAJ1sssp+Nhl6w3aZ3/t0a8tJ3axtujIis3AukIchz8ERXgacglABqta+NTyV7xCK5IPiTu0h819SZ0qNH39iSiqfRWcbYF8EDX+pW2BF/rnO/kjN9mnG5bu3HEvRrOggdjUVuKl9mDu2csN5c5I=
+	t=1731000944; cv=none; b=X3Iv59LwqGo+x5DU2kE1u9rf2kLircLA8foQJshlYluTD1NdajwPrUDqN9ewhk7mc4Bu/CoIRcIGaWfHPkxNcfdk818kpd5FGhApfKIpwcZ/QMGtS64e32EXgIoEAumKNilJEPhxZ7wqCowV8dFvudbtK3Ru9wyHIdZUC8Jxdmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730999396; c=relaxed/simple;
-	bh=Sc2kkmVag8JZmDQQOGAev4MWjffkUtOpARZ1iWbbcjo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U4XQzT1ZvYE60agjIVbqKt8IE3e3x173wuik8vK9G7E9LYSPqNX7/CBeem0Id/YqKuUwROHFmTAkSv8JC/1Ku86TclGc5JPkJOimdlkyWfqUwPY+jpO2UqZMWDf94mNTKoenKBIqFqKYt5z48JlEX+f5B6ypumIAuOV3c3+p5pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IySs1wcO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730999394;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+AA5XAlWwCizTNJ1aw2XWsbcfdnUBQq1EXYsuL1VNjM=;
-	b=IySs1wcOB8/QvXjvqW7biTF0Yt6bTh2+QenOPNgUFajDmo9JfoaPTIgaX+oZCwLV0YwrEx
-	S+LE/56EtJkcwRb7zvwI2xfjm7WiVzY0gwwl4u7vK2NTjg8XZA2MrWBmAcCu0LrHefi49C
-	bxTJu24HQhtko17eTtLESncE9J/2m6o=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-608-R5_5PKKvM_-8Jd4rn86yCw-1; Thu,
- 07 Nov 2024 12:09:51 -0500
-X-MC-Unique: R5_5PKKvM_-8Jd4rn86yCw-1
-X-Mimecast-MFC-AGG-ID: R5_5PKKvM_-8Jd4rn86yCw
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 429FA1955F10;
-	Thu,  7 Nov 2024 17:09:47 +0000 (UTC)
-Received: from f39 (unknown [10.39.192.153])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 53B811953880;
-	Thu,  7 Nov 2024 17:09:40 +0000 (UTC)
-Date: Thu, 7 Nov 2024 18:09:37 +0100
-From: Eder Zulian <ezulian@redhat.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, tglx@linutronix.de,
-	williams@redhat.com, ojeda@kernel.org, alex.gaynor@gmail.com,
-	gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
-	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
-	jlelli@redhat.com, peterz@infradead.org, mingo@redhat.com,
-	will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-	bigeasy@linutronix.de, sfr@canb.auug.org.au, hpa@zytor.com
-Subject: Re: [PATCH v3 0/1] rust: helpers: Avoid raw_spin_lock initialization
- for PREEMPT_RT
-Message-ID: <Zyz0UWH--MHjTy8r@f39>
-References: <20241107163223.2092690-1-ezulian@redhat.com>
- <CANiq72nmWeyXkV0fhKwQESm10OdVuS7UGAux2N3ic2B0zNhuuQ@mail.gmail.com>
+	s=arc-20240116; t=1731000944; c=relaxed/simple;
+	bh=Es3xdb3+fGVc/P3IHs9p2GC1wgz3ny25FcAJqTgbHsM=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=FiGsOevgGYzvjjlxeSJeWVLJLOxUHdPSLuskFCUyzXp/XpUlQLZ/oQHfSzQGICJCJ/CQWL6e1fMcCSAFanYOA2AE6BwdXW/2sG/PI5urKCwaVIOhqYH6ZabB4u29wefkuCXDVtN+9XsKioyNzep9BwrINOhf2Tp7A/ZAo58z4bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=RkTmkpmt; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2e2ed2230d8so1032248a91.0
+        for <linux-next@vger.kernel.org>; Thu, 07 Nov 2024 09:35:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1731000940; x=1731605740; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ezf6lX1oDpLyuU9EkbaNJ+YVfb4X2yKg0DUBvIbVbA4=;
+        b=RkTmkpmt98tob2PEM4rpeX0Zz6jZoVCDYYNqM3ajrxQZiZvHpb9QyesWX2Ldto2nXK
+         g+CoufE5sxRx9RgzhJGGvrCUXI5mS2tH2r8cfUpi0Cu16/3vet/mOr041UkvM4JyV1zw
+         nZ+i48UxYHHj1vtOV7QNsFmzrvIPDy2DLPdkI4zuNZwD3DR6DSBeNU2Bs+XGP72uwXmp
+         y+W3scGBX2txj/LBgO9tFRyih4jItNOqEdxleWx8rxjR5jWW/m7gfcd9cwcKVtLBG9Ue
+         sbSdq3Mck/8+c3S1S+qUVCkBPY+DIu39ptQMFFwrQ3oAwe8n63FoANxerQgyuducQiSZ
+         TcnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731000940; x=1731605740;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ezf6lX1oDpLyuU9EkbaNJ+YVfb4X2yKg0DUBvIbVbA4=;
+        b=NETQ4qyciKGWpdBqPo7NN2VqOgaDGfPbUPwGpeptJsADWfBKer5cTBYaaio47GiXe1
+         F/FZ6Uwyv3VtiOLY2ekcopESwhIjXN+nzcRiz9n3yoLWskPCYUsF9hOR6ZcnZi1GHlFF
+         zAzhrapSwHvptoMVWBzHPttW4WGzIPiML1ZC03kehZV98eG80huhew4IFYBgGcgP+ylZ
+         jGudSaSGRP32UokYjQw1sqhuKkUYsnQLbuwKbkRyvB2o5D34G9BT+DLBSRiugXrcXNr5
+         Cf8e5TM15po7jwwzkms+0yosKXCwfyNExXF/Ea3mBrJRyuLlPDQA6220PRQXUADXFIwe
+         XQHw==
+X-Gm-Message-State: AOJu0YzMBjLetAo0OoT4C6sIixT6ucIie6PuQ8lGf2rn138INLJTiDfT
+	OVLO7lHqJ8YaK09R8UYfmkvCn65aDYIMwoAQTFQLW6472rH4ii6YkmIKetNSDfBgAKrXJUTRw07
+	H
+X-Google-Smtp-Source: AGHT+IFKxwgPHQ3qAAT1HwI7xR8Xn9d8hPYc42bZ91sOIHCuGlZvHI3l88c9ndY51LPahsK1DZ7U+A==
+X-Received: by 2002:a17:90b:2685:b0:2e2:a667:1a18 with SMTP id 98e67ed59e1d1-2e9b13d3e5emr112247a91.5.1731000940432;
+        Thu, 07 Nov 2024 09:35:40 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e98ca37ae8sm2901878a91.1.2024.11.07.09.35.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Nov 2024 09:35:40 -0800 (PST)
+Message-ID: <672cfa6c.170a0220.331c6e.3607@mx.google.com>
+Date: Thu, 07 Nov 2024 09:35:40 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72nmWeyXkV0fhKwQESm10OdVuS7UGAux2N3ic2B0zNhuuQ@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: next-20241107
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 132 runs, 15 regressions (next-20241107)
+To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+ kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Miguel,
+next/master baseline: 132 runs, 15 regressions (next-20241107)
 
-On Thu, Nov 07, 2024 at 05:50:50PM +0100, Miguel Ojeda wrote:
-> On Thu, Nov 7, 2024 at 5:33 PM Eder Zulian <ezulian@redhat.com> wrote:
-> >
-> > As a note, at the time of writing, RUST support for x86_64 depends on
-> > !(MITIGATION_RETHUNK && KASAN) || RUSTC_VERSION >= 108300. Miguel Ojeda
-> > pointed out that this can be avoided with Rust 1.83, to be released in 3
-> > weeks (2024-11-28).
-> 
-> I was referring there to the "or" in that condition, i.e. the "||
-> RUSTC_VERSION >= 108300" part. In other words, it was just a comment I
-> made to explain in the other thread that disabling KASAN or RETHUNK is
-> not needed anymore when you use 1.83 in the future. :)
-> 
+Regressions Summary
+-------------------
 
-Yes, I thought that was clear all along.
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron | gcc-12   | multi_v7_de=
+fconfig           | 1          =
 
-> But that seems unrelated to the patch here, so normally you wouldn't
-> add it to the cover letter. Or am I missing something? Same for the
-> `make rustavailable` note below (i.e. `RUST=y` already implies that).
-> 
+kontron-kswitch-d10-mmt-8g   | arm   | lab-kontron | gcc-12   | multi_v7_de=
+fconfig           | 1          =
 
-Noted. I don't think you're missing anything. Thank you for the hints.
+qemu_arm64-virt-gicv2        | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
 
-> (Of course, no need to resend anything for this -- it is just a note
-> to clarify, and anyway the cover letter does not go into the
-> repository :)
-> 
-> Thanks!
-> 
-> Cheers,
-> Miguel
-> 
+qemu_arm64-virt-gicv2        | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._16K_PAGES=3Dy | 1          =
 
-Thank you,
-Eder
+qemu_arm64-virt-gicv2        | arm64 | lab-broonie | gcc-12   | defconfig  =
+                  | 1          =
 
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._16K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-broonie | gcc-12   | defconfig  =
+                  | 1          =
+
+qemu_arm64-virt-gicv3        | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3        | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._16K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3        | arm64 | lab-broonie | gcc-12   | defconfig  =
+                  | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._16K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-broonie | gcc-12   | defconfig  =
+                  | 1          =
+
+r8a7743-iwg20d-q7            | arm   | lab-cip     | gcc-12   | shmobile_de=
+fconfig           | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+241107/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20241107
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      74741a050b79d31d8d2eeee12c77736596d0a6b2 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron | gcc-12   | multi_v7_de=
+fconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc05f46ea6f566ec8686c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm/=
+multi_v7_defconfig/gcc-12/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g-2=
+gs.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm/=
+multi_v7_defconfig/gcc-12/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g-2=
+gs.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc05f46ea6f566ec86=
+86d
+        failing since 12 days (last pass: next-20241022, first fail: next-2=
+0241025) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+kontron-kswitch-d10-mmt-8g   | arm   | lab-kontron | gcc-12   | multi_v7_de=
+fconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc05d46ea6f566ec86866
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm/=
+multi_v7_defconfig/gcc-12/lab-kontron/baseline-kontron-kswitch-d10-mmt-8g.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm/=
+multi_v7_defconfig/gcc-12/lab-kontron/baseline-kontron-kswitch-d10-mmt-8g.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc05d46ea6f566ec86=
+867
+        failing since 12 days (last pass: next-20241022, first fail: next-2=
+0241025) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv2        | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc39536a67bc2aec8685b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc39536a67bc2aec86=
+85c
+        failing since 21 days (last pass: next-20241016, first fail: next-2=
+0241017) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv2        | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._16K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc3d1c85d837045c8687c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_16K_PAGES=3Dy
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc3d1c85d837045c86=
+87d
+        failing since 21 days (last pass: next-20241016, first fail: next-2=
+0241017) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv2        | arm64 | lab-broonie | gcc-12   | defconfig  =
+                  | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc90ed7a5c4c0d6c8688e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc90ed7a5c4c0d6c86=
+88f
+        failing since 16 days (last pass: next-20241016, first fail: next-2=
+0241022) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cbebf768f6da47dc86877
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cbebf768f6da47dc86=
+878
+        failing since 21 days (last pass: next-20241016, first fail: next-2=
+0241017) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._16K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc3d3c85d837045c86882
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_16K_PAGES=3Dy
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc3d3c85d837045c86=
+883
+        failing since 21 days (last pass: next-20241016, first fail: next-2=
+0241017) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-broonie | gcc-12   | defconfig  =
+                  | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc8327f6fbdac69c86856
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc8327f6fbdac69c86=
+857
+        failing since 16 days (last pass: next-20241016, first fail: next-2=
+0241022) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv3        | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cbee52555a1abcac86855
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cbee52555a1abcac86=
+856
+        failing since 21 days (last pass: next-20241016, first fail: next-2=
+0241017) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv3        | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._16K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc3d336a67bc2aec8686d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_16K_PAGES=3Dy
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc3d336a67bc2aec86=
+86e
+        failing since 21 days (last pass: next-20241016, first fail: next-2=
+0241017) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv3        | arm64 | lab-broonie | gcc-12   | defconfig  =
+                  | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc8fcc32d4c8b23c86867
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc8fcc32d4c8b23c86=
+868
+        failing since 16 days (last pass: next-20241016, first fail: next-2=
+0241022) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cbed0629b4606b9c868ee
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cbed0629b4606b9c86=
+8ef
+        failing since 21 days (last pass: next-20241016, first fail: next-2=
+0241017) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-broonie | gcc-12   | defconfig+C=
+ON..._16K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc449337fde1ea4c8687e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_16K_PAGES=3Dy
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-12/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc449337fde1ea4c86=
+87f
+        failing since 21 days (last pass: next-20241016, first fail: next-2=
+0241017) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-broonie | gcc-12   | defconfig  =
+                  | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cc8489c90c753c3c8685f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm6=
+4/defconfig/gcc-12/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cc8489c90c753c3c86=
+860
+        failing since 16 days (last pass: next-20241016, first fail: next-2=
+0241022) =
+
+ =
+
+
+
+platform                     | arch  | lab         | compiler | defconfig  =
+                  | regressions
+-----------------------------+-------+-------------+----------+------------=
+------------------+------------
+r8a7743-iwg20d-q7            | arm   | lab-cip     | gcc-12   | shmobile_de=
+fconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/672cbaaf079c4ab7d0c8685d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: shmobile_defconfig
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20241107/arm/=
+shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20241107/arm/=
+shmobile_defconfig/gcc-12/lab-cip/baseline-r8a7743-iwg20d-q7.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/672cbaaf079c4ab7d0c86=
+85e
+        failing since 21 days (last pass: next-20241016, first fail: next-2=
+0241017) =
+
+ =20
 

@@ -1,102 +1,102 @@
-Return-Path: <linux-next+bounces-4677-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4678-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E30899C08EC
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 15:31:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DB3E9C0917
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 15:39:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A82DD284681
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:31:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 983501F22449
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42AA321216A;
-	Thu,  7 Nov 2024 14:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14CC120CCD1;
+	Thu,  7 Nov 2024 14:39:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f8XANMet"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="opIhrEKd"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C528E168BD;
-	Thu,  7 Nov 2024 14:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84EC31E049C;
+	Thu,  7 Nov 2024 14:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730989902; cv=none; b=am8NoJfu+z6R94eIUqGX7HAs+OML5mCdFKGYCwle5EXEm+9cZOGaERxO+MEq8B4BG+OLC8jO7GcGsX56mQCPfmrCQJYAQBeD/WCWoq44tjBZV1OUeUfDpuh6YfpNf4Niw6u5N/4KsHYoZ70aPRvWPmdfMf4dT2RvzwX7VU6o34Y=
+	t=1730990377; cv=none; b=QubvcFGFPBdX++4cqj2A+NhQ7G707FKKIV5XpU9L/mbyU9FBm3CyvuZUOQQCnO1EcaBmGJ4RSyYjD/g+zc2fiWexFZ0S4wPiHwm8Mb/ZfsJzR3WKeEHgB074Rn3meKzYpNGfTp1ggkCoy1Y7OhpsQE/v8QfiWdut1BzOcbk3Xao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730989902; c=relaxed/simple;
-	bh=Ek0EJDP9PHjwQQaqfhHm96VEoeJggzdZuE9i0svJpsA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tLMNh5RMxBQMIUraQCUS7K6ci6U7ix5tjDdyW8J01f5LsN+lfJ1UzILP7IPRDMdtXEqBtjUEb7U9gqh5UdYj2/w1Z1xXRgVgE3pGADoX6sPieSh/UTRRKqNABaLuByZ1R3onDc8qbeAyD9TbuX4q+Zi+1QROB9N3eGRg3CVdzdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f8XANMet; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2e2d1b7bd57so92227a91.1;
-        Thu, 07 Nov 2024 06:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730989900; x=1731594700; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ek0EJDP9PHjwQQaqfhHm96VEoeJggzdZuE9i0svJpsA=;
-        b=f8XANMetChqe9WgyxEWtvZ6YmxMd56mXf9eRclplyouGrdHxkASGXa/uSjCvKX2J/+
-         FMSNrVQ9zg1rZh+KtctRB9YPuzOl0tmDJ8TyMhFxNzzCfun1yZri5/bZTNdb/qr9rcMp
-         VIMV4baFmYXeTRyIkoqQjQpnsMqJd3+54Id+YbF8aKKHOFY7gwEbKUmUPfNIKSvtuBbf
-         t3Ac135aXQsZ4RbZoDGgu3tGQVDynwbeOo1ikr+6lbanaGv4duUNZ5FRHu54i2u8jZ3L
-         wRP/uiDLmZmODEOgeVflax7BRlI9jadIiNyTaRkDgnGQh3G9MFOiC+6ZULCjc/A7o+4Q
-         308w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730989900; x=1731594700;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ek0EJDP9PHjwQQaqfhHm96VEoeJggzdZuE9i0svJpsA=;
-        b=lKrFZ1pzfMQAw8f5Sl8RPVvYuFDIIdsblQPqXCg4zmy8sYbwAHOZl9WZWc/Q6fh2+U
-         hmcmbQ3+38GvHDAZpf0unAjcuoLv7y4Awa3u5eweW44xtGtm7t74MT03VRDVxMTSLeJN
-         kx1CyxDkwLCjWkORP8fNJcJ1bG8R7bSXXJaIFswuOZ/JoQJ+iDRRQ5L72YNCICPGSbBA
-         9DXeBt0DcjPPmDIXagF+BHM/wH6sLuI3p1K2RWxMur3nidv/VUW3bzXsl/Q8StQJcqGy
-         AwHIU0uZL4jq2Vn8bmpV6m4kVAUD/HDMpm+wAKXyrbG4OFnKdqD/3oYG1Q/TAWFOmPYE
-         TtIg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEJByS8V8pSMZQaXMOX3sDHb/Vqui2EZM7ySgfIz9ZC+XTyLKhaxdiw7BpLkqFz96U8mszgP90ApRsBQ==@vger.kernel.org, AJvYcCUl6veXcc6rg+aN5DEyDwN7n5TL7o4ycOM7aCqdNuEskMmYiRZ6Wqf/gNU+aaniDeDCqAeaF9y9GCL/M/w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRlyxPW67TNh6/weS8RLmKh4CZZwMktlX+TrwRWodg47UniQUn
-	nl8soqMpxavZQrv9Y9Z/dWE6SdSWE7bsPufQ6PzRpkgIrEM3KxI2DwJpOH6GX7YntUt99bfGWAj
-	X+LNKI7Dhlbn9ozV+MxrkBN1OHj8=
-X-Google-Smtp-Source: AGHT+IGZdOJDk4fZZ2ZKGbiwvgZpInqg3zx+v+B59S7HLyY4fGDGERIs/IJK9qQzFn3i3apVhYDLvprqmd7gYVU4Lv0=
-X-Received: by 2002:a17:90b:1810:b0:2e2:da8c:3fb8 with SMTP id
- 98e67ed59e1d1-2e9afae97d6mr94432a91.6.1730989899924; Thu, 07 Nov 2024
- 06:31:39 -0800 (PST)
+	s=arc-20240116; t=1730990377; c=relaxed/simple;
+	bh=j5z94PtQoW59kPS8kdY5s2UwbCijAPL8dnOom8ujCx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ef8ZzJ7Wd5lCprIRDz/7NVlnpirDH1dmXZxK5VskW5E3RoeyeHgpFo55JfsQdH7er3jMJJjoYQcSpJSERq68l+AypK6cxoPofSxleKT0Le/IVWXgR2FuS1AtyQYS/hIn2bjUJrLq1yHc1v+Z6u9VDXX47qgvG179cRdJjP2IMDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=opIhrEKd; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=ZZOQcMyQbmxyWBdUsa1OX+zK2dTEt1bfIdzEjlEc8/8=; b=opIhrEKdUxXdObcwcbY3zAHNca
+	cw646wFzSEw9NGheDwGJMHSLN8TLzoFy15ULJQm4svLfen20cm4NnyTO3t62ZuFPWefo8VNYay8uU
+	0uVQPu1g/AURghetQiZreJ4TMAZLAmH3WxtrfW8YIXfOPv36kDyKj20KeJ0ym6LNMVjBqR1el0DTt
+	dAmg9rl8RwdMwdXvWV3+j82jpVNXQ33UCNS2NhSlRHb0tlzBxNV1tU1fKZMKo6kNmh6evRVFL+ZIK
+	aMhX2bBOorvoyK7ezT8dq5+ife4ORGRacYPzZdZ4F3iWEUT9Qeivq2MudXYP+mGu1XBhOCjgR8WZN
+	ZAb5u3Zg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t93fX-0000000C8u3-1gng;
+	Thu, 07 Nov 2024 14:39:31 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id D51083006AB; Thu,  7 Nov 2024 15:39:30 +0100 (CET)
+Date: Thu, 7 Nov 2024 15:39:30 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	bigeasy@linutronix.de, boqun.feng@gmail.com
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20241107143930.GC38786@noisy.programming.kicks-ass.net>
+References: <20241107182411.57e2b418@canb.auug.org.au>
+ <20241107103414.GT10375@noisy.programming.kicks-ass.net>
+ <CANiq72kkiwaMpeKgNLYiCSMX_VK7a+6Xu4iQrDiB_cpnXpokxg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107182411.57e2b418@canb.auug.org.au> <20241107103414.GT10375@noisy.programming.kicks-ass.net>
-In-Reply-To: <20241107103414.GT10375@noisy.programming.kicks-ass.net>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 7 Nov 2024 15:31:27 +0100
-Message-ID: <CANiq72kkiwaMpeKgNLYiCSMX_VK7a+6Xu4iQrDiB_cpnXpokxg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the tip tree
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, bigeasy@linutronix.de, boqun.feng@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72kkiwaMpeKgNLYiCSMX_VK7a+6Xu4iQrDiB_cpnXpokxg@mail.gmail.com>
 
-On Thu, Nov 7, 2024 at 11:34=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> So I can't get RUST=3Dy, even though make rustavailable is happy.
+On Thu, Nov 07, 2024 at 03:31:27PM +0100, Miguel Ojeda wrote:
+> On Thu, Nov 7, 2024 at 11:34 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > So I can't get RUST=y, even though make rustavailable is happy.
+> 
+> If you get the chance, please check in e.g. `menuconfig` the unmet `depends on`.
+> 
+> It could be e.g. the `!CALL_PADDING` one if you have an older `rustc`
+> than Stephen.
 
-If you get the chance, please check in e.g. `menuconfig` the unmet `depends=
- on`.
+So menuconfig prints that as a giant line without wrapping, but instead
+forces me to press 'right-arrow' to scrol that.
 
-It could be e.g. the `!CALL_PADDING` one if you have an older `rustc`
-than Stephen.
+So I can't readily read or even copy/paste it :-(
 
-Cheers,
-Miguel
+http://peterz.broke-it.net/sekrit/allmodconfig
+
+Is what I get from: make LLVM=-19 allmodconfig
+
+It has:
+
+CONFIG_RUSTC_VERSION=108200
+
+Which is what I installed today from debian/unstable, because the
+version from debian/testing was too old to satisfy make rustavailable.
 

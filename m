@@ -1,136 +1,191 @@
-Return-Path: <linux-next+bounces-4654-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4655-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2A6E9C0132
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 10:34:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 597259C024C
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 11:27:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF4ED282F62
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 09:34:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B39F1C214C6
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 10:27:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 772C41D5CCD;
-	Thu,  7 Nov 2024 09:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 294191EC00D;
+	Thu,  7 Nov 2024 10:26:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDmU/BG+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fnb9DGjp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C90BC2ED;
-	Thu,  7 Nov 2024 09:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0864A18A95A;
+	Thu,  7 Nov 2024 10:26:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730972052; cv=none; b=c9KY7BA/cAI4AMpiMz9Uaf+O7jYN02uJVZvXLURwn3Zj1bj9mSzdtwgP5dOfzHi+wv03w6D3e9e6DR7UhVdu6o/PGyhnI2Xmsz3j4obZ6Jhn0geY+7/kkPvUBLFkyU33BqnbD8YP163I+hXHWNiVNjY8CJLDJu3B52PCgiAjs2g=
+	t=1730975215; cv=none; b=Mva/FWgdME5Gf13/V75w1s4sJt9Xt8izGXztwdxJlHGeEqDQQ07PJOxEyedLhEdfyDHmV8yecEUBpMGLspJOiflDx28iIPB6wFUfHlO7cXQFlLPyddC7JOeAR8O95rPKTxl+cz9LxWrejG4cCPRLth+CUL0pm2cpJoiDlziQBZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730972052; c=relaxed/simple;
-	bh=inESUDudB5HfcmBBNbqKRZ9XUBmBgBiXWRXYsjc867w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=blVVKIsRQANl1vtswnLy2VKot323XRtEYsNUAHaxiZJxYvpDcmA66t2IqTDZH2HnTNyd5tpbe2Ha/PRjKTYqgc4WKgYbCZJgzOaf/qleSKc6Qw/KhE1D/9VqbhyCxtLVqeQwjx31061RYE2vAM4K6rfPzpPu3HzyO4s1SGmCyyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDmU/BG+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA0CC4CECC;
-	Thu,  7 Nov 2024 09:34:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730972052;
-	bh=inESUDudB5HfcmBBNbqKRZ9XUBmBgBiXWRXYsjc867w=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TDmU/BG+hRQ9l6HbOxYsJpcI7R6NBTvpKAIO4HPYxDJGII5+3TfrHvN97Lw+aVVc+
-	 CwRkbTfdyzRCzhiKC8fFwwUgv8YRsACnwa4aetSX7sS0kwDgYID+LGBVuJLmQU32PG
-	 v2oNSrhsewmgkNMel2A91E5fuxBwJpUBLGcow+koUVxCE28Se6DKBJ1d6Dm6FimWlX
-	 rbRaei7/WoHrz8V+EF1zRv26wEK1wn1Zl8q52T7+VFQdDCoku4khl0yxrgy5JZjj8N
-	 UZ15HV1X6c29/Q0YWDiho0yaNrXLOvajBXR1i3qWtfjfeah76pgm8j9kPMq+dTDdyg
-	 vTnqXqjLqYBgw==
-Message-ID: <a0e3d45f-d982-4961-9945-3c81c0380806@kernel.org>
-Date: Thu, 7 Nov 2024 10:34:07 +0100
+	s=arc-20240116; t=1730975215; c=relaxed/simple;
+	bh=Nmr7/wo4+pDuXfEGjh2V9jGELY2fQQwbEl6oZRb5YO0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=c/NDMXBAzo2zCOQdrPa8M2BxUcGTOFu5Z7oEgBEEMbIU/v/CEAdO4xIA2f7MDabXEl7PJLBX+TEFlqrp8ZjBPNnEP4JVcqlrH3FHu85+Dn/EMQr+nSaUTj8RVvRqn7g2aDrpnVt33ANiwMlBA8R620gDi4Gs1cDsM1JvManSK2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fnb9DGjp; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1730975206;
+	bh=5QgSf7hVK1dumtikivz4wSJLUDbjZjZ3l79lbSa7CDc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fnb9DGjp2DDJMjWCcsPrP4PrIE/3Y8lDWP6Cgdrit4o+mMyW1etk/4aSArbTTEMtg
+	 FD9p9iLyDs5isFenPQmRpu1k5PwFefmWePqnyfhaZ3lJF1eU+2qSaXOVsezC4/2mbX
+	 4Br+oKENqhdyFcqvjn2J/f6oAd1r4wsw/Mu//qo+dg1lgX0X358gSluhDDmqSXPWP0
+	 V8Lv5S7WQBgkbgcOMeDDhC/HWRZGavgQQuBOuNl4odnjfviNi0HWiqBrN93uamrcDs
+	 3gOUKUsW0vyAi0jt/9rCikyTfkicoY/8lfNNTPyW9xCMwcwePXM4DFDjtZbjO9U6jk
+	 ubBZlxkklCk8g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XkdXh4D1bz4wxx;
+	Thu,  7 Nov 2024 21:26:44 +1100 (AEDT)
+Date: Thu, 7 Nov 2024 21:26:45 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>, Hans de Goede <hdegoede@redhat.com>, Mark
+ Gross <markgross@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ilpo =?UTF-8?B?SsOk?=
+ =?UTF-8?B?cnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Suma Hegde <suma.hegde@amd.com>, Thomas
+ =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>
+Subject: Re: linux-next: manual merge of the driver-core tree with the
+ drivers-x86 tree
+Message-ID: <20241107212645.41252436@canb.auug.org.au>
+In-Reply-To: <20241107194007.1d247bde@canb.auug.org.au>
+References: <20241107194007.1d247bde@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the watchdog tree with the
- samsung-krzk tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Wim Van Sebroeck <wim@iguana.be>
-Cc: Byoungtae Cho <bt.cho@samsung.com>, Guenter Roeck <linux@roeck-us.net>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Sunyeal Hong <sunyeal.hong@samsung.com>, Taewan Kim
- <trunixs.kim@samsung.com>, Wim Van Sebroeck <wim@linux-watchdog.org>
-References: <20241107165933.3e8b5af5@canb.auug.org.au>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241107165933.3e8b5af5@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/2jasR_IukKyZVKSeoCS0q=_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 07/11/2024 06:59, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the watchdog tree got a conflict in:
-> 
->   arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-> 
+--Sig_/2jasR_IukKyZVKSeoCS0q=_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Thu, 7 Nov 2024 19:40:07 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the driver-core tree got a conflict in:
+>=20
+>   drivers/platform/x86/amd/hsmp.c
+>=20
 > between commit:
-> 
->   ef1c2a54cbc7 ("arm64: dts: exynosautov920: add peric1, misc and hsi0/1 clock DT nodes")
-> 
-> from the samsung-krzk tree and commit:
-> 
->   3595a523d043 ("arm64: dts: exynosautov920: add watchdog DT node")
+>=20
+>   9df193087b9e ("platform/x86/amd/hsmp: Create hsmp/ directory")
+>=20
+> from the drivers-x86 tree and commit:
+>=20
+>   b626816fdd7f ("sysfs: treewide: constify attribute callback of bin_is_v=
+isible()")
+>=20
+> from the driver-core tree.
+>=20
+> I fixed it up (I deleted the file and applied the following patch) and
+> can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 7 Nov 2024 19:36:12 +1100
+> Subject: [PATCH] fix up for "sysfs: treewide: constify attribute callback=
+ of
+>  bin_is_visible()"
+>=20
+> interacting with "platform/x86/amd/hsmp: Create hsmp/ directory" from
+> the drivers-x86 tree.
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/platform/x86/amd/hsmp/plat.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/platform/x86/amd/hsmp/plat.c b/drivers/platform/x86/=
+amd/hsmp/plat.c
+> index f8e74c0392ba..748bbc356484 100644
+> --- a/drivers/platform/x86/amd/hsmp/plat.c
+> +++ b/drivers/platform/x86/amd/hsmp/plat.c
+> @@ -75,7 +75,7 @@ static ssize_t hsmp_metric_tbl_plat_read(struct file *f=
+ilp, struct kobject *kobj
+>  }
+> =20
+>  static umode_t hsmp_is_sock_attr_visible(struct kobject *kobj,
+> -					 struct bin_attribute *battr, int id)
+> +					 const struct bin_attribute *battr, int id)
+>  {
+>  	u16 sock_ind;
+> =20
+> --=20
+> 2.45.2
 
-The main problem is above patch should have never been taken to watchdog
-tree. I never agreed on that. I never acked it. It is against SoC
-policies which are always requesting entire DTS to go through SoC tree.
+It also required this:
 
-Please drop the patch from watchdog. Or revert it.
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 7 Nov 2024 19:57:41 +1100
+Subject: [PATCH] another fix for "sysfs: treewide: constify attribute callb=
+ack
+ of bin_is_visible()"
 
-Best regards,
-Krzysztof
+interacting with "platform/x86/amd/hsmp: Create hsmp/ directory" from
+the drivers-x86 tree.
 
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/platform/x86/amd/hsmp/acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/platform/x86/amd/hsmp/acpi.c b/drivers/platform/x86/am=
+d/hsmp/acpi.c
+index 4aa4d66f491a..dd5b5773328a 100644
+--- a/drivers/platform/x86/amd/hsmp/acpi.c
++++ b/drivers/platform/x86/amd/hsmp/acpi.c
+@@ -236,7 +236,7 @@ static ssize_t hsmp_metric_tbl_acpi_read(struct file *f=
+ilp, struct kobject *kobj
+ }
+=20
+ static umode_t hsmp_is_sock_attr_visible(struct kobject *kobj,
+-					 struct bin_attribute *battr, int id)
++					 const struct bin_attribute *battr, int id)
+ {
+ 	if (hsmp_pdev->proto_ver =3D=3D HSMP_PROTO_VER6)
+ 		return battr->attr.mode;
+--=20
+2.45.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2jasR_IukKyZVKSeoCS0q=_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcsleUACgkQAVBC80lX
+0GwjUgf9Fm9HZW854/9N+ubcQx/0ShJoQiIR8e1PkwUJjLGGG26RJON1gy5w59Ct
+zT/qHbXQdlJwEgQ0X1GXh+8ASTpAtfkjYL+HF4lE6w0RIxuKvPwPvqfhT+/mGlYR
+n7vnGkQIhzPx+2zIVEvfkUjb1VFDpQfAc56fCwyDxco1gfVCmoNUKPWQ7fxmuvUs
+/9RKHdPDGQ0rTeZSF9X8gLi4nEr1LSVp8TThfzjR2dOQDbQXUO26yO/sA4ytAf+F
++QwA0m70mPU1BcSOFg8N9s9Oj1GRfRx8AsyozibHd4gZtBIaD4CRjFncdAJwhlAY
+QwUHTPw4GHLJlYWFIgIKuEAX0Mu0PA==
+=O6My
+-----END PGP SIGNATURE-----
+
+--Sig_/2jasR_IukKyZVKSeoCS0q=_--
 

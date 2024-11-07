@@ -1,120 +1,197 @@
-Return-Path: <linux-next+bounces-4667-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4668-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DC339C0627
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 13:49:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC73F9C06E7
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:09:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B86D41F23184
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 12:49:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33225B21A27
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 13:09:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA31620FA81;
-	Thu,  7 Nov 2024 12:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F0F212D38;
+	Thu,  7 Nov 2024 13:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="PW2wWdCi"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TNMLiVrI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0DF1EF087
-	for <linux-next@vger.kernel.org>; Thu,  7 Nov 2024 12:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49CC21217B;
+	Thu,  7 Nov 2024 13:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730983763; cv=none; b=C8Blquv3nVwOb3AyC+YgZqwDPDkrgChQhpc5EpYIh7bEpjRLnfKJwKcRIaoYIQ2slDdc1CDCRnRuZSLw438Hsq6BVSQmdPWsblN5hDF90UTrilO11dmPClVzpmwESXE4Wf9iex/3PW7UBnhnKZIecH/5Ald1cp1u7dM2W7rG2Fg=
+	t=1730984680; cv=none; b=kFHZPEGNhPYnerVWE67QA07T/O8vqF0wHyMaR4UwKaGmdZnzRvnUFEn6RByyDqqicsogiDyM09AIOFgmFu9GuaudmWamwEOAn/7/Uct10SQ17fy+9VdLqgowqdvRnmb1zlbm9kwxYm6Zh1D1srZZxTiBd8kZqnWDi4JmdKiPeEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730983763; c=relaxed/simple;
-	bh=YaluIJlgoCCuBdHgOKc7RYey61qon8eAc7qQZACWI6o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q0UrjX5t8u5CuEqU/RhQD/THy+UIxRKj3oFua2sK9GHxO/yB3FjLodjE8eoja0Z/XHVLcYNfdH7ocNyBOYEx1e0Ux76LM0ST9wJVtC5nViUg8qoVXlPdVzL7gMGFkBHI3xHvh0bktD4UOYKTNG7KrC/AHktZE9zGNCqCMH07F1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=PW2wWdCi; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-71e49ad46b1so721062b3a.1
-        for <linux-next@vger.kernel.org>; Thu, 07 Nov 2024 04:49:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1730983759; x=1731588559; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=94jLGAE/7l0i/fZSh0MjmULEecf21MaMbr8LKDkqjrs=;
-        b=PW2wWdCiGYFR3YAnjIgbVNOebgQCC/2Qaxgvr/BYfuiYaaqrS9U/csDt9DAvPCNWMg
-         m/aSzn6/3PHjqh3YVBSWv9F4Y4anApYyqTk2GtgZppszeUIbY/zml7Q6sX9uFFxYldmb
-         O8us71BeryylIXg/yuRaSAEM0hcQBvrpRiaUY5+IhwxsbjCRgQxJqAyBexGViykh+oZZ
-         Jc/J9Igd+gCJiWDDBJDuTIiB8kQpC/lN5+3c4CIJodB3fOg82FTb/ht7IBjHiKMu0Ixe
-         loPXSgZU6HFQ89UmHf83Xj//SEJ2J6QSpF8ICmKZhyvAT2FrqvM3y1I3Ti0Rk7fjSjVV
-         tB1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730983759; x=1731588559;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=94jLGAE/7l0i/fZSh0MjmULEecf21MaMbr8LKDkqjrs=;
-        b=megWtkfYVDMoJ4usAa3EtvNrGD78GjFAWicdOHCYlCEeuKK49FKE7Qt+y6DepcO29y
-         8oMjO81rvJxTuKN+LP9Xm/fPczHnwuw8kCTWwC1LrZPVXnSAACgD+Ope0cNaF1AWgb1I
-         9WQJVaD7VJ8vah98t2gcNkZqLqCQa3AdawFJ2XBcam1ovXaTg70kR8ZNDKp7gRSKIUKB
-         hUys9PFJNNVQTXDYWKJbX5Lq2lmCrde2cxPTwvnp6ucPx53tlwb0niMlTXHsMDlcnlLq
-         4qZFNKzRc+hKQL9CS5pXhSxs7yLvU9LnHgGpIcW/VhiNhvWIQqhZEtI0gDHzQjCt8jFa
-         yV5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUCZ68yQbY5pmf3A3lMyDI6L0hqkOQeOJ3UIy12N7KdyETT2fYp9gEnyYjIHA1TFk/2wEAFEysb+W0u@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIi4zQ6TzIdfrOEwYTUmjkbvV6ZMuaJhosz3mqzaJLedv4v4nY
-	qpDEmiRMjF8/VztcCMquzwKe91K3qcRLj8EZXi2IAMt0JOFVPNKy7air9zyyhXo=
-X-Google-Smtp-Source: AGHT+IHX7sxlTETvpS+WLgqZfj1rC52dnNzvMfoR3p6xBcHaEDdnd4Ruh3GT6l4lurUPhTyFKlPYvg==
-X-Received: by 2002:a05:6a20:4c9b:b0:1d9:3b81:cdd3 with SMTP id adf61e73a8af0-1d9a83ab2d9mr45744337637.1.1730983759535;
-        Thu, 07 Nov 2024 04:49:19 -0800 (PST)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407a56421sm1444525b3a.185.2024.11.07.04.49.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Nov 2024 04:49:18 -0800 (PST)
-Message-ID: <fa092ae5-d15d-4f53-9de5-d06ebd985b33@kernel.dk>
-Date: Thu, 7 Nov 2024 05:49:18 -0700
+	s=arc-20240116; t=1730984680; c=relaxed/simple;
+	bh=alJhYjUGmAHiDkzk0RdRNv7iWlA7faKZ06xLb+2wABU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Mz3igvrU2pfOEnGzYbz+oVfk9oCWxZDPZkzTYY/Q3rp1CJxLWkiQZRPRNC4FWr4eRAWln7xfm5+Nz98dZGsg6hO9PaFUgM1sIki9LKWSNd1DWj89Zd5ypsn2RDJW+Oq3kLskN1KvRHHdmGAYUCMfN5H7iXu0q9ll6u7nZKwX/gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TNMLiVrI; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1730984672;
+	bh=WHaVBwuwn8YA/BqwcIrDoO8GovcenlT0q9KCEoQJ1E4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TNMLiVrIj+l8iRCkn083Am6kV7TgibeQrvlHJA8TxN+gjAc5LkwfIxaEO/HSWcAvh
+	 vvND20njLdikIGnl84TCoTNV7kPtAwMUO+kKaOUW4Bj6I9Mg11M3uZadJz8TFXXDOf
+	 hgkEbvParfeA65XGtTzxXh5bCX+bmFNFgl7OGVKSAgtWWVxnFWWhLT203oEDBMrnEn
+	 MhLFdHyP0OLnZZmzP/Sxd8cEbsOa4eY17wOdHycERGRgHpDK6Ib4aDfPJ/ejNSiEvV
+	 j3p+iuH+N/0x66QUKdbwnp/cz9deXfJHwNzE5ea5wNY1RD27Tfsg2NLOw4jAjx/UaL
+	 dQO9HqMSBezQw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xkj2l2yX1z4wcl;
+	Fri,  8 Nov 2024 00:04:31 +1100 (AEDT)
+Date: Fri, 8 Nov 2024 00:04:32 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>, Alex
+ Gaynor <alex.gaynor@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, bigeasy@linutronix.de, boqun.feng@gmail.com
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20241108000432.335ec09a@canb.auug.org.au>
+In-Reply-To: <20241107103414.GT10375@noisy.programming.kicks-ass.net>
+References: <20241107182411.57e2b418@canb.auug.org.au>
+	<20241107103414.GT10375@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the block tree with the pci tree
-To: Philipp Stanner <pstanner@redhat.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>, Bjorn Helgaas <bhelgaas@google.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20241107162459.71e0288a@canb.auug.org.au>
- <71860affadbd3efe72edbced28b3135924a28594.camel@redhat.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <71860affadbd3efe72edbced28b3135924a28594.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/GuOa5y9PukXOSTbXNSWK=T4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 11/7/24 1:13 AM, Philipp Stanner wrote:
-> On Thu, 2024-11-07 at 16:24 +1100, Stephen Rothwell wrote:
->> Hi all,
->>
->> Today's linux-next merge of the block tree got a conflict in:
->>
->>   drivers/block/mtip32xx/mtip32xx.c
->>
->> between commit:
->>
->>   5080394a8fcb ("block: mtip32xx: Replace deprecated PCI functions")
->>
->> from the pci tree and commit:
->>
->>   91ff97a72259 ("mtip32xx: Replace deprecated PCI functions")
->>
->> from the block tree.
-> 
-> Ooops, that should not have happened – I must have lost overview over
-> my branches when submitting the latter.
+--Sig_/GuOa5y9PukXOSTbXNSWK=T4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ehm that's not good. I can't drop it from the block tree, I have
-merges sitting on top of it. Can it be dropped from the PCI tree?
+Hi Peter,
 
+On Thu, 7 Nov 2024 11:34:14 +0100 Peter Zijlstra <peterz@infradead.org> wro=
+te:
+>
+> On Thu, Nov 07, 2024 at 06:24:11PM +1100, Stephen Rothwell wrote:
+> So I can't get RUST=3Dy, even though make rustavailable is happy.
+>=20
+> make LLVM=3D-19 allmodconfig does not get me RUST=3Dy
+>=20
+> I started out with tip/master, tried adding rust-next, then kbuild-next
+> gave up and tried next/master. Nada.
 
--- 
-Jens Axboe
+Just on Linus' tree allmodconfig gives me:
 
+$ grep RUST .config
+CONFIG_RUSTC_VERSION=3D108100
+CONFIG_RUST_IS_AVAILABLE=3Dy
+CONFIG_RUSTC_LLVM_VERSION=3D180108
+CONFIG_RUST=3Dy
+CONFIG_RUSTC_VERSION_TEXT=3D"rustc 1.81.0"
+CONFIG_HAVE_RUST=3Dy
+CONFIG_RUST_FW_LOADER_ABSTRACTIONS=3Dy
+CONFIG_BLK_DEV_RUST_NULL=3Dm
+CONFIG_RADIO_TRUST=3Dm
+CONFIG_HID_THRUSTMASTER=3Dm
+CONFIG_THRUSTMASTER_FF=3Dy
+CONFIG_TRUSTED_KEYS=3Dm
+CONFIG_HAVE_TRUSTED_KEYS=3Dy
+CONFIG_TRUSTED_KEYS_TPM=3Dy
+CONFIG_TRUSTED_KEYS_TEE=3Dy
+CONFIG_TRUSTED_KEYS_CAAM=3Dy
+CONFIG_INTEGRITY_TRUSTED_KEYRING=3Dy
+CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=3Dy
+CONFIG_SYSTEM_TRUSTED_KEYRING=3Dy
+CONFIG_SYSTEM_TRUSTED_KEYS=3D""
+CONFIG_SECONDARY_TRUSTED_KEYRING=3Dy
+CONFIG_SECONDARY_TRUSTED_KEYRING_SIGNED_BY_BUILTIN=3Dy
+CONFIG_SAMPLES_RUST=3Dy
+CONFIG_SAMPLE_RUST_MINIMAL=3Dm
+CONFIG_SAMPLE_RUST_PRINT=3Dm
+CONFIG_SAMPLE_RUST_HOSTPROGS=3Dy
+CONFIG_RUST_DEBUG_ASSERTIONS=3Dy
+CONFIG_RUST_OVERFLOW_CHECKS=3Dy
+CONFIG_RUST_BUILD_ASSERT_ALLOW=3Dy
+
+$ rustc --version
+rustc 1.81.0
+
+> Anyway, I think the above needs something like this:
+>=20
+> ---
+> diff --git a/rust/helpers/spinlock.c b/rust/helpers/spinlock.c
+> index b7b0945e8b3c..5804a6062eb1 100644
+> --- a/rust/helpers/spinlock.c
+> +++ b/rust/helpers/spinlock.c
+> @@ -5,11 +5,16 @@
+>  void rust_helper___spin_lock_init(spinlock_t *lock, const char *name,
+>  				  struct lock_class_key *key)
+>  {
+> +#ifndef CONFIG_PREEMPT_RT
+>  #ifdef CONFIG_DEBUG_SPINLOCK
+>  	__raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
+>  #else
+>  	spin_lock_init(lock);
+>  #endif
+> +#else
+> +	rt_mutex_base_init(&lock->lock);
+> +	__rt_spin_lock_init(lock, name, key, false);
+> +#endif
+>  }
+> =20
+>  void rust_helper_spin_lock(spinlock_t *lock)
+
+I will try to remember to add that to the tip tree merge tomorrow.
+
+> > Without the revert CONFIG_PREEMPT_RT=3Dy, after the revert it is not set
+> > and spinlock_check is only defined for !defined(CONFIG_PREEMPT_RT). =20
+>=20
+> Right, that moved PREEMPT_RT out of the preemption choice. Now I'm not
+> sure we want it =3Dy for all{yes,mod}config. Is the below the right
+> incantation to avoid this?
+>=20
+> ---
+> diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
+> index 7c1b29a3a491..54ea59ff8fbe 100644
+> --- a/kernel/Kconfig.preempt
+> +++ b/kernel/Kconfig.preempt
+> @@ -88,7 +88,7 @@ endchoice
+> =20
+>  config PREEMPT_RT
+>  	bool "Fully Preemptible Kernel (Real-Time)"
+> -	depends on EXPERT && ARCH_SUPPORTS_RT
+> +	depends on EXPERT && ARCH_SUPPORTS_RT && !COMPILE_TEST
+>  	select PREEMPTION
+>  	help
+>  	  This option turns the kernel into a real-time kernel by replacing
+
+Yeah, that will do it.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/GuOa5y9PukXOSTbXNSWK=T4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcsuuAACgkQAVBC80lX
+0GwFRQgAiJthyCT5arGjsZIuXNRLlrmpjEVKqKamnlkxHwFt2Oz8D78hbkkL2TWQ
+8ad3gAtRFoQ53mnYabRlKM4ZvPQbsFFl8jVNHJG856Q6UvCBGj7Oi4rtNv8qDuVM
+8dJFibFQjBd9aU9xmc4cD7n/SeIQZ480aCzgcXhGYBFdOWuNxLEzVp8WA2UAHA1c
+wzazATVHHlpEF2ZIpLzbYG0fW9L/t/QKuEHc7iazFWPRrkfGi9EiT02QgojI855W
+WNIgYgVNbtLhFkdCjYYqdwdk76U+tARRLHXcBhv3jvyc8WPgrFy98e6+ew9njg1g
+UI2kcZNNXqY+6alhEPPqWQy+XfCswA==
+=Yhzi
+-----END PGP SIGNATURE-----
+
+--Sig_/GuOa5y9PukXOSTbXNSWK=T4--
 

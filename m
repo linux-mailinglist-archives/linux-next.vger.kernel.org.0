@@ -1,116 +1,233 @@
-Return-Path: <linux-next+bounces-4679-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4681-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C7729C0938
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 15:49:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B60949C0988
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 16:02:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20B5F2849C9
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:49:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09A32B23ED8
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 15:02:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D190E20FABC;
-	Thu,  7 Nov 2024 14:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B395212F0E;
+	Thu,  7 Nov 2024 15:01:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="flRiIlGM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YIf0CPUZ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5D32E3EB;
-	Thu,  7 Nov 2024 14:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F47B17C79
+	for <linux-next@vger.kernel.org>; Thu,  7 Nov 2024 15:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730990938; cv=none; b=gn0tonUwbtLQ6VzSgqsWcs0FN9dBN+GNn4OkLv0KWaiyQybmqN4kl7k0zYP351C9wPL/uWj6d60wMOKxauXe5kQ56sWuJdldBg/vfm+lE7TbgKu6lJhgjvgzJzfFMxKEZYXMVK8wccuZYHm0yxjxtTjxu0sYASTY5X+gmXL2hbU=
+	t=1730991717; cv=none; b=U6df240Y3g79bPJPPlRVTWWI/ZBXGRuZaZyjEzzs9jXpW4qcPNTOmqG1T65VgwigibJLBI7SJH3MUBp0PwTNFAsu+EuS9y3RhxP7jBtmN7mFcivWh0xXLhiAlM+vh88i8DhBRhNR+awBTuZPUDiRwb7a7a2nJ2UlCW2hbsoFwRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730990938; c=relaxed/simple;
-	bh=PMaxsGwxGP8L4PO1DN8e3RJXl9QLLdw9+O0d3SdJ8eY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dJ5R3zFd2d54+nQRnYgMrxbQkWvu9tdwKTNlW92+mCD1htHTX5bjEJO0BrAFugq0vHO/Ksy5VdjrO1n1DB7I/rwlVQOrKG5P6OgLEuvxXd87l4zA4F1hVtp1jIKVA6+Lg1IpF+Krk7wFAVaUjra6GPQ9FlZY8q7ETy3BV/emGs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=flRiIlGM; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2e2da8529e1so146954a91.1;
-        Thu, 07 Nov 2024 06:48:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730990937; x=1731595737; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RXm90BM0e3g7s1YWkLkcrwlJUU8mJYPnf6cKrFICdi0=;
-        b=flRiIlGMAtQmtuYTMkQnm2VgwbdsY5AHlFS6ci3S62JSN+Z9Svqu5azwU1eM9PGkJm
-         n2dh9rEosSsPFd+39I74URhJKZHgfUIHTWxGDh16USnKXLD4OSRXmFf3XfsGfQvKuhpp
-         OSDhoiW6f7qaz5OmkMnzZTBQ2i/WLw/p075VG8yCWE5HHqT4xZqpmC41N8TOWldvwpZo
-         XNONP8Pw4y17xlsKEdjCa5oej9wvWuyIP1IUd5IKhSSs1Nt5mbTrwtb4KCv+eCU8z4JJ
-         OnG05KN4ZwtorXmbxQSaSvf3qlycP7cRNDuxO6jnG/yvlZjQwNFHwKMA5dR+NQMHOx+j
-         SjHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730990937; x=1731595737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RXm90BM0e3g7s1YWkLkcrwlJUU8mJYPnf6cKrFICdi0=;
-        b=DuxqAoI5BVYUQZbkII0e7Odlc8RDzRsQq5JXMDiu0G7C+Jr910KqHqIPqtSMxIWsgI
-         uMlu8hm7Us7xm0Rn/m4ZY5PBdmd/lR4muXWaSQAf8BDlh8K69FLu/Zv0iI/9DnIfWsCB
-         8wkEFx8zBJ0OTrIvvWoc8bb9TexgC+I2dC5Qe9Zx2ZC/7WiSUdOUOpdiF/4lDXaZTDZa
-         MRL/LWdayMtSR0bRlht4ob1iAj4WFBH1KjYyiF4NsryptYNdq7/+419oLfMhNkV3fssI
-         I5GtkauYyFhgBsn/Fr3AENc6PIVXAKrcWevNYIttdnfrZwAGxVbmsSlYAtNL6uItyYYc
-         K2ng==
-X-Forwarded-Encrypted: i=1; AJvYcCWuZpjZpjm9OEAXMbQLsfoFNrpYoI/bPWE9y+Fq1Z4OXY93K+aZSR9TVH+hEWzHYoD62kyD8DQ0EH6KTWw=@vger.kernel.org, AJvYcCXsmE0q8wCyw84sAlQ1A5qGLYNxjgikRV2LB1iq4ToxUqHQyJ3ws3mN54ZIGzB1ELKUJVIInWx7KDyyTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6EMztd9R3C9bn3LCQfpwJDbh1jep2pVZSndhHn64NxxYR9Q6H
-	L82y2AQhsH81sLIfeYGjHUzL89GvEF71WbKda+VbR48IzT4cWmJGLOixSM+mo+VOueefx7raM4Y
-	vaNE1QYoVRC6NdiL8mZJPL7/K1OA=
-X-Google-Smtp-Source: AGHT+IF6MTLRk+KPqBxLL/3eKuTaPnNkJqCH3RcYZkvvpiuKj+qMr8AQtN2jNM6akkFBI+9DuceGHfPfFxYiDX6ziAM=
-X-Received: by 2002:a17:90b:4c11:b0:2e7:8a36:a9ad with SMTP id
- 98e67ed59e1d1-2e9afcc285emr90333a91.9.1730990936627; Thu, 07 Nov 2024
- 06:48:56 -0800 (PST)
+	s=arc-20240116; t=1730991717; c=relaxed/simple;
+	bh=BcCssuJkh8gL1YcujKqWtRxdJh22MLP0AR8iUfe8AW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m82zXUWHNYjM2AW2UXkk/qAWD3HUQ/fdp9uZZUBPomqLg2D3k3KJeyPPD7nVvAtPnRe7T/MF8qtOI41J3RJC7RbXQTt4jmISaYdV3G1z3sVJXBdYVO57TY11ZEzHM7WpxvefR1aesOZLD+6C1s5gj8MGd9b0Xg9sIV6f/GadWcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YIf0CPUZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730991714;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4Xmu1kxDhzwlZgXeOwsE6gEAR/pvNGajgUpVujRUjeE=;
+	b=YIf0CPUZumoJi5GICI1uqqF0NB4GlAbBcI4CvAp7nF07uabBclyT9Lp18W2q3vcfjL0rN/
+	kVQ82Olv9YZtAstsn6jW/uJlYnfWk+aqYXG9WAajR7HKzjOyylbXrxAL9Upx9eoyeRQCC9
+	wt0xd4uc6psOcv+UnARiKP++aKfEvJc=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-647-mn_anOkVPdeC4022HdKA7A-1; Thu,
+ 07 Nov 2024 10:01:50 -0500
+X-MC-Unique: mn_anOkVPdeC4022HdKA7A-1
+X-Mimecast-MFC-AGG-ID: mn_anOkVPdeC4022HdKA7A
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4B7A81955EB9;
+	Thu,  7 Nov 2024 15:01:47 +0000 (UTC)
+Received: from f39 (unknown [10.39.192.153])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C2F81953882;
+	Thu,  7 Nov 2024 15:01:43 +0000 (UTC)
+Date: Thu, 7 Nov 2024 16:01:38 +0100
+From: Eder Zulian <ezulian@redhat.com>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <ZyzWUirB25EYTTOO@f39>
+References: <20241107182411.57e2b418@canb.auug.org.au>
+ <20241107103414.GT10375@noisy.programming.kicks-ass.net>
+ <20241108000432.335ec09a@canb.auug.org.au>
+ <20241107141212.GB34695@noisy.programming.kicks-ass.net>
+ <cade359b-8e58-4031-b21b-3c47e0dcf3af@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107182411.57e2b418@canb.auug.org.au> <20241107103414.GT10375@noisy.programming.kicks-ass.net>
- <CANiq72kkiwaMpeKgNLYiCSMX_VK7a+6Xu4iQrDiB_cpnXpokxg@mail.gmail.com> <20241107143930.GC38786@noisy.programming.kicks-ass.net>
-In-Reply-To: <20241107143930.GC38786@noisy.programming.kicks-ass.net>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 7 Nov 2024 15:48:43 +0100
-Message-ID: <CANiq72nobVS2t9pEMP=xs3HCh5-qZwp7yzswvSCqPw4Cb=BCZQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the tip tree
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, bigeasy@linutronix.de, boqun.feng@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cade359b-8e58-4031-b21b-3c47e0dcf3af@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Thu, Nov 7, 2024 at 3:39=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
-> wrote:
->
-> So menuconfig prints that as a giant line without wrapping, but instead
-> forces me to press 'right-arrow' to scrol that.
+On Thu, Nov 07, 2024 at 06:22:31AM -0800, Boqun Feng wrote:
+> 
+> 
+> On Thu, Nov 7, 2024, at 6:12 AM, Peter Zijlstra wrote:
+> > On Fri, Nov 08, 2024 at 12:04:32AM +1100, Stephen Rothwell wrote:
+> >> Hi Peter,
+> >> 
+> >> On Thu, 7 Nov 2024 11:34:14 +0100 Peter Zijlstra <peterz@infradead.org> wrote:
+> >> >
+> >> > On Thu, Nov 07, 2024 at 06:24:11PM +1100, Stephen Rothwell wrote:
+> >> > So I can't get RUST=y, even though make rustavailable is happy.
+> >> > 
+> >> > make LLVM=-19 allmodconfig does not get me RUST=y
+> >> > 
+> >> > I started out with tip/master, tried adding rust-next, then kbuild-next
+> >> > gave up and tried next/master. Nada.
+> >> 
+> >> Just on Linus' tree allmodconfig gives me:
+> >> 
+> >> $ grep RUST .config
+> >> CONFIG_RUSTC_VERSION=108100
+> >> CONFIG_RUST_IS_AVAILABLE=y
+> >> CONFIG_RUSTC_LLVM_VERSION=180108
+> >> CONFIG_RUST=y
+> >> CONFIG_RUSTC_VERSION_TEXT="rustc 1.81.0"
+> >> CONFIG_HAVE_RUST=y
+> >> CONFIG_RUST_FW_LOADER_ABSTRACTIONS=y
+> >> CONFIG_BLK_DEV_RUST_NULL=m
+> >> CONFIG_RADIO_TRUST=m
+> >> CONFIG_HID_THRUSTMASTER=m
+> >> CONFIG_THRUSTMASTER_FF=y
+> >> CONFIG_TRUSTED_KEYS=m
+> >> CONFIG_HAVE_TRUSTED_KEYS=y
+> >> CONFIG_TRUSTED_KEYS_TPM=y
+> >> CONFIG_TRUSTED_KEYS_TEE=y
+> >> CONFIG_TRUSTED_KEYS_CAAM=y
+> >> CONFIG_INTEGRITY_TRUSTED_KEYRING=y
+> >> CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=y
+> >> CONFIG_SYSTEM_TRUSTED_KEYRING=y
+> >> CONFIG_SYSTEM_TRUSTED_KEYS=""
+> >> CONFIG_SECONDARY_TRUSTED_KEYRING=y
+> >> CONFIG_SECONDARY_TRUSTED_KEYRING_SIGNED_BY_BUILTIN=y
+> >> CONFIG_SAMPLES_RUST=y
+> >> CONFIG_SAMPLE_RUST_MINIMAL=m
+> >> CONFIG_SAMPLE_RUST_PRINT=m
+> >> CONFIG_SAMPLE_RUST_HOSTPROGS=y
+> >> CONFIG_RUST_DEBUG_ASSERTIONS=y
+> >> CONFIG_RUST_OVERFLOW_CHECKS=y
+> >> CONFIG_RUST_BUILD_ASSERT_ALLOW=y
+> >> 
+> >> $ rustc --version
+> >> rustc 1.81.0
+> >
+> > Yeah, I'm not sure what's going on. I occasionally get rust stuff, but
+> > mostly when I try allyesconfig. Weirdness.
+> >
+> >> > Anyway, I think the above needs something like this:
+> >> > 
+> >> > ---
+> >> > diff --git a/rust/helpers/spinlock.c b/rust/helpers/spinlock.c
+> >> > index b7b0945e8b3c..5804a6062eb1 100644
+> >> > --- a/rust/helpers/spinlock.c
+> >> > +++ b/rust/helpers/spinlock.c
+> >> > @@ -5,11 +5,16 @@
+> >> >  void rust_helper___spin_lock_init(spinlock_t *lock, const char *name,
+> >> >  				  struct lock_class_key *key)
+> >> >  {
+> >> > +#ifndef CONFIG_PREEMPT_RT
+> >> >  #ifdef CONFIG_DEBUG_SPINLOCK
+> >> >  	__raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
+> >> >  #else
+> >> >  	spin_lock_init(lock);
+> >> >  #endif
+> >> > +#else
+> >> > +	rt_mutex_base_init(&lock->lock);
+> >> > +	__rt_spin_lock_init(lock, name, key, false);
+> >> > +#endif
+> >> >  }
+> >> >  
+> >> >  void rust_helper_spin_lock(spinlock_t *lock)
+> >> 
+> >> I will try to remember to add that to the tip tree merge tomorrow.
+> >
+> > Boqun, could you test the above and make it happen?
+> >
+> 
+> FYI, Eder is already working on this:
+> 
+> https://lore.kernel.org/rust-for-linux/20241106211215.2005909-1-ezulian@redhat.com/
+> 
+> Eder, could you Cc locking for the next version?
 
-Yeah, it is bad, I also suffer from that :(
+Yes, sure.
 
-We should improve it.
+By the way, I'm using linux-next/master here and I think I had to make
+(MITIGATION_RETHUNK && KASAN) false at some point for x86_64 to get RUST=y.
 
-> Which is what I installed today from debian/unstable, because the
-> version from debian/testing was too old to satisfy make rustavailable.
+$ grep -i '_rust\|preempt_rt\|debug_spin' .config | grep -v '#'
+CONFIG_RUSTC_VERSION=108200
+CONFIG_RUST_IS_AVAILABLE=y
+CONFIG_RUSTC_LLVM_VERSION=170006
+CONFIG_PREEMPT_RT=y
+CONFIG_RUST=y
+CONFIG_RUSTC_VERSION_TEXT="rustc 1.82.0 (f6e511eec 2024-10-15) (Fedora 1.82.0-1.fc39)"
+CONFIG_HAVE_RUST=y
+CONFIG_HAVE_CFI_ICALL_NORMALIZE_INTEGERS_RUSTC=y
+CONFIG_DEBUG_SPINLOCK=y
+CONFIG_RUST_OVERFLOW_CHECKS=y
 
-Something is amiss here -- Debian Testing should be fine (I test it
-regularly using the Docker image), since has 1.82 too:
+> 
+> Regards,
+> Boqun
+> 
+> >> > > Without the revert CONFIG_PREEMPT_RT=y, after the revert it is not set
+> >> > > and spinlock_check is only defined for !defined(CONFIG_PREEMPT_RT).  
+> >> > 
+> >> > Right, that moved PREEMPT_RT out of the preemption choice. Now I'm not
+> >> > sure we want it =y for all{yes,mod}config. Is the below the right
+> >> > incantation to avoid this?
+> >> > 
+> >> > ---
+> >> > diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
+> >> > index 7c1b29a3a491..54ea59ff8fbe 100644
+> >> > --- a/kernel/Kconfig.preempt
+> >> > +++ b/kernel/Kconfig.preempt
+> >> > @@ -88,7 +88,7 @@ endchoice
+> >> >  
+> >> >  config PREEMPT_RT
+> >> >  	bool "Fully Preemptible Kernel (Real-Time)"
+> >> > -	depends on EXPERT && ARCH_SUPPORTS_RT
+> >> > +	depends on EXPERT && ARCH_SUPPORTS_RT && !COMPILE_TEST
+> >> >  	select PREEMPTION
+> >> >  	help
+> >> >  	  This option turns the kernel into a real-time kernel by replacing
+> >> 
+> >> Yeah, that will do it.
+> >
+> > OK, I'll write it up and stick that in tip/sched/core along with them
+> > patches that's causing the grief :-)
+> >
+> > Attachments:
+> > * signature.asc
+> 
 
-    https://packages.debian.org/trixie/rustc
-
-I double-checked manually the `debian:testing` image:
-
-    # apt show rustc
-    Package: rustc
-    Version: 1.82.0+dfsg1-2
-
-Cheers,
-Miguel
 

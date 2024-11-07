@@ -1,167 +1,136 @@
-Return-Path: <linux-next+bounces-4653-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4654-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04D019C0071
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 09:51:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2A6E9C0132
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 10:34:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E9831F221F1
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 08:51:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF4ED282F62
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 09:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1425819F120;
-	Thu,  7 Nov 2024 08:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 772C41D5CCD;
+	Thu,  7 Nov 2024 09:34:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="MndZh2uV";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AZtEeqp5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDmU/BG+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8137C38FB0;
-	Thu,  7 Nov 2024 08:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C90BC2ED;
+	Thu,  7 Nov 2024 09:34:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730969513; cv=none; b=giDiXlO3ayyAstjhc4jLTBlwhg+tX9cLfwa1BzyMHkZS8YYHe1HH0uHeznvwwR4xlmKB1xssLRvqSdnpa2RWnr7YSQ4kXg18F2YjvtTed3jvOHsy7XnPggDk3o9nY/xr9JmJXj5yStJTbrsJGxIRJevOIv2HXsOCG/fnr2C7OJU=
+	t=1730972052; cv=none; b=c9KY7BA/cAI4AMpiMz9Uaf+O7jYN02uJVZvXLURwn3Zj1bj9mSzdtwgP5dOfzHi+wv03w6D3e9e6DR7UhVdu6o/PGyhnI2Xmsz3j4obZ6Jhn0geY+7/kkPvUBLFkyU33BqnbD8YP163I+hXHWNiVNjY8CJLDJu3B52PCgiAjs2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730969513; c=relaxed/simple;
-	bh=+yCI5Y08iCTDBIHlMEsCVdskeck8YG+AF5B+AuVrptM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WUllG/R6Ku6oeCY0QM6QNw7pCoJkXDXa5uR2YNkzc1tREbCpSIO9yXlYX/sK41WbmFIUBncoOH2WbDjTUM+dnxavxSTYBXdevWpXnS0c5XFQqSSGhvnd+hQGQN/WzY+sTG9K0A1CvzidSznypHqLdeUzpBkyt0mke98L+KQnMtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=MndZh2uV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AZtEeqp5; arc=none smtp.client-ip=202.12.124.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfout.stl.internal (Postfix) with ESMTP id 1AFEA11400CF;
-	Thu,  7 Nov 2024 03:51:49 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-09.internal (MEProxy); Thu, 07 Nov 2024 03:51:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1730969508; x=1731055908; bh=mLYrGgR7xi
-	150q2EmTJsQhEuZ8EEIYlqYshpmAVqwAA=; b=MndZh2uVrHvHfeaJ5TG5IL/gxz
-	YJN0BwRnjK9GWvfSKwzl3SucW5Bg1y58/rjXrg0wu4/Q6MhsJn2hvQIE+Nw0iFHd
-	IN1Gdr7U1MJ6l3aXYgzAFU8sziUAuct9olW6B2rD15gJNEd5cSQhN37JS1+CtSDD
-	bfjHcvQqCC6XsUexce/owwnb75kkcHkxnraJJEWsdaUPxRyraOQrDWcWN4GpeJlx
-	adL+2ME1OZLOnip770VBjYlOYhHXUw7IX8hce7vRiXDrO6FFMOFkUVjEe2oDJROF
-	Cgap/5N3rwYY6XZB0YrQpR2BQlB1V/Ei6OvNWaddfcUqar4hFGzoK9TIh28A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1730969508; x=1731055908; bh=mLYrGgR7xi150q2EmTJsQhEuZ8EEIYlqYsh
-	pmAVqwAA=; b=AZtEeqp5+LeTdKCqHuRfHd8r+GNAtVtupKvrMZw+4HyhLXLYYkj
-	7RDJ6LJDn74vZCcv59CnM8woXwzIpRtJVwbGutDUn9bPCnZueLHCNqEtDVvgZFXi
-	aGOdFt8ABh5EEJb5wyLAkERwV8wp1Vuqyn+AHdyjPKjcIltw/izob2ngMbkJovAg
-	+tT/WEulzzBv8ysIfJHZ+dvA6tUxkv1zb8uPqYVYExwI7MtRhiYUi14bmxGkyQ4v
-	PSn74vI5mO8Lqmcx+O54QyqfxOzNAWSZhJIAHsq0SKqZDwDlRwQ0W2TMmcpThD1l
-	xGwX8TwS7WOGmGgcvlAAEqLczTxt2z05pFA==
-X-ME-Sender: <xms:o38sZ0lOQRl2ofk2myBjw8ppoWf03HTAMkpnMJh0ut9HGtkkPCeqeQ>
-    <xme:o38sZz0HZi6sh3K9wDoRWquxTBvX8Bh7jB69Bu9P6DcYcQx0lY-iPF3Fg_LKYJOmd
-    dMOPpQR7gLuJA>
-X-ME-Received: <xmr:o38sZyo7jvX2p-RBCfSqFZphhy9TP2591rph7qEWWZF9O8DmcSSggFyqKVA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrtdefgdduvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
-    ucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrf
-    grthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefh
-    gfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopeduiedpmhhouggvpehs
-    mhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupd
-    hrtghpthhtohephhguvghgohgvuggvsehrvgguhhgrthdrtghomhdprhgtphhtthhopehm
-    rghrkhhgrhhoshhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehilhhpohdrjhgrrh
-    hvihhnvghnsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidq
-    khgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugi
-    dqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhumhgrrdhh
-    vghguggvsegrmhgurdgtohhmpdhrtghpthhtoheplhhinhhugiesfigvihhsshhstghhuh
-    hhrdhnvght
-X-ME-Proxy: <xmx:o38sZwlZUpL4qbrMrjZprh8Ilz4XU7ZJYRGRpxdI9E3ezu_EKTJQsg>
-    <xmx:o38sZy3DnWeKTKmPQVValhjSlUJOJwi4yiLsKHgtAfHWmQX0_kWmwQ>
-    <xmx:o38sZ3sk6U9onJ_Cyf2F050PgoYVPmFddMh9Z_hDCRCN2rEQFMSA0A>
-    <xmx:o38sZ-WbDDvpcN4W2h7nxco1Urjv28hnh782NUFeBGRiYEnfo9_Xfw>
-    <xmx:pH8sZ7EAkOVurLCH7gTOErYUwS9H08xbNKQHIXj8b_IgklXALEEp8KiG>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 7 Nov 2024 03:51:46 -0500 (EST)
-Date: Thu, 7 Nov 2024 09:51:28 +0100
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Suma Hegde <suma.hegde@amd.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Subject: Re: linux-next: manual merge of the driver-core tree with the
- drivers-x86 tree
-Message-ID: <2024110719-detective-directly-fbcf@gregkh>
-References: <20241107194007.1d247bde@canb.auug.org.au>
+	s=arc-20240116; t=1730972052; c=relaxed/simple;
+	bh=inESUDudB5HfcmBBNbqKRZ9XUBmBgBiXWRXYsjc867w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=blVVKIsRQANl1vtswnLy2VKot323XRtEYsNUAHaxiZJxYvpDcmA66t2IqTDZH2HnTNyd5tpbe2Ha/PRjKTYqgc4WKgYbCZJgzOaf/qleSKc6Qw/KhE1D/9VqbhyCxtLVqeQwjx31061RYE2vAM4K6rfPzpPu3HzyO4s1SGmCyyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDmU/BG+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA0CC4CECC;
+	Thu,  7 Nov 2024 09:34:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730972052;
+	bh=inESUDudB5HfcmBBNbqKRZ9XUBmBgBiXWRXYsjc867w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=TDmU/BG+hRQ9l6HbOxYsJpcI7R6NBTvpKAIO4HPYxDJGII5+3TfrHvN97Lw+aVVc+
+	 CwRkbTfdyzRCzhiKC8fFwwUgv8YRsACnwa4aetSX7sS0kwDgYID+LGBVuJLmQU32PG
+	 v2oNSrhsewmgkNMel2A91E5fuxBwJpUBLGcow+koUVxCE28Se6DKBJ1d6Dm6FimWlX
+	 rbRaei7/WoHrz8V+EF1zRv26wEK1wn1Zl8q52T7+VFQdDCoku4khl0yxrgy5JZjj8N
+	 UZ15HV1X6c29/Q0YWDiho0yaNrXLOvajBXR1i3qWtfjfeah76pgm8j9kPMq+dTDdyg
+	 vTnqXqjLqYBgw==
+Message-ID: <a0e3d45f-d982-4961-9945-3c81c0380806@kernel.org>
+Date: Thu, 7 Nov 2024 10:34:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241107194007.1d247bde@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: manual merge of the watchdog tree with the
+ samsung-krzk tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Wim Van Sebroeck <wim@iguana.be>
+Cc: Byoungtae Cho <bt.cho@samsung.com>, Guenter Roeck <linux@roeck-us.net>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Sunyeal Hong <sunyeal.hong@samsung.com>, Taewan Kim
+ <trunixs.kim@samsung.com>, Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20241107165933.3e8b5af5@canb.auug.org.au>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241107165933.3e8b5af5@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 07, 2024 at 07:40:07PM +1100, Stephen Rothwell wrote:
+On 07/11/2024 06:59, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the driver-core tree got a conflict in:
+> Today's linux-next merge of the watchdog tree got a conflict in:
 > 
->   drivers/platform/x86/amd/hsmp.c
+>   arch/arm64/boot/dts/exynos/exynosautov920.dtsi
 > 
 > between commit:
 > 
->   9df193087b9e ("platform/x86/amd/hsmp: Create hsmp/ directory")
+>   ef1c2a54cbc7 ("arm64: dts: exynosautov920: add peric1, misc and hsi0/1 clock DT nodes")
 > 
-> from the drivers-x86 tree and commit:
+> from the samsung-krzk tree and commit:
 > 
->   b626816fdd7f ("sysfs: treewide: constify attribute callback of bin_is_visible()")
-> 
-> from the driver-core tree.
-> 
-> I fixed it up (I deleted the file and applied the following patch) and
-> can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 7 Nov 2024 19:36:12 +1100
-> Subject: [PATCH] fix up for "sysfs: treewide: constify attribute callback of
->  bin_is_visible()"
-> 
-> interacting with "platform/x86/amd/hsmp: Create hsmp/ directory" from
-> the drivers-x86 tree.
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/platform/x86/amd/hsmp/plat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/amd/hsmp/plat.c b/drivers/platform/x86/amd/hsmp/plat.c
-> index f8e74c0392ba..748bbc356484 100644
-> --- a/drivers/platform/x86/amd/hsmp/plat.c
-> +++ b/drivers/platform/x86/amd/hsmp/plat.c
-> @@ -75,7 +75,7 @@ static ssize_t hsmp_metric_tbl_plat_read(struct file *filp, struct kobject *kobj
->  }
->  
->  static umode_t hsmp_is_sock_attr_visible(struct kobject *kobj,
-> -					 struct bin_attribute *battr, int id)
-> +					 const struct bin_attribute *battr, int id)
->  {
->  	u16 sock_ind;
->  
+>   3595a523d043 ("arm64: dts: exynosautov920: add watchdog DT node")
 
-Change looks good, thanks!
+The main problem is above patch should have never been taken to watchdog
+tree. I never agreed on that. I never acked it. It is against SoC
+policies which are always requesting entire DTS to go through SoC tree.
 
-greg k-h
+Please drop the patch from watchdog. Or revert it.
+
+Best regards,
+Krzysztof
+
 

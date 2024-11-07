@@ -1,104 +1,103 @@
-Return-Path: <linux-next+bounces-4694-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4695-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94EFA9C1100
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 22:32:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D7EF9C1172
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 23:03:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCAAF1C22684
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 21:32:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C69082831F6
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 22:03:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616C2194C92;
-	Thu,  7 Nov 2024 21:32:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02BF5216A32;
+	Thu,  7 Nov 2024 22:03:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AgAoy19J"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="anTApJyq"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4313FC08;
-	Thu,  7 Nov 2024 21:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409CB215C6D;
+	Thu,  7 Nov 2024 22:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731015162; cv=none; b=iepX1iCyVTytbX4GJ8ofuU5OLH7kIUTjTaid9BEOF6ptD27nj6sU7ikolF/4xKtrwu/ynmGfkRID7qG4rqTDiv6uv/lcxaMkNy53cA0E9uTr/DXNX0Eu7CA0ysqaxjyVTDgrOQ7/aCBR06DzPSwaEnTTzdlrrQooGCTs+iXNYH0=
+	t=1731017003; cv=none; b=G3u42krH5ZyeMgQDKIwMzJvdHZP2FrHe/WwVNHTm/nzo09NddbSrdlBs9mekh8Z70UCm0yqbxA9ejf5ezLZ5pZJBqaEuxaLBFITskh999/n74REXHJDXPSJCRuqzEQoJS5pOruxKEaxJu/rpJCaf3/2KL41peE5KbVKHyhffBQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731015162; c=relaxed/simple;
-	bh=fLUMpZE4KVohXe2BrJG1lxCr7XeS3+OIr2eK3EvT6L4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XcBCI6stqAPV+BFc7O/QewFUzg4qxZYMQWlev3MI9LZbui3kIJjFpZJvU64hq8RnGNj+rxoaMs6BhoBHIq+q91+SfMNRISJhvBrXwYnLVlNuNpm4FCSeLacd+7leKz4ZZ/k/S3foS3v3qP6no+61puGeE0XB7gthieQinDHNNkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AgAoy19J; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1731017003; c=relaxed/simple;
+	bh=qkK0amL98AbIIS/b4OPpm+hQwWpbUUOjYa7QJ2H5DuU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sZAG9n4rkdcaZiC82DE8Iv2slw/vPsUgpWA7czhh7AnNcfo1wkc/Z+UVT6aS2x+7KsOzAW9ZfQMD4+9T7H/r4Yu+cDQwVXFteVQe8bQ/iP2PlWWe2XdLRQ60Mr+tNqIdEHbK+0LMI7GBfzUdKmJEC2EqnppWQnd6uf1Gi72xtSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=anTApJyq; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1731015154;
-	bh=KKhgicMpL5VrtMahHOSsNk5VTX3KdW+Yr/4+MEh3Wjg=;
+	s=201702; t=1731016995;
+	bh=wUixlLA5DgEihjvV1A9082nTUUK+zEhB9qYoo60sBWs=;
 	h=Date:From:To:Cc:Subject:From;
-	b=AgAoy19JUC1WzvcSGQY/giK7Y8LaMUzNY5vTOmqfjmMAOvyk/KEe5h8WBbqRHtEbQ
-	 wIlHw6isBfJPfTyptdKG9JINKdYdy3zTeQfdP+6tM3RpR6Z2LxoBzfeqCIUEgIsbiI
-	 q5gZhqswbtm6BrMfckcbHp126FRSlZD4IoDn0A9lodszuvLli2sz+2c2jUCsW/7cQR
-	 SIc0i8678tcF+WGkGjIyl35c4RBd7R8PJpYw1B3YhX+x8cF52ePiY5Ezv5xJ/baCg4
-	 WEcHhzTA/CqBuQaEsV504vLvrio+p7I1hoQMRZ+IJy9Yi43p/ORtd9rlZ8HE8hhMIv
-	 oYrfzutsrIlJA==
+	b=anTApJyqJPBY3BVeaYG9jUx8gH8mpy+Y3jpuM9K3NmgQfD/9iEintklgz/Uge0nxK
+	 ZFAVyi6FOBlXLX9ODee6pyA4AZ4UryL7bdFFZunJ+pYEdszrjJHlBOvFAMFbeVglVF
+	 0H8ap32HepW3gFDi8WyBBFsPHsag2jdG6hgY1/kzJ0W13wCOiQOrDirrg3KvbsUejU
+	 2B7MeBM0zHkdKz8e0YsxNagaeCUcwrNNYwzuZ8C9ajZO96dhfDzleS3z4ASqSdYUET
+	 BcZkAoSsg8M54MJr8VB3b9cT5npi8KS8csv7IOlJjt5SNz/Elfqj+bQF4UGm6XtU62
+	 7HQHRKKel0c8Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XkwJy2CC9z4x1w;
-	Fri,  8 Nov 2024 08:32:34 +1100 (AEDT)
-Date: Fri, 8 Nov 2024 08:32:35 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xkx0M6F7nz4w2K;
+	Fri,  8 Nov 2024 09:03:15 +1100 (AEDT)
+Date: Fri, 8 Nov 2024 09:03:17 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
+To: David Sterba <dsterba@suse.cz>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the mm-hotfixes tree
-Message-ID: <20241108083235.6165fa8e@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the btrfs tree
+Message-ID: <20241108090317.3eaad84e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mbpYcwq46LHXFuPeepUpvFs";
+Content-Type: multipart/signed; boundary="Sig_/JgKSypWmO_Is+W0YgB_Oq5A";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/mbpYcwq46LHXFuPeepUpvFs
+--Sig_/JgKSypWmO_Is+W0YgB_Oq5A
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in Linus Torvalds' tree as a different commit
+The following commit is also in the btrfs-fixes tree as a different commit
 (but the same patch):
 
-  b27b8cf966c1 ("MAINTAINERS: remove Florian from DSA entry")
+  f4c30cb4a62e ("btrfs: fix the length of reserved qgroup to free")
 
-from the mm-hotfixes-unstable branch of the mm=3Dhotfixes tree.  This is
-commit
+This is commit
 
-  be31ec5c8efa ("MAINTAINERS: Remove self from DSA entry")
+  2b084d820594 ("btrfs: fix the length of reserved qgroup to free")
 
-in Linus' tree.
+in the btrfs-fixes tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mbpYcwq46LHXFuPeepUpvFs
+--Sig_/JgKSypWmO_Is+W0YgB_Oq5A
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmctMfMACgkQAVBC80lX
-0GxYaQf/feDu/OL58wQ2hhzp0fJUrwKkoT/d1FMf2qB8QM+WhlI4jfgdrFnAPFIc
-m1UI09I8JCr3STISNXEWjCupr8FXmjj1Uerad8pewHYWmVIf3JMO9y41aaDpZJSm
-y9447bq0PkDxgeHJ1rS7Q2ErLdSwmKKTL3gX6ZzVoHM0llnH59NPOkXSxzddK+wQ
-lHuNe1EeO7AqRUnuGWHebEV36tPrsAZbg1ut9aYLI2iHMgpVllZAtlUfaXkWqDcD
-6zXVyN3+jWURY15/Wo+8IrnH3F/Tw6BT4x/IVAQVBe7Gg6K4964PHsXwkCih2YAJ
-E0+bAT0R2zXT09tFFz9FRfRabY4lqA==
-=Rn7R
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmctOSUACgkQAVBC80lX
+0GwuaQgAi4n5MrwpmwN3TxBglM6Fpv0G1PgpW45U9pZq8XGpUY9RTvrOFJJalJwC
+OdzqQSBH+YuQSDzyP8DOjMRP6SR8ENHH2pm6nRNWJaPnYDNByPh3XzJr6ftvQ8Xy
+JkDg8JYJl5CgCiDw12obTMTJYkeJpRwDtbZS61TcpP0fdecWG3+j4lEnunVFtQxa
+iq84NMKrmuCZg9eaKTmim/ac+PeiaeNuF28ZsNisBzd8Gjn3qVyiQtj7I10T3EE1
+ttWz9VqyAkTviCUHu9kQDRITTtbauRDaI8uX3QCj0sKggGpPnAXzA6IEec0haaaa
+7TjytF8mbosb5wq77BO7U1g2aRwtng==
+=Awqt
 -----END PGP SIGNATURE-----
 
---Sig_/mbpYcwq46LHXFuPeepUpvFs--
+--Sig_/JgKSypWmO_Is+W0YgB_Oq5A--
 

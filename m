@@ -1,116 +1,102 @@
-Return-Path: <linux-next+bounces-4680-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4677-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9643B9C095C
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 15:54:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E30899C08EC
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 15:31:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23DBDB24DCC
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:54:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A82DD284681
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:31:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C755921500B;
-	Thu,  7 Nov 2024 14:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42AA321216A;
+	Thu,  7 Nov 2024 14:31:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="pRnilHBQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f8XANMet"
 X-Original-To: linux-next@vger.kernel.org
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE43A212181;
-	Thu,  7 Nov 2024 14:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C528E168BD;
+	Thu,  7 Nov 2024 14:31:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730991183; cv=none; b=ZByB5AN3e4bcT6VreLajuQkxdjKmYAFSPB7FMNWQ0R27rgF38gWmdVFh79cQCDl06w0G55hNVWcCEbwVRBIDwcHYYc5yxei3QZOZfE5CIW+LwIqNVuGNuIirQ+4cBWiKQT3ADlzRPsCuHjjXnU3O00MSt3+Sh4EVUl8ZjzcTyCM=
+	t=1730989902; cv=none; b=am8NoJfu+z6R94eIUqGX7HAs+OML5mCdFKGYCwle5EXEm+9cZOGaERxO+MEq8B4BG+OLC8jO7GcGsX56mQCPfmrCQJYAQBeD/WCWoq44tjBZV1OUeUfDpuh6YfpNf4Niw6u5N/4KsHYoZ70aPRvWPmdfMf4dT2RvzwX7VU6o34Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730991183; c=relaxed/simple;
-	bh=83E/dXa4P42+y0SvJfMAESOqUaAmNkaaZIy+HaJhrhA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NvG4E4rFa8nR+GhmM5nApkufMwaVTjUe2zfk9ZuwPIZe0a3PJJYUo7jIkrldPtxTTT5BakTsRyrrCZH9xLOU4HXSfA7RAUMmhj/BuJ0xawI5dxMZrJoyWRou00cpTCNk0pKDDXs/m0s3eOSkm8MM/QlrGtStwxY1vy5H1PlLjXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=pRnilHBQ; arc=none smtp.client-ip=185.87.125.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 8049640A06; Thu,  7 Nov 2024 15:25:37 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 8049640A06
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1730989537;
-	bh=83E/dXa4P42+y0SvJfMAESOqUaAmNkaaZIy+HaJhrhA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pRnilHBQt0iyzl64H6q58P2ph6P40VDVnyMBQJBtX47Z2nV6CGcnhWEbd2QJobjL5
-	 yi3UDdQHKDRgP0/rm/f/eTcOmQFV9d+YPTqt6fLzlFzs+/HPUfb4NhbFKsw2O0sLt1
-	 eRU7QH7//ZBfWPgJd87ndB83anmTaGYqppefbnTk=
-Date: Thu, 7 Nov 2024 15:25:37 +0100
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Wim Van Sebroeck <wim@iguana.be>,
-	Byoungtae Cho <bt.cho@samsung.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Sunyeal Hong <sunyeal.hong@samsung.com>,
-	Taewan Kim <trunixs.kim@samsung.com>
-Subject: Re: linux-next: manual merge of the watchdog tree with the
- samsung-krzk tree
-Message-ID: <20241107142537.GA5765@www.linux-watchdog.org>
-References: <20241107165933.3e8b5af5@canb.auug.org.au>
- <a0e3d45f-d982-4961-9945-3c81c0380806@kernel.org>
- <20241107103708.GB4818@www.linux-watchdog.org>
- <e56525c4-0e71-4c5d-9af2-b697e6b86d61@roeck-us.net>
+	s=arc-20240116; t=1730989902; c=relaxed/simple;
+	bh=Ek0EJDP9PHjwQQaqfhHm96VEoeJggzdZuE9i0svJpsA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tLMNh5RMxBQMIUraQCUS7K6ci6U7ix5tjDdyW8J01f5LsN+lfJ1UzILP7IPRDMdtXEqBtjUEb7U9gqh5UdYj2/w1Z1xXRgVgE3pGADoX6sPieSh/UTRRKqNABaLuByZ1R3onDc8qbeAyD9TbuX4q+Zi+1QROB9N3eGRg3CVdzdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f8XANMet; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2e2d1b7bd57so92227a91.1;
+        Thu, 07 Nov 2024 06:31:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730989900; x=1731594700; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ek0EJDP9PHjwQQaqfhHm96VEoeJggzdZuE9i0svJpsA=;
+        b=f8XANMetChqe9WgyxEWtvZ6YmxMd56mXf9eRclplyouGrdHxkASGXa/uSjCvKX2J/+
+         FMSNrVQ9zg1rZh+KtctRB9YPuzOl0tmDJ8TyMhFxNzzCfun1yZri5/bZTNdb/qr9rcMp
+         VIMV4baFmYXeTRyIkoqQjQpnsMqJd3+54Id+YbF8aKKHOFY7gwEbKUmUPfNIKSvtuBbf
+         t3Ac135aXQsZ4RbZoDGgu3tGQVDynwbeOo1ikr+6lbanaGv4duUNZ5FRHu54i2u8jZ3L
+         wRP/uiDLmZmODEOgeVflax7BRlI9jadIiNyTaRkDgnGQh3G9MFOiC+6ZULCjc/A7o+4Q
+         308w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730989900; x=1731594700;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ek0EJDP9PHjwQQaqfhHm96VEoeJggzdZuE9i0svJpsA=;
+        b=lKrFZ1pzfMQAw8f5Sl8RPVvYuFDIIdsblQPqXCg4zmy8sYbwAHOZl9WZWc/Q6fh2+U
+         hmcmbQ3+38GvHDAZpf0unAjcuoLv7y4Awa3u5eweW44xtGtm7t74MT03VRDVxMTSLeJN
+         kx1CyxDkwLCjWkORP8fNJcJ1bG8R7bSXXJaIFswuOZ/JoQJ+iDRRQ5L72YNCICPGSbBA
+         9DXeBt0DcjPPmDIXagF+BHM/wH6sLuI3p1K2RWxMur3nidv/VUW3bzXsl/Q8StQJcqGy
+         AwHIU0uZL4jq2Vn8bmpV6m4kVAUD/HDMpm+wAKXyrbG4OFnKdqD/3oYG1Q/TAWFOmPYE
+         TtIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUEJByS8V8pSMZQaXMOX3sDHb/Vqui2EZM7ySgfIz9ZC+XTyLKhaxdiw7BpLkqFz96U8mszgP90ApRsBQ==@vger.kernel.org, AJvYcCUl6veXcc6rg+aN5DEyDwN7n5TL7o4ycOM7aCqdNuEskMmYiRZ6Wqf/gNU+aaniDeDCqAeaF9y9GCL/M/w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRlyxPW67TNh6/weS8RLmKh4CZZwMktlX+TrwRWodg47UniQUn
+	nl8soqMpxavZQrv9Y9Z/dWE6SdSWE7bsPufQ6PzRpkgIrEM3KxI2DwJpOH6GX7YntUt99bfGWAj
+	X+LNKI7Dhlbn9ozV+MxrkBN1OHj8=
+X-Google-Smtp-Source: AGHT+IGZdOJDk4fZZ2ZKGbiwvgZpInqg3zx+v+B59S7HLyY4fGDGERIs/IJK9qQzFn3i3apVhYDLvprqmd7gYVU4Lv0=
+X-Received: by 2002:a17:90b:1810:b0:2e2:da8c:3fb8 with SMTP id
+ 98e67ed59e1d1-2e9afae97d6mr94432a91.6.1730989899924; Thu, 07 Nov 2024
+ 06:31:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e56525c4-0e71-4c5d-9af2-b697e6b86d61@roeck-us.net>
-User-Agent: Mutt/1.5.20 (2009-12-10)
+References: <20241107182411.57e2b418@canb.auug.org.au> <20241107103414.GT10375@noisy.programming.kicks-ass.net>
+In-Reply-To: <20241107103414.GT10375@noisy.programming.kicks-ass.net>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 7 Nov 2024 15:31:27 +0100
+Message-ID: <CANiq72kkiwaMpeKgNLYiCSMX_VK7a+6Xu4iQrDiB_cpnXpokxg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, bigeasy@linutronix.de, boqun.feng@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Guenter,
+On Thu, Nov 7, 2024 at 11:34=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> So I can't get RUST=3Dy, even though make rustavailable is happy.
 
-> On 11/7/24 02:37, Wim Van Sebroeck wrote:
-> >Hi Krzysztof,
-> >
-> >>On 07/11/2024 06:59, Stephen Rothwell wrote:
-> >>>Hi all,
-> >>>
-> >>>Today's linux-next merge of the watchdog tree got a conflict in:
-> >>>
-> >>>   arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-> >>>
-> >>>between commit:
-> >>>
-> >>>   ef1c2a54cbc7 ("arm64: dts: exynosautov920: add peric1, misc and hsi0/1 clock DT nodes")
-> >>>
-> >>>from the samsung-krzk tree and commit:
-> >>>
-> >>>   3595a523d043 ("arm64: dts: exynosautov920: add watchdog DT node")
-> >>
-> >>The main problem is above patch should have never been taken to watchdog
-> >>tree. I never agreed on that. I never acked it. It is against SoC
-> >>policies which are always requesting entire DTS to go through SoC tree.
-> >>
-> >>Please drop the patch from watchdog. Or revert it.
-> >>
-> >>Best regards,
-> >>Krzysztof
-> >>
-> >
-> >See my other e-mail. Since the 3 patches were about adding a new watchdog driver, I indeed took them in.
-> >This was reverted and I can only presume that you will take the 3 patches and do the necessary via the SoC tree.
-> >
-> 
-> I think the idea was that the watchdog tree would take the driver and
-> its devicetree property description, and the SoC tree would take the
-> actual devicetree changes. At least that is what I do in hwmon.
+If you get the chance, please check in e.g. `menuconfig` the unmet `depends=
+ on`.
 
-That's how it is now.
+It could be e.g. the `!CALL_PADDING` one if you have an older `rustc`
+than Stephen.
 
-Kind regards,
-Wim.
-
+Cheers,
+Miguel
 

@@ -1,91 +1,85 @@
-Return-Path: <linux-next+bounces-4669-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4670-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0633B9C06FA
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:11:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 441AC9C06FF
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:13:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 915F3B23D69
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 13:11:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FD6A1C21C2E
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 13:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C501EE039;
-	Thu,  7 Nov 2024 13:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED961EF08E;
+	Thu,  7 Nov 2024 13:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="chJbdCzV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RBZeZxvX"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17B31DBB37;
-	Thu,  7 Nov 2024 13:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DCB1DBB37;
+	Thu,  7 Nov 2024 13:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730985085; cv=none; b=jF6ggASVM34+xyZr7NL+YnVbnxt6/UXiv7RPDOGHCSreQJBf6eAJwU8EYfOKNwCSZfYSYlcLoG5jcFyHKbFRVm7DqwVfPjNgQTpL7dF8JUpybPHy/OmzepEQoCFvLH7tMFHRZblXcIhU2qT2gNlsSTAbuP47FY4B1u+xJlEYwzY=
+	t=1730985207; cv=none; b=r3k+fvDgtZiFAs2hjLiHErXDJD6u5/YUGPtX/H0D7cwZF4tNH4ND/Gariw0XizL8iXkoWbeebJ5ilGNiF8oa21SY4g+SJRzXNxeQd1GqZR2QCE98srOWQQAUhn5GI+fq1dHPHhwVkDDwZBTDRvJLSHkCzoVvht8un6ePbbWCa6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730985085; c=relaxed/simple;
-	bh=VW2FpAO8sqaHhfixyY+M0ih0cCjpw4i0naO5w2pm+RE=;
+	s=arc-20240116; t=1730985207; c=relaxed/simple;
+	bh=MFt+M4rjh+5OaIZFVxuxfqcABZPm4DVZor5oXblzbw8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=FzKS93pDMIK60+PWcPywFL1wL+jWwAdTsyt1oxitURFPhSjU9HmJU+K3/AJqrNHPG+4OQtSavunpMZUZwM7eCcjT2jrm7+uK+rw6Pwk9CULjfeKh5hCQnf8MUNAyHNv+bs7sj0v2cCRMqSwKLtQR8O2Xhsu2z2aAek5IBREPXVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=chJbdCzV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6037FC4CECC;
-	Thu,  7 Nov 2024 13:11:24 +0000 (UTC)
+	 Content-Disposition:In-Reply-To; b=FAk1ptcbO8/DyAprQja60CAov5mmeuTzY4QDA2E4svx34Trw5xmV66ShGFI5vsQohybNz01Z/2nVNV+vy3m/a1XxLmvErQL5FfU2ZGxF1J/1iyLLI/W+jUXh0Ju1ZvL0d/53IennDo2agV96nt/PZSFZWVNi23HJODPnnzuI+zY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RBZeZxvX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE91C4CECC;
+	Thu,  7 Nov 2024 13:13:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730985084;
-	bh=VW2FpAO8sqaHhfixyY+M0ih0cCjpw4i0naO5w2pm+RE=;
+	s=k20201202; t=1730985206;
+	bh=MFt+M4rjh+5OaIZFVxuxfqcABZPm4DVZor5oXblzbw8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=chJbdCzVwZftpKvRlmldEsw3wWr59CrJWJlc3dy8LFRJ8wb8qKDB773Q1dtujU4mq
-	 tkfEi5npvYVyqMtjXaQXfADE5BCSS1mB5+7q3iDDfOe1g7zDVD4SOQRff/7gvoxuxx
-	 HrBhdiWSrdJjweuP969Iyav2dZmfOqqlSdsnpIFQgyZ+sV9OeNGViaK3Y3LNWF74Kf
-	 /O3VQP7CcG2hkCs82k1qhGWd6yFI5hVJGDXGjV8l78ErDSvra1aLLodQ2W9X6hjHJT
-	 LDYSEFO5UbfwW+ZlJ5OZMMsoa/OVEU3vjdFvEwQyw8+8tM5HkW5tQfI8GGz/2qWw+a
-	 IjuiVXkaaKhFw==
-Date: Thu, 7 Nov 2024 07:11:21 -0600
+	b=RBZeZxvXMvpSS6MbFdJ9kvcL0IgLJdkRVX6ccUje6ikcakykUAoIOS9p+l2NlIhvB
+	 1zEyXYVeIVeMig9Zo21N4/bNUpdXH6qVo3YZT/RYpOtk242k7YOERDwoo2yBoLrJCm
+	 CC82wNiRkyFlDzvtL681LIP8w1MsnR2OEUfhwgY/VW3o4mYhARrt/o2EINrjN87Fei
+	 ZBkST5sdhTOGKiRlhiYdVP1Fhw4u60666AkMywOCzy6P5RUKENkVgc8/4ziAZURGY4
+	 A+kLlFWsFJ7x85SSK/g6NPekT8Iob8v1493Gelj0mtJ6BtGSLYSNaXZM3yw5/yOtMY
+	 Fjn7Ji5NOpmAw==
+Date: Thu, 7 Nov 2024 07:13:25 -0600
 From: Bjorn Helgaas <helgaas@kernel.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Philipp Stanner <pstanner@redhat.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
 	Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the block tree with the pci tree
-Message-ID: <20241107131121.GA1603326@bhelgaas>
+Subject: Re: linux-next: build failure after merge of the pci tree
+Message-ID: <20241107131325.GA1603844@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fa092ae5-d15d-4f53-9de5-d06ebd985b33@kernel.dk>
+In-Reply-To: <20241107120716.rkymr4sedc5co2nx@thinkpad>
 
-On Thu, Nov 07, 2024 at 05:49:18AM -0700, Jens Axboe wrote:
-> On 11/7/24 1:13 AM, Philipp Stanner wrote:
-> > On Thu, 2024-11-07 at 16:24 +1100, Stephen Rothwell wrote:
-> >> Hi all,
-> >>
-> >> Today's linux-next merge of the block tree got a conflict in:
-> >>
-> >>   drivers/block/mtip32xx/mtip32xx.c
-> >>
-> >> between commit:
-> >>
-> >>   5080394a8fcb ("block: mtip32xx: Replace deprecated PCI functions")
-> >>
-> >> from the pci tree and commit:
-> >>
-> >>   91ff97a72259 ("mtip32xx: Replace deprecated PCI functions")
-> >>
-> >> from the block tree.
+On Thu, Nov 07, 2024 at 12:07:16PM +0000, Manivannan Sadhasivam wrote:
+> On Thu, Nov 07, 2024 at 11:02:31PM +1100, Stephen Rothwell wrote:
+> > Hi all,
 > > 
-> > Ooops, that should not have happened – I must have lost overview over
-> > my branches when submitting the latter.
+> > After merging the pci tree, today's linux-next build (i386 defconfig)
+> > failed like this:
+> > 
+> > In file included from drivers/pci/msi/pcidev_msi.c:5:
+> > drivers/pci/msi/../pci.h:862:1: error: expected identifier or '(' before '{' token
+> >   862 | {
+> >       | ^
+> > drivers/pci/msi/../pci.h:861:20: error: 'of_pci_is_supply_present' declared 'static' but never defined [-Werror=unused-function]
+> >   861 | static inline bool of_pci_is_supply_present(struct device_node *np);
+> >       |                    ^~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> Ehm that's not good. I can't drop it from the block tree, I have
-> merges sitting on top of it. Can it be dropped from the PCI tree?
+> That's silly on me. Krzysztof, could you please fix it in the branch?
 
-Sure.  5080394a8fcb dropped from the PCI tree.
+I fixed it, thanks for the report.
 

@@ -1,213 +1,254 @@
-Return-Path: <linux-next+bounces-4675-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4676-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B31229C0892
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 15:12:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4A1F9C08CC
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 15:23:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6C981C232FF
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:12:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 641E32846E1
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2024 14:23:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E9C3212647;
-	Thu,  7 Nov 2024 14:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D8E5212D0B;
+	Thu,  7 Nov 2024 14:22:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oHUiLIx3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RPBkKLJr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E076D28F1;
-	Thu,  7 Nov 2024 14:12:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8654529CF4;
+	Thu,  7 Nov 2024 14:22:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730988738; cv=none; b=O4N3D92QALfwIIG6mYojg5Sbbd16YM1mCw2bSC1qOBJRfu5e96n2FdULsAnk9opICY7Z4G9hkL6d1TR+rZ6RlRsv2zd2DYQfUiPGwV+WJDSiXdPe4mM2uv6OsiziXV7ak/4Pynj+4HHXyiOCNyxqKhVWTlP4sa6IvRLRUSmqVAs=
+	t=1730989379; cv=none; b=C+c0963x+bmpxnh4xKQ9mRGEmBxeNPI0Q5D1+aVRzyxx8LCy77M8Hqw06KgK077bu1Lf6hgm4OmUntQK/DjT9XNGo8gnhcQDx4WmMZ2BRQLEmXQS/rYy9z52y1/xBmWl4C0y4lLVRdzXAKC+jWPiWF/aaW40f+/vl4p3VMF28bQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730988738; c=relaxed/simple;
-	bh=2wcCc6Xti/KhTWb0bMmK3g+FxFRCPbDyP6uPDksPAu4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p6IymxTo4pX6Z7S8B9D1n0bBg87DL1eaJ51XcdB1SU7eOYtiyi+23iL54aZSFsGTRCG/6FtSMFiFPES5g8IMIwrZkECta/6QN7NTrvGq3VUbyXHNBcsnXRkNTo8zXIcw3dzJRhG1thlV2Zjb/hz5LuZ90fQN21rTw9p+n/NsSTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oHUiLIx3; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=a0L5TP8VHkT/SCXs9iavhK3s9CtL7Vkw+p8sqahkp+g=; b=oHUiLIx3GRRDlstVP3pPAT9eG8
-	oZehaL6Ug6frPIIsZZ+YSlEnS6tEdMcFXWwJLO9fQjj3qpTCXGayHRGxmJkdHpGolv696o4T32Yr7
-	inqdJTRV0JSlHJ0wtjxmwWBmnSxZ9T8AbKnt7iL0i89mbsjuKU0Zrwa1XLBJ8NN/vRFR0xwmOZWvA
-	hy9m5RUe5WrpJ1yUebpaRapDdUPmfw5NXhiJhMzlR2sg8TWNvSffWI2miBMWLi2N+C/x/2Uee8M8N
-	sy8P168OQaVHr1ik3jiolFqs82M8uZSyseSWt+caig7ipSEv0EYnYmuNpsSjOcJ5gKZFNiGFuSyUs
-	IivfyEPg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t93F6-0000000C8kH-1xFb;
-	Thu, 07 Nov 2024 14:12:12 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 1B71A30078C; Thu,  7 Nov 2024 15:12:12 +0100 (CET)
-Date: Thu, 7 Nov 2024 15:12:12 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	bigeasy@linutronix.de, boqun.feng@gmail.com
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20241107141212.GB34695@noisy.programming.kicks-ass.net>
-References: <20241107182411.57e2b418@canb.auug.org.au>
- <20241107103414.GT10375@noisy.programming.kicks-ass.net>
- <20241108000432.335ec09a@canb.auug.org.au>
+	s=arc-20240116; t=1730989379; c=relaxed/simple;
+	bh=KqzZ6WY79YDLF1OpB1WL5ZQJCC7MXmKi54LGk5AgKQQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=QvIdiZBpdMtd+snkM5nc/4N5xUQCJv4m6ESUdRl2IzOdmtmQ1CDMGoTs8XoqzNVCdqoFIKrheEZJ99LB0TCT6AxJ7WP0NEdeC5n0fqwKKIVWtzFVxc+Pzyv2yLilfIxH+mqRZChuTfMusi+d38bGPhIxHW+LiPOazxY8Yqg0zh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RPBkKLJr; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4609c9b39d0so6657461cf.1;
+        Thu, 07 Nov 2024 06:22:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730989376; x=1731594176; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:references:in-reply-to:message-id
+         :cc:to:from:date:mime-version:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V8ChnhCYzMNWeR7/L12G3EeHqZZWIuyUN+IvvX5XAtw=;
+        b=RPBkKLJrD0lcM5k6MH7A2usS4U5vZ6rVbDNAlS+vLZzKjOmyRLWDegie5wT5vbuYvT
+         wA+PVX/+EcGSOCcX6EU2NQNjbw5MIek8Qf67+nDECyzoSxWvXJCfq68JkJB1NBm+27Hm
+         TZ0vJjkETuz3xjWsP6pjogpSWjZd7UaIc0+bmC9pvSJBysR4VoOgTZc2u8xMzaH7qRxZ
+         lY9L4QABjQgir8D8qdHkL7YnqS3pbg+F8CQ9Ub4tv6hHi1BLeJNmt4ipIGw9w6E2DKU0
+         bt+jxsOAo2WAbkFcUAif5YNaeQJNbcL26tDe/ah542siE9aK9ei/fXrVk7Uv8GK6vGoF
+         ZNQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730989376; x=1731594176;
+        h=content-transfer-encoding:subject:references:in-reply-to:message-id
+         :cc:to:from:date:mime-version:feedback-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=V8ChnhCYzMNWeR7/L12G3EeHqZZWIuyUN+IvvX5XAtw=;
+        b=lCXpcKJ5ELuhiXCG8ddMgV/8TRgV2m6cZjFzeVJLWqX7m8NVrO6B8WzLFscY+QmMGg
+         guAcwTyns0EEuRy2sxR1TcTLOfhegHEH5jfPSUPp08+VfLzZmrZYfKPnEP2DXySAdSBr
+         MIxNjP97y5QFxtYNQw2/aefRYZR+PZXPo2UdYkqhUqyVDPALOa99nU1gI4Hn6tjqgKc4
+         XWwH3iDRUaexNLBBmzEcqJnln7jbKRA6QrPNClhnogtBNB7Dgy+I/YfU0NlWVOnqXZ9J
+         mq+WnLemKIVdd8dihFz7D/xpjLYsWx+cdVqLkXtv8dqpChKeN/t+XRV7Q6gFSJOujtbH
+         2kfg==
+X-Forwarded-Encrypted: i=1; AJvYcCUOkbAuF/DYWp757syxj2Resl+vQbZrSDBZ8MGvRhajBGsNoMQEZprbu0Qhf3nBVC/QZ1MVZf2EoH0/Qg==@vger.kernel.org, AJvYcCUTQszsm8eNjdNO+Kunu/pEQZdvRk1FVW1UmIEWSfboIa/m0G4Y1Aqeohv9iT8Egpv8FryHYysSJnKPstg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOWpRblk0dUpS3TjLWPlvtaJiTPUU0+4YQdBD1L1i+BAGjJGHm
+	24j+a6v1u9UmaHBlPsEz72SEMYD2oRBOov3kYaRJBPC7JaMeQa0t
+X-Google-Smtp-Source: AGHT+IGPR1Xjfbc3eFsCOaVLSKqt8kcMoR+LBR2Ieg03VWwf80oAMJCQZAsJ9agXCSl0qngcnJbJiw==
+X-Received: by 2002:a05:622a:1b1b:b0:461:52b3:7ce5 with SMTP id d75a77b69052e-46307f4e324mr1038321cf.37.1730989373167;
+        Thu, 07 Nov 2024 06:22:53 -0800 (PST)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-462ff41de0asm8249581cf.33.2024.11.07.06.22.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Nov 2024 06:22:52 -0800 (PST)
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 26F61120006A;
+	Thu,  7 Nov 2024 09:22:52 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-12.internal (MEProxy); Thu, 07 Nov 2024 09:22:52 -0500
+X-ME-Sender: <xms:PM0sZ-u3U237Sj4UhqZ8LDMWMZxWDrD2FjoLAA9231giZlVq3t9XAA>
+    <xme:PM0sZzeNfGKVOxi-LaHTXvhfL3qwoi9r4HUGlMcRS3JdFYuGf0QsIeS-ds10P_8UP
+    sgfv7mwJ-cAvKYn-w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrtdeggdeifecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredttden
+    ucfhrhhomhepfdeuohhquhhnucfhvghnghdfuceosghoqhhunhdrfhgvnhhgsehgmhgrih
+    hlrdgtohhmqeenucggtffrrghtthgvrhhnpeegtddvvdevgedthfeuleekgfeftdefkeej
+    udehgeekvdeukeeiueejgfefveeitdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhu
+    nhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqdduje
+    ejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdr
+    nhgrmhgvpdhnsggprhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpth
+    htohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupdhrtghpthhtoheprghlvgig
+    rdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfh
+    hrrgguvggrugdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopegsihhgvggrshihsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoh
+    epthhglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepvgiiuhhlihgrnhes
+    rhgvughhrghtrdgtohhmpdhrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgtohhmpd
+    hrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:PM0sZ5zi-60Yc-W51ZQe75bdgwF3PGO1kzvUf4dJMLYpbasCf68eHQ>
+    <xmx:PM0sZ5MQi9azvPOYlokoYwD6j4POxT34wPlGUMuHAeXpuKc5PX9B9Q>
+    <xmx:PM0sZ-_k4UeU7JIqjlz6svntD1f7WOHE-PpIX4yPlpcA0rj_BBFyFw>
+    <xmx:PM0sZxXQF14DJ0dVjjHG5ASngwO6RyEHjTudufFbMavs7_bsPABVNw>
+    <xmx:PM0sZ3cIEPFKBtSixpcyl88OUVeWMjQtlcWS2c1pG4Qttb8Y2Cr5GUvs>
+Feedback-ID: iad51458e:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id F1217B00068; Thu,  7 Nov 2024 09:22:51 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="068i1ftiWJ33qMIW"
-Content-Disposition: inline
-In-Reply-To: <20241108000432.335ec09a@canb.auug.org.au>
+Date: Thu, 07 Nov 2024 06:22:31 -0800
+From: "Boqun Feng" <boqun.feng@gmail.com>
+To: "Peter Zijlstra" <peterz@infradead.org>,
+ "Stephen Rothwell" <sfr@canb.auug.org.au>
+Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "Miguel Ojeda" <ojeda@kernel.org>,
+ "Alex Gaynor" <alex.gaynor@gmail.com>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+ "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>, ezulian@redhat.com
+Message-Id: <cade359b-8e58-4031-b21b-3c47e0dcf3af@app.fastmail.com>
+In-Reply-To: <20241107141212.GB34695@noisy.programming.kicks-ass.net>
+References: <20241107182411.57e2b418@canb.auug.org.au>
+ <20241107103414.GT10375@noisy.programming.kicks-ass.net>
+ <20241108000432.335ec09a@canb.auug.org.au>
+ <20241107141212.GB34695@noisy.programming.kicks-ass.net>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
 
---068i1ftiWJ33qMIW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 08, 2024 at 12:04:32AM +1100, Stephen Rothwell wrote:
-> Hi Peter,
->=20
-> On Thu, 7 Nov 2024 11:34:14 +0100 Peter Zijlstra <peterz@infradead.org> w=
-rote:
-> >
-> > On Thu, Nov 07, 2024 at 06:24:11PM +1100, Stephen Rothwell wrote:
-> > So I can't get RUST=3Dy, even though make rustavailable is happy.
-> >=20
-> > make LLVM=3D-19 allmodconfig does not get me RUST=3Dy
-> >=20
-> > I started out with tip/master, tried adding rust-next, then kbuild-next
-> > gave up and tried next/master. Nada.
->=20
-> Just on Linus' tree allmodconfig gives me:
->=20
-> $ grep RUST .config
-> CONFIG_RUSTC_VERSION=3D108100
-> CONFIG_RUST_IS_AVAILABLE=3Dy
-> CONFIG_RUSTC_LLVM_VERSION=3D180108
-> CONFIG_RUST=3Dy
-> CONFIG_RUSTC_VERSION_TEXT=3D"rustc 1.81.0"
-> CONFIG_HAVE_RUST=3Dy
-> CONFIG_RUST_FW_LOADER_ABSTRACTIONS=3Dy
-> CONFIG_BLK_DEV_RUST_NULL=3Dm
-> CONFIG_RADIO_TRUST=3Dm
-> CONFIG_HID_THRUSTMASTER=3Dm
-> CONFIG_THRUSTMASTER_FF=3Dy
-> CONFIG_TRUSTED_KEYS=3Dm
-> CONFIG_HAVE_TRUSTED_KEYS=3Dy
-> CONFIG_TRUSTED_KEYS_TPM=3Dy
-> CONFIG_TRUSTED_KEYS_TEE=3Dy
-> CONFIG_TRUSTED_KEYS_CAAM=3Dy
-> CONFIG_INTEGRITY_TRUSTED_KEYRING=3Dy
-> CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=3Dy
-> CONFIG_SYSTEM_TRUSTED_KEYRING=3Dy
-> CONFIG_SYSTEM_TRUSTED_KEYS=3D""
-> CONFIG_SECONDARY_TRUSTED_KEYRING=3Dy
-> CONFIG_SECONDARY_TRUSTED_KEYRING_SIGNED_BY_BUILTIN=3Dy
-> CONFIG_SAMPLES_RUST=3Dy
-> CONFIG_SAMPLE_RUST_MINIMAL=3Dm
-> CONFIG_SAMPLE_RUST_PRINT=3Dm
-> CONFIG_SAMPLE_RUST_HOSTPROGS=3Dy
-> CONFIG_RUST_DEBUG_ASSERTIONS=3Dy
-> CONFIG_RUST_OVERFLOW_CHECKS=3Dy
-> CONFIG_RUST_BUILD_ASSERT_ALLOW=3Dy
->=20
-> $ rustc --version
-> rustc 1.81.0
+On Thu, Nov 7, 2024, at 6:12 AM, Peter Zijlstra wrote:
+> On Fri, Nov 08, 2024 at 12:04:32AM +1100, Stephen Rothwell wrote:
+>> Hi Peter,
+>> 
+>> On Thu, 7 Nov 2024 11:34:14 +0100 Peter Zijlstra <peterz@infradead.org> wrote:
+>> >
+>> > On Thu, Nov 07, 2024 at 06:24:11PM +1100, Stephen Rothwell wrote:
+>> > So I can't get RUST=y, even though make rustavailable is happy.
+>> > 
+>> > make LLVM=-19 allmodconfig does not get me RUST=y
+>> > 
+>> > I started out with tip/master, tried adding rust-next, then kbuild-next
+>> > gave up and tried next/master. Nada.
+>> 
+>> Just on Linus' tree allmodconfig gives me:
+>> 
+>> $ grep RUST .config
+>> CONFIG_RUSTC_VERSION=108100
+>> CONFIG_RUST_IS_AVAILABLE=y
+>> CONFIG_RUSTC_LLVM_VERSION=180108
+>> CONFIG_RUST=y
+>> CONFIG_RUSTC_VERSION_TEXT="rustc 1.81.0"
+>> CONFIG_HAVE_RUST=y
+>> CONFIG_RUST_FW_LOADER_ABSTRACTIONS=y
+>> CONFIG_BLK_DEV_RUST_NULL=m
+>> CONFIG_RADIO_TRUST=m
+>> CONFIG_HID_THRUSTMASTER=m
+>> CONFIG_THRUSTMASTER_FF=y
+>> CONFIG_TRUSTED_KEYS=m
+>> CONFIG_HAVE_TRUSTED_KEYS=y
+>> CONFIG_TRUSTED_KEYS_TPM=y
+>> CONFIG_TRUSTED_KEYS_TEE=y
+>> CONFIG_TRUSTED_KEYS_CAAM=y
+>> CONFIG_INTEGRITY_TRUSTED_KEYRING=y
+>> CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=y
+>> CONFIG_SYSTEM_TRUSTED_KEYRING=y
+>> CONFIG_SYSTEM_TRUSTED_KEYS=""
+>> CONFIG_SECONDARY_TRUSTED_KEYRING=y
+>> CONFIG_SECONDARY_TRUSTED_KEYRING_SIGNED_BY_BUILTIN=y
+>> CONFIG_SAMPLES_RUST=y
+>> CONFIG_SAMPLE_RUST_MINIMAL=m
+>> CONFIG_SAMPLE_RUST_PRINT=m
+>> CONFIG_SAMPLE_RUST_HOSTPROGS=y
+>> CONFIG_RUST_DEBUG_ASSERTIONS=y
+>> CONFIG_RUST_OVERFLOW_CHECKS=y
+>> CONFIG_RUST_BUILD_ASSERT_ALLOW=y
+>> 
+>> $ rustc --version
+>> rustc 1.81.0
+>
+> Yeah, I'm not sure what's going on. I occasionally get rust stuff, but
+> mostly when I try allyesconfig. Weirdness.
+>
+>> > Anyway, I think the above needs something like this:
+>> > 
+>> > ---
+>> > diff --git a/rust/helpers/spinlock.c b/rust/helpers/spinlock.c
+>> > index b7b0945e8b3c..5804a6062eb1 100644
+>> > --- a/rust/helpers/spinlock.c
+>> > +++ b/rust/helpers/spinlock.c
+>> > @@ -5,11 +5,16 @@
+>> >  void rust_helper___spin_lock_init(spinlock_t *lock, const char *name,
+>> >  				  struct lock_class_key *key)
+>> >  {
+>> > +#ifndef CONFIG_PREEMPT_RT
+>> >  #ifdef CONFIG_DEBUG_SPINLOCK
+>> >  	__raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
+>> >  #else
+>> >  	spin_lock_init(lock);
+>> >  #endif
+>> > +#else
+>> > +	rt_mutex_base_init(&lock->lock);
+>> > +	__rt_spin_lock_init(lock, name, key, false);
+>> > +#endif
+>> >  }
+>> >  
+>> >  void rust_helper_spin_lock(spinlock_t *lock)
+>> 
+>> I will try to remember to add that to the tip tree merge tomorrow.
+>
+> Boqun, could you test the above and make it happen?
+>
 
-Yeah, I'm not sure what's going on. I occasionally get rust stuff, but
-mostly when I try allyesconfig. Weirdness.
+FYI, Eder is already working on this:
 
-> > Anyway, I think the above needs something like this:
-> >=20
-> > ---
-> > diff --git a/rust/helpers/spinlock.c b/rust/helpers/spinlock.c
-> > index b7b0945e8b3c..5804a6062eb1 100644
-> > --- a/rust/helpers/spinlock.c
-> > +++ b/rust/helpers/spinlock.c
-> > @@ -5,11 +5,16 @@
-> >  void rust_helper___spin_lock_init(spinlock_t *lock, const char *name,
-> >  				  struct lock_class_key *key)
-> >  {
-> > +#ifndef CONFIG_PREEMPT_RT
-> >  #ifdef CONFIG_DEBUG_SPINLOCK
-> >  	__raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
-> >  #else
-> >  	spin_lock_init(lock);
-> >  #endif
-> > +#else
-> > +	rt_mutex_base_init(&lock->lock);
-> > +	__rt_spin_lock_init(lock, name, key, false);
-> > +#endif
-> >  }
-> > =20
-> >  void rust_helper_spin_lock(spinlock_t *lock)
->=20
-> I will try to remember to add that to the tip tree merge tomorrow.
+https://lore.kernel.org/rust-for-linux/20241106211215.2005909-1-ezulian@redhat.com/
 
-Boqun, could you test the above and make it happen?
+Eder, could you Cc locking for the next version?
 
-> > > Without the revert CONFIG_PREEMPT_RT=3Dy, after the revert it is not =
-set
-> > > and spinlock_check is only defined for !defined(CONFIG_PREEMPT_RT). =
-=20
-> >=20
-> > Right, that moved PREEMPT_RT out of the preemption choice. Now I'm not
-> > sure we want it =3Dy for all{yes,mod}config. Is the below the right
-> > incantation to avoid this?
-> >=20
-> > ---
-> > diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
-> > index 7c1b29a3a491..54ea59ff8fbe 100644
-> > --- a/kernel/Kconfig.preempt
-> > +++ b/kernel/Kconfig.preempt
-> > @@ -88,7 +88,7 @@ endchoice
-> > =20
-> >  config PREEMPT_RT
-> >  	bool "Fully Preemptible Kernel (Real-Time)"
-> > -	depends on EXPERT && ARCH_SUPPORTS_RT
-> > +	depends on EXPERT && ARCH_SUPPORTS_RT && !COMPILE_TEST
-> >  	select PREEMPTION
-> >  	help
-> >  	  This option turns the kernel into a real-time kernel by replacing
->=20
-> Yeah, that will do it.
+Regards,
+Boqun
 
-OK, I'll write it up and stick that in tip/sched/core along with them
-patches that's causing the grief :-)
-
---068i1ftiWJ33qMIW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEv3OU3/byMaA0LqWJdkfhpEvA5LoFAmcsyrMACgkQdkfhpEvA
-5LrXzQ//eWsdIudUYWZW709q2oyhYDiCfOis2ioIwmf0N8RPKwXXPPx97SHm6Yio
-VqBptjOCuYmZeP6+A1j9cm+rh3DS54aP+uccxjiucbZ2VJJX39Unt6ZRCLW1Nw09
-r8tt4SOnr23eeX+AaSJSl7dCJa77aG5gIHkICnVoZgvFItdSeObQKir59dyiqwJg
-lt+Dzz5eBczMuSKepkRhFGA/lPb6yXEW0EE8BtPQMuXoHZzjlktraamq6Mc62XGa
-wcb5C8ocIKoQzi/19d5Kou3UfNAg9knwpwsaDqYbL/PwwETDoLkuKB0eShz04IUB
-g6IjyUlmcz3OtUVHBV7EdQ3rFgsadNty2C5c9/v7RzYiCEhX+xK8z/TiH5IcOObi
-/+yDdhPbqs1TZkXUIRyC4tNig85K0+X77ONhpDaRn/zUvMAnPgns7bzqPuRMhVDn
-jtge/25a/Sv2On4QtcdLlTTFp2NRwNsq5VVfNxH7n48FVEVVEk/N4xbjaoONW5qr
-6fTKKAjXE57tUy4ZQnqtMJm72V8ED6y3izYRXAr4T2fVncs339gUn1rgVbLF6ShV
-dv+B/uojhAirOhpda+WafoE8y9/JPSrlWGvvc7soxzCMohmntIJy+NmSYaqY38+A
-0Lol8vhtGx6cdQckHuqWM16j1Mqyl1ijTHH0Ni1xfb4nnyQts+4=
-=uWKk
------END PGP SIGNATURE-----
-
---068i1ftiWJ33qMIW--
+>> > > Without the revert CONFIG_PREEMPT_RT=y, after the revert it is not set
+>> > > and spinlock_check is only defined for !defined(CONFIG_PREEMPT_RT).  
+>> > 
+>> > Right, that moved PREEMPT_RT out of the preemption choice. Now I'm not
+>> > sure we want it =y for all{yes,mod}config. Is the below the right
+>> > incantation to avoid this?
+>> > 
+>> > ---
+>> > diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
+>> > index 7c1b29a3a491..54ea59ff8fbe 100644
+>> > --- a/kernel/Kconfig.preempt
+>> > +++ b/kernel/Kconfig.preempt
+>> > @@ -88,7 +88,7 @@ endchoice
+>> >  
+>> >  config PREEMPT_RT
+>> >  	bool "Fully Preemptible Kernel (Real-Time)"
+>> > -	depends on EXPERT && ARCH_SUPPORTS_RT
+>> > +	depends on EXPERT && ARCH_SUPPORTS_RT && !COMPILE_TEST
+>> >  	select PREEMPTION
+>> >  	help
+>> >  	  This option turns the kernel into a real-time kernel by replacing
+>> 
+>> Yeah, that will do it.
+>
+> OK, I'll write it up and stick that in tip/sched/core along with them
+> patches that's causing the grief :-)
+>
+> Attachments:
+> * signature.asc
 

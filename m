@@ -1,115 +1,108 @@
-Return-Path: <linux-next+bounces-4714-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4715-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FAF09C26E4
-	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2024 22:05:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E87E9C273E
+	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2024 22:52:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1B811C22C9D
-	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2024 21:05:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 404841F21994
+	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2024 21:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675BF1D0F6C;
-	Fri,  8 Nov 2024 21:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741311E0E0C;
+	Fri,  8 Nov 2024 21:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iRKL2K6h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DHrwgeWg"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679FC233D92;
-	Fri,  8 Nov 2024 21:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB151F26D7;
+	Fri,  8 Nov 2024 21:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731099945; cv=none; b=lI6NoG7u+iXiSn150z8DkV2JoDz5teuvvPmNgaiWpbLe2PE0+BxtB+b3QNPuFsVFNh9T92Tq8Uq8qJ4fMSduzNyWMFU7F5PP/bskP1i3nVf7XnqFKPG8KvC7GWJkFRBnOqOQa0oeQN7pnTa74d0TiCUTmxCG45KLvspnD5DX0/0=
+	t=1731102699; cv=none; b=ajcC/0fAD1u7bux1h2HOPhLm7kSMNt8dsmyv3NEfeDTGdouymbRu1Kzx00DHeaNvajlI2H/FLeBPpb9r5O0c3Kt3Vq6RhUtU5tdRDEXEKFTcb3kF8dU3mIkTfU58gStOLJOAfGqnqMLHc4Bppbvr8vbjzKzAASKCrF6lrGlbruw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731099945; c=relaxed/simple;
-	bh=/KHRFjkuE/A9C0WJxDMVSW1WywPTRFQXWtQZ2q5dcwI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IWYtAZM2S22/xc5CIuAO8fbRyGbrKjKjSja4anrw+aZh3YBs7EDBfHQ1O0+GnuSBUq/aZ81UJtWSazyfK7hlU8jepwzsCtsrT1Uf3oESuQzpPrvhvl395KmhiTr6htGIvDbSshQeeeKSjNtyAe9Wgq7c3vemSrMcAqn7bZPQiM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iRKL2K6h; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7ede26dc527so383447a12.3;
-        Fri, 08 Nov 2024 13:05:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731099943; x=1731704743; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DwfI1+gidb4OWd62usyzOyDsH2cgtSWFP9TdDL/qVTc=;
-        b=iRKL2K6hiul9V/SP4omiL34F/v+FM1tSeT5i9hN9u9rx1HfnbSfJ9YzOpRxAMVisCS
-         5wqdXIztWPxIF+4k7hTmD55SiguJ7a329NNKFmiNcY+yqnF0fLxq2XafdhWNjnFjHuDL
-         JBUXHeuTxVuyIpqUgFKva7si/Ngz2l6k7O5XYSIa5cp0fsW/Ayi0qGZ4GRKxMFIp49eg
-         n0huoI/P9gqMY1aDleW6JuRodVgMrev1BjYvhstLnFgryiaHUAlz6Gm6amd0u99Pu3Ez
-         vhvtlg5SZ2n+7tjrZ41jwvSD2MLUJQmQWc80KTANyE5tvBUegnoLomeJKcZp9nP2NQIN
-         HbIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731099943; x=1731704743;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DwfI1+gidb4OWd62usyzOyDsH2cgtSWFP9TdDL/qVTc=;
-        b=P3jjFZQM+v/TGYC4/hSCohQHKL8ngDP0JlUShLzXm0t9hrStQ4zfUD29hltJ4jIYbl
-         gBKUsPTFTLi/YzTtMTudem7uV2ccCADrRkBMf4ij0DILguY9YA3kXd0E0JiQ9SAUkOF9
-         raDZOlk1eEnM8zFVFkEmfobpPWBsVclQtwgCzAUJDCw5hGRMFLuWXznpe7hdj8NeGKyp
-         4VKKEOWiDdIXtuG55fu26dAbNhbACo2no24jkYV4OAOAWzo5TuD2HMLmT1hDzLVPz7xY
-         fLs6ZQCIbnHyMl6SzbPYWUF7yDs7R1Tq7lcApNfMRqMr0DKZzWaFo/eF1CpUV0tnASrp
-         7wYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUE4ZBKNUSZ4Iu9VJN1ojwh0VjiHGixLqAedOjaOc4gZXfhfSamjJrjY2yaGghCSb39qC8nkXSFfXpFQBRWGqE=@vger.kernel.org, AJvYcCUcpseySPrWG2UyOZXLgP8zZHxAtvkGmSC2b5cMLWpY+i0VbJ8s537BfekQNcOzHxBcHN3709aWdmT13g==@vger.kernel.org, AJvYcCVF1nohX2Zx7HRj0HZAnquOsh62CDlXf0kmsM6DC6MhJPFUeUVkaDuILTlcqyA2r32BHRwnuD9nd5rpaLQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvmPuqmWeR0hbnmx1CVkBP2K+2UPM+LNlpnUjfIMwUvi6A9Q6z
-	ZmZN0vhVvZLU3ozgeEC3TdRKhIccLYIQY2aSsSYrqxEF3jukVB1AiXYxSWLT7yjLi5qWVmlxsk8
-	nbo3RjsFdu9JIdJ8bAlCQOhFUKJU=
-X-Google-Smtp-Source: AGHT+IHcK4oGgKoSMwwVhFYzHLBNuSvAjv06YVdNylUSXyd7Uk5t9tf8n3kxozjG5BXCxuVtL0/4/c3dmeHM7ZxYVzU=
-X-Received: by 2002:a17:90b:4b41:b0:2e7:8a36:a9ad with SMTP id
- 98e67ed59e1d1-2e9b1773084mr2542113a91.9.1731099942706; Fri, 08 Nov 2024
- 13:05:42 -0800 (PST)
+	s=arc-20240116; t=1731102699; c=relaxed/simple;
+	bh=GJ6OMCNdBUV+NNO8nN3bK8dKyElJu2aj9aL34bm5n5Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WjVlfA0J6OnM9zvfkpVFXu+6UPDtZ+YVtnpA/0Aj3Ic8HatggPvVu7dph/CqrKBjIjOR+HNBiPH72McmXTnINt7QeoI6VgEkHg0BFdkTGXQybXRVYLdF9Jep/EL9alnNNKYuCKKRBETqwyHaqjR0uhbrj6kn109gWjUUsSzPSEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHrwgeWg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 193FEC4CECD;
+	Fri,  8 Nov 2024 21:51:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731102698;
+	bh=GJ6OMCNdBUV+NNO8nN3bK8dKyElJu2aj9aL34bm5n5Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DHrwgeWgDpX2VcmIQMIr0DSQqaqobfi7UnlJoB6xCHZuZcFNAqxIaNWaKP/M4c7K3
+	 xxwYYPoAe8wWYH5gSMFEQ8ywyJwzRDmlg8wZZ6ha8TEExavRagEgOaJboiZHL/gmPA
+	 FRQyqMlD+QMw536uLoeQN+2i2WOHGy1BAES+PlkDMVJKhwIWm7drMLRPTvSkI3E+f0
+	 nstt2riJuVImJ9REQCNZcEBQugeNyVVrohzByEtIg7imPhaT5Bsl/Jpr6Uir/o+lHd
+	 PPhET1lVXvwiYO2KQYwXzqoxLJ59GASic+a8roni98dHYz3xW6n2av98LZJYOwfx2y
+	 yaikL4QuRlpyg==
+From: Miguel Ojeda <ojeda@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Alice Ryhl <aliceryhl@google.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] samples: rust: fix `rust_print` build making it a combined module
+Date: Fri,  8 Nov 2024 22:51:15 +0100
+Message-ID: <20241108215115.1398033-1-ojeda@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241108152149.28459a72@canb.auug.org.au> <20241108095933.72400ee1@gandalf.local.home>
- <CAH5fLgj6zSDH6Oe3oqfE7F+NQSgSLxh8x7X3ewrrDAdOHOh0YA@mail.gmail.com> <20241108153503.1db26d04@gandalf.local.home>
-In-Reply-To: <20241108153503.1db26d04@gandalf.local.home>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 8 Nov 2024 22:05:30 +0100
-Message-ID: <CANiq72mP15rjfR3cMZH-z9hkTDQfqgEaM4M+71B1KWLmw=3cPA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the ftrace tree
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	rust-for-linux <rust-for-linux@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 8, 2024 at 9:35=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
->
-> I can reproduce it with the attached config.
+The `rust_print` module, when built as a module, fails to build with:
 
-Something like this should work I think:
+    ERROR: modpost: missing MODULE_LICENSE() in samples/rust/rust_print_events.o
+    ERROR: modpost: "__tracepoint_rust_sample_loaded" [samples/rust/rust_print.ko] undefined!
+    ERROR: modpost: "rust_do_trace_rust_sample_loaded" [samples/rust/rust_print.ko] undefined!
+
+Fix it by building it as a combined one.
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Closes: https://lore.kernel.org/all/20241108152149.28459a72@canb.auug.org.au/
+Fixes: 91d39024e1b0 ("rust: samples: add tracepoint to Rust sample")
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+Steven: please feel free to rebase the original if that is better for
+you, but in case you prefer a formal patch on top, here it is. Thanks!
+
+ samples/rust/Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/samples/rust/Makefile b/samples/rust/Makefile
-index f29280ec4820..37c15f05cb81 100644
+index f29280ec4820..17017115657d 100644
 --- a/samples/rust/Makefile
 +++ b/samples/rust/Makefile
 @@ -2,6 +2,8 @@
- ccflags-y +=3D -I$(src)                          # needed for trace events
+ ccflags-y += -I$(src)				# needed for trace events
 
- obj-$(CONFIG_SAMPLE_RUST_MINIMAL)              +=3D rust_minimal.o
--obj-$(CONFIG_SAMPLE_RUST_PRINT)                        +=3D
-rust_print.o rust_print_events.o
+ obj-$(CONFIG_SAMPLE_RUST_MINIMAL)		+= rust_minimal.o
+-obj-$(CONFIG_SAMPLE_RUST_PRINT)			+= rust_print.o rust_print_events.o
++obj-$(CONFIG_SAMPLE_RUST_PRINT)			+= rust-print.o
 +
-+obj-$(CONFIG_SAMPLE_RUST_PRINT) +=3D rust_print_combined.o
-+rust_print_combined-y :=3D rust_print.o rust_print_events.o
++rust-print-y := rust_print.o rust_print_events.o
 
- subdir-$(CONFIG_SAMPLE_RUST_HOSTPROGS)         +=3D hostprogs
+ subdir-$(CONFIG_SAMPLE_RUST_HOSTPROGS)		+= hostprogs
 
-Cheers,
-Miguel
+base-commit: 91d39024e1b02914cc5e2dbc137908e29b269ce4
+--
+2.47.0
 

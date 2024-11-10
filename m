@@ -1,105 +1,116 @@
-Return-Path: <linux-next+bounces-4721-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4722-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F0329C2E9C
-	for <lists+linux-next@lfdr.de>; Sat,  9 Nov 2024 17:57:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DA3A9C31B6
+	for <lists+linux-next@lfdr.de>; Sun, 10 Nov 2024 11:57:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A89D1C20FE5
-	for <lists+linux-next@lfdr.de>; Sat,  9 Nov 2024 16:57:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F7E62811C8
+	for <lists+linux-next@lfdr.de>; Sun, 10 Nov 2024 10:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1826D19D06A;
-	Sat,  9 Nov 2024 16:57:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA53314F121;
+	Sun, 10 Nov 2024 10:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JIZZpkuz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tPNRG97x"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1DD1537C9;
-	Sat,  9 Nov 2024 16:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7942154457
+	for <linux-next@vger.kernel.org>; Sun, 10 Nov 2024 10:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731171438; cv=none; b=qDJUZBu4ifp8bRclkgiT47aVTOmW49UTlH0D9Rn88z8ywuGXe2Kp6pD1KDd0sB1GTiIHWhVpv6MUfMzpflBkRmyb+nOEWupTAHD6BkYUpeBFBmXYHPhuuWiftR6b8tZDHoUbaYm0T4HelcNwUEIfS02uDCNrfMuX2wqx8B/umbM=
+	t=1731236220; cv=none; b=E1MZe/PHj15Dlv4nyuyi7Am8kkI42uET8d3xGgsD2mKe/oU7P+KHUxVvnejToMhzFSVgyxcZVpVGYX5HPdYyUAO3eZyjnKUBUxzBLE9keRNhsegCa1Pze6fMcIBEKfYw2U/8Tvcz18hRf/BEpgFEsBAwQ0Ddvw7rLLmMvEa5Now=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731171438; c=relaxed/simple;
-	bh=i8hJauaqwslaETLhFqoPJLuS8NN37Zi9IGkHx7X2Qts=;
+	s=arc-20240116; t=1731236220; c=relaxed/simple;
+	bh=fApCHzHaNaMN9ZQJrGXmdWes5ZsjF+zWr97kyjUl1Ww=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PMejx0lsyp9TTqqWNzlAKQJNMTXApT6gtTNcuBFrBkelIT9u56ex03T7ldu57yH7uBYP3XmU/Lnol7mQvPoAiboQ6sG1PsOD+nwItSyoFd4W6XumIKUSj0luU/i41JELdPhw8HLksFcI3SP6L/nxdlVHoZZfK7mv/+0DPJiEg6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JIZZpkuz; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e9b23d189cso277515a91.1;
-        Sat, 09 Nov 2024 08:57:16 -0800 (PST)
+	 To:Cc:Content-Type; b=bPYyMbCLH1VA/wxAH0GwUo4/sgAxDzZsphjTlSs4Bgreb5DHmaD3lVUqmZoKVdVwB+PVxyBwV1fuUmBQdcZ1fDORTUA3MZrsst4+x+2Gn72y7gJhLrmseatuT5lcC3CmrYBWqITKo1xsAc9tSTMMhzKNfiEG8zGCJq3pE/VmsAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tPNRG97x; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43155afca99so25859625e9.1
+        for <linux-next@vger.kernel.org>; Sun, 10 Nov 2024 02:56:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731171436; x=1731776236; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1731236217; x=1731841017; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cj1AR0EvHQpu6WLpeb68qCEphyV98dcCcf5SQEQfjPo=;
-        b=JIZZpkuzbYcknwwJoGZQHiiWbd8mOceVYXbQMtf/JbPm/zk5zIaJLrj3+lJng/XyM2
-         ggdthujfczOZ+gjAfRCbDUePc50pys3Lyzxe3Ac1r/OPUJ0ECnDwUg77zr7EOTQ6QKPo
-         UuR8x9EiRza4JkuRBGrChC3viBQTV2YKADdWQXhGjw0z+cCt80GJIqDpXYYzfWOCz52F
-         pQP9lS9ieOZyqwOKaui21uHkuiD1R2MvE7274Clt4BFrPZMnjx+WgBWA7HoaQYa8Ghyd
-         D1ZLSgX7E6RBBBZJXUHWYYWEaxt7e2jXB03TpECZCKrUWKthvpDtTBXwrhOe+rjDE3OA
-         HYmg==
+        bh=S6pZc1K5vHW1yLRrOq46D/RKiIu83zxt8iuFPjL5iSM=;
+        b=tPNRG97xDYcZRaVFOPuoMoDKQsphmkyD+SxrMAW2TwOnX22AtrW3+672fryaqR0zAj
+         us4HTz+iOj+cyP4peFjaoZJWZp3V0Mc8PvMU64xJFkuuTvaskWHuKkvvOmr6liD8BKDE
+         0+dc3X6Vu1ttFp/99H+6PAaBg4PJ0mDP2ntPvGWmN+ln0A0PJRnnBaqSmM8F2f/cIPdH
+         HZdoWgdAPK3+HMfkgONVXMJJJQ3TPIXq6yWUsMs10rN5U9O85d+PSv3yKVWjnUHh2Xei
+         mN7G/YO1P5UOaZqhUsfos2UY7zWTKrzA1O3gBCKlGHwAZXYsQXSX2ndgX0q7AlVliEnE
+         eX7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731171436; x=1731776236;
+        d=1e100.net; s=20230601; t=1731236217; x=1731841017;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cj1AR0EvHQpu6WLpeb68qCEphyV98dcCcf5SQEQfjPo=;
-        b=sPJZVTR0Q2PZd5LCggcQkhTk+Vzahdkj1BkYUcyMgFvYsQAuSj8QR7PZcfPHll8Tg3
-         ggX9k6MGSXz/IbzvyWG6ttkwrQ4SB9pcfK+jy0QTmeDQZIBo0FEYQRmCGwLBK7c5Tz3X
-         7E4MjB7H2iboK32i1XTjkyBgUfeJENE3hHBXjUYVJ3oG8LbGbPfaEbDODDNkfOH4pK52
-         pa0/v/BnxyGlPHlPbePwpB3eE8UikCagsXP/qQmQExugHUYjcj+PUrQmtltazHaiL2/O
-         lEcGGdexnLpMPgsxR+57jttqDdofRtEwfHekz6xKPYN36qNKNt39hlKo7XGaFqI6G3th
-         1Lkg==
-X-Forwarded-Encrypted: i=1; AJvYcCUFnIDvifU9wg0cozWxbmUEhVlCKszC6lArG/mUVBm8G2LtMp42S+bwpULd98jwGs4k0LF2abTwH4bPmokbR0o=@vger.kernel.org, AJvYcCVGPgj6xm2RIM+r9RT0eN1hs/pHk9bX+jKGTlqDby2l3tHJ7iOklDE2VakKdZAd4o6xYp6GL6w58IIHWg==@vger.kernel.org, AJvYcCVi5+XNoVA3H3VI7iPWECQvTf5DCUlBeGq/Z8DB3Pwz7KUXTQRD3jn20uGLEUonocBl1Jzz9qY5pSVfH1U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ58n2kQVF6xuOpgYVg9Od51VNmSniPuH5nZrJwb2kPPYEa4Xf
-	qVAzu4/uFntJYwFw3sAMi23MIo70b8LE0nVlhB9bORNcx03EJ9h+dPjDDGe8f4Du0dBsabSNlwc
-	duNV1d8E4RfTcgFaz0AK7zgHqQI0=
-X-Google-Smtp-Source: AGHT+IGtd5uAVGyMbPZCbrXoZEoRrNhuAunugHzuvwexEnuTm7+n+0c3DxRLBDx7oIwtQSxXfmIbXwKQUW4wjGxwWIc=
-X-Received: by 2002:a17:90b:1a8a:b0:2e2:a60f:289e with SMTP id
- 98e67ed59e1d1-2e9b14884dcmr4081654a91.0.1731171435770; Sat, 09 Nov 2024
- 08:57:15 -0800 (PST)
+        bh=S6pZc1K5vHW1yLRrOq46D/RKiIu83zxt8iuFPjL5iSM=;
+        b=k61Ri7TWn0FpLmJgBqKqrfzXGj2FZH3QVHJl7yUYNSKWVzm14XWs1B+EReOMVVTdqE
+         mh9h5GRmrTZ1XadAoF9WzcXZ7/qgPlTgla40LQv+JoyqQkalSXvXowwqsoqpsAJxbjYc
+         nmaO7bja7VfrMHryEmkTTRAJMgXpWgqHhDcUix3nz7HKdn4yeviE1LzB6jFRqeFnMfnx
+         rzwqiv5BoXdS4JN7vhIfscvSG7cvrKTZ+fE3pizKnc4k3/W/CWMQBRh6aINksTBaA+ih
+         rsnXvxpZVpkaK3WAPyqMak5mL4xToFLsG/kjQYgWgfD6rNZtmL6Yc8+GEs7yTn8r0i91
+         scYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUVyf4C+/OJMGASeDrpjTtwYNCEutwkH4F/YbYjo9GZEIznnFA0O7XtE6p610PTo2N+WyczTB+ZvHjz@vger.kernel.org
+X-Gm-Message-State: AOJu0YySCeO9513ynlUDvuuODAqcgnwn2pt1jVbvG/0uxjJsve5gurRD
+	9eiTtsc5OthXTutaAux3HbLce15A8E6uKeYlGxTBHluUf8yjxNKWGnzID7wUsVKVXEs+RD3v8aa
+	Ouy3gwCKmlpOvV4yHpV6GtYsFMrM1UWlEXJC0
+X-Google-Smtp-Source: AGHT+IHMoahnfY0BITCuLZrb0MEqyF9R5+UE+yA+o8e4yfiWrcrbfycPVvQoH4GneTAdVu6kkPrdqxT9YFq58Bk4Ryc=
+X-Received: by 2002:a05:6000:1acc:b0:37c:cc7c:761c with SMTP id
+ ffacd0b85a97d-381f1a6675fmr6413285f8f.3.1731236217034; Sun, 10 Nov 2024
+ 02:56:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241108152149.28459a72@canb.auug.org.au> <20241108095933.72400ee1@gandalf.local.home>
- <CAH5fLgj6zSDH6Oe3oqfE7F+NQSgSLxh8x7X3ewrrDAdOHOh0YA@mail.gmail.com>
- <20241108153503.1db26d04@gandalf.local.home> <CANiq72mP15rjfR3cMZH-z9hkTDQfqgEaM4M+71B1KWLmw=3cPA@mail.gmail.com>
- <CANiq72m9T7NM33SCw=7yssTXFy=7FvD9zS26ZnBT6RMJB6ze1w@mail.gmail.com>
- <7B5D1CF7-0DBD-4F19-8587-32516DCE233B@goodmis.org> <CANiq72kg2k6cn3J_x+DZVGgSKwVXF_bLHFYsuexPHHg6T7b7BQ@mail.gmail.com>
- <3DC15367-3B1B-4808-988D-8C8D1CB2F4BB@goodmis.org>
-In-Reply-To: <3DC15367-3B1B-4808-988D-8C8D1CB2F4BB@goodmis.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 9 Nov 2024 17:57:03 +0100
-Message-ID: <CANiq72ki5dR6rzBu5nxA0CRt9RpcbjJmoey82BCPLdxWHtWQLA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the ftrace tree
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	rust-for-linux <rust-for-linux@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>
+References: <20241109165520.1461400-1-ojeda@kernel.org>
+In-Reply-To: <20241109165520.1461400-1-ojeda@kernel.org>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Sun, 10 Nov 2024 11:56:44 +0100
+Message-ID: <CAH5fLghd2qdW02CeX5QgP2p2mwgxGEj93MrW5G-T1zOCVaUOhw@mail.gmail.com>
+Subject: Re: [PATCH RESEND] samples: rust: fix `rust_print` build making it a
+ combined module
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Mark Rutland <mark.rutland@arm.com>, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, patches@lists.linux.dev, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 9, 2024 at 2:03=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
+On Sat, Nov 9, 2024 at 5:55=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wrot=
+e:
 >
-> No, I'm currently traveling and thought your change just touched what's u=
-pstream.  I'll take it.
+> The `rust_print` module, when built as a module, fails to build with:
+>
+>     ERROR: modpost: missing MODULE_LICENSE() in samples/rust/rust_print_e=
+vents.o
+>     ERROR: modpost: "__tracepoint_rust_sample_loaded" [samples/rust/rust_=
+print.ko] undefined!
+>     ERROR: modpost: "rust_do_trace_rust_sample_loaded" [samples/rust/rust=
+_print.ko] undefined!
+>
+> Fix it by building it as a combined one.
+>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/all/20241108152149.28459a72@canb.auug.org=
+.au/
+> Fixes: 91d39024e1b0 ("rust: samples: add tracepoint to Rust sample")
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-https://lore.kernel.org/linux-trace-kernel/20241109165520.1461400-1-ojeda@k=
-ernel.org/
+Thanks for fixing this, Miguel!
 
-Cheers,
-Miguel
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 

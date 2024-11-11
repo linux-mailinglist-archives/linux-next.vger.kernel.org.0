@@ -1,142 +1,142 @@
-Return-Path: <linux-next+bounces-4732-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4733-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C7449C3742
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 05:05:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 134FC9C3858
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 07:29:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABB991F21137
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 04:05:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A852628228F
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 06:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E95D14B5C1;
-	Mon, 11 Nov 2024 04:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF2314D452;
+	Mon, 11 Nov 2024 06:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="pDpkJSm7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pdmNN5r+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729F032C8E
-	for <linux-next@vger.kernel.org>; Mon, 11 Nov 2024 04:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B33A933;
+	Mon, 11 Nov 2024 06:29:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731297913; cv=none; b=rpXc7BuSqc/FMos8ADMHo7xsxriFhNPUcGXF7eanqPxHzPe7DSm5GRDIA7ZUGo5xiyiVwWECtxELZ5LNSv83ffTEyQqyhuow55nXYMvofQM/ZYpI0/L6tqLFJwnYSOnMi45Hderi4F2Kloq3qrKG7E2TVw8reQMvT68uHIJpEz8=
+	t=1731306593; cv=none; b=ok1DrT6j+PfOqDn1uIiO2c6JE/+1Pn7k5pS12/C+NkwqGyu3g2DX/nHrE7aIDv+hdALt6S3FjbHUF5giHtUEC8oBlXeiYHKnTkTYNXWtE688YZ2zjWFSgJwUgBJQGLdfGjXcY+tIW5Hn0KyOw3jSj6q97snNaVBYQzDfcb/frhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731297913; c=relaxed/simple;
-	bh=cuo+Z06wzmkF951dCw/yj3c7kmiQEphuZC+HdNuZAd8=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=cNxezc4F7VwMShQwfhmlc2K0ApBwMf69w/rj9tgwNn69VEtKc7qNJQK1j4JOX5fHMDGEDhwDtRtzoq6w//zYAZMJqEP137CzxnVJOqkRhXJV4SscGALd9qzRFpNYN7fQGuQ5WUg88EzRlYOy3EuCmIHxzUU2hB2tdQvhmJHc3xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=pDpkJSm7; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71e52582cf8so3199569b3a.2
-        for <linux-next@vger.kernel.org>; Sun, 10 Nov 2024 20:05:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1731297910; x=1731902710; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=rWuXyiE9f0ZMujDckUvxTlWGuXn/H2/zJMrwx+xnT9o=;
-        b=pDpkJSm7ZCIjwAgVxxoSAgWr1vmSnDUbXNtmC77soscil0srccJUfMGSqrachxQFYB
-         9/bmVvoh3dh+882eT4Rpp+4jAcaIIAzh+DINIMe4MiUi3higVpeVZtt2q3635KfD1EBV
-         WNgTNPuoQ/SJuuxb7bMm2gWs3RH5c6R9WZDjDMDL6XaKBdDpuEBD5HV2XW0mzn5btlcn
-         w1uuYhwCIJKkpCW3SyzFbfl+2bDFEh5QTs6sP9OEv4fUkGhRCPTpU0Z+stUF4eGC0ji7
-         qK0tUTfk6t17OjTPz+ZGxOHnPSzzGl00hLwvHyCPhNIvOCJWBTekJn945IyVUV4g1uEe
-         rrlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731297910; x=1731902710;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rWuXyiE9f0ZMujDckUvxTlWGuXn/H2/zJMrwx+xnT9o=;
-        b=pmQf/moViNc6XqN+SX5KIWE/mSsz8jVIH3RagAo3h3l0bc+RCYBrgjaMXlE/A0VQjW
-         ADZev4D+tG71vnFXoGkwHcrbsdczHjuprFJV8U5+b6PsxxLi7uQJ1BZPgd6ZTYHy40of
-         4FXGYfaaEk5C+EVDfYlY5fMMRSOzOaVgad3DzUS8ali6BRSrpdQmgzJ8cUbv/BmnbSnX
-         wUmjiTcttVYeRMamCUtdHxKDiduhtt44ffp0vGy5XJW8wvtFr1w+YKRm6mjpafltnM7i
-         eSaWTWONZw1B+irfYfibkOIuQmVPfeAaGDi9xRjbbn19enpii1sw/D/INsqJ3FzUFi7L
-         2Q5A==
-X-Gm-Message-State: AOJu0YxeukiJKmBoJ+BunB1FoelaE8l2CbMkfgbcNeBQLt8BmSlnewmf
-	VGDTfBMElY0dO4EHaRkVtDUjOjRWOBqcN5CMRw1BXw4es2/biSE+rtUDeP8F6DxwtkNLYjfpJmu
-	4
-X-Google-Smtp-Source: AGHT+IEn2dieLcxZyJc+GyvzfGIdjjz8FSWkTp9gYC+phfZ1a9Gi8ps14xrms9+ow2hKayBP5JYKrw==
-X-Received: by 2002:a05:6a00:1150:b0:71e:cc7:c507 with SMTP id d2e1a72fcca58-7241338bda9mr15925152b3a.23.1731297910310;
-        Sun, 10 Nov 2024 20:05:10 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078c09f9sm7985458b3a.80.2024.11.10.20.05.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Nov 2024 20:05:10 -0800 (PST)
-Message-ID: <67318276.050a0220.39db27.02f3@mx.google.com>
-Date: Sun, 10 Nov 2024 20:05:10 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1731306593; c=relaxed/simple;
+	bh=MsGkDlyRzUvHO9JQvDqb6yalK4ylfTkXZGgxs/CLPTA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Hk/1GQQehcPPf4bmjjKgcx9Vy92TfRvQH6S5dGPMbqvGY4Q2YKhBUqgeC7c4X1UUgPVOhRUz4JuvRB9FvhznChKNL+bSg/Umi/mI/xBdR8JYBq8/rEVqy4/TMQ/LC+fqIpVXwG4ckWyhnC8vxDchHAFLX0l/CPCb/21tfFIFERM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pdmNN5r+; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1731306586;
+	bh=7XdyAqAuJIDFhl8oP7a2OYC/KdOeH4Rds6/l++IVPxg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=pdmNN5r+HTTFwMJY8VTBmoWYuRfPMpOHAaTbWAUbRClELZusrMQbwsVB3xvE0sn8b
+	 BopJd6UDy6+RNM/BTo3SZ1cDXyxzc57R2PUgAV/NnpEV2j6ObzND7wh/BDWOwbCo0q
+	 xYWMHEi2dWa8a4u1xWafJh1+qCxSAdVPCsT6RnyFp1SiGx4J7KwK+6PxgF5D55Au4h
+	 LHUvTskEhuL9P97swLeulqvr9WHT2ISKYuCR8NOldZux2UBbXD1twRkIlRnRYlmfCi
+	 Qh8jvdiEVpcnJSrPyZxEvSoWV+dZKS8Cy9FlAFpVYTiUo+l6Fr8FtZ2sZI5GcwTGFT
+	 FxngW8TK2/J1w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xn05P5B98z4x8C;
+	Mon, 11 Nov 2024 17:29:45 +1100 (AEDT)
+Date: Mon, 11 Nov 2024 17:29:47 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Miguel Ojeda <ojeda@kernel.org>, Christian Brauner <brauner@kernel.org>
+Cc: Alice Ryhl <aliceryhl@google.com>, Gary Guo <gary@garyguo.net>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the rust tree with the vfs-brauner tree
+Message-ID: <20241111172947.63ee16dc@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/rm3mdfZ.4JV1jEEKOhAAubL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/rm3mdfZ.4JV1jEEKOhAAubL
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.12-rc6-415-g0e90fad093db9
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 43 runs,
- 1 regressions (v6.12-rc6-415-g0e90fad093db9)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes baseline: 43 runs, 1 regressions (v6.12-rc6-415-g0e90fad=
-093db9)
+Hi all,
 
-Regressions Summary
--------------------
+Today's linux-next merge of the rust tree got a conflict in:
 
-platform       | arch  | lab     | compiler | defconfig | regressions
----------------+-------+---------+----------+-----------+------------
-r8a774c0-ek874 | arm64 | lab-cip | gcc-12   | defconfig | 1          =
+  rust/kernel/task.rs
 
+between commits:
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.12-rc6-415-g0e90fad093db9/plan/baseline/
+  e7572e5deaf3 ("rust: types: add `NotThreadSafe`")
+  8ad1a41f7e23 ("rust: file: add `Kuid` wrapper")
+  e0020ba6cbcb ("rust: add PidNamespace")
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.12-rc6-415-g0e90fad093db9
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      0e90fad093db9dfdb0f09edaa8e08d724bc58fbf =
+from the vfs-brauner tree and commit:
 
+  d072acda4862 ("rust: use custom FFI integer types")
 
+from the rust tree.
 
-Test Regressions
----------------- =
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
+--=20
+Cheers,
+Stephen Rothwell
 
-
-platform       | arch  | lab     | compiler | defconfig | regressions
----------------+-------+---------+----------+-----------+------------
-r8a774c0-ek874 | arm64 | lab-cip | gcc-12   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6731550bcce1cedcfec86869
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.12-rc6-4=
-15-g0e90fad093db9/arm64/defconfig/gcc-12/lab-cip/baseline-r8a774c0-ek874.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.12-rc6-4=
-15-g0e90fad093db9/arm64/defconfig/gcc-12/lab-cip/baseline-r8a774c0-ek874.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6731550bcce1cedcfec86=
-86a
-        new failure (last pass: v6.12-rc6-326-gaded6a2e0817) =
-
+diff --cc rust/kernel/task.rs
+index 5120dddaf916,5bce090a3869..000000000000
+--- a/rust/kernel/task.rs
++++ b/rust/kernel/task.rs
+@@@ -4,17 -4,9 +4,17 @@@
+  //!
+  //! C header: [`include/linux/sched.h`](srctree/include/linux/sched.h).
  =20
++ use crate::ffi::{c_int, c_long, c_uint};
+ -use crate::types::Opaque;
+ -use core::{marker::PhantomData, ops::Deref, ptr};
+ +use crate::{
+ +    bindings,
+ +    pid_namespace::PidNamespace,
+ +    types::{ARef, NotThreadSafe, Opaque},
+ +};
+ +use core::{
+ +    cmp::{Eq, PartialEq},
+-     ffi::{c_int, c_long, c_uint},
+ +    ops::Deref,
+ +    ptr,
+ +};
+ =20
+  /// A sentinel value used for infinite timeouts.
+  pub const MAX_SCHEDULE_TIMEOUT: c_long =3D c_long::MAX;
+
+--Sig_/rm3mdfZ.4JV1jEEKOhAAubL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcxpFsACgkQAVBC80lX
+0Gwp5AgApYShZHNOTdtNW4KsiZqV2LBP3KcnJx7OZSiihknVnNLyeyeTjWDyuCVw
+KCeC4G9ZwA0+gFd1yqlRNkwWl0yok9uo0MJxnGMyoGB+P6UNBLSCOWf2v7gMynd/
+gSVTUIUpgUIYnMtp988JRVjnzLNgXqp3TFZfhk/M2tSyD0yO79lerIPPnyssO1Qo
+ODeItbB//jV+TF68vwbed2bqkW8gsdtWgiuWY1gUKbHPfzBDQQo8JhcCitUn3Fg+
+I/ml2O6IH9xvXEsF9QWz2/t7stqaj+ng0W3YYrDmJTsNxWCg6fc8dvX6Q/QiUoW1
+5KNHgttzN4N8Fwho7DEHuJBzYmFfuw==
+=7+Ys
+-----END PGP SIGNATURE-----
+
+--Sig_/rm3mdfZ.4JV1jEEKOhAAubL--
 

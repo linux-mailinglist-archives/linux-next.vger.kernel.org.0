@@ -1,121 +1,106 @@
-Return-Path: <linux-next+bounces-4743-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4744-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EF749C41A4
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 16:14:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90CC79C4295
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 17:26:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62A512814BC
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 15:14:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C700B215EF
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 16:25:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64E1E19E997;
-	Mon, 11 Nov 2024 15:14:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B711A0AF1;
+	Mon, 11 Nov 2024 16:25:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="cq/FCo28"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XBAW8Is0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB22518A6C0
-	for <linux-next@vger.kernel.org>; Mon, 11 Nov 2024 15:14:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1397189BBF;
+	Mon, 11 Nov 2024 16:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731338089; cv=none; b=H3L5Mm/IYAeAQSfhqA8JSzlLpWds6ag/JfiDocaWHhbqw0tTeeNFLy5+Gv3YMRFzKeoUHB7dxjxXSB58/iacfkP/1xVOBXmUfdEvPqTIAh/9e8G27SuTdwH58r5rvsvZIx9CUJs3KVJHXCL8bJiUepB/XEf6YF5RpEn2Wbng3Lk=
+	t=1731342313; cv=none; b=Kp3y0hsFAZO7e95Qp73IjpMu4nsAvwWwM8ZN5OUpclSeQisFKw+v7CcsBxYa1M7hfU6LoL9k3F3agELO9woe6Ho/ly761K7vGtgxnKVaHlgad8hbCgN3ZZdDc/Indb2T9fP8zxtcQMjE0Jn2jPHonmUsIezy7gNv1plYnRfdWm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731338089; c=relaxed/simple;
-	bh=UnPcoZ/mS2Qlmy7QVtab8EhHtoLabZ0wivst5i5cF7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LELh7HY7jYGoiwkDsSxnWoNUmb37/fSn2C4WOCOql3uXr+KMYuOVc3nR+LM5mlruq8CLJ4mS0V0Zb0tIm3E4w7jR2WTxPJYAnNabcFXp3rmHLLVc4XghEf06d0O9DXlCo7EcUPHyDi8lGZFyjNboIhbrtSDu6kheyZZ+ouM2wlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=cq/FCo28; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7180c7a4e02so2578978a34.0
-        for <linux-next@vger.kernel.org>; Mon, 11 Nov 2024 07:14:47 -0800 (PST)
+	s=arc-20240116; t=1731342313; c=relaxed/simple;
+	bh=OccHd1rTDxGip1Tqu1chnXzqdTStVagIc6+eFig3HFk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=h+auHMPF7azSQhfA0wwSkjBKH6N2x0DLu4rROG3w0hsscsHK5WxFBwEW2FW/KIpsGZs7MEELz6gzbH9nOcd6OMM3PyWAysJ+wnaDdPxBbrLSZOAv0nW4Kp/pWh4sFiAAZ3mPg5UY2ILPwLIABj6vzLB1HXIUSB+9VY+Z7kAwtR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XBAW8Is0; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7ee020ec76dso3648243a12.3;
+        Mon, 11 Nov 2024 08:25:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1731338087; x=1731942887; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rbb3ioDkWQUtkUEGcUOQSAFySHBMZKciKumQ+CVhPVU=;
-        b=cq/FCo288GLIokrH2UmLTFR2uNGOJtF46wZ6nM6oiOPe0IcXhPboht4W66WUW4rDlr
-         wlhL2rh1s0isHGSHsUWO7ZZ/L4WeyDzCohcwPrsV/2t067Osg0Tcm/YMEgEQW4xU6Lr2
-         YpTYWpcer420gGK4a37rHkoTqh4idQ+J0SHyhMhuhbZyxuZ16yXz/pW+Dp/b7sg5Sg8Z
-         cTOOfQwKl2/mu1GDVEOWeCOYTv/iVdmqMQNHxU5djBezgeS1n2RLEh5sgQqIZlXfiEoM
-         sWLn3IDtZIKGKB4FmGool2wp8fQL8aO+TzBUi18wu2VIVg1oFdDFLu9hjx+iPwYeESa1
-         F86w==
+        d=gmail.com; s=20230601; t=1731342311; x=1731947111; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qg9x1RcRnG2WX//9+175aTG+cJjttqB0GgtrQ7pKtXo=;
+        b=XBAW8Is0hciM4qwKuFJPfP2r8jMK7Knk/8MIrlHWgKFqr/5/kgOzlYPdK75o1GzOaR
+         f+uOtaRsahEUP5WMRsAuIzezc45JT6L16O4efl1tMQfyUHMUHbaluqvQcLHrmW/8pQFD
+         nJ/J4iSXTO2CnYhqDRUSxy5NmqjJAf67eBM4rhkUflolaXCs5lolgicCX8PssCkR7Twf
+         2tyaZELtfxHmMJlcP8ZOb8j0ha8lBgdz3ABcE3/lulffhWuiegXhiRzfyne6cOc8W4sM
+         ABsTxoWsHOJDHZLOURkNitNEn1pi2L6u4TXDtweLj5PuxK/s8ocVRXTlh1W+adcywUdp
+         ukaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731338087; x=1731942887;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rbb3ioDkWQUtkUEGcUOQSAFySHBMZKciKumQ+CVhPVU=;
-        b=XAvKLXpni6zJBE7zMl/X86hhuW74KntrqYTEeZ6tCJL0E3ZtT9dSL+lz83I6E3kbFw
-         KiiqONHDqBAKHYzZvCR3TiNduWhuNKke7b/IddWfm/wCCC34Q0xrtJC8C3l2G/1HfXdC
-         HxBsr/KGruUfobwsAgSPQqL0h6WM55dErgUtzCF2i50SAztByu28ywumEYQRwXtTaCgL
-         0Ti680YLf+N1Up2JkCq5ypIYDS55PTs/qQ1JHIFYYKJwQJ+PpjWyAWu4PqFCFnZXbg9P
-         BxzCIG7TCCw6uTptvq2qFaXBT2/V6Alxcju/gCllw/gmyObD8SOwGpUhH0r1kL5o6SHs
-         WjEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWBgg7NqyBl1CU46mbC9WvTgI+uOX//nw3/wrCn0kL7J7084sCbki59pakwNfYRnI4AzIVLKhPYvbvI@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR/bCp+IxVqJATeyhJmJ85hmOSA4zlEOeG+9yVJBZVmoK7VBHM
-	kV2EiUpdfq9cNGVH2B72y7IYjyV6USQy1vuQW4D1VUd3vemj9+hNfwjUbICMcwM=
-X-Google-Smtp-Source: AGHT+IEWftHGeRdWbnyVuxtSjbsVpJKzpmKgkCgPXFwdzBrutzyKUBQtoJjDqWRiqfn3hnNrOWo6eQ==
-X-Received: by 2002:a05:6830:6109:b0:718:3b7:23e4 with SMTP id 46e09a7af769-71a1c28a6a4mr10720803a34.23.1731338086775;
-        Mon, 11 Nov 2024 07:14:46 -0800 (PST)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71a108e6f9fsm2251567a34.46.2024.11.11.07.14.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Nov 2024 07:14:45 -0800 (PST)
-Message-ID: <e2a01b88-6cc5-43a0-bbd4-2a583231bf8c@kernel.dk>
-Date: Mon, 11 Nov 2024 08:14:45 -0700
+        d=1e100.net; s=20230601; t=1731342311; x=1731947111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qg9x1RcRnG2WX//9+175aTG+cJjttqB0GgtrQ7pKtXo=;
+        b=AsiAXrPSuEdOBHkjKFjgvG8mIHDaD5yxAU35Bw/LE/1Dg8ZigmoYVeYUXgSAtn87ai
+         1clvQIhB0kOoNmh1HdQryztwp+2Cb1K3F4xoyDCKvLgpWWighPFXvvLsbAVpC0uHdxXo
+         SAoLkXvUwhanHgv4sJXqz0ozpJugLWug0xqntWCW7JGsZe8Bl92Qxv17nA+E7uM45gY6
+         FPW3YUAFiQv43+20gdvcZUE4wIDJUJVMv9gDyM3NG2bHjNCe4O3FWKY5Qf7uFKIrY6jT
+         5uWI8g1dUvVK7MtnoT+EwuQF3/eoti4ZgyrsqtoxlhDR62ooP+zIMjDW8/oAZ9n/4rjb
+         2rcg==
+X-Forwarded-Encrypted: i=1; AJvYcCVL6a8IRdfaRCr2oSUYBxRA8LuJWa1wqOgMHDoGka0CSuZe5uMRXXsSnuIKzAYXIkLbisTwnEb/@vger.kernel.org, AJvYcCWNaOnOfgHINAYOOwGRodOOxfm9ux/rt572tMmbQ+8GFaa94sgefAd/k/+BkDRNmkPGCD1PYLXa/UzR0mO2@vger.kernel.org, AJvYcCXNbRSZoZnN8cSLqjUCSRu+aQnFse6ozFEvrZ2233F+KKjeZulGknB9iawZHW7HmlrNsMI=@vger.kernel.org, AJvYcCXwU6SLhWOvbTJQ1zv5baTUONJAEmdESdUKWOCkJM8NL7aSSx6mkXVdIxtzFU7ETf6VZVZh56PGzv11Sw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZlc74tfjKRE3teeKlDDuEbXma2w8URM6o8UJz31XT57ususFY
+	fVoiXWIKyaIq98xURt9Ln6u/1SYuzg5v763EIALBI4EvYLHYKKQJQZO8/MsNgKQNHsJzVpzW/Ql
+	0w7flGR3wl+6utAx//GghwNnHF5Y=
+X-Google-Smtp-Source: AGHT+IElDdvIgdZx0aKMKrebaZqvXhoopHUdyBWc1+UNJ1thTyzTdJrn8cYezzwf7Sv059fw/322Sk+U+ScPg32U+2U=
+X-Received: by 2002:a17:90b:2b8e:b0:2e2:8f1b:371f with SMTP id
+ 98e67ed59e1d1-2e9b177d6bemr17818331a91.26.1731342310976; Mon, 11 Nov 2024
+ 08:25:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the block tree with Linus' tree
+References: <20241111080035.10b4609e@canb.auug.org.au>
+In-Reply-To: <20241111080035.10b4609e@canb.auug.org.au>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 11 Nov 2024 08:24:58 -0800
+Message-ID: <CAEf4BzZE631YjigS9sbG0XcU974hf_PNFRRfuaneb=uHPAY-6g@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the bpf-next tree
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Breno Leitao <leitao@debian.org>, Keith Busch <kbusch@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Ming Lei <ming.lei@redhat.com>
-References: <20241111141033.2485eb96@canb.auug.org.au>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20241111141033.2485eb96@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/10/24 8:10 PM, Stephen Rothwell wrote:
+On Sun, Nov 10, 2024 at 1:00=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
 > Hi all,
-> 
-> Today's linux-next merge of the block tree got a conflict in:
-> 
->   drivers/nvme/host/core.c
-> 
-> between commit:
-> 
->   6d1c69945ce6 ("nvme/host: Fix RCU list traversal to use SRCU primitive")
-> 
-> from Linus' tree and commit:
-> 
->   6b6f6c41c8ac ("nvme: core: switch to non_owner variant of start_freeze/unfreeze queue")
-> 
-> from the block tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>
+> Commit
+>
+>   9a28559932d2 ("selftests/bpf: Allow building with extra flags")
+>
+> is missing a Signed-off-by from its committer.
+>
 
-Thanks I sorted it out in my for-next branch merge now.
+Fixed it up, thanks for the heads up.
 
--- 
-Jens Axboe
-
+> --
+> Cheers,
+> Stephen Rothwell
 

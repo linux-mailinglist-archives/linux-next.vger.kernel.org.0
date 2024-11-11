@@ -1,69 +1,71 @@
-Return-Path: <linux-next+bounces-4733-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4734-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 134FC9C3858
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 07:29:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB4779C3875
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 07:35:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A852628228F
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 06:29:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 794A81F2200D
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2024 06:35:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF2314D452;
-	Mon, 11 Nov 2024 06:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D320C15533B;
+	Mon, 11 Nov 2024 06:35:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pdmNN5r+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gBvS6qrS"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B33A933;
-	Mon, 11 Nov 2024 06:29:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81D4014F9F8;
+	Mon, 11 Nov 2024 06:35:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731306593; cv=none; b=ok1DrT6j+PfOqDn1uIiO2c6JE/+1Pn7k5pS12/C+NkwqGyu3g2DX/nHrE7aIDv+hdALt6S3FjbHUF5giHtUEC8oBlXeiYHKnTkTYNXWtE688YZ2zjWFSgJwUgBJQGLdfGjXcY+tIW5Hn0KyOw3jSj6q97snNaVBYQzDfcb/frhw=
+	t=1731306905; cv=none; b=GmMmm7LKKBwuJtsPpiuo04r67Zew5zOy9MJ0Wok5fdClzMr+RRcuJ31KDAOgmSm1uG5DUHCHPqZl2HBkMtor0sI3NaWoIxtWPToj7+oN9Sx7O5rq3STwy6vGIVk4sqTSpVw0Gf+15VuXU7FPionHi0r8Xq/8MKMSGXQrmFSwjKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731306593; c=relaxed/simple;
-	bh=MsGkDlyRzUvHO9JQvDqb6yalK4ylfTkXZGgxs/CLPTA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Hk/1GQQehcPPf4bmjjKgcx9Vy92TfRvQH6S5dGPMbqvGY4Q2YKhBUqgeC7c4X1UUgPVOhRUz4JuvRB9FvhznChKNL+bSg/Umi/mI/xBdR8JYBq8/rEVqy4/TMQ/LC+fqIpVXwG4ckWyhnC8vxDchHAFLX0l/CPCb/21tfFIFERM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pdmNN5r+; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1731306905; c=relaxed/simple;
+	bh=Ch0f7NofSlQP/lO8vheMHhgSna8alrNuunGxDtOYuA8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Q33qkdSV90Q2p12lmI3+39l6eXbk1mAw9Y4zQx12z5dl42JPyM3H9jluZ38GZlGzXDnEy6z7va4GEWIwZfitEcq7Rd3EcAD4Bt0dE+BDiEWUOqeptqRvZ7O+rieG5i2Z5QVQ2h9uwFdWnwuAhCm/uqXbecJtq454Zkw1/65epiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=gBvS6qrS; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1731306586;
-	bh=7XdyAqAuJIDFhl8oP7a2OYC/KdOeH4Rds6/l++IVPxg=;
+	s=201702; t=1731306898;
+	bh=0tNaVeY1YVlUI8jHkrHJWvQnhhN2woCW7W3Az2C0gp4=;
 	h=Date:From:To:Cc:Subject:From;
-	b=pdmNN5r+HTTFwMJY8VTBmoWYuRfPMpOHAaTbWAUbRClELZusrMQbwsVB3xvE0sn8b
-	 BopJd6UDy6+RNM/BTo3SZ1cDXyxzc57R2PUgAV/NnpEV2j6ObzND7wh/BDWOwbCo0q
-	 xYWMHEi2dWa8a4u1xWafJh1+qCxSAdVPCsT6RnyFp1SiGx4J7KwK+6PxgF5D55Au4h
-	 LHUvTskEhuL9P97swLeulqvr9WHT2ISKYuCR8NOldZux2UBbXD1twRkIlRnRYlmfCi
-	 Qh8jvdiEVpcnJSrPyZxEvSoWV+dZKS8Cy9FlAFpVYTiUo+l6Fr8FtZ2sZI5GcwTGFT
-	 FxngW8TK2/J1w==
+	b=gBvS6qrSVTmxWkCPZ+iOxNZrdKxKXePqPO/h6O1Z460GAuIgihiWgeqpfDNPpZtoT
+	 fAqRR3BituWCPqKB07hcuXolYbriJPPWONexOEeexNdpimwmu8x8MyNuXCyZEdwZ/i
+	 Tlh7q6jiN1l44QKCQSbiuA6EhvdPch2rkQNfVztdSo+XKlB4ISq72LAdNjdoB5SlPT
+	 yWSnH84522UgQnvjQFKvdEegRW6Q8Fzd10AlAGuCVEiTXoUqWhZwBX+DeUSX0ge8b7
+	 KOcK4vIPXCv+B2y7Nb6s/PxNQF4Z4jitF0kwOwyjvck2zGs3E36EAFF/P5xdRTSSFL
+	 9c2tQJzhbCpLw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xn05P5B98z4x8C;
-	Mon, 11 Nov 2024 17:29:45 +1100 (AEDT)
-Date: Mon, 11 Nov 2024 17:29:47 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xn0CP2YHpz4wbp;
+	Mon, 11 Nov 2024 17:34:57 +1100 (AEDT)
+Date: Mon, 11 Nov 2024 17:34:59 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Miguel Ojeda <ojeda@kernel.org>, Christian Brauner <brauner@kernel.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Gary Guo <gary@garyguo.net>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the rust tree with the vfs-brauner tree
-Message-ID: <20241111172947.63ee16dc@canb.auug.org.au>
+To: Miguel Ojeda <ojeda@kernel.org>, Greg KH <greg@kroah.com>, Arnd Bergmann
+ <arnd@arndb.de>
+Cc: Danilo Krummrich <dakr@kernel.org>, Gary Guo <gary@garyguo.net>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Wedson Almeida Filho <walmeida@microsoft.com>
+Subject: linux-next: manual merge of the rust tree with the char-misc tree
+Message-ID: <20241111173459.2646d4af@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rm3mdfZ.4JV1jEEKOhAAubL";
+Content-Type: multipart/signed; boundary="Sig_/gQlbsfWmH_MKIiWP6n2p=+i";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/rm3mdfZ.4JV1jEEKOhAAubL
+--Sig_/gQlbsfWmH_MKIiWP6n2p=+i
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -71,72 +73,89 @@ Hi all,
 
 Today's linux-next merge of the rust tree got a conflict in:
 
-  rust/kernel/task.rs
+  rust/macros/module.rs
 
-between commits:
+between commit:
 
-  e7572e5deaf3 ("rust: types: add `NotThreadSafe`")
-  8ad1a41f7e23 ("rust: file: add `Kuid` wrapper")
-  e0020ba6cbcb ("rust: add PidNamespace")
+  7f15c46a57c3 ("rust: introduce `InPlaceModule`")
 
-from the vfs-brauner tree and commit:
+from the char-misc tree and commit:
 
   d072acda4862 ("rust: use custom FFI integer types")
 
 from the rust tree.
 
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc rust/kernel/task.rs
-index 5120dddaf916,5bce090a3869..000000000000
---- a/rust/kernel/task.rs
-+++ b/rust/kernel/task.rs
-@@@ -4,17 -4,9 +4,17 @@@
-  //!
-  //! C header: [`include/linux/sched.h`](srctree/include/linux/sched.h).
+diff --cc rust/macros/module.rs
+index a03266a78cfb,e7a087b7e884..000000000000
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@@ -332,15 -330,21 +332,15 @@@ pub(crate) fn module(ts: TokenStream) -
+                      /// # Safety
+                      ///
+                      /// This function must only be called once.
+-                     unsafe fn __init() -> core::ffi::c_int {{
++                     unsafe fn __init() -> kernel::ffi::c_int {{
+ -                        match <{type_} as kernel::Module>::init(&super::s=
+uper::THIS_MODULE) {{
+ -                            Ok(m) =3D> {{
+ -                                // SAFETY: No data race, since `__MOD` ca=
+n only be accessed by this
+ -                                // module and there only `__init` and `__=
+exit` access it. These
+ -                                // functions are only called once and `__=
+exit` cannot be called
+ -                                // before or during `__init`.
+ -                                unsafe {{
+ -                                    __MOD =3D Some(m);
+ -                                }}
+ -                                return 0;
+ -                            }}
+ -                            Err(e) =3D> {{
+ -                                return e.to_errno();
+ -                            }}
+ +                        let initer =3D
+ +                            <{type_} as kernel::InPlaceModule>::init(&sup=
+er::super::THIS_MODULE);
+ +                        // SAFETY: No data race, since `__MOD` can only b=
+e accessed by this module
+ +                        // and there only `__init` and `__exit` access it=
+. These functions are only
+ +                        // called once and `__exit` cannot be called befo=
+re or during `__init`.
+ +                        match unsafe {{ initer.__pinned_init(__MOD.as_mut=
+_ptr()) }} {{
+ +                            Ok(m) =3D> 0,
+ +                            Err(e) =3D> e.to_errno(),
+                          }}
+                      }}
  =20
-+ use crate::ffi::{c_int, c_long, c_uint};
- -use crate::types::Opaque;
- -use core::{marker::PhantomData, ops::Deref, ptr};
- +use crate::{
- +    bindings,
- +    pid_namespace::PidNamespace,
- +    types::{ARef, NotThreadSafe, Opaque},
- +};
- +use core::{
- +    cmp::{Eq, PartialEq},
--     ffi::{c_int, c_long, c_uint},
- +    ops::Deref,
- +    ptr,
- +};
- =20
-  /// A sentinel value used for infinite timeouts.
-  pub const MAX_SCHEDULE_TIMEOUT: c_long =3D c_long::MAX;
 
---Sig_/rm3mdfZ.4JV1jEEKOhAAubL
+--Sig_/gQlbsfWmH_MKIiWP6n2p=+i
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcxpFsACgkQAVBC80lX
-0Gwp5AgApYShZHNOTdtNW4KsiZqV2LBP3KcnJx7OZSiihknVnNLyeyeTjWDyuCVw
-KCeC4G9ZwA0+gFd1yqlRNkwWl0yok9uo0MJxnGMyoGB+P6UNBLSCOWf2v7gMynd/
-gSVTUIUpgUIYnMtp988JRVjnzLNgXqp3TFZfhk/M2tSyD0yO79lerIPPnyssO1Qo
-ODeItbB//jV+TF68vwbed2bqkW8gsdtWgiuWY1gUKbHPfzBDQQo8JhcCitUn3Fg+
-I/ml2O6IH9xvXEsF9QWz2/t7stqaj+ng0W3YYrDmJTsNxWCg6fc8dvX6Q/QiUoW1
-5KNHgttzN4N8Fwho7DEHuJBzYmFfuw==
-=7+Ys
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcxpZMACgkQAVBC80lX
+0GwmUQf/T1YTaxbVTgmgElmCsEkIi7D6Y2IbGU9m8vz9BwTBTDa13bv0ZsX4DjcK
+XqDE1hjABzXTPrcVB1LUMCC/ojZvyLWVDqGXMw1PtfAGOvp8sD9AI3qwMDXUT0Fh
+/FadT2tqeE7ikInQQdMMPkFJVG8qpfYtuiK1KBFcG2xUYGMpZIyC3QKakWZwinVn
++tdGIYrVKzlln3SZYQqmjUvPzLXy+rkx4lHbZ5bTQtTxHFh7fJBw9ezspLb+lMWz
+t4M4zx9EXoIYBN2Ya3djS6KqCDcHhKOBQeA5tH2KWJH0zdoGhgZjJpwVfDdml0Yb
+aQVpikQPELcntCQj92ippvOZwBebZw==
+=swMW
 -----END PGP SIGNATURE-----
 
---Sig_/rm3mdfZ.4JV1jEEKOhAAubL--
+--Sig_/gQlbsfWmH_MKIiWP6n2p=+i--
 

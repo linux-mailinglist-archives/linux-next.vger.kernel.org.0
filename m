@@ -1,115 +1,141 @@
-Return-Path: <linux-next+bounces-4756-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4757-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 286E69C4EC6
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2024 07:30:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 950AE9C4ECA
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2024 07:31:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA2DBB2573E
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2024 06:30:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30B2728827E
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2024 06:31:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78636208203;
-	Tue, 12 Nov 2024 06:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F00C208210;
+	Tue, 12 Nov 2024 06:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VIAME+0S"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="MmWMszFT"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886F45234;
-	Tue, 12 Nov 2024 06:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B245234
+	for <linux-next@vger.kernel.org>; Tue, 12 Nov 2024 06:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731393038; cv=none; b=fUarVSd7nZdyy/09ist1uUmITglg6nEf2piOTQhCioLroqzuVyApJ7tSJl6f7sMxpcorN2Aea2/Hv0YphLgVzzySq7t7j9TmLvfJaLMEyQ0skncY8OnLij6ZpwLrJfbXP64U3Eo+q/h8KP+AucaDfsyj2hmvEME548LyBCoASZU=
+	t=1731393087; cv=none; b=D6VXwge5Zebm2iIwA5MR1z0DF0bsTdn8JBbSdxWNx/Q/ULPzUCy9ATPG6knUlNsWBozclkan8wZQaQxmTKuHop0oznLjGyjOTH8Gg1gjB4c57Ys44zOi3CPSlityeDpCa5si4Fj85BV4mSGSQLL3oi0zCF3cgzto/l0slwcHz4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731393038; c=relaxed/simple;
-	bh=ZamXW1gOCoJT7299mt7TjY0oZlhR+DtytP5GXkfobT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=swA6B85brmavrlxMqMniM937qLJ4dfzBt/ccqtC1UkQKLCUIOB5SDgPmjJEmPk2uyBzmvOvJRAOrp75+r1Or7hXMWkNmqumkGT9P/VtM0b6uyqfeVYeLbngprCPnC4M1ZnKKWEbpJVEMCbciieLlNnfBh1D+1W0qeAEOKb6PThs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VIAME+0S; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1731393029;
-	bh=ZamXW1gOCoJT7299mt7TjY0oZlhR+DtytP5GXkfobT4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=VIAME+0SFPNmDw6F3RWVElW2DTXlkvpPJ1l5NdmewntS4Mgbim0aZS/seNnFpsUAD
-	 DI2FQLS5BTs3p4T97/ScZwZjlBBAtGQkJIdSym/3Oq+wq8gtkvFy7fsUUllTe/yKHd
-	 3ohh0Fl412lzjWRA/oCG3WLTxsyBLoDGeWHQgTpWxO72cWtTAt5Dj+us5sMd5tKhvn
-	 jPD3WgfnpK1a4OnYQCwghb4Et6wrFukywwgH/7he0irh2Y+UbOSu3XnStrIxgMD0mk
-	 mtNsN9/XysoguTVa5/RPLEi4+QgIe65NyfzLwEExzuTcQpP6+lR+ycOGstLa5w3mME
-	 ns4U/7vNdCoog==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xnc3n3Gpqz4x2J;
-	Tue, 12 Nov 2024 17:30:29 +1100 (AEDT)
-Date: Tue, 12 Nov 2024 17:30:26 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rust tree
-Message-ID: <20241112172920.6aedc927@canb.auug.org.au>
-In-Reply-To: <CANiq72mYq-53xB9WFTH3H78WLrQuJze-nEybjwyLqnrSbv8UqA@mail.gmail.com>
-References: <20241111175842.550fc29d@canb.auug.org.au>
-	<CANiq72=JhmDJJCgcG5ex2A1gvBxCg3wzzutUc3L1HLPrPsHeyA@mail.gmail.com>
-	<CANiq72nyWAhyORsDij6P6U7Ww=eCp6S=LzPWZN4wxGD8JiK+RQ@mail.gmail.com>
-	<CANiq72mYq-53xB9WFTH3H78WLrQuJze-nEybjwyLqnrSbv8UqA@mail.gmail.com>
+	s=arc-20240116; t=1731393087; c=relaxed/simple;
+	bh=ET4B3eBs1DSDaD2hlWeUYfM+c0MOjq12MqVRvWcklbU=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=b8dMIQHdE5AYLlJDMBFeWYNsVjbFkV3W7CxF5p9P/WXAOdDQeTD4OLJrFPB+sVrEOTI+eMVIb9W8iHXI4VwSjW0+iVg94GdBX50T/6bNElPid4LQ93ZmJ+rVsVWi5KA41JkqUkdUshzh0kQjkK481yjcn2H00tGU0znIAsdFMm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=MmWMszFT; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7206304f93aso4757234b3a.0
+        for <linux-next@vger.kernel.org>; Mon, 11 Nov 2024 22:31:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1731393084; x=1731997884; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=wrus6mNHQMe5veO6BElnrZXFWHJwaVk5UDTLOZZGUqY=;
+        b=MmWMszFTpxn4N9a1IlHwk2h+OKSq1RvUY1Be6kpeMxKDAYkBCCk1BOUWuamtrkpula
+         QX5nC1HmTmcxe8aznbf+dm8vt2SVl4dnj4Fn6/0lDCxGn+G8MzHNw14ar1D00Id+NPHf
+         ioJyKeZERAOMUpOXYWMW0kaLIJgdlSaOIuZ+pecAs1+DZkIjFEk/b8MnnUVxZ3HTfyZH
+         xK8hfqBTUfujSS21Y+6O5btGgXWK1pP0r2eA+WA/66eFiw/UTq0XPcDSRFCdJ6N/Vh9U
+         aOYClbcKSz1Yyof+j7ssKvSXQg592xRXLhK82wam+peuFpp1zC6DxoWDswoL6aT7u6xt
+         ByEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731393084; x=1731997884;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wrus6mNHQMe5veO6BElnrZXFWHJwaVk5UDTLOZZGUqY=;
+        b=wl/qAjTyRpyOmhEpTuEqCWuA7uPxwVKSxYcqeYEcTLNHrk2yDPnP/WIomA4wyZiBKo
+         XZZnORYe6yjPok8narj7Mqx9t8/FWmISXdKtEIKL4sq9ZNPwDs+/Xzvo0rxfdStG/Acf
+         UvmnztRk6KknwsSgPlO8pzHnrd+PvrxeWJtKUZDHpMYxoglHfndXq24BIlsaySrVC+W4
+         ADDcfZCyauGHkXQ+16k8FyrGu+tn8VXgJ90LarKlVpQKLTrVZLRqh0sXyk6ww9dcUFOp
+         Lxp+l3WvVIgILJ0xh42tAi/SW91BYm24oI+EQKIByPbFfsdxmdIVnujWa8pp3FUeGKou
+         szhw==
+X-Gm-Message-State: AOJu0YwdOhU39uLs7qCB+wYaHkFhTdyIeSM933ZxIwKUStKfcUy7EJM+
+	zUXUdpmhUiR3B/l151Evzil5LWnnJxFZ8I58cY9RPCOB7yU75TjlMHNhx6aakz65Jtz1Mf/kr8Q
+	k
+X-Google-Smtp-Source: AGHT+IFTJwJZo4fEFoGeLFym2+1z7K3jy13RNon0/zAYW4bmzYDHqyESCo2I2dsOzNHwWeizW+uphw==
+X-Received: by 2002:a05:6a00:188d:b0:71e:4655:59ce with SMTP id d2e1a72fcca58-7241314261fmr22701356b3a.0.1731393084062;
+        Mon, 11 Nov 2024 22:31:24 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407a2367dsm10330758b3a.169.2024.11.11.22.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2024 22:31:23 -0800 (PST)
+Message-ID: <6732f63b.050a0220.1e1426.7a38@mx.google.com>
+Date: Mon, 11 Nov 2024 22:31:23 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=99vlNttIZwjw_HnFWa+GvR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/=99vlNttIZwjw_HnFWa+GvR
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.12-rc7-95-g96203094619a7
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 43 runs,
+ 1 regressions (v6.12-rc7-95-g96203094619a7)
+To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+ kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Miguel,
+next/pending-fixes baseline: 43 runs, 1 regressions (v6.12-rc7-95-g96203094=
+619a7)
 
-On Tue, 12 Nov 2024 00:58:47 +0100 Miguel Ojeda <miguel.ojeda.sandonis@gmai=
-l.com> wrote:
->
-> Stephen: I went with this, since unless I did something wrong, you
-> should see those build failures are gone, i.e. your build resolutions
-> were fine.
->=20
-> The hashes didn't change, I just dropped the top two commits.
->=20
-> You should be able to reuse the resolutions from yesterday.
->=20
-> If needed, we may simplify further, but let's see if this way works.
+Regressions Summary
+-------------------
 
-Its all good, no build failures and conflicts still there (but rerere
-took care of those).
+platform   | arch  | lab         | compiler | defconfig | regressions
+-----------+-------+-------------+----------+-----------+------------
+imx8mp-evk | arm64 | lab-broonie | gcc-12   | defconfig | 1          =
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/=99vlNttIZwjw_HnFWa+GvR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v6.12-rc7-95-g96203094619a7/plan/baseline/
 
------BEGIN PGP SIGNATURE-----
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v6.12-rc7-95-g96203094619a7
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      96203094619a7fda589f7a73808518f4b3e0113b =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcy9gIACgkQAVBC80lX
-0GxL7AgApNQT+WgM6k+ao3utScRunxuPJjtYCCw3xoH1nCEXIfWhdtmJWeOs2Fa2
-fjL4W0hG18jIgKuMxZ6fT/zXIEdCHBL5pEQWNMNLyK/HIsSkvPNkLUQAs9Ulamgs
-BLp5DcMpvLKvNf/jZIHY76Iqf7Nkwpiix0OB2QXyP6oyJkuArnLucAg9ymkARbJZ
-dHetLqWMKR7xF3PsssWaNIdzMFW6SWmfdw1Gi3yZeykOaqQp7q1CzDEOU+eT93zM
-tBV6rl1eT07ob95TD2YzWQOTXVQhK/hGQiBqEALByrXyfqCje+mAmXXw8ENzvDRV
-5KT3/ryk7FfNZQ7OiYrhkY0eY5LUNg==
-=Ug1Y
------END PGP SIGNATURE-----
 
---Sig_/=99vlNttIZwjw_HnFWa+GvR--
+
+Test Regressions
+---------------- =
+
+
+
+platform   | arch  | lab         | compiler | defconfig | regressions
+-----------+-------+-------------+----------+-----------+------------
+imx8mp-evk | arm64 | lab-broonie | gcc-12   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6732c453ede488ad1dc86869
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.12-rc7-9=
+5-g96203094619a7/arm64/defconfig/gcc-12/lab-broonie/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.12-rc7-9=
+5-g96203094619a7/arm64/defconfig/gcc-12/lab-broonie/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230703.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6732c454ede488ad1dc86=
+86a
+        new failure (last pass: v6.12-rc6-415-g0e90fad093db9) =
+
+ =20
 

@@ -1,125 +1,129 @@
-Return-Path: <linux-next+bounces-4765-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4766-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A78919C6633
-	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2024 01:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A27319C66A8
+	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2024 02:24:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62048B2AEF3
-	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2024 00:25:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9D36B2958E
+	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2024 01:24:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADB14B644;
-	Wed, 13 Nov 2024 00:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AEE01F94D;
+	Wed, 13 Nov 2024 01:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LzekJVh3"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="P4xbzwuH"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F49AD2F;
-	Wed, 13 Nov 2024 00:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C2A134A8;
+	Wed, 13 Nov 2024 01:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731457513; cv=none; b=inr5SLFimcBL5wgU74FQddJ/vGzzZydoyegZaRbrQWtpGC/0vEEmtv4hpXpS0d/MNzS8250PaRonBEgUKvCSumRI2lXLx75Ndnr03s0pWJtPHTZbau9GxwBycoaQQ53OOZoCkmyaUilbUwUzbWRy6tSWigND0Bgq+plu+YwoA7M=
+	t=1731461047; cv=none; b=MPb68x1BVVZv4RL3E1F5CS7oJCimwTuXPCldumHkZND5XpRuH9WIht816nh0dMEKQTHVHmggroX5uv0KRjiKb8ym9seK3vxTYkA3UuyR5mMlz8jtP/vNv1cxM46hFfFYWFZPHW6XIDqqADNrOC0Na8vCG01oyIuQXbuU3MBgrX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731457513; c=relaxed/simple;
-	bh=E0/DHcmy1l6PM/oUApczGnfErm6nSQiivQiC5KVPTJ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qHMYP0SQvSXfUJTR7vvujmMgauMsuXdLmw+nkfPXDkkp9rPfyzW4HDsKKdW3dhQIXJ/ZIyUHJnTrW1w1WOtFKCRFP/qdnthDIIKzzrkEUHvoAPa+0cY5SBsiwMWFC0Tn4WWksZKjcBNLOlKKUiO+c+14Umv94zgOiIlFftGOMzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LzekJVh3; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1731461047; c=relaxed/simple;
+	bh=sUKz3jCT2hiAfo2BD57mh6EmTwdB5aP1+aVXCjzoIw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dt32r6/Re5N6NEiqkv5wCftZ1kBp5jPj50/rZzJ22pGneQjjdmfD/3jGQgz0mkVE8Y9lXIdXy8thglSynhtN0Eg9sz6k6xNIXTDc9GSsLluJ2UOSeAY+v7g+NJ08Mqk0bPoOezB2S2zApPvndhIz2bQRUspcj6LAlLR34XRZx0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=P4xbzwuH; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1731457502;
-	bh=rZ0JJ7nTEh2UMu+kQD4VMFn9uu7/bXOcIeRL+kJ003I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LzekJVh31nSSyw9cIc8smH46FNeOVk10lH5FLEh/q6TmRd3t3kZTfSHVxK6Pb/BwH
-	 Xn2BFNnnNW6auy9n0vCsYQbKa+bEzX6nh7wYhQ4l3YVRqaL9jNaeq0oci/k0kdfy5c
-	 PUxmWFSL4x1fFgjmfan/uKRoeqKj8rY2rdLVhTndPr0sZQE48qrqbF16RDBKHn3vFB
-	 LMl1+bHMPCMi5SQrHYFAwvvrcjj2S2QXyJ1iuaL4tGq8bE1sILrsiEpywBZhftKRKK
-	 5/5Vjc+h3s0VNwSUSbxAajx9n/9ZiTVbRtju+XIQaraWKeTuQXlQTeq/yDF2QPCbvg
-	 +tEwTiEG9wuYw==
+	s=201702; t=1731461039;
+	bh=YTvwOVHqUNLK9XlVW0eiqWJCmdjKjorGQduxber6A+o=;
+	h=Date:From:To:Cc:Subject:From;
+	b=P4xbzwuHCV6A2QZcFbCBK8D+ucx6ZXFRFPDuCimpGIONfOvlVWZIWzbJlWIbZUMbf
+	 5tJpKcNfWb5wqzDMPchvMNPac9cM+JgFNkaHxxR5xA3v/IWJz4kSGYDa85RiIeTQi5
+	 MDjKHbok1Az1zA55CpSDhluscTlZFdvxv9yKK4ITgd5Qrfmf/wrOlpAoeCKWxirFZN
+	 pQIWET89dZxx3qfnu+/rlKFcuU/oo8IwQmoENFeIfPUaebFfYNrh2vAJX+NAmal85R
+	 XbMQlImXQprdupfpcUEXXvMtILrXY2ZF5d1boIU8roD84yE76rPiHxOjrz2J+QT0Ze
+	 V9fLSYYQlYk2g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xp3vf4nlRz4wny;
-	Wed, 13 Nov 2024 11:25:02 +1100 (AEDT)
-Date: Wed, 13 Nov 2024 11:25:04 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xp5Cf3llYz4wb1;
+	Wed, 13 Nov 2024 12:23:57 +1100 (AEDT)
+Date: Wed, 13 Nov 2024 12:23:59 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Russell King <linux@armlinux.org.uk>
-Cc: Melon Liu <melon1335@163.com>, Linux Kernel Mailing List
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the arm tree
-Message-ID: <20241113112504.0dec6df5@canb.auug.org.au>
-In-Reply-To: <20241113104614.4093835f@canb.auug.org.au>
-References: <20241113104614.4093835f@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Stanislav Fomichev <sdf@fomichev.me>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20241113122359.1b95180a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yNoGFEV8huMqSt9yfyq2tFV";
+Content-Type: multipart/signed; boundary="Sig_/LgKoOoNNB=8NtuqrS93ebRH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/yNoGFEV8huMqSt9yfyq2tFV
+--Sig_/LgKoOoNNB=8NtuqrS93ebRH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 13 Nov 2024 10:46:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the arm tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->=20
-> arch/arm/mm/ioremap.c: In function 'sync_vmalloc_pgds':
-> arch/arm/mm/ioremap.c:130:46: error: implicit declaration of function 'ka=
-san_mem_to_shadow'; did you mean 'kmsan_init_shadow'? [-Wimplicit-function-=
-declaration]
->   130 |                 sync_pgds(mm, (unsigned long)kasan_mem_to_shadow(
->       |                                              ^~~~~~~~~~~~~~~~~~~
->       |                                              kmsan_init_shadow
->=20
-> Caused by commit
->=20
->   15c0b4cb0223 ("ARM: 9427/1: mm: Fix stack recursion caused by KASAN")
->=20
-> kasan_mem_to_shadow() is only defined when CONFIG_KASAN_GENERIC or
-> CONFIG_KASAN_SW_TAGS is set.
->=20
-> $ grep CONFIG_KASAN arm_multi_v7_defconfig/.config
-> # CONFIG_KASAN is not set
->=20
-> I have used the arm tree from next-20241112 for today.
+Today's linux-next merge of the net-next tree got a conflict in:
 
-Also, I note that arch/arm/mm/ioremap.c does not even include linux/kasan.h=
- :-(
+  tools/testing/selftests/net/.gitignore
+
+between commit:
+
+  252e01e68241 ("selftests: net: add netlink-dumps to .gitignore")
+
+from the net tree and commit:
+
+  be43a6b23829 ("selftests: ncdevmem: Move ncdevmem under drivers/net/hw")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/yNoGFEV8huMqSt9yfyq2tFV
+diff --cc tools/testing/selftests/net/.gitignore
+index 59fe07ee2df9,48973e78d46b..000000000000
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@@ -18,8 -19,6 +19,7 @@@ ipv6_flowlabel_mg
+  log.txt
+  msg_oob
+  msg_zerocopy
+- ncdevmem
+ +netlink-dumps
+  nettest
+  psock_fanout
+  psock_snd
+
+--Sig_/LgKoOoNNB=8NtuqrS93ebRH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcz8eAACgkQAVBC80lX
-0GwX8ggAkcabGr51EaHYIBgaq8qog7KmgZvtu6XGfaFrZtE55LnEKJqeAhOLVRlF
-n+sYXUh/op3cuQ14um4b3XUz7xNhRk5qw6izec7edX56XMNHVic44efFHMcCOs9U
-H1qpss8J5JD3hT9tjdSfbzOF4LSe3oSq+rGxc0mLtLVu+S+R+/EJaiLNjGZZklce
-WuL/QHy+wqH0P+QFm4xiQRcdrIkvvULtb96TQT4D5EwzzBj0xW0QwPPEwdcwUFLO
-F/7BXA9keU7WgtG35/AzdfrJNxKBBOWBIQTU3SZoelLRsHc4cqGXwQl/KUjFiKbJ
-1mU0jNQ0RyK/YqqXP9J24fMmXmMUyg==
-=2ltq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcz/68ACgkQAVBC80lX
+0Gyblgf/XvYusQlNhiqcaGdiOAFSbPddN2qoVU2EcAz2vq8r+nogGPMmPW4nJiE1
+VHh4l508qhkRHaOc5GG/X8WmiWWHUCikqSVogsr6l77Xhz9X7zhkkLFlEIkFGz01
+5oUzXkNNXmkzjThLmNrNuuphuHLYQIHeI0u5t/khbmalhoGKMZSO7Kn9/mwL3L5N
+0vsFCgtSzIrPJysXAsS8VI0avkJx/SgktCEWYaGRP5Lct1EqxG6jTcRRvQSnKbwh
+Z7PkVt67TvAg5SzuN2Nss/45RYwGD7lORWVvNhlONSHkXlgun5IUKqCR3rqKk43h
+RPAP8PG6IvhoFeEQrgOH9ibmm1e59w==
+=eakZ
 -----END PGP SIGNATURE-----
 
---Sig_/yNoGFEV8huMqSt9yfyq2tFV--
+--Sig_/LgKoOoNNB=8NtuqrS93ebRH--
 

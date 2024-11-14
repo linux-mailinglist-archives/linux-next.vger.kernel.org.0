@@ -1,99 +1,65 @@
-Return-Path: <linux-next+bounces-4786-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4787-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 857609C8346
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2024 07:40:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A173C9C8351
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2024 07:44:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4983A281478
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2024 06:40:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58C8C1F214F8
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2024 06:44:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C4411EBA1C;
-	Thu, 14 Nov 2024 06:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Yg+AqnXx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20EE1E884C;
+	Thu, 14 Nov 2024 06:44:27 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279101E0E13;
-	Thu, 14 Nov 2024 06:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D9570818;
+	Thu, 14 Nov 2024 06:44:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731566405; cv=none; b=l9Q+JBd51pUH04K0QpfA2FTZg55dvCzXnHochBXjq2mZ8iL+u7h+8FVOawWkIcdtqwgiBq0lAfgXHwSUkmeB64Ccb0EAHX46emQQx2RLrel0IdpP+qn0C+mW5XfpqixXRp8CMbN/KaCU6/yaaWoaNo08RA1ecvLoll+D+u6QjK8=
+	t=1731566667; cv=none; b=KBunjAtFhL5wwDkdMPRA3981BqoJVVqmqZEa901k7Z5ISfU5gTzgYsOu7lFfpEXhw9YlG+3UJ2KICEwJQixwrJIQeyYzJi4ary018Vsl7qMDexn6IdYSI98C3qiiFsZXAEHkA+j6AfjDFsGwo44vEBA3TsbpRFKBD0KUMkT+qfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731566405; c=relaxed/simple;
-	bh=dOUCaWPK1D+zorbowizKIDt566IMDdrWJOcPF3XCiws=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Qw8VQG2lstk85b/0js4vPJVQmORDDwIe7F2X+xACsWuASfbYNfKeqV0ttWK1BqSg9QsCVY34Z4ueUEBQk2UOMxmXkFuBNwoMJmZKapyh4af++lqTWB5D0CplsXdsOuhC92KQCr9TYsCo3MS8qVuUSAKjXfivBuzeEaCj5VZMCAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Yg+AqnXx; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1731566396;
-	bh=YleiJNYL5eXW+jEREvFEwpoCjupq1xMfDclSi4Ksdkg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Yg+AqnXxXOpMjI5KqHt8WP2JgfUQ/LYRZxSZDsxZxUJwt/WEC4krnsdZfxovrNJqj
-	 lvAiDx/Cs5/y63+os1aieZn3fZ0HSbmlxm976cQd1gaZuR9KsOjrObvfv6y5lBwnRl
-	 NxuTjcR5oWfFSjvda7vjOMQzsQNi4yc9A7do/wrcYF8XMNhwTY09atV0ubZzMXoBlj
-	 RUeV4vlTlb34eOznJc2JQ3Gpu/NlRWPQWxLKf09RFgdRxklu79Jx945sHAOzlt6cEK
-	 8PcwFLCxJcE9/cga6UxjHQHAzRIEnSYcEfdI3uQXesPGez2qK8t4wGanNcJYuMLb/V
-	 5zuD8TtjTeYZA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xpr9m2qfZz4wb1;
-	Thu, 14 Nov 2024 17:39:56 +1100 (AEDT)
-Date: Thu, 14 Nov 2024 17:39:58 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the configfs tree
-Message-ID: <20241114173958.6cce33ce@canb.auug.org.au>
+	s=arc-20240116; t=1731566667; c=relaxed/simple;
+	bh=YjDmkfo3uWgsed5qa47MdRirdGFwFZ001EwPfWKSeOQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mhQLSBrUnAMgWXm+gjdGDwlmnrfG9vaQI3imCikymvjkybDkMHp3rPLP+IDv5E4y6UwyLg/8Yfp+1uSbXIiTY/LeJEBXTQTLiUw6odaJn4BcIB693BHr8do1hHGs1QRcYZqVnNx8/tcbF6Hl2j8HtRb4zte//7LcYlXjWiroYZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 9CF7C68C7B; Thu, 14 Nov 2024 07:44:21 +0100 (CET)
+Date: Thu, 14 Nov 2024 07:44:21 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christoph Hellwig <hch@lst.de>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the configfs
+ tree
+Message-ID: <20241114064421.GA11939@lst.de>
+References: <20241114173958.6cce33ce@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/D+PmA0WGjZf5..qFSCqD3kZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241114173958.6cce33ce@canb.auug.org.au>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
---Sig_/D+PmA0WGjZf5..qFSCqD3kZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Nov 14, 2024 at 05:39:58PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   a591497f6b3d ("cpufreq: intel_pstate: Rearrange locking in hybrid_init_cpu_capacity_scaling()")
 
-Hi all,
+Hmm, there should be no such commit in the configfs tree. Let me check
+what I messed up and fix it.
 
-Commit
-
-  a591497f6b3d ("cpufreq: intel_pstate: Rearrange locking in hybrid_init_cp=
-u_capacity_scaling()")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/D+PmA0WGjZf5..qFSCqD3kZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmc1mz4ACgkQAVBC80lX
-0GyGDgf7BZIZWqWSO+HS3h0Hr01i7ewEnZeKrvDQSVPecbcPiXLtbozI4cEWpShn
-VsOfb1PLkJHT/oc8Kc07EQceFCqRBUFLk5Kd8LryDYhVV41xfQPSR+X+Mfvjjedg
-CaTPrbOOhEU4hngGyNDop12ijQlgAOxgykkjwPeyoUupp7MmpTUl38lwDkC1pK1f
-kO85vlSedUahX1A3QeP5+Tpxld/vSmH684W9GLYzHijS2rreny7AVA0GRL/WmIuQ
-3pLIYy4Tg8qkvmKi7EzAwiIuQji60DKnWWqDt4hoqcPNg5KjhuQzx98vU2+53WGm
-eE3tEJYZAp2QKbBxrZfp0PuuUYwLPw==
-=DaRF
------END PGP SIGNATURE-----
-
---Sig_/D+PmA0WGjZf5..qFSCqD3kZ--
 

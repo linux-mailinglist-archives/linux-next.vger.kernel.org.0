@@ -1,145 +1,159 @@
-Return-Path: <linux-next+bounces-4788-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4789-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 989239C851F
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2024 09:47:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A33D19C9191
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2024 19:20:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EEBECB28BD0
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2024 08:47:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 120C2B2BC64
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2024 18:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA36C1F756D;
-	Thu, 14 Nov 2024 08:45:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EF02199FD0;
+	Thu, 14 Nov 2024 18:16:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cHNI5Fqm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tvBB1N8s"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3AB198E84
-	for <linux-next@vger.kernel.org>; Thu, 14 Nov 2024 08:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D83199E92;
+	Thu, 14 Nov 2024 18:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731573916; cv=none; b=jehLFyGrAVrUTJFmbh6dfQGfePmXPfYh9oMH8eyJQB2yGwi9FNEAe5iTAB0YXF7xWLGNuX2Rr6p+3W4L2NPBERzXOkJ9VBMPWMdiCDzlXzVmNz3dPXkgRL1UBZ1bRzlf6ixnKR2cN5Crfou2RSWXRAMreeUZh9OlCmFSQWD7wAY=
+	t=1731608173; cv=none; b=AITjp12qT6UAzKY7ok8hPME+RIaStYcyzdw5aiPpOSXpnPqmXoKnMYELozDzFevkgfl6TSJCdygjwcW4/WqEBzUA6SOGnltj/4yaFURj8j4ELxxeDqovvcA0KMbExXv+juOoMLS1rgI+sAFJH4LpNiiOKOIHKNB8178XnU0A/9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731573916; c=relaxed/simple;
-	bh=0nAr9CgPwwa4383ED9JVYTEnqtVWSatARUNM6hcdfEk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qi93NjLcv3jAfuGKn7rDYNVOe2s4KCqK9zSUVdWJc2VHxk9+9sJdu7onFrQ7TayM4ucu3TkUI7lbB4TIazmVoCqpG8Rq5L4iRvuhnnDeP7P3R7I8RKnpFljJ6IgWOTd8Y8O6CM0YlK/fIelbyIpQSy9hb+uxSl4PXgl3KesNz9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cHNI5Fqm; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6eb0c2dda3cso3891327b3.1
-        for <linux-next@vger.kernel.org>; Thu, 14 Nov 2024 00:45:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731573913; x=1732178713; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k+Lge5lw10SGbs4DANZU2moBw8on3pmDvP4g57FGYV8=;
-        b=cHNI5FqmFAp7aUeln3aHewxQaneWraS6GyaBJOm73C/xa1indCXfyO10MncCoNtq37
-         t/gEGIEMLcpqk/GJXHbvxpYOQ/wSpyib7t+O63Cijw59Iqv54s/Ny7XuchSfEbGWi3HW
-         8hqgqF4T2xZnazVFjhW3XOZXh0gIrjPkygsBPkSvX9oEhfm4/lqwRnpww7h9P5aEUUu5
-         z/crDAT60G3fj8hs/TaxKjYhIjKKWDCC9rPEYgrvqPkonEVGJFxNMv4Aq0v5HJ0LT3ww
-         lrqtOY0KMnKUkLZNmGfNpiMZyzyy6MVHQ+yhhiDqgsC7d59RVcyBAdTXrsrT8+DLkKoh
-         WMmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731573913; x=1732178713;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k+Lge5lw10SGbs4DANZU2moBw8on3pmDvP4g57FGYV8=;
-        b=JXcc45yNHFKDzzYvY7Vxjmko0JnYMBCba6vmgexRqfp9SJwbFPDNY02UgaeJyN6cze
-         KIMkTIT5P4TWN5SOm9WBSAFIfK4B/sLowfu/0H38ffd1gDgk09ilO5hVdRDmuBg+J9KY
-         VmS+AJlc46hYzQtw7cNmHdbTCGZ4AaxN1MADZPXnI0udfoiE7mZZOOUeDHO7FakZpjX6
-         GxK2rUhLQGXKDgWbL0n6SO3o8Wu3eDP8kMZwVcgB4C9KDhIzfhHGeVIBH7Ip+BqwxJ/W
-         aXT0xkCpxFc+2x5MWLyjn/zdT4ZGPsv9LQpgCawJPTPATwuUwLti0NsurWzINwR8AlC0
-         N2PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUUsetrVE/0E2zzPay1dxSZYY4NPeLfMl4nLjEX3u2PeN7SLU9BoXi2R5/RFbmylD+Cb17LCaAmbSU3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+osfnVQOHz2xX9uPWi+WyPALC+RhXyJCpcZ07e074siDzPoLD
-	EAielADhfT1lqESL5oRKN/5OvC7BBXlyj8nYDHSBrSi3nt6McWcQGoFzOnwMTSr8Sg7QFD+DuWw
-	qnWlZweZvgE9zVcPPBngzScvZiL/2PHRrINo40w==
-X-Google-Smtp-Source: AGHT+IEHacuOwS6NTvCWJvOywx9R7oLnu4ZHdY9f95fcIcWWbJeN5XffysgqE2a19dukPv8VIY+yElhWsLSxYCJcptE=
-X-Received: by 2002:a81:b105:0:b0:6ea:8a5e:7fbd with SMTP id
- 00721157ae682-6eaddd8aea0mr190722817b3.2.1731573912932; Thu, 14 Nov 2024
- 00:45:12 -0800 (PST)
+	s=arc-20240116; t=1731608173; c=relaxed/simple;
+	bh=LKiC482/mkSPjMpYS7rVLUPrc3QBSwoQJqPmsr2UmZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Er6xO8WKo0vmozcydA0ogkRL4nGgwuXQ1PNQr2y+L/caMN6RKqmE3d7uz1TQkqKrE4t6IQaJX2z5A5t2ATQZ8wqnbAPAkuhQHRUHRh6a4D+fV4YM5Bhbc7x1KDoHMAYUwANpr9O0Sbk2wVrRGr4BtFiMUKlOSF5Low/9yypdWac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tvBB1N8s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3403EC4CED5;
+	Thu, 14 Nov 2024 18:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731608173;
+	bh=LKiC482/mkSPjMpYS7rVLUPrc3QBSwoQJqPmsr2UmZ4=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=tvBB1N8sAHR/h5Qo6H/hw7kxDuIi978WkfnA/s7JaDrNgt4Q5oGmo1r+v6ZdLZeRN
+	 MEqWqV/32KS+w++02Pxv+LkAkimwC5cyFBOJwzRh3ietoH+SwLfs590/Pc+s8k6P4c
+	 qC9NYHQUbxGTiWaOPeEcbnEyNqmFIgnL6cnkCFeNTl1m4LmCYqt5jHM9wSW6ytUHvo
+	 wkvqoZ2a9DESkFCSS/Mu8d0bRNy5+gLRfQaVb7YRd/KCzDNShrpKBU6vZGUV5ur37S
+	 0cOh5XB77I9OTXUeGqISsZFNGBF4jGi0VwWKKxz3fHykbvF1TdlZ42HJwJ5bT4WlXW
+	 so7io7bzkXu2w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id C18AFCE0717; Thu, 14 Nov 2024 10:16:12 -0800 (PST)
+Date: Thu, 14 Nov 2024 10:16:12 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Tomas Glozar <tglozar@redhat.com>
+Cc: Valentin Schneider <vschneid@redhat.com>, Chen Yu <yu.c.chen@intel.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [BUG almost bisected] Splat in dequeue_rt_stack() and build error
+Message-ID: <6e3fce44-1072-4720-bf91-33bb22ebbd21@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <xhsmhed50vplj.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <d6033378-d716-4848-b7a5-dcf1a6b14669@paulmck-laptop>
+ <xhsmhbk04ugru.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <64e92332-09c7-4cae-ac63-e1701b3f3814@paulmck-laptop>
+ <CAP4=nvTtOB+0LVPQ=nA3=XdGLhDiwLjcLAb8YmQ+YqR9L+050Q@mail.gmail.com>
+ <CAP4=nvTeawTjhWR0jKNGweeQFvcTr8S=bNiLsSbaKiz=od+EOA@mail.gmail.com>
+ <35e44f60-0a2f-49a7-b44b-c6537544a888@paulmck-laptop>
+ <fe2262ff-2c3d-495a-8ebb-c34485cb62a2@paulmck-laptop>
+ <b9064ed8-387d-47ce-ad0a-7642ad180fc3@paulmck-laptop>
+ <7cdc0f04-819d-429c-9a2c-9ad25d85db55@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241114110347.04ef829f@canb.auug.org.au>
-In-Reply-To: <20241114110347.04ef829f@canb.auug.org.au>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Thu, 14 Nov 2024 09:45:02 +0100
-Message-ID: <CACMJSeuNPC+=izBa4pN7SYrYP9-Gpf18FuNfSvzbBtHrsGG0KA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pci tree with Linus' tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7cdc0f04-819d-429c-9a2c-9ad25d85db55@paulmck-laptop>
 
-On Thu, 14 Nov 2024 at 01:03, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the pci tree got a conflict in:
->
->   drivers/pci/probe.c
->
-> between commit:
->
->   1d59d474e1cb ("PCI: Hold rescan lock while adding devices during host probe")
->
-> from Linus' tree and commit:
->
->   dc421bb3c0db ("PCI: Enable runtime PM of the host bridge")
->
-> from the pci tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc drivers/pci/probe.c
-> index f1615805f5b0,bf4c76ec8cd4..000000000000
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@@ -3105,9 -3127,18 +3127,20 @@@ int pci_host_probe(struct pci_host_brid
->         list_for_each_entry(child, &bus->children, node)
->                 pcie_bus_configure_settings(child);
->
->  +      pci_lock_rescan_remove();
->         pci_bus_add_devices(bus);
->  +      pci_unlock_rescan_remove();
-> +
-> +       /*
-> +        * Ensure pm_runtime_enable() is called for the controller drivers
-> +        * before calling pci_host_probe(). The PM framework expects that
-> +        * if the parent device supports runtime PM, it will be enabled
-> +        * before child runtime PM is enabled.
-> +        */
-> +       pm_runtime_set_active(&bridge->dev);
-> +       pm_runtime_no_callbacks(&bridge->dev);
-> +       devm_pm_runtime_enable(&bridge->dev);
-> +
->         return 0;
->   }
->   EXPORT_SYMBOL_GPL(pci_host_probe);
+On Mon, Oct 21, 2024 at 12:25:41PM -0700, Paul E. McKenney wrote:
+> On Mon, Oct 14, 2024 at 11:55:05AM -0700, Paul E. McKenney wrote:
 
-Looks good to me, thanks.
+[ . . . ]
 
-Bartosz
+> > But no big wins thus far, so this will be a slow process.  My current test
+> > disables CPU hotplug.  I will be disabling other things in the hope of
+> > better identifying the code paths that should be placed under suspicion.
+
+The "this will be a slow process" was no joke...
+
+> Disabling CPU hotplug seems to make the problem go away (though
+> all I can really say is that I am 99% confident that it reduces the
+> problem's incidence by at least a factor of two).  This problem affects
+> non-preemptible kernels and non-preemptible RCU, though it is possible
+> that use of the latter reduces the failure rate (which is of course *not*
+> what you want for testing).
+> 
+> A number of experiments failed to significantly/usefully increase the
+> failure rate.
+> 
+> The problem does not seem to happen on straight normal call_rcu()
+> grace periods (rcutorture.gp_normal=1), synchronize_rcu() grace periods
+> (rcutorture.gp_sync=1), or synchronize_rcu_expedited() grace periods.
+> Of course, my reproduction rate is still low enough that I might be
+> fooled here.
+> 
+> However, the problem does occur reasonably often on polled grace periods
+> (rcutorture.gp_poll=1 rcutorture.gp_poll_exp=1 rcutorture.gp_poll_full=1
+> rcutorture.gp_poll_exp_full=1).  This might be a bug in the polling
+> code itself, or it might be because polling grace periods do not incur
+> callback and/or wakeup delays (as in the bug might still be in the
+> underlying grace-period computation and polling makes it more apparent).
+> This also appears to have made the problem happen more frequently,
+> but not enough data to be sure yet.
+> 
+> Currently, rcutorture does millisecond-scale waits of duration randomly
+> chosen between zero and 15 milliseconds.  I have started a run with
+> microsecond-scale waits of duration randomly chosen between zero and
+> 128 microseconds.  Here is hoping that this will cause the problem to
+> reproduce more quickly, and I will know more this evening, Pacific Time.
+
+Well, that evening was a long time ago, but here finally is an update.
+
+After some time, varying the wait duration between zero and 16
+microseconds with nanosecond granularity pushed the rate up to between
+10 and 20 per hour.  This allowed me to find one entertaining bug,
+whose fix may be found here in my -rcu tree:
+
+9dfca26bcbc8 ("rcu: Make expedited grace periods wait for initialization")
+
+The fix ensures that an expedited grace period is fully initialized before
+honoring any quiescent-state reports, thus avoiding a failure scenario
+in which one of a pair of quiescent-state reports could "leak" into
+the next expedited grace period.  But only if a concurrent CPU-hotplug
+operation shows up at just the wrong time.
+
+There are also a couple of other minor fixes of things like needless
+lockless accesses:
+
+6142841a2389 ("rcu: Make rcu_report_exp_cpu_mult() caller acquire lock")
+dd8104928722 ("rcu: Move rcu_report_exp_rdp() setting of ->cpu_no_qs.b.exp under lock")
+
+Plus quite a few additional debug checks.
+
+So problem solved, right?
+
+Wrong!!!
+
+Those changes at best reduced the bug rate by about 10%.  So I am still
+beating on this thing.  But you will be happy (or more likely not)
+to learn that the enqueue_dl_entity() splats that I was chasing when
+starting on this bug still occasionally make their presence known.  ;-)
+
+Added diagnostics pushed the bug rate down to about four per hours,
+which isn't quite as nice as between 10 and 20 per hour, but is still
+something I can work with.
+
+Back to beating on it.  More info than anyone needs is available here:
+
+https://docs.google.com/document/d/1-JQ4QYF1qid0TWSLa76O1kusdhER2wgm0dYdwFRUzU8/edit?usp=sharing
+
+							Thanx, Paul
 

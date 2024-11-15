@@ -1,148 +1,127 @@
-Return-Path: <linux-next+bounces-4790-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4791-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4124F9CD610
-	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2024 05:01:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 621469CD61E
+	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2024 05:05:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C09871F223FF
-	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2024 04:01:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E7411F226A3
+	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2024 04:05:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B04A156F5D;
-	Fri, 15 Nov 2024 04:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2333E70825;
+	Fri, 15 Nov 2024 04:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DGPW0/Tv"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Rws3Vb3j"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3FA155A2F;
-	Fri, 15 Nov 2024 04:01:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C520D155A2F;
+	Fri, 15 Nov 2024 04:05:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731643290; cv=none; b=rxyNY3KuAYacuOmOb4WgPGiorcUmFiFvRWSPDS57bpcp4bb9C8nMARqceCEZZck8u+bubwwIVEZR0NIEgcAdYHPEMQ6RQat0G2DRxU0Eu4fWaxtdxDc0ChLk7/vZ6YvTpa4xAT9OEg3qTewvBZLbDJQEVjdosWGcy+tb4ZUAibM=
+	t=1731643546; cv=none; b=fGWgBcpoCReVdbHd11oTZ4LsudoccyJ8Dfs7YKW6ZsEokhPQCRGVrlqCReJQ7um3A4ohRtqakbzhVxFyi/+eLUo6dyIGnAsnXS5oWEeBP9BGR13yl5p7GyXk33RHvCnziUzOzS3th7eCrZebK20PjYxml3CNhJrPnXsz7wnJww0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731643290; c=relaxed/simple;
-	bh=XthNiZBvbef+YNwcxdRWiT4FzpyLkPHqMawNovF5+wQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WzCekRLZ3twBmWzGftFdqH17KoOTx5AvmJf33ohItEO+tIjdDSzoeSHRsjFK3tfsHYW6hk8RiZlFkD84SNIRNzXUs4PxATv0gY8+POLXa1sbIHsEhoRax3kPSGsDiBNjElyDnNbQH/kl5SXiDHpdRmgax+pbIMjYzLeFnQ8+inI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DGPW0/Tv; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1731643546; c=relaxed/simple;
+	bh=b3AT6AKpS+kUcgi7BA3eUNf9UYufYRVv8pj3DCDRr3E=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GGmBtZbhzFugRNQAv9QorSda1U0XH9NGFrpV637px1AYpwXazjRJs2pGZsIVKB5NNnLH9V449/405f4bwzpKPx56M7b/zzeoHwMG5Pz3yS6MEdtR5IgYLp6GVZogfbmX59pDxcxqfwQQqfJ4UYxq6WgSh0DfUuFlw1GGyj9Om9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Rws3Vb3j; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1731643277;
-	bh=y9pr4TSN6PiCb+Spz9MTsxw+G++IqCVNQrT9eZzuDFM=;
-	h=Date:From:To:Cc:Subject:From;
-	b=DGPW0/TvD0fPVkpp4KJ671HIBA3tQQnzC7K/OKW2zUf1t1wtG9vpKxiLOvvow/iRD
-	 UCfZG07mh/yngJF6dIUzg8SzgypxWHHeqFgackKzubzwsvlf9VhT8lkn0aiVtSXFbT
-	 yccY09jCSj+uPzJ6SrCrqUCF2yKKjPIll8F8SlVlFSPL0fkmeJwi83dsZt96U0vsvA
-	 e6qbUVZzUJ3+cEf3ZtoLn5ZTpCqd5f8SPu+H7MbkUNnSlGu+b8j4+d1VAdYBiZnvqf
-	 SZ6qAlfCuJ0JBiS/M0b+wypn3Ywq5J0HMGZjgNlBrU3BcDOSwbUXccZSCd8foFImCn
-	 vvuaZUhGjcQ8Q==
+	s=201702; t=1731643539;
+	bh=Wx/CjR4XQVbMA/M/7ZlkINu4DHcqhXpv+A7XlpzDKT0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Rws3Vb3jSwIryU89IFhPz4hk5sRmwRvWdOer12+TYocqdFo8fkgEdV/8fyS4dq0qU
+	 MBq80BLmza3iQj+NZJ7CkBjLfZe5ZLFiykqN+H6KdfHgHToFIkJMe34bU7voPKSQhv
+	 V0y4zZA9aaHbkYpCfvp/R1TKRuhkhL1D9KLB49nIQobh1gL2F7qtm3GYUHlZUQkSiM
+	 sBqrmSsj/FrTxON3xWKnXmCFrAFvtj50Gh1TlGhIQKezaV6b0lxwTWSRFB7Xjf/AnX
+	 C2ihr/CpVXaBsSAxxpjaTaTKU7uT73pMsFi2yywJ7+nZndj+bLnmKGl0PWbwl5SReh
+	 qn5PlaNc2bTtQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XqNcD0f0Gz4x8m;
-	Fri, 15 Nov 2024 15:01:16 +1100 (AEDT)
-Date: Fri, 15 Nov 2024 15:01:18 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XqNjG3qnPz4w2F;
+	Fri, 15 Nov 2024 15:05:37 +1100 (AEDT)
+Date: Fri, 15 Nov 2024 15:05:39 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>, Liam
- Girdwood <lgirdwood@gmail.com>
-Cc: Bard Liao <yung-chuan.liao@linux.intel.com>, Charles Keepax
- <ckeepax@opensource.cirrus.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Pierre-Louis Bossart
- <pierre-louis.bossart@linux.dev>, Pierre-Louis Bossart
- <pierre-louis.bossart@linux.intel.com>
-Subject: linux-next: manual merge of the soundwire tree with the sound-asoc
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
+Cc: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>, KVM <kvm@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64
  tree
-Message-ID: <20241115150118.3abfa3c6@canb.auug.org.au>
+Message-ID: <20241115150539.49a010d8@canb.auug.org.au>
+In-Reply-To: <20241031143519.73eca58b@canb.auug.org.au>
+References: <20241031143519.73eca58b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mkTW5raL2pqVcz1kQlLTnwK";
+Content-Type: multipart/signed; boundary="Sig_/XXiwl.9JUZ0mVUdsW+F./dd";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/mkTW5raL2pqVcz1kQlLTnwK
+--Sig_/XXiwl.9JUZ0mVUdsW+F./dd
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the soundwire tree got a conflict in:
+On Thu, 31 Oct 2024 14:35:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the kvm-arm tree got a conflict in:
+>=20
+>   arch/arm64/tools/sysreg
+>=20
+> between commit:
+>=20
+>   034993461890 ("arm64/sysreg: Update ID_AA64MMFR1_EL1 to DDI0601 2024-09=
+")
+>=20
+> from the arm64 tree and commit:
+>=20
+>   9ae424d2a1ae ("arm64: Define ID_AA64MMFR1_EL1.HAFDBS advertising FEAT_H=
+AFT")
+>=20
+> from the kvm-arm tree.
+>=20
+> I fixed it up (the former is a superset of the latter) and can carry the
+> fix as necessary. This is now fixed as far as linux-next is concerned,
+> but any non trivial conflicts should be mentioned to your upstream
+> maintainer when your tree is submitted for merging.  You may also want
+> to consider cooperating with the maintainer of the conflicting tree to
+> minimise any particularly complex conflicts.
 
-  include/linux/soundwire/sdw.h
-
-between commit:
-
-  3a513da1ae33 ("ASoC: SDCA: add initial module")
-
-from the sound-asoc tree and commit:
-
-  e311b04db66a ("soundwire: Update the includes on the sdw.h header")
-
-from the soundwire tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+This is now a conflict between the kvm tree and the arm64 tree
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/soundwire/sdw.h
-index 49d690f3d29a,784656f740f6..000000000000
---- a/include/linux/soundwire/sdw.h
-+++ b/include/linux/soundwire/sdw.h
-@@@ -4,14 -4,20 +4,21 @@@
-  #ifndef __SOUNDWIRE_H
-  #define __SOUNDWIRE_H
- =20
-+ #include <linux/bitfield.h>
-  #include <linux/bug.h>
-- #include <linux/lockdep_types.h>
-+ #include <linux/completion.h>
-+ #include <linux/device.h>
-  #include <linux/irq.h>
-  #include <linux/irqdomain.h>
-+ #include <linux/lockdep_types.h>
-  #include <linux/mod_devicetable.h>
-- #include <linux/bitfield.h>
-+ #include <linux/mutex.h>
-+ #include <linux/types.h>
- +#include <sound/sdca.h>
- =20
-+ struct dentry;
-+ struct fwnode_handle;
-+=20
-  struct sdw_bus;
-  struct sdw_slave;
- =20
-
---Sig_/mkTW5raL2pqVcz1kQlLTnwK
+--Sig_/XXiwl.9JUZ0mVUdsW+F./dd
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmc2x44ACgkQAVBC80lX
-0Gww4wgAncGM7TIKrWIEyuBhbyc55Rz6KZv5o0w6+/beE/kSBeSe1dZXI8udMWxL
-eyXPZwoi8XZwE3eEUOjp/yVEJNc6tqibVycclH/O1Pkr9RSp1WmGAvUKhZrpN6Xx
-YtGStcb8kI8We7Fm4SCkrZZM3DwvK2XUhaR6zhh8d+LHH6iTVVXsJ1GMJGi+svtB
-Jm3TMseiHfFg4a8jobghB+xDRBa7f1Xqigq2KdsmZahL9AVK6nJqjYW3gUnINaU2
-xyoUzttpJrzif9lOSX6ZbGONFa1I38qkwNFwZGNX7TP4G0NWDo1+k/Q4+rILD9Gi
-lDX2sejyxA25LAIaxyaCQB4U7F5aZA==
-=gMld
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmc2yJQACgkQAVBC80lX
+0GxpFAf/cQgjBGmp0pMjruTdLl8Hr4qupKlZHr45AB1gG+CNedjxlkr0Y91erLzK
+IZqnrM7FPX4e9vmEsNJxWkFehL0y0CN0PppIryMceaSq6xLB0j9rJIN6hLX4sO6m
+FW/fdlfHx07rokJGpmYlUU3w57xGMlM3R5BxBsg2NddwrFlmMMmvACvhufKwRGZL
+A6zmhK83ieNr6Tyq7N6XbBM95+Xam98MXAAwM31HjF7sVeyYwVbIcsvfk7RM/xHe
+evE960s+Q9xJH56ifB+6xEMCBOu3W3l3UW5ZBYhfiMfOJy7z/UyX/dlzv/205hK5
+yDU4kuMkPiTShEyZsFF3h4UvR8tjZA==
+=jzxC
 -----END PGP SIGNATURE-----
 
---Sig_/mkTW5raL2pqVcz1kQlLTnwK--
+--Sig_/XXiwl.9JUZ0mVUdsW+F./dd--
 

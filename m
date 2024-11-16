@@ -1,57 +1,76 @@
-Return-Path: <linux-next+bounces-4794-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4795-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8C7F9CFBE6
-	for <lists+linux-next@lfdr.de>; Sat, 16 Nov 2024 01:59:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F39AC9CFFA0
+	for <lists+linux-next@lfdr.de>; Sat, 16 Nov 2024 16:41:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A10BC1F23233
-	for <lists+linux-next@lfdr.de>; Sat, 16 Nov 2024 00:59:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8C6D28150E
+	for <lists+linux-next@lfdr.de>; Sat, 16 Nov 2024 15:41:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F836FB0;
-	Sat, 16 Nov 2024 00:59:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3CD47E105;
+	Sat, 16 Nov 2024 15:40:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQvHUPWi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PobAToZB"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748B6161;
-	Sat, 16 Nov 2024 00:59:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D0B17B402
+	for <linux-next@vger.kernel.org>; Sat, 16 Nov 2024 15:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731718779; cv=none; b=TSRQeIPaqWdMTqz6bv1fWmdyTB84SU4ZmiSPow56c2RSfBUkGFU8XfzkJe8UcKhHufKoacSCoOai8E7qmjSGcVbWE0dySYbz4p9mBoPbg4W14zfzPbLbHq1GDt1IoYeUx+nGgK/G6/NtnCpDP2yXSPcVmc/A+d0HPm736tVuDVM=
+	t=1731771643; cv=none; b=f9+LwzaU7YFKxMvB2TvdkcDnxKsu6FZibE3fCU0cCRoGvC9CfLW3W9dCUXZmO3XHDqf+8tJO5lt/WLlcBy1igBtbcqTYpRNTaWpjiXritRMcAMWZb4FA0JGs5jmOnTaiTrzfnC0QLcFNNpbkYFvXang9JTL5bojIbANi+q+zobU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731718779; c=relaxed/simple;
-	bh=I0VslumfgKdekW8XDklNd2dJRtcj2IWDvMv+cfLhBGc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NlMflTm77Elx9aTOB1P5jOW3/glbyA8S8NBIPPTfottYfwmOUiouBKPiTUE/uM6nwoHhhgDrp9zT7w4D7V8DPwJraGu1O3SsttZe2e0H3xcB7jvHKtcp0Lt8i/tUBUm6o3LiYNQ1WUAkMLbJmdjixYIWZXM5Dgg3kfX5wowqUf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQvHUPWi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63932C4CECF;
-	Sat, 16 Nov 2024 00:59:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731718778;
-	bh=I0VslumfgKdekW8XDklNd2dJRtcj2IWDvMv+cfLhBGc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eQvHUPWit+YYwo6ISi9Oa4lIH7ppZGbmBFsoORIEJ5mJBARtv1Xn34ixiM6Pivk0R
-	 uSC/6J8xOaeuwSoP0Jdznb2AbD4BspunmQNVbpQNqcVOffgQxt3ZxQl6CTJdO6vErs
-	 /v33gTdnIp/6YHbWrt5AHPDY6mx9h/o9LmiZkBD2x4RVRKOUJL7xUKDyaj/lre//VJ
-	 H7hzyUIcge50F6h+NRnzCKiusI7dIefNyyFiubx9wYO/a0Hijw7Vg2XJ1t99TMJOKn
-	 mrtiJ27krGPU2MTrXuGQCk21jE4cn4rkBTyru5IttYkTSEasFwjJ/RbnHCyyB90Ned
-	 dNkIxEglxRnnQ==
-Date: Fri, 15 Nov 2024 17:59:35 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: syzbot <syzbot+a521f132f5a83d10ab40@syzkaller.appspotmail.com>
-Cc: apparmor@lists.ubuntu.com, jmorris@namei.org,
-	john.johansen@canonical.com, linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org, linux-security-module@vger.kernel.org,
-	paul@paul-moore.com, serge@hallyn.com, sfr@canb.auug.org.au,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] linux-next build error (18)
-Message-ID: <20241116005935.GA1180844@thelio-3990X>
-References: <67371529.050a0220.1324f8.00a4.GAE@google.com>
+	s=arc-20240116; t=1731771643; c=relaxed/simple;
+	bh=Wd+7kLQISUZlzyPvYmSUTVOb8NV4Vyd3OpsFXw6X7a0=;
+	h=From:Message-ID:To:Subject:Date:MIME-Version:Content-Type; b=gXbASskoarm1e0n5ZUZx5kkeTGfH9jDjJQ6o8JFOkrGyQsztHF4ZW2hYaWlUUwF0SqAF5vt61UoN8MIiwtm90EM8/qEW8mCr50pj/wcCxlhexAgreRH1Y8AMMyduG4bsTLnsrv2VL9uce1L/xRGIr6XJJ7rOxSrNVa2xaxf2Exc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PobAToZB; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-211c1c144f5so21014915ad.1
+        for <linux-next@vger.kernel.org>; Sat, 16 Nov 2024 07:40:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731771641; x=1732376441; darn=vger.kernel.org;
+        h=mime-version:date:subject:to:reply-to:message-id:from:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XHEOkgJ64rwJ+cv0sVIqPUmbc8l+iTifR7HzGzNced0=;
+        b=PobAToZB5VQcuCsYtgjTD8m1Q6rPJDNXFRKk6BKDwUic16f5o1GuQnfguz2agbwZsq
+         aIiOhcQoxoIKbgze5auuUi/NatkXQAxhF0AHomr1xcmQ2awHW4DYDkNM18wTUZZxt443
+         hPqLFdz4iHQ0Aiimux4KtVhpwcQm4yU6NssndVD+9L49eEk2Dj0/Rq1JbDwrC4eCcbKB
+         EVhNM/amucUCb6b6ArLaPSpc99vXWhAm2LKSMweHT3zCzH8bRMyVJNJtUDDgbSwQgkQq
+         kUEMvlDY1OxIZ3PQgog/0dKPLjmerY5o3xx2uAUDIbeNBe+U6aII7tW1dcQeb6g5usUQ
+         smTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731771641; x=1732376441;
+        h=mime-version:date:subject:to:reply-to:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XHEOkgJ64rwJ+cv0sVIqPUmbc8l+iTifR7HzGzNced0=;
+        b=tCyOtGKA5W9a39TfxCwfuSkPU/N6Z/xK4iMbwNDtgsQh9QtcrcMVDPF5LHSYLPqjPR
+         coFDeVASWhUCWaWdG92rc3FDiyB399p4AgLBys3RXWtACljM3ReHr3ZJ8IdRfdr5IsfC
+         pXGZD3zVO15XrwdgSwjIKmgxle14vIj6iYsUQ8h/9/WaX9zYmWoafsX3nJ3sHjlTKmne
+         BCmnKTjpkaMFnbU+2r0NzthhcDntJy+4bn0zSSrk26V4J/5FJ1lpDChLtk6jqwQU++W8
+         D2NiL5ujk9z4r2T/rqEQIOwRoa9P80nyWNOONCB1R/THs6c4RxHqYroeg+ewU3fkZWHa
+         4apQ==
+X-Gm-Message-State: AOJu0Yz8AAUZQM+0E2NOB9hYo53Q7k+S2cxeo9SBfdguj6T5DuMmEtjd
+	awqYUUWMOgW1miyle8KzGdGQKCAmSLUpduukw6P5KKL9uoa8hy5nrrr/yg==
+X-Google-Smtp-Source: AGHT+IFRPHA/QRvIH0UQ0Fh2seCfxUGzRY3oDAje4ReEN0FXfV56cF9aonUwGfhnEuL1rC+yjtkS1w==
+X-Received: by 2002:a17:903:40c8:b0:20c:a04a:1e22 with SMTP id d9443c01a7336-211d06aae11mr114039355ad.5.1731771641404;
+        Sat, 16 Nov 2024 07:40:41 -0800 (PST)
+Received: from [103.67.163.162] ([103.67.163.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211d0ec7fffsm28961155ad.70.2024.11.16.07.40.40
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 16 Nov 2024 07:40:41 -0800 (PST)
+From: "Van. HR" <akechjuombo@gmail.com>
+X-Google-Original-From: "Van. HR" <infodesk@information.com>
+Message-ID: <6c0274ba672044502a3e237cee6ab9940258d48cae2ec2803f1dfaf54a32ca76@mx.google.com>
+Reply-To: dirofdptvancollin@gmail.com
+To: linux-next@vger.kernel.org
+Subject: Nov:16:24
+Date: Sat, 16 Nov 2024 10:40:38 -0500
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -59,32 +78,14 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67371529.050a0220.1324f8.00a4.GAE@google.com>
 
-On Fri, Nov 15, 2024 at 01:32:25AM -0800, syzbot wrote:
-> syzbot found the following issue on:
-> 
-> HEAD commit:    744cf71b8bdf Add linux-next specific files for 20241115
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10525cc0580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=ada879778ea11d6f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a521f132f5a83d10ab40
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+a521f132f5a83d10ab40@syzkaller.appspotmail.com
-> 
-> security/apparmor/domain.c:695:3: error: expected expression
-> security/apparmor/domain.c:697:3: error: use of undeclared identifier 'new_profile'
-> security/apparmor/domain.c:699:8: error: use of undeclared identifier 'new_profile'
-> security/apparmor/domain.c:704:11: error: use of undeclared identifier 'new_profile'
+Hello,
+I am a private investment consultant representing the interest of a multinational  conglomerate that wishes to place funds into a trust management portfolio.
 
-I sent a patch for this earlier this week but it does not look like it
-has been picked up yet:
+Please indicate your interest for additional information.
 
-https://lore.kernel.org/20241111-apparmor-fix-label-declaration-warning-v1-1-adb64ab6482b@kernel.org/
+Regards,
 
-Cheers,
-Nathan
+Van Collin.
+
 

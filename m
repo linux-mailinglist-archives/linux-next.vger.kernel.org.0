@@ -1,91 +1,90 @@
-Return-Path: <linux-next+bounces-4797-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4798-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1619E9D07AD
-	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2024 03:00:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0B0C9D07FB
+	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2024 03:55:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 414D3B217EF
-	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2024 02:00:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66215B21B8E
+	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2024 02:55:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E94D88F5C;
-	Mon, 18 Nov 2024 02:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB187282FD;
+	Mon, 18 Nov 2024 02:55:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="eoyl6FBq"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="r9DxHmAm"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3861EE55B;
-	Mon, 18 Nov 2024 02:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B66EAE7;
+	Mon, 18 Nov 2024 02:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731895215; cv=none; b=qn+p8rMa4ARYVtHjWUJB9K1Qh2Dy3A27UlnDi17oBHHtWsHeAU/xDFp5wh0N4+iDfH1uSsGNHTq9Yo18jM+XGx1IgusgvywxG2umBLAnBqd4bNCry4avayq8mY2WbIWG0ZCazZuoMNlXqk0ZKoTob6FTW9P0yZMqs3jTP5iH0Q8=
+	t=1731898519; cv=none; b=puHD3hEHd7jtb+z4gIhQsqz0LSp5uPUT8fx0XYyuDzkJOt1axrm917hWPdCiYstOudCr8/XJwgpKBn88EnFG80h/MEP8mYkqHyv9lNZgA5Au1Fx7hL3Ox4vc/+1C9ii2ZWNmDp+t0EtuIJlBn+FYAznx04eKm5IoWWlgFmuKSb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731895215; c=relaxed/simple;
-	bh=Je1hJxMN9hD6APxB/+Abkl5BOe94IaC3VlzIa8Vtdo0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OdGuo1mRhBaGe+Ru4C2/m8d4zyvbT602pmWU3iY0+cIDKtmqYn3IImI9uwXaIThgPR2vKyt2O0KhMw497iYZUOB+OfkxnsFKsThlmlPAeRxWN4YJJU+EU6UXkoITRzGOuJg7h3gfVkqBTtSNu3IsesMAkK/e5vWjz0RT2pxqFVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=eoyl6FBq; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1731898519; c=relaxed/simple;
+	bh=wRPgT1yObEHD6svJnaOip0QGxnZUBOU5xL/pq0EZDYk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dCZvbOFul9wPQ0Pzk4oEyZWa+FB3815t23N6HlZiYidZRX+z2xURBY2zyLJgtbnA3X4e0tOeScPKVc/WQY3mHhlV8Yu8TEEmj9edAzSqcGoV58ulWKq9pFD1KGVf+cpIVJogPkoGIyOKugqA0n1sixumwY2Wrys9jbaYF1Bl6vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=r9DxHmAm; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1731895205;
-	bh=CNTDTqXbhEFap5YCqaXqxmDfJdiMqARrjatz4N2vwVE=;
+	s=201702; t=1731898511;
+	bh=lA9p/6FlZ0uog6Hp8Mfew1zkqnhfYb5W0Rbs/v3d/MA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=eoyl6FBqy0I3vWfJQNBWnjsegbjA8u9s+Ikk0MFEEITzWBdDAc+bND5eh1v/SlRE1
-	 AqwHjWW9S5+Ahzt1/dw83p2fROzT7aRMOErAJh1FkNakhRQfKx79gHmhBkv3OYIPGA
-	 a15NVRxU2B5YV60euZwc6nOT6bogzupgVhUK8uXbnuR2uasD9XIyOoF/92d0OxwZAy
-	 qwdLgzFGYm0lEVSx/FL27rbuOAepwL1eUXWnd4YVJhMKEpULZ5BZARsgpzDas5Bkw1
-	 w5B69gAbicKMoRlFe7xol40bsLmjiQoyApbvU+BAGZIEJgrlub/Da4vyhqzf4fMgwE
-	 uh1j4p6bOrZAw==
+	b=r9DxHmAm7s/FlNVmJ5oX4b8Tn63VDPyWgkdf0QAEkHnSdVb5b6/TR/1+dot+5M09q
+	 Xt1mP1rwfXsSok2qEpqWgvkHwdRa4sjquKPu1iOGpLvFOJ2qm2/RCB5k9QIgJ3TIg+
+	 7RvuzOY/adSf1h10szEZT3HF2Y6MKK75/PBB8ordVt5shMFUlpJwwgmfaBRSDsN2Uu
+	 mbPaYYhyqc3ustpb6OzQZNnOG/N22vYZQcGpeJcgvPxE2jMgDRnHJ9mW4N3Y3N1EtY
+	 faXu6EgvV/tIMQDxF5c65yckXBMZE6Kp0CAQtTgMhTc5rRWJxFRA3OyLkZrtFMFFXv
+	 Vi7594J7p25Lw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xs9n10xd1z4x04;
-	Mon, 18 Nov 2024 13:00:05 +1100 (AEDT)
-Date: Mon, 18 Nov 2024 13:00:06 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XsC0b0bgLz4xfL;
+	Mon, 18 Nov 2024 13:55:10 +1100 (AEDT)
+Date: Mon, 18 Nov 2024 13:55:12 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
- <kw@linux.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the pci tree with Linus' tree
-Message-ID: <20241118130006.05700e50@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Heiner Kallweit
+ <hkallweit1@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Russell King (Oracle)"
+ <rmk+kernel@armlinux.org.uk>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20241118135512.1039208b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yoai1q2MpqJ4Vbpgb.n_HY9";
+Content-Type: multipart/signed; boundary="Sig_/_/vmX0Hz1vripoj/QLgQntj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/yoai1q2MpqJ4Vbpgb.n_HY9
+--Sig_/_/vmX0Hz1vripoj/QLgQntj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the pci tree got a conflict in:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  drivers/pci/pwrctrl/pci-pwrctrl-pwrseq.c
+  include/linux/phy.h
 
 between commit:
 
-  ad783b9f8e78 ("PCI/pwrctl: Abandon QCom WCN probe on pre-pwrseq device-tr=
-ees")
+  41ffcd95015f ("net: phy: fix phylib's dual eee_enabled")
 
-from Linus' tree and commits:
+from the net tree and commit:
 
-  086bf79a4d45 ("PCI/pwrctrl: Rename pwrctl files to pwrctrl")
-  e826ea4c7f26 ("PCI/pwrctrl: Rename pwrctrl functions and structures")
+  721aa69e708b ("net: phy: convert eee_broken_modes to a linkmode bitmap")
 
-from the pci tree.
+from the net-next tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -98,124 +97,38 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/pci/pwrctrl/pci-pwrctrl-pwrseq.c
-index 0e6bd47671c2,e9f89866b7c2..000000000000
---- a/drivers/pci/pwrctrl/pci-pwrctrl-pwrseq.c
-+++ b/drivers/pci/pwrctrl/pci-pwrctrl-pwrseq.c
-@@@ -6,9 -6,9 +6,9 @@@
-  #include <linux/device.h>
-  #include <linux/mod_devicetable.h>
-  #include <linux/module.h>
-- #include <linux/pci-pwrctl.h>
- -#include <linux/of.h>
-+ #include <linux/pci-pwrctrl.h>
-  #include <linux/platform_device.h>
- +#include <linux/property.h>
-  #include <linux/pwrseq/consumer.h>
-  #include <linux/slab.h>
-  #include <linux/types.h>
-@@@ -18,51 -18,16 +18,51 @@@ struct pci_pwrctrl_pwrseq_data=20
-  	struct pwrseq_desc *pwrseq;
-  };
+diff --cc include/linux/phy.h
+index 44890cdf40a2,b8346db42727..000000000000
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+@@@ -720,6 -721,11 +720,10 @@@ struct phy_device=20
+  	/* used for eee validation and configuration*/
+  	__ETHTOOL_DECLARE_LINK_MODE_MASK(supported_eee);
+  	__ETHTOOL_DECLARE_LINK_MODE_MASK(advertising_eee);
++ 	/* Energy efficient ethernet modes which should be prohibited */
++ 	__ETHTOOL_DECLARE_LINK_MODE_MASK(eee_broken_modes);
+ -	bool eee_enabled;
++ 	bool enable_tx_lpi;
++ 	struct eee_config eee_cfg;
  =20
-- struct pci_pwrctl_pwrseq_pdata {
-++struct pci_pwrctrl_pwrseq_pdata {
- +	const char *target;
- +	/*
- +	 * Called before doing anything else to perform device-specific
- +	 * verification between requesting the power sequencing handle.
- +	 */
- +	int (*validate_device)(struct device *dev);
- +};
- +
-- static int pci_pwrctl_pwrseq_qcm_wcn_validate_device(struct device *dev)
-++static int pci_pwrctrl_pwrseq_qcm_wcn_validate_device(struct device *dev)
- +{
- +	/*
- +	 * Old device trees for some platforms already define wifi nodes for
- +	 * the WCN family of chips since before power sequencing was added
- +	 * upstream.
- +	 *
- +	 * These nodes don't consume the regulator outputs from the PMU, and
- +	 * if we allow this driver to bind to one of such "incomplete" nodes,
- +	 * we'll see a kernel log error about the indefinite probe deferral.
- +	 *
- +	 * Check the existence of the regulator supply that exists on all
- +	 * WCN models before moving forward.
- +	 */
- +	if (!device_property_present(dev, "vddaon-supply"))
- +		return -ENODEV;
- +
- +	return 0;
- +}
- +
-- static const struct pci_pwrctl_pwrseq_pdata pci_pwrctl_pwrseq_qcom_wcn_pd=
-ata =3D {
-++static const struct pci_pwrctrl_pwrseq_pdata pci_pwrctrl_pwrseq_qcom_wcn_=
-pdata =3D {
- +	.target =3D "wlan",
-- 	.validate_device =3D pci_pwrctl_pwrseq_qcm_wcn_validate_device,
-++	.validate_device =3D pci_pwrctrl_pwrseq_qcm_wcn_validate_device,
- +};
- +
-- static void devm_pci_pwrctl_pwrseq_power_off(void *data)
-+ static void devm_pci_pwrctrl_pwrseq_power_off(void *data)
-  {
-  	struct pwrseq_desc *pwrseq =3D data;
- =20
-  	pwrseq_power_off(pwrseq);
-  }
- =20
-- static int pci_pwrctl_pwrseq_probe(struct platform_device *pdev)
-+ static int pci_pwrctrl_pwrseq_probe(struct platform_device *pdev)
-  {
-- 	const struct pci_pwrctl_pwrseq_pdata *pdata;
-- 	struct pci_pwrctl_pwrseq_data *data;
-++	const struct pci_pwrctrl_pwrseq_pdata *pdata;
-+ 	struct pci_pwrctrl_pwrseq_data *data;
-  	struct device *dev =3D &pdev->dev;
-  	int ret;
- =20
-@@@ -109,17 -64,17 +109,17 @@@ static const struct of_device_id pci_pw
-  	{
-  		/* ATH11K in QCA6390 package. */
-  		.compatible =3D "pci17cb,1101",
-- 		.data =3D &pci_pwrctl_pwrseq_qcom_wcn_pdata,
- -		.data =3D "wlan",
-++		.data =3D &pci_pwrctrl_pwrseq_qcom_wcn_pdata,
-  	},
-  	{
-  		/* ATH11K in WCN6855 package. */
-  		.compatible =3D "pci17cb,1103",
-- 		.data =3D &pci_pwrctl_pwrseq_qcom_wcn_pdata,
- -		.data =3D "wlan",
-++		.data =3D &pci_pwrctrl_pwrseq_qcom_wcn_pdata,
-  	},
-  	{
-  		/* ATH12K in WCN7850 package. */
-  		.compatible =3D "pci17cb,1107",
-- 		.data =3D &pci_pwrctl_pwrseq_qcom_wcn_pdata,
- -		.data =3D "wlan",
-++		.data =3D &pci_pwrctrl_pwrseq_qcom_wcn_pdata,
-  	},
-  	{ }
-  };
+  	/* Host supported PHY interface types. Should be ignored if empty. */
+  	DECLARE_PHY_INTERFACE_MASK(host_interfaces);
 
---Sig_/yoai1q2MpqJ4Vbpgb.n_HY9
+--Sig_/_/vmX0Hz1vripoj/QLgQntj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmc6n6YACgkQAVBC80lX
-0GzKGggAln6zLHF8emEgeQSAdW0d7T2KI9GtvyR1lKSoOOSTs1JtBhocmOPSi9go
-2al8XZDtnlGD5EBXflEJHt3TfMIzO+xz0gza2F+gwugUgtA/qzT4ur27oxFEsfGH
-bXS/xAk8cJ66k9fljwnJsHgm5tbzuLhK7JrG+SnWkUJc0RF8q3gOBGA9oyVF9LSK
-vzWMMFMRjdOllW+odvObIZXrBhurfyP+KVMJp6r2FaJeQ4HaKK+OMBFU5zypAT4T
-CHXCINPRA+OE6F/3VQSAPsTWitfZStrMlSsedOGe4ihE/I4pJ8b+pPagsyhTgjGM
-rQwWu+RDokbk3AahAzEAMjAhhMPBgg==
-=pc1E
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmc6rJAACgkQAVBC80lX
+0GyAOAf+JsvkHQtN6HM1uzq93ryqcOg8/QM2rbDuGAxiMphDc4vg+jUtiEuuOtHP
+Y1VwGaFYffonnh+nj72fZTx+hxWLk/SsQ4++ovlPKRRA7egDnMZ+lvFTiw5CjisH
+PqrDPPKYBixXnpP7lJZdMW9OzPUn3ziOOmlMbc1/OQVahLOYq5Nv6dCw6OCexgWT
+JCLRq1J0SwM6chF574CXu5iENguUEUGkTk+bZsRjX6bjhSodCEhMIwD6NZjAkOND
+dYQ1TyewL/Q7pWdcGrRwthWLZj7cA2HpM4zZ9kioZBqxh3pcIQoYdQT586T6hJ22
+/vEWrBHL+ofwDsE/sY6nbHYQCkFW4w==
+=VEEF
 -----END PGP SIGNATURE-----
 
---Sig_/yoai1q2MpqJ4Vbpgb.n_HY9--
+--Sig_/_/vmX0Hz1vripoj/QLgQntj--
 

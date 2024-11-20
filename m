@@ -1,215 +1,179 @@
-Return-Path: <linux-next+bounces-4813-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4814-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3837C9D31A4
-	for <lists+linux-next@lfdr.de>; Wed, 20 Nov 2024 02:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 053D49D31DA
+	for <lists+linux-next@lfdr.de>; Wed, 20 Nov 2024 02:19:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8B801F23794
-	for <lists+linux-next@lfdr.de>; Wed, 20 Nov 2024 01:10:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFBB51F238D7
+	for <lists+linux-next@lfdr.de>; Wed, 20 Nov 2024 01:19:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B76F15AF6;
-	Wed, 20 Nov 2024 01:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6B317C91;
+	Wed, 20 Nov 2024 01:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="psGrWpNN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="i98xjEL4"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D37EAF9
-	for <linux-next@vger.kernel.org>; Wed, 20 Nov 2024 01:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED2AEED8;
+	Wed, 20 Nov 2024 01:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732065001; cv=none; b=rwASj65RsEpFwOPwNKh4GZSxNUvnkr85cU4lzMi1Pami1Ge96Kv4FrL39wDY/QdUgkAgqOwCQqf9EbCflNECT6zX02TQlXNyLMEVcRLIvBtngRfdy98A3ZLhw3T6l3YKZW2Gv9XTCPallADxjhpY5IILdsJO7v7CLNFa0J7R4GM=
+	t=1732065556; cv=none; b=Vz7TVHbADvVuufvpX0Y5a/caM910boNdfbOSwSUnl7BwXL0fNsRx+QEo1KFfkI/ougTuBmuJHC+KJ938zJ3gwvDragoLVqSA+sJwlgqU15yYbx+d4Sm/n8zwWv4FlP59S3iUFDD53unkXhlsV8Shs7b/OxV5oP+9sQExT2NFMcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732065001; c=relaxed/simple;
-	bh=hTwajJRAAvU6UJ4h6j5qhr1gH9r7IyhS/L6+4LgUJ0A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UE2PlK1AFzeMqL1DqyTfrEsSEbMeruRMufUf2BxbsX7dJdv/mp7NJ6RyJVXgHrWmw7VwQbW7Q9tyXsJe2Ifi10WQSIb90PgsD9v33m9KxX03tMRkeYA7Yy4VX3GZ3FpbzD38Bk04mmLsWePb3mpRBGuTSn4UiJel2cZD8unj41U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=psGrWpNN; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-460a8d1a9b7so464511cf.1
-        for <linux-next@vger.kernel.org>; Tue, 19 Nov 2024 17:09:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732064998; x=1732669798; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fyD0n8XFP8f0istqBBknRrTZ6rAT8CN6zVNxOsts9j4=;
-        b=psGrWpNNMHIn4c2oLFFckbtKqtUWx1UXJqQRpWFivUwVlW96+SfNI/UFrEtBt+s5yd
-         5qPlR3Z4icOCLKelvbLiTj0GjE9BXIaiMuG/957MRC0Vu0f9hvlmqnI2NWOJRNEeyj0U
-         c22agTgVrJo4h+dIpxJQpMElsX+bM9LTvI7Bv7ZuwjGKAzrC0Lfxfbjsl4pvuX5B1lv0
-         asaKM3dowZNJC7sfLbECaWI4/oGIgJNBht5Hgwbf38YnsCFdrQsFicH6s/H9d1U/WCuP
-         ruQtWLGl2SO6w5Q+0WFiiTZGJOQtp4sd74fqJhPMjKu85yRA7ZCNXZcLMQoJomerUrqd
-         JIjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732064998; x=1732669798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fyD0n8XFP8f0istqBBknRrTZ6rAT8CN6zVNxOsts9j4=;
-        b=nTtVjxuwwD8+WSvrMptj8RZPNbM4fHPyy/MOcLevCXnRGpc1HSNEyoIccHtdIEya+H
-         dOeZwAvHw0Icm/MyGBcBy7lVv5y4Fn37oKVFuKa0282vnLz84tXoKs5VicHeVuQoob2T
-         Ibx0eXYc0P06INENWGEzvT472VVBwdjHbDNsjPo2AP/k5CbsZht/mgFxkqXWa2b63mHE
-         5SiZFZNP0mrxpjHkXGcicAVHBbmt1rMNIZ97OLJNHeMvYMLyIhaWfAmYDF88qp02bpyL
-         lmwJHeI7091qLenig0u+PEVevNbF0FQU8FLkdPAYa3b03dMteAQEi/mLGd5nlMv0DVll
-         j0lw==
-X-Forwarded-Encrypted: i=1; AJvYcCVA/0TldQJIVbqkCvUSTCt/Qj5D3ukSh8mAbK7kCtQZY/JERZVbLYnFKzGCqiO8GZ0OKBfPFu3zgJK2@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKkrO9oTtms7IqQ2NlMvYCxvjXbWJVzB+pUKELy33/0j22BJsL
-	F6rPHpBTFn7hwguUyYWasWMEcRTw0xQnXhZdWZJP9st9yHYtE9idc9ofnJwbx7IOyQpBaVt03yF
-	EFmaihp5llWA/ErESv57ZpnzrO6FDv1ywUuvB
-X-Gm-Gg: ASbGncu+TZYpI8E+lr+ei6bvtcsyOF7NAWIuZK0nlYem630uCGvz7nkSUfzwv8n9/1V
-	x/bEnSBcs8c1TTJnlKnNeC7wFAYYdidY=
-X-Google-Smtp-Source: AGHT+IFsHmpVebwMXEK1glSVoxpXP+DG+iAfRE6TY3s0nAUoSLrP9HGvoiwMiUxbSdstOSlZRyQPTMfIc0RCUhStYcE=
-X-Received: by 2002:a05:622a:3c6:b0:460:e7fa:cf2 with SMTP id
- d75a77b69052e-464d33fc13amr461681cf.23.1732064998036; Tue, 19 Nov 2024
- 17:09:58 -0800 (PST)
+	s=arc-20240116; t=1732065556; c=relaxed/simple;
+	bh=LS36WzC1vHM1bDQEy88QOgHxaM80RcL9ebChJUr95U8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V4O9FV2mm8RDN9lU8zkH1AHWvx9F6sY3ipG15pEmSukkMUBGWEIiwYLk5DdAxu5H21o6zKeFyVPuWnUJ+JTjn9k/3a570AMFcsbDfoFVW+9S+eHbH4aENzTgcaF6JM1zsTeCMGw6joxFCiqy53HfOfk1jmcMjZk2Fj4Wy6yCCZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=i98xjEL4; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1732065546;
+	bh=oQWAyMlcER0yyskUI8rGHrgY1NmCDuDpMSytMU+quK4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=i98xjEL4h45TS2qYTonEl+117Gzt6evwz5+wOQedigokDh6QyPys2I/7+kYQZ0MSM
+	 TR4DnXvoEXd8kL6RsjYUF3G1nNOu7xJ71Qp7tcSvcWCtx1E5ls8BYm+KVJxX05ThtE
+	 tnPuoyFlmF6uxAmKi7Du8UaUAKz2vltZXgL3aeS/Mf49129aRub/t2xjnEmgNJEyUz
+	 BhTZsSZpi75F2inyGEMCMyL9uxGhmCgb7IAc6yRu0lBAQ8K/jsEdrRN8GMc8C94NW/
+	 fZWLrQWaTCe4MjY4E4S4zdwmclNJWtruJHCiufTeaKOOazv+169OVLjAzobE2c95DH
+	 UJ2FmXNhFzWZg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XtNmp2Q5Rz4xfJ;
+	Wed, 20 Nov 2024 12:19:06 +1100 (AEDT)
+Date: Wed, 20 Nov 2024 12:19:08 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@de.ibm.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Subject: Re: linux-next: manual merge of the s390 tree with the mm tree
+Message-ID: <20241120121908.15749360@canb.auug.org.au>
+In-Reply-To: <20241028111606.5c009055@canb.auug.org.au>
+References: <20241028111606.5c009055@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241028111058.4419a9ed@canb.auug.org.au> <20241120120124.03f09ac5@canb.auug.org.au>
-In-Reply-To: <20241120120124.03f09ac5@canb.auug.org.au>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 19 Nov 2024 17:09:46 -0800
-Message-ID: <CAJuCfpGNKzBadFix9WpN-PQMr2Mwj1NjawzSk8ycBST9USKpcA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the arm64 tree with the mm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/ZNdjOeeaWv6U66hhL68/gG+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/ZNdjOeeaWv6U66hhL68/gG+
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 19, 2024 at 5:01=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> On Mon, 28 Oct 2024 11:10:58 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > Today's linux-next merge of the arm64 tree got a conflict in:
-> >
-> >   include/linux/mm.h
-> >
-> > between commit:
-> >
-> >   e87ec503cf2e ("mm/codetag: uninline and move pgalloc_tag_copy and pga=
-lloc_tag_split")
-> >
-> > from the mm-unstable branch of the mm tree and commit:
-> >
-> >   91e102e79740 ("prctl: arch-agnostic prctl for shadow stack")
-> >
-> > from the arm64 tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tre=
-e
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularl=
-y
-> > complex conflicts.
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> >
-> > diff --cc include/linux/mm.h
-> > index 086ba524d3ba,8852c39c7695..000000000000
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@@ -4166,4 -4174,65 +4178,8 @@@ static inline int do_mseal(unsigned lo=
-n
-> >   }
-> >   #endif
-> >
-> >  -#ifdef CONFIG_MEM_ALLOC_PROFILING
-> >  -static inline void pgalloc_tag_split(struct folio *folio, int old_ord=
-er, int new_order)
-> >  -{
-> >  -    int i;
-> >  -    struct alloc_tag *tag;
-> >  -    unsigned int nr_pages =3D 1 << new_order;
-> >  -
-> >  -    if (!mem_alloc_profiling_enabled())
-> >  -            return;
-> >  -
-> >  -    tag =3D pgalloc_tag_get(&folio->page);
-> >  -    if (!tag)
-> >  -            return;
-> >  -
-> >  -    for (i =3D nr_pages; i < (1 << old_order); i +=3D nr_pages) {
-> >  -            union codetag_ref *ref =3D get_page_tag_ref(folio_page(fo=
-lio, i));
-> >  -
-> >  -            if (ref) {
-> >  -                    /* Set new reference to point to the original tag=
- */
-> >  -                    alloc_tag_ref_set(ref, tag);
-> >  -                    put_page_tag_ref(ref);
-> >  -            }
-> >  -    }
-> >  -}
-> >  -
-> >  -static inline void pgalloc_tag_copy(struct folio *new, struct folio *=
-old)
-> >  -{
-> >  -    struct alloc_tag *tag;
-> >  -    union codetag_ref *ref;
-> >  -
-> >  -    tag =3D pgalloc_tag_get(&old->page);
-> >  -    if (!tag)
-> >  -            return;
-> >  -
-> >  -    ref =3D get_page_tag_ref(&new->page);
-> >  -    if (!ref)
-> >  -            return;
-> >  -
-> >  -    /* Clear the old ref to the original allocation tag. */
-> >  -    clear_page_tag_ref(&old->page);
-> >  -    /* Decrement the counters of the tag on get_new_folio. */
-> >  -    alloc_tag_sub(ref, folio_nr_pages(new));
-> >  -
-> >  -    __alloc_tag_ref_set(ref, tag);
-> >  -
-> >  -    put_page_tag_ref(ref);
-> >  -}
-> >  -#else /* !CONFIG_MEM_ALLOC_PROFILING */
-> >  -static inline void pgalloc_tag_split(struct folio *folio, int old_ord=
-er, int new_order)
-> >  -{
-> >  -}
-> >  -
-> >  -static inline void pgalloc_tag_copy(struct folio *new, struct folio *=
-old)
-> >  -{
-> >  -}
-> >  -#endif /* CONFIG_MEM_ALLOC_PROFILING */
-> >  -
-> > + int arch_get_shadow_stack_status(struct task_struct *t, unsigned long=
- __user *status);
-> > + int arch_set_shadow_stack_status(struct task_struct *t, unsigned long=
- status);
-> > + int arch_lock_shadow_stack_status(struct task_struct *t, unsigned lon=
-g status);
-> > +
-> >   #endif /* _LINUX_MM_H */
->
-> This is now a conflict between the mm-stable tree and Linus' tree.
+Hi all,
 
-Let me try to manually apply it to Linus' ToT and will send a replacement p=
-atch.
-
+On Mon, 28 Oct 2024 11:16:06 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> --
-> Cheers,
-> Stephen Rothwell
+> Today's linux-next merge of the s390 tree got conflicts in:
+>=20
+>   arch/s390/include/asm/set_memory.h
+>   arch/s390/mm/pageattr.c
+>=20
+> between commit:
+>=20
+>   4c5768ef0fd7 ("arch: introduce set_direct_map_valid_noflush()")
+>=20
+> from the mm-unstable branch of the mm tree and commit:
+>=20
+>   2835f8bf5530 ("s390/pageattr: Implement missing kernel_page_present()")
+>=20
+> from the s390 tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+>=20
+> diff --cc arch/s390/include/asm/set_memory.h
+> index 240bcfbdcdce,cb4cc0f59012..000000000000
+> --- a/arch/s390/include/asm/set_memory.h
+> +++ b/arch/s390/include/asm/set_memory.h
+> @@@ -62,6 -62,6 +62,7 @@@ __SET_MEMORY_FUNC(set_memory_4k, SET_ME
+>  =20
+>   int set_direct_map_invalid_noflush(struct page *page);
+>   int set_direct_map_default_noflush(struct page *page);
+>  +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool v=
+alid);
+> + bool kernel_page_present(struct page *page);
+>  =20
+>   #endif
+> diff --cc arch/s390/mm/pageattr.c
+> index 4c7ee74aa130,aec9eb16b6f7..000000000000
+> --- a/arch/s390/mm/pageattr.c
+> +++ b/arch/s390/mm/pageattr.c
+> @@@ -406,17 -406,21 +406,33 @@@ int set_direct_map_default_noflush(stru
+>   	return __set_memory((unsigned long)page_to_virt(page), 1, SET_MEMORY_D=
+EF);
+>   }
+>  =20
+>  +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool v=
+alid)
+>  +{
+>  +	unsigned long flags;
+>  +
+>  +	if (valid)
+>  +		flags =3D SET_MEMORY_DEF;
+>  +	else
+>  +		flags =3D SET_MEMORY_INV;
+>  +
+>  +	return __set_memory((unsigned long)page_to_virt(page), nr, flags);
+>  +}
+> ++
+> + bool kernel_page_present(struct page *page)
+> + {
+> + 	unsigned long addr;
+> + 	unsigned int cc;
+> +=20
+> + 	addr =3D (unsigned long)page_address(page);
+> + 	asm volatile(
+> + 		"	lra	%[addr],0(%[addr])\n"
+> + 		"	ipm	%[cc]\n"
+> + 		: [cc] "=3Dd" (cc), [addr] "+a" (addr)
+> + 		:
+> + 		: "cc");
+> + 	return (cc >> 28) =3D=3D 0;
+> + }
+> +=20
+>   #if defined(CONFIG_DEBUG_PAGEALLOC) || defined(CONFIG_KFENCE)
+>  =20
+>   static void ipte_range(pte_t *pte, unsigned long address, int nr)
+
+This is now a conflict between the mm-stable tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ZNdjOeeaWv6U66hhL68/gG+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmc9OQwACgkQAVBC80lX
+0Gwuagf/fmX9crxO87s++/cJmh++kbLunB5oHj1sc27uO2xoWe1iksoMMaSrTMdw
+/ouOq3cxdqKtgDqEmxHgSbRFqCeAFwR7zBgGsHbfI0ywGLv+TrAhKel4DvFLC5Bv
+HWAa9Sw/5IRoFc5T0kN5nhPmF/DElC56f/gExJpxOXl9oKvmsDnnxMFpatVPZ5qW
+GbMYMevpEZjbA18BFGIBs5DRoWtRbJZhOamreP1kg2K+SDSZNWqt2Vss1QmUMu0d
+eTEjxOvvxmKm/1GKUJbxUYxS+kpE6y5vwIv0GOqp0aS0+C9W85Mej0HSQRAjWnrc
+/2HhdELwtlCTsiqinwRUovp1nGxqKw==
+=SZIH
+-----END PGP SIGNATURE-----
+
+--Sig_/ZNdjOeeaWv6U66hhL68/gG+--
 

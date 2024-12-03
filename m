@@ -1,63 +1,53 @@
-Return-Path: <linux-next+bounces-4864-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4865-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 617E99E2C41
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 20:46:41 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBD709E2C1E
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 20:35:14 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B22BB2C9A0
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 19:20:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93502165C27
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 19:35:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEBBE1FECB7;
-	Tue,  3 Dec 2024 19:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E613920ADE3;
+	Tue,  3 Dec 2024 19:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b/a2Vsjz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iXUP7zHL"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7852013B2B8;
-	Tue,  3 Dec 2024 19:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B749A20ADDF;
+	Tue,  3 Dec 2024 19:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733253605; cv=none; b=XNyxYRuhn+sPpUmTStYHXuOcvkegReocty/f624e4vILV5jXJo7T8y9ms9A58WSVwXQgff1HgocQ4ufvXB/T/CB7S8hma21vUmOvNcfV285713MO5J8tex30eE3PV/nHdkqaoiU05YC6NBSWG8ohGgFC9Fig69p8EZXwGfYRgZ0=
+	t=1733254402; cv=none; b=UVehxGHioOvlZIbahPScKNjIAVpf0szDGbq2w9TDLCZ1kWAbTHKN52VQI2Iy5PfLF8IxqcQV2HFXj0RyFW5W4iLKNIRif/+yU4j4FEJaFOhWDFi+OmIFO3ZKsRV4d5WF9RrKqasaL61hEBNJeruowN6MAjfsmsQtD/+8CZVjGqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733253605; c=relaxed/simple;
-	bh=GoVY0MacbGqeIM2tuFnUAwUqQsX3P927jIipuZadN/8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SlX063Pp7rxnvGaMPym5NNoBbGsQO/XQeTu83yLFAPM/7S28P+hKGhHjuzi1Nj5uFYJKJr34mdmP1/WtSLXdH9j/dqazJ8l//l7kkEsS7jM2b8crHnmbd0fTNuDtr8mSdPFhKs+HofHdWcbSEX27cbklEWN08xdXMV8XY2+I9CQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b/a2Vsjz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B950C4CECF;
-	Tue,  3 Dec 2024 19:20:01 +0000 (UTC)
+	s=arc-20240116; t=1733254402; c=relaxed/simple;
+	bh=UfQ6ZMAmFyaVl1WaANxYOS08qhgErHJXc/qHtAmXbxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YlOYZ0tfFrnQNWs719Ma7xAMmcqgxit+qjw8XVLrgRpJj42njCo0p4mR/Ex6qAfql1T1GwJWFFOUBi/+AOpolbFFBAkBbBcmqdz0R9u7B/ja6xYo+ZnBaDfTafOCmuGUW7Cx/3ZhLpB8YuWpdKyVQGiEFq3IWFLjF2suwTtgvbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iXUP7zHL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74470C4CED8;
+	Tue,  3 Dec 2024 19:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733253605;
-	bh=GoVY0MacbGqeIM2tuFnUAwUqQsX3P927jIipuZadN/8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b/a2VsjzXpa4vq+6GX9bWpT4jfdCc9+qSk5OIXdrtio3/wiZsdTNMnGHPb5hWQ1Lu
-	 hnJraYFam6cvpxnBvD22Ajp/WwFQLQOdN74OE7XwbpKKDUqcFY5A/Uz/oOrKg6ZgVa
-	 bqvVY/5u91+fPguQJOGxbEsS43YeS/32dpiPHd+hKL9WUEHF3ckg+B1Gv+6jauj8U2
-	 Xe9cg0rQHScQpqNzLZ5UAZqGVM4kXUCVE9lC3aSGcHJ+TgH6tMjXWTTteSgXZDPiQ1
-	 pxNd5QqcXmNcUwz7HQtEhX2FJEeOT5H5e5MgklbZuSV8aATLJasgSNxnTkgXkbKDjv
-	 LiV+OrnyYgqzA==
-Date: Tue, 3 Dec 2024 19:19:58 +0000
+	s=k20201202; t=1733254402;
+	bh=UfQ6ZMAmFyaVl1WaANxYOS08qhgErHJXc/qHtAmXbxg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=iXUP7zHLsxv5UCtao1gBdVFZZwGlJvYhe6nHTyC6PzdHmfYmTLDzQeqFNfpTlThHp
+	 J4k+kFslut7W1UdpY52pnRQXReUL9lsyhw2H0Z4aSc2KWb4+QJghn+SkVJEpuN2pPu
+	 xGfH2DAajjW5JePF5vGKDeVT2lQzbWz6wtt6yT+ogq3zidX/ywFNnHtQiBCTVFwGKs
+	 5BNYIcbKWsW5fO6BppeC3MZzHQhJGsxrYjQJSjoDRsfDrlmBRxjyXzX6KT4Lg2tLcP
+	 VimfHABfrgTrtmqilMtTHd+7mfqESyKQ/u+4bQ/Yui6pnH98iaE3Bk8WGuFikDp/IF
+	 bvCtf1QQ2PD1w==
+Date: Tue, 3 Dec 2024 19:33:17 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, mcgrof@kernel.org,
-	x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com,
-	samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org,
-	nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	hch@infradead.org, gregkh@linuxfoundation.org,
-	linux-next@vger.kernel.org
-Subject: Re: [PATCH -v2 1/7] module: Convert symbol namespace to string
- literal
-Message-ID: <d707cb3b-1569-45d9-bdc3-dcc98eb88bc4@sirena.org.uk>
-References: <20241202145946.108093528@infradead.org>
- <20241202150810.048548103@infradead.org>
- <20241202151533.GF8562@noisy.programming.kicks-ass.net>
- <CAHk-=wh7KugYO+R-1DMmkLz4fD_-A9BMyrWTVsH_K0a86Ojn4A@mail.gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the hwmon-staging tree
+Message-ID: <Z09c_U2l8SqLQG-n@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -65,62 +55,59 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PoFmYAtqBuzya2VW"
+	protocol="application/pgp-signature"; boundary="cOKDY8y/dtFwjHZR"
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wh7KugYO+R-1DMmkLz4fD_-A9BMyrWTVsH_K0a86Ojn4A@mail.gmail.com>
-X-Cookie: She's genuinely bogus.
 
 
---PoFmYAtqBuzya2VW
+--cOKDY8y/dtFwjHZR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 02, 2024 at 11:33:58AM -0800, Linus Torvalds wrote:
-> On Mon, 2 Dec 2024 at 07:15, Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > Perhaps we can ask Linus to run this now, before -next fills up again ?
->=20
-> Sure. I did an unasked-for scripted 'remove_new' removal right after
-> rc1 for the same reason.
->=20
-> If we have these kinds of big scripted things, right after the merge
-> window tends to be the best time to do them. The conflict potential of
-> leaving it hanging in linux-next can be somewhat annoying. They may be
-> fairly unlikely, and easy to resolve individually, but it's one of
-> those "one is trivial to deal with, but even just a handful is
-> annoying".
->=20
-> So I'll run your script and take your commit message, and we'll have
-> this part over and done with.
+Hi all,
 
-I *think* this is interacting in a fun way with at least the IIO
-subsystem in -next (Linus' tree is fine, I didn't do too much
-investigation as I'd quite like the -next build to finish some time
-today):
+After merging the hwmon-staging tree, today's linux-next build
+(x86 allmodconfig) failed like this:
 
-/tmp/next/tmp/ccjk7YJR.s: Assembler messages:
-/tmp/next/tmp/ccjk7YJR.s:5: Error: junk at end of line, first unrecognized =
-character is `I'
-make[7]: *** [/tmp/next/build/scripts/Makefile.build:194: drivers/iio/imu/i=
-nv_icm42600/inv_icm42600_core.o] Error 1
+In file included from /tmp/next/build/include/linux/module.h:22,
+                 from /tmp/next/build/include/linux/device/driver.h:21,
+                 from /tmp/next/build/include/linux/device.h:32,
+                 from /tmp/next/build/include/linux/hwmon-sysfs.h:10,
+                 from /tmp/next/build/drivers/hwmon/pmbus/tps25990.c:9:
+/tmp/next/build/drivers/hwmon/pmbus/tps25990.c:437:18: error: expected ',' =
+or ';' before 'PMBUS'
+  437 | MODULE_IMPORT_NS(PMBUS);
+      |                  ^~~~~
+/tmp/next/build/include/linux/moduleparam.h:26:61: note: in definition of m=
+acro '__MODULE_INFO'
+   26 |                 =3D __MODULE_INFO_PREFIX __stringify(tag) "=3D" info
+      |                                                             ^~~~
+/tmp/next/build/include/linux/module.h:299:33: note: in expansion of macro =
+'MODULE_INFO'
+  299 | #define MODULE_IMPORT_NS(ns)    MODULE_INFO(import_ns, ns)
+      |                                 ^~~~~~~~~~~
+/tmp/next/build/drivers/hwmon/pmbus/tps25990.c:437:1: note: in expansion of=
+ macro 'MODULE_IMPORT_NS'
+  437 | MODULE_IMPORT_NS(PMBUS);
+      | ^~~~~~~~~~~~~~~~
 
-I've dropped the IIO trees from -next for now.
+Caused by an interaction with Linus' tree.  I have used the hwmon tree
+=66rom 20241128 instead.
 
---PoFmYAtqBuzya2VW
+--cOKDY8y/dtFwjHZR
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdPWd0ACgkQJNaLcl1U
-h9DqCgf/eHt6CEyW4+3cV5neQO9p64Zdpt+vJBM+4RtNmpd3ZRufj3exRjmiqrC7
-L4Yj4iHFGHk5Vdkw0PUCe6JZ7vS5hIcP1TC/xzhPqL31++/6L3/RCn1bAJZ5s+if
-UVKFxbTEiFclpfcHejEYmv/mz0+sN1WOm7xwK2N5/AHwWxlMNGZAQmG0gM0sA2Ws
-Z+dT6DjMIOD/RR63yeT6uetozBl2TkJTVj8tDH8QHZlgOlZrqyUl4RrcLGnDugq9
-rXEBU/EgaKGTQhWgj4Uleid3Rw5VS8Hmu1Tcp+yvKS4ACzICMVKuE8WV7inO0Xt/
-oYpm7fWMp9YMDq/gHcC4Dlrs6njCGQ==
-=uKSV
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdPXP0ACgkQJNaLcl1U
+h9BpNggAgm9PvudnvzaZzW+dRRteQcBzftFoFw0oHJom7i1Y/zR/y2IwXAKwpTBu
+iXXEorMvQ0ZxX+6HXSygGAUhsZdu/RZZYNRJIh9qK7gmKtmitpDePgMWCXuobjM9
+mBviRKpa0I2+4Aypb3a1XgkwwziBjtHMnJswP9YCEp/gZICFKc6KkvwaUL63csoE
+5l7CGbZ9v9DNh5BNpgnf0/mXqlQoA4JIZvdkra2CWyJHw5JuoJbh8V9Y4c1VyZEx
+GeZUY1LT5xkFWC/AUGDbYDVquolw8XMz4yDkbztrphPbydjtkb7Ok9FTvKE9wTlK
+IUvQb+9pV/vAwcEbDrXmNZ3O8nJIjA==
+=xW/E
 -----END PGP SIGNATURE-----
 
---PoFmYAtqBuzya2VW--
+--cOKDY8y/dtFwjHZR--
 

@@ -1,81 +1,81 @@
-Return-Path: <linux-next+bounces-4867-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4868-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD3BB9E2C6A
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 20:53:17 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76EFB9E2C72
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 20:54:41 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DEB128312D
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 19:53:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EB43167A21
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 19:54:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C38205ADC;
-	Tue,  3 Dec 2024 19:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9B2203704;
+	Tue,  3 Dec 2024 19:54:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UlD/x7yY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PO7ZwAaS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137BB204F62;
-	Tue,  3 Dec 2024 19:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0391E1F76BE;
+	Tue,  3 Dec 2024 19:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733255578; cv=none; b=erFImipIIi/7YJ2eGGzLvx8KVy1FAF5q7YH3M4wdob+X5SRUIuKVNl+J68iTdmxSScdReZWCU7Jtd9dhw9j/XQGwUvoKOl9bBnrLyU3rxtLqRZKX7daHknS0pqmrSEsR61h8JRoMUHf8vFw2S3BRUgAyYR37Lx5//FSF5NHXzj4=
+	t=1733255642; cv=none; b=LkruZX96HQkvrTj2TXhzBlarLoyHinvUGfOxxBvmrmzVn3XMI2WscrTEXCSiMxDVXxZUWisY8UAj9gkLdUq2nSgfKULdMg4+n1VjIwfAwPFopveqvxuTutYid12TPqJEiF1SfSVbvR+fxcgA6uULFYrmbFD1KnCXpS0/fiLrKU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733255578; c=relaxed/simple;
-	bh=ie5h+6CpGww4EvqMe8sRR1D6TyL6IN2CdvTaRNTfRB0=;
+	s=arc-20240116; t=1733255642; c=relaxed/simple;
+	bh=a8/fGOuUJ44pAfvDzDvZ5AWCrtE2NyWJkm8SUeoY1XI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=baFjpIUcCooF67L0ArHHldYQtaCZfocUo1YNrXk1OtHUT4dMn/VZg2z152lrmhVYKE7lmwojtB4ZWd6jS0n42hjHo1+zA1g3DAyJ8h8NyvaF+ZFNKmzdn7zDb3VFnb/dF4xXkGreQByBVER5bMrkUy4knHhCvGqkOHbH/L20N0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UlD/x7yY; arc=none smtp.client-ip=209.85.214.181
+	 In-Reply-To:Content-Type; b=C4UTdSIVL/1WwzAIxdf6QZaV5E8qyKGh3uE23MD6YJym9AFyzy9wJD6c2vSatOfGLUCACwQ+BVXFGJh5KVj0SVTO+Mat7dMYriQP6p40O8tMiQR9mQBEJiU1gCLpOS35GFcXYKXEkCOh0ORk8jjXN9udUBgZHpeQCEqrMb8PMXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PO7ZwAaS; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21539e1d09cso56230435ad.1;
-        Tue, 03 Dec 2024 11:52:56 -0800 (PST)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7fcdb53cca6so1672132a12.0;
+        Tue, 03 Dec 2024 11:54:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733255576; x=1733860376; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733255640; x=1733860440; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7jNTWV+8gv1sP1pwmHNm1JBQRuq1KzrGOnDCul3WBmU=;
-        b=UlD/x7yYf5dfg1jPp24Q8/X/NNN8OvwJ8qS0w3KGEWXG7tG9BDvuTjsPXqd/fYTxpb
-         7XHeiY8pHk7aOcrEe3NcnGRS9l5cHQlBxJGOnwMdwX2VDDueQGDp2k6JIg7FCU8lSjeT
-         j2vP/V28TW/Ensg23meahWmiziVgmMpA6gkO8xGQpj9rUktC1dPsgPvsxJkHyfUB/V6W
-         We12UurVw8+GL+njXDc0TtEns+zR5cQfwzCmMoSnt3t+Ax6yKNogDW4qZLOWP5A3CRrS
-         GX2j5UVx+KXINjoj8XUhUSg2ou1jtyCT2bpnVtJMYMd2a9hzc4KS9qBdUFYFNzK3TNkz
-         TicQ==
+        bh=XhX64BkDXW7gJ/FwLL5pSVfPB+JqhnLTUrRfRzg9wbA=;
+        b=PO7ZwAaSCb6xK0NSsFOp5VoM616qdMGzzvcnRN6+Nc2e0Zs2Q6xvbaM3tY9/f7ne/R
+         /9bkAGwiti4A0QStpQEPTkv9CvTX3TCAnNWWsqSL34ZU4XY918yC/6ohfykUkBcehqg8
+         CgVDhpzQ9+iIWmfipiwC6PMPhPZecM57kg9n8fPGPXWzBJA2N3fPYIk2F3539SdIQ5o3
+         Vwh8dnusOjASI1G2VH1qx56Fj6vPxiQr8GNao9T14/k5HsO3ie5lKLg2kylfNHMB02TY
+         M0ENRvJJT0rOFIZWEkqFrEX4XlJAc7AWSbX2JlTxThYrq4vbIKzu5ezeFEQfmiKZ1HMC
+         mViA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733255576; x=1733860376;
+        d=1e100.net; s=20230601; t=1733255640; x=1733860440;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7jNTWV+8gv1sP1pwmHNm1JBQRuq1KzrGOnDCul3WBmU=;
-        b=CFTpW0vVb6tg3KI8NZR2kXQRMNCj5o0gvnIXTCG5AxeMGTDQ7UWEhRpKNC5goftVHn
-         39SeB95lzjAJAaezuzTHey3mUiNDL/f7tRLJ69IRnnTssVyBIz1rDK3fYordqPwB0LYN
-         opW8FRVjmkG5AHpTQqLVrFLMK0FYf5c5etFDMsbHpoVXAAgRgIn4yk/ziLSs2V+Utu35
-         aJDZ7x+G+M3LXceSFud96eOHArtwc2gfGuy/nkKSAfCjKtdTVwlEf8xBrGkHEtGVusct
-         /xpdhM/+ptR4sbDDXIpNOin7KXT4OTV7x+nuis4DYYWSOG1ZZpYjI3x95+roUs99lSXJ
-         OCGA==
-X-Forwarded-Encrypted: i=1; AJvYcCW5ChLnthSN5FUMDkQYmWZWUmM+YyltxjAc8MwnDe5E8D+8PV9IEUzrbBeE0Cm3ORxPzzJZn5n2Oowx@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVsvdo6f7ktq01aYAPDi0GRs+HLmTaIFKflEbT66i3b40cZ/W9
-	w9RUXF/Ht76J54B4Ado7uyNuORiAxYAOXER1PIlupHHZxuLorFPM1abnAQ==
-X-Gm-Gg: ASbGnctQGyH+mkftbTf+7FHf9VwQhc1XI30GHBm6I/wcASomIcwk6EU5losm0H35Csq
-	gv5Htg80mzLT9jfCJolVV8SDok6FXQzWI55VTDzve7tXQVoce6TUMud2cpj2y1WFMtAPCzblBv5
-	Zf1EYskKezb5W01KeMwaHPqtH3FLr5jzd7XUva15nS1BIVMo6ecCUuEdk9vEkeE07d2If5r7GSf
-	1jbVPESQ1Q7LhjPagP3pNJgBaTy7T8D49ulynavLjb82Unq34VuiHTlq2iE9DHqaQm/tcMwX+rK
-	Uuasm1EdgSgFw/MQ7Q/Qr+c=
-X-Google-Smtp-Source: AGHT+IFQj5ygVF12Vjd1JX0HqtF1mCI1f2Z/dwAH4ECKBi6ebdjhgLkcDmXNrtn/cQbT6imHAX1ysQ==
-X-Received: by 2002:a17:902:d4c2:b0:215:b468:1a48 with SMTP id d9443c01a7336-215bd2001f9mr45261085ad.26.1733255576212;
-        Tue, 03 Dec 2024 11:52:56 -0800 (PST)
+        bh=XhX64BkDXW7gJ/FwLL5pSVfPB+JqhnLTUrRfRzg9wbA=;
+        b=msO6MnSip+sg1z4qr/UL0PxjcI3RUjykgfsck9SksxXf2LSuRJLEvd7H7aSwSER83B
+         StuoB7UC1JGPXNWUFZg7lLd/TWJtvIIjswmnbi1A5QUHbEBTB050tLpchO1EV9b3FIU3
+         LXcjlzVLDD3WJ4qw3N8h0mqY56KIwUeaOOZfKhEBIN5hC7kOJi+VtpX8WFgQjx/vHzzc
+         xxmfgjFlCgXUOekGEWS+8Zg3tamJI92xO3yew8vnnTIEtiiefq/2EWBzcKlnOuyQZ9cQ
+         L6tQu4rL3sGSpC2KaxpTziqXISW4fbXNeC1CztYZ86XZ/BkQcLdMCiC+tXo7kxxoaqLO
+         3s2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXjFVPm9t2Va32D3g4jsa9JzsUysfrLu08nuoQPv/R4bYwSw3LUAAYERrbj3xhftreBVbCyW4YX7AIO@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMN+FJeamE64vd/urja9cnZOiIPSXq74LtDSmbU/Mpi7zwVV/E
+	Bs6emHbJC05eWKwtbNbaHsdCgxBNzgAZI6I7nl/YCx2ZcEee7jYX91uYJg==
+X-Gm-Gg: ASbGnct0tBjvaZ2ZmffvBW5YsvYf3hkWHMhvydrTbVsurQheO9RH+hDq4vSL8T7uqNf
+	RjDwC4BCCMsSxxMT0Sx3OiH1p/MCOVNMYCjX1sOm+UvoCsFtXI8VWuriCNigLr1u7Yr1AUgnNBP
+	1Siabm2Nz6iGYtWv76ydNtFklNhOOuwVn5wbJUWHJqi/ZK4mZZPjhVgbLVZEK5SUU4NRzDmpPMk
+	qIgtinyOlUoQYmjQkNbgOBuawwzuhR7ZPPV9g7h3lYW+Vfx92jv0BpeepGCS6UVCPDAdBZkjZVn
+	lmmXUJHqFaECmKmeZHjgkmM=
+X-Google-Smtp-Source: AGHT+IHwMu6ryEs6oXWfrMU5ZYK5HQdS7ac1LstTPxZEkdKnXEygmaeaKLiUfgXWM5s4rGbndWwizw==
+X-Received: by 2002:a05:6a20:43a9:b0:1e0:d8c1:cfe2 with SMTP id adf61e73a8af0-1e1653f6bb2mr5513926637.34.1733255640195;
+        Tue, 03 Dec 2024 11:54:00 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7258bbbc565sm126340b3a.61.2024.12.03.11.52.54
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7258c1e3e20sm84933b3a.145.2024.12.03.11.53.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Dec 2024 11:52:55 -0800 (PST)
+        Tue, 03 Dec 2024 11:53:59 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <24c61106-9928-4423-97b5-f43dc823d54d@roeck-us.net>
-Date: Tue, 3 Dec 2024 11:52:54 -0800
+Message-ID: <d57e049a-9d1b-4229-84ba-0933cc0315d4@roeck-us.net>
+Date: Tue, 3 Dec 2024 11:53:58 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -84,10 +84,11 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: linux-next: build failure after merge of the hwmon-staging tree
-To: Mark Brown <broonie@kernel.org>
+To: Mark Brown <broonie@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
  Linux Next Mailing List <linux-next@vger.kernel.org>
 References: <Z09c_U2l8SqLQG-n@sirena.org.uk>
+ <cba440fc-88c6-444c-af57-046ebedd60c2@sirena.org.uk>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -133,40 +134,46 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <Z09c_U2l8SqLQG-n@sirena.org.uk>
+In-Reply-To: <cba440fc-88c6-444c-af57-046ebedd60c2@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/3/24 11:33, Mark Brown wrote:
-> Hi all,
+On 12/3/24 11:40, Mark Brown wrote:
+> On Tue, Dec 03, 2024 at 07:33:22PM +0000, Mark Brown wrote:
+>> Hi all,
+>>
+>> After merging the hwmon-staging tree, today's linux-next build
+>> (x86 allmodconfig) failed like this:
 > 
-> After merging the hwmon-staging tree, today's linux-next build
-> (x86 allmodconfig) failed like this:
+> Sorry, this was the i2c-host tree rather than the hwmon-staging tree.
 > 
-> In file included from /tmp/next/build/include/linux/module.h:22,
->                   from /tmp/next/build/include/linux/device/driver.h:21,
->                   from /tmp/next/build/include/linux/device.h:32,
->                   from /tmp/next/build/include/linux/hwmon-sysfs.h:10,
->                   from /tmp/next/build/drivers/hwmon/pmbus/tps25990.c:9:
-> /tmp/next/build/drivers/hwmon/pmbus/tps25990.c:437:18: error: expected ',' or ';' before 'PMBUS'
->    437 | MODULE_IMPORT_NS(PMBUS);
->        |                  ^~~~~
-> /tmp/next/build/include/linux/moduleparam.h:26:61: note: in definition of macro '__MODULE_INFO'
->     26 |                 = __MODULE_INFO_PREFIX __stringify(tag) "=" info
->        |                                                             ^~~~
-> /tmp/next/build/include/linux/module.h:299:33: note: in expansion of macro 'MODULE_INFO'
->    299 | #define MODULE_IMPORT_NS(ns)    MODULE_INFO(import_ns, ns)
->        |                                 ^~~~~~~~~~~
-> /tmp/next/build/drivers/hwmon/pmbus/tps25990.c:437:1: note: in expansion of macro 'MODULE_IMPORT_NS'
->    437 | MODULE_IMPORT_NS(PMBUS);
->        | ^~~~~~~~~~~~~~~~
-> 
-> Caused by an interaction with Linus' tree.  I have used the hwmon tree
-> from 20241128 instead.
 
-Yes, that is due to the MODULE_IMPORT_NS API change in the upstream kernel
-that was pushed right after -rc1. I'll push a new version after I build tested it.
+I think it is (or should be) the hwmon-next tree.
 
 Guenter
+
+>>
+>> In file included from /tmp/next/build/include/linux/module.h:22,
+>>                   from /tmp/next/build/include/linux/device/driver.h:21,
+>>                   from /tmp/next/build/include/linux/device.h:32,
+>>                   from /tmp/next/build/include/linux/hwmon-sysfs.h:10,
+>>                   from /tmp/next/build/drivers/hwmon/pmbus/tps25990.c:9:
+>> /tmp/next/build/drivers/hwmon/pmbus/tps25990.c:437:18: error: expected ',' or ';' before 'PMBUS'
+>>    437 | MODULE_IMPORT_NS(PMBUS);
+>>        |                  ^~~~~
+>> /tmp/next/build/include/linux/moduleparam.h:26:61: note: in definition of macro '__MODULE_INFO'
+>>     26 |                 = __MODULE_INFO_PREFIX __stringify(tag) "=" info
+>>        |                                                             ^~~~
+>> /tmp/next/build/include/linux/module.h:299:33: note: in expansion of macro 'MODULE_INFO'
+>>    299 | #define MODULE_IMPORT_NS(ns)    MODULE_INFO(import_ns, ns)
+>>        |                                 ^~~~~~~~~~~
+>> /tmp/next/build/drivers/hwmon/pmbus/tps25990.c:437:1: note: in expansion of macro 'MODULE_IMPORT_NS'
+>>    437 | MODULE_IMPORT_NS(PMBUS);
+>>        | ^~~~~~~~~~~~~~~~
+>>
+>> Caused by an interaction with Linus' tree.  I have used the hwmon tree
+>> from 20241128 instead.
+> 
+> 
 
 

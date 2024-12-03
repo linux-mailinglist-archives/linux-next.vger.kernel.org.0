@@ -1,57 +1,61 @@
-Return-Path: <linux-next+bounces-4870-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4871-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C15B9E2CB0
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 21:07:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 748869E2CB5
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 21:07:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAB3628A59E
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 20:07:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AA3F28B157
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 20:07:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76B2209F49;
-	Tue,  3 Dec 2024 20:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4EF204F92;
+	Tue,  3 Dec 2024 20:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qloih+gC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4gNRBJd"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3CC209F46;
-	Tue,  3 Dec 2024 20:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CC3202F86;
+	Tue,  3 Dec 2024 20:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733256149; cv=none; b=sioqyX2wSWpTfWhLP7pIyWvPsFx1ymvrjPN0QvXBH7AtGibwHDcRP/oS/tYXoIQdwL3sm6BT9UyPRv51XmeSQ3FP0G5Vhcbm9hUhTXoiazg9y8Yw8cY7N1ZzLJDjI9KMekvG7G4RCWoi435lsQOOzr/nwst/yuLaEJQipvVDAnc=
+	t=1733256334; cv=none; b=lHlOOsyBdU9bRw3Qs+RTka39zwr3DKuo44oG/fVQGiLl75Aj/4KZJrLO+bQivT0Hw5kPeXdwZfzwutXXSyLKMSkgRS9YXZzVduItpiljphz6oI2ve/2a5Lp5KUHmrv1Gwbkva9q5vgN091XJK71qLrcox3cE7oDjAden/SahBxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733256149; c=relaxed/simple;
-	bh=YgO+22E9CP1aoJ8xQyShLmWzJS1FxWDyHERFzMsZ6TQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DCYUl8pAf/eP0+Vx7ZrnJ+IAJXDR131FIWfAjtST41wknbLLthAs90aeHl6sC/HGMm4Jz2TS7qf4ph3A3Rj1qd40PVTbVjfn/zp2mBi7/+U8e5Cgi73CoO0fjLE3geZd8267JTy7O0PvvWWT6AkHSVBC5w3X2LuJ7opqWNXee4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qloih+gC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54CE0C4CECF;
-	Tue,  3 Dec 2024 20:02:28 +0000 (UTC)
+	s=arc-20240116; t=1733256334; c=relaxed/simple;
+	bh=Yrbc/l+xD4S/+XGL1vpPMBgFYNpUEoULuxt7XeELIQ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QASlJaQh3yq38wssdiFgmyaxSe6MLHe+wWoOn+G4SH/xIrgJr3TVLBOYjjrsrhzKdWE2fKpUNFef6xE7ufzS3GV/ud0DfmitO77w70Q4m9uns/hqY7yyiQjOqjTAdIRnbv2/3i6FHuv5Uc1xfq0F3+f0B8l2mSzE3qhGKqK/3gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4gNRBJd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21EDC4CECF;
+	Tue,  3 Dec 2024 20:05:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733256149;
-	bh=YgO+22E9CP1aoJ8xQyShLmWzJS1FxWDyHERFzMsZ6TQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qloih+gC69E9I09sLS7Zww5CUtFyohiFZfGU0qpUsTatiBzwDEGnSUWiYUHE6weJW
-	 VOSva0dbERQdn5xJ+GFEe5QcLZNXHH5FEc4+JJvQe+vR+ydvClB9388gUmGN+VMsaY
-	 mc/4HegJE4xLCG6OB/8wl3/OONV7fISKalkHhqHY20uzhNfaJ+HDx0I7FMgwVvX44A
-	 1nBP7MYrpriGEZ/wrUzWQj40SrJ1xuOLmsBAVBxL7hkXKPWBrhA3VuSCQQQAWj/t9I
-	 F6Rw5ZlGf1xOipQnwCPq2fzaCo36Br2J+HL7Xj3DTM3Tbu1yOEGnmdVR0+E7M/Oa61
-	 Z3rrDDBd3AqGw==
-Date: Tue, 3 Dec 2024 20:02:25 +0000
+	s=k20201202; t=1733256334;
+	bh=Yrbc/l+xD4S/+XGL1vpPMBgFYNpUEoULuxt7XeELIQ0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=H4gNRBJdg9Ivv4L/m83TP2Jqkg7jqALzF5q273mkarIkOTVUawzu+C+lVc31b8byV
+	 njlpQb3gpfA0sLERXtPAISP54eF8AeffcYWxVrUr3tgcXryax0qUV+T0Qx+zg07JzQ
+	 G+DgJVDeUPiHKS5vmHFveLgeose8lyT7V0sU3fTguATjYabwjRwICOOjpkW7InbSzY
+	 odXRvjm4h9BvqLQmAXC06thNpT/KeqPGuWiDwYYF9nlZwl/XkOjehy+8O91LyhUTMb
+	 8rCsETFtGxG/XZP/l6LT+w8Qx59nx+c2TfQPzXUlvsZTLr7umoack8KzvPyaF1U5vv
+	 gCZuwLSsQM7+Q==
+Date: Tue, 3 Dec 2024 20:05:29 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Andi Shyti <andi.shyti@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the hwmon-staging tree
-Message-ID: <da18d79a-542d-49b4-a0d2-da7b483af158@sirena.org.uk>
-References: <Z09c_U2l8SqLQG-n@sirena.org.uk>
- <cba440fc-88c6-444c-af57-046ebedd60c2@sirena.org.uk>
- <d57e049a-9d1b-4229-84ba-0933cc0315d4@roeck-us.net>
+To: Simona Vetter <simona.vetter@ffwll.ch>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Intel Graphics <intel-gfx@lists.freedesktop.org>,
+	DRI <dri-devel@lists.freedesktop.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with the
+ drm-intel-fixes tree
+Message-ID: <Z09kidsTlxhP51ff@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -59,49 +63,136 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="SjqtM/eYBztvk2cQ"
+	protocol="application/pgp-signature"; boundary="TJMdyoU9CQls9ZU9"
 Content-Disposition: inline
-In-Reply-To: <d57e049a-9d1b-4229-84ba-0933cc0315d4@roeck-us.net>
-X-Cookie: Alimony is the high cost of leaving.
 
 
---SjqtM/eYBztvk2cQ
+--TJMdyoU9CQls9ZU9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 03, 2024 at 11:53:58AM -0800, Guenter Roeck wrote:
-> On 12/3/24 11:40, Mark Brown wrote:
-> > On Tue, Dec 03, 2024 at 07:33:22PM +0000, Mark Brown wrote:
-> > > Hi all,
-> > >=20
-> > > After merging the hwmon-staging tree, today's linux-next build
-> > > (x86 allmodconfig) failed like this:
-> >=20
-> > Sorry, this was the i2c-host tree rather than the hwmon-staging tree.
-> >=20
->=20
-> I think it is (or should be) the hwmon-next tree.
+Hi all,
 
-It is the hwmon-staging tree (which is the hwmon-next branch in
-linux-staging.git) - came here to say that, I'd forgotten how to drive
-the scripts and got confused about the I2C tree sorry for the noise
-there.
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
---SjqtM/eYBztvk2cQ
+  drivers/gpu/drm/i915/display/intel_dsb.c
+
+between commit:
+
+  ebd1e5faa72af ("drm/i915/dsb: Don't use indexed register writes needlessl=
+y")
+
+=66rom the drm-intel-fixes tree and commit:
+
+  ecba559a88ab8 ("drm/i915/dsb: Don't use indexed register writes needlessl=
+y")
+
+=66rom the drm-intel tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/gpu/drm/i915/display/intel_dsb.c
+index 4d3785f5cb525,e6f8fc743fb40..0000000000000
+--- a/drivers/gpu/drm/i915/display/intel_dsb.c
++++ b/drivers/gpu/drm/i915/display/intel_dsb.c
+@@@ -304,55 -295,34 +295,43 @@@ void intel_dsb_reg_write_indexed(struc
+  	 * we are writing odd no of dwords, Zeros will be added in the end for
+  	 * padding.
+  	 */
+- 	if (!intel_dsb_prev_ins_is_mmio_write(dsb, reg) &&
+- 	    !intel_dsb_prev_ins_is_indexed_write(dsb, reg)) {
+- 		intel_dsb_emit(dsb, val,
+- 			       (DSB_OPCODE_MMIO_WRITE << DSB_OPCODE_SHIFT) |
+- 			       (DSB_BYTE_EN << DSB_BYTE_EN_SHIFT) |
++ 	if (!intel_dsb_prev_ins_is_indexed_write(dsb, reg))
++ 		intel_dsb_emit(dsb, 0, /* count */
++ 			       (DSB_OPCODE_INDEXED_WRITE << DSB_OPCODE_SHIFT) |
+  			       i915_mmio_reg_offset(reg));
+- 	} else {
+- 		if (!assert_dsb_has_room(dsb))
+- 			return;
+ =20
+- 		/* convert to indexed write? */
+- 		if (intel_dsb_prev_ins_is_mmio_write(dsb, reg)) {
+- 			u32 prev_val =3D dsb->ins[0];
++ 	if (!assert_dsb_has_room(dsb))
++ 		return;
+ =20
+- 			dsb->ins[0] =3D 1; /* count */
+- 			dsb->ins[1] =3D (DSB_OPCODE_INDEXED_WRITE << DSB_OPCODE_SHIFT) |
+- 				i915_mmio_reg_offset(reg);
++ 	/* Update the count */
++ 	dsb->ins[0]++;
++ 	intel_dsb_buffer_write(&dsb->dsb_buf, dsb->ins_start_offset + 0,
++ 			       dsb->ins[0]);
+ =20
+- 			intel_dsb_buffer_write(&dsb->dsb_buf, dsb->ins_start_offset + 0,
+- 					       dsb->ins[0]);
+- 			intel_dsb_buffer_write(&dsb->dsb_buf, dsb->ins_start_offset + 1,
+- 					       dsb->ins[1]);
+- 			intel_dsb_buffer_write(&dsb->dsb_buf, dsb->ins_start_offset + 2,
+- 					       prev_val);
++ 	intel_dsb_buffer_write(&dsb->dsb_buf, dsb->free_pos++, val);
++ 	/* if number of data words is odd, then the last dword should be 0.*/
++ 	if (dsb->free_pos & 0x1)
++ 		intel_dsb_buffer_write(&dsb->dsb_buf, dsb->free_pos, 0);
++ }
+ =20
+- 			dsb->free_pos++;
+- 		}
+-=20
+- 		intel_dsb_buffer_write(&dsb->dsb_buf, dsb->free_pos++, val);
+- 		/* Update the count */
+- 		dsb->ins[0]++;
+- 		intel_dsb_buffer_write(&dsb->dsb_buf, dsb->ins_start_offset + 0,
+- 				       dsb->ins[0]);
+-=20
+- 		/* if number of data words is odd, then the last dword should be 0.*/
+- 		if (dsb->free_pos & 0x1)
+- 			intel_dsb_buffer_write(&dsb->dsb_buf, dsb->free_pos, 0);
+- 	}
++ void intel_dsb_reg_write(struct intel_dsb *dsb,
++ 			 i915_reg_t reg, u32 val)
++ {
++ 	intel_dsb_emit(dsb, val,
++ 		       (DSB_OPCODE_MMIO_WRITE << DSB_OPCODE_SHIFT) |
++ 		       (DSB_BYTE_EN << DSB_BYTE_EN_SHIFT) |
++ 		       i915_mmio_reg_offset(reg));
+  }
+ =20
+ +void intel_dsb_reg_write(struct intel_dsb *dsb,
+ +			 i915_reg_t reg, u32 val)
+ +{
+ +	intel_dsb_emit(dsb, val,
+ +		       (DSB_OPCODE_MMIO_WRITE << DSB_OPCODE_SHIFT) |
+ +		       (DSB_BYTE_EN << DSB_BYTE_EN_SHIFT) |
+ +		       i915_mmio_reg_offset(reg));
+ +}
+ +
+  static u32 intel_dsb_mask_to_byte_en(u32 mask)
+  {
+  	return (!!(mask & 0xff000000) << 3 |
+
+--TJMdyoU9CQls9ZU9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdPY9AACgkQJNaLcl1U
-h9ClPgf/Tv0h6f/799XpSl+6KmdSMzRdA+YDIE+roPcarkj63TP7MijE3T7KgHMY
-eQiQX6iFYvjQgK7deLFPP1hIUZGFkOUr+EYB5JTRiUQpSTXi8EXV1SZfcOVsLsKB
-VEdvElvPFs+NcOdFyZaQNbAmAIklpnaZGTN0VLYVy1eqL2BFGZJh60xpzErVMP6u
-Di3obsPai0BUCLsO0Kf7QcZfA0EX6XmIE8e+FiEHGycX5TWZ4Zi+jPLF74NMyNf5
-dkrvPPp47d8ZBkdA82VpOuPg4FYAIE9lLBtxnY0y2yozUE8hluhPdP21e/q9K6cL
-9fGt8ZgxLjAfa2XZJjDMBB0VHa3M3Q==
-=615t
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdPZIgACgkQJNaLcl1U
+h9DfIQf/SoCA06H1HA7SzYcLnmr1j91iBNfuorL7JDrOYYJo7s4u+iNplrl4z1w2
+DpqO4w9khwF+DHpxo8aHkLz+T6/B/TGjFHNrXuWYxIXDCn07Q20oz+nI05ty99XP
+7X6LnVyVxeymUiDwlfg87S+2SlhcAhWMXZBl31+snLaiol8tCcrdpEzYqyRBIDl9
+ADFOIgVtmKOZTohrtoDfC+XmWz0PjowzYIUUI+cnTdN6mlczxdAsyvYQX8ks94PV
+ngxPZy3TNYqf/FnyVmi9srN/aVkNNecL4v/rj5VFKWz2zd2w+NPzcqhvf0CnVTqy
+jISI1uZutV477SMwsKnYvXdqrzRKBw==
+=t1ob
 -----END PGP SIGNATURE-----
 
---SjqtM/eYBztvk2cQ--
+--TJMdyoU9CQls9ZU9--
 

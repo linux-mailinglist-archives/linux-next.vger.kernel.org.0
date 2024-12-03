@@ -1,95 +1,87 @@
-Return-Path: <linux-next+bounces-4860-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4861-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFF9A9E2359
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 16:35:48 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91F849E288A
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 18:02:58 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71A68B26195
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 13:35:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 685DD165AD4
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 17:02:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7EB1EBFFC;
-	Tue,  3 Dec 2024 13:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694E01F8916;
+	Tue,  3 Dec 2024 17:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sx6zWmOX"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DxNlElGt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28709192D98;
-	Tue,  3 Dec 2024 13:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C557A1F76C6;
+	Tue,  3 Dec 2024 17:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733232945; cv=none; b=SBDXMi7EY2TFLfTBbQWnBeZ7S2cDYhQPOWZ/y56GVbOTM52zDM+xhrk1yTrrZeznXoAREEPOtKhbx0Ge4CrpSqjs8I33BZ3fz/TJsuc6g13/n+st30Z0Q/kL632uPRf7M13sD24fE1cmCFlJSInj9jUUy1VCV+3FZRDjeAP/yF8=
+	t=1733245374; cv=none; b=saI6w+rQuCxtjfsFc92wM2Rvw+jqtdE9WW0TjU7GCPPOCZLGBHZckbJe1QM6dLd80zelO3j+pcIJ0GKMiIJPyk+O1sVPeysm+MqVeiH33K31ZlpQH2iZf9IhekYVvnIGQF4BfCZx9fXq2x+YW8of9WWDQJRlZ+t16ei7VUrh940=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733232945; c=relaxed/simple;
-	bh=dXDrDtN5XaSL7lVIDYJ3Rm5FRszCej7xDYfP7QV04Kk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AWpyOU0qB2oqJOZ/j+v20fWpryWt0nuf16K69F/MRQ65AmJwCJMMaupbeynn+bMT3bWuVak7+Sp8wntEkm0G4dbkhCaOmfm2Q/0JZE5lHs746K/6sqreOJhoSFXzsaZ1RjhWmznAOA73uw4c+X3+9varnw0N1O0w4KoJQrOYM9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sx6zWmOX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01ACC4CED6;
-	Tue,  3 Dec 2024 13:35:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733232944;
-	bh=dXDrDtN5XaSL7lVIDYJ3Rm5FRszCej7xDYfP7QV04Kk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sx6zWmOXljO2J9kWAcinw+IGcbZxfufoFfJTCWxkOFBTR6zoKNakrtAEn1gUWoAY6
-	 eGNh/pfgYqPnAg1VQB06Fez4JQRSVS/l2yktXAm2HQxXRLrCiq2GJPDKRdNPhHIURf
-	 /8Tt6zmdvMt/UkMF05P/hZcjhoHvYqse2UYZoITIC/qck7QLnvqlhm3y3yf011e2Fm
-	 4fnt0aDjOuNh+xxQEAYG21guoBtOzxzANrIa6gFjVIkkwx/ZOXjTTF6fwPfQ5pGj7+
-	 CGh7IovTGTFkG1riVvgXngh1NBWrDeNq678k7CiKymIC9qdQ+sFDdPRZFQZbzHp7Ud
-	 33mEQz+gM97HQ==
-Date: Tue, 3 Dec 2024 13:35:40 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+	s=arc-20240116; t=1733245374; c=relaxed/simple;
+	bh=4onJmAuEn/gPvcPKpwAVf4XUSOY6vXaKxHKjF2JLfTc=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=Pflpv68EvjEBl7vIqheZCGEj71wcnqvsGwGnomcJawHSb032jqmPeYSSyeSFQf3P3u8XuunzR5W7ubtZVxwoZ8d/Y67rVziCzUhLCBo3BgzP5cyomGQWmpGtGi5xOSLUMFB90BgRkfuZGWdCCOlyh5MEx+lCmUfaMku6uL/qBQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DxNlElGt; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1733245362;
+	bh=sDBnWLdIyitSZ3qmu+9wRsBu3g24mjnplT3AmeMcxDs=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=DxNlElGtTEYMF8IbOJckIJFwZDGH5xarFTu1LYh/wgKSD4MIpIvvPVpVFyj1/7cbP
+	 ft7Smr/TBnSzkmIAXLDI8npUZHJIUnoWtcfOSOdarFsgKYW/ZdpAYh1TUL6hBvzbsg
+	 jasqLuLt55n8hbdarB/7Ld1xcWpMHHMdX2HdJQghTZJ0llMVfT+g7md8eYBrEZnf6/
+	 yTwQZN1+AggFuNKshavrvpVB+mOEx9MartE//IZ3q1GbVkPASoCi+rBqyjLj0HE5n+
+	 ZHWnd0ZQ+g7XL3/HcItNNLTcQT3MKVOBzE/3BMM7xL+G6RgBCO7GvPmC9rnvHLj8Mg
+	 xMJmsyK5e7fTA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Y2n5Z1rvRz4x6Z;
+	Wed,  4 Dec 2024 04:02:42 +1100 (AEDT)
+Date: Wed, 04 Dec 2024 04:02:45 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>
+CC: Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: linux-next: Tree for Nov 28
-Message-ID: <ad4c0bbb-51df-4a5d-8c7a-e5dceb290bf9@sirena.org.uk>
-References: <20241128133214.6a39d091@canb.auug.org.au>
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ad4c0bbb-51df-4a5d-8c7a-e5dceb290bf9@sirena.org.uk>
+References: <20241128133214.6a39d091@canb.auug.org.au> <ad4c0bbb-51df-4a5d-8c7a-e5dceb290bf9@sirena.org.uk>
+Message-ID: <5D4F6778-BBD6-465D-A4C3-60F0EA0D2211@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="c7fF2wfXWEDgUDBF"
-Content-Disposition: inline
-In-Reply-To: <20241128133214.6a39d091@canb.auug.org.au>
-X-Cookie: Alimony is the high cost of leaving.
-
-
---c7fF2wfXWEDgUDBF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 28, 2024 at 01:32:14PM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> News: There will be no linux-next releases tomorrow or next week.
+On 4 December 2024 12:35:40 am AEDT, Mark Brown <broonie@kernel=2Eorg> wrot=
+e:
+>On Thu, Nov 28, 2024 at 01:32:14PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>=20
+>> News: There will be no linux-next releases tomorrow or next week=2E
+>
+>I didn't notice this until this morning=2E  I've got a build running for
+>today, if there isn't a -next today there should hopefully be ones for
+>the rest of the week=2E
 
-I didn't notice this until this morning.  I've got a build running for
-today, if there isn't a -next today there should hopefully be ones for
-the rest of the week.
+Hi Mark,
 
---c7fF2wfXWEDgUDBF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdPCSwACgkQJNaLcl1U
-h9D/Rwf+JBR2g1t7r1z/EZK6AWJJRVYZuYXlwqOpSfV8q/G1Kl6YFnMTrJxDVg0a
-YzvZ7TnBS+HL8g07HnXCCicFdWWoCLf4o7GpKCtxG4G5n4QEzz6QyJxFcsSiLGX8
-oiq4KYpKdRL5IvrZ3v5xB/WVeBH/6FlbVbKFvoV5BZV5Ip1M6F6aQd/GZPXFZ7LG
-EkWIPoRIhYceEJtXNiSb9brJ9DCUhf7mKEotU7I2L8CDteqwGhXYaLWWKrERWlMg
-y2GgPcZ9ege+Reuisax1bdKpk729LOZ5WLhhjb4rdHdHN05NPuXaxaiRXPlSlmIs
-KECVwqXMW0eGJ1Vg7DgqYetQ0iZpUg==
-=vP70
------END PGP SIGNATURE-----
-
---c7fF2wfXWEDgUDBF--
+Thanks, but don't worry too much as it's just the first week after the mer=
+ge window has closed=2E
+--=20
+Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
 

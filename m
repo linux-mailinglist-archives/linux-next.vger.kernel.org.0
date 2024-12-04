@@ -1,131 +1,132 @@
-Return-Path: <linux-next+bounces-4874-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4875-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCB3B9E2F8E
-	for <lists+linux-next@lfdr.de>; Wed,  4 Dec 2024 00:11:57 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CFD69E30A6
+	for <lists+linux-next@lfdr.de>; Wed,  4 Dec 2024 02:12:10 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0152282F2A
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2024 23:11:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1676A161555
+	for <lists+linux-next@lfdr.de>; Wed,  4 Dec 2024 01:12:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDF631FA167;
-	Tue,  3 Dec 2024 23:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81CE48BEC;
+	Wed,  4 Dec 2024 01:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TAEm4p+8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/K11b0Q"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D338460;
-	Tue,  3 Dec 2024 23:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48ECE63D;
+	Wed,  4 Dec 2024 01:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733267512; cv=none; b=mfcQeyGV2lMoCcW9bRfA/TCSUxjtyiM4OJV7uCpzY7pTa4C0wt+SUQZitieVDw5Xs4AHN16Rol0HY+A4jrM2gsfux6uOBpWeZIwIZ/6F0baVxtoKKesUJEsQfX6sdASr8GYTlu2qt+mz8PjCDtIf8d9bxq+L4hvPO+pjU491ZxE=
+	t=1733274725; cv=none; b=f31a1E0KfVlbTfOiXGGbfqM63cqhoXFf14YeNpDs9F5sdP6bcF5F626YUUkuVOCwF8lUgyoxz9hp4YW6qA+A2WAtKKsyqvwqEqYA8W1tcHxBl57+SdX7zUiyTJalbao3RJTmEZl0D9+0olD411S3fJJyF4xw3Evh0fRqX/CbEEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733267512; c=relaxed/simple;
-	bh=d20KR80wasI7XHqdiONKe8v4ECQvsTbtaE1E6K21lOE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PIEDE+lbD1T9mZJ89DenZlJLWd1OdI26IyZzc3SLJCjLeijWrN2BpjKCBe27RV0UFZaQs6RJUerb/N1c7BxSd6uTHnRiNhx9/EnFVcB2TxhkNIrXt4PTwPTFg64edtODdq1SVpUBUgmNoBfXWzjJ++oa6CELXzoirW7RBRvLORE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TAEm4p+8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF39C4CEDC;
-	Tue,  3 Dec 2024 23:11:50 +0000 (UTC)
+	s=arc-20240116; t=1733274725; c=relaxed/simple;
+	bh=763Q33cesnFLz/F287OyxBs3fuu5TUB7AZvEBp0vBAk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l7s7sFLIMGsFqDKMu95uWtzPRXXRfPjJGpMRJn+ReaNpkjuwCxyhY7Ic0Zsm1/3A05ECgJNVWIqy2fHwgGfqnJR1Pz6xo0CvlqvDjS7zI+qUJ04jw5QsW83GsJne/bF5k/Eb28DfGUkrO62I+jZkHA6WXcGTNCQPo3YicBxmZkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/K11b0Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA73AC4CEE1;
+	Wed,  4 Dec 2024 01:12:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733267512;
-	bh=d20KR80wasI7XHqdiONKe8v4ECQvsTbtaE1E6K21lOE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=TAEm4p+8lEWq30wBFYWMWtQOFNiPLtOIzWYiFAUNSoY8VF993rVjGoBO1R0V1GiXG
-	 2W3uiQfUUNz9K5tLZptTklNvIBgnL/s355jxFiq3saywQYplismCyUrOMykhtRffcF
-	 rScMWMyc6xhViqYSN//fBKzGdq38ikMCExHbv44yZaOHeEInNcKJBCytx9GBLD41MW
-	 mhzwuHdGO9s4CvKj3A2WHgQLZomSNLETT1OAqwPn8u7e7U3j9Yyl9nM7nW9+1AoWTY
-	 ezQ4ar1wpzyHeP8LFP3bIMIJOQUKEEShH/1YMmZpV3yY9iOiFvRQD5iQ22yRlGPf9O
-	 dTlrACIAgfiQA==
-Date: Tue, 3 Dec 2024 23:11:46 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Dec 3
-Message-ID: <Z0-QMgYYurkzyjV6@sirena.org.uk>
+	s=k20201202; t=1733274724;
+	bh=763Q33cesnFLz/F287OyxBs3fuu5TUB7AZvEBp0vBAk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=o/K11b0QVleBbg0StRpJxsDY1TO1ONOycjeTFN8/lhyzeAsGIAEoA7BzdAFykkR8G
+	 pMMIJpznop/TmCW2UMXrHNm4GfipO+nRPKBlTbSnqpUft+SBNwggXNNm912G713Nuq
+	 Jo48EhhOFPM+VERFTOOEzy+Z60hC2278uZY8TNvCl8LhLNDEd/wwuVphLEDmIlxfjI
+	 cjJp9m7CDve0z/Qj3Ouh1LVOwHYTKMO3xPUTLjFlI9HcOTEY34EgOOqlLbKRfDu9LE
+	 GxdIyLT34HslJcaD9JUiarRVTH4XzGUqibizO8NAnpGEIZEKsTDi1pGdNaUp9tpF5E
+	 YyqSjze1SMTMw==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53df80eeeedso6366215e87.2;
+        Tue, 03 Dec 2024 17:12:04 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVZrFmZz6K257oIuoT17Wyek53fXoR6S48Y6B2sxu9t8peq5uzMCyLn1qHWCmadElEqA7YFM9W4ibaM2PH78Q==@vger.kernel.org, AJvYcCVqVsl54TFRURIsGxmb9p3SF4f71uLayI+wfQkhxmRa2yB+dHtzsiVpU2TLQQvz12A5OmNUOS+3Ef8Wb2NB@vger.kernel.org, AJvYcCVvG211z51Ng8hDmw7hoUULyAsyjdF2Zqi4FuPlLej4Rsl0wjbCTHjEtdPiYV9xC/2D1G4pF9VVo12+Bg==@vger.kernel.org, AJvYcCWmeDVcFcawmnbdMTYUoKuKMeL99jrqY2nxTAIlvJytivape37Lt2QiPhwBCnQHKy8gT13zB1f25mCPMfw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCwKm2/iHOW2s6yzAsQtWg+QVkQ/QY4x4pqvWk0iLShrhPcAYD
+	V+psutk7G+bOOx7CkzEBO9t2ZXvhLEH1mINAO2rxV+fmnoO7ncQXrDvQThv6e6nRuYVEVBkp4MF
+	4F+Q/my9U/GZhQjT3K0Ww4BoW+nw=
+X-Google-Smtp-Source: AGHT+IGP7jCsBuS29VUw55WfMqwUrppo+WokdJLiuLvhcPQEbTEYDMMfP6oFn+2xAWP/c+lLBU+OkaEYPcfRMPKGqm8=
+X-Received: by 2002:a05:6512:2252:b0:53d:ab0d:b9ef with SMTP id
+ 2adb3069b0e04-53e12a27675mr2301885e87.43.1733274723002; Tue, 03 Dec 2024
+ 17:12:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cWo/kyIJZvmOjkfc"
-Content-Disposition: inline
+References: <20241202145946.108093528@infradead.org> <20241202150810.048548103@infradead.org>
+ <20241202151533.GF8562@noisy.programming.kicks-ass.net> <CAHk-=wh7KugYO+R-1DMmkLz4fD_-A9BMyrWTVsH_K0a86Ojn4A@mail.gmail.com>
+ <d707cb3b-1569-45d9-bdc3-dcc98eb88bc4@sirena.org.uk> <93a900b2-7740-4bfa-bfac-1ec2e5bfa383@sirena.org.uk>
+In-Reply-To: <93a900b2-7740-4bfa-bfac-1ec2e5bfa383@sirena.org.uk>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 4 Dec 2024 10:11:26 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ5Y5HN7UZU2JhW9Yvqkp1ye4NMzHce-2pCnPSRNANX7g@mail.gmail.com>
+Message-ID: <CAK7LNAQ5Y5HN7UZU2JhW9Yvqkp1ye4NMzHce-2pCnPSRNANX7g@mail.gmail.com>
+Subject: Re: [PATCH -v2 1/7] module: Convert symbol namespace to string literal
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, 
+	mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com, 
+	samitolvanen@google.com, da.gomez@samsung.com, nathan@kernel.org, 
+	nicolas@fjasle.eu, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	hch@infradead.org, gregkh@linuxfoundation.org, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Dec 4, 2024 at 7:06=E2=80=AFAM Mark Brown <broonie@kernel.org> wrot=
+e:
+>
+> On Tue, Dec 03, 2024 at 07:20:05PM +0000, Mark Brown wrote:
+> > On Mon, Dec 02, 2024 at 11:33:58AM -0800, Linus Torvalds wrote:
+>
+> > > If we have these kinds of big scripted things, right after the merge
+> > > window tends to be the best time to do them. The conflict potential o=
+f
+> > > leaving it hanging in linux-next can be somewhat annoying. They may b=
+e
+> > > fairly unlikely, and easy to resolve individually, but it's one of
+> > > those "one is trivial to deal with, but even just a handful is
+> > > annoying".
+>
+> > > So I'll run your script and take your commit message, and we'll have
+> > > this part over and done with.
+>
+> > I *think* this is interacting in a fun way with at least the IIO
+> > subsystem in -next (Linus' tree is fine, I didn't do too much
+> > investigation as I'd quite like the -next build to finish some time
+> > today):
+>
+> Yes, this is breaking ASoC and possibly other things as well.  I guess
+> any tree adding a new use of these macros needs to merge mainline to
+> avoid a mess here.
+
+In this development cycle, I think subsystems should queue up patches
+on top of -rc2 instead of -rc1.
 
 
---cWo/kyIJZvmOjkfc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Meanwhile, linux-next needs to carry the following fixup.
 
-Hi all,
 
-Changes since 20241127:
+diff --git a/drivers/iio/imu/inv_icm42600/inv_icm42600_core.c
+b/drivers/iio/imu/inv_icm42600/inv_icm42600_core.c
+index 550cc53e7559..f415f300afb6 100644
+--- a/drivers/iio/imu/inv_icm42600/inv_icm42600_core.c
++++ b/drivers/iio/imu/inv_icm42600/inv_icm42600_core.c
+@@ -908,4 +908,4 @@ EXPORT_NS_GPL_DEV_PM_OPS(inv_icm42600_pm_ops,
+IIO_ICM42600) =3D {
+ MODULE_AUTHOR("InvenSense, Inc.");
+ MODULE_DESCRIPTION("InvenSense ICM-426xx device driver");
+ MODULE_LICENSE("GPL");
+-MODULE_IMPORT_NS(IIO_INV_SENSORS_TIMESTAMP);
++MODULE_IMPORT_NS("IIO_INV_SENSORS_TIMESTAMP");
 
-The crc-next tree was added.
 
-The iio related trees were dropped due to build issues from an
-interaction with Linus' tree.
 
-The hwmon-staging tree gained a build failure due to an interaction with
-Linus' tree, I used the version from 20241128 instead.
 
-The net-next tree gained a conflict with Linus' tree.
-
-The drm-intel tree gained a conflict with the drm-intel-fixes tree.
-
-The ASoC tree interacted badly with Linus' tree which I fixed up.
-
-The watchdog tree gained a conflict with Linus' tree.
-
-Non-merge commits (relative to Linus' tree): 1345
- 1274 files changed, 51599 insertions(+), 24657 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a defconfig
-for arm64, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf.
-
-Below is a summary of the state of the merge.
-
-I am currently merging 387 trees (counting Linus' and 148 trees of bug
-fix patches pending for the current release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---cWo/kyIJZvmOjkfc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdPkDIACgkQJNaLcl1U
-h9DAFQf/cfWiGGAQokMSIiEY8d8IahZCi8lvzgaekrLynNJ2LnFoVSQn8gg9yf6c
-yVMefzCx3RFO2MIZdGnH9ACodo+hXAa9fSdeQC8tJDNplaJp3fIxVqnD4O6etrz+
-MrIqzZTqPaEnXSlPFs9Sxp0Owo3SAIpSsY1fh3bOpUgEZOyASrsXRxWU7kmDpmQZ
-TyWsxNeOXhAkDgD7qNatn4yVXxFNAZV/kz/g79fiijDXc6JvDEms55HCt/tHk6TZ
-roFIpVAGeC7kvK34zAvYgLJhoHUZwLl9VhV0t37BfitxGmJ9xkmHrzbwIp2XSQke
-9XnqZrP5xhcIliOXR90POda+eP9bbw==
-=zgqd
------END PGP SIGNATURE-----
-
---cWo/kyIJZvmOjkfc--
+--=20
+Best Regards
+Masahiro Yamada
 

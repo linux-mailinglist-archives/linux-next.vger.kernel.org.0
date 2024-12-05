@@ -1,52 +1,52 @@
-Return-Path: <linux-next+bounces-4881-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4882-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DEEF9E3D3A
-	for <lists+linux-next@lfdr.de>; Wed,  4 Dec 2024 15:50:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 383329E57FE
+	for <lists+linux-next@lfdr.de>; Thu,  5 Dec 2024 14:57:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BD9B16225C
-	for <lists+linux-next@lfdr.de>; Wed,  4 Dec 2024 14:50:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85CEC1883DAC
+	for <lists+linux-next@lfdr.de>; Thu,  5 Dec 2024 13:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C03020C00D;
-	Wed,  4 Dec 2024 14:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52B2621D58A;
+	Thu,  5 Dec 2024 13:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LyTz6L2A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tRm97cn9"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D197D20C00A;
-	Wed,  4 Dec 2024 14:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2963A21A421;
+	Thu,  5 Dec 2024 13:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733323800; cv=none; b=qygUi0EPN6EcV7vHpg4EOd3GHuYL2lDonM/RztGNjcgBFDaXFRJWrstYSzCqb/mdn0f0vmMVm/7BpD+ufzFe9Oda8HtfALmLIjLWYwnBcJBo+J53C2nnhy573a4g9tsGLh54fZGK77d+TRgL5FrO/5kpUbXUhESX86N99RHcalI=
+	t=1733406957; cv=none; b=QGOvFnUqIY92SAa21LuT0pVv1v05JwIMg87fCTGYajCvY0m60ByKrSPBoEczgXkHynfuspaPeSRAzzkWRV7JhgAya0Vdh7mxnBYdFUpi5xflKDziEvw2JwokNS8A7xFBbNBhTY6zYbRUXLJJcTlPhIlD/UBgt+CVYWNc7vUxhAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733323800; c=relaxed/simple;
-	bh=SXYiOg7sCEsshSv5in7bYG/cn1JLWYDjWECIwnuFPHM=;
+	s=arc-20240116; t=1733406957; c=relaxed/simple;
+	bh=9xfNcPVSe44pJPtT9gM7f8XpXMhKID/xZCOWJKPfTiU=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=S57GQYDU4GPRAaLnAsyYHQwdO5wovNDZhgcAYkIDYlVD6MJN8oUavjRq6ukGCB9FnGmUYoLg7j7CKwbrRmUk8o/mpkx+nBRG5koo9cpdBVjM2XVXyyGNrUEB+N2PzhvJawIQhkEC6uGqvfasLBtKKdEVE3QiPGoQUr33q702mgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LyTz6L2A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1798C4CECD;
-	Wed,  4 Dec 2024 14:49:59 +0000 (UTC)
+	 Content-Disposition; b=k0J47A1KP9sueqarce6VIrwvoIxjWNDsg5q1GGY1x/nP9BtI5fGySoOEPpImVEYS4Jwf0rtYKlgnUbEmbU2eLWhrmY7w6vO2FWiIuKPkL5Gl248ZIxDsZID/HmRS4N1cKYitaS8B5ZRB2xzvfuwDqgfuoMpKWk3W3djjIoGfc18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tRm97cn9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBE4C4CEDF;
+	Thu,  5 Dec 2024 13:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733323800;
-	bh=SXYiOg7sCEsshSv5in7bYG/cn1JLWYDjWECIwnuFPHM=;
+	s=k20201202; t=1733406957;
+	bh=9xfNcPVSe44pJPtT9gM7f8XpXMhKID/xZCOWJKPfTiU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=LyTz6L2AMXhvY1hX/r7eHjonMwh3v51vB1ujVf83gjfFLXtMho5I69rVOyBFl0xdT
-	 OnpRYWn9QeDQe4Sx9ea9mv0h1bjcMJJlOLZO6bla/nLbvlnKQVqEpZLghb9ZpRPTAf
-	 SipXe8S/mfbl+Echmagz9BKsNiMFFACOnEm7stxROo9G1kQN8nH3P0NSTeIKKqCUde
-	 Ss6AD7fkGThBhbzD0pDLQ3r9hfmi1VMq3cB8vDs/Qm4kTt6m/ZIwtTQBfNYAJglwA8
-	 GHRGr17bWRK22Sm1hSg+bLpBgELbpvXygrivCfGwtTQir3sis3wNyQsCdn6AIJ14pn
-	 1Id+0erL3aA7Q==
-Date: Wed, 4 Dec 2024 14:49:56 +0000
+	b=tRm97cn9eeAPAJMLXbs+YhVuQBugoRRq4zk3EDVRA6/xe8D9TK1TGrdgBgLVUXEww
+	 Q/ZueGm+KCMJOxe04cB3MECeCx5TDE7tfjrEIC5I7bD0Cq8snA1uAVMrx+EQzJvhft
+	 eZC2UNGkx4FRk157vMcxBO5KEeOnWeQltrOUSLwjkrNaYIqt/Csm4Dav2kkGlgL/Ga
+	 pyu2dyIwrPkBK0JvGC7rD3djyBwKMYq5/XHQJvbPqQq67vJNdvZkTFdg90cxHtfvXf
+	 CTBe8+eVZ/JnjHroRHE+zsUX1YQekrEIEJCPE8h7/Rp+TK+HBppRhvX3tmFZlWFMKI
+	 ZO4bM7UTTztZQ==
+Date: Thu, 5 Dec 2024 13:55:53 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Dec 4
-Message-ID: <Z1BsFNdGqJQNe17G@sirena.org.uk>
+Subject: linux-next: Tree for Dec 5
+Message-ID: <Z1Gw6QQaz5VxFKFW@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -54,22 +54,22 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Z4Jo/EfryksjxvzX"
+	protocol="application/pgp-signature"; boundary="Q1J+13aApQ1Q4AGh"
 Content-Disposition: inline
 
 
---Z4Jo/EfryksjxvzX
+--Q1J+13aApQ1Q4AGh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi all,
 
-Changes since 20241203:
+Changes since 20241204:
 
-The drm-xe tree gained a bad interaction with the module changes.
+None.
 
-Non-merge commits (relative to Linus' tree): 1477
- 1480 files changed, 62765 insertions(+), 30120 deletions(-)
+Non-merge commits (relative to Linus' tree): 1753
+ 1758 files changed, 67871 insertions(+), 29887 deletions(-)
 
 ----------------------------------------------------------------------------
 
@@ -98,20 +98,20 @@ http://neuling.org/linux-next-size.html .
 Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
 Gortmaker for triage and bug fixes.
 
---Z4Jo/EfryksjxvzX
+--Q1J+13aApQ1Q4AGh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdQbBQACgkQJNaLcl1U
-h9CMgwf9Gejik72iK01DCXuqEfa7hYrhB+T2j10Eyis5/ZP8dRTIpnlVq1+l2yR8
-A6oZTuLlNOUpz77dmfsC6V0vrIUG/4vDMmkONrafPCUOmuoqaK45WUduNf5sPW0Z
-zQSnYyBRTHGXfafqPZHFzkRpD1AJM+Qm0foRAbnPi3vpkOTclwEeAhuFVdIxKTLf
-oNjcjgXJw3F63byGMLSbvk9/6EUAR7U10zY32j873VNHLHtv8q2J8rTAKLSUAEoG
-W4oKk0uQX0XEZhKi8C9uJmxtcWo6q2+P8jCiwn1EuX1V0Oes3rqXA03dWVVe7b+5
-FVdDFg0ULQDE/EBxL+TiDiEig1dPbA==
-=TATX
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdRsOgACgkQJNaLcl1U
+h9ApzQf/T07oRQJfFRlPkS4kHhM1RBfZo1RWsCQzdQFcUTKyguSaWKzAWFuRoXdW
+KAzFbtuJrk9acsNHVf21ujRVl+PjmVh7tMNiyRmUC2K0DQUW1ZhFBSwbGTyDtVnp
+bxzZhcCUD5uQ8LFhefZ2FTe1Uq3HiDrS6pm6YtqpmsUOZuAZiAIvD5rIQpMBfn5s
+GARQQIkYCWkfFq11qc7LYjiQR2rUwTUtMk/TdI+gyPRrJ/uKQTxaXlKEsXjmZnnd
+89mpIB9TReK2ZBZmjhleIGPDp6LmcQKwTdafYJoWJJ+KjSaWsDss+pyjUXoJ7c/7
+PKikxlMcAbqdnRpEhT8JAsp5jC7UKw==
+=/E3v
 -----END PGP SIGNATURE-----
 
---Z4Jo/EfryksjxvzX--
+--Q1J+13aApQ1Q4AGh--
 

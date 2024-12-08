@@ -1,124 +1,99 @@
-Return-Path: <linux-next+bounces-4893-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4894-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71E6E9E8790
-	for <lists+linux-next@lfdr.de>; Sun,  8 Dec 2024 20:55:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A352F9E87AF
+	for <lists+linux-next@lfdr.de>; Sun,  8 Dec 2024 21:24:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 668EB18853B7
-	for <lists+linux-next@lfdr.de>; Sun,  8 Dec 2024 19:55:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94AD11884E97
+	for <lists+linux-next@lfdr.de>; Sun,  8 Dec 2024 20:24:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E6021537CB;
-	Sun,  8 Dec 2024 19:55:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48BD41474B7;
+	Sun,  8 Dec 2024 20:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kAmTLqLs"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="btxJwL9v"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B66976410
-	for <linux-next@vger.kernel.org>; Sun,  8 Dec 2024 19:55:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C651459F6;
+	Sun,  8 Dec 2024 20:24:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733687725; cv=none; b=MQsq53c18HgsSBwZM9zn4/RE4yzSPZinOhIuks02av+2POr+1ZVCEtNfUd42LelKEik+lLobIPos+v9NTQyEw13Frzzc4GznX8KodO0DKkfwHhEmKQIViSeOwUIphdr9ML0A485T4ncEsfZtCGci9+eySde0ezo0F7dNVYsXF/4=
+	t=1733689469; cv=none; b=gBG2E2xTo0Uuhuhj/mje84Go7+h1JTSw6wTJPe444InmADvlD7LrrLLzq0b/vSx+Za6TwmHymsh++GZ/AURhxxNETMcIyc4oQLYffC1ciOvf8ZwxxAGgZp58tMor1OjtNXDzp8WKgHV2jQP1aDYYjqGMjd2J17lbWyLTML6nxNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733687725; c=relaxed/simple;
-	bh=Mt14XQUw+pLdD/m3gLanTNTfsbK6qEleGLdMrDRQc4o=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XGb5WrQtjapiDycddYh+ecRSEOH1gTDxtZcg/KLZNN2isyqEtwKwxyslWLMJT2DoDjCZmMW8rimBljyEHJAUbXjPcKMCjs5utuR8pSufMVfenDXf9yWV5FbX1R6SKXZKqD5ahyaVcUlNIzaP5RBCgp54cwl7o+IUbaWW96tDUhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kAmTLqLs; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1733689469; c=relaxed/simple;
+	bh=Ah3NoXVJWygQ1h1IsKMsocQLXojTDeZOt3Y58xSb8yw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Kj+923HokYyhB9OO+eiX21XXq4M1fjQ0G6yWCnCFsTs+HlnHxES4iBOynjsMKGO2xWT5sP2gqAXcMVSpe4AUFg+1qKq/qbLh0nDb4aAFWfuzD/eradGZu+TuaGqbeB47fSVjmvtUHyIUT88NdfelOrnM1fRjI8H4RnCu5zM0tBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=btxJwL9v; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1733687707;
-	bh=3uynoYLu2c0UOdmfVkpLAfWNoXYaEhXGv1f2vo+5u80=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=kAmTLqLswDkppfna0OOV+KbnOwMwBEeceEN2Rkg6glvQugld5Wy+1QJZwo4LXu1M/
-	 b/KB7K6iGHuDMFEQhmk7OuZ8sbGaQ84ZOTeisvT9AYW0iCjepyBFoVwQk4KIsfQU34
-	 TQwGhEdS9qiLeXYKGFdmGQ8SMbqDTLP7V56OcZE7U4kWXPRDjnEnC1kGgnlWxA1301
-	 qrdwXc19MdrzshqFalLnAJPPR1HlW9dMys/igYGUX8mt5aXzVVr+bbXC0vpGT2jPAK
-	 KVXJ+XOYpUPY6B+7j8IRfo8hZ2PU44kTTdkkjWYuFHY0s6pLtdeq8VvAyR1aZXvuFo
-	 /+t5UqRxih+6A==
+	s=201702; t=1733689459;
+	bh=z+hzQOWO/dvE89+z08jvnDN3IPqO3v4dnEON2qPMvY4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=btxJwL9vhLSf8nPJMXNEjwb+G97vu60Ok8a6rmHFDsImGzcy67nxY+i8K8cl3NCpy
+	 ih7QCdjtMnTRxoFlfRHpNwRjneysohxDOREMW17x0Mrn1fvspCfA7+nCrMgPatU8Gj
+	 z6do8IiPXA6dBx0ZSPK7NusUAV831bNS3y9Me64PNFzc28PdfZwwbvDhJ0t+fWady+
+	 7zrGLyuOZqCgLlf9e5JFlKu2BUtoZtLvRj9GqfF1RAanMhMWFnnNJduxRY85566N14
+	 DHbew4xtV7/YEHvwNOqzzU3N3M/Hv8+f+sjac0eMXdPe/dIG7R+6viEppGJP0oHf6D
+	 xZNe3435z9Y1w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Y5whC4YR4z4wdF;
-	Mon,  9 Dec 2024 06:55:07 +1100 (AEDT)
-Date: Mon, 9 Dec 2024 06:54:51 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Y5xKv1T8lz4wnp;
+	Mon,  9 Dec 2024 07:24:19 +1100 (AEDT)
+Date: Mon, 9 Dec 2024 07:24:22 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-next@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, Mark Brown
- <broonie@kernel.org>
-Subject: Re: Add crc-next tree to linux-next
-Message-ID: <20241209065451.19f5ecfb@canb.auug.org.au>
-In-Reply-To: <20241202013154.GA25618@sol.localdomain>
-References: <20241202013154.GA25618@sol.localdomain>
+To: Andreas Gruenbacher <agruenba@redhat.com>, Steven Whitehouse
+ <swhiteho@redhat.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the gfs2 tree
+Message-ID: <20241209072422.5650f3fe@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//mbvjeIkqTm+XQTA6xSHQOF";
+Content-Type: multipart/signed; boundary="Sig_/Y=q.DpTmuuo9p2G.uKOB3hd";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_//mbvjeIkqTm+XQTA6xSHQOF
+--Sig_/Y=q.DpTmuuo9p2G.uKOB3hd
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Eric,
+Hi all,
 
-On Sun, 1 Dec 2024 17:31:54 -0800 Eric Biggers <ebiggers@kernel.org> wrote:
->
-> When you have a chance, can you please add the following to linux-next:
->=20
->     Repo: https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.=
-git
->     Branch: crc-next
->     Contacts: Eric Biggers <ebiggers@kernel.org>
+Commit
 
-Added to my tree form today (Mark added it to his last week).
+  5e72345a34a5 ("gfs2: reorder capability check last")
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
-
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
-
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+is missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
+Stephen Rothwell
 
---Sig_//mbvjeIkqTm+XQTA6xSHQOF
+--Sig_/Y=q.DpTmuuo9p2G.uKOB3hd
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdV+YsACgkQAVBC80lX
-0Gw7QQf9ExGNaMvpfXt7kyqsSvxgToAgLRKV4URtXrLst8xPQkjuYshminZRJzD5
-Uk0hvlmRt6EptjN5vSQi/E4pAKx5kDxfjVRVsHueLT6PP7R3SCHgSs9fsu2uyGjQ
-jNnO2AR8zxGkb7yLZoB2mFn3R4IAGSVlKF2vWhLwgwm1oe2x7DUqPg/rS/7BFaWO
-qSzg27sMyQ7VzRwUqOiA7r+Ik3ThOVJf9GICsoRNJi14pRC/P5pd0uofoHxX4/9T
-JGQy1rlATnPlJGikcsIHpVVUeCUALeMCyG8s8p084OOOTClP/PfgORQ4Vn8W+ad0
-6dHOOUnuA0r8M39g8J7FA7TFOCOTzQ==
-=mJlB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdWAHYACgkQAVBC80lX
+0GwxUAf8D0aFmbBMrv7LhMQH2p5m/on6xOno6B7NVuzM5qN2T8/TxVxW2ERWkjOr
+cteaxmWrdk2h6ySK+elYmk26710241SQfhdbExtudNRZaA9Gzh6rkX+kE9La9hpP
+XjiaRXc8nzHfPkDvHQ+1cSA4gxfVJ4iFMbgfqu/4mPcBmcTMmDgkPubrYTZXSEAh
+30S2Yq4qc3BgiJtZSspQ45qlcLrzf97YxMyMmK5nKqyYmndtcsRu+9x1QhiEOWxC
+9AtdC/6sEbdeDPuZnVkMy1qPk8dT9SCAT8n99lBX4Mk4S15O4a3UXC7xKSMnBrdd
+RIDkV5l8Ldw73tFiTiRE7Qs8/tzrVw==
+=AEUL
 -----END PGP SIGNATURE-----
 
---Sig_//mbvjeIkqTm+XQTA6xSHQOF--
+--Sig_/Y=q.DpTmuuo9p2G.uKOB3hd--
 

@@ -1,129 +1,91 @@
-Return-Path: <linux-next+bounces-4923-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4924-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E375E9E9CD2
-	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 18:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 080489E9FD0
+	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 20:45:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9276D162BB9
-	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 17:19:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBBCF164F0E
+	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 19:45:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4045614AD38;
-	Mon,  9 Dec 2024 17:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B7D1552E4;
+	Mon,  9 Dec 2024 19:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HYLVRdHi"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="s60iZQwx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106DB14A60D;
-	Mon,  9 Dec 2024 17:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6C213B280;
+	Mon,  9 Dec 2024 19:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733764746; cv=none; b=N6MqoWitpsOrSpbw4fbvq/9grDih8j0ybhq8nmx8OhBnmWKEH2L6ZPjVChxIlZR3C/InbECaqJfERKg+ra470cUEeNhSy9t6OMfyOMeek4d11fUsR0liE72Hw8aDl14gGnrUt6Pt3YJPbjNYJ0zGml5veGJC6mQqepL4MEBBmPA=
+	t=1733773526; cv=none; b=tOCMoCBjS6GHRztLU7K/ddgYCIBArjSN+BoV0NNBzRvkDT2MCW/DBbavZ8ffTXa+Kocn4ubbgJPP7U9aVANKuQIcxeiGcgkHgKpgcjn0ZlTgqgkULsIogBiA3LgaS3CHLdnmIGNd3UqSHWATMKiRxmEJiZ74JaNMLhG3Za2WQ5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733764746; c=relaxed/simple;
-	bh=ItD4eplOn/dhoyPmVWtZF6jzHpii+Rtqx285G2OsUWo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tbk0h7/dH+LzU1B95u1XNsAynm446f+J5oRq5qis9b6S6WL+YloJNOQ7KHZdTM5f0nBASX146qWmech6OkUeTJfZwl3SaEAYKWxteQvQwlC/yHPJqZcNuCuFKeRyB+6PtzbwkPHNLHM9sPA3Wrqv8wsaZ8ez7v9LDJu76P9UxFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HYLVRdHi; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-434f0432089so17603895e9.2;
-        Mon, 09 Dec 2024 09:19:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733764742; x=1734369542; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UnHwODGAbEIMfTKBL8qUAljRu8OgOtDIjJW4GIX7tSM=;
-        b=HYLVRdHiNJUBYuDTxog7IBCWm4XqiwioaLbZzAa4bpMZ1Fn5Y+ZtnNEzguXx2pY1B3
-         By0JIDEPaUly/06FoCOISumsDPGHXVJ/NqIDM/mfPZzizJ4IdEH753gstqVe6LuyyVxR
-         ZNrtTEBvjTcH8FIgCEgsEQWaLIC0VpLuQUX2/Fy/p+q/CjKB5fNE2oZ2p4XeI43WKbq6
-         mTcwRcqsUupVvoxVN4UpXADuu2DvFHygJDq323dSTV+LKDjJ0ZMm/fhDjTAP8tzEsLsR
-         sNibV4+2/9/3YsY2IRmABF+9h7ucNWnoq75h+Bg9ZJ+SHvORsYWcaBpqntmWPSqqn44f
-         a0tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733764742; x=1734369542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UnHwODGAbEIMfTKBL8qUAljRu8OgOtDIjJW4GIX7tSM=;
-        b=CSYKMVasuOg2QuKFRVVJ5vGnY6X6qeOqc3KkbuxjQyzSluiIlb83os93tfrzuT92+q
-         XBpZ6b+2FjbmvDTw9R5MYo6+FGdCBjomyBd2ZJRiBhY4wMe16v4h0HdNFOdS7WaEESed
-         kT9IiIiIJNEpsu53e04eKgQNUpFN5jYFF/volAA+qBMTTTStQailEfry8Td5S6yaNivM
-         hyXXLt17BM2EM7JNJ3nE33dyDdFbpU7c4ouFy2QTyisSQdNQvUIdsQlU1OGZ588zcHD3
-         6g96Ur86ItdINcytoE5t+zex4XKhUre91s9ulNgCLX0YQqjIhxCUH3qF5Q3HO4EDSoCy
-         uCpw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0pfETKPWrL1l9KeK9M1u66pDaOminr7Ur7kbFh+PiJro/NjUildPXdQ9PFHJpjsRj76pmvDswID59hw==@vger.kernel.org, AJvYcCVfXuh91QhgDkosjtt+RvHOKCsSqR0WgItJlKq3TUy/EXox8VW9PNjkuVYMERtrvEUrhKLWbZsFM9yxjzXZ@vger.kernel.org, AJvYcCWOxPf8DAnSxHmWA7noCG7aY/9a529minsInlLKoy+GcPsYQgUFuLqcyOR8RAKWoUjVDzpft+gn@vger.kernel.org, AJvYcCXLQyNoqwTLn3HBe67PymdMjcK6O7zLnrwpvYqRNa/CuUURy2weoLxgS/6rF5nP0sQL2zE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw313y9XSYUK1UYZnSZVEP6wTd9oRGaPNA7uQ2JXL9hNrzAGNF2
-	mcTqbSIZ5YkH7qMVOtGcAWJdUP9vezdeA8gtnNE/mzG1rb5EIRqpbARXrfpPJkmoNd5GLB6Bf9a
-	yPxf0DcEoH/DmGBLB/RoxfnHutgs=
-X-Gm-Gg: ASbGnct8JS91jDFu4ZM0x/6ut7+41XBlRGBPMSNDNhYPmyWelYTWouulTmudyj/Q3aL
-	5vSw7TaCWIF5oOwadiwif12qkQLuMmL8UEvQO1aEuswZ60DA=
-X-Google-Smtp-Source: AGHT+IFdRGZ/2e8nYotBGdaClS5bSaHlkeM7IP9OXCyHHRen0+4G9xbNC8ZyRxXXJaithuNWY6QpBYreynnJliiOeHQ=
-X-Received: by 2002:a05:600c:a09:b0:434:fb65:ebbb with SMTP id
- 5b1f17b1804b1-434fb65ecb9mr31310295e9.17.1733764742223; Mon, 09 Dec 2024
- 09:19:02 -0800 (PST)
+	s=arc-20240116; t=1733773526; c=relaxed/simple;
+	bh=lVr2fYnmhfwM5+H/myTszO7aLzrPh/OBEFJeKMwsV/c=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=hmb/zj77g5/jpY1sudDHo5r5lZP9sfgrNwky7WVTu793LhNMI7qnpOT7cdxjAI4fGYZeoDIDayqb+BLy1p+kwmGZJ0M/MKZfN9uR9qorLThTLuvoe3scj9BhmsL1Ud+lJauR5P/Bw7Ar8LcbSAWhITonogGMbXOXcvemYTGPcAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=s60iZQwx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D77AC4CED1;
+	Mon,  9 Dec 2024 19:45:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1733773525;
+	bh=lVr2fYnmhfwM5+H/myTszO7aLzrPh/OBEFJeKMwsV/c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=s60iZQwx9XzB//kbaVAu3qag7aHKNx6eAzow2yhKIhr7t6QcH9v14wi3dBA3+n1mT
+	 Z1bNEM6qivaNlHZ8vIoHLqSi8x1uYQB1FX3j7gUthiTr6V6NTCSBLgaaHom8OIwgMr
+	 78QSeayg0/mz+dseBR5ITFDxWRQn1C7BUVLM9OBE=
+Date: Mon, 9 Dec 2024 11:45:24 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin"
+ <hpa@zytor.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>, surenb@google.com
+Subject: Re: linux-next: duplicate patches in the tip tree
+Message-Id: <20241209114524.a150aba86198e6f0fc9afcbc@linux-foundation.org>
+In-Reply-To: <20241209110842.GM21636@noisy.programming.kicks-ass.net>
+References: <20241209132941.58021bb7@canb.auug.org.au>
+	<20241209110842.GM21636@noisy.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241209181607.421c025f@canb.auug.org.au>
-In-Reply-To: <20241209181607.421c025f@canb.auug.org.au>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 9 Dec 2024 09:18:51 -0800
-Message-ID: <CAADnVQKrU3d8dt9SFLM_0wLAjQBfhU=utENF5gYtLCMds_f7uw@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the bpf-next tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, 
-	=?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
-	bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sun, Dec 8, 2024 at 11:16=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   c721d8f8b196 ("selftests/bpf: ensure proper root namespace cleanup when=
- test fail")
->
-> Fixes tag
->
->   Fixes: 284ed00a59dd ("selftests/bpf: migrate flow_dissector namespace e=
-xclusivity test")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
->
-> Maybe you meant
->
-> Fixes: 6fb5be12d1bb ("selftests/bpf: migrate flow_dissector namespace exc=
-lusivity test")
+On Mon, 9 Dec 2024 12:08:42 +0100 Peter Zijlstra <peterz@infradead.org> wrote:
 
-I believe the fixes tag was correct when it was first applied
-during merge window (without being in for-next),
-but then bpf-next/master was rebased after rc1 was released
-and fixes tag became wrong.
-Now the commit c721d8f8b196 is so far down that we cannot fix it and
-force push it. We don't rebase after rc1 either.
-Sadly it would have to stay this way.
-We probably need to run our pw-check [0] script during the rebase
-to make sure such mistakes don't happen.
+> On Mon, Dec 09, 2024 at 01:29:41PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > The following commits are also in the mm tree as different commits
+> > (but the same patches):
+> > 
+> >   96450ead1652 ("seqlock: add raw_seqcount_try_begin")
+> >   eb449bd96954 ("mm: convert mm_lock_seq to a proper seqcount")
+> > 
+> > These are commits
+> > 
+> >   46dbe8ab1205 ("seqlock: add raw_seqcount_try_begin")
+> >   5f0d64389e1f ("mm: convert mm_lock_seq to a proper seqcount")
+> > 
+> > from the mm-unstable branch of the mm tree.  The latter ones are already
+> > causing conflicts.
+> 
+> Why is this in -mm ?
 
-[0]
-https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/pw.git/tree/pw-che=
-ck
+Because
+https://lore.kernel.org/all/20241206225204.4008261-1-surenb@google.com/T/#u
+needs it.
+
+> I agreed with Suren I'd take them through
+> tip/perf/core to go along with Andrii's uprobe patch that relies on
+> them.
 

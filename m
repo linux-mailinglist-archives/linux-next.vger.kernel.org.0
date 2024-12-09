@@ -1,120 +1,169 @@
-Return-Path: <linux-next+bounces-4904-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4905-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A49239E88BD
-	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 01:44:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 094799E88F9
+	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 02:17:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA8B8163ED6
-	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 00:44:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0058D1886108
+	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 01:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A30124A0F;
-	Mon,  9 Dec 2024 00:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6B559474;
+	Mon,  9 Dec 2024 01:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="mDanIQq/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="i1UwMysJ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DBC4409;
-	Mon,  9 Dec 2024 00:44:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C277D320B;
+	Mon,  9 Dec 2024 01:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733705057; cv=none; b=aV16M4gxhMyUy3rkY1zVARQW+Sg6vB2EfwEX5xWBQqkMMIGIVOMZeP0xVCnOoWfXI7uHt1x5WzhptcZbk7cajWzV954s0aBhPNBiPhDJLeHklhu/0MIlEHSCS+1+zhS5beQjynsrmlT34jWT+/rCiUucyULckeHKUaJXtCPU+bg=
+	t=1733707049; cv=none; b=OTK+TBeh6fASAQnlaweaCNRsa/fttV8NdUkXMCiZBySrCpYlui/P2tonTnjI7xXk/lrFq8KjWK8muR6F4Yfnh0P3CmGKc8ZSr27RHKqI1IMlxu1i/HWsUs52OV+tCMmxb5QKX5TUnerE9lNcIF7OKrpt5wSKcJt9NEGja80peHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733705057; c=relaxed/simple;
-	bh=HMfX6H6ovWZjnsYBpklr514M8LHt7hqDtKGYaSLqd5E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n4JZA4TEMtHBVWlJQ8LarPCWvRf80qUcmJGmS7bUfO/XNXzpvmQhP4kYlJtuRoHF9nuub7y9Q5hzMmdkWSvvhzznSq8xkixIYxNN9i1hlxsFr6jZetgWik+WbzdI5m26+tFDhCtZxGztpP11nFdKDiBcAnqY/l7EKqCch7RFkfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=mDanIQq/; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1733707049; c=relaxed/simple;
+	bh=dE/jq+z7gEezUtXTwEV7MPXDKrdJF9LEl+KvrvySFbg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IYGtwAvlvam4SZW+yXH8Ge/C4TDDYVoixq2jfKNNqBtG0yt42SEFxl8tCUZ0NZopZpmC2coy3w/Kv+uWdMPRD9RQO8mExxZIj06AlUb7RlAsbOtDWXsrCZl7mo0wvCI6WgfTrv2L4lyLykNOuOWsa9aSmQUKUpBW7/o0Z/WwJeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=i1UwMysJ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1733705047;
-	bh=VuSwFZqdOcsQZu89mOF5nFlUiHL0MQb4vOkyE7AqXgY=;
+	s=201702; t=1733707036;
+	bh=t+DmoviSdAlTAk3abSj0RVB34XICUcoxmmWptoeLCtM=;
 	h=Date:From:To:Cc:Subject:From;
-	b=mDanIQq/zkrZQoQLLW6W+TVyMVA8a35BSq7eVZzxhBbDC/nPvXDarh7ekFwfXBiw0
-	 l8F2kHW9N/62sy8otBLILFPjmVyZqKDVzjuIWT486+TambAUVvq5kdGA4NGlt1TsEJ
-	 4Itk1u+wYKHa9bnA93SRnnAmlk0L9Ofhw+NneNzzmgkYCUd4BbVpx2ndoW0OfQCeGL
-	 Sf5B0PjXPahEB7tvu/lmcDEtVFlmTDCT98q9Vp4R6B8rjyLDo1Mr/GRqIYEVdkYK54
-	 m5kFyY1+Nhrz5r5NhdKPPczd7xY3UW4Xet5+qlgb3Q+ZEIowtz8pH1n4dhGBgqYvDd
-	 qv+7LeDt1JfLw==
+	b=i1UwMysJ1ZO+TD6/r/L/NuH6jt2pIFn/AEYRufyRUxUUSG9XNjWRZbrDr/17Gv8n8
+	 t4GbF1iqZzcKPKr+Y8pHVFtZAI336VhJhZwe+t7Vai5JUOW+rbnRiO4VE9akZ9a8DD
+	 7WoLcmFfKMlzHTSDlv1m7KSIf5oKzPB0bAJm97mDbfqBv4cJZ8qr6+GQA/ShNL1SBg
+	 8SF1uT4bNFkVVDcBY43BwUqSfOp6KqwNbcVBKHl+Hs3bP05YOyDTnta42yW05eKAkl
+	 tw3hdinSvuWLH5khcwbwTYpgyI4m6fEpW+wAO6K/gBdY2aDKbrtO2kZxw/dawa1Aei
+	 kcROYCcYV1kPw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Y635f01xyz4wc4;
-	Mon,  9 Dec 2024 11:44:05 +1100 (AEDT)
-Date: Mon, 9 Dec 2024 11:44:09 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Y63qt32kcz4wj1;
+	Mon,  9 Dec 2024 12:17:14 +1100 (AEDT)
+Date: Mon, 9 Dec 2024 12:17:17 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Chanwoo Choi <cw00.choi@samsung.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
- <u.kleine-koenig@baylibre.com>
-Subject: linux-next: manual merge of the devfreq tree with the origin tree
-Message-ID: <20241209114409.3cdd6fea@canb.auug.org.au>
+To: Simona Vetter <simona.vetter@ffwll.ch>
+Cc: Peter Zijlstra <peterz@infradead.org>, Dmitry Osipenko
+ <dmitry.osipenko@collabora.com>, Vivek Kasireddy
+ <vivek.kasireddy@intel.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20241209121717.2abe8026@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4Z.WLYMMjDCKDgZhT0svLCG";
+Content-Type: multipart/signed; boundary="Sig_/TGxxteLnVPJt1FrtE=UXr.l";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/4Z.WLYMMjDCKDgZhT0svLCG
+--Sig_/TGxxteLnVPJt1FrtE=UXr.l
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the devfreq tree got conflicts in:
+After merging the drm-misc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  drivers/devfreq/event/exynos-nocp.c
-  drivers/devfreq/event/exynos-ppmu.c
-  drivers/devfreq/mtk-cci-devfreq.c
-  drivers/devfreq/rk3399_dmc.c
-  drivers/devfreq/sun8i-a33-mbus.c
+In file included from include/linux/module.h:22,
+                 from include/linux/device/driver.h:21,
+                 from include/linux/device.h:32,
+                 from include/linux/dma-mapping.h:5,
+                 from include/linux/dma-buf.h:21,
+                 from include/linux/virtio_dma_buf.h:11,
+                 from drivers/gpu/drm/virtio/virtgpu_prime.c:26:
+drivers/gpu/drm/virtio/virtgpu_prime.c:30:18: error: expected ',' or ';' be=
+fore 'DMA_BUF'
+   30 | MODULE_IMPORT_NS(DMA_BUF);
+      |                  ^~~~~~~
+include/linux/moduleparam.h:26:61: note: in definition of macro '__MODULE_I=
+NFO'
+   26 |                 =3D __MODULE_INFO_PREFIX __stringify(tag) "=3D" info
+      |                                                             ^~~~
+include/linux/module.h:299:33: note: in expansion of macro 'MODULE_INFO'
+  299 | #define MODULE_IMPORT_NS(ns)    MODULE_INFO(import_ns, ns)
+      |                                 ^~~~~~~~~~~
+drivers/gpu/drm/virtio/virtgpu_prime.c:30:1: note: in expansion of macro 'M=
+ODULE_IMPORT_NS'
+   30 | MODULE_IMPORT_NS(DMA_BUF);
+      | ^~~~~~~~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  e70140ba0d2b ("Get rid of 'remove_new' relic from platform driver struct")
+  25c3fd1183c0 ("drm/virtio: Add a helper to map and note the dma addrs and=
+ lengths")
 
-from the origin tree and commit:
+Interacting with commit
 
-  1f8ac4b95fee ("PM / devfreq: Switch back to struct platform_driver::remov=
-e()")
+  cdd30ebb1b9f ("module: Convert symbol namespace to string literal")
 
-from the devfreq tree.
+from Linus' tree.
 
-I fixed it up (I just used the latter versions - only white space changes)
-and can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+I have applied the following merge fix patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 9 Dec 2024 12:08:24 +1100
+Subject: [PATCH] fix up for "drm/virtio: Add a helper to map and note the d=
+ma
+ addrs and lengths"
+
+interacting with commit
+
+  cdd30ebb1b9f ("module: Convert symbol namespace to string literal")
+
+from Linus' tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/virtio/virtgpu_prime.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/virtio/virtgpu_prime.c b/drivers/gpu/drm/virti=
+o/virtgpu_prime.c
+index 688810d1b611..b3664c12843d 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_prime.c
++++ b/drivers/gpu/drm/virtio/virtgpu_prime.c
+@@ -27,7 +27,7 @@
+=20
+ #include "virtgpu_drv.h"
+=20
+-MODULE_IMPORT_NS(DMA_BUF);
++MODULE_IMPORT_NS("DMA_BUF");
+=20
+ static int virtgpu_virtio_get_uuid(struct dma_buf *buf,
+ 				   uuid_t *uuid)
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/4Z.WLYMMjDCKDgZhT0svLCG
+--Sig_/TGxxteLnVPJt1FrtE=UXr.l
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdWPVkACgkQAVBC80lX
-0GyFUAgApSp+6urcjF1VTkBgbnBhlR/XtWzqD+gBNKvnKlH6XzXIvw6xeoBw9ggn
-nU888FSJ+6i5caPIg863xS3GjEYj+NSgl9y4dCv78/eVtszM25MWRZLyRCtUARxK
-IVwgxxDwgxjTFyII8Q4cRDETFhkZYWsY7qPbQOJ6YYQW/8s618BVcz28yqX8iUYH
-b0J3C38dFQRb86nrRuSr6YZg+Uql9VSK2cJ5A6TcLpLUT8TPpX23MYJikch5qeoB
-SeNZULlxv5B1n4yq4WV7vIrYt3rtNlNBckr+2ZZhHEiS4xuSefPU6ROTi23+yePr
-hQDht6tAWnD5yaSBeBvbZHvRcFDqVw==
-=ULsB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdWRR0ACgkQAVBC80lX
+0Gya1gf+L7+ybxyfZSaJhxvqPO9tsfECMUSA6w/dj8rcodhy5CrYOfDWkt/avS49
+F41fQ1QqqvmgOpqT3Rj/mKBlFCNlZAj04bNukZcgy/v3CLGYcQq/QY+n4deKDAUp
+bMnQsChNIXqI/bwyZ7laLU+3HAPim0tF9b6vA2t2vjKRNbeYigrjVc2vW+RXRI0T
+RRRGkGZdepm37Sv1/pzIQFstyPNum6hutFpYvQ/xn0NA5EYzKC0xBfw4Veng9rdU
+bq6xvanR8Ldlsz4kAfR+sUHZepeR6UG3bC0R95vSZsj/1up13gWn09lp7zQvh36z
+L7EugUQRrzyAiojD3i2m8Y2aswKoiA==
+=c+iH
 -----END PGP SIGNATURE-----
 
---Sig_/4Z.WLYMMjDCKDgZhT0svLCG--
+--Sig_/TGxxteLnVPJt1FrtE=UXr.l--
 

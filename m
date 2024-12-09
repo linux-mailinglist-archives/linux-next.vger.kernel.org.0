@@ -1,84 +1,155 @@
-Return-Path: <linux-next+bounces-4912-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4913-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D58719E8A88
-	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 05:56:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31FA59E8B57
+	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 07:08:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95C88280D1C
-	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 04:56:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD82E28150C
+	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 06:08:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DB33190685;
-	Mon,  9 Dec 2024 04:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654FE2135CD;
+	Mon,  9 Dec 2024 06:08:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eMET9XsK"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lZLm+p9g"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBAD18A6B2
-	for <linux-next@vger.kernel.org>; Mon,  9 Dec 2024 04:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDAD316DEB5;
+	Mon,  9 Dec 2024 06:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733720157; cv=none; b=kqfOTA3omm2cVsO6+YWMMB3T94NQJfp4HDJO6At7Vtp38InfuVxFta/pD0UCC32z90/1MCQOUBnNzAsu89RzAuQAXwWkEx8MLYzpwaMeoiip8gTX1/0lBjV97+6CX9s1BpDOSH7Si1xJ1uoKoNYjSpQMnwIK+ijDP+WnFeh44MQ=
+	t=1733724521; cv=none; b=TJ2ttYpuS62dx3MZknbQtkpz0xKcGdhvIRBqAd+xtaZuLudPdEOP546O9RDXLwwp3T0JuliPdLUSvlP1LO0qc+NIV08PHXnOmjSalKaEx1YxvOlQzwHl6WVBVjU/8D1GGAmMc4u0FwdeII58OS0Ww5aPF9mx5xujLdSuIUZ0HPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733720157; c=relaxed/simple;
-	bh=VH/shOGBREMDD5P0xXQUsQrIXgYQZRNWJZCoAQzwPys=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s88Nxuc5D32CdjTjpfqAB1XE5FFWOjCAA8BhdbKeGOW3Kqp5nE/EqL6P9YHKgt2Sq4b07n0nIgKStS84Of43gxa0FryOtP7Qa1QQ5SMFlj+vgjnibTC53Yuw7g4FgvrSobkL3jU1U7EWWFzhvyM06CAjavgsRRZ/boMExP2Tlqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eMET9XsK; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Sun, 8 Dec 2024 23:55:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1733720152;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=imtpzrox85iDU+gasEW4W4oEnbh3XKoHR7yt2QiAu/c=;
-	b=eMET9XsKv28ERPEHr0JZvl53nQy3MGvOme/M5zMnNnthlgTcDpXjcKBqtejttN4A3OENhj
-	/HymfAxaYRA0ql4FUx//L8JtJ5hWfyVRc05qYuvKIXvfFJLlzYJLMhn9gFKICmvLVVKVp3
-	k8rwVRQwppEIQx2loQCbttPjc7z0Zh8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the crc tree
-Message-ID: <brztkvr45rq35vyuvec5sy5acbwdddr3qftagd3dqcchm4r6go@fbw47zmysch4>
-References: <20241209145714.1619f9d2@canb.auug.org.au>
- <20241209043043.GA320952@sol.localdomain>
+	s=arc-20240116; t=1733724521; c=relaxed/simple;
+	bh=BerKf0+Bz4UEdSIMFwHT/raPfvGi8QrEc/om39G88SM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fb6icuZylrJh4+aR4SGbzsqs17SAOgrxksIUHnMgJnhbgoTtUbkjCvD1mmvac1OlihtCUcAryA7+Z/BPte8ty5tmMbuxbk+JV18m3XdJjWzjk608ZslWeMFJHr3fFHAF8C+m4UqghmPiJfPBcVuXIYT4nqnY0aaSPH7fW6/ASx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lZLm+p9g; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1733724506;
+	bh=iP7+A8OJEvravqrcKXz46bES4mj2u4XsJxSti6jRLRU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lZLm+p9glWos/2MptCfTCaLO1CYEa7vGBsdbILlTEZn9h00wEmbSnxq6O15hxUi6D
+	 ODjZ18WXtzrOiIomPnu3FurWBrAf86hXTKQyBctIhMM8t3mkwNdDETSOZRXG7SgoUv
+	 1JU/2StHJs09yOvkpHLVW/TU+C175hh8vHTqpytDXZqg/Iu3AUr1NJMEDED6K46VQm
+	 H0ME6ANpmuEjujjpE2AE9VUzw63DcBYzh4PMt0dhZysgOcWGsZBsVrRK2x5qwd6HAW
+	 Wc3BjhCi3RJ2nG+PdZdk2yXTt6G+H5bSPUjC0IwiScqfidwDCUTTNl9PJ+vPEzTF9b
+	 qh6W8ZLTm+vnQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Y6BHt4Nkhz4wb0;
+	Mon,  9 Dec 2024 17:08:26 +1100 (AEDT)
+Date: Mon, 9 Dec 2024 17:08:29 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Suren Baghdasaryan <surenb@google.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20241209170829.11311e70@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241209043043.GA320952@sol.localdomain>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; boundary="Sig_/b1Ofq.+ld.mJCYnc7CS.f2q";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Sun, Dec 08, 2024 at 08:30:43PM -0800, Eric Biggers wrote:
-> On Mon, Dec 09, 2024 at 02:57:14PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > The following commit is also in the bcachefs tree as a different commit
-> > (but the same patch):
-> > 
-> >   cc354fa7f016 ("bcachefs: Explicitly select CRYPTO from BCACHEFS_FS")
-> > 
-> > This is commit
-> > 
-> >   4fa882d383cc ("bcachefs: Explicitly select CRYPTO from BCACHEFS_FS")
-> > 
-> > in the bcachefs tree.
-> > 
-> 
-> Thanks.  Kent, this is a prerequisite for one of my patches targeting 6.14, so
-> I'd like to carry it in my tree if you don't mind.  Thanks,
+--Sig_/b1Ofq.+ld.mJCYnc7CS.f2q
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Of course - dropping it.
+Hi all,
+
+After merging the mm tree, today's linux-next build (powerpc allyesconfig)
+failed like this:
+
+In file included from mm/damon/vaddr.c:736:
+mm/damon/tests/vaddr-kunit.h: In function 'damon_test_three_regions_in_vmas=
+':
+mm/damon/tests/vaddr-kunit.h:92:1: error: the frame size of 3280 bytes is l=
+arger than 2048 bytes [-Werror=3Dframe-larger-than=3D]
+   92 | }
+      | ^
+
+Presumably caused by commit
+
+  062111898568 ("mm: move per-vma lock into vm_area_struct")
+
+I have applied the following hack for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 9 Dec 2024 16:33:16 +1100
+Subject: [PATCH] fix up for "mm: move per-vma lock into vm_area_struct"
+
+on PowerPC that change causes a frame size error
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ mm/damon/tests/vaddr-kunit.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/mm/damon/tests/vaddr-kunit.h b/mm/damon/tests/vaddr-kunit.h
+index b9fe3bc8472b..564373fadf38 100644
+--- a/mm/damon/tests/vaddr-kunit.h
++++ b/mm/damon/tests/vaddr-kunit.h
+@@ -14,6 +14,7 @@
+=20
+ #include <kunit/test.h>
+=20
++#ifdef notdef
+ static int __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
+ 			ssize_t nr_vmas)
+ {
+@@ -90,6 +91,7 @@ static void damon_test_three_regions_in_vmas(struct kunit=
+ *test)
+ 	KUNIT_EXPECT_EQ(test, 300ul, regions[2].start);
+ 	KUNIT_EXPECT_EQ(test, 330ul, regions[2].end);
+ }
++#endif
+=20
+ static struct damon_region *__nth_region_of(struct damon_target *t, int id=
+x)
+ {
+@@ -306,7 +308,7 @@ static void damon_test_split_evenly(struct kunit *test)
+ }
+=20
+ static struct kunit_case damon_test_cases[] =3D {
+-	KUNIT_CASE(damon_test_three_regions_in_vmas),
++	// KUNIT_CASE(damon_test_three_regions_in_vmas),
+ 	KUNIT_CASE(damon_test_apply_three_regions1),
+ 	KUNIT_CASE(damon_test_apply_three_regions2),
+ 	KUNIT_CASE(damon_test_apply_three_regions3),
+--=20
+2.45.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/b1Ofq.+ld.mJCYnc7CS.f2q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdWiV0ACgkQAVBC80lX
+0Gw7GAf+PMW9beV5ewZXDK6cYbATS+Ri+r5AzdKAYy1uLtChM71SyV+YHIzyyY3P
+xP1eOuZ7/5Y7wfbJ8ob4MbJ963CtZntXpj6VMrvd4QoUjYhRtLUWTJAC224kxcnL
+kn38HPLvt87dd32SJRW0KngH1MZWXmqOj4b01tXZK6lDyHr6XQsIOVQl3YYe5qsq
+daLVdDArH6sYrO8sMJKETxs7uTUyl9BdWp0qchxsVqLeWVp6fdzb/uqNvsM+I2vl
+mQ1CH6UqZ8U8cvsf01FloY8eAQHOiMh7tk2hxVn7PfISMU2c9A8AH+Hs+NUl73eJ
+T/pYLxMJ0194MMoF2+kWXpj6pyu0BA==
+=Ghid
+-----END PGP SIGNATURE-----
+
+--Sig_/b1Ofq.+ld.mJCYnc7CS.f2q--
 

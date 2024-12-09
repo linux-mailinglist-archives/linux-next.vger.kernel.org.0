@@ -1,101 +1,108 @@
-Return-Path: <linux-next+bounces-4926-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4927-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B35A69EA221
-	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 23:52:04 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2027F9EA226
+	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 23:53:34 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 367D9281AEC
-	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 22:52:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7A081665CB
+	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2024 22:53:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0B01991C8;
-	Mon,  9 Dec 2024 22:52:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A7C19D075;
+	Mon,  9 Dec 2024 22:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UhzPy/Ie"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kIR/9drE";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iTcVXFj4"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB3C2C9A;
-	Mon,  9 Dec 2024 22:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5791991C8;
+	Mon,  9 Dec 2024 22:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733784720; cv=none; b=g4P8tQGOASMvIJDLpJdA7RCjVo58f5nn6WyKBcN/cUFAB1HJT87W6bl8I8PgxcQ3THHQZReAp99vIn0iNsbGTzocoi50CLMb6Gb08qDg3UwXew59h/1bxXSAIacFmQvD35ZrtXWyeLonswhWw0M16QqiYmfjUbA9ujhvcVaP4j8=
+	t=1733784812; cv=none; b=qtkr5tDI1FaZMFftSSLtdInm/ymwRWU1TPPSTTJH6su1R4fofPvsIsnPgWoYKZ/PTk59FuvHP0PhouPS2fuYNMeI5JephtkNFlOyY9VPYyMcrfnKP2oOHF7pM8g+l0PTC6vaAYVxAHbdqK5F0sn9fvHmxCmqvRgJYObEu7b71oQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733784720; c=relaxed/simple;
-	bh=EDSSmjoUOrd5pxmaOj11ch1Jng29oVuGXF8cZ/u17P4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uwAEHnZcuHuL/qc+iXiu5Ij6svSAL6TDw1Vpe5va9ZBMxauh7Oh9dP3Aa6U0xt6CqoyH9N01obuaeAK6CQJrQh8ps2izcx/7kiYj7eDIT7j87ccdJEvCvk80hKqV2qL40wYf9vddJz3IL30Bpl0SJJ1VAV1MyHVAelksuDIvylQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UhzPy/Ie; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1733784702;
-	bh=Jhl+2HIuYXqcn0cvtXYPzxvSnWib81OMoFZf9k5q1kc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=UhzPy/Iemzy7yAyx/g56A5lNcj9jqXJdbtIS6zKfacOUOlz+MNMWlqSoe3ockYhha
-	 oXrZ+BrdaMW5mwAbVX1kJwTkhOnYuSTLrtQYGF9a5qCfuHn+FtcRgBxGdu8fDC3GYf
-	 fn74ZHJ4JvBnYolKpMeVgg+U/t/7R5mDET7G2knFplyOo2DJcCHtlrC9FGssfZvf9/
-	 gWUUvPXSfj6MfwGukYosaZ2boF7oXl9o8ER9uH6bnb+Kuma4JUpcQ/bSBfXsFTUb5O
-	 llXz2xFtY8DmsBbNGPdZGWMr/DOlnt982B8BF4o/rY7u00EdBSEhgXPVzv5ZPtxeEt
-	 Jp/gRwxh6aSiQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Y6cYV2w0Gz4wcD;
-	Tue, 10 Dec 2024 09:51:42 +1100 (AEDT)
-Date: Tue, 10 Dec 2024 09:51:45 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the auxdisplay tree
-Message-ID: <20241210095145.43be58b0@canb.auug.org.au>
+	s=arc-20240116; t=1733784812; c=relaxed/simple;
+	bh=5PVuXzyChowh894auAT5ZoRTLYIMdrIFvFOJj4P2wlQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=QVDbqYIKFc+pWjfuFj6Xfpb87NBIeo10eZ7S+TSoBDhQCIKoW2ZNje45oCnxS1qLwdPhPMtepDP3jpV+NJdcoeJikgV2zV61PUXvI1xcmarabysd9MrbdBcvqkMqm3E1JkR4L6msZs5qy/hyBRBGvdCO777zymoMOHqtarDRmeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kIR/9drE; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iTcVXFj4; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1733784808;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TMMrkishAKVvaLPs2kIvYJkEqrVd+c3FLBZGGUM/C6s=;
+	b=kIR/9drEiSpPopen4U0v6O7MReri00hhkQ+u7mK8ymvOI0PnIMF+4Ry7BpL91PmxlPiNAq
+	ANkdR2pHosYzjuJefqphBhb3zUREa/SgCw9lxLELcukgF1uzTBr35ZsH8kRSyUAjZPt5j6
+	wJtUxfKxf5MjrXLW6Q8GHl2G6lD6XukwaBo11Yi9T+Dcy/ojVlqwBqsVn67fER2WCJEfOM
+	mHdzBDYO+CkZIBo7W+TL0Q0oCUN2U+wW9xuY5DirPCBz9NpBxoXQbMQnWl/zRZAejCeJO5
+	9++L6bytNxYGOCnkr00Tdkc8fxeE9N7dT+X9aJLh7aHANKnfoWigX6klEynewg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1733784808;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TMMrkishAKVvaLPs2kIvYJkEqrVd+c3FLBZGGUM/C6s=;
+	b=iTcVXFj44e/PcV2+cz2JR2cO3goL/V7PGTQg8jvCj+oD9jqM+MoIYtEYQ0xWYYhvNGbIgN
+	I6yCNVw4bPQn0lCQ==
+To: Suren Baghdasaryan <surenb@google.com>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Stephen Rothwell
+ <sfr@canb.auug.org.au>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin"
+ <hpa@zytor.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the tip tree
+In-Reply-To: <CAJuCfpFTeom8u6nb8z1+BF+1B3rChUqfvgp29h3yqFWVAu5nJw@mail.gmail.com>
+References: <20241209132941.58021bb7@canb.auug.org.au>
+ <20241209110842.GM21636@noisy.programming.kicks-ass.net>
+ <20241209114524.a150aba86198e6f0fc9afcbc@linux-foundation.org>
+ <CAJuCfpFTeom8u6nb8z1+BF+1B3rChUqfvgp29h3yqFWVAu5nJw@mail.gmail.com>
+Date: Mon, 09 Dec 2024 23:53:27 +0100
+Message-ID: <87v7vso4d4.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FI6zYq=rV=+tSxdwxmgvVG0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/FI6zYq=rV=+tSxdwxmgvVG0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Mon, Dec 09 2024 at 12:21, Suren Baghdasaryan wrote:
+> On Mon, Dec 9, 2024 at 11:45=E2=80=AFAM Andrew Morton <akpm@linux-foundat=
+ion.org> wrote:
+>> On Mon, 9 Dec 2024 12:08:42 +0100 Peter Zijlstra <peterz@infradead.org> =
+wrote:
+>> > Why is this in -mm ?
+>>
+>> Because
+>> https://lore.kernel.org/all/20241206225204.4008261-1-surenb@google.com/T=
+/#u
+>> needs it.
+>>
+>> > I agreed with Suren I'd take them through
+>> > tip/perf/core to go along with Andrii's uprobe patch that relies on
+>> > them.
+>
+> Both trees now have changes depending on those patches. If we can't
+> have them in both trees then I can rework my last patchset in the mm
+> tree to use old seqcount code and not require those patches, but we
+> will have to deal with the merge conflicts later.
 
-Commits
+Usually one tree picks the changes up into a seperate branch based on
+-rc1 and declares that branch immutable by tagging it. Both trees then
+can merge it into their respective branches which depend on it.
 
-  fcfadc7fef8c ("auxdisplay: img-ascii-lcd: Constify struct img_ascii_lcd_c=
-onfig")
-  3b362560d9a3 ("auxdisplay: img-ascii-lcd: Remove an unused field in struc=
-t img_ascii_lcd_ctx")
+Thanks,
 
-are missing a Signed-off-by from their committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/FI6zYq=rV=+tSxdwxmgvVG0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdXdIEACgkQAVBC80lX
-0GwxMAgAhC09mEiflcpZuHXFp6mT2BSlbGZgRERAE7pbUV4+OhLA8TkCO/Lu+r+d
-HdmqisNZcHq6oYQCpuXLWf9MBKn3pS00+SEVZgNAfNXpTiPGSBRxbM77nZDdrZmM
-uBtJ0wcW3GGDKxaBmHPx/fnza1GD6zrDH0Gw2Z+eHZo4aaLvNBa3jenL2bpcQSYi
-CB2r1Fp71eJ/HFhqR6bl4YyE6oJVe5Rhlz/G3weCUtrGt68i3hHGA+t6GM0uz8i+
-Mc+1H6COeHq3kqiGREHNpQPPCKr1R+HC9VWiWpBRaxKBtnZ73qCJuFIGvuHDVaUc
-BkN7tBHbYKrzRyKchS6zy8f0OZ8uPA==
-=55Fi
------END PGP SIGNATURE-----
-
---Sig_/FI6zYq=rV=+tSxdwxmgvVG0--
+        tglx
 

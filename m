@@ -1,102 +1,116 @@
-Return-Path: <linux-next+bounces-4936-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4937-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AD9C9EBADA
-	for <lists+linux-next@lfdr.de>; Tue, 10 Dec 2024 21:28:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 806FC9EBD9F
+	for <lists+linux-next@lfdr.de>; Tue, 10 Dec 2024 23:17:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D836282D80
-	for <lists+linux-next@lfdr.de>; Tue, 10 Dec 2024 20:28:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C422287996
+	for <lists+linux-next@lfdr.de>; Tue, 10 Dec 2024 22:17:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CABF022689F;
-	Tue, 10 Dec 2024 20:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 552E71EE7CE;
+	Tue, 10 Dec 2024 22:12:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EIQVNf9e"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ke3I16qY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550E321504C;
-	Tue, 10 Dec 2024 20:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FF92451F1;
+	Tue, 10 Dec 2024 22:12:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733862464; cv=none; b=ehozZ49fLGsCD7IzA0uFt5v0xVtyCz+pqdmif/gh00s6+CvSMJbhj42xOo18QU4NLoqsjO2/xtqXT0/s9mSaaAR9lpwWrUyJ0X45jOv8CZcR/HP4W8yTjj5IjZ2eGbEdOiyQuv/SqPD0mrwf7/OSgT9ddMaBbFMhgFXTfXPS7QM=
+	t=1733868723; cv=none; b=Q8Q7y3MbszE5RAttDmwJSfUaPC5048v5klcqvB9KUkjU9vtmbbB7OkKJMm00hpq0hDtGE0jf0cXSmUj2DEnnNaMWhwHyuKsRutWpnbNkjCGBZuWOrz2Yqx5q4+LoEkebc6B8/QjWm96dO7bTGgCUbIDQuXrDmvEFblNfCVuEIrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733862464; c=relaxed/simple;
-	bh=goZardWMquXxzpOl9Tq+pH1tOzOCyV2LTao3+db3xfM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nBhXdAb/Xdb/Dx723Ew9UwG2GPsNJpGJHcO7of8AtTkHodA3JkcAUDgq9EsLCAgt5iNreZyRuOiOTDVCPtlHcOq2IpHZ+nmzygfOgDSIWUerUWuytaQuVDVk+16tyZVJhFWjaqUX+G+qWBixR9FTng4H1yGUo1zaT2LUI5HJVAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EIQVNf9e; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733862463; x=1765398463;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=goZardWMquXxzpOl9Tq+pH1tOzOCyV2LTao3+db3xfM=;
-  b=EIQVNf9e7pPor5W6Lw+58jNj5ZZKptNgvytktYJRx8gD98QNwC0UiL7r
-   jV4NwivpkilO8S5xvkEfVggZRixDcORyubeDn+Y5JlnC4UfgFQyBySajQ
-   yAZytVCPdeQJCj2DnYdXasXrhKEXv3j+u7JRzuUsp6c1IaOHvAUFKUPJR
-   BZ3bdFQBPoJn++EgTUmy49h5qaRrFvyWJkEBy+83yZUWrKNNZgroJuqRx
-   B6nWW4VF3rYXb1esrPn3YG+9qI71FzwUhQKfEiEWxYo+0wp5Ox/QNZH5H
-   yuTIBCKuSXRW2P+TF400DXo6qcGtlwxBg3HHlpj5nrddsLgD7HtBc00bs
-   w==;
-X-CSE-ConnectionGUID: 0mPdF05VQMS3s6MEz9Od6w==
-X-CSE-MsgGUID: av2GIo5VT8S4NJp1l3H0XA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="45626398"
-X-IronPort-AV: E=Sophos;i="6.12,223,1728975600"; 
-   d="scan'208";a="45626398"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 12:27:43 -0800
-X-CSE-ConnectionGUID: QvhTK9y5SeS1fwWB3EjvZQ==
-X-CSE-MsgGUID: KnLnPeyWRymjVYrk7hB6rQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,223,1728975600"; 
-   d="scan'208";a="95355142"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 12:27:42 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1tL6pX-00000006HiC-2ah8;
-	Tue, 10 Dec 2024 22:27:39 +0200
-Date: Tue, 10 Dec 2024 22:27:39 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the auxdisplay
- tree
-Message-ID: <Z1ikO7HzRx3NyZSn@smile.fi.intel.com>
-References: <20241210095145.43be58b0@canb.auug.org.au>
+	s=arc-20240116; t=1733868723; c=relaxed/simple;
+	bh=C+VGg9Te1RoFWH1QxqbHwOC4+kDj5oMz3gr4BAuLx/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DT9pM9HT3a/bItnhYUv5hLnLbIYNtI9jilReI72IU2XfvGs1cBCAkMso9GFW5p/h9+W6HhK/OV3u+qgsXOskxMJ6U4TIHVGFXMnItiZkXDmJA4kt4QnmUrOEtKJg6Mequ9DeYjXAgj4QmDyQUSquBa3ts467QsFjwuonkgU3RCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ke3I16qY; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1733868282;
+	bh=V6UPHcPzwOo+KejU7patriwerwN4iMc1t5g5z34b7zY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ke3I16qYCmxPq1VTjo+MN7jrUgUUPqqq6hRKx7cZb4ycElTRXrP8JQAGFPMaJXDf7
+	 upOQNXnRTp4GwW4c6NZe4Mj1APFmo495a5rlyZ/OsdqE2j4gBICBusp5/s7W7aI1KP
+	 TWDKbuMl0+99dygctfG85qgD5m+YEQKDMHSDr7q9723PVVP2XiJUU0Jcm6tUdxaYdq
+	 OUUyLPcxLR6KfSiKXWuV1rvnlNm2Jjj4zXXnS7k6ez8ulfrvv+gTEIGJN7yq0WuzyQ
+	 +h3QANy3tW9rDMDviHf6nf5SweGrfNa4pHmXA1Q+tsmE1T1zdyH6mipCIae6IRwE2N
+	 t1wbCsKN+5vZA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Y7CSp4smtz4wvd;
+	Wed, 11 Dec 2024 09:04:41 +1100 (AEDT)
+Date: Wed, 11 Dec 2024 09:04:45 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Chinner <david@fromorbit.com>, Carlos Maiolino <cem@kernel.org>,
+ "Darrick J. Wong" <djwong@kernel.org>, <linux-xfs@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the xfs tree
+Message-ID: <20241211090445.3ca8dfed@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241210095145.43be58b0@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: multipart/signed; boundary="Sig_/DzxDu0MsDwEf7IHQ4V8td.m";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Dec 10, 2024 at 09:51:45AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commits
-> 
->   fcfadc7fef8c ("auxdisplay: img-ascii-lcd: Constify struct img_ascii_lcd_config")
->   3b362560d9a3 ("auxdisplay: img-ascii-lcd: Remove an unused field in struct img_ascii_lcd_ctx")
-> 
-> are missing a Signed-off-by from their committer.
+--Sig_/DzxDu0MsDwEf7IHQ4V8td.m
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixed now, thanks for notifying!
+Hi all,
 
--- 
-With Best Regards,
-Andy Shevchenko
+After merging the xfs tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
+fs/xfs/xfs_trans.c: In function '__xfs_trans_commit':
+fs/xfs/xfs_trans.c:869:40: error: macro "xfs_trans_apply_dquot_deltas" requ=
+ires 2 arguments, but only 1 given
+  869 |         xfs_trans_apply_dquot_deltas(tp);
+      |                                        ^
+In file included from fs/xfs/xfs_trans.c:15:
+fs/xfs/xfs_quota.h:176:9: note: macro "xfs_trans_apply_dquot_deltas" define=
+d here
+  176 | #define xfs_trans_apply_dquot_deltas(tp, a)
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Caused by commit
+
+  03d23e3ebeb7 ("xfs: don't lose solo dquot update transactions")
+
+$ grep CONFIG_XFS_QUOTA .config
+# CONFIG_XFS_QUOTA is not set
+
+I have used the xfs tree from next-20241210 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/DzxDu0MsDwEf7IHQ4V8td.m
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdYuv0ACgkQAVBC80lX
+0Gz/7gf9FKrMEjYTDhb1Tr3Ux8JlEaOGcSCL2hRuYawoa2tLUPPD1eVN5Cd5++Qe
+giWQreO+vlmeX/4ErB6nnYG5GhWWg11pRAnzDuXDqQH5Pwnn/rZL8lz9+F2w5/nq
+HnhC14fiKDPcUGnYHAkJbcytS11iu8dHvdDCNibrudonNGp1lepB2fmlPIwS1MST
+ufK/YWY97DOWs3fRBzLJD5eHuALg7z1CXpk0LzGaX3wIgwnlWCsIqB73KvjnjhqI
+yFM33fYfCAxrj5HwqI2dFvYD2B+5hWDe+pjY6FNTtX4Nr6zabrzjXaOhfLcCXmdb
+q/ATrcjXLGMTu3EWkrrcVbMfCui1Sg==
+=nCEH
+-----END PGP SIGNATURE-----
+
+--Sig_/DzxDu0MsDwEf7IHQ4V8td.m--
 

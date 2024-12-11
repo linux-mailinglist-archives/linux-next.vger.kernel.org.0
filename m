@@ -1,97 +1,105 @@
-Return-Path: <linux-next+bounces-4941-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4942-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE0079EC96B
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 10:44:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0B9D9ECBBC
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 13:06:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B18D11889D17
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 09:44:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BE91168325
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 12:06:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F241C1F22;
-	Wed, 11 Dec 2024 09:44:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3B0209660;
+	Wed, 11 Dec 2024 12:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vGdOXM0A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+1j6WHK"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6256236F89;
-	Wed, 11 Dec 2024 09:44:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374CC238E2A;
+	Wed, 11 Dec 2024 12:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733910291; cv=none; b=fsLM+ub5WwhhzAPuiOcZ++lRN6a3/RuTzeeQA5LkKsw8L0kL1Rw2UVrPXgKF8zJwOEXKp/DJamgenYrXSD9RuyKw84OrqyBpiHuX+xvlPfAZW8C2KMEDdvjPZC+w2tna1BC5QvnX4zhnF5M6iSMGGEKtHwXeFcr+yVn22hyJ2Xk=
+	t=1733918797; cv=none; b=gMIyH2SDBMLsDSNzyU/vqlOXbBjGQc8nT88+B1roA1Jstm8uu3GGLpz50rt4SaZvykX4HN+MDwBIoO+R35geOaGL9iTy0Z+ptOLn4rKEFS8Z4/MBb3bt73XIxh91dvdz2X5jQCOh9xBAqigJ2PXmWBPoYrLcq85jGqDkI2k8+Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733910291; c=relaxed/simple;
-	bh=Ex6cTuHsHnotpZ25WZxob618vffzdexeNfX47lRIkis=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jGyGyxkZ5HQ+wvycsLrRlBucQBK1eOcWxjNJUjKiAaIg+/l219RRfK7yoFaqqbATlPZtP9AbdHuZJ9FDPiXvTImmLWw4OJ1wSscc5GHq0JwX1AsJTiRBl3rvAmVMOuC2zkXPtIATVVvZzRxKG/A/U95cS44FKwgJFBjRyfxt6pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vGdOXM0A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF1DC4CED2;
-	Wed, 11 Dec 2024 09:44:49 +0000 (UTC)
+	s=arc-20240116; t=1733918797; c=relaxed/simple;
+	bh=URHkU87kc3SnecwGaVrovMnEpPnArukzBkxsCWKks/4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hBMaSmwCRvDWk9aPq5H7NKFFKcwZvOCQJkzybLtCdOvMKcHvSyCwFnqckEUFdNK64XbfpSMJI+oJNlOsTe0RNF8bfmc6bvOM8KB9vXgSPsa4GANU536RFg6uMmnVYsRyr9iZMZubTjFUD64bBbNTDB7PiaUH4pccXukLWHUoKWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+1j6WHK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36CB3C4CED2;
+	Wed, 11 Dec 2024 12:06:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733910291;
-	bh=Ex6cTuHsHnotpZ25WZxob618vffzdexeNfX47lRIkis=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vGdOXM0AuHiboqGcIim8wXSC6HN1rCfj2FJXuQJ9UCeVT/GhyS0BRfY+8NHMuJ4r6
-	 NUldL1CIa8tqCiJr1ahNEmMxh8s+6OQpI1AGnpMK4DSW/OL9FZOqo23RcAMvx9GYej
-	 1wFBa+Xm3G/oI842EZ5rwlIqDWmWLtDtxuKNCEnvTZsNaPUl1TPYgoxA31+b3O9ksi
-	 PUwEu+89h9imwMOxQVz7+/e4dGR0tdmcWlQVGJqE69dFtVLh2y4exSWBWq/RHVOhdm
-	 uZHPqT64uwactE424SikMMu4Wv3rzraoDYKvmHnWCUXnDZpd3C37LZX8mRfbo1/r0V
-	 kjS4lIk1Lys1w==
-Date: Wed, 11 Dec 2024 10:44:46 +0100
-From: Carlos Maiolino <cem@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Chinner <david@fromorbit.com>, 
-	"Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the xfs tree
-Message-ID: <2ysi332hv6kqgoqk64zjrl7vbby24m2xbg6awbhkfvg7sq3sce@7xopdtzxd76d>
-References: <20241211090445.3ca8dfed@canb.auug.org.au>
+	s=k20201202; t=1733918796;
+	bh=URHkU87kc3SnecwGaVrovMnEpPnArukzBkxsCWKks/4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=p+1j6WHKXt6208ircTn/scVv4le3ox79hEv1y7oSS7A8/3Oq4EUdK+b2EeiiI4Mrh
+	 0yeYNmPc0ZLTb/m/vPAf0iYplB3TCUaKfnJELbYfpbCSqRvqPNNnvvOFrZ3WXUZrlP
+	 SG/6JRCE0ueMgEW8dvfxByFEsmRknMDXj3ikVSw49uAYZx3rABve1OTsnNvMP3+MJX
+	 cHb6W2XtQgVwn29GAULHMyhR3rWdArCRSSArb4TlLbCnV0wpoBUSaNqfTfc8qadwln
+	 LebvVMquVkffowk9fP5G4TVq2gIqr3afa4Qws1gvv5yyTfAJpaNLZgNtmKUsc4+65i
+	 bmB9FPyjd02aA==
+Message-ID: <6aa70be5-59d0-4441-9432-79cb87fdd915@kernel.org>
+Date: Wed, 11 Dec 2024 17:36:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241211090445.3ca8dfed@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Signed-off-by missing for commit in the dmaengine
+ tree
+To: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>,
+ Vinod Koul <vkoul@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20241209075036.055e0729@canb.auug.org.au>
+ <Z1hzMRuORVOQvKLW@vaman> <2e61add7-8e72-4ef4-b696-8bb5c0e83d01@prolan.hu>
+Content-Language: en-US
+From: Vinod Koul <vkoul@kernel.org>
+In-Reply-To: <2e61add7-8e72-4ef4-b696-8bb5c0e83d01@prolan.hu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 11, 2024 at 09:04:45AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 11/12/24 14:39, Csókás Bence wrote:
+> Hi,
 > 
-> After merging the xfs tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+> On 2024. 12. 10. 17:58, Vinod Koul wrote:
+>> On 09-12-24, 07:50, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Commit
+>>>
+>>>    1ad2ebf3be83 ("dt-bindings: dmaengine: Add Allwinner suniv F1C100s 
+>>> DMA")
+>>>
+>>> is missing a Signed-off-by from its author.
+>>>
+>>> Scripting confused by the comma in the origin SoB line?
+>>
+>> Yes I guess so, checked again yes b4 seems to eat it up
+>>
+>>>
+>>> Also, please keep all the commit message tags together at the end of
+>>> the commit message.
+>>
+>> Again scripting is going bonkers here
+>>
+>> I have fixed it up now
+>>
 > 
-> fs/xfs/xfs_trans.c: In function '__xfs_trans_commit':
-> fs/xfs/xfs_trans.c:869:40: error: macro "xfs_trans_apply_dquot_deltas" requires 2 arguments, but only 1 given
->   869 |         xfs_trans_apply_dquot_deltas(tp);
->       |                                        ^
-> In file included from fs/xfs/xfs_trans.c:15:
-> fs/xfs/xfs_quota.h:176:9: note: macro "xfs_trans_apply_dquot_deltas" defined here
->   176 | #define xfs_trans_apply_dquot_deltas(tp, a)
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Still broken in these:
 > 
-> Caused by commit
-> 
->   03d23e3ebeb7 ("xfs: don't lose solo dquot update transactions")
-> 
-> $ grep CONFIG_XFS_QUOTA .config
-> # CONFIG_XFS_QUOTA is not set
-> 
-> I have used the xfs tree from next-20241210 for today.
-> 
+> commit eeca1b601381 ("dma-engine: sun4i: Add a quirk to support 
+> different chips")
+> commit 1f738d0c2f67 ("dma-engine: sun4i: Add has_reset option to quirk")
 
-Thanks Stephen. I'm testing the fix now, and I'll push an update today.
+Fixed all.. looks like all patches from you have this issue :-(
 
-Carlos
-
-> -- 
-> Cheers,
-> Stephen Rothwell
-
+-- 
+~Vinod
 
 

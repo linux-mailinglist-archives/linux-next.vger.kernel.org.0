@@ -1,112 +1,97 @@
-Return-Path: <linux-next+bounces-4940-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4941-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1021A9EC87C
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 10:09:51 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE0079EC96B
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 10:44:59 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49EAA286C41
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 09:09:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B18D11889D17
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 09:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC222210E4;
-	Wed, 11 Dec 2024 09:09:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F241C1F22;
+	Wed, 11 Dec 2024 09:44:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="O6BQweN1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vGdOXM0A"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD232210DF;
-	Wed, 11 Dec 2024 09:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6256236F89;
+	Wed, 11 Dec 2024 09:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733908182; cv=none; b=pESoQ1NGvTS36dnEKA2sTu+U15A4VabxsKFqrhygU4BfUmBKpAgIPw6Ybh3Zcu8E6o9O191It645X9NI1NkS/Zm9q7eJnlxllXry9roWuKQGqZ5bRcWnyc1r7xkkW4LfibyNEJBYrCgcDY6Fg1KozxGdkECQJJnzn1rHxow5JrU=
+	t=1733910291; cv=none; b=fsLM+ub5WwhhzAPuiOcZ++lRN6a3/RuTzeeQA5LkKsw8L0kL1Rw2UVrPXgKF8zJwOEXKp/DJamgenYrXSD9RuyKw84OrqyBpiHuX+xvlPfAZW8C2KMEDdvjPZC+w2tna1BC5QvnX4zhnF5M6iSMGGEKtHwXeFcr+yVn22hyJ2Xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733908182; c=relaxed/simple;
-	bh=GrcM3ijr1YJaugRX/YZaBRAi26Voavni1D6ZneGWyD4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=g3xUQNwbAeuPElOjb9Ge1bnAGNl0wiSLPsyIrMJYmr/H9DrpzloHYKVfqOiK9trs8lPTYmRd9CwAWZDibS1yjmS2At3vhO54RYDogEomfGzw4O98ceqDnF5nSoWJx860M9SSD+9CMJE9gchUOtv5CbCINnZwDV6kkLyARrWahKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=O6BQweN1; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 6278CA0788;
-	Wed, 11 Dec 2024 10:09:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=sj38z4dgdwT7fdiU77z2
-	qi8dSAhvaQf6WJZny2MW7JQ=; b=O6BQweN1RzG6r8MkluDgmqYa/yhXD/6Dh74T
-	/or7DLn3zkX4RzppNexBRAkqQQ3P0Fzew/odqHsGOgtiF3yX+FMIXASCG8bt1oKg
-	zqXs9dSBABLtgLDtbla2AAxF1Jp15ZYhBFY2r7pUZpaIvmVoKKxUWH0g98bY/Pyr
-	BzOobus+ct3KhP5dlhzBKxGrxWaxFALBq0WU++S0X8qWntCmn90IaFEqhcU7eUNe
-	1AV8b3+lOUvsn5JLqgtt22YrTGlq5KaNe2HI0hjkBh/wgcZ5Yoc2Zy7YUl7QQi0+
-	Xr4ERADZeou6XlCFy0a3+8marZOL0UwXa0UIWas3J5OWmzFYEKMsQzxEff+hQANs
-	WviVzEyAfhmihX9G7Y4f1UJUvUgsrXeHTfZdQT6M9uMKiEf5qDdpyDHoul3k8MpP
-	GoPHrblNQtI3NTMvWubEex0iExmTu4x6iijCfN3ENs+nR07Qa2I6QILw4kMCPkqY
-	ldPGpfPAxFvSu+GHEHscB2nyRwpNEmh7KcpUVgUqbRAjOmWa1Bhyrr62f/2HzeLl
-	IV9FnHNqVMOe3RshrpyEatU3FAicyDfE198N8lOGw9FmTKOam8fNuYyg5TsKQXHt
-	TvJuX/R5VPjsQYL7ougaf4vBDH5/sUDbpFGXwii3o+v+GcCEV+2J6C/kBthioAKI
-	Yb9tbRc=
-Message-ID: <2e61add7-8e72-4ef4-b696-8bb5c0e83d01@prolan.hu>
-Date: Wed, 11 Dec 2024 10:09:28 +0100
+	s=arc-20240116; t=1733910291; c=relaxed/simple;
+	bh=Ex6cTuHsHnotpZ25WZxob618vffzdexeNfX47lRIkis=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jGyGyxkZ5HQ+wvycsLrRlBucQBK1eOcWxjNJUjKiAaIg+/l219RRfK7yoFaqqbATlPZtP9AbdHuZJ9FDPiXvTImmLWw4OJ1wSscc5GHq0JwX1AsJTiRBl3rvAmVMOuC2zkXPtIATVVvZzRxKG/A/U95cS44FKwgJFBjRyfxt6pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vGdOXM0A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF1DC4CED2;
+	Wed, 11 Dec 2024 09:44:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733910291;
+	bh=Ex6cTuHsHnotpZ25WZxob618vffzdexeNfX47lRIkis=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vGdOXM0AuHiboqGcIim8wXSC6HN1rCfj2FJXuQJ9UCeVT/GhyS0BRfY+8NHMuJ4r6
+	 NUldL1CIa8tqCiJr1ahNEmMxh8s+6OQpI1AGnpMK4DSW/OL9FZOqo23RcAMvx9GYej
+	 1wFBa+Xm3G/oI842EZ5rwlIqDWmWLtDtxuKNCEnvTZsNaPUl1TPYgoxA31+b3O9ksi
+	 PUwEu+89h9imwMOxQVz7+/e4dGR0tdmcWlQVGJqE69dFtVLh2y4exSWBWq/RHVOhdm
+	 uZHPqT64uwactE424SikMMu4Wv3rzraoDYKvmHnWCUXnDZpd3C37LZX8mRfbo1/r0V
+	 kjS4lIk1Lys1w==
+Date: Wed, 11 Dec 2024 10:44:46 +0100
+From: Carlos Maiolino <cem@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: David Chinner <david@fromorbit.com>, 
+	"Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the xfs tree
+Message-ID: <2ysi332hv6kqgoqk64zjrl7vbby24m2xbg6awbhkfvg7sq3sce@7xopdtzxd76d>
+References: <20241211090445.3ca8dfed@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Signed-off-by missing for commit in the dmaengine
- tree
-To: Vinod Koul <vkoul@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
-CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "Linux Next
- Mailing List" <linux-next@vger.kernel.org>
-References: <20241209075036.055e0729@canb.auug.org.au>
- <Z1hzMRuORVOQvKLW@vaman>
-Content-Language: en-US
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <Z1hzMRuORVOQvKLW@vaman>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D94855627263
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241211090445.3ca8dfed@canb.auug.org.au>
 
-Hi,
-
-On 2024. 12. 10. 17:58, Vinod Koul wrote:
-> On 09-12-24, 07:50, Stephen Rothwell wrote:
->> Hi all,
->>
->> Commit
->>
->>    1ad2ebf3be83 ("dt-bindings: dmaengine: Add Allwinner suniv F1C100s DMA")
->>
->> is missing a Signed-off-by from its author.
->>
->> Scripting confused by the comma in the origin SoB line?
+On Wed, Dec 11, 2024 at 09:04:45AM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Yes I guess so, checked again yes b4 seems to eat it up
+> After merging the xfs tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
 > 
->>
->> Also, please keep all the commit message tags together at the end of
->> the commit message.
+> fs/xfs/xfs_trans.c: In function '__xfs_trans_commit':
+> fs/xfs/xfs_trans.c:869:40: error: macro "xfs_trans_apply_dquot_deltas" requires 2 arguments, but only 1 given
+>   869 |         xfs_trans_apply_dquot_deltas(tp);
+>       |                                        ^
+> In file included from fs/xfs/xfs_trans.c:15:
+> fs/xfs/xfs_quota.h:176:9: note: macro "xfs_trans_apply_dquot_deltas" defined here
+>   176 | #define xfs_trans_apply_dquot_deltas(tp, a)
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> Again scripting is going bonkers here
+> Caused by commit
 > 
-> I have fixed it up now
+>   03d23e3ebeb7 ("xfs: don't lose solo dquot update transactions")
+> 
+> $ grep CONFIG_XFS_QUOTA .config
+> # CONFIG_XFS_QUOTA is not set
+> 
+> I have used the xfs tree from next-20241210 for today.
 > 
 
-Still broken in these:
+Thanks Stephen. I'm testing the fix now, and I'll push an update today.
 
-commit eeca1b601381 ("dma-engine: sun4i: Add a quirk to support 
-different chips")
-commit 1f738d0c2f67 ("dma-engine: sun4i: Add has_reset option to quirk")
+Carlos
 
-Bence
+> -- 
+> Cheers,
+> Stephen Rothwell
+
 
 

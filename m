@@ -1,105 +1,113 @@
-Return-Path: <linux-next+bounces-4942-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4943-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0B9D9ECBBC
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 13:06:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB4F19ED768
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 21:43:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BE91168325
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 12:06:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00F4518879CF
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2024 20:43:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3B0209660;
-	Wed, 11 Dec 2024 12:06:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82553209695;
+	Wed, 11 Dec 2024 20:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+1j6WHK"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="t3lZNbt0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374CC238E2A;
-	Wed, 11 Dec 2024 12:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4499115746E;
+	Wed, 11 Dec 2024 20:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733918797; cv=none; b=gMIyH2SDBMLsDSNzyU/vqlOXbBjGQc8nT88+B1roA1Jstm8uu3GGLpz50rt4SaZvykX4HN+MDwBIoO+R35geOaGL9iTy0Z+ptOLn4rKEFS8Z4/MBb3bt73XIxh91dvdz2X5jQCOh9xBAqigJ2PXmWBPoYrLcq85jGqDkI2k8+Ag=
+	t=1733949815; cv=none; b=Qc9oMpr5soHwW223s9FVZuwk45P6P7IZJs48ujoJvVsL+zjbYF9WoCDtCe14TkUcPlfJowFosL4sVLQS7OvD3XITZgzp/k0XMcQeagobFujnXq3sJs4bMEU2u7W9gZ5anU38pLIc8hvNJciggv2ngXTXtmEKpVJ09sGtdBXRC94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733918797; c=relaxed/simple;
-	bh=URHkU87kc3SnecwGaVrovMnEpPnArukzBkxsCWKks/4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hBMaSmwCRvDWk9aPq5H7NKFFKcwZvOCQJkzybLtCdOvMKcHvSyCwFnqckEUFdNK64XbfpSMJI+oJNlOsTe0RNF8bfmc6bvOM8KB9vXgSPsa4GANU536RFg6uMmnVYsRyr9iZMZubTjFUD64bBbNTDB7PiaUH4pccXukLWHUoKWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+1j6WHK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36CB3C4CED2;
-	Wed, 11 Dec 2024 12:06:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733918796;
-	bh=URHkU87kc3SnecwGaVrovMnEpPnArukzBkxsCWKks/4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=p+1j6WHKXt6208ircTn/scVv4le3ox79hEv1y7oSS7A8/3Oq4EUdK+b2EeiiI4Mrh
-	 0yeYNmPc0ZLTb/m/vPAf0iYplB3TCUaKfnJELbYfpbCSqRvqPNNnvvOFrZ3WXUZrlP
-	 SG/6JRCE0ueMgEW8dvfxByFEsmRknMDXj3ikVSw49uAYZx3rABve1OTsnNvMP3+MJX
-	 cHb6W2XtQgVwn29GAULHMyhR3rWdArCRSSArb4TlLbCnV0wpoBUSaNqfTfc8qadwln
-	 LebvVMquVkffowk9fP5G4TVq2gIqr3afa4Qws1gvv5yyTfAJpaNLZgNtmKUsc4+65i
-	 bmB9FPyjd02aA==
-Message-ID: <6aa70be5-59d0-4441-9432-79cb87fdd915@kernel.org>
-Date: Wed, 11 Dec 2024 17:36:32 +0530
+	s=arc-20240116; t=1733949815; c=relaxed/simple;
+	bh=peNxnft8Rk4uOKWn1r2Cpb791kC/5zpQd4LClny23SY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=mW8E0C03oIfs+LwkTDY5wduc1oldRwhwWfWVlTBM+BzL3Bt8Ds53lCoW+1IxlTNyfWPMuwlkUH2yWZRvhbhiLzxEi0lEoyb/JpVcqUGdumS++F/bzPsZR5UZz64ClfyYE1n7Ncylr2//8bfQ7Sn/yMjiqowD0/b/5/ZUWRlcWdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=t3lZNbt0; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1733949803;
+	bh=bsDljuDBjuJYvqrYMEZIWjCshRIG0H3v1815+7ANi2A=;
+	h=Date:From:To:Cc:Subject:From;
+	b=t3lZNbt0HcNZwg6wM7zLvcan5aWXQ1pBBnU/QaHXuXCA5UdyCgv4QzaAFNwpMEF43
+	 xxWxCvckSEfOnjL3bjjleb6kvWbhecKXOepHeBBPQRck1TSxrcctfERct1sK3c+7Xa
+	 e54qpCCQLJ/U3vIoE2a94bQlrMKZrXLW8hFAQdfTlDST9DXyjf1avMn75fgfvkyYsm
+	 +pEVIpepyPSot1fG+re8EmQ3szkQO39qBfXOuMu8R7XyIZrjWOxlmJHalS5PYqfD1k
+	 0i8cInfrQBdSdQ3MXehK1HStO1ZuEpe4T0u1rnBZdr9hA41W3ER/D7YJlzAMDJKsA8
+	 9weGNsh/tmDeg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Y7ncW5tBdz4wb1;
+	Thu, 12 Dec 2024 07:43:23 +1100 (AEDT)
+Date: Thu, 12 Dec 2024 07:43:26 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the pm tree
+Message-ID: <20241212074326.207d3373@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Signed-off-by missing for commit in the dmaengine
- tree
-To: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>,
- Vinod Koul <vkoul@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20241209075036.055e0729@canb.auug.org.au>
- <Z1hzMRuORVOQvKLW@vaman> <2e61add7-8e72-4ef4-b696-8bb5c0e83d01@prolan.hu>
-Content-Language: en-US
-From: Vinod Koul <vkoul@kernel.org>
-In-Reply-To: <2e61add7-8e72-4ef4-b696-8bb5c0e83d01@prolan.hu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_//utZjtgztGbimUBysg4f8n9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 11/12/24 14:39, Csókás Bence wrote:
-> Hi,
-> 
-> On 2024. 12. 10. 17:58, Vinod Koul wrote:
->> On 09-12-24, 07:50, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Commit
->>>
->>>    1ad2ebf3be83 ("dt-bindings: dmaengine: Add Allwinner suniv F1C100s 
->>> DMA")
->>>
->>> is missing a Signed-off-by from its author.
->>>
->>> Scripting confused by the comma in the origin SoB line?
->>
->> Yes I guess so, checked again yes b4 seems to eat it up
->>
->>>
->>> Also, please keep all the commit message tags together at the end of
->>> the commit message.
->>
->> Again scripting is going bonkers here
->>
->> I have fixed it up now
->>
-> 
-> Still broken in these:
-> 
-> commit eeca1b601381 ("dma-engine: sun4i: Add a quirk to support 
-> different chips")
-> commit 1f738d0c2f67 ("dma-engine: sun4i: Add has_reset option to quirk")
+--Sig_//utZjtgztGbimUBysg4f8n9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixed all.. looks like all patches from you have this issue :-(
+Hi all,
 
--- 
-~Vinod
+In commit
 
+  f9320cd0fa4b ("ACPICA: events/evxfregn: don't release the ContextMutex th=
+at was never acquired")
+
+Fixes tag
+
+  Fixes: c27f3d011b08 ("Fix race in GenericSerialBus (I2C) and GPIO OpRegio=
+n parameter handling")
+
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+        git log -1 --format=3D'Fixes: %h ("%s")'
+
+i.e.
+
+Fixes: c27f3d011b08 ("ACPICA: Fix race in generic_serial_bus (I2C) and GPIO=
+ op_region parameter handling")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_//utZjtgztGbimUBysg4f8n9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdZ+W4ACgkQAVBC80lX
+0GxeYAgAkp7WRCunPY6knu1gQTAEmKVQHe0PjGFe07t3BKjNZQsxGGyVCbjWwj0w
+4/LbG+xMmKhjk/Awx2GYY2pPOyeZq4ouxN0H5vVFYh3S7RuiUhXOelbcNba5VqGm
+l+LoPaG8fEwgonp08/bvHYGVTZGE40JOs8Xp6Qdt+xBfbL1DFTIg2tQX9GLlx2pr
+bXl/h5IW4vof63y6cgdcLy2PquPyky0QM8Hk3paIpWlAGv9uT3U+eUs3exWcZKQ2
+0a+SYBTkPa0fqr2aUPTiegnJDy0q4J4RVt6BVWQXWH7I6ZlX72bUc/ZYYidD7Kxh
+4JOquUSVq6jSqt0ktPtBfj/maKNuig==
+=5NVR
+-----END PGP SIGNATURE-----
+
+--Sig_//utZjtgztGbimUBysg4f8n9--
 

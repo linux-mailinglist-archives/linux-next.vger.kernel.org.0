@@ -1,138 +1,148 @@
-Return-Path: <linux-next+bounces-4959-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4960-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F4A29F286E
-	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2024 03:15:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEDA69F2948
+	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2024 05:27:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA2EB16435A
-	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2024 02:15:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5979E18850A5
+	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2024 04:27:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2DA2CCC0;
-	Mon, 16 Dec 2024 02:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D566157E6B;
+	Mon, 16 Dec 2024 04:27:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IcIANeON"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="J1Ga8HSa"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0302AD2C;
-	Mon, 16 Dec 2024 02:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602001804E;
+	Mon, 16 Dec 2024 04:27:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734315322; cv=none; b=W8SS+i0sPFs13bXF1LKKqAZoJ5TQ75KGzpKfRKQtwo9qwt9QLro8l3xRH/PM11qfBtWp/WZ+udI7CVPmK5C6f5Sp3X/40WjTw14vkcRs7/p6eOyjXwqJS1nc9/TFubTsQm9Na1+qGgunFde2GjYHDr2lJMpXZ8XjDMETv1wi9ak=
+	t=1734323252; cv=none; b=pNGTBRIbQEOZZEIRpN+RAIgUvvIswqOyKyIFcrx/VNpKDJnleNtw8+w68ZgT4aY85+4il3gEKWgxz7XF/aFKkszH2iWamVeaq4hWNizDL4usD0od09PKt3s0FV9cck84X+/Om88Np1v0FtGlCJFCMDYP5zA+btMmFLALDhLcSVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734315322; c=relaxed/simple;
-	bh=viMTA3KontE6bymRa2un1KK0eCHT3PdKd0fxyrsDGpc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=nMZznEGiWp3KWbFoyi8qvCAIxeCh4lsq8ZLqiuYjLdMp+n1V1pgk5hzaEcfwdeZKXUDtGop0lj9e97XZ30mlx57h2nFMxUQg/QXSZ9tpqvA9pD7K1IU/dqDpb0aAitGZqQE/U/lSZa17M3unI1itL3BSvoerBAf5gK+9oc+m2G0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IcIANeON; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1734323252; c=relaxed/simple;
+	bh=otPDCT+zNuLeY30xEpg3VzSC84h3SWofTQjeGTFRVXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BgRq1inzgF1SjZoJgQP4VRC4nsCr+SMd0wl5yk9155gcwNQQ++snjTRnZ5vk6nJ0bO4rRJWoOsXs3P7Et1gHWov+/IeG+cGfyhyetsrMkNLXjzwICaaAgX1qjo8Y7MNW4BDlfLY68sVEMcM5MIvHafDkG8UHjJZSFdoXFtGlLYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=J1Ga8HSa; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1734315313;
-	bh=U69ogNzUgdNWshqhg3jvFGYJfG1yy7B46bJom/jIT4o=;
+	s=201702; t=1734323238;
+	bh=N/oRaOSR2vryUH9BMfzLb8IpNMFy8XD1TRPbK4O4IdA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=IcIANeONm4tHkQj4BZnzN/Ch9o9v+kcuA1GfBsa06vYdzgNApv/oNOLnBt1retEux
-	 YZCIFB1jta4Mpv4s/P+NFHAwQXjAJ3mWuxd88PZtlopu2vPB2Ei1PoKMD6CiPD58cN
-	 WoZJkKboQnYHdgcpCoJvlUSimTHbaZuZ5Q0hyLKAjLZgGiGslilG8vsPXOozB7qyeH
-	 egeAGYuAN070Yf3peveSSiYlWv+VEnknVeGY1spccAVMlxG2b1ZfA9GSMKeTZQ278e
-	 OxlVNpQpfRvyhYSbAt9x787gyL5jDU8tm+Dnx1FZyG6tCTG/azO6VrUI5qdpcry7Bg
-	 igmk3uKBysCsg==
+	b=J1Ga8HSanOzk09IgMeGlht1eQzUf5T0vRdTG5AmRsV/x28YEhLfW31tAtie53MN5X
+	 VMUEpHG2ij82BqstGxPbBSMaA7XSBVR37gYSYEBXOo1Y0tUUGFrgxtZWKhcc7qcqpr
+	 gfo0iYV1rISqdebXi9n+SdPeA520T8xDxl1uw3knJFqvGp1OZ9Tz0ufStPwHibTMKc
+	 FDmTePliBBkYvdsm0mKsJDEpcc3x3LVVrdcS3uVmisVS4m9pKJj2hAK6jh9VZWh07D
+	 +51PCPVHReSNJwv1sOgyFSEntiCutK3J4gIVrYolbGS9Fm3r0JMIzPttGc+RqP00fN
+	 h1YsAenR3NOww==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YBNnY1bWLz4wc2;
-	Mon, 16 Dec 2024 13:15:13 +1100 (AEDT)
-Date: Mon, 16 Dec 2024 13:15:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YBRjy0ryVz4wcn;
+	Mon, 16 Dec 2024 15:27:17 +1100 (AEDT)
+Date: Mon, 16 Dec 2024 15:27:21 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Lee Jones <lee@kernel.org>
-Cc: Charles Keepax <ckeepax@opensource.cirrus.com>, Linus Torvalds
- <torvalds@linux-foundation.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>
-Subject: linux-next: manual merge of the mfd tree with Linus' tree
-Message-ID: <20241216131517.6413c3ac@canb.auug.org.au>
+To: Vlastimil Babka <vbabka@suse.cz>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, "Peter Zijlstra (Intel)"
+ <peterz@infradead.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Subject: linux-next: manual merge of the slab tree with the mm tree
+Message-ID: <20241216152721.15c5864d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UuMtHmuv+b_=rBDhBaCBU8b";
+Content-Type: multipart/signed; boundary="Sig_/db+KhbC4UMnHXa75F0tRldg";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/UuMtHmuv+b_=rBDhBaCBU8b
+--Sig_/db+KhbC4UMnHXa75F0tRldg
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mfd tree got a conflict in:
+Today's linux-next merge of the slab tree got a conflict in:
 
-  drivers/mfd/cs42l43.c
+  kernel/rcu/tree.c
 
 between commit:
 
-  cdd30ebb1b9f ("module: Convert symbol namespace to string literal")
+  e20b770a87b4 ("kasan: make kasan_record_aux_stack_noalloc() the default b=
+ehaviour")
 
-from Linus' tree and commit:
+from the mm-unstable branch of the mm tree and commit:
 
-  c5bb88eac10f ("mfd: cs42l43: Use devres for remove as well")
+  c44d336ad5ba ("mm/slab: Move kvfree_rcu() into SLAB")
 
-from the mfd tree.
+from the slab tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I used the former and applied the following patch) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 16 Dec 2024 15:23:41 +1100
+Subject: [PATCH] fix up for "mm/slab: Move kvfree_rcu() into SLAB"
+
+interacting with commit
+
+"kasan: make kasan_record_aux_stack_noalloc() the default behaviour"
+
+form the mm tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ mm/slab_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 69f2d19010de..4030907b6b7d 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -1944,7 +1944,7 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+ 		return;
+ 	}
+=20
+-	kasan_record_aux_stack_noalloc(ptr);
++	kasan_record_aux_stack(ptr);
+ 	success =3D add_ptr_to_bulk_krc_lock(&krcp, &flags, ptr, !head);
+ 	if (!success) {
+ 		run_page_cache_worker(krcp);
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/mfd/cs42l43.c
-index b5ab5e613db7,beb63c4efd21..000000000000
---- a/drivers/mfd/cs42l43.c
-+++ b/drivers/mfd/cs42l43.c
-@@@ -1096,16 -1113,8 +1113,8 @@@ int cs42l43_dev_probe(struct cs42l43 *c
- =20
-  	return 0;
-  }
- -EXPORT_SYMBOL_NS_GPL(cs42l43_dev_probe, MFD_CS42L43);
- +EXPORT_SYMBOL_NS_GPL(cs42l43_dev_probe, "MFD_CS42L43");
- =20
-- void cs42l43_dev_remove(struct cs42l43 *cs42l43)
-- {
-- 	cancel_work_sync(&cs42l43->boot_work);
--=20
-- 	cs42l43_power_down(cs42l43);
-- }
-- EXPORT_SYMBOL_NS_GPL(cs42l43_dev_remove, "MFD_CS42L43");
--=20
-  static int cs42l43_suspend(struct device *dev)
-  {
-  	struct cs42l43 *cs42l43 =3D dev_get_drvdata(dev);
-
---Sig_/UuMtHmuv+b_=rBDhBaCBU8b
+--Sig_/db+KhbC4UMnHXa75F0tRldg
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdfjTUACgkQAVBC80lX
-0Gw2tQf/SFIKyLQH7vUwpM1Valfhxeht4S1kBbmngW8BO3GlLMnQaX7Xhkpj1fPM
-dglYwnz3YXC7Xpoa1dT1CtrHgG3sfplHLSS4RaS3kLy33B5PZT2sX2IHNwPqd3FN
-rXKVaCEsZmo/eEkjj8VZNKMpBYpznUZioGtFDBTrBUln6pn8by7LWm4+5ELls4WS
-o5nla2CkaQsBveB+M2BeNlFF6cbazYXgAqs1WHF/uk89kxKR3IiZ05jm9HkxiD9o
-jCMOnyYYofKNZPEA2l810Ccxoln83om+GaciV7LIiQITgz1ZYW7Cpw6jnTb3Ooqe
-luk7fBusuH3fWhHiaVVu6zsCIOW+8g==
-=fhfk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdfrCkACgkQAVBC80lX
+0GxylggAkUAJTOczg6BUJBXsWLjedZgSN9bSCc6mFgQQbPr5Yferr8dkCBqN+kNX
+nQnSiAlOvwN0V48Hm/KRCcuCIUXL2R3CiAbV/cmkz6xHoRnZPt5fSUZ/7QIdvO6N
+ZS/q2UYl4wvKWjdpq5/8k6ny63BdY0AkWM7IQ/3Qma/dALFMvycrX3Hv38bAjpQc
+EC9RVSCehs2xMGaJRpBpGSKEHRs9MwkXWctbUe3p1YE1cm6yCCJCZ2XVzfh8bOnW
+Ewp31kgpt8xiJvy5gzaEFyk1Ozw+/AVsfqy1618pXj2tcWJTQjEJukkTRICxjKk0
+wHzwecL2JC1unxee9lYwU/Qils6gjA==
+=IXFb
 -----END PGP SIGNATURE-----
 
---Sig_/UuMtHmuv+b_=rBDhBaCBU8b--
+--Sig_/db+KhbC4UMnHXa75F0tRldg--
 

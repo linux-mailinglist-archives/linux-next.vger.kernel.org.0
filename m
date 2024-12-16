@@ -1,111 +1,108 @@
-Return-Path: <linux-next+bounces-4971-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4972-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B873A9F35E5
-	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2024 17:25:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC2F29F3952
+	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2024 19:53:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 110A316307B
-	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2024 16:25:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E417C7A397D
+	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2024 18:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6CC82040AF;
-	Mon, 16 Dec 2024 16:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ACA9207657;
+	Mon, 16 Dec 2024 18:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yi99rkKV"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="2Ce5JH7n"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1301FFC44;
-	Mon, 16 Dec 2024 16:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BBC20766A
+	for <linux-next@vger.kernel.org>; Mon, 16 Dec 2024 18:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734366296; cv=none; b=GPn8D1Cbl47x8e3bU17a8VcUGJY7L3jqZ0P3eJf2l9PBE2Z9Q4pTU6sn1FEGYMsFGH/7yivbQ2WyjkwfgYaqssK4tJjHQA8YCjhp3DkdkJk0qRDd4hjlJrY48+Hki+bVlAhijYktP4I/vKKbfOkaPUqv/3RpSVbROUhW4mPrKww=
+	t=1734375201; cv=none; b=ON9gdGl+KwalLU+nq2SVg1ZtzayDe158UyipktAPbQl8At+3PRyUfbKO21GLgIO1nCFPPL1H1DFw4EV87ClP3kyTpfYVJt5/nbDfFaEO133aEU39wj2N+IP/5uFk3/qYbpg/5NrfI2rGKK2c9paqv9zcI78/OMRB+z7vtEhZpKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734366296; c=relaxed/simple;
-	bh=fLwgD91ITAbfYLmZ7uaoGuyV9MoN2ljajNO7zYF6dGg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C74ucp2NcxgzTTFBEta9Yo89QpAR8IohxJ9Pp83PnnlEdFuaXyJAzwlg2cWca8mUL+vsvSUcGHG1sVRwjs4Ge6i/dpuCFmPHT7Qo1dfDkT+2wTyo7Lb9LjUc17VdFw6QMKdK+0Mp9DApXtvCxhUh0SqPa44Q1BGCcUxvIQ/jZG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yi99rkKV; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7fbb47b65d8so266933a12.2;
-        Mon, 16 Dec 2024 08:24:55 -0800 (PST)
+	s=arc-20240116; t=1734375201; c=relaxed/simple;
+	bh=QksVs/Fxv+cbTfWNhYVGoeCzkAB7AdKcWXZuz26F64A=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Br6IJ6wYrr4NcinCsy66lItgEaJTzwVl25MkKV6GoLTdXrfnWI2YX9fZuq6ThZ4pS0Y940kCOBZIVEVlBb5Uz8F22Pdu6Ye8OsnQ/eAwy+jZX6tszFBMSRQ0gCkV4g9f2kPVJJjxEdPiX1uOotB9p+8uRnGc6rVXbKlXJCIifBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=2Ce5JH7n; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-728e3826211so3509090b3a.0
+        for <linux-next@vger.kernel.org>; Mon, 16 Dec 2024 10:53:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734366294; x=1734971094; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fLwgD91ITAbfYLmZ7uaoGuyV9MoN2ljajNO7zYF6dGg=;
-        b=Yi99rkKVh7ToMmgm7cZOyXeBHQS9mAL+XWbXpnS1oYBo1ZHnkm8VEIR7qPRTC/E+Ar
-         xnDm9KelsFZYrl+G9B05poX2Nx83tGitlU6DpcqutSiiaNHVo2rF7G+V893KTvarm4NM
-         fxaRnKs8NFgk3FJhPzLzz3E0WcPjDDfPxPKaKZDvsC+3f8KjP6OMAkeuHAGqkU7zYqDD
-         xFqD21F2T7FHn+GspweXoL/1R1TlSAHXgrZfGf3dy5fWJpZiwm5S1vXtvhpTE/1FtP+I
-         Hrubccs7SPapRv8YH/hX1iIRtHyJxzSCoWRhhKCz/LAaZtwnGlg2b4TUVcaLI9Mg4Ewv
-         9wVg==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1734375197; x=1734979997; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5LtCDUPpXP7mZ+NtBMUfwJXGAbOMvjyVT6yZDJ43guI=;
+        b=2Ce5JH7nlAQiKQgSJNQp9hOiMBlUa0ogI1g9soqcTageJolocav3FMJclMjYo80/Xy
+         50Vdt282wcQ/vqneHQ2eEtwUKddVZJINPmQSCHnhf5tVXw8EnwvVyOCSXWUACVoSgKfT
+         wSkDXWIb7EbLV7YMbMZIok9pbMWPB/zwoCFZCjqsOGWa2A8xeyCINdk26B+iRdglhvq1
+         efhAJdnqoZlj8mFqA8oDoTEBujTbMrSlf9zz7Eov/hvAkV60HFxIyzg5FmAbPT5xpxgf
+         83TmlXKBsXnorJBeG/ySZZsbbXqggP6OU+fNKGc9hGVmB5Z9NVzrXsHXORa5X9P0My4O
+         09ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734366294; x=1734971094;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fLwgD91ITAbfYLmZ7uaoGuyV9MoN2ljajNO7zYF6dGg=;
-        b=HD/1cie39pi01QDCgeQzo4n8loCQ5KMLJ1YDEQXINzZSRBKGsfgG77T316gy7MyNfL
-         KThYGZPSVHKmFLZpUhvmf4sgkeq7kkDqIK3RMnBS49NW9ByRBQ7X/KKcbB3q5r2RhAWp
-         4KWHUFXNlZ1aVmXdi/SftDAbRhAmv8p5gzhiBlFe5qndNusePHZ9U/j26in8yiHc+v5W
-         ZIyF9+KI8WzxuTw8Q896zRbaDEIvnaiy1XYkIlBWSCgjGBMxq4qUalOxAzJlio4m4GPm
-         DTLcRbg9X3OKK1MztYUMaIu/FevDVivYgEWEEYVycZOs7W3EI6WJyuL858r0a9OzoQ6N
-         sEOg==
-X-Forwarded-Encrypted: i=1; AJvYcCXFJwemkBW3gSjT2nT3p0TF2pKlHqDMzq9zzQlfE5kBct2aejR1a0DAGMiLK+T0Uk33rjCHo26SQdJY/g==@vger.kernel.org, AJvYcCXR/5cxbs9B4vG/nn1P1i4ywj3upT/UUfwgX0kiKl7mfGQWCNV/7//Mhe4xjVUweoquISnev7GjmkQqGqQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYdfXREGRWXViI7I5li1tGEHIWm+/KWAna8/6YouOuGLL00xs2
-	j4dvWMvTuVfnwrrDbE/+eH6wHApRz/5ySi23CS7B3FVQlbni1DNqHlmiZTe4t3Zkx3C5MN7fo0p
-	kDewD7RgxtDDt+dHhzyGC3Uzef5o=
-X-Gm-Gg: ASbGncvwV53vOeNEQ72VFpOvTV8CTkFwsgbF7hsNO2BpYamil7MSQNNSYRWWxMLC/et
-	OHMk7GNh60cGzNLRyaAm44amwEvBkz+RI2UmVUA==
-X-Google-Smtp-Source: AGHT+IGBaZTwiys0SehYk/HD4cFQMugwK+tb7VoLd8+Y07ZAUbeAUYFScceJi2D2TgknJbyzLaZP+8MhjeuXYUEfmLY=
-X-Received: by 2002:a17:90b:3509:b0:2ee:3fa7:ef23 with SMTP id
- 98e67ed59e1d1-2f2905b4479mr7150066a91.8.1734366294515; Mon, 16 Dec 2024
- 08:24:54 -0800 (PST)
+        d=1e100.net; s=20230601; t=1734375197; x=1734979997;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5LtCDUPpXP7mZ+NtBMUfwJXGAbOMvjyVT6yZDJ43guI=;
+        b=KUE/Et6m/Fivipq5YYtyIWltm8GiwX5tJmzIQ4X/G0DEMldDYVKF5awSOacu5CUg6F
+         q6iItbY7mlxBRfX+ByHNaiaHN9phyjZvfwnXsm5XPqfYFpZg6RITrwELtSohhsO0JZ7C
+         7uLrNdA1/TLc7tqwJhYMb+YLOtybp83fjxL2gpcLbsNv+fiMMipwphk8fspxlzXQMvkZ
+         +OGSbvM3H85zMx/seGBukSPVjNd+BkngFkzXBG9NwIA50+Cth1Bl+1O9SCoVnjSQ7a0e
+         IzzrNW0dtrP66DZAfpbFFDbKmgI3h5RFbvEaC4UefvHLWDLnyaX1Wy3ZQ1nQlQLFgIAA
+         pw9g==
+X-Forwarded-Encrypted: i=1; AJvYcCXfGESIBADVEpSMp1LjxGjLqDW4XDc/GXpZVJLjl3/qoDjLr2oeeVi7sAyfNsnDEQva2MoLbXWd+/rP@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiqeyyorisP2qic1/0dfPcvBhg84ZB5WXVAEHVx9dKqNA4rYNJ
+	H+9Ff1OeBSMVAFXr6RCShhboNP1phWeBM91f5WWPYu99lG0Tx15eVNhTlAjpM2w=
+X-Gm-Gg: ASbGncsW1lggMQb4YIYS1dEQZemTC91iUoiMufqSi9QuZ/6QfEwxbFGsH34bCy4BR0K
+	OY4k9l6VzadZmXnqogLrMD7TEukG1C+5XQVO/VTrtULMvCSRCKRteERZEikx1m31onrngv/QEJ2
+	mnjwbYzvI+wvZiDpgLjSnj9CiTybZjqXV0dCV28W1dPgCBAYCE59DmYSgguCJ5++R+GHaExjzyE
+	XACXzkgInQn/+55Ha1+QeK3ff2qSXNDODG6bw6XzzihvgCJ+kQ2ACw=
+X-Google-Smtp-Source: AGHT+IG7ou0OLntrolix78mJXcOLuespNWbeAilFeGSN0T/emum0szk7WfV9OyOyRpYPPEVP2Vk4Lw==
+X-Received: by 2002:a05:6a20:918b:b0:1e1:9fef:e969 with SMTP id adf61e73a8af0-1e45ab18122mr1137519637.4.1734375197464;
+        Mon, 16 Dec 2024 10:53:17 -0800 (PST)
+Received: from localhost ([97.126.182.119])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-801d5c0ef86sm4435890a12.56.2024.12.16.10.53.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2024 10:53:17 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Krzysztof Kozlowski
+ <krzk@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the omap tree
+In-Reply-To: <20241216113416.3e78369f@canb.auug.org.au>
+References: <20241216113416.3e78369f@canb.auug.org.au>
+Date: Mon, 16 Dec 2024 10:53:16 -0800
+Message-ID: <7ha5cvcvdv.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241216162512.064724b9@canb.auug.org.au> <CANiq72kv-bjeHtnom2xLqMD92xfogd1hm6yFGg16wpqjhJWMGw@mail.gmail.com>
- <06f34e34-116d-48de-88f2-c029877f41e8@redhat.com>
-In-Reply-To: <06f34e34-116d-48de-88f2-c029877f41e8@redhat.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 16 Dec 2024 17:24:42 +0100
-Message-ID: <CANiq72nqM6Ncz7pP4jfyBENK936QXqd0KP-9BQdbHwVU8zX=Xg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the rust tree
-To: Jocelyn Falempe <jfalempe@redhat.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Mon, Dec 16, 2024 at 11:59=E2=80=AFAM Jocelyn Falempe <jfalempe@redhat.c=
-om> wrote:
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+
+> Hi all,
 >
-> Yes, I'm fine with that change, thanks for the fix!
+> The following commit is also in the drivers-memory tree as a different
+> commit (but the same patch):
+>
+>   56d96fc55390 ("memory: omap-gpmc: deadcode a pair of functions")
+>
+> This is commit
+>
+>   5119e6b44f8a ("memory: omap-gpmc: deadcode a pair of functions")
+>
+> in the drivers-memory tree.
 
-Thanks for the quick reply!
+Yes, this one was my fault.  It's now dropped from the omap tree.
 
-May I transform your reply into an Acked-by?
-
-By the way, if you want it as an independent fix that can go to stable
-too, I am happy to split it into its own (previous) commit and tag it
-as such. I am not sure if it should be considered a fix, though, since
-one could argue nothing is "broken" (apart from the type not being the
-optimal choice).
-
-I am also happy to split it without marking it as a fix, in case you
-may want to backport it independently as a prerequisite at some point
-or similar.
-
-Cheers,
-Miguel
+Kevin
 

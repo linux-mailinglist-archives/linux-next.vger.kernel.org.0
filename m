@@ -1,108 +1,109 @@
-Return-Path: <linux-next+bounces-4992-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-4993-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A16A9F6D86
-	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2024 19:44:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64C929F6F4F
+	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2024 22:14:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CD127A167D
-	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2024 18:44:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B599516873D
+	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2024 21:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A0B1F9F5E;
-	Wed, 18 Dec 2024 18:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9901FC7DF;
+	Wed, 18 Dec 2024 21:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EBPgIgyc"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UsyGK+lB"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2E01F0E21;
-	Wed, 18 Dec 2024 18:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D791FD784;
+	Wed, 18 Dec 2024 21:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734547436; cv=none; b=j7XF+qgaeEsyE67HXgThJ2mRzdCQlLccWKmhm+YkMauGlkDQvNoRwa53/yGXxuzKdrhXrkE3xclrqlmvKvpTqGxiKIZMJYPnZQb95xw11Ed2Hwz1JkkzcqUZsyFmFDyMTTRlorE+S0cN2bLlPCMS2wyvn3M0nuSiNOAnq8PCz4o=
+	t=1734556452; cv=none; b=qDfwWdxSMasEpq+6arKRwI23vgytWiBy6ypT9PQ/utz0CP0pu8cHxOtm1tFf4qPEWxofdPDc33JgsiI8vXr9QwdRxp6ftUZaNWDEe/iv6kM+iZTHElTvaG2csCf+lJ+5zydQWMOaEoNm7j9sPwwL0rkgP2VbM3G2/KIqWbxLXiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734547436; c=relaxed/simple;
-	bh=G/38zKCX+XRXuN14AmwlS2jsKmtwl0zRI7NBXEZgl2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oGDq8UfEY1Nzu4KiyW7rKr9FyDnm+indaS46dLnEB/9EwIYEdqYanzWbabcFAPg5NX9CCK4Efd8s0go5WwdXEsXZJyitz8QDZMVms7mhbEJ7XYkoEvFszncefbfUZES3815xIMaIjw4qrgRJS4veRWCqiHb2lEyyrh8RmN9gvhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EBPgIgyc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A8D5C4CECD;
-	Wed, 18 Dec 2024 18:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734547436;
-	bh=G/38zKCX+XRXuN14AmwlS2jsKmtwl0zRI7NBXEZgl2k=;
-	h=Date:From:To:Cc:Subject:Reply-To:From;
-	b=EBPgIgycLcUumJFDmJ/VWz0AZI8IXdeDB8YkVjvMMkAkEnwII+7BojJZheQNnZcMA
-	 91R0SrXOMIRWohd0N3Gt2lEV3+1wDpSYEa/Jq1PdLBRN70Iz5YZrNB+OB+gmABL18E
-	 8bGuCIabZ5hJEk2yhc+3nLNbxvToDMNqwDRBOgVqO83QYz2C2UNh+2kkJj9DLKngpe
-	 NQpL5h7WqURr5Nvu7WZs6cF6ILiJff0ToZWCswSlK978HRsq7d/2BsMqS82eUP1+P/
-	 r+8eExKs4mPmSfmNv0I+XkPdgjkprVC3uz3G+DBWmpElCUvQs6q5R0fMlfWT/Pygio
-	 NTunh20ad0ZSA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id C97A5CE079A; Wed, 18 Dec 2024 10:43:55 -0800 (PST)
-Date: Wed, 18 Dec 2024 10:43:55 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: dhowells@redhat.com, jlayton@kernel.org
-Cc: netfs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
-	linux-next@vger.kernel.org
-Subject: [PATCH RFC netfs] Fix uninitialized variable in
- netfs_retry_read_subrequests()
-Message-ID: <fb54084d-6d4e-4cda-8941-addc8c8898f5@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+	s=arc-20240116; t=1734556452; c=relaxed/simple;
+	bh=9YZkt379BzdyIbTtvUX5Wd43JLD1NzVhiyvi6cQbYgY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Bk4krQeER3LfWTbxrflt3ATbcfgGEV6tYDaQg167M6KovKkqN7/BzYwCZT4Zao90QA7NaFI5rBqVqx/XDIfognBsbKZrOWIBzGEj2InlOqVZFces5hMci0b0BTVmiz/sb38KIA5i4xtVF8yFiWYi3Z50nbQaCVVamDJEmkA1uuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UsyGK+lB; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1734556441;
+	bh=mzwXArFBynQo4Abs235UmkVmOJuzrfvILYuexZn5W3k=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UsyGK+lBLW86/Dt99fpsEHQXojo0i3q2NbqZm6io5/xU8GvZ+MZq34Di2jGGSoH2+
+	 rdHT0Cbus0kkBSjLxA8nBofFQ3t5KOa2M5+65AvYEyBpFqHCw96g6uXavIW6Es9RCa
+	 Uh7YMD8AFL15qIhHuxfImebvBdQPgkCNkmU484r9uqeOWafBNwYorYcW5Y82THzt6N
+	 wxZLhFwohADgsix550jxKJC+LTmUJTN9j99xlRDG8ESoaNN17Ts68dXXlpNubCQX+p
+	 j2ZIPIZEExdVPPrjukcen7jk4GFn1qwjJI5YSCl3BaXs415S5SUAiethwE7oCMuhUE
+	 kw1uSE6cUuTnA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YD5yc6hwQz4xdw;
+	Thu, 19 Dec 2024 08:14:00 +1100 (AEDT)
+Date: Thu, 19 Dec 2024 08:14:04 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Dec 18
+Message-ID: <20241219081404.28cc069a@canb.auug.org.au>
+In-Reply-To: <6242bac5-bf75-4cf2-8baf-62df8d159792@sirena.org.uk>
+References: <20241218153228.695ee650@canb.auug.org.au>
+	<6242bac5-bf75-4cf2-8baf-62df8d159792@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/signed; boundary="Sig_/+H/mOBNUxWluMXMLrE4b+Yk";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hello!
+--Sig_/+H/mOBNUxWluMXMLrE4b+Yk
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This should actually be considered more of a bug report than a patch.
+Hi Mark,
 
-Clang 18.1.8 (but not GCC 11.5.0) complains that the "subreq" local
-variable can be used uninitialized in netfs_retry_read_subrequests(),
-just after the abandon_after label.  This function is unusual in having
-three instances of this local variable.  The third and last one is clearly
-erroneous because there is a branch out of the enclosing do-while loop
-to the end of this function, and it looks like the intent is that the
-code at the end of this function be using the same value of the "subreq"
-local variable as is used within that do-while loop.
+On Wed, 18 Dec 2024 14:28:11 +0000 Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Dec 18, 2024 at 03:32:28PM +1100, Stephen Rothwell wrote:
+>=20
+> > News: there will be no linux-next releases after this week until
+> > January 6. =20
+>=20
+> I'm taking similar holidays, it's possible I might do some runs but I'd
+> not count on it.
 
-Therefore, take the obvious (if potentially quite misguided) approach
-of removing the third declaration of "subreq", instead simply setting
-it to NULL.
+No worries, hopefully it will be pretty quiet anyway.  There is plenty
+of time for me to catch up in January.  Have a good break.
 
-Not-yet-signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Jeff Layton <jlayton@kernel.org>
-Cc: <netfs@lists.linux.dev>
-Cc: <linux-fsdevel@vger.kernel.org>
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/fs/netfs/read_retry.c b/fs/netfs/read_retry.c
-index 8ca0558570c14..eba684b408df1 100644
---- a/fs/netfs/read_retry.c
-+++ b/fs/netfs/read_retry.c
-@@ -72,12 +72,14 @@ static void netfs_retry_read_subrequests(struct netfs_io_request *rreq)
- 	next = stream->subrequests.next;
- 
- 	do {
--		struct netfs_io_subrequest *subreq = NULL, *from, *to, *tmp;
-+		struct netfs_io_subrequest *from, *to, *tmp;
- 		struct iov_iter source;
- 		unsigned long long start, len;
- 		size_t part;
- 		bool boundary = false;
- 
-+		subreq = NULL;
-+
- 		/* Go through the subreqs and find the next span of contiguous
- 		 * buffer that we then rejig (cifs, for example, needs the
- 		 * rsize renegotiating) and reissue.
+--Sig_/+H/mOBNUxWluMXMLrE4b+Yk
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdjOxwACgkQAVBC80lX
+0Gw7QQf9F6f04lf3e4pdU93EYTIxdHSdmhld/xtKuYWPjqruxPQJ4AjacHcbZ8zF
+yMfsImmGd6ZbhpRQKfKY4puTdynJz1H25xQo66ByZtH7NyKJPswS5RLC3t53fN83
+XGavw+JFXrjjBbNGX+/C0eCxo1p6PJWYmibRfvhILSP5ZyAUqo7kQNoO4+3hQ9i5
+oeESPS5+fsnxG/Mwrkw8Vw4115Sb76JQ4d8eAJhwcy4QX0D3ARIpNFgacW3W/VtO
+O7fF9L+mUbkPWfgC1AHCqOSC/T80Fg9nD8ylNsi6kYhvb4YR+dxOn8F1jh7wZuga
+qEYbpI5hym3jV6JzCG7Kn87A5jk1PA==
+=pI9V
+-----END PGP SIGNATURE-----
+
+--Sig_/+H/mOBNUxWluMXMLrE4b+Yk--
 

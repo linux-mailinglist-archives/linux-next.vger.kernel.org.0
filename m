@@ -1,138 +1,105 @@
-Return-Path: <linux-next+bounces-5010-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5011-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 885DD9F8A23
-	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2024 03:37:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D31249F8B80
+	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2024 05:42:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 826A5188DA41
-	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2024 02:37:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32B94169B45
+	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2024 04:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD051C6BE;
-	Fri, 20 Dec 2024 02:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A32E7082B;
+	Fri, 20 Dec 2024 04:42:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cr4T9ujR"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="RsdRu2aW"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873213D81;
-	Fri, 20 Dec 2024 02:37:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D962C859;
+	Fri, 20 Dec 2024 04:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734662265; cv=none; b=KLVPpzDg7p/ycs232jhLle6Bi+OYHK/SqkTL/M5kfs+Dr6Urhw8aF7P/zyr9K99nTxB0TK5cvGHKRTISr1vZMgpk0H0Q4vEdx8sGDlLTvFs2NNUsC3Zx2HqFByFEA+z/ezBIK/HnkDqIXVAuhAYdsJvPlaD1GfOP5E2XW+4B2rk=
+	t=1734669746; cv=none; b=DxbUcsBsLgu7GCpppLWhVGtF5rRzdy04mWUG2QYCvppLk8Cutv4z87St/VCJYTqeRkNQRPT3MWqTIJDvGnEabNOqBQCj7bphS5Jx39ktfpJHkQJ8QKXXTr791++DW+jQ6MHoADCO7J360GFVm42cbVoCnFMPJYwi+WInWSmb3t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734662265; c=relaxed/simple;
-	bh=iNxE5jgIPtKQwfomgb0Hs0FZnx/095lpq8wl8Ge3mEc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iucPBRascg/xkRYN5gdzMluJEGj2XG2sFiYJ/YfYOE6nyItgwjrl/h57tE41W71c+fCrKayOVC32hMRdBxmVz9UCOyhuiFVAlZ6AuZ1tOJLUetJZO9ACQux4dkZ+xVkFpmwYJeEZuHbBX0CCPfx+FaaPO8jLi48dCGYRAe12Fho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cr4T9ujR; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1734669746; c=relaxed/simple;
+	bh=vsouJAYZu0kUkJ31sohQaHS6Er+ELVA28rnVBI/tx/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sg1OzrI9XgCydPNmlwYcjJlovrAQ6vJlfV7cKR5LfppU6AE5GW4TX5bao1rxCmOVUapzMcoxmBvq8c1PkstF1EVu1V+fraWii2YUW0WwaYKh4vv85G2yyCuY8ceTZMTjssGrikykyMqzr3XuK7n6ee7FpOucPrMdRHEeYfkZKf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=RsdRu2aW; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1734662254;
-	bh=rl7NR2Og4SUCticRxLvFIIX6JIHZ7a1vcQIqnvbt8CA=;
+	s=201702; t=1734669726;
+	bh=X1sD28c5lvOZVoU2CZWWg264ZPUBOVNrYwpPBe1nkjE=;
 	h=Date:From:To:Cc:Subject:From;
-	b=cr4T9ujRQPosVFeMoFXlWtFRUkHSpLJtR3p0LpI7p9q0IuyE8VsnioXErWSPNjF3M
-	 5QKZPYecveA/K/8LLwKyh9yOyC5Tl1ZuSQ0+lyobNYyGknmP01xc0fwoQH8JJe5XXc
-	 woipxUCIJfvRerZBUsz1iCo+lDDVhqbEt8L1ZgOSVEIoiZkBhW9GCwVi/Lbv7DvLq2
-	 Bv8RrRf+S99hq3pJ++wXajz57ftrlVnIzFwbE+JSF6yx70uhjvkOYZWM2/pYEIPMvy
-	 Tcgq5kGZpk6yNdQipb2CSq5f/pkMLsZG2kJyPjINRzkMKJbol51akPp4isffS/Z90e
-	 2CZegfSWezlww==
+	b=RsdRu2aWiUAhNMBU2p/ASaTgyoCMLuZyD/op2g46lRjAWAp79BQBHZ8rBSUk3nHHO
+	 RcS6xDTcddqQIYkLLJit6CYG0q54cjKO5qgxZAsPpupPR6LiDccsOpMMzv8O8fFP05
+	 IaF/jbAYAz0OmruIAdT1SYCYhLvmBhyWYjmMM4GmdnvnUs+xHd2pbn65l8ltjNRfZm
+	 3C8Ijhx6ZSXIQMDwh0ZzcGkCefPZTAYeITu5+nixFKJ1E1aUt+8W0c9OrKmfCqNNyS
+	 rW+nCqiO3sSwgld0iVo20nVFMCd2BMENrXLVr/TvBe/znyNm5ZQAy//zzZCZLGbqra
+	 ALoaQC6wK4gag==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YDs5T6RKMz4x3J;
-	Fri, 20 Dec 2024 13:37:33 +1100 (AEDT)
-Date: Fri, 20 Dec 2024 13:37:38 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YDvsB0nx3z4wc4;
+	Fri, 20 Dec 2024 15:42:05 +1100 (AEDT)
+Date: Fri, 20 Dec 2024 15:42:08 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Paul E. McKenney" <paulmck@kernel.org>, Frederic Weisbecker
- <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Boqun
- Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, Andrew
- Morton <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, "Peter Zijlstra (Intel)"
- <peterz@infradead.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: linux-next: manual merge of the rcu tree with the mm tree
-Message-ID: <20241220133738.1beae531@canb.auug.org.au>
+To: Simona Vetter <simona.vetter@ffwll.ch>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>
+Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the drm-misc tree
+Message-ID: <20241220154208.720d990b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S.vHHCANdWp/aJMvFMcx9/z";
+Content-Type: multipart/signed; boundary="Sig_/AEjIXrQB5G1FD5m3QdsPQc1";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/S.vHHCANdWp/aJMvFMcx9/z
+--Sig_/AEjIXrQB5G1FD5m3QdsPQc1
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the rcu tree got a conflict in:
+After merging the drm-misc tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-  kernel/rcu/tree.c
+drivers/gpu/drm/xlnx/zynqmp_dpsub.h:86: warning: Function parameter or stru=
+ct member 'audio' not described in 'zynqmp_dpsub'
+drivers/gpu/drm/xlnx/zynqmp_dpsub.c:1: warning: no structured comments found
 
-between commit:
+Introduced by commit
 
-  bf8f464ee259 ("kasan: make kasan_record_aux_stack_noalloc() the default b=
-ehaviour")
-
-from the mm tree and commit:
-
-  049dfe96baf9 ("rcu: Report callbacks enqueued on offline CPU blind spot")
-
-from the rcu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  3ec5c1579305 ("drm: xlnx: zynqmp_dpsub: Add DP audio support")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc kernel/rcu/tree.c
-index 3885aae5f9cb,24f1cb292a92..000000000000
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@@ -3083,9 -3083,12 +3083,12 @@@ __call_rcu_common(struct rcu_head *head
-  	}
-  	head->func =3D func;
-  	head->next =3D NULL;
- -	kasan_record_aux_stack_noalloc(head);
- +	kasan_record_aux_stack(head);
-+=20
-  	local_irq_save(flags);
-  	rdp =3D this_cpu_ptr(&rcu_data);
-+ 	RCU_LOCKDEP_WARN(!rcu_rdp_cpu_online(rdp), "Callback enqueued on offline=
- CPU!");
-+=20
-  	lazy =3D lazy_in && !rcu_async_should_hurry();
- =20
-  	/* Add the callback to our list. */
-
---Sig_/S.vHHCANdWp/aJMvFMcx9/z
+--Sig_/AEjIXrQB5G1FD5m3QdsPQc1
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdk2HIACgkQAVBC80lX
-0GwKXAgAkndqwcGZl3fUBBFIKwP+YrYzOFRJCf9OanDSDWRM9U7L8aXOoSRGMBAU
-U9egon9xO8FuUw+ir+ipKEZz+ng+QvenKtxgnvk08snSMbsoYrEguq1zmYjsVIH5
-L7ubFU0vquoZOdoii9MmHC1HCvy3rWOuodxYb5ouECRNOfkNZ2Skok1GwPf2MZzm
-q1ORmvkO1GOPCF9O8askMFIhHXt6m4WXs78xqUMedJxZTJzaXJJ+TI67MsjfSqB/
-xExHfgIVgxPZTCycb3r9jDmsjtAO9Hvukqp0aywAQqS9LeGMyZ+N25MMIWcJCEf4
-05jQH9gPcJw6o9J5eh7IWYFZdQpESw==
-=RhZ6
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmdk9aAACgkQAVBC80lX
+0Gz/rgf/WPa2cHf9/Fh49P40jSDpH770drpcWB8/zVLnufEEGip4+d9M1+ow+N+t
+voKbfrJFbUa5iNc2GLXhl1ynJidtrSB5OIVpsfpqvKOUhPQ9N1FjGWBMGFHaktoa
+a4szR+KdCyOw0nML28PX0fyGHHoskaaN/rT6sIx9F/a10aQSJSODHap5r1AR3yDC
+PFrwiC1s2uA+v8RJsw0Xo/R/lsu3VYpuagmvJzhCF6kUI4WbH5KIL+IBA1Qg38p8
+a5TEsZdF5e3OrZ4YQvgUOv2jVogs7tdfFyV9CH66ciLDylXmkfiKNedctKEfSDzc
+BKFSa0To81kw/6VNnNlS3coTcqNfJA==
+=OPvd
 -----END PGP SIGNATURE-----
 
---Sig_/S.vHHCANdWp/aJMvFMcx9/z--
+--Sig_/AEjIXrQB5G1FD5m3QdsPQc1--
 

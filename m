@@ -1,105 +1,126 @@
-Return-Path: <linux-next+bounces-5059-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5060-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE011A0286D
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 15:47:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AE59A028C1
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 16:05:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB8F61886994
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 14:47:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89E4B3A15F0
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 15:05:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCE791DF74E;
-	Mon,  6 Jan 2025 14:46:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59F6270802;
+	Mon,  6 Jan 2025 15:05:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="gsQ1cJsF"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="prUJgM59"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2581DF743
-	for <linux-next@vger.kernel.org>; Mon,  6 Jan 2025 14:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E531C69D;
+	Mon,  6 Jan 2025 15:05:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736174777; cv=none; b=s1ahFyWiLcgMYB82EpCEG76jrb1j2oq4LzvbVuP2ogAJRXnOQx2qkwaQPRiTeE3/ro7uJ4D8nGYkj3TlONDX6h4kr5Bhn7P1bgSJRSobolj9rfwgIxnztr5QGS1UB5sZUAGnC2N+oQd1qOqXhJGJ0zAZ5IUBakr5UyNuhqXjZ68=
+	t=1736175925; cv=none; b=gyd/S4o3boZVraHO6ZNSl8yjHqenNmQD8jyj6IkRCEXzSr4r0gRNdOgxw3S/Vb143+ZFR6N8RCHx3N8EnRuGmcjjsGPNrqxUzP/sU0gdoWTPw6HZSOhp1x08EHDeDG2JKy7Dtx6BgbaCwSZVQAg6DeKJLJcwzeBIny8vaMVRJZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736174777; c=relaxed/simple;
-	bh=x3d1JJg/hVS+0hBT98LFsltpezk5P79AI4u9IHkRVUE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kAShDsJeTMlcUMvTKD2GCnmodnpRp57egQSl0sWTrPuNs71ja9Xe3mi6rRGtY7V56KcVOXxncEM/e5Lp7eFzTWquxgJVZFFgJJ3yRVRz/sNwv7sXSrEa9+tpm0k7ZIQdH7RVRws1OhippPMa2u9DyyrWRpklsSPOF8UY9Kl9fQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=gsQ1cJsF; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-aaee0b309adso1728311566b.3
-        for <linux-next@vger.kernel.org>; Mon, 06 Jan 2025 06:46:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1736174767; x=1736779567; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a1pgOzQyih4UPY4EYy9GMG8OgF7eiSel+vNOAcwgiE4=;
-        b=gsQ1cJsFxYWHOcvDMFfMp1NZuiGSuICYcPDzBvUJOYUO1p+h6Zj8g3gwsQN7TL1V6M
-         ACOUxUaOdAVsstsy33mTjsXBGbc5/iHbNCWnWXPwG1RH9WXeqKPbldD7CVCKzPmlGC/5
-         dS7P1NqVSjTDh9u6c23UlxgMNXRJRUHOFG964=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736174767; x=1736779567;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a1pgOzQyih4UPY4EYy9GMG8OgF7eiSel+vNOAcwgiE4=;
-        b=qsWKCubGkWsqKNbFUjVX7VmS8t+MsnalZWuXJZ8f8y0RtdSMpvpeXm4i2fkydCVn+M
-         SfT15C0qTJ+upeBsIBhKxthkfQfMVTUkp1O2JD7wzcbs3Z8cmDO6+GW97QmgLwE7b74N
-         LNWB3jd6+YUlOQ3H4S8logTAHYSuGBG/1RFYay1PAskLhS1p9QwbOh5YW9G1wY4atCQV
-         YgIKU035d9AoekC8ekdc/4zFmgI0a1iMeFgsytZ5CBQaMWqGGbvQfpQ0NJcuTf5gPJdb
-         1qPVIE74lm5LkBwrmAFuJnGVxcau/16zT+6dBlJwdjLh0OCelzQ/NCx+eevkjBY3xwiu
-         BkzA==
-X-Forwarded-Encrypted: i=1; AJvYcCUVcb8rB8mEGNH+i7AzNsaQZgybaSInxbBoTyTOn/UaQtvHxFJKCyraTtQwRcuUBhDvy9Xwr9+fxNlF@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywc75Um9I8sDS2RYlJBrHvpq8DfbTTZUmijYIB4y4qBIcEBLZVJ
-	E2SFIvRxeSKIQBRmZHgub/oiuX29FIdMD1AjFyR/uoeRz+Ohu+ZHJvwohjiSgdJlXjdc13CEII7
-	8faA=
-X-Gm-Gg: ASbGncuxX7MLsUhjRBqB7y8qiW97+k1AsQywbIIMHgFoyi9jKMjmih0Gk5TxtmsHg7H
-	ODbjHvixJ8UlowylUwOT22i4E+j2ozuzO590B96pqUwkH6KCWeze4boMvMiCBfwpBGujGUnrxlk
-	vIdI/UrbElrjosBX7kVIClEO/ONIky4lzTOTF3MzZ9TuEKSG96gPKJR3LBzJDR93yKq5HuvoM0Q
-	/zX4OLN5bpPSCkfpI1NAM0t+MM+s8t0clYEJbAAiDOzLgKcC12Hn7AIP3BslSjbT1dY+B6c7QyD
-	6CuzcuKPVi7XUF4IlKczI5m1xi+CajM=
-X-Google-Smtp-Source: AGHT+IFCRyoGLloT0chPqNL9EO3fgpmx5Ea4CnhynIH8YeeA4z7KH3AjzzBWIob0n/55VBuiZBoONQ==
-X-Received: by 2002:a17:907:7288:b0:aa6:a9fe:46dd with SMTP id a640c23a62f3a-aac346507b2mr4190408366b.38.1736174767296;
-        Mon, 06 Jan 2025 06:46:07 -0800 (PST)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0e5029f8sm2248731766b.0.2025.01.06.06.46.06
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2025 06:46:06 -0800 (PST)
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5d3ecae02beso18195333a12.0
-        for <linux-next@vger.kernel.org>; Mon, 06 Jan 2025 06:46:06 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWm/SFenm+6W1ujM0uAQlx/MeoP/gZ4X5JlpFZ/SeoqUuWlGZW7Vlm81u2m7F3CoAmXiS7ltMj3wwDg@vger.kernel.org
-X-Received: by 2002:a17:907:7287:b0:aa6:a33c:70a7 with SMTP id
- a640c23a62f3a-aac347cb97emr5592623466b.49.1736174766358; Mon, 06 Jan 2025
- 06:46:06 -0800 (PST)
+	s=arc-20240116; t=1736175925; c=relaxed/simple;
+	bh=CKZ/y2MCSbd/WTnX5KQeqeg+/YTKVBzr7RHLVbAB25U=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=N9r/fA1+wmkRcKeNLOMeX7mWdiogPa+7+stfwkBmwEOPpucps4Vfn+I2gwHDDsWTZ2NsCFNajioYCrVHF9akzbVnP5HNATnaZwxS5Q8bOGTIrXaqbjRC+uiQ684+yzLOYQEXEGw4DqukIHEkHKF29PCOr/e9aHbRL/6bEBJ1dMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=prUJgM59; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net AF556404EC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1736175922; bh=d9e4RTfPeEbapGYG7kGReecGHzVwmMNR/uVeZYfgs90=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=prUJgM59VRFHuhPEIOgdxx9yUKEeedMoKB26iwEJ6znb9H+Mf/Dii91ScUIZDQ23p
+	 HjEgmsjISmfWd7OTYrw8f0yw+0dvpOaUFcdprRnqGCjFfB+FooAgbdzqOqbpJDYXpH
+	 lTC/MEarqdM+fS1QQKu4LH9Jxap6PSwpnprY/DmrQ0+m9hRCmkITrl3N5yQ1RHExHg
+	 tJccpGsrKYDBtIkQFxieTvhG+P8gV86E1ArZjkIIV5+88+Hi0w8ROqfH7g732EmKsu
+	 09QIorXWtv6XNR57VAutBQ73N6EoealrldW45L8P52VMOaSB2ySz7kSK+KbErgPwtB
+	 JBF5+NbLU3Vcw==
+Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id AF556404EC;
+	Mon,  6 Jan 2025 15:05:22 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Tamir Duberstein <tamird@gmail.com>
+Subject: Re: linux-next: manual merge of the jc_docs tree with the mm tree
+In-Reply-To: <20250106095826.140c01cb@canb.auug.org.au>
+References: <20250106095826.140c01cb@canb.auug.org.au>
+Date: Mon, 06 Jan 2025 08:05:21 -0700
+Message-ID: <87o70kt232.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250106175107.48eed897@canb.auug.org.au>
-In-Reply-To: <20250106175107.48eed897@canb.auug.org.au>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 6 Jan 2025 06:45:50 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgjyEtLJfnY0zCK6sp--M3T9ubECNS+OkUWJ7NDmvPo-A@mail.gmail.com>
-Message-ID: <CAHk-=wgjyEtLJfnY0zCK6sp--M3T9ubECNS+OkUWJ7NDmvPo-A@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the linus tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Sun, 5 Jan 2025 at 22:51, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+
+> Hi all,
 >
-> After merging the linus tree, today's linux-next build (htmldocs)
-> produced these warnings:
+> Today's linux-next merge of the jc_docs tree got a conflict in:
+>
+>   scripts/checkpatch.pl
+>
+> between commit:
+>
+>   253f01394dc0 ("checkpatch: check return of `git_commit_info`")
+>
+> from the mm-nonmm-unstable branch of the mm tree and commit:
+>
+>   6356f18f09dc ("Align git commit ID abbreviation guidelines and checks")
+>
+> from the jc_docs tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Thanks, hopefully fixed now.
+The fix looks fine, but...
 
-             Linus
+> -- 
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc scripts/checkpatch.pl
+> index 744328d21eb8,f7087dda9ac9..000000000000
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@@ -3237,12 -3237,12 +3237,12 @@@ sub process 
+>   			my ($cid, $ctitle) = git_commit_info($orig_commit, $id,
+>   							     $title);
+>   
+>  -			if ($ctitle ne $title || $tag_case || $tag_space ||
+>  -			    $id_length || $id_case || !$title_has_quotes) {
+>  +			if (defined($cid) && ($ctitle ne $title || $tag_case || $tag_space || $id_length || $id_case || !$title_has_quotes)) {
+>  +				my $fixed = "Fixes: $cid (\"$ctitle\")";
+>   				if (WARN("BAD_FIXES_TAG",
+> - 				     "Please use correct Fixes: style 'Fixes: <12 chars of sha1> (\"<title line>\")' - ie: '$fixed'\n" . $herecurr) &&
+>  -				     "Please use correct Fixes: style 'Fixes: <12+ chars of sha1> (\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
+> ++				     "Please use correct Fixes: style 'Fixes: <12+ chars of sha1> (\"<title line>\")' - ie: '$fixed'\n" . $herecurr) &&
+
+...it all comes down to a single "+" sign here.  If 253f01394dc0 could
+be tweaked to add that character, I think this conflict would go away
+and we wouldn't make Linus delve into Perl code...?
+
+Just a thought.
+
+Thanks,
+
+jon
 

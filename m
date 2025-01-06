@@ -1,106 +1,169 @@
-Return-Path: <linux-next+bounces-5041-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5042-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E27BA01E82
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 05:24:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DCEEA01EAD
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 05:53:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED8451883EE8
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 04:24:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B934188011A
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 04:53:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D62D573451;
-	Mon,  6 Jan 2025 04:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11DB4148314;
+	Mon,  6 Jan 2025 04:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DIFtXz68"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="H3QMC215"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E604EEEB1;
-	Mon,  6 Jan 2025 04:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A032AD24;
+	Mon,  6 Jan 2025 04:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736137475; cv=none; b=BhXIOAlFrHwYE5faP9Yvuf1+/p8zVw18xIKyXY+kNgbl0Jq0E/A6sXu8AsMUiMfqe5oqh7dJcSf2fte4EM7Bv5+ZPkzoBNoabNEMi4CVrAaD9d71/896d+JilCyrzjM1kou8jd95ssIeB2SZ+yg5T7rj0f4XMjckXozUPxZue6w=
+	t=1736139221; cv=none; b=Np5q4EXsHrGldPje1jc/lnrMlfm3O8KkbN0xdxOoPgByRkNtQsvgwVlWnTh6D+rLNjWKsQsf1NkCwNeuHJzzZ5TldgBdGy4RKFDQkPdXdtH4RGoc1UAd1G4b0DglLrpsfmRX2zvokwE/ky6l1w7ZAgMQ4htM2bbz6bGdeUXMEg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736137475; c=relaxed/simple;
-	bh=7Rja17X3xa5ksDJpQhN2v4WEkzkJDO1CILGcqNIzKDk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IGQr+Uzc5Eg3BuUt57XtkF9L5rpGCFrbHx2phg68SGrb7oi82wW3ffCGhQ1kMorTSrOMueR9C+hzTQgSDg1Q9NEwLienqUKcLiWAlooU8fp5HcwmLd+rD0eY3pfWAA+Ve7sZldvA4AHHFEZ6bgVutSFUHd6K1WfeCCNH5SDxRc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DIFtXz68; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736139221; c=relaxed/simple;
+	bh=EHqHnKtOgodgrqEb9vk77CMlCeZn+sg86C3LeuVpX5c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Wkoeivo4/+XfIHy+dHFLcisYDYtqA+4TE3ZpseR0YBYULgaj8Ir/4wjvAKDI9f37vq0gjcRNRox15lplgEQilzNdNadw2AvDPAVsuv6jSrc7X59aJkayx4Xmu7roGGVclIxgUoHikMyHqozpOYlFhQhS5oPYQkxxhwNNBEEjcmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=H3QMC215; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736137465;
-	bh=vCjD6hXhmDbWFqx9wRMRRJQD5n/Qx7afCcegL1z3XLY=;
+	s=201702; t=1736139208;
+	bh=elJA45iwj7FURuEP0SqweB0TerwxNN06rAxeBfKMhcU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=DIFtXz68t3+8L2n5Q9kev2KIR8eq9HwNtwqCXtQ4qrcefv/EjXuIxiVrbTpMAkAzf
-	 nsR2gHEjAufUMRGeun0xf/CAkTxWbtZbViQkdVdzbeFi/TA96PutlmrnN6M0zm2r8E
-	 Wx02+rs24WVkmDyh71c0T3ID+Y8OuwBaCcLek2lbWXvtSrCeXrXwiiuDoks7DGMyga
-	 fot9tibtkrDHHvPp/lceZP0L91KqNnpyAUL38vWQi8nUvIbSFNYgb4Eym/nzvcgyJx
-	 xvBeAybuyuQD7/VoI4T8THqTMz5BmxaoMh1YgvMn2rADW5ZSN4rHhMCtwg4jrrnmQs
-	 PUaihppnx41Hw==
+	b=H3QMC215kiH8rYOVy60jL/jqdxMGU9YkhTLfGJkaAm2knfiDWbEJ8Ucc3r7K/RutY
+	 bk+uMdx0/xyMKMTfyI/z5V7GIOyMzA/fjcNgPnT6Xquajo6mxAcQnhHdFbPS3+zCJ2
+	 kfLI3cBzWxH7jpH1ThuTu/79Q1gVwoIoTF5joHtueFBoFRH8fNOcAX7sWHyQR5MvGI
+	 wzIwi49nFsXBrOLx+YzT7hzwcSHl3Y0j9xGSUfxfOI+aFM7uvu3I+i5tB36LEYlhZD
+	 x4We6Q0WKkkARyDIwbXx2o2u4ksnn3D8D0dWWm2fEpmpvrXPrTVt7+jnYuprIJkLln
+	 B8tjEtdGL8kCQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRLfx41bjz4x4v;
-	Mon,  6 Jan 2025 15:24:25 +1100 (AEDT)
-Date: Mon, 6 Jan 2025 15:24:31 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRMJQ4f04z4wj1;
+	Mon,  6 Jan 2025 15:53:26 +1100 (AEDT)
+Date: Mon, 6 Jan 2025 15:53:32 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kishon Vijay Abraham I <kishon@kernel.org>, Vinod Koul
- <vkoul@kernel.org>, Greg KH <greg@kroah.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the phy-next tree
-Message-ID: <20250106152431.6f61fdb1@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>, Wolfram Sang <wsa@the-dreams.de>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Zijun Hu <quic_zijuhu@quicinc.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the driver-core tree
+Message-ID: <20250106155332.050670e4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5ndI1k+RoUYTeA0mev2+f/1";
+Content-Type: multipart/signed; boundary="Sig_/9eYxED8PJI2=_T=1HhgPDQ=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/5ndI1k+RoUYTeA0mev2+f/1
+--Sig_/9eYxED8PJI2=_T=1HhgPDQ=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the usb tree as a different commit
-(but the same patch):
+After merging the driver-core tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  413918c44c4f ("dt-bindings: usb: qcom,dwc3: Add QCS615 to USB DWC3 bindin=
-gs")
+drivers/i2c/i2c-core-base.c: In function 'delete_device_store':
+drivers/i2c/i2c-core-base.c:1350:58: error: passing argument 3 of 'device_f=
+ind_child' from incompatible pointer type [-Wincompatible-pointer-types]
+ 1350 |         child_dev =3D device_find_child(&adap->dev, &addr, __i2c_fi=
+nd_user_addr);
+      |                                                          ^~~~~~~~~~=
+~~~~~~~~~~
+      |                                                          |
+      |                                                          int (*)(st=
+ruct device *, void *)
+In file included from include/linux/acpi.h:14,
+                 from drivers/i2c/i2c-core-base.c:16:
+include/linux/device.h:1085:49: note: expected 'device_match_t' {aka 'int (=
+*)(struct device *, const void *)'} but argument is of type 'int (*)(struct=
+ device *, void *)'
+ 1085 |                                  device_match_t match);
+      |                                  ~~~~~~~~~~~~~~~^~~~~
 
-This is commit
+Caused by commit
 
-  f097a36ef88d ("dt-bindings: usb: qcom,dwc3: Add QCS615 to USB DWC3 bindin=
-gs")
+  f1e8bf56320a ("driver core: Constify API device_find_child() and adapt fo=
+r various usages")
 
-in the usb tree.
+interacting with commit
+
+  3cfe39b3a845 ("i2c: Replace list-based mechanism for handling userspace-c=
+reated clients")
+
+from the i2c tree.
+
+I have applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 6 Jan 2025 15:33:36 +1100
+Subject: [PATCH] fix up for "driver core: Constify API device_find_child() =
+and
+ adapt for various usages"
+
+interacting with commit
+
+  3cfe39b3a845 ("i2c: Replace list-based mechanism for handling userspace-c=
+reated clients")
+
+from the i2c tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/i2c/i2c-core-base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index bd90a6084fc0..c21a16aa96dc 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1306,10 +1306,10 @@ new_device_store(struct device *dev, struct device_=
+attribute *attr,
+ }
+ static DEVICE_ATTR_WO(new_device);
+=20
+-static int __i2c_find_user_addr(struct device *dev, void *addrp)
++static int __i2c_find_user_addr(struct device *dev, const void *addrp)
+ {
+ 	struct i2c_client *client =3D i2c_verify_client(dev);
+-	unsigned short addr =3D *(unsigned short *)addrp;
++	unsigned short addr =3D *(const unsigned short *)addrp;
+=20
+ 	return client && client->flags & I2C_CLIENT_USER &&
+ 	       i2c_encode_flags_to_addr(client) =3D=3D addr;
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/5ndI1k+RoUYTeA0mev2+f/1
+--Sig_/9eYxED8PJI2=_T=1HhgPDQ=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd7Wv8ACgkQAVBC80lX
-0GzGWwgAkGdQ3UPZQ99d/ENO0H8KUd9WthFJ/NWTBXfR5BaUtDEteSIZ+F/2NuWa
-czbs921v2Or4mHD9vCUz0rVytpVDxGByhaUNIlTDR4KPz+DqqMIvZF03tVa0Kqbp
-o02nl29nyTLssOqil56/Y7Rr0e0hfGME5Hj7eTyxXFGhMSHg3Y2A2TKSTl0k6yOb
-4o3QZu8ZaiAfeUuO3bsK+Yk5jAC+UTNTp10J1I9xMWn5mWBvx1W97iS3T+YXkrDN
-EmghddaFbT4KXanuShEmhPYcTEXQzRB5qI6Uf+kN6cRmp2wYgjmNHkkl+YNUOobt
-rjq3PRR/hZvKG7cctOh/+a5N5bmudQ==
-=PB9e
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd7YcwACgkQAVBC80lX
+0Gy5JAf/U3ygmivkERtFwgy5gAIDQk8R6VLO4WNdaEJ/1IM5k3Ve8381foOGMb9n
+vDpDEvV/+E7FjClqCXHgxonRhRaGVog5d6XMNiXeHfjAO1FB+siXmfCZ5UANHe0D
+viSj05QueoP+7Tmeo9sr9eFjlCAR9u3VYS1vg8a6lDt9qgRctPlxO/eESylb/XIo
+rC2pIQYgC1p0Ixw0fvuOirbKhYb7xxxv2+hHT1aM6/6yJQ9wwVjTjDF5XlTOU1O2
+IlJIgOoojj25Eqo6lPg7YM3QwUenKZhtVlVR4vB8KhUbxdErKICEDxpg6lXQ4OsY
+dvwRGzCuhljChyODxk1Dk9dMOPrPcA==
+=G673
 -----END PGP SIGNATURE-----
 
---Sig_/5ndI1k+RoUYTeA0mev2+f/1--
+--Sig_/9eYxED8PJI2=_T=1HhgPDQ=--
 

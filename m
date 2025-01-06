@@ -1,177 +1,122 @@
-Return-Path: <linux-next+bounces-5032-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5033-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1394EA01CF1
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 02:03:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3403A01D19
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 02:48:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB00916234E
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 01:03:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33B613A3B54
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 01:48:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12707182D2;
-	Mon,  6 Jan 2025 01:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10640DDBB;
+	Mon,  6 Jan 2025 01:48:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="X04HEx/Y"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hak5Vkv5"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C94801;
-	Mon,  6 Jan 2025 01:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92437184F;
+	Mon,  6 Jan 2025 01:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736125381; cv=none; b=Mg0cjMhCIoIpwkqXxx5eEX4BeKNKflq6trCZ3dOjCG0iyEfAK20wzGATuT2pgJBlJPwBTuDuaqmHturrwxuarxpuXU2slaWTpSROQpPWutQ0JRHfSFe8VyM5kjBU0pEuxq0+FLue9SRumRmptrJ6tJsCMcnD6GncJJF/Mv6cjUo=
+	t=1736128122; cv=none; b=U9ADnNZ4uqtb1g/0t3cOA1G/BRMq+TQ6Iot3l05aN0dRw860tbNcn7B3Wf7PpmdEK08wb+SHC12FS7noIU7aOyxrufFCRd+SBGiM0k8LPhez60xZ7zRVLWiSx2BVoQidindbO0ROG64IREBhTJMYZuPkEMGbse5Wf1Hn75QNzAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736125381; c=relaxed/simple;
-	bh=nm0uQgwT7od0vW3iFlIycsKziRFz79TbmN2Xn2rw9zA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mvKU6uwJZQKUesCuIuGPcsO4Ed+2cOnZ4MNdUZNlIVH0IVIeMoFLFPl9bVmeRyORk93WQkkt7WxSix50efBOrJrhDl2mOYHA0lh4ybkTyEbWlicdbx/OrSGUWwMJvN9DzWYupC2Zkk7f0vtqnmckPQLOdsE3Ec18/NAt5PJAvk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=X04HEx/Y; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736128122; c=relaxed/simple;
+	bh=ZoiV0Pvc+Sgo7RVe7XDNG1Qqi4sNyFXIbRistouXdNY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TLzSz+u/y2Ix03fm9Px2K1B/ugW1Heu5ZFJv22E9km5CkaEMxyFvmpsgqLrCZBgRGk8rn9RiMSV4a7ra/NEfrv6KsvMgXpNByZmcdovvTHr45rRVSTnlEra6z+K9FeZO1ddK0wNaeiwFp3C6W1rmk/7EO5G1zx97gOEWxjImlYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=hak5Vkv5; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736125367;
-	bh=hUAI27qyyGuVce/f1T8wzXEBFJcbe/WNjTvninBQiR8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=X04HEx/Yq/562zd11um4wzsfKwSrzqK0vZ0qrue61fcn3N1QaLu00Dv5JQBmiYIEx
-	 kVJo44tjnWh6QAjpmptpoubJglApJGlh953TdXdON6583GYW21maU4cPc47S1dUDQA
-	 OZ9MkI95k+ti6OLrECM/wVa7bK3gqVRA8AzEeEC5eF0MeeJ97dj9L/7bU75bmroKdh
-	 bZxVZnoRfWvxzpMZmojMJnUlDH6NJoO5Vg5QQVwfc3Vv+xRUIDsOQScBlf28XpX12D
-	 9/01NcRtAWZRO9Fa6V7jRv/APSEyyKiAbWEEH2ifoG6MEUJeC6mLK5eMOFa8g5WwrG
-	 8h8+Q4C02j4pg==
+	s=201702; t=1736128108;
+	bh=CBXyB3/RPrQw4e/NtOZ2YqTa0EFxIUqmACmBmx5Lmzg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=hak5Vkv5tQerYLM6yYaXNQ39UnrrkiyQCsHbeOktoENEQe1c8vRoPj4zRk9zefRnT
+	 RNu1uVgz/beYZ0nei2gfNZAkGUI/+xE0fdaYNrMRsV6lJDLZ/jBTu8qt6nRvug/VOA
+	 E7ZZLRoroOJr1XsarR8tbTTx3MPFdknGF7Gr3fOWI0t93shrMN0SudhVtV7R8ii7m8
+	 lij2XqaBnsKz4sgp3cjWe4cts7LaxZrdFUC2CChe1Xi4o3cc/cJGDCbK5McHbXldNv
+	 EtqCwF3Hami+GBSOGIc1MkRwSoo2kkHubI3oPi2IFtUTI+D+6w1u4xjd2LaJ4hou7q
+	 +Y53YrcmCzX6w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRGBG2pMZz4x4t;
-	Mon,  6 Jan 2025 12:02:46 +1100 (AEDT)
-Date: Mon, 6 Jan 2025 12:02:52 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRHC03JXGz4wvd;
+	Mon,  6 Jan 2025 12:48:28 +1100 (AEDT)
+Date: Mon, 6 Jan 2025 12:48:34 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Doug Ledford <dledford@redhat.com>, Jason Gunthorpe <jgg@mellanox.com>
-Cc: Junxian Huang <huangjunxian6@hisilicon.com>, Leon Romanovsky
- <leon@kernel.org>, Linux Kernel Mailing List
+To: Miquel Raynal <miquel.raynal@bootlin.com>, Boris Brezillon
+ <boris.brezillon@collabora.com>
+Cc: Md Sadre Alam <quic_mdalam@quicinc.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Yuyu Li <liyuyu6@huawei.com>, Zhu Yanjun
- <yanjun.zhu@linux.dev>
-Subject: Re: linux-next: manual merge of the rdma tree with Linus' tree
-Message-ID: <20250106120252.000a2afa@canb.auug.org.au>
-In-Reply-To: <20250106105106.3d94b0c3@canb.auug.org.au>
-References: <20250106105106.3d94b0c3@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the nand tree
+Message-ID: <20250106124834.5a82a6da@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lKWs7p0ve4vM_YajYcCDK8D";
+Content-Type: multipart/signed; boundary="Sig_/36bE1q_Hgbw/KnJDpyojwgG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/lKWs7p0ve4vM_YajYcCDK8D
+--Sig_/36bE1q_Hgbw/KnJDpyojwgG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 6 Jan 2025 10:51:06 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the rdma tree got a conflict in:
->=20
->   drivers/infiniband/sw/rxe/rxe_net.c
->=20
-> between commit:
->=20
->   2ac5415022d1 ("RDMA/rxe: Remove the direct link to net_device")
->=20
-> from Linus' tree and commit:
->=20
->   958152336cfa ("RDMA/rxe: Remove deliver net device event")
->=20
-> from the rdma tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc drivers/infiniband/sw/rxe/rxe_net.c
-> index 8cc64ceeb356,d400aaab0e70..000000000000
-> --- a/drivers/infiniband/sw/rxe/rxe_net.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_net.c
-> @@@ -595,13 -577,7 +585,13 @@@ void rxe_port_down(struct rxe_dev *rxe
->  =20
->   void rxe_set_port_state(struct rxe_dev *rxe)
->   {
->  -	if (ib_get_curr_port_state(rxe->ndev) =3D=3D IB_PORT_ACTIVE)
->  +	struct net_device *ndev;
->  +
->  +	ndev =3D rxe_ib_device_get_netdev(&rxe->ib_dev);
->  +	if (!ndev)
->  +		return;
->  +
-> - 	if (netif_running(ndev) && netif_carrier_ok(ndev))
-> ++	if (ib_get_curr_port_state(ndev) =3D=3D IB_PORT_ACTIVE)
->   		rxe_port_up(rxe);
->   	else
->   		rxe_port_down(rxe);
+After merging the nand tree, today's linux-next build
+(x86_64_allmodconfig) failed like this:
 
-It also needed the following merge fix patch:
+In file included from include/linux/string.h:389,
+                 from include/linux/bitmap.h:13,
+                 from include/linux/cpumask.h:12,
+                 from include/linux/smp.h:13,
+                 from include/linux/lockdep.h:14,
+                 from include/linux/mutex.h:17,
+                 from include/linux/notifier.h:14,
+                 from include/linux/clk.h:14,
+                 from drivers/mtd/nand/qpic_common.c:6:
+In function 'fortify_memset_chk',
+    inlined from 'qcom_clear_bam_transaction' at drivers/mtd/nand/qpic_comm=
+on.c:88:2:
+include/linux/fortify-string.h:480:25: error: call to '__write_overflow_fie=
+ld' declared with attribute warning: detected write beyond size of field (1=
+st parameter); maybe use struct_group()? [-Werror=3Dattribute-warning]
+  480 |                         __write_overflow_field(p_size_field, size);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 6 Jan 2025 11:36:03 +1100
-Subject: [PATCH] fix up for "RDMA/rxe: Remove deliver net device event"
+Caused by commit
 
-interacting with "RDMA/rxe: Remove the direct link to net_device"
+  fdf3ee5c6e52 ("mtd: nand: Add qpic_common API file")
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/infiniband/sw/rxe/rxe_verbs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.c b/drivers/infiniband/sw/=
-rxe/rxe_verbs.c
-index 47d57046fad4..6152a0fdfc8c 100644
---- a/drivers/infiniband/sw/rxe/rxe_verbs.c
-+++ b/drivers/infiniband/sw/rxe/rxe_verbs.c
-@@ -62,7 +62,7 @@ static int rxe_query_port(struct ib_device *ibdev,
- 	ret =3D ib_get_eth_speed(ibdev, port_num, &attr->active_speed,
- 			       &attr->active_width);
-=20
--	attr->state =3D ib_get_curr_port_state(rxe->ndev);
-+	attr->state =3D ib_get_curr_port_state(ndev);
- 	if (attr->state =3D=3D IB_PORT_ACTIVE)
- 		attr->phys_state =3D IB_PORT_PHYS_STATE_LINK_UP;
- 	else if (dev_get_flags(ndev) & IFF_UP)
---=20
-2.45.2
+I have used the nand tree from next-20241220 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/lKWs7p0ve4vM_YajYcCDK8D
+--Sig_/36bE1q_Hgbw/KnJDpyojwgG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd7K7wACgkQAVBC80lX
-0GzECgf+OeR4iyfnu2fy9XPq5CdqU3DaFjQNsAPqvXomXKfx0FuKIYM20EgLjtIR
-U247cTVwvnH3u03YLRDlUg4XkzSXg+Hbf+vJ6v+eIvUvVtRxaiHcj3rPyq70/Xtb
-HewKeWmYb5xQgMoAjShdOXXgeDXbOSBtb92Fvyjk23tbKJ3krLGdQ+MVFow1sP8a
-+tYrKUYU7oQX1FPRsf+3H/UrM+6V6fvO4U8CUAb4CBJMzHlDoTqqqa4VHF/XkfDP
-GoO75jX0UqrgOhh7xfWatJDO9yBRkv8LDAQGoD6v5Cd5KmfAO5dQvNW/Pdthvtpd
-+vdHSyilZb04viSd1lRh5J3WHK4hWw==
-=7SgA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd7NnIACgkQAVBC80lX
+0GzXPQgAmw7RsiXyfsVUJKudWFJyaJU9A6kXzF7wlmebKCgfJQFmnyfvESTCc3UL
+thTjZLm/6nnxTyJoqnEMf5P3qszoin1vPILKRj3uAuFzLSKsT/1YBhOMFS3DbCdr
+Ypk4lQg06Jlcn/OcCmjo4C1fBNMyJWU0ciAQJ6pc75MH8tSe88j4p/NGTYlzTBAU
+AVL91E0zAbSIqeJIpl/7cSo2OamZqcn7oEDr9m4ZorJcg49E2r24EQ1M+FJzx8wC
+/pIvk/KXSw9m2SZZatT8X1duLBJjBdpF2jukkYR1QBZq6StDpfxAEXo/EogxOcPB
+5BV0VSQlhOA4r9UQtwv14x89gkpKpw==
+=t5bD
 -----END PGP SIGNATURE-----
 
---Sig_/lKWs7p0ve4vM_YajYcCDK8D--
+--Sig_/36bE1q_Hgbw/KnJDpyojwgG--
 

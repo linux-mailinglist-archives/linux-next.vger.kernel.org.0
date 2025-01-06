@@ -1,131 +1,238 @@
-Return-Path: <linux-next+bounces-5036-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5037-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91361A01E10
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 04:09:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8610CA01E5D
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 04:53:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21B1B3A4F78
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 03:09:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F57B7A151D
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 03:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CAA478F2F;
-	Mon,  6 Jan 2025 03:09:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6A135962;
+	Mon,  6 Jan 2025 03:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="F5h+0/vg"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Ju5MOa5L"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEFB13D69;
-	Mon,  6 Jan 2025 03:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B201FB3;
+	Mon,  6 Jan 2025 03:53:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736132979; cv=none; b=gs0uvW9Avow1V5WtoXjCKYp3Kas0fnn6gzjZXUWz5pNF7AN7ZztDm7HR7BVbhqEn1PYnNg8u5VkMUJ1LJ3SulAvdQHm7Ul79o8u8zg8tcW55UdPxiNz/MMEi/OvNpMKCANhoiNxrr7k292Hn0t+oBIMnqN9O3wadvrRT5ACuYMM=
+	t=1736135596; cv=none; b=lQCMRSokBJOJmwVlqY3ucouYmgupKiVujzptJVrVt3AWqsFSIs3IcIwD2kRdFGyaSMnnWQvltttEubLXuwmRJYVzItc72bVdw/W7OSz6xQ6YKNYwN8flHU4Aod8k2Y/X/lJt9fz+cgdMgmZx7OK5xzmhtB5peJSuDFILtkxRwiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736132979; c=relaxed/simple;
-	bh=1fKuf5tCIA07T7uP0hby637bkNQdcJ70kZB8SCkkaOQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fu4EjUGFjnIguK2aqCNA4PqTKfT4oFQrmuMVBkdrGczveciMuNHs56JZQmEOU5juiAnfh51nw6ZsOVofu+ZToQ6KMUbU4iC6CcnDUf85Tm6EnuM7HZmMyfcPpsL2q44HuaARtTMdXDKUnKmQ+EFk6ZmxJtzWUBlW14jGd9rC9Fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=F5h+0/vg; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736135596; c=relaxed/simple;
+	bh=RyG+vQ665wUThqcHA9frIZaxWKDkPzHbExz5CtYTl/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=azQ/XqL/PB5Oz6NJONu/9UdiezJcUfMIzB3vq6z5iI7FT3NvRgLlZ3vsdfjPtqy4nHWW/QQCEZtuTn7WkSQKJJXR/7e5zpQPgLTh8evuoCesdNVADKJ8ucfEBVSZFU022ZdFm15kQDmMXWgOeLANhAAdsA7CJTTwQwG0QbUEC14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Ju5MOa5L; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736132963;
-	bh=GLdh3mNJ20XsJe1cVfVLWwYPjbqOD9haQe5s49WEWkA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=F5h+0/vg7FmnouyNleI1zDC7WnTK7qZkJXelA1c9I1GW3Z2q2/VlWtpsEb6WqfdKP
-	 ApsxYM0zPrNL4CtjcLlQ9Ki3fjT62YSFPQUQE/3kvghlVoQkpJ8lrsmsNvKPbEcU1K
-	 p7fG6qpdXAzDY1oBaOohrKEEWT3tB10HelD26R5PQjffqPiCTb4EDBlr8ilmpnhjeu
-	 9kd3SSO5BZLdTpH1VA1ZRxLT6fM1Ptj6sGOHV1rwS3kNK7IOhujwgfbaNLeof/9jki
-	 TK/KU6W9qAluLLjTxIA/MAGMGuUkycxLD7qRgjFHD4gO1jcous4bajsaxXaaYTjHPy
-	 EkGMFM8F5cbMw==
+	s=201702; t=1736135579;
+	bh=kaKGY/Oo7W2ooCg7+OLWBU2cQdT4iGLCvnUxUmP8S80=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Ju5MOa5LEd7drFw1a24OG7b7oIEXrEXEkdItNpP/ux2RxyBR/OmPkECZeN7oAqvu3
+	 kg9uaoEL7HOkiPZB+RcEmsz9GFPh2K3jmq3Z+mpZvfvZLNivGpTMA7X7rVGPXvVf88
+	 q6ICWMIa+djqVBmuOKhQWIEFnXPmXHF8aLi2KbHBMLBE1rwpVf/850ofPJ01ntYYFt
+	 K9ul6rmXBnduxLAPAZWgA/VhxV+T1eZjdoJMCfsGLTvm87lU5u6/hHNWifDQEw4/C0
+	 O9OGevURS+M82k9UnHXBlWf2WCUEyq+wqsV382mQzbrn1EDT6qIGlUdAyTnuKZE3+d
+	 1hYpYieUAQemQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRK0L63YKz4w2H;
-	Mon,  6 Jan 2025 14:09:22 +1100 (AEDT)
-Date: Mon, 6 Jan 2025 14:09:28 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRKyf5MhGz4wbR;
+	Mon,  6 Jan 2025 14:52:57 +1100 (AEDT)
+Date: Mon, 6 Jan 2025 14:53:03 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Suren Baghdasaryan
- <surenb@google.com>
-Subject: Re: linux-next: manual merge of the tip tree with the mm tree
-Message-ID: <20250106140928.50569876@canb.auug.org.au>
-In-Reply-To: <20241209132446.77fcb14b@canb.auug.org.au>
-References: <20241209132446.77fcb14b@canb.auug.org.au>
+To: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: Fuad Tabba <tabba@google.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Oliver Upton <oliver.upton@linux.dev>
+Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <20250106145303.47c2bef4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//r9g2Ki3jJp_PbT3qFKHPdY";
+Content-Type: multipart/signed; boundary="Sig_/25=wCiX=8Fzgy8nj+l+4lRI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_//r9g2Ki3jJp_PbT3qFKHPdY
+--Sig_/25=wCiX=8Fzgy8nj+l+4lRI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 9 Dec 2024 13:24:46 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the tip tree got conflicts in:
->=20
->   include/linux/mm.h
->   include/linux/mm_types.h
->   kernel/fork.c
->   tools/testing/vma/vma_internal.h
->=20
-> between commits:
->=20
->   5f0d64389e1f ("mm: convert mm_lock_seq to a proper seqcount")
->   062111898568 ("mm: move per-vma lock into vm_area_struct")
->   85ad413389ae ("mm: make vma cache SLAB_TYPESAFE_BY_RCU")
->=20
-> from the mm-unstable branch of the mm tree and commit:
->=20
->   eb449bd96954 ("mm: convert mm_lock_seq to a proper seqcount")
->=20
-> from the tip tree.
->=20
-> Note that commits 5f0d64389e1f and eb449bd96954 are identical patches.
->=20
-> I fixed it up (I used the mm tree version) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+Today's linux-next merge of the kvm-arm tree got conflicts in:
 
-I got 2 more conflicts today due to the duplicate patch above.
+  arch/arm64/include/asm/kvm_emulate.h
+  arch/arm64/kvm/fpsimd.c
+  arch/arm64/kvm/hyp/nvhe/pkvm.c
+  arch/arm64/kvm/hyp/nvhe/switch.c
+
+between commit:
+
+  e5ecedcd7cc2 ("arm64/sysreg: Get rid of CPACR_ELx SysregFields")
+
+from the arm64 tree and commits:
+
+  41d6028e28bd ("KVM: arm64: Convert the SVE guest vcpu flag to a vm flag")
+  d381e53384a6 ("KVM: arm64: Move host SME/SVE tracking flags to host data")
+  f50758260bff ("KVM: arm64: Group setting traps for protected VMs by contr=
+ol register")
+  2fd5b4b0e7b4 ("KVM: arm64: Calculate cptr_el2 traps on activating traps")
+(and maybe others)
+
+from the kvm-arm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//r9g2Ki3jJp_PbT3qFKHPdY
+diff --cc arch/arm64/include/asm/kvm_emulate.h
+index 4f1d99725f6b,2d91fb88298a..000000000000
+--- a/arch/arm64/include/asm/kvm_emulate.h
++++ b/arch/arm64/include/asm/kvm_emulate.h
+@@@ -628,12 -629,12 +629,12 @@@ static __always_inline void __kvm_reset
+  		if (cpus_have_final_cap(ARM64_SME))
+  			val |=3D CPACR_EL1_SMEN_EL1EN;
+  	} else if (has_hvhe()) {
+ -		val =3D CPACR_ELx_FPEN;
+ +		val =3D CPACR_EL1_FPEN;
+ =20
+- 		if (!vcpu_has_sve(vcpu) || !guest_owns_fp_regs())
++ 		if (!kvm_has_sve(kvm) || !guest_owns_fp_regs())
+ -			val |=3D CPACR_ELx_ZEN;
+ +			val |=3D CPACR_EL1_ZEN;
+  		if (cpus_have_final_cap(ARM64_SME))
+ -			val |=3D CPACR_ELx_SMEN;
+ +			val |=3D CPACR_EL1_SMEN;
+  	} else {
+  		val =3D CPTR_NVHE_EL2_RES1;
+ =20
+diff --cc arch/arm64/kvm/fpsimd.c
+index 98718bd65bf1,0e0f37d1990a..000000000000
+--- a/arch/arm64/kvm/fpsimd.c
++++ b/arch/arm64/kvm/fpsimd.c
+@@@ -168,8 -168,8 +168,8 @@@ void kvm_arch_vcpu_put_fp(struct kvm_vc
+  	 */
+  	if (has_vhe() && system_supports_sme()) {
+  		/* Also restore EL0 state seen on entry */
+- 		if (vcpu_get_flag(vcpu, HOST_SME_ENABLED))
++ 		if (host_data_test_flag(HOST_SME_ENABLED))
+ -			sysreg_clear_set(CPACR_EL1, 0, CPACR_ELx_SMEN);
+ +			sysreg_clear_set(CPACR_EL1, 0, CPACR_EL1_SMEN);
+  		else
+  			sysreg_clear_set(CPACR_EL1,
+  					 CPACR_EL1_SMEN_EL0EN,
+diff --cc arch/arm64/kvm/hyp/nvhe/pkvm.c
+index 73e319891327,918d8142da8f..000000000000
+--- a/arch/arm64/kvm/hyp/nvhe/pkvm.c
++++ b/arch/arm64/kvm/hyp/nvhe/pkvm.c
+diff --cc arch/arm64/kvm/hyp/nvhe/switch.c
+index 0f6b01b3da5c,0ebf84a9f9e2..000000000000
+--- a/arch/arm64/kvm/hyp/nvhe/switch.c
++++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+@@@ -36,33 -35,46 +35,46 @@@ DEFINE_PER_CPU(unsigned long, kvm_hyp_v
+ =20
+  extern void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc=
+);
+ =20
+- static void __activate_traps(struct kvm_vcpu *vcpu)
++ static void __activate_cptr_traps(struct kvm_vcpu *vcpu)
+  {
+- 	u64 val;
++ 	u64 val =3D CPTR_EL2_TAM;	/* Same bit irrespective of E2H */
+ =20
+- 	___activate_traps(vcpu, vcpu->arch.hcr_el2);
+- 	__activate_traps_common(vcpu);
++ 	if (has_hvhe()) {
+ -		val |=3D CPACR_ELx_TTA;
+++		val |=3D CPACR_EL1_TTA;
+ =20
+- 	val =3D vcpu->arch.cptr_el2;
+- 	val |=3D CPTR_EL2_TAM;	/* Same bit irrespective of E2H */
+- 	val |=3D has_hvhe() ? CPACR_EL1_TTA : CPTR_EL2_TTA;
+- 	if (cpus_have_final_cap(ARM64_SME)) {
+- 		if (has_hvhe())
+- 			val &=3D ~CPACR_EL1_SMEN;
+- 		else
+- 			val |=3D CPTR_EL2_TSM;
++ 		if (guest_owns_fp_regs()) {
+ -			val |=3D CPACR_ELx_FPEN;
+++			val |=3D CPACR_EL1_FPEN;
++ 			if (vcpu_has_sve(vcpu))
+ -				val |=3D CPACR_ELx_ZEN;
+++				val |=3D CPACR_EL1_ZEN;
++ 		}
++ 	} else {
++ 		val |=3D CPTR_EL2_TTA | CPTR_NVHE_EL2_RES1;
++=20
++ 		/*
++ 		 * Always trap SME since it's not supported in KVM.
++ 		 * TSM is RES1 if SME isn't implemented.
++ 		 */
++ 		val |=3D CPTR_EL2_TSM;
++=20
++ 		if (!vcpu_has_sve(vcpu) || !guest_owns_fp_regs())
++ 			val |=3D CPTR_EL2_TZ;
++=20
++ 		if (!guest_owns_fp_regs())
++ 			val |=3D CPTR_EL2_TFP;
+  	}
+ =20
+- 	if (!guest_owns_fp_regs()) {
+- 		if (has_hvhe())
+- 			val &=3D ~(CPACR_EL1_FPEN | CPACR_EL1_ZEN);
+- 		else
+- 			val |=3D CPTR_EL2_TFP | CPTR_EL2_TZ;
+-=20
++ 	if (!guest_owns_fp_regs())
+  		__activate_traps_fpsimd32(vcpu);
+- 	}
+ =20
+  	kvm_write_cptr_el2(val);
++ }
++=20
++ static void __activate_traps(struct kvm_vcpu *vcpu)
++ {
++ 	___activate_traps(vcpu, vcpu->arch.hcr_el2);
++ 	__activate_traps_common(vcpu);
++ 	__activate_cptr_traps(vcpu);
++=20
+  	write_sysreg(__this_cpu_read(kvm_hyp_vector), vbar_el2);
+ =20
+  	if (cpus_have_final_cap(ARM64_WORKAROUND_SPECULATIVE_AT)) {
+
+--Sig_/25=wCiX=8Fzgy8nj+l+4lRI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd7SWgACgkQAVBC80lX
-0GzSlQf+L9HeH1z7Vi1Zaw9t/4GAbti4Vsx7A+J/eonjTjndLbExsp/zBz2veAQW
-tQKw5/MYEBUPoEmWL0CLMCpgCWNflr/S5AXTXNJDxLo8ynPqSrzk3h/Fz8940Wzy
-OPKIuzdJZ8B0MeryBgeQYmxpGnSdLGv9Hv+zERcQRMe5Ybdj0JcGQ7m3wAVMpt/E
-6StXlaI5DIJVxo/RlEES5VpyruZ8ZXzwTKJMm9XmbeIpD51SRwTfv/58lovSS8Lt
-Xgps+u1yA0M59B0U+0hToumsWxxCh2vWIu//AROMCkXZVc4stwUCSinvwzmslYJh
-YBn4WvF4zL46oA1qe9c9UcOxE3aO8w==
-=ut8X
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd7U58ACgkQAVBC80lX
+0Gx1GQf/XAqvygIEXEx07gEKG3A0+Ic0En4MOAc2Pswk1aTKo2RQDBfaR8UbHwzN
+te0X4JL58Wy2J/zYc/fKIZ1pPnfyp0/9uJRnGT5bAaAdppmbFkJOfQUEN8DwSKjF
+lHsnMgICyYxqDYmvTpb8ljavLbYe2Lzw4PGQACR0Nv0AVdGY15uQrK6Ov9REkbac
+1cX00fJy7wnUhAfNnanB3VIgvfHMdoBrbvkJo/fW15Dwkl/dPxveulqOAv5S8qKg
+LymgBmPT9Rv+L7JcYrDfkLH3lGGHyJceZIo0ncc7mGugm64DT3/bd1J5/n0y8hef
+6VIaqBmJgB/iEjRy0MHWu9L2eXlIVA==
+=WNVk
 -----END PGP SIGNATURE-----
 
---Sig_//r9g2Ki3jJp_PbT3qFKHPdY--
+--Sig_/25=wCiX=8Fzgy8nj+l+4lRI--
 

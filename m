@@ -1,116 +1,138 @@
-Return-Path: <linux-next+bounces-5046-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5048-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D7FEA01EFF
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 06:46:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0E0BA01F25
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 07:17:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58A7D1625E6
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 05:46:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 535D4188495B
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 06:17:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC34A19924F;
-	Mon,  6 Jan 2025 05:46:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF4743AA9;
+	Mon,  6 Jan 2025 06:17:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lyal909r"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CFYT6BJM"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED5A1D0F62;
-	Mon,  6 Jan 2025 05:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FE2522A;
+	Mon,  6 Jan 2025 06:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736142396; cv=none; b=Y25p18AgX6jLMooIfbubX0cAm4wIN0zCQdvsT7hFM5sX2XNbuoGV7FbVJ6iCj0g+Lngdysa6/hCaabaA+lstDk4yporodvJUbvsMSvRvySyGOzOA/Eud755QMJzzhbBf/3o7GgJSG7vbsvRdiBZtSvWnzNbia0bHdbyQKCjot5E=
+	t=1736144230; cv=none; b=fF00Tv2aKkXcDWMoJqUtHEeQR7blfL3sohdABA2Qwf7AtFQUKaj7cH7/i9qAcbbxcYIKQHWtI15fJJf7h4N9o/wk9E9nQlacnEjJ3avJnwJ0P9lsKOsgsroFK3zMEJEXcH+HyKvVjzmgSSp1JHhAl/q61q1RWYQuG9x52gAioX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736142396; c=relaxed/simple;
-	bh=leD9MENYNTMk76rajE2E8MulQP3FwIHytDMURir9RPs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=NkejVmJAWeUwjdndxREckO7npPGGcyI20hO2DfCFmlHVLcmS9drv9eFLgL+Bc/qxY03wtTiJ6z2buxzZNI4SfO9ajUIo05AmTiixKHucaCIq5KFuf+qAthMMZlY4DZZaEqLR8b/UgN+CeBD17r1D50EJUIprGRnun/5r0YvAnjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lyal909r; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736142384;
-	bh=3xgQZPj+VEizHtdG+0oJG5lBO99j9G6sgT3pL1Ou0fU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=lyal909rlXXSzRtWq8q1iz00m268fbFlxO8lyL4VNfaSex3NmSMORLcJYgK7Ste68
-	 QBRe2+GZoXUejstg+6O53anGLF0VezZIZFJBV9pJmZIlzJdaTk10b9/M2P+0+n+o3N
-	 p7U0z0UkZoAI3ZHsbGZ/tyDkqIS8Obn9lGX0zCzI5SeEcGy7RrTWcVf9OSydZzc7gJ
-	 7vADj62l+oCr95I5tE6Iknpb4cQv6EACUcOS3/wYdHl5tY16BDa6yKh842OL50jTbJ
-	 Qk9nVmhJd06wPAjwvv1M4ULx11LIBIbjmWhXd2Z+pWPM7pmYhjsZE+O88hm3FGhQdT
-	 hipHuZ74cnA4g==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRNTX1bWRz4wyV;
-	Mon,  6 Jan 2025 16:46:24 +1100 (AEDT)
-Date: Mon, 6 Jan 2025 16:46:30 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Daniel Golle <daniel@makrotopia.org>, Frank Wunderlich
- <frank-w@public-files.de>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pinctrl tree
-Message-ID: <20250106164630.4447cd0d@canb.auug.org.au>
+	s=arc-20240116; t=1736144230; c=relaxed/simple;
+	bh=pAxcsgLvkayOuCCpWUHV4oWwKGLsVG2C0d/nOa3BY1g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=hx6XVA5J5Oir1ab8wttEEZTEo1LleMwsA6Nhj73bM6nbowW3oCTQZ/tbm6JLgGO6YjNyowwmwCsCrxtpzMr8iIR6KRL3SMyd1oT3z+kwTZKqeHJZ3HqZTkqA21NzqLyLxd//OaqLkEmkM3Xm2+J8QYqa3scoN9Ydho6j1TKp6EQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CFYT6BJM; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5063XbJf032611;
+	Mon, 6 Jan 2025 06:16:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	vP4qECh25ipOf5AP/uGm+CqjGh6jblrERb8Kmm0+lLo=; b=CFYT6BJMsY8N8oVa
+	OaNMFNt6sXeeHqGpmlootBG3Z9peZ/7elo92JeWlviKW3Rn1c9096pLJJ2Pcc81N
+	CGChpNap1/tgHY75zRKmx8TUbG4Cqd+R5sWMRhf1YUwPvrZVj3xE52owQNQqT+2j
+	alABCduytxAxXYvswYLETXWQo5Otq91bEbVgf8X7uPsGBtR0O07MrdKxrjGEKV5n
+	rwu/f24WQbidMmOUS5c2AwLdfXgOtu6KPTpLzM0HenCVswc2Lh7w3dMnQwmjud4F
+	AOJE09AgOOuqWGCg+sKSa9JzcUN1QZpsNWxBhw+WyaOfd9VuXW5/5bHhN4IRlu49
+	K+u0gg==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4407ck89ma-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Jan 2025 06:16:58 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5066Gvq6006619
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 6 Jan 2025 06:16:57 GMT
+Received: from [10.152.201.53] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 5 Jan 2025
+ 22:16:55 -0800
+Message-ID: <79fc738a-9c9c-a1a7-af37-bca9247e73be@quicinc.com>
+Date: Mon, 6 Jan 2025 11:46:51 +0530
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/b8ypKZdt6Ohp4ya=tg4e=NG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: linux-next: build failure after merge of the nand tree
+Content-Language: en-US
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+        Miquel Raynal
+	<miquel.raynal@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next
+ Mailing List" <linux-next@vger.kernel.org>,
+        <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
+References: <20250106124834.5a82a6da@canb.auug.org.au>
+ <20250106125104.16305a1e@canb.auug.org.au>
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <20250106125104.16305a1e@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pp7NkQy66sJDW1lmQnD9Ze6DNYKL6z8G
+X-Proofpoint-ORIG-GUID: pp7NkQy66sJDW1lmQnD9Ze6DNYKL6z8G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ impostorscore=0 mlxlogscore=999 malwarescore=0 phishscore=0 mlxscore=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501060054
 
---Sig_/b8ypKZdt6Ohp4ya=tg4e=NG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-After merging the pinctrl tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On 1/6/2025 7:21 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 6 Jan 2025 12:48:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> After merging the nand tree, today's linux-next build
+>> (x86_64_allmodconfig) failed like this:
+>>
+>> In file included from include/linux/string.h:389,
+>>                   from include/linux/bitmap.h:13,
+>>                   from include/linux/cpumask.h:12,
+>>                   from include/linux/smp.h:13,
+>>                   from include/linux/lockdep.h:14,
+>>                   from include/linux/mutex.h:17,
+>>                   from include/linux/notifier.h:14,
+>>                   from include/linux/clk.h:14,
+>>                   from drivers/mtd/nand/qpic_common.c:6:
+>> In function 'fortify_memset_chk',
+>>      inlined from 'qcom_clear_bam_transaction' at drivers/mtd/nand/qpic_common.c:88:2:
+>> include/linux/fortify-string.h:480:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+>>    480 |                         __write_overflow_field(p_size_field, size);
+>>        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> cc1: all warnings being treated as errors
+>>
+>> Caused by commit
+>>
+>>    fdf3ee5c6e52 ("mtd: nand: Add qpic_common API file")
+> 
+> Actually caused by commit
+> 
+>    8c52932da5e6 ("mtd: rawnand: qcom: cleanup qcom_nandc driver")
 
-drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c: In function 'mtk_pinconf_=
-bias_set_pd':
-drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c:606:13: error: unused vari=
-able 'err' [-Werror=3Dunused-variable]
-  606 |         int err, pd;
-      |             ^~~
-drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c: At top level:
-drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c:602:12: error: 'mtk_pincon=
-f_bias_set_pd' defined but not used [-Werror=3Dunused-function]
-  602 | static int mtk_pinconf_bias_set_pd(struct mtk_pinctrl *hw,
-      |            ^~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+  Ho ok, checking on this, will post a fix quickly.
 
-Caused by commit
-
-  1673d720b7e2 ("pinctrl: mediatek: add support for MTK_PULL_PD_TYPE")
-
-I have used the pinctrl tree from next-20241220 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/b8ypKZdt6Ohp4ya=tg4e=NG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd7bjYACgkQAVBC80lX
-0Gx7Qgf+KV0woTIURPXqafOT9GOblHtNa+Lm2x/+zZoSTdHWswe7WhPqWe2R5W1z
-BPsRL6SqpM/z/e4ZumC6PIU/PD1+O6PMyiBD1pFzU4K3r07gIsdxQiHnAaJ5J5Si
-PUu3f6Z6YdeEflfebUWs6mCe0zuijzERcR4CGikSLSjyn8MqGEvuWfgtLwV+yV09
-17SM63vSVIUzUCEX0ConEOs0FMIaZiVYN14LuZCJ3p1sfqzO7+VW/5iO+ufcZeVE
-JCqtKNqFNnyN2GJWM+ZIkSajfbDE2cG8T6tA2+aGDxQ2Zh88giqn5Pxg3xo+gjv0
-1sgXDD8yukPyWXa3r+6Iaek36sDCwQ==
-=M/ot
------END PGP SIGNATURE-----
-
---Sig_/b8ypKZdt6Ohp4ya=tg4e=NG--
+Regards,
+  Sricharan
 

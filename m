@@ -1,133 +1,159 @@
-Return-Path: <linux-next+bounces-5034-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5035-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C647A01D1C
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 02:51:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EB9CA01D2A
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 03:04:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4A0418834E1
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 01:51:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8515162C48
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 02:04:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EE0BE6C;
-	Mon,  6 Jan 2025 01:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405B8111AD;
+	Mon,  6 Jan 2025 02:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="T5WfUDWf"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Z4YD75Rm"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFD4184F;
-	Mon,  6 Jan 2025 01:51:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC777469D;
+	Mon,  6 Jan 2025 02:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736128269; cv=none; b=soEhwAAVZDs6SD/PMKb1/opDgbBMYLLZRdvKzEREq75cmvESnwI4DSMuiXKyoADx0bpHxSSjkRjadIOPg9+FYPo/pv9g8oNP9wdMUeNhefdomw3U5Hg3dCuqnLYNgZ1vzTT5Xqzp9lipwobKZFLzLIMz8DMmwUr0BDJMbFJHp0Q=
+	t=1736129038; cv=none; b=aGZM++m5Im31PP/B5v5bU0i/xCwCqm++xem1fjtV0Im+lpSOUGtj1KJFzdKMyRKVlBCUAiEByUXMtMGdiKgFs3JpryMtkU/0K+3BuXFaSquPhvTZTd83RmoJPztaTXObdvVwr622Ej6tGGcrpxOXS7nI4f9vIMWLh9b0s3r7SIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736128269; c=relaxed/simple;
-	bh=Heo8iqUxJpRIzrkFigrPuMTBXHU7LHG6AG7WEMCU3Ic=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jIcKuDUHFO9l+mBU8NvfvMQ1sKoHBOgGHAdoFYhaDeB5AudA/dlGrAQ7CM2S05vhNgo+/igC0MKoInegb3+4qbdoauEXsKNWfixleIqnCGvXYSix0O98YVYQSQkDzPaG4zEDr3ogsiyqEU7PxZD0g/uUuBB7b6I6c9G5YZiTY9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=T5WfUDWf; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736129038; c=relaxed/simple;
+	bh=hYGqyKKkCQU0qyHhekOl8k5xhxLnHh+QsvI6QTc8DUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tgRIuaB2sg8fPUlTdh08/zNf/Xb+9k5U7YeFJDQ4Kv56I8dxElFr/Eri1KKDKoY8mczrOOXAxl4EzCQHmbe+zYxeN7xLHhZuYzNKLUc0u2MGZQo+Wgyu9Qz5WzpzO4J4BNOlW96Bn742xFHc2MDk2kbCzH1wG3fBbRumJB0PYls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Z4YD75Rm; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736128258;
-	bh=6ibZdhDTeJcSS/ToP+tHQS9w9kD6Ypbw/Skiio0OQDU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=T5WfUDWfWFM4YVBffvydt4wtg70qP/lBbWYnWACdjIXowYZhPwweM5nM7eqt1zD3I
-	 faKxnoRpnoh0IgfsPbd8Kb8PWs7btM8H+H/eIvbRdrWmVwe9xgdUwcPW4YCYAoJSy/
-	 8aV0FgRoQ3ZKdnXznCovxEqQb2j1djHWaU1+SMLnxeO9jBwTZGbgbv57GphdN3eFQJ
-	 PgGDXYcER4bRUOj1CIEk7w0X3dTqXv064JMmEPgSsMPROfFy1UtUE3a+wYidrJs/iH
-	 JVEF29dshLMuAyRGmoqjMvNCnPq96EPf6HsnPw8MdcYEn+bykKY8UiM44njaS7U5Dn
-	 /RBOdhw0N9OEw==
+	s=201702; t=1736129024;
+	bh=o7q4YMCbm6QDOOrZ12zWJdvJpl2MSPRbhzNZADhYwP0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Z4YD75RmhflWtIkI4EhVSPo3670B8nIFoomrQtpA/KUcBN2UM5y3ePwvJoNLk5Xd/
+	 VJFLo6W4gYw0FincqDG1bphIMfh9J9w/cr4ud9D7A3iIqgDtxgSSB/IiZmr96ImlDH
+	 yirb3YapY+1ty9xsZ0AiOd3GARpOecs1pRqyGu22txBdaqD59z5uAYVrjUzb6bG2yK
+	 ybple8Ob7/1QfYZlgcRI1UVcdZtT3eMN72iO/U0qKXgnyGYAZsjOl0fazBTR2XYqFE
+	 gNs81HXHeKta/f2LZDXFHyowz1XpYES4lAMVMjA1SC938Fs0rwmaR7uoAQzZ+8KcrQ
+	 em5MEFjOjN17g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRHFt0wwCz4wxx;
-	Mon,  6 Jan 2025 12:50:58 +1100 (AEDT)
-Date: Mon, 6 Jan 2025 12:51:04 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRHXZ5ck1z4wxx;
+	Mon,  6 Jan 2025 13:03:42 +1100 (AEDT)
+Date: Mon, 6 Jan 2025 13:03:48 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Miquel Raynal <miquel.raynal@bootlin.com>, Boris Brezillon
- <boris.brezillon@collabora.com>
-Cc: Md Sadre Alam <quic_mdalam@quicinc.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the nand tree
-Message-ID: <20250106125104.16305a1e@canb.auug.org.au>
-In-Reply-To: <20250106124834.5a82a6da@canb.auug.org.au>
-References: <20250106124834.5a82a6da@canb.auug.org.au>
+To: Simona Vetter <simona.vetter@ffwll.ch>, Jani Nikula
+ <jani.nikula@linux.intel.com>, Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
+ <dri-devel@lists.freedesktop.org>, Jani Nikula <jani.nikula@intel.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Yafang Shao
+ <laoar.shao@gmail.com>
+Subject: linux-next: manual merge of the drm-intel tree with the mm tree
+Message-ID: <20250106130348.73a5fae6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Vxmh+78sve4Xc2.V9p.U6QD";
+Content-Type: multipart/signed; boundary="Sig_/jBLpBhe/Y1HjnQTCrWM99kN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Vxmh+78sve4Xc2.V9p.U6QD
+--Sig_/jBLpBhe/Y1HjnQTCrWM99kN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 6 Jan 2025 12:48:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the nand tree, today's linux-next build
-> (x86_64_allmodconfig) failed like this:
->=20
-> In file included from include/linux/string.h:389,
->                  from include/linux/bitmap.h:13,
->                  from include/linux/cpumask.h:12,
->                  from include/linux/smp.h:13,
->                  from include/linux/lockdep.h:14,
->                  from include/linux/mutex.h:17,
->                  from include/linux/notifier.h:14,
->                  from include/linux/clk.h:14,
->                  from drivers/mtd/nand/qpic_common.c:6:
-> In function 'fortify_memset_chk',
->     inlined from 'qcom_clear_bam_transaction' at drivers/mtd/nand/qpic_co=
-mmon.c:88:2:
-> include/linux/fortify-string.h:480:25: error: call to '__write_overflow_f=
-ield' declared with attribute warning: detected write beyond size of field =
-(1st parameter); maybe use struct_group()? [-Werror=3Dattribute-warning]
->   480 |                         __write_overflow_field(p_size_field, size=
-);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
->=20
-> Caused by commit
->=20
->   fdf3ee5c6e52 ("mtd: nand: Add qpic_common API file")
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-Actually caused by commit
+  drivers/gpu/drm/i915/display/intel_display_driver.c
 
-  8c52932da5e6 ("mtd: rawnand: qcom: cleanup qcom_nandc driver")
+between commit:
 
-> I have used the nand tree from next-20241220 for today.
+  4fc0cee83590 ("drivers: remove get_task_comm() and print task comm direct=
+ly")
+
+from the mm-nonmm-unstable branch of the mm tree and commit:
+
+  f5d38d4fa884 ("drm/i915/display: convert intel_display_driver.[ch] to str=
+uct intel_display")
+
+from the drm-intel tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Vxmh+78sve4Xc2.V9p.U6QD
+diff --cc drivers/gpu/drm/i915/display/intel_display_driver.c
+index 62596424a9aa,497b4a1f045f..000000000000
+--- a/drivers/gpu/drm/i915/display/intel_display_driver.c
++++ b/drivers/gpu/drm/i915/display/intel_display_driver.c
+@@@ -389,8 -397,9 +397,8 @@@ void intel_display_driver_resume_access
+   * Returns %true if the current thread has display HW access, %false
+   * otherwise.
+   */
+- bool intel_display_driver_check_access(struct drm_i915_private *i915)
++ bool intel_display_driver_check_access(struct intel_display *display)
+  {
+ -	char comm[TASK_COMM_LEN];
+  	char current_task[TASK_COMM_LEN + 16];
+  	char allowed_task[TASK_COMM_LEN + 16] =3D "none";
+ =20
+@@@ -399,14 -408,15 +407,14 @@@
+  		return true;
+ =20
+  	snprintf(current_task, sizeof(current_task), "%s[%d]",
+ -		 get_task_comm(comm, current),
+ -		 task_pid_vnr(current));
+ +		 current->comm, task_pid_vnr(current));
+ =20
+- 	if (i915->display.access.allowed_task)
++ 	if (display->access.allowed_task)
+  		snprintf(allowed_task, sizeof(allowed_task), "%s[%d]",
+- 			 i915->display.access.allowed_task->comm,
+- 			 task_pid_vnr(i915->display.access.allowed_task));
+ -			 get_task_comm(comm, display->access.allowed_task),
+++			 display->access.allowed_task->comm,
++ 			 task_pid_vnr(display->access.allowed_task));
+ =20
+- 	drm_dbg_kms(&i915->drm,
++ 	drm_dbg_kms(display->drm,
+  		    "Reject display access from task %s (allowed to %s)\n",
+  		    current_task, allowed_task);
+ =20
+
+--Sig_/jBLpBhe/Y1HjnQTCrWM99kN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd7NwgACgkQAVBC80lX
-0GzVygf+Ka6PAhW6rcPkT5+1YWoR3JBVKWyxQ2oWzWSIIYeFuR5R1eSt7E9zBWgW
-npsuexS/dduksavZ8a2yY+j18Yho7MfIUWdNUoOysIppNMy7fb6fy+wsB+LKRRoX
-gcms5yX1puWiZdeWbtxXhNhyzg8Mg1gAmXzWlXGPm2siEVnFOab3uQ/SoU6LNiLJ
-54iAfe+enrnsuipU0XrDoKHG6C3BRLlGl9HIsUSaWH2m+C1CiwkKMsEeaDccfuE+
-94nNwDBH2A4GJWwlTYg4e9l8bk1AsbqSBFAJzijGcnhV4MOehodgMaqPJk8p/6AS
-bZAei6glLtkOwgLWJmTkAcWoBLzjbg==
-=2Qm/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd7OgQACgkQAVBC80lX
+0GyVngf+OrzkOD7TLv4JmROI3BaLqfZVO0h5D/abja84Bp37NG54xPo8OwExh5v7
++IiwBCbrAxUFiXHuBgvM3gZA+gyJOjp68/YlZdngVThsGN0N3AsOuUnunEsnrUG7
+FB2R89nPV5GYEoLab5mI5VxTtaymBt+U77hL+TngjpHeovHmQh4bLSl9DC6F2NwZ
+MiB+3Grz/MHJchwodizgtG0fYiNaj0/7Q3bGBPsHsW8d3Me5MtoQ+HSeJ6A+/9VO
+A+69paKg9+QKwQ1wrsSr+TcNLUxwi7j4dYhkxJnYf1sr/aTx2CHCqN9nQhICvew9
+TxuL/6vO/PsAt7Pq8EVNdMwGie37PQ==
+=Q0n0
 -----END PGP SIGNATURE-----
 
---Sig_/Vxmh+78sve4Xc2.V9p.U6QD--
+--Sig_/jBLpBhe/Y1HjnQTCrWM99kN--
 

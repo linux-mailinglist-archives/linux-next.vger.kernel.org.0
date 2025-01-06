@@ -1,138 +1,189 @@
-Return-Path: <linux-next+bounces-5055-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5056-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 776F3A02669
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 14:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB575A0270B
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 14:48:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B30B1646E6
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 13:23:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E368163557
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 13:48:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8981DDA1E;
-	Mon,  6 Jan 2025 13:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Lo4eTUKB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 936C828F5;
+	Mon,  6 Jan 2025 13:48:13 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4541D619D;
-	Mon,  6 Jan 2025 13:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEFF79C4
+	for <linux-next@vger.kernel.org>; Mon,  6 Jan 2025 13:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736169801; cv=none; b=j3b1XLnwVNGiqiHsAOIYd2IFp8U2veKzshwKILStd+2oTKdPUoueK+d1GwyC/HS1BGBYeK31QHoIKsx/QbhEl7O1zFSp2BtBE+kWxpRf5eToNtA3x0V4G7B9eOLJlG/13CTtFfpSRo3fkIe6iDLVa141A8m5XNlnkj8NNRE/0d0=
+	t=1736171293; cv=none; b=GNupDktnvruiltuQgq8BNWuvZ+8QetVShacOyl3ZjO6lI++IpYdU4HOilFA/C+tpB9y3UeEpzmsK3GGaNUJ3Vs5x/k1qjwcLBCi2V0D+bDltg1G87O4bzyd6OG+YKFExAjbVieQgiUHV8ZrMJwKscLjB56T6jipdPzDtJuWze0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736169801; c=relaxed/simple;
-	bh=EQanYnAugqL+reWe8cV+6Xo4vWORrcNYbtYAlUuMB80=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=QRWDAR1U392A/EFH5uT5jcLMP4yLtJPSVcjACOWsb3GOlx+ztzyQek7DnlIOSuV9twM+FGQoPgARY3dN0vbhGiHtU0vHbEOIHuPQpdSLvObl8Zwk/xvp/xlU8ZREDhoY+Ii8oMdD04zzzfAeqtpb4uz7yX8l4vFNk+XY9wZsOqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Lo4eTUKB; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5067EkIC016602;
-	Mon, 6 Jan 2025 13:23:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	dbi9Ei9IXYJ7mLiMJcaOEjl9H5CuRs5/mT1ITovSd9U=; b=Lo4eTUKBeuXdcayR
-	WSjGSiHkOy/ro0/Id3bpaLrVKZZDdlyY0BEELb8qPg9cs9Gh/W5a/7XJkGFWkUh8
-	szcBn+Qw6BervFtL18K3pgCFm+xAr3jbxIF9oIQnFXvINCwJHXQIFVswuC2oL8Tn
-	KjWPHsg9SMfRy6gkQbilHrMff4RCostUnMrSX1FN5HR9Ok9PMQpliiD5We+LhtLS
-	oi5qGrRxmmUpII1/So0XFKdYzw09JdJ7Db4Ng0s4HWZnoD4hVgEGWcWRVST6FNmS
-	lGFQQZ3HVY+K2/5UGjaTvUFcafT+kmruJXXhOxkQzhTLeUe4vmlqsIR5R16af72w
-	EiYtGA==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 440am8rrp8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Jan 2025 13:23:06 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 506DN6dj029551
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 6 Jan 2025 13:23:06 GMT
-Received: from [10.151.36.43] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 6 Jan 2025
- 05:23:04 -0800
-Message-ID: <409116b0-ebb2-025f-ba8c-0eff3e7e11dc@quicinc.com>
-Date: Mon, 6 Jan 2025 18:53:01 +0530
+	s=arc-20240116; t=1736171293; c=relaxed/simple;
+	bh=/BRwXKdY7yeFklQ4rce9sVCcAy4drJJC1/e90n1Dgjw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LOwMtk5GbKfNsp1A9Qy4JfyFs4lp68zV50dkZbbSSsCD6u+qHZNhocxbGJEk2qMjX8wY8guLyU3EA4nnS2z9Fv9aif25/zF5PmnXMQN4QWMWnLJUQzPxOLul+M9In2ZFBXjOxTUTvbEh0BzL6eJLVmL5bi4FCplIUpkgBhATRts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:39d4:dc4e:b4ce:1377])
+	by xavier.telenet-ops.be with cmsmtp
+	id xpo32D0053AZZFy01po3C3; Mon, 06 Jan 2025 14:48:03 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tUnSa-00000008JLG-1NZm;
+	Mon, 06 Jan 2025 14:48:03 +0100
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tUnSc-00000004HKO-40Hn;
+	Mon, 06 Jan 2025 14:48:02 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Jeff Layton <jlayton@kernel.org>,
+	Christian Brauner <brauner@kernel.org>
+Cc: linux-next@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH -next] samples/vfs/mountinfo: Use __u64 instead of uint64_t
+Date: Mon,  6 Jan 2025 14:48:01 +0100
+Message-ID: <20250106134802.1019911-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: linux-next: build failure after merge of the nand tree
-Content-Language: en-US
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-        Miquel Raynal
-	<miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next
- Mailing List <linux-next@vger.kernel.org>
-References: <20250106124834.5a82a6da@canb.auug.org.au>
- <20250106125104.16305a1e@canb.auug.org.au>
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <20250106125104.16305a1e@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nMp_nhRgXK9EGOzZH7khke-zoHf8H8cD
-X-Proofpoint-ORIG-GUID: nMp_nhRgXK9EGOzZH7khke-zoHf8H8cD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- clxscore=1015 adultscore=0 impostorscore=0 lowpriorityscore=0
- suspectscore=0 malwarescore=0 spamscore=0 priorityscore=1501
- mlxlogscore=921 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2411120000 definitions=main-2501060118
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 32-bit (e.g. arm32, m68k):
 
+    samples/vfs/mountinfo.c: In function ‘dump_mountinfo’:
+    samples/vfs/mountinfo.c:145:29: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long long unsigned int’} [-Wformat=]
+      145 |                 printf("0x%lx 0x%lx 0x%llx ", mnt_ns_id, mnt_id, buf->mnt_parent_id);
+	  |                           ~~^                 ~~~~~~~~~
+	  |                             |                 |
+	  |                             long unsigned int uint64_t {aka long long unsigned int}
+	  |                           %llx
+    samples/vfs/mountinfo.c:145:35: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 3 has type ‘uint64_t’ {aka ‘long long unsigned int’} [-Wformat=]
+      145 |                 printf("0x%lx 0x%lx 0x%llx ", mnt_ns_id, mnt_id, buf->mnt_parent_id);
+	  |                                 ~~^                      ~~~~~~
+	  |                                   |                      |
+	  |                                   long unsigned int      uint64_t {aka long long unsigned int}
+	  |                                 %llx
 
-On 1/6/2025 7:21 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Mon, 6 Jan 2025 12:48:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the nand tree, today's linux-next build
->> (x86_64_allmodconfig) failed like this:
->>
->> In file included from include/linux/string.h:389,
->>                   from include/linux/bitmap.h:13,
->>                   from include/linux/cpumask.h:12,
->>                   from include/linux/smp.h:13,
->>                   from include/linux/lockdep.h:14,
->>                   from include/linux/mutex.h:17,
->>                   from include/linux/notifier.h:14,
->>                   from include/linux/clk.h:14,
->>                   from drivers/mtd/nand/qpic_common.c:6:
->> In function 'fortify_memset_chk',
->>      inlined from 'qcom_clear_bam_transaction' at drivers/mtd/nand/qpic_common.c:88:2:
->> include/linux/fortify-string.h:480:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->>    480 |                         __write_overflow_field(p_size_field, size);
->>        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> cc1: all warnings being treated as errors
->>
->> Caused by commit
->>
->>    fdf3ee5c6e52 ("mtd: nand: Add qpic_common API file")
-> 
-> Actually caused by commit
-> 
->    8c52932da5e6 ("mtd: rawnand: qcom: cleanup qcom_nandc driver")
-I have posted the fix. Please check the patch at [1]
-[1] 
-https://lore.kernel.org/lkml/20250106131558.2219136-1-quic_mdalam@quicinc.com/T/#u
+Just using "%llx" instead of "%lx" is not sufficient, as uint64_t is
+"long unsigned int" on some 64-bit platforms like arm64.  Hence also
+replace "uint64_t" by "__u64", which matches what most other samples
+are already using.
 
-Thanks,
-Alam.
+Fixes: d95e49bf8bcdc7c1 ("samples: add a mountinfo program to demonstrate statmount()/listmount()")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Feel free to fold into the original commit.
+
+Alternatively, you can use PRIx64, which is used by tools/, but not by
+any of the current samples.
+---
+ samples/vfs/mountinfo.c | 35 +++++++++++++++++------------------
+ 1 file changed, 17 insertions(+), 18 deletions(-)
+
+diff --git a/samples/vfs/mountinfo.c b/samples/vfs/mountinfo.c
+index 2b17d244d321ee75..f47c035cc339544e 100644
+--- a/samples/vfs/mountinfo.c
++++ b/samples/vfs/mountinfo.c
+@@ -32,9 +32,9 @@ static bool ext_format;
+  * There are no bindings in glibc for listmount() and statmount() (yet),
+  * make our own here.
+  */
+-static int statmount(uint64_t mnt_id, uint64_t mnt_ns_id, uint64_t mask,
+-			    struct statmount *buf, size_t bufsize,
+-			    unsigned int flags)
++static int statmount(__u64 mnt_id, __u64 mnt_ns_id, __u64 mask,
++		     struct statmount *buf, size_t bufsize,
++		     unsigned int flags)
+ {
+ 	struct mnt_id_req req = {
+ 		.size = MNT_ID_REQ_SIZE_VER0,
+@@ -50,9 +50,8 @@ static int statmount(uint64_t mnt_id, uint64_t mnt_ns_id, uint64_t mask,
+ 	return syscall(__NR_statmount, &req, buf, bufsize, flags);
+ }
+ 
+-static ssize_t listmount(uint64_t mnt_id, uint64_t mnt_ns_id,
+-			 uint64_t last_mnt_id, uint64_t list[], size_t num,
+-			 unsigned int flags)
++static ssize_t listmount(__u64 mnt_id, __u64 mnt_ns_id, __u64 last_mnt_id,
++			 __u64 list[], size_t num, unsigned int flags)
+ {
+ 	struct mnt_id_req req = {
+ 		.size = MNT_ID_REQ_SIZE_VER0,
+@@ -68,7 +67,7 @@ static ssize_t listmount(uint64_t mnt_id, uint64_t mnt_ns_id,
+ 	return syscall(__NR_listmount, &req, list, num, flags);
+ }
+ 
+-static void show_mnt_attrs(uint64_t flags)
++static void show_mnt_attrs(__u64 flags)
+ {
+ 	printf("%s", flags & MOUNT_ATTR_RDONLY ? "ro" : "rw");
+ 
+@@ -112,7 +111,7 @@ static void show_propagation(struct statmount *sm)
+ 		printf(" unbindable");
+ }
+ 
+-static void show_sb_flags(uint64_t flags)
++static void show_sb_flags(__u64 flags)
+ {
+ 	printf("%s", flags & MS_RDONLY ? "ro" : "rw");
+ 	if (flags & MS_SYNCHRONOUS)
+@@ -125,15 +124,15 @@ static void show_sb_flags(uint64_t flags)
+ 		printf(",lazytime");
+ }
+ 
+-static int dump_mountinfo(uint64_t mnt_id, uint64_t mnt_ns_id)
++static int dump_mountinfo(__u64 mnt_id, __u64 mnt_ns_id)
+ {
+ 	int ret;
+ 	struct statmount *buf = alloca(STATMOUNT_BUFSIZE);
+-	const uint64_t mask = STATMOUNT_SB_BASIC | STATMOUNT_MNT_BASIC |
+-				STATMOUNT_PROPAGATE_FROM | STATMOUNT_FS_TYPE |
+-				STATMOUNT_MNT_ROOT | STATMOUNT_MNT_POINT |
+-				STATMOUNT_MNT_OPTS | STATMOUNT_FS_SUBTYPE |
+-				STATMOUNT_SB_SOURCE;
++	const __u64 mask = STATMOUNT_SB_BASIC | STATMOUNT_MNT_BASIC |
++			   STATMOUNT_PROPAGATE_FROM | STATMOUNT_FS_TYPE |
++			   STATMOUNT_MNT_ROOT | STATMOUNT_MNT_POINT |
++			   STATMOUNT_MNT_OPTS | STATMOUNT_FS_SUBTYPE |
++			   STATMOUNT_SB_SOURCE;
+ 
+ 	ret = statmount(mnt_id, mnt_ns_id, mask, buf, STATMOUNT_BUFSIZE, 0);
+ 	if (ret < 0) {
+@@ -142,7 +141,7 @@ static int dump_mountinfo(uint64_t mnt_id, uint64_t mnt_ns_id)
+ 	}
+ 
+ 	if (ext_format)
+-		printf("0x%lx 0x%lx 0x%llx ", mnt_ns_id, mnt_id, buf->mnt_parent_id);
++		printf("0x%llx 0x%llx 0x%llx ", mnt_ns_id, mnt_id, buf->mnt_parent_id);
+ 
+ 	printf("%u %u %u:%u %s %s ", buf->mnt_id_old, buf->mnt_parent_id_old,
+ 				   buf->sb_dev_major, buf->sb_dev_minor,
+@@ -166,10 +165,10 @@ static int dump_mountinfo(uint64_t mnt_id, uint64_t mnt_ns_id)
+ 	return 0;
+ }
+ 
+-static int dump_mounts(uint64_t mnt_ns_id)
++static int dump_mounts(__u64 mnt_ns_id)
+ {
+-	uint64_t mntid[MAXMOUNTS];
+-	uint64_t last_mnt_id = 0;
++	__u64 mntid[MAXMOUNTS];
++	__u64 last_mnt_id = 0;
+ 	ssize_t count;
+ 	int i;
+ 
+-- 
+2.43.0
+
 

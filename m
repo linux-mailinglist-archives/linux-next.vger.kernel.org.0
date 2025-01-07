@@ -1,91 +1,91 @@
-Return-Path: <linux-next+bounces-5072-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5073-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD241A03605
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2025 04:44:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF034A036D9
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2025 05:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA0123A521C
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2025 03:44:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A21F18868BC
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2025 04:09:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7321818BBA8;
-	Tue,  7 Jan 2025 03:43:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C0341547E9;
+	Tue,  7 Jan 2025 04:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="L/UZSexL"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="uY8rnYVT"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E121DDC39;
-	Tue,  7 Jan 2025 03:43:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F5B13D638;
+	Tue,  7 Jan 2025 04:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736221402; cv=none; b=brO0Yr8ZDshSFYdc76wHN2aGfvCtkVNGgSIjklEZbrr9U31bgb4866rrQP45Ng3zVQhQ/UITkjdEGWyeswBetfp+iiNjAY8s4G9mxPeCSx9wGBGpxykfyqis34yeLrLiveDMKIarnRDXsxmqIucAohXjHEyiH8kaYHCUbtMUu1M=
+	t=1736222992; cv=none; b=XyGQaDjTkMVAso0Tz32uXoQp8vlzAAoegE3A8QePUDD9H8vlsc9MWahjCLeLa5JLfpSJXG3+XbhUxL8Krv6qigFVtisbyV/llJyWDlYnuCG1NW3aJd2DMnZo/urMiyRvAyciDvscCt/UnpMekVHdOmPDZFRKrYxY6ZW0pDKoovY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736221402; c=relaxed/simple;
-	bh=eUM1vh8+pR5/LSEI6GQ5mmBEBryvUEBcQjrBxBQRSgA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ajsOfuncprzPek+NveGwL92NzRyFeRfHeEjM7yzUz4uyWYx+qG0N3BZ4/2Scx7ROdOs153/fq111ZDfCK944HpYn+kDzBSmOV33VHNUucCYOyc34BBh+scH0Yxs88DmO/qcoVRTOplagBbQdc8sxZZLzq1DEHQBPhJEHUobtSII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=L/UZSexL; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736222992; c=relaxed/simple;
+	bh=EmvAg8/vVDJExmjqspmf0jvSl/rrIMe0a87ex7Axwjk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hJ9aEbanP2hCk8WwPPaz24gWKcdO1nmasAtdmwZO7PMJZHw3GiA78h/fdAT9yP1QnnY7fncB9K8LfB2BamgWWHjjEpQpKdp+F2EG/awGxTPKeQjTBYvD8ghh+nPD4PlQp8oActuJcMuNLQhGECuyqdiRamiuWAtvphBoOs1xrgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=uY8rnYVT; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736221387;
-	bh=/eUl/z0mcAX33dGzlb82bnCYXgKWcWM4yt7V7pz5Agg=;
+	s=201702; t=1736222973;
+	bh=2MfWUpcU9LOmZDbkvnv623OB8uId10EfPKazuqmmqdg=;
 	h=Date:From:To:Cc:Subject:From;
-	b=L/UZSexLZrO8a7NxyXzXm0qs/tU7Bar6RJcY1rUq5vG8wM8mCrF6k5isK/FdeGiON
-	 bjKsGNz3PcYPaqb3yJh6gd4fhriOFXQjfq4tmeIVk1astfRBh4PPxS8REYzrMdxx3A
-	 3w4vNf86cjyLLtvWvc7bCfq34vTZJr7HJrL25WgSfNI27udaSOIU30Jx2/GB0VFUtC
-	 VYnxH0+pM/NqswKSyiilwgf1fWURyonsCdxEm3w1a8g28ZwbelGQYvww9IxnH/abFL
-	 fzJH0+9HIo3aDRNmPqjrSsHoViJV9VX+4oZ5i4goy97skOiZu+EI2yptVNtLIBC8/B
-	 tr1LKbejWXp2A==
+	b=uY8rnYVTX/ZKXNH6a2AHbEt9CqRTLK/9cOwLRa3qtv2iINth/SLu5UrzT7a/nJ6qC
+	 +zIo7wPILKL3LDEnW9UXreIsZ+ojiW8hQqU3yz/xOm79jOKhuYCK3Jdb5W6Mphm8gh
+	 SAnnT8VGW7pyvzgIBMJgr3gH6JXOqg3LNMbNItWNuuBTpwRIn7qdb1vSoBZwxaFkXU
+	 nuz/ooqwUKnr001E+sDlqDdbqCcW6/5qx9MZ35eiIksKcnlsg2eu4+UxgoTC5YJS5v
+	 Vh9CvkFQcRQMwo5nYus+9XNWgDQMziqbtiRrbUSAdS67L8QpqtuRw3JwoU1zJ24arB
+	 ZNOXjOYnKg+kQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRxhq0bmYz4x2J;
-	Tue,  7 Jan 2025 14:43:06 +1100 (AEDT)
-Date: Tue, 7 Jan 2025 14:43:12 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRyHJ0yB0z4wcl;
+	Tue,  7 Jan 2025 15:09:31 +1100 (AEDT)
+Date: Tue, 7 Jan 2025 15:09:37 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>, Rob Herring
- <robh@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jingyi Wang
- <quic_jingyw@quicinc.com>, Lijuan Gao <quic_lijuang@quicinc.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Srinivas Kandagatla
- <srinivas.kandagatla@linaro.org>
-Subject: linux-next: manual merge of the char-misc tree with the devicetree
- tree
-Message-ID: <20250107144312.0cea97e9@canb.auug.org.au>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>, Jens Axboe
+ <axboe@kernel.dk>
+Cc: Bart Van Assche <bvanassche@acm.org>, Christoph Hellwig <hch@lst.de>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>
+Subject: linux-next: manual merge of the scsi tree with the block tree
+Message-ID: <20250107150937.773b3776@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WLpwgQLVHD47M9+Ng/38j.J";
+Content-Type: multipart/signed; boundary="Sig_/cEi3Vj=7vB8JiYM0Zk_k.ru";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/WLpwgQLVHD47M9+Ng/38j.J
+--Sig_/cEi3Vj=7vB8JiYM0Zk_k.ru
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the char-misc tree got a conflict in:
+Today's linux-next merge of the scsi tree got conflicts in:
 
-  Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+  drivers/ata/ahci.h
+  drivers/ata/sata_mv.c
+  include/linux/libata.h
 
 between commit:
 
-  38a498a28112 ("dt-bindings: nvmem: qfprom: Add compatible for QCS615")
+  ce32496ec1ab ("block: simplify tag allocation policy selection")
 
-from the devicetree tree and commit:
+from the block tree and commit:
 
-  f22a51b0a7cd ("dt-bindings: nvmem: qfprom: Add compatible for QCS8300")
+  47c2e30afcec ("scsi: Rename .device_configure() into .sdev_configure()")
 
-from the char-misc tree.
+from the scsi tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -98,35 +98,75 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-index 38e0d50f0e1c,c03da595804f..000000000000
---- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-@@@ -32,7 -34,7 +34,8 @@@ properties
-            - qcom,msm8998-qfprom
-            - qcom,qcm2290-qfprom
-            - qcom,qcs404-qfprom
- +          - qcom,qcs615-qfprom
-+           - qcom,qcs8300-qfprom
-            - qcom,sc7180-qfprom
-            - qcom,sc7280-qfprom
-            - qcom,sc8280xp-qfprom
+diff --cc drivers/ata/ahci.h
+index 06781bdde0d2,75cdf51a7f74..000000000000
+--- a/drivers/ata/ahci.h
++++ b/drivers/ata/ahci.h
+@@@ -396,8 -396,8 +396,8 @@@ extern const struct attribute_group *ah
+  	.shost_groups		=3D ahci_shost_groups,			\
+  	.sdev_groups		=3D ahci_sdev_groups,			\
+  	.change_queue_depth     =3D ata_scsi_change_queue_depth,		\
+ -	.tag_alloc_policy       =3D BLK_TAG_ALLOC_RR,             	\
+ +	.tag_alloc_policy_rr	=3D true,					\
+- 	.device_configure	=3D ata_scsi_device_configure
++ 	.sdev_configure		=3D ata_scsi_sdev_configure
+ =20
+  extern struct ata_port_operations ahci_ops;
+  extern struct ata_port_operations ahci_platform_ops;
+diff --cc drivers/ata/sata_mv.c
+index 21c72650f9cc,caf7b1303d4c..000000000000
+--- a/drivers/ata/sata_mv.c
++++ b/drivers/ata/sata_mv.c
+@@@ -672,8 -672,8 +672,8 @@@ static const struct scsi_host_template=20
+  	.dma_boundary		=3D MV_DMA_BOUNDARY,
+  	.sdev_groups		=3D ata_ncq_sdev_groups,
+  	.change_queue_depth	=3D ata_scsi_change_queue_depth,
+ -	.tag_alloc_policy	=3D BLK_TAG_ALLOC_RR,
+ +	.tag_alloc_policy_rr	=3D true,
+- 	.device_configure	=3D ata_scsi_device_configure
++ 	.sdev_configure		=3D ata_scsi_sdev_configure
+  };
+ =20
+  static struct ata_port_operations mv5_ops =3D {
+diff --cc include/linux/libata.h
+index be5183d75736,7717f06a548d..000000000000
+--- a/include/linux/libata.h
++++ b/include/linux/libata.h
+@@@ -1467,14 -1466,14 +1466,14 @@@ extern const struct attribute_group *at
+  #define ATA_SUBBASE_SHT(drv_name)				\
+  	__ATA_BASE_SHT(drv_name),				\
+  	.can_queue		=3D ATA_DEF_QUEUE,		\
+ -	.tag_alloc_policy	=3D BLK_TAG_ALLOC_RR,		\
+ +	.tag_alloc_policy_rr	=3D true,				\
+- 	.device_configure	=3D ata_scsi_device_configure
++ 	.sdev_configure		=3D ata_scsi_sdev_configure
+ =20
+  #define ATA_SUBBASE_SHT_QD(drv_name, drv_qd)			\
+  	__ATA_BASE_SHT(drv_name),				\
+  	.can_queue		=3D drv_qd,			\
+ -	.tag_alloc_policy	=3D BLK_TAG_ALLOC_RR,		\
+ +	.tag_alloc_policy_rr	=3D true,				\
+- 	.device_configure	=3D ata_scsi_device_configure
++ 	.sdev_configure		=3D ata_scsi_sdev_configure
+ =20
+  #define ATA_BASE_SHT(drv_name)					\
+  	ATA_SUBBASE_SHT(drv_name),				\
 
---Sig_/WLpwgQLVHD47M9+Ng/38j.J
+--Sig_/cEi3Vj=7vB8JiYM0Zk_k.ru
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd8otAACgkQAVBC80lX
-0GzdIAf9EeHbVT2NFqIy0iAYU3sQDB+ArNvZDbTupYF17Sj8p760LV+7/2k9NmZg
-wh5NxmaYIOFdfhMIhii3ButTtidKvzuAABGR3n/Ee8lbEtx5SF1vTaXWNki9F4aU
-RW6Ex00vUiA7g8rhCC4J1vuT/D2+dp3tVelngskQlGdaPYNvt/1I9yxtDNv9dQSx
-x1vAAmWecNfc/1baYrTIVp7L7sOcR/KhncspkuD/oXL1QtjPdwuWdfLWIG2x/JYt
-peEfTSkJyBqpP1fj1owKUJ2vFVT/k73/J8qMPFX0wuqFsVPBL3PFQIZJK5hOEPR0
-u1OM5WQe0XD7uMk60+IjupsOwSs6TA==
-=g2un
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd8qQEACgkQAVBC80lX
+0GxpGwf/YbGWeuKqHLWAuhLfIt2G1qVNJCxOJOfQ2Lo7deJs5wJEEDwJKXiAtz2z
+Jg2WBHo76WSPRwsWRVZAlKIkovJI0rUIFj0B2DTXOzCP02CWqOOzVjWTNPZM+loU
+0fltbb8pwhllo1ALnKAvROu7Vd/oHZV315AOzArnSnY6raWFaDzJJr8uXEc1s1mo
+/2GDTg16xhTCdcaptbLBLPRsoCu+cLih7hOaFcyihvcfsLLPnxu+20YrhRRmklaP
+p2a6Rck3g5MPhPS7ROysiKmQ6KxQdBNGDgcWDjaGtG/E0cBIhzYIRRrwTA8Eb81h
+8MeRpnFVM72YdLG41ROeX7evMm2yIQ==
+=exBm
 -----END PGP SIGNATURE-----
 
---Sig_/WLpwgQLVHD47M9+Ng/38j.J--
+--Sig_/cEi3Vj=7vB8JiYM0Zk_k.ru--
 

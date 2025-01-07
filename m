@@ -1,103 +1,119 @@
-Return-Path: <linux-next+bounces-5066-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5067-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2A09A03242
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 22:47:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D7FDA033CF
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2025 01:11:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F26C188282D
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2025 21:47:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6845E1644D3
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2025 00:11:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B641DFE0A;
-	Mon,  6 Jan 2025 21:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF3E7259480;
+	Tue,  7 Jan 2025 00:11:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="C0p23oXf"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="aQgv/3x4"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C864F1DFDB8;
-	Mon,  6 Jan 2025 21:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8812615A8;
+	Tue,  7 Jan 2025 00:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736200065; cv=none; b=Rw2AvRpOmMwn3k+CQEVLZkKGsHItNEPB5FSxOAYyoqsFb0AiB2eMCCFIpuuHhplx8d4PGiI6Ve+liKBZbiAkYW3DYjpPL5ej5T0s9zbIeMuo+v1IFvqhPhU2L9Bw/8D0EGB9QvOBGenlNBl2I2HwQ92OKDKSB/9DWBGgAEb7Zvc=
+	t=1736208688; cv=none; b=UT6IwORlT1uKb/vVrzUdE3qsKXl3/QrfGdghO+gAiEqRP4h92Wd0+awDKheVPRiSs+XzGUywlaO4S5yY5W7fJNpSdO+vqWudVSzyQBnIRti9J7HGkMODDBtgg+/aE6W2Flxx45fmsV6vZOFqWUSw3/WEGZHpypiBZVLAb4k0acA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736200065; c=relaxed/simple;
-	bh=/64J2Z9PK9IdWZwiNm8W4Xg5G8fXG0ZxuIT2T7K1cHc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=d1jRM6eOMN4D5KpoC6tXg006G5kc8gq2VG4oaKzKykYICk1UFuoWYM2DUjhEQDMvYhzwtdALfxCDSR/mjHnGLbBhJrcQVbkZuEAjxM9MAr9K4+t0KErEWFdpG6lXifZuhOSX2PY18IDdDAQolYSERogLctCYBNzoNOkmrs2KqCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=C0p23oXf; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736208688; c=relaxed/simple;
+	bh=eMHjiboGoRzIL3NKtvufVsimXrsNLxdcHCzMi37PwUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=CwpG3dvSyhQnPbe/hrGQRo9MlcU+9XfHPBYRc8k1Jn02xlFObYRKmkDq4Mo9Njn1FzIwMbqAGUMmm/agpRFP6yOjBYWWKF5azqn0FU+dAvtnnw/SKCWBQncVhL5ZSBwlY8Js1g6iW4VkSHdsrwLYsFGGOeyfwAbTyO3GCox/aPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=aQgv/3x4; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736200050;
-	bh=HygOs5h0hOwVspe7s/5nsicxNX6VrXzDjbwf653lhF0=;
+	s=201702; t=1736208674;
+	bh=SQMs9fTKwzRaw7Cdvo+jhTYMx9pWxrR9GqVmJqAAdn8=;
 	h=Date:From:To:Cc:Subject:From;
-	b=C0p23oXfU46k8pxw3G25+ANdLKbp4S1dq6T9n6Ig6lpSsc54lSOXrsqIAGF/0fckD
-	 euzmti9SlGqOIJTzKRAajg2qgylrPFCXs9d7UctNb17E+lHXHEw23FzLGvgzukmC+Q
-	 ZgZby47koswYZtGbRRQCERgHv6vC0U7H5I+kYA2MlijfdbGQVyJYRFkMz80omEbfzK
-	 rpeIrWiv1KonEe3fuaHRCsMaeCoTrkbTEY20GIb2eRy8xaNYm2K+6lNo5MLmU+Qefe
-	 4lbjSfYQxiO/8LPS92FCNIZldck4k8mZLyCDvkzCryo8jE9LLXpL+hEOTn4qjBY38V
-	 v6BVGAUdxJ0gg==
+	b=aQgv/3x4TYSFMvMS5bQY4DrOQtufxllhm6Re5hRn5PIgUktQOBDQfTl0TgSJcYGkU
+	 ej25V7TsFiS/bsHvXu9gefrXEeoPk3bsLVQVpNowBeQllByGjJQzQlY0poRPy1g+YD
+	 qs61usx+e4t78h60W9BEdb18v0XUqhu7WmAKn6IBgmsQbGdDGHsAl8rtfms4fzKKiu
+	 MUcC/bOuffGlA49MFMuDK9Epwn6MGBiXrlPgZjt2waCmhm4pmtb5ycI4MuirxQ5zWG
+	 RA6uPUQvRzzlbv3F7+G/w4McYgCifgLAXhUUPqHsXM+0XmrLZ5rH62UgePJV4+xvQa
+	 u04AY2jLrLsBA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRnpV1vWdz4wc2;
-	Tue,  7 Jan 2025 08:47:29 +1100 (AEDT)
-Date: Tue, 7 Jan 2025 08:47:35 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YRs0L0QtNz4wb0;
+	Tue,  7 Jan 2025 11:11:12 +1100 (AEDT)
+Date: Tue, 7 Jan 2025 11:11:17 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Al Viro <viro@ZenIV.linux.org.uk>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the vfs tree
-Message-ID: <20250107084735.54cbbf60@canb.auug.org.au>
+To: Michal Simek <monstr@monstr.eu>
+Cc: Michal Simek <michal.simek@amd.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the xilinx tree
+Message-ID: <20250107111117.599016eb@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3e1ZDOQ=2RU7an0cG9SAZJe";
+Content-Type: multipart/signed; boundary="Sig_/C1SmyXzY0fah22F+cgNYJma";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/3e1ZDOQ=2RU7an0cG9SAZJe
+--Sig_/C1SmyXzY0fah22F+cgNYJma
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+After merging the xilinx tree, today's linux-next build (arm
+multi_v7_defconfig) produced these warnings:
 
-  b4080c21aeaa ("fs/qnx6: Fix building with GCC 15")
+arch/arm/boot/dts/xilinx/zynq-ebaz4205.dts:55.3-13: Warning (reg_format): /=
+axi/memory-controller@e000e000/nand-controller@0,0/nand@0:reg: property has=
+ invalid length (4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm/boot/dts/xilinx/zynq-ebaz4205.dtb: Warning (pci_device_reg): Faile=
+d prerequisite 'reg_format'
+arch/arm/boot/dts/xilinx/zynq-ebaz4205.dtb: Warning (pci_device_bus_num): F=
+ailed prerequisite 'reg_format'
+arch/arm/boot/dts/xilinx/zynq-ebaz4205.dtb: Warning (i2c_bus_reg): Failed p=
+rerequisite 'reg_format'
+arch/arm/boot/dts/xilinx/zynq-ebaz4205.dtb: Warning (spi_bus_reg): Failed p=
+rerequisite 'reg_format'
+arch/arm/boot/dts/xilinx/zynq-ebaz4205.dts:54.9-56.4: Warning (avoid_defaul=
+t_addr_size): /axi/memory-controller@e000e000/nand-controller@0,0/nand@0: R=
+elying on default #address-cells value
+arch/arm/boot/dts/xilinx/zynq-ebaz4205.dts:54.9-56.4: Warning (avoid_defaul=
+t_addr_size): /axi/memory-controller@e000e000/nand-controller@0,0/nand@0: R=
+elying on default #size-cells value
 
-This is commit
+Presumably introduced by commit
 
-  989e0cdc0f18 ("fs/qnx6: Fix building with GCC 15")
-
-in Linus' tree.
+  dd6c610ac948 ("ARM: zynq: Do not define address/size-cells for nand-contr=
+oller")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3e1ZDOQ=2RU7an0cG9SAZJe
+--Sig_/C1SmyXzY0fah22F+cgNYJma
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd8T3cACgkQAVBC80lX
-0Gw2AwgAmUUYYQDGveFSeswo07RM3C4EV1suHuTbir1gzWqmi7ujzTWG9voFlyRc
-SzCiq/YUIbE6Z46Z//hMby2ov+CrBTusQVQfAZm5o7DcVTIeMUnoGjAn+5qSUwCe
-e97fu9e9uqDYbiiUs0kcP7KiXRw8tJo6qqqVzob1IVSikE7KsewzyTRMvW/gEoA+
-pHkQILBgu+51hwKVCnW+DvcYHKZtsZso3OCmB28qvKKCy3fgu+34f13n4zshy/94
-grOdlpFZAUHcjsm+Ewkav0SyrIZ3q8S1fP9e85JklOK82pfi7Gl45MQDNVN7q5rj
-fZ9JPdG8tqnzUJrwXEh/JQoF8G0KvA==
-=oOa1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd8cSUACgkQAVBC80lX
+0GycDAf9E6r3KQCA3EsP+Yk5UYuXlcMzqcmNX8X6GiMvl+0f7308JpX6leNauNgh
+tohPwAQFjD9Io3IOcDfQ9suWeKbXJcpyJwABWAK9JV9uKnsUTcrPYDLt+mHe5RAL
+3+zozCXiNRnJado7McevCuOZNJ+81rWbynBEqLi9umusHCkgkwVxgBcvNAErPJ55
+WSIrLCfi6M0p0qMVt0jFJDKxn0HKtxYBoooZlCJlpQitGwYMDlh3xU727gwJ37h8
+s7K2h+1gG/DwB22sFP53fPAsGVEAH3jqxP0KRJVvnf2rU2BVU5+7Xs4S3FkUzKqk
+BTqowI7L3xA+mgrfyj5k312/Rn4WJQ==
+=LPx3
 -----END PGP SIGNATURE-----
 
---Sig_/3e1ZDOQ=2RU7an0cG9SAZJe--
+--Sig_/C1SmyXzY0fah22F+cgNYJma--
 

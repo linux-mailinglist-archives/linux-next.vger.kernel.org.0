@@ -1,137 +1,123 @@
-Return-Path: <linux-next+bounces-5088-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5089-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBE45A051A9
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 04:40:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9510A0551C
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 09:15:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4FB2161317
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 03:40:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 305E21884156
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 08:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE89A198E92;
-	Wed,  8 Jan 2025 03:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5721DFDAF;
+	Wed,  8 Jan 2025 08:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TKlLXD31"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="hPB8yH1d";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AX2lao04"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4718F259490;
-	Wed,  8 Jan 2025 03:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0972F1DFD85;
+	Wed,  8 Jan 2025 08:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736307612; cv=none; b=IUm49E9Oxl7Wqka5+V+5iyPgxYoK1mPbBqplnfgNopBpmmdhfSK41sL1ic56w/eGZuYwjCYTaJGL3LDEUlNYkSqcP9UDOD2Q+sfbASUBunHnTtg9TTX+utz1UrBq5TEdwUIcTWe6PP2y+7t/DyVQYQ/zlSBSVz/ki8f9mQE93rg=
+	t=1736324119; cv=none; b=Lc8sRq8Qarf/w53JohRrEz9/a53JcdBpStd7Ur5yqS8UuGGOw3FK5nTg508d0PEAxtHfnXFdcEL4SkYwdAQnhosO/QZFF3ZJMIyQnUxWMQXCP7Qy9/lST8jtkZOAzUgqBaqvxCbIqCpWzJzJcOJK+W6lxj1vGbdlnG7QaAqFI10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736307612; c=relaxed/simple;
-	bh=nJzJDPkFr1R0vofj0FUp576AUzuwlj76/G9iJKmKKks=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EPSDqkfeWWLU9WGfwjkHfTBd43cw4BpGunbstKhAzGcEHTPkPVvybIaRS9u0kvDqk7RytVmM7mgv6IHNz+Hu4UKnFqBkE3kXNeva0hEy8qW8GfBk1fTxQSpyaOQ2lugzDLp+Bf+Zk4vJ6DLoUnxxawE3yeIbm1CWkI4dN/29GpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TKlLXD31; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736307598;
-	bh=7czeec3KX/3LjHKBxMfcaje8wAQStBDWRZm0Q0beq4Q=;
-	h=Date:From:To:Cc:Subject:From;
-	b=TKlLXD31EE36elOk6GEGnZI7+uZojo7TNJDenzh/3bPqiC9aFmX/Vf1LnLoNhQEvx
-	 L+Djw0YOk5XfuHABwNqWDlC6pkGfMLb0rnEMMf/Upjee2RmVArJwiXy9jeZj+iAG5t
-	 GNTOY3rTflBdKKzyDEzn/IKlfHEnV72lZESeUXNFzwdPHaWely8SUk6sjFhOcnduve
-	 PgJ4gMKjHQeOor6GD74ELZ0gVY9rxpmbh5JgzdSV0OHow6zQ3E3EuRPhypZ89n+1+Q
-	 YLTTWVr3u1IXS0JRZkXwWPU+/HdOtIjjyCQNDz+lMyzpMgDB8U+Wt+vWev/rGqzD5v
-	 g3Pe4cW6tTYwA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YSYZj0dG9z4wvb;
-	Wed,  8 Jan 2025 14:39:57 +1100 (AEDT)
-Date: Wed, 8 Jan 2025 14:40:03 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Shuah Khan <shuah@kernel.org>, David Miller <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Laura Nao
- <laura.nao@collabora.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- Willem de Bruijn <willemb@google.com>
-Subject: linux-next: manual merge of the kselftest tree with the net-next
- tree
-Message-ID: <20250108144003.67532649@canb.auug.org.au>
+	s=arc-20240116; t=1736324119; c=relaxed/simple;
+	bh=CdU6z/naYqZCCm3HdaILrLdeFa0Sw5Zj+dvb7Qs61Fs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pMNEJqjB5eJ6Hr1BLQDvSeNcfWd4H3PoTF76jWrz5M9vg5GXedpm91mx0YL4WEsM99cPIZqlWHC6AyuD56YNvK1XuUnXc7uoXCcCjT6t8hHWOzuxIAmf60/NanTLIya2lZC19EQlztGyQHdex4vYOYJZs5MCUACOe2p6nU5pSms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=hPB8yH1d; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AX2lao04; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id DA2761140167;
+	Wed,  8 Jan 2025 03:15:15 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Wed, 08 Jan 2025 03:15:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1736324115; x=1736410515; bh=8k/I8qvdbx
+	tc1ZQSZQc1qpCopgUll02URThDoeqTlBg=; b=hPB8yH1d2Td3c/3mrjOiFQlcME
+	dTOedmKyGTGwOqNtez4AdPIhkiEJv6fu1DsW5+4Hznx0H73r+n1VuT9fRl/Ibm41
+	Wq9pCfmHeNJGhc4ejeeU3kW/4LLGKdZUEQjvjX0ULjEqSOk33akW3Klmrq+MnHUn
+	tL18vRsn3dS3sePk5GteIFuuabj5yhEpfHH3dx+hBDMCQ42e9TdNIvvZxpgh24ma
+	JWZBGnI3LV/kKthxWQRa2GjepR1BpLpFpSZS/U3jTj19vdoUC2d2eeF8auXsE2mb
+	NIJD+ilHc/n1LCO6xwkK0YOIOrbehBv5Gkdivpci53/fIONaadND2HoU1wtQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1736324115; x=1736410515; bh=8k/I8qvdbxtc1ZQSZQc1qpCopgUll02URTh
+	DoeqTlBg=; b=AX2lao04ptRNKBlgrX2KKnefC/ilQL4vVBuLxTZl00M7U29qioB
+	Eb4KAAe/k+6r+noJPLBxeoGOebs8EAc+0FR8MsDyadCom1L0yYgH3tSgZkJ3iG2A
+	neoVa6HjyBPkwm3NiMu6yCaAksZjL6maFNiYynBprWMDq7Wm8cMw4viJXbQ5T9IO
+	XGufo36lMB8b0fkNLwq0iDv2FIWbobgqo1/xjvmVQRA4unZ1NhaFJRz22GGmGaRJ
+	ea6Daq1+0vAZ6P9GvjLF/IKb+OGEIU7/zXLIC6fwCCBA6z0lRIAWfRarPXeJ5+qo
+	cv+NPPx5LZMJBQDU+EhMhIlne6omwgtCXdg==
+X-ME-Sender: <xms:EjR-Z_NJE9vnFAefKmFqHtnBmZ17Q_LYtrJagg_nrlgOn_MlHVlt9w>
+    <xme:EjR-Z5_qoMk0uv9UCw91OoyohYoVxN19VYJvBlZYP7uIByZdZW7f1fwuW6ylvq9F8
+    Gh_ly26n1urLw>
+X-ME-Received: <xmr:EjR-Z-QXQ5AUcCCiDvLTyzq-L-z0FBuXFKcHt8zZb_wt4DI5wYQIVFuO0mVdoI6cv72HL-o7en4KjJ3OelDgS-0v-0EyxpJoh09mzw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudegfedgudduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
+    necuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtf
+    frrghtthgvrhhnpeehgedvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueef
+    hffgheekteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehgrhgvgheskhhrohgrhhdrtghomhdpnhgspghrtghpthhtohepiedpmhhouggvpehs
+    mhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupd
+    hrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:EjR-ZztwG7dl2WF31MNLTmA9fvQfyOUGapkqM2H4op35mmCO1h0qng>
+    <xmx:EjR-Z3ePK3p8MNHrYyDX0TPJo0kIS2JlmaNN33Z9ziRCxjndPtpZFQ>
+    <xmx:EjR-Z_2bCxwgqJezwS3tZhfMds-By-0M97bsBNKuPCPgy4WFclNSow>
+    <xmx:EjR-Zz9K8ARXi6bp--s0PcvHl4vTtnRjKOkUV6DhF2XVo7a0eNmGGQ>
+    <xmx:EzR-Z_QRAxSwEE0uqtNm3DP5FMTHm7xdTFDWwWWQy9Gbsnh1-vXIgc8z>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Jan 2025 03:15:14 -0500 (EST)
+Date: Wed, 8 Jan 2025 09:15:12 +0100
+From: Greg KH <greg@kroah.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the driver-core.current tree
+Message-ID: <2025010854-annoying-splurge-8f67@gregkh>
+References: <20250108070228.1067a48c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IODd3m+JJxETFIENaX2Q7UE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250108070228.1067a48c@canb.auug.org.au>
 
---Sig_/IODd3m+JJxETFIENaX2Q7UE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jan 08, 2025 at 07:02:28AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commit is also in Linus Torvalds' tree as a different commit
+> (but the same patch):
+> 
+>   b4aee757f1ba ("MAINTAINERS: align Danilo's maintainer entries")
+> 
+> This is commit
+> 
+>   2872e21c47c3 ("MAINTAINERS: align Danilo's maintainer entries")
+> 
+> in Linus' tree.
 
-Hi all,
+Ah, I missed that Linus had already picked it up, sorry.  Merging should
+be fine.
 
-Today's linux-next merge of the kselftest tree got a conflict in:
+thanks,
 
-  tools/testing/selftests/kselftest/ktap_helpers.sh
-
-between commit:
-
-  912d6f669725 ("selftests/net: packetdrill: report benign debug flakes as =
-xfail")
-
-from the net-next tree and commit:
-
-  279e9403c5bd ("selftests: Warn about skipped tests in result summary")
-
-from the kselftest tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/testing/selftests/kselftest/ktap_helpers.sh
-index 05a461890671,531094d81f03..000000000000
---- a/tools/testing/selftests/kselftest/ktap_helpers.sh
-+++ b/tools/testing/selftests/kselftest/ktap_helpers.sh
-@@@ -118,5 -107,9 +118,9 @@@ ktap_finished()=20
-  }
- =20
-  ktap_print_totals() {
-+ 	if [ "$KTAP_CNT_SKIP" -gt 0 ]; then
-+ 		echo "# $KTAP_CNT_SKIP skipped test(s) detected. " \
-+ 			"Consider enabling relevant config options to improve coverage."
-+ 	fi
- -	echo "# Totals: pass:$KTAP_CNT_PASS fail:$KTAP_CNT_FAIL xfail:0 xpass:0 =
-skip:$KTAP_CNT_SKIP error:0"
- +	echo "# Totals: pass:$KTAP_CNT_PASS fail:$KTAP_CNT_FAIL xfail:$KTAP_CNT_=
-XFAIL xpass:0 skip:$KTAP_CNT_SKIP error:0"
-  }
-
---Sig_/IODd3m+JJxETFIENaX2Q7UE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd985MACgkQAVBC80lX
-0GyYeggAkhEdbu2tP0dzlToclCrQeNAlmwYmCF7tNaGXzgN+0BoVDgwb/fXQP2BO
-rvLy2wq9S6Gi/95Nnk6II1omeZUcBn7WTmd2jz87KKjAWfGagkANghrippYZo94j
-4Fa0UoKG558DPm46ctl55QNv/EYEwVflO7VT81oaLDZ5ahm3V456FeYFjK6Ta8XP
-pUSpr4ak07uLeEyEnmeM1mv/W07v5ci/j2b7IuTB/SGld+q2FEIN+6eATEACkGxI
-NhjhujpQyARSeE1OMLmghTDoZuUzoHeN8mWa7zyJVpCdRLnLAnPQ/Uq4ZySZhtaW
-tjWx3B+EBOCWjf0I/p07nTRfUYzdtA==
-=vRu+
------END PGP SIGNATURE-----
-
---Sig_/IODd3m+JJxETFIENaX2Q7UE--
+greg k-h
 

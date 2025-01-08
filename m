@@ -1,277 +1,136 @@
-Return-Path: <linux-next+bounces-5095-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5096-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C808CA06736
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 22:32:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC965A06765
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 22:45:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA28A16572B
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 21:32:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 091D07A3114
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 21:45:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9DA201259;
-	Wed,  8 Jan 2025 21:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3165B1A2399;
+	Wed,  8 Jan 2025 21:45:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BfwRjlIk"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="W85768rN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55FA18D626;
-	Wed,  8 Jan 2025 21:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736371965; cv=fail; b=gGrsbRMfP3ibavReVmHDNLjrhqvAu/ZEMqbyewFS5r/bOrIs9mIh9cxT7RMzHMzPDR6SHBfg7YiE9jY4KL/cyHgJa+2kY6ZBMgNoJKAiUaow8p4YHt6kUDwDzi22f/Ov7g+TMgzqi7WZhIU3t6iKDH4nv0CBhhm5kLsLngXEkO8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736371965; c=relaxed/simple;
-	bh=r5+m1vEW4PKMH35RWEPkRmIzMI+qU13radM2pgYHDmM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=gfA1Srmz2yedoHHhUc0Pku1cW4LeA6AJy+O6Xth0JXP9CKdJoKCRuMv1Pavp9dCLTJQfdSRrdxihPiIqimPbjBXXJfppVBUKVFv94XxW3vxLSyvgtO712gWx6ozsizs+WoYXsq8k9dir2s5i3vHp7ljKhDGtHv1OdXKDPBVGan0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BfwRjlIk; arc=fail smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736371963; x=1767907963;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=r5+m1vEW4PKMH35RWEPkRmIzMI+qU13radM2pgYHDmM=;
-  b=BfwRjlIk8eHs9COBrgJptp8+FkXYdzpCMmW65MmP1J7t0V/bHadGv/9G
-   8dT1chrSCnDiU3XWJKFFHINbfSkWyxwwMYcM2C0AOsu/2VuUj+fjrzOAP
-   RIs48WNeS1VpkTE4PCjLFt3Jf985TFSyf3rE8gu8gFod1Fwnz7vvvfFiT
-   T6+aDW/Ex0zgOiRQaX89qZJjBlOwpjnJLmvPAYhsOIOARgz4dJK9MN9IU
-   fAKUV9aEMb4DBKH28QRQbRq7gcM30NQJ7gHYYBwEdNzEecimWkHcVOQtB
-   MYGnSFJYS3sThBcbpbNSyortITY970vRHmieC1gDvj5ZTJEtHztZX8kcg
-   Q==;
-X-CSE-ConnectionGUID: uHAtTDvKTweDgJ3smBd8Lw==
-X-CSE-MsgGUID: ej6PJyq8TR6VaX6KiF8qqw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36838739"
-X-IronPort-AV: E=Sophos;i="6.12,299,1728975600"; 
-   d="scan'208";a="36838739"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 13:32:43 -0800
-X-CSE-ConnectionGUID: KAlUbJp+Sjy7GsPsPAT5QQ==
-X-CSE-MsgGUID: USlC/lmeSuW3GUndzlnGdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="107258715"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 08 Jan 2025 13:32:42 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Wed, 8 Jan 2025 13:32:41 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Wed, 8 Jan 2025 13:32:41 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.41) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Wed, 8 Jan 2025 13:32:41 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RBZkDGiiU1RzAL0Axr1i6c1+yAnWxC6E1FudWB3rzVumQwCsmxHDsd62Jh2hlSYiBEAT4vKKAYOqEv2x/gVMB5GlNCYCzRxIaalOQzQrjzwc9dUuSX8Sz6OxBUK3rVpv0OsqoH1PIp5apHgtzg2opeJIucoS5z16gFjMk2hOaUrXHx5zQmnUEsr7dnDIUcfsYAIgG19pNX9hIhMhYQ10jmllNosAo2bsThtzqUK3bVkKpRvIMS4TkJTJOAYwaNPacL1OeNu0/dkg4o9VPvrRm+UWdppRoV87qjRw0+FmqrUZXGvuUNuTieRCbGXd0WGwFKVi3MVGwO6c4rExjbQG/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gdssjuEdF+xI8mRB+bQHcUuUJgimN9mvj0+UxXHnofQ=;
- b=nQRwGQkDCUE40Bw/deDFNCHjOhN+woZhsKzBFHQoe3leWnw0RrjOZ4BfA+15dobV1QKx7IabznAfEmdtpQ4sj2ddj/UQQ0iWnQls0hZLjqlrXczunlUXSsQFRtYw1TixBfJyBxM6W9zJgDwur33C6VPt6NI3a7Gzo1OYwwOePU1fGryAvyzD0vHEf/manV+pJB3dtnAGv1bGsR1/Mf4SqiV1I0PdbW8s0SAv47rb5+HEv8hSZICSujHiJOG5uj7xPorrONSykWVuS7GQdwze47Dri/t49jxvEs6LShmDRpyxogulEgif1cqdrbz6/gY7vWUKlnlHQUaYixokCWUCeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH7SPRMB0046.namprd11.prod.outlook.com (2603:10b6:510:1f6::20)
- by SJ0PR11MB5772.namprd11.prod.outlook.com (2603:10b6:a03:422::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.16; Wed, 8 Jan
- 2025 21:32:37 +0000
-Received: from PH7SPRMB0046.namprd11.prod.outlook.com
- ([fe80::5088:3f5b:9a15:61dc]) by PH7SPRMB0046.namprd11.prod.outlook.com
- ([fe80::5088:3f5b:9a15:61dc%4]) with mapi id 15.20.8314.015; Wed, 8 Jan 2025
- 21:32:37 +0000
-Date: Wed, 8 Jan 2025 16:32:32 -0500
-From: Rodrigo Vivi <rodrigo.vivi@intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, <dri-devel@lists.freedesktop.org>
-CC: Andrew Morton <akpm@linux-foundation.org>, Dave Airlie
-	<airlied@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>, Jani Nikula
-	<jani.nikula@linux.intel.com>, Joonas Lahtinen
-	<joonas.lahtinen@linux.intel.com>, Intel Graphics
-	<intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
-	Jani Nikula <jani.nikula@intel.com>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
-	<linux-next@vger.kernel.org>, Yafang Shao <laoar.shao@gmail.com>
-Subject: Re: linux-next: manual merge of the drm-intel tree with the mm tree
-Message-ID: <Z37u8PjNcMwN_LOw@intel.com>
-References: <20250106130348.73a5fae6@canb.auug.org.au>
- <20250108121650.09a8e828@canb.auug.org.au>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250108121650.09a8e828@canb.auug.org.au>
-X-ClientProxiedBy: MW4PR02CA0003.namprd02.prod.outlook.com
- (2603:10b6:303:16d::30) To PH7SPRMB0046.namprd11.prod.outlook.com
- (2603:10b6:510:1f6::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8A02040B9;
+	Wed,  8 Jan 2025 21:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736372713; cv=none; b=NauYpNPt/8NAZsIgkeykN3b9+V9vSO5Z+W9405x1R4ZhVc+6ibnSXf67jC9CHu35MqJKDKV3QZpGee3tu2JJe/RzuquLd1zgpYu74PGVKuLTIfWt+E6GaSdpESfYC9ICh/Q37YXngTCVqQ5nIZmm1lL95LYWXpv43DICgKxmw7Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736372713; c=relaxed/simple;
+	bh=X0aAD+o4Opsr95XHrthvpsnLVv6sXFdpfvO1nU4p1Wk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SrXJCTZQ4dUQ7Ma/uSwdIg3mYNLqs6C9jpxpbJk+SnOFpji7+rLN5NSUGTNBLcIBfImf32FHxgmMq/E3DnztoJqMgos9YIwwltX96kDqLxGitqo6DPMQplrAkas7JUwTa3MC78DDwFZ2RTeKIF2c+eZJUPAYPdFkcb5Pms1eMq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=W85768rN; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1736372697;
+	bh=5y5fC8vBsfLkwmxzYmaRRRrfDFBy7Wm7ZUP1hlHJ7ww=;
+	h=Date:From:To:Cc:Subject:From;
+	b=W85768rN3aphxMKKtm2ieL4jVLE3PuomIEWwdKJNYrr7oQCZVRfBB7j1wn3WyNVoC
+	 DF+DdWp0CKPDhyvJ+Cfy1FCbPdX/4IIzOKLVm/02LcG8xlxlshifxxtgBB/+KmLxTF
+	 hOzT7K6Ewq5Oi6na3RW7chIPCapj+23PNIXdIsRIQUYjdkMY/m3kRvsLcEFtvPV8y1
+	 ZEgAJ9J7xLtx3h3bh8AVLQmtPQwBPcmYD3MUj6nVlfiJ24fP/+/j1T3RmjqNZj3Kyy
+	 nNhZhPJyMKmTByh7Qibcah4ZmNWXikasYeaqeiBCIcA3fimfy+1vKKyzOu3Ayh1EML
+	 GfC6MTfrEiX3w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YT1fd2P1Qz4wc4;
+	Thu,  9 Jan 2025 08:44:57 +1100 (AEDT)
+Date: Thu, 9 Jan 2025 08:45:03 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>, Anna Schumaker
+ <anna@kernel.org>, Trond Myklebust <trondmy@gmail.com>
+Cc: NFS Mailing List <linux-nfs@vger.kernel.org>, Anna Schumaker
+ <anna.schumaker@oracle.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Mike Snitzer <snitzer@kernel.org>
+Subject: linux-next: manual merge of the vfs-brauner tree with the nfs-anna
+ tree
+Message-ID: <20250109084503.1e046ef7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7SPRMB0046:EE_|SJ0PR11MB5772:EE_
-X-MS-Office365-Filtering-Correlation-Id: 08e88184-62d0-4df8-6f6f-08dd302bf8a3
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?+xvIgBFU1fYpqum0mXaNyv2RPqWAl4+cn+7RZK83s6UrQWi2/vs3E2jzQhjl?=
- =?us-ascii?Q?ld2Cpn6pUA2N0J01O33IhipQ2JEWs7cATAObbij/IzwzzLyQ92X2oOm2RjgP?=
- =?us-ascii?Q?GSF3PQ1aF94jrV4Vhw/aZdojihS+0twqE7G2dWhu891KOadd4Eaciug/Er5b?=
- =?us-ascii?Q?5zmmkSbV8osYTkv665+nzgg92JDUFJh6/A/MYC0fOp6f+fLKlqKi/gLPiSOR?=
- =?us-ascii?Q?sGzLhMcoWCbh4rv1mgnCW79RTeQUuAcKu23uAcchAPsVdWh7LQJoeG+gN748?=
- =?us-ascii?Q?BwLkl9cqc3/dzHYVWVBTnfhzPe2Om9fhZNKD/sL1ZoXYusuki82h1NPJ9I5l?=
- =?us-ascii?Q?6oP8s/+RTFDudo8C7x5t7uY7PvJKkCo3t95dP3RwV4hra35P3YtJC8vk/Ued?=
- =?us-ascii?Q?Q/fp86+rT+JdWDr+093ST0LgA+FAEEUHFuIxmF8EbndPjwEm6dyEKNc83FKS?=
- =?us-ascii?Q?GrD8Y1KhJNekYgCE2KWhzTTwDEvavG4oWJPuSksi83dhdDy163aiz/LO5Q5l?=
- =?us-ascii?Q?ecKl/GoFby+ynt+mLgVbcrgbc/MhZT7QAmYBnxHCMU8FbuJQJ5vq2DoTV/GD?=
- =?us-ascii?Q?rkHAn6DYwtM+LDTa/MYIXKRG5h8C4XR8OcI/e8G60w1aRkssOlethdvfQlW+?=
- =?us-ascii?Q?Sx55JM5IKDjV5jpEm5lrRNdE69sokKlxqYb88E08bgToOjy6PQi+Z2LonlOf?=
- =?us-ascii?Q?rvrbkLnvm814rqV+ULop9J8NaleVLW0SAHqlhfXzwKdpe++mfyQqT+ZTlZsN?=
- =?us-ascii?Q?FRm/DlO8lK5J05ubGwGa8UHdre6aEW4I49GvVIm/LbwUnzkVm5z48FHhsVsD?=
- =?us-ascii?Q?XOlg37Tj7S9LXJNaJ672CqKs7WazX2nUq1lUN8XDk2YLsFaWk50DugbTPGyE?=
- =?us-ascii?Q?9bxUdYaKCQKfezPyc/UkOekBLSnRaqx+ehwPQQh3yt+YQviF3cvdxDf0HERB?=
- =?us-ascii?Q?ILZJazu1Xk0qsmo62V00b/rVbMU4i1zN11JBP+aCs+ljEPmmvE0XyFS1Linr?=
- =?us-ascii?Q?W5q49sjHqM6NRNa0KfhVwWgzny2n3pp/LdbNW6l5wA+n++cQ/eoEBK88ZeK+?=
- =?us-ascii?Q?zgzpkvx+SePZ1Nmh+e1kf4UT5xcLGE3DnEI6fTBhuL3HMP7xnCTlYBIv3Zs7?=
- =?us-ascii?Q?rgw0kTunPdeEkrTNSf/kG8+o6qxdADt14NVOof0HDK9B/pjY+odxo4gaCYdj?=
- =?us-ascii?Q?XwSSwYwTgdUergJSHDmuKtdQQ2u5WJMekiDJgeQE2hsoWfb3PtO8V0EUwYZE?=
- =?us-ascii?Q?tdT9GIfq9wXlbH8Qjm3EP3+tjfdoHWSjwKxCNoGc4DuBd3FIQV9tgcieuks5?=
- =?us-ascii?Q?DIpssaU4Bs5KJuMhbeyH74/Y88ILCToXxpNP6y1Te5LKvEz9ImDCRvzR6HKV?=
- =?us-ascii?Q?jihrXutRNkoLPLUn8E87S3T7Em3y?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7SPRMB0046.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LAXlDq5/uBkU9YlH66zyRtf6/4b/l/5RN2J8E66zGtzQ16JnUjuloCjaBC2X?=
- =?us-ascii?Q?w39n8iJ038CpS+613pg1nJDmWNO92DTCXFKGfT+oT8bOHjS+wvYuf1Q68xxj?=
- =?us-ascii?Q?ZOcZHz9jhx1UIioVDccsPRluWwu2DqRrgz6Rjke5PLOhNMw/jjlX3+NEjQ5H?=
- =?us-ascii?Q?xbiUeupoDzHTGKqK/o2XyKyEUznQhVs5YLWDz3aaQwubfjbBqQvFXlcKnW1Y?=
- =?us-ascii?Q?2ARPoNNDzDOskY858egTdZTCpkdpznD905/UJKjOklV8ettSPW2X2XiXHJYU?=
- =?us-ascii?Q?a2DxByqlZm7A+oWatLkvXWQEv1x3SYGX8G8J3OLLtJT11SSkqnL5c+ScfByQ?=
- =?us-ascii?Q?So3rHhYZQNw/OgQdVRq60V62AL+UJAcY+q4V0lLRYdoZXgPpbP403Gq4undz?=
- =?us-ascii?Q?U8xuQ0qhHWv2rLmdolG4H1QW07BtZEftJiLmkZobrJrv1xq8Qz22jN2EikLf?=
- =?us-ascii?Q?tbWgysrolWYBse6AKY0FMSaA8XN6pHKRYf99/LLgYIkxzyTssPb0ab+esOqp?=
- =?us-ascii?Q?8IbMGkddNXygNbL4Rbh/boI2qC6udLHkpwFi8uYeRKoc3naFKA/p8ujIFBpa?=
- =?us-ascii?Q?ETEXw6pCkbdx+p/52po+vuORcs0rTQIWeXgg6AMlPrmwO9r1Oa0Guk2CETA0?=
- =?us-ascii?Q?1MEhQg5dkagQgfRTT1JqD12sqWIuuw2x8bbhl4QYqfWFBiNMV1/oIMA51KO2?=
- =?us-ascii?Q?zmnzLobvaJr+aJEyAMgSZYUpOT6Wi2XGwDMmb6DKwxj+E8bFADtUwm2C8iL7?=
- =?us-ascii?Q?Xv/mMKBjPGDY4x9J/fXako6bdzP243wTEuaVxgpM3FSZuzL0xbHVpCIzTR4o?=
- =?us-ascii?Q?8Y/3bnco/GykT97TPO+2KjHf+StSItNu51CL5iD150mWEC7ihANwOW41Awzg?=
- =?us-ascii?Q?RE9riXZi+vqVG/zFEAT9LEtfRVCdo4Oxi6R2GfY3sFqk/fQ8yLGRQkV1bzc9?=
- =?us-ascii?Q?hYSiWeVOwceVMU/rj7AxScRV0nLGYjF1fYE6ZzSVE+TERvBe1aDYJ/clIWQG?=
- =?us-ascii?Q?CFUqegCrbyJCOLM0nfBXCSoYim4ZseCAIHVrOfg0U7/XvGG+PFwYwYyz0fep?=
- =?us-ascii?Q?Ns3+4rAQi4SzO9lJ5hkHHLCTYBxwKahew9gh4niaFP7rQKCcJyto7pswmUvI?=
- =?us-ascii?Q?/fwxHFHwtjq64dgx85A45Z4cYiap/CpxmRrXXZIP+njrZvDPJj0NIsGYuoC/?=
- =?us-ascii?Q?X4PGkLFNebik3fZd0swMrA7P3PJo9VJs1phuqcZCWL4nUEZ8RuGqWCv+eagQ?=
- =?us-ascii?Q?eNc5xgHY0Sy5Z63pzu93/IBno7ZL5PDuILw+FVKM1fhq1PwmB7IZAVcogGqD?=
- =?us-ascii?Q?gLk0iF4MHAd/VPHGWBt0kktKIN6aAgpj8aIc4PRMbHP1fmQTm5RULcD7mkmW?=
- =?us-ascii?Q?RLVc8ZeydLRImfs+j5bKY5JiVdtS4+/IdIHIR3OwP43tSTGsDSN30g41Cyqf?=
- =?us-ascii?Q?u06DKQzFMjwC0FuFAg6exySTkD3GljCWXzqf1UsPYQH/3hscuQXVjI1PY1qV?=
- =?us-ascii?Q?0LsFegRKcdV8fmC2m1A83nnr3tzS+8EamU6znaZtQjPxNcezkiJhY3qqIDDw?=
- =?us-ascii?Q?6byO69SC/T+juDfuenReIkRvvxtgdQ++M5x7vOXlXwCReTIcuxMy9FZhoI3I?=
- =?us-ascii?Q?Rw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08e88184-62d0-4df8-6f6f-08dd302bf8a3
-X-MS-Exchange-CrossTenant-AuthSource: PH7SPRMB0046.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2025 21:32:37.1472
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EaIwLiz63DOGKTrTFlXMCBZcXtQPOAZRNB7JjKEXbOwGoGqNrNNxelKbCsK3x3gBpCJaUgEtd/XKoXIoiFC2bQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5772
-X-OriginatorOrg: intel.com
+Content-Type: multipart/signed; boundary="Sig_/e2WIvSe0jOiXRtiGlQHwXfK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, Jan 08, 2025 at 12:16:50PM +1100, Stephen Rothwell wrote:
-> Hi All,
-> 
-> On Mon, 6 Jan 2025 13:03:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Today's linux-next merge of the drm-intel tree got a conflict in:
-> > 
-> >   drivers/gpu/drm/i915/display/intel_display_driver.c
-> > 
-> > between commit:
-> > 
-> >   4fc0cee83590 ("drivers: remove get_task_comm() and print task comm directly")
+--Sig_/e2WIvSe0jOiXRtiGlQHwXfK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I don't believe this patch was acked by us, next time it would be good to get
-different patches for different drivers with the proper acks for visibility on
-these kind of conflicts.
+Hi all,
 
-But if the conflicts are easy to handle right now, let it be...
+Today's linux-next merge of the vfs-brauner tree got a conflict in:
 
-> > 
-> > from the mm-nonmm-unstable branch of the mm tree and commit:
-> > 
-> >   f5d38d4fa884 ("drm/i915/display: convert intel_display_driver.[ch] to struct intel_display")
-> > 
-> > from the drm-intel tree.
-> > 
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> > 
-> > -- 
-> > Cheers,
-> > Stephen Rothwell
-> > 
-> > diff --cc drivers/gpu/drm/i915/display/intel_display_driver.c
-> > index 62596424a9aa,497b4a1f045f..000000000000
-> > --- a/drivers/gpu/drm/i915/display/intel_display_driver.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_display_driver.c
-> > @@@ -389,8 -397,9 +397,8 @@@ void intel_display_driver_resume_access
-> >    * Returns %true if the current thread has display HW access, %false
-> >    * otherwise.
-> >    */
-> > - bool intel_display_driver_check_access(struct drm_i915_private *i915)
-> > + bool intel_display_driver_check_access(struct intel_display *display)
-> >   {
-> >  -	char comm[TASK_COMM_LEN];
-> >   	char current_task[TASK_COMM_LEN + 16];
-> >   	char allowed_task[TASK_COMM_LEN + 16] = "none";
-> >   
-> > @@@ -399,14 -408,15 +407,14 @@@
-> >   		return true;
-> >   
-> >   	snprintf(current_task, sizeof(current_task), "%s[%d]",
-> >  -		 get_task_comm(comm, current),
-> >  -		 task_pid_vnr(current));
-> >  +		 current->comm, task_pid_vnr(current));
-> >   
-> > - 	if (i915->display.access.allowed_task)
-> > + 	if (display->access.allowed_task)
-> >   		snprintf(allowed_task, sizeof(allowed_task), "%s[%d]",
-> > - 			 i915->display.access.allowed_task->comm,
-> > - 			 task_pid_vnr(i915->display.access.allowed_task));
-> >  -			 get_task_comm(comm, display->access.allowed_task),
-> > ++			 display->access.allowed_task->comm,
-> > + 			 task_pid_vnr(display->access.allowed_task));
-> >   
-> > - 	drm_dbg_kms(&i915->drm,
-> > + 	drm_dbg_kms(display->drm,
-> >   		    "Reject display access from task %s (allowed to %s)\n",
-> >   		    current_task, allowed_task);
-> >   
-> 
-> This is now a conflict between the drm tree and the mm-nonmm-unstable
-> branch of the mm tree.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+  fs/nfsd/filecache.c
 
+between commit:
 
+  735aab1241ea ("nfsd: nfsd_file_acquire_local no longer returns GC'd nfsd_=
+file")
+
+from the nfs-anna tree and commits:
+
+  f905e00904cc ("tree-wide: s/revert_creds()/put_cred(revert_creds_light())=
+/g")
+  51c0bcf0973a ("tree-wide: s/revert_creds_light()/revert_creds()/g")
+
+from the vfs-brauner tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/nfsd/filecache.c
+index 2adf95e2b379,dc5c9d8e8202..000000000000
+--- a/fs/nfsd/filecache.c
++++ b/fs/nfsd/filecache.c
+@@@ -1255,8 -1247,8 +1255,8 @@@ nfsd_file_acquire_local(struct net *net
+  	__be32 beres;
+ =20
+  	beres =3D nfsd_file_do_acquire(NULL, net, cred, client,
+ -				     fhp, may_flags, NULL, pnf, true);
+ +				     fhp, may_flags, NULL, pnf, false);
+- 	revert_creds(save_cred);
++ 	put_cred(revert_creds(save_cred));
+  	return beres;
+  }
+ =20
+
+--Sig_/e2WIvSe0jOiXRtiGlQHwXfK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd+8d8ACgkQAVBC80lX
+0Gxk8Qf9EWDqLoE66YL1N0TYXR8PVajbp8UQifNuk5g7O2Exet1J1DbiiDh0LEtd
+b99KDrYM3RRJcHeMk5UVWeoJPX33RcjNFvu0m6oIR2kagqFs8w6cI6Sl9AtH3hDw
+XzbbjhCwMISPtkyziD5hcmk79Ro3EGgdlBb4jgLsrdzkPtSLUPbVG5ybLShgAP+q
+VwhlPrZr4paZj0T7MWPjBj/iIyz7d6TM2Xh4x3AGxK9dOuLklZ9Oau1o+bUkGvd6
+B2A9MCituSiaC1QxSeWHBNPpMBF6nWOr2sL4jxD0EoqPi9AouISnwNHyKLkHGKTc
++aSfRQZhuJFaFbgWSKp8nlkQB4PWWA==
+=MK/l
+-----END PGP SIGNATURE-----
+
+--Sig_/e2WIvSe0jOiXRtiGlQHwXfK--
 

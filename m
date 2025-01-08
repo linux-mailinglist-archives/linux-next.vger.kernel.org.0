@@ -1,245 +1,125 @@
-Return-Path: <linux-next+bounces-5099-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5100-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8824DA06943
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 00:07:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B9B9A0698D
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 00:40:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA4633A6CF9
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 23:07:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A87DA18859E5
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 23:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF982046B7;
-	Wed,  8 Jan 2025 23:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721EE2046AA;
+	Wed,  8 Jan 2025 23:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="aaWXBVZ/"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="F0oTw53F"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908D520408C;
-	Wed,  8 Jan 2025 23:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD2422611
+	for <linux-next@vger.kernel.org>; Wed,  8 Jan 2025 23:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736377618; cv=none; b=LviYpRpLqwo3WhjXzP/ldUa1JSUMQDG7tDNX5/alNeR3KS8MLrauffTE9tzYRPCEN56bM/SpYacVhazrTHhli7lBSuMw5TbNlypWGCIz+4L7CzLWkY+PUUkTt46E20MSzipRvgYnHL/FyLriwm8ac1FObCZAbFhOA49rXi+STzQ=
+	t=1736379614; cv=none; b=Q6oDNu+DFCo12/uMY/RFeL1iFGe4+nlnROXN5AxRd2c1bUMX8Tmn386FOHsYZ6k8RCta+1pzfp7U4PKsz7oagBOMgYAfziImiDLjC/jfm3oCt0152DGonBTAdUsVBmjE9FPLSopA2Xnl2LOXgkSLbErYo0WboFZjFRQzueDt5q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736377618; c=relaxed/simple;
-	bh=Jm8qAfut6+6t24rGlPBDLOn7EdAz7R6cwoQ5dNlbR14=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pkt2rGWUVM81TQlwjmfvb78FjkGGIni06POzxL0hc3uNYt3o38vZ+qRWyH7J9pYG3ls/5f/lbQAh4n3mo4IiXjJCmOfHYeQVWkLGMYMakj43wqNNqDHb57CU4n0IHu7y8o5My4W6hxc9b1zn3MOL/ye5MK6XyNb0IdyJxRVFSeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=aaWXBVZ/; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736377601;
-	bh=7wNe598J0QJV4jbXv5R7Y0TmGXZIhcS6TbgPMv/p1Pc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=aaWXBVZ/ezD+HDP08VgyjJug/8id04TfBaXVsR3KYhTIssTVCLqDCgDFxQAz0fkC7
-	 0ruZDrCiArxL0mmSNAQ5y3/b1dikI8drsP/CDTnc8Co2run1E5o6ySINhNepKJNJWM
-	 HvGvZs8/qIZuJrIB+/ZxN6TjzIZ/WP8RcJTdbh7BZfn3jwhTeTRnPXuVTvbPQKz6ls
-	 fm1GZBBg4UVp1kofNv5X9q0t78R4oN55dTpCmRV5bHgdwi0VIcq06CINsqtJQLj6tP
-	 icQTSSijx4g/T37vn/Ke/yHSW81J7b7c77mvudrL2VP+dT0cRZWi8NOYr/OMmMvXFF
-	 sbSqVQ0Cp6E7w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YT3Sx0gFgz4wc4;
-	Thu,  9 Jan 2025 10:06:41 +1100 (AEDT)
-Date: Thu, 9 Jan 2025 10:06:46 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Alistair Popple <apopple@nvidia.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20250109100646.7b0ef3b7@canb.auug.org.au>
+	s=arc-20240116; t=1736379614; c=relaxed/simple;
+	bh=6MdkO+ANHM9A60tsmkecbfdrjtmSsD6weQX4DUCJNuQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H/kytDHkfBu2P/LRnGgh3/3Y165pQikDtCLyWykcGzk6+bX4d9Wgbu5KtgD3naHSbzob8/iWbFxdY3vdrfiN8o2GbRRtq1pAisHpFPArim9btw7V63l4AHDb+8uaY+P+azosR7XL2owDpwpno9cIQCbFTkkX1BmLfULeqZaIIaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=F0oTw53F; arc=none smtp.client-ip=209.85.166.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3ab29214f45so966465ab.0
+        for <linux-next@vger.kernel.org>; Wed, 08 Jan 2025 15:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1736379612; x=1736984412; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6Ri8mtVirUvyyZ6nmOnC/LZjhObjSlPKVdDOjjMdr2c=;
+        b=F0oTw53Fn6BhcYe32Cl26yv7NTB+xwr/Tn6Wlw+dXXw4Yu1XtShmOVs5v5YnD1KQPU
+         /Zw5xKnTC8jpEEbG2OItlLvTVeRICjHKktPXPsNkS4sDAHJ33DpYeGwEl0epNYEk/u01
+         N1sJ55oLZg9Xshm+OZN5JgGfVfP940fBQWcXQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736379612; x=1736984412;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Ri8mtVirUvyyZ6nmOnC/LZjhObjSlPKVdDOjjMdr2c=;
+        b=iixf209uao2P1N6Y6T9QofGBhBCsx0GbzdMwUz7yGYdtIf8jxDttW3qm3lP8Jp39vk
+         k2xZVGpAFbtdN817J+yECX9sTdcyB5ofYOx0FjPBjycJeZ6knlm9Z6PFXun9Ao2vyBda
+         1+bWMFp/XH6Ym12qN60+r/TH+dmIZM3VwL+M0Sbw+r/6MsTlA726KNTdtMVCiR0mQmWB
+         4OxPZh3Gc03YsqFnkppqwMo9GqTh0d6OH2PdCGToZ539skUtNTTlZPX0cWHf+5SnmL/3
+         Jm+NRAe3bXYx4Pi6UDuvaVaBOKuvNpkkuqFnUEv3m2O91mLHLoGsZiU6xDXMGt0dfsPZ
+         ts7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXx2zu4XFpQ8+UsltI8vQ6kGVzMDyeV1W8tGnh4DA/kyjcrxeR3MJqbUwRqPrw9UWp9cAw3w+0d+S9k@vger.kernel.org
+X-Gm-Message-State: AOJu0YzE1+Km/Lqyj3ZSmZK3ayw6bSYMQTmsCEPL4+OpyW0VmBLYNUWK
+	XLE6QtMRL6j2kuZ2HBjcZmirCiRJKpWGLDsTINriCX+WP5Xfh2xliy8Nr8s/WA4=
+X-Gm-Gg: ASbGncsV6+wKaM5tfpPPWr39zzRkCUyu1f1nfz/YxWMKHJWJbIHtpyNe7gliFLhMW5+
+	As0xT+u0iwPfHT9QRqVHV37a5csDyVRN9TJ+HrGGl0AhybiQ1xdS0iypoOnuhBS18rrQHh9ZV93
+	Yp7evwoUvFdslkZEyXOF0sjvW/MGfISEucFkhyeavovxMJiOQSn/ipAsdpX9L3Ux6DXZakoES2U
+	XEP86I+EYo6fImRavGWMnDoyZjlppSMZTks2tT9rYVGpZwrqDBTfieWzfk+gjOY7Mxe
+X-Google-Smtp-Source: AGHT+IF6eYSuISgD+RCYfI+Ara0n1whGJDeBklXH6p//wxMXgzwItnvsMB1eg/4jHGvsuHgbZqdB3A==
+X-Received: by 2002:a05:6e02:152d:b0:3a7:fe8c:b014 with SMTP id e9e14a558f8ab-3ce3aa763a6mr36286005ab.21.1736379611869;
+        Wed, 08 Jan 2025 15:40:11 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3ce4af56167sm398725ab.58.2025.01.08.15.40.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jan 2025 15:40:11 -0800 (PST)
+Message-ID: <057fdf09-ef2b-42fa-9300-dd7bf348362c@linuxfoundation.org>
+Date: Wed, 8 Jan 2025 16:40:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3W.8IC2k_SZspOGS8n4FxUa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: manual merge of the kselftest tree with the net-next
+ tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Shuah Khan <shuah@kernel.org>,
+ David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Laura Nao <laura.nao@collabora.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Willem de Bruijn <willemb@google.com>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250108144003.67532649@canb.auug.org.au>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250108144003.67532649@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---Sig_/3W.8IC2k_SZspOGS8n4FxUa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/7/25 20:40, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the kselftest tree got a conflict in:
+> 
+>    tools/testing/selftests/kselftest/ktap_helpers.sh
+> 
+> between commit:
+> 
+>    912d6f669725 ("selftests/net: packetdrill: report benign debug flakes as xfail")
+> 
+> from the net-next tree and commit:
+> 
+>    279e9403c5bd ("selftests: Warn about skipped tests in result summary")
+> 
+> from the kselftest tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
 
-Hi all,
+Thank you for finding this. I will mention this when I send pr to Linus.
 
-After merging the mm tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
-
-In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
-                 from arch/powerpc/include/asm/book3s/64/mmu.h:32,
-                 from arch/powerpc/include/asm/mmu.h:377,
-                 from arch/powerpc/include/asm/paca.h:18,
-                 from arch/powerpc/include/asm/current.h:13,
-                 from include/linux/thread_info.h:23,
-                 from include/asm-generic/preempt.h:5,
-                 from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                 from include/linux/preempt.h:79,
-                 from include/linux/alloc_tag.h:11,
-                 from include/linux/rhashtable-types.h:12,
-                 from include/linux/ipc.h:7,
-                 from include/uapi/linux/sem.h:5,
-                 from include/linux/sem.h:5,
-                 from include/linux/compat.h:14,
-                 from arch/powerpc/kernel/asm-offsets.c:12:
-arch/powerpc/include/asm/book3s/64/pgtable.h:1364:1: error: expected identi=
-fier or '(' before '}' token
- 1364 | }
-      | ^
-arch/powerpc/mm/book3s64/pgtable.c: In function 'pmdp_huge_get_and_clear_fu=
-ll':
-arch/powerpc/mm/book3s64/pgtable.c:670:33: error: unterminated argument lis=
-t invoking macro "VM_BUG_ON"
-  670 | EXPORT_SYMBOL(vm_get_page_prot);
-      |                                 ^
-arch/powerpc/mm/book3s64/pgtable.c:207:9: error: 'VM_BUG_ON' undeclared (fi=
-rst use in this function)
-  207 |         VM_BUG_ON((pmd_present(*pmdp) && !pmd_trans_huge(*pmdp) &&
-      |         ^~~~~~~~~
-arch/powerpc/mm/book3s64/pgtable.c:207:9: note: each undeclared identifier =
-is reported only once for each function it appears in
-arch/powerpc/mm/book3s64/pgtable.c:207:18: error: expected ';' at end of in=
-put
-  207 |         VM_BUG_ON((pmd_present(*pmdp) && !pmd_trans_huge(*pmdp) &&
-      |                  ^
-      |                  ;
-......
-arch/powerpc/mm/book3s64/pgtable.c:207:9: error: expected declaration or st=
-atement at end of input
-  207 |         VM_BUG_ON((pmd_present(*pmdp) && !pmd_trans_huge(*pmdp) &&
-      |         ^~~~~~~~~
-arch/powerpc/mm/book3s64/pgtable.c:205:15: error: unused variable 'pmd' [-W=
-error=3Dunused-variable]
-  205 |         pmd_t pmd;
-      |               ^~~
-arch/powerpc/mm/book3s64/pgtable.c:671: error: control reaches end of non-v=
-oid function [-Werror=3Dreturn-type]
-cc1: all warnings being treated as errors
-arch/powerpc/mm/book3s64/hash_hugepage.c: In function '__hash_page_thp':
-arch/powerpc/mm/book3s64/hash_hugepage.c:57:44: error: '_PAGE_DEVMAP' undec=
-lared (first use in this function)
-   57 |         if (!(old_pmd & (H_PAGE_THP_HUGE | _PAGE_DEVMAP)))
-      |                                            ^~~~~~~~~~~~
-arch/powerpc/mm/book3s64/hash_hugepage.c:57:44: note: each undeclared ident=
-ifier is reported only once for each function it appears in
-arch/powerpc/mm/book3s64/hugetlbpage.c: In function '__hash_page_huge':
-arch/powerpc/mm/book3s64/hugetlbpage.c:77:42: error: '_PAGE_DEVMAP' undecla=
-red (first use in this function)
-   77 |         if (old_pte & (H_PAGE_THP_HUGE | _PAGE_DEVMAP))
-      |                                          ^~~~~~~~~~~~
-arch/powerpc/mm/book3s64/hugetlbpage.c:77:42: note: each undeclared identif=
-ier is reported only once for each function it appears in
-
-Caused by commits
-
-  c0c3319917db ("mm: remove devmap related functions and page table bits")
-  f9a01843d366 ("mm: remove pXX_devmap callers")
-
-from the mm-unstable branch of the mm tree.
-
-I have applied the following patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 9 Jan 2025 09:33:31 +1100
-Subject: [PATCH] fix up for "mm: remove devmap related functions and page
- table bits"
-
-and "mm: remove pXX_devmap callers"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/powerpc/include/asm/book3s/64/pgtable.h | 1 -
- arch/powerpc/mm/book3s64/hash_hugepage.c     | 2 +-
- arch/powerpc/mm/book3s64/hugetlbpage.c       | 2 +-
- arch/powerpc/mm/book3s64/pgtable.c           | 2 +-
- 4 files changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/in=
-clude/asm/book3s/64/pgtable.h
-index bda0649b316d..1d98d0a5984b 100644
---- a/arch/powerpc/include/asm/book3s/64/pgtable.h
-+++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
-@@ -1361,7 +1361,6 @@ static inline bool arch_needs_pgtable_deposit(void)
- }
- extern void serialize_against_pte_lookup(struct mm_struct *mm);
-=20
--}
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-=20
- #define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
-diff --git a/arch/powerpc/mm/book3s64/hash_hugepage.c b/arch/powerpc/mm/boo=
-k3s64/hash_hugepage.c
-index 15d6f3ea7178..cdfd4fe75edb 100644
---- a/arch/powerpc/mm/book3s64/hash_hugepage.c
-+++ b/arch/powerpc/mm/book3s64/hash_hugepage.c
-@@ -54,7 +54,7 @@ int __hash_page_thp(unsigned long ea, unsigned long acces=
-s, unsigned long vsid,
- 	/*
- 	 * Make sure this is thp or devmap entry
- 	 */
--	if (!(old_pmd & (H_PAGE_THP_HUGE | _PAGE_DEVMAP)))
-+	if (!(old_pmd & H_PAGE_THP_HUGE))
- 		return 0;
-=20
- 	rflags =3D htab_convert_pte_flags(new_pmd, flags);
-diff --git a/arch/powerpc/mm/book3s64/hugetlbpage.c b/arch/powerpc/mm/book3=
-s64/hugetlbpage.c
-index 83c3361b358b..2bcbbf9d85ac 100644
---- a/arch/powerpc/mm/book3s64/hugetlbpage.c
-+++ b/arch/powerpc/mm/book3s64/hugetlbpage.c
-@@ -74,7 +74,7 @@ int __hash_page_huge(unsigned long ea, unsigned long acce=
-ss, unsigned long vsid,
- 	} while(!pte_xchg(ptep, __pte(old_pte), __pte(new_pte)));
-=20
- 	/* Make sure this is a hugetlb entry */
--	if (old_pte & (H_PAGE_THP_HUGE | _PAGE_DEVMAP))
-+	if (old_pte & H_PAGE_THP_HUGE)
- 		return 0;
-=20
- 	rflags =3D htab_convert_pte_flags(new_pte, flags);
-diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/=
-pgtable.c
-index b6aeb306ec0b..49293d0c41dd 100644
---- a/arch/powerpc/mm/book3s64/pgtable.c
-+++ b/arch/powerpc/mm/book3s64/pgtable.c
-@@ -204,7 +204,7 @@ pmd_t pmdp_huge_get_and_clear_full(struct vm_area_struc=
-t *vma,
- {
- 	pmd_t pmd;
- 	VM_BUG_ON(addr & ~HPAGE_PMD_MASK);
--	VM_BUG_ON((pmd_present(*pmdp) && !pmd_trans_huge(*pmdp) &&
-+	VM_BUG_ON((pmd_present(*pmdp) && !pmd_trans_huge(*pmdp)) ||
- 		   !pmd_present(*pmdp));
- 	pmd =3D pmdp_huge_get_and_clear(vma->vm_mm, addr, pmdp);
- 	/*
---=20
-2.45.2
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/3W.8IC2k_SZspOGS8n4FxUa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd/BQYACgkQAVBC80lX
-0GybOAf9Gq3Gk25d4SVQerdrCLl17NzNSQAVTtc4C87+vdaB3BlEGv0Z8x8M5lzy
-hOmh+qkXu0ke4mpyleVaYhUBmnxE02nCZnYLnaS9qOYXpKHyBw9NugmTSd0nj4wq
-aLFT2fvivk5ynhCUXt+hkG6fQgetUSQ1s3Y7LWRXs/tanFgmtn5c1EuMyefXIKoW
-qEYTMX7MsuFcWstEhYmfxTC/qePYtFPL100jn/dplUHppbStCJfyNgM5pjsj5Bco
-Kp/RzQI2scXGwFx0x3wckfNYOifm7KfyYYKmSIdGUSibCGfXy1gyMhvzkYfsRUbC
-zAF/R1RL3tR6XOx9mLtxV9v6v8h70A==
-=WgLv
------END PGP SIGNATURE-----
-
---Sig_/3W.8IC2k_SZspOGS8n4FxUa--
+thanks,
+-- Shuah
 

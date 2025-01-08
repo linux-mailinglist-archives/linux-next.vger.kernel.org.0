@@ -1,162 +1,105 @@
-Return-Path: <linux-next+bounces-5085-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5086-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C98FA050D6
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 03:33:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CFE8A0516D
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 04:04:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 772C3188A25E
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 02:33:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F270188557D
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 03:04:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F4F15DBC1;
-	Wed,  8 Jan 2025 02:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F9C175A5;
+	Wed,  8 Jan 2025 03:03:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="uzsF8o+Z"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="twY4ZJuB"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE78815FD13;
-	Wed,  8 Jan 2025 02:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5861259490;
+	Wed,  8 Jan 2025 03:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736303537; cv=none; b=dSqQLRALh/ja71BCUvWGiptnkPnNE3qFPo1jfaSVxM0tHXFSGt7szrGq34N7W4Xva2Be7j+cL0q8GvNLi60KJUG5OPb/+D11feaJ8TC2Wa14U6v2O4AE4jEGo+gy7Y6+t+FwjiRzPuUwDGmO6jFXwm6xPszTmbGJboAwuCwtses=
+	t=1736305439; cv=none; b=PmKzmx3ivSpjP0of/rsHkqohGLS8OkF8omItOntTrYohf82Y/J+paLOW1XtuPlGzox2TAvlC1nPe1s+2FBjin9QTajNGrYRaM4sQb47qLIZor7UhQwHJJ3MMLkiyJUX2Ho739+2rDMgMzD6Hn7b6XD9ghD/I56xo3zJpAiWEQoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736303537; c=relaxed/simple;
-	bh=F8ZdfyylUlvD32S3A8PXRlcoRMl6cAhTKdBTG6xGL7I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uish+7Q1IGnM5W9hXzZd7CMb/wYMsPTRaGlc9zqnKn1fNokMwoFurOrE54JnD2r6L2X+pHECcmKxD2HWrhFfWzyhBrw0QL92ClpxStyyW4XjigzyD9X/UzgGExkyIVYVLsp+6lfFn3gVUEp7zHGgiuInKgIH6gLBrM055K/kv9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=uzsF8o+Z; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736305439; c=relaxed/simple;
+	bh=LB8wPattgvhgTcINi3w1OE/byxKEQbyDgoAyv+uBnik=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=CmtcfVgFRZHmyK4MTN3+bjuJP9ltf/Fks9n5/qhztc7lrYiQf/eWxUed1l4tqcwJVx0dOWCOYiyyp2CHFBgY1IR3+LOS4zGXNE/9PLbqVBzlO1wujuhOJwm6y4doPZhrTj6Rda50LXE04rkIPRsfTq2UCH0c1VEKLS3XXdIwNBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=twY4ZJuB; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736303522;
-	bh=vjef3+YneLoIOMJ8eoWkQ/C+uu/i2Y0p5hGds2QmghY=;
+	s=201702; t=1736305427;
+	bh=3bxAVa4SsfwwzlkjvpSYMeXDYxVgp/gRArWpfULZ7Ws=;
 	h=Date:From:To:Cc:Subject:From;
-	b=uzsF8o+ZXXN1i6Y1YKLyALNeL4pu49+VUKqBjVRUJmxupE5J4333Aiu8jSx57gUD1
-	 WhqqBjBtcIWQm5Pjwif6rhJ3/euV6KlYWiQtkaxqU+R66dNENHQhZ60QkHLUED6d1u
-	 DnTLSrq0w8ZSTMNFEeBYw5+Mje3Z4S4XWPVSlB1Ywh8tA2dFRhOcZtcRArttg+uSiN
-	 oE6l0GRMxmLkKLUaxcflZxV1vb/QWuQi7BYE+2FZBRJoOett/Q73YA4FP1vvsk3vGp
-	 3gr1ojA+dpxf1Z1kJxIQNzUBe8S2QVWmUKW4rQZDDrSl/Mxmrn1MgrrwC4R35wRsF1
-	 FLPiWaM95gwlg==
+	b=twY4ZJuBJMgaw/E6oCwsumXztZ8R951cVmOyxX9FNBKko78iNGC9thTuhWLbjBzOG
+	 cklFH6pxiHt/hC8VOQVSQ4ZQN/lWZ2cJ9VVX7eusk/NiRcq3UVdT2MasZnYQlNW0Pq
+	 cWhBMR4+w+Vw3Bcm39kKvxTfbPzKEUpw8ajsHXU8p6z2COciXWr82+xXa1ouLUAQ0s
+	 XR2q73tnkpwSE1JlKJMur8lGdK+kK78ieY2za/MopDEZzcJZ7GcMF8BlsCn7TJCWs0
+	 GWzV4vgtxslXkmSRIQ5ObvI7eXjB1/9h34ALa81NUOEgPApMQVijeEcTb7j9EO65Qa
+	 a4d9q/07giU0Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YSX4L3Jnfz4wbr;
-	Wed,  8 Jan 2025 13:32:01 +1100 (AEDT)
-Date: Wed, 8 Jan 2025 13:32:07 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YSXmy6t7Nz4wcD;
+	Wed,  8 Jan 2025 14:03:46 +1100 (AEDT)
+Date: Wed, 8 Jan 2025 14:03:52 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Kuan-Wei Chiu
- <visitorckw@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ftrace tree with Linus' tree
-Message-ID: <20250108133207.265a6f47@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>, Andy Gross <agross@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the usb tree
+Message-ID: <20250108140352.177285ae@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Yeb26swHmGcoVLDNzfyyBSF";
+Content-Type: multipart/signed; boundary="Sig_/EnSu9Msh01YeWCGcFjcj85c";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Yeb26swHmGcoVLDNzfyyBSF
+--Sig_/EnSu9Msh01YeWCGcFjcj85c
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the ftrace tree got a conflict in:
+The following commit is also in the qcom tree as a different commit
+(but the same patch):
 
-  scripts/sorttable.h
+  485ff9860801 ("arm64: dts: qcom: x1e80100-qcp: Enable external DP support=
+")
 
-between commit:
+This is commit
 
-  0210d251162f ("scripts/sorttable: fix orc_sort_cmp() to maintain symmetry=
- and transitivity")
+  5f440a7b003e ("arm64: dts: qcom: x1e80100-qcp: Enable external DP support=
+")
 
-from Linus' tree and commit:
-
-  4f1d0c914628 ("scripts/sorttable: Move code from sorttable.h into sorttab=
-le.c")
-
-from the ftrace tree.
-
-I fixed it up (I deleted the file and applied the following merge fix
-patch) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 8 Jan 2025 13:23:17 +1100
-Subject: [PATCH] fix up for "scripts/sorttable: Move code from sorttable.h
- into sorttable.c"
-
-interacting with commit
-
-  0210d251162f ("scripts/sorttable: fix orc_sort_cmp() to maintain symmetry=
- and transitivity")
-
-from Linus' tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- scripts/sorttable.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-index cd3b2145a827..656c1e9b5ad9 100644
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -368,7 +368,7 @@ static inline unsigned long orc_ip(const int *ip)
-=20
- static int orc_sort_cmp(const void *_a, const void *_b)
- {
--	struct orc_entry *orc_a;
-+	struct orc_entry *orc_a, *orc_b;
- 	const int *a =3D g_orc_ip_table + *(int *)_a;
- 	const int *b =3D g_orc_ip_table + *(int *)_b;
- 	unsigned long a_val =3D orc_ip(a);
-@@ -386,6 +386,9 @@ static int orc_sort_cmp(const void *_a, const void *_b)
- 	 * whitelisted .o files which didn't get objtool generation.
- 	 */
- 	orc_a =3D g_orc_table + (a - g_orc_ip_table);
-+	orc_b =3D g_orc_table + (b - g_orc_ip_table);
-+	if (orc_a->type =3D=3D ORC_TYPE_UNDEFINED && orc_b->type =3D=3D ORC_TYPE_=
-UNDEFINED)
-+		return 0;
- 	return orc_a->type =3D=3D ORC_TYPE_UNDEFINED ? -1 : 1;
- }
-=20
---=20
-2.45.2
+in the usb tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Yeb26swHmGcoVLDNzfyyBSF
+--Sig_/EnSu9Msh01YeWCGcFjcj85c
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd946cACgkQAVBC80lX
-0GyUywf+JmnUSrWTngY7eErsh+spx4fX5TMFm4KlaB69cxgueG/rWdtkuszEufh5
-ezwHILIoiCUqdaq+aN/j0pCcbhCQv8/Y+ksGePBJ7/RMM7SXLj41jJwuUSHjLy1W
-DDBxaxem2dlqiiytdWjcczLRhzozUDHHRdVmcMwCwJm04H7/uVy5a6hlob93T8Bu
-svX1dsLEOedHd7MzEWXCte/AzKrVDpDIvyVrWduMPTizJpNLIlXvnpLrYq29LzgL
-i1cIw111j7FUfB1VvYueTA3fBR8fGB5keJSkqiLXVgED7qcZmJqyW1fI7yGsp+4u
-ccvxh/TUapdaQKrBg6eAQxMHGKjk4A==
-=VbjI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd96xgACgkQAVBC80lX
+0GwZhgf/XvfULybF7RwFl8ZXZa3SN9aND2dCtQ4TQhVjLUnFUfUkD1tiBy0Pz7t/
+dwhuIB7W/Fw6MJbx2EtC0J7rfanmw/q/qrNWFmn5oqebnNSCnoLBh08PAPe/m2ry
+1bqB4EY4DntiCpx73wNCuK9A07C3KWLlYEyHvviZlxBAk0ZDXbuZhu6bVIeLaVbf
+IYpvjaBMHw+8cA1MNSLBfMI3BmGYInDgpsVmleupeTBL/fV4C0RX21SUj/REbmhb
+Dm4qtTGAkuS7aVNcHGBf4afFXRRuaPu34j08W5qV7a49Jvby4mcV6U7gpPGVPx7n
+iK0Nl5wiBdtRvEJiKeB2hmQnwy7W/Q==
+=ajCe
 -----END PGP SIGNATURE-----
 
---Sig_/Yeb26swHmGcoVLDNzfyyBSF--
+--Sig_/EnSu9Msh01YeWCGcFjcj85c--
 

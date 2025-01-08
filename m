@@ -1,235 +1,277 @@
-Return-Path: <linux-next+bounces-5094-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5095-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15669A05B1F
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 13:13:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C808CA06736
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 22:32:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 608603A5B3F
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 12:13:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA28A16572B
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 21:32:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 157F21F8AE0;
-	Wed,  8 Jan 2025 12:13:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9DA201259;
+	Wed,  8 Jan 2025 21:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="ViVDD/U6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="v5/by6zW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BfwRjlIk"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050D81F76C3;
-	Wed,  8 Jan 2025 12:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736338394; cv=none; b=sF5Xd/ijjBfMSMxAw8UEatpfE/OQ9OeYuJwK7584tfrysxrGurRyts7ZUVEf4sJ8roQTDNoBKhhw1u0tcgKYaS+34r0b2GmOGIOcEvs51bwnnqtK9YyzNUaNYZqPqD7aR/3qPxrsRl6+lJQVGH2g5SPmNeGeiIa9v33wbPJOE4A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736338394; c=relaxed/simple;
-	bh=8dIpAjXyic7YM2fJ/zmqhXkLzm+JvmU4tUeH4xYlCuE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iy5HF6/OyqvVkydbDLEcxfJD7m30kkPoV72Lbi9gCaBwNPiWlDWCZ5lyIhuA6JOjCTI02xxz4tTBxzHtqkVHYo5QR06vauJ6I/iSgKFvkqGyeL9iGcic5xQJ4AH2a/pRTuXFfejQt+mgN74/HzXe0Uk/dWf+jDIDQewYEqec/sE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=ViVDD/U6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=v5/by6zW; arc=none smtp.client-ip=202.12.124.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id C0E50254019D;
-	Wed,  8 Jan 2025 07:13:10 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Wed, 08 Jan 2025 07:13:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1736338390; x=1736424790; bh=cwUBGlsGl/
-	dSJmQqfRIIHs8sc7pHg4nk92SgPWKHe0s=; b=ViVDD/U6TmduWTO1CNwzmyB+dE
-	USAQXvaVhzLAXa6x17wtaE+o7/ZMmfyEU6BHnUj8AQImY11+/DY0K3bO9wTlvYS+
-	zCuJYxanGskMJw0PMSy23a86TAqEYcjpCgs9ec5O2uJgdm6mXNhZ6h6sEOa/jTgR
-	C6kNXba3j09hpHZall35zVz7cP6Sds1X19TGDCzMTmbWLEgI/biL57v2NtW2RYxz
-	lBuRe+X61g3QEuCVVmqPuS1U8rvkd2OBk2rLw9SY84S/lQNdpQyTX16Lgq85WZ/K
-	9RHsnaySzaxAu3h2jt4PpRbkMUV2fgygHeuJ3QbqFGNssA5yqpUBodrOKegw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1736338390; x=1736424790; bh=cwUBGlsGl/dSJmQqfRIIHs8sc7pHg4nk92S
-	gPWKHe0s=; b=v5/by6zWKsrgUJ0sNlO2K8TowxrHdt0jM7yLh+X4kiQ3FfYVmTc
-	QAJZROXI141dsXTOanxsMfOwTW4isoi0E0vY2Tn2dioYkLKpsty+bhBaSDu0j7uj
-	2q/sy+C7WHEZnrsTc9aBf6RmVqZ9G1aAYkpCfpNTSTUZmxYgItjQbPtxkAmSGCHT
-	qBMmdxZVsbydxQoD9iM4zUOvcBHNlJYDSri1OZJM6dLCL3z1Art/mmB3T3+uAB5F
-	vdPMvRM0wy8xpHJaV6IawZjTzNSilsqNzn/B/W4TD2m8BLC5thZq02vguhmYNhKo
-	4xKhrNrnohojR4a9zI24vWDx8xhwhFJ2Aog==
-X-ME-Sender: <xms:1mt-Zwha3Asm1o9ju5RtoxBRGIdK5MWmUP2-aXhLRLcffpsjhOi_XA>
-    <xme:1mt-Z5ChCz38Z9amMmyiiiCsya6sVVcLl7mAz-qU9UmmacjToUjbLSNBLvDjaZCt8
-    lSNAr9vw5jWiQ>
-X-ME-Received: <xmr:1mt-Z4GCOznTm_c-CIaMCepZ5aCQuq8EHbNBap6jPPHFI0dSm555NUbX3UjTfrNsHxkTQGFwg-vzd04JiqEOg_tHbBSYimdtFDHSCQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudeggedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
-    ucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrf
-    grthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefh
-    gfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopedugedpmhhouggvpehs
-    mhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupd
-    hrtghpthhtoheprghgrhhoshhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrsggv
-    lhdrvhgvshgrsehlihhnrghrohdrohhrghdprhgtphhtthhopegrnhguvghrshhsohhnse
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrd
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgvphhhrghnrdhgvghrhhholhgusehl
-    ihhnrghrohdrohhrgh
-X-ME-Proxy: <xmx:1mt-ZxTjZUcCdD7KmdOIGKmRDpBB6Org-ZjCt7PvlhWyslizbVW6lg>
-    <xmx:1mt-Z9xrGdtgsTx5FEfLJfv85lGfGriT5VeUVYjO1VLDPVvGd_u62w>
-    <xmx:1mt-Z_4wcdiBTXOkF_dpgyNuu0w-ampyuoZG3h9LlNDSdQIfDD9gkQ>
-    <xmx:1mt-Z6yh-7qvrpFJHIIqccF2Hnpl_ENb1Oi5x_cHEEogugURr-RqSw>
-    <xmx:1mt-ZyK5OsxWAuKhavZJHJkyng8J--Z-pCbFAiLh6j5pNMHQ4vfhD-vW>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Jan 2025 07:13:09 -0500 (EST)
-Date: Wed, 8 Jan 2025 13:13:07 +0100
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andy Gross <agross@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>
-Subject: Re: linux-next: manual merge of the usb tree with the qcom tree
-Message-ID: <2025010801-easiest-excitable-a3ca@gregkh>
-References: <20250106151712.4cf70651@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55FA18D626;
+	Wed,  8 Jan 2025 21:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736371965; cv=fail; b=gGrsbRMfP3ibavReVmHDNLjrhqvAu/ZEMqbyewFS5r/bOrIs9mIh9cxT7RMzHMzPDR6SHBfg7YiE9jY4KL/cyHgJa+2kY6ZBMgNoJKAiUaow8p4YHt6kUDwDzi22f/Ov7g+TMgzqi7WZhIU3t6iKDH4nv0CBhhm5kLsLngXEkO8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736371965; c=relaxed/simple;
+	bh=r5+m1vEW4PKMH35RWEPkRmIzMI+qU13radM2pgYHDmM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=gfA1Srmz2yedoHHhUc0Pku1cW4LeA6AJy+O6Xth0JXP9CKdJoKCRuMv1Pavp9dCLTJQfdSRrdxihPiIqimPbjBXXJfppVBUKVFv94XxW3vxLSyvgtO712gWx6ozsizs+WoYXsq8k9dir2s5i3vHp7ljKhDGtHv1OdXKDPBVGan0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BfwRjlIk; arc=fail smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736371963; x=1767907963;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=r5+m1vEW4PKMH35RWEPkRmIzMI+qU13radM2pgYHDmM=;
+  b=BfwRjlIk8eHs9COBrgJptp8+FkXYdzpCMmW65MmP1J7t0V/bHadGv/9G
+   8dT1chrSCnDiU3XWJKFFHINbfSkWyxwwMYcM2C0AOsu/2VuUj+fjrzOAP
+   RIs48WNeS1VpkTE4PCjLFt3Jf985TFSyf3rE8gu8gFod1Fwnz7vvvfFiT
+   T6+aDW/Ex0zgOiRQaX89qZJjBlOwpjnJLmvPAYhsOIOARgz4dJK9MN9IU
+   fAKUV9aEMb4DBKH28QRQbRq7gcM30NQJ7gHYYBwEdNzEecimWkHcVOQtB
+   MYGnSFJYS3sThBcbpbNSyortITY970vRHmieC1gDvj5ZTJEtHztZX8kcg
+   Q==;
+X-CSE-ConnectionGUID: uHAtTDvKTweDgJ3smBd8Lw==
+X-CSE-MsgGUID: ej6PJyq8TR6VaX6KiF8qqw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36838739"
+X-IronPort-AV: E=Sophos;i="6.12,299,1728975600"; 
+   d="scan'208";a="36838739"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 13:32:43 -0800
+X-CSE-ConnectionGUID: KAlUbJp+Sjy7GsPsPAT5QQ==
+X-CSE-MsgGUID: USlC/lmeSuW3GUndzlnGdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="107258715"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 08 Jan 2025 13:32:42 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Wed, 8 Jan 2025 13:32:41 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Wed, 8 Jan 2025 13:32:41 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.41) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Wed, 8 Jan 2025 13:32:41 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RBZkDGiiU1RzAL0Axr1i6c1+yAnWxC6E1FudWB3rzVumQwCsmxHDsd62Jh2hlSYiBEAT4vKKAYOqEv2x/gVMB5GlNCYCzRxIaalOQzQrjzwc9dUuSX8Sz6OxBUK3rVpv0OsqoH1PIp5apHgtzg2opeJIucoS5z16gFjMk2hOaUrXHx5zQmnUEsr7dnDIUcfsYAIgG19pNX9hIhMhYQ10jmllNosAo2bsThtzqUK3bVkKpRvIMS4TkJTJOAYwaNPacL1OeNu0/dkg4o9VPvrRm+UWdppRoV87qjRw0+FmqrUZXGvuUNuTieRCbGXd0WGwFKVi3MVGwO6c4rExjbQG/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gdssjuEdF+xI8mRB+bQHcUuUJgimN9mvj0+UxXHnofQ=;
+ b=nQRwGQkDCUE40Bw/deDFNCHjOhN+woZhsKzBFHQoe3leWnw0RrjOZ4BfA+15dobV1QKx7IabznAfEmdtpQ4sj2ddj/UQQ0iWnQls0hZLjqlrXczunlUXSsQFRtYw1TixBfJyBxM6W9zJgDwur33C6VPt6NI3a7Gzo1OYwwOePU1fGryAvyzD0vHEf/manV+pJB3dtnAGv1bGsR1/Mf4SqiV1I0PdbW8s0SAv47rb5+HEv8hSZICSujHiJOG5uj7xPorrONSykWVuS7GQdwze47Dri/t49jxvEs6LShmDRpyxogulEgif1cqdrbz6/gY7vWUKlnlHQUaYixokCWUCeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7SPRMB0046.namprd11.prod.outlook.com (2603:10b6:510:1f6::20)
+ by SJ0PR11MB5772.namprd11.prod.outlook.com (2603:10b6:a03:422::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.16; Wed, 8 Jan
+ 2025 21:32:37 +0000
+Received: from PH7SPRMB0046.namprd11.prod.outlook.com
+ ([fe80::5088:3f5b:9a15:61dc]) by PH7SPRMB0046.namprd11.prod.outlook.com
+ ([fe80::5088:3f5b:9a15:61dc%4]) with mapi id 15.20.8314.015; Wed, 8 Jan 2025
+ 21:32:37 +0000
+Date: Wed, 8 Jan 2025 16:32:32 -0500
+From: Rodrigo Vivi <rodrigo.vivi@intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, <dri-devel@lists.freedesktop.org>
+CC: Andrew Morton <akpm@linux-foundation.org>, Dave Airlie
+	<airlied@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>, Jani Nikula
+	<jani.nikula@linux.intel.com>, Joonas Lahtinen
+	<joonas.lahtinen@linux.intel.com>, Intel Graphics
+	<intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+	Jani Nikula <jani.nikula@intel.com>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>, Yafang Shao <laoar.shao@gmail.com>
+Subject: Re: linux-next: manual merge of the drm-intel tree with the mm tree
+Message-ID: <Z37u8PjNcMwN_LOw@intel.com>
+References: <20250106130348.73a5fae6@canb.auug.org.au>
+ <20250108121650.09a8e828@canb.auug.org.au>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250108121650.09a8e828@canb.auug.org.au>
+X-ClientProxiedBy: MW4PR02CA0003.namprd02.prod.outlook.com
+ (2603:10b6:303:16d::30) To PH7SPRMB0046.namprd11.prod.outlook.com
+ (2603:10b6:510:1f6::20)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250106151712.4cf70651@canb.auug.org.au>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7SPRMB0046:EE_|SJ0PR11MB5772:EE_
+X-MS-Office365-Filtering-Correlation-Id: 08e88184-62d0-4df8-6f6f-08dd302bf8a3
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?+xvIgBFU1fYpqum0mXaNyv2RPqWAl4+cn+7RZK83s6UrQWi2/vs3E2jzQhjl?=
+ =?us-ascii?Q?ld2Cpn6pUA2N0J01O33IhipQ2JEWs7cATAObbij/IzwzzLyQ92X2oOm2RjgP?=
+ =?us-ascii?Q?GSF3PQ1aF94jrV4Vhw/aZdojihS+0twqE7G2dWhu891KOadd4Eaciug/Er5b?=
+ =?us-ascii?Q?5zmmkSbV8osYTkv665+nzgg92JDUFJh6/A/MYC0fOp6f+fLKlqKi/gLPiSOR?=
+ =?us-ascii?Q?sGzLhMcoWCbh4rv1mgnCW79RTeQUuAcKu23uAcchAPsVdWh7LQJoeG+gN748?=
+ =?us-ascii?Q?BwLkl9cqc3/dzHYVWVBTnfhzPe2Om9fhZNKD/sL1ZoXYusuki82h1NPJ9I5l?=
+ =?us-ascii?Q?6oP8s/+RTFDudo8C7x5t7uY7PvJKkCo3t95dP3RwV4hra35P3YtJC8vk/Ued?=
+ =?us-ascii?Q?Q/fp86+rT+JdWDr+093ST0LgA+FAEEUHFuIxmF8EbndPjwEm6dyEKNc83FKS?=
+ =?us-ascii?Q?GrD8Y1KhJNekYgCE2KWhzTTwDEvavG4oWJPuSksi83dhdDy163aiz/LO5Q5l?=
+ =?us-ascii?Q?ecKl/GoFby+ynt+mLgVbcrgbc/MhZT7QAmYBnxHCMU8FbuJQJ5vq2DoTV/GD?=
+ =?us-ascii?Q?rkHAn6DYwtM+LDTa/MYIXKRG5h8C4XR8OcI/e8G60w1aRkssOlethdvfQlW+?=
+ =?us-ascii?Q?Sx55JM5IKDjV5jpEm5lrRNdE69sokKlxqYb88E08bgToOjy6PQi+Z2LonlOf?=
+ =?us-ascii?Q?rvrbkLnvm814rqV+ULop9J8NaleVLW0SAHqlhfXzwKdpe++mfyQqT+ZTlZsN?=
+ =?us-ascii?Q?FRm/DlO8lK5J05ubGwGa8UHdre6aEW4I49GvVIm/LbwUnzkVm5z48FHhsVsD?=
+ =?us-ascii?Q?XOlg37Tj7S9LXJNaJ672CqKs7WazX2nUq1lUN8XDk2YLsFaWk50DugbTPGyE?=
+ =?us-ascii?Q?9bxUdYaKCQKfezPyc/UkOekBLSnRaqx+ehwPQQh3yt+YQviF3cvdxDf0HERB?=
+ =?us-ascii?Q?ILZJazu1Xk0qsmo62V00b/rVbMU4i1zN11JBP+aCs+ljEPmmvE0XyFS1Linr?=
+ =?us-ascii?Q?W5q49sjHqM6NRNa0KfhVwWgzny2n3pp/LdbNW6l5wA+n++cQ/eoEBK88ZeK+?=
+ =?us-ascii?Q?zgzpkvx+SePZ1Nmh+e1kf4UT5xcLGE3DnEI6fTBhuL3HMP7xnCTlYBIv3Zs7?=
+ =?us-ascii?Q?rgw0kTunPdeEkrTNSf/kG8+o6qxdADt14NVOof0HDK9B/pjY+odxo4gaCYdj?=
+ =?us-ascii?Q?XwSSwYwTgdUergJSHDmuKtdQQ2u5WJMekiDJgeQE2hsoWfb3PtO8V0EUwYZE?=
+ =?us-ascii?Q?tdT9GIfq9wXlbH8Qjm3EP3+tjfdoHWSjwKxCNoGc4DuBd3FIQV9tgcieuks5?=
+ =?us-ascii?Q?DIpssaU4Bs5KJuMhbeyH74/Y88ILCToXxpNP6y1Te5LKvEz9ImDCRvzR6HKV?=
+ =?us-ascii?Q?jihrXutRNkoLPLUn8E87S3T7Em3y?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7SPRMB0046.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LAXlDq5/uBkU9YlH66zyRtf6/4b/l/5RN2J8E66zGtzQ16JnUjuloCjaBC2X?=
+ =?us-ascii?Q?w39n8iJ038CpS+613pg1nJDmWNO92DTCXFKGfT+oT8bOHjS+wvYuf1Q68xxj?=
+ =?us-ascii?Q?ZOcZHz9jhx1UIioVDccsPRluWwu2DqRrgz6Rjke5PLOhNMw/jjlX3+NEjQ5H?=
+ =?us-ascii?Q?xbiUeupoDzHTGKqK/o2XyKyEUznQhVs5YLWDz3aaQwubfjbBqQvFXlcKnW1Y?=
+ =?us-ascii?Q?2ARPoNNDzDOskY858egTdZTCpkdpznD905/UJKjOklV8ettSPW2X2XiXHJYU?=
+ =?us-ascii?Q?a2DxByqlZm7A+oWatLkvXWQEv1x3SYGX8G8J3OLLtJT11SSkqnL5c+ScfByQ?=
+ =?us-ascii?Q?So3rHhYZQNw/OgQdVRq60V62AL+UJAcY+q4V0lLRYdoZXgPpbP403Gq4undz?=
+ =?us-ascii?Q?U8xuQ0qhHWv2rLmdolG4H1QW07BtZEftJiLmkZobrJrv1xq8Qz22jN2EikLf?=
+ =?us-ascii?Q?tbWgysrolWYBse6AKY0FMSaA8XN6pHKRYf99/LLgYIkxzyTssPb0ab+esOqp?=
+ =?us-ascii?Q?8IbMGkddNXygNbL4Rbh/boI2qC6udLHkpwFi8uYeRKoc3naFKA/p8ujIFBpa?=
+ =?us-ascii?Q?ETEXw6pCkbdx+p/52po+vuORcs0rTQIWeXgg6AMlPrmwO9r1Oa0Guk2CETA0?=
+ =?us-ascii?Q?1MEhQg5dkagQgfRTT1JqD12sqWIuuw2x8bbhl4QYqfWFBiNMV1/oIMA51KO2?=
+ =?us-ascii?Q?zmnzLobvaJr+aJEyAMgSZYUpOT6Wi2XGwDMmb6DKwxj+E8bFADtUwm2C8iL7?=
+ =?us-ascii?Q?Xv/mMKBjPGDY4x9J/fXako6bdzP243wTEuaVxgpM3FSZuzL0xbHVpCIzTR4o?=
+ =?us-ascii?Q?8Y/3bnco/GykT97TPO+2KjHf+StSItNu51CL5iD150mWEC7ihANwOW41Awzg?=
+ =?us-ascii?Q?RE9riXZi+vqVG/zFEAT9LEtfRVCdo4Oxi6R2GfY3sFqk/fQ8yLGRQkV1bzc9?=
+ =?us-ascii?Q?hYSiWeVOwceVMU/rj7AxScRV0nLGYjF1fYE6ZzSVE+TERvBe1aDYJ/clIWQG?=
+ =?us-ascii?Q?CFUqegCrbyJCOLM0nfBXCSoYim4ZseCAIHVrOfg0U7/XvGG+PFwYwYyz0fep?=
+ =?us-ascii?Q?Ns3+4rAQi4SzO9lJ5hkHHLCTYBxwKahew9gh4niaFP7rQKCcJyto7pswmUvI?=
+ =?us-ascii?Q?/fwxHFHwtjq64dgx85A45Z4cYiap/CpxmRrXXZIP+njrZvDPJj0NIsGYuoC/?=
+ =?us-ascii?Q?X4PGkLFNebik3fZd0swMrA7P3PJo9VJs1phuqcZCWL4nUEZ8RuGqWCv+eagQ?=
+ =?us-ascii?Q?eNc5xgHY0Sy5Z63pzu93/IBno7ZL5PDuILw+FVKM1fhq1PwmB7IZAVcogGqD?=
+ =?us-ascii?Q?gLk0iF4MHAd/VPHGWBt0kktKIN6aAgpj8aIc4PRMbHP1fmQTm5RULcD7mkmW?=
+ =?us-ascii?Q?RLVc8ZeydLRImfs+j5bKY5JiVdtS4+/IdIHIR3OwP43tSTGsDSN30g41Cyqf?=
+ =?us-ascii?Q?u06DKQzFMjwC0FuFAg6exySTkD3GljCWXzqf1UsPYQH/3hscuQXVjI1PY1qV?=
+ =?us-ascii?Q?0LsFegRKcdV8fmC2m1A83nnr3tzS+8EamU6znaZtQjPxNcezkiJhY3qqIDDw?=
+ =?us-ascii?Q?6byO69SC/T+juDfuenReIkRvvxtgdQ++M5x7vOXlXwCReTIcuxMy9FZhoI3I?=
+ =?us-ascii?Q?Rw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08e88184-62d0-4df8-6f6f-08dd302bf8a3
+X-MS-Exchange-CrossTenant-AuthSource: PH7SPRMB0046.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2025 21:32:37.1472
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EaIwLiz63DOGKTrTFlXMCBZcXtQPOAZRNB7JjKEXbOwGoGqNrNNxelKbCsK3x3gBpCJaUgEtd/XKoXIoiFC2bQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5772
+X-OriginatorOrg: intel.com
 
-On Mon, Jan 06, 2025 at 03:17:12PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Wed, Jan 08, 2025 at 12:16:50PM +1100, Stephen Rothwell wrote:
+> Hi All,
 > 
-> Today's linux-next merge of the usb tree got a conflict in:
+> On Mon, 6 Jan 2025 13:03:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Today's linux-next merge of the drm-intel tree got a conflict in:
+> > 
+> >   drivers/gpu/drm/i915/display/intel_display_driver.c
+> > 
+> > between commit:
+> > 
+> >   4fc0cee83590 ("drivers: remove get_task_comm() and print task comm directly")
+
+I don't believe this patch was acked by us, next time it would be good to get
+different patches for different drivers with the proper acks for visibility on
+these kind of conflicts.
+
+But if the conflicts are easy to handle right now, let it be...
+
+> > 
+> > from the mm-nonmm-unstable branch of the mm tree and commit:
+> > 
+> >   f5d38d4fa884 ("drm/i915/display: convert intel_display_driver.[ch] to struct intel_display")
+> > 
+> > from the drm-intel tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> > 
+> > -- 
+> > Cheers,
+> > Stephen Rothwell
+> > 
+> > diff --cc drivers/gpu/drm/i915/display/intel_display_driver.c
+> > index 62596424a9aa,497b4a1f045f..000000000000
+> > --- a/drivers/gpu/drm/i915/display/intel_display_driver.c
+> > +++ b/drivers/gpu/drm/i915/display/intel_display_driver.c
+> > @@@ -389,8 -397,9 +397,8 @@@ void intel_display_driver_resume_access
+> >    * Returns %true if the current thread has display HW access, %false
+> >    * otherwise.
+> >    */
+> > - bool intel_display_driver_check_access(struct drm_i915_private *i915)
+> > + bool intel_display_driver_check_access(struct intel_display *display)
+> >   {
+> >  -	char comm[TASK_COMM_LEN];
+> >   	char current_task[TASK_COMM_LEN + 16];
+> >   	char allowed_task[TASK_COMM_LEN + 16] = "none";
+> >   
+> > @@@ -399,14 -408,15 +407,14 @@@
+> >   		return true;
+> >   
+> >   	snprintf(current_task, sizeof(current_task), "%s[%d]",
+> >  -		 get_task_comm(comm, current),
+> >  -		 task_pid_vnr(current));
+> >  +		 current->comm, task_pid_vnr(current));
+> >   
+> > - 	if (i915->display.access.allowed_task)
+> > + 	if (display->access.allowed_task)
+> >   		snprintf(allowed_task, sizeof(allowed_task), "%s[%d]",
+> > - 			 i915->display.access.allowed_task->comm,
+> > - 			 task_pid_vnr(i915->display.access.allowed_task));
+> >  -			 get_task_comm(comm, display->access.allowed_task),
+> > ++			 display->access.allowed_task->comm,
+> > + 			 task_pid_vnr(display->access.allowed_task));
+> >   
+> > - 	drm_dbg_kms(&i915->drm,
+> > + 	drm_dbg_kms(display->drm,
+> >   		    "Reject display access from task %s (allowed to %s)\n",
+> >   		    current_task, allowed_task);
+> >   
 > 
->   arch/arm64/boot/dts/qcom/x1e80100-qcp.dts
-> 
-> between commit:
-> 
->   ab8f487d2f89 ("arm64: dts: qcom: x1e80100-qcp: Enable SD card support")
-> 
-> from the qcom tree and commit:
-> 
->   42943457e49d ("arm64: dts: qcom: x1e80100-qcp: Add FSUSB42 USB switches")
-> 
-> from the usb tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> This is now a conflict between the drm tree and the mm-nonmm-unstable
+> branch of the mm tree.
 > 
 > -- 
 > Cheers,
 > Stephen Rothwell
-> 
-> diff --cc arch/arm64/boot/dts/qcom/x1e80100-qcp.dts
-> index 9a7b45066be2,f45df1396eae..000000000000
-> --- a/arch/arm64/boot/dts/qcom/x1e80100-qcp.dts
-> +++ b/arch/arm64/boot/dts/qcom/x1e80100-qcp.dts
-> @@@ -943,13 -977,79 +1048,86 @@@
->   		};
->   	};
->   
->  +	sdc2_card_det_n: sdc2-card-det-state {
->  +		pins = "gpio71";
->  +		function = "gpio";
->  +		drive-strength = <2>;
->  +		bias-pull-up;
->  +	};
->  +
-> + 	usb_1_ss0_sbu_default: usb-1-ss0-sbu-state {
-> + 		mode-pins {
-> + 			pins = "gpio166";
-> + 			function = "gpio";
-> + 			bias-disable;
-> + 			drive-strength = <2>;
-> + 			output-high;
-> + 		};
-> + 
-> + 		oe-n-pins {
-> + 			pins = "gpio168";
-> + 			function = "gpio";
-> + 			bias-disable;
-> + 			drive-strength = <2>;
-> + 		};
-> + 
-> + 		sel-pins {
-> + 			pins = "gpio167";
-> + 			function = "gpio";
-> + 			bias-disable;
-> + 			drive-strength = <2>;
-> + 		};
-> + 
-> + 	};
-> + 
-> + 	usb_1_ss1_sbu_default: usb-1-ss1-sbu-state {
-> + 		mode-pins {
-> + 			pins = "gpio177";
-> + 			function = "gpio";
-> + 			bias-disable;
-> + 			drive-strength = <2>;
-> + 			output-high;
-> + 		};
-> + 
-> + 		oe-n-pins {
-> + 			pins = "gpio179";
-> + 			function = "gpio";
-> + 			bias-disable;
-> + 			drive-strength = <2>;
-> + 		};
-> + 
-> + 		sel-pins {
-> + 			pins = "gpio178";
-> + 			function = "gpio";
-> + 			bias-disable;
-> + 			drive-strength = <2>;
-> + 		};
-> + 	};
-> + 
-> + 	usb_1_ss2_sbu_default: usb-1-ss2-sbu-state {
-> + 		mode-pins {
-> + 			pins = "gpio169";
-> + 			function = "gpio";
-> + 			bias-disable;
-> + 			drive-strength = <2>;
-> + 			output-high;
-> + 		};
-> + 
-> + 		oe-n-pins {
-> + 			pins = "gpio171";
-> + 			function = "gpio";
-> + 			bias-disable;
-> + 			drive-strength = <2>;
-> + 		};
-> + 
-> + 		sel-pins {
-> + 			pins = "gpio170";
-> + 			function = "gpio";
-> + 			bias-disable;
-> + 			drive-strength = <2>;
-> + 		};
-> + 	};
-> + 
->   	wcd_default: wcd-reset-n-active-state {
->   		pins = "gpio191";
->   		function = "gpio";
 
 
-
-Resolution looks good, thanks!
-
-greg k-h
 

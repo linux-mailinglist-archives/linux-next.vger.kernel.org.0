@@ -1,136 +1,123 @@
-Return-Path: <linux-next+bounces-5096-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5097-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC965A06765
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 22:45:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9D4DA06773
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 22:47:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 091D07A3114
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 21:45:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 782FD18899A8
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2025 21:47:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3165B1A2399;
-	Wed,  8 Jan 2025 21:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E8A31F4E50;
+	Wed,  8 Jan 2025 21:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="W85768rN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="h4SnuKVt"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8A02040B9;
-	Wed,  8 Jan 2025 21:45:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850FD1F3D3A;
+	Wed,  8 Jan 2025 21:47:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736372713; cv=none; b=NauYpNPt/8NAZsIgkeykN3b9+V9vSO5Z+W9405x1R4ZhVc+6ibnSXf67jC9CHu35MqJKDKV3QZpGee3tu2JJe/RzuquLd1zgpYu74PGVKuLTIfWt+E6GaSdpESfYC9ICh/Q37YXngTCVqQ5nIZmm1lL95LYWXpv43DICgKxmw7Q=
+	t=1736372862; cv=none; b=UtXuPiJ14VzRfmyEnJ3t0dGCqddFW5cE0p0h8IkBoJfd3EvmBnCnWQ4EAP/cJbVVhNLrC1qcRTYoCeR05ZaECjTGZYeVYuh35un4hwnSKX0YSHP4U5W8wtn/3xTmiaoAsUfVpoekKvZVpAt+EKIDGSySlADjBLqf5NokAi0k0o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736372713; c=relaxed/simple;
-	bh=X0aAD+o4Opsr95XHrthvpsnLVv6sXFdpfvO1nU4p1Wk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SrXJCTZQ4dUQ7Ma/uSwdIg3mYNLqs6C9jpxpbJk+SnOFpji7+rLN5NSUGTNBLcIBfImf32FHxgmMq/E3DnztoJqMgos9YIwwltX96kDqLxGitqo6DPMQplrAkas7JUwTa3MC78DDwFZ2RTeKIF2c+eZJUPAYPdFkcb5Pms1eMq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=W85768rN; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736372862; c=relaxed/simple;
+	bh=SLU9ufOcysmvRVOdMjyUbwG00vJlLTuWjTebZw2GUdo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Vml0AI0tXMPd/z95mJJWqNpxfMhWvYdOsxGJjtSXIiIUVivT14v/IOec7MwO91QFi9GbWKhdm39JhxkihNcTxubat1QdlJ0+nTBCMWmTIvW0F9LDAzyg1BCrhheqeDTpZ2PqYYtOJzJT9hxp9m7tezodoGThv6qjmERsQRluzSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=h4SnuKVt; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736372697;
-	bh=5y5fC8vBsfLkwmxzYmaRRRrfDFBy7Wm7ZUP1hlHJ7ww=;
-	h=Date:From:To:Cc:Subject:From;
-	b=W85768rN3aphxMKKtm2ieL4jVLE3PuomIEWwdKJNYrr7oQCZVRfBB7j1wn3WyNVoC
-	 DF+DdWp0CKPDhyvJ+Cfy1FCbPdX/4IIzOKLVm/02LcG8xlxlshifxxtgBB/+KmLxTF
-	 hOzT7K6Ewq5Oi6na3RW7chIPCapj+23PNIXdIsRIQUYjdkMY/m3kRvsLcEFtvPV8y1
-	 ZEgAJ9J7xLtx3h3bh8AVLQmtPQwBPcmYD3MUj6nVlfiJ24fP/+/j1T3RmjqNZj3Kyy
-	 nNhZhPJyMKmTByh7Qibcah4ZmNWXikasYeaqeiBCIcA3fimfy+1vKKyzOu3Ayh1EML
-	 GfC6MTfrEiX3w==
+	s=201702; t=1736372851;
+	bh=cN9Bnnh2Xdd8PAZnw6ESIP15PeyN1tqx9SRAkJj5Fnc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=h4SnuKVt8xOL7Gf6shSlGK3mjWFYU/cC/retM5P7ad6cXxsF/4ECrSORIsDHFq5dP
+	 wP/9dBBC9DJUBuqbEh1x8xJXyZ2NdjNKg5wWzYTZxvNIiuheG6bDQGYvxFrjtNjQVD
+	 SfXz+6I2UyYagcUd+wF3aofvqrvZqyLAJvsGvZegyw+wVMFq/KC9OY23+v5YnH08JH
+	 OyT70KJ7sYrKrC4+4GEYiXwB+L9tU1upTVrPxcaKTRT56TaOSlhlMoxF7zh/hp1HEO
+	 11ZtQ5Z0qdlEzJz/vU4iI3+C/mVGF1INt/+ATR+7AH7TOrTfhnc/9eHG/OlO2nv+Ds
+	 SJVqpqgeUt8Xw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YT1fd2P1Qz4wc4;
-	Thu,  9 Jan 2025 08:44:57 +1100 (AEDT)
-Date: Thu, 9 Jan 2025 08:45:03 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YT1jb1NKBz4wc4;
+	Thu,  9 Jan 2025 08:47:31 +1100 (AEDT)
+Date: Thu, 9 Jan 2025 08:47:37 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Anna Schumaker
- <anna@kernel.org>, Trond Myklebust <trondmy@gmail.com>
-Cc: NFS Mailing List <linux-nfs@vger.kernel.org>, Anna Schumaker
- <anna.schumaker@oracle.com>, Linux Kernel Mailing List
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Daniel Golle <daniel@makrotopia.org>, Frank Wunderlich
+ <frank-w@public-files.de>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Mike Snitzer <snitzer@kernel.org>
-Subject: linux-next: manual merge of the vfs-brauner tree with the nfs-anna
- tree
-Message-ID: <20250109084503.1e046ef7@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the pinctrl tree
+Message-ID: <20250109084737.574cfb99@canb.auug.org.au>
+In-Reply-To: <20250106164630.4447cd0d@canb.auug.org.au>
+References: <20250106164630.4447cd0d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e2WIvSe0jOiXRtiGlQHwXfK";
+Content-Type: multipart/signed; boundary="Sig_/bljhQ_KxN6fWAoJLMIec1nQ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/e2WIvSe0jOiXRtiGlQHwXfK
+--Sig_/bljhQ_KxN6fWAoJLMIec1nQ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
+On Mon, 6 Jan 2025 16:46:30 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the pinctrl tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c: In function 'mtk_pincon=
+f_bias_set_pd':
+> drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c:606:13: error: unused va=
+riable 'err' [-Werror=3Dunused-variable]
+>   606 |         int err, pd;
+>       |             ^~~
+> drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c: At top level:
+> drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c:602:12: error: 'mtk_pinc=
+onf_bias_set_pd' defined but not used [-Werror=3Dunused-function]
+>   602 | static int mtk_pinconf_bias_set_pd(struct mtk_pinctrl *hw,
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+>=20
+> Caused by commit
+>=20
+>   1673d720b7e2 ("pinctrl: mediatek: add support for MTK_PULL_PD_TYPE")
+>=20
+> I have used the pinctrl tree from next-20241220 for today.
 
-  fs/nfsd/filecache.c
-
-between commit:
-
-  735aab1241ea ("nfsd: nfsd_file_acquire_local no longer returns GC'd nfsd_=
-file")
-
-from the nfs-anna tree and commits:
-
-  f905e00904cc ("tree-wide: s/revert_creds()/put_cred(revert_creds_light())=
-/g")
-  51c0bcf0973a ("tree-wide: s/revert_creds_light()/revert_creds()/g")
-
-from the vfs-brauner tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
+I am still seeing these errors.
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/nfsd/filecache.c
-index 2adf95e2b379,dc5c9d8e8202..000000000000
---- a/fs/nfsd/filecache.c
-+++ b/fs/nfsd/filecache.c
-@@@ -1255,8 -1247,8 +1255,8 @@@ nfsd_file_acquire_local(struct net *net
-  	__be32 beres;
- =20
-  	beres =3D nfsd_file_do_acquire(NULL, net, cred, client,
- -				     fhp, may_flags, NULL, pnf, true);
- +				     fhp, may_flags, NULL, pnf, false);
-- 	revert_creds(save_cred);
-+ 	put_cred(revert_creds(save_cred));
-  	return beres;
-  }
- =20
-
---Sig_/e2WIvSe0jOiXRtiGlQHwXfK
+--Sig_/bljhQ_KxN6fWAoJLMIec1nQ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd+8d8ACgkQAVBC80lX
-0Gxk8Qf9EWDqLoE66YL1N0TYXR8PVajbp8UQifNuk5g7O2Exet1J1DbiiDh0LEtd
-b99KDrYM3RRJcHeMk5UVWeoJPX33RcjNFvu0m6oIR2kagqFs8w6cI6Sl9AtH3hDw
-XzbbjhCwMISPtkyziD5hcmk79Ro3EGgdlBb4jgLsrdzkPtSLUPbVG5ybLShgAP+q
-VwhlPrZr4paZj0T7MWPjBj/iIyz7d6TM2Xh4x3AGxK9dOuLklZ9Oau1o+bUkGvd6
-B2A9MCituSiaC1QxSeWHBNPpMBF6nWOr2sL4jxD0EoqPi9AouISnwNHyKLkHGKTc
-+aSfRQZhuJFaFbgWSKp8nlkQB4PWWA==
-=MK/l
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd+8nkACgkQAVBC80lX
+0Gyn8Af/bvlIxGbYsXnO1TdCqWFDIIic58fPzgVtd+Uwxh2Z/Hs5TW5H0uddXSvT
+5x6nhC/CSK56LHYTJeFpjAhJjHvKPHHV8a2HsjO+7pUGoR24uuCmpbSQV6hV/L6X
+EyIf4ZOucqRzpdsEuyAD3gg6NAz499ZwJ469KLBQJF8Ae38tWq7thV4PdU1okGse
+RBCvxjXeVDtB4FI+slyrBB6Z8B9/HUxM3hJ29iOIEL+C0F4cquHAuUNaANpTqmL8
+iYd1quJ9BnalYpGD0Ldlo0tTh9F/gtIbmrvSx8YjW3PpIv5UnhUhk/z5k1phwop2
+EUHSh95Z1R4kEtv+fZIWVdrTMpB+kg==
+=+LQf
 -----END PGP SIGNATURE-----
 
---Sig_/e2WIvSe0jOiXRtiGlQHwXfK--
+--Sig_/bljhQ_KxN6fWAoJLMIec1nQ--
 

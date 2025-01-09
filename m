@@ -1,146 +1,138 @@
-Return-Path: <linux-next+bounces-5103-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5104-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1939AA06A69
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 02:46:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD33AA06C5D
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 04:41:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A8D91664C3
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 01:46:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B5533A364D
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 03:41:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CF1BBE5E;
-	Thu,  9 Jan 2025 01:46:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5854A2D;
+	Thu,  9 Jan 2025 03:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Mf0YiBR3"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="s0fzsh/4"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853728837;
-	Thu,  9 Jan 2025 01:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271543398B;
+	Thu,  9 Jan 2025 03:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736387186; cv=none; b=htNyt9DoMly1ztjBp3FgWsjXcUziLslD6nTYg3nIGQXODIIxk5c+xhvANZEqQOzmmDN/fMiHTK6Xk9RjTPFsRdTyjOgS3huHXzZngmkOmHWBjWB5vhrE+emI5XWb+vED+yORPA1WHaNwNP0zdwxINAy1C+9quQENB5jwKa1xH0k=
+	t=1736394067; cv=none; b=ZUVQEhJHhztKJ14H6OqYUSv12td8A+a30lc92GUApTRzcoNziHwP9yiR2iSfqD9zFDO3LSWEe/lRNijYMGro7jD1PuO/VBQhMVHkvMeee/49zfg+0T1aVMnZAQrxX7L7SVARrp8zVKVzsA0I+bZCW/YjLt0ZEl7v/i/SG4qucAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736387186; c=relaxed/simple;
-	bh=AUSpJ44G4OimdTY4rS5w3bxc0Q9fKfjrXSzDvcDXIgw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=HE0d6B14amVEspLujnt0FAlJSr06StgwZS4CErO7eJPXnU+xPqWqifrzyzgdAhZl9DDVXXQFDXZea7tDzNcs+cbO5k8RofxLQ0IvB8Qa+lQslNoUipGnr/R9ofcpk5Y+QANxs3F3pnvlDjURADuWyoRwSY/ctnvAIvT602QgrQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Mf0YiBR3; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736394067; c=relaxed/simple;
+	bh=Ph6Zjzl6Zbk2Y1dEbc9qPYJKLPKxVxFujcaB7DpNuAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MQms1CjmAjfoCVMvHB8RsKaU+vnkeLa+UZ0UUDxK6mD4wJC5K/REAw3JDKejHlbOSoo7I4KbGO4FlXDNoS26rxWu01W1vdBuiU3nWM5syzHC2EfKmCjctZGGS6LfSWC6At0EkB5V5I5VaCiMdWGsLc8WOTeSg541PKmPu8nGZ/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=s0fzsh/4; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736387172;
-	bh=HxIT1hWXSmnB9DSX8HSpK7uomHTJBfi+8NdQm8eba/0=;
+	s=201702; t=1736394049;
+	bh=JFNXXg1lhaUeWqg/EYPMGJlkEG/bJxfF2/9U5a42Cok=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Mf0YiBR3t3fEc33CVzDuq9hAb+Sp+/9JYHKLINXRmX+7u5h7lmlUXlFpyW2CNXUCO
-	 XqIDPAl9PlNVZjoH1C8jdEmcgX6BZL73qj5yzduHWDSx5iU14Tj/gNus5yGWv4EKiX
-	 4Jq7Rqzv0s5p3KhONNJ/Z2ES7OFf3DKv42QAWJ5PToyPlGP+fqcuVAAS/8Ci3tJv5E
-	 /2ip8zi4UOZCsiBwDv3Ve2Q/doWVLONkm5NPCl7zOm+jPnup4HGQJqToOLykG2ratK
-	 XZOxeQCevCyBJvFNQgN0tR/8TJAOluq/go+YoLhCn7c5j6orCQSryasDUOoxuYXP4y
-	 O/WO5yPoZ5YtQ==
+	b=s0fzsh/4MP4CV7vrw4KVDE8X8ST0xa6DIiqWNeQ3nE+4PqhgVbN3YiftZC1GI3i3A
+	 7wp9PiIclOhnbN09L5JypKOdz3PKGphhoaESicVxxmqI6HrATx0eh31cxr7pr/9BJZ
+	 eoA7nuAtKOWJKbj/1LJSge+JXwPiAwuYV2b+YhEnVsfVIERySm55ZBlAVvrUKpaNFq
+	 dv3CjqJ1NcLkAYlIK6TSdjPj+BNc73SHrT34ltG4966TygIdpBw91lsngRd7I+a0NH
+	 ZODxW496E/DBYjXA/fOt7m/P2fm3fgJGebDr8vT9JIIGbqswo/dDEngD4eojrCpfFc
+	 DQWpHB2cNsAJQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YT70z4tMcz4wby;
-	Thu,  9 Jan 2025 12:46:11 +1100 (AEDT)
-Date: Thu, 9 Jan 2025 12:46:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YT9YF35ylz4w2R;
+	Thu,  9 Jan 2025 14:40:49 +1100 (AEDT)
+Date: Thu, 9 Jan 2025 14:40:54 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: John Garry <john.g.garry@oracle.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Milan
- Broz <gmazyland@gmail.com>
-Subject: linux-next: manual merge of the block tree with Linus' tree
-Message-ID: <20250109124617.1b4ff0b8@canb.auug.org.au>
+To: "Michael S. Tsirkin" <mst@redhat.com>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the vhost tree
+Message-ID: <20250109144054.6bdf0189@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pfCEm5=ZbGbsEclO1C1yOEB";
+Content-Type: multipart/signed; boundary="Sig_/Hgi+=KsLc.o0M6pJ7h9Keuo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/pfCEm5=ZbGbsEclO1C1yOEB
+--Sig_/Hgi+=KsLc.o0M6pJ7h9Keuo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the block tree got a conflict in:
+The following commits are also in the mm tree as different commits
+(but the same patches):
 
-  drivers/md/dm-verity-fec.c
+  e981e8d8b23e ("s390/kdump: virtio-mem kdump support (CONFIG_PROC_VMCORE_D=
+EVICE_RAM)")
+  a4bba3b65c20 ("virtio-mem: support CONFIG_PROC_VMCORE_DEVICE_RAM")
+  b9ad8a711a3c ("virtio-mem: remember usable region size")
+  a8328b40b3b0 ("virtio-mem: mark device ready before registering callbacks=
+ in kdump mode")
+  ef78030ec96f ("fs/proc/vmcore: introduce PROC_VMCORE_DEVICE_RAM to detect=
+ device RAM ranges in 2nd kernel")
+  a127bc45d3de ("fs/proc/vmcore: factor out freeing a list of vmcore ranges=
+")
+  98c5f8c3827a ("fs/proc/vmcore: factor out allocating a vmcore range and a=
+dding it to a list")
+  5488433f810c ("fs/proc/vmcore: move vmcore definitions out of kcore.h")
+  23365031b34f ("fs/proc/vmcore: prefix all pr_* with "vmcore:"")
+  006f0492f363 ("fs/proc/vmcore: disallow vmcore modifications while the vm=
+core is open")
+  26b866c242e5 ("fs/proc/vmcore: replace vmcoredd_mutex by vmcore_mutex")
+  5c04c6205add ("fs/proc/vmcore: convert vmcore_cb_lock into vmcore_mutex")
 
-between commit:
+These are commits
 
-  6df90c02bae4 ("dm-verity FEC: Fix RS FEC repair for roots unaligned to bl=
-ock size (take 2)")
+  9e85e500e8b3 ("s390/kdump: virtio-mem kdump support (CONFIG_PROC_VMCORE_D=
+EVICE_RAM)")
+  5605b723bbc2 ("virtio-mem: support CONFIG_PROC_VMCORE_DEVICE_RAM")
+  3a365d7b1a60 ("virtio-mem: remember usable region size")
+  e4c56e7d625f ("virtio-mem: mark device ready before registering callbacks=
+ in kdump mode")
+  342dc629fe62 ("fs/proc/vmcore: introduce PROC_VMCORE_DEVICE_RAM to detect=
+ device RAM ranges in 2nd kernel")
+  44df29fb6c95 ("fs/proc/vmcore: factor out freeing a list of vmcore ranges=
+")
+  10a41d9df694 ("fs/proc/vmcore: factor out allocating a vmcore range and a=
+dding it to a list")
+  e8685745122c ("fs/proc/vmcore: move vmcore definitions out of kcore.h")
+  cfc7a194e459 ("fs/proc/vmcore: prefix all pr_* with "vmcore:"")
+  19b42b73afa4 ("fs/proc/vmcore: disallow vmcore modifications while the vm=
+core is open")
+  527d8662c520 ("fs/proc/vmcore: replace vmcoredd_mutex by vmcore_mutex")
+  9a775759ac92 ("fs/proc/vmcore: convert vmcore_cb_lock into vmcore_mutex")
 
-from Linus' tree and commit:
-
-  5c292ac6e69f ("block: Delete bio_prio()")
-
-from the block tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+in the mm-unstable branch of the mm tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/md/dm-verity-fec.c
-index e61855da6461,b0ee199009fc..000000000000
---- a/drivers/md/dm-verity-fec.c
-+++ b/drivers/md/dm-verity-fec.c
-@@@ -121,8 -132,7 +121,8 @@@ static int fec_decode_bufs(struct dm_ve
-  	u8 *par, *block;
-  	struct bio *bio =3D dm_bio_from_per_bio_data(io, v->ti->per_io_data_size=
-);
- =20
- -	par =3D fec_read_parity(v, rsb, block_offset, &offset, &buf, bio->bi_iop=
-rio);
- +	par =3D fec_read_parity(v, rsb, block_offset, &offset,
-- 			      par_buf_offset, &buf, bio_prio(bio));
-++			      par_buf_offset, &buf, bio->bi_ioprio);
-  	if (IS_ERR(par))
-  		return PTR_ERR(par);
- =20
-@@@ -163,8 -160,7 +163,8 @@@
-  		if (offset >=3D v->fec->io_size) {
-  			dm_bufio_release(buf);
- =20
- -			par =3D fec_read_parity(v, rsb, block_offset, &offset, &buf, bio->bi_i=
-oprio);
- +			par =3D fec_read_parity(v, rsb, block_offset, &offset,
-- 					      par_buf_offset, &buf, bio_prio(bio));
-++					      par_buf_offset, &buf, bio->bi_ioprio);
-  			if (IS_ERR(par))
-  				return PTR_ERR(par);
-  		}
-
---Sig_/pfCEm5=ZbGbsEclO1C1yOEB
+--Sig_/Hgi+=KsLc.o0M6pJ7h9Keuo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd/KmkACgkQAVBC80lX
-0GweZAf+KNdXqaUbWcys/s7MK9jI3tZ0FLYBmmoaK/xmIVtrPYaXK2HsyGXQXt2i
-uEW9AaFVfBYrgU6HPpCYxvT4wBEP9hp6gESKE8bVO0HoIojkEOL7QzJfir4hYWGA
-7uje6wy7IZrZoBoO6GHy6OqT2MoB5RMsPN+RpJHwzPU1nGaxSesMJmE4isE/1gx4
-e7ujyA64LwyS20tG+owGIzCY4cnhHyP0BYtH/hZoq+29JJPwnFAAjPtrJAamJTBU
-IYt4SaGWfNwJQejS8A6B0KQaizHB6hCyvFcG8LKlEE0oEG7FNi1/AQjIKDz1BCR7
-OH77Dzh8xH8Zmkd52Jy9hqdbzPCYvA==
-=4g3j
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd/RUYACgkQAVBC80lX
+0GwZvAgAgWlxlkwoo9nKz6Nlv5KVEpGHfWMRZBT9ROu+Klkt5OlIsSFKgW/vRpxK
++/VEKVa1iszezlCnJ0yiMHJfox0XS3JiNgYqcEcNW+7Bw6GcXJdXncxtjo9dfzeg
+bmsYZebaU5I91RrtciW1EsUCx63kWXhYGbrDi3yJbUtDUgt+zbNzQ9Rkx05wFDXP
+AR8n48R6oVtKWwvpK9NP6K3XF1Rgml1X13W88PyiDtfE1F5kJUkfE+XhmTclzNmq
+2OrGSOq3yBuWoTAaMvI4Y30mAYhMB79JBPplctfbGR8MlumzSKT3CmwINBofVx9U
+QyPj2LkLIWjssIgIP/2BByCDtcm/0g==
+=dF9Q
 -----END PGP SIGNATURE-----
 
---Sig_/pfCEm5=ZbGbsEclO1C1yOEB--
+--Sig_/Hgi+=KsLc.o0M6pJ7h9Keuo--
 

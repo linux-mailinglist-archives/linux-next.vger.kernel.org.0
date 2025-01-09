@@ -1,157 +1,240 @@
-Return-Path: <linux-next+bounces-5109-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5110-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E142A06D58
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 06:00:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D372DA06D5A
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 06:01:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FEA01669AE
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 05:00:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C773A166D91
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2025 05:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8C621422B;
-	Thu,  9 Jan 2025 05:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65F8821422D;
+	Thu,  9 Jan 2025 05:01:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ceiCGfTI"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MazXll9+"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16021AAC9;
-	Thu,  9 Jan 2025 04:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24998213E82;
+	Thu,  9 Jan 2025 05:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736398803; cv=none; b=jE9e5mHzX5usrUNhiPjjmdplijlV12mbOfGssI+Vd9nkZNhaQER/WzMtaaH54/hiBhb0pU4e/2/Q+tHlVzRubU/3D1Crwfgum85/ok4JLXax+6JWYXI/x8x1TuqqhLBIjyqESzJCrz++RP1XvqvbH7uM+EgOLm7vDV6OGZVC3iw=
+	t=1736398893; cv=none; b=B5/0X1rXEQupD9aGjaVsr2kZEnrv2VeyeMoSSjOjucUM5liNyUJu51yvuNiyG70AXb2t8H8kVSv8jFHoWIeJ0OTKN2fme8KkrF6wUCBkO2CQZGVtghOFHmHEHpZdxujnpAm+1I2CT0bwEMlyPXOxe3pBHUob3rB3yFag/PAVaE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736398803; c=relaxed/simple;
-	bh=DJ+GPBaEFnABIMqnnRJuOMGZGWf9aFQGYAb5si2NDfc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=JuWslI/V0U8RjUkzmbf/Dij1iiuchEJnWoxvI9YdfqVx6qCAUr+PaxWQE0yS7zrZy50QGmE5RWbRV0JiwoYpcJ1KfowAxUoLphDOYIAPNDOPrZaOfiQuHHiCK1w2IDA74GhSYdzZUuzISy2RexnA4DjWzDYo8/b2XKvSARZM3Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ceiCGfTI; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736398893; c=relaxed/simple;
+	bh=EHvbi3qMg+wEYEMAzBp+3a6jbLcov2YR4YqPrA9QmPI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YToqNWjwwRa2sY4IeiLXHZUIbeQZqjbuiRyQ+zNBU5vegG7YheOLP5guUKqnvOzwnt5zgd/53sEMPgR4Te18HDyeK6AN4zv9Xo/8OT/Qgyh94E18KpgH4amSx1rbRNIHjo/9dMwSiz2h63fOg+hEGEqs7OXzvwyxL6+ZFG8Lo+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=MazXll9+; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736398788;
-	bh=3wSD/KKvQycQI6PVpFWC0ZAAZTjW0PKrQjEEiT3SOO0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ceiCGfTIhLmzOuZhuz8tDE4RdV7NU4QveXPUatoVrvR9Lfu/PZteMiDXMHHF3wBq3
-	 jelKmiusLH05HgtU1J2N/6YQcmWP+L1/3ZJkAj3ZhYAeUhQ8C1YHRyl4PCSIO4oGmP
-	 sgnHozW3eEL7sR9fZAJR/DEoCnKV0LzWj4QWdPo8MWBs0PVWVz+WRFL4BQZ7Q4he/5
-	 j8e8UWZAnw4O/S6GfR8xcERIlyn5v53bCT4BXcOxILuZF7QF7tyd6sYdpD3cMOT41i
-	 MLS1qYbPF3khr5LepypO0cPX0GjtmV+bX/1B5+JMSBGrUATNqbzJJvbaGO38ReBgps
-	 taZxmhR1HCf8w==
+	s=201702; t=1736398880;
+	bh=EjSfwB3VcysE6HTpWLUXNB3iY3Cu923U5DOeHogtZYE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=MazXll9+r63HUDCQH9Z7Pn0/n3e5LvByp3DDZNrxsO5Zlt9ZF3j/lMBwe51EB843D
+	 VS/4nxQOGgXJLSkKt0XZ6A3iShFmdHVu6Sdz6HVa79NUrLZfrrlGoO8yM68Lf1SskS
+	 rlLqAND/Tu8ODwlSF4DpvDy+U8ZV5gWUKfY0sFd0gecdmo2VN3D/qX1NKRbDQwjNoj
+	 YaG2v9i86AeZBT5ziKm3rMAKkebm1q6npxDxGfV+myJ5JyC295/ubab5p/pjAZsvSK
+	 MWQEgUjnzF8q0tcdRjnzHN1z8TANnMvBvVimYyy35ornp8mgv5cIpRNTaeLyNmV3TC
+	 S2L6tra9pf64A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YTCJN5cxTz4wc2;
-	Thu,  9 Jan 2025 15:59:48 +1100 (AEDT)
-Date: Thu, 9 Jan 2025 15:59:54 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YTCL83krwz4wbR;
+	Thu,  9 Jan 2025 16:01:20 +1100 (AEDT)
+Date: Thu, 9 Jan 2025 16:01:26 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alistair Popple <apopple@nvidia.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20250109155954.6bf8eafe@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <20250109160126.199c8325@canb.auug.org.au>
+In-Reply-To: <20250109155954.6bf8eafe@canb.auug.org.au>
+References: <20250109155954.6bf8eafe@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9EyJh.IyFuIoVBZq7Db_Ff7";
+Content-Type: multipart/signed; boundary="Sig_//ERNIvy+Xe.bmCZnP4R8Pj_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/9EyJh.IyFuIoVBZq7Db_Ff7
+--Sig_//ERNIvy+Xe.bmCZnP4R8Pj_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (x86_64 allnoconfig)
-failed like this:
+On Thu, 9 Jan 2025 15:59:54 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the mm tree, today's linux-next build (x86_64 allnoconfig)
+> failed like this:
 
+In file included from <command-line>:
+mm/rmap.c: In function 'folio_add_file_rmap_pud':
+include/linux/compiler_types.h:542:45: error: call to '__compiletime_assert=
+_328' declared with attribute error: BUILD_BUG failed
+  542 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |                                             ^
+include/linux/compiler_types.h:523:25: note: in definition of macro '__comp=
+iletime_assert'
+  523 |                         prefix ## suffix();                        =
+     \
+      |                         ^~~~~~
+include/linux/compiler_types.h:542:9: note: in expansion of macro '_compile=
+time_assert'
+  542 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_a=
+ssert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_=
+MSG'
+   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+      |                     ^~~~~~~~~~~~~~~~
+include/linux/huge_mm.h:107:28: note: in expansion of macro 'BUILD_BUG'
+  107 | #define HPAGE_PUD_SHIFT ({ BUILD_BUG(); 0; })
+      |                            ^~~~~~~~~
+include/linux/huge_mm.h:115:26: note: in expansion of macro 'HPAGE_PUD_SHIF=
+T'
+  115 | #define HPAGE_PUD_ORDER (HPAGE_PUD_SHIFT-PAGE_SHIFT)
+      |                          ^~~~~~~~~~~~~~~
+include/linux/huge_mm.h:116:26: note: in expansion of macro 'HPAGE_PUD_ORDE=
+R'
+  116 | #define HPAGE_PUD_NR (1<<HPAGE_PUD_ORDER)
+      |                          ^~~~~~~~~~~~~~~
+mm/rmap.c:1562:44: note: in expansion of macro 'HPAGE_PUD_NR'
+ 1562 |         __folio_add_file_rmap(folio, page, HPAGE_PUD_NR, vma, RMAP_=
+LEVEL_PUD);
+      |                                            ^~~~~~~~~~~~
+mm/rmap.c: In function 'folio_remove_rmap_pud':
+include/linux/compiler_types.h:542:45: error: call to '__compiletime_assert=
+_329' declared with attribute error: BUILD_BUG failed
+  542 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |                                             ^
+include/linux/compiler_types.h:523:25: note: in definition of macro '__comp=
+iletime_assert'
+  523 |                         prefix ## suffix();                        =
+     \
+      |                         ^~~~~~
+include/linux/compiler_types.h:542:9: note: in expansion of macro '_compile=
+time_assert'
+  542 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_a=
+ssert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_=
+MSG'
+   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+      |                     ^~~~~~~~~~~~~~~~
+include/linux/huge_mm.h:107:28: note: in expansion of macro 'BUILD_BUG'
+  107 | #define HPAGE_PUD_SHIFT ({ BUILD_BUG(); 0; })
+      |                            ^~~~~~~~~
+include/linux/huge_mm.h:115:26: note: in expansion of macro 'HPAGE_PUD_SHIF=
+T'
+  115 | #define HPAGE_PUD_ORDER (HPAGE_PUD_SHIFT-PAGE_SHIFT)
+      |                          ^~~~~~~~~~~~~~~
+include/linux/huge_mm.h:116:26: note: in expansion of macro 'HPAGE_PUD_ORDE=
+R'
+  116 | #define HPAGE_PUD_NR (1<<HPAGE_PUD_ORDER)
+      |                          ^~~~~~~~~~~~~~~
+mm/rmap.c:1694:42: note: in expansion of macro 'HPAGE_PUD_NR'
+ 1694 |         __folio_remove_rmap(folio, page, HPAGE_PUD_NR, vma, RMAP_LE=
+VEL_PUD);
+      |                                          ^~~~~~~~~~~~
 
-Caused by commit
-
-  ce9c7ffcf303 ("rmap: add support for PUD sized mappings to rmap")
-
-$ grep CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD .config
-CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=3Dy
-$ grep CONFIG_PGTABLE_HAS_HUGE_LEAVES .config
-$
-
-from include/linux/huge_mm.h:
-
-#ifdef CONFIG_PGTABLE_HAS_HUGE_LEAVES
-#define HPAGE_PMD_SHIFT PMD_SHIFT
-#define HPAGE_PUD_SHIFT PUD_SHIFT
-#else
-#define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
-#define HPAGE_PUD_SHIFT ({ BUILD_BUG(); 0; })
-#endif
-
-I have applied this hack for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 9 Jan 2025 15:39:17 +1100
-Subject: [PATCH] fix up for "rmap: add support for PUD sized mappings to rm=
-ap"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/rmap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 227c60e38261..721d4f7b7570 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1558,7 +1558,7 @@ void folio_add_file_rmap_pmd(struct folio *folio, str=
+> Caused by commit
+>=20
+>   ce9c7ffcf303 ("rmap: add support for PUD sized mappings to rmap")
+>=20
+> $ grep CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD .config
+> CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=3Dy
+> $ grep CONFIG_PGTABLE_HAS_HUGE_LEAVES .config
+> $
+>=20
+> from include/linux/huge_mm.h:
+>=20
+> #ifdef CONFIG_PGTABLE_HAS_HUGE_LEAVES
+> #define HPAGE_PMD_SHIFT PMD_SHIFT
+> #define HPAGE_PUD_SHIFT PUD_SHIFT
+> #else
+> #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
+> #define HPAGE_PUD_SHIFT ({ BUILD_BUG(); 0; })
+> #endif
+>=20
+> I have applied this hack for today:
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 9 Jan 2025 15:39:17 +1100
+> Subject: [PATCH] fix up for "rmap: add support for PUD sized mappings to =
+rmap"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  mm/rmap.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 227c60e38261..721d4f7b7570 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1558,7 +1558,7 @@ void folio_add_file_rmap_pmd(struct folio *folio, s=
+truct page *page,
+>  void folio_add_file_rmap_pud(struct folio *folio, struct page *page,
+>  		struct vm_area_struct *vma)
+>  {
+> -#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+> +#if defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) && defined(CONFIG=
+_PGTABLE_HAS_HUGE_LEAVES)
+>  	__folio_add_file_rmap(folio, page, HPAGE_PUD_NR, vma, RMAP_LEVEL_PUD);
+>  #else
+>  	WARN_ON_ONCE(true);
+> @@ -1690,7 +1690,7 @@ void folio_remove_rmap_pmd(struct folio *folio, str=
 uct page *page,
- void folio_add_file_rmap_pud(struct folio *folio, struct page *page,
- 		struct vm_area_struct *vma)
- {
--#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
-+#if defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) && defined(CONFIG_P=
-GTABLE_HAS_HUGE_LEAVES)
- 	__folio_add_file_rmap(folio, page, HPAGE_PUD_NR, vma, RMAP_LEVEL_PUD);
- #else
- 	WARN_ON_ONCE(true);
-@@ -1690,7 +1690,7 @@ void folio_remove_rmap_pmd(struct folio *folio, struc=
-t page *page,
- void folio_remove_rmap_pud(struct folio *folio, struct page *page,
- 		struct vm_area_struct *vma)
- {
--#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
-+#if defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) && defined(CONFIG_P=
-GTABLE_HAS_HUGE_LEAVES)
- 	__folio_remove_rmap(folio, page, HPAGE_PUD_NR, vma, RMAP_LEVEL_PUD);
- #else
- 	WARN_ON_ONCE(true);
---=20
-2.45.2
+>  void folio_remove_rmap_pud(struct folio *folio, struct page *page,
+>  		struct vm_area_struct *vma)
+>  {
+> -#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+> +#if defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) && defined(CONFIG=
+_PGTABLE_HAS_HUGE_LEAVES)
+>  	__folio_remove_rmap(folio, page, HPAGE_PUD_NR, vma, RMAP_LEVEL_PUD);
+>  #else
+>  	WARN_ON_ONCE(true);
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/9EyJh.IyFuIoVBZq7Db_Ff7
+--Sig_//ERNIvy+Xe.bmCZnP4R8Pj_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd/V8oACgkQAVBC80lX
-0GwZTQf+JAg8eorhu2Ntkt/jgInEWfRwMFGlzemHemMOqPT3QH/mqDnMl9R8SaCn
-Tbb3uzNgT3wCZtSlamt0wKVBl0C7kD02Boc6Pu3+gq5epXGWJdvtZlNJbmkwLIpG
-GN2NmANbPgvqTmQutMjg8uDdO2b5SSd5r5yzKVExErmYf16T0iOf7RDA4lrUQlLM
-nkYm3mL4IMkO3BDHSuBW5R02c1J7H5YstAP0R9Xedl8IW3Qp71htTK+9s1vSrpYn
-q+qxhUpBiQhHqjAoUu7d0C8N6GsjQIb/zdgtH6DizIWc+jcTcMyYxIbIMeh1I8i7
-BO290VbJd5mFhkFeiXvAch5e+uK0Vg==
-=zPhe
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmd/WCYACgkQAVBC80lX
+0GzwxAf/bBJ6KAVv2wA6Dtv6TVkHGI1rSIP5R6J5ZijMm+OQWMU6mbtlwo4F2JXi
+hGv+I4gt8Y7ID2wrFavw2kvttF8/T4XP9FOzKaRztQrSR0SqsQEcKWKZo/jKJkQX
+pruS9mGjXcG0+7J0qnJo71vVEAVV8xNLE2en296HCrEpwNG6LfoMzDHr+exWiX3n
+Np5vsnW6YGLlxMgH4GOgC7YelA0czC3elExBqSRRHPILj0GK+IEk6Hr9DcP8TFJW
+Kfbns2OviUXivdLY81WzYpS+vnDPYaettKtdNS2xljMXJEfT+ynefqsuSOv4WE1D
+K7hIybQvFNxk4biyOOc0G8HX4M6ezg==
+=ywuR
 -----END PGP SIGNATURE-----
 
---Sig_/9EyJh.IyFuIoVBZq7Db_Ff7--
+--Sig_//ERNIvy+Xe.bmCZnP4R8Pj_--
 

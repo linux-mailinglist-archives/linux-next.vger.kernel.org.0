@@ -1,118 +1,192 @@
-Return-Path: <linux-next+bounces-5152-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5153-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A355A09496
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 16:03:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFD06A09891
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 18:32:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5438616B082
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 15:02:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A99AD188E405
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 17:32:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912E3204C38;
-	Fri, 10 Jan 2025 15:02:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D49E212B17;
+	Fri, 10 Jan 2025 17:32:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="0WLMew2h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hIOtWZTe"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB222211487
-	for <linux-next@vger.kernel.org>; Fri, 10 Jan 2025 15:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D092F3E;
+	Fri, 10 Jan 2025 17:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736521369; cv=none; b=fuvaOYjXKAKngmmS1Je3jwvdwy8F9dU2f42/ptcYLOs59iBT2tb2xoI24unO7Wcmzr+suhgUe9FCJDvW/rEslXQy8x7Yy9Q+mkn+iQoO8kAPjRPqTh2An4yhQVp6FPWdBpnSEAzvbsX1diiAsvZ6DHvlRtYCxllhhXrr5YVrCPw=
+	t=1736530355; cv=none; b=K/Y9cSpbxtjc5byRtyfQon40S/uZUFKOlIolo57z5WFHJjoP+VSOeZfjf7YCT9hiwltd83RsSof/H6EBTDVouL1eCc4AOIoTk8MbEKRk3rtmas1qck9j8YS40mX6oDdBjOdN87YxhdTGGPhmv+FjxecOCuZSJHdj8Hw8iNX5t8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736521369; c=relaxed/simple;
-	bh=rf6CcJMEMkWJLbVR755i17pre52sTWSm+8n10NRmPwg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YIrZxsHI0WuyiQPnZU8laeXuSgIZdMyuj4iUmyrllA+4IdZw8vk4oEzWPl59K4ejDHbVGfpJ+G0hLqannBqZSSCUlnB7X+Zn+C7CF5crWuhNEFgCf7MxNpCfQTZRZaDccsyT3AEkZOw+wMaq0pQ8Z0hkrD+gsY7ckZBCrVOG52Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=0WLMew2h; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-844e9b83aaaso155791739f.3
-        for <linux-next@vger.kernel.org>; Fri, 10 Jan 2025 07:02:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1736521367; x=1737126167; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sKHq1I4+wS23tZRiPsoNDVnIf5eOdGV6U4W0dd2CTxw=;
-        b=0WLMew2hMlQU6a8PgFTniI/R8U/xJN57z3r58A/7kH4xbXBWNT2uTXBJp3AvCVYjht
-         XMSTH87K4JMgtIzcu9uzgEvrdqy3/od7H2XCC1u/NqCfnTB2lO1xpYGP6v4D7niwxfHu
-         G2SkMGWyyEEKJV72bjLgIVYS3h78cN8KWY7t6HJtqc00RDN9T3ZK/zIpT1tkrQqpwKev
-         0neAZBMZzwP8JDpCwdH/DVvyouf3QqXl8rosOAimTtnKTJOxNqEjHY1rGx30i8iBhvmi
-         1QrMGI/XCHYse7ZhoXeZ13Mi3LbOTFP96VTHn0H1ZNqz4boK5BKXu/S4L13R01cAZVCS
-         vPKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736521367; x=1737126167;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKHq1I4+wS23tZRiPsoNDVnIf5eOdGV6U4W0dd2CTxw=;
-        b=w88BekIiuCSw3s7GOpnXQJUzTVlMAiE5ZBTeL7Z2L/PdF+WQeAraNXEFTKX2FyGX1A
-         74BupwotsB9Tfd+4oRuMck1F/IA0G3AZF96/NY8izq9/g8+Xd4HssL07ejeEElH1kmVa
-         jzTH6eLFoPjZpoHi44DSdeuFk0nAtoWOtf5zeXZl+s5HaeS/JjbsjkoHAz4Bmm4gOA2c
-         poZWgUmiaidGRMaSAfM4etpXCWamuLdam6mq/C0avQ2MOYG8Pk8cnHQzEhDJSQA1oNjt
-         oOI7/t9CH/bqTxMX8v7rPqG5Z+J10Ued1KlORCQLsQxUBq7axivC1iXopLd8VU1oZlqq
-         2jfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUQMWRDB5SIIcQ6XBeeP3mhEPR+zblWpyZxLC4QfKpV6xLIWDLBA04HUs7ixsZuwcwyCh7Czhyl9Skm@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPW2Uc3Kq1EyDRhNff4q8AXMY62SOc0Sy3Hdyx7Pi5bnCtvWi0
-	Ahnid7qVxetnC+X0F1bROD1iZ8w5VLyRP2m//+yK6UaUEDC2532iBR56Df4GAYg=
-X-Gm-Gg: ASbGncumS0vpcWX2hXg2ZwcAbEcuC7MYPcdHJuFTPVp5inQ70dyZkqkZMaR+jHLvyMF
-	GUIxRSPSYNthzqQkXGmd9vmIjXZ8nxdZU2FGTGQMeCBVo9WHDg3jR7nvk0pnEJorSMOXwUGfIaU
-	3hTC80QHqAJy/bxJf9Bd1DGEFI4i9p6BM539SKQ8kVPETtAgJ1Tyz+0JiUeQbUtomH/9gj8z1DV
-	xWubM7JAAQtSs/c9C1szIJxwtlqBm+izZd1gge6iojF6BcpKumM
-X-Google-Smtp-Source: AGHT+IHyLhnHpkW1aRd9Uy/4dFtRInCS77Ck4Pzm8qkgIw4buwcaWXv/o+BaPPgFubE9f39qTvqxhg==
-X-Received: by 2002:a05:6e02:3a87:b0:3ce:394a:ad4c with SMTP id e9e14a558f8ab-3ce3a88853dmr84298645ab.14.1736521366894;
-        Fri, 10 Jan 2025 07:02:46 -0800 (PST)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3ce4add9b01sm10150675ab.40.2025.01.10.07.02.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2025 07:02:46 -0800 (PST)
-Message-ID: <00e4ae73-f4e5-491a-894a-8f6f166c1bef@kernel.dk>
-Date: Fri, 10 Jan 2025 08:02:45 -0700
+	s=arc-20240116; t=1736530355; c=relaxed/simple;
+	bh=OlJNy7c62qCwKTUPtKRXyXqYchCXojv7KzNJlPQ4B/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rrgTGXws0tHmhWcDwDqFmpn478Soo1/uC2/2jn8Ap58AkXMlZPqe6hVfSXbnf8pkwNT5I4oI/Ixc1ANPjRPxDsKFMJyGtmF0YpzoDoOFYvIn/MIu49r7kjfMG2UcwXboIunCYVRsHeYfuwJRzAupG5t0IULKINfbWwo+421j4eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hIOtWZTe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12A70C4CED6;
+	Fri, 10 Jan 2025 17:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736530354;
+	bh=OlJNy7c62qCwKTUPtKRXyXqYchCXojv7KzNJlPQ4B/8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hIOtWZTePYcrXkj6ELOTRqigz6SzT2jT/GhLjCzzmq2b42avwqoYpWVzkylZvoH4J
+	 HXPMdqxEGCGOTvD36CQP5nI6PP3CbK60oaFhABZmE0TBOavCjQd9YOkVTxUBnd4X/8
+	 ipKzQmdGJ2nUbpPQtM40iG4KSVBoPI3fcyQBdM2+4TJcUKkLnHdzPu7cnbtsrwgz6v
+	 uzxsoX8CSzPc3sYgN1WKQ7zEGrgAnyMrIwtonssy6IViZuvdVigk3uxdXMZwdde8E8
+	 wwYzLv9b/pHQEHK6tfQVPueYB8GNnXhaybfqJ2y4RRS+m/rNRTjtWMl6/YrR44wwov
+	 m0m+VTiqf9tDA==
+Date: Fri, 10 Jan 2025 14:32:31 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the perf tree
+Message-ID: <Z4FZr6RMikxo__nZ@x1>
+References: <20250110100505.78d81450@canb.auug.org.au>
+ <Z4BcXhjzl066fNGe@ghost>
+ <Z4EoUoxSYPnS_Hul@x1>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the block tree with Linus' tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: John Garry <john.g.garry@oracle.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Mikulas Patocka <mpatocka@redhat.com>, Milan Broz <gmazyland@gmail.com>
-References: <20250109124617.1b4ff0b8@canb.auug.org.au>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20250109124617.1b4ff0b8@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Z4EoUoxSYPnS_Hul@x1>
 
-On 1/8/25 6:46 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the block tree got a conflict in:
-> 
->   drivers/md/dm-verity-fec.c
-> 
-> between commit:
-> 
->   6df90c02bae4 ("dm-verity FEC: Fix RS FEC repair for roots unaligned to block size (take 2)")
-> 
-> from Linus' tree and commit:
-> 
->   5c292ac6e69f ("block: Delete bio_prio()")
-> 
-> from the block tree.
+On Fri, Jan 10, 2025 at 11:01:54AM -0300, Arnaldo Carvalho de Melo wrote:
+> On Thu, Jan 09, 2025 at 03:31:42PM -0800, Charlie Jenkins wrote:
+> > On Fri, Jan 10, 2025 at 10:05:05AM +1100, Stephen Rothwell wrote:
+> > > Hi all,
+> > >=20
+> > > After merging the perf tree, today's linux-next build (native perf)
+> > > failed like this:
 
-Thanks, I resolved this in my for-next branch now.
+Some more:
 
--- 
-Jens Axboe
+COLLECT_GCC=3Dmips-linux-gnu-gcc
+COLLECT_LTO_WRAPPER=3D/usr/libexec/gcc-cross/mips-linux-gnu/14/lto-wrapper
+Target: mips-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion=3D'Debian 14.2.0-1' =
+--with-bugurl=3Dfile:///usr/share/doc/gcc-14/README.Bugs --enable-languages=
+=3Dc,ada,c++,go,d,fortran,objc,obj-c++,m2 --prefix=3D/usr --with-gcc-major-=
+version-only --program-suffix=3D-14 --enable-shared --enable-linker-build-i=
+d --libexecdir=3D/usr/libexec --without-included-gettext --enable-threads=
+=3Dposix --libdir=3D/usr/lib --enable-nls --with-sysroot=3D/ --enable-cloca=
+le=3Dgnu --enable-libstdcxx-debug --enable-libstdcxx-time=3Dyes --with-defa=
+ult-libstdcxx-abi=3Dnew --enable-libstdcxx-backtrace --enable-gnu-unique-ob=
+ject --disable-libitm --disable-libsanitizer --disable-libquadmath --disabl=
+e-libquadmath-support --enable-plugin --enable-default-pie --with-system-zl=
+ib --enable-libphobos-checking=3Drelease --without-target-system-zlib --ena=
+ble-multiarch --disable-werror --enable-multilib --with-arch-32=3Dmips32r2 =
+--with-fp-32=3Dxx --with-lxc1-sxc1=3Dno --enable-targets=3Dall --with-arch-=
+64=3Dmips64r2 --enable-checking=3Drelease --build=3Dx86_64-linux-gnu --host=
+=3Dx86_64-linux-gnu --target=3Dmips-linux-gnu --program-prefix=3Dmips-linux=
+-gnu- --includedir=3D/usr/mips-linux-gnu/include --with-build-config=3Dboot=
+strap-lto-lean --enable-link-serialization=3D3
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 14.2.0 (Debian 14.2.0-1)=20
++ make NO_LIBTRACEEVENT=3D1 ARCH=3Dmips CROSS_COMPILE=3Dmips-linux-gnu- EXT=
+RA_CFLAGS=3D -C tools/perf O=3D/tmp/build/perf
+<SNIP>
+   /git/perf-6.13.0-rc2/tools/perf/arch/mips/entry/syscalls/mksyscalltbl  -=
+-abis common,64,n64 /git/perf-6.13.0-rc2/tools/perf/arch/mips/entry/syscall=
+s/syscall_n64.tbl /tmp/build/perf/arch/mips/include/generated/asm/syscalls_=
+64.h
+/bin/sh: 1: /git/perf-6.13.0-rc2/tools/perf/arch/mips/entry/syscalls/mksysc=
+alltbl: not found
+make[2]: *** [/git/perf-6.13.0-rc2/tools/perf/scripts/Makefile.syscalls:43:=
+ /tmp/build/perf/arch/mips/include/generated/asm/syscalls_64.h] Error 127
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [Makefile.perf:286: sub-make] Error 2
+make: *** [Makefile:76: all] Error 2
+make: Leaving directory '/git/perf-6.13.0-rc2/tools/perf'
 
+-----------------------
+
+COLLECT_GCC=3Dmips64-linux-gnuabi64-gcc
+COLLECT_LTO_WRAPPER=3D/usr/libexec/gcc-cross/mips64-linux-gnuabi64/14/lto-w=
+rapper
+Target: mips64-linux-gnuabi64
+Configured with: ../src/configure -v --with-pkgversion=3D'Debian 14.2.0-1' =
+--with-bugurl=3Dfile:///usr/share/doc/gcc-14/README.Bugs --enable-languages=
+=3Dc,ada,c++,go,d,fortran,objc,obj-c++,m2 --prefix=3D/usr --with-gcc-major-=
+version-only --program-suffix=3D-14 --enable-shared --enable-linker-build-i=
+d --libexecdir=3D/usr/libexec --without-included-gettext --enable-threads=
+=3Dposix --libdir=3D/usr/lib --enable-nls --with-sysroot=3D/ --enable-cloca=
+le=3Dgnu --enable-libstdcxx-debug --enable-libstdcxx-time=3Dyes --with-defa=
+ult-libstdcxx-abi=3Dnew --enable-libstdcxx-backtrace --enable-gnu-unique-ob=
+ject --disable-libitm --disable-libsanitizer --disable-libquadmath --disabl=
+e-libquadmath-support --enable-plugin --enable-default-pie --with-system-zl=
+ib --enable-libphobos-checking=3Drelease --without-target-system-zlib --ena=
+ble-multiarch --disable-werror --enable-multilib --with-mips-plt --with-arc=
+h-64=3Dmips64r2 --enable-targets=3Dall --with-arch-32=3Dmips32r2 --with-fp-=
+32=3Dxx --enable-checking=3Drelease --build=3Dx86_64-linux-gnu --host=3Dx86=
+_64-linux-gnu --target=3Dmips64-linux-gnuabi64 --program-prefix=3Dmips64-li=
+nux-gnuabi64- --includedir=3D/usr/mips64-linux-gnuabi64/include --with-buil=
+d-config=3Dbootstrap-lto-lean --enable-link-serialization=3D3
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 14.2.0 (Debian 14.2.0-1)=20
++ make NO_LIBTRACEEVENT=3D1 ARCH=3Dmips CROSS_COMPILE=3Dmips64-linux-gnuabi=
+64- EXTRA_CFLAGS=3D -C tools/perf O=3D/tmp/build/perf
+<SNIP>
+   /git/perf-6.13.0-rc2/tools/perf/arch/mips/entry/syscalls/mksyscalltbl  -=
+-abis common,64,n64 /git/perf-6.13.0-rc2/tools/perf/arch/mips/entry/syscall=
+s/syscall_n64.tbl /tmp/build/perf/arch/mips/include/generated/asm/syscalls_=
+64.h
+/bin/sh: 1: /git/perf-6.13.0-rc2/tools/perf/arch/mips/entry/syscalls/mksysc=
+alltbl: not found
+make[2]: *** [/git/perf-6.13.0-rc2/tools/perf/scripts/Makefile.syscalls:43:=
+ /tmp/build/perf/arch/mips/include/generated/asm/syscalls_64.h] Error 127
+
+-----------------------
+
+COLLECT_GCC=3Dmipsel-linux-gnu-gcc
+COLLECT_LTO_WRAPPER=3D/usr/libexec/gcc-cross/mipsel-linux-gnu/14/lto-wrapper
+Target: mipsel-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion=3D'Debian 14.2.0-1' =
+--with-bugurl=3Dfile:///usr/share/doc/gcc-14/README.Bugs --enable-languages=
+=3Dc,ada,c++,go,d,fortran,objc,obj-c++,m2 --prefix=3D/usr --with-gcc-major-=
+version-only --program-suffix=3D-14 --enable-shared --enable-linker-build-i=
+d --libexecdir=3D/usr/libexec --without-included-gettext --enable-threads=
+=3Dposix --libdir=3D/usr/lib --enable-nls --with-sysroot=3D/ --enable-cloca=
+le=3Dgnu --enable-libstdcxx-debug --enable-libstdcxx-time=3Dyes --with-defa=
+ult-libstdcxx-abi=3Dnew --enable-libstdcxx-backtrace --enable-gnu-unique-ob=
+ject --disable-libitm --disable-libsanitizer --disable-libquadmath --disabl=
+e-libquadmath-support --enable-plugin --enable-default-pie --with-system-zl=
+ib --enable-libphobos-checking=3Drelease --without-target-system-zlib --ena=
+ble-multiarch --disable-werror --enable-multilib --with-arch-32=3Dmips32r2 =
+--with-fp-32=3Dxx --with-madd4=3Dno --with-lxc1-sxc1=3Dno --enable-targets=
+=3Dall --with-arch-64=3Dmips64r2 --enable-checking=3Drelease --build=3Dx86_=
+64-linux-gnu --host=3Dx86_64-linux-gnu --target=3Dmipsel-linux-gnu --progra=
+m-prefix=3Dmipsel-linux-gnu- --includedir=3D/usr/mipsel-linux-gnu/include -=
+-with-build-config=3Dbootstrap-lto-lean --enable-link-serialization=3D3
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 14.2.0 (Debian 14.2.0-1)=20
++ make NO_LIBTRACEEVENT=3D1 ARCH=3Dmips CROSS_COMPILE=3Dmipsel-linux-gnu- E=
+XTRA_CFLAGS=3D -C tools/perf O=3D/tmp/build/perf
+<SNIP>
+   /git/perf-6.13.0-rc2/tools/perf/arch/mips/entry/syscalls/mksyscalltbl  -=
+-abis common,64,n64 /git/perf-6.13.0-rc2/tools/perf/arch/mips/entry/syscall=
+s/syscall_n64.tbl /tmp/build/perf/arch/mips/include/generated/asm/syscalls_=
+64.h
+/bin/sh: 1: /git/perf-6.13.0-rc2/tools/perf/arch/mips/entry/syscalls/mksysc=
+alltbl: not found
+make[2]: *** [/git/perf-6.13.0-rc2/tools/perf/scripts/Makefile.syscalls:43:=
+ /tmp/build/perf/arch/mips/include/generated/asm/syscalls_64.h] Error 127
 

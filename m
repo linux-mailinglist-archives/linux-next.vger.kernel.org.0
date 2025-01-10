@@ -1,141 +1,171 @@
-Return-Path: <linux-next+bounces-5136-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5137-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68880A089F5
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 09:24:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AC28A08C07
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 10:31:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72790166D5B
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 08:24:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20841188DC8E
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 09:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35FD72080EC;
-	Fri, 10 Jan 2025 08:23:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4765B20A5FD;
+	Fri, 10 Jan 2025 09:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aBjZy0kr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AA2207A2C
-	for <linux-next@vger.kernel.org>; Fri, 10 Jan 2025 08:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520E620B801
+	for <linux-next@vger.kernel.org>; Fri, 10 Jan 2025 09:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736497407; cv=none; b=fixZDqZCt8HhvTjL+l1OAJMcM+figiYTba1e/3i9N2Q5ks0g23Mkbze6gwPxcd2RL1um3qk4VyRo0SSOYWGDR8kicgR9VMueHFPMiGsmWUswHnMsPy2QQlsYkk7hzGLPAT/c37Pg+EzKng57VDm1HKVN9nDfJMXyiys8sioteRk=
+	t=1736501341; cv=none; b=HGJIm03kIrCKu6H3T1Y6ewn9F4JDRMWcSbDWkYPznqbFGiyQlPx3iRQiPQFzwUB4ABFtoE+8/tUs6A2+XDh1EI+QpH4HxzkrMIdhtgpv8WjnOsbe6ARdb7zkmJkhDNuUQViNnW4ajfKAfLd1WRMqlxelGoMxDnHkLwiZXLksom8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736497407; c=relaxed/simple;
-	bh=vQUga7wN9sYJzr3zmj0FALDqzd7npC1fdeHaJKrSM/k=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=N/NFDZ7iJ8z7hnHC7ebb1aDqOV7SS+KB3Mp0JK34lUpuv9ZKVKQvwiLeXB/S8A/L2IOUWBT37kUl217IU6DnBU+kfYxOhk6ekZBMQr84gDrpEm+kjkhdno6u0brLXgfg4KISKV0jiwXk/cF8ix6Ed97Js2GnW0nnXDZ5BsWRwMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3a9cd0b54c1so15264525ab.0
-        for <linux-next@vger.kernel.org>; Fri, 10 Jan 2025 00:23:25 -0800 (PST)
+	s=arc-20240116; t=1736501341; c=relaxed/simple;
+	bh=ugxU+y6whzGZVd7Lc5WjWdCwqy5E9nGzKmdtgmp2yIw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rMfYEYVsgl4VJCj8PFfQhzvl+KQG6jA7KccQExq1cjmJk1q++BoQ4UJGI3EfVbC6uz25mperVt/uwEvp8NuUFCJLzcecI8Ah/yUvR7LbAPFzdC3gP9jBvizzFhuDtAs1SVPIMK/LbGMPk/2M6MfopI+IlyVmM/FPVWBC1iu05Js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aBjZy0kr; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-388cae9eb9fso981439f8f.3
+        for <linux-next@vger.kernel.org>; Fri, 10 Jan 2025 01:28:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736501338; x=1737106138; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pc48kWJkc+jN0D3iJgJ4FngpU8KfaZpctK87uL99jGA=;
+        b=aBjZy0kr4lW/TUA90ZLYAQbtgMl40DOSKMbyuP0/521MKsNa/SDC9O/lmwDsy3BMNw
+         Z7k00zTKtopZ3PxdVvOACEtkoGbb0md7YhO9EliOizE0OkjLq6QOxMdOHQ/ihnWR2gkY
+         9s1rXVfc/Awfl6YjPLit4iSXpha+QCqWzY+JEisZJ6ulwFrxBEa3nPc/2Us1/dxMYhEl
+         e73HZ7HcSIefWIIc2DhtsC/v+hbbmP6JIoBmfPj9209bEdPVP9BpfRhFLHQ9CK4OT6CB
+         CsfQhAvC5E+pald/tCSv9lO2Q8Fs6aMbDaoO09hlloVVoIGZqdzuW7LXJ1Q1pTwsiopv
+         rI4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736497404; x=1737102204;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U7/4FL8kYgI9lR5zgsufPl1DLX3WKUBwumIMlSOsROw=;
-        b=LK1+OrghVvfFupVKfRghD9sutIvjSgNbVNuP8BjC36kqrbDFElz3xDLWXkTHU02nBJ
-         GF5BWrEMlAtEUFEjxUs8HBDwy0Q3XVmwl9cWJ2se2RGGTPq+MZUyB3uY15pje77RWQqi
-         LfdvxA/Y5LSARlxyBct525A2r/kiHIq+yOCHl7IV/e94ZLPDDR02lM7og0jSoqB2s5gt
-         ogXK6xwSoLM5EiC/uk9kJNykywhylXmxLiCR/cYk56N8pBGiZzdF1sNIip/r6EIrLrqy
-         ErJ3713+K+i/K651jC5Eso7sDpOmX3s2tlk48s0spsjfozlUShfy+nzwqg/zu6mkM6A4
-         nNPw==
-X-Forwarded-Encrypted: i=1; AJvYcCWBBRBunjrOtcJMvjUOhKukrVFNcNBBs3kK7riRuoVOHWC8O9t9UuWJQiolbR1hB75QvBJanxJMl2Rd@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAH5S6wYUK+hO4AAd4ifVh6ICuNspSB8YiwbaTapIjBUa+4DRh
-	vj8eTtoXV+Ky7GPSv+C+u7zkXshWoc5pEOqSq+F2orO7omwTM3lRhul0i8JwyKOLEsYX0Uywmf2
-	0Zoq4+uCQkSFNdvexaGfXNwKV7wYbPMPje/pKApWB4Q4SUcR4ak0YDBM=
-X-Google-Smtp-Source: AGHT+IGiEisFy5AALA/WHz0VYuKf3GPKTEwvQU0nNGmRSyfxvhShzQ+T/Fipyba0aakq2Jz/21+EEmJ5PIkFi9tkQmjU/v7ydBKD
+        d=1e100.net; s=20230601; t=1736501338; x=1737106138;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pc48kWJkc+jN0D3iJgJ4FngpU8KfaZpctK87uL99jGA=;
+        b=iN2F6Mm72Za33I/Cq2YVgJQwlYjqy84wQo3Rg+AK/I/6UI1+/tFzyyboeqweq5KTkk
+         0I/mHlQxmBaEucwcjW4Zh5CaIe4qAXfvs2/hE7rDtK+LYnKJM/WpBWLa1B4M5XLp124q
+         /x521LFVS7aj4Pzj+sJgMaX6E0Ox9mxTMi9Hw7cS+g6U5VFbVKnJUYx8CcccQKlPSPnP
+         NJC1ZVY5XHMlkTK1HQE2v3wPDNr0rPcjO3aJBIHuicT9E+5XlCozbRgInuS42nBoIybY
+         WycFXlD9komfhdOyq7jiEtSvEgd+3r5Tfl+Iy0WK018fRt9qRyInaIK5brLxXCl7o4WK
+         vrDA==
+X-Forwarded-Encrypted: i=1; AJvYcCW07617qdnI5MnhFbYLIEfDHcIl/3EK96scZX7xwGprB1oY4SeWO7MfHiz1+fbgpFCpmCMUVUsZqXoA@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiWe2DGm+khHXSffhRk3eS/eULED2FuYZKeTxsvO7ltwmDrofN
+	T77dC8OleHzfw0tEdyjdV+ZhW+8ZWfQOgfLFhDXXzYBv0E1O1QLDDN5vv9ExN9r4LV6rbjf7eSt
+	Kiw8WjnOlHuksit41QbURHqaM5R75uFgq9Kiq
+X-Gm-Gg: ASbGncsIvfIkdOoj9i5WYnqep8vY71MaSsDskRphTbskAYTG7rAyJU4vgddS/YLHea7
+	7JKUqwXURYxXVhdHsXrpRNXHk/yQZAQ7Bsfc9etg=
+X-Google-Smtp-Source: AGHT+IFsI/zsaa4GsW+VvaTS4J5d6VE3camb4pW6IpRhw6KrFr4+xRv0pep3resZyiIheLRk14YQ9hzs//IRMrxLFx0=
+X-Received: by 2002:a05:6000:4102:b0:38a:8b4c:886d with SMTP id
+ ffacd0b85a97d-38a8b4c88b7mr4766586f8f.46.1736501337706; Fri, 10 Jan 2025
+ 01:28:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:18cc:b0:3a7:1c73:e18e with SMTP id
- e9e14a558f8ab-3ce3a8e0a69mr82024215ab.21.1736497404462; Fri, 10 Jan 2025
- 00:23:24 -0800 (PST)
-Date: Fri, 10 Jan 2025 00:23:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6780d8fc.050a0220.d0267.0026.GAE@google.com>
-Subject: [syzbot] [mm?] linux-next test error: WARNING in enable_work
-From: syzbot <syzbot+722a07ef96b37455090d@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-next@vger.kernel.org, sfr@canb.auug.org.au, 
-	syzkaller-bugs@googlegroups.com
+References: <20250110162828.38614c1b@canb.auug.org.au>
+In-Reply-To: <20250110162828.38614c1b@canb.auug.org.au>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Fri, 10 Jan 2025 10:28:46 +0100
+X-Gm-Features: AbW1kvZ-4Pne2VkIG_5V-NWETmrz8cPkMUNcW8oBZnew0F8PiEhuJ46yjNHbYdQ
+Message-ID: <CAH5fLggV5QC53u9xypFga4yheem+7vO=fNqLE47zRj=t_H8eYg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the rust tree
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Fri, Jan 10, 2025 at 6:28=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> After merging the rust tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> error[E0423]: expected function, found macro `kernel::build_error`
+>    --> rust/kernel/miscdevice.rs:159:9
+>     |
+> 159 |         kernel::build_error(VTABLE_DEFAULT_ERROR)
+>     |         ^^^^^^^^^^^^^^^^^^^ not a function
+>     |
+> help: use `!` to invoke the macro
+>     |
+> 159 |         kernel::build_error!(VTABLE_DEFAULT_ERROR)
+>     |                            +
+> help: consider importing one of these functions instead
+>     |
+> 11  + use crate::build_assert::build_error;
+>     |
+> 11  + use build_error::build_error;
+>     |
+> help: if you import `build_error`, refer to it directly
+>     |
+> 159 -         kernel::build_error(VTABLE_DEFAULT_ERROR)
+> 159 +         build_error(VTABLE_DEFAULT_ERROR)
+>     |
+>
+> error: aborting due to 1 previous error
+>
+> For more information about this error, try `rustc --explain E0423`.
+>
+> Caused by commit
+>
+>   614724e780f5 ("rust: kernel: move `build_error` hidden function to prev=
+ent mistakes")
+>
+> interacting with commit
+>
+>   5bcc8bfe841b ("rust: miscdevice: add fops->show_fdinfo() hook")
+>
+> from the driver-core tree.
+>
+> I have added the following merge resolution patch.
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 10 Jan 2025 16:02:19 +1100
+> Subject: [PATCH] fix up for "rust: kernel: move `build_error` hidden func=
+tion
+>  to prevent mistakes"
+>
+> interacting with commit
+>
+>   5bcc8bfe841b ("rust: miscdevice: add fops->show_fdinfo() hook")
+>
+> from the driver-core tree.
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  rust/kernel/miscdevice.rs | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/rust/kernel/miscdevice.rs b/rust/kernel/miscdevice.rs
+> index 9685e50b100d..3ba018651bc0 100644
+> --- a/rust/kernel/miscdevice.rs
+> +++ b/rust/kernel/miscdevice.rs
+> @@ -156,7 +156,7 @@ fn show_fdinfo(
+>          _m: &SeqFile,
+>          _file: &File,
+>      ) {
+> -        kernel::build_error(VTABLE_DEFAULT_ERROR)
+> +        build_error!(VTABLE_DEFAULT_ERROR)
+>      }
+>  }
 
-syzbot found the following issue on:
+Thank you, this fix is correct. Greg, can you pick this up directly,
+or do you want a real patch?
 
-HEAD commit:    4e16367cfe0c Add linux-next specific files for 20250106
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=143344b0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ab790aab796d34a9
-dashboard link: https://syzkaller.appspot.com/bug?extid=722a07ef96b37455090d
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/403cb64e30da/disk-4e16367c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ccd3dbdc32f4/vmlinux-4e16367c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/32256ded47b5/bzImage-4e16367c.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+722a07ef96b37455090d@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-workqueue: work disable count underflowed
-WARNING: CPU: 1 PID: 22 at kernel/workqueue.c:4317 work_offqd_enable kernel/workqueue.c:4317 [inline]
-WARNING: CPU: 1 PID: 22 at kernel/workqueue.c:4317 enable_work+0x34d/0x360 kernel/workqueue.c:4488
-Modules linked in:
-CPU: 1 UID: 0 PID: 22 Comm: cpuhp/1 Not tainted 6.13.0-rc5-next-20250106-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-RIP: 0010:work_offqd_enable kernel/workqueue.c:4317 [inline]
-RIP: 0010:enable_work+0x34d/0x360 kernel/workqueue.c:4488
-Code: d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc e8 08 69 37 00 c6 05 e3 0b 7d 0e 01 90 48 c7 c7 80 d7 09 8c e8 74 23 f8 ff 90 <0f> 0b 90 90 e9 56 ff ff ff e8 a5 6a 6a 0a 0f 1f 44 00 00 90 90 90
-RSP: 0000:ffffc900001c7b20 EFLAGS: 00010046
-RAX: c75b2868096bc700 RBX: 0000000000000000 RCX: ffff88801d683c00
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc900001c7be8 R08: ffffffff817ff732 R09: 1ffffffff1cfa188
-R10: dffffc0000000000 R11: fffffbfff1cfa189 R12: 1ffff92000038f68
-R13: 1ffff92000038f70 R14: 001fffffffc00001 R15: ffff8880b87383f0
-FS:  0000000000000000(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000000e736000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- vmstat_cpu_online+0xbb/0xe0 mm/vmstat.c:2151
- cpuhp_invoke_callback+0x48d/0x830 kernel/cpu.c:194
- cpuhp_thread_fun+0x41c/0x810 kernel/cpu.c:1103
- smpboot_thread_fn+0x544/0xa30 kernel/smpboot.c:164
- kthread+0x7a9/0x920 kernel/kthread.c:464
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Alice
 

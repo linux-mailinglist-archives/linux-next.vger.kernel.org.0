@@ -1,112 +1,149 @@
-Return-Path: <linux-next+bounces-5127-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5128-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13D9FA08437
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 01:57:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B437CA084FD
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 02:44:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 375E43A2BE6
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 00:57:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76543188BFF4
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 01:44:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF7D529CE7;
-	Fri, 10 Jan 2025 00:57:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 158DD25771;
+	Fri, 10 Jan 2025 01:44:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="P+znGcDz"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="aacoLbbL"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E17EEB5;
-	Fri, 10 Jan 2025 00:57:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7D6149C50;
+	Fri, 10 Jan 2025 01:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736470643; cv=none; b=TIIRcT2jFh/iv9AghMQgOfABJFVnnq/INn0R8wyeHLALeZhj+c19KzCQmO8YQaasiNiDoiDW626VeTEo/m62QiRVB3WDFSoqhNcCwz0We7SBphZo6JcU2ba2uSPogbaO2f4Nzg9mAt2I+v9drJowEHGeZnDXVwlaI/IpzNYChVI=
+	t=1736473459; cv=none; b=c1dA1qy8PScqOQaQxHgRRt/BCzTr9JL2lSNZL6xWQrYsA1XUh9AO5l2AQLqQM9ZLE4jf8+uGOM8UJ4y/wF1cKM25RIzIbDE9KlOkoDw/PeNpwyDi4CHe/LuBnLLla4JCt9aaNsntd5ubGDEuMY1YtuRjS/A+zuiMGIb02NCjISQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736470643; c=relaxed/simple;
-	bh=RFfN2U87eByk7hef7nl2QfqHXTtmbNqJRiZS0z4RzM4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sWlHozfMuOsIQyvmtCtsNg+IB0vYCD5bL8fH6stdc0TvG0FXa9pwWKkNVBCFuUrt8rge6aedlRVXp7igo5kR1fWxngZecB7azVa6vGN+bIV2G75azyG5Avdk4lnp6dXxFgmSvZzwtQP/Uk49G7FqbDzYWXUEKWj7dWTXVrP6UY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=P+znGcDz; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736473459; c=relaxed/simple;
+	bh=QHkrxdgcdWWerA2WUGyi/mnyg4tIP8o1XE9qzv/9G+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sBqHsxmNBLW5nLN0Sj8fzjN9Modii3qX8CQL5pj98qahsK+4DWNRWG6UiR/W0wmR/bPMJUnxBfXsumlU4c4aIi/jsT4qEPUn8iD/OPAjY9CmjPvuoA52AYqxPyPRwvGkVCb8L0RTi7IzPuzcTWLQsx24vGpkdzI296sNuGqZZh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=aacoLbbL; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736470630;
-	bh=NnfTK9CZ3ZwPkR+QAovE71e5flveJ29lRRrT/fqgnQ4=;
+	s=201702; t=1736473442;
+	bh=Kaz/wzTXAIRBYQe4VTBIfWIMMWuFfgds2SHO3oWJi6I=;
 	h=Date:From:To:Cc:Subject:From;
-	b=P+znGcDz0NunjA7n+rBlncdoVnvZ6HYruRAFysU+/Hg/PI51FS9aQBIu+GbB9c3OM
-	 TLNqiqxyMC1f5aOL2YHfl8u5gu7IXhYYPk7oqNr0lmpzDinTwuuYJpPqU2qdXr4LA0
-	 Fg5W58x8loIi+0pJ1i1YdY4uhrRJWunebctIrLcbAsXCb24VUHDa8uBxAJCzqsoxnb
-	 2SH9AeOhSin0qyzwevNIte1pCxVSqhMkC2yuDGnXv+ng4FuzERzVVijsUSOUnyCMAP
-	 H8XZXpg9ff0uYoOMubNhNzMHUZGgZYXM1rHLsxOgJCrOzaI5QMzlRS1vfr0aq0vBVs
-	 7KdkhQBoBAB2Q==
+	b=aacoLbbLXDv1JmHKvqtN9h19FWH6PDO2pAoKl5V1OJ+luqompTp2ieONg4P7Fw/Uk
+	 rRolcxx7BXJT+9/4vyzYX+Q06I5HGL3Lh2BDFzlTI2U6Q7P3T7dNpm4JFuu+4Kc+2u
+	 hWNXzYfWgve/Bg3UePDrjCP9EiNjCvHP71PmS1FiqU7hrXx9HLeFSuXezvnC3RaZXe
+	 sj9pAciuLDYKT1Kq3+tFCQOFvTqJirR/yiahsDCsKJZ/DAmTtUEvjGCbvWp5ZZw6aZ
+	 WgBJgVyTH3evXvFLM6eKsVUNjE+ZtyIS5kFLkbQZC7SWgjLnrPgm/iiGEG8/K9w47w
+	 dZPPEJX5G/XLQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YTjsy1G01z4w2R;
-	Fri, 10 Jan 2025 11:57:09 +1100 (AEDT)
-Date: Fri, 10 Jan 2025 11:57:16 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YTkw15swBz4wcZ;
+	Fri, 10 Jan 2025 12:44:00 +1100 (AEDT)
+Date: Fri, 10 Jan 2025 12:44:06 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
- <johan.hedberg@gmail.com>
-Cc: Charles Han <hanchunchao@inspur.com>, Luiz Augusto von Dentz
- <luiz.von.dentz@intel.com>, Linux Kernel Mailing List
+To: Jens Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, Luiz Capitulino
+ <luizcap@redhat.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the bluetooth tree
-Message-ID: <20250110115716.2baf8622@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20250110124406.17190e3a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KWfMV.lD/svhlfVYmn.aoqy";
+Content-Type: multipart/signed; boundary="Sig_/Fv1X7+wOTMVsEK8Sk.S_XYk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/KWfMV.lD/svhlfVYmn.aoqy
+--Sig_/Fv1X7+wOTMVsEK8Sk.S_XYk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the bluetooth tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+After merging the block tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-drivers/bluetooth/btbcm.c: In function 'btbcm_get_board_name':
-drivers/bluetooth/btbcm.c:557:24: error: returning 'int' from a function wi=
-th return type 'const char *' makes pointer from integer without a cast [-W=
-int-conversion]
-  557 |                 return -ENOMEM;
-      |                        ^
+io_uring/memmap.c: In function 'io_region_allocate_pages':
+io_uring/memmap.c:173:24: error: implicit declaration of function 'alloc_pa=
+ges_bulk_array_node'; did you mean 'alloc_pages_bulk_node'? [-Wimplicit-fun=
+ction-declaration]
+  173 |         nr_allocated =3D alloc_pages_bulk_array_node(gfp, NUMA_NO_N=
+ODE,
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                        alloc_pages_bulk_node
 
 Caused by commit
 
-  52d2af107592 ("Bluetooth: btbcm: Fix NULL deref in btbcm_get_board_name()=
-")
+  1e21df691ffa ("io_uring/memmap: implement kernel allocated regions")
 
-I have used the bluetooth tree from next-20250109 for today.
+interacting with commit
+
+  4f6a90a13f78 ("mm: alloc_pages_bulk: rename API")
+
+from the mm-unstable branch of the mm tree.
+
+I have applied the following merge fix up patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 10 Jan 2025 12:40:38 +1100
+Subject: [PATCH] fix up for "io_uring/memmap: implement kernel allocated
+ regions"
+
+interacting with "mm: alloc_pages_bulk: rename API" from the mm tree
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ io_uring/memmap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/io_uring/memmap.c b/io_uring/memmap.c
+index dda846190fbd..361134544427 100644
+--- a/io_uring/memmap.c
++++ b/io_uring/memmap.c
+@@ -170,8 +170,8 @@ static int io_region_allocate_pages(struct io_ring_ctx =
+*ctx,
+ 		goto done;
+ 	}
+=20
+-	nr_allocated =3D alloc_pages_bulk_array_node(gfp, NUMA_NO_NODE,
+-						   mr->nr_pages, pages);
++	nr_allocated =3D alloc_pages_bulk_node(gfp, NUMA_NO_NODE,
++					     mr->nr_pages, pages);
+ 	if (nr_allocated !=3D mr->nr_pages) {
+ 		if (nr_allocated)
+ 			release_pages(pages, nr_allocated);
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/KWfMV.lD/svhlfVYmn.aoqy
+--Sig_/Fv1X7+wOTMVsEK8Sk.S_XYk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeAcGwACgkQAVBC80lX
-0Gys9Qf/RFCGGo5Vu5LoHIuD/pNrjMV9LHJMnRTrvshokTcZl4StXMvyekYbSNrF
-z7vZx1geC0GZSi+fr2aCKFLt2LsvlfZmIjEXp21ufDaUoiOvJM3Xx0h9l3ra7H++
-xMJOoDY39yo4WuOUbuYbHHZsRhfrbZdG4LmEFdwFKqfM4kt/Xiys772MefA2qm5K
-hqMpNj7iD0hHVjNXOcLwKr6nAoCpeZ8RUpsl5yt9iGgOD9YTcmk5GlRPtYmcCzYa
-gwMtW0iPj6MnpfGIPXi4ff8C5I/ktHpA3bNRSjNjYk0o0zj4GXwTNW7bOEt6/013
-w29Z0/6sGenDOcW1Id+8zzG8aeXlvA==
-=jHpx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeAe2YACgkQAVBC80lX
+0GwYdwf/eeP1uuIQYb9g6YlwbXeBc03LwO42bC4We5uLe41g6VtOvvkUP6xfljPP
+hhaxN/nJfjU5vdZ2SKOeOw34jlKFSOJFKCsZvVSm1w2z1Qg/V45XOZBMXQBjzf5n
++rkiTKNHkQfsu+3KZEni9DbpgbTCNjEFiXpwwRRuTcLmoU+zFvElEPjnxdJt01cY
+QGKTjHvj/OdMykgGaxfVHUatma0/zaAvXucwMYiQQESUlxnz6S1PmDqSvMcdxzli
+Cmp4d5nUwqdSVoh7QQNazGWtViRINf1UKcwXQI7Fu+obpnIA1UJE9p+SWFX4rINZ
+UZvZ7rutH9kQFYcpkOKl1/yVjUr+GA==
+=e+zn
 -----END PGP SIGNATURE-----
 
---Sig_/KWfMV.lD/svhlfVYmn.aoqy--
+--Sig_/Fv1X7+wOTMVsEK8Sk.S_XYk--
 

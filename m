@@ -1,99 +1,103 @@
-Return-Path: <linux-next+bounces-5146-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5147-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3CFEA08ED0
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 12:08:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 249B8A08ED5
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 12:09:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0C5F3A996F
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 11:08:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F03017A2A6B
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2025 11:08:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2456B205AA8;
-	Fri, 10 Jan 2025 11:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 331F9209F32;
+	Fri, 10 Jan 2025 11:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EkWRxhL4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G0kjedv7"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB661AA1F6;
-	Fri, 10 Jan 2025 11:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093BB20550A;
+	Fri, 10 Jan 2025 11:08:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736507289; cv=none; b=TXvUx9+uB9vJPzWa+De2IlkD1kCZr5PwA6IVITDv3kiW5R1AOTZKpn4m3HaJtuIWz4YtZ+0exN7aZ5N58iYg7AFNO0ggtyDFUJEOe5Cy26imr53cuS4V9/fD6fuWBpgGmPQNpeR0a9MM/uDubSYf9QsjDxAvODliCqLaqItYyxc=
+	t=1736507335; cv=none; b=g8MFYOSnjilos9n3i3SLFNJOlpp+r7WMmwmFDcsgWSGx4M9cdc3xY4oBCnJAm09Rp9mP6BAtSmmDw8oVIWNbbriSSL2QKIGij8YO8AXWXto4ZPSVDwhLqXkOkNzFYz30aGWQlx00H4K7gpl3SNXW7oc4r+JpaBYK/3ehACby4FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736507289; c=relaxed/simple;
-	bh=NsOsM1gIUOc1kHCpBQKyDj3khzhWkTChTn7RoJ4bO8k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gbHg3IQztWawH9wYc4KRxLwA/+SYqZAlOmaPDUCQR0bpdhRm8NnEMLlj+00Y386sfIP7+TK5+RZjne3dpSTXQnYDCFBUfHg8cSVhW4N4fOpGMYp3u9fi84dSV8EkB4oTDt8ms2QdIeMBflhGq7wwSrWO1o1PGqSeQ4hD6rXStgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EkWRxhL4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 729E5C4CED6;
-	Fri, 10 Jan 2025 11:08:07 +0000 (UTC)
+	s=arc-20240116; t=1736507335; c=relaxed/simple;
+	bh=HV0C/PdaseQ4DsT3b/AlZH7TSiFjh0bVZ6UY2lBbR5A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=egUPAlmFIHL8IRfoYvKsMQ0mjpE0Yk45ddxWyU+WKFPQDKC0C0xBwR7iPGl5b5ZuthIj4lD5rGAakhqfiXEJnw8r99pFRHMEl60UjUNxyJ31G6n48bwhi7D4qylBegQNyM+jUIfwyLVRHa9qXpaI+zazDtg/dy2f97TTKQKgJBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G0kjedv7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1F6C4CED6;
+	Fri, 10 Jan 2025 11:08:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736507288;
-	bh=NsOsM1gIUOc1kHCpBQKyDj3khzhWkTChTn7RoJ4bO8k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EkWRxhL4l1Be0do2TKEukF3sRKgItwIHLbaeSZuMaMxDYkrREmqIej3ZGM2z9TLOO
-	 fdOv96IgM5YG1qrwBfpnVaPFW8qiSpCYBQ06DSuzUNFeF3SGDNFhzs2RHM/yWeevuS
-	 TtuX5+tbxaCrf/VLSUlnGaZYfB6v5trIGMYTo7nrYEnNsKr+VpQPVNm7ZJTA51NGvo
-	 Da2T3wlHLdsF6aNlR/DGGsjlgNo9lsr0EfiaErBLaZEQ79VJmmDXgBSw7FZXuuEPvi
-	 cuq450jzu6BIvGd+9vadKLWSWGA4cEcCNWJlfdvGH5OKJR06h0W/lScSTAbHl/bv1U
-	 3Q5K1IwVmlruQ==
-Date: Fri, 10 Jan 2025 12:08:04 +0100
+	s=k20201202; t=1736507334;
+	bh=HV0C/PdaseQ4DsT3b/AlZH7TSiFjh0bVZ6UY2lBbR5A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=G0kjedv7bGLxZaS4wBQ6jLghHAx1ybyHeRKw0yvBvPdvZkDa1K4CCTEen4lPk9Zbm
+	 1fJzVwbIQ7PbbnKkQU0WXnKovj2dL+jFA2Gbj2qudj6kR3Ijhp3sdBsAoVD49+IoYA
+	 8tRq3hgc5yUXuPC217RNFR3l43JutYq3V1E/Zpu8MlsDVEmQj0CwD2kyEcrsKiSVsX
+	 +RQ/LDoZz2m+hOeGPEh1lWxuV83SGmOwV36uZ6Ahbx1kYvrGKU0iOixbnaAxEHQWCC
+	 YyqPI9Qveog3xkXTMvW5LXjzcNSMKRQk5QP8nKqQjnzny778ncKYHBZYfVBwsOungp
+	 TENS4VyFokgtA==
 From: Christian Brauner <brauner@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the vfs-brauner tree
-Message-ID: <20250110-siedler-karnickel-d6a5e3904c9c@brauner>
-References: <20250106101038.65f9b810@canb.auug.org.au>
- <20250106191417.0f7707a0ecbf1a386ef60538@linux-foundation.org>
+To: Jeff Layton <jlayton@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Christian Brauner <brauner@kernel.org>,
+	linux-next@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] samples/vfs/mountinfo: Use __u64 instead of uint64_t
+Date: Fri, 10 Jan 2025 12:08:47 +0100
+Message-ID: <20250110-genom-jagdsaison-02d05f945840@brauner>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250106134802.1019911-1-geert+renesas@glider.be>
+References: <20250106134802.1019911-1-geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250106191417.0f7707a0ecbf1a386ef60538@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2103; i=brauner@kernel.org; h=from:subject:message-id; bh=HV0C/PdaseQ4DsT3b/AlZH7TSiFjh0bVZ6UY2lBbR5A=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQ3/D/Q9yRJJF94/gVRhgX7xdm5tjQs+7PMcbPvXS+/9 4JqHz8e6ihlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZhI5RtGhpct3U4xf88mT3l9 w/RCAHft0TPP2NUV9j+e0c9SNynvIjsjw/1ih3Mt6x1ePD60Rcfsz7qDr+0KhVlTVzf5e8U7l9m e5AMA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 06, 2025 at 07:14:17PM -0800, Andrew Morton wrote:
-> On Mon, 6 Jan 2025 10:10:38 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Mon, 06 Jan 2025 14:48:01 +0100, Geert Uytterhoeven wrote:
+> On 32-bit (e.g. arm32, m68k):
 > 
-> > Hi all,
-> > 
-> > The following commits are also in the mm-hotfixes and mm trees as
-> > different commits (but the same patches):
-> > 
-> >   15858da53542 ("selftests: coredump: Add stackdump test")
-> >   ab251dacfbae ("fs/proc: do_task_stat: Fix ESP not readable during coredump")
-> > 
-> > These are commits
-> > 
-> >   1e0ad4a1359b ("selftests: coredump: add stackdump test")
-> > 
-> > from the mm-nonmm-unstable branch of the mm tree, and
-> > 
-> >   7cc55ae2737b ("fs/proc: do_task_stat: fix ESP not readable during coredump")
-> > 
-> > from the mm-hotfixes-unstable branch of the mm-hotfixes tree.
+>     samples/vfs/mountinfo.c: In function ‘dump_mountinfo’:
+>     samples/vfs/mountinfo.c:145:29: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long long unsigned int’} [-Wformat=]
+>       145 |                 printf("0x%lx 0x%lx 0x%llx ", mnt_ns_id, mnt_id, buf->mnt_parent_id);
+> 	  |                           ~~^                 ~~~~~~~~~
+> 	  |                             |                 |
+> 	  |                             long unsigned int uint64_t {aka long long unsigned int}
+> 	  |                           %llx
+>     samples/vfs/mountinfo.c:145:35: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 3 has type ‘uint64_t’ {aka ‘long long unsigned int’} [-Wformat=]
+>       145 |                 printf("0x%lx 0x%lx 0x%llx ", mnt_ns_id, mnt_id, buf->mnt_parent_id);
+> 	  |                                 ~~^                      ~~~~~~
+> 	  |                                   |                      |
+> 	  |                                   long unsigned int      uint64_t {aka long long unsigned int}
+> 	  |                                 %llx
 > 
-> I'll drop the mm.git copies.
-> 
-> Christian,
-> 
-> hp2:/usr/src/mm> git log fs/proc | grep "Signed.*akpm" | wc -l 
-> 1231
-> 
-> if you wish to change this then please discuss with me.
+> [...]
 
-Ah sorry, I just saw this message now.
-Sorry, since fs/proc/ is just listed as fsdevel I picked them up.
-I'm happy to take them going forward unless it has obvious interactions
-with mm.
+Applied to the vfs-6.14.mount branch of the vfs/vfs.git tree.
+Patches in the vfs-6.14.mount branch should appear in linux-next soon.
 
-Let me know what you think.
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-6.14.mount
+
+[1/1] samples/vfs/mountinfo: Use __u64 instead of uint64_t
+      https://git.kernel.org/vfs/vfs/c/f79e6eb84d4d
 

@@ -1,108 +1,111 @@
-Return-Path: <linux-next+bounces-5161-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5162-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48DCEA0AC05
-	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2025 22:55:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FD4DA0AC10
+	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2025 23:00:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 178FD3A65DD
-	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2025 21:55:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4341E165E76
+	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2025 22:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C583F187553;
-	Sun, 12 Jan 2025 21:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B2D18CBFE;
+	Sun, 12 Jan 2025 22:00:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rPAa/62a"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="SNKMeUhm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3608515575D;
-	Sun, 12 Jan 2025 21:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F5E839F4
+	for <linux-next@vger.kernel.org>; Sun, 12 Jan 2025 22:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736718916; cv=none; b=tgyCq/M8wDN/ghmZ/l6/tjTJ0TZmA0Sy7jV0oNq0bTM3dIOPZ+2qDwfAnOGnKT37BCZmICY+TIukOq0rTJ7EbqUa4TxrWndkLlKRxOecPkoEqaziPHnVCunp0Ky9YzQOBafQ5V54k9CqtFy1o8LbXiQYSdIFR5ehYwUPdXumwPc=
+	t=1736719226; cv=none; b=m32gtscLu/Che78wIuSYt5GV9bvkf75u/FFiqcyLsJZ6gaTmi1tocqyBhflx0O2UfM5gmXM5jsEbknLe7BouuLiyXhpJKck+0YqfaGq6jS5OXSR79KsP6thqO8J1QyguxzX9p07V6nP3E2BSTWKZcbvA+8gIfB2O9Ec4zdF/Wp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736718916; c=relaxed/simple;
-	bh=FbD4U1Rn5e7gVj1AB+XR10yY5yC+ImQUvyoFCjFmFuE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VHg7rKbJH7PW8zTUfzl+BeG6krwTJ9CmccvqGkAysC2VxjqCFgxpdRy+R80e+67PJox5LFo5li1JQtGaAarRsJMQMNEHVhXelH9KH/3fj3pfLsHwD012ADLZkFNMAG7MIcn73P7Nd9zYe4QA3LrErWGqodBpdH4qnW+yki1S7xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rPAa/62a; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736718901;
-	bh=AgsQ+UvzEwcakIvUVJkPLP613bkVloGb80jQfXuzQAg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=rPAa/62avVjcPpAl1CS71RwNuNDtCu0y43nSVo3Ntw1nCUw69uKPABv/ebHEh59/B
-	 DsxXJEdqXuvchFOcix8aIMj7SomFZDZBAIcGwxJp/YsabHKiLT4RSLEM0WdeWG2fO2
-	 bGQ5hPk+eSxj9P+p+4rNpapsLIyw1wH/zoit7zWVBUt/zzBxRRHC5ynAtzuAje5Ulr
-	 GZPh23I44sUpjrUcUrVo8GTyUz1MapRf2B3eQAZn3apVzq3J+FIuqxYRtoLhvIqhmY
-	 Sgt7Z4Lt3AS0q5P+fRtzbeg/dVZX5ETS8AdMbOWO2pZ0BErJX4Zh2nhUDDQUWokRhI
-	 ehvDJasOHPPww==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YWThP4fwRz4x0t;
-	Mon, 13 Jan 2025 08:55:01 +1100 (AEDT)
-Date: Mon, 13 Jan 2025 08:55:07 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, David Howells
- <dhowells@redhat.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the vfs-brauner tree
-Message-ID: <20250113085507.3f2984fd@canb.auug.org.au>
+	s=arc-20240116; t=1736719226; c=relaxed/simple;
+	bh=j9ChWlFz37Ht0CvmQ6luBJp+SBesfB/3xhnHYkzKcGw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aA2/J0JX5TM+zVEyhJ22G5Lq9S7W9no3WZa8Jy3KCvx9VS8NGR8iZ8ethPjlsA/FLjTE47mA0Yv6MyJiqL7JSfAIiBSPSmCAAGqrQPr9pI6FHpPsQoCsMrATY74wIOj+KpCX/EH4ejfvL8lkFFnKAL4BvaKjFWJX3taDYrdAQOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=SNKMeUhm; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-844e161a957so310622239f.0
+        for <linux-next@vger.kernel.org>; Sun, 12 Jan 2025 14:00:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1736719223; x=1737324023; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CqDqN8RiHpsdqolUOa+DHwAJPWi38JcC0MdE7FuMO4Y=;
+        b=SNKMeUhmB8tggG1teAVY99ScwxXN6+OcnWA2fdgQN6LWEnxVRgQjTyv2c40j9wHT3u
+         HOSIVxnjiNFsj+CMm3+OQs1qRbHEgFc/rcBWaDMesUoD6eOZjlQA8Y90fIhs2ntpI3u1
+         cIW5l5kDFfpnGScrILonSZ0EXwHBIgkx2DhsaKu30BV5/t1MmZHu1FdBySkhzOYTo/kP
+         ZPD7ZoGl0oN9d1CFxcrmhIyjaf0yC9RIIdE/a9FQ80qsGkH3bykTwSNiJVFriJnvbUsA
+         vn/LXdhAmuvfI1AwNlv9p/aD6jBQeMNsFfqC793QFJn1ihBQPWZhs9PUbZa+4SJiPEEK
+         VFbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736719223; x=1737324023;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CqDqN8RiHpsdqolUOa+DHwAJPWi38JcC0MdE7FuMO4Y=;
+        b=r1y3FS3tqsBkwdeiLaHCte5IGuOaf368L6CIo4Q1H5PjE2ECXCxly7EbKBn3YeG20J
+         ibRZ9MgQFFT8Sw6O9vXxKT9QGiktA9Kvd3xNYskOy52+a0i+BP7Ffu0GaTvbYAsipoYd
+         iKLLlLdKuIoJSZKHElYHsy2UmnipXAWs++t9+9BEds7SMW4U9nVbyj3gfkSYpmwsQHQx
+         +/fDmbPGo7C6iZ7mQ1BBh8MZgdH564HDYm3lsDcOZe0DYRqZOhU4ycdUaZ0yX4S9MP2M
+         V+UkIhMphw4DhBBlBMq9M8wTp6tA0CxAc/9EYYVFJXmd7pkfM+pjeiwz06eXL0X+JEe1
+         RG/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXqfBsfCRmW3cKrQ/2y3NWnsXoD0irRduv/345wTu9Y6mNsmvKl+XmNhFzBnnCqGROezpBrWR/pS/Lx@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKUTcXBfwg2Rrdj7ZA/orR72hWjOvO3yP+KegeO/jn3xb7yd0x
+	iBaTpO9ljaqdds0r7kLzV7VAObYdYEvhayu05XHQFuwfAs8EN8Jr7lKjj6NMuTYB3BNVUxyRuIT
+	n
+X-Gm-Gg: ASbGncvcmc6vzCPPMYLr4M+0Vc6pf8nt8o2rEtartrM35YW1DJp9ZX0+XXd7F1HYYdP
+	HxcGmnWiyoV316ATSnNHZrwf8svsYmnVpoUFw1Fbr3AOLrz1KsiTHwU44z8lqcEVHaDySLoBd6M
+	C+hwABwgPmL5jVf2wmJZlvT5aC5oB/qEVVaAcbpkcQPvUvAg5oJk9QWzFEsncMB1OdvbiK5HApb
+	otxTNfVc1MKDQcjHVRL6PR8Xds+VrvNwO5hd8KDob8CFcrs80lcZQ==
+X-Google-Smtp-Source: AGHT+IF/HJK41HHlDKE84bdH8yEq8afCJ9yo6g+CSq0kUMKO/MJ/8yonLWLXNV5AmZMwn4uTa/+kaQ==
+X-Received: by 2002:a05:6602:b8e:b0:84a:7906:21e3 with SMTP id ca18e2360f4ac-84ce00c2d93mr1676263039f.7.1736719223129;
+        Sun, 12 Jan 2025 14:00:23 -0800 (PST)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ea1b5f82desm2345889173.19.2025.01.12.14.00.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Jan 2025 14:00:22 -0800 (PST)
+Message-ID: <31a7362a-bda1-4893-9680-2a10fc3cfb34@kernel.dk>
+Date: Sun, 12 Jan 2025 15:00:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BKAEkW=xJO7EgrRNoe9_Lb7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Signed-off-by missing for commit in the block tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Keith Busch <kbusch@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250113075119.6d1d8177@canb.auug.org.au>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20250113075119.6d1d8177@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/BKAEkW=xJO7EgrRNoe9_Lb7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/12/25 1:51 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   ae50aa677503 ("nvme-pci: fix comment typo")
+> 
+> is missing a Signed-off-by from its committer.
 
-Hi all,
+Due to this and the bisection issue, I've dropped the nvme pull request
+for now. So this issue should be gone, new version getting added once
+it's ready.
 
-The following commits are also in the afs tree as different commits
-(but the same patches):
-
-  30bca65bbbae ("afs: Make /afs/@cell and /afs/.@cell symlinks")
-  3e914febd79a ("afs: Add rootcell checks")
-  92f08e9d3cf0 ("afs: Make /afs/.<cell> as well as /afs/<cell> mountpoints")
-
-These are commits
-
-  3c9ca856fd12 ("afs: Make /afs/@cell and /afs/.@cell symlinks")
-  bcc4d777ff8d ("afs: Add rootcell checks")
-  31ad47d22fac ("afs: Make /afs/.<cell> as well as /afs/<cell> mountpoints")
-
-in the afs tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BKAEkW=xJO7EgrRNoe9_Lb7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeEOjsACgkQAVBC80lX
-0Gwelgf/ecgwwCRUwONB3+cEPaPDDeNCeWaZn3bbh4xf1kojajdRp5DKAebDpeB9
-i2Ndb4bqA779Q3OoV77yQDRmtwxVFGHaYd72zoqpzZ/wzI2BakaMM5qXBZbbMsle
-Y4r4w+7yR9qSgY456UshHwd/aPiL3k3a2Z4OBQpqQFIOkgfj2lT1DJL7gzHyjlOz
-ntOcG931Dcaatf1FHFPP1Ycfu6eQD6fo/BtY3zHK40RIbF52so9VsGjeM9sqShFg
-hyk8JfckEnrTZK2UHfprDPguUqJ/un4bBjMIXpXJrN/eLVRTKcuZoGeNGBrc1F0P
-fM6h9V46/5XXsJFSgWb9kO2LXdvUKQ==
-=zhrD
------END PGP SIGNATURE-----
-
---Sig_/BKAEkW=xJO7EgrRNoe9_Lb7--
+-- 
+Jens Axboe
 

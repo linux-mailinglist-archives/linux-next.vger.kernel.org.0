@@ -1,437 +1,200 @@
-Return-Path: <linux-next+bounces-5179-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5180-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B8A9A0AF21
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 07:13:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EE63A0B1D0
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 09:54:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FA151885CD5
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 06:13:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6064F3A7200
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 08:54:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D89BA231A33;
-	Mon, 13 Jan 2025 06:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29E7237A4F;
+	Mon, 13 Jan 2025 08:54:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nhR3GhEP"
+	dkim=pass (1024-bit key) header.d=axentia.se header.i=@axentia.se header.b="CUexYcdE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2134.outbound.protection.outlook.com [40.107.22.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69CE13D504;
-	Mon, 13 Jan 2025 06:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736748809; cv=none; b=U5mVE/lZiz4Iu0XU+eN99RaD9HxVy9nNpf9bSs32zSvGd4Jcww6XcmCEVzwHU+J6KeCnZAmlPeyTRC6Yo1FWbBufbkDLUlOIQqe2KhHulRdNi8YY6qACu1ZQIiZ4PYKKgUMIYxi2YxGegHjg4bWM1COCpSCt6p3WEtQnU62l1kA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736748809; c=relaxed/simple;
-	bh=VrfnBLAbJIaR4zhRsyYr0mPJk3ssfnECODENxy1qDxQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YVP/VjBFnTdDUSwZufygT4OVg5hEYlapNhNo7pQ1W7xKWweiSRpB2Bk2xQMra1V+qliLrKcqWRsv0w2P2762bgkoOnDcPsK4DdOrkM8f86cW6CxIL7XeoBU9vtHYPRLq+57g508oXsYiuqahtznezM2zL9ps0QExXwe06MIhdCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nhR3GhEP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCA2C4CED6;
-	Mon, 13 Jan 2025 06:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736748809;
-	bh=VrfnBLAbJIaR4zhRsyYr0mPJk3ssfnECODENxy1qDxQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=nhR3GhEPT1mKGXI+pKgl4Kn+xgHuk2nzwhOd7PIQXRq1xYPTMoEAz+qczwMWJAhV3
-	 ZRAuVcZKIjVRmjJiHE24xu6PakIhnt5NGEFy69tRkJUYjO4F4GkMgGy5axc2SnU/FC
-	 vqtj4q/j4z6jFNnTwrCZuBhcUu40I4/F9bCchRzHhcBAtOCmwR/37vLOb0SoWDGCIW
-	 NIfCbAuvdEiWnRB6ndYAYb0L9c3WBFzMrRWkU0bTdXG1w8vdiW23gL1wGmMwU0meuV
-	 mga3LpmNw3i2JZMZUcF69RprpGtwr/5lHBb3AlamYzg7UXhUx1B7Jmxwae6Ng6ZUh/
-	 /JyFspgDjw35A==
-From: Song Liu <song@kernel.org>
-To: sfr@canb.auug.org.au,
-	axboe@kernel.dk,
-	linux-raid@vger.kernel.org,
-	linux-block@vger.kernel.org
-Cc: linux-next@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	yukuai3@huawei.com,
-	song@kernel.org
-Subject: [PATCH] md: Add missing md-linear.c
-Date: Sun, 12 Jan 2025 22:13:08 -0800
-Message-ID: <20250113061308.101069-1-song@kernel.org>
-X-Mailer: git-send-email 2.43.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0005231A46;
+	Mon, 13 Jan 2025 08:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.134
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736758444; cv=fail; b=BM/ORBRuS/ngMz29H+7gQ5MNvVw2qma1/EdcKZQjgZ+nfd7tudQ8ugZbbPBOqfxqAY9TW9xcZsYnq/40U7um0HhbRI2CTcb12hvMXXyaQfoSPbwA+LRt9ksH/gxQ154W0dde3U2knUv0/TRl88E1Ld15RZVwPUe5idKom5Qy+Rc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736758444; c=relaxed/simple;
+	bh=s0/0xguqf6+eq4lCCblD04YLOJGLIs7amEFROUWOLuw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=MqMU442dQl/tNM21sP5+fquHpuHq6QxLs1WXY91Vjypktqle2zFfCH6I8b76v0YTnlzoYXCBf/AhoDGOXowUUnMgpmmY59IgrRWlVcLlJOrf/tZ8MLJHCKKtFxT5Yer7QaFbx7SkFPF0aP6/jbqYeUXCCL/JIAOHmUbTHcx0XiA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axentia.se; spf=pass smtp.mailfrom=axentia.se; dkim=pass (1024-bit key) header.d=axentia.se header.i=@axentia.se header.b=CUexYcdE; arc=fail smtp.client-ip=40.107.22.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axentia.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axentia.se
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EczlQ3gGob3INizN40fFooMBazjEm4al5eOc8CWtrhL29yk0DwRzELy78BHxFHrCQtPfaqDwgx6IuZkwIi7VoBNINcSVV7hphc8WxP8acFKljB5Xh4NX7ccrirubVe8e18jKTof0Z4OqombuGSva4grgzdIzfoDLidbkw+GS1Hn0t7WFpaI8PaXVZYLC1vMK4hu3PgnFWClM9hzSQofZwtlpHdumFndTMStFo9fpIU7EWQI2pKLWuEaQ7e67issxD0iS6UlVmSe8jK2jmIVM3a15tkbJQnK/TiG4H1gahETubykNqAlnOaMjqx8ySq/eH1FhUJB1y4+Z3o6grNdrVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ol1xy2U53r1abh0f1CfprGn1490kdNO+1YTIIdusW50=;
+ b=d2xA5ALULOCgmiWgcDQjRl8uIEW9VpCLx9rPuna5BwyC3u5AaUdERPPMeOWy5epkENO9+Kfx8nTr6zhDma/xMxLXC5ggJJWou/aonyG6rS9Om2iJc6PfpFx2qaD2l+mc2BnPWv6hgB6mqHb2zQTaJRzge+vgwKKTpPf/MJk0chVe7xdilccYLgDdjIJ02THmpuIGWn9cGgo9N10XbKBkT4tBFzrp+hZ59L2RWJgQc8nctgv2LyGKKyDyEDxMzuqrUQYn4lKW0t+aZgkb7TlJTq5Uxc+j2P9tKr+GB3W0SDmn6Ph9hr/r+DUnMAA/lD/7knciAkxGS9jc8wHbxNZAFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ol1xy2U53r1abh0f1CfprGn1490kdNO+1YTIIdusW50=;
+ b=CUexYcdErwXVb7iLOMboM5Ja5NmB582ycnnaJJbUjaRDMbzqL8772+vDYGQHyAaLIVFon4CnEsbVU0e7FOlpCvv6p4kgIg+rs/Rfvlyq+3bPWnlR/+MwgO7aSet/O8vATx1gRBgXe1p6XMmgen1iHSJuYFcXliabI+sxhFdywHw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from DU0PR02MB8500.eurprd02.prod.outlook.com (2603:10a6:10:3e3::8)
+ by PAWPR02MB10321.eurprd02.prod.outlook.com (2603:10a6:102:365::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.18; Mon, 13 Jan
+ 2025 08:53:27 +0000
+Received: from DU0PR02MB8500.eurprd02.prod.outlook.com
+ ([fe80::aff4:cbc7:ff18:b827]) by DU0PR02MB8500.eurprd02.prod.outlook.com
+ ([fe80::aff4:cbc7:ff18:b827%6]) with mapi id 15.20.8335.015; Mon, 13 Jan 2025
+ 08:53:26 +0000
+Message-ID: <133f3d1c-19b2-db19-f4df-c67d1f57b946@axentia.se>
+Date: Mon, 13 Jan 2025 09:53:24 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: duplicate patch in the mux tree
+Content-Language: sv-SE
+To: Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250113142640.54d5eceb@canb.auug.org.au>
+ <2025011357-deceased-press-cbae@gregkh>
+From: Peter Rosin <peda@axentia.se>
+In-Reply-To: <2025011357-deceased-press-cbae@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GV3P280CA0008.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:b::9)
+ To DU0PR02MB8500.eurprd02.prod.outlook.com (2603:10a6:10:3e3::8)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR02MB8500:EE_|PAWPR02MB10321:EE_
+X-MS-Office365-Filtering-Correlation-Id: e95a96b6-1cbe-49cf-13f8-08dd33afbe99
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?N1R0TU9TVTZMTEhVelZwcjE3aXpBSVkzUDI4Z1hmMHhzSitpY0NyVnlqdTBT?=
+ =?utf-8?B?T0s0clozSFVQWWxjaHJYc0pZRldJMmVpdFhyWXlheHl5d0JKdlBSd3ovSHA3?=
+ =?utf-8?B?QVdBNVhlWVJzajdLenJ5ZDM0Mi81S1MxNmJWSGJDVkFaclNaL2JJQjdCREZw?=
+ =?utf-8?B?WndSRHZ5UWJzVnc0NEtmd2tsN2xJZ1Z2dG5BVVZIazcrNVZlMCtOWlA3MEwv?=
+ =?utf-8?B?TkV5QytOYzBhV2NudVpTNWdYYXN5YzYxZDhlckxCOGdXNjNINEhveUR4bGVz?=
+ =?utf-8?B?aVVPdnVuU0Ewc2xiaHhTVmRJL2pnWHdNZXBmSFFCQjF1NXhZRE1jZXNqZTd3?=
+ =?utf-8?B?cXlzMDlKQThLK0NyNzQ3dmRoY0FUWmZLRmVBUVVESHMwbko1ei85KytjbCtH?=
+ =?utf-8?B?ck0vMFJRbGUvUEVFN2lPYWFFZ3RCOTk4NDlCY2FsMXU1cmR5WDFIV0RHNXc2?=
+ =?utf-8?B?UTV5SUdJa1NsZ3BFdEhhVlVJNFpyd1QwbzNOdmZRVVVBQnpHK2RUK1lnTzF2?=
+ =?utf-8?B?L1R4MUVweTlEL0J2YlVnNEVlY3piajRFYjEybzR3OVdQUEJSRE1PVjE5VTZm?=
+ =?utf-8?B?MWI2cXZDZE0zNnoxaGIrNHB6Tzd3WmNGbU10S0wxd1B4S004eVpKR3JXT2o2?=
+ =?utf-8?B?dFc5ODE5KzlwSy9wM21TdkJldHdLUEQxYjV0UmpQQmR1YXYrdnNUVWE3eVBH?=
+ =?utf-8?B?SWxTOVdVS09rNjI5MjlqNWd0aWdsVmtzYkpGRTNjNXhHNUdwelh4MXQ2NERl?=
+ =?utf-8?B?aktxaVJBN3J4cEJDQSt5bTdVWVVkc0k0MnpoR1FVMnFjTm9ycUErSmhseTNl?=
+ =?utf-8?B?aGxKelhOSDBhTWREd2s0aUMwVHI0M2YwK1Jta2tkNld0emV4ejB5N0pVNUM5?=
+ =?utf-8?B?WHhYWnhBQjREL1pZZVEwWUt0bVd5b0hZdnN3R3hUZUk5UFdLYWh0aDk5NVN4?=
+ =?utf-8?B?c1M1bURoZEZFRE5Fa2FoTTBOVllsWTBod1hLV2h3WGlaeE9WWHlYeDBWK09N?=
+ =?utf-8?B?NThBR3YvWnVaTU1qeUZNc2xETzgrcTl3MGVhR3BYWlNPMFdKb1NJZTd4VTdS?=
+ =?utf-8?B?ck0wNldjN1hnV0w1Q3MyaUc0bURia0tnZWtBdWErU2hRZkdyMEZTalZ3RFk2?=
+ =?utf-8?B?cWsySFBTK01PM0pod3lsd2srRFRoZnp3ekZmRlFQVmNuWHVyRU5VcFUzalE0?=
+ =?utf-8?B?alpYZHZsbkFNa1NyaVZuU1dBdDNORjNLOHh0N3duOUVjYmVzYS9DdEd0dldZ?=
+ =?utf-8?B?b2JrdUZOeVArRDVTZEx1ZlFoWW9CSE80VUFRUWJ2NlIzTTdvcWNVUTd5OTZj?=
+ =?utf-8?B?L3pPSlVHcDNaYndISU5QUHFaMmlzNmYvOWlGSHNOSDRaWDlaVzU0Q2VrK1o1?=
+ =?utf-8?B?NUw5dnhTNmFSUHI0R05RNyt4SzBoNUVJNFlqYTVjKzhrSStRNFYwZmR4RFFo?=
+ =?utf-8?B?U2ZhT3F1K1FleDFZUlZBN040SWJhRGloUk9sdnJuNjJUREZBVDlaRzZGd0s5?=
+ =?utf-8?B?MG5RU2o3aENpVk9pUFNVTWFnaThJWCsxZnY2dm5vNGE5WUZ4K2loRHF1clh6?=
+ =?utf-8?B?dVpnOHAzWWdheGJITUVoaU5pdlB1WFErRUJCdUxxcFBVT1R2V2hUY2pGYnZQ?=
+ =?utf-8?B?M1lCd3ZLRjBDajgvcVF0TFpKS2VtMFExTFBDamZRcjJBT0RpS3Q4aHl1VGhW?=
+ =?utf-8?B?SjBCTno1dHZpS0VyenQzeHF1VXBUVTJvVngyYzFYVGpqWGRlTDFxemw2bEw5?=
+ =?utf-8?B?aVVvdkdwbC9zUWNHRDluSmsreFJraDcycUo1V1R6NmdpRDhRbnY5ckxiZnZO?=
+ =?utf-8?B?U3libVlUYjI2RmJsZG9ud1hEUEZRaEFvaFJDd2ZGZnZtblQxTWpFL3lzaTRP?=
+ =?utf-8?Q?T2m7FANr3hztV?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR02MB8500.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZjJIWW9oL3EzRzZkbGNjQ2Rac2RGaGw3RzhUM1NTM0FoeEdGL1ArWGlDVFRq?=
+ =?utf-8?B?N0ZadnZhTFdNR0tlaTM2Y3dIUXBKd0EzVkF6N2FFd3AxR3BJOVhQUCtUeHNw?=
+ =?utf-8?B?c3NDZ1B3QnJSek1zblJ3ZlFZN2NVWFJULzdhU2NOSk9YWnBubmEwais4emlH?=
+ =?utf-8?B?TG14Z0dDZWlMMnFxOUhrc1QxL0NVTkpaV2hrQWFVMTNPN004WUFkak5nOWNP?=
+ =?utf-8?B?TEpmS0ZHczRnd1lyUDQ3RDRqUnN1Q3JrSi9LZDNIcmkxcjZmME5tR1ZJbUVP?=
+ =?utf-8?B?WlhmU2tZam5ZM2R1dWQ2NUZqa2kvakRuU1VNWjRRcVlSUDU4cVVUTVJpaVdr?=
+ =?utf-8?B?Z2ZVTVMyYmhRNEdzbkpsNVJGNDdFTExqLzRBZDUweUdrZVNML1dyQ3M1VVN3?=
+ =?utf-8?B?TGZvTWJvdldHYWZrRXpVRlVWWnE1dkV2UmozbWxiQ3hzS3crZk1zWW9RSWhk?=
+ =?utf-8?B?cVFFc0tEamlUT055ZFRHSGgyUmhXbjZITmN4SE1haEtOczdhN09lQ3U0M2JT?=
+ =?utf-8?B?UHg4dDFwVHhDaXZlMksyaVYySUs0bExZaklVa29oV0NNM1grYWZqbmZSeC85?=
+ =?utf-8?B?RHlFdzRwTGRvZ3JGY1c1QmY3NjZvUnY1NjVVQnZHWWpYSEJ1VzRZZmRMdlRE?=
+ =?utf-8?B?ckdsQzhCbFFTTkh6TFplRjJaWHU4dEt1enNQdm9EakdtZkIwbVB3MDJsNTVQ?=
+ =?utf-8?B?V0EwaHQ0eUJQdUVtTE01M2VwSzBSRDRxemdiWE9jY0lmTXRhdjRIYU5udy9l?=
+ =?utf-8?B?ZGJIWUVDcGp2R1l3M2NTMEwvSjR1aCs2bDZtZUx2REZ2Tk0xZFVyN3JIaXNk?=
+ =?utf-8?B?Q2k4Ylc1ekIwMTZQR2FMRnZ1aVg2Q09pekFObFBKeDZtOG1ITmh1M2loczlp?=
+ =?utf-8?B?SDhHald2STF1TzRnMS9Yd0FWL1ExOVlnTGZvcTJKTTZwWldndFFNWmV4bG9U?=
+ =?utf-8?B?UVVORVhCaFpWU0FJNENweWNPSjJ3ZDV5NGVNN3pKZld4R1BQU1ZTMzRiVzZs?=
+ =?utf-8?B?eng3U0lMRGE0Q01PcXhVaWQ5YzV5TWY1cWptZG8xZy8wRkhwemRxYzBoOVRD?=
+ =?utf-8?B?aUhxTWErd0M3SVF4Mm45d29LWFg0dXlqL1pCa2QyWGpXUjFQUFZTYU9UUEpH?=
+ =?utf-8?B?clhKak1LazZDSVVRUXJSWncvalFpcWsxa0x0aFl0c2VyVjJDNGxhQmJKUm01?=
+ =?utf-8?B?SkhJNjdoQUloa0hXbXNYN0lIay90dXdnUFVnS0NZV0owVXpIV3RsWWtjSG5I?=
+ =?utf-8?B?Tk9BL0pQcmtlZ05BS2hESUcyOUVaUHdtYkFiMmRNRC9HMS92eVVCNjZkWGVK?=
+ =?utf-8?B?cmxsMzRKcmVRQTFIbzJTVUJQbGhzOG9oazFKTkVjT3UrTmZ1cENNQ0YzVWl2?=
+ =?utf-8?B?YWNCdXpsQWJiODVNZkpOdWMvZVRoblYrdTcySWhUYkozUlcyNTU2WXQ3c0hi?=
+ =?utf-8?B?SDAzMXFVNWZXRFU0TDFIKzJ0MHFHeU16d0dsYU5SOTZDUnQ1amsyS1ltZ2cr?=
+ =?utf-8?B?T1RsUUU1Z2FFMVUyM2ZCUXVNMHpVZlhRQkFHc1N3bithV0ovQTZQcEZJVWk0?=
+ =?utf-8?B?SWFmdDI3Mm51bGRTUEE2UFl5N3p0VC9MbXQ5MHpFN2Z2SGtuK2ZUbWNYUW1v?=
+ =?utf-8?B?ZDRHV0drM1M5WVYva0JOV1NrcUVQeE9OWWdISW1hdm1jVldoWVFKazdGSmFi?=
+ =?utf-8?B?WEZuTGMySVBFOGNkYzkyS3FacmdCVHNKU3dSa2VGV2FKZEZWMFh3SXRsd0N4?=
+ =?utf-8?B?ejhlVy8vbi9DWDFTL25iNGFPMGljVEkycG1HalpacGtrZDVCSkdpYmViRkZW?=
+ =?utf-8?B?QnArZ0ZlQnl2bXlFdHBOblRNR1c1SkxIdzIwaUpnTTNNZXNhMjRrS05OdlhV?=
+ =?utf-8?B?OUsrbldkVFlEYjZVRS9jaEt1VHA2K2V3dUlQNUNHbzVUTitXZ1RzdWJxKzRU?=
+ =?utf-8?B?b1c5NFZmYTY2MmlwbzBSVE5jQ3Z1SzhQMUVLWmlFa0J3dmlhTGhVT201QXhP?=
+ =?utf-8?B?d2hlVVhnK0tYMnNCRk5ab1BGd1BVR1B4REEwMHMrZWV5ZlR6ZlhtL2RMbGhQ?=
+ =?utf-8?B?OFQ3aGVWWkowWFZBZk0zQnJ2MnljRkNYaXNRSWhPbFdlZ3ExQ0xpdXJweE5P?=
+ =?utf-8?Q?EqdE3BK1diaRGlvJ4gZ7dgCwj?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: e95a96b6-1cbe-49cf-13f8-08dd33afbe99
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR02MB8500.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2025 08:53:26.8148
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZQc76hjvytzEe3D59Ya6OBgDxn8VEwMBoTbPF7ZPfkysAyj9TQkw6Tn+oMpxEN3r
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR02MB10321
 
-md-linear.c was missed during manual fix-up of a git-am conflict.
-Add it back.
+Hi Greg!
 
-Fixes: 7ad00dd67641 ("md: reintroduce md-linear")
-Signed-off-by: Song Liu <song@kernel.org>
----
- drivers/md/md-linear.c | 354 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 354 insertions(+)
- create mode 100644 drivers/md/md-linear.c
+2025-01-13 at 06:20, Greg KH wrote:
+> [You don't often get email from greg@kroah.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+> 
+> On Mon, Jan 13, 2025 at 02:26:40PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> The following commit is also in the driver-core tree as a different commit
+>> (but the same patch):
+>>
+>>   49a9b01803e4 ("mux: constify mux class")
+>>
+>> This is commit
+>>
+>>   7685ad5f08d9 ("mux: constify mux class")
+>>
+>> in the driver-core tree.
+> 
+> Thanks, this should be fine, I thought no one had picked it up :(
 
-diff --git a/drivers/md/md-linear.c b/drivers/md/md-linear.c
-new file mode 100644
-index 000000000000..53bc3fda9edb
---- /dev/null
-+++ b/drivers/md/md-linear.c
-@@ -0,0 +1,354 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * linear.c : Multiple Devices driver for Linux Copyright (C) 1994-96 Marc
-+ * ZYNGIER <zyngier@ufr-info-p7.ibp.fr> or <maz@gloups.fdn.fr>
-+ */
-+
-+#include <linux/blkdev.h>
-+#include <linux/raid/md_u.h>
-+#include <linux/seq_file.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <trace/events/block.h>
-+#include "md.h"
-+
-+struct dev_info {
-+	struct md_rdev	*rdev;
-+	sector_t	end_sector;
-+};
-+
-+struct linear_conf {
-+	struct rcu_head         rcu;
-+	sector_t                array_sectors;
-+	/* a copy of mddev->raid_disks */
-+	int                     raid_disks;
-+	struct dev_info         disks[] __counted_by(raid_disks);
-+};
-+
-+/*
-+ * find which device holds a particular offset
-+ */
-+static inline struct dev_info *which_dev(struct mddev *mddev, sector_t sector)
-+{
-+	int lo, mid, hi;
-+	struct linear_conf *conf;
-+
-+	lo = 0;
-+	hi = mddev->raid_disks - 1;
-+	conf = mddev->private;
-+
-+	/*
-+	 * Binary Search
-+	 */
-+
-+	while (hi > lo) {
-+
-+		mid = (hi + lo) / 2;
-+		if (sector < conf->disks[mid].end_sector)
-+			hi = mid;
-+		else
-+			lo = mid + 1;
-+	}
-+
-+	return conf->disks + lo;
-+}
-+
-+static sector_t linear_size(struct mddev *mddev, sector_t sectors, int raid_disks)
-+{
-+	struct linear_conf *conf;
-+	sector_t array_sectors;
-+
-+	conf = mddev->private;
-+	WARN_ONCE(sectors || raid_disks,
-+		  "%s does not support generic reshape\n", __func__);
-+	array_sectors = conf->array_sectors;
-+
-+	return array_sectors;
-+}
-+
-+static int linear_set_limits(struct mddev *mddev)
-+{
-+	struct queue_limits lim;
-+	int err;
-+
-+	md_init_stacking_limits(&lim);
-+	lim.max_hw_sectors = mddev->chunk_sectors;
-+	lim.max_write_zeroes_sectors = mddev->chunk_sectors;
-+	lim.io_min = mddev->chunk_sectors << 9;
-+	err = mddev_stack_rdev_limits(mddev, &lim, MDDEV_STACK_INTEGRITY);
-+	if (err) {
-+		queue_limits_cancel_update(mddev->gendisk->queue);
-+		return err;
-+	}
-+
-+	return queue_limits_set(mddev->gendisk->queue, &lim);
-+}
-+
-+static struct linear_conf *linear_conf(struct mddev *mddev, int raid_disks)
-+{
-+	struct linear_conf *conf;
-+	struct md_rdev *rdev;
-+	int ret = -EINVAL;
-+	int cnt;
-+	int i;
-+
-+	conf = kzalloc(struct_size(conf, disks, raid_disks), GFP_KERNEL);
-+	if (!conf)
-+		return ERR_PTR(-ENOMEM);
-+
-+	/*
-+	 * conf->raid_disks is copy of mddev->raid_disks. The reason to
-+	 * keep a copy of mddev->raid_disks in struct linear_conf is,
-+	 * mddev->raid_disks may not be consistent with pointers number of
-+	 * conf->disks[] when it is updated in linear_add() and used to
-+	 * iterate old conf->disks[] earray in linear_congested().
-+	 * Here conf->raid_disks is always consitent with number of
-+	 * pointers in conf->disks[] array, and mddev->private is updated
-+	 * with rcu_assign_pointer() in linear_addr(), such race can be
-+	 * avoided.
-+	 */
-+	conf->raid_disks = raid_disks;
-+
-+	cnt = 0;
-+	conf->array_sectors = 0;
-+
-+	rdev_for_each(rdev, mddev) {
-+		int j = rdev->raid_disk;
-+		struct dev_info *disk = conf->disks + j;
-+		sector_t sectors;
-+
-+		if (j < 0 || j >= raid_disks || disk->rdev) {
-+			pr_warn("md/linear:%s: disk numbering problem. Aborting!\n",
-+				mdname(mddev));
-+			goto out;
-+		}
-+
-+		disk->rdev = rdev;
-+		if (mddev->chunk_sectors) {
-+			sectors = rdev->sectors;
-+			sector_div(sectors, mddev->chunk_sectors);
-+			rdev->sectors = sectors * mddev->chunk_sectors;
-+		}
-+
-+		conf->array_sectors += rdev->sectors;
-+		cnt++;
-+	}
-+	if (cnt != raid_disks) {
-+		pr_warn("md/linear:%s: not enough drives present. Aborting!\n",
-+			mdname(mddev));
-+		goto out;
-+	}
-+
-+	/*
-+	 * Here we calculate the device offsets.
-+	 */
-+	conf->disks[0].end_sector = conf->disks[0].rdev->sectors;
-+
-+	for (i = 1; i < raid_disks; i++)
-+		conf->disks[i].end_sector =
-+			conf->disks[i-1].end_sector +
-+			conf->disks[i].rdev->sectors;
-+
-+	if (!mddev_is_dm(mddev)) {
-+		ret = linear_set_limits(mddev);
-+		if (ret)
-+			goto out;
-+	}
-+
-+	return conf;
-+
-+out:
-+	kfree(conf);
-+	return ERR_PTR(ret);
-+}
-+
-+static int linear_run(struct mddev *mddev)
-+{
-+	struct linear_conf *conf;
-+	int ret;
-+
-+	if (md_check_no_bitmap(mddev))
-+		return -EINVAL;
-+
-+	conf = linear_conf(mddev, mddev->raid_disks);
-+	if (IS_ERR(conf))
-+		return PTR_ERR(conf);
-+
-+	mddev->private = conf;
-+	md_set_array_sectors(mddev, linear_size(mddev, 0, 0));
-+
-+	ret =  md_integrity_register(mddev);
-+	if (ret) {
-+		kfree(conf);
-+		mddev->private = NULL;
-+	}
-+	return ret;
-+}
-+
-+static int linear_add(struct mddev *mddev, struct md_rdev *rdev)
-+{
-+	/* Adding a drive to a linear array allows the array to grow.
-+	 * It is permitted if the new drive has a matching superblock
-+	 * already on it, with raid_disk equal to raid_disks.
-+	 * It is achieved by creating a new linear_private_data structure
-+	 * and swapping it in in-place of the current one.
-+	 * The current one is never freed until the array is stopped.
-+	 * This avoids races.
-+	 */
-+	struct linear_conf *newconf, *oldconf;
-+
-+	if (rdev->saved_raid_disk != mddev->raid_disks)
-+		return -EINVAL;
-+
-+	rdev->raid_disk = rdev->saved_raid_disk;
-+	rdev->saved_raid_disk = -1;
-+
-+	newconf = linear_conf(mddev, mddev->raid_disks + 1);
-+	if (!newconf)
-+		return -ENOMEM;
-+
-+	/* newconf->raid_disks already keeps a copy of * the increased
-+	 * value of mddev->raid_disks, WARN_ONCE() is just used to make
-+	 * sure of this. It is possible that oldconf is still referenced
-+	 * in linear_congested(), therefore kfree_rcu() is used to free
-+	 * oldconf until no one uses it anymore.
-+	 */
-+	oldconf = rcu_dereference_protected(mddev->private,
-+			lockdep_is_held(&mddev->reconfig_mutex));
-+	mddev->raid_disks++;
-+	WARN_ONCE(mddev->raid_disks != newconf->raid_disks,
-+		"copied raid_disks doesn't match mddev->raid_disks");
-+	rcu_assign_pointer(mddev->private, newconf);
-+	md_set_array_sectors(mddev, linear_size(mddev, 0, 0));
-+	set_capacity_and_notify(mddev->gendisk, mddev->array_sectors);
-+	kfree_rcu(oldconf, rcu);
-+	return 0;
-+}
-+
-+static void linear_free(struct mddev *mddev, void *priv)
-+{
-+	struct linear_conf *conf = priv;
-+
-+	kfree(conf);
-+}
-+
-+static bool linear_make_request(struct mddev *mddev, struct bio *bio)
-+{
-+	struct dev_info *tmp_dev;
-+	sector_t start_sector, end_sector, data_offset;
-+	sector_t bio_sector = bio->bi_iter.bi_sector;
-+
-+	if (unlikely(bio->bi_opf & REQ_PREFLUSH)
-+	    && md_flush_request(mddev, bio))
-+		return true;
-+
-+	tmp_dev = which_dev(mddev, bio_sector);
-+	start_sector = tmp_dev->end_sector - tmp_dev->rdev->sectors;
-+	end_sector = tmp_dev->end_sector;
-+	data_offset = tmp_dev->rdev->data_offset;
-+
-+	if (unlikely(bio_sector >= end_sector ||
-+		     bio_sector < start_sector))
-+		goto out_of_bounds;
-+
-+	if (unlikely(is_rdev_broken(tmp_dev->rdev))) {
-+		md_error(mddev, tmp_dev->rdev);
-+		bio_io_error(bio);
-+		return true;
-+	}
-+
-+	if (unlikely(bio_end_sector(bio) > end_sector)) {
-+		/* This bio crosses a device boundary, so we have to split it */
-+		struct bio *split = bio_split(bio, end_sector - bio_sector,
-+					      GFP_NOIO, &mddev->bio_set);
-+
-+		if (IS_ERR(split)) {
-+			bio->bi_status = errno_to_blk_status(PTR_ERR(split));
-+			bio_endio(bio);
-+			return true;
-+		}
-+
-+		bio_chain(split, bio);
-+		submit_bio_noacct(bio);
-+		bio = split;
-+	}
-+
-+	md_account_bio(mddev, &bio);
-+	bio_set_dev(bio, tmp_dev->rdev->bdev);
-+	bio->bi_iter.bi_sector = bio->bi_iter.bi_sector -
-+		start_sector + data_offset;
-+
-+	if (unlikely((bio_op(bio) == REQ_OP_DISCARD) &&
-+		     !bdev_max_discard_sectors(bio->bi_bdev))) {
-+		/* Just ignore it */
-+		bio_endio(bio);
-+	} else {
-+		if (mddev->gendisk)
-+			trace_block_bio_remap(bio, disk_devt(mddev->gendisk),
-+					      bio_sector);
-+		mddev_check_write_zeroes(mddev, bio);
-+		submit_bio_noacct(bio);
-+	}
-+	return true;
-+
-+out_of_bounds:
-+	pr_err("md/linear:%s: make_request: Sector %llu out of bounds on dev %pg: %llu sectors, offset %llu\n",
-+	       mdname(mddev),
-+	       (unsigned long long)bio->bi_iter.bi_sector,
-+	       tmp_dev->rdev->bdev,
-+	       (unsigned long long)tmp_dev->rdev->sectors,
-+	       (unsigned long long)start_sector);
-+	bio_io_error(bio);
-+	return true;
-+}
-+
-+static void linear_status(struct seq_file *seq, struct mddev *mddev)
-+{
-+	seq_printf(seq, " %dk rounding", mddev->chunk_sectors / 2);
-+}
-+
-+static void linear_error(struct mddev *mddev, struct md_rdev *rdev)
-+{
-+	if (!test_and_set_bit(MD_BROKEN, &mddev->flags)) {
-+		char *md_name = mdname(mddev);
-+
-+		pr_crit("md/linear%s: Disk failure on %pg detected, failing array.\n",
-+			md_name, rdev->bdev);
-+	}
-+}
-+
-+static void linear_quiesce(struct mddev *mddev, int state)
-+{
-+}
-+
-+static struct md_personality linear_personality = {
-+	.name		= "linear",
-+	.level		= LEVEL_LINEAR,
-+	.owner		= THIS_MODULE,
-+	.make_request	= linear_make_request,
-+	.run		= linear_run,
-+	.free		= linear_free,
-+	.status		= linear_status,
-+	.hot_add_disk	= linear_add,
-+	.size		= linear_size,
-+	.quiesce	= linear_quiesce,
-+	.error_handler	= linear_error,
-+};
-+
-+static int __init linear_init(void)
-+{
-+	return register_md_personality(&linear_personality);
-+}
-+
-+static void linear_exit(void)
-+{
-+	unregister_md_personality(&linear_personality);
-+}
-+
-+module_init(linear_init);
-+module_exit(linear_exit);
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Linear device concatenation personality for MD (deprecated)");
-+MODULE_ALIAS("md-personality-1"); /* LINEAR - deprecated*/
-+MODULE_ALIAS("md-linear");
-+MODULE_ALIAS("md-level--1");
--- 
-2.43.5
+It all my fault. Sorry for being unresponsive and thanks for picking
+the patch. I have now removed the patch from my mux for-next branch.
 
+Cheers,
+Peter
 

@@ -1,110 +1,163 @@
-Return-Path: <linux-next+bounces-5173-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5174-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEB2DA0AE97
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 06:03:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4131A0AEAE
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 06:20:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEECC165D0D
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 05:03:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A735F1887254
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 05:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9C918D63A;
-	Mon, 13 Jan 2025 05:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E907D1865E5;
+	Mon, 13 Jan 2025 05:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="V2gBNrQn"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="O7EBCskk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iW0xdcRK"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82061537CB;
-	Mon, 13 Jan 2025 05:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAC61487FE;
+	Mon, 13 Jan 2025 05:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736744620; cv=none; b=dMZtt8nMUiN96i4PCmjwCGs8YwuMTcoikF8Oj9M543MVHS4e2EdfHfKgpyGThz2/AN8FghYvGhlbOqVHUph55ZE8vV+IJfpkyxW8Mto/f/I4UVACRicNNQ+KpucWy+lX4bVUcl2mr81GyZkP6bQsXfRsG4tkTru0e3tFuzb84Xo=
+	t=1736745598; cv=none; b=YQ+Lu8mvawIqn4S+s3UsoyKDuq/a9O/92F0vRhf5De2K8amA4BPxJXyynuBLQKIHp27AMzTtKv5RbytVOrIRsacrmpJkBe2YwLX9JVL8qPrLlAFTj7H/VcWmb/wuVZ1gATVlN0TVMLMJnQ5UNrDXcIBFbblgsxiVuN0SncYeB/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736744620; c=relaxed/simple;
-	bh=Vhio5Xsxo0s6nDLnOThakD7Ta5JsfkDk0toaa2VQ4Go=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ob1O40Dvc2AfPp7UoCzXGuGxTRkmLGg9WuOe+WziZcrMlK+asgJvgaU7AMrPqvZQ4R5V1/YXMfN8ET0JL2jLIvFAAOpLfvHDGL2t//kwmFmNhgLxBFbBYQ4Nhn5M4rwEilmt2xlhjWhdGGAUWZHEL5x8CbyA9rmKG6Z0DBh7U10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=V2gBNrQn; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736744608;
-	bh=yMYUVdKiQc1gQZ7Tf3KQn3ZaPzIwNokYINqh23B5kCg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=V2gBNrQnkTyapQtehlXahvjneOO0x1vHRuyHa/qFN2eFtz9en5UWWMT0Kz+KXSHNe
-	 yl6W1eZUfRXiGlZwKienJ1tXqzHT0rLeKEj4OFPO3RhVfR1rBl2BO5AJTh+RA2fuhO
-	 dzOGgF3ArBW2d3W029iowAyYBRMQF4P9vNQ2tNvrjD2E1+3PDuFO1s7fFIyj4CSpJA
-	 KQh/woAIY+V7yE0oRzx9CFCa725XEFsP0XAEOF/qS1whaIycMqxtDvY/1B37S0kZW6
-	 SzeqQWkDXcIdDwNZBZ+oaHg0x5CQRypRwNL9Wea8+LpFOQ3KT4LdgxsmPre25rqnuR
-	 /TIx4IV4uBGaw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YWgBm0dgbz4wvb;
-	Mon, 13 Jan 2025 16:03:28 +1100 (AEDT)
-Date: Mon, 13 Jan 2025 16:03:34 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dave Airlie <airlied@redhat.com>, DRI <dri-devel@lists.freedesktop.org>
-Cc: Friedrich Vock <friedrich.vock@gmx.de>, Maarten Lankhorst
- <dev@lankhorst.se>, Maxime Ripard <mripard@kernel.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the drm tree
-Message-ID: <20250113160334.1f09f881@canb.auug.org.au>
+	s=arc-20240116; t=1736745598; c=relaxed/simple;
+	bh=5qohmklPdQr/tI60yImaDKn7AGAmpwhRyNYVh6mD1gQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WtT9r8k0zhqlkCnKOmkyehvu5XzBKw77QdnCn2ppyfX3BbFdhDcMMiPuCFxClatXbrR87dhgwDIzRfO00Fh++ALMATUyGFn5BXoKc6Hgr2LIKCOgClgXC9Dgj6+V65XaaNr3dI7A3UwEyWcbyvCw9dmF6P51/sN5Rxl7kuap/QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=O7EBCskk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iW0xdcRK; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id D076C11400DA;
+	Mon, 13 Jan 2025 00:19:54 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Mon, 13 Jan 2025 00:19:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1736745594; x=1736831994; bh=/qOfrG3FP8
+	7JYhp9vjJ12o/IZhWoJm+3pBPlKY5vgmc=; b=O7EBCskkxKxj+oaYqOZO4M8OJ9
+	ipMsbhds7T15qkqrjyvn04j3vd4XTnULy9LBselTfvtSG0Vth+gxyQ7Ego1P83Bt
+	ML1gsIOIRAodAsIpU1qvi+oI2lUaWnoHZyyggQb3s/4VLyuO2nCOtF2uUVU+nqyh
+	WrXKH89adjM2n8kIl8cKqBmHNw4JKbKDISFwt5NGbimNTps3w4Y69zABsCJhMXPQ
+	WMfeZIoOlNN9cD3nM1/7BQbaIY8meFnssWzFyXKCkjalNYMIVlE4Hyuaf1V3wOQo
+	yLk1tO8LvT4d16Sm8tfA3B13rtsdDMnjFIZ/nNqxuqBa71HFzABGesS96pdg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1736745594; x=1736831994; bh=/qOfrG3FP87JYhp9vjJ12o/IZhWoJm+3pBP
+	lKY5vgmc=; b=iW0xdcRKal7bgKwIO+AXvbbGZ2qAPeDEEKZdviDkf7efdZOhKI5
+	fZsUZ/hrCIlwIEWHHx0AL4Z8lz7v8V27dAungq546TVns8ho5twcE7hiNnEX/nvJ
+	/WfEtUZY+iYYjkc9nAOg2/kMeD4zSll42Rhr2MUuvI+zWUkKuqQZyWgLe7WpGbHn
+	hN2Fv3aNZtW4LbV0YiT/coobcE55vsb9rllzDrjGi0gc1GDDKaDZMML9Zl+GBcV6
+	InpoqEm47RKPDKuaxHtNUU4r8MAXTRjgL7rn8pI/a2Nd36f3XicUzAn9s9OU7kSx
+	lBROkC4fhhLTKBIlRk/2Kc9rX8ltmwDeK1Q==
+X-ME-Sender: <xms:eaKEZ7E54HrI9wIIORfMr4CfjH1_bSeSPbAJ-KqBS4tYkEUTlaDvPw>
+    <xme:eaKEZ4Wyb7qSRNgY5vnzPl04diO00_XkEovO8cYOdarBKT_H94vuzpx0oP2GdBrxF
+    tyYy7U8hoFWQQ>
+X-ME-Received: <xmr:eaKEZ9LY7psofbh0zb4Lw0AbzzL3L-ysYPgNq_GIhvAvBMQ0SuEJqNDWluDXbk0NrCm829KGlMAUTanizv_yOCFOahfaAtbr8Mq31A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehfedgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
+    ucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrf
+    grthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefh
+    gfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopeduvddpmhhouggvpehs
+    mhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupd
+    hrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehjohhnrghthhgr
+    nhdrtggrmhgvrhhonheshhhurgifvghirdgtohhmpdhrtghpthhtohepjhgrvhhivghrrd
+    gtrghrrhgrshgtohdrtghruhiisehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhu
+    gidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
+    hugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:eaKEZ5Fp-j2cqDeHSVA_PS47R24YgFOUKsgff_bCetpnS7v2emxVAw>
+    <xmx:eaKEZxX9Zqo542Hjg_LJyqnXc-MShUBeXJDLONCloIRCTHRXxUjqkg>
+    <xmx:eaKEZ0M8fRsSAEQAhPmDZ9V_LFWxv-g7B7JdzPcCKUPp3-MjwWht5w>
+    <xmx:eaKEZw1s2FKWvhyMnXXPzKd8x6eXqL3kmS9hrUlZOhk5NJjVRh7seQ>
+    <xmx:eqKEZ6uJWzYonVAp9ULTgSdNXmxGLq5CX83Hz8AEuVp2DW-nt8GJqzAP>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Jan 2025 00:19:53 -0500 (EST)
+Date: Mon, 13 Jan 2025 06:19:50 +0100
+From: Greg KH <greg@kroah.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the iio tree with the
+ char-misc.current tree
+Message-ID: <2025011343-cannon-sprawl-f0e0@gregkh>
+References: <20250106152107.2c0fc03c@canb.auug.org.au>
+ <20250113142342.4578868a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Hutv5y9_DgXrsftH63naBGD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250113142342.4578868a@canb.auug.org.au>
 
---Sig_/Hutv5y9_DgXrsftH63naBGD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 13, 2025 at 02:23:42PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 6 Jan 2025 15:21:07 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > 
+> > Today's linux-next merge of the iio tree got a conflict in:
+> > 
+> >   drivers/iio/adc/ti-ads1119.c
+> > 
+> > between commit:
+> > 
+> >   54d394905c92 ("iio: adc: ti-ads1119: fix sample size in scan struct for triggered buffer")
+> > 
+> > from the char-misc.current tree and commit:
+> > 
+> >   2cfb4cd058d0 ("iio: adc: Use aligned_s64 instead of open coding alignment.")
+> > 
+> > from the iio tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> > 
+> > -- 
+> > Cheers,
+> > Stephen Rothwell
+> > 
+> > diff --cc drivers/iio/adc/ti-ads1119.c
+> > index c268e27eec12,0a68ecdea4e6..000000000000
+> > --- a/drivers/iio/adc/ti-ads1119.c
+> > +++ b/drivers/iio/adc/ti-ads1119.c
+> > @@@ -500,8 -500,8 +500,8 @@@ static irqreturn_t ads1119_trigger_hand
+> >   	struct iio_dev *indio_dev = pf->indio_dev;
+> >   	struct ads1119_state *st = iio_priv(indio_dev);
+> >   	struct {
+> >  -		unsigned int sample;
+> >  +		s16 sample;
+> > - 		s64 timestamp __aligned(8);
+> > + 		aligned_s64 timestamp;
+> >   	} scan;
+> >   	unsigned int index;
+> >   	int ret;
+> 
+> This is now a conflict between the char-misc tree and Linus' tree.
+> 
 
-Hi all,
+Thanks, now resolved in my tree.
 
-After merging the drm tree, today's linux-next build (htmldocs) produced
-this warning:
-
-kernel/cgroup/dmem.c:300: warning: Excess function parameter 'dev' descript=
-ion in 'dmem_cgroup_state_evict_valuable'
-kernel/cgroup/dmem.c:300: warning: Excess function parameter 'index' descri=
-ption in 'dmem_cgroup_state_evict_valuable'
-kernel/cgroup/dmem.c:635: warning: Function parameter or struct member 'reg=
-ion' not described in 'dmem_cgroup_try_charge'
-kernel/cgroup/dmem.c:635: warning: Excess function parameter 'dev' descript=
-ion in 'dmem_cgroup_try_charge'
-
-Introduced by commit
-
-  b168ed458dde ("kernel/cgroup: Add "dmem" memory accounting cgroup")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Hutv5y9_DgXrsftH63naBGD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeEnqYACgkQAVBC80lX
-0Gz3dQf+J8bDaYxs9MuSCBgwHQoq74a5xncmyg24Py7N5srX+HbQ8Uxd5aaCTEO2
-IOr8r8sCPdumLKNe4wV+W7yVrwukV8xpC2+j7lCzjB1axTXezbSU72XmAGavUKhy
-8YZNIMlPIgSH6sc1O3+v6Fdmk4ytrxpoW3CIaJfNTsR3PA7QT0g41Mz1jIwlwjCu
-Ou227nF2CmLJ8UfpZzcs6Mbf7t69rENsxHBScp5WAkxvIW3BrIPS4ATu8n3PAR/z
-JxH47ejDzn4KQjNKO540D9Vy3NIL6UauK83vJ+Wm+FD+hHRrMxKEdlJzLMh6vk1f
-Lo9z47Uq7DQMQP6TXKfuHc2Gm0Iu/w==
-=oIX1
------END PGP SIGNATURE-----
-
---Sig_/Hutv5y9_DgXrsftH63naBGD--
+greg k-h
 

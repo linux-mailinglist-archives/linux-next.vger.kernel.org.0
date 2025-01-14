@@ -1,123 +1,136 @@
-Return-Path: <linux-next+bounces-5185-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5186-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABB0DA0C4DC
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 23:45:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3581DA0FE1D
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2025 02:30:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 750CA3A6FF3
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2025 22:45:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5078D169930
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2025 01:30:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89CDA1CAA9F;
-	Mon, 13 Jan 2025 22:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6BA22540A;
+	Tue, 14 Jan 2025 01:30:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="B39B5i8b"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Or1VNnSW"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E821CB31D
-	for <linux-next@vger.kernel.org>; Mon, 13 Jan 2025 22:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A804502F;
+	Tue, 14 Jan 2025 01:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736808338; cv=none; b=HFjUdgWowdHGtnbQ3oM3MH3dWREZQ84vdc0hV4aRqAlmzGujctY5WBQ0OMrE6wZkj1sb8B68HzXSImZJkk5tEHOGmyuonxz2mxkZgZL57MUqTUxRX85GfPaChFTfaSoUl4SW49betLhLsjE16WI1Yk4tBKKdyOhm3deQdzZXc4c=
+	t=1736818241; cv=none; b=WvJdP+CvbKT/vBfLUoZsi0RSXH7Jq+ql/ZQOchknYc9x1AemB+9in3JAg9XhG6eqDPm8GbdNwktnOozg+FB9TK+QErBxX2O7Amuptm1b9vcLD0UZbbL0XW3QTtPyiONbaQn6aT5//wIga5jqJQ4ubyWPSdtxeqPa6WKg2JFMw9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736808338; c=relaxed/simple;
-	bh=nkxYTgeUkUlfDrEtj0he16g1lxeqFMIA0vKIv654i8A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=REgor2kszmnbyJ95Zoj4m+rXHz0vCmyTVwLATAQV09rQ4jOhzAzMqMmMrbZ6pfc/fg2bvys6nUmCj6serwPS42hb/hLsylYR2/coicx8vGaAQqprSbzU2KdtOPhoOvzGnIi8d0x3T5dids0+X1UFZBI0aYYTXFbTIsxzo1MmNGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=B39B5i8b; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a9c9f2a569so32758005ab.0
-        for <linux-next@vger.kernel.org>; Mon, 13 Jan 2025 14:45:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1736808335; x=1737413135; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pgVvEIFG1uSmiDxP57dichY34o2izSezGlpeFWsj++I=;
-        b=B39B5i8bs82PpjIq4NWA0SChcwUNrkQLYPHHDzfENxAjb3dvbJhrGIzs1s9q1NWtIV
-         S+OY1XIg1WE4vBIi2CnifYjNrIhRgyyr7v8O4iKIGWRWrDRUwzr5WR2FobjmSLWBytFU
-         VHpw1j1/ZO+Bf5f7MMt5R2FahGJVHzQ4hm7ns=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736808335; x=1737413135;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pgVvEIFG1uSmiDxP57dichY34o2izSezGlpeFWsj++I=;
-        b=gBGJsoPET4ZIg265tj+78j4uZDm3coCXJmBQFM+4QZk3XmYatgSsuM24HUK8FR0yRg
-         SgknMZfyJVXOxzlav/6Ar3bUMiefs02M7xcPKHaXTldTfSxUKGl2/MtUvcacWdVJC7eB
-         XxZ4sRNod5gFV8+ihKH/LI41f0VBn7kbpPs9Kmsbm+bmEn+zpE7akGRdv2wdo7xCv8kQ
-         eoYLceohvJgVEdYzVDXFDn4UMNFTgx7aANuXI1m3ZAUhAegB2mKzA09szWkcdZR78vZl
-         YQt4QdX5FvK8wdkt/K8yNR3Vm5RN5cPoC38lzg8YS91PCa5cdCXHvdp73xGjurJO5uKr
-         Z0Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCWcmuPeFr3L/5n8bLwP0Ww+IbTpqfBjSm2uvSxjTHlD+qWI0fEl61tgS96vQWLj4viWfkUls1hjzCY3@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPqrqalHELnFrCHdLHjJudVMce1uSPHZzj0c7rb6q9LK2kIwlf
-	YUCtsXOu5eaoPc1jGa+Z8l4RRaA+etOdnO27QRG318JdhftAd8Pbq6Jou2ygnSw=
-X-Gm-Gg: ASbGncsZc3VXHPEvxrr1z0fqgL1WoYjGa2fzA/iqbGlRZYQHeDSSXECCMdDaJLaxGW6
-	hyIHA4oBYHWdgi6VkjoL2lAn8ywODVfrggQKYlnWXecKKY+5m52QMzU/1SZK5jC8PkOnOZa/SH8
-	vIxbQ+K7wgTqFTnxj0KqX2tm/vdESlwHNjUCl9DnMoE28RoB2eBfLHht/BP/LhDUTTdfqcW4DRl
-	ydNMJ2hbDzov4dOxkJrnnysN2g9TEIAyRlFm0Fw7PrNs3sHqp2zaH4rjet5H9WruSs=
-X-Google-Smtp-Source: AGHT+IEgjO/vBs1RlHK0/64Crw5ifVV3oLXzNLp3a+I+kb+7df8sLl0plI+qKMD/Agp55p3qgZMZcw==
-X-Received: by 2002:a05:6e02:1f09:b0:3a7:e0c0:5f27 with SMTP id e9e14a558f8ab-3ce3a86a220mr197338035ab.2.1736808335722;
-        Mon, 13 Jan 2025 14:45:35 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ea1b6293fbsm2963222173.68.2025.01.13.14.45.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jan 2025 14:45:35 -0800 (PST)
-Message-ID: <5e7eda18-6a1d-4008-bc6c-c3b59c27cc9e@linuxfoundation.org>
-Date: Mon, 13 Jan 2025 15:45:34 -0700
+	s=arc-20240116; t=1736818241; c=relaxed/simple;
+	bh=jwW29DEHrVPtu3GS2M1ExyzyXiYx0h2TruQWI1GL9q4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aABAcrTIwpauPTCpNiZw6E1i5+YiyORr4Dgc6icVfFudRPRaHrCQh36BoUrwBBW8GJSgpZsnzGCzjoptHZZqAc/GBfhGUTu76fOoFjSd0IFTQSBoTIX+b5GscgnehIUFDNHFXet5B0qze04JgqTXfiCmHDwWzDCkR0pjQdZorX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Or1VNnSW; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1736818223;
+	bh=uq4TdeSTT+OI1UyCzrbwriLkWC75e1mMtOZYuBwrIKA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Or1VNnSWjVecmiH7X0VYBn5IiBAw4na56uh2EN+m2O4Lirah7/H9MG+OUvBoyN51f
+	 A1/cMIcDBiQLM6Y2jW2ltt+HYuffVYSrPn1HCck6b0P8NjVNUYJJ/lmFv5wHSUTMGS
+	 gEFXmVUxmWAN/MmlwukaYyl3niGV16odhCQkScmTCXiFL2w3vJ0ywWtIgQPghbYr4L
+	 SBvFbDYyNZhecRtzCywGX/+cdX/D74tz8o2ixloyJbh4BzH+9Co7EqUnkiDo29viPb
+	 EyLZlvywLmpUZ6Qn6cj66v6XzzVgH0BKVxAtR3oefWFRhOHnu7Q6311kqQ9HI5Uzbl
+	 tU8SzxLMvWH9w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YXBQQ6t17z4wp0;
+	Tue, 14 Jan 2025 12:30:22 +1100 (AEDT)
+Date: Tue, 14 Jan 2025 12:30:28 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Dave Airlie <airlied@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>
+Cc: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, Dmitry Baryshkov
+ <dmitry.baryshkov@linaro.org>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm tree with the drm-misc-fixes
+ tree
+Message-ID: <20250114123028.67761865@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: duplicate patch in the kunit-next tree
-To: Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Brendan Higgins <brendanhiggins@google.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250113152511.4f7f382b@canb.auug.org.au>
- <2025011331-chef-unwired-e143@gregkh>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <2025011331-chef-unwired-e143@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/Xxx123I3QZ8_DDv4mUPmxfO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 1/12/25 22:21, Greg KH wrote:
-> On Mon, Jan 13, 2025 at 03:25:11PM +1100, Stephen Rothwell wrote:
->> Hi all,
->>
->> The following commit is also in the driver-core tree as a different commit
->> (but the same patch):
->>
->>    875aec2357cd ("kunit: platform: Resolve 'struct completion' warning")
->>
->> This is commit
->>
->>    7687c66c18c6 ("kunit: platform: Resolve 'struct completion' warning")
->>
->> in the driver-core tree.
-> 
-> Thanks for letting me know.  Ugh, so many duplicates this development
-> cycle, probably due to delays in the holiday season...
-> 
-> sorry,
-> 
-> greg k-h
+--Sig_/Xxx123I3QZ8_DDv4mUPmxfO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Greg,
+Hi all,
 
-I can drop this patch if it is better for this to go through
-driver-core.
+Today's linux-next merge of the drm tree got a conflict in:
 
-thanks,
--- Shuah
+  drivers/gpu/drm/display/drm_bridge_connector.c
+
+between commit:
+
+  1bd1562d3522 ("drm/bridge-connector: Sync supported_formats with computed=
+ ycbcr_420_allowed")
+
+from the drm-misc-fixes tree and commit:
+
+  0beba3f9d366 ("drm/bridge: connector: add support for HDMI codec framewor=
+k")
+
+from the drm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/display/drm_bridge_connector.c
+index 3a5a4f92c979,32108307de66..000000000000
+--- a/drivers/gpu/drm/display/drm_bridge_connector.c
++++ b/drivers/gpu/drm/display/drm_bridge_connector.c
+@@@ -460,9 -596,8 +596,11 @@@ struct drm_connector *drm_bridge_connec
+  		return ERR_PTR(-EINVAL);
+ =20
+  	if (bridge_connector->bridge_hdmi) {
+ +		if (!connector->ycbcr_420_allowed)
+ +			supported_formats &=3D ~BIT(HDMI_COLORSPACE_YUV420);
+ +
++ 		bridge =3D bridge_connector->bridge_hdmi;
++=20
+  		ret =3D drmm_connector_hdmi_init(drm, connector,
+  					       bridge_connector->bridge_hdmi->vendor,
+  					       bridge_connector->bridge_hdmi->product,
+
+--Sig_/Xxx123I3QZ8_DDv4mUPmxfO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeFvjQACgkQAVBC80lX
+0GwvzQf8DvWQGTTDWj9o6J5uhESCy7Uz/Af+xkRfutHgKookbd8CtcFECpwG3YYo
+mCwDmF1eKjIaymRDOP5yaeWmJ8FYRpcsvwSwCPl2/Lt9984LwxzTazAyehVWStRz
+hButypZwbfcJ/6czOyAA1vfP280i5miFw9YWqrWsoQgDbTa4ueyH4ISy/hZEKuQ6
+zuUalowKE3+kOH6PPuV/lcTWQd48s/wKG/IvXnFxDIiN2+IphWGifVJbQJniVia6
+FivbIaUpEy3dVGbgmzy3hQ+2Cwzzo2l0yakePIWO8XZMo0dj/AiIHLH4o3HH1Scm
+fgPsh1rQun9pV90GljCTRcsTJ0A1tw==
+=ZojV
+-----END PGP SIGNATURE-----
+
+--Sig_/Xxx123I3QZ8_DDv4mUPmxfO--
 

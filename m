@@ -1,115 +1,120 @@
-Return-Path: <linux-next+bounces-5199-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5200-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A4E7A10242
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2025 09:40:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44F5FA105AD
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2025 12:40:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61AB63A9ED6
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2025 08:39:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50096167A65
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2025 11:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0A14284A5C;
-	Tue, 14 Jan 2025 08:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28038234D0E;
+	Tue, 14 Jan 2025 11:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ISqU5JBT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZeK8vkqp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B221CEE9B;
-	Tue, 14 Jan 2025 08:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4E1234CFF
+	for <linux-next@vger.kernel.org>; Tue, 14 Jan 2025 11:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736843986; cv=none; b=TlQzhJxHLVDi0re5k1tGU/DbbIgc0X3sMTONhWDhUxSAX8h2iEQ0h3izBA2otclWd+XTtOHmCT9reNtHNQCPTEKDBwWIyRiDfHVx7GeGr8TkkqQKmlUFJ4i/csQQtHRfzGd/ttnPVhRx5lgkdG++GbUCgDm+l05O11kJXofgXBc=
+	t=1736854851; cv=none; b=Tb6rgxSuLPgBdia5SSWYHGAnP2n/zb9R68VRffgT3A/WZnhIfBRz3VkGd6xqGHmjeXxP8Nr2mVaLFrVJnsFhK5Rz4wOQne9drSWatq95I2MAyM6AQAL6ko4Jin4onLSyJWq9dvyT/gXOhmkepgSWloWl4ALCbhq5VYRBiBX7LNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736843986; c=relaxed/simple;
-	bh=lnqwUrYFRJdxzwACLywBPuLzyVbMQRNu8sgCGUkDShQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fOeAcf0LEphLoxBuV8QnCLkMdvNjRlCkmBZ6YnSr/txbTIgmAQgLF0KDl8D3XvTTcK7dlJ51QONx5cdB6LXljO4eZ/b1SOVYFXkivJ6tDKRPFZQPFeMb0bnLDuWIw8t654J2ooOutTH8/exnpJidzxaC9zj1yp2qMVi9tLIdLFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ISqU5JBT; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2ee4b72d4d8so1073005a91.3;
-        Tue, 14 Jan 2025 00:39:44 -0800 (PST)
+	s=arc-20240116; t=1736854851; c=relaxed/simple;
+	bh=0DwfetgWmDsIr9Ybvzps+HBaWB3enTRlj4YQegBmS5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nR361Yu+gYCHiNRKWxIzhiLIWGH5Znssli/e6DNFPQds7mWeOKT4g4swE5a9Sc237W2PZ5QlnWYmZ5EvD5sZDn4a/kBHKyD8j6O/xv+e7uMoylHRu6LXhl0vk50Q5W6CnqYcTQNO5msbNOZBsSauDK99jzlCJ8hN3LfOvLDvSaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZeK8vkqp; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-53f22fd6887so4586276e87.2
+        for <linux-next@vger.kernel.org>; Tue, 14 Jan 2025 03:40:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736843984; x=1737448784; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OdaPQOG+jZl+QzszmKjWuwCDq3PKK+nnIPtoJurL7Fo=;
-        b=ISqU5JBTHHBVfNJKOO6e9t+lE7lQRa8a0q5O4MwKO0iiiLGc3PzInXVq974J5siaGQ
-         kD+g17uTOV4akDKuDL1m7/PFxgWG08z0QIDI5BbjIxiJ6jGaMjIeKvEWVCmV98V6cbn6
-         gh+NcZz2CaYHsd3kpfqWj1XzMdI0009nYbRr9OUJlNuZRXw0QJ4s8XjvyJxxf3v+9bsd
-         0oh2Dfsc0FKCJiiSCJ3b/ikKMOZLOz6/vqyNUa53wbN6aZORO0Ppqwns1lWi/N8nREz1
-         9HlKgvoi8zgWJWo5s7ebyC0QnLthYOJ6+h1qjLzd075yNu4FA6s3AZMAPNlB8bDG/BXV
-         Nzfw==
+        d=linaro.org; s=google; t=1736854847; x=1737459647; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RApK6ABZb5RLkZkJuxLbChpY8t9FmD5Eg7LXWFRYRmI=;
+        b=ZeK8vkqplEk0FqAwA08aYf1zkm36W07pmI8ic5K59nsybeWsekZQrChiC4LKI2U4K+
+         C23b4Ri+WLpvY1Ts1aL5Rirp8DpNEhhIp0oNZfNfo5kKUwYl6wygdNQ5FqxX3GSKOpl5
+         GF3lAv2sBBe0JIxKL02IKVzx+dQ8qVlL1DicB83om+heD0WGZ51dgYGBDNgTqz6eA5DA
+         8eWeaMgPxAUbRGEZR2vYaXJXHoFt0uWsZmVnxPkf10QEz7gHBFIc6QLA7ls94vO6RPSI
+         1KdiPnt18cGJouQtuUFOVWOw582oNiw/Cy2a/kCi7L5qxGK45hSp8elKSEuED51PLqt1
+         rtGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736843984; x=1737448784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OdaPQOG+jZl+QzszmKjWuwCDq3PKK+nnIPtoJurL7Fo=;
-        b=iXkPCh3z/xZasuClAeGuY5OgOINBN7UhorxF5fXD4do+5IOuRWTiiBwD9wwYaCGyvv
-         VAZYXj3Dlug8SeFdkuPp3oC20XeHixAuJV8h6cQXLwq7TIuAk+Chnoxiwdz7USmK7oXQ
-         dCMQ9Hr6XfkSj5cO/PyxR+5UhM8BbkQMnAYpQ1teRXxhjgHCzTxZX3gNd/BlIoHnFSxh
-         c3dDMKpahoNAvFn0oGuFJTxq4IbNBlWFauFnQL8xw9YZ5Pno147HqWcnvD1iQi4Z0Tmx
-         5fp+EhNYsuTroKpkr8x6cKmwDaFgj2LLRepCWk/G+edueLu+RA+RMvzfr/UJrWYISvCp
-         pa9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUQvZX0YoJ/HWDWSn2ERLTJkYOjcmc/6dsSPcpRrz676FsMI67Om0UZMfTQOVXaBP4epN0DyDMGZ/1MPA==@vger.kernel.org, AJvYcCWRUYQrf07AWSZODWZvje7GjsLvrGQ5cyItdopm+qN5v6i06nPyNDbDGsOphPuARUSi0ZzzUpUZZ1L1CCc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2J+vJhGDwZKyvkNsk+BZIWCTl+qZakykvU+Zavy/R3kY9EbKj
-	MBxTxpIuPVxytnp2orjyFv1WeoC8hj6fcAzqN9idz1dWmuIaZFoDNaLZ2iWbcS8GM/iCGaSYVhW
-	yGn6vC6N0Gt0Lg6LltXvSRf1vubQ=
-X-Gm-Gg: ASbGncusSefTBQRWPtIqLfubXnLdTapdSu275ikFQcCj+vqbeHq5fE5aoGOq3L4D+vJ
-	WviFlcenHGFA2kkVfM3oQNphlaADkMmdiM4PJGw==
-X-Google-Smtp-Source: AGHT+IHN72gJcTX0nPpXhNdtjRlpLYcz7TjdKj8WCSuW3qB0JarUDaMdpl6+yn0UzFGxeTf7geSr/g+rP4JmuGQ15bw=
-X-Received: by 2002:a17:90a:d88c:b0:2ea:c2d3:a079 with SMTP id
- 98e67ed59e1d1-2f548f3fc41mr13428342a91.3.1736843984331; Tue, 14 Jan 2025
- 00:39:44 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736854847; x=1737459647;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RApK6ABZb5RLkZkJuxLbChpY8t9FmD5Eg7LXWFRYRmI=;
+        b=Km/rFO7carlfHYNCaeN21qyFoR8ohnzSI14DcZ3UIizoNmX0w308frUnYddmj8ZoQb
+         ug9jdFlnKiJy5h+DdnqR5j1R0fW9BMW6+qTTFTbFrzY0kBGZKjB1ZPw8pGqXZLeab1b0
+         2XBcD0FNAF0ZCqBhD+kaai/6wIwYyc2NFei9TsHA7icsOYJoXt+KgxObehz2IaaomFWG
+         9w1uOhdnO2XDW1m6JFb7jIXe8A4u4DaT5sOhMDfWltq5fL243G/7ZoAl9Ol//VjKJLgP
+         X8iB1nI4o9dKHax+Ql+HaE6Yw+OVVgiRAH6Zv77rTJYhAE26Fr7XxRfJ6rJSChZ9fJBS
+         PXnA==
+X-Forwarded-Encrypted: i=1; AJvYcCUEKPJQ1ZKOkpEWI1ABK1GYJlu9biNMgJZy02M7FMM4jTeuCY0EgPF3DN89QebP5qgsVJDuuA5YBdH4@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAELgG6Avzw9YY5/GVVorRpT2R15fp4Vug0mySmXSBsIXqj2C0
+	ZAaxGy+JszZIwctulUaWfqWkPfsMpeoBkJV/8XJIENTekQ/f0rp8rw4JCBkmlvM=
+X-Gm-Gg: ASbGncuvcwiZNCIqADtMOLqmPBbeg2hAXwHBiemzF9pMMmPNKIWZYOtPHJux+Zw+rBa
+	j6QsglFA/3Xp+6Dcd2LdNFHyMRc+koa73IbWFhVMEnZ2Pj1tAClSxsBLOXsHvdH0qa0Am4Ff+3g
+	F8EklSKMWqwjHdSBOmT1ySYsu16Ky6DFPDLjMU9YdSnkAYIWNnnsWhnICz3qj61AozlK4xKhNws
+	Z3UUZn8JgtFQdy9mLrKlgKOxE/FthVVHJ0NK3C76EWaSpKjnvQNgJzyQkzVBekUvgYC3Wm03Pwq
+	MXYP8fGElegAKFmgPCSN1sziDUGAbL4wp3PT
+X-Google-Smtp-Source: AGHT+IEP3QuLGe6bUVSbTfGj70OEbmA3v0rl9rotK0Soo8E/zBAkb5J8r0RoTnIkZJH41eNgQ3s5pA==
+X-Received: by 2002:a05:6512:3d18:b0:542:2a28:e30f with SMTP id 2adb3069b0e04-542845d315emr8457141e87.31.1736854846750;
+        Tue, 14 Jan 2025 03:40:46 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5428be49a28sm1633804e87.42.2025.01.14.03.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2025 03:40:45 -0800 (PST)
+Date: Tue, 14 Jan 2025 13:40:43 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Simona Vetter <simona.vetter@ffwll.ch>, 
+	Dave Airlie <airlied@redhat.com>, Intel Graphics <intel-gfx@lists.freedesktop.org>, 
+	DRI <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the drm-misc tree
+Message-ID: <2f74opyehgqxnd7337fc23hwwow2ggod25obqweu72j2zfbo6g@xuvurpzbwbyd>
+References: <20250106174645.463927e0@canb.auug.org.au>
+ <20250114164324.3a42700e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250114154623.080e160f@canb.auug.org.au>
-In-Reply-To: <20250114154623.080e160f@canb.auug.org.au>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 14 Jan 2025 09:39:30 +0100
-X-Gm-Features: AbW1kva2pyPqRqAIIMTR_aAc42-DdtqaYOlELMAB8YKBkXV_XYdRs7GAkJ6w-ds
-Message-ID: <CANiq72nkk+ecotB0Dnn=0P3eORP2kiEWj2+4-X73D=4LYKuCiw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the driver-core tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Greg KH <greg@kroah.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Tamir Duberstein <tamird@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114164324.3a42700e@canb.auug.org.au>
 
-On Tue, Jan 14, 2025 at 5:46=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Today's linux-next merge of the rust tree got a conflict in:
->
->   rust/kernel/miscdevice.rs
->
-> between commit:
->
->   88441d5c6d17 ("rust: miscdevice: access the `struct miscdevice` from fo=
-ps->open()")
->
-> from the driver-core tree and commit:
->
->   14686571a914 ("rust: kernel: change `ForeignOwnable` pointer to mut")
->
-> from the rust tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
+On Tue, Jan 14, 2025 at 04:43:24PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 6 Jan 2025 17:46:45 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the drm-misc tree, today's linux-next build (htmldocs)
+> > produced these warnings:
+> > 
+> > include/drm/drm_bridge.h:738: warning: Function parameter or struct member 'hdmi_audio_prepare' not described in 'drm_bridge_funcs'
+> > include/drm/drm_bridge.h:738: warning: Excess struct member 'prepare' description in 'drm_bridge_funcs'
+> > 
+> > Introduced by commit
+> > 
+> >   0beba3f9d366 ("drm/bridge: connector: add support for HDMI codec framework")
+> 
+> I am still seeing those warnings.  This commit is now in the drm tree.
 
-Looks good to me as well, thanks!
+The patch is pending reviewal:
 
-Cheers,
-Miguel
+https://lore.kernel.org/dri-devel/20250107-drm-bridge-fix-docs-v1-1-84e539e6f348@linaro.org/
+
+
+-- 
+With best wishes
+Dmitry
 

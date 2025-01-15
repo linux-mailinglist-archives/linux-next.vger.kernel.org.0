@@ -1,148 +1,115 @@
-Return-Path: <linux-next+bounces-5207-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5208-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EFAEA11658
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jan 2025 02:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E022A11674
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jan 2025 02:22:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50EF3188AC4B
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jan 2025 01:07:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0C7E188B088
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jan 2025 01:22:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5CC61DA23;
-	Wed, 15 Jan 2025 01:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DA2F200CB;
+	Wed, 15 Jan 2025 01:21:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cYhef7bS"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Nbgizg/+"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4B02E630;
-	Wed, 15 Jan 2025 01:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69490F9D6;
+	Wed, 15 Jan 2025 01:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736903260; cv=none; b=BSGhCBOlQu2mlnXg1Xebxg2mgJz2F7QljCtAJXNH2Zo8ppIuQVgvvNs3xXdTn9z9GXm4krUGdPv1TEROco+wbHFHFuNUPnv9gTYRlhB1hNqWMJMETV/xNaLwsy4TN0wfIs4TFUyhXTT0fjgFwQ0fyicP7mdd/46znnKybYBnJAU=
+	t=1736904119; cv=none; b=gaqtdpYB01mCZqEu0JXxeqHZXMpDiehVsJ5QFSdXJo/vWUhBxJxb+Ynw3kxJZuEsyYCtFwAZ88xvYALudiXUaNczliBqrwyPcP28O8aImAqgu70YED1+GGiEvmkrVuMaM1n5s0swHBbHGc38KW1qafiQF5FTyE/5szvC+vvKdg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736903260; c=relaxed/simple;
-	bh=2azUmSr5jkDQ3p8WGY0lOXjho4Aoedb/z9Bm8yyml8U=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Skd8TtzsAE15PIAhFF/0HBtwVgZtAMSYao12rYZubo6+OHYuZ85TWmDcAhXkGtLtnu7Ch0NC1rbnDGZaCgIcuD/dwzsjJDOKeMzGLsFIDQNwHti+FBbG7fNk3PItj4eQQpAqvgNVlDT98JYNoqPsI23lN+GHsKWQV9IofR4pFgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cYhef7bS; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736904119; c=relaxed/simple;
+	bh=H4/QQ7eT0HZFPZJJblHfOvOeTwSt4izsyDxEWwx4iuQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Pqg74lzbZHjUmlpAWFWvTWGpXOuNnIiUL2Qd/duiegukn+eedXN+vLROH00RXbspVYbbXou/R+U0iv02iX9zTibOYYMfCjTK/XZogL8FmANqOa9d0Mtf2b/4Yy70nulcuLKH2klJAT1RBHhudyw9KHEYNwkv1cpzflfYfS0ew5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Nbgizg/+; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736903246;
-	bh=lkTDgAyjrLzua64WIH4jxHEO6C9OQ7nTKpfcH6w8t8s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cYhef7bSDePvpfXXs2HNAUPJvTskbCHteofpOORoKDLVk4X065SlOr/AS/6leQi9N
-	 EI2AOJeDMDYCZEdvqGpkETUL+BffzrVRe4UHgYm//WlnfRSg6+WJ/kruF8DgEKEp0d
-	 GhgI3BYAOMKvaxK9oWtLP4nh2js79Hr+bgHUGy3UEZkYDlbk6P2KdYBynfu/US+d+4
-	 ohERc4uAMwfbbtBBP3bIi1mv2nl7y19M14oUPZSBLB48CU6ebQ08oSEysiZGqkiedt
-	 EkgLxRie5xEjVnSSgVwTsPULbJGextZkCO5WIWVdeyQb9LDSz9k+Efyx5DaPh/y70/
-	 4ABi2T/iA+WoQ==
+	s=201702; t=1736904106;
+	bh=kb7+rS4racKCDrINUR7ofdq57fmaVolCAbgQYocRaBs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Nbgizg/+TILeb1ftRQFrkMKVnc/cEfVs/6E0tPymKsjVRSG5Wo2Zw/CRyzTNFqHkr
+	 M6yQU1g3+yTzZ/I1ub6xO/Xd2ZDcYw3EaZmaFMBcCQvMykOpDe1QbaEtJ6z/JaeNTh
+	 3vmyewGA4xwrYCizNDTGq/lMgfnm/jNHmTs8eso2lMeD7jhdc4sTJ+cVWI4GM5tTed
+	 1ew4O9rd4MQFxV2KS4cnCSl1ZjS+uY/Z8WuWDn1IE2txb6G+J651hjbW1BcB7EeB/R
+	 BMNOHsgM6nnGWKAx5zYIDFoQJffvGwlLN11fiolapmuWVZAsHmHfOp9OiZktCw9L2V
+	 o8kfiUHIyHSoQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YXnsT3m1lz4wj1;
-	Wed, 15 Jan 2025 12:07:25 +1100 (AEDT)
-Date: Wed, 15 Jan 2025 12:07:32 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YXpB21ZnJz4wj1;
+	Wed, 15 Jan 2025 12:21:45 +1100 (AEDT)
+Date: Wed, 15 Jan 2025 12:21:52 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Bernard Metzler <bmt@zurich.ibm.com>, Junxian Huang
- <huangjunxian6@hisilicon.com>, Leon Romanovsky <leon@kernel.org>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Yuyu Li <liyuyu6@huawei.com>
-Subject: Re: linux-next: manual merge of the rdma tree with Linus' tree
-Message-ID: <20250115120732.4a210e37@canb.auug.org.au>
-In-Reply-To: <20250115004130.GJ5556@nvidia.com>
-References: <20250106111307.7d0f55ba@canb.auug.org.au>
-	<20250114204828.GI5556@nvidia.com>
-	<20250115082721.732ba8d2@canb.auug.org.au>
-	<20250115004130.GJ5556@nvidia.com>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20250115122152.760b4e8d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//.7cl.ik+B6KaAV46w1rFrt";
+Content-Type: multipart/signed; boundary="Sig_/ZV3m6HjlaBf_wsy8=.bV=5S";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_//.7cl.ik+B6KaAV46w1rFrt
+--Sig_/ZV3m6HjlaBf_wsy8=.bV=5S
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jason,
+Hi all,
 
-On Tue, 14 Jan 2025 20:41:30 -0400 Jason Gunthorpe <jgg@nvidia.com> wrote:
->
-> On Wed, Jan 15, 2025 at 08:27:21AM +1100, Stephen Rothwell wrote:
-> > Hi Jason,
-> >=20
-> > On Tue, 14 Jan 2025 16:48:28 -0400 Jason Gunthorpe <jgg@nvidia.com> wro=
-te: =20
-> > >
-> > > I think we need to retain the ib_get_curr_port_state() call: =20
-> >=20
-> > Why?  =20
->=20
-> That is how the new system is supposed to work.. Drivers are supposed
-> to call ib_get_curr_port_state() not open code it. This matches what
-> is in the for-next tree:
->=20
->         attr->state =3D ib_get_curr_port_state(sdev->netdev);
->         attr->phys_state =3D attr->state =3D=3D IB_PORT_ACTIVE ?
->                 IB_PORT_PHYS_STATE_LINK_UP : IB_PORT_PHYS_STATE_DISABLED;
->=20
-> > It is no longer used to determine the attr->phys-state value and
-> > then attr->state is set again just below.   =20
->=20
-> Ah, missed that, it should be deleted also, and the phys_state should
-> use the other hunk too:
->=20
-> --- drivers/infiniband/sw/siw/siw_verbs.c       2025-01-14 16:37:02.02373=
-8738 -0400
-> +++ /home/jgg/oss/testing-k.o/drivers/infiniband/sw/siw/siw_verbs.c     2=
-025-01-14 20:38:42.611302948 -0400
-> @@ -189,10 +189,9 @@
->         attr->max_msg_sz =3D -1;
->         attr->max_mtu =3D ib_mtu_int_to_enum(ndev->max_mtu);
->         attr->active_mtu =3D ib_mtu_int_to_enum(READ_ONCE(ndev->mtu));
-> -       attr->phys_state =3D (netif_running(ndev) && netif_carrier_ok(nde=
-v)) ?
-> +       attr->state =3D ib_get_curr_port_state(ndev);
-> +       attr->phys_state =3D attr->state =3D=3D IB_PORT_ACTIVE ?
->                 IB_PORT_PHYS_STATE_LINK_UP : IB_PORT_PHYS_STATE_DISABLED;
-> -       attr->state =3D attr->phys_state =3D=3D IB_PORT_PHYS_STATE_LINK_U=
-P ?
-> -               IB_PORT_ACTIVE : IB_PORT_DOWN;
->         attr->port_cap_flags =3D IB_PORT_CM_SUP | IB_PORT_DEVICE_MGMT_SUP;
->         /*
->          * All zero
+Today's linux-next merge of the net-next tree got a conflict in:
 
-Thanks, I have updated my resolution to that today.
+  drivers/net/ethernet/realtek/r8169_main.c
+
+between commit:
+
+  1f691a1fc4be ("r8169: remove redundant hwmon support")
+
+from the net tree and commit:
+
+  152d00a91396 ("r8169: simplify setting hwmon attribute visibility")
+
+from the net-next tree.
+
+I fixed it up (I used the former version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//.7cl.ik+B6KaAV46w1rFrt
+--Sig_/ZV3m6HjlaBf_wsy8=.bV=5S
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeHClQACgkQAVBC80lX
-0GyG9Qf/Y9BDKtsxPC4BohdpaiRUAEgBINNrQ6ZU3SrvBauqNnGkaC2tdiI7+sbS
-zYQ3wVEMBILC3X7XeIToE/A1h1PpxpCTvaAMYT8Gyhz2mf+xMjJbfZ67EnCmT6+S
-BDyrVmqrVGRF25LQBN//6/4KS+vXqPVnD+4Wq5/5wXpuSYkao0xMPWGNW4dWH46q
-W5BRF6IG5WGj6HBQxqO9yDddQb3eG5SrQmfO16ZVlytp/nAxqUu1i/cFMNZwYrEF
-snH68DQQa28FkWcQ3ASd079o8IidhVeW5Zj6eeoqZrbMMFRdORYUKkWSfTxXdi2G
-S9lxuKYIBRqQ4Mv8BdY0qg9Fgfpcjg==
-=QoiQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeHDbAACgkQAVBC80lX
+0GwBfQf/R67Fl0s5Zwk9umBbwj6GeR594BEapLVealWbPfmaJiaNVPJsTO5+1b7W
+EEVXVCdhYONHJOftNPQ39xgZjH9MCo7PL+DJCRQRbvYkbqVrz6ME8CmzI2LgoOko
+xXR8WC2f7takrF+5dd11x7o/morx9cpHIedgkiDMD2qDtxbFwcPE0gkNtM8jOa7e
+zWr5G3BuI6DazPXA1ZDAY92obYyVdyGqwFg9ebZ1bx3keIb3jszWAltmQDA7/V4Z
+4QfqWknfqRUPpHUwuYvcmOetUuvcVRKO+KLJW2NQpkWDs/qClQvDnqF/HZHQt4sI
+bSVVhXYm91j4jPI6wgwWcA1Tshj2Fg==
+=Qb+O
 -----END PGP SIGNATURE-----
 
---Sig_//.7cl.ik+B6KaAV46w1rFrt--
+--Sig_/ZV3m6HjlaBf_wsy8=.bV=5S--
 

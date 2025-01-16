@@ -1,121 +1,117 @@
-Return-Path: <linux-next+bounces-5233-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5234-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA207A1396D
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 12:50:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E865FA13D4E
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 16:10:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91F9B168F86
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 11:50:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A61E166640
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 15:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 837B41DC1A7;
-	Thu, 16 Jan 2025 11:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171DC22A7EA;
+	Thu, 16 Jan 2025 15:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eUF6RhYB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AQ4hokqr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A61D1DE3C3;
-	Thu, 16 Jan 2025 11:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF4E17578
+	for <linux-next@vger.kernel.org>; Thu, 16 Jan 2025 15:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737028213; cv=none; b=fhIe9KOfP7jkpotqkODYhknCn0VNF3+KKbPKmWvdUg6ZHDW7hBl0tJj+ZSKjR32HGKzrnGpdbTvxOG59m/Wvo1QcL4QQHogmTgbyKHtU/ihyuIq0dnBnk6i2TnT7Kc/b5+foK+CE83mfGZSiAY5fHWJRMCm00En5wOepgITiHD0=
+	t=1737040247; cv=none; b=RJo33/BcO/XEflFjlQba5/KzxoWRWa1YsRSbEsgC2eR6Q3mVLiKasPXGJtG4ibWG+ZDKpwEH0PoLIU5if4IcgLeQhNxRCSC64782PDJvJC0df+6fsRYGyjJ9IHrLc1MCkGNyvUb9ibb7X1AuucEeeuDaiFAJrI2WMkyMJW9bBbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737028213; c=relaxed/simple;
-	bh=3urIvcjjKWnB2qJRr7oQPOXeUZvw36gw6qaU2DNqvRc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jZa2u0QsuVn/wDaOEMgRTNqxtHmuNNjbJXF9nOqlMGt8kgdCMv5vuA5oVlbtKY9W3m4w4wIH4FiRz1fzROvxl40XNrsIsYJKKzQbRusArPiGI34xy2r1fsJ+ufWW8/V4B3RDSK5EwSkI/pSWQxGupFg5cHR83re62QIiQIPHpck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eUF6RhYB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B787C4CED6;
-	Thu, 16 Jan 2025 11:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737028213;
-	bh=3urIvcjjKWnB2qJRr7oQPOXeUZvw36gw6qaU2DNqvRc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eUF6RhYBJd+0hRDL1DgEvHe+FvsaO+v8bq4HS1x9MR74PmLYswK2RYhSde1yiuf8w
-	 jzITDmyb37rVju1CR9IJd+kqtLrvmHFRhAL5ttua0kB8ITrLJXdLsrNYL7vgickQem
-	 7Cnubso7LLqYZd/TiLNBAZdN1tDw8cGdYh2kxMQgDO3SRytauekolVfZGPGYA9/NPd
-	 6oSCae7anL4lw0mDW1pN4GyJje529layBTlllhskxYEwsFo8dvqXyQ6OAnPIFHhCVD
-	 QnAFlVJqBpnlUnpaBuosbLYO5CMh0A9xQWj9UNjwvO/P3nAVEd8OZgNZf4FTaTTGUK
-	 hDc6DicvYdkVQ==
-Date: Thu, 16 Jan 2025 12:50:10 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: Simona Vetter <simona.vetter@ffwll.ch>, 
-	Dave Airlie <airlied@redhat.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>
-Subject: Re: linux-next: build warnings after merge of the drm-misc tree
-Message-ID: <20250116-rampant-versatile-butterfly-f1166c@houat>
-References: <20241220154208.720d990b@canb.auug.org.au>
- <20250114164149.6459996d@canb.auug.org.au>
- <beed4438-2416-4994-bb18-a7dfdbe3d9e8@ideasonboard.com>
+	s=arc-20240116; t=1737040247; c=relaxed/simple;
+	bh=cQJfsqu+H/V7ZEr8YC47jAPSs16GnbacLzx0EeMGX/c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QAx+zAtH+AviQCgqww/zHNa22odo2blADSGwRtJDWADLMG0BF6T5JWs3kgdHJJWefb4HFwaD74EV/1q11ARQqNcM46buVYfrjk8S3gKJV5A5JJDlQl5voXBq/LrWspdERQsaT9xZBeKbeb4krkVVAe081utIpCo6JE+CkacK2ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AQ4hokqr; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4678c9310afso224351cf.1
+        for <linux-next@vger.kernel.org>; Thu, 16 Jan 2025 07:10:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1737040244; x=1737645044; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/lozNqO3EVTTK2/QtlLyULdC5Y90oTFe48ixj2tApOg=;
+        b=AQ4hokqrLC9/SqRc5wsLETZAtPywsUQBtAbLa+uE/SlbIOn7jbtHkzQNypEYRkkNOR
+         lg2dA6kYJELVIHeAkxLEUbJrZr2Nyg9d4EUMhToCBF1b2ixAB66CBdNCUISg3TFd6Y6m
+         CzMLUnBFNUjf9MwBy7xIuTzuSPzEv0L3F1i/s/V7ZrOVZMYC+84G20CC8VEEvfwsqnVM
+         wH4ayGpWvDC/C75vKmghIsJf+KDJxpLBDkkY7r1wuJ0Z6+LIGBySG98JGUb0L//IL1D+
+         DA18C43G16ap5y7WJhYNL8PkySvZGrxdqSib6x8OKUGf78vGdqX1MVvqyEUmMKXVb+YJ
+         zB8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737040244; x=1737645044;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/lozNqO3EVTTK2/QtlLyULdC5Y90oTFe48ixj2tApOg=;
+        b=CUXVhGy9RFJz/5Cw8mJVGpIJMfPZBp8GnAUEgRp5Oc/3sG4OY5A602rxPOn+DSWi1F
+         mVNaattFY4NZOtUxE5hYFRqv6l3jA8umwktRXo/9XrCJv9amctcCExIAAGB7QDKdwqlH
+         dkYO6Uzvcc7GbCrFDPzPgEWQ0pkShuGsTbznme93ueX37LGoT7j7e5wxf4WvvzdNJu94
+         0peUp1bqXVUu/ROegaGOrKZPXuvJGpOVJ3JrOlbBmLHXZqgbZzfdQBDE/SXcVeIoHhXB
+         d0CCFmaw6zyMWFfjj97SQXTE8jkS2F2/OcRe+QhkMJ6ZjSHneivd2B4ovkIFYIQLrRON
+         JwVw==
+X-Forwarded-Encrypted: i=1; AJvYcCWqZCvB2WckwX1oblcYLKSLz6qa6WSqkNj7zY+hRnIRqAMJsv2uET0RcQhJ4HNq+Ol1vE4wG/g9OaMK@vger.kernel.org
+X-Gm-Message-State: AOJu0Yys1BCRpAPSdZc0TIHjvBCPTRX//FY38XSlcXCf+sNQytb3bZCk
+	YgQrBKgDim2UTlebbXb2/Vw0/2UywLJDeBYzQhaaFJvS2xbwGgDvDSNzKmjbz4xBBO+ElwFl+Gp
+	3ef7dCdybjvJ+YB1gK8a1Qre+5XHS/vTTR+aWYv9XjB9IrvurlNN+
+X-Gm-Gg: ASbGncuAkPy1obgFI3XpTkt6vDW8zpy2GZ24h7AHFSV2VYiKxX50EScEEB1Lj2l9HGk
+	G8DIzNitakeTwTh5hTrsk0Ybh0/gh7wWTSF9aubqQY3B5lneSYj/3/343SnH0UXp/5is=
+X-Google-Smtp-Source: AGHT+IFzJW8T2fGTskKNglsE5o2Abr/Bg9aMjkbEYkFFKpCEnoVee/IwUhs1fXZcpjp48UwCVVtx4ojzAF/dBADTu6E=
+X-Received: by 2002:ac8:7d45:0:b0:46d:d452:a1b0 with SMTP id
+ d75a77b69052e-46e041647ccmr4147771cf.2.1737040243889; Thu, 16 Jan 2025
+ 07:10:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="xr74ivsemsid3src"
-Content-Disposition: inline
-In-Reply-To: <beed4438-2416-4994-bb18-a7dfdbe3d9e8@ideasonboard.com>
-
-
---xr74ivsemsid3src
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <20250116170522.23e884d5@canb.auug.org.au>
+In-Reply-To: <20250116170522.23e884d5@canb.auug.org.au>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 16 Jan 2025 07:10:32 -0800
+X-Gm-Features: AbW1kva0QTvWhVnT0_e7NgrXkPdDS3NUJfoabTtk4scoCSaW1PGcQeI6l5B6fXo
+Message-ID: <CAJuCfpFkPvyDLNxjQ1bJS=fQds-mUS=+e-ZKf00nSQ5OyohhRg@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the mm-stable tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: linux-next: build warnings after merge of the drm-misc tree
-MIME-Version: 1.0
 
-On Thu, Jan 16, 2025 at 12:34:39PM +0200, Tomi Valkeinen wrote:
-> Hi drm maintainers,
->=20
-> On 14/01/2025 07:41, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > On Fri, 20 Dec 2024 15:42:08 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
-> > >=20
-> > > After merging the drm-misc tree, today's linux-next build (htmldocs)
-> > > produced these warnings:
-> > >=20
-> > > drivers/gpu/drm/xlnx/zynqmp_dpsub.h:86: warning: Function parameter o=
-r struct member 'audio' not described in 'zynqmp_dpsub'
-> > > drivers/gpu/drm/xlnx/zynqmp_dpsub.c:1: warning: no structured comment=
-s found
-> > >=20
-> > > Introduced by commit
-> > >=20
-> > >    3ec5c1579305 ("drm: xlnx: zynqmp_dpsub: Add DP audio support")
-> >=20
-> > I am still seeing these warnings.  That commit is now in the drm tree.
->=20
-> Can 96b5d2e807f667320c66f41ddc1c473023a73ab2 from drm-misc-next be picked=
- to
-> a -fixes branch? It fixes 3ec5c1579305, which is in drm-misc-next and in
-> drm-next.
+On Wed, Jan 15, 2025 at 10:05=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:
+>
+> Hi all,
+>
+> After merging the mm-stable tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> include/linux/seqlock.h:341: warning: Function parameter or struct member=
+ 'start' not described in 'raw_seqcount_try_begin'
 
-Done, thanks
+Oops. Thanks for catching this! It should be:
 
-Maxime
+@start: count to be passed to read_seqcount_retry()
 
---xr74ivsemsid3src
-Content-Type: application/pgp-signature; name="signature.asc"
+Should I send a fixup to Andrew for inclusion into the mm tree?
 
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCZ4jycQAKCRAnX84Zoj2+
-dv/VAYCyN7mP6B9dpcKCjMH+UsajZWr3P+rR5kULKVOnHzqVA+dd7URfeKTwrR20
-ewOxPfgBfAuzoNGQOsm/lFOOyDpOcobmUuKV7TYzEMfXLQ5Qvq0MwP8cnH30CIFv
-CInigMdcXw==
-=eHBa
------END PGP SIGNATURE-----
-
---xr74ivsemsid3src--
+>
+> Introduced by commit
+>
+>   dba4761a3e40 ("seqlock: add raw_seqcount_try_begin")
+>
+> I seem to have missed this when it was first introduced, sorry.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 

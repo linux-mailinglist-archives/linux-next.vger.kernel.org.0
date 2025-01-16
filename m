@@ -1,106 +1,121 @@
-Return-Path: <linux-next+bounces-5220-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5221-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8D30A13094
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 02:16:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68A34A13113
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 03:08:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 384D87A2689
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 01:16:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E844165B3F
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 02:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FC851E487;
-	Thu, 16 Jan 2025 01:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 034C471750;
+	Thu, 16 Jan 2025 02:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EqfPg7bq"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="vJdFX+7P"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E5729A1;
-	Thu, 16 Jan 2025 01:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60667082D;
+	Thu, 16 Jan 2025 02:08:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736990199; cv=none; b=cswcutiQTnpKJd/59K54CX49A8XchwRHAqF/yRl4BNEeLYs5tVmEkr5dXFWxbgbSEYZc2jX+vMLvEtKsQ+WZilQc6O80AYN2DcIRuZli0pADJkvFAtp4xaqn53DJEXi9MYlW5GyekfocgmB2ZWin5EDdJevqpgL1TPBgghb2FjE=
+	t=1736993299; cv=none; b=t8SarM61ijPy3wlHBL6Rt2QiEtkXFDhrc6Z6Z9Rc7H5VlHgGoU0XwoOzR6/Fga7CeTPEDe2b5JoAzcs8fRENdlVZQwder47kfxgUJr/Th7mu7ILRHHLdlaUYb+SpjSHeq5Tm/kXC4XhOBIdnFEXne7y8feHOfAzwqEIzMQdIq7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736990199; c=relaxed/simple;
-	bh=3oMqmAkUiPqPUvQ1sfLuYrMyHQ7v5xsONbu6lfN0Clc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EseyhRFbK9QcgAyubI3zIGzAEWO1GhhrzaRcM1/HMLrIJOcnxyRs7ALN6E5r+ItvHDMWs0UJBBwqEiSyg55VMvm5+xRbetkow8Avcg+7IAbW3C5mXR5bzx+4rNmilQoOmR4hWztqecoxCXL2pZ2CySWLIctl6aK9FffVB5Nx8Rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EqfPg7bq; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736993299; c=relaxed/simple;
+	bh=dq25cu2CFcaEy0Sjy94dpa6TNJ5EsczGcqwiGw4b3KM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cWAHF50nODKgvLpLEcMBgSFomfPQ0+yAgTKNQ/D3ajTeNz1zwmurXYxQMQrcR2PV3LmHfcQq7yhM+DEaHkj1zzm2Z+3ImMFc0zbBt6fa8h8jD0ZDvv+tWEZrz/yoHV7mAxW7g+E3Uzm9dOiUqk/jXFwYn+pCCgvEW7dh2u8/QCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=vJdFX+7P; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736990186;
-	bh=JVeFAgl+oD/Ykj7BPda2LkdsPDoqnz6PrIQER/opz/U=;
+	s=201702; t=1736993285;
+	bh=PPpDrhEzQh9Fo/crDUCNf6BtsRd8ABancL1Cmvc3SAM=;
 	h=Date:From:To:Cc:Subject:From;
-	b=EqfPg7bqZe4DyfjKZqosd4syt5GNTU+1DWvJ0KO4dQER/aDPlqFOzK+LIyASsHd2s
-	 03aJ4ce/CdT9pAIlmH79Hx1uziyjqottU7Kn+zXZ6jILelu9HnN1mdehL9bSlu2w2q
-	 oa13uAmHZgRFT2Rn/BY1QR5Wmq2868V82t/zSslVYUyeeVJtslvGLClsBfnuxOjo76
-	 QJOjWX+3et0lEAqmGzDtxC9+7w3D2bW92FMon/hDaF4AsFa/mU7rnY81gb37rVbg1f
-	 qWGjs5zaLp0YahKjcXl+47b5ffvYWwYF0zM8juyQ3IXHMxSzwmhPVNQOYfdAvWifHN
-	 RAjMiDEBm99rA==
+	b=vJdFX+7Pw4pmJjFbEzZ+w1wRoVnFmUIpuf82b/8mFrKEJfBC8rFDLTdfKEKTSzVm9
+	 B7Bxy9/iirn2b7DYw0qY+pHz2G+KiBS2P1VmUhaBpdojsIIPs/UXr/ZbWOcElS3W3N
+	 w+lv7Pr8W3zrJ79LoXi18Es7LJcA3qtH5hbZucTciYgyyUN8D0L4H/kB9p+v9VubvV
+	 oykO2sxcO1Nlpas3V7/RgE9z1CTysYS98eEBZ+J65qnBEWxCTBmjDMx5JjrCpgJSKm
+	 eWmgUfKTBUGA8/THWYq+A2RKCvKpDMh530qicO5/udvjSLKSyDaSLhd9qbO3V5I6lR
+	 Q2cAljz43Lg/A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YYQ1Q0nd6z4xN1;
-	Thu, 16 Jan 2025 12:16:26 +1100 (AEDT)
-Date: Thu, 16 Jan 2025 12:16:32 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YYR9123cxz4xQq;
+	Thu, 16 Jan 2025 13:08:05 +1100 (AEDT)
+Date: Thu, 16 Jan 2025 13:08:12 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the vfs-brauner tree
-Message-ID: <20250116121632.43604bfd@canb.auug.org.au>
+To: Kalle Valo <kvalo@kernel.org>, Johannes Berg <johannes@sipsolutions.net>
+Cc: Bitterblue Smith <rtl8821cerfe2@gmail.com>, Ping-Ke Shih
+ <pkshih@realtek.com>, Wireless <linux-wireless@vger.kernel.org>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the wireless-next tree
+Message-ID: <20250116130812.6e6c7b3e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hsSsoh12/brI/0v_2gX0BCV";
+Content-Type: multipart/signed; boundary="Sig_/CJABub7zUDeTb3IYWBzXz+x";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/hsSsoh12/brI/0v_2gX0BCV
+--Sig_/CJABub7zUDeTb3IYWBzXz+x
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the mm-hotfixes tree as a different commit
-(but the same patch):
+After merging the wireless-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  a560758705a6 ("mm: shmem: Use signed int for version handling in casefold=
- option")
+drivers/net/wireless/realtek/rtw88/led.c:19:6: error: redefinition of 'rtw_=
+led_init'
+   19 | void rtw_led_init(struct rtw_dev *rtwdev)
+      |      ^~~~~~~~~~~~
+In file included from drivers/net/wireless/realtek/rtw88/led.c:7:
+drivers/net/wireless/realtek/rtw88/led.h:15:20: note: previous definition o=
+f 'rtw_led_init' with type 'void(struct rtw_dev *)'
+   15 | static inline void rtw_led_init(struct rtw_dev *rtwdev)
+      |                    ^~~~~~~~~~~~
+drivers/net/wireless/realtek/rtw88/led.c:64:6: error: redefinition of 'rtw_=
+led_deinit'
+   64 | void rtw_led_deinit(struct rtw_dev *rtwdev)
+      |      ^~~~~~~~~~~~~~
+drivers/net/wireless/realtek/rtw88/led.h:19:20: note: previous definition o=
+f 'rtw_led_deinit' with type 'void(struct rtw_dev *)'
+   19 | static inline void rtw_led_deinit(struct rtw_dev *rtwdev)
+      |                    ^~~~~~~~~~~~~~
 
-This is commit
+Caused by commit
 
-  99b24f3ad327 ("mm: shmem: use signed int for version handling in casefold=
- option")
+  4b6652bc6d8d ("wifi: rtw88: Add support for LED blinking")
 
-in the mm-hotfixes-unstable branch of the mm-hotfixes tree.
+I have used the wireless-next tree from next-20250115 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/hsSsoh12/brI/0v_2gX0BCV
+--Sig_/CJABub7zUDeTb3IYWBzXz+x
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeIXfAACgkQAVBC80lX
-0GzWaQf+NrLk5ot3Tc+AyU8JVbiZa0/rzMrEDZ1CBrvDZ+ZeB8sX5C5bMmLTzHK4
-bM0iJrUy/oU9Tj8t6m64l9KT/nooc/KmWppnyyz9sIokvyE4gDsr1Hq5JaF5E6lw
-EJhEjGXlrykBZuy/CZHP7a2VakvIvgz/fC1fnUPNLvgtW7N76mejMlHnegxD+YJv
-X/PGxUAdj+7hLZk/TsZrmRQbhT1MAaUIzUD/y62axToLPu+0wHJ/HkDWXECGy/09
-ySXKxokd0dQZnt1dpF61pFqexnLe3Z2lyHpEpVVHtuA7NYuMJrhoiLWi+rWlIHXn
-HTK5Hl+YtjhgxruPH5uumNQsQWocEA==
-=cF9S
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeIagwACgkQAVBC80lX
+0GyW7Qf+I+Ci4aadJ1YDY0r5cryldp039QRO6Utn2iwRMuMeE7KUz1ktbGjB75vT
+9ghsZud1xJ57PvwUrbKeCP848164Y6cOUR15Mk86jKCLHxIql1KW3k9IpqOR6Tg5
+R4c6Ks3nzOp5tXEejVqkRjZXPrwbFonXSUScLkGclLgH+SdOfFa0x1oBDgHAC2Tl
+t/g8v8YNwo3873TOTTGkv9AZ4zAUSzh5YK04qoX3acIQt8YXCnrS7UB/d7trKcTw
+/+spxcbLuiEVNmOQ67qD/i4R6Y8KwVYIHPc17Udc0mmUK/jjEIkU75f42KMqwUIZ
+h4fxkcgRXcrMAGHknc70pvG9YPuiyw==
+=mNBR
 -----END PGP SIGNATURE-----
 
---Sig_/hsSsoh12/brI/0v_2gX0BCV--
+--Sig_/CJABub7zUDeTb3IYWBzXz+x--
 

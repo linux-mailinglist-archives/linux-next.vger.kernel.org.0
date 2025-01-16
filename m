@@ -1,129 +1,105 @@
-Return-Path: <linux-next+bounces-5224-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5225-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA301A132BD
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 06:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 05496A132EE
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 07:05:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0221F1653F3
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 05:50:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20488161B09
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 06:05:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1464159596;
-	Thu, 16 Jan 2025 05:50:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D0147082F;
+	Thu, 16 Jan 2025 06:05:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror (0-bit key) header.d=realtek.com header.i=@realtek.com header.b="MDzRMlfp"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lQqG+9+l"
 X-Original-To: linux-next@vger.kernel.org
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABC629A1;
-	Thu, 16 Jan 2025 05:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974894414;
+	Thu, 16 Jan 2025 06:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737006602; cv=none; b=BZjT0GCYA019fUdOi4IoLDEY7T6mY0YiAUv2DSV7c4lIRUvnqWP+ARCTxbI5Vrwurnn6Z4yLDa9qnLc0LzLnxC9pgJkuRuz01DPlSrE7WYrNxjsxNLyXkjkrcjN40w7VcLW/xqMPlaEdEWc8ai0qnWjK5KU6rpk5HfA2Z/nBV5s=
+	t=1737007530; cv=none; b=GFOzoxgxaMmw93iDNjWNYuSfqUuPtLHjLUEORMeb2G0ROqrR2of9z1sh3eQ9pDUCgOvnZNvlt6oFulTnPQ+gq1tzNZJpO4S/lk0gykDuBkqcYtZnRr8+z2W9FypkHYtah5743g/UEyYl88o/oBzYkw8mS4E2ciy0tNNjFV1EbkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737006602; c=relaxed/simple;
-	bh=aK5Qp1WtZfWb+ehb16SgewX1iBiUcmfwlo03v1oO9nU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=K1tqHodSqgFXVHkbtvaP1CHOwyXPevTxfKQBHe7muKC+uAjNgQrP4Q9QW2Zx2PlvmHNZQCIAk5cLpPSoE1nag+qxWGJwjDMpN1w1wLJSP/FHi1hQeFpQtoycc9LlQHTGx3FXXDtXuuPUtFUwB9EJcBzHJN0MCsiofHyyi7KMqGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=temperror (0-bit key) header.d=realtek.com header.i=@realtek.com header.b=MDzRMlfp; arc=none smtp.client-ip=211.75.126.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 50G5nTvM5503241, This message is accepted by code: ctloc85258
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=realtek.com; s=dkim;
-	t=1737006569; bh=aK5Qp1WtZfWb+ehb16SgewX1iBiUcmfwlo03v1oO9nU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:MIME-Version;
-	b=MDzRMlfppF1DW25x5i5BvMlMSCcmaBlOL6jh7dOZu0ABAaaIJbLo8+E5CsPy5qIvY
-	 0Nk6GRlJXMNsSTdWrYPkPaBvftZIdth4r9FUFctTNz+AAKPqB38tCbIGpBSoxmpJpB
-	 YxKL4fDm/tmf4i+/PnLn+2IeZ4umk+jBTfyr8T2/08+9XgGWgKI2ZEeRmhhBnKIRPR
-	 OCENgmnNDthQ5ydtmHzi1rc42Xa8hQ0rDRg8nKkP/5864MWjl+SAfV4nIBEbqRn3BP
-	 exWycJXzSf32fL+jmMbfnOqfbKE+AVHZH6TICZoL4r6gwfdjWu9Wxfa8FCTSBKII1G
-	 /pGldosykpN+A==
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-	by rtits2.realtek.com.tw (8.15.2/3.06/5.92) with ESMTPS id 50G5nTvM5503241
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 16 Jan 2025 13:49:29 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 16 Jan 2025 13:49:29 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 16 Jan 2025 13:49:29 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::48ab:b54f:96a1:6553]) by
- RTEXMBS04.realtek.com.tw ([fe80::48ab:b54f:96a1:6553%5]) with mapi id
- 15.01.2507.035; Thu, 16 Jan 2025 13:49:29 +0800
-From: Ping-Ke Shih <pkshih@realtek.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-CC: Bitterblue Smith <rtl8821cerfe2@gmail.com>,
-        Wireless
-	<linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List
-	<linux-next@vger.kernel.org>
-Subject: RE: linux-next: build failure after merge of the wireless-next tree
-Thread-Topic: linux-next: build failure after merge of the wireless-next tree
-Thread-Index: AQHbZ7uDbaJxwydigkCHDMeSE6CRnrMYXzuA
-Date: Thu, 16 Jan 2025 05:49:28 +0000
-Message-ID: <e19a87ad9cd54bfa9907f3a043b25d30@realtek.com>
-References: <20250116130812.6e6c7b3e@canb.auug.org.au>
-In-Reply-To: <20250116130812.6e6c7b3e@canb.auug.org.au>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1737007530; c=relaxed/simple;
+	bh=Dqy/LrYexWTPVnCc0DbJwNQwj5gH8uUlCep5TBWDhCw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lGyku8tL4ya4GeTdBuI1UZZt6b9/dydibIpB7YEZeJi6H9HpjYBawRRuJY96/kRtbpMBSisr+OLOBliK+Ozsy6r5s7vnT+oTJDXtpmp06rOTy5MaEuhx3R82THOKQDr8yChOEYZONZdwFW8jPMTneYw32gvMtB7Kyl0uy24jCdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lQqG+9+l; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1737007516;
+	bh=YYWiFMktYTzI4Nn16hXuJY9lgMlDQXG//Bf/rIZ6Wtc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lQqG+9+lXyxdF0BJr9B5WuVH8znJsTn2ZIgBggzWjMuvatBB4BPvmOuc7qnRRHCFT
+	 hdpW6oNcuV6w5hOZCYrM9XEMsnHsGx0v0r9xyiiMcm3dsIJ8JRF7sX8G6miCu+gK9J
+	 Ipion8IVvfd0MvojSM1RkliHU1oVnYBgePIfHu4K793ctnWysgwJS5kzZ1EdY9+9Y1
+	 P7bN0hYep1sR/Wwd2OTlxx0oy9TRaUEXoa0H4OhsOll7Qi/csQJHCkofhd7mp3/E1O
+	 ZPFw75hEHbcbqsRBF9tIpRWEFrQUWLMB+g8cOYqOGuD5qstKv66UbJ70xMkTbscli8
+	 8XhFbcHAgGCpQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YYXQh0HXcz4xRj;
+	Thu, 16 Jan 2025 17:05:15 +1100 (AEDT)
+Date: Thu, 16 Jan 2025 17:05:22 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Suren Baghdasaryan <surenb@google.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the mm-stable tree
+Message-ID: <20250116170522.23e884d5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: multipart/signed; boundary="Sig_/81y7Rw.N_JUbW8ssmRXunN2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
->=20
-> After merging the wireless-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/net/wireless/realtek/rtw88/led.c:19:6: error: redefinition of 'rt=
-w_led_init'
->    19 | void rtw_led_init(struct rtw_dev *rtwdev)
->       |      ^~~~~~~~~~~~
-> In file included from drivers/net/wireless/realtek/rtw88/led.c:7:
-> drivers/net/wireless/realtek/rtw88/led.h:15:20: note: previous definition=
- of 'rtw_led_init' with type
-> 'void(struct rtw_dev *)'
->    15 | static inline void rtw_led_init(struct rtw_dev *rtwdev)
->       |                    ^~~~~~~~~~~~
-> drivers/net/wireless/realtek/rtw88/led.c:64:6: error: redefinition of 'rt=
-w_led_deinit'
->    64 | void rtw_led_deinit(struct rtw_dev *rtwdev)
->       |      ^~~~~~~~~~~~~~
-> drivers/net/wireless/realtek/rtw88/led.h:19:20: note: previous definition=
- of 'rtw_led_deinit' with type
-> 'void(struct rtw_dev *)'
->    19 | static inline void rtw_led_deinit(struct rtw_dev *rtwdev)
->       |                    ^~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   4b6652bc6d8d ("wifi: rtw88: Add support for LED blinking")
->=20
-> I have used the wireless-next tree from next-20250115 for today.
+--Sig_/81y7Rw.N_JUbW8ssmRXunN2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I reproduced this issue, and fixed it by a patch [1].
+Hi all,
 
-[1] https://lore.kernel.org/linux-wireless/20250116054337.35723-1-pkshih@re=
-altek.com/T/#u
+After merging the mm-stable tree, today's linux-next build (htmldocs)
+produced this warning:
 
+include/linux/seqlock.h:341: warning: Function parameter or struct member '=
+start' not described in 'raw_seqcount_try_begin'
+
+Introduced by commit
+
+  dba4761a3e40 ("seqlock: add raw_seqcount_try_begin")
+
+I seem to have missed this when it was first introduced, sorry.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/81y7Rw.N_JUbW8ssmRXunN2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeIoaIACgkQAVBC80lX
+0GwtcAf3XR6CdeuTBQajgTdfUztQp5BRgqz9X3oE/6zmHKgfdh2XXo7BWUrL4NI4
+Sb3hAhHg2HudiWHmMNc0Nj30NkewPqjdCuQ1mwnRzypkVeMqkh3vz0hFB2aSxmyQ
+KGV4JsGpXI63E3q4QUA1TjZZoJyHxZamHs6Etaj1p2q4keC967jhtcqOAAqIbCkx
+CUG2DzfSRsHhaktrVH9twlJ8E/yQ78bKusBwOKNVPfcJ7J3pshLnAoB1RKgTg4Db
+GlZQBxv+nSh32K6jA721zInr8sqIBBFuKJCjIgIQG9F7GWxcFIio8Z6zLqD+3iqi
+5NLoEZ/SJJ5Ia66K4IB7CMqSGdj2
+=vyEo
+-----END PGP SIGNATURE-----
+
+--Sig_/81y7Rw.N_JUbW8ssmRXunN2--
 

@@ -1,121 +1,513 @@
-Return-Path: <linux-next+bounces-5221-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5222-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68A34A13113
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 03:08:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C46ADA13148
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 03:20:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E844165B3F
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 02:08:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 766577A21DC
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 02:20:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 034C471750;
-	Thu, 16 Jan 2025 02:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6097935967;
+	Thu, 16 Jan 2025 02:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="vJdFX+7P"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dd8M0iFB"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60667082D;
-	Thu, 16 Jan 2025 02:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475BA86358;
+	Thu, 16 Jan 2025 02:20:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736993299; cv=none; b=t8SarM61ijPy3wlHBL6Rt2QiEtkXFDhrc6Z6Z9Rc7H5VlHgGoU0XwoOzR6/Fga7CeTPEDe2b5JoAzcs8fRENdlVZQwder47kfxgUJr/Th7mu7ILRHHLdlaUYb+SpjSHeq5Tm/kXC4XhOBIdnFEXne7y8feHOfAzwqEIzMQdIq7c=
+	t=1736994018; cv=none; b=nmIwpU9HFATODkOajj5PRQCyWbYROlFIIizOFO8b8il6l6pi6zu/cp0XI5wlB3RxFPoCVf7dbfEXAJKXfanMqjF83VjGCdGez2u03rp0Hg+N5CtmUgjeQvkp69fMc/2J0kiKjX6kPgLVfLAKpyUu/ECHvdiB0c70wtNY/Ym/4H0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736993299; c=relaxed/simple;
-	bh=dq25cu2CFcaEy0Sjy94dpa6TNJ5EsczGcqwiGw4b3KM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cWAHF50nODKgvLpLEcMBgSFomfPQ0+yAgTKNQ/D3ajTeNz1zwmurXYxQMQrcR2PV3LmHfcQq7yhM+DEaHkj1zzm2Z+3ImMFc0zbBt6fa8h8jD0ZDvv+tWEZrz/yoHV7mAxW7g+E3Uzm9dOiUqk/jXFwYn+pCCgvEW7dh2u8/QCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=vJdFX+7P; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1736994018; c=relaxed/simple;
+	bh=hBgXWpAkifD03J704+eyd3kE+vReY7uTuiusvgP4T80=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aZr6pAx5Lh2okydV3Arfpa+AWOrSaQukWk4jdW7jXha6YDbIRlpTQCj+ZgrH6dpylGp+pDL/G42cVJaxHp+RuRmthX8xemtseoKCs+JiQd1AEBXd+v2j03pez0MNZgpNlGKvl+sM4Xzpm4SsLuDRiFa9h+4vzGkYdw3frsdAasE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dd8M0iFB; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1736993285;
-	bh=PPpDrhEzQh9Fo/crDUCNf6BtsRd8ABancL1Cmvc3SAM=;
+	s=201702; t=1736994003;
+	bh=SjMeqMZ3zyKF8V6USNUqUyleZnlXtbpQEDTO2uPMJxA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=vJdFX+7Pw4pmJjFbEzZ+w1wRoVnFmUIpuf82b/8mFrKEJfBC8rFDLTdfKEKTSzVm9
-	 B7Bxy9/iirn2b7DYw0qY+pHz2G+KiBS2P1VmUhaBpdojsIIPs/UXr/ZbWOcElS3W3N
-	 w+lv7Pr8W3zrJ79LoXi18Es7LJcA3qtH5hbZucTciYgyyUN8D0L4H/kB9p+v9VubvV
-	 oykO2sxcO1Nlpas3V7/RgE9z1CTysYS98eEBZ+J65qnBEWxCTBmjDMx5JjrCpgJSKm
-	 eWmgUfKTBUGA8/THWYq+A2RKCvKpDMh530qicO5/udvjSLKSyDaSLhd9qbO3V5I6lR
-	 Q2cAljz43Lg/A==
+	b=dd8M0iFBAFoIWvvfVPzACYhsT3fq2yUH0ydWGbKK7ss5/y0/z3olcxof3W79owvc/
+	 adWEqfvj7vfUDI0N8FP78dAchJNDaLfkEeOuJadTJ6lPXWg6FhnUHNmBb9Hl8Tqxr8
+	 JNlPeZGC3WxKjceaw6FqS9myyb31A0H/SUHm4kvvBsO9xYz+A9+m4OT5DDB/msDOxq
+	 cl+AfZ2Fh3ki8qWlIp4OJmHL3qCyNxrNo6Sw8WSCnuWYbxeCCPOWWO5heZhjUEz+L6
+	 lHx9v/F6ZqRXoabMtNKBPymGWwcNxwqto9jz7FMOJo7HZXQnqMpCA3491YTHSNa8qV
+	 B3NpN74AFm6Yw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YYR9123cxz4xQq;
-	Thu, 16 Jan 2025 13:08:05 +1100 (AEDT)
-Date: Thu, 16 Jan 2025 13:08:12 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YYRQq4yNjz4xS5;
+	Thu, 16 Jan 2025 13:20:03 +1100 (AEDT)
+Date: Thu, 16 Jan 2025 13:20:10 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kalle Valo <kvalo@kernel.org>, Johannes Berg <johannes@sipsolutions.net>
-Cc: Bitterblue Smith <rtl8821cerfe2@gmail.com>, Ping-Ke Shih
- <pkshih@realtek.com>, Wireless <linux-wireless@vger.kernel.org>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the wireless-next tree
-Message-ID: <20250116130812.6e6c7b3e@canb.auug.org.au>
+To: Miquel Raynal <miquel.raynal@bootlin.com>, Boris Brezillon
+ <boris.brezillon@collabora.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the nand tree
+Message-ID: <20250116132010.4948547d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CJABub7zUDeTb3IYWBzXz+x";
+Content-Type: multipart/signed; boundary="Sig_/vaxmCeuK8_RTaaHsr8SKJUQ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/CJABub7zUDeTb3IYWBzXz+x
+--Sig_/vaxmCeuK8_RTaaHsr8SKJUQ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the wireless-next tree, today's linux-next build (x86_64
+After merging the nand tree, today's linux-next build (x86_64
 allmodconfig) failed like this:
 
-drivers/net/wireless/realtek/rtw88/led.c:19:6: error: redefinition of 'rtw_=
-led_init'
-   19 | void rtw_led_init(struct rtw_dev *rtwdev)
-      |      ^~~~~~~~~~~~
-In file included from drivers/net/wireless/realtek/rtw88/led.c:7:
-drivers/net/wireless/realtek/rtw88/led.h:15:20: note: previous definition o=
-f 'rtw_led_init' with type 'void(struct rtw_dev *)'
-   15 | static inline void rtw_led_init(struct rtw_dev *rtwdev)
-      |                    ^~~~~~~~~~~~
-drivers/net/wireless/realtek/rtw88/led.c:64:6: error: redefinition of 'rtw_=
-led_deinit'
-   64 | void rtw_led_deinit(struct rtw_dev *rtwdev)
-      |      ^~~~~~~~~~~~~~
-drivers/net/wireless/realtek/rtw88/led.h:19:20: note: previous definition o=
-f 'rtw_led_deinit' with type 'void(struct rtw_dev *)'
-   19 | static inline void rtw_led_deinit(struct rtw_dev *rtwdev)
-      |                    ^~~~~~~~~~~~~~
+In file included from drivers/mtd/nand/spi/skyhigh.c:11:
+include/linux/stddef.h:8:14: error: initialization of 'unsigned int' from '=
+void *' makes integer from pointer without a cast [-Wint-conversion]
+    8 | #define NULL ((void *)0)
+      |              ^
+include/linux/mtd/spinand.h:342:48: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  342 |                 .ops =3D (struct spi_mem_op[]) { __VA_ARGS__ },    =
+       \
+      |                                                ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:61: note: in expansion of macro 'NULL'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                                                             ^~~~
+include/linux/stddef.h:8:14: note: (near initialization for '(anonymous)[4]=
+.data.nbytes')
+    8 | #define NULL ((void *)0)
+      |              ^
+include/linux/mtd/spinand.h:342:48: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  342 |                 .ops =3D (struct spi_mem_op[]) { __VA_ARGS__ },    =
+       \
+      |                                                ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:61: note: in expansion of macro 'NULL'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                                                             ^~~~
+drivers/mtd/nand/spi/skyhigh.c:24:58: error: initialization of 'void *' fro=
+m 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                                                          ^
+include/linux/mtd/spinand.h:342:48: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  342 |                 .ops =3D (struct spi_mem_op[]) { __VA_ARGS__ },    =
+       \
+      |                                                ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:58: note: (near initialization for '(anon=
+ymous)[4].data.buf.in')
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                                                          ^
+include/linux/mtd/spinand.h:342:48: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  342 |                 .ops =3D (struct spi_mem_op[]) { __VA_ARGS__ },    =
+       \
+      |                                                ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/stddef.h:8:14: error: initialization of 'unsigned int' from '=
+void *' makes integer from pointer without a cast [-Wint-conversion]
+    8 | #define NULL ((void *)0)
+      |              ^
+include/linux/mtd/spinand.h:342:48: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  342 |                 .ops =3D (struct spi_mem_op[]) { __VA_ARGS__ },    =
+       \
+      |                                                ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:62: note: in expansion of macro 'NULL'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                                                              ^~~~
+include/linux/stddef.h:8:14: note: (near initialization for '(anonymous)[5]=
+.data.nbytes')
+    8 | #define NULL ((void *)0)
+      |              ^
+include/linux/mtd/spinand.h:342:48: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  342 |                 .ops =3D (struct spi_mem_op[]) { __VA_ARGS__ },    =
+       \
+      |                                                ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:62: note: in expansion of macro 'NULL'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                                                              ^~~~
+drivers/mtd/nand/spi/skyhigh.c:25:59: error: initialization of 'void *' fro=
+m 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                                                           ^
+include/linux/mtd/spinand.h:342:48: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  342 |                 .ops =3D (struct spi_mem_op[]) { __VA_ARGS__ },    =
+       \
+      |                                                ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:59: note: (near initialization for '(anon=
+ymous)[5].data.buf.in')
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                                                           ^
+include/linux/mtd/spinand.h:342:48: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  342 |                 .ops =3D (struct spi_mem_op[]) { __VA_ARGS__ },    =
+       \
+      |                                                ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/stddef.h:8:14: error: initialization of 'unsigned int' from '=
+void *' makes integer from pointer without a cast [-Wint-conversion]
+    8 | #define NULL ((void *)0)
+      |              ^
+include/linux/mtd/spinand.h:343:55: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  343 |                 .nops =3D sizeof((struct spi_mem_op[]){ __VA_ARGS__=
+ }) /  \
+      |                                                       ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:61: note: in expansion of macro 'NULL'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                                                             ^~~~
+include/linux/stddef.h:8:14: note: (near initialization for '(anonymous)[4]=
+.data.nbytes')
+    8 | #define NULL ((void *)0)
+      |              ^
+include/linux/mtd/spinand.h:343:55: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  343 |                 .nops =3D sizeof((struct spi_mem_op[]){ __VA_ARGS__=
+ }) /  \
+      |                                                       ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:61: note: in expansion of macro 'NULL'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                                                             ^~~~
+drivers/mtd/nand/spi/skyhigh.c:24:58: error: initialization of 'void *' fro=
+m 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                                                          ^
+include/linux/mtd/spinand.h:343:55: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  343 |                 .nops =3D sizeof((struct spi_mem_op[]){ __VA_ARGS__=
+ }) /  \
+      |                                                       ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:58: note: (near initialization for '(anon=
+ymous)[4].data.buf.in')
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                                                          ^
+include/linux/mtd/spinand.h:343:55: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  343 |                 .nops =3D sizeof((struct spi_mem_op[]){ __VA_ARGS__=
+ }) /  \
+      |                                                       ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:24:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   24 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0=
+),
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/stddef.h:8:14: error: initialization of 'unsigned int' from '=
+void *' makes integer from pointer without a cast [-Wint-conversion]
+    8 | #define NULL ((void *)0)
+      |              ^
+include/linux/mtd/spinand.h:343:55: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  343 |                 .nops =3D sizeof((struct spi_mem_op[]){ __VA_ARGS__=
+ }) /  \
+      |                                                       ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:62: note: in expansion of macro 'NULL'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                                                              ^~~~
+include/linux/stddef.h:8:14: note: (near initialization for '(anonymous)[5]=
+.data.nbytes')
+    8 | #define NULL ((void *)0)
+      |              ^
+include/linux/mtd/spinand.h:343:55: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  343 |                 .nops =3D sizeof((struct spi_mem_op[]){ __VA_ARGS__=
+ }) /  \
+      |                                                       ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:62: note: in expansion of macro 'NULL'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                                                              ^~~~
+drivers/mtd/nand/spi/skyhigh.c:25:59: error: initialization of 'void *' fro=
+m 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                                                           ^
+include/linux/mtd/spinand.h:343:55: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  343 |                 .nops =3D sizeof((struct spi_mem_op[]){ __VA_ARGS__=
+ }) /  \
+      |                                                       ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:59: note: (near initialization for '(anon=
+ymous)[5].data.buf.in')
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                                                           ^
+include/linux/mtd/spinand.h:343:55: note: in definition of macro 'SPINAND_O=
+P_VARIANTS'
+  343 |                 .nops =3D sizeof((struct spi_mem_op[]){ __VA_ARGS__=
+ }) /  \
+      |                                                       ^~~~~~~~~~~
+include/linux/mtd/spinand.h:66:9: note: in expansion of macro 'SPI_MEM_OP'
+   66 |         SPI_MEM_OP(SPI_MEM_OP_CMD(0x03, 1),                        =
+     \
+      |         ^~~~~~~~~~
+include/linux/mtd/spinand.h:69:20: note: in expansion of macro 'SPI_MEM_OP_=
+DATA_IN'
+   69 |                    SPI_MEM_OP_DATA_IN(len, buf, 1),                =
+     \
+      |                    ^~~~~~~~~~~~~~~~~~
+drivers/mtd/nand/spi/skyhigh.c:25:17: note: in expansion of macro 'SPINAND_=
+PAGE_READ_FROM_CACHE_OP'
+   25 |                 SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, =
+0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Caused by commit
 
-  4b6652bc6d8d ("wifi: rtw88: Add support for LED blinking")
+  042087247835 ("mtd: spinand: Create distinct fast and slow read from cach=
+e variants")
 
-I have used the wireless-next tree from next-20250115 for today.
+I have used the nand tree from next-20250115 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/CJABub7zUDeTb3IYWBzXz+x
+--Sig_/vaxmCeuK8_RTaaHsr8SKJUQ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeIagwACgkQAVBC80lX
-0GyW7Qf+I+Ci4aadJ1YDY0r5cryldp039QRO6Utn2iwRMuMeE7KUz1ktbGjB75vT
-9ghsZud1xJ57PvwUrbKeCP848164Y6cOUR15Mk86jKCLHxIql1KW3k9IpqOR6Tg5
-R4c6Ks3nzOp5tXEejVqkRjZXPrwbFonXSUScLkGclLgH+SdOfFa0x1oBDgHAC2Tl
-t/g8v8YNwo3873TOTTGkv9AZ4zAUSzh5YK04qoX3acIQt8YXCnrS7UB/d7trKcTw
-/+spxcbLuiEVNmOQ67qD/i4R6Y8KwVYIHPc17Udc0mmUK/jjEIkU75f42KMqwUIZ
-h4fxkcgRXcrMAGHknc70pvG9YPuiyw==
-=mNBR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeIbNoACgkQAVBC80lX
+0GwVzAf9GonXFsp127jA65iX95gUbj2gq3Omuh7lTqx4nahrknC/wHyonpl5D0xY
+QlkSRJ4NGADExdo10qC6X56N8MCSDBW2XCog4RLcdU9tRCYsQJRHZbwqjKmNsl3T
+sn+YHj1cMTeAMxPhL9mXK5mSUnJLrb2vkqNk8G32LU7mOzeTMpaIY/8167Zj7rpH
+Om+nO02KkaN5HKPDuYxFcqpc1iWxbWtuf1YYz1LCiRZa1YFwU921LM6BDyiYghWB
+h8pu6ogNg1tqgDnuJ7DhHGAKcXd2kd4MnkF4/G/B55smuN9jh3kDXe/y/T8Wyfz3
+xBKqzTgux67TXOUJa6LYVrYp1CHV3Q==
+=dpWb
 -----END PGP SIGNATURE-----
 
---Sig_/CJABub7zUDeTb3IYWBzXz+x--
+--Sig_/vaxmCeuK8_RTaaHsr8SKJUQ--
 

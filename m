@@ -1,105 +1,113 @@
-Return-Path: <linux-next+bounces-5225-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5226-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05496A132EE
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 07:05:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67C20A132F1
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 07:08:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20488161B09
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 06:05:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B696F1889808
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 06:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D0147082F;
-	Thu, 16 Jan 2025 06:05:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5ADD1459F6;
+	Thu, 16 Jan 2025 06:08:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lQqG+9+l"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="R1cdnY09"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974894414;
-	Thu, 16 Jan 2025 06:05:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569784414;
+	Thu, 16 Jan 2025 06:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737007530; cv=none; b=GFOzoxgxaMmw93iDNjWNYuSfqUuPtLHjLUEORMeb2G0ROqrR2of9z1sh3eQ9pDUCgOvnZNvlt6oFulTnPQ+gq1tzNZJpO4S/lk0gykDuBkqcYtZnRr8+z2W9FypkHYtah5743g/UEyYl88o/oBzYkw8mS4E2ciy0tNNjFV1EbkQ=
+	t=1737007686; cv=none; b=gESpiPjySKFOIgHiA1Sbv4xw/ggYCCjKyMh4AcKX6pUpiCxfOfXf58sElmOtM0lsL/Kjewqd/kwMKraROSQaCPuqhOKOAKEIqOsrWWiS3aCSiS1SXOB0YCer5Tzkb/iq22uGEo8+J3Sm8QSQb1pnjzY+FA4aCQn4WLEmF7iH2RU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737007530; c=relaxed/simple;
-	bh=Dqy/LrYexWTPVnCc0DbJwNQwj5gH8uUlCep5TBWDhCw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lGyku8tL4ya4GeTdBuI1UZZt6b9/dydibIpB7YEZeJi6H9HpjYBawRRuJY96/kRtbpMBSisr+OLOBliK+Ozsy6r5s7vnT+oTJDXtpmp06rOTy5MaEuhx3R82THOKQDr8yChOEYZONZdwFW8jPMTneYw32gvMtB7Kyl0uy24jCdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lQqG+9+l; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1737007686; c=relaxed/simple;
+	bh=aozlfBMeNaXfWzZexMAo2jBOKqIjFw1qA5JP0zuzQLc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lFWhzMWwmeXP1+upThsVnLB8P5BkN05pujhI+tzGcSVCDA+yaVLyZmUAkMDh5UKeTml5R+Db74ulLBF/9NVvWX4rU0OFZqTNlS9GTq24jqXx3I8aKUgyAeWrKecUoyGb+YzS6m6PshdXRKg46NsFhDCa8fwyI3RFACnQRBlNaW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=R1cdnY09; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1737007516;
-	bh=YYWiFMktYTzI4Nn16hXuJY9lgMlDQXG//Bf/rIZ6Wtc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=lQqG+9+lXyxdF0BJr9B5WuVH8znJsTn2ZIgBggzWjMuvatBB4BPvmOuc7qnRRHCFT
-	 hdpW6oNcuV6w5hOZCYrM9XEMsnHsGx0v0r9xyiiMcm3dsIJ8JRF7sX8G6miCu+gK9J
-	 Ipion8IVvfd0MvojSM1RkliHU1oVnYBgePIfHu4K793ctnWysgwJS5kzZ1EdY9+9Y1
-	 P7bN0hYep1sR/Wwd2OTlxx0oy9TRaUEXoa0H4OhsOll7Qi/csQJHCkofhd7mp3/E1O
-	 ZPFw75hEHbcbqsRBF9tIpRWEFrQUWLMB+g8cOYqOGuD5qstKv66UbJ70xMkTbscli8
-	 8XhFbcHAgGCpQ==
+	s=201702; t=1737007675;
+	bh=TeaJjQclXiieRyqczNSx5oWONLO6v9jhRcEroFf1LCE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=R1cdnY09MYX+UpNlwA1o0i0vlqmNewhR3DWcO4Azbx6+/wmn6XCY39LihFn3DdbrF
+	 8CUWzITx/QSzMpM5GODpdJvTSDRmb+t8nzKywos7uYo8bB3juYmqyaMt6usRhNh79E
+	 i0LxTNAnigbIc3S+J9eov0zrKQLYD2nDPjNBPyNN0hzHHfHxOkLfu6qhqIJ5GShJ1U
+	 4cNO6P/p53eoUd4J3I8e+kv/isOmfitHFto0VC6cAKDUetkHg652TfX4fsI4WhSGR1
+	 vkdNW8+rJ9Mf1JSap/ktMtb9KYGEUjPE6GmIb5gQP+LjFboIRyoRYhe1cZhWZRAILe
+	 OuPzS2mcJFZnA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YYXQh0HXcz4xRj;
-	Thu, 16 Jan 2025 17:05:15 +1100 (AEDT)
-Date: Thu, 16 Jan 2025 17:05:22 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YYXTk527Wz4wy9;
+	Thu, 16 Jan 2025 17:07:54 +1100 (AEDT)
+Date: Thu, 16 Jan 2025 17:08:01 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Suren Baghdasaryan <surenb@google.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm-stable tree
-Message-ID: <20250116170522.23e884d5@canb.auug.org.au>
+To: Alex Deucher <alexdeucher@gmail.com>, Dave Airlie <airlied@redhat.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>,
+	Kun Liu <Kun.Liu2@amd.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	"DRI <dri-devel"@lists.freedesktop.org
+Subject: Re: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20250116170801.7ee67a21@canb.auug.org.au>
+In-Reply-To: <20250113155423.3be0e78a@canb.auug.org.au>
+References: <20250113155423.3be0e78a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/81y7Rw.N_JUbW8ssmRXunN2";
+Content-Type: multipart/signed; boundary="Sig_/whifXz+u.ftTh4z74Ip5QEX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/81y7Rw.N_JUbW8ssmRXunN2
+--Sig_/whifXz+u.ftTh4z74Ip5QEX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm-stable tree, today's linux-next build (htmldocs)
-produced this warning:
+On Mon, 13 Jan 2025 15:54:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the amdgpu tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> drivers/gpu/drm/amd/include/amd_shared.h:352: warning: Enum value 'DC_DIS=
+ABLE_HDMI_CEC' not described in enum 'DC_DEBUG_MASK'
+>=20
+> Introduced by commit
+>=20
+>   7594874227e1 ("drm/amd/display: add CEC notifier to amdgpu driver")
 
-include/linux/seqlock.h:341: warning: Function parameter or struct member '=
-start' not described in 'raw_seqcount_try_begin'
-
-Introduced by commit
-
-  dba4761a3e40 ("seqlock: add raw_seqcount_try_begin")
-
-I seem to have missed this when it was first introduced, sorry.
+I am still seeing this warning.  That commit is now in the drm tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/81y7Rw.N_JUbW8ssmRXunN2
+--Sig_/whifXz+u.ftTh4z74Ip5QEX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeIoaIACgkQAVBC80lX
-0GwtcAf3XR6CdeuTBQajgTdfUztQp5BRgqz9X3oE/6zmHKgfdh2XXo7BWUrL4NI4
-Sb3hAhHg2HudiWHmMNc0Nj30NkewPqjdCuQ1mwnRzypkVeMqkh3vz0hFB2aSxmyQ
-KGV4JsGpXI63E3q4QUA1TjZZoJyHxZamHs6Etaj1p2q4keC967jhtcqOAAqIbCkx
-CUG2DzfSRsHhaktrVH9twlJ8E/yQ78bKusBwOKNVPfcJ7J3pshLnAoB1RKgTg4Db
-GlZQBxv+nSh32K6jA721zInr8sqIBBFuKJCjIgIQG9F7GWxcFIio8Z6zLqD+3iqi
-5NLoEZ/SJJ5Ia66K4IB7CMqSGdj2
-=vyEo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeIokEACgkQAVBC80lX
+0GylsAf8DPauo+P9yu3APjl/MgDIH4dLnydm4usscwdfn/Afbi0/iFq/BFS/VlFH
+IPbhUJKWE/aeszMx2PkScrX3DooXLm6E4Rcp+s6djH3FVaofk85/xaMnqO1rF0uc
+lxMS56ZFrg5kNNNUo9fm41IMDvLuzOiHdJD5JZKjPYWKnW/7wdZS1YCzu5NXOQP/
+AHTpiNxhWr0F+K+k7XrAkNLExZuWA4Y/JL9IxhOCfRN1iLiJlB4H8MIWTw5+0qBk
+OhgoSg3J9X9ZN/s9eNuABsreZb+PThwHPJOtmhNhHVRlAKaOKUcdx6RN78dthQba
+SIhCVYO8aGUXpa2QLIW20NlBpa8SVQ==
+=uDT3
 -----END PGP SIGNATURE-----
 
---Sig_/81y7Rw.N_JUbW8ssmRXunN2--
+--Sig_/whifXz+u.ftTh4z74Ip5QEX--
 

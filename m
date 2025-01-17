@@ -1,119 +1,104 @@
-Return-Path: <linux-next+bounces-5239-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5240-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C81A6A1444F
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 23:00:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62543A1473A
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jan 2025 02:03:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DD7D3A189D
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2025 22:00:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5CFD188D3CD
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jan 2025 01:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9555D236EAE;
-	Thu, 16 Jan 2025 22:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4E3625A64F;
+	Fri, 17 Jan 2025 01:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dj02NGZy"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="r9uYyeo7"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9040823F296;
-	Thu, 16 Jan 2025 22:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D340D25A628;
+	Fri, 17 Jan 2025 01:03:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737064809; cv=none; b=rovsvecHNLjfeV5uAS70hPWGV9BKSCSkStGF+h9OZSAmFmrNm9rrl5EQLqHnZa4GO2wc4knN7ni53B3jut4t6MmFxnRlmVd5EjVFk6cY5CXtEAKRBDFTXO2+xPzp9B1XneyTUsvgoKbSGhytqYNnnu94q+EwtTC0rLkqYKYCGyM=
+	t=1737075792; cv=none; b=j2gJwQUlpVH2s0EbrZg7c4fzMtdZpVDX13zJcfEXD+IhwWSRpwnI7a0HKPyJmvgfShlM58qo4Jk/VQ9iPDA4nEys7GdOPGQMWL2NoZCi1roj2TMwOeDzkv0eh2UuiNBSqcexoWozv6rMd5Ys6fBEV24YkTM0/D4ynyzlUJJUEoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737064809; c=relaxed/simple;
-	bh=LMdhNGgpoMdpVPVnPBX3BM6SifdnKgk8kMXZqaRKmIQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=AGuuQBpK34wGXUfDGeruIpSW8JoKHU5kXimkIrGYl4mWtWqWVaadF84JTq/wJqQT0TrXG+io//ixGVWWnRYcadI5VtREAiLMngigHiDFKDD3nRGz+eIAk+rg0A5A9HHgl8Eg512logJGMl96C2cilyTWE4JplaQNgqAmQ8etJfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dj02NGZy; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1737075792; c=relaxed/simple;
+	bh=ne4C0S1UNPhuNl/pX42I2XBk+tUSJ3hETDwezKYdbAY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=b9PN7j8OdYGhfl7LlaEYmaRUnWsiSZyTYy1GqKaHGfYziMdQpIfo2H5/Q0UV9ohdCQ8p1dmy8kpxWhEMapR3/oAeD38D9NIt5J4GDERWsV0I6jsRkZEBHvIcShZemFG+UJcPzNW+Zs9216t4DIRT0J0C7Gzmo4yD292032We26c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=r9uYyeo7; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1737064792;
-	bh=UfCRp/85TOkSuLejrmRH713UUoJpeiCnqrPceLBvshk=;
+	s=201702; t=1737075768;
+	bh=I012bLDoCFT/wkfBFnTnsqNx60N8owb2a7/m1oAGE9Y=;
 	h=Date:From:To:Cc:Subject:From;
-	b=dj02NGZy5bUkJc+xe5iZF0iny96CBvHdOTPrmFYn8vQNPYMS1vfyE0fT54ND2GLeC
-	 UAXnrmuf+WouaaUiRPkw/Jgo5lh5ZF030BEHMlFz7ubDByTmJsi9YsvVtGtaqBWVlu
-	 VEDajCysptOPKhu1Ic+1ezc+uyYTj/Z6HPXnD7VA4Zn9/2yO5AkwWMC9lNrjIyhVJS
-	 ezTvnx6Fk3d7FROQQ2EHAXx4AGQgc2tXOeiJ0dCBOtCwQ8mVNei16V3P3KpFIvB03W
-	 xkpWywd3Lag0irrbIdTdcT+FSBB8X6yEwM139mEA80WCbB9JXi95ejr1e2OzWVxU8f
-	 RTpprCXdzTISQ==
+	b=r9uYyeo7sMb/ZX7GQI5HhiSseV/3BJwCaLFOuCv9L/UW7akOYLSKFCUqGAreqzjRy
+	 /xqnZ6b6EPtNtgR5HQsC8ZQG3JAFORjlONcgrUNq/eJ6CYs4Tjb+OGNYU4TJWWuw/a
+	 YdGJ5Pp9m6A1YC76fBbBnp/nwTviOSzayyeybBntRoB96cxxeIz4qEtPvr/0/1J9Ex
+	 dE6ezTqRnQyDMCUqQKRk01R1HirP2LcPNaKtNcQnoTBRaY4iBldZbj9SNbDUqILR1M
+	 y0BzPw2fKHzS/5fz45tfK+cU6WZI5EUPMRkk+7e+kx1KlCEp/a0CA5AJOdJltku+pT
+	 D3jwR55t8V3Hw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YYxc809g2z4xQZ;
-	Fri, 17 Jan 2025 08:59:51 +1100 (AEDT)
-Date: Fri, 17 Jan 2025 08:59:58 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YZ1gD1t0fz4w2M;
+	Fri, 17 Jan 2025 12:02:48 +1100 (AEDT)
+Date: Fri, 17 Jan 2025 12:02:54 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Steve French <smfrench@gmail.com>
-Cc: "Paulo Alcantara (Red Hat)" <pc@manguebit.com>, Steve French
- <stfrench@microsoft.com>, CIFS <linux-cifs@vger.kernel.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the cifs tree
-Message-ID: <20250117085958.0b91a98b@canb.auug.org.au>
+To: Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the jc_docs tree
+Message-ID: <20250117120254.4dd5c696@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4to0jkOCE5bLkDtu2S/zZ5U";
+Content-Type: multipart/signed; boundary="Sig_/1Bvd2sOpT99zpnzYgTwZA/m";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/4to0jkOCE5bLkDtu2S/zZ5U
+--Sig_/1Bvd2sOpT99zpnzYgTwZA/m
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the cifs tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+The following commit is also in the mm tree as a different commit (but
+the same patch):
 
-In file included from fs/smb/client/dns_resolve.h:15,
-                 from fs/smb/client/dns_resolve.c:18:
-fs/smb/client/cifsproto.h:32:28: warning: 'struct TCP_Server_Info' declared=
- inside parameter list will not be visible outside of this definition or de=
-claration
-   32 | extern int smb_send(struct TCP_Server_Info *, struct smb_hdr *,
-      |                            ^~~~~~~~~~~~~~~
-fs/smb/client/cifsproto.h:79:45: warning: 'struct cifs_tcon' declared insid=
-e parameter list will not be visible outside of this definition or declarat=
-ion
-   79 |                                      struct cifs_tcon *tcon,
-      |                                             ^~~~~~~~~
-(and many more like this)
+  b6cdff984c3f ("docs/mm: Physical memory: Remove zone_t")
 
-Caused by commit
+This is commit
 
-  42b78fe1919b ("smb: client: provide dns_resolve_{unc,name} helpers")
+  d8e91542e036 ("docs/mm: physical memory: Remove zone_t")
 
-Looks like a missing include.
-
-I have used the cifs tree from next-20250116 for today.
+in the mm-unstable branch of the mm tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/4to0jkOCE5bLkDtu2S/zZ5U
+--Sig_/1Bvd2sOpT99zpnzYgTwZA/m
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeJgV4ACgkQAVBC80lX
-0GzuZAf9G6pZifWMr6+CXs+gwvQDoSJU99fCwRUK2yqDvrH+i0GLlTk4cBpz+qoF
-LqWHoQ1qtLaI5xIxmiuUBBZR1veYuHVjPufT7XLoJNQWb6vkKdKiGzt3WmTm/2If
-3j8rd61FHJQnXne7wxH0s10Kzm3by7lNkualjlnhGimpmRJd1fzrKEFW5FlL6fG6
-7WNwoS0GWw1h3eGPvP2dyjXCY/LeD5kRsv9ijnwoSrieJKaDvl9XbPgCilW/vFrl
-S1ds2eNO67oda06GITbQaA/7NvNRwoYa4LKWkcsqv+ehAfMWm2bsNP0plOZJEdi3
-EF8E8mZIdfNBe0H/DjxYDn0FF7P4XQ==
-=g7iW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeJrD4ACgkQAVBC80lX
+0GyuPggAjDxjP2eNLzaMUK/ReMqfiVw5JtEZROz4QVUoIEmF+C+1p4Y43ZDwr0/z
+vZWgPZLht6EcuGgRfTdtFKly91bB6o31ZPTi5zkZVpiXLrKtOiGvyPDDTHZdMPM9
+u/SBjqBtXyLTEmYT1YlKglYPuwf0k2pjjybBKGBoQW0Op4CRUitSoaXvPJnklFWp
++5lbF4DoRsgx/2dM/XOJM7dx60gBDn5jjt07ibwa0f+o2N4po7gCvpEiNUk5d9fz
+C1Y3ezPey33Wgm6lH4IfjM2+4FwddtUPq9Yx6+qbmwmnFfp+ctDDEgGBmivrjZdA
+xyFxxqDk4lIWXlASD/JTWA7f1I46RA==
+=tnPd
 -----END PGP SIGNATURE-----
 
---Sig_/4to0jkOCE5bLkDtu2S/zZ5U--
+--Sig_/1Bvd2sOpT99zpnzYgTwZA/m--
 

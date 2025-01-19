@@ -1,96 +1,103 @@
-Return-Path: <linux-next+bounces-5247-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5248-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09702A14B13
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jan 2025 09:25:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E98CAA163F5
+	for <lists+linux-next@lfdr.de>; Sun, 19 Jan 2025 22:02:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 551E0188B931
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jan 2025 08:25:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D484164537
+	for <lists+linux-next@lfdr.de>; Sun, 19 Jan 2025 21:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57F31F869C;
-	Fri, 17 Jan 2025 08:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE191DF73E;
+	Sun, 19 Jan 2025 21:02:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UjxH24AR"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="X2vYvcq9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475751F6687;
-	Fri, 17 Jan 2025 08:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71D91885A1;
+	Sun, 19 Jan 2025 21:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737102330; cv=none; b=Yagc8KqCKVvcihkLUsTgV2JqFP+D88ybMSXNcuDynhD1stNF4XW0uUHKyvPFraILbo5FbsABrE8eBTeNiIYIJ40M/M3okI5rc5XWCyD/BLv4SzfqFUYloTjhKiLGE5sGjWOe7Ns1cR8zks0jJqJJ0UI5bGWsKcn4aN2QZ7bv5Sw=
+	t=1737320565; cv=none; b=oyj45a9zCfjuvKe+oMGZk9AFFtikPF8Xym5x6aNBL0KcR9u0JRi7hrb9h1m/HNoXdAx6fuBcckIBvDSW4GSNmxLfuHeVRKu6DemIWZYw1D1jnomPoWF0HycQYclePjGmGdB7WwA9hrh43+x2xgXmKUb3ynGfBR9RvYq86+PSUcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737102330; c=relaxed/simple;
-	bh=Ss2uUJKAclyiWbfO9/bASXHOWgux5lmJrwb5jBKUmgI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=hw4XUDhBZsgfVEKwwkxVJFgmouTvsUNIrZgRSLi52qYKXJ4IP8t+pnMZ707aUBSPlYbajehKbjhvPi0kXX2QinAa6K5tGLjFe5desPWrWMFVhKwOmk1ukBVY+Hqqk6/pX4s4YVDZuUSDDS3ETsGyyA3HQ7OfwjQs0042dfuXaY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UjxH24AR; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 415C2FF80E;
-	Fri, 17 Jan 2025 08:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1737102326;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fvzBTwah9gYqXO/3vWomtMkdz6rezT2SNUuG2dzOzAY=;
-	b=UjxH24ARGTAmt6V/vMOB70dvpIRK0nh5YSf+9FGl+WuQdjLafJIE+BlaC/b68Of1TaCdor
-	6So31gJcr0VlFvB99+YneYveJRn7VjXSYP09TcaqlzNRSgV3LQ66iimPMOul+rR2sQjkHr
-	2k+61jlbraOSI2H/WeR7LQSVtYQEl9V8gW9jTd5c8mA+6InCulDJbIe3drE8RzWM1fIoHD
-	l4/ceGOtb7Pr12KUAmBVg+GJ0WZk+LU+SrUTDJOzPqsxFa0b7ZY3uJPYjkNTAYtL/VNF7L
-	0xbVyPMcwYrYRkvjP99Dt1eqOuo83DE2Vgqa2BBRM9MtyUZSZ6qIci+mVPETYQ==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Boris Brezillon <boris.brezillon@collabora.com>,  Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>,  Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the nand tree
-In-Reply-To: <20250117132326.71696151@canb.auug.org.au> (Stephen Rothwell's
-	message of "Fri, 17 Jan 2025 13:23:26 +1100")
-References: <20250116132010.4948547d@canb.auug.org.au>
-	<20250117132326.71696151@canb.auug.org.au>
-User-Agent: mu4e 1.12.7; emacs 29.4
-Date: Fri, 17 Jan 2025 09:25:25 +0100
-Message-ID: <877c6tkft6.fsf@bootlin.com>
+	s=arc-20240116; t=1737320565; c=relaxed/simple;
+	bh=BuJKD9hdZ1YMfgcNMkFcuHylRvdp2ci/AsYh82fAJvw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IthXWqZ1BYvyo+I0jd2900TsxRTvkcZOXIkFkK5xU6dMeL5vX/SpFq+0/hgZyemSf3FoUdbod5RR+lULGOejUAqJVHF6izhsb81QNaGIYAvMIJ3kNgJmdr+7Yk/17QMhsUXtWYMnxDDq1rqL0hqeo+/HTNJuDtdCfZ+ly/Fm6Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=X2vYvcq9; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1737320545;
+	bh=A7WI8ztHvjdmtlYC+DmwAZxZXm4ZpNvBV338o7cB6F4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=X2vYvcq9BrIDYpx9h6pMcmwNH+nHE9ZEfi9xzeJv3aqy4RziwhvGMp7CMZulrOsqn
+	 8fk2kgph03iBhLR/Gc1QklPzcnekI+8AlsgZYmuVBueEhXd8LrTmtjYEN0W3Qr+TG/
+	 cDiSSpZ2xcJx2FtQFRp4tbtgsBXLt0RRPRVfaluAzDCbXkoWGNH4tXcwx0rXl/OTMg
+	 qIPlwQfqcK/uDXrWvM8pVXTvh+woL9lQEwLm+iJn8f2T262XZCK6KCRwhyj9ZCx3rc
+	 ygJlt6LzIyoLimQP2pMtGvxW9H75p4AKrGjPtW+Lno5DGcJVSn2rKIpOKlU7Cml0qV
+	 mhbDfRYi8pQCw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YbmBT0ZL8z4x5J;
+	Mon, 20 Jan 2025 08:02:25 +1100 (AEDT)
+Date: Mon, 20 Jan 2025 08:02:12 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Anna Schumaker <anna@kernel.org>, Trond Myklebust <trondmy@gmail.com>
+Cc: NeilBrown <neilb@suse.de>, NFS Mailing List <linux-nfs@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: warning fetching the nfs-anna tree
+Message-ID: <20250120080212.26c96b53@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; boundary="Sig_/J=y/JaxlEElProi8Nms5fRv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/J=y/JaxlEElProi8Nms5fRv
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
 
-Hello Stephen,
+Hi all,
 
-On 17/01/2025 at 13:23:26 +11, Stephen Rothwell <sfr@canb.auug.org.au> wrot=
-e:
+Fetching the nfs-anna tree, today produced this warning:
 
-> Hi all,
->
-> On Thu, 16 Jan 2025 13:20:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
->>
->> Caused by commit
->>=20
->>   042087247835 ("mtd: spinand: Create distinct fast and slow read from c=
-ache variants")
->>=20
->> I have used the nand tree from next-20250115 for today.
->
-> I applied the suggested patch for today (instead of using the older
-> nand tree).
->
-> Tested-by: Stephen Rothwell <sfr@canb.auug.org.au> # build tested
+Commit
 
-Thanks a lot, your feedback is very valuable.
+  d9f3e89b21a7 ("nfs: combine NFS_LAYOUT_RETURN and NFS_LAYOUT_RETURN_LOCK")
 
-Miqu=C3=A8l
+added this unexpected file:
+
+  fs/nfs/pnfs.c.orig
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/J=y/JaxlEElProi8Nms5fRv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeNaFQACgkQAVBC80lX
+0GzQXgf/Ugpe3CQrVIF+s68Ob1s4JP1gF9libzEZJ+9F72rBjRKMPCTYU7Xv73/Y
+QrfgYntXos9Z3YqsxsEttIT47p0qTzF1/zqg0olBzWuCARxxf2WMkHQhnHhLZmMO
+uJg5ZnXjWhoAvgN397JjrnZHXjMIrbWF8jTYzLLHiZ+q/W4jMIeNrt5pfWTfxHIu
+iQF1Nu+SKcb71wwaOFjCQzDHhhZsiapE7lGjsQbzVtuw4zog/kbtfq0g6OX2tBk3
+zjLxvXaIrUeE2nwmwfAIECwoOLNmCNBUmfh6ulapXU510Vo5Ktn9fNALoSPE/+8h
+S2S+gX7Ax9xDwyDJOnT4y0ncH8b+VQ==
+=mNMu
+-----END PGP SIGNATURE-----
+
+--Sig_/J=y/JaxlEElProi8Nms5fRv--
 

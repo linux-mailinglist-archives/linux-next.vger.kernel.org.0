@@ -1,107 +1,119 @@
-Return-Path: <linux-next+bounces-5266-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5267-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82A4EA173D7
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2025 21:55:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABCA2A1743F
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2025 22:39:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADF0B165C0F
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2025 20:55:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63FA81887A83
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2025 21:39:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A7541EF0A9;
-	Mon, 20 Jan 2025 20:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBD701EF0A6;
+	Mon, 20 Jan 2025 21:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DOkspP/h"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="YAo7g52w"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E72188A0E;
-	Mon, 20 Jan 2025 20:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94532199EB7;
+	Mon, 20 Jan 2025 21:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737406526; cv=none; b=ICW/FFPzUA5c9JShqxTTuilKF3I7Xk7i5JE6qShF6CDwnm6dbOWQYAepsmhOJgzH4eNm51Uicj4lVak3PIuPsqv14Gpdd/xm/pa5MSm8SqLqvP23FDJGbE/lG7Nv45rq8pkLILkFWb4wv15Orf2zgH30uusc+DDEg2mFZg/X28s=
+	t=1737409165; cv=none; b=H0CbZb1ifReJeDFlSVtrIVH+pewTRlmvIbbrY6zilkPrnd4pv7Sr1JgzG+uU5z7zNct/CExzFdIBj/q9wNlNOqP9uIYlaDQ7PW4QPvtE/fICIBjmvBK4WojAROP+tR7rn4Nq+W34jGaZGkNM+KFOSgEtiXgl5+GStolp3WuH9/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737406526; c=relaxed/simple;
-	bh=0lqeWCC1fUdouQiSzksJsSUgb5yHrCYy0sbpjQZheaw=;
+	s=arc-20240116; t=1737409165; c=relaxed/simple;
+	bh=cNb6aFMGNrpYezzi8JBRmLXYMz34qhGao1VidjjanYs=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Wusl+v6K3S5eT+6J8dIpUV3wbNcnn0khp+uKEu+YkAY8AtgwONX7nZdZ6oGN93gFRo/gJe/NeJ/Gy80JsfhUkB9M5ImlthaI5koLktS180asnY/CYPKTeBOg2bZFSUXgom3quVOjUUv2Fi8iaSCF8e/AuMgXAZvz6iLwpqnUI+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DOkspP/h; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=CMDkzl5T6j6UMyl9BL5kQ0a/aF1kXcEMPJs9b395n7q22tk0UIhJc7ONYlKajSexMvzsFqu2oDKz8wVjKZYScb6pXxi72t54/gjVjUQ1crnUYvRELu1OKOWhBg99LC0vruBffkN27mqpdCAQ7N+Tq5y5KvsRLdHkneFFww0VUQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=YAo7g52w; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1737406511;
-	bh=0lqeWCC1fUdouQiSzksJsSUgb5yHrCYy0sbpjQZheaw=;
+	s=201702; t=1737409146;
+	bh=OUBtNPcKHpjUM5JPaGUtzFxwmTGCNoN/sfF63P5D9es=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=DOkspP/hS+zZ3IQqJ6tKBNOu3JDsAOPUcqOTcXz3czqEhpnvN709lpkwrQVLDDs8F
-	 7mvCmW2sB67EbcgW8Uk9djkX57Iqyy4aOxktl1f0KPvLPvUd5dsqI4QpyGwTqd0+1g
-	 SE6By1oPGWAxSEF8s9pWlTKsgaTCh+zLyZjXd5XWHaeTDaMbcu0rLhK4Jap+PrYJAQ
-	 LCRYfBt7nERQ5NJZDvhjT36+gZH3QXJuIA7MVlubvrmOmFEwUUzKKL4OtKu6tlGwp2
-	 2QWBrIT6yCs6lotlVuEUNFaTjeQ5mZsFelWW1X3GC+8LwE/xiHgCPPsavFGfTkibvl
-	 McMEzKQkGiiBg==
+	b=YAo7g52wTXct2x3ySfyRU7VTL43Z4VXnYZCeCoeMThguukxLcH6JLSA35tLgmf+LF
+	 0a2De282pitbFzCUuz660JLa2EbtNJ4+vy/AIgOvijynGnWHh65PD+JVNEA+MiNWiv
+	 E3U5nxLDoUJh75iJGdWyxGRKpfN+8LrTF4QzLt5miCjl4sOcjd1kpBh03X9lhc8ZR4
+	 eTCJ8/85lNH+deQEUtvynSQOSsLlFrgu1zYyuGXvMadncur6jvtsV1lPBc5yZ4tpQF
+	 iK+bw4o4sKU1YEcQy2sIiYlSz74jz5ohSSgUX4J/ThjnUkoVf+aC60SIsgKjqpguhC
+	 nj/h04gyl2U1w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YcMzg5Fn2z4x89;
-	Tue, 21 Jan 2025 07:55:10 +1100 (AEDT)
-Date: Tue, 21 Jan 2025 07:55:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YcNyL20nJz4wxx;
+	Tue, 21 Jan 2025 08:39:06 +1100 (AEDT)
+Date: Tue, 21 Jan 2025 08:39:13 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the vfs-brauner tree
-Message-ID: <20250121075517.76bc2c97@canb.auug.org.au>
-In-Reply-To: <20250120-juror-halme-dc19277bc465@brauner>
-References: <20241213152724.589b38d8@canb.auug.org.au>
-	<20241219173235.6600d08a@canb.auug.org.au>
-	<20250114164812.2bfb505a@canb.auug.org.au>
-	<20250120192504.4a1965a0@canb.auug.org.au>
-	<20250120-juror-halme-dc19277bc465@brauner>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Christian Brauner <brauner@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the vfs-brauner tree
+Message-ID: <20250121083913.62c34db7@canb.auug.org.au>
+In-Reply-To: <20250109111812.39f35f9c@canb.auug.org.au>
+References: <20250109111812.39f35f9c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RgT.cS1tpiQyidEjI0IkmZd";
+Content-Type: multipart/signed; boundary="Sig_/6HcRKzhtHvH4iqqTvFzdOzH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/RgT.cS1tpiQyidEjI0IkmZd
+--Sig_/6HcRKzhtHvH4iqqTvFzdOzH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Christian,
+Hi all,
 
-On Mon, 20 Jan 2025 13:15:07 +0100 Christian Brauner <brauner@kernel.org> w=
+On Thu, 9 Jan 2025 11:18:12 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
 rote:
 >
-> Thanks for the reminder.
-> This is now fixed.
+> The following commit is also in the mm tree as a different commit (but
+> the same patch):
+>=20
+>   af6505e5745b ("fs: add RWF_DONTCACHE iocb and FOP_DONTCACHE file_operat=
+ions flag")
 
-Thanks.
+This is now in Linus' tree.
+
+> This is commit
+>=20
+>   aa1afdf5cfa9 ("fs: add RWF_DONTCACHE iocb and FOP_DONTCACHE file_operat=
+ions flag")
+
+This is now commit
+
+  096a474e8872 ("fs: add RWF_DONTCACHE iocb and FOP_DONTCACHE file_operatio=
+ns flag")
+
+in the mm-stable tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/RgT.cS1tpiQyidEjI0IkmZd
+--Sig_/6HcRKzhtHvH4iqqTvFzdOzH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeOuDUACgkQAVBC80lX
-0GzWyQgAjGOm/G+bjCRdR9btacuH6HzPgvMlT73wsRcTvMjm8K2C7psHfKytR6A8
-L3bQfgebyroRDzIXrAydn9liSKeztoaSP4Aj1eiTjWp6VokhDMH8Amn7qKnAR1W/
-sTC6UwJWSABfwW0vzs1kxywdvAo9/A0RAt+8KUQuhqyHs7jGfaqcAY7F4TRXJjA/
-Xpu945lakiAsMuhTPtCMxfJw2zY2wqRHDDn1A+B7xEUxkrgvZBrmGcuFl5MhAhlb
-QzVz4XfMq3SXIlRUrm2PVCHwG4konyazDXU+eqdEXml+QNip9XYgXlA/z4vJ+vL3
-GUAYeaEW6uaQ5qs62orn/adWxDogFA==
-=BrW2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeOwoEACgkQAVBC80lX
+0GweqwgAgL7dPXqGEd4kMeoayCUOxyNnRxaF747ExmJxTEj/1cxfhS3CtDIjXIm3
+EsD+7j94jRkTVc9bXvJmElzbiu3LRN3xljEF0RL7FEMS4DRBGqz/UM1F4eFZVoYn
+TTf9mH9f/60jF0fR/g9FVqkxjFkYISdDyziAzZHqKxwsNUkMEjElUa2Vclekc3VU
+wjDQ92vAB3m4tY5M1b2oJV49PjdvwlPeeeMfwm9q0vzEtKBKD3ScKNohSS5N/tSQ
+O2peLlBQbfBQSmmrDRLn+PWGnlIAhE6VniciC69+7L15e0HhW0iNtmQ02+ElRRXy
+rNJgvrdrBeP8TWKnIQ1dP0naJyXLNQ==
+=d5Zp
 -----END PGP SIGNATURE-----
 
---Sig_/RgT.cS1tpiQyidEjI0IkmZd--
+--Sig_/6HcRKzhtHvH4iqqTvFzdOzH--
 

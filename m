@@ -1,146 +1,146 @@
-Return-Path: <linux-next+bounces-5255-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5256-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03137A165E9
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2025 04:57:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B568A16738
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2025 08:18:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B1957A054B
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2025 03:56:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 745A6169D79
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2025 07:18:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB5C137C35;
-	Mon, 20 Jan 2025 03:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DA1C1865F0;
+	Mon, 20 Jan 2025 07:18:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hYQrtiru"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UQMK7pXC"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AE11474A7;
-	Mon, 20 Jan 2025 03:56:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CEE4A1E;
+	Mon, 20 Jan 2025 07:18:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737345421; cv=none; b=IwvvjWZXZDax9T04z1qy09gPzGLVzSfIaDIdpCUPSdK6Pqd9p+qzq/+UwO5ZN1ZiJErNxfWnMz7I/sTXfFNGb4VHEWowM+6TlkF3MtHJJBLuFdHmfDAkjNRk0emGB2x1VlBRoVD9A8hLCYaNR9/w6TRzP3zdMZsGjJWR43jfinA=
+	t=1737357492; cv=none; b=ffkTEjEUVjpR3F7h58G5PNWY+en8EaIYFCod6UNOyWW9gMAeSUwhG5gUD2GodWIGjK15SMz7vRMZTpIkVqQqkwiYl4pE6clfKpC6op46WokOjhfj63hHaRU0IHWZyXEfKAeZo25IHIECbORvFqw3jKDRnvtUYBEcrg7G5gh/2lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737345421; c=relaxed/simple;
-	bh=+m5M1mRCLF5Orifng9DxrX9YXw6XpbC5d7iI99KkNWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EgZUYc2BWc0+yg0hyiu/MkSacF+N21A9vjbP4eRwPoi8o5IZ3ceGucrWLJT2M3TS8fXOUJ+hGKa0zP+6ykie/DHl8mRoNFL4wblflVPJ585XTcvXmS3rQveOGpHqVWD2u8pCnjfx8svL13pOny68LVH0m8yXHqApnqhW33hDAbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=hYQrtiru; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1737357492; c=relaxed/simple;
+	bh=+jwgQLA5rMJmUP7TqPE+KbWlFX4XD0pkXUNFG32NLqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Nut+AB1zOZE3ERakURuZM+X9KGwbHjFnpwjSxl0iV5ZHe9V0R2lTwvYZRi65RliEoDQe7Byg986M7AxLJfzKpwnqyRSDn6RbaAGmAG96lB9Wd3cAZl4SeB+8e/o7aj3PrqUc8WcsKSg1vSg7apXVxRZGQivwPJ0xKsgQ+L4bHko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UQMK7pXC; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1737345404;
-	bh=FY1Yp4sc6uitio/NB14Z2F8LEDo5PmW57efSRvmeiBs=;
+	s=201702; t=1737357478;
+	bh=aVoU2iw8kWAXkfx/ny83IiQerMDqv70DDyIHosQObKk=;
 	h=Date:From:To:Cc:Subject:From;
-	b=hYQrtiruZGjuJ+H684NqREUKl6MyeD8m/byaZvxrRjZAGEdyrHnKFQzJs3Fe0EIKM
-	 vv2nVhPmrDgngFS+SKZvejyl0r7fcycG5Nyc8SLQ7PkbpI04iPlQMs2NJwKIhBXkv2
-	 eNMNKG2/IneAdIt/eY3mDt/av9lUGwYAn4qFQ1UmKhR0DW0oGO7+/Rtur1F46fPi19
-	 319iwqIJ3T4hhggVHdYdtNzozMCt4bGvgJJGCLfddCLX6YA5DPBIrhO7MNpRgk/I3N
-	 kUvpbeIAcwB2iVofcCw1D5vZj7dCzh1UrISPoZKHN5TfGl5rTTWs9Qid5H1SwfoZpF
-	 OuRaX98sslV5Q==
+	b=UQMK7pXC+mrRJmQGp0d552udkSRpRKXa5TKdIqW3T/ce21OcCuTRasXSWlmLb54BZ
+	 m949givEoQ81774zblpKlx7klGnRYhhr86CfDgNnAR9KTG8GlCwpBzn0U9BAJYFliD
+	 urpZF59P6BGILL9JUJAx4GrvyvIUjZPEtMWcV93rJkVORoA1MC2yaIsPKUEgOdn2ba
+	 1O+6ZBU0xz2tpCirLN0V/dfNZZiBcbzSN28+MCx6Ezz/8wB3DGLW1XSx5tPtN9SydP
+	 Im4T46XxaMX4Aw58ikmx/+2JZ/phVdJ4DpVopKZv3h39EqDntZ3CyOKaZGss/8Tp+K
+	 GvnfHf9kEq1Pw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YbxNX5pndz4wby;
-	Mon, 20 Jan 2025 14:56:44 +1100 (AEDT)
-Date: Mon, 20 Jan 2025 14:56:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Yc1rj61Rwz4x6D;
+	Mon, 20 Jan 2025 18:17:57 +1100 (AEDT)
+Date: Mon, 20 Jan 2025 18:17:44 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: "Geoffrey D. Bennett" <g@b4.vu>, Linux Kernel Mailing List
+To: Takashi Iwai <tiwai@suse.de>, Eric Biggers <ebiggers@kernel.org>
+Cc: Baojun Xu <baojun.xu@ti.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the sound tree
-Message-ID: <20250120145617.07945574@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the crc and sound trees
+Message-ID: <20250120181744.6433557e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/unWDXzrqt7HEEsvKkmJzewQ";
+Content-Type: multipart/signed; boundary="Sig_/VrdD9JbP390UCfUpiYqjthL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/unWDXzrqt7HEEsvKkmJzewQ
+--Sig_/VrdD9JbP390UCfUpiYqjthL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the sound tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+After merging the crc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-sound/usb/fcp.c: In function 'fcp_hwdep_init':
-sound/usb/fcp.c:889:22: error: assignment to 'long int (*)(struct snd_hwdep=
- *, char *, long int,  loff_t *)' {aka 'long int (*)(struct snd_hwdep *, ch=
-ar *, long int,  long long int *)'} from incompatible pointer type 'ssize_t=
- (*)(struct snd_hwdep *, char *, long int,  loff_t *)' {aka 'int (*)(struct=
- snd_hwdep *, char *, long int,  long long int *)'} [-Wincompatible-pointer=
--types]
-  889 |         hw->ops.read =3D fcp_hwdep_read;
-      |                      ^
+In file included from lib/gen_crc32table.c:5:
+lib/crc32defs.h:13:10: warning: "CRC_LE_BITS" redefined
+   13 | # define CRC_LE_BITS 8
+      |          ^~~~~~~~~~~
+lib/crc32defs.h:5:10: note: this is the location of the previous definition
+    5 | # define CRC_LE_BITS 64
+      |          ^~~~~~~~~~~
+lib/crc32defs.h:14:10: warning: "CRC_BE_BITS" redefined
+   14 | # define CRC_BE_BITS 8
+      |          ^~~~~~~~~~~
+lib/crc32defs.h:6:10: note: this is the location of the previous definition
+    6 | # define CRC_BE_BITS 64
+      |          ^~~~~~~~~~~
+In file included from lib/crc32.c:34:
+lib/crc32defs.h:13:10: error: "CRC_LE_BITS" redefined [-Werror]
+   13 | # define CRC_LE_BITS 8
+      |          ^~~~~~~~~~~
+lib/crc32defs.h:5:10: note: this is the location of the previous definition
+    5 | # define CRC_LE_BITS 64
+      |          ^~~~~~~~~~~
+lib/crc32defs.h:14:10: error: "CRC_BE_BITS" redefined [-Werror]
+   14 | # define CRC_BE_BITS 8
+      |          ^~~~~~~~~~~
+lib/crc32defs.h:6:10: note: this is the location of the previous definition
+    6 | # define CRC_BE_BITS 64
+      |          ^~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-Caused by commit
+Probably caused by commit
 
-  46757a3e7d50 ("ALSA: FCP: Add Focusrite Control Protocol driver")
+  bb5f86ea50ff ("ALSA: hda/tas2781: Add tas2781 hda SPI driver")
 
-I have applied the following patch for today.
+from the sound tree - it selects CRC32_SARWATE.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 20 Jan 2025 14:49:12 +1100
-Subject: [PATCH] fixup for "ALSA: FCP: Add Focusrite Control Protocol drive=
-r"
+$ grep CONFIG_CRC32_ .config
+CONFIG_CRC32_IMPL_ARCH_PLUS_SLICEBY8=3Dy
+# CONFIG_CRC32_IMPL_ARCH_PLUS_SLICEBY1 is not set
+# CONFIG_CRC32_IMPL_SLICEBY8 is not set
+# CONFIG_CRC32_IMPL_SLICEBY4 is not set
+# CONFIG_CRC32_IMPL_SLICEBY1 is not set
+# CONFIG_CRC32_IMPL_BIT is not set
+CONFIG_CRC32_ARCH=3Dy
+CONFIG_CRC32_SLICEBY8=3Dy
+CONFIG_CRC32_SARWATE=3Dy
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- sound/usb/fcp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+It looks like lib/crc32defs.h does not expect these last 2 to be enabled
+at the same time.
 
-diff --git a/sound/usb/fcp.c b/sound/usb/fcp.c
-index eb6a5c1f9b21..8e9ed9c4de08 100644
---- a/sound/usb/fcp.c
-+++ b/sound/usb/fcp.c
-@@ -815,13 +815,13 @@ static int fcp_hwdep_ioctl(struct snd_hwdep *hw, stru=
-ct file *file,
- 	/* not reached */
- }
-=20
--static ssize_t fcp_hwdep_read(struct snd_hwdep *hw, char __user *buf,
-+static long fcp_hwdep_read(struct snd_hwdep *hw, char __user *buf,
- 			      long count, loff_t *offset)
- {
- 	struct usb_mixer_interface *mixer =3D hw->private_data;
- 	struct fcp_data *private =3D mixer->private_data;
- 	unsigned long flags;
--	ssize_t ret =3D 0;
-+	long ret =3D 0;
- 	u32 event;
-=20
- 	if (count < sizeof(event))
---=20
-2.45.2
+I have reverted the above sound tree commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/unWDXzrqt7HEEsvKkmJzewQ
+--Sig_/VrdD9JbP390UCfUpiYqjthL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeNyWEACgkQAVBC80lX
-0GxdYgf/VoSKx+V2IGFvOxSJbdI1VIrlYakRcy19N1wX55s1UV6AbGzadELEzlbh
-OrQZ2AtxVlg0Xf3EfNGg2eIT600uKVTbQbf/YmyEGLWsfhRBuFAiKil3cWPyh861
-WZh/LfDXUBgEX/XLkxoGwEUir6r7dgwbZXyqamYOqbKDInSEiDa+UPR6rbyCtQrm
-nAb9bSiNlBaepuFQBMcoayTQi9cxJhD/ocs7K0fR9qBMQ47obuDeEQJgj7dJYKtb
-T5boYjCs3/c9Tsn/Tk2+j74XCb9JsgObi/unurNotJBwHUVEO0Rn0h/bigZtqsJI
-xbBSEj/Rz/qlTLX/+K1/bMWfGKe4bQ==
-=q5uS
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeN+JkACgkQAVBC80lX
+0Gxmzwf8DN8GqgYWJ8rLb71gCGShB4BTcUhaB38DEAz/R7tRqA5lpDpA15odX6vg
+0HQh1SkXBU9CfLiUYpycq08NrZlVET+xVtxJGnYiYKDaeY97oAxDkrQksLq5Vd5d
+7SdeH8iN/iEuj6Q2uz1R1x2ApeAr7f55gBVRDq6++0fSpOyaoKeekafBnOzSRfu0
+OBeFDQHZvMvTQPIBOhZx/XYxHMFj57R5kHshhqVuhRKnMmRijv0JPyw9Aw3Dgg0U
+bZcjVDrTMjzoiqY4mQ4X0Ir1w0X41Gqvk8zXIoG85Cc7OS07fH3Wx6bQDGRI+f69
+PoT68r8E1rvH5T3xwG4NMbDC9hmZPQ==
+=w8G1
 -----END PGP SIGNATURE-----
 
---Sig_/unWDXzrqt7HEEsvKkmJzewQ--
+--Sig_/VrdD9JbP390UCfUpiYqjthL--
 

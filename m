@@ -1,144 +1,105 @@
-Return-Path: <linux-next+bounces-5297-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5298-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 490E3A19454
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2025 15:47:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE3E5A19A94
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2025 22:57:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27E3A3A7A43
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2025 14:47:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C90F93A925F
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2025 21:57:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38F45170A15;
-	Wed, 22 Jan 2025 14:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D50CD1C5D7A;
+	Wed, 22 Jan 2025 21:57:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/edoKe0"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HQ7sREUR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF0D77111;
-	Wed, 22 Jan 2025 14:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62D01C5D74;
+	Wed, 22 Jan 2025 21:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737557227; cv=none; b=AhuHC+3pqjBRS0GtLj4lvCZnwM0HXAjHvcfJcDpKICET9K4ul7frOHZtsC4DqmfIxYjo7ZqPp5xexj46X+VZzeQgEYIJm/UJTiUipHB4y3ufJJpOmN5tByZK5QAFMP7n3NI4+cqnaTB4mRAlMgfXHyaFLhvqQ1w6MaUUVwKFvCY=
+	t=1737583030; cv=none; b=Qj+KxooxJlB1RfGWagdZvrz/N0Y5EGVzq8cJQFuBVamFx0lBfJ/KFSbInksFS1v0SkZkXnJleI3ugLA1TpMcPPxsl2XyTudgzW7THwMv4e2guDHcqN06umOnAz/clpeoYHS/7YtVQz3zR6oe649/Azxy3HyN3vLu6s0yJJVM8RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737557227; c=relaxed/simple;
-	bh=mWH1l8xN+kPhWeuesiiwO1oNDL8Ob46Y8DUXP0xLRT4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jGDtmlSroO8qGPpPgpHuSZJgBauJk3eSCVc3BxgxMqNX5+ofaw9dYA1oQaWUQpUg49YMhjmQFR6YQiOEvtkF/4mtulc3XC5ey418w8HAVJQiyq7Tchgn7qowmZ1GDpzIgnAK/7uM60v7ON5IugtdAA388p/MbiD8ZoDlO1yQYxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T/edoKe0; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2efd81c7ca4so9503602a91.2;
-        Wed, 22 Jan 2025 06:47:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737557225; x=1738162025; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DTwmwXE6hvLZlylHXv7J9Xg/8DidTCd/7TCvUczShtk=;
-        b=T/edoKe0+pHs18s9+4lPPbY6xWWIT0GTls0wBAkDNMJEFrPO4Wk7RUtFh0WGz7gc5w
-         3n4BxAMz6YVB+xgjoLnVVKPqnnilf0Ma3E+31nq1KbhbHPuOGKfrbn0vzEEWSNPsRbs1
-         Nnd0gSCoAqcTbGfm8csLv+hWwzUE1/MU4iHbASLtOZMEqIF1S1GP7C0qmLShGnI0erUO
-         b0Q6rWU0YXZq+BU8NPZ1lrG5Zyn09jrqV1ntCc7GdRc7YGGv3hEIgBOQx16CCT4nkSeB
-         NP/JYCdiN3C7A1wZ4XO9oT/NkizWjADY8IzRwo31VtvBHmBE4Ye3xeOXI/tTygUroDuO
-         gH+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737557225; x=1738162025;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DTwmwXE6hvLZlylHXv7J9Xg/8DidTCd/7TCvUczShtk=;
-        b=XrruubLZxfuF/HkzZGOe5i7awU8kZQT80snpl1+pL6g7ciL1r53nqezknFXq871J4s
-         9r7hwIFcvCbaoWuFFHc/wT/5R22rhi0kFEjlQcyoNdiMeT5aOlPcqTPWtT++mBblenob
-         MIhoRI/zaznO4pBdwAkUNOWm89VuNmcBnb6Za0H8Fimgvc/oteJnMiXs8qBDcUcV9rn6
-         EhBJlkkbmSwFTWMQoRlgWyxifh77iqbHaJpL6GQoYSCG02l17zQq5j/VKkl099Bur/2T
-         /quh7K6AqED6VOXrYrWx6OW4x30MLyH5LP3Q/9Stvpg+azHLx8AHWtNa+jb5dfWbOHVm
-         zivg==
-X-Forwarded-Encrypted: i=1; AJvYcCW8erMH0GugfnXR+R9M2JWn4N9ww5h+pe74nj797RyHAW0fJk7/nrG5Z0x39d3z7NAnLO9ElM5IvwY=@vger.kernel.org, AJvYcCXAuC6BoSeEITjpTHZgSTJ2A1tbhJ1nKXpzxvasUwz63UtwLenTye6MmMK/lI/F5qbclPpxoqflG9JxAQ==@vger.kernel.org, AJvYcCXz5d0q1UhxlqM4v94uzkJLSsl7lWtmuB75x50SrVGB1oWTYjk5v8Ea2beK9PqZWX5519gPI9J7+Xhu5ZCp@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTGudll7sdIdiiJv70jSBPD43ynua+7zCfMN9NCGzxFJyssPSD
-	sk+hmS7GfUTZ4xRbRiuDRINWGA3Cy0dMko5v4E5BkN8BoEJmqVL5rQj0Dg==
-X-Gm-Gg: ASbGncuGAVaMFEj2frDX9g+UwBsE9jO3TyQvpjqAPrBnnA/COR5G2xacXaBLtAKXNIA
-	piuT+vgHVONb8DPbAgzCwKFyGEnpcLjGsIA/D7SPPLL8ltD21igBkR/Jj/WnidWhFyQRnR6oTgh
-	DLkoqTkEpnBECcKfmPXDBdEYkhnV3HVF/3nSVWQhz4ZwFBlRuw48yOfIWHJCh8PNXQgiICgJDgc
-	MD1yXhuWKzcmt+a7ZiVUHwq5HuNMj5ssLK4qq/zuP+aYbUHq/XeQT6xbQNg/oKpLh8acGQct6/x
-	tqxAindtOfgdPKbLwPYQr4HrV2Cqs1o5SGihopef
-X-Google-Smtp-Source: AGHT+IEFJfb8JdR0uxTB95f0hEiIqD55HlidaYwR/BiGXD5dnSl2tjMZjFye0YN2S0xhVu9KHzdayQ==
-X-Received: by 2002:a17:90b:258c:b0:2ee:dd9b:e3e8 with SMTP id 98e67ed59e1d1-2f782c73b69mr31734721a91.8.1737557224891;
-        Wed, 22 Jan 2025 06:47:04 -0800 (PST)
-Received: from [10.0.2.15] (KD106167137155.ppp-bb.dion.ne.jp. [106.167.137.155])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7e6aabc4bsm1774219a91.21.2025.01.22.06.47.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jan 2025 06:47:04 -0800 (PST)
-Message-ID: <1518fd0f-4b8e-406a-bd60-878c0c522bde@gmail.com>
-Date: Wed, 22 Jan 2025 23:46:46 +0900
+	s=arc-20240116; t=1737583030; c=relaxed/simple;
+	bh=002sIJCTxpszw1r8onww3iHHoDWr7q9C+cyz9Nyiqzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cKg36ovUWG6UeWUF9BOXq3KePQtLKICiEV1xjpia2UuCX8B6KqPJOpl04i6pu95xWHKGqRaGIv62OVxfe+bojxOn216JPjezc2W1NU639P5EKqxIFEuFhQTuYUE2wsqugpOuBKX349VMaCgSj4qHsQxEboiRL2RKrKFvkx7MTLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HQ7sREUR; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1737583014;
+	bh=gJOPT1zlMmMVHPTETDbsLJwtWhbtDpKiYkIqDsFmmAE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=HQ7sREURTKYPj/qVeW6AcCv/sHRNsBisfArRnhIwbHFD2leCFvJVgGucNkbItOOse
+	 jm9yWT4uf1n7dwa0NFktEQ3EJprOd8tzzXfCrgp2FiHbbTttcW6u+TDvFKpiDYZfjk
+	 9V45X4u48hg8wPchRfFk4zhHnkinH1rQyswVAzYzoJ/gBnZ6NlB1TRHpVyllNRd4vU
+	 Xz9MTjL8LJEC0eXCsnAnR6MjKZ/QGy/MLsM+VNvpfFp6peNFNf7AiIrgz7BawEWTEW
+	 4EAXHGsCSRY1rJHF07w4YWu9qMmU6Lq6M77QYQts7aj4ZgBioRcSCvb5rBNnMj9Dvp
+	 DZ+jufWrK8bVw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YddFy3tvdz4x04;
+	Thu, 23 Jan 2025 08:56:54 +1100 (AEDT)
+Date: Thu, 23 Jan 2025 08:57:01 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Akira Yokosawa <akiyks@gmail.com>
+Cc: bhelgaas@google.com, linux-kernel@vger.kernel.org,
+ linux-next@vger.kernel.org, mchehab+samsung@kernel.org,
+ linux-doc@vger.kernel.org
+Subject: Re: linux-next: build warning after merge of the origin tree
+Message-ID: <20250123085701.11f1dbc5@canb.auug.org.au>
+In-Reply-To: <07507296-a37b-4543-97cb-0560ef7fb7b8@gmail.com>
+References: <20250122170335.148a23b0@canb.auug.org.au>
+	<07507296-a37b-4543-97cb-0560ef7fb7b8@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warning after merge of the origin tree
-To: Bagas Sanjaya <bagasdotme@gmail.com>, sfr@canb.auug.org.au
-Cc: bhelgaas@google.com, linux-kernel@vger.kernel.org,
- linux-next@vger.kernel.org, mchehab+samsung@kernel.org,
- linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <20250122170335.148a23b0@canb.auug.org.au>
- <07507296-a37b-4543-97cb-0560ef7fb7b8@gmail.com> <Z5D1FzkmODr7YC8I@archie.me>
-Content-Language: en-US
-From: Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <Z5D1FzkmODr7YC8I@archie.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/C46d+hILz.+u5j1uzH3M7Co";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Bagas Sanjaya wrote:
-> On Wed, Jan 22, 2025 at 07:00:43PM +0900, Akira Yokosawa wrote:
->> [+CC: linux-doc]
->>
->> Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Today's linux-next build (htmldocs) produced this warning:
->>>
->>> Documentation/power/video.rst:213: WARNING: Footnote [#] is not referenced. [ref.footnote]
->>>
->>> This warning has presumably been there for a long time.
->>>
->>> I don't know what causes it - maybe it needs a space before the opening
->>> bracket?
->>
->> Stephen, fhve you upgraded your Sphinx recently?
->>
->> In "Bugs Fixed" section of Sphinx 8.1.0 changelog [1], there is an item which
->> reads:
->>
->>     - #12730: The UnreferencedFootnotesDetector transform has been improved
->>       to more consistently detect unreferenced footnotes. Note, the priority
->>       of the transform has been changed from 200 to 622, so that it now runs
->>       after the docutils Footnotes resolution transform. Patch by Chris Sewell.
->>
->> So the above warning is real and prior versions of Sphinx just can't flag it.
->>
->> To silence it, you need to get rid of the unreferenced footnote, I guess.
-> 
-> Hi Akira,
-> 
-> I think the culprit [#f3] footnote (that triggers the warning) refers to
-> Toshiba Satellite P10-554 notebook, where s3_bios and s3_resume work only on
-> uniprocessor kernel. The proper fix will be probably adding a space before
-> the footnote.
-> 
+--Sig_/C46d+hILz.+u5j1uzH3M7Co
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ahh, you mean the referencing side of the footnote in that table.
+Hi Akira,
 
-Yes, you are right. I was lazy and didn't look closely at that jumbo change.
-Point taken!
+On Wed, 22 Jan 2025 19:00:43 +0900 Akira Yokosawa <akiyks@gmail.com> wrote:
+>
+> Stephen, fhve you upgraded your Sphinx recently?
 
-Thank you.
+Yes, I did.  So that explains this report, I guess.  I also have some
+left over warnings that appeared before I started reporting them (and
+while I have taken vacation).
 
-        Akira
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/C46d+hILz.+u5j1uzH3M7Co
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeRaa4ACgkQAVBC80lX
+0GzhiQgAknqMDLBfIcRB0WYqfgH+YepFTYY3pLY/d8AQRpJqeqaYy5mocoQpxLwx
+VByQkm7oZMvsh3ktlqSIZzciPCGZoCUaOsxBO9DSItL+GHSqb6prD6BDJkhNY3vc
+tmiN5agfURXrdZOi88i9Jn+KWk5MdbZSTGRqv5W9drUaj4kWMK+rjdjlh2ASjjVs
+aNT15pmHbpplRokj5TfMKSILzLGOpe2QBB/NFhQQ8He7XgLenrGKwslXORThtOaO
+ZRSQo3su+LjC+jlcmCp2L/yp2BCyyz7Fskmwcko3tiLUcAoIXi2V2oM9kakvs8m6
+cC8jV48uHuCPssuAEuYsJ9hI0JRzFw==
+=WkvY
+-----END PGP SIGNATURE-----
+
+--Sig_/C46d+hILz.+u5j1uzH3M7Co--
 

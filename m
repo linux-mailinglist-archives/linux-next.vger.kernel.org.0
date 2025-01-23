@@ -1,96 +1,123 @@
-Return-Path: <linux-next+bounces-5311-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5312-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36106A1A67A
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2025 16:03:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62775A1A81A
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2025 17:49:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A43BA163491
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2025 15:02:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 259743A9B75
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2025 16:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63D1A212F86;
-	Thu, 23 Jan 2025 15:02:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614EB170A1A;
+	Thu, 23 Jan 2025 16:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y0QZJTGq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IvIsJGoq"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB1C211706
-	for <linux-next@vger.kernel.org>; Thu, 23 Jan 2025 15:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEDE13FD83
+	for <linux-next@vger.kernel.org>; Thu, 23 Jan 2025 16:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737644553; cv=none; b=bPta+JOE68xlTQTrufiHBv9W2jOb77lPycSLyy50IkxioBqOhCcKd7yxEzxMmgMXsT/Kk4qjCd/sYiwrv95ll0aUdKyYPKm0xfGU3Hr7BS1DYIEhwWjC/1UgJluKGEk2xj+FlZqrRduNylNqIvQ00RGlM5eqcOJ6B23gXQToWac=
+	t=1737650954; cv=none; b=ffsF0dS6oY/IWvOboj76a6cXftLJc6cGm2IMFpg1j2RJxdHQVV4ImnKwGWkc8MvF6AkkT9lGirioJin3QzPExeR41qDiya4z98RUp7y9p2BE8r9HqEqAg3kvz/2OZmLbjR79ZY5xJwtar0/RVoOC7rO8vwMEmwgcrQbAzwQQF0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737644553; c=relaxed/simple;
-	bh=n0bwgPaWRrbHjZeItfR1A5cw1pvEt8ep406suEzUxcM=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=e0UFpIqZZbDoYAPTD9Rq79eNkoL8phGhhqrLomlVa1Z00q5BUhU8z/SO6cp+RJJ9ssa1xIpGxk1iDTHgGw9F8P6FQ1GehG99ouTiSQHIj4NMS9YWPUGXAbdLpMNqO/hVcbyr4tSMCje6BhwyQTDWaxPOGWs1BD4xxHc12Z7iLoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y0QZJTGq; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737644550;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qYnwQOBBZVU8Wg278ORS4OsK0ZJ+3tnRgZ/Sh63uOAI=;
-	b=Y0QZJTGqUUPSaejGJKR9Y/b+he3i1oTBvDOFEwUi2RgEdf09X2pr/Uu6LyMpQnjJQ3xawW
-	ltInOXdOY9nT2PtyZXbAhLm9GWZJxFAREf+NU93c1rGZS8ehQo6UyRH58ib1TOShcP8uEa
-	7bqRNADWLTLga2mm/AWHXi4gO67sBA8=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-599-GM-7UH1yPjm2McgKlBsdMg-1; Thu,
- 23 Jan 2025 10:02:25 -0500
-X-MC-Unique: GM-7UH1yPjm2McgKlBsdMg-1
-X-Mimecast-MFC-AGG-ID: GM-7UH1yPjm2McgKlBsdMg
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5D63119560A3;
-	Thu, 23 Jan 2025 15:02:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.5])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D77A619560AD;
-	Thu, 23 Jan 2025 15:02:22 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <20250121091525.6ff05253@canb.auug.org.au>
-References: <20250121091525.6ff05253@canb.auug.org.au>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: dhowells@redhat.com,
-    Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-    Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the afs tree
+	s=arc-20240116; t=1737650954; c=relaxed/simple;
+	bh=hYLucHQ2GmvyYGM25CegMuMOk06ntWJcKyymmU5cPNY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e/2KiH1+ImBYetsIq3lHVX4k5Q6wkH5ryjOxi7lGPRtrIOCigYAjzgjatP6bDMSpqvGulGSU2C7LDBlHUueKv7ZM3jakbn5WXqBwfyy7HvGKfy+CN6LNPba8VVY7Ceul7jSS1Pnqgei+zvdjQyk8/8BFWqPvF6Eyur0PtNP68N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IvIsJGoq; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-215740b7fb8so220985ad.0
+        for <linux-next@vger.kernel.org>; Thu, 23 Jan 2025 08:49:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1737650952; x=1738255752; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p8Ktjkvm7S5NoXz/Y7DuB0HrZMbc1D1VpyZ2582WTxM=;
+        b=IvIsJGoqepVok4tD+hN8J2tEjle2QwzJiLG34Avvl4Plnc2OABhaS2Xl0+yjjF++MP
+         bq6IfuZVyV+3UTt/L1NzoKt5MWTWxRUhex11Ta1Ypn93p1d5e8maV+Z1M1W9hZ5IA7c/
+         NCh01KtUOjKzYW9FJ9zgoRguZ4jpcxWfAwQ5Z4vFbdva3l0uFXdqyekoTBI8XaR3l4G9
+         /gAyE6Udz33zs1JtsBKbPIg69w5lBph/ItfS29TTml15QrQfq4CpD/aDVGPgfBIcNOz5
+         agg9DL3nzagN71i1I4SBMMkMUcrTLPcLCuGm4qHC3Q0fB63FqhsaIZWbCNWoCKEmuNG8
+         Ijmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737650952; x=1738255752;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p8Ktjkvm7S5NoXz/Y7DuB0HrZMbc1D1VpyZ2582WTxM=;
+        b=WESouBttaO17vQRKFhSig8VOQbuWvKsKZSWSIfDShiDKMHw9MvjOKcE0f5lTcGnOq7
+         IeLYvVBKJIPoOCVhJ0QllTx02F8CQsVnpWq+hRS0bm2F5asLAU0kpFGsPMmbcwxSD7RF
+         TqV7W0EOrtYJRDBEHDrPK7SO2V79DdekioBloUGP10qM24B5HBjbYH6bgOvJ3sNzmTCO
+         r3UEFu39XkcHCMMQs3bPHzlsTzjAwScfyflsBKpzplQnJ9QFihAKVq8VODpFEoHJwYax
+         o40CkVRsx2zdSFKfFxbJCOunFswDRxKvd+LlZLcjIDGpw+BDUtnJL9rfdVJnEI7u+67R
+         YHsg==
+X-Forwarded-Encrypted: i=1; AJvYcCW4/348rUqEfSfLalRLi0oc2JMhxpD3MgTo0fXbd5FEzEUiSi0vLmub4Q+QOw8In7WtNkleQzVcVaDg@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRpp16JU3KKSwjj5CEgMi/AmgayHOx6fClmZxPf0B+SY0Wb8AY
+	IMIWnah80jdoGO8D0jKxxDF0yBIa97PHDgd06GUDvNKasv1PL7f9Xoh5YqMtfQ==
+X-Gm-Gg: ASbGncvgCB7WYsdoP44M30Y8Exv2LzAP9vh1BzA/eeyg6w+88RZJlpZBq4wAvXZvs3X
+	r+tehdEXnpUKLd/t3LicZ283pczksVUQ+XcgU8wKQ8P9cVLyyhxoIscclX7oBh6PHEUV9cSs9ue
+	+/Gd17vX8rzrGcXfSVUCPjJbRXW5hgoJvnlomp2c0noEyE5MUu8Yr0KziVCxT5lUe0GqdieAbSs
+	vahpoM36pEBQnhXW0MFsEd+eEXi4HTUi5vFOrU3M5h5TYXUFZed320ijI0dXcwDUxPAFy4qL6/P
+	Vct4jqJqqKkudXzdn5cV8TVhycuNx5VuzPsjv09Wmkk=
+X-Google-Smtp-Source: AGHT+IEdI9sfswL1CKpgteGUTpoa8KzLTHDzZUTd6md5ndqBYJhxcQogQX/2Fh+WAvAdK1DX0CjY5w==
+X-Received: by 2002:a17:902:ce0a:b0:215:7ced:9d67 with SMTP id d9443c01a7336-21d99cfa7a8mr3019815ad.24.1737650951932;
+        Thu, 23 Jan 2025 08:49:11 -0800 (PST)
+Received: from google.com (57.145.233.35.bc.googleusercontent.com. [35.233.145.57])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da3d9e38esm1259485ad.3.2025.01.23.08.49.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 08:49:11 -0800 (PST)
+Date: Thu, 23 Jan 2025 16:49:07 +0000
+From: Carlos Llamas <cmllamas@google.com>
+To: Aleksandr Nogikh <nogikh@google.com>
+Cc: syzbot <syzbot+7015dcf45953112c8b45@syzkaller.appspotmail.com>,
+	Li Li <dualli@google.com>, arve@android.com, brauner@kernel.org,
+	gregkh@linuxfoundation.org, joel@joelfernandes.org,
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+	maco@android.com, sfr@canb.auug.org.au, surenb@google.com,
+	syzkaller-bugs@googlegroups.com, tkjos@android.com
+Subject: Re: [syzbot] [kernel?] linux-next test error: KASAN:
+ slab-use-after-free Write in binder_add_device
+Message-ID: <Z5JzA2OMokMz4Mic@google.com>
+References: <6788e8a3.050a0220.20d369.0031.GAE@google.com>
+ <CANp29Y4ss7w4C+A2rgy45TqFbHvFoEAU9fq8JJxq_DJr74+WZg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2190349.1737644541.1@warthog.procyon.org.uk>
-Date: Thu, 23 Jan 2025 15:02:21 +0000
-Message-ID: <2190350.1737644541@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANp29Y4ss7w4C+A2rgy45TqFbHvFoEAU9fq8JJxq_DJr74+WZg@mail.gmail.com>
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
+On Thu, Jan 23, 2025 at 01:32:29PM +0100, Aleksandr Nogikh wrote:
+> The problem began to appear after:
 > 
->   3c9ca856fd12 ("afs: Make /afs/@cell and /afs/.@cell symlinks")
->   bcc4d777ff8d ("afs: Add rootcell checks")
->   31ad47d22fac ("afs: Make /afs/.<cell> as well as /afs/<cell> mountpoints")
+> commit 12d909cac1e1c4147cc3417fee804ee12fc6b984
+> Author: Li Li <dualli@google.com>
+> Date:   Wed Dec 18 13:29:34 2024 -0800
+> 
+>     binderfs: add new binder devices to binder_devices
+> 
 
-Did you drop my afs-next branch from linux-next in favour of Christian's tree?
+Correct. I tried to mark this commit with a #syz blame or something but
+I couldn't find anything. The problem here is we add binderfs devices to
+the binder_devices list but we don't remove them when these are kfreed
+e.g. during umount.
 
-David
+This is then fairly easy to reproduce, something like:
+  $ mount -t binder binder /dev/binderfs
+  $ umount /dev/binderfs
+  $ mount -t binder binder /dev/binderfs
 
+It should be a simply fix. I'll send a patch later today.
+
+Thanks,
+--
+Carlos Llamas
 

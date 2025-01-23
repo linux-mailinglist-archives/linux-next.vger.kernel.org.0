@@ -1,252 +1,172 @@
-Return-Path: <linux-next+bounces-5303-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5304-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A005A19D3E
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2025 04:26:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16451A19D43
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2025 04:28:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1939D7A17C3
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2025 03:26:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0A3A3A699F
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2025 03:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5035336D;
-	Thu, 23 Jan 2025 03:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 005A643151;
+	Thu, 23 Jan 2025 03:28:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rX6Lxwj9"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ilJN//tJ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F51B1BC3F;
-	Thu, 23 Jan 2025 03:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859B31BC3F;
+	Thu, 23 Jan 2025 03:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737602770; cv=none; b=eiIzfY+IYU8oFh0EcUNYC6mn3llZor/HHVqzo7XJC031sFcUOTePJYPDWAE2rcETguxJuTu48Gc1O8MKl8n8jQaJ9RsgJmDVG0tDexs8mZjA4MV4RogaqXuUE9jssNK6NL0CTjhtNGzA9XgCVWhRhsDGx4Lo6fufXoeuNcxtim4=
+	t=1737602921; cv=none; b=lqU9RXKhZiivO/8tHtUQ+oZe/VAaTJpLAUNVznHjCGPMX0CRbH5aAbFNvPse5tGdvTLyqPS0qC+2Dk5DY29MGZIqFUm8Zhs8+6+oHq1N1UYd5lnifK9fCjHF3m0U3M04Z7OHuoPQxanQSq9gFLP9s4z8ua6GnEiZNoK/fO74t3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737602770; c=relaxed/simple;
-	bh=NW3KQOc3AD0L9fmRbl6c11MEcyiYy9146An3JPau5ic=;
+	s=arc-20240116; t=1737602921; c=relaxed/simple;
+	bh=gmbZpLMVKbfVuee7TqQytPcfBrVeYfwEudxnEm90bKg=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CKEi9R8+9bgix97KeBWdTZmNw14UQU6xcnCIlIYKnl+DoCpn+rsAEHHGGRBNdIwziVQ0262OxaIfLt1iNDebRXGscb3T5ULygPL9SGASzaxjnobajKcBtX185grQEbfvPkvqzatSgIY2WeQUvmwVnzejEhoxrV4kA5J1I9lROK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rX6Lxwj9; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=L8+bpqaYDwwlR/SMTjFOGXDv5fxqbfEdtH74C5QCHJbRGhXOZ+QvyhJ6TnPnA5wQLwc9ID+T5HoddzK/fqJFuEr0tZrjaBH0eymZUq33pDBCf4hv6nQWKDUNE2wzOzmmKTxwi1oAMHBsfRWA/GCyr38Qe0EWC5E9maa93cmgVGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ilJN//tJ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1737602747;
-	bh=MBvyQpr2bYhEtUSEXDN1il1fD7Xgx4lIrndP8tj/bGg=;
+	s=201702; t=1737602909;
+	bh=CrLA+AwX6W91CKXm9EPDRHaOc3CGXSAkqvaWjv/BP7E=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rX6Lxwj9FItpxDyjo08oi8ZCa1PTKeaAe+KthhM94SiVJvYsZ+N+xd4TwK1D1EL3m
-	 FMRsbajQAGY4sFLaEUFJ5hV8syjsdOOw/YejqA+tu6KMwTleEOgb4RqYi6xBNWJgd4
-	 U10FPvygAWW341fCGR/DowEQKXVMKYh/JspNOddL7ouTTP3hrRMiUCr4xvMoL45s57
-	 zoNPMsYTFsmOow49hf/FYf9ttSziXK97ri71B7O2JIyQJy2uDzQx6i2UvFvhSwetx4
-	 mh6i5nhG2A3BXWlBb+wgjGzI3x5he7xoLmRMXUKbCWJG1OfWl/+Iu2hCTH7+syT67K
-	 4SkyKU6vroq7Q==
+	b=ilJN//tJF40FhOIXhErXMy6PIpGisaoD7bV2KsVrrXlV07B7/KN3rTiHh2q+kDATM
+	 hKcN0HO0WnBpkI19CSDsV9BtoLEoxC7ZjgXRTLtUQCYcYV18A8LaQe7pS+ujm4+eod
+	 WjC/d4lvyDyfWnddHzV1FN4VYm1XvYBKz4MvYusiB6Y/2MSIuuCUQW7pdb8j8g3ScA
+	 6DhuRojdjxTNZgewAqrxQFIPDhRunQpVAXC1JfKY7ZdyxFfIYfazyWt6b609wBvRXq
+	 r5/ib5gX5M6ichvZFIGq248VjOgfza+bzgkYlfjrVe5CZEFCKxItNrIJzQv0KgICyC
+	 CjWkB/gVXyfLA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YdmYQ1bz6z4x2c;
-	Thu, 23 Jan 2025 14:25:46 +1100 (AEDT)
-Date: Thu, 23 Jan 2025 14:25:53 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YdmcX2Zh5z4wc3;
+	Thu, 23 Jan 2025 14:28:28 +1100 (AEDT)
+Date: Thu, 23 Jan 2025 14:28:35 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin"
- <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, "Borislav Petkov
- (AMD)" <bp@alien8.de>, Linux Kernel Mailing List
+To: Greg KH <greg@kroah.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Fabien Parent <fabien.parent@linaro.org>, Gary Guo <gary@garyguo.net>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, KVM <kvm@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the kvm-x86 tree with the tip tree
-Message-ID: <20250123142553.12c76c11@canb.auug.org.au>
-In-Reply-To: <20250106150509.19432acd@canb.auug.org.au>
-References: <20250106150509.19432acd@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Wedson Almeida Filho <wedsonaf@gmail.com>,
+ Xiangfei Ding <dingxiangfei2009@gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the driver-core
+ tree
+Message-ID: <20250123142835.1ae298f5@canb.auug.org.au>
+In-Reply-To: <20250114153733.1b73c3df@canb.auug.org.au>
+References: <20250114153733.1b73c3df@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TfFFt7RpZgjcPYI.qENiH2n";
+Content-Type: multipart/signed; boundary="Sig_/yKSEmls.zdjl7.FKm=iR+pY";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/TfFFt7RpZgjcPYI.qENiH2n
+--Sig_/yKSEmls.zdjl7.FKm=iR+pY
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 6 Jan 2025 15:05:09 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the kvm-x86 tree got a conflict in:
+On Tue, 14 Jan 2025 15:37:33 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >=20
->   arch/x86/kvm/cpuid.c
+> Today's linux-next merge of the rust tree got a conflict in:
+>=20
+>   rust/kernel/lib.rs
 >=20
 > between commit:
 >=20
->   716f86b523d8 ("KVM: x86: Advertise SRSO_USER_KERNEL_NO to userspace")
+>   9b90864bb42b ("rust: implement `IdArray`, `IdTable` and `RawDeviceId`")
 >=20
-> from the tip tree and commits:
+> from the driver-core tree and commit:
 >=20
->   ccf93de484a3 ("KVM: x86: Unpack F() CPUID feature flag macros to one fl=
-ag per line of code")
->   3cc359ca29ad ("KVM: x86: Rename kvm_cpu_cap_mask() to kvm_cpu_cap_init(=
-)")
->   75c489e12d4b ("KVM: x86: Add a macro for features that are synthesized =
-into boot_cpu_data")
->   871ac338ef55 ("KVM: x86: Use only local variables (no bitmask) to init =
-kvm_cpu_caps")
+>   47cb6bf7860c ("rust: use derive(CoercePointee) on rustc >=3D 1.84.0")
 >=20
-> from the kvm-x86 tree.
+> from the rust tree.
 >=20
-> I fixed it up (I think - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 >=20
-> --=20
-> Cheers,
-> Stephen Rothwell
 >=20
-> diff --cc arch/x86/kvm/cpuid.c
-> index f7e222953cab,edef30359c19..000000000000
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@@ -808,50 -1134,72 +1134,73 @@@ void kvm_set_cpu_caps(void
->   	    !boot_cpu_has(X86_FEATURE_AMD_SSBD))
->   		kvm_cpu_cap_set(X86_FEATURE_VIRT_SSBD);
+> diff --cc rust/kernel/lib.rs
+> index b11fa08de3c0,545d1170ee63..000000000000
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@@ -13,16 -13,12 +13,17 @@@
 >  =20
-> - 	/*
-> - 	 * Hide all SVM features by default, SVM will set the cap bits for
-> - 	 * features it emulates and/or exposes for L1.
-> - 	 */
-> - 	kvm_cpu_cap_mask(CPUID_8000_000A_EDX, 0);
-> -=20
-> - 	kvm_cpu_cap_mask(CPUID_8000_001F_EAX,
-> - 		0 /* SME */ | 0 /* SEV */ | 0 /* VM_PAGE_FLUSH */ | 0 /* SEV_ES */ |
-> - 		F(SME_COHERENT));
-> -=20
-> - 	kvm_cpu_cap_mask(CPUID_8000_0021_EAX,
-> - 		F(NO_NESTED_DATA_BP) | F(LFENCE_RDTSC) | 0 /* SmmPgCfgLock */ |
-> - 		F(NULL_SEL_CLR_BASE) | F(AUTOIBRS) | 0 /* PrefetchCtlMsr */ |
-> - 		F(WRMSR_XX_BASE_NS) | F(SRSO_USER_KERNEL_NO)
-> + 	/* All SVM features required additional vendor module enabling. */
-> + 	kvm_cpu_cap_init(CPUID_8000_000A_EDX,
-> + 		VENDOR_F(NPT),
-> + 		VENDOR_F(VMCBCLEAN),
-> + 		VENDOR_F(FLUSHBYASID),
-> + 		VENDOR_F(NRIPS),
-> + 		VENDOR_F(TSCRATEMSR),
-> + 		VENDOR_F(V_VMSAVE_VMLOAD),
-> + 		VENDOR_F(LBRV),
-> + 		VENDOR_F(PAUSEFILTER),
-> + 		VENDOR_F(PFTHRESHOLD),
-> + 		VENDOR_F(VGIF),
-> + 		VENDOR_F(VNMI),
-> + 		VENDOR_F(SVME_ADDR_CHK),
->   	);
+>   #![no_std]
+>   #![feature(arbitrary_self_types)]
+> - #![feature(coerce_unsized)]
+> - #![feature(dispatch_from_dyn)]
+> + #![cfg_attr(CONFIG_RUSTC_HAS_COERCE_POINTEE, feature(derive_coerce_poin=
+tee))]
+> + #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(coerce_unsize=
+d))]
+> + #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(dispatch_from=
+_dyn))]
+> + #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(unsize))]
+>   #![feature(inline_const)]
+>   #![feature(lint_reasons)]
+> - #![feature(unsize)]
+>  +// Stable in Rust 1.83
+>  +#![feature(const_maybe_uninit_as_mut_ptr)]
+>  +#![feature(const_mut_refs)]
+>  +#![feature(const_ptr_write)]
+>  +#![feature(const_refs_to_cell)]
 >  =20
-> - 	kvm_cpu_cap_check_and_set(X86_FEATURE_SBPB);
-> - 	kvm_cpu_cap_check_and_set(X86_FEATURE_IBPB_BRTYPE);
-> - 	kvm_cpu_cap_check_and_set(X86_FEATURE_SRSO_NO);
-> -=20
-> - 	kvm_cpu_cap_init_kvm_defined(CPUID_8000_0022_EAX,
-> - 		F(PERFMON_V2)
-> + 	kvm_cpu_cap_init(CPUID_8000_001F_EAX,
-> + 		VENDOR_F(SME),
-> + 		VENDOR_F(SEV),
-> + 		/* VM_PAGE_FLUSH */
-> + 		VENDOR_F(SEV_ES),
-> + 		F(SME_COHERENT),
-> + 	);
-> +=20
-> + 	kvm_cpu_cap_init(CPUID_8000_0021_EAX,
-> + 		F(NO_NESTED_DATA_BP),
-> + 		/*
-> + 		 * Synthesize "LFENCE is serializing" into the AMD-defined entry
-> + 		 * in KVM's supported CPUID, i.e. if the feature is reported as
-> + 		 * supported by the kernel.  LFENCE_RDTSC was a Linux-defined
-> + 		 * synthetic feature long before AMD joined the bandwagon, e.g.
-> + 		 * LFENCE is serializing on most CPUs that support SSE2.  On
-> + 		 * CPUs that don't support AMD's leaf, ANDing with the raw host
-> + 		 * CPUID will drop the flags, and reporting support in AMD's
-> + 		 * leaf can make it easier for userspace to detect the feature.
-> + 		 */
-> + 		SYNTHESIZED_F(LFENCE_RDTSC),
-> + 		/* SmmPgCfgLock */
-> + 		F(NULL_SEL_CLR_BASE),
-> + 		F(AUTOIBRS),
-> + 		EMULATED_F(NO_SMM_CTL_MSR),
-> + 		/* PrefetchCtlMsr */
-> + 		F(WRMSR_XX_BASE_NS),
-> ++		F(SRSO_USER_KERNEL_NO),
-> + 		SYNTHESIZED_F(SBPB),
-> + 		SYNTHESIZED_F(IBPB_BRTYPE),
-> + 		SYNTHESIZED_F(SRSO_NO),
-> + 	);
-> +=20
-> + 	kvm_cpu_cap_init(CPUID_8000_0022_EAX,
-> + 		F(PERFMON_V2),
->   	);
->  =20
-> - 	/*
-> - 	 * Synthesize "LFENCE is serializing" into the AMD-defined entry in
-> - 	 * KVM's supported CPUID if the feature is reported as supported by the
-> - 	 * kernel.  LFENCE_RDTSC was a Linux-defined synthetic feature long
-> - 	 * before AMD joined the bandwagon, e.g. LFENCE is serializing on most
-> - 	 * CPUs that support SSE2.  On CPUs that don't support AMD's leaf,
-> - 	 * kvm_cpu_cap_mask() will unfortunately drop the flag due to ANDing
-> - 	 * the mask with the raw host CPUID, and reporting support in AMD's
-> - 	 * leaf can make it easier for userspace to detect the feature.
-> - 	 */
-> - 	if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
-> - 		kvm_cpu_cap_set(X86_FEATURE_LFENCE_RDTSC);
->   	if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
->   		kvm_cpu_cap_set(X86_FEATURE_NULL_SEL_CLR_BASE);
-> - 	kvm_cpu_cap_set(X86_FEATURE_NO_SMM_CTL_MSR);
->  =20
-> - 	kvm_cpu_cap_mask(CPUID_C000_0001_EDX,
-> - 		F(XSTORE) | F(XSTORE_EN) | F(XCRYPT) | F(XCRYPT_EN) |
-> - 		F(ACE2) | F(ACE2_EN) | F(PHE) | F(PHE_EN) |
-> - 		F(PMM) | F(PMM_EN)
-> + 	kvm_cpu_cap_init(CPUID_C000_0001_EDX,
-> + 		F(XSTORE),
-> + 		F(XSTORE_EN),
-> + 		F(XCRYPT),
-> + 		F(XCRYPT_EN),
-> + 		F(ACE2),
-> + 		F(ACE2_EN),
-> + 		F(PHE),
-> + 		F(PHE_EN),
-> + 		F(PMM),
-> + 		F(PMM_EN),
->   	);
->  =20
->   	/*
+>   // Ensure conditional compilation based on the kernel configuration wor=
+ks;
+>   // otherwise we may silently break things like initcall handling.
+> @@@ -37,12 -33,10 +38,13 @@@ pub use ffi
+>   pub mod alloc;
+>   #[cfg(CONFIG_BLOCK)]
+>   pub mod block;
+> - mod build_assert;
+> + #[doc(hidden)]
+> + pub mod build_assert;
+>   pub mod cred;
+>   pub mod device;
+>  +pub mod device_id;
+>  +pub mod devres;
+>  +pub mod driver;
+>   pub mod error;
+>   #[cfg(CONFIG_RUST_FW_LOADER_ABSTRACTIONS)]
+>   pub mod firmware;
 
-This is now a conflict between the kvm tree and Linus' tree.
+This is now a conflict bewteen the driver-core tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/TfFFt7RpZgjcPYI.qENiH2n
+--Sig_/yKSEmls.zdjl7.FKm=iR+pY
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeRtsEACgkQAVBC80lX
-0Gzqywf+NjZBx64y4Cm+R6ICuj7zQYhrqzyiCUIE2jpENvtAx31a81SsZmrAj1P5
-X4OcDF4pNI5C/XVOb6wEmL+OWjt7c4VwzYiwdrJKtTnuouLCtFl19gFHR8cDLO6u
-274U9B1Siz5KYZbT3T0Nv8sToG/ukOJpjKQnRYNDreAwORydF132mPHYnutqBZcM
-+A1hV4TaYWNtnA8Jq/+HhPdyWisgFAlhiUHJ4063TKpSxrv/qJTEFrcnZrY7ohhV
-Bpr5sl5mY3lRjvmhjyf82OW3mEnYm6MAUyfF3ir9aLC4wd39v5o8ArE5kczi18ps
-/fbktbPclC1TjV7sJ2RrxMuMxtodDg==
-=F/Ca
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeRt2MACgkQAVBC80lX
+0GwoAQgAo78i1Caow5KFheiTHrPoM0HsFHsqWrt+I60RJzszE/pzJ3+vHdNTmZoE
+Pxey81xuRb/uak7RMT3G94kLmMgYoyvckXTaSRI20qoagpUd/pCs1HWHsJ20NHnn
+tjjdLsgTKXrwkSRbFWC5ZfgW3fOEUIJwu1MgXIEhHAm9H5ATNXOxdeXlqY8XtBkE
+lM30PfuwCIiSFIgkOjX4IeUb6AXRv1RCVrRR66P8rootCknH8OKBlkRPMcCb/ze2
+79pPzIcN/lJwVzFimzBbEj4mKZOaUtOm1S6JYdVZBi7pj5uUlMk933IEoXxrG+P1
+Fn5bFbYq2RmPM07BBd0hf4M4a9OdCA==
+=8l7d
 -----END PGP SIGNATURE-----
 
---Sig_/TfFFt7RpZgjcPYI.qENiH2n--
+--Sig_/yKSEmls.zdjl7.FKm=iR+pY--
 

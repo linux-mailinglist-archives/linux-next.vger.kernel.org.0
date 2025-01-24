@@ -1,91 +1,118 @@
-Return-Path: <linux-next+bounces-5320-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5321-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41401A1AE14
-	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2025 02:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 421A3A1AF09
+	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2025 04:27:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F31003A67E3
-	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2025 01:05:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E06003A7400
+	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2025 03:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 048041D516D;
-	Fri, 24 Jan 2025 01:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28A31D5CCC;
+	Fri, 24 Jan 2025 03:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="P8F8XS0O"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5C5846D
-	for <linux-next@vger.kernel.org>; Fri, 24 Jan 2025 01:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3A51EA65;
+	Fri, 24 Jan 2025 03:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737680707; cv=none; b=OkE5cK2/nbGi5UF3daxJ1kcPWVIk8dtxL0WX2/9brw8vx9EO3Fw61KfLlR9F8VfL7dnph8d6sd4MAeMQngrsdpslYuGvvM2dWYo3lt0/QXuv13jZeBuoTXqdt6xACgM3HDerVSQq2ZCRdfz2MuCzEeEsvYtKBNjZe2IvGJ3iFe0=
+	t=1737689257; cv=none; b=aGnbN2iCRYmciYTsMZ4heMUTE14KyQPW/oOWrwlnnTdyrJH7AmNrtuS0qdGLHyeQS/dc2Hl7pO0QYKwT85TfYsLmMjElCIwCLmZq9tBk7WcvQWNzLHlRlG3Umo7y4v5ZY0auXIKhlyywBL1idORYSVj/kx5/SfOf8eAr4/XzGbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737680707; c=relaxed/simple;
-	bh=5n2UF7YRFnf03Ob9UbfeJcQBrbpV5T8h5GH+CfYGw2g=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=SoiV/XVVdQxNqKNGj1WgVD5yhT7yosywLCYhOq1Sm9yg3hGSpub4AF+BGpkKkPQe/h8bNbO4t9vp9cyt5IVQaLYdIHLhfMjy3c4wAhcyI9IhMSDMaah8GjPf5417iA5XUwHIw9hIwr4P/DTCGu5RZy7JmMtb6U6doEuSG1Qkdsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-84cdae60616so105391439f.3
-        for <linux-next@vger.kernel.org>; Thu, 23 Jan 2025 17:05:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737680704; x=1738285504;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RnKvFaFjTe8h96vEhXOTTIMabXuYO8T43twYxRKmYwE=;
-        b=M57ldK5QnBvzR9FmhKLhOP/g6ESi2oXYu17a3qJEabLNfQ5yFRwItfQ8eV3iNLz1Xl
-         BDe0v4+X213Wo5jDe+israYVHkO2HTi9K+3/L9hjuaCz9516rboCRrqHXO+DjuLcHAUl
-         jeHT7WMbgCvsqOacgR8+wroIeqGXwQFDrMV2DupgcE1xbDwAw2X24KddPNmNfIipwa4o
-         igrTa5Huda5cqg80HlDcSXY68XiM9RkxaPDeRCOxJAo2yqkasV7u2kmFhJYPXS5A/VT+
-         NgTzJw6qdbBMLswuyXSpI7GIesqsT0hqrVX3PhvVpbnq42IdALsMUt7veHtVNxGbQePZ
-         qqgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVD1XvdBBe8C+vJMIQ05VFxoufIk/PrcK13n2owFMV0EYkAIFjFqsdOYe8e7jbyreRW5i2ILjSDUp2Y@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPAR6yDRXpEHJGEtLwvkD5lu4lR3gEWFcN0/Plmcxmu9npUDsj
-	sZTlutjSIu7EIT90rjWSJHfhCddGF29LLeZmSpkY3pAvpwgOycfojM5IwJ0EwhlUc+tnW5woLN3
-	M5xsCIUkBJSBFTC2UbYmqITv7WrC9+HHnEaOKCIpk1daLizl53/M9Ir0=
-X-Google-Smtp-Source: AGHT+IGuczncQwfCe9HqD/JNzILm4cM+iF+Sc+8gaPQHcK2rO+KdYsGoKPKhcRBJWGztSTIkN2A+hCdUUWydN2oKbpWJod5/OjbY
+	s=arc-20240116; t=1737689257; c=relaxed/simple;
+	bh=zYP8oiwtI2qlnMW8INLtFQ9tEg/Capc16JE5YLdq6P0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VTd13xyuwrZbaageGUayIQgmBpLM5fWfyNM3NMfoTioDi/OXW1PFjw5QkhpjyfIANuLSdvgGlhWY2RoQjS2cMaGovJugDTRFyxXbTdZst36m4KoClf28kRTNuXOov58sM1DTFZqYVOON6ptEFYrxKWXEaOaPqzMqZDPyxWsxI9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=P8F8XS0O; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1737689235;
+	bh=1v57yKQOF3EjSVnnADMZufyh9gBYF45J9zKItmGRCsI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=P8F8XS0OY7ku0uuZC3OIkROzZkhPbB6WuVrhMfFtu0nhq5yYvYeaj5YXoIiiFhB6O
+	 YVbv6G9/ALFlA5Io5Wsb5xPvfx74VudEf3ubZ3CQRRM81nRC2qr03Gt4jcS3qR9QDb
+	 HbDRYEc1asjW5MOB2wUFMZpk8a44mvZVQ6P3wwul2U1kW05h3EOlr7znvmJUaogxjM
+	 1whXq/Fazoh2pJ6YJBr7ALfVY2AZPa68VqrmYKTgBpIxdJdJcBp6HMIodeHsZQ13En
+	 y3eRuDSptMsYLKeuZIxmqqT/BhIJDd1rqWuJTuSgbuOXHHgcghqSe8TOeewTN0KBLC
+	 D2bE47lK3KPiQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YfNXg1b1Hz4wgp;
+	Fri, 24 Jan 2025 14:27:15 +1100 (AEDT)
+Date: Fri, 24 Jan 2025 14:27:22 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Howells <dhowells@redhat.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the afs tree
+Message-ID: <20250124142722.7b8a4681@canb.auug.org.au>
+In-Reply-To: <2190350.1737644541@warthog.procyon.org.uk>
+References: <20250121091525.6ff05253@canb.auug.org.au>
+	<2190350.1737644541@warthog.procyon.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:4811:b0:3cf:b2ca:39cb with SMTP id
- e9e14a558f8ab-3cfb2ca3ad8mr79189405ab.22.1737680704229; Thu, 23 Jan 2025
- 17:05:04 -0800 (PST)
-Date: Thu, 23 Jan 2025 17:05:04 -0800
-In-Reply-To: <Z5Lcvf02wNt_CHsD@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6792e740.050a0220.3ab881.0003.GAE@google.com>
-Subject: Re: [syzbot] [kernel?] linux-next test error: KASAN:
- slab-use-after-free Write in binder_add_device
-From: syzbot <syzbot+7015dcf45953112c8b45@syzkaller.appspotmail.com>
-To: arve@android.com, brauner@kernel.org, cmllamas@google.com, 
-	dualli@google.com, gregkh@linuxfoundation.org, joel@joelfernandes.org, 
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, maco@android.com, 
-	sfr@canb.auug.org.au, surenb@google.com, syzkaller-bugs@googlegroups.com, 
-	tkjos@android.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/U=d55Enu6Y=6.=dtNT10uwd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hello,
+--Sig_/U=d55Enu6Y=6.=dtNT10uwd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Hi David,
 
-Reported-by: syzbot+7015dcf45953112c8b45@syzkaller.appspotmail.com
-Tested-by: syzbot+7015dcf45953112c8b45@syzkaller.appspotmail.com
+On Thu, 23 Jan 2025 15:02:21 +0000 David Howells <dhowells@redhat.com> wrot=
+e:
+>
+> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>=20
+> > The following commits are also in Linus Torvalds' tree as different
+> > commits (but the same patches):
+> >=20
+> >   3c9ca856fd12 ("afs: Make /afs/@cell and /afs/.@cell symlinks")
+> >   bcc4d777ff8d ("afs: Add rootcell checks")
+> >   31ad47d22fac ("afs: Make /afs/.<cell> as well as /afs/<cell> mountpoi=
+nts") =20
+>=20
+> Did you drop my afs-next branch from linux-next in favour of Christian's =
+tree?
 
-Tested on:
+No, I didn't.  Do you want me to remove your tree from linux-next?  If
+not, then just reset your afs-next branch to somewhere in Linus' tree,
+or to the equivalent to the top of your branch in Christian's tree -
+30bca65bbbae ("afs: Make /afs/@cell and /afs/.@cell symlinks") - which
+has now been merged into Linus' tree).  (And then push it out :-))
 
-commit:         970b9757 ntsync: Fix reference leaks in the remaining ..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5ef5646cab25e74a
-dashboard link: https://syzkaller.appspot.com/bug?extid=7015dcf45953112c8b45
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=17e5e5df980000
+--=20
+Cheers,
+Stephen Rothwell
 
-Note: testing is done by a robot and is best-effort only.
+--Sig_/U=d55Enu6Y=6.=dtNT10uwd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeTCJoACgkQAVBC80lX
+0GxjzQf/WTeSvW2aMn2/mKh0HzB8l19JHWmh3C+6UgSmhASCaAR2pAM35cyzk4Bk
+P1+xvmHf42PcmtUh9hja2DhSvkM80qSAevIkpGE56HWrkDyUd/XaYKwEz44/Re/r
+Ycf1wc+3VASIv+dX/iXr9x/1AAoVbKUm8MxGMZMRHbF32NaxXPQ00DDzxKo3g9zE
+XXDZBZechAEov4GG6Kono+/gryaV49lxDFe3sPFKyD4iYL16Cdb36mtr5eQuca4J
+Z9+y0IV7d1iESm0Z3WMaNTVkX1T/LE9DqFjcFQ7FeZE69KLp0o5+KqB2iIJcpgyl
+QLl5JjBqlw38gH6h8EEJDOppKRIz8Q==
+=/99y
+-----END PGP SIGNATURE-----
+
+--Sig_/U=d55Enu6Y=6.=dtNT10uwd--
 

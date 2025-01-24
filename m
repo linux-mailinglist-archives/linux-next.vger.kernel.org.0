@@ -1,89 +1,88 @@
-Return-Path: <linux-next+bounces-5318-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5319-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF59FA1ADC4
-	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2025 01:11:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26AD2A1ADE3
+	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2025 01:20:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 899023AD27A
-	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2025 00:11:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CEB8C7A3614
+	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2025 00:20:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB2F26AA1;
-	Fri, 24 Jan 2025 00:11:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C62B48634C;
+	Fri, 24 Jan 2025 00:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qjn1kMuU"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v5yr/a6U"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584E44C91
-	for <linux-next@vger.kernel.org>; Fri, 24 Jan 2025 00:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55EC386332
+	for <linux-next@vger.kernel.org>; Fri, 24 Jan 2025 00:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737677490; cv=none; b=EhmROSr9xUZnBRVAfIojQh0I4K0c3FLsqq8qCYSfxcachcFsUstmyW0mHZ5y4ewHLUvFylYMgKQ0u+kJrxD5iss0HpuKeBlfHm8F+uftP5rfWyY92DSZ31PaRWIshLKbKXnNnhCF3X5zE+/C0qhmfRhu1bY8ST+vOL8ibavrW60=
+	t=1737678020; cv=none; b=Ns0xWfnLM/exYL7Lu47YpRrBuCx0UGb46Y9KROlTYbvQ+WrHC0DEu7+kw02vwnZg4tgvw5N+daaC4/zx13wptUHQmFUtk78uhmoTbSysDBCsF1J6nD3YsVDymiVHgZy32MvaLJuj3dqBE/44kKrVkE4pSrAcuUazGCZwMa3JwEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737677490; c=relaxed/simple;
-	bh=SYhD6O6RGDoCgQKW2y3MQQXdgD99A+4cBPBqwS9aJls=;
+	s=arc-20240116; t=1737678020; c=relaxed/simple;
+	bh=gCrvOk6jJjGGdqrncEhK0F22qM4eBClCHpzHo1HLaYs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m6rU/EAkDKcb3jGxY3Dg2kGS6+6DQKJyRDQ6IEor/5KAWjljDNJFKWLCHsPx6F0FmjOKW28vDeFv/e5bENTNFAbEwg4D6GbRAd+ffyCGN9roHF0+zQaoC2KLYfsM4f/SHiiVFcNWTxa9BWWqwRnZw2vdlZZhBnlB+sL47Kq/Aro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qjn1kMuU; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=F1O/v++IOBLQtnhPXzQtBE3PgOdeHEMmBYQJKYDc9yAP4DGviSJf7tVDMpL14Pr8w6xZUCmOsYNLD/W+eFePyCQDixPsK4elSBiodCwf/Gm+u23ZttsBsO77mFJ2FEzTsglwaL1+nbLHcToe2dpDCD2axkBEzI2INs3WFX8lWA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v5yr/a6U; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-215740b7fb8so65695ad.0
-        for <linux-next@vger.kernel.org>; Thu, 23 Jan 2025 16:11:29 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-215740b7fb8so66695ad.0
+        for <linux-next@vger.kernel.org>; Thu, 23 Jan 2025 16:20:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737677488; x=1738282288; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1737678017; x=1738282817; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZjkRRDA4hnNszEaflHVA0iwk48+fYjAf9dZcv5vcjpE=;
-        b=Qjn1kMuUAnIEt37Itep1KtzeLfLjP1PI/ulDsUx7NddYaN40GoMTkNV2SAJugpNdzj
-         6xUd5stxgzhxSnMy4BX+c+tspNWbNe6jTfr9o0fWZkHdD9ua9NM3DD4JMM9FVlEDbg5h
-         xh2FujBHzPRcH19zDoaJELMm1ikZYmDG5ATSISGWj8J/5sbU08+PteNUV3adRApN8ydC
-         rw7qa2WW4AVfUy4SJhQ22evP9XB1aiROgwjp9a9lyTBryKS6fIzpvaxjbV9KLUk0pg3H
-         iG3kg4DDswUOj6b10PF3oiXDeHao73+f5flQpS88DVmzDrzwcuepANoZhythLKyAV/8j
-         pCGw==
+        bh=dJFcaGlmjy0dmMltSgbDUy2jlbWnS2q5949Np8OSwEg=;
+        b=v5yr/a6U322GfKvITgeh/NDDom+Aqni5Osrv3sTXCVjMcaaN9Cc7mNduOb2pf4aS+p
+         diYtkXK8vmeWgNsYhnPMGkO3VlTIl6sad3iJlp9gwOhh2d/WamsGv3wUCCPTNX1JuLOL
+         kXg6NHBX5PQiN/mE0KG4oBV5JZAiNcWGyjeMMJtzARYAznV7CQGKjnko+uUhjRs6sPWx
+         0NgIG26l1ZAs24n7jr+LlJpEEfyiJiXogVsPgh57LICNDRcdxStSFKcxnMwk2ueJ1ARL
+         wJV3+7Tsaej8vqSqD78/1POmJWwVdcmUuj0PaQjciXzCuSVIxIutTaJosap/DM7g96uW
+         1DQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737677488; x=1738282288;
+        d=1e100.net; s=20230601; t=1737678017; x=1738282817;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZjkRRDA4hnNszEaflHVA0iwk48+fYjAf9dZcv5vcjpE=;
-        b=VrBYhhjUOu0rOJcl2xUyOBc1sPE16ykACJcTI0Fz6ZmJdyazmeou5bjuhaH4AUXew2
-         E8fmVOi+AMebM6tJsmq4H31ZmH05VLbmivMnXgW2WEEWF7py5B6Jgc4D1uJVu/x29oDD
-         KcDPUMWTSdYA17v6rBh1A5DUGokXcRNy/mPpPucRfWT2Kyuyu5G4LuyPqQ8lmEQzEQZ9
-         3QqKU0weMlhFTjvgPGVuyUeg0VDQkLX7qC6WjKRNT384TkTicXeZIuhXCwX3SSfv8vw2
-         MK3GvtdyhPQQSNmCwT2K8+aWPw7qdDwlbq66LV4k8G2aSQemUX7D/GtJKMD9nJGymzN5
-         nuag==
-X-Forwarded-Encrypted: i=1; AJvYcCW8oRXE6SvlR73yJnSEm98srA8WYMWeug9IiKpQvqWSLXBrIPfYGCApOUqwbTGnLogp3Hmaf9ph1YvB@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvTI8Skpn3wvZWDPHCnbS20tp8T+GtFejv2lJSpU7M7i3MRFE5
-	y9hfesCJSp86Cl4ClF0zFpN5Xnd5QgKnII+AdTC/JVn/07d2B6+8cCdZ2hMDEg==
-X-Gm-Gg: ASbGnctQezXTMI5rv73CKnHaTXDx34wQq9t/vLES6OzqjkQ4cfNipvR2KJkXmV7x0Ga
-	3rM5H/64XkNvms+DxmsxVoR9BsViJT/ZIH4myVEqlCXYFQZXg4H4+1fYF96TBzOEOYGZsSxrdki
-	Wj5BoVvUeaMW4VwZlaBAQyxQ3EQTkO2flouo8rq0WoyyViViTZnXyvbz/bOinQe+LogvOKKnsHp
-	CaJDrUhLYRevnM7yJ21d4onNebJSb+0jzIgzle4GbMegbJfR3XrwG9AQIduz9yG7a3piq/zPPuU
-	8mtruNVjJJVZ34aWC6HPmYdv16Htg7C4oEnpXFSahWk=
-X-Google-Smtp-Source: AGHT+IETrKp4cY+9PRqEKuq00wickTAPduTpXnGBieIbfDJglLRtSgo8HbVq1V3fl2EjzeEpTHvNZQ==
-X-Received: by 2002:a17:903:298f:b0:215:98fd:cb04 with SMTP id d9443c01a7336-21d9ad495b7mr3981615ad.25.1737677488396;
-        Thu, 23 Jan 2025 16:11:28 -0800 (PST)
+        bh=dJFcaGlmjy0dmMltSgbDUy2jlbWnS2q5949Np8OSwEg=;
+        b=DERiymz5MXkjI8swaaEk2DwgYFOf5IQzXZ3RYX3pwqnO6jPrh1mqaANvXN4TfGJyOy
+         s3ZTuH+S6bXOjHSaWv4SqUSv+SSmukPqspTk0UoGFsf03gcuwiNpg7cdTaNYUMixRtGq
+         zfbKYd6iyJPOhVOzJUMliHg2D2U7IfPT6BrNAA1BisUEfvyXsGIzAU9gVpNm3/Gsct4A
+         fUE1spEVHGcoLz85b3bB+OkcVEx5CTfMncQMmCb4RhVt8HcAdHWGjZej4E8kawbXWiPS
+         H3KcuQ5xFSJajDceoHAbaKV7cPoblBX0S3LmQeMuIMLVCtTog7ywfnUKY6D5aXK+uIk5
+         Xd5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWKeCt4nqJ/kQadwbbUht+YJRJbiVxCC8UQMa0xiwHekT3ZhuDCzf2O/6GMAA9cW+B3WLJAccHV92BX@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqs+YT3srJqihkk2P7d6EoldJxyj7OivHg3UAAkFCdK0dS9a8O
+	wLK69J+nwnLlUOps+wYlCs+xVJMPuU7YXtVRik63kaK8gUGI43sGH//TjOjnaA==
+X-Gm-Gg: ASbGncsaV5fRfC6SdCovcQeiIptoSDBCnPj/7zXgRtxInkQMocLw5L/pozEt+Ni4C+V
+	Wp68ROgVNz2w3FAFjkQtNmK7pb2vJsVFTXQS4XZ1NmMeydhjFeL3ReAV0moDxD0v6vkb+Yspw6c
+	AtsaAuETK9UJe2Wbus4nUWNtHdFaALYvOvZsknXB4IJsmYF2qI0Lfk6tcHYjXIXR0MLBPQqbIfV
+	WO2i82A8eXAy1uy5tyURn0xSakzjiP9vRHFku3ywFrMeqL/Jj3a+FZPG1Q1fBv0J8cW8h9pPs+M
+	dTAyC3ndSGO2DCkgbaLWuUSm6KDmmvzIh7CWWUMezDU=
+X-Google-Smtp-Source: AGHT+IE8EWJVCBJSV6XMWLUp70zFMbVBiO796VdbII+rnU4TXB66XkjLNGjKwiyhZQB5SsVt7cJNIQ==
+X-Received: by 2002:a17:902:cf43:b0:215:7152:36e4 with SMTP id d9443c01a7336-21d9ad4d3a3mr3874955ad.27.1737678017400;
+        Thu, 23 Jan 2025 16:20:17 -0800 (PST)
 Received: from google.com (57.145.233.35.bc.googleusercontent.com. [35.233.145.57])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac496bbcdb2sm452803a12.69.2025.01.23.16.11.27
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7ffa76f3bsm331007a91.33.2025.01.23.16.20.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 16:11:27 -0800 (PST)
-Date: Fri, 24 Jan 2025 00:11:24 +0000
+        Thu, 23 Jan 2025 16:20:16 -0800 (PST)
+Date: Fri, 24 Jan 2025 00:20:13 +0000
 From: Carlos Llamas <cmllamas@google.com>
 To: syzbot <syzbot+7015dcf45953112c8b45@syzkaller.appspotmail.com>
 Cc: arve@android.com, brauner@kernel.org, gregkh@linuxfoundation.org,
 	joel@joelfernandes.org, linux-kernel@vger.kernel.org,
 	linux-next@vger.kernel.org, maco@android.com, sfr@canb.auug.org.au,
 	surenb@google.com, syzkaller-bugs@googlegroups.com,
-	tkjos@android.com
+	tkjos@android.com, dualli@google.com
 Subject: Re: [syzbot] [kernel?] linux-next test error: KASAN:
  slab-use-after-free Write in binder_add_device
-Message-ID: <Z5LarLkj50YumVD1@google.com>
-References: <Z5KTGg7KXfBhHJZA@google.com>
- <6792a5db.050a0220.3ab881.0002.GAE@google.com>
+Message-ID: <Z5Lcvf02wNt_CHsD@google.com>
+References: <6788e8a3.050a0220.20d369.0031.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -92,42 +91,40 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6792a5db.050a0220.3ab881.0002.GAE@google.com>
+In-Reply-To: <6788e8a3.050a0220.20d369.0031.GAE@google.com>
 
-On Thu, Jan 23, 2025 at 12:26:03PM -0800, syzbot wrote:
+On Thu, Jan 16, 2025 at 03:08:19AM -0800, syzbot wrote:
 > Hello,
 > 
-> syzbot tried to test the proposed patch but the build/boot failed:
+> syzbot found the following issue on:
 > 
-> 0][   T52]  ieee80211_unregister_hw+0x5d/0x2c0
-> [   72.827744][   T52]  mac80211_hwsim_del_radio+0x2c4/0x4c0
-> [   72.827761][   T52]  ? __pfx_mac80211_hwsim_del_radio+0x10/0x10
-> [   72.827777][   T52]  hwsim_exit_net+0x5c1/0x670
-> [   72.827790][   T52]  ? __pfx_hwsim_exit_net+0x10/0x10
-> [   72.827802][   T52]  ? __ip_vs_dev_cleanup_batch+0x239/0x260
-> [   72.827818][   T52]  cleanup_net+0x812/0xd60
-> [   72.827831][   T52]  ? __pfx_cleanup_net+0x10/0x10
-> [   72.827847][   T52]  ? process_scheduled_works+0x976/0x1840
-> [   72.827861][   T52]  process_scheduled_works+0xa66/0x1840
-> [   72.827882][   T52]  ? __pfx_process_scheduled_works+0x10/0x10
-> [   72.827898][   T52]  ? assign_work+0x364/0x3d0
-> [   72.827913][   T52]  worker_thread+0x870/0xd30
-> [   72.827931][   T52]  ? __kthread_parkme+0x169/0x1d0
-> [   72.827946][   T52]  ? __pfx_worker_thread+0x10/0x10
-> [   72.827960][   T52]  kthread+0x7a9/0x920
-> [   72.827975][   T52]  ? __pfx_kthread+0x10/0x10
-> [   72.827991][   T52]  ? __pfx_worker_thread+0x10/0x10
-> [   72.828004][   T52]  ? __pfx_kthread+0x10/0x10
-> [   72.828019][   T52]  ? __pfx_kthread+0x10/0x10
-> [   72.828035][   T52]  ? __pfx_kthread+0x10/0x10
-> [   72.828057][   T52]  ? _raw_spin_unlock_irq+0x23/0x50
-> [   72.828073][   T52]  ? lockdep_hardirqs_on+0x99/0x150
-> [   72.828083][   T52]  ? __pfx_kthread+0x10/0x10
-> [   72.828099][   T52]  ret_from_fork+0x4b/0x80
-> [   72.828115][   T52]  ? __pfx_kthread+0x10/0x10
-> [   72.828130][   T52]  ret_from_fork_asm+0x1a/0x30
-> [   72.828147][   T52]  </TASK>
+> HEAD commit:    b323d8e7bc03 Add linux-next specific files for 20250116
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=139dc9df980000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=76ebc49148908d34
+> dashboard link: https://syzkaller.appspot.com/bug?extid=7015dcf45953112c8b45
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/a529f1184b45/disk-b323d8e7.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/08db885c938e/vmlinux-b323d8e7.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/2ff92778e2b7/bzImage-b323d8e7.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+7015dcf45953112c8b45@syzkaller.appspotmail.com
 
-Huh? it sounds like linux-next is broken right now. This is some
-unrelated lockdep issue. Let me retry with char-misc tree instead.
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-next
+
+diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+index bc6bae76ccaf..94c6446604fc 100644
+--- a/drivers/android/binderfs.c
++++ b/drivers/android/binderfs.c
+@@ -274,6 +274,7 @@ static void binderfs_evict_inode(struct inode *inode)
+ 	mutex_unlock(&binderfs_minors_mutex);
+ 
+ 	if (refcount_dec_and_test(&device->ref)) {
++		hlist_del_init(&device->hlist);
+ 		kfree(device->context.name);
+ 		kfree(device);
+ 	}
 

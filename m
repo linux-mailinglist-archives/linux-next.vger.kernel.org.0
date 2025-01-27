@@ -1,105 +1,236 @@
-Return-Path: <linux-next+bounces-5332-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5333-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21C09A1FA8C
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jan 2025 22:13:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1A98A2007B
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jan 2025 23:22:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A614188564F
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jan 2025 21:13:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EE0C3A41A8
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jan 2025 22:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5DD61946BC;
-	Mon, 27 Jan 2025 21:13:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E94F1DC9B1;
+	Mon, 27 Jan 2025 22:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="n9hSsvm2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iuDh8fy0"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9481315B10D;
-	Mon, 27 Jan 2025 21:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A490D1D932F;
+	Mon, 27 Jan 2025 22:21:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738012383; cv=none; b=Z9Jsc3Gxju52Hza9j/BpeS7BI+nRm72Gw4GxbnTh9gSIs8foA/O+d+bTF7xBimIt3zxQba0jMLVCEaM8djeMbs30tt6/8+qSR7RaXBvnHYVXCUbRWegsxBX2MBpxcX0DWfBTQpZ3+o74toEUZhCdHgywgZ8omQQAiwaYE3OP8WA=
+	t=1738016477; cv=none; b=K7kPEdfkJAiSgMJ4THPduIjPkshfaIQG9Y7EJWUr3OhmQdU/rxRJf+cTrvi5rJL6MdJYJxe36yAthai0DdLdRqeAvlEBl3eJz4WxTatmE+M2rRqeDRhj0Y4p6QjbNb4fAO3n86Lwn0d5qihAUJpGXx7OdKO6+wFdvCwwlq1mW4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738012383; c=relaxed/simple;
-	bh=ud1u35Sfg1sfqTbAS/YOeteaWFgf03ugWgEcQ55gA1o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lqyt1WvTTZQ8iKqoDBarrmjOp1TO6EF3pp7SDIztRDK4YwqGtiXbE0vziRipTmQiPZ8IrKkt8eUTbVrX4KksHIaARnL5r3yAPiAOypJDKRLmqn5b6oIsahTDcLoeXhQ1bvQM7hbR+XMVj/gMJtASn9cOT60xwDlzFJt9jH0nJdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=n9hSsvm2; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1738016477; c=relaxed/simple;
+	bh=GIpgLHHzwGU3E7Z1rlTpf2U1vPAtFMlvKvD3oTd5yV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=U819WUx5vwHZTgkt8O3ZkuxqZhUxMqGGkQYDRJ6oNqpmYvdKcrf9vgI+rcl1x91QlMpn2cW9NUwvv1x04wy4xaf5QEXAuKBCpGJDCc5VvFqEi6lv2cq//v4HUQtf9ekU3qvCfg1r/DSV4vF05V0/kSn6hLY0Gcu7X03D0WeY5ZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iuDh8fy0; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1738012367;
-	bh=m0GZawHoB0dngE8xI493+Wp1K3bd9T861BCtZER3VNg=;
+	s=201702; t=1738016461;
+	bh=ypButPENFewyVD54htziMLjAJI8a4XmG/FH7pfaT348=;
 	h=Date:From:To:Cc:Subject:From;
-	b=n9hSsvm2b+rJqOjTosuomTf9/GE1B2JAG+7vkWosORBRIiLDt9AnLXbFzSjovFpW9
-	 CrE4wNB9EG14xtejxpRFeUCpxA0UhCmGrhiGT1yIIjeRo2C3lDJmHovHS5HleYv7cr
-	 53Eye4nJVXjGkMnmMcbKh+lfVC+3q+chNzdj/vy/bJVTihvILT0SmSG0q8+MgXiua6
-	 9TSgRsUQ5TSWG4u2nAUzwhAP6qkdvBbmxRVAtMU8uNYPudrKdVZkB4YzOTlnYCVQaT
-	 nur5dtwlmaogTBkhZn/9bPPKKHKIoPzPdI8Y1IpTAOHwT1xhjY3RTnjjENNuuHDUeN
-	 SDjvJGNCp8w7Q==
+	b=iuDh8fy0zGxHQwINAxYRfNnZYngBxU3YZhKp5VIBmpmw6BZ+B9G3PR34OQPjm109K
+	 bC6QreRFI/6tAl6J3b0M71Z9asj5D0UXYKoWY4BPVRuKdFujiU5mBNNkVCTJkJQiVM
+	 HhOgGLZebQVBGatz+6+rpDIuJohkviMVqJVwGaVn0+ogN0X0rTS4E5KHPxDIcLXuxj
+	 qC2cBRzDSyUJDcF66RfR8P1zeeBgEjxhhVtvQlmdUFXSco+0AXeFlgtGdmYatpn1MZ
+	 3KF/l7mYpRo8iHaXNvIzu25qiB9hhI3XLncu5e/wffsvLq6QNo8GusW8iHiTP4GxT0
+	 H2GZD1jabye9A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Yhh2l4X95z4wc2;
-	Tue, 28 Jan 2025 08:12:47 +1100 (AEDT)
-Date: Tue, 28 Jan 2025 08:12:22 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YhjYS6mtXz4wxh;
+	Tue, 28 Jan 2025 09:21:00 +1100 (AEDT)
+Date: Tue, 28 Jan 2025 09:21:08 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, Namhyung Kim
- <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Linux Kernel Mailing List
+To: Al Viro <viro@ZenIV.linux.org.uk>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the perf-current
- tree
-Message-ID: <20250128081222.0e16ae68@canb.auug.org.au>
+Subject: linux-next: manual merge of the vfs tree with Linus' tree
+Message-ID: <20250128092108.6acba872@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jhAIB8MvTmr1_DW/LUuQBjV";
+Content-Type: multipart/signed; boundary="Sig_/M5xlr87b0HsuMlHG4ZF0lCV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/jhAIB8MvTmr1_DW/LUuQBjV
+--Sig_/M5xlr87b0HsuMlHG4ZF0lCV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+Today's linux-next merge of the vfs tree got a conflict in:
 
-  191f1bd6492a ("perf annotate: Use an array for the disassembler preferenc=
-e")
+  fs/bcachefs/recovery.c
 
-is missing a Signed-off-by from its author.
+between commit:
 
-Looks like the SoB was after the '--' separator in the original emailed
-patch.
+  e3c43dbe8e5f ("bcachefs: bch2_btree_lost_data() now uses run_explicit_rce=
+overy_pass_persistent()")
+
+from Linus' tree and commit:
+
+  9c86671dae7d ("add a string-to-qstr constructor")
+
+from the vfs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/jhAIB8MvTmr1_DW/LUuQBjV
+diff --cc fs/bcachefs/recovery.c
+index 98825437381c,ebabba296882..000000000000
+--- a/fs/bcachefs/recovery.c
++++ b/fs/bcachefs/recovery.c
+@@@ -32,85 -32,21 +32,83 @@@
+  #include <linux/sort.h>
+  #include <linux/stat.h>
+ =20
+- #define QSTR(n) { { { .len =3D strlen(n) } }, .name =3D n }
+-=20
+ -void bch2_btree_lost_data(struct bch_fs *c, enum btree_id btree)
+ +int bch2_btree_lost_data(struct bch_fs *c, enum btree_id btree)
+  {
+ -	if (btree >=3D BTREE_ID_NR_MAX)
+ -		return;
+ -
+  	u64 b =3D BIT_ULL(btree);
+ +	int ret =3D 0;
+ +
+ +	mutex_lock(&c->sb_lock);
+ +	struct bch_sb_field_ext *ext =3D bch2_sb_field_get(c->disk_sb.sb, ext);
+ =20
+  	if (!(c->sb.btrees_lost_data & b)) {
+ -		bch_err(c, "flagging btree %s lost data", bch2_btree_id_str(btree));
+ -
+ -		mutex_lock(&c->sb_lock);
+ -		bch2_sb_field_get(c->disk_sb.sb, ext)->btrees_lost_data |=3D cpu_to_le6=
+4(b);
+ -		bch2_write_super(c);
+ -		mutex_unlock(&c->sb_lock);
+ +		struct printbuf buf =3D PRINTBUF;
+ +		bch2_btree_id_to_text(&buf, btree);
+ +		bch_err(c, "flagging btree %s lost data", buf.buf);
+ +		printbuf_exit(&buf);
+ +		ext->btrees_lost_data |=3D cpu_to_le64(b);
+  	}
+ +
+ +	/* Once we have runtime self healing for topology errors we won't need t=
+his: */
+ +	ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVER=
+Y_PASS_check_topology) ?: ret;
+ +
+ +	/* Btree node accounting will be off: */
+ +	__set_bit_le64(BCH_FSCK_ERR_accounting_mismatch, ext->errors_silent);
+ +	ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVER=
+Y_PASS_check_allocations) ?: ret;
+ +
+ +#ifdef CONFIG_BCACHEFS_DEBUG
+ +	/*
+ +	 * These are much more minor, and don't need to be corrected right away,
+ +	 * but in debug mode we want the next fsck run to be clean:
+ +	 */
+ +	ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVER=
+Y_PASS_check_lrus) ?: ret;
+ +	ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVER=
+Y_PASS_check_backpointers_to_extents) ?: ret;
+ +#endif
+ +
+ +	switch (btree) {
+ +	case BTREE_ID_alloc:
+ +		ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVE=
+RY_PASS_check_alloc_info) ?: ret;
+ +
+ +		__set_bit_le64(BCH_FSCK_ERR_alloc_key_data_type_wrong, ext->errors_sile=
+nt);
+ +		__set_bit_le64(BCH_FSCK_ERR_alloc_key_gen_wrong, ext->errors_silent);
+ +		__set_bit_le64(BCH_FSCK_ERR_alloc_key_dirty_sectors_wrong, ext->errors_=
+silent);
+ +		__set_bit_le64(BCH_FSCK_ERR_alloc_key_cached_sectors_wrong, ext->errors=
+_silent);
+ +		__set_bit_le64(BCH_FSCK_ERR_alloc_key_stripe_wrong, ext->errors_silent);
+ +		__set_bit_le64(BCH_FSCK_ERR_alloc_key_stripe_redundancy_wrong, ext->err=
+ors_silent);
+ +		goto out;
+ +	case BTREE_ID_backpointers:
+ +		ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVE=
+RY_PASS_check_btree_backpointers) ?: ret;
+ +		ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVE=
+RY_PASS_check_extents_to_backpointers) ?: ret;
+ +		goto out;
+ +	case BTREE_ID_need_discard:
+ +		ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVE=
+RY_PASS_check_alloc_info) ?: ret;
+ +		goto out;
+ +	case BTREE_ID_freespace:
+ +		ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVE=
+RY_PASS_check_alloc_info) ?: ret;
+ +		goto out;
+ +	case BTREE_ID_bucket_gens:
+ +		ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVE=
+RY_PASS_check_alloc_info) ?: ret;
+ +		goto out;
+ +	case BTREE_ID_lru:
+ +		ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVE=
+RY_PASS_check_alloc_info) ?: ret;
+ +		goto out;
+ +	case BTREE_ID_accounting:
+ +		ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVE=
+RY_PASS_check_allocations) ?: ret;
+ +		goto out;
+ +	default:
+ +		ret =3D bch2_run_explicit_recovery_pass_persistent_locked(c, BCH_RECOVE=
+RY_PASS_scan_for_btree_nodes) ?: ret;
+ +		goto out;
+ +	}
+ +out:
+ +	bch2_write_super(c);
+ +	mutex_unlock(&c->sb_lock);
+ +
+ +	return ret;
+ +}
+ +
+ +static void kill_btree(struct bch_fs *c, enum btree_id btree)
+ +{
+ +	bch2_btree_id_root(c, btree)->alive =3D false;
+ +	bch2_shoot_down_journal_keys(c, btree, 0, BTREE_MAX_DEPTH, POS_MIN, SPOS=
+_MAX);
+  }
+ =20
+  /* for -o reconstruct_alloc: */
+
+--Sig_/M5xlr87b0HsuMlHG4ZF0lCV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeX9rYACgkQAVBC80lX
-0GydEAf+NZvFgnhWvzrraWe9Bnc5nBX0MRKc4XwaC+wax7mGyjIdOVcY8UkYG1uH
-oC7DgB2pJBBgWzj/WyXuJSeajHNuC1HXRHw4xQqYBWD9fTbVnO7tM/1SIwe8CZlt
-JRLOzR8no0bKbrVHKQd/s8E8tdaE+XAcVjtrD7Q/TOczm3bg89Kunmo5psFjVD+c
-LErmEGHwVecpBPB+4Oxhb56m1ZMMzaS8nPKUlvXn/IyGmnYUCkk6jGQJ9WPUToqT
-d2SFdzb4nu2V2CChj/4+1Onaej5yKc4qprhoE2Zxwko9VoKek3zPRXJ/FhfV8dnt
-MNLmPWgx1X35Mtqykie8wNwlqDHE5A==
-=47ck
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeYBtQACgkQAVBC80lX
+0Gwdwgf/T0nDw7oWnvnj/9pT1bXvaRZjelcFRuuTv0VxXasRmAh7e/XCKcIBhUfe
+eXlU5NV1+Ybx4zC8CLir1dsRLz11HES+4hkUgnyZUB4vVELNYieD9jkB0FCfQYLv
+A0KwAouwMFSytPr4LU0CwaFSrNTTnNFw5X6tC0S5a7IEruS/zeJFB7ju18S03v4O
+wg7HEcNJkgSjEq85c30PBxx9UxFa6ces/Z4cG0eOkAcuUHflFGDG9h2n1580/gsy
+FeHh5H1c12A2k0lgb/9uXtDY3bwPze7SNtrZoRSFqq8NFoVkhRUSzmAWJYhEv8P2
+dzICYJHdcUTuP2bxuxCqKDfy+7Vz8Q==
+=FW19
 -----END PGP SIGNATURE-----
 
---Sig_/jhAIB8MvTmr1_DW/LUuQBjV--
+--Sig_/M5xlr87b0HsuMlHG4ZF0lCV--
 

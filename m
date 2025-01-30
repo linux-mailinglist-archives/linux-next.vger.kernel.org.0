@@ -1,119 +1,98 @@
-Return-Path: <linux-next+bounces-5345-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5346-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BD2FA231B9
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jan 2025 17:25:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 705ADA23568
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jan 2025 21:54:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 123FF3A7255
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jan 2025 16:25:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 737333A66F4
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jan 2025 20:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A8991EE003;
-	Thu, 30 Jan 2025 16:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB601B3921;
+	Thu, 30 Jan 2025 20:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v8GyktGu"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GDcJrfGy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CE51EBFF9
-	for <linux-next@vger.kernel.org>; Thu, 30 Jan 2025 16:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A5A1AF0C3;
+	Thu, 30 Jan 2025 20:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738254354; cv=none; b=dnr/F3SBS7KJlcn/WhXfKVOl2RRyMnQ+3ajuyi6QDxr4LkkGc6XvPwwE8O/kiXnIj1bg+bQsU+flKhIDtZEyKWLio80ul4Kpx4+SBmirsU2oG/jFRHbsqLAinc67kMQBH09BoyI5Kgv2xcZC5sx0eodmgDfvz84H55ZqizhqkyE=
+	t=1738270489; cv=none; b=PWu+5Uh1U0X6bANZcPvzLasuGOTPkF404XDf+VLjM7vRZgzPIgemd3ABAJ3DIVAl6LIqhZWqu3SMNK+kiqF/ul9M0D4iy7ma5feRgG/zw91dWjRlgeEYV30SCFBsf0NJumcpv2X9+CDwKHV8gsNIY8+aiyom8ouZFQYl4wmAadg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738254354; c=relaxed/simple;
-	bh=7MbILsjhKj2s5zvjXYe+wMzspmEdlv0lccPETbKTUcc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pYrT/p4WLt7sFtjNKp//54K17Z870lmGZje5PbqO2gydEK6NlSGqRHDeE1HMKs3RL7F77fFnNepfIAs8j0lX3QUfreaYl/0KwFCue+IRsTEAlHIu9MUct6/3EfpYN2v8Qfsb9xGvPMmQbPDxR7T37HjmWYgzFepzja16cor+gZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v8GyktGu; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5dc5722eeaaso8295a12.1
-        for <linux-next@vger.kernel.org>; Thu, 30 Jan 2025 08:25:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738254351; x=1738859151; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D1VbyvNf60Kf8EUF9uihS44Al/9bqOoO9TPYohytuLs=;
-        b=v8GyktGu3oIdtVizEDSzsTCiPf0rD2ziPEApSJVovnRL5RtWb2OQwpIrZcouqZgnDH
-         IPEkFDVFAo9T6RCr8wAmaTR6PKbpdNk+cpCuTNPE9k806yfnCLz6oIt9ewZupH5qYJtq
-         nGrxuOQByHILujq5FWguDCN6R4BLVUXPikBILiPhHRXkCfmI7pII8d8HXlfVfG1IwkyZ
-         vrwZk870Ad9xYvRWTe3fooLuB2QQM53k3Ho1KiiJAJdp0wdS+b5rW+G5GYm9NTkxg49A
-         UwHYsLNNHh7BeZFo+d0z9oD13E/dRZleFNrTd50ChC8bFEEUEKGeQjbuWkpqVJh4RYep
-         MWVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738254351; x=1738859151;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D1VbyvNf60Kf8EUF9uihS44Al/9bqOoO9TPYohytuLs=;
-        b=vGedJWu8xmLbHgdUMwrnvp8JTg57V9H+WkIhrUwfCt4tC/Q1bUnsNkx9+XoaPzUGhn
-         0U8dOrA6smvDkZZqpEdJYZ957wXTrl01DM4Qwx7lNEoiJoPKw9qhBYx7Oai1qb7hbZOu
-         Dj7dpUly6iG9yTLj9UK0Sc9TV/TVLSuqanBqxoiye9aN8XImlHZh3F5DgepwHmmOiVUd
-         FRFJXiaeLOs0bRUM30DNNG/UzfZTWSwNjOBPzvyqJqeuazK94TDKwTk03pq2wLG/GqSx
-         3Y+ZoDx7rD23YAh+NUk/xvIH1x6bX3yvOfykgM24ePnMS69grg4QMN+3JmkFg8jGgD/R
-         EcJw==
-X-Forwarded-Encrypted: i=1; AJvYcCXX5IbMl+wLkEHQ/YUupSo30teB6Je6D7lcf/68BpyylRN/CujVfoOfM15BkqXI7/2G18MhFwybrkiV@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaJ67Gdx2l01TR4maehGGy7LV1DpZU3WsvD3Hn7Oskw72Eb60H
-	O2/HMo1hT3zgV29iJ/dOMYmEuqUXGywgNFjhl965smMnW3FsHMPE6LIeOsv/LA7u/kKV4BdOTT+
-	6nr+Ypb6W314+CNpI+6mAHRJUVnfTm4Zjyjl8S6iaQDWAGY2Cbw==
-X-Gm-Gg: ASbGncuueqNAZv3vv41/3w8cUlp0D5WwJ3Q7o2yikmR0YchOo0F3aZvftPMssy7j+oN
-	OpRv1vPk4szQ5O6t99tMUp/WfUze4gBgmGSgdTVMXoXESbByZnSl9Y+hKuAq4XaEDPjfTcg==
-X-Google-Smtp-Source: AGHT+IHhDr3WLmHS020qYiDGqruH/H5KWsGKCNm6bAmGyAHM/dAndCBO2vfKx9M5/upYX5fbRvFEKaH+41A2H/O8RSI=
-X-Received: by 2002:a50:cc94:0:b0:5db:e72d:b084 with SMTP id
- 4fb4d7f45d1cf-5dc7f8f2eb1mr6594a12.0.1738254350731; Thu, 30 Jan 2025 08:25:50
- -0800 (PST)
+	s=arc-20240116; t=1738270489; c=relaxed/simple;
+	bh=79nu8oQEfj4h/uBdJJghkxFJTEeKvvrmP8QQQyh6eq8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=KmD1xQWVEqVJyq1QPYUJDIgH6vkZ8NV3sKuiPZhWKtotdwDKEbuQsMAEulDdwAdGUBtwWHiCWHyyMW5f/dVNmFxJlcPVM8y1tRQOjkOc/CpFKW70EyEd5XasyUhFeoVj3wT1aJgPeDytquGhJEJeCM9+04IJQJYZSBvt5Ij/12s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GDcJrfGy; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1738270465;
+	bh=BrDmub9gfSOCRMnIhhxj0iWVOHOHurRqFWOG+8aDtgQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=GDcJrfGyOd4mKbN4Hsb0h9MM5sSAYvnlFfp9kSH0weXG357D1P93JaK8TkpssAep1
+	 aqt/f4dE2jfY2l8Zthen3Hw74fmF5NzvIh0R/levG58qqvj5w1fJ/yaOAWX5b37wme
+	 FTptXQiCiy8Z8Qagt3MHKtVQ24mayRPRBtG4AVc/TmwVVrt8Hug838jPlLCtohNM6G
+	 bATO7n57lFdSgF91AjuWv/0ArXJC8o9h5s1q1sa/w4roTqF+1HTbxm2GH9YXlM9YQ2
+	 cpSWS6akXuvhnTEr67Cd9vzZcDKsyUm5Z9ZqcgudriPyn9mkLT0A9DoZVbwBw430+3
+	 19A2cApeziCrw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YkWV85T0yz4wc4;
+	Fri, 31 Jan 2025 07:54:24 +1100 (AEDT)
+Date: Fri, 31 Jan 2025 07:54:13 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the risc-v tree
+Message-ID: <20250131075413.6fc6c272@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <679b7c95.050a0220.d7c5a.0014.GAE@google.com>
-In-Reply-To: <679b7c95.050a0220.d7c5a.0014.GAE@google.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 30 Jan 2025 08:25:13 -0800
-X-Gm-Features: AWEUYZmrBV1U2WTS48Ggt1n7BFcW0T5BPP0zexNotres2EAXXsig32k122LDFns
-Message-ID: <CABCJKufpND1qvBhUMwpJ4OE7Umo9EuaNTLOi-GmAXFdXRqhoFQ@mail.gmail.com>
-Subject: Re: [syzbot] linux-next build error (19)
-To: syzbot <syzbot+62ba359e1dfec1473c57@syzkaller.appspotmail.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-next@vger.kernel.org, 
-	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Hv+T/2lex8/aKBLz3Iva4p2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/Hv+T/2lex8/aKBLz3Iva4p2
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 30, 2025 at 5:20=E2=80=AFAM syzbot
-<syzbot+62ba359e1dfec1473c57@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    a13f6e0f405e Add linux-next specific files for 20250130
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D10221ddf98000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D3445081dab637=
-16c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D62ba359e1dfec14=
-73c57
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Deb=
-ian) 2.40
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+62ba359e1dfec1473c57@syzkaller.appspotmail.com
->
-> scripts/gendwarfksyms/gendwarfksyms.h:6:10: fatal error: dwarf.h: No such=
- file or directory
+Hi all,
 
-gendwarfksyms depends on libdw, so on a Debian system, I assume
-libdw-dev would be required to build with CONFIG_GENDWARFKSYMS.
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
-Sami
+  0207244ea0e7 ("riscv: defconfig: enable pinctrl and dwmac support for TH1=
+520")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Hv+T/2lex8/aKBLz3Iva4p2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeb5vUACgkQAVBC80lX
+0Gz0wwf/Sg8J501MHV7p8T0U5BvjHwhpsiWI0clffcLWsX5QipBLrY0FUbtq1BBm
+xXcq+/9Hx/uOJ5Kx9gHU/8UG6wnWfkMBp2U0S1XzhLIi/2MGpBpDduE7X3pH/TJT
+OAAIM5fXd9HT9YToYDBIn9GPdY6ufv6Eypckjnh/F1kW2aLoHsmM9moKd/KCeqbA
+Tiwym9Lb4QzIYkN1aYvy8Rd8B/hPvBj5M5TQR4emEHGIWbl9jM+fGdkA7GhOCKxc
+2M2hv4T6CRySUmTY7RkLF7h9hrsdYUXlWlpTC5crK4Tq/L8aLE24Pg0mTGy6ViF+
+VLzCHMbHE3ZTX3C1GaED8r37ihA9kg==
+=skVP
+-----END PGP SIGNATURE-----
+
+--Sig_/Hv+T/2lex8/aKBLz3Iva4p2--
 

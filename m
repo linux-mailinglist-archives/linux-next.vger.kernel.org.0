@@ -1,120 +1,119 @@
-Return-Path: <linux-next+bounces-5368-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5369-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00C03A2860A
-	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2025 09:59:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A68E5A28648
+	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2025 10:14:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 551EB7A622F
-	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2025 08:58:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 424E3160CC2
+	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2025 09:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B480B219A6E;
-	Wed,  5 Feb 2025 08:59:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 806BF22A4E4;
+	Wed,  5 Feb 2025 09:14:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cO9tXdYV"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZeVRaGs4"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB8C131E2D;
-	Wed,  5 Feb 2025 08:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A5622A4E1;
+	Wed,  5 Feb 2025 09:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738745962; cv=none; b=ZO7NzQveSDt0ijpCgQUFKd4Df3aMRtNWwj6D79dL9+Gtt4xcD/HVCxth2iXn2fBByHuvQVDfBRByPzj9tJa99wnI3oB4UEFYLyl35t/Njp1Qn7aml/sMyM3lUR84bSjRlz9uMKwsHxSveLYJFiovRtcfy/HUgNJYrIGeFTmlAXU=
+	t=1738746877; cv=none; b=HJNy9BX+gwyCL5gQBmz32qZAnm79KgbVlV127Ex9CaSBmrGoGZmkJMu6CYP2z/LR122/yaYXOOKqCpLLbR2CUNv4rIesUMDCQtiA19R90+MK8CLnW+RT6JtaWh3YF2z6Sial3UKwSzyv8se4wKxJ3f1sMZPKvip1/stYZZe3mjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738745962; c=relaxed/simple;
-	bh=TZFRc6FYXHvwnfyDD0qzPkae1qeV3chgsD6Gs3FuGHQ=;
+	s=arc-20240116; t=1738746877; c=relaxed/simple;
+	bh=7Fd/ktYgs+VN6W6ON+omAnkDBbnkRTbJd0bDOrSqCE0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dkMIOn86/BxoopqKUGVpuHzRx9ba8z+70ijpljRSx7uUV8sD+52p/KBC2RjenB01CCK1kNumM8XaBXd6IUac1ZIZK+7yUFD6BKEBWOrtEaMlqCYIkPnupRg9IJv3ZK4EXy86uNi8VoEL4rFv4IYejTI1+zZt78l0sgXXpbNzOSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cO9tXdYV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C97C4CED1;
-	Wed,  5 Feb 2025 08:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738745962;
-	bh=TZFRc6FYXHvwnfyDD0qzPkae1qeV3chgsD6Gs3FuGHQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cO9tXdYVFbN3eDp5YAZltzm/MY5C6pCYg/yJ+Nw3DkfYiprk70NPPaNFi6BUYhcIA
-	 JtyeivNMZgTaYaUUO+aRH8OD6y9jJcD1Y4+wHslvMf2KEj9+taQh0ylJ2mTX/GbX0q
-	 Dv70zlCMhV3+qhzlG7xsGp6rteY+v7JzJpC5H+jlzEj65+ANhbPl+sP1HxsW05vcxL
-	 s2MbW2fw7sUjwWzSUB9Gqz/PCN7ODBShwlGPw4lI/dQQsxpOlZOMoJJwoHdqRJVRiD
-	 LFs+f/MB/ob+jG+/N5VReibBMIaAoWZIPCDc2XKEerpfazk16iY8ioWi+gGYdC9t4s
-	 D7bp/AXe0tLwQ==
-Date: Wed, 5 Feb 2025 09:59:17 +0100
-From: Joel Granados <joel.granados@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PrXDpvq4c9eFZuz8LizlmDcbxbW34/y0FgxS9o86F8nkhJDoVjo0z0BMFWt7oKJd+WiZXGyBFXvK5S13vcHajUCiWyOtrjTQ9P2bPi8yHvZE17ZAhS3EhcgPDcU/7k1YAhmoEPji1Fj9tL+Wewzh4ouE5PVBw9bKnqUGZli43ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZeVRaGs4; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=gSYBRslTCVnWBoHK/aqOtRXDAUtCUdvwNR/hxpXAIc4=; b=ZeVRaGs4ZgH/nGGESIexy1plJa
+	h65QYfLJYhs2jwl6TI0qkwAehx41dtiQJcMUU2OMWCgEGOZptonwVRcrhqIX2LM4ZwURqM427SwqF
+	n/Xe3/sbnCOCRqg0DfabeUha55tUnWWeeN5UUWl+UT5VNjMbIFlLRHlxwLJQ+vITygzeUDnbNrI1s
+	7eO5maMDRH/NqLNIj15U9ZCFxPjDrmfnbFYtCEJxb95Lpf/fen1+pHaTJn5ThuNANG4+ft3V531Wn
+	vTbwl3MWlqxwAN7o9kXW9fqsKrc8QGOdj7QHSFsCapGhdxhUpYx0xHxvow9GFf0s1QPW08WAEyreY
+	kvOgF/fA==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tfbUK-00000004Atj-1Euq;
+	Wed, 05 Feb 2025 09:14:28 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 2BC573006C0; Wed,  5 Feb 2025 10:14:27 +0100 (CET)
+Date: Wed, 5 Feb 2025 10:14:27 +0100
+From: Peter Zijlstra <peterz@infradead.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miklos Szeredi <miklos@szeredi.hu>, 
-	Joanne Koong <joannelkoong@gmail.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Miklos Szeredi <mszeredi@redhat.com>
-Subject: Re: linux-next: manual merge of the fuse tree with Linus' tree
-Message-ID: <jr2ud7od7ryb7j3gz5pz4kwz4gm72fj25t2xrq6m3agobcye6y@fa4vd3sxfbti>
-References: <20250130093252.78a892bd@canb.auug.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Liao Chang <liaochang1@huawei.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the tip tree
+Message-ID: <20250205091427.GZ7145@noisy.programming.kicks-ass.net>
+References: <20250205080053.30dbe654@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lKpNcEHplkQbB6JV"
+Content-Disposition: inline
+In-Reply-To: <20250205080053.30dbe654@canb.auug.org.au>
+
+
+--lKpNcEHplkQbB6JV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250130093252.78a892bd@canb.auug.org.au>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 30, 2025 at 09:32:52AM +1100, Stephen Rothwell wrote:
+On Wed, Feb 05, 2025 at 08:00:53AM +1100, Stephen Rothwell wrote:
 > Hi all,
-> 
-> Today's linux-next merge of the fuse tree got a conflict in:
-> 
->   fs/fuse/sysctl.c
-> 
-> between commit:
-> 
->   1751f872cc97 ("treewide: const qualify ctl_tables where applicable")
-> 
-> from Linus' tree and commit:
-> 
->   9afd7336f3ac ("fuse: add default_request_timeout and max_request_timeout sysctls")
-> 
-> from the fuse tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc fs/fuse/sysctl.c
-> index 63fb1e5bee30,3d542ef9d889..000000000000
-> --- a/fs/fuse/sysctl.c
-> +++ b/fs/fuse/sysctl.c
-> @@@ -13,7 -13,13 +13,13 @@@ static struct ctl_table_header *fuse_ta
->   /* Bound by fuse_init_out max_pages, which is a u16 */
->   static unsigned int sysctl_fuse_max_pages_limit = 65535;
->   
-> + /*
-> +  * fuse_init_out request timeouts are u16.
-> +  * This goes up to ~18 hours, which is plenty for a timeout.
-> +  */
-> + static unsigned int sysctl_fuse_req_timeout_limit = 65535;
-> + 
->  -static struct ctl_table fuse_sysctl_table[] = {
->  +static const struct ctl_table fuse_sysctl_table[] = {
-This LGTM. As long as that array is const, I'm happy :)
+>=20
+> Commit
+>=20
+>   a66396c911bd ("uprobes: Remove the spinlock within handle_singlestep()")
+>=20
+> is missing a Signed-off-by from its author.
 
-Not sure if this makes sense in this context but:
-Reviewed-by: Joel Granados <joel.granados@kernel.org>
->   	{
->   		.procname	= "max_pages_limit",
->   		.data		= &fuse_max_pages_limit,
+Bah.
+
+> Looking at the original patch, it seems that some process has cut the
+> commit message off at the '----------' line ...  the divider is
+> traditionally '---' or '-- '.
+
+Yeah, except akpm uses/used a much longer one IIRC.
+
+I'll go fix up and rebase I suppose. Thanks!
 
 
+--lKpNcEHplkQbB6JV
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
+-----BEGIN PGP SIGNATURE-----
 
-Joel Granados
+iQIzBAABCgAdFiEEv3OU3/byMaA0LqWJdkfhpEvA5LoFAmejK+0ACgkQdkfhpEvA
+5Lpt+RAAjNvTt9Pm1JLPfqDG1iuWwpFMoV1qUqRSIypNeIvCoNN1u/1FciNIKVxT
++wuUJWefrLQyavobQ6RkPdL47xB6GVL0GTHOtXz3jz7881cs2fkibx6TYaQ64ILE
+l0P/qAZ8gezqSnTpSMUPFcV43MhZ4d9f33K3GMWlI/KpPxZv1NEN4vHOlnvacCeo
+UAsLRZcWIMcU7vgXvSV7zp8iVikSsJ/oGU+XfmIL+ZV5w5braeyJ1dzoNNVGRzAa
+L2M5EiuDlncx8Bc2vYxlEEe4ShdJR8GPUP6mBJHTkyvCTbTJOWqWzP6p2OESht5r
+8iX9SKsemnQnpJgVddogIAyKzmszj/fjG2P1n9HqQk+eVAZNFQ8W8mnXFZM2A4JJ
+yPvwgTcg7RVwCNapeXugS1a7FBApxTLc9H5em431UYEdukq4LjULhKsx5wdTxiXR
+XjI7d//wHo4kUdQo7X+r7jHTJlriqJ4AL2VJzWOVZhPznrP3Tg3wHmI4/KfyjVGb
+FIoxFDkBtwWN8uQu08Wa5Lb5J9MQb2AQ2/gPUyi7mn1vWZaJPAHzfjb88ymiuZyh
+5mjdBGOHaYq8LquhqxyQvuvNUjCcp3WAigTxK3qqOQrnMfpfuke7w+6W0Mu+jos4
+xNqCDNHYU95BY6XXB8VL6LzUNVTJ7hOEEWibmjJenosPo1loiFM=
+=WD1d
+-----END PGP SIGNATURE-----
+
+--lKpNcEHplkQbB6JV--
 

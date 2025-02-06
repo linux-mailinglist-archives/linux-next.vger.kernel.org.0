@@ -1,114 +1,116 @@
-Return-Path: <linux-next+bounces-5377-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5378-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AD14A29EFA
-	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2025 03:53:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E891A29F67
+	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2025 04:36:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F5A31654CA
-	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2025 02:53:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C94B33A46AE
+	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2025 03:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B161136988;
-	Thu,  6 Feb 2025 02:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66C89154BE2;
+	Thu,  6 Feb 2025 03:36:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VGbixHn5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QnVaRI4H"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF37B1422D4;
-	Thu,  6 Feb 2025 02:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CFC3B1A4
+	for <linux-next@vger.kernel.org>; Thu,  6 Feb 2025 03:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738810418; cv=none; b=jSt6Xgw5hrshiDIMPKZgQ/1B4S+//1wQMBE/aZ0zc0OlUBhHGktofRc3vK1YlmiyJwqCdUBUpEA+k/7OfC11pWcqtF/uc0F7e1oidMWHnep7LjX583353+hedHQ8OBB1x2GfYH7YxP4hUcFg+MfdKenbfIyS/mpPhwfK3x/k/rc=
+	t=1738812962; cv=none; b=TrBHhQAveW+WX4CDZgLhqGQALJ+V8ZiWAOdrvSn9sVY6h82/WmUsArF41n1XDwZiNe/QNFrEuLzTrXrLLL93S97juDexzhyVcK9o36ueVazA6h7xZEYA5B50GDBeeap5QshAUgakZrWPG1UdwmxubNL7zAJHOGPhOQp8wt71LaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738810418; c=relaxed/simple;
-	bh=KaIqYSpMI2Kcjo9Dk1clxhX5KjFMB/7s/tbYlEm2v2A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VahET0BEOxfPJOMOKq81WmfG7vSn1OfuumgG+ONGIxgWWpp3FUeGdRW3noqKf/7LGvcy6vnx9/pBahSPAWWeX2QcRXrjUo/519boKyV8TdayqRK9E1Gzcuk/1tRpDMYjSN1iHuAn+kvNiS/toHLg4JOokOqxNq1d0yx3zvnJhKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VGbixHn5; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1738810401;
-	bh=YuhrVy0QKQnIHMyTWgPFjnFm1OG18Fln7T1zxKKh/EQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=VGbixHn5OFIYvutRjF+MlTIDXu4TDiTzYNqX74CC5RK3gRIkh//7TJsxILMIcuWrk
-	 tsEyeZaG+NmShToFxLAmErXeKNeQraljn5RfuWo/bATnN2LWuAdJICxE6VuWobNXdK
-	 FmZ/JQX6pB5QULa7nia/DdKyzAjAKUCePHBDKkHOLXXq9l0lF5oZsi7WE26BkTX3aF
-	 iriUahBbzMwBz//kG1YVAJlafM1AXtRd+zzlsjFtJQQmktdHfaMroCwAGCNjHg6orQ
-	 wSp9s0KznHx4qqVnbVH5MZAKBeRHyrfSSTEDpcxKYswt7C9QLhAZF0wM1tVYklEV6a
-	 00ZEDj0CFq6Bg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YpM9X04ZCz4wcD;
-	Thu,  6 Feb 2025 13:53:19 +1100 (AEDT)
-Date: Thu, 6 Feb 2025 13:53:28 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>
-Cc: Benjamin Larsson <benjamin.larsson@genexis.eu>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tty tree
-Message-ID: <20250206135328.4bad1401@canb.auug.org.au>
+	s=arc-20240116; t=1738812962; c=relaxed/simple;
+	bh=SliaH8b6GjP5DO8bJ29b+UYqG8BQPICpMIb2A8l/7sM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UcuCiChi2xax2BhEHBV+KhUmHGEv73GQa40j4J9iUQVX33K4MDTlo8IztoyQydpsTqyn8WscSiBHSDKrAv/6RIpeLw22gEH74aTB8IgGd4iFJscMEQi9W/XE/OKw0CRhxLuNqL+gk6oagLmhPC1cXnzVAFc9+4+8S7fMPCCjLKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QnVaRI4H; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21f01fe1ce8so5980185ad.2
+        for <linux-next@vger.kernel.org>; Wed, 05 Feb 2025 19:36:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1738812960; x=1739417760; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5QdU5dLEWKXzhZsgVLEFYLWQnoZN9dNqbJWkrckt/Tc=;
+        b=QnVaRI4H6uC3lt04xrNZl3RKLSvV3AAojwOMHmdJMiOP7jV8QD7aA5eijDHwiyLIgA
+         rtKgVAW2DcvWcnAoyeYZ247oFednEnsWwZWoHf22fhNlwoXqdXogw4JobVfNP07PJ6Jk
+         IJ2Ru3sGy8Pav2X9rsJTvrxQz51vZcEyPxmOOzEeIc5k9oXpZ40m2oPeibJVQohaW72n
+         wraF+T4YMc3+eKu2T5kETNZP6n/ArJkxxnWUracXUB01oJR4OiH9lE79iiD0K8GZNgd7
+         loSYtkKYhX6WVjhEoy4deVFcpNd+UreKDDkPPzOc8Ey0zJQNaJRfK0tpXCGQUnhtotja
+         kpeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738812960; x=1739417760;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5QdU5dLEWKXzhZsgVLEFYLWQnoZN9dNqbJWkrckt/Tc=;
+        b=iKgvUHop56AP6g1hrhCDI1eBvrUYHw93a4AxXv+JUWgwB8W1AbGJRSv3c2CHK8hF11
+         f8NCb9jUlsqtH5AF7x8K/iEVA8445TbqDO0lO78dE92VKsedchagV277Ny2BmZw/2Wxw
+         4D0TvN0NymWyWWYsR79axjSRWtfC5RXXqkfjJ9ycc77uXhVl4BR8AR80GuGbV6kwRNoC
+         J8yhQpJpnOlDqIHtCbi9cEtIE8V+162k+oVbCqBFLqaovVHc2rkNTyEUo2D3U3kpaXy9
+         jZQCOr7mJ/Jti/iS41qnE0e+rHMrSrvqPrq1zBzAoCT2qGan3R+5YYitlf8az6v1CtoM
+         gTrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXL5KFfLH37ihwCtjM6GahA2E1seY+ErbMu3v9lJnyAWm52HQVMIMj7Xp1px8T7Q9njFywOIO/6CwSJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbEIuh/8aoEtZIEvYEJjG7vL7KdrFAlMcXP8O3doD7EQ8tQAaU
+	xyAngOz06vwQ1bjzxLMAFKNVtBZ+UYxjjmAkoBY6prjGwpQcYb2pKcxnVEvH7qs=
+X-Gm-Gg: ASbGncssRMgde0QLwWc4jlN9SXqDoHdYAmxwwKODuZzqgv763Dry/Y5iO2izaMA/z4w
+	3xOyabos2SYsWns2AWImGKVhG3KM/u/b+rU+/t7cu709rWEQHVJavp3zTVpseqP4DNOuqEHuaZe
+	XIKrdHqBkqozP8JGThjCCfUxjy5AWxzXc39T4jrtaFvzGuqJzzSf0ftrdd71ZdX/LFflHdsahml
+	I8Q7YFgfutXzuUUy2dfwOAXMroiMTNf99W5BHdYYdPfcpPGo1FPVLSbezMrNzMlpxQm39sCFE6Q
+	TGEnAnyPFq6op/u7KQ==
+X-Google-Smtp-Source: AGHT+IFu8Ns2woiq6S/e2FUNHLRPplPpN02WxrN73BtCsPcLpHZ5SjLLdFbqjcsqRh2Jl0/9eiGzrQ==
+X-Received: by 2002:a17:902:e5c7:b0:21f:db8:262d with SMTP id d9443c01a7336-21f17f02bdcmr101308555ad.35.1738812960121;
+        Wed, 05 Feb 2025 19:36:00 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3650f382sm1803545ad.29.2025.02.05.19.35.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Feb 2025 19:35:59 -0800 (PST)
+Date: Thu, 6 Feb 2025 09:05:55 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Aboorva Devarajan <aboorvad@linux.ibm.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: linux-next: manual merge of the cpufreq-arm tree with the pm tree
+Message-ID: <20250206033555.q24q36txif37hzgu@vireshk-i7>
+References: <20250206115034.5d3004c6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pYaJ/yzPbG7Rmf1iL9+kcs9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250206115034.5d3004c6@canb.auug.org.au>
 
---Sig_/pYaJ/yzPbG7Rmf1iL9+kcs9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 06-02-25, 11:50, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the cpufreq-arm tree got a conflict in:
+> 
+>   drivers/cpufreq/cpufreq.c
+> 
+> between commit:
+> 
+>   0813fd2e14ca ("cpufreq: prevent NULL dereference in cpufreq_online()")
+> 
+> from the pm tree and commit:
+> 
+>   60208a700f76 ("cpufreq: Restrict enabling boost on policies with no boost frequencies")
+> 
+> from the cpufreq-arm tree.
 
-Hi all,
+Fixed now.
 
-After merging the tty tree, today's linux-next build (x86_64_allmodconfig)
-failed like this:
-
-drivers/tty/serial/8250/8250_airoha.c:52:6: error: redefinition of 'airoha8=
-250_set_baud_rate'
-   52 | void airoha8250_set_baud_rate(struct uart_port *port,
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~
-In file included from drivers/tty/serial/8250/8250_airoha.c:10:
-drivers/tty/serial/8250/8250.h:328:20: note: previous definition of 'airoha=
-8250_set_baud_rate' with type 'void(struct uart_port *, unsigned int,  unsi=
-gned int)'
-  328 | static inline void airoha8250_set_baud_rate(struct uart_port *port,
-      |                    ^~~~~~~~~~~~~~~~~~~~~~~~
-
-Caused by commit
-
-  e12ebf14fa36 ("serial: Airoha SoC UART and HSUART support")
-
-I have used the tty tree from next-20250205 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/pYaJ/yzPbG7Rmf1iL9+kcs9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmekJCgACgkQAVBC80lX
-0GwEOAf8DLXNL4Pv3SpAnHBs5jrPP7rnPF70U47jEzd2dIz8wG53HQHPyCRVOo7P
-VB1yLTMzR2gUzhBsCTNdi08RdS77T17cl2dIZ13DxtlYXJnmKHcnn/Mm1Tjf5R1O
-pj4YtNV4IRuhh0ieTuLcUW/OCXd7dXhHcfVHwmQuHJR0siMD7iMDWcUzx0hlPLmI
-emB6pdyyOqvz1BLPL8Nzo/UcyDHovQNr6AeCjszb12M6VGEf19smsbiMAbwXGvsr
-euyvCOCel314HKgwajpkakMGLfxaHd/+7nB7vo8PvJfmw6az6UT7qRIYR6LTaFlK
-NHDNET1b3ajxD0WFMCa10iRabwF8wQ==
-=ivRd
------END PGP SIGNATURE-----
-
---Sig_/pYaJ/yzPbG7Rmf1iL9+kcs9--
+-- 
+viresh
 

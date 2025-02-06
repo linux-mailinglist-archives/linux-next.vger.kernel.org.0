@@ -1,106 +1,133 @@
-Return-Path: <linux-next+bounces-5373-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5374-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6132A29CCC
-	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2025 23:43:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F599A29E0B
+	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2025 01:50:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 162957A21F8
-	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2025 22:43:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 968881663F7
+	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2025 00:50:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809EB21505E;
-	Wed,  5 Feb 2025 22:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1895746E;
+	Thu,  6 Feb 2025 00:50:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ScgaJ/gn"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cMDaPIxN"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457F3192D83;
-	Wed,  5 Feb 2025 22:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811061C683;
+	Thu,  6 Feb 2025 00:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738795432; cv=none; b=gI70uwCSvIghnLBUoMNoA3hG/3r7gNOBm7U+bc45wfaMoQqUnMStNfHeGSorHmyVA8xSPvjg9OMIthHBHsLe2w+mp1O2Kr1OmpzkP/6G9zZztU75QpkGZ+7STcimS8JfJxueIoE7ru0yUJIDGprruvKNI5YElldIhEhA5vtk99Y=
+	t=1738803045; cv=none; b=HF8E6IwUYCsxXElsXAMDLwKTMt7Fecofl/msWSR23AyCFe6mgyUUI95kONHr7QvMcSR5oHsVwTWYRcwQgx0Rt0PmLmjqUm55gKZQA3ajgoLm9cFNLxwKvqV45oSpL9VWTcVikPjBI2JD79wjk8OGTZIdkhwa25QCV1d68IArcuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738795432; c=relaxed/simple;
-	bh=bOUalrxp7jG3ZgR6do7zefLQcA5EfaiJ/ToVZgxk9oc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OvrZJJEkB94rd7/+9B4RvH9OYpkKQPfVmlhu0OxHuJP7+anSF4uSLN4UOS6TcPmYn24Q+ZrsM/dX/7JqQ6VmueMp/ESzSlp0ZaDkzrJLSOvfu8bzmtlZ5P/4Lz3odVLw3D9YP/8dvHoH/LQ8Szv6W/3ILXaIs6K6WKzFNh8XhBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ScgaJ/gn; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1738803045; c=relaxed/simple;
+	bh=sr51Vgm+nQeGaht5C28wzr0rYZR0dNDhabGn57YISJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=k5LXNQVt/1/BJIt5Vfz8SqWM9jgMU4pX0WDSceluIe5puUHnvPdT7wwgglsS0XGJx5SRq7qd00xTiAIsKMExWhhKmKVwJQJKfyab3A33LFix2RQQUcHh9jKQtFjjJ3Lc4v2FQZoTwcX2ArR2/wHn9tADtHjlmvp2JtZHV1U2Puw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cMDaPIxN; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1738795414;
-	bh=F9QakszKuP8ByB6pho/CiHISDfLT0b2YnYhAlOWSH/I=;
+	s=201702; t=1738803026;
+	bh=6u3JVO9UJT5fwx2hnzk3rwfwY6b9fPSJmjL8WIW+DXY=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ScgaJ/gncv+v1bgXcjqTDXR7kWyho+bshZuTTpb/0gKC4aM2kTQzgZR7fhbtkRzic
-	 oaneLpLFq9i78dJjaI5ZYyKeY2VvrBTX3TlnxLMOOaWQDZjw55IOWjO7l74LQXRQ/c
-	 b0tbVo4zacbmCZ/om58lkveImm/KV/S38/gdu3P7EzjWb6uQJeoyCtrSJN4p7lfmBV
-	 pf+UWBiH9qgEcET2BrBdMRbBCi3kGOVQpnQDzViNo37sjQCQ8WyJGDsGQS2UM6Ne2G
-	 XX8yb1rDS9+zkOAEihJHHDR4vAyn0Hk1oOCAKw1a03NLX3kbgKngnVFNXDVouRA9El
-	 BT05bkAb3rNXQ==
+	b=cMDaPIxN7rbKtuq0RGrRVIryhmzChzR2fXM5+ZgBlXNIo0XNisq1TRgo8buZOCLXC
+	 H6U1csgrMoEdQ8+ZJA89j0mpa/zoAtm2dusPG3TSrnLCqvgxO12UKnHt6iJiAHBtQj
+	 DPJ2xORvCsxJf4tYNc7PQES90o4pCUDZTcljViFN/Twlp4kQnRNkOD27MU69800eBc
+	 3beivt0klIomBVFhWLjyh5wnqjGKXG1/SzsAZQsgzV5uDZIxkf5lQCac9++SDJuMl+
+	 SfCC5l08VguNHlb1jVq0bZ34rxvUPeIqn4Vqc3Dq1ACTYcCjiUqmTgTTtfTM8/ljV2
+	 Kdi0Z4rJxtNZA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YpFdK54xCz4wj2;
-	Thu,  6 Feb 2025 09:43:33 +1100 (AEDT)
-Date: Thu, 6 Feb 2025 09:43:42 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YpJRj5s0Dz4wcD;
+	Thu,  6 Feb 2025 11:50:25 +1100 (AEDT)
+Date: Thu, 6 Feb 2025 11:50:34 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Masahiro Yamada <masahiroy@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the kbuild-current tree
-Message-ID: <20250206094342.1a8cea88@canb.auug.org.au>
+To: Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki"
+ <rjw@rjwysocki.net>
+Cc: Aboorva Devarajan <aboorvad@linux.ibm.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Rafael J. Wysocki"
+ <rafael.j.wysocki@intel.com>
+Subject: linux-next: manual merge of the cpufreq-arm tree with the pm tree
+Message-ID: <20250206115034.5d3004c6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/W6ziQFaIJg4=sdAzbtDozK9";
+Content-Type: multipart/signed; boundary="Sig_/TOz7FwC_ssdJKnqs+Ncq_DL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/W6ziQFaIJg4=sdAzbtDozK9
+--Sig_/TOz7FwC_ssdJKnqs+Ncq_DL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the mm-hotfixes tree as a different commit
-(but the same patch):
+Today's linux-next merge of the cpufreq-arm tree got a conflict in:
 
-  738fc998b639 ("scripts/Makefile.extrawarn: Do not show clang's non-kprint=
-f warnings at W=3D1")
+  drivers/cpufreq/cpufreq.c
 
-This is commit
+between commit:
 
-  c6530a209ad6 ("scripts/Makefile.extrawarn: do not show clang's non-kprint=
-f warnings at W=3D1")
+  0813fd2e14ca ("cpufreq: prevent NULL dereference in cpufreq_online()")
 
-in the mm-hotfixes-unstable branch of the mm-hotfixes tree.
+from the pm tree and commit:
+
+  60208a700f76 ("cpufreq: Restrict enabling boost on policies with no boost=
+ frequencies")
+
+from the cpufreq-arm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/W6ziQFaIJg4=sdAzbtDozK9
+diff --cc drivers/cpufreq/cpufreq.c
+index 30ffbddc7ece,3bb5cef263da..000000000000
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@@ -1571,7 -1590,7 +1590,7 @@@ static int cpufreq_online(unsigned int=20
+  		policy->cdev =3D of_cpufreq_cooling_register(policy);
+ =20
+  	/* Let the per-policy boost flag mirror the cpufreq_driver boost during =
+init */
+- 	if (cpufreq_driver->set_boost &&
+ -	if (policy->boost_supported &&
+++	if (cpufreq_driver->set_boost && policy->boost_supported &&
+  	    policy->boost_enabled !=3D cpufreq_boost_enabled()) {
+  		policy->boost_enabled =3D cpufreq_boost_enabled();
+  		ret =3D cpufreq_driver->set_boost(policy, policy->boost_enabled);
+
+--Sig_/TOz7FwC_ssdJKnqs+Ncq_DL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmej6Z4ACgkQAVBC80lX
-0Gyk2Af+JJWHonS2CLAmcHasugB8AKG4nIxahbHOQUftKnf4ucCaHDWKNx13di3r
-8vpNzbL36mhXSbYT6X7nxPusZB4CsNVElo92j9QKC/IFmjCofPnuY8HSQxwJXpOJ
-E1PF/6T5EXgSXUBnpWXpJfkFmVqI0tSUdWphb5tPFj4lCfBPBFga4R26fEPq4mWN
-fVBsd1ibnPIhVfYy18VE+Ma/4/gcSvJhdbjSKhJmpimWbn/xkBvEW9qArW3XKWjE
-xlD8ETH1e8gh+eXm/WZiXc40Wwel3aIY+yN3DZ3aO6ath7JtYAhUsAisYZiqkJCd
-xEbzBWyyPW9owkOXejBhFBpH367yiA==
-=/RLP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmekB1oACgkQAVBC80lX
+0GxXTQf+J2DAyh71NS2hCLJISeRUhRNxkk0Gxvj5VvCElDUFohVAeH8kfWOq1T7K
+KXH73NG4+HonE/lDpwiRERNZEDQ3zuaX8qtPtq9At8fCwQM6wXLss43co0L1adMJ
+8D1z9H8wXMAI0NhK2K+3F+1BKrmkE3Sb54TvPpLZ4P9IQeK4SJzjc+SFoDIjhTU1
+UMU/lBf/m6d2Jw1jxsWvcMHjAW0fhmf5GV6iCXWht89MdxxJUXIzijqus6yUz2PL
+O5kQTpNAmTMdWyH3wUGeiH2hrUvOOaLqBNW2idpx7UJlnvs0CKRw2pblNRlWsd4y
+TnIcOQmLZ+TnvecJmdl76DLLuhcQ4w==
+=vGJn
 -----END PGP SIGNATURE-----
 
---Sig_/W6ziQFaIJg4=sdAzbtDozK9--
+--Sig_/TOz7FwC_ssdJKnqs+Ncq_DL--
 

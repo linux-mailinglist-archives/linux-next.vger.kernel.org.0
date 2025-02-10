@@ -1,95 +1,94 @@
-Return-Path: <linux-next+bounces-5405-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5406-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F073A2E362
-	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2025 06:08:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAA1AA2E946
+	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2025 11:25:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59FF73A505E
-	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2025 05:07:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88E61162F2F
+	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2025 10:25:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24B7B15A85E;
-	Mon, 10 Feb 2025 05:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hPpKWy+e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957D11E5729;
+	Mon, 10 Feb 2025 10:23:02 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D69D2F2A;
-	Mon, 10 Feb 2025 05:07:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E560A1E5732;
+	Mon, 10 Feb 2025 10:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739164076; cv=none; b=FJT2MoagWjIthzCwND+RtVIwpk1VHs9057+N0KEGUzCuDmscHF5EnAUYYRSfpget3l/vv5msAo5vgPS544LS7M3MvNyqsNtJPxzYfKHUkmcJxydd0gPIpho0ZJraQ7aVL8SfVvw0fZRofqA8V6x2xhqpy1IRkxkcsNYsCPFwhbc=
+	t=1739182982; cv=none; b=sYF7NSbx2Fq9Zevo/2narPpQynucwk42kFYxr7X42fr6wph4HD6V+z5ks5b4lyKosqKyeCMy3lLL5/kslRocQLz+7a1CkydET+nA+S1J6Ljnl5bZTLUr4gZ67a93k8G5CgK0N421hGVTCyAb6z/3jb4MBsClZ8Bs4zCwDRBXCGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739164076; c=relaxed/simple;
-	bh=ANO9oMWAe9WVlezDq1z5oOTTNnIfIcxIryQuVjmqVX8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gUTramfmB/gJxu+FdnP5eY2UIYsCxO8n7p1Xrff+KR9jvGiA3jYgXvN0Z/qWeff99kNaUqEfeuIn0MOO7EcrINHZ7EEpKW9IkY8bknDkNc2eChADomlkp+yHugsUbX8GN68xk+097YHWQhLJ2BB+EgrC1s2ioNMWctBjY8iwGXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=hPpKWy+e; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1739164068;
-	bh=0DU1lW0OzqBKiYkfpzAiSmzVXvZR8o2Im4Sez63qh3g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=hPpKWy+eYnHl1rehrAqFpQqwScYXLmjJ041HUn2dU9SUZ20gL4PJwIDPXlj9OtszF
-	 CyZ6DckAwybcvqA2FdGBURVgQH3GTY3mJgHhF80WKUyU2LjS0mSq0zrgErBKyQgKx8
-	 yZecBA/UWg+OWcKUerL+8rF8XY0z171jKjEd2soE9uCKFLxMzhvaW3LbbXm2YsOLLR
-	 b65yYih7qNY9+St/gGPoWVLBWmKmk3GXMWGGgfRUV1ZsMtF7/5troNqdR5T2N38z41
-	 +yL9H7rsvXPsTFKSC7lZzk2IhjAVQMZLZbz8j04Qur0aaaSermgfwLHArLLbqTlHZK
-	 JPGLfHkKW+D7w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Yrsyr1fByz4wbR;
-	Mon, 10 Feb 2025 16:07:48 +1100 (AEDT)
-Date: Mon, 10 Feb 2025 16:07:47 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 10
-Message-ID: <20250210160747.4db5c984@canb.auug.org.au>
-In-Reply-To: <20250210152940.1bff8e43@canb.auug.org.au>
-References: <20250210152940.1bff8e43@canb.auug.org.au>
+	s=arc-20240116; t=1739182982; c=relaxed/simple;
+	bh=1AH1+qDGBe3izN60C7CJNQrPXyH8uryGwGB9HKh0fPI=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GYhTfXAtAt0MWYQHj9dV5JorZC+sTpeMoPxFKgVwyaZbJncvXlVpBzhXAGLwafUobbU4RyyKjWwPPWDtKo28Vd35u69o6+DCIIY75/TQzoeTq9hIfd/fVZD6YLHZtiuUPOn4wv24JNA4fPJE42ftCMHHyKJ/B9+RJS99JpZAZyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ys0x222gZz6K9Hx;
+	Mon, 10 Feb 2025 18:21:42 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id F14731402A4;
+	Mon, 10 Feb 2025 18:22:51 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 10 Feb
+ 2025 11:22:51 +0100
+Date: Mon, 10 Feb 2025 10:22:50 +0000
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+CC: Antoni Pokusinski <apokusinski01@gmail.com>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the iio tree
+Message-ID: <20250210102250.00006bfc@huawei.com>
+In-Reply-To: <20250209173446.19590956@canb.auug.org.au>
+References: <20250209173446.19590956@canb.auug.org.au>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=M7vtFD.FdynQRZMxf.zzzM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
---Sig_/=M7vtFD.FdynQRZMxf.zzzM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, 9 Feb 2025 17:34:46 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> Hi all,
+> 
+> In commit
+> 
+>   3e2a7cb538ec ("iio: magnetometer: si7210: fix magnetic field measurement scale")
+> 
+> Fixes tag
+> 
+>   Fixes: cb29542a178f ("iio: magnetometer: si7210: add driver for Si7210")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: e0f5349ba881 ("iio: magnetometer: si7210: add driver for Si7210")
+> 
 
-There will be no linux-next release tomorrow.  Sorry for the short notice.
---=20
-Cheers,
-Stephen Rothwell
+Sorry, I pushed an update to fix this to my testing branch (squashed the commit)
+but failed to update the togreg branch I'd pushed out earlier in the day.
 
---Sig_/=M7vtFD.FdynQRZMxf.zzzM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Will fix up when I'm next on the right computer.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmepiaMACgkQAVBC80lX
-0Gxw/ggAlHmC5Vz3DjHbPmqBR05MSm2ApE584JYAVqHKy4KFlW5SwLnvfjP3zRMc
-oWl3/4ePpFTWAI1jjH05lZAWo7+iH5i/VEK1R2dbwsMQsX5/soSVg3D/oIjFt0eO
-UTaq9sEibed/WzsRVGEEuyaXlbNBIZh4B/W7iyW3rcvJiiDh1KA15gP3zFAtLDfT
-tp2gfEakXinNLSf+d8im1W5ytkmDsq84f1/H96ufNFH2BSSiD4uapjHoW5DUuoes
-cVLwnfGWl3wUvjM3pInO+AzMiKDTDdzp7G/sl2KMd5LajY8SCuicpRw79UmfSWEj
-qg2RDYhdRd6o/i+SNGKvzD7RZLBwWw==
-=FMVI
------END PGP SIGNATURE-----
-
---Sig_/=M7vtFD.FdynQRZMxf.zzzM--
+Jonathan
 

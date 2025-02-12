@@ -1,103 +1,110 @@
-Return-Path: <linux-next+bounces-5427-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5428-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22B31A3313B
-	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2025 22:05:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D354EA33170
+	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2025 22:25:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 405A73A25A9
-	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2025 21:05:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 993517A405A
+	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2025 21:24:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57149202C48;
-	Wed, 12 Feb 2025 21:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D78F202F68;
+	Wed, 12 Feb 2025 21:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JdwFOEYG"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HdUp/4EI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E363201269;
-	Wed, 12 Feb 2025 21:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A95202F61;
+	Wed, 12 Feb 2025 21:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739394339; cv=none; b=shdxLCbb6tPFZQV1Sg5QJzZYVPwf/l7xNyeaCb5yjFNpc3Brsf1sGmdc9ysorFH8cH9ZddEdVMkf9HcRCeG5WHexBpEu6o4CmhswmobanN8Hf0NpHlX/bxVLyq6f6TMvAt/YmZBJG6pBywLsTCu0NILMQunnUDGGgZ9dcQ6ct5c=
+	t=1739395535; cv=none; b=NKHYdvgzYDm+iqwnPy9CgwtIxmLeS7sqKAn0GL+S8SvBxVVKSVLgq++HkTigeA491ozKa9QYxmCj2vtXTxDOthCk+6er2r7CSOqO8bwLuvZAsGKw3O7XzebY3nnHfIadFFzFaE28P41Twtp7+zcBOVYor2dJhzAEno+Oil0Uro0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739394339; c=relaxed/simple;
-	bh=Aowa3s5zJHsnAPg33VdK9+jt6XqQw5dz2ZA2gzT3Mws=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XjTlBE7VRevlXtdef1Hd0uzMPcAMjxmyTebc1nlrEgw21KqdWRJeCD3NHmCXfbXaJ1sb/TWBljoNMGa3SXmgV7BE7qviwNlIQgHIJwnf84haOHb/gDqgPkkNqB7/IGYVQYgiBdJ3PZCBx+WmxSyPE1p3Rkc/CTXHwB8aUGjleT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JdwFOEYG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE30C4CEE4;
-	Wed, 12 Feb 2025 21:05:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739394338;
-	bh=Aowa3s5zJHsnAPg33VdK9+jt6XqQw5dz2ZA2gzT3Mws=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JdwFOEYGudhCUr9c6XUqp9kim0YuHV17tr8YBLFmALCGH1lPDkZXTwAezXo1wUuci
-	 ch+BsOuOKHAyrw5Pa975/rc1r5jjfokU0zF4xJMSyoCZZ/QqXvuNNk4f72SQgSZxzD
-	 lMF8xHlBa4qlPVdofcyl+ggvoG//wM3yhkKCPQQxTikRk/ssdG8fR58MvUdC2dJYDf
-	 FiGhJ8TcevdlTqGj0OidFuS6r0wnrxEKUGl53IEjjRuKA8Gdw0cgcxZgLbEZL9hqjG
-	 GMgiE/wxBJflHei9gpaSeFGFO/nsuldzq952P5nd654IjeyRX81jsONEFyoJMWf8gt
-	 nxY8WNWFZvF+g==
-Date: Wed, 12 Feb 2025 22:05:34 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the jc_docs tree
-Message-ID: <20250212220534.1fd321ee@foz.lan>
-In-Reply-To: <871pw3urml.fsf@trenco.lwn.net>
-References: <20250212155253.5bf0513a@canb.auug.org.au>
-	<871pw3urml.fsf@trenco.lwn.net>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1739395535; c=relaxed/simple;
+	bh=03Z8biH18L9FZMMAmims/VOX32xtfmOa0W18ZbjpQ14=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=FiRraLCAnceaeQom3ixU8F/9zEu2RP3mf7xR8BNXR/4XV3ZWHpyyUDxgYP/cwE7c7NRHY34jK2tqQGNgrMdxp6Kgy9tn34C+f7WYGPwwRc9Baccf7Rrgr5vGuKqsvSKERQlhmzo+MFearR+7HOtO42WG6yV73B8n+rsX0rvcxgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HdUp/4EI; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1739395523;
+	bh=AKh8X90vyF7JdBjv9k1Ghn3wvruHDrDm7vAtdLAepTk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=HdUp/4EIsdNCc1Q+9XhAskORQ/4ETuLiePRae78qfO2nd8bAhxNO+QdT5Zq2bZmro
+	 d/DOYTPLf1L2ROZoOVlGD1lhlXApuodOCmfAq7jLIjAPaV4nxWcgm26d/6g9AqUqAE
+	 Lrbk61s1i4yXhX1MSVwhNVyPHOOzp8XWMb14JetOc6G/MOZJGfi/taLIFA5+hphc/6
+	 a5CbZo64snTuEtuLCrX95NQ/N+mabfs6HzEZsCctIYaCY3hacWaKU6JiKiVZBEOc2q
+	 wbtR84pelMNjiBbi0tlZj66tJF/mh/R7OEIz1txuZ5YQUAh0v/nI8Mjq/HBQp6oFEJ
+	 J3l+5RbVEkPQg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YtWYv1Cdsz4wy1;
+	Thu, 13 Feb 2025 08:25:23 +1100 (AEDT)
+Date: Thu, 13 Feb 2025 08:25:22 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mediatek tree
+Message-ID: <20250213082522.52ca62e0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/UzWDtLHIZjBvcTWtpSiJtV9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/UzWDtLHIZjBvcTWtpSiJtV9
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-Em Wed, 12 Feb 2025 08:09:22 -0700
-Jonathan Corbet <corbet@lwn.net> escreveu:
+Hi all,
 
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> 
-> > Hi all,
-> >
-> > After merging the jc_docs tree, today's linux-next build (htmldocs)
-> > produced these warnings:
-> >
-> > WARNING: /sys/devices/system/cpu/cpuX/topology/physical_package_id is defined 2 times: Documentation/ABI/stable/sysfs-devices-system-cpu:27; Documentation/ABI/testing/sysfs-devices-system-cpu:70
-> > WARNING: /sys/devices/system/cpu/cpuX/topology/ppin is defined 2 times: Documentation/ABI/stable/sysfs-devices-system-cpu:89; Documentation/ABI/testing/sysfs-devices-system-cpu:70
-> >
-> > I am not sure what introduced these warnings, but I am guessing Mauro's
-> > changes have exposed them - the two Documentation files above have not
-> > changed since my last build.  
-> 
-> Exactly - the situation has been there for who knows how long, it's just
-> that we're hearing about it now.
+In commit
 
-Yes, this issue wave been there already for a long time, but, as we
-were checking each part of ABI files in separate, there was no way to
-detect in the past.
+  c4d75a56d161 ("arm64: dts: mediatek: mt8188: Assign apll1 clock as parent=
+ to avoid hang")
 
-With the recent changes, all ABI symbols are parsed altogether. So,
-symbol duplication on different parts of ABI (in this specific case
-stable and testing) are now detected.
+Fixes tag
 
-I wrote already a patch fixing it as part of my original RFC:
+  Fixes: 4dbec3a59a71 ("arm64: dts: mediatek: mt8188: Add audio support")
 
-https://lore.kernel.org/linux-doc/673e9543783349b0fcf625018e38e4e93fe98f52.1738020236.git.mchehab+huawei@kernel.org/
+has these problem(s):
 
-It ended that I placed it on a bucket of patches to be sent later on.
+  - Target SHA1 does not exist
 
-I'm re-sending it right now as a normal patch.
+Maybe you meant
 
-Thanks,
-Mauro
+Fixes: bd568ce198b8 ("arm64: dts: mediatek: mt8188: Add audio support")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/UzWDtLHIZjBvcTWtpSiJtV9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmetEcIACgkQAVBC80lX
+0GwCngf/bEWbHuQ/BDVW5O7ZwkMqdSXKt23miXuhZMibZiGo1brPnqCDzhQ1vir3
+u/J3HkMGo75mU3jzscmvmUaQNVy0oVX+tAwGKK8UcawMFZKQdzj01UW9BUOTeZdB
+OdKKCHKBx5NRm0StlCmcf7PKzjX15B4aN9eJPf2L/Z9qS602E0VpDglB+Y6pl7bG
+ETRLJ5EeB7J6X6F4Fr8CHxsibQXwAllVNegxCxDXBJFFebSEtjTrLHHaRiSoS8+S
+hbY0vg91sQHtfrqpTReq4dz5+zmMuz+D4cBluaTREjE1lXqZsllmsX4tQ1BNCMo0
+rZ7J6y4HpEPoy0OPFLqlpz9SfRnnzw==
+=gXty
+-----END PGP SIGNATURE-----
+
+--Sig_/UzWDtLHIZjBvcTWtpSiJtV9--
 

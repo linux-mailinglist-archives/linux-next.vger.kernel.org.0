@@ -1,159 +1,136 @@
-Return-Path: <linux-next+bounces-5466-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5467-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D16AA37A37
-	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 04:56:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1825A37B0C
+	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 06:46:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EB8216D7BE
-	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 03:56:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDFD93ABDE2
+	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 05:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8750782899;
-	Mon, 17 Feb 2025 03:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C89C185B67;
+	Mon, 17 Feb 2025 05:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DofaAc/y"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xwBhU6Qv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DB4C2C9;
-	Mon, 17 Feb 2025 03:56:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0706154433
+	for <linux-next@vger.kernel.org>; Mon, 17 Feb 2025 05:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739764613; cv=none; b=In0pH9HVWgCh8hpWygJPddu3wLj18offm1gEFOn7jlVl40h7aWnEUibmxcPav17OjSmU0ldXVPUeUrSz7yywTIWMoFUvDeAhoQkoIDO1KWifdcaU2WHxb3k4GqZiM3m1ubnomSRFThydhONgIYzW7zOS2JsTFxiuRme1kR7C8Hc=
+	t=1739771162; cv=none; b=sLWQ74pV7NRJ+AiwBfqmm14gO70CDJN+R6jDHDsxwov8K+cg+tl7KkP6PyIKPkt/cNZ722yrgsOsHEG7XlX0MrYt0pujwo/c5tinvZxO7YX6/a33e5FoHMxOfvlxPkuupjgBl4OiruHThDLOYuVIl8juJ+t+CAAmRmTl07Vrpvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739764613; c=relaxed/simple;
-	bh=HL9f+syMQDsFWUoQOD69NgzQ668GNBmX4e8GA0zddxs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ueD0gGhOnxG+SmTwWkRTMCuPHeZMwjzjSs0cVNAZ+zSNJeEgOpnp00zmTXtjLAR6r3Neym/EWVrNnuAgtSo64MFHgv98YYgYLJ2loqXDF25Imu3nZiM9I9P/M4VFYkSKn0uAKULhkZgCEDJ/07Uo+Ri6bw4CP8kMgeKj+TAGMUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DofaAc/y; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1739764604;
-	bh=6WSqKaFUzHhGRhLRQ9fZfQ+P24a/r+GzPC8WLMsu8qE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=DofaAc/ygLDCrbHDSyfN+LHlAvJIlsCv+zqgByPfJH0Lsf/DujncT41U6lw6JDg/t
-	 dxHvGnknPH3arPLdLCoaWxnYdabA3ukbS8BtgpR8tNWmyLkH6Fw16GVXk9YvcUrRls
-	 e8XF+pFvmotW2Eunv8b0x7TyeIoOr0bx1qMybLky7lkn2diddbz1G/4IdeX7VSSoSV
-	 nY2APp6NUngUznqVlLHqCyn7RnTYIvYRjrT5DEcxPnoSC/uKM1C8v+zxMOEcH693ZG
-	 N582MoGT70uPnQSCos4xWYbVIq2Cb9TQh+SHxMjFtGeFQFywhoA7VX7UG6/dlVKbK0
-	 aZQhqFfYdULsQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Yx83b1jbCz4wgp;
-	Mon, 17 Feb 2025 14:56:43 +1100 (AEDT)
-Date: Mon, 17 Feb 2025 14:56:42 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Cameron
- <Jonathan.Cameron@Huawei.com>
-Cc: Angelo Dureghello <adureghello@baylibre.com>, Bartosz Golaszewski
- <bartosz.golaszewski@linaro.org>, David Lechner <dlechner@baylibre.com>,
- Guillaume Stols <gstols@baylibre.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the gpio-brgl tree with the iio tree
-Message-ID: <20250217145642.410f6a1c@canb.auug.org.au>
+	s=arc-20240116; t=1739771162; c=relaxed/simple;
+	bh=36v6jqmZpCEsxa7KW4JPCPXZ3N7MYiG6GwfdqHuGqxk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ufvPNNR8GtJoqOtE3HNq/zJikf1nT73J2KkpdX3p1GQiCvQRdrnEWALaY8O8rXf9xwazjyKYK/AWA0Zmq1jE2Z+cvCXfyYZJXNNGikS5Y4TnHi0Fx0X7ZHsbzZMqrn/ZMMibM2uHM0nCBe84EzLlHyS10kVuXMC36iD3wdwsAow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xwBhU6Qv; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4718aea0718so353531cf.0
+        for <linux-next@vger.kernel.org>; Sun, 16 Feb 2025 21:46:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739771159; x=1740375959; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JgEtP7ZCj/iec489kglaPIikfWIGYspzrrfhJsqEWyQ=;
+        b=xwBhU6QvlljIJXmjO2X7SCFQ/EhagSbhJL1Cti21f6E8vBUNEtT5t6NXlEvK1PJwE2
+         51n8d0ICkNUMa5kyhjVsCGvBpe1TqINIsWm6MYJDhdrU0DuXWM8zW5RsAUpZaJiDEFGc
+         Xhq4He7zw7kM7jjImzCDeJDh6b/wslGUGca6y2IgWMxC4/4hASeJbn8JMp6iyrLo3/4l
+         BDoMfPfbFojIGriNnqJ86keGV2TYzRvsw7opClCnwutS4hZROtH7M8IDyPS7/UGRns2E
+         WbugO3ONirEhuIBEYM9ixiV+jSuHVBc4VKv6VbZjw+aaBiTggZN0jyv3lKmWST/23xaj
+         ZLGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739771159; x=1740375959;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JgEtP7ZCj/iec489kglaPIikfWIGYspzrrfhJsqEWyQ=;
+        b=Hi5wBvOp+XYjlNDlJZ3F2Jv7+rHmtfsEeMRo6J7xUGI2BhZnoJ1MlBAlfzSpMWTk6m
+         VZTr17b/AQXATpn+NSGu5TOHACkN4v8hsPLZXGKXzQ3bXsL7Ld1TiwDjYjzawbCPo8AD
+         DE9GcvjLp/mEKcdqv8ChzR6LpC/WRHXAtoQcRRstc/KMYqhZ0cz4FEFlRfYdTFJvPU/M
+         O6Gem3hlPIKAENAWQxPHMAU3WXP/05AgBxlwme+7x3luAIrIgAVP8U7vdWP5vo3ccRzy
+         bg1pTdXOcEdmahsg7T4nBpe8dFbKw/YuwjewR+wExhLavHJI1MI6LISpkq0oVA3FNVKO
+         nClw==
+X-Forwarded-Encrypted: i=1; AJvYcCWXMOl6T+wniUTabTRnK+Mbk92ykv2Jv0vaXZbbPM5/T7Y9Wg0lLm9CRJFQFkTARtebbyEmgzS4GAoI@vger.kernel.org
+X-Gm-Message-State: AOJu0YyL69ZQOopR1rILu1O+Yz9rNzUenU+ix0NLpNXikFiCoeRrjOTz
+	gK3GFBztvlD2jWEFl4mgzZHA5FFtpux6p+L830x43OEwuM3wMAv87GJ67hLL0KWKv1IE80tUFee
+	Fovrjwp4KDk+2UguUXfBFkK2gP6ueoTdqis2Bc4ibO/Qqk1NC7vp9
+X-Gm-Gg: ASbGnctkSPkQqlJzU3IHebu0HEv4IjA5f1OHEd8cubQ+U4VV7gNByTbf8MITyeYBSMs
+	+wSA1bWPIPNYokZe5aQildFbNgzOz4U+1pMzs8Ag7Nc8gEw3g2k0+QNwnVZx8u99MmX7ktmGe8G
+	POa8Ood7TP7U2EWJQlIIN+Amf0f4w=
+X-Google-Smtp-Source: AGHT+IFWZTc7y7L0UDRu1d2wIAjRGiucn5vcsQ3bASYdK/8KN/JZXov27MH9PO3Rjj5rtaREOTBbM2DXstTopUX+pjw=
+X-Received: by 2002:ac8:7dc6:0:b0:471:8b2d:c155 with SMTP id
+ d75a77b69052e-471dde5eb1cmr4061821cf.1.1739771159280; Sun, 16 Feb 2025
+ 21:45:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ETjtAXRq3b4IjRiUOkWULIK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/ETjtAXRq3b4IjRiUOkWULIK
-Content-Type: text/plain; charset=US-ASCII
+References: <20250217101453.34720e6f@canb.auug.org.au> <CAJuCfpEXqT-aHU39XMTtf-omJJUcQXtNF6RHmZ2bddqcVN0G=A@mail.gmail.com>
+In-Reply-To: <CAJuCfpEXqT-aHU39XMTtf-omJJUcQXtNF6RHmZ2bddqcVN0G=A@mail.gmail.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Sun, 16 Feb 2025 21:45:48 -0800
+X-Gm-Features: AWEUYZkLtcptRikPsV9k3V5QK8ESQI9OLOXmwPu4xnUTngqpDm7EjFewi9OLT4M
+Message-ID: <CAJuCfpHR_NA+RERHRi3m1vwJVdDkcpd9Vd4XfM35gTnHeUmOag@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the mm tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Sun, Feb 16, 2025 at 3:22=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Sun, Feb 16, 2025 at 3:14=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.o=
+rg.au> wrote:
+> >
+> > Hi all,
+> >
+> > After merging the mm tree, today's linux-next build (powerpc native per=
+f)
+> > failed like this:
+> >
+> > In file included from threadmap.c:4:
+> > tools/include/linux/refcount.h: In function 'refcount_set_release':
+> > tools/include/linux/refcount.h:65:9: error: implicit declaration of fun=
+ction 'atomic_set_release'; did you mean 'refcount_set_release'? [-Wimplici=
+t-function-declaration]
+> >    65 |         atomic_set_release(&r->refs, n);
+> >       |         ^~~~~~~~~~~~~~~~~~
+> >       |         refcount_set_release
+> > tools/include/linux/refcount.h:65:9: error: nested extern declaration o=
+f 'atomic_set_release' [-Werror=3Dnested-externs]
+> > cc1: all warnings being treated as errors
+> >
+> > (and several more similar)
+> >
+> > Caused by commit
+> >
+> >   1465347e498f ("mm: make vma cache SLAB_TYPESAFE_BY_RCU")
+> >
+> > from the mm-unstable branch of the mm tree.
+> >
+> > I have reverted that commit for today.
+>
+> Thanks! I'll see if I can fix it quickly. I must be missing this
+> function under tools/ in some specific config.
 
-Today's linux-next merge of the gpio-brgl tree got a conflict in:
+I just posted a fix at:
+https://lore.kernel.org/all/20250217054351.2973666-1-surenb@google.com/
 
-  drivers/iio/adc/ad7606_spi.c
-
-between commit:
-
-  d2477887f667 ("iio: adc: ad7606: move software functions into common file=
-")
-
-from the iio tree and commit:
-
-  8203bc81f025 ("iio: adc: ad7606: use gpiod_multi_set_value_cansleep")
-
-from the gpio-brgl tree.
-
-I fixed it up (code was moved so I used the former version of this file
-and applied the following merge resolution patch) and can carry the fix
-as necessary. This is now fixed as far as linux-next is concerned, but
-any non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
-=46rom a1072aac97bdaf3042fe2def4d7e6e7fa928cfbd Mon Sep 17 00:00:00 2001
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 17 Feb 2025 14:52:30 +1100
-Subject: [PATCH] fix up for "iio: adc: ad7606: use gpiod_multi_set_value_ca=
-nsleep"
-
-interacting with commit
-
-  d2477887f667 ("iio: adc: ad7606: move software functions into common file=
-")
-
-from the iio tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/iio/adc/ad7606.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/iio/adc/ad7606.c b/drivers/iio/adc/ad7606.c
-index cb3de1bd15b4..7d83bb320249 100644
---- a/drivers/iio/adc/ad7606.c
-+++ b/drivers/iio/adc/ad7606.c
-@@ -1259,10 +1259,9 @@ static int ad7606b_sw_mode_setup(struct iio_dev *ind=
-io_dev)
- 	 * in the device tree, then they need to be set to high,
- 	 * otherwise, they must be hardwired to VDD
- 	 */
--	if (st->gpio_os) {
--		gpiod_set_array_value(st->gpio_os->ndescs, st->gpio_os->desc,
--				      st->gpio_os->info, os);
--	}
-+	if (st->gpio_os)
-+		gpiod_multi_set_value_cansleep(st->gpio_os, os);
-+
- 	/* OS of 128 and 256 are available only in software mode */
- 	st->oversampling_avail =3D ad7606b_oversampling_avail;
- 	st->num_os_ratios =3D ARRAY_SIZE(ad7606b_oversampling_avail);
---=20
-2.45.2
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ETjtAXRq3b4IjRiUOkWULIK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeys3oACgkQAVBC80lX
-0GwLPwf/Vm8RAVS4wYoBjAGzMTl0fH//QQTldi0Lwc93QWYUsOXPW39BAb+uheSZ
-Cts1fErqPU/ifcwBZJqDwA23SXQm1tW2vVf+fc7OI0qt/F7+T5mE4OE7kArHB4s3
-TlOUaIShSY77UMTwUA45c2VlRLvnpXbXdJWouL6hfxVmq6UrHOKb9BAKYhGgMmiQ
-38wxkbvJgxw2typLvkKfHo4y7CVXfJtejS3W3PV0HMzBg/h+XHRGKWh2Z3ZA2yCq
-2zK4Vxg19tSBfqIdx4Q5Azii4pLkWhldLBh/zB9/GAyLrOPtTHASBmo7T4sOyaj6
-rOj+lq4ConYNazta9rYikd8e9Ti/KA==
-=uP9N
------END PGP SIGNATURE-----
-
---Sig_/ETjtAXRq3b4IjRiUOkWULIK--
+>
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
 

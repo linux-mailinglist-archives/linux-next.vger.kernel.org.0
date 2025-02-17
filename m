@@ -1,123 +1,93 @@
-Return-Path: <linux-next+bounces-5473-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5474-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEBEDA3891B
-	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 17:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C139AA38B26
+	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 19:16:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1E773AA444
-	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 16:28:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D98223B19E4
+	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 18:16:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9D39224B1C;
-	Mon, 17 Feb 2025 16:28:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B96F215F5E;
+	Mon, 17 Feb 2025 18:16:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AlW1oC44"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQFJOTsw"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2602248B6
-	for <linux-next@vger.kernel.org>; Mon, 17 Feb 2025 16:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67D438FB0;
+	Mon, 17 Feb 2025 18:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739809705; cv=none; b=heQucFEGCBamSQ67EgmFF1o/ahZpGneLkq95q5UFbvtUZwYTRZikIPfdrFVlvk7A5v7tXsnEnctXJIjMGax4oIqBpCyAPx3V0svfiRi5OZhVQULxZ35zlqGEcjVWSKjqX0W9PW4Uquz/Bw1i1cNuZ8Qecq1jrsr+6jlLAcnw6qU=
+	t=1739816174; cv=none; b=m7y30wON/QMfmYJYfz9aDk4aJ3UYBEtIvLrtfgcrTm8Kr1ItOmN4e8vGGl7627BIK7SBS4BQFmkwK56TV7Go08QXdagHt3vC1Z1iYREliN62cRE6pi4C5Ae7nqg+eAhP23N4jw4KkW4s0j6TpzlJdxJJxcYrXG6P6KSmgjdz2bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739809705; c=relaxed/simple;
-	bh=xsLMSfj1VEdYuqIej3x3D6/4UOd70zugyUhuwJwli4M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pxmMlDLsYTRT2d7hAZ2FD4C39d5XxrKivSanaHSo+oQ4dBUHWLOszeHBcrzH6NLgbD9IS8htsPNL7QrVLpTUHpU0XnX4qfBSGE/Ei4Z4TR582eZqZbcgq7LaH+6/ycLG8+QKOLZ8/b51hjjOpdi/Gs+BQLMCcD+TtAEL28tCQJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AlW1oC44; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-471f1dd5b80so216621cf.1
-        for <linux-next@vger.kernel.org>; Mon, 17 Feb 2025 08:28:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739809703; x=1740414503; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=95spON9hLuQ6bBnBVCFPCtuSrKFhHu45XBLog4+BEpk=;
-        b=AlW1oC44iSA4x3crV1oLTWNFkEZzzmIAdRP5u9nPqusl29Ih+L7jdR00oH7FKH1Rca
-         O1d0ZLbl/39ydLcRi2lIlcnbQG4YEHdwaoY5MekalpaLG2kqW2h6FJiPz7Pk9W3Ff/lT
-         rSSwI+S3KpOCunEixHw4YAYY7NO2UydLeX0YUuCUSQcBS0ORQhH1wlga9l/qY0/lJfJN
-         sqfAC48GeotoPzJb/pgS0aolOiyodDntLCcHptpudvoI79MIlV9nxKT9DZJ3pBT/iUm1
-         gB06wR+KepDdDMEspxXmO+9M8Uih0xhaTEgfhXkEDkZn/0t/hFfyYbr3E5LLHlexdJX1
-         4Npg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739809703; x=1740414503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=95spON9hLuQ6bBnBVCFPCtuSrKFhHu45XBLog4+BEpk=;
-        b=k2cRpQGMLXSzq5gYiJWOLN/KENjH+xjx3242APYWOQHfqY9lSwS34uMzxUKldkIgFF
-         C98Q2eLmFDz9IB7SldXXR2vJhDcbAbmAsW6tu2CqR0RX23XjHhNLXEi4crvkFZL8cmfv
-         B5rOiZrhWYmsat1htn08HxNUy0EhEFy6ltyF4ptNT4FeVGpLhNGmLSWuyhssTDpKjHZb
-         +HJJ7N26R06aNQZ8QiVG6apnIQpAwxpDCf+/JL9GnG5pAocEyJ4q16sjG+gz/FSNxRox
-         NDOcmUt4P+Qu0PI2hl+g4Ty9wQPsTl74SPvjZbHPm4J8EtbWnMbywiXLqYj9XE2PBttu
-         1gCg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEARBsm2PCS1N7uR+Y8uldt8zzgt9+sA9YiwuNSJe70YUXXFd55Z28PlgdxbDBg1RAZbL8qpmYlw90@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJtVjOHe4KWyZdZfBpfJps5tTQBLtSf7hb2AHI3OWkisP8YLq7
-	MZ/TUS2+Bz1JCDtVCy9mBjAnlOVBBCJVFFMNshPkkoSsg7q58508oDLsU8MHxmEivbb6jT5R+Gs
-	08XyDEbOmsn1S8/A3rE00KoHU2S805ZaTbXbX
-X-Gm-Gg: ASbGncs4hL0DU/l0SPsTZ36V1MRwQNeBt7UtOnK/vHKk1VLlhbS6n4NOW0zgDxq7NS1
-	iR6c0ri3g1wx9n4dbZvtfYsH1gML5jo+wCDMFnROSnIW3fmLbAJNflwY2YPO3XyzGAncZ6KGX
-X-Google-Smtp-Source: AGHT+IE3N2cLiQ7+cf8WqSfpU/XsS4YJ3qwsjZ2stHnaJgNWkUogcNcG2SHfhhTQq6WriNXafqqvbkY1HHOKSZPy1fQ=
-X-Received: by 2002:a05:622a:4287:b0:471:be43:a534 with SMTP id
- d75a77b69052e-471dc777033mr6796511cf.12.1739809702916; Mon, 17 Feb 2025
- 08:28:22 -0800 (PST)
+	s=arc-20240116; t=1739816174; c=relaxed/simple;
+	bh=8jJF4h1VZsO4TU1g0ukVbyX19HvGbQr1TXRSd7Fs81U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uUrk14pUmXCBt8s1kRosbHjEZQ2caSOPHhpgp8+/fXorHlTh2MvKg7L4aEEZRESFQmZThzsIwK2KU39K+YbA+0uOQ0BMLPn5cQ9t/rKm1YxgGoIiSQB/PzuFlNK2bcWjoETpR6jwoMoyQSku2iUiqQgw0r1Wnmv/y8k2/9yrWCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQFJOTsw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34398C4CED1;
+	Mon, 17 Feb 2025 18:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739816173;
+	bh=8jJF4h1VZsO4TU1g0ukVbyX19HvGbQr1TXRSd7Fs81U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CQFJOTswQg4CvzX1648lCoxBIOJDaewV/doleqMuQjLolxrcU2YOPrf5jXKJtGkrI
+	 Rur5sIsxyBfr0vp0Cb7/Z+Tpc5/l8IMMq+aY5H09SthQQ4CZZRut2QJmjyX4d8ckYo
+	 Y1IYVN6Vl4b6snOJH82uuUUfiSPvc77bP/gV6V5yXb24/WoOpJw07oqGSzVCO5uOuB
+	 BqDDYcuo6gFz8lUhE96bsMYaTMr0Zyv0KoIpa3zjKz4dQlSB7OhaGkV8layS+hPBfz
+	 qnudoqJE0oZFjf7/calN6RB6ubGD4k6/bpL//neUUMW4r/f28VF+BMXjM3+TdnugK5
+	 qnxojGPXaY9Jg==
+Date: Mon, 17 Feb 2025 10:16:11 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	x86@kernel.org
+Subject: Re: linux-next: build warnings after merge of the crc tree
+Message-ID: <20250217181611.GA1258@sol.localdomain>
+References: <20250217170555.3d14df62@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250217171018.7b4f5e2e@canb.auug.org.au>
-In-Reply-To: <20250217171018.7b4f5e2e@canb.auug.org.au>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Mon, 17 Feb 2025 08:28:11 -0800
-X-Gm-Features: AWEUYZkmdEfemTZ21_DYBZC8hQT35KQVP-KXKmgcVnRAgnEGvAIvv-8AeqTVC28
-Message-ID: <CAJuCfpEJO+pd8BUSCaa+qawnoKzFCT0+sDr3u3H4BGoqOn30mQ@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the mm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250217170555.3d14df62@canb.auug.org.au>
 
-On Sun, Feb 16, 2025 at 10:10=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
->
+On Mon, Feb 17, 2025 at 05:05:55PM +1100, Stephen Rothwell wrote:
 > Hi all,
->
-> After merging the mm tree, today's linux-next build (htmldocs) produced
-> these warnings:
->
-> Documentation/core-api/refcount-vs-atomic.rst:90: WARNING: Title underlin=
-e too short.
->
-> case 2) - non-"Read/Modify/Write" (RMW) ops with release ordering
-> ------------------------------------------- [docutils]
-> Documentation/core-api/refcount-vs-atomic.rst:142: WARNING: Title underli=
-ne too short.
->
-> case 6) - increment-based RMW ops with acquire ordering that return a val=
-ue
-> ----------------------------------------------------- [docutils]
->
-> Introduced by commit
->
->   03b412c8b184 ("refcount: provide ops for cases when object's memory can=
- be reused")
-
-Fix is posted at
-https://lore.kernel.org/all/20250217161645.3137927-1-surenb@google.com/
-Thanks!
-
->
-> --
+> 
+> After merging the crc tree, today's linux-next build (x86_84 allmodconfig)
+> produced these warnings:
+> 
+> vmlinux.o: warning: objtool: crc32_x86_init+0x1c0: relocation to !ENDBR: crc32_lsb_vpclmul_avx10_256+0x0
+> vmlinux.o: warning: objtool: crc64_x86_init+0x183: relocation to !ENDBR: crc64_msb_vpclmul_avx10_256+0x0
+> vmlinux.o: warning: objtool: crc_t10dif_x86_init+0x183: relocation to !ENDBR: crc16_msb_vpclmul_avx10_256+0x0
+> vmlinux.o: warning: objtool: __SCK__crc32_lsb_pclmul+0x0: data relocation to !ENDBR: crc32_lsb_pclmul_sse+0x0
+> vmlinux.o: warning: objtool: __SCK__crc64_lsb_pclmul+0x0: data relocation to !ENDBR: crc64_lsb_pclmul_sse+0x0
+> vmlinux.o: warning: objtool: __SCK__crc64_msb_pclmul+0x0: data relocation to !ENDBR: crc64_msb_pclmul_sse+0x0
+> vmlinux.o: warning: objtool: __SCK__crc16_msb_pclmul+0x0: data relocation to !ENDBR: crc16_msb_pclmul_sse+0x0
+> 
+> I have no idea what has caused these.  Just sending to the crc tree
+> owner (due to the symbol names) and Peter (since he made the only new
+> change to objtool - though it doesn't look vrey related).
+> 
+> -- 
 > Cheers,
 > Stephen Rothwell
+
+Thanks.  I'm wondering if this means the crc assembly functions need to use
+SYM_TYPED_FUNC_START instead of SYM_FUNC_START.  But they are only called via
+static_calls, not indirect calls, so previously this didn't seem to be necessary
+even with CFI enabled.  I'll look into it.  Peter, any thoughts on this?
+
+- Eric
+
 

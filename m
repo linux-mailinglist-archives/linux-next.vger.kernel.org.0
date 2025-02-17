@@ -1,127 +1,144 @@
-Return-Path: <linux-next+bounces-5464-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5465-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3488DA37892
-	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 00:22:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8A44A3794A
+	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 01:52:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FB463AEA53
-	for <lists+linux-next@lfdr.de>; Sun, 16 Feb 2025 23:22:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7599188CCEF
+	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2025 00:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD1219C543;
-	Sun, 16 Feb 2025 23:22:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986EB79D2;
+	Mon, 17 Feb 2025 00:52:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EvYPcjF7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="nEbQoif5"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867FB17D346
-	for <linux-next@vger.kernel.org>; Sun, 16 Feb 2025 23:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461762E406;
+	Mon, 17 Feb 2025 00:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739748157; cv=none; b=lq4sxUzTWH0UqvmImI/FMV863rqvWtHVUzMmpXdsS3vLZ/JPGdZPcl/fan932O4HFYE/TrKVycBRky9XWr6AYALT5T+5D8dbxSCq+Re+4PgW25WfVP3wJ5xgBXLkTHLmMo0Fz5QT3SCLmVy1lHnTEStcWLDfZQxxtuD1ZyF3cIc=
+	t=1739753567; cv=none; b=rKfQZu2wCtxhWiEB30+trzi1S6k6bBFviwdroOmbFzNRPURJecwu246cVFpRMTdQthi5KzyyUMoRc/EpK7cFiDMwclUuE8emmqW3H8JyzwcKU3PxjZGmwjGSUT+CQ4jMMQ7Fz36r0nSFUyorvMmBqtSWe2JvOsQ8TQRSYcNY6YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739748157; c=relaxed/simple;
-	bh=O/LB/cGzJHLa6ECkMx6rE6ZSxHn6zdjGYsIO44Aus54=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hA0XpgnwPh2CIoUbCaxc6imLsvo5sSVMvCRWKQGoBtLXhMRm/anP8/tHzCipcI0KoQyNk53dlaQ0jIlHAGiJofBYRWxCqJYPhDS5NNTLnxu+QmcIPuyJngeFj5SDOdKxLPQHIJpoWo8o9EUBebuAFjTaIktALGmBnblkl+L/Ftg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EvYPcjF7; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-471c9947bb5so330391cf.1
-        for <linux-next@vger.kernel.org>; Sun, 16 Feb 2025 15:22:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739748154; x=1740352954; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YynGZg6cxhCFGGZEppb0fFoNfE9HksRCiDOsoeL4FEc=;
-        b=EvYPcjF70+f5GBVMwuFfZqnWaKpxz5oO08VKw8YzqwTIpC7kDnwZkSv0g/k96j5EUn
-         F9+7AUp+GpsqoY76ycCAwFwlx7qLUFSZyg2ql5pnMjmhG7gPWozahCXN/9EMyoWseq+R
-         jhX2QpAoCgl5hh1MKLhvM2BEZEMLLGns94OceKvRbScL8qhHC2UQYKjWUlS56ecW70t7
-         itXjDTULw+VZ769G0Gjjq8S4qMhvJ951Sh1MObzBmygC8OaJK4/pj2g6QTLy/tTHPXHk
-         dhYfGj0vs6p29W/rJ/B6tcNXn07Z4N2SSbGeCjxQ292QXS3DJ4Y4rz+/jpv1mOQ/Nkl9
-         +o0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739748154; x=1740352954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YynGZg6cxhCFGGZEppb0fFoNfE9HksRCiDOsoeL4FEc=;
-        b=HRo84NeR7Ls8GEVCEALBcd62PTBWM8icoh7eHVmWm2VAwUInMel+ncrY1gRQlGbJx5
-         UHdJxIs1KwlJKe4kURe/lWhmQulQONwgt1NvMOWnFYBm8YmuhLx+iBSEXeeQOdgDcFEH
-         I89kQL2pDSawHqdyPx9X+v3suQnxeE33j/7P9vOa6OvcHop9GAa09x7v9FB/uJFJtDdD
-         i+kn56WbLfkx/HgfYGsFHosSoq2VlRneOHuzz7yD4sUYCp6Xzn1OLYKzG1aNdNY9eOCf
-         Y3kztN257QAYQ7Rduwc/9ZNn4iSVnSq21q5p0FrVlUThSL498Zcpeh/MAgV0VgOyQl0o
-         Jb6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWCNgKciLxbAQ6pYy/i6Dp5YPwIHyXK1XOF/y4kjhMMDhXcYCDJLCCH2nHLdX6KgkdW5MjIu7R14U7Q@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUfDpkAm41hcpJalg90UzBBWzkn9CBIQHyGCt97om08SfocQU7
-	0UvMnJmeZNN7dMlYiLVFwZHcojloQqKnZ2ZREa2HCdBm2w7kXnOyJ+TCkMJJZ5yP1sD7uz/HcnD
-	xlr7k7r3P5xopU3/o6iQFNSS581FaVno83SqyedA/XysvEKh2lg==
-X-Gm-Gg: ASbGncs3tc6RwOe2WASI9iew0gHO13bgV5YeEVNMhl1Bw3APccxKPVSrbyx6cIl1hX3
-	3QGNhVEYxu677ltgClqdZHL9xsuEJDjxqSCRPyIMJgvTu6TzNtMoOt3JOMCu6ORoEXKe8mtjS
-X-Google-Smtp-Source: AGHT+IFUrXQzMWLJ/pBRAra1I+405imEOBnC4CBLfg+P+i/ZYt0VDANhlJRR/kopznf79ZpQ/VPA8pjqMP0pqU8mchU=
-X-Received: by 2002:ac8:5d41:0:b0:471:9ece:b13b with SMTP id
- d75a77b69052e-471dde5f658mr3826191cf.1.1739748154189; Sun, 16 Feb 2025
- 15:22:34 -0800 (PST)
+	s=arc-20240116; t=1739753567; c=relaxed/simple;
+	bh=23HkDlUD5mWGcE7aphZBBSvEXupw+3Tg4P9qdnisVXo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aOl6mBHHufeJxl8kOoZCLolbyxL25orC5RygX4ti1VxcbTJEmiN/F4T4U4f/TTNy7acibYQ4XRTcEThnswFrfUiN5KcLxxBUZJDFz82i97AzXFPVw+7OFK3/lvv5uD+r5a3SZ+jYKwgxDE+bjMmI0Lz8kTdxzUzUG3BuyxNIBWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=nEbQoif5; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1739753556;
+	bh=KSGXX34I/Tc3wWb6KX2w22KlpznNooZZpfVa6bYJsVY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=nEbQoif5EH05HtDuvc1hsjRpKytrdOkBUEBr1Ns45Ciqa+vO5AV7lacI/2N9UKQdr
+	 UMSjrjCzEbYBiVfzTWn8MV2KpuBR2SRc2WA3gC6P7uTP7d17CfiXs0NL82gIOZ/a9k
+	 KMbQiYTvE1GYjpX4UEZW78/XSCkMVgy8RljPpt4vGyP1AOeXHeTQXM+6SQE3UJABgZ
+	 9u5OLmhauuA6Xup0fiZO+bSlDEP1HeCu2LSGLzdbM6jx1FZDjLay8/9Gpa09zRtihe
+	 6ja5XwpZSb775p1Rakg/ozc1oxS7mI6kY4iSFEr2y3nt7fPAzsT2iaZm7+n6SuMXXF
+	 9wLw5l+9Q4z8g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Yx3z72dDlz4wd0;
+	Mon, 17 Feb 2025 11:52:35 +1100 (AEDT)
+Date: Mon, 17 Feb 2025 11:52:34 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Lucas De Marchi <lucas.demarchi@intel.com>, Thomas =?UTF-8?B?SGVsbHN0?=
+ =?UTF-8?B?csO2bQ==?= <thomas.hellstrom@linux.intel.com>, Simona Vetter
+ <simona.vetter@ffwll.ch>, Jani Nikula <jani.nikula@linux.intel.com>, Joonas
+ Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi
+ <rodrigo.vivi@intel.com>
+Cc: Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
+ <dri-devel@lists.freedesktop.org>, DRM XE List
+ <intel-xe@lists.freedesktop.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm-xe tree with the drm-intel tree
+Message-ID: <20250217115234.2a39f6f6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250217101453.34720e6f@canb.auug.org.au>
-In-Reply-To: <20250217101453.34720e6f@canb.auug.org.au>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Sun, 16 Feb 2025 15:22:23 -0800
-X-Gm-Features: AWEUYZkYMAGgtHMgzOku0vJzKVRI3tVt78Kb1S3kAwmg0kTzWVRLQqQ0Fu6-qjo
-Message-ID: <CAJuCfpEXqT-aHU39XMTtf-omJJUcQXtNF6RHmZ2bddqcVN0G=A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the mm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/tw6MrVy0Q0E2fmCziLv3ENH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/tw6MrVy0Q0E2fmCziLv3ENH
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Feb 16, 2025 at 3:14=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> After merging the mm tree, today's linux-next build (powerpc native perf)
-> failed like this:
->
-> In file included from threadmap.c:4:
-> tools/include/linux/refcount.h: In function 'refcount_set_release':
-> tools/include/linux/refcount.h:65:9: error: implicit declaration of funct=
-ion 'atomic_set_release'; did you mean 'refcount_set_release'? [-Wimplicit-=
-function-declaration]
->    65 |         atomic_set_release(&r->refs, n);
->       |         ^~~~~~~~~~~~~~~~~~
->       |         refcount_set_release
-> tools/include/linux/refcount.h:65:9: error: nested extern declaration of =
-'atomic_set_release' [-Werror=3Dnested-externs]
-> cc1: all warnings being treated as errors
->
-> (and several more similar)
->
-> Caused by commit
->
->   1465347e498f ("mm: make vma cache SLAB_TYPESAFE_BY_RCU")
->
-> from the mm-unstable branch of the mm tree.
->
-> I have reverted that commit for today.
+Hi all,
 
-Thanks! I'll see if I can fix it quickly. I must be missing this
-function under tools/ in some specific config.
+Today's linux-next merge of the drm-xe tree got a conflict in:
 
->
-> --
-> Cheers,
-> Stephen Rothwell
+  drivers/gpu/drm/xe/display/xe_display.c
+
+between commit:
+
+  1b242ceec536 ("drm/i915/audio: convert to struct intel_display")
+
+from the drm-intel tree and commit:
+
+  8b3f09fb44a3 ("drm/xe: Fix xe_display_fini() calls")
+
+from the drm-xe tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/xe/display/xe_display.c
+index 96ba9595bf2a,ac0804726e55..000000000000
+--- a/drivers/gpu/drm/xe/display/xe_display.c
++++ b/drivers/gpu/drm/xe/display/xe_display.c
+@@@ -175,13 -167,12 +167,12 @@@ static void xe_display_fini(void *arg
+  	struct xe_device *xe =3D arg;
+  	struct intel_display *display =3D &xe->display;
+ =20
+- 	if (!xe->info.probe_display)
+- 		return;
+-=20
+- 	intel_display_driver_remove_nogem(display);
++ 	intel_hpd_poll_fini(xe);
++ 	intel_hdcp_component_fini(display);
+ -	intel_audio_deinit(xe);
+++	intel_audio_deinit(display);
+  }
+ =20
+- int xe_display_init_noaccel(struct xe_device *xe)
++ int xe_display_init(struct xe_device *xe)
+  {
+  	struct intel_display *display =3D &xe->display;
+  	int err;
+
+--Sig_/tw6MrVy0Q0E2fmCziLv3ENH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmeyiFIACgkQAVBC80lX
+0GzL1ggAo+OeYfjyyiHMzQ3ZSGfI/lm9zmEyNu6cpWZ39+hfUIvhM/s5vcD6Y+Oa
+YYO57LmJnDl/SZA6XedYD9CoSw+174FkLZ/vGG2D25oa9EbM/CWISk0eV3cRvmE/
+eNO6DZ+BNxFf3nXOXo4jAXpcBEhiFSvIEbOepj/rdyeiTirDfKtK1CscGpPq4Y5M
+24KMpsrG8cR9jJBJS1YaPV+vL4IW+VryIn0x5hU2c182U6F+D3CO8GPCmGJFfkFF
+aaQ+k6beygNSv2SI8Ia9uivnOl7GojBPEYVzGLrhMIMWZGLsqkwzqHX0yjomi65Y
+dqButjZ1dX7eL9ChjeVPq/wQwRqpyQ==
+=UgYb
+-----END PGP SIGNATURE-----
+
+--Sig_/tw6MrVy0Q0E2fmCziLv3ENH--
 

@@ -1,90 +1,49 @@
-Return-Path: <linux-next+bounces-5481-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5482-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35E6FA39E7B
-	for <lists+linux-next@lfdr.de>; Tue, 18 Feb 2025 15:16:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92788A3A560
+	for <lists+linux-next@lfdr.de>; Tue, 18 Feb 2025 19:25:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B8B83A3448
-	for <lists+linux-next@lfdr.de>; Tue, 18 Feb 2025 14:16:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB990173DAB
+	for <lists+linux-next@lfdr.de>; Tue, 18 Feb 2025 18:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22B2269D08;
-	Tue, 18 Feb 2025 14:16:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hhCMfjPi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 707DE17A305;
+	Tue, 18 Feb 2025 18:23:33 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5021D23958C;
-	Tue, 18 Feb 2025 14:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5326C17A303;
+	Tue, 18 Feb 2025 18:23:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739888198; cv=none; b=K6+swqSUDbLhO1330Y4bR05ftvnNDfNOzJUoyz1ljHbCmozOqhosgxm0pw7ecihYfEzX0MMUOs5dMiHn20bXgOOMNvu/tSpwbav3UQUV3u2jv/PCHQUznW+WX8UvOuDI0nxKFY7Du/I6nPRiFYS2Lr/M22zS5LqIY3uPPH+66Hc=
+	t=1739903013; cv=none; b=TLbK2Vi27wREJ9hgjDTzgkKgJ+dtrQkv60zU6g3Y+ejl7sNOB9wI3FHFhTo/Zby5ADtj/vHzI+ZIs5eJalsb/NnkqgkXGKTuLc4Oal86YlOg7YlxUFWOddT1xT7IUFjb2Gn5+Hglra/YyaXnWT2HlF3r6mnQLFmifI/nR9uEFKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739888198; c=relaxed/simple;
-	bh=Q0z9FjYXWyIXtaEzCZf6FVqFshEIJPiN8uoO6wxcv3I=;
+	s=arc-20240116; t=1739903013; c=relaxed/simple;
+	bh=Vck+L+XZNB3JBJMTN/9OhHJszsvd/vi5d09OrFOR3EA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ku/eALEeUqoAGr3dlUt2QtsYCMIiZpJ55ajEDkd9Mxjj5ANxI7D0jLO3JVb/gBBinT+KFGnrVbhqGf4dXic/JObSUI7oNbxMuFKiMvxxLLiIaVhW5iQA7pA9vq+Vpx08+J0AGmcKZgQCQlQhcrY31KE0i/FfpWLaLKfL80eP1r0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hhCMfjPi; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e5372a2fbddso4300542276.3;
-        Tue, 18 Feb 2025 06:16:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739888196; x=1740492996; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J0llu5YB8AGoFH0I5kYKDvWCJis6mleBIejl0Ej5nZM=;
-        b=hhCMfjPiUmDEY+2ZCO96T9B9qhUzydJakDElk/DhcE0Q7lCMdIi38Hl94ngq99mnvb
-         ihRiuOmk7L90a7cpSrkD8CE/34j73q9J1mx0E4Orc2Bbg4PICFXTCKTyWQFe0c3qmgnc
-         L0ZJzJz1x5d8+UwKUQVF6SNNxCta/hfEw7wNizsq8a8Grddo5fTZ0ucnZkiWgdQSrhiO
-         MouXcMb4VkAPovJFBLZU566GpKNA68jIrKKD4pIRLU8VqBQ5N7mD4w5QtaWtNKGJ6v7k
-         VfkpZ1vQVurOQXljP+baKjzMcO88DRfNgMWHFb2UGyOT9mofdVZAGZCV3fnLrqGL7+SB
-         ENng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739888196; x=1740492996;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J0llu5YB8AGoFH0I5kYKDvWCJis6mleBIejl0Ej5nZM=;
-        b=R6VHrZzF1vv5QJA5KPBZh4swih06X0QwanoDVWNvCeAm4IcSXv6g1j35S5QL6lzcU3
-         l/aLrpjiC+4GICfDjaEJwReleIFkPY8goNmVlJZISiCHKHOJhkZw7oM0HDM2G6it5m8f
-         PxF+EgudwWZ2hY5h3yzfOyBIAPB5yE6r3O/uBcUS/Ou/AkHtt7Kk+0lxxWiLIoVSa5xM
-         NuEA4/WgarsWE4smUPRDrSnzsyJDv/OeBcaafQ5n1rXgXjjc1KJWmtyE/+IgsJLM1c8E
-         SdDMlnW+WHbMKLkjlcR0whhIQ/SLvWjiKZCVElLWBI3KCBsiPw+B6c7KtJv54zAKZrST
-         jDoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUAUPeZFUAuJ8m9keVEecKSgwZ6OJs3KsxT69EpKsSFCBxdVzNqYw3SasaHuD2wadquz1Lawf3XhUF16aE=@vger.kernel.org, AJvYcCV4FMIasTopKhsNBiW/zlBusrtd31I8NA2z8lHSh7a2XzkE7ZQhNyhOL+Sb1QSqJCMd5ShddKSF16yhyg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPO7sDdibAsZ40yu1uL0YnCp2A38oHt82Mkx0QbwOLekHbs7T+
-	vwmYZ4Lmsz9MLA+Xeu7yFSLIxy3XzvjnH2c3rNQ0M1p5oDxNUwccNrAXsSa3
-X-Gm-Gg: ASbGncs4T/BNokxUi5wF/uPV1+ltaqenIahaKINhHJtlzpGyjF7m9D7gbtPbPBwqL5z
-	qJ/aLeexZUuyOLfdQvnMDe311CQoX51VjzkF+08+n3M0IRHZEPvGz7dNX79IKabshl9eKrTbiZ7
-	0/c61VkP0d6U0Ac05k9UvN7FO3DzLvxKMLmq/DSCAoSYyBsGsxV/xaYPCV54N6WOAhOKj0ibjtw
-	ySTYiouCUmC2rdS9Mvfb93lTO5Yy568VMvwZejKuD3YOBGEmI6BI4erDX2z2MAJDi6nFzJS/THt
-	nN83spE8ZlwllbnhH2vM0wloZgtHhWMcEdEOZPNMw2C+Mbk6k54=
-X-Google-Smtp-Source: AGHT+IH7nd0t1Q3cNhxJjwGpKDAwBG18APeeJ3x8AEDKf8Pz6YQOczjRk4Y46gYPIsBPF8/G2jt/PA==
-X-Received: by 2002:a05:6902:1a4a:b0:e5d:afe5:8c2b with SMTP id 3f1490d57ef6-e5dc9045af8mr11419017276.13.1739888195864;
-        Tue, 18 Feb 2025 06:16:35 -0800 (PST)
-Received: from localhost (c-73-224-175-84.hsd1.fl.comcast.net. [73.224.175.84])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e5dadea63d6sm3040662276.13.2025.02.18.06.16.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 06:16:35 -0800 (PST)
-Date: Tue, 18 Feb 2025 09:16:34 -0500
-From: Yury Norov <yury.norov@gmail.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=pc3mP/TC+RHGFx2dMeCpTZEClNM33O2U0SS8B3p4lGyuJGAk/wu/g2CSSWDA+M0kLwqDdr3TYXD2mW9uTzmdAW8IzPsFYOzHGcjNJoNdDQ1ApwYAaBCQ5w/CNhzeLm7tPURH+KEC1uFFgbudr/k+DxRJB31acIv1fM6k6SzSyM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E05C4CEE2;
+	Tue, 18 Feb 2025 18:23:31 +0000 (UTC)
+Date: Tue, 18 Feb 2025 18:23:29 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Yury Norov <yury.norov@gmail.com>
 Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
 	Beata Michalska <beata.michalska@arm.com>,
 	Will Deacon <will@kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the bitmap tree
-Message-ID: <Z7SWQoO2Upm_sNNx@thinkpad>
+Message-ID: <Z7TQIYRPw6nxsa0K@arm.com>
 References: <20250218160742.49d6ab76@canb.auug.org.au>
  <Z7RiVtunqI9edfK4@arm.com>
  <20250219004934.46ace766@canb.auug.org.au>
  <Z7SU0THZ6bSG9BKT@arm.com>
+ <Z7SWQoO2Upm_sNNx@thinkpad>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -93,28 +52,76 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z7SU0THZ6bSG9BKT@arm.com>
+In-Reply-To: <Z7SWQoO2Upm_sNNx@thinkpad>
 
-On Tue, Feb 18, 2025 at 02:10:25PM +0000, Catalin Marinas wrote:
-> Hi Stephen,
-> 
-> On Wed, Feb 19, 2025 at 12:49:34AM +1100, Stephen Rothwell wrote:
-> > On Tue, 18 Feb 2025 11:35:02 +0100 Beata Michalska <beata.michalska@arm.com> wrote:
-> > > I'm currently testing a proper fix for that one.
-> > > Should I just send it over as a diff to apply or rather a proper 'fixes' patch?
+On Tue, Feb 18, 2025 at 09:16:34AM -0500, Yury Norov wrote:
+> On Tue, Feb 18, 2025 at 02:10:25PM +0000, Catalin Marinas wrote:
+> > Hi Stephen,
 > > 
-> > Maybe a proper 'fixes' patch, please, if easy - otherwise a diff is
-> > fine.
+> > On Wed, Feb 19, 2025 at 12:49:34AM +1100, Stephen Rothwell wrote:
+> > > On Tue, 18 Feb 2025 11:35:02 +0100 Beata Michalska <beata.michalska@arm.com> wrote:
+> > > > I'm currently testing a proper fix for that one.
+> > > > Should I just send it over as a diff to apply or rather a proper 'fixes' patch?
+> > > 
+> > > Maybe a proper 'fixes' patch, please, if easy - otherwise a diff is
+> > > fine.
+> > 
+> > I just talked to Beata off-list. I think she'll try to use the current
+> > for_each_cpu_wrap() API and avoid conflicts with the cpumask_next_wrap()
+> > API change.
 > 
-> I just talked to Beata off-list. I think she'll try to use the current
-> for_each_cpu_wrap() API and avoid conflicts with the cpumask_next_wrap()
-> API change.
+> Hi,
+> 
+> Yes, for_each() loops are always preferable over opencoded iterating.
+> Please feel free to CC me in case I can help.
 
-Hi,
+Beata is going to post the official fix but in the meantime, to avoid
+breaking next, I'll add my temporary fix:
 
-Yes, for_each() loops are always preferable over opencoded iterating.
-Please feel free to CC me in case I can help.
+--------8<--------------------------------
+From 1b12139107798128c183838c5f4a3f7ffcea1e44 Mon Sep 17 00:00:00 2001
+From: Catalin Marinas <catalin.marinas@arm.com>
+Date: Tue, 18 Feb 2025 18:20:46 +0000
+Subject: [PATCH] arm64: Do not use the deprecated cpumask_next_wrap() in
+ arch_freq_get_on_cpu()
 
-Thanks,
-Yury
+cpumask_next_wrap() will soon disappear in its current form. Use
+for_each_cpu_wrap() instead.
+
+Fixes: 16d1e27475f6 ("arm64: Provide an AMU-based version of arch_freq_get_on_cpu")
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+---
+ arch/arm64/kernel/topology.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index a09b0551ec59..1544d3648554 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -254,7 +254,7 @@ int arch_freq_get_on_cpu(int cpu)
+ 		if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
+ 		    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
+ 			struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+-			int ref_cpu = cpu;
++			int ref_cpu;
+
+ 			if (!policy)
+ 				return -EINVAL;
+@@ -265,11 +265,10 @@ int arch_freq_get_on_cpu(int cpu)
+ 				return -EOPNOTSUPP;
+ 			}
+
+-			do {
+-				ref_cpu = cpumask_next_wrap(ref_cpu, policy->cpus,
+-							    start_cpu, true);
+-
+-			} while (ref_cpu < nr_cpu_ids && idle_cpu(ref_cpu));
++			for_each_cpu_wrap(ref_cpu, policy->cpus, start_cpu) {
++				if (!idle_cpu(ref_cpu))
++					break;
++			}
+
+ 			cpufreq_cpu_put(policy);
+
+
 

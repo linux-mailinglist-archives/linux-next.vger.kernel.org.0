@@ -1,200 +1,98 @@
-Return-Path: <linux-next+bounces-5505-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5506-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FA73A3CB2C
-	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 22:15:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D530A3CBA4
+	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 22:40:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4566189E9C2
-	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 21:13:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7E347A4AF6
+	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 21:39:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0242500CF;
-	Wed, 19 Feb 2025 21:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68EE62580C6;
+	Wed, 19 Feb 2025 21:40:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JB8kVsz8";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zy+SKcQh";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WQ5DtBRR";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2vtti/c4"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tQgXeAfh"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D871253F0C
-	for <linux-next@vger.kernel.org>; Wed, 19 Feb 2025 21:12:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1976F1C5F35;
+	Wed, 19 Feb 2025 21:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739999563; cv=none; b=kMuCcUGpHL19kbM3BUKkRHx1Y55H3W6K+TdVuQVmXGZPtrBe2cpbcQRZSF3LIR+PeAlj8F8tITXr3jspowHOuVZQppKhBeSsu+Gb7Vzb1iJXS4+6Cjiq+elw23eK740qvm0hKe5FdqES+RPkIKvi4XeVTMJhrTrMA/ATIlRPuZU=
+	t=1740001203; cv=none; b=ed+Koxpx4oadr6HZiV/b/0zRyLClOqAdZENJzc6CFe3RQ0Csu0fd++U8vjRO+UreMFIKHTeo9962j++ggLW/NwyvPtibT6N/q1GDKIJdDtnnhPlCU2D5nUJHJmjPpEEihjI7GazjsKpsV/4pb6s3rkpqSQQQTr2Ee6xZBCPcdXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739999563; c=relaxed/simple;
-	bh=cRtn6DLNU/SjK8wv/JWpI/qrM+g7kwfGr63Ft/6txWk=;
-	h=Content-Type:MIME-Version:From:To:Cc:Subject:In-reply-to:
-	 References:Date:Message-id; b=nG2CQt1DnYYacgAOj7YF6ELaqOn5OcYwl4ygw+qrEbZM75QqIYtzLkWSsqNdmRNGyS/i7WCo8XGzvom4C6kMfTUXu4OL+bJDJ00w4LsGvTMqGXSdmAgm6H7D0iQMM1qsEylLk3L4eUFeaCMWVTbw32Z8S9uye/EBZwMoQhX6Qmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JB8kVsz8; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zy+SKcQh; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WQ5DtBRR; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=2vtti/c4; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	s=arc-20240116; t=1740001203; c=relaxed/simple;
+	bh=D5yQRlgjz8pIf0S3EvuJaVVxsdibweNfwCw0CARbfq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=judr84lYDmpS48eb4Jv3nvz3fzxkZ91qY1mCI2wLRf/3U2K6uu0mtJWQMXqtf/pyQp87nXfhReR+1yiQug7o7xbP7OWS8jD3iHk36KCM5HITd1eHfVD2dksUIVSMGg21bVqrj25OVbHEuJ7n5E4z5vV6wyub9lyCqLCYZIjaK3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tQgXeAfh; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1740001194;
+	bh=cIogJHhgqGA5f5yLXpjO29DTGRFoxWFnIadtsybhlqQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=tQgXeAfhhUkXRbZ/gaw9IWQKawVcPwHCiM6M0zlb9kuMGYtsInxP6W3gXDl8eaCno
+	 k/ZnqbcPadEsHSwowZOHLR2vii2EpckOd6GB3oQwobcrpVLPb1i8FPI3H8R5jUueyx
+	 ME3BjCFN4m6yZHQNV2sOiEiJ0TMu83qeoWx9FeinbB0zz9NdYVVYiRclHTEOqeL6mo
+	 9iOq/7LjKUgxzTNCB6sRuTGAqo0jD6DNemb36Km0qhgGTCjmzBt0/SFjIfDxDo/NLs
+	 /wnuGaomqpHNxOkEmLQh1oqn5bmy2Uk3bphQekWJc46jhaEnr0doXhL7+niFeTEQD1
+	 ZNZpBHYySBRRw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DF2481F86C;
-	Wed, 19 Feb 2025 21:12:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1739999554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VpldkGZefhNxtKiLXQCmXZ8Zj1sa/cliTtoWiaTp7II=;
-	b=JB8kVsz8FkGzsf4H/dCAqb0IWrFSr43o+rlV2ORYi0kkdGREn1c2PMz+9XVe1R1iNTFZDy
-	C7nETKuOuqQi1p1nxFtK23hgSvEnBttJl0Lk9qJStf83TNAWV1UPmpedBETstXqumA63Lj
-	RiFZUhKO9eKsWDc02a5R7cUSknSPJKc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1739999554;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VpldkGZefhNxtKiLXQCmXZ8Zj1sa/cliTtoWiaTp7II=;
-	b=zy+SKcQh3ivV9gUJG6EcN4SGHHKH978jACHycR5dMdagcN/MVDdYiyOs0IqFg8LDoffn3+
-	MS67G7lozbYoj2CQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=WQ5DtBRR;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="2vtti/c4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1739999553; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VpldkGZefhNxtKiLXQCmXZ8Zj1sa/cliTtoWiaTp7II=;
-	b=WQ5DtBRR9tfa2qlW25hhkchumb8HLqFG7YrYYnpCq+6HnuwPeSiYnGYb1naSTCd49Jhic9
-	mAXKtvuQ+Vi6IJFqzwiIXVCIWIzeuzaxx3DfQsWz7m1hReEjrf9MD8gjT9+cPM7JdQaNAt
-	tvtMOO99H9bZOE4NSFTM2UT8esYiH0o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1739999553;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VpldkGZefhNxtKiLXQCmXZ8Zj1sa/cliTtoWiaTp7II=;
-	b=2vtti/c4sqXdKs463U2ojTwqf87l+ggXZbSD1a4ZVrqbnIw/hKNuMlRzyxM7IDh5fTBK+B
-	TLDamDIwvnMRY8Dg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1949F1366F;
-	Wed, 19 Feb 2025 21:12:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 3+HtLz9Jtmf7IAAAD6G6ig
-	(envelope-from <neilb@suse.de>); Wed, 19 Feb 2025 21:12:31 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YyqYQ4CQGz4x2c;
+	Thu, 20 Feb 2025 08:39:54 +1100 (AEDT)
+Date: Thu, 20 Feb 2025 08:39:53 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Anna Schumaker <anna@kernel.org>, Trond Myklebust <trondmy@gmail.com>,
+ NFS Mailing List <linux-nfs@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the nfs-anna tree
+Message-ID: <20250220083953.12e3ad01@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "NeilBrown" <neilb@suse.de>
-To: "Bagas Sanjaya" <bagasdotme@gmail.com>
-Cc: "Stephen Rothwell" <sfr@canb.auug.org.au>,
- "Christian Brauner" <brauner@kernel.org>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- "Linux Next Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the vfs-brauner tree
-In-reply-to: <Z7WaNWHRkqt2rFGA@archie.me>
-References:
- <20250219153444.0046e433@canb.auug.org.au>, <Z7WaNWHRkqt2rFGA@archie.me>
-Date: Thu, 20 Feb 2025 08:12:28 +1100
-Message-id: <173999954863.3118120.1592139865849565534@noble.neil.brown.name>
-X-Rspamd-Queue-Id: DF2481F86C
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -4.51
-X-Spam-Flag: NO
+Content-Type: multipart/signed; boundary="Sig_/V=bh8+aeNG+zXVz8hrEld.k";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, 19 Feb 2025, Bagas Sanjaya wrote:
-> On Wed, Feb 19, 2025 at 03:34:44PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the vfs-brauner tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> >=20
-> > Documentation/filesystems/porting.rst:1173: ERROR: Unexpected indentation=
-. [docutils]
-> >=20
-> > Introduced by commit
-> >=20
-> >   20c2c1baa9ab ("VFS: add common error checks to lookup_one_qstr_excl()")
-> >=20
->=20
-> Separating the bullet list should suffice (plus s/recommend/recommended/
-> for consistency with the rest of docs):
->=20
-> ---- >8 ----
-> diff --git a/Documentation/filesystems/porting.rst b/Documentation/filesyst=
-ems/porting.rst
-> index 3b6622fbd66be9..cfac50a7258db6 100644
-> --- a/Documentation/filesystems/porting.rst
-> +++ b/Documentation/filesystems/porting.rst
-> @@ -1166,10 +1166,11 @@ kern_path_locked() and user_path_locked() no longer=
- return a negative
->  dentry so this doesn't need to be checked.  If the name cannot be found,
->  ERR_PTR(-ENOENT) is returned.
-> =20
-> -** recommend**
-> +** recommended**
-> =20
->  lookup_one_qstr_excl() is changed to return errors in more cases, so
-> -these conditions don't require explicit checks.
-> +these conditions don't require explicit checks:
-> +
->   - if LOOKUP_CREATE is NOT given, then the dentry won't be negative,
->     ERR_PTR(-ENOENT) is returned instead
->   - if LOOKUP_EXCL IS given, then the dentry won't be positive,
->=20
-> Let me know if I should send the formal patch.
+--Sig_/V=bh8+aeNG+zXVz8hrEld.k
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks a lot for correcting these for me!
-NeilBrown
+Hi all,
 
+There are 2923 patches duplicated from Linus Torvalds' tree in the
+nfs-anna tree.  It is unusable in this state, so I will drop it today
+unless it is updated very soon.  It looks like an attempted rebase onto
+v6.14-rc2 went badly wrong :-(
 
->=20
-> Thanks.
->=20
-> --=20
-> An old man doll... just what I always wanted! - Clara
->=20
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/V=bh8+aeNG+zXVz8hrEld.k
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme2T6kACgkQAVBC80lX
+0Gzd4ggAjS2kcHFzQFQGuKtc4LdcsIgxBhNYrkzfhCM2MW12uu7HKH6rKZTT5A2w
+YyiUNBRagVBh4Ao3OMuKGlQrYZVK9vHDvib0TUxmI53Lva2c+pqIF40+8hn0kNHf
+fnICQsF+rGkjh0g3Yru6Z0LBE8lLOI1eMvIGtyzKUHopwzO1KRnigxHHTU6nRZn7
+FhmEQUn2o4dW01SciUnxCYQvECrnZeCkgZvKiEC4khTBYB887UA0ZKQA9nFQK5hS
+26CS65iMOYFBhl27LHni90RMn/sI7qUe3Of5QDKJQ1MEs0Bv+BlIV5KH8hpfivid
+NbfJKz2PRfwl3pEn8qKYOfpExANp5A==
+=AZTQ
+-----END PGP SIGNATURE-----
+
+--Sig_/V=bh8+aeNG+zXVz8hrEld.k--
 

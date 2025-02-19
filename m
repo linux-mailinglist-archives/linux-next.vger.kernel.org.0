@@ -1,109 +1,112 @@
-Return-Path: <linux-next+bounces-5507-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5508-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A999A3CBCF
-	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 22:51:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CF54A3CBD2
+	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 22:52:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 605933B43A8
-	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 21:51:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E73D189C5A5
+	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 21:52:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFA1A22A81A;
-	Wed, 19 Feb 2025 21:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160AA22A81A;
+	Wed, 19 Feb 2025 21:52:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="enVd0QmN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ER8n1WOt"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4DC1A841F;
-	Wed, 19 Feb 2025 21:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2400F1A841F;
+	Wed, 19 Feb 2025 21:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740001888; cv=none; b=Im4eXc0Cac3R7nuNbPnvpurkMXvTpECi5vVZNsSC7oaL0fVFv7Z5qvOb3e/7iq31pA8NzLv3fAteb5mgu+p2Zy27NaRVBGtqcXyfIDeuvfxJShQLEc2pQWgIHbq7BximLOCSJBmuLvC3q8OMNjZNtOnRa3E/7UVQe5Eubg+wtjU=
+	t=1740001933; cv=none; b=r6YFQLVxdofim6SiZGoywzqMRZz7oImTeBll1aR4E6DYNI08jsPin6tdml0wBeOMveXEzpa8aAmBhgSLPx5Z/i3Nh7IDlMZW5yoseLLxhWxx6WdC1V2dLCfnk9xQ/saBQcdWYZS+I5vaIaA446jXSwzVraQyh0jYSzp6PNvugd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740001888; c=relaxed/simple;
-	bh=rPjeYmKJydRc6RxImkLoCXPWMmB5KRSLLkwqXEY2Mlw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BHfIDas3ZTIJv9xNyR8phxWSjVXI6b/CC7MijP3E3vgCI1Tk8wvFCCX1Uo1maDQMYT26PAbf6T5s1V9VdrF+lOqRoNG9DfbI9TXdA9j/8XCFpHqSKA10WlsdJeF+EGKlbQL567O+98ne9Ox8CLKI5E1Q8tyXAp3b62HJdow01Ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=enVd0QmN; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1740001933; c=relaxed/simple;
+	bh=6QNMJ61yNbCiOtKJc3nNULn0jRW6MpzxnBYfQl7dbfc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CmKeGSZ+UZEjm3D6/oSYh8wFEcWsln/eJo6veNRksXO28zrYKlQDLjCTpB8TWx1WKUir3p6uLflIbA9mPXNyrGMBEXiYAcwdIvAx1aRgHL1eEwUejeVou7tRDpp10ce9XWcIdUQqTiW7El66WppA1otbTOmLP2wc9jgH9KcOfYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ER8n1WOt; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1740001882;
-	bh=NUScgfZvaIi7Kic7ViCMQoAnbJX3U3IyXAhfMMsBT18=;
-	h=Date:From:To:Cc:Subject:From;
-	b=enVd0QmNuzsXHShngikp8JazUgrHVuweYWiYl7kyvlcR55AX/V2X80LztLSdbUloF
-	 /nnbsG8wFKzoiz/wXEbvC8KvxlG3fNdNUQU376Vip3F4mMNhKqdiypKaJiapLalhjR
-	 +/O77jTrhWrar2PQozcCMJmvJ5rWSNGgXKNCMf4v4vhZNc/q4ua1IqDRsTGE3shNPe
-	 UaUojMvkdldkZ77dUY7QqZh4FchFbT7dLCuNl+YpswZaYDgLv9nKehyXGEpwdKIejU
-	 Gdmo6jncjI7czzfzIcjWSVMeGmq/KJvzyatypjCMat0WxB/4W2zIJ8BOKt2YXQQgjA
-	 rwZjaQ9Qyj/Kg==
+	s=201702; t=1740001929;
+	bh=6QNMJ61yNbCiOtKJc3nNULn0jRW6MpzxnBYfQl7dbfc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ER8n1WOtmDmyn70J1Qhd0kBtdb4wki4oDpbiDi41nbciZ6qDeRZbZM1Hh+Dtg6rxQ
+	 +Rqsgj8Xx685GjsBRBRd3tPprjReHYgeGr1UFC/ylt8cowhETqyfe6QyYRvF1fGJkC
+	 E46WcNk8lyxIit8QwSs0Mq6P1epL0fhGpNJqhJZXIbH9r7/nv+QRunbQQrO7fpB8Zr
+	 /ejZVHdDOCM1QewUiSSQsWArY70yPCfM+mDHjzLfu8eOBLJDqwmggtf9E0ai2YkOkQ
+	 KWQlXP0hjGo83/sXyN8O9qVyDhGl6UiFpsVZr/rPLRb6K023JLI+SK6+oO2cqrYoew
+	 +FpebiEW4fR+Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Yyqpd5sZcz4wbn;
-	Thu, 20 Feb 2025 08:51:20 +1100 (AEDT)
-Date: Thu, 20 Feb 2025 08:51:20 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YyqqX4Qw8z4wbn;
+	Thu, 20 Feb 2025 08:52:08 +1100 (AEDT)
+Date: Thu, 20 Feb 2025 08:52:07 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the block tree
-Message-ID: <20250220085120.149904bb@canb.auug.org.au>
+To: Vineet Gupta <vgupta@kernel.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Dan Williams
+ <dan.j.williams@intel.com>, "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+ Jeff Layton <jlayton@kernel.org>, Jeremy Kerr <jk@ozlabs.org>, Joel Stanley
+ <joel@jms.id.au>, Kent Overstreet <kent.overstreet@linux.dev>, Linus
+ Walleij <linus.walleij@linaro.org>, Nick Terrell <terrelln@fb.com>
+Subject: Re: linux-next: trees being removed
+Message-ID: <20250220085207.7eba1bfd@canb.auug.org.au>
+In-Reply-To: <06bc4404-ec60-4f38-a568-6600969f6f96@kernel.org>
+References: <20250212095632.6bdd50d7@canb.auug.org.au>
+	<8e27ccd9-47c4-45f0-ad93-b88d603108b4@kernel.org>
+	<20250216221113.03080b52@canb.auug.org.au>
+	<06bc4404-ec60-4f38-a568-6600969f6f96@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sNqbWSt9Q/ZQM1gOKFuKWeI";
+Content-Type: multipart/signed; boundary="Sig_/NF52mP3gHtcMvon783MIHVE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/sNqbWSt9Q/ZQM1gOKFuKWeI
+--Sig_/NF52mP3gHtcMvon783MIHVE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Vineet,
 
-In commit
+On Wed, 19 Feb 2025 11:58:58 -0800 Vineet Gupta <vgupta@kernel.org> wrote:
+>
+> For quite some time I've been using just # for-curr for both fixes/featur=
+es, as
+> dev as slowed down.
+> Things might change if and when work picks up on ARCv3/arc64 bit for now
+> for-curr suffices.
 
-  f6977b06c598 ("io_uring/zcrx: fix leaks on failed registration")
-
-Fixes tag
-
-  Fixes: 9fd13751abf5f ("io_uring/zcrx: grab a net device")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 035af94b39fd ("io_uring/zcrx: grab a net device")
+OK, I have removed the arc tree from today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/sNqbWSt9Q/ZQM1gOKFuKWeI
+--Sig_/NF52mP3gHtcMvon783MIHVE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme2UlgACgkQAVBC80lX
-0GwOIQf/d3xi+F5Kdqo/80lialZppsQg18jITmFS7YtuKQY/2nZXmAO6k0DMzxMA
-goTj+QU91Bq87IYjMjJ4u7QxTHwLzdWnFFj/r6sPxdGrfTlQyXe5JBANN1RXR0Ts
-7DPBN/tizhptdMvROG8viALpChChJ+DcCmPi3ay6qZRJBAf2MULuimAMDVkdLiwm
-Uku8CoLWUEKBjWbTSMQrwJslscCMQyVOx+FMZjLTs3s9vFHpC+BWXDpmP6IPlCIf
-tw0y1Jyb5vjiGU7XCU9c7yw0tVJbIBPZutuUk8nD0QRm6s+IgMYaSsFvXqSLf6bX
-8EVg09pGHTEMBw6do57qzrVDxPus5w==
-=Pg/X
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme2UocACgkQAVBC80lX
+0Gzpvwf9GORn8jQrNvFIPfgJWbfRwzMB2q4ddb/nm1WI1+8kPETIGrsEcwBg549I
+tTDPeO88ykPqTr8LPWlbwa/ttUS7DdJwLYC8LYVPvADvC6GPG21KBrvpG4RsFDvf
+ZiGp/SgWPM7+LjR61cRqqzLgiFjTTy5B6NJWatvTDEjXwSNo7ceBcJ0Z8VWkjAs/
+E+dqUh2F8lp8kBz3kUISntuxFDrtzk124k4K2VDo5WB3FRc+Em/fb8FEVxhq0cFe
+bdcXDZfBVNw/5s96Y6lEfSsF/ukLZuChOLqev6t1IgEybbo2NQQAb3+soh6jJloT
+yq2ViLgR7vpz7h6irnkWGMjwaWGxmQ==
+=ievT
 -----END PGP SIGNATURE-----
 
---Sig_/sNqbWSt9Q/ZQM1gOKFuKWeI--
+--Sig_/NF52mP3gHtcMvon783MIHVE--
 

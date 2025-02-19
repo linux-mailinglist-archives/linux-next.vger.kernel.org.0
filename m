@@ -1,159 +1,135 @@
-Return-Path: <linux-next+bounces-5498-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5499-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A48DDA3B2F8
-	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 09:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C5BC0A3B38B
+	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 09:22:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6F9B188A7E2
-	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 08:00:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CB651898D87
+	for <lists+linux-next@lfdr.de>; Wed, 19 Feb 2025 08:20:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A4D1B87F4;
-	Wed, 19 Feb 2025 08:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sdJT9w06"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B4FC1BAEDC;
+	Wed, 19 Feb 2025 08:20:17 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C47817A2FE;
-	Wed, 19 Feb 2025 08:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A4B1C07D8;
+	Wed, 19 Feb 2025 08:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739952031; cv=none; b=nhkzJa1KdROZZEK6zMv0m4aU+AyCTmUvDJImYbaJu4z8xzx+murgfPQutfOoSMvf5KffJd7FEhwE3NhWyepkj21uAjY09IqNNsKkbFF1AhVZ4qgOp8BQVfEj1/FDn4LlJyGT5gPGsiBYF7nBL4fK5RipwKGPBEG+2YJWYMzO1cs=
+	t=1739953217; cv=none; b=UIBicgvKTbuX8Qn+m+KNPrT6t8VA/pF5yfuF7UDqZoJeL61dqoQ3OIhPs6pnLF0+XnNK5aL+PsmBg3fTmvStyAniSn95P6prZN0ch7pkuvvoypKth38KLN1AQbffmrNtBguafQ+WgjWoO2B8cyjXAtc+ASFRprIFef8a2VdBicg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739952031; c=relaxed/simple;
-	bh=8eWqJHU2LbrFX/m2Y0cx1pG2wLnCHCevlsWu3c1RYvU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FWrqKc0e4tdUo1TZ6sf0Wq+4KL0EisEr6nw0Uw1MpQkbXntRt8c7BwKqFpjs3NO7oh52omDh7XeCuqKS8dSihAWvT536pOYnBWe/5BBcmTD/ZIPJ+sA7i402hDH3nDYNcTNT7iVy9N999lYR+cAP44tlWuUJ0LAFIb2CahZ4m/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sdJT9w06; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51J75B8a005303;
-	Wed, 19 Feb 2025 08:00:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ejfOtp
-	j+exSth/ZFyiK/cHQMe5GVKIP/KuhULowI8is=; b=sdJT9w06RiKt4fmZ42IqQA
-	WxfdIf4gqVL0gj5JRjOmOpR4+Wi/cqRqEL1E6s94BR1nv+jckIUYngTEDQXpB7te
-	geIpMoTdPpe7hcQSkeY0MbsnU0QUGCUDA6rpdemO+JxdnhrXbJ97E/KSDN5Q2C3X
-	m55ThXuS+QFWcEKi4hCBUgITcwaNGejGVFwYCyqBrO4eJVsbFqcJNi5rlkqjKx+l
-	4Pso89RclLPbiPzcDEu2L7o2UNdX0lzJ6DWv7gcIEH/GP9Y2S0/vaqYomjXXAy6Z
-	wK0jYc7VbuzsgT/KbAZKg+JtvN9onOhWmVi2NIZgrss2mrilTIncw95BLSATV7YQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44w65097yk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Feb 2025 08:00:14 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 51J7xE3b006847;
-	Wed, 19 Feb 2025 08:00:14 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44w65097ye-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Feb 2025 08:00:14 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51J704B3005826;
-	Wed, 19 Feb 2025 08:00:13 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44w02xawrg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Feb 2025 08:00:13 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51J80CuQ64029038
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 19 Feb 2025 08:00:12 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AEFD95806F;
-	Wed, 19 Feb 2025 08:00:11 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 51F3358056;
-	Wed, 19 Feb 2025 08:00:05 +0000 (GMT)
-Received: from [9.43.108.86] (unknown [9.43.108.86])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 19 Feb 2025 08:00:04 +0000 (GMT)
-Message-ID: <d5734fe3-813f-4c8b-9ead-3089d3af6274@linux.ibm.com>
-Date: Wed, 19 Feb 2025 13:30:01 +0530
+	s=arc-20240116; t=1739953217; c=relaxed/simple;
+	bh=6wZy9EuO1eT7DmYlRDQUktf92Tji9heVhYH1Bu+cHw4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DbFqbjEj+ocNwWCvGNKAKco+zXNMRNnHmaHCP86nr4d8Sw6lCaLwF74cSRje7dBmNyACv6sm8peo0KSGfr1jKuLXKxEkBPX8TIgiLZKuIEt/Sqo4IRrsjyN1pRzDM9yCI90BN0mNPyZHby1gH3w1iikW87/M4h1CKw/7K5okfYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 234B21682;
+	Wed, 19 Feb 2025 00:20:23 -0800 (PST)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8C523F5A1;
+	Wed, 19 Feb 2025 00:20:00 -0800 (PST)
+Date: Wed, 19 Feb 2025 09:19:56 +0100
+From: Beata Michalska <beata.michalska@arm.com>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
+	sfr@canb.auug.org.au, ionela.voinescu@arm.com,
+	linux-next@vger.kernel.org, sumitg@nvidia.com,
+	yang@os.amperecomputing.com, vanshikonda@os.amperecomputing.com,
+	lihuisong@huawei.com, zhanjie9@hisilicon.com,
+	ptsm@linux.microsoft.com
+Subject: Re: [PATCH] arm64: Utilize for_each_cpu_wrap for reference lookup
+Message-ID: <Z7WULBZPsh8QK3DV@arm.com>
+References: <20250218192412.2072619-1-beata.michalska@arm.com>
+ <Z7TqFLU0Kwg9cUjO@thinkpad>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cxl: Fix cross-reference in documentation and add
- deprecation warning
-To: Andrew Donnellan <ajd@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
-Cc: fbarrat@linux.ibm.com, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        mchehab+huawei@kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20250219064807.175107-1-ajd@linux.ibm.com>
-Content-Language: en-US
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-In-Reply-To: <20250219064807.175107-1-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ZpWv9r_k4_BcWUijIIygROr8keycnyVP
-X-Proofpoint-GUID: 9iddCGeetMERc6TtA9Qm1KYvDJrgEslg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-19_03,2025-02-18_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=695 spamscore=0
- impostorscore=0 suspectscore=0 mlxscore=0 clxscore=1011 bulkscore=0
- adultscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502190062
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z7TqFLU0Kwg9cUjO@thinkpad>
 
-
-
-On 2/19/25 12:18 PM, Andrew Donnellan wrote:
-> commit 5731d41af924 ("cxl: Deprecate driver") labelled the cxl driver as
-> deprecated and moved the ABI documentation to the obsolete/ subdirectory,
-> but didn't update cxl.rst, causing a warning once ff7ff6eb4f809 ("docs:
-> media: Allow creating cross-references for RC ABI") was merged.
+On Tue, Feb 18, 2025 at 03:14:23PM -0500, Yury Norov wrote:
+> On Tue, Feb 18, 2025 at 07:24:12PM +0000, Beata Michalska wrote:
+> > While searching for a reference CPU within a given policy,
+> > arch_freq_get_on_cpu relies on cpumask_next_wrap to iterate over
+> > all available CPUs and to ensure each is verified only once.
+> > Recent changes to cpumask_next_wrap will handle the latter no more,
+> > so switching to for_each_cpu_wrap, which  preserves expected behavior
+> > while ensuring compatibility with the updates.
 > 
-> Fix the cross-reference, and also add a deprecation warning.
-> 
-> Fixes: 5731d41af924 ("cxl: Deprecate driver")
-> Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> 
-> ---
-> 
-> Maddy: can we take this by powerpc-fixes?
+> This is technically correct, but I would rather point that for
+> iterating over each CPU, it's better to use a dedicated iterator
+> instead of opencoded loop.
 
-Yes. Will take this via powerpc-fixes
-
-Maddy
-
-> ---
->  Documentation/arch/powerpc/cxl.rst | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+I can certainly add that.
 > 
-> diff --git a/Documentation/arch/powerpc/cxl.rst b/Documentation/arch/powerpc/cxl.rst
-> index d2d77057610e..778adda740d2 100644
-> --- a/Documentation/arch/powerpc/cxl.rst
-> +++ b/Documentation/arch/powerpc/cxl.rst
-> @@ -18,6 +18,7 @@ Introduction
->      both access system memory directly and with the same effective
->      addresses.
->  
-> +    **This driver is deprecated and will be removed in a future release.**
->  
->  Hardware overview
->  =================
-> @@ -453,7 +454,7 @@ Sysfs Class
->  
->      A cxl sysfs class is added under /sys/class/cxl to facilitate
->      enumeration and tuning of the accelerators. Its layout is
-> -    described in Documentation/ABI/testing/sysfs-class-cxl
-> +    described in Documentation/ABI/obsolete/sysfs-class-cxl
->  
->  
->  Udev rules
+> > Fixes: 16d1e27475f6 ("arm64: Provide an AMU-based version of arch_freq_get_on_cpu")
+> > Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+> > ---
+> >  based on arm64 for-next/amuv1-avg-freq
+> > 
+> >  arch/arm64/kernel/topology.c | 16 ++++++++++------
+> >  1 file changed, 10 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> > index a09b0551ec59..9e3583720668 100644
+> > --- a/arch/arm64/kernel/topology.c
+> > +++ b/arch/arm64/kernel/topology.c
+> > @@ -254,7 +254,7 @@ int arch_freq_get_on_cpu(int cpu)
+> >  		if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
+> >  		    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
+> >  			struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> > -			int ref_cpu = cpu;
+> > +			int ref_cpu;
+> >  
+> >  			if (!policy)
+> >  				return -EINVAL;
+> > @@ -265,11 +265,15 @@ int arch_freq_get_on_cpu(int cpu)
+> >  				return -EOPNOTSUPP;
+> >  			}
+> >  
+> > -			do {
+> > -				ref_cpu = cpumask_next_wrap(ref_cpu, policy->cpus,
+> > -							    start_cpu, true);
+> > -
+> > -			} while (ref_cpu < nr_cpu_ids && idle_cpu(ref_cpu));
+> > +			for_each_cpu_wrap(ref_cpu, policy->cpus, cpu + 1) {
+> > +				if (ref_cpu == start_cpu) {
+> > +					/* Prevent verifying same CPU twice */
+> > +					ref_cpu = nr_cpu_ids;
+> > +					break;
+> 
+> If start_cpu == cpu, and you begin with 'cpu + 1', you will never
+> check the 'cpu' for idle, right? Maybe like this?
+> 
+>         unsigned int start_cpu = cpu + 1;
+> 
+This is not entirely a pure for-each case here.
+If this loop is reached, it means the start_cpu did not meet the criteria, and
+we are trying to find another CPU within the policy that might. Which is why we
+pick up the next in line and check whether it is suitable or not.
+Testing for idle is just a shortcut, as an idle CPU will most probably not be
+considered a good reference either way.
 
+---
+BR
+Beata
+> > +				}
+> > +				if (!idle_cpu(ref_cpu))
+> > +					break;
+> > +			}
+> >  
+> >  			cpufreq_cpu_put(policy);
+> >  
+> > -- 
+> > 2.25.1
 

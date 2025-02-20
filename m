@@ -1,157 +1,113 @@
-Return-Path: <linux-next+bounces-5511-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5513-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4F7FA3CEB4
-	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 02:29:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3595CA3D056
+	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 05:16:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0D303A99A9
-	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 01:28:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03A7D177A50
+	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 04:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CDB1922FB;
-	Thu, 20 Feb 2025 01:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88581D5140;
+	Thu, 20 Feb 2025 04:16:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="H7lalOPn"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="fHN2jfFt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mail-m19731107.qiye.163.com (mail-m19731107.qiye.163.com [220.197.31.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1E02AD16;
-	Thu, 20 Feb 2025 01:28:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44322AE74;
+	Thu, 20 Feb 2025 04:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740014920; cv=none; b=CXYiV6FzvBdFU6G/vQKLSi5+4ld3nljEbUmxBOAeJoR6sQpv089iKelNt20/MpxceGOlQUG+xvx/JJT7NJ+iukmqREArH5lPTwPO/P8wMin4WQUqfhSirt4ybCbRW8CiiPaPnI/Tgp1D8GKG86BC+x7tymcE2Qxbgqi63QbPYqo=
+	t=1740024979; cv=none; b=PhaiOMhZjydhxtZBnuVSF27rg8omOoh9lwTpd1OiUzhiivxZnOaeQkkul0Kwe9Za8l1tFijIW4AgF7ZnqHTPhA01LXF5DwhOIcUSH9uzbOnHdVH/FVG9ofGS6TgiJXKR+hp89/zggWxTAdN3A3rVHAH0plWYAHU5YJ2TrEmvs9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740014920; c=relaxed/simple;
-	bh=TxwQblYIrtsHX+cs7fiBg5nYEFzMEzY04MyorO352eU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DbIAlKrmAJwjYEWDsHyjxBOKWBAn9+IBiFXvvP38iyluc6riWaO9RNwB1mObsKiIQqw4TvmE9g4EC4P9h+WK+4+ut/9jj0Z02tCVjbMCbNMXLyp5c8PTLTspH+KFTqJ0CypCjuSCbWs762N4CulO14q3ThpJA1D7l9+F4Fmy/Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=H7lalOPn; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1740014913;
-	bh=ymPGS3K8PtvdLHv0pCnuqbZVNZlMes3BilfU1Lqnccg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=H7lalOPnBxLeghgNDfRCx7wufj2Hm2+MxWZnjIyJx1vGO1zreqwO06W3zPqH4ApD0
-	 9MUyNRiEUH4ZHGW1lMoRnIIUaWD8a4bCdJzCP7/s+VwSWIocCkoXhX6fBtxTIcOy7Y
-	 kAqQqIO0jWBkw+kZl2HvaU0heD4UQJ6kb1++TeXOSdu3BdnrPae7cdp4EmIweCD4GY
-	 XaIGTA4vr4Kq+RETGLBnab4MghnwsVq5r8hkYHnc2QcG3A1+c1VT/mPVWOLEvPO2Rq
-	 cE2BJae+CSx65tamtt8dADkqq6JvOqeOlLINWI22Qp8tZW6xrB0Pz7xG0PsqGWHhQi
-	 HRUWdaFj9AxpQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YywdD5sjpz4wyk;
-	Thu, 20 Feb 2025 12:28:32 +1100 (AEDT)
-Date: Thu, 20 Feb 2025 12:28:32 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Deucher <alexdeucher@gmail.com>, Dave Airlie <airlied@redhat.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>, Dmitry Baryshkov
- <dmitry.baryshkov@linaro.org>, Harry Wentland <harry.wentland@amd.com>, DRI
- <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Roman Li <roman.li@amd.com>
-Subject: linux-next: manual merge of the amdgpu tree with the drm tree
-Message-ID: <20250220122832.0d9d9eb9@canb.auug.org.au>
+	s=arc-20240116; t=1740024979; c=relaxed/simple;
+	bh=kTVEpN6+LFzOeLE8CLLajgv8R95++2NW96EUIp7cVGY=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=LDrFvmHFtoQGorlcg9pbsr0XroR99vPGxf2LoKMjr64I2LiAxCawthu3x6PETkmqezIPBdCOfVkPaf0BBQYwwzRV9Eakv1bUuuzy8w5Eq2ZonpjrhYIf/K8VTDDRZCMked7ZjA8aPhFFmbhLLfoYAAk5J1orvt/gyLOsSZ+/tH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=fHN2jfFt; arc=none smtp.client-ip=220.197.31.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.45] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id b986b031;
+	Thu, 20 Feb 2025 09:53:44 +0800 (GMT+08:00)
+Message-ID: <4e07e570-25ef-4d03-b1b8-5acf8bc8bc8a@rock-chips.com>
+Date: Thu, 20 Feb 2025 09:53:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/efS0uCbL9qU9bEaGXfn_NVJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Cc: shawn.lin@rock-chips.com,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Heiko Stuebner <heiko@sntech.de>
+Subject: Re: linux-next: build failure after merge of the pmdomain tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+References: <20250220113338.60ba2290@canb.auug.org.au>
+Content-Language: en-GB
+From: Shawn Lin <shawn.lin@rock-chips.com>
+In-Reply-To: <20250220113338.60ba2290@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkkYSVYaGEgaSUNCTBkZH01WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a95210f95d809cckunmb986b031
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NT46Szo5ITIWCS0IEkoyLU4L
+	AgkaCRFVSlVKTE9LS0pNT0lOSUJCVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpJTk43Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=fHN2jfFtUOHW8HxjGan8tRKqKCIW1hgwEn91a/mKizUUx79Ikgh5RjdlmOWKu9nAeEG49sTX+keGPF/RM3hrWyKQ3aG7Wzw+BpzWWp7jaDuiUZW1fyvn9qS6p9GphAjhX0/SNqQvyoAj0tDKQvSTY0Nv9hmohFPfFLO45hRy/JY=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=kz2RbdNXW8q9JlPloKdddNUyjkRikvpmhR8YLFqMJdQ=;
+	h=date:mime-version:subject:message-id:from;
 
---Sig_/efS0uCbL9qU9bEaGXfn_NVJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+在 2025/2/20 8:33, Stephen Rothwell 写道:
+> Hi all,
+> 
+> After merging the pmdomain tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> x86_64-linux-gnu-ld: vmlinux.o: in function `rockchip_do_pmu_set_power_domain':
+> pm-domains.c:(.text+0x19aa103): undefined reference to `arm_smccc_1_1_get_conduit'
+> 
+> Caused by commit
+> 
+>    61eeb9678789 ("pmdomain: rockchip: Check if SMC could be handled by TA")
+> 
+> $ grep CONFIG_HAVE_ARM_SMCCC_DISCOVERY .config
 
-Hi all,
+It seems x86_64_defconfig did't enable  CONFIG_HAVE_ARM_SMCCC_DISCOVERY 
+which apparently belongs to ARM stuff.
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+Selecting HAVE_ARM_SMCCC_DISCOVERY and ARM_PSCI_FW should pass the
+x86_64 allmodconfig compile.
 
-  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+--- a/drivers/pmdomain/rockchip/Kconfig
++++ b/drivers/pmdomain/rockchip/Kconfig
+@@ -5,6 +5,8 @@ config ROCKCHIP_PM_DOMAINS
+         bool "Rockchip generic power domain"
+         depends on PM
+         select PM_GENERIC_DOMAINS
++       select ARM_PSCI_FW
++       select HAVE_ARM_SMCCC_DISCOVERY
+         help
+           Say y here to enable power domain support.
+           In order to meet high performance and low power requirements, 
+a power
 
-between commit:
 
-  b255ce4388e0 ("drm/amdgpu: don't change mode in amdgpu_dm_connector_mode_=
-valid()")
+> $
+> 
+> I have used the pmdomain tree from next-20250219 for today.
+> 
 
-from the drm tree and commit:
-
-  cbf4890c6f28 ("drm/amd/display: Don't treat wb connector as physical in c=
-reate_validate_stream_for_sink")
-
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 1ea40696c955,8672c0c3c5db..000000000000
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@@ -7476,9 -7536,11 +7536,12 @@@ enum drm_mode_status amdgpu_dm_connecto
-  {
-  	int result =3D MODE_ERROR;
-  	struct dc_sink *dc_sink;
- +	struct drm_display_mode *test_mode;
-  	/* TODO: Unhardcode stream count */
-  	struct dc_stream_state *stream;
-+ 	/* we always have an amdgpu_dm_connector here since we got
-+ 	 * here via the amdgpu_dm_connector_helper_funcs
-+ 	 */
-  	struct amdgpu_dm_connector *aconnector =3D to_amdgpu_dm_connector(connec=
-tor);
- =20
-  	if ((mode->flags & DRM_MODE_FLAG_INTERLACE) ||
-@@@ -7501,16 -7563,11 +7564,16 @@@
-  		goto fail;
-  	}
- =20
- -	drm_mode_set_crtcinfo(mode, 0);
- +	test_mode =3D drm_mode_duplicate(connector->dev, mode);
- +	if (!test_mode)
- +		goto fail;
- =20
- -	stream =3D create_validate_stream_for_sink(connector, mode,
- +	drm_mode_set_crtcinfo(test_mode, 0);
- +
-- 	stream =3D create_validate_stream_for_sink(aconnector, test_mode,
-++	stream =3D create_validate_stream_for_sink(connector, test_mode,
-  						 to_dm_connector_state(connector->state),
-  						 NULL);
- +	drm_mode_destroy(connector->dev, test_mode);
-  	if (stream) {
-  		dc_stream_release(stream);
-  		result =3D MODE_OK;
-
---Sig_/efS0uCbL9qU9bEaGXfn_NVJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme2hUAACgkQAVBC80lX
-0GwDxwf9GOEhJAsOiyeHp+Bg89a6OutNo2Kq/Eks3y4IxmsoDxmJ5Fw4HcF4GG1H
-h18UUvF1iCxozICVtzIHxQxt8L+QBp3fvqSEb3yW5sa2X4Gs4vs8I9retJOC7Thq
-1iWSfc+JHTL9N/Tw9uqkLeDyd9fwuIWsiqyhtRAymqLd06nhHPo8MMzY1mivSet8
-pF2PZ1WSjkn2NkA8U4Otl+XnAh6H8ebvFkHL4er5qRIv5lIxWUvnqpI3vg/stxPt
-ikSxvejUHM5ZUBy0eS2dE6KxEGUutNXubDVQj5j8bwEZG4RZ7SIeuIZsHKHmLsYf
-JEZD3iqDZ0bOKdrCtulxiC83iZVGng==
-=sycq
------END PGP SIGNATURE-----
-
---Sig_/efS0uCbL9qU9bEaGXfn_NVJ--
 

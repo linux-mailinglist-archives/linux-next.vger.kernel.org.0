@@ -1,117 +1,102 @@
-Return-Path: <linux-next+bounces-5518-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5519-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 706C6A3D446
-	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 10:12:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 842A4A3E6B1
+	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 22:33:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 175393B6ECB
-	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 09:11:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAC2C189B299
+	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 21:33:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EC71EE02A;
-	Thu, 20 Feb 2025 09:10:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63599213248;
+	Thu, 20 Feb 2025 21:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OB7/3D3X"
 X-Original-To: linux-next@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF79B8BF8;
-	Thu, 20 Feb 2025 09:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A7E19DF6A;
+	Thu, 20 Feb 2025 21:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740042646; cv=none; b=tj/w1I+llGMX2gkAVGckISoqcxOtnDsDLDVNRxhj7SkDuOCFxJXkoaPwl5iyMrx57zqB3LyGsIdk0RWF8IgXKE7uYYblUCo6ehK3pqVV6RHnkrrf3niW8WNCZt7jljJdbNr/ALhuoNjFRSjKQX7NidTnWwGnycPIOPWarTycGLw=
+	t=1740087225; cv=none; b=bfRzzrPJ9+nBfZ769UqHVCz/G8Ul7CoKhl9fjfi6zvKQc1ZRytc8D67Sn/9rnc1EXc93SThxs/kMLBq2JNEuwaH/MxDpoFuSV80YztacHvnBsshpB1q+MzR8T+LoLnJoQ6b1SDqXAWTqYxsW3m3NBjTXCHrPoZtbZWUW3PKu2QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740042646; c=relaxed/simple;
-	bh=9H9oeHUeHBLIXefM54SF3s2VJrEb43LbDnogiG+QqQg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qMMIiVUIudhCREaH50UfvA2PXJGbwBXkR4pJ4YQLNOYy/xUYbkqeM02yYG92WHxxPJ25K+5qHLEri5KWud0QfPlAwZgIfwu5d8k+k3Znmuref03GN6MLXRwqWcifeUQkKM9ev9gRRtVsiOBB/IvXVY/v6gVkK7l5TzvFV6hlirQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B04A81BB0;
-	Thu, 20 Feb 2025 01:10:55 -0800 (PST)
-Received: from e125905.cambridge.arm.com (e125905.cambridge.arm.com [10.1.194.73])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 675C43F6A8;
-	Thu, 20 Feb 2025 01:10:35 -0800 (PST)
-From: Beata Michalska <beata.michalska@arm.com>
-To: linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	sudeep.holla@arm.com,
-	will@kernel.org,
-	catalin.marinas@arm.com,
-	sfr@canb.auug.org.au
-Cc: ionela.voinescu@arm.com,
-	yury.norov@gmail.com,
-	linux-next@vger.kernel.org,
-	sumitg@nvidia.com,
-	yang@os.amperecomputing.com,
-	vanshikonda@os.amperecomputing.com,
-	lihuisong@huawei.com,
-	zhanjie9@hisilicon.com,
-	ptsm@linux.microsoft.com
-Subject: [PATCH v2] arm64: Utilize for_each_cpu_wrap for reference lookup
-Date: Thu, 20 Feb 2025 09:10:15 +0000
-Message-Id: <20250220091015.2319901-1-beata.michalska@arm.com>
+	s=arc-20240116; t=1740087225; c=relaxed/simple;
+	bh=MeZPeDtFOyoiCyo51bFiJauQ91oSO9LxqtJ96Dngxvo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Pfzl2u2ou8TAHBGqPDu0R7xP4DPf6ClO0TzXUDwHNz6nrVfA1AdXi7bInbpD7F/iGRTDaXaWbPxj76kvEft23GEFfCxRIrPrX+JlFTw9splCU6kvoDubCkWA4gErao5Otx+XBD34x75pzLuTshkNF8p/MCMXpNtTwn/eHQHzcQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OB7/3D3X; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1740087218;
+	bh=52PDNdWJ/jx+9zOcv0Lf5QYU7kDXgl2M/PRR7i06cFk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=OB7/3D3X2EG0ghyCrC4TBkW+ffVIFOP74dMB53CBXWuaThwyNBL05AkxFNkDUarrq
+	 4T7nsNwTArId0pZ189YrJn/Bync4z1vIBsLQWB388RVZwRLWbOixLotkXQSgs6LCR/
+	 RSz8zXOJfB3/Vzn9Jaz1mP0brVyK7oj7iBrHEscnP7/Sz0U7PfuiN5aDORb/SJ1yMq
+	 Oafu48vIZ7bqfZ+VVb/yXIjAd4KiWg4qSdiGEsqPrwHzKG3gfuSnVPP+qF5a1fCAjg
+	 BTwnPPKr1unl/U00wNU3V1zIIf7t+ZPsc9/RRY4YOfMWJBNNVAd1roen+bP+yqmMiG
+	 UbGXYNK1ahXtA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YzRMk4nxDz4wbp;
+	Fri, 21 Feb 2025 08:33:38 +1100 (AEDT)
+Date: Fri, 21 Feb 2025 08:33:37 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Joshua Ashton <joshua@froggi.es>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the bcachefs tree
+Message-ID: <20250221083337.243123fb@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/0qkxuvk3YSUaRtsGkzr60zL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-While searching for a reference CPU within a given policy,
-arch_freq_get_on_cpu relies on cpumask_next_wrap to iterate over
-all available CPUs and to ensure each is verified only once.
-Recent changes to cpumask_next_wrap will handle the latter no more,
-so switching to for_each_cpu_wrap, which  preserves expected behavior
-while ensuring compatibility with the updates.
-Not to mention that when iterating over each CPU, using a dedicated
-iterator is preferable to an open-coded loop.
+--Sig_/0qkxuvk3YSUaRtsGkzr60zL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 16d1e27475f6 ("arm64: Provide an AMU-based version of arch_freq_get_on_cpu")
-Signed-off-by: Beata Michalska <beata.michalska@arm.com>
----
- v2:
- Updated commit message
+Hi all,
 
- arch/arm64/kernel/topology.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+Commit
 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index a09b0551ec59..9e3583720668 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -254,7 +254,7 @@ int arch_freq_get_on_cpu(int cpu)
- 		if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
- 		    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
- 			struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
--			int ref_cpu = cpu;
-+			int ref_cpu;
- 
- 			if (!policy)
- 				return -EINVAL;
-@@ -265,11 +265,15 @@ int arch_freq_get_on_cpu(int cpu)
- 				return -EOPNOTSUPP;
- 			}
- 
--			do {
--				ref_cpu = cpumask_next_wrap(ref_cpu, policy->cpus,
--							    start_cpu, true);
--
--			} while (ref_cpu < nr_cpu_ids && idle_cpu(ref_cpu));
-+			for_each_cpu_wrap(ref_cpu, policy->cpus, cpu + 1) {
-+				if (ref_cpu == start_cpu) {
-+					/* Prevent verifying same CPU twice */
-+					ref_cpu = nr_cpu_ids;
-+					break;
-+				}
-+				if (!idle_cpu(ref_cpu))
-+					break;
-+			}
- 
- 			cpufreq_cpu_put(policy);
- 
--- 
-2.25.1
+  40e00a584732 ("bcachefs: Split out dirent alloc and name initialization")
 
+is missing a Signed-off-by from its committer.
+
+Also, please keep all the commit message tags together at the end of
+the commit message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/0qkxuvk3YSUaRtsGkzr60zL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme3n7EACgkQAVBC80lX
+0GzScgf/a77TVtRUDpO70tIq/JDW9BnglZnKY34NdNEOUG1tl3Gj2xRlFNgN4Tls
+R/MSFQOVGg8yVCL4UespwQWRrV7AEhP0eNpBct4OMEBsxRz+F+Dgf0p9ksJXGVF/
+CZpf+PbXbmUowfOe0T5gZXEmS1sRJGueS8YC35WlHPh3tQfGx9jYRDDq3iIE9Cef
+pK0gJyCApwySlbOUGNfG5u0oBwN9OGhhavmcZsykKt1welCdcwtFGQwq6HYvCNfc
+Pm3/w03dP+xWas1HyMEU4rkHgbULqn2VCthK8MhRLRL8F3wTkEcBnxPXHa1PdDpO
+FWmSIIONbTnX5Z3G7cvQMBNdCBevFA==
+=0Grg
+-----END PGP SIGNATURE-----
+
+--Sig_/0qkxuvk3YSUaRtsGkzr60zL--
 

@@ -1,113 +1,132 @@
-Return-Path: <linux-next+bounces-5513-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5512-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3595CA3D056
-	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 05:16:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DDA4A3CFFE
+	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 04:16:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03A7D177A50
-	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 04:16:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3763D18953AD
+	for <lists+linux-next@lfdr.de>; Thu, 20 Feb 2025 03:16:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88581D5140;
-	Thu, 20 Feb 2025 04:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF1014AD29;
+	Thu, 20 Feb 2025 03:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="fHN2jfFt"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DChuayI8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-m19731107.qiye.163.com (mail-m19731107.qiye.163.com [220.197.31.107])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44322AE74;
-	Thu, 20 Feb 2025 04:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 608A535958;
+	Thu, 20 Feb 2025 03:16:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740024979; cv=none; b=PhaiOMhZjydhxtZBnuVSF27rg8omOoh9lwTpd1OiUzhiivxZnOaeQkkul0Kwe9Za8l1tFijIW4AgF7ZnqHTPhA01LXF5DwhOIcUSH9uzbOnHdVH/FVG9ofGS6TgiJXKR+hp89/zggWxTAdN3A3rVHAH0plWYAHU5YJ2TrEmvs9E=
+	t=1740021368; cv=none; b=ueYixDDtNKpLzYkDuir48pDbQVLGh/BdniODIjpiNI+XikNVROmycnygQImSudFSwZXhGtdt4KaZbSTfb8ix2KkOwpP2RaWVk5JLQzAJ0/adkuBBUTv/VyxVp1963nNhdyZKvRLCHWFVlJ1MFUvHEopZd1iYBYYtV7igqZs3L6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740024979; c=relaxed/simple;
-	bh=kTVEpN6+LFzOeLE8CLLajgv8R95++2NW96EUIp7cVGY=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=LDrFvmHFtoQGorlcg9pbsr0XroR99vPGxf2LoKMjr64I2LiAxCawthu3x6PETkmqezIPBdCOfVkPaf0BBQYwwzRV9Eakv1bUuuzy8w5Eq2ZonpjrhYIf/K8VTDDRZCMked7ZjA8aPhFFmbhLLfoYAAk5J1orvt/gyLOsSZ+/tH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=fHN2jfFt; arc=none smtp.client-ip=220.197.31.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.45] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id b986b031;
-	Thu, 20 Feb 2025 09:53:44 +0800 (GMT+08:00)
-Message-ID: <4e07e570-25ef-4d03-b1b8-5acf8bc8bc8a@rock-chips.com>
-Date: Thu, 20 Feb 2025 09:53:44 +0800
+	s=arc-20240116; t=1740021368; c=relaxed/simple;
+	bh=nPGMhUWYIpks9e6EFpGHLY29CxqRvzdWGksM9NHzd5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jZXQZ5Rt2wc5V2XmDxWlgxpnXXYQJ7KzMfyu6uRAG4PElz3Dt9diqe76mzVvIppaBwwj1ntUn1MZLFuGqGf69HvdG4b9fP97hx2RSSSbh22KQjD7Fn+M/tMxx0TQOuMO/0UXu8gpKtJ5b3nPvCRJ1zMr2mBk3ZiIFPvPOr7fUNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DChuayI8; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1740021361;
+	bh=/yXepqxGrxwJecrbe8Vndr28izqVsiN8I1cu2CtsYw8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=DChuayI8AHvlNgki5zjdX16WaRo0VHcmn+QLmlpgw+xoMS66UwFi29Vwkczfl8VPM
+	 KZPweJZod63+aHXPCeb27rnHKD35bpb9QLipUZaOY+cY+1zw0JKO3OWn+cY3u8yLpc
+	 Bvw9/UPGUs0juc+1lksVmm9O5BXMs9CC+7H43Jowwg1QdfnjJF1tab6vTUmc3lGX8b
+	 E92ey9ftFglboRDwl5/8xGNWvkA/WCRcxvrou6UGz8CawaL+W33llgJVlCbQ7ukHIB
+	 P87isOFGiS6Qb2KmKQe0VEM1iY+xugUc7HY5/6UtQ1Ek59KZuxNFwnoz/QDf/RWOIf
+	 XRIOyBpKsOIoA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Yyz1D4Yr2z4wyk;
+	Thu, 20 Feb 2025 14:16:00 +1100 (AEDT)
+Date: Thu, 20 Feb 2025 14:15:59 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>, Dmitry Baryshkov
+ <dmitry.baryshkov@linaro.org>, Fedor Pchelkin <boddah8794@gmail.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the usb tree with the usb.current tree
+Message-ID: <20250220141559.71d7db7c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: shawn.lin@rock-chips.com,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Heiko Stuebner <heiko@sntech.de>
-Subject: Re: linux-next: build failure after merge of the pmdomain tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Ulf Hansson <ulf.hansson@linaro.org>
-References: <20250220113338.60ba2290@canb.auug.org.au>
-Content-Language: en-GB
-From: Shawn Lin <shawn.lin@rock-chips.com>
-In-Reply-To: <20250220113338.60ba2290@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkkYSVYaGEgaSUNCTBkZH01WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a95210f95d809cckunmb986b031
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NT46Szo5ITIWCS0IEkoyLU4L
-	AgkaCRFVSlVKTE9LS0pNT0lOSUJCVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpJTk43Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=fHN2jfFtUOHW8HxjGan8tRKqKCIW1hgwEn91a/mKizUUx79Ikgh5RjdlmOWKu9nAeEG49sTX+keGPF/RM3hrWyKQ3aG7Wzw+BpzWWp7jaDuiUZW1fyvn9qS6p9GphAjhX0/SNqQvyoAj0tDKQvSTY0Nv9hmohFPfFLO45hRy/JY=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=kz2RbdNXW8q9JlPloKdddNUyjkRikvpmhR8YLFqMJdQ=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: multipart/signed; boundary="Sig_/56WW9O0FjtZFH7h00Xb79xW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-在 2025/2/20 8:33, Stephen Rothwell 写道:
-> Hi all,
-> 
-> After merging the pmdomain tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> x86_64-linux-gnu-ld: vmlinux.o: in function `rockchip_do_pmu_set_power_domain':
-> pm-domains.c:(.text+0x19aa103): undefined reference to `arm_smccc_1_1_get_conduit'
-> 
-> Caused by commit
-> 
->    61eeb9678789 ("pmdomain: rockchip: Check if SMC could be handled by TA")
-> 
-> $ grep CONFIG_HAVE_ARM_SMCCC_DISCOVERY .config
+--Sig_/56WW9O0FjtZFH7h00Xb79xW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It seems x86_64_defconfig did't enable  CONFIG_HAVE_ARM_SMCCC_DISCOVERY 
-which apparently belongs to ARM stuff.
+Hi all,
 
-Selecting HAVE_ARM_SMCCC_DISCOVERY and ARM_PSCI_FW should pass the
-x86_64 allmodconfig compile.
+Today's linux-next merge of the usb tree got a conflict in:
 
---- a/drivers/pmdomain/rockchip/Kconfig
-+++ b/drivers/pmdomain/rockchip/Kconfig
-@@ -5,6 +5,8 @@ config ROCKCHIP_PM_DOMAINS
-         bool "Rockchip generic power domain"
-         depends on PM
-         select PM_GENERIC_DOMAINS
-+       select ARM_PSCI_FW
-+       select HAVE_ARM_SMCCC_DISCOVERY
-         help
-           Say y here to enable power domain support.
-           In order to meet high performance and low power requirements, 
-a power
+  drivers/usb/typec/ucsi/ucsi_acpi.c
 
+between commit:
 
-> $
-> 
-> I have used the pmdomain tree from next-20250219 for today.
-> 
+  976e7e9bdc77 ("acpi: typec: ucsi: Introduce a ->poll_cci method")
 
+from the usb.current tree and commit:
+
+  f9cf5401526c ("usb: typec: ucsi: acpi: move LG Gram quirk to ucsi_gram_sy=
+nc_control()")
+
+from the usb tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/usb/typec/ucsi/ucsi_acpi.c
+index ac1ebb5d9527,ada5d0d21ee6..000000000000
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@@ -131,25 -131,7 +137,8 @@@ static int ucsi_gram_sync_control(struc
+  static const struct ucsi_operations ucsi_gram_ops =3D {
+  	.read_version =3D ucsi_acpi_read_version,
+  	.read_cci =3D ucsi_acpi_read_cci,
+ +	.poll_cci =3D ucsi_acpi_poll_cci,
+- 	.read_message_in =3D ucsi_gram_read_message_in,
++ 	.read_message_in =3D ucsi_acpi_read_message_in,
+  	.sync_control =3D ucsi_gram_sync_control,
+  	.async_control =3D ucsi_acpi_async_control
+  };
+
+--Sig_/56WW9O0FjtZFH7h00Xb79xW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme2nm8ACgkQAVBC80lX
+0Gwyxwf9HpCikWafXgbbEUMxUiX20jElj4UWbs+Byar5e0P96fTBj26twq08YOI8
+gRJFG0U6FgAIBUpnOUN097bgKgMtOJA8mUsiConMJvaQzPXNhdX3hliLrJtSGghz
+25OfEdXRB6oF2OadVbWVS6gYicMZDyTBH233J8nWfo3B+NO1eJYtDfmicxq4DYiI
+QwtC3PxWlgiDZpfhyKTEQAtCzhorJUlGqyYH5CtmyNsuN6Q6Vmbg0qk8LA1ULrZ0
+SPHWKvzCkPNO631rvv5pBNu2KXHb5k3HHC10wwDNQCNJ1TaIWF3JYZlHVPSZii+O
+SJQK4CmI/V7QqWe3T4cwQo1toameMQ==
+=ba5A
+-----END PGP SIGNATURE-----
+
+--Sig_/56WW9O0FjtZFH7h00Xb79xW--
 

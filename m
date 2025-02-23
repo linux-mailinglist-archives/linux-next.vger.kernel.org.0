@@ -1,155 +1,104 @@
-Return-Path: <linux-next+bounces-5530-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5531-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A04A4A3FF4C
-	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2025 20:04:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6617A40CE5
+	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 07:02:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9971E169E3B
-	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2025 19:04:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 560CE7A5986
+	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 06:01:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1EE8253329;
-	Fri, 21 Feb 2025 19:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jl0bNujm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49C9828691;
+	Sun, 23 Feb 2025 06:02:27 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521212528E5;
-	Fri, 21 Feb 2025 19:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38358C1E
+	for <linux-next@vger.kernel.org>; Sun, 23 Feb 2025 06:02:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740164629; cv=none; b=A6NgPVldQy5caDpjTMNwxV8kOwX3souqJW0rb+u8ZHHuWwfWU4RMAA+i09tBxnGMGaEWtIU8noawAzkiS+/Q2U+23LLttUzl4D9HCAftxkykHGOZTtHIDyZEq0tV8/ZA+ElDU2tIOGrKGOpojZ6kFC700suvdolao6VG4CW80vM=
+	t=1740290547; cv=none; b=n+mr/iq7OW6MU+QSWbXbz7UZg6DXcXyXJniHbNZVMz7Zf4eERdiLq/sWZJYcXSp6AxmZ63YDsdiGrbEbcdvs9TT3pjolgvjE4JREmjK704aQaJkb+qrgtP/10pb22xRYhuiRPkKoQt4NgmJxOdxd5bL+jsS1UoUldT2KQRmqxjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740164629; c=relaxed/simple;
-	bh=Yx3CJUQ5auhYQe1AJZt5x2K3GAMK2KGFQSDBdaEAfFs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qn3pscEs4nejNiQGuRYMum7tafbh/lzgSM7uiD+5tOOlz0rbvpBuw6DaBsu79w7SIgY+msH9ZtjUXv35BRb1PjKslm15ZBXa+WmFJXBW+vz+X3iB2qYEKQ6ILrvG4ZafzsLnBHW8msQ6YCc0FNUnqf43AipNLg+Nlclg2Kn0jpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jl0bNujm; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-220e83d65e5so49239135ad.1;
-        Fri, 21 Feb 2025 11:03:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740164627; x=1740769427; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vH5HFKaawkeYnTHXne+k2M6Gi4L64IdQGTcUjzfy9HQ=;
-        b=Jl0bNujmhj1ZT3UvB4hm2DM/3omwI+EwUv5vxUZUnFWP7DvZ2l3Pu/r+ZWguQvL57g
-         HMQvdJNu96iJ3kuWVIAyW+m/c1l6CtN/PTyvnIVhWigY6u8DIFDjzvrmpGXkrpzlCfVV
-         fw9AxQJG9PUxTnjc2rFeCwBFlEFYukXzCskoovwwudIvf6PRgnrPoYjgAhAZdiuhZtmU
-         jFjAiDV4UA4WTD2Nwsv5/rXaIgN4nEpOIuehFkwi9NWkLeTXcHHBVfbVIGt+AMujmNcu
-         nlGGCDp6hdUfK71gpT/dWvyo/pcYTJzPe82vj+0oL4Uq2KX3989o/mGVoP6iLzHuGdOB
-         +b3A==
+	s=arc-20240116; t=1740290547; c=relaxed/simple;
+	bh=OAtn2xTdO+cgvKJBjCddRRYCUOnG9EQgRwoUJf3hThM=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Rvg9oeE79vO1AA9H1eMr+5wK1Ue+TLotVnpHY3b4RDI85aVLW61Wkez7KW75kIdXk+R85vjrwaXdrgC45LaxiXonteA756gc/O/mL1UqaYZLsfbWTzLFdP8smett/KMpyiX8NuhACzE9vXjmF8d99bs6vhynR9hCz1hTlM0RieI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3d2a6102c1aso76255865ab.0
+        for <linux-next@vger.kernel.org>; Sat, 22 Feb 2025 22:02:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740164627; x=1740769427;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vH5HFKaawkeYnTHXne+k2M6Gi4L64IdQGTcUjzfy9HQ=;
-        b=MFq/yX34qfauc4kYpQJqwGvhb2ll9N1EPQHr21RB/JeQLg1B+6Th2AjaI2DizxjPQ3
-         qrf2FskXt66MobSTY5vXn3C5w6oSPjHWLFarZsleGVA0qZXTOVHnyfWBnEItxlkylSSj
-         dud0PwJaeBou4n/wxeEHVuE3RXam9dDlGFaiEmtct0Rfn30aKpYLBDg/j5jNOc/e7DsJ
-         akuNrozZ+CbVgLQ+L7esBxVz2ThYV7CCz65KEwuqtD64F/89HzoiKALGVVIcQD1fZpJA
-         Ka2SEMVy31ISeJKb1ibK8CJVfbJlJp0JO2n1fymfPi+sJvTd2OS4+ZM2xA2gNuMQk+37
-         rkAg==
-X-Forwarded-Encrypted: i=1; AJvYcCWsbRZAm239NNEKhdW42yEsf2E1/xaHmRReJsvo1Cvo/aTwwwuyXVOfPTyiuGxsX6qEf3yFF1jUqvjf@vger.kernel.org
-X-Gm-Message-State: AOJu0YwduRhSIja9+/V5pc+DVIeK3HO1+qdflFO0NIY1jTN3eT3oN8Tc
-	J7DdLQo5cUkhEmoJGRGTkZpWyPKeRK2ADYqo9vxy17hzPqGbskJX
-X-Gm-Gg: ASbGncvZMHR5/YibSsq+sc0ftX+Z9ex9lrzqV1ad4BbJXhpXveSfmyhrj0uKPpsRzUG
-	QbBAegQ0WDxEo0cv9vVUzxSan5k6e1esydfFmWykH+LBMJgXQggRAAs7mb9l5OgouorOcbRNMZa
-	Kctodw8lODowqDKEXCoxw0/2BCwJ8R77NGIcDb84AZjXBO1MVXUfVsN+JxIhrNRo673NCg4YVmr
-	PNR0ueMHj0fY53yYCGwrzBgA5/cG67D0ei/lroAs9f7ZrZHXAtKvHEXQ4euRBOzMlS+4J6UNXgy
-	o4p9ULNPgZyYY6tFMVvEMIlU0Q==
-X-Google-Smtp-Source: AGHT+IHdmbG5cRGpHshEwzmBxgJqyw7H3qrw+xRtwNe8nI+Hjc2ysty4thRXFYYFyK6ggCpp5W52Tw==
-X-Received: by 2002:a05:6a21:69b:b0:1e1:aef4:9ce8 with SMTP id adf61e73a8af0-1eef3d87138mr8755556637.28.1740164627344;
-        Fri, 21 Feb 2025 11:03:47 -0800 (PST)
-Received: from localhost ([216.228.125.130])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73264729945sm12838710b3a.179.2025.02.21.11.03.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 11:03:46 -0800 (PST)
-Date: Fri, 21 Feb 2025 14:03:44 -0500
-From: Yury Norov <yury.norov@gmail.com>
-To: Beata Michalska <beata.michalska@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
-	sfr@canb.auug.org.au, ionela.voinescu@arm.com,
-	linux-next@vger.kernel.org, sumitg@nvidia.com,
-	yang@os.amperecomputing.com, vanshikonda@os.amperecomputing.com,
-	lihuisong@huawei.com, zhanjie9@hisilicon.com,
-	ptsm@linux.microsoft.com
-Subject: Re: [PATCH v2] arm64: Utilize for_each_cpu_wrap for reference lookup
-Message-ID: <Z7jOEFtVtcuMyjjt@thinkpad>
-References: <20250220091015.2319901-1-beata.michalska@arm.com>
+        d=1e100.net; s=20230601; t=1740290545; x=1740895345;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XpCKX5dC6Lp03zGCSnuSFhesEWR5oKdS40nv7EcsF7k=;
+        b=So/HUhGsqglfyYaBGGA0MK2mpvS88PedPZVbGLUU1IjU2EbC0xvM08eed9xJu7oOao
+         T1r1KF31OU8Rg8Z0n+FSPyFlyErCe7OvfIVHEeN/CjbgIREEMskUGdEaQE4gvh2NdBA/
+         8iNZ0uXyj3qWOKvXvAtaYMAIZ+Mme/JQbnubCrI/R8hn4WPF/KW8D4DjEm6aJIa2wRBf
+         bgUSVE/Fr1PUjaSjLbFvIGMvUo1vnhOuauUWbwdw5/Sf2l0wdk99RcSJ7Ot7dkdQoOQS
+         CtiTQWezEqG0Vltc8yvkoreZ2i2DmErUHjNhD0+LGEA2xsjzAOk+19VQvhJb3TSjBo6q
+         M+zw==
+X-Forwarded-Encrypted: i=1; AJvYcCWd8irJvN8jykqWzu6fLcA06xkP+Xw11LE70IY9gsIUYjahLMXJpVRMYKruhq+9lgZl9ww67Ps2GDuW@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkgJyZKP0Lh79itB3JEW2EapBqS6lKicVtwP2oPM7r0IKeunFB
+	NnCaIVJikkomjTYZ5uMid1W60oSeFMU5vlhvK4h9qGdtZEyX/aU6ohLW2Y5QNpyRO2rusXYIoFq
+	WvSk1L+Kam/v753Q/E4DDfn9dfFausfWwkk68sVGKulUeSLz696QAbFs=
+X-Google-Smtp-Source: AGHT+IF1suL4fPIdAP6uDdEQd8QQfsV1EO4MxtkXzNB9QUmDwwTG6JcFwL+uxWOqvUqLKWGRSG5z5oQSZu13CiwBPJq7RTBUqgYJ
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250220091015.2319901-1-beata.michalska@arm.com>
+X-Received: by 2002:a05:6e02:3113:b0:3d2:b509:af44 with SMTP id
+ e9e14a558f8ab-3d2cae6c9damr96832965ab.8.1740290544831; Sat, 22 Feb 2025
+ 22:02:24 -0800 (PST)
+Date: Sat, 22 Feb 2025 22:02:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67bab9f0.050a0220.bbfd1.000e.GAE@google.com>
+Subject: [syzbot] linux-next build error (20)
+From: syzbot <syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 20, 2025 at 09:10:15AM +0000, Beata Michalska wrote:
-> While searching for a reference CPU within a given policy,
-> arch_freq_get_on_cpu relies on cpumask_next_wrap to iterate over
-> all available CPUs and to ensure each is verified only once.
-> Recent changes to cpumask_next_wrap will handle the latter no more,
-> so switching to for_each_cpu_wrap, which  preserves expected behavior
-> while ensuring compatibility with the updates.
-> Not to mention that when iterating over each CPU, using a dedicated
-> iterator is preferable to an open-coded loop.
-> 
-> Fixes: 16d1e27475f6 ("arm64: Provide an AMU-based version of arch_freq_get_on_cpu")
-> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+Hello,
 
-Reviewed-by: Yury Norov [NVIDIA] <yury.norov@gmail.com>
+syzbot found the following issue on:
 
-> ---
->  v2:
->  Updated commit message
-> 
->  arch/arm64/kernel/topology.c | 16 ++++++++++------
->  1 file changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> index a09b0551ec59..9e3583720668 100644
-> --- a/arch/arm64/kernel/topology.c
-> +++ b/arch/arm64/kernel/topology.c
-> @@ -254,7 +254,7 @@ int arch_freq_get_on_cpu(int cpu)
->  		if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
->  		    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
->  			struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> -			int ref_cpu = cpu;
-> +			int ref_cpu;
->  
->  			if (!policy)
->  				return -EINVAL;
-> @@ -265,11 +265,15 @@ int arch_freq_get_on_cpu(int cpu)
->  				return -EOPNOTSUPP;
->  			}
->  
-> -			do {
-> -				ref_cpu = cpumask_next_wrap(ref_cpu, policy->cpus,
-> -							    start_cpu, true);
-> -
-> -			} while (ref_cpu < nr_cpu_ids && idle_cpu(ref_cpu));
-> +			for_each_cpu_wrap(ref_cpu, policy->cpus, cpu + 1) {
-> +				if (ref_cpu == start_cpu) {
-> +					/* Prevent verifying same CPU twice */
-> +					ref_cpu = nr_cpu_ids;
-> +					break;
-> +				}
-> +				if (!idle_cpu(ref_cpu))
-> +					break;
-> +			}
->  
->  			cpufreq_cpu_put(policy);
->  
-> -- 
-> 2.25.1
+HEAD commit:    d4b0fd87ff0d Add linux-next specific files for 20250221
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a5bae4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=76d7299d72819017
+dashboard link: https://syzkaller.appspot.com/bug?extid=06fd1a3613c50d36129e
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com
+
+<stdin>:4:15: error: use of undeclared identifier '__ref_stack_chk_guard'
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 

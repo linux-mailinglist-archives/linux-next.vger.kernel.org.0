@@ -1,104 +1,88 @@
-Return-Path: <linux-next+bounces-5531-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5532-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6617A40CE5
-	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 07:02:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEF5AA40D63
+	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 09:28:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 560CE7A5986
-	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 06:01:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 748017A658F
+	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 08:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49C9828691;
-	Sun, 23 Feb 2025 06:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7411C84C2;
+	Sun, 23 Feb 2025 08:28:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="nCpCRjvQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38358C1E
-	for <linux-next@vger.kernel.org>; Sun, 23 Feb 2025 06:02:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.14])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 427AB1FCF5B;
+	Sun, 23 Feb 2025 08:28:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740290547; cv=none; b=n+mr/iq7OW6MU+QSWbXbz7UZg6DXcXyXJniHbNZVMz7Zf4eERdiLq/sWZJYcXSp6AxmZ63YDsdiGrbEbcdvs9TT3pjolgvjE4JREmjK704aQaJkb+qrgtP/10pb22xRYhuiRPkKoQt4NgmJxOdxd5bL+jsS1UoUldT2KQRmqxjs=
+	t=1740299329; cv=none; b=AdL1DtLMJ78gE+LssmC+XwbxJqi4fLqA7m8bjOTCvmfGoxc1eXkTf0n5tNGGsKGizPqyWGTtybdMovyepzqea9EK370ps3vMzn5T3YHU6IeUqcPMh8ijQzWrRVg+CS1HKLBWnMh1H8n/8+x7ULsRS8PP5qdaCrIkDjyyYKb9M34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740290547; c=relaxed/simple;
-	bh=OAtn2xTdO+cgvKJBjCddRRYCUOnG9EQgRwoUJf3hThM=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Rvg9oeE79vO1AA9H1eMr+5wK1Ue+TLotVnpHY3b4RDI85aVLW61Wkez7KW75kIdXk+R85vjrwaXdrgC45LaxiXonteA756gc/O/mL1UqaYZLsfbWTzLFdP8smett/KMpyiX8NuhACzE9vXjmF8d99bs6vhynR9hCz1hTlM0RieI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3d2a6102c1aso76255865ab.0
-        for <linux-next@vger.kernel.org>; Sat, 22 Feb 2025 22:02:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740290545; x=1740895345;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XpCKX5dC6Lp03zGCSnuSFhesEWR5oKdS40nv7EcsF7k=;
-        b=So/HUhGsqglfyYaBGGA0MK2mpvS88PedPZVbGLUU1IjU2EbC0xvM08eed9xJu7oOao
-         T1r1KF31OU8Rg8Z0n+FSPyFlyErCe7OvfIVHEeN/CjbgIREEMskUGdEaQE4gvh2NdBA/
-         8iNZ0uXyj3qWOKvXvAtaYMAIZ+Mme/JQbnubCrI/R8hn4WPF/KW8D4DjEm6aJIa2wRBf
-         bgUSVE/Fr1PUjaSjLbFvIGMvUo1vnhOuauUWbwdw5/Sf2l0wdk99RcSJ7Ot7dkdQoOQS
-         CtiTQWezEqG0Vltc8yvkoreZ2i2DmErUHjNhD0+LGEA2xsjzAOk+19VQvhJb3TSjBo6q
-         M+zw==
-X-Forwarded-Encrypted: i=1; AJvYcCWd8irJvN8jykqWzu6fLcA06xkP+Xw11LE70IY9gsIUYjahLMXJpVRMYKruhq+9lgZl9ww67Ps2GDuW@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkgJyZKP0Lh79itB3JEW2EapBqS6lKicVtwP2oPM7r0IKeunFB
-	NnCaIVJikkomjTYZ5uMid1W60oSeFMU5vlhvK4h9qGdtZEyX/aU6ohLW2Y5QNpyRO2rusXYIoFq
-	WvSk1L+Kam/v753Q/E4DDfn9dfFausfWwkk68sVGKulUeSLz696QAbFs=
-X-Google-Smtp-Source: AGHT+IF1suL4fPIdAP6uDdEQd8QQfsV1EO4MxtkXzNB9QUmDwwTG6JcFwL+uxWOqvUqLKWGRSG5z5oQSZu13CiwBPJq7RTBUqgYJ
+	s=arc-20240116; t=1740299329; c=relaxed/simple;
+	bh=BLLEcxi5Valr83XCBImMbsQs+SRclbSuX5Ufy5dWkxk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pUagvZ2JREhGtS7UzvQV7iF6xkU/7tbM2tkiNswYL+XAKM4l8BpIBXXi6vUpcy2g6Y58VFXfRe9qvN12tFM/xgnSszF8Rm0lWcRi4sztz7ISSC2jCFiKAqayO1dZOO40s1Xq0wOK0W45as+mtcglD7AyLlPeD2Qlz0+IKcfisZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=nCpCRjvQ; arc=none smtp.client-ip=1.95.21.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=16FFplOXDe2qlZ3CZQWPEx47sTdPoDpjPNcXAW2Suxw=;
+	b=nCpCRjvQ/vRugb3+iwQcIDKNYJZImRU+q0KJnl2+/6lbT0EvRpsOmkmv7QHDqi
+	quOuk0DzuWfSOAe428rN7IleTY+D+yVy4qqyj2Dgv8hYS95pH+SQHvb60yleR8CJ
+	tqVQt/GZjwmbZwZMQxLmu3Eh/Bp7PRUDG2mcKRm7F57nQ=
+Received: from dragon (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id Ms8vCgA3WEgL3Lpn2GHJCQ--.24260S3;
+	Sun, 23 Feb 2025 16:27:57 +0800 (CST)
+Date: Sun, 23 Feb 2025 16:27:55 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Mark Brown <broonie@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the regulator tree
+Message-ID: <Z7rcC3YskGoNHdvN@dragon>
+References: <20250219134354.144eb868@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3113:b0:3d2:b509:af44 with SMTP id
- e9e14a558f8ab-3d2cae6c9damr96832965ab.8.1740290544831; Sat, 22 Feb 2025
- 22:02:24 -0800 (PST)
-Date: Sat, 22 Feb 2025 22:02:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67bab9f0.050a0220.bbfd1.000e.GAE@google.com>
-Subject: [syzbot] linux-next build error (20)
-From: syzbot <syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
-	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250219134354.144eb868@canb.auug.org.au>
+X-CM-TRANSID:Ms8vCgA3WEgL3Lpn2GHJCQ--.24260S3
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUotCzDUUUU
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiEhv8ZWe6kuH3-QAAs0
 
-Hello,
+Hi Mark,
 
-syzbot found the following issue on:
+On Wed, Feb 19, 2025 at 01:43:54PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commit is also in the imx-mxs tree as a different commit
+> (but the same patch):
+> 
+>   b5ec74c2aec7 ("arm64: dts: imx8mp-skov-reva: Use hardware signal for SD card VSELECT")
 
-HEAD commit:    d4b0fd87ff0d Add linux-next specific files for 20250221
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17a5bae4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=76d7299d72819017
-dashboard link: https://syzkaller.appspot.com/bug?extid=06fd1a3613c50d36129e
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+Any particular reason you picked this DTS change?  Would you drop it
+from regulator tree?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com
+Shawn
 
-<stdin>:4:15: error: use of undeclared identifier '__ref_stack_chk_guard'
+> 
+> This is commit
+> 
+>   38db2315c465 ("arm64: dts: imx8mp-skov-reva: Use hardware signal for SD card VSELECT")
+> 
+> in the imx-mxs tree.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 

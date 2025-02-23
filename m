@@ -1,88 +1,99 @@
-Return-Path: <linux-next+bounces-5532-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5533-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEF5AA40D63
-	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 09:28:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A1C4A411E8
+	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 22:24:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 748017A658F
-	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 08:27:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E9913B094B
+	for <lists+linux-next@lfdr.de>; Sun, 23 Feb 2025 21:23:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7411C84C2;
-	Sun, 23 Feb 2025 08:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21D8223A9BC;
+	Sun, 23 Feb 2025 21:24:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="nCpCRjvQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="eV7f3SUp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.14])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 427AB1FCF5B;
-	Sun, 23 Feb 2025 08:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.14
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77D91E868;
+	Sun, 23 Feb 2025 21:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740299329; cv=none; b=AdL1DtLMJ78gE+LssmC+XwbxJqi4fLqA7m8bjOTCvmfGoxc1eXkTf0n5tNGGsKGizPqyWGTtybdMovyepzqea9EK370ps3vMzn5T3YHU6IeUqcPMh8ijQzWrRVg+CS1HKLBWnMh1H8n/8+x7ULsRS8PP5qdaCrIkDjyyYKb9M34=
+	t=1740345844; cv=none; b=qNNpdwHaaeX+WpEjoW/6a1swcRYd4tgasuLITFr5Kb/jxhDUU370TUzrBL7kMhOjWO8nZcMbQD6CXaxVAm54oEwUrA6frla1VONM0Kg8OCLnz+cur2dskigD+P+rNhzBgP9tuL0eLlJNsBT5TWs+5UdsMvxr8H07ZeSDRE9HsrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740299329; c=relaxed/simple;
-	bh=BLLEcxi5Valr83XCBImMbsQs+SRclbSuX5Ufy5dWkxk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pUagvZ2JREhGtS7UzvQV7iF6xkU/7tbM2tkiNswYL+XAKM4l8BpIBXXi6vUpcy2g6Y58VFXfRe9qvN12tFM/xgnSszF8Rm0lWcRi4sztz7ISSC2jCFiKAqayO1dZOO40s1Xq0wOK0W45as+mtcglD7AyLlPeD2Qlz0+IKcfisZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=nCpCRjvQ; arc=none smtp.client-ip=1.95.21.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=16FFplOXDe2qlZ3CZQWPEx47sTdPoDpjPNcXAW2Suxw=;
-	b=nCpCRjvQ/vRugb3+iwQcIDKNYJZImRU+q0KJnl2+/6lbT0EvRpsOmkmv7QHDqi
-	quOuk0DzuWfSOAe428rN7IleTY+D+yVy4qqyj2Dgv8hYS95pH+SQHvb60yleR8CJ
-	tqVQt/GZjwmbZwZMQxLmu3Eh/Bp7PRUDG2mcKRm7F57nQ=
-Received: from dragon (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id Ms8vCgA3WEgL3Lpn2GHJCQ--.24260S3;
-	Sun, 23 Feb 2025 16:27:57 +0800 (CST)
-Date: Sun, 23 Feb 2025 16:27:55 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: Mark Brown <broonie@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the regulator tree
-Message-ID: <Z7rcC3YskGoNHdvN@dragon>
-References: <20250219134354.144eb868@canb.auug.org.au>
+	s=arc-20240116; t=1740345844; c=relaxed/simple;
+	bh=RyXTgCMHhAPtmnpxzabRSY1se+g8Vct1Vnsa1vl01xM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VY0w7lqMyZAHEO5PZxfjeH8APQsckD2bq99rE2hPJBpjVn8opaXQPQvRvuH6SL9qTCyRhEiYUG67sJnkgbG2vOd4P5Wu2OWpbDiOTz0woSc35kUNPJJ/nXJvFnGaxP//5OggY01dUgeNnRrdAZc9q5vwxjRnT1xHm2n2UKac6no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=eV7f3SUp; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1740345831;
+	bh=3VSf9QUqjBcJCEaeR3x6UJzruM1MQMs8aYbTAevaJDw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=eV7f3SUpybRNAvXI20c76mnOuS9ELHMHOqDONLcdx2axa9XRE44CQ4iSaTg6UqWMI
+	 E1OuVIgy7PIxJMsEbOOOyrO+627kiCxdooWBpGaIeT3xO5/H2u7DNk4jmLeNtp9hTR
+	 WdS+DTpV+bruZ9cXs780x1tXsQaep9xkTfch2BgSkWr4lhJKiusgWd2TY4VInIygfO
+	 g216qmLY7eOWCjvVr1k3iNWYJs1Zzr8SQaPgGaykCMTdw1rPsPsnuikdO/jnUprL75
+	 Fx5aM2giif4caOwrGdxTPNPaPM4xDOfii2H7Qu6hjjmt7ChT8kr/7dpR5wPG822Seu
+	 rGc6rKavrFXfg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z1H132sS2z4wcj;
+	Mon, 24 Feb 2025 08:23:51 +1100 (AEDT)
+Date: Mon, 24 Feb 2025 08:23:32 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Michal =?UTF-8?B?S291dG7DvQ==?= <mkoutny@suse.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the mm tree
+Message-ID: <20250224082332.3a45e550@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250219134354.144eb868@canb.auug.org.au>
-X-CM-TRANSID:Ms8vCgA3WEgL3Lpn2GHJCQ--.24260S3
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUotCzDUUUU
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiEhv8ZWe6kuH3-QAAs0
+Content-Type: multipart/signed; boundary="Sig_/4aCirJAqwvnm3Ki8HHbfF=U";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Mark,
+--Sig_/4aCirJAqwvnm3Ki8HHbfF=U
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 19, 2025 at 01:43:54PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commit is also in the imx-mxs tree as a different commit
-> (but the same patch):
-> 
->   b5ec74c2aec7 ("arm64: dts: imx8mp-skov-reva: Use hardware signal for SD card VSELECT")
+Hi all,
 
-Any particular reason you picked this DTS change?  Would you drop it
-from regulator tree?
+Commit
 
-Shawn
+  6799f20bc8b2 ("pid: optional first-fit pid allocation")
 
-> 
-> This is commit
-> 
->   38db2315c465 ("arm64: dts: imx8mp-skov-reva: Use hardware signal for SD card VSELECT")
-> 
-> in the imx-mxs tree.
+is missing a Signed-off-by from its author.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4aCirJAqwvnm3Ki8HHbfF=U
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme7kdQACgkQAVBC80lX
+0GwO8Af+J9wr6Fre0ybKu8jqk+c53NA7Mankb2H5vKqTJX9XAf++4WSBx7Fj2Fyy
+tphk1dR6FvEbS1iAB6YJLFzaJvP35Mgy/T3Zg7gf6L8SeM2OLMpVptwrE16060QG
+aLDP8yxJXq4FrJ9zBMPGfftK+xAXP22uENFB6mbvmOkFbxQyWtbdtrGRylzqSN2y
+d/xdKNj3wOcDOg+VIFLB15I7JPXsmhPDAtJnm/8eCzgELitbxN+/lyZOF++xt5bc
+ogOGBPepd+q7F7kKI0lfkFCu/ETMddZRN86bnKyJDUD9eCDSdHmu984KEs9x2sVi
+XDOcLM72xjN397YPz+hU+DrEtgmfCg==
+=OIDg
+-----END PGP SIGNATURE-----
+
+--Sig_/4aCirJAqwvnm3Ki8HHbfF=U--
 

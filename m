@@ -1,136 +1,103 @@
-Return-Path: <linux-next+bounces-5553-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5554-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10FD4A41EC3
-	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2025 13:24:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3431A42738
+	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2025 17:03:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79FB3188AD85
-	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2025 12:19:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0D5D165D1C
+	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2025 16:01:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4854219316;
-	Mon, 24 Feb 2025 12:17:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1FB25B66A;
+	Mon, 24 Feb 2025 16:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zKSs7pgA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q+uvAVqa"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E801221F1A
-	for <linux-next@vger.kernel.org>; Mon, 24 Feb 2025 12:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE663DBB6;
+	Mon, 24 Feb 2025 16:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740399444; cv=none; b=fZKtLQrBMSrbE8chGvWo2aswlF7xcYI4p9tvyox8qxSFoRkQuC0wAyQjvrRmOx+5C9a9OuzwGj4kXpVVIY6vK8Pcof43Lozjp3/CKCMklGARxycy51B4am4DWezlbMcExUO3Mals+Z1vjMXpMv3bD0ag7KDucRxc5Y/6uIZxeGU=
+	t=1740412911; cv=none; b=jTzLxCNK/+TxOgi1pxt/NEkg54//Ww50SQw5Ac8Ur1/H7AiVSeJ30Nx/68JJAU2RWb0eUx+lxjr82QpJhBY5ORVoyGvrYHLR+x8N5ED92BxNaXCCn/zQOBSEBxIfAk894KqjSvufrcHWjlywIJzMu2f5QLlHUoGt9MHEOSA6PNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740399444; c=relaxed/simple;
-	bh=i8BCyQZA2KjDPBQrmOPrvK++2JfiudfMcGh50LMt8rY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bUdq6XfxryEgvMP/A3B8AD6HnJ8aVW9cOvx0eKfxP0NV75JyCStAP22RKb9tRwiAlHIb6G0pa7WFSVVbyN4xopnXDsNwVAMkyQO+tZVDMfxP2nsWwzv8eXySNgP6aJvHd1FQailmdPQYkSRnvDDPnchsEER6iac+2StYN+nf8WY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zKSs7pgA; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e461015fbd4so3132999276.2
-        for <linux-next@vger.kernel.org>; Mon, 24 Feb 2025 04:17:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740399442; x=1741004242; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vMvNtutvHMAptcP5aSgqQ3Rpg3q4pARtFCm/FUX2MJY=;
-        b=zKSs7pgAQlNBQKzBg4QNmOiooFNHSRO8eOfv3qR1ZCdkKrGtB48apN+tRZ2QFuiPY6
-         1HZ/Fg9jPa+nBsU8t7g52yTMgRpszAaOBn2cu6KzDR1oadlQW9UrHbtCxBFVRsFjaWeh
-         /DOxuiu2NSOcOH9o4eyY5bLxw/BMoyMv+ci0XpQMdvxnHAbB4b943RUcoTnyMZfpiViF
-         KWIe3VWscBSQ6KNEzPdAEuyawoVoxvAe7oege/GtS51drCTScU7Dhpx+x4Z6El/P8tQU
-         cl7AXjmK1nnw9ewnuRKuYJExvob3kmy+wzahODKe/r5Aq5BHIVRw/nbm9E6UlIlyUzX+
-         aAzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740399442; x=1741004242;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vMvNtutvHMAptcP5aSgqQ3Rpg3q4pARtFCm/FUX2MJY=;
-        b=IPj01fPVnHzIpqafqbtipSXHXiaLsuYqtreO4UWF8Y9MdUJgAzojJs553DEepOqCSG
-         R97a/CXlfjYS/JTLKYlCsSflLFniVUBBubOv278z1ta9Zq73lFivX/EcaC4f+766FOZa
-         HOdky8MzhnURErSFYf+sVdp9SxKHZ288/6A5OJZSPrSZv49g37UZ2fFAzsFj/Gsy+fT2
-         TbxvGLADj4l3saIvJ5iJ+YaSV6dXvU4vFBXo8t2tKASLIRTPlUq7I0HHXYHH4dO0uD3P
-         s9nG/5vSVVMFFutZDlTm0a+O9IECCLIE9nzH6F7D4/1juUiZg85IO6boXfJtSb8f8LXz
-         U+Gw==
-X-Forwarded-Encrypted: i=1; AJvYcCXU/fk9FrGb9YpwOKGn0s+qcDStozbkuiB4ieM2+jurWAYZP+xaCSC3K6LvkbenTtVKsZYnOOUVOBQz@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxf4VWmJ9AStmN/2u9wOVtUTa8hiHMNYjUIl8t38Ue4/VvtvXJg
-	XTDWJdFji4XkikltA4Pl7DdOR+wh7cH8hMwzP1ElYOylW5dt7VpnOqoUxKkwqqhTxu3k3bXZiT+
-	l2RQOlYD5AI+E3V2Knwzpjdh0YUSyfEBIXiBnRzQsV9TcrItMnuo=
-X-Gm-Gg: ASbGncvE0BrITQ85IkialIZQLcLSPy/wCr4HEcaAvswvGHU+e4+xDW4bjaiDac79uuH
-	DU5whZy5v9bcKTOVqsB5+ZQcPZSB1V/siJ3XeglLPD7NaKCqA3w1roxwQFJbZoT0/LVQa1vWUGt
-	GqW8cKOzFj
-X-Google-Smtp-Source: AGHT+IELOk5ZXAqmoOudEZqUSDKLpqR/4L/Z9SA60povjeh84JPDLDRKCUYn0cTHIiydrsnhjz9f0XWowWtSem6OafA=
-X-Received: by 2002:a05:6902:2845:b0:e5b:3af0:d4a1 with SMTP id
- 3f1490d57ef6-e5e246880f8mr10067451276.40.1740399442088; Mon, 24 Feb 2025
- 04:17:22 -0800 (PST)
+	s=arc-20240116; t=1740412911; c=relaxed/simple;
+	bh=+WoLFECrq1/sA7ZSENgjsivk/hBFMJC/CUlRi3UpkAE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EPbP2DJevhBL8aDWP2Ppnb81iajDXLECjXWFbtyForcu191yMzU6wV8Di1PnD1RMsLqmzNfQHEnIOxwFqIq2bQ49UvcJuswlL3rzlC/eu8lV6tACsFgTvLUybCWAViZDEo66BizHvRIVv/BqnXnMHAbl/syN9Ep3/gjaECEMCr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q+uvAVqa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41684C4CED6;
+	Mon, 24 Feb 2025 16:01:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740412910;
+	bh=+WoLFECrq1/sA7ZSENgjsivk/hBFMJC/CUlRi3UpkAE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q+uvAVqazSSrpgiXxIEepHVJjGmULeeVkysSbiiSTe0jGU/UiDHx6XP4sPmOvl6p3
+	 ZXU7RhiyMhb+yUmPUCRSmwhg4s+mbsESANfOhJ4z8h6SGChwzyKIIh1voYGP7XeMAX
+	 crlRMGEx5EbHmxMJ31RkO4lr7Ix1VUhSOly8I7RxGAVxIcGvFEe3E3M1kgxhc5/aq/
+	 IDCLhVJzvEdEn7Mu7Pl9OgL4eQ4s0tSOWmdof+3NRmPWhXiSz7afSSiN5wL3jIagEY
+	 Lof4HgSRu8RI9WYheYcCY/VrJ1L+GpVzuQUPV384yUTx6dUluOKyQl1qJaGqE/X9CU
+	 by7njgZILLqbA==
+Date: Mon, 24 Feb 2025 16:01:46 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Shawn Guo <shawnguo2@yeah.net>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the regulator tree
+Message-ID: <7e616125-5909-41fc-a17f-21d07638d72d@sirena.org.uk>
+References: <20250219134354.144eb868@canb.auug.org.au>
+ <Z7rcC3YskGoNHdvN@dragon>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250220113338.60ba2290@canb.auug.org.au> <20250224122318.228f695c@canb.auug.org.au>
- <20250224162048.7806bb1d@canb.auug.org.au>
-In-Reply-To: <20250224162048.7806bb1d@canb.auug.org.au>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 24 Feb 2025 13:16:46 +0100
-X-Gm-Features: AWEUYZksBg3IE74M1moVSjQJhnuSmrxpg_pv5byEOd0zI1JVF6jP9rg_85gkz_M
-Message-ID: <CAPDyKFqBwari-MoRefG82kbxovVaLt3ewRVFihHoLbrOSWSnMQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pmdomain tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Shawn Lin <shawn.lin@rock-chips.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Heiko Stuebner <heiko@sntech.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zAMhU6Hnw1p6ObYP"
+Content-Disposition: inline
+In-Reply-To: <Z7rcC3YskGoNHdvN@dragon>
+X-Cookie: Phone call for chucky-pooh.
 
-On Mon, 24 Feb 2025 at 06:20, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Mon, 24 Feb 2025 12:23:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > On Thu, 20 Feb 2025 11:33:38 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > After merging the pmdomain tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >
-> > > x86_64-linux-gnu-ld: vmlinux.o: in function `rockchip_do_pmu_set_power_domain':
-> > > pm-domains.c:(.text+0x19aa103): undefined reference to `arm_smccc_1_1_get_conduit'
-> > >
-> > > Caused by commit
-> > >
-> > >   61eeb9678789 ("pmdomain: rockchip: Check if SMC could be handled by TA")
-> > >
-> > > $ grep CONFIG_HAVE_ARM_SMCCC_DISCOVERY .config
-> > > $
-> > >
-> > > I have used the pmdomain tree from next-20250219 for today.
-> >
-> > I am still seeing this build failure.
->
-> And now that commit from the pmdomain tree has been merged into the
-> scsi-mkp tree and so the build failure happens there as well.
->
-> I have used the scsi-mkp tree from next-20250221 for today.
->
-> --
-> Cheers,
-> Stephen Rothwell
 
-Stephen, thanks for reporting and sorry for the delay.
+--zAMhU6Hnw1p6ObYP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have now fixed the problem on the next branch as well on the
-immutable rockchip branch. Martin, please pull again.
+On Sun, Feb 23, 2025 at 04:27:55PM +0800, Shawn Guo wrote:
+> On Wed, Feb 19, 2025 at 01:43:54PM +1100, Stephen Rothwell wrote:
 
-Sorry for the mess!
+> > The following commit is also in the imx-mxs tree as a different commit
+> > (but the same patch):
 
-Shawn-Lin, no need for any action from your side, I have taken care of
-the issue.
+> >   b5ec74c2aec7 ("arm64: dts: imx8mp-skov-reva: Use hardware signal for SD card VSELECT")
 
-Kind regards
-Uffe
+> Any particular reason you picked this DTS change?  Would you drop it
+> from regulator tree?
+
+My understanding was that these fixes all needed to go together since
+the interface changes were a bit dodgy from an ABI point of view.
+
+--zAMhU6Hnw1p6ObYP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme8l+kACgkQJNaLcl1U
+h9DDIgf+IVm2htScAsNPorR/RwcMDREc7S7fxmhKce4+jG9hOhP/vx8oKcSN79ez
+nJjYLkraYlSKB8br+ahBUUxW8G7RfiSAQa8ONM4KWc5LMfhyXKl7Ove1lJ3h3fVd
++yy2L+N6rlpiV6jigtaHD3r3jylVentu7JbLN+vrsqn+y9Cn+dajP2CJ4W2tNPNy
+gw9Wa8OQM5kYAKNyVn09DOReJ7tzE6pimsi/vN12+ngrozjQR9kMqDYBrB9Fa9Ku
+nSuL8FqJifrsuH3KR/958nDrd5Sz8QavR/abOe5PTtVP0wwNd8vz4V8oX8WrzrN8
+sSefvStuAj31e7UWgApTjlztnMfI8Q==
+=hw8Z
+-----END PGP SIGNATURE-----
+
+--zAMhU6Hnw1p6ObYP--
 

@@ -1,108 +1,126 @@
-Return-Path: <linux-next+bounces-5568-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5569-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBF58A44EF0
-	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2025 22:33:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C39E1A44F50
+	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2025 22:55:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E19603AF60B
-	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2025 21:32:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17FB57A7ABF
+	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2025 21:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A50AD2135DA;
-	Tue, 25 Feb 2025 21:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 041FA20D4FD;
+	Tue, 25 Feb 2025 21:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Gu11XbNM"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hfal9T5n"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C816210185;
-	Tue, 25 Feb 2025 21:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2EF5198A32;
+	Tue, 25 Feb 2025 21:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740519118; cv=none; b=N5J/O+Cu4xKbxPKG0IPjo2irkanDCPYzGAPV7qngH9fdkv5OC0Bzwx85CWwf6KzQ1Dg6H1ZRl3ADDrlvn9NK+ab7+JBSOd2w/jHF7s3zox2HDHoyARRql08mcJpxYsGN0YgHitV8MJgKf9DltixxopUpbkuJ3vyBl+73i8Ns4jE=
+	t=1740520507; cv=none; b=TgahALl+NR6UTmWcpQ/owNTX0qLbcysIkCRShBvVdUpbespv+eM64q42SHNA1rCnDW9OSMG+W76+6+EufRV73wxk0LlV4RIi1Dsn8VbBOzDEE85MbMNjDKeZp4XDySDn6Doi/ZdnAp5CsoZfIEV/Wt3ggAGRENdUqckguWlRjso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740519118; c=relaxed/simple;
-	bh=CkEtZzZ1aO63asz2NO8we0PvyLXANQ7tN1ik2Ygq0wQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tJ/WVs46fJxOvQiFvvUQp6NTo0+dSLRNWxvrbAl6Ie+gqjpYhNsTVg6szFJ78CgX6ouLW9UvWCbpgqVsACbdV5SD8UMJ1co/wGylrW8HcA1Vcwuc+LamDGJHGqAxlRu6AgI8H+heHQCkeyM88SNjZUmE2fYv1AbFm/sx5if8OgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Gu11XbNM; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1740520507; c=relaxed/simple;
+	bh=KOaUpuobEYJa6FPJI2WuExOdYmMlPWWncrQ/Jha0ucE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EinIHlvaJC13/EOVDYoiFf1ZMMe5GofuBeUSQvAoL4wagQbbsqRjcfBnLZqChCKctxyHzyY88X12fLywWcUg0FF8pSMnck7w2V/opqBPli7RuQHJz6w12Pq8GP7eD55gsHoVMZzR7TvcPZUQNp0Y3TwNxGAMbAHUJmyQzE1kNRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=hfal9T5n; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1740519110;
-	bh=dyXGZlQij6yZqfR5AYTIythLXO1ZuwD/59wrUfG2tl4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Gu11XbNMxzIdmh0K0PzMjvSaE/t25hBJ868LL/knUP+0KD6PXIFevQvZMBk9c8s7V
-	 k4Qx47HM39vvUGYOJs2vbDWS9zbBuER9t1pMTCwXwoNgHK4h1n+8tbpHLNJA7/hFWw
-	 U0+9G5UfkSxYGHuH87AbSnpg8NGkahK9K1MdBoRoHcUvcT5mnefEpAZP64RZznjQnE
-	 QXfomebLZVRAlNUd9osAOaVD2Qpf5QVSxxh+nWKq0kSmwBHaax6OpHT/sfgsboE3+L
-	 1+ad96k+0YlVHCV7h5JX4EuY4HJ0ijlJpNQkatLYe7hMeVdXhXRVSwOFNAx6qn0lrt
-	 kobmniSD6Ff4w==
+	s=201702; t=1740520500;
+	bh=fA2zsdMbwAeLI5ZvHBc6b5RYSJ2cOjYBLDyph7IPDWg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hfal9T5nxHSpS8X9tO5ZiAmNoUUuFGQ8AAMSS2F7IeA9DBMPFRCO/0uietMMVC/sG
+	 0kN3NJPX9gKk5MArO1/1e7c8BX8rBqemRu1BzzTOlAhCn81bsziZENz1cp0/jL00RO
+	 yHD3wUcEaKe+VfFBJiWThw5qdd111i0ax4FFdrRI7WikwJPL8rxIeJJxGEPYi5Zszt
+	 AYOqaJA8TQQSbB0+32LtVCm447tW8D+Onw1QsSBK2QW370z6TEaXn5q5BIz4Rj4llz
+	 xLdC+cdkK7p9ioZOffYsu8JjexRc8fIH8gKPSW9hpTnqq6tkPZvmN7nSnHffcJizyp
+	 eqEBGxNo5SUfA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z2W5L4G5pz4x04;
-	Wed, 26 Feb 2025 08:31:50 +1100 (AEDT)
-Date: Wed, 26 Feb 2025 08:31:49 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z2Wc30dVSz4x04;
+	Wed, 26 Feb 2025 08:54:59 +1100 (AEDT)
+Date: Wed, 26 Feb 2025 08:54:35 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Deucher <alexdeucher@gmail.com>
-Cc: Aurabindo Pillai <aurabindo.pillai@amd.com>, Linux Kernel Mailing List
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: John Garry <john.g.garry@oracle.com>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, Ingo Molnar <mingo@redhat.com>, "H. Peter
+ Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Bart Van
+ Assche <bvanassche@acm.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the amdgpu tree
-Message-ID: <20250226083149.7a1142fe@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Nam Cao <namcao@linutronix.de>
+Subject: Re: linux-next: manual merge of the scsi-mkp tree with the tip tree
+Message-ID: <20250226085435.50a140ab@canb.auug.org.au>
+In-Reply-To: <87h64hg6r7.ffs@tglx>
+References: <20250225153200.00773d86@canb.auug.org.au>
+	<a902ea86-132a-4b64-8710-575a798f1a18@oracle.com>
+	<87h64hg6r7.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UTg4SrTDafNnPqtszTgG8iR";
+Content-Type: multipart/signed; boundary="Sig_/=JQ4+YJ7Dc8tjQ+W8HjhzNz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/UTg4SrTDafNnPqtszTgG8iR
+--Sig_/=JQ4+YJ7Dc8tjQ+W8HjhzNz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+On Tue, 25 Feb 2025 20:32:28 +0100 Thomas Gleixner <tglx@linutronix.de> wro=
+te:
+>
+> On Tue, Feb 25 2025 at 09:38, John Garry wrote:
+> >
+> > static int sdebug_init_cmd_priv(struct Scsi_Host *shost, struct=20
+> > scsi_cmnd *cmd)
+> > {
+> > 	struct sdebug_scsi_cmd *sdsc =3D scsi_cmd_priv(cmd);
+> > 	struct sdebug_defer *sd_dp =3D &sdsc->sd_dp;
+> >
+> > 	spin_lock_init(&sdsc->lock);
+> > 	hrtimer_setup(&sd_dp->hrt, sdebug_q_cmd_hrt_complete, CLOCK_MONOTONIC,
+> > 		      HRTIMER_MODE_REL_PINNED);
+> > 	sd_dp->hrt.function =3D sdebug_q_cmd_hrt_complete; ***
+> > 	INIT_WORK(&sd_dp->ew.work, sdebug_q_cmd_wq_complete);
+> >
+> >
+> > I guess that setting sd_dp->hrt.function explicitly, at *** above, is=20
+> > not needed (as hrtimer_setup()) does this. =20
+>=20
+> Correct. hrtimer_setup is enough.
 
-  a1addcf8499a ("drm/amd/display: fix an indent issue in DML21")
-
-Fixes tag
-
-  Fixes: 70839da6360 ("drm/amd/display: Add new DCN401 sources")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
+Thanks, I have updated my merge resolution.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UTg4SrTDafNnPqtszTgG8iR
+--Sig_/=JQ4+YJ7Dc8tjQ+W8HjhzNz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme+NsUACgkQAVBC80lX
-0GxCrggAk/2O/Fdx1V0zz+Ueo3/5eIyBoUgxvI8Jp101ozU8yXChtllVidlTNZ+K
-Hr58OQp1/F0llw+lX+1zKsX72fyzL8/LZhfP1xjNNGl5J82Quu+F4G1ihYYJX7py
-k2D5EotGCTFDQaPD5UUwrrCdtsRYUHcbygW3GysimvBP6+vJ6v5hQ9dqA6u+LO+V
-tW/MofJ4danaDr4Wt+MKCjhHcASSkvGDTetlU+HsOPc8G5RYE+oJSpJ9fo1eRVF5
-2Y9y3W2uw/YUHh2E3b5pwtO4gCxh9UFX1/0zZYHGh8S/2ONzs+pR/ILgklEtLtjg
-pIV1y2RCDlBJsuyA+8HgltKNEw3UIA==
-=zEjJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme+PBwACgkQAVBC80lX
+0GxDEQf+OIs7m12CrjF4Vp27eyc5zzcnhB3TpqslahusUaCwJyQX9ewMzpdOpCa0
+vg8H0i+4gs3HrJVOUKh41zpUr3SiqAOmfEbAlAPY/SRopulNzbhq2+25qfTmXmwf
+Lg2495AkLwmz45V5Edh5yAHWyGHERIayh06rO9VA7XFqMERrWfufcolQPlIQKAVV
++ubycHFztIlEx96fjcN04nTR9T45o+MlDa8SXeLGf5/L1GBWcpKFncxffECfoXms
+GkOO+BPyxrmpQYoxr+xlXQgdiOMa3iPfA1/wSrSECKYDrJQEM0wbSUhaFmLkNrwY
+ZOgY5jSRUmlhnleEk/Ex6I3K5ApdQA==
+=v6/I
 -----END PGP SIGNATURE-----
 
---Sig_/UTg4SrTDafNnPqtszTgG8iR--
+--Sig_/=JQ4+YJ7Dc8tjQ+W8HjhzNz--
 

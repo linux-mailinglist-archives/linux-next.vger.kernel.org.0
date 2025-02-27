@@ -1,101 +1,56 @@
-Return-Path: <linux-next+bounces-5589-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5590-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B75BA47974
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2025 10:40:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84C61A47D77
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2025 13:21:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92AE5171A42
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2025 09:40:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03A453B29FF
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2025 12:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42C37226534;
-	Thu, 27 Feb 2025 09:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC3B922D4C5;
+	Thu, 27 Feb 2025 12:18:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ll7E5nOn";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="pWE3CECj";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ll7E5nOn";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="pWE3CECj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GP2codip"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A70226177
-	for <linux-next@vger.kernel.org>; Thu, 27 Feb 2025 09:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27E0270040;
+	Thu, 27 Feb 2025 12:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740649253; cv=none; b=Zd6dkztbKaYgQ66TXh7mKmleYrwQk6o547vPYHAGqBZQTihBjGRAPgCLrFaU3JbuRxs8t7iJRhLhfBSfhEKowrxuhIP2HnkSZB/Nb/k9j30dUSynU7n2xNlToDPhe83za3DKmBi/O2pKeryVPR2ROprOw1SY29Aa7B65A1KJRm0=
+	t=1740658707; cv=none; b=MCRx6zAa96KCaeh21QNGDIx3ERdfDsVSH2dYYagDc0+bVpiWFdtSiM740snGF/VA7fwlyTe5wIChNWLxHEgYICjmlY13PbPR05kg/Zt1Q/rSQn5hgs8G9NAO8E8Emmo655y3CLM6TdDSUtH2jU0KAk7gB9B+/+J0XPibtqWZkCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740649253; c=relaxed/simple;
-	bh=zHU1v0Cc0UaisjgExOZcPWyMuGYjHPbxdW6xL2SCog0=;
+	s=arc-20240116; t=1740658707; c=relaxed/simple;
+	bh=Y/2H0VwlBRrkxH+JvTo6LrgmHk1fi1vhR22rgXq1cmg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JaMYsa9UX9IGjSUKukrhNo2WP1AdukLQ3dBJQZQUNriNCM2VplcdV2PyO9izFhbmp10uCIkwSQvSKq/lIWcRJthn2bfAMDa57PbyYPIL1xKSCKoJCJikpaVqgLim9NPN4zYdf+mq/WD1J+6nTFV2RqkTP2RSWpAsL8GpAMqysDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ll7E5nOn; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=pWE3CECj; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ll7E5nOn; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=pWE3CECj; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DE38B1F38F;
-	Thu, 27 Feb 2025 09:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1740649243;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EbKxWAYwt++J388gIevwx92wSnps6TdEX/dkt8kQHDA=;
-	b=ll7E5nOnqhXe86ArfvniAOUVWoIyZbINXGS2K5pa8jyxVPjfuLlbmtH7DLttB7NYlok86M
-	uQ8zc4gK5S42igjqaOWFqu26wy+NP/ruOQ/r7BA6ziNHjzpdQ9T/ECNUpwEPXMunoRUgSG
-	ZAoeYn6wwi/PF0oPqMrRbezTWifllJY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1740649243;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EbKxWAYwt++J388gIevwx92wSnps6TdEX/dkt8kQHDA=;
-	b=pWE3CECjrXgxSRLzWxxbfE8wN6dvzj8oYKY5XbLUBxPdKqLBZDA0BizmJznxX+Txbl9QK9
-	V4J0LiC5h+TlrlDw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1740649243;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EbKxWAYwt++J388gIevwx92wSnps6TdEX/dkt8kQHDA=;
-	b=ll7E5nOnqhXe86ArfvniAOUVWoIyZbINXGS2K5pa8jyxVPjfuLlbmtH7DLttB7NYlok86M
-	uQ8zc4gK5S42igjqaOWFqu26wy+NP/ruOQ/r7BA6ziNHjzpdQ9T/ECNUpwEPXMunoRUgSG
-	ZAoeYn6wwi/PF0oPqMrRbezTWifllJY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1740649243;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EbKxWAYwt++J388gIevwx92wSnps6TdEX/dkt8kQHDA=;
-	b=pWE3CECjrXgxSRLzWxxbfE8wN6dvzj8oYKY5XbLUBxPdKqLBZDA0BizmJznxX+Txbl9QK9
-	V4J0LiC5h+TlrlDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C18AC13946;
-	Thu, 27 Feb 2025 09:40:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 2QUOLxszwGfDFwAAD6G6ig
-	(envelope-from <dsterba@suse.cz>); Thu, 27 Feb 2025 09:40:43 +0000
-Date: Thu, 27 Feb 2025 10:40:42 +0100
-From: David Sterba <dsterba@suse.cz>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y+3a9qpJM9neOcMeW9/yvtzTnAvQDaOmpGAphU7b0n+KK+bZIix4X2a3ohwR4xY+1YJ5TLdtBn0z2cT/vPuR5VCSYyp308wwWgR+ED/xysDQGGIHKLoZT9k9NsPVMhPhXALeYyLw3HvCcFzWmfktIsT+k/jN5cAHRptlCnlkeqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GP2codip; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB38C4CEDD;
+	Thu, 27 Feb 2025 12:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740658707;
+	bh=Y/2H0VwlBRrkxH+JvTo6LrgmHk1fi1vhR22rgXq1cmg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GP2codipxrHYBkhNHC1/K/xNkUFRxPiKB9xFfqguhzRiQko+9FFUxls3xjTDm/7Rr
+	 blonfpL1d4l/yKhYcJdllZsvs6WFZ/worPwKbXgM6AmNG+IroyZF5ml2UfN08d/gs5
+	 rT14F/fWKR1G+ouKjTjOdxQRH7lIuMqNIvc0Ov78bPy1SOl63fXKqZHM2AMdYJJp9t
+	 w1CRlHQ+wbAsqzjAV+hDKU4DOorXG/Yfz3RlO5xG5NqOK/MT6l/tvVIQEuDN2MFyTU
+	 n1Wx+4os1QBdE55Qnr0cOavFfnJQMYNSLS7tLlqoVEqZYrynJOatA5JgmHItU1uh0l
+	 1ZwqeKdXSL0Ow==
+Date: Thu, 27 Feb 2025 13:18:18 +0100
+From: Joel Granados <joel.granados@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Sterba <dsterba@suse.com>, Goldwyn Rodrigues <rgoldwyn@suse.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the btrfs tree
-Message-ID: <20250227094042.GZ5777@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20250227103214.2cf95e8a@canb.auug.org.au>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Kaixiong Yu <yukaixiong@huawei.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the sysctl tree with the tip tree
+Message-ID: <skkjdjse5q7wgwwfqzkgcfb7ewcrlsn7hbqmdf333bcwbbpgak@j4hwc7iidkqh>
+References: <20250224170310.41c8611d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -104,56 +59,64 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250227103214.2cf95e8a@canb.auug.org.au>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Score: -4.00
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	HAS_REPLYTO(0.30)[dsterba@suse.cz];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCPT_COUNT_FIVE(0.00)[5];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo];
-	TO_DN_ALL(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
+In-Reply-To: <20250224170310.41c8611d@canb.auug.org.au>
 
-On Thu, Feb 27, 2025 at 10:32:14AM +1100, Stephen Rothwell wrote:
+On Mon, Feb 24, 2025 at 05:03:10PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the btrfs tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+> Today's linux-next merge of the sysctl tree got a conflict in:
 > 
-> fs/btrfs/extent_io.c: In function 'btrfs_set_folio_subpage':
-> fs/btrfs/extent_io.c:874:45: error: passing argument 2 of 'btrfs_is_subpage' from incompatible pointer type [-Wincompatible-pointer-types]
->   874 |         if (!btrfs_is_subpage(fs_info, folio->mapping))
->       |                                        ~~~~~^~~~~~~~~
->       |                                             |
->       |                                             struct address_space *
-> In file included from fs/btrfs/extent_io.c:26:
-> fs/btrfs/subpage.h:95:51: note: expected 'struct folio *' but argument is of type 'struct address_space *'
->    95 |                                     struct folio *folio)
->       |                                     ~~~~~~~~~~~~~~^~~~~
-> 
-> Caused by commit
-> 
->   40524fd05deb ("btrfs: kill EXTENT_FOLIO_PRIVATE")
-> 
-> I have used the btffs tree from next-20250226 for today.
+>   kernel/sysctl.c
+Yep, 8aeacf257070 got picked up by the tip robot. I was expecting a bit
+more review before this went in, so I did not bother rebasing it on top
+of next.
 
-Fixed in in today's for-next snapshot.
+> 
+> between commit:
+> 
+>   8aeacf257070 ("perf/core: Move perf_event sysctls into kernel/events")
+> 
+> from the tip tree and commit:
+> 
+>   dccf3c99febf ("sysctl: remove unneeded include")
+> 
+> from the sysctl tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+Thx for this.
+
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc kernel/sysctl.c
+> index 635f5e829fe8,eeb4cba12190..000000000000
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@@ -54,7 -47,7 +47,6 @@@
+>   #include <linux/acpi.h>
+>   #include <linux/reboot.h>
+>   #include <linux/ftrace.h>
+> - #include <linux/oom.h>
+>  -#include <linux/perf_event.h>
+>   #include <linux/kmod.h>
+>   #include <linux/capability.h>
+>   #include <linux/binfmts.h>
+I see that linux/oom.h was removed from kernel/sysctl.h. This was not
+part of any of the patches but it is the right thing to do. I'll make a
+note of it and make sure to remove it if it comes back
+
+Thx again.
+
+Best
+
+-- 
+
+Joel Granados
 

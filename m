@@ -1,124 +1,105 @@
-Return-Path: <linux-next+bounces-5584-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5585-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36AABA473B9
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2025 04:48:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3408A473EF
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2025 05:04:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E24B2188E137
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2025 03:48:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB2E93AC090
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2025 04:04:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122CD170A0B;
-	Thu, 27 Feb 2025 03:48:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95EF324B28;
+	Thu, 27 Feb 2025 04:04:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="f5euBY9D"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tqsm4K2V"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9209A17A300;
-	Thu, 27 Feb 2025 03:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4B1BE65;
+	Thu, 27 Feb 2025 04:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740628104; cv=none; b=iC80Iv+USVSvsweTD4hB/dyIxmIWjL6AanrqwpZ8gggEWgg8pF7UhxfKEQevMBJpXKlDWu3l2bCKwwFHg5zDcIuPlmrpSk47CwmBnKfKk/TZhEe9haTM3Qu8BdWrhHRMN6Lhf6xrnK+H7w9pZr68lNX0P/bB+Y2l7F+0+MdgftI=
+	t=1740629084; cv=none; b=gpbXlMHzlarieb5As3OlG0YJfFAbmuDprHYlyQ/EB6opkObc/3BaEK3bxVqMIHNP5k/2YeFNfCsObfjwovQyhKFxpZoA6qaGIiQjzUi/l6ovnb2TN+ykm5+ahK4/u5NUYfINAel6Dmp+7Wk2W98rSxt84OfvNFFTw62T8nL1/OM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740628104; c=relaxed/simple;
-	bh=u/PEOVAjimaTUXsxs/nRpNPwrODncoeKYCVgWYjjf8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lH6atgepo5pkYw6BxQ0zbjvfQ/qmakXxu5zoyjPhyYOEPJrl0Qx/PSkIGINycdhGvN/c4jBJ2OnYRF/+HFAHzrIWOxiWCVXhH/I6BC/D0y6728XDPCsQXiUyFAalQG7vjsSpKoVihvMDph5VREGU4qiU7J0KUMXG5tGELDsVg34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=f5euBY9D; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1740629084; c=relaxed/simple;
+	bh=L49AgEInu75X3a5lu/WbDpQesPjoT1koyxZbS6v/y4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VtcGJ2W6CJA54UuTCAeRScOJwWQBovsBzXK5di0TTzFKNMpDFqShRlGIoVhrtw7VJDZBlTgHfA2GqlKdRv+8AMsSSwbH0N1W+pccf5YThBuSPogZ4kQJ93i+YYap6PSMhzL/7trNvkciZrZvIBuE3OA8zhJtldsSUE4boA7unjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tqsm4K2V; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1740628098;
-	bh=e7AfLy/Nu1ZKsYc+MFqD9pfgPuX1Hh6mcwV9NZJnDww=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=f5euBY9DbWiAjxnON+ycJF/NZ4uRuu9z67m3pmOeeyO0GPIt0wNyE9gEAs1Eljejg
-	 WLdcngrQq5apzZ4Sb8bd/Vca4TekEm09x0ljXscSTTG7Zih2uZINw7WTeKa5SJYww1
-	 ysOFxkjpXLmv+qjNbeH8ZaXvyZ0kpJm7yxFVl12fFg4185VyclEdMCj2krxICsZnxG
-	 9Vqj4iQ5/sdJYy2NcWNIjLNUqZm90dmvWeuzd53wC5YD2Rn4+YkjLBjF/bcIWPXvdF
-	 RmgMGgitxygYYch7z49RF98cqc0C+58MI1hwColoC+xev3FEQFT642U74IhZJIVm0t
-	 HpjzLI3toA+UA==
+	s=201702; t=1740629078;
+	bh=CWz+QXeFH2u89wfikyy369PYPjDdtcy2aCpxfPF6ySk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=tqsm4K2VvK1RHCJr03BmQAV0HWZzx4J8vdBAJUfFKUvOY1TvKnkSVrhKL0svYsRgK
+	 pPmnrvooOEmByluYvktwXgbVlknvJ0VWvLTz0nRIbvZcJwHIbU9h3eOAVPXFSzvSp/
+	 S0kDgMtOrB9kuGPTQw/86b4Ut0qoQQ9+zupIsgqpbwosIY+NZ7X1NNA7eD6DszAOG1
+	 sGpRgGFEE6ARYylvQvo5aOPU9oSiSknaEK+opo/Or21OA8nfYe52kPonILJJRk7z3Y
+	 76vFDJZz2goM3KVWqLfyJrnkhb+v28hfCR97MBP6QovajPfkDhKudoeijcQfT6KpL5
+	 Oea8nfMqtwTbQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z3HPG0R7cz4wyh;
-	Thu, 27 Feb 2025 14:48:18 +1100 (AEDT)
-Date: Thu, 27 Feb 2025 14:48:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z3Hm65Qkmz4wcT;
+	Thu, 27 Feb 2025 15:04:38 +1100 (AEDT)
+Date: Thu, 27 Feb 2025 15:04:38 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Andrew Morton <akpm@linux-foundation.org>
+To: Mark Brown <broonie@kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Rik van Riel <riel@surriel.com>,
- Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: Re: linux-next: duplicate patch in the tip tree
-Message-ID: <20250227144817.50618ab7@canb.auug.org.au>
-In-Reply-To: <20250227144410.275469fc@canb.auug.org.au>
-References: <20250227144410.275469fc@canb.auug.org.au>
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the spi tree
+Message-ID: <20250227150438.280465e0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mgGbm+H1qOA2Lhne92ZpV.M";
+Content-Type: multipart/signed; boundary="Sig_/oJOY+=EAvUgN59ta036dl8Z";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/mgGbm+H1qOA2Lhne92ZpV.M
+--Sig_/oJOY+=EAvUgN59ta036dl8Z
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 27 Feb 2025 14:44:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> The following commit is also in the mm tree as a different commit (but
-> the same patch):
->=20
->   a37259732a7d ("x86/mm: Make MMU_GATHER_RCU_TABLE_FREE unconditional")
->=20
-> This is commit
->=20
->   a30104ede395 ("x86/mm: make MMU_GATHER_RCU_TABLE_FREE unconditional")
->=20
-> in the mm-unstable branch of the mm tree.
->=20
-> This is already causing a conflct in arch/x86/kernel/paravirt.c due commit
->=20
->   f2c5c2105827 ("x86/mm: Remove pv_ops.mmu.tlb_remove_table call")
->=20
-> in the tip tree (where I just used the tip tree version).
+The following commits are also in the mm tree as different commits
+(but the same patches):
 
-And another in arch/x86/mm/pgtable.c due to commit
+  1d2e01d53a8e ("spi: spi-imx: convert timeouts to secs_to_jiffies()")
+  32fcd1b9c397 ("spi: spi-fsl-lpspi: convert timeouts to secs_to_jiffies()")
 
-  530c12f84d2c ("x86: pgtable: convert to use tlb_remove_ptdesc()")
+These are commits
 
-in the tip tree (where I again just used the tip tree version).
+  442b53316118 ("spi: spi-imx: convert timeouts to secs_to_jiffies()")
+  d569a6881325 ("spi: spi-fsl-lpspi: convert timeouts to secs_to_jiffies()")
+
+in the mm-nonmm-unstable branch fo the mm tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mgGbm+H1qOA2Lhne92ZpV.M
+--Sig_/oJOY+=EAvUgN59ta036dl8Z
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme/4IEACgkQAVBC80lX
-0GylNwf/WKckhKe31CS2xHsEoPaX9xuIu3KNNaPwSVsptBdWd7vNW5tKl4rxxGXK
-pChIsq1hYRbvbEeNjGB80XMAEnF2MItMjsA70tYUrIddE9gNPAkaC1LB9PYGIiqi
-HF0Cc26ivMo1mTtzEN3qaWqyiRH4AAI0+u7BoxWGhqFWpSXvM8Dk2g4A05CuVI76
-zZlRfmN2aM0Tedi01JiiUTYNeFnclWvadGiGuibQ0CRY/XzTpS9uvVINOMPBC/rF
-BLXdSexbhVnC/FBJwdv491CsE7XndRohQ5oG97Aot9V/YoXjII24cUgiW7y0ra5K
-regi94ZId5Nw0MI+1+TTBq4xTNkYvw==
-=Kub6
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAme/5FYACgkQAVBC80lX
+0Gz+rAf/W4mpbfSRJHNLUM+ygQe3Ltcywmvv3CDna37vyzLXMKZS6VVAQtMxyx5p
+wVHjk8bI7wz2JV8clJ3H5c1Mw/zWn5YlRGt2vjE0Gx1TBnPo/PJHhwuaz8SNxckt
+ku+gFNxqptB7Z1SKir6Cxoer4In01paXx61uKf7azKJr5Jr9B/aT4s1UmVMB84dI
+qtXDZ4BwqhDJCEgw9mC7Q3lQjEYubszStCSUmfaPQ0nmAe4c+bvj/9GljlduOyIl
+ZXCWX9ohtzWvnhudrYfs9f9zVRb6jaK1A18dgnkXJg/AqpraUkYv9ncDFyVm6/vt
+tdJyF/YyamzZr404sRTORYZLg4xzmQ==
+=HPH4
 -----END PGP SIGNATURE-----
 
---Sig_/mgGbm+H1qOA2Lhne92ZpV.M--
+--Sig_/oJOY+=EAvUgN59ta036dl8Z--
 

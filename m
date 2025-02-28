@@ -1,109 +1,137 @@
-Return-Path: <linux-next+bounces-5603-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5604-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEA4DA48FAB
-	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2025 04:39:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEA4AA48FD7
+	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2025 04:50:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C7D77A4771
-	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2025 03:38:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9827216A8D4
+	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2025 03:49:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 388AB19259F;
-	Fri, 28 Feb 2025 03:37:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A6D77602D;
+	Fri, 28 Feb 2025 03:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FeEH2h8I"
 X-Original-To: linux-next@vger.kernel.org
-Received: from wangsu.com (mail.wangsu.com [180.101.34.75])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEB97187553;
-	Fri, 28 Feb 2025 03:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.101.34.75
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE18819;
+	Fri, 28 Feb 2025 03:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740713824; cv=none; b=LKm+NoXlcckDsjqVPYdk5BPMHR4h/jx/VbBLXO5aZpI9/A9em1Us/7F96wpYn+EnePvL1lOT92SCc3dG5e+6zHQm2P7/mD28D9mrT5Y7npkm1h5S7hmttbKnwGEMmMZEm97WDOBe4UyuVFBNhyfMp6qQmepMDQgKpA8vb6V9bCE=
+	t=1740714565; cv=none; b=DyC909YYprDstM1R6Rmd+SYLlAGaYEux8DG3ITEt5ISJpV9QouqqRoXbuR5YTc0s0B0ct7/LoCGyvIInm6dWWi8dhOVctwqISRqARBf7xich9XaJsmHcZPc35K4rt8jkhsT0HMgXtWBG5O8iPLQkNhXvrkVciQdkrCq9a41ckT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740713824; c=relaxed/simple;
-	bh=TQzvWiOdvU5caeaRBqElrxoX75nvhd1b0LPDOE8juNg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rrI659jCqKrqDFJxTcy35vv8XJfl+8ZJ+1m20CDEL5nNr9riCqgIDV+H0Gx35D3d2JiKVzu9oKYLQAh/POV7CB6Xlsisgvw6XYWlenvsgnCc59WAdmdASA0gWUrwlUvol3vbO8f1XOpp7cue9q29rOUfhJBTuwFfGgOzk2jbtXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wangsu.com; spf=pass smtp.mailfrom=wangsu.com; arc=none smtp.client-ip=180.101.34.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wangsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wangsu.com
-Received: from [10.8.162.84] (unknown [59.61.78.234])
-	by app2 (Coremail) with SMTP id SyJltABX2Qw6L8FnOmQLAA--.668S2;
-	Fri, 28 Feb 2025 11:36:36 +0800 (CST)
-Message-ID: <a8af57eb-97dd-406a-8f5f-c4375ca4fce2@wangsu.com>
-Date: Fri, 28 Feb 2025 11:36:26 +0800
+	s=arc-20240116; t=1740714565; c=relaxed/simple;
+	bh=2JJRsSl9s1ShM7CmwpkQX5IijJd0EPLQAbxDyAdVct4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=r0rnlHffNcsyFm/euUZWSIAD9qWneIv+dfc9kP7ngmQ4KpXiTiAzWWnMRqWNvttQJOhGCxa6WGgXO5/6nJo/TW8Flh0uiIIxLBnSS76wxCk8ZpH6GZselQd97Xd5EwFqB47z6AfFraTvC6NVnuhBBUJAW0B7xdAFJAvV6dn0frw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FeEH2h8I; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1740714560;
+	bh=6E/Ll8VCwKDAYpHkrqT04AlysqffxMkMCwKN9pLzA5g=;
+	h=Date:From:To:Cc:Subject:From;
+	b=FeEH2h8IV3dCReCMxRFwMByCOCMc6evZ7cSXTQko/8Fyq/8YkH6kAeyWWWY3x973X
+	 jRo6BXgCHwN95NvrOCPvkl4fvhcF+f/W1e4yM4jKSY9Uc8euiREMzXicwPFhX44ICz
+	 Pth2x01tkfAVD/Gy9rmCDuY3E5+pekS9PQiJB4XLF5hq2bpMCReeUNXhK+uqLeIey+
+	 7V/kjr8sM8fJ4M1AjeQFJEZc9LG2h0J4rCItcfZIdKXVPTTPqj0rfn5j07AweALIUY
+	 FRPe2y2AkA+sXZ++JjWjDZAYy/cRW2JnLhP075DQuAU+gY1UOyBf+haepkqtxodWVY
+	 Y+iocU/RCBk8Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z3vMz08wsz4wbx;
+	Fri, 28 Feb 2025 14:49:17 +1100 (AEDT)
+Date: Fri, 28 Feb 2025 14:49:16 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jens Axboe <axboe@kernel.dk>, David Miller <davem@davemloft.net>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, David Wei <dw@davidwei.uk>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the block tree with the net-next tree
+Message-ID: <20250228144916.3f5905cf@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the net-next tree with the
- vfs-brauner tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Christian Brauner <brauner@kernel.org>
-Cc: Networking <netdev@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Stefano Jordhani <sjordhani@gmail.com>
-References: <20250228132953.78a2b788@canb.auug.org.au>
-Content-Language: en-US
-From: Lin Feng <linf@wangsu.com>
-In-Reply-To: <20250228132953.78a2b788@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:SyJltABX2Qw6L8FnOmQLAA--.668S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFWrJF4UWryUJFWxAr4fZrb_yoW3trc_Wr
-	15t3Z7Jr1DZw47J3yIyF4fZFy7Gr48tr15Zr1kKr17Zas8Zay5CF4Sv34DX34rWr9IkF98
-	uF9IgFy8Kr129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb48YjsxI4VWkKwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
-	s7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI
-	8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vE
-	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzx
-	vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VACjcxG62k0Y48FwI0_
-	Gr0_Cr1lYx0E74AGY7Cv6cx26r48McIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1UMcvjeVCFs4
-	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCY02Avz4vE14v_Gr4l42xK82IYc2Ij64vIr41l
-	42xK82IY6x8ErcxFaVAv8VW8GwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU59iSJUUUU
-	U==
-X-CM-SenderInfo: holqwq5zdqw23xof0z/
+Content-Type: multipart/signed; boundary="Sig_/IqqFrWOlEanhzm3JG70FbSu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/IqqFrWOlEanhzm3JG70FbSu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2/28/25 10:29, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the net-next tree got a conflict in:
-> 
->   fs/eventpoll.c
-> 
-> between commit:
-> 
->   d3a194d95fc8 ("epoll: simplify ep_busy_loop by removing always 0 argument")
-> 
-> from the vfs-brauner tree and commit:
-> 
->   b9d752105e5f ("net: use napi_id_valid helper")
-> 
-> from the net-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+Today's linux-next merge of the block tree got a conflict in:
 
-Hi Stephen,
+  tools/testing/selftests/drivers/net/hw/Makefile
 
-The conflict fix looks good to me, thanks for handling this!
+between commit:
 
-linfeng
+  185646a8a0a8 ("selftests: drv-net: add tests for napi IRQ affinity notifi=
+ers")
 
+from the net-next tree and commit:
+
+  71082faa2c64 ("io_uring/zcrx: add selftest")
+
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/drivers/net/hw/Makefile
+index cde5814ff9a7,7efc47c89463..000000000000
+--- a/tools/testing/selftests/drivers/net/hw/Makefile
++++ b/tools/testing/selftests/drivers/net/hw/Makefile
+@@@ -10,7 -12,7 +12,8 @@@ TEST_PROGS =3D=20
+  	ethtool_rmon.sh \
+  	hw_stats_l3.sh \
+  	hw_stats_l3_gre.sh \
++ 	iou-zcrx.py \
+ +	irq.py \
+  	loopback.sh \
+  	nic_link_layer.py \
+  	nic_performance.py \
+@@@ -43,4 -42,4 +46,6 @@@ include ../../../lib.m
+  YNL_GENS :=3D ethtool netdev
+  include ../../../net/ynl.mk
+ =20
++ $(OUTPUT)/iou-zcrx: LDLIBS +=3D -luring
+++
+ +include ../../../net/bpf.mk
+
+--Sig_/IqqFrWOlEanhzm3JG70FbSu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfBMjwACgkQAVBC80lX
+0GzgUwf/T+4bByxUtEmJQ/tSOYTLf+IKtgczZtQ1OgybowN4jSLUDPvIJvFEbPi5
+l1nQ4BMJtoyL7TJFG7yStomvFNAZHXdFHBNDudzhlCAn9tKfOXYp3JquagO7dweT
+p14NOW/TmDOACGBz+hrqB/hkGqLdwJZFDd3MZGhoGbBOz3Zt7iqEdTCU39pJCWA+
+XcAdk3TgApsf9ta3Cw1EQSpnWWqhH3/0bQssJGzfg+MhtLJTt8Kf2o/SYrD1LQT6
+26koynuAP+/v6Mm9+FqBH6VldKZxxMuGa0y8wALCtukXt86mZe+It45TkB8GzAQE
+7JzDbPL1MYIYsufMF7eyRXfwZr1r/Q==
+=B+NT
+-----END PGP SIGNATURE-----
+
+--Sig_/IqqFrWOlEanhzm3JG70FbSu--
 

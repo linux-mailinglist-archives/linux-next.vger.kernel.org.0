@@ -1,198 +1,107 @@
-Return-Path: <linux-next+bounces-5625-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5626-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02BF4A4B7C5
-	for <lists+linux-next@lfdr.de>; Mon,  3 Mar 2025 06:57:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2331CA4B851
+	for <lists+linux-next@lfdr.de>; Mon,  3 Mar 2025 08:26:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 171A87A2DDE
-	for <lists+linux-next@lfdr.de>; Mon,  3 Mar 2025 05:56:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96CAF3AFF1A
+	for <lists+linux-next@lfdr.de>; Mon,  3 Mar 2025 07:26:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D1B1DFD8B;
-	Mon,  3 Mar 2025 05:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E6A1E9B18;
+	Mon,  3 Mar 2025 07:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="g+5oWLd7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="eFnYccCO"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE1CEADC;
-	Mon,  3 Mar 2025 05:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9531EA7E0;
+	Mon,  3 Mar 2025 07:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740981458; cv=none; b=FtWXMLEI7uG3UoBcsF04uVyOI4YO1siUkMhL+F+5Ruqn3PjGW8NJPJ7Tf0FkagIo6t5BxXKhmFWzY6AALo4+pKAjVdbemGMba1KwRRj9d/zUsNhjEPGn3CQyz1oGg36jLx42EjLtp0Y/2ZIw3l4jDbChT5dQ4zfbKr7orqSXVS8=
+	t=1740986807; cv=none; b=I8FEG/f8MGQpckYgF9084b6A70tIKRF+UC9hSTkH2yhnGIUmSVkYLpwNB8WUiOIzryYK0PzD+0xQTsU0p096N5Egp1WpmfQMXZ/GvN0oHEMoW8pP4QAWHayYLqnYI46KoG3h6kMexMuQ8KsXJy7kGPByAMv4J4AIMdNNjYobW0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740981458; c=relaxed/simple;
-	bh=CQhR6gB0aJatgJRCzvHokMZoCQPfIKKaEwPAYSGeIE8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=unGBx79ZU5w5/4qf8sJJsexFGDso8TS125YNOnj9JAkceM1+vYRGHulzMa2qrrPIAcRn9cej6SurYA6ktCXMUqYHZJPyzQph1EUNcN/yizbLrLEuAlZAlPsVEObH2tGFbpFfXU84jHvO5jZ9LTXcYxvjDeL/du9Ak6RrA6tfGh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=g+5oWLd7; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1740986807; c=relaxed/simple;
+	bh=EoEz1sVPNLIdzQ3hYSNoXZm9t9D20YKTd0JlTlLNOK0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=O5qDswy1b4/M0f+4IZi5cQKXv/dHMKl4TguzKySK7gCum+G6uXfI/tHw9sOBmDc0IwzWbdwXnNuBO54hsgEcuVnITGf2r+beA7xqAZLZ3Jhaud3ka3qHXOCrFb2zMPdgRHpcajZ5bxsyhQ0k5hEXtdDQUdZWDU/vR5sRuObNkao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=eFnYccCO; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1740981443;
-	bh=RSgLqzudgEPy/S6CCf1yszXy8VS9pXFuXO06zPu3m7k=;
+	s=201702; t=1740986801;
+	bh=JYtmQK7z3nhSyi0RYaAxJIUtW1aTo8IqbYRNufPPnFM=;
 	h=Date:From:To:Cc:Subject:From;
-	b=g+5oWLd71/1gNn3fzcjPd+JAeXtepKalLN3m5Ze0zArq+0EXOWxgl8JYN/zjiOKwL
-	 AoN77W1znlzL+N0ekZNymDG9jCl3MdvRVqg9Zna15nSlaLMLFoW8fZ1dbR7QoKw55r
-	 ppguBWKgxPbQLyq/FEAulPE08HrFGfgV8RWLyh7F6v1UKnPixCiLbP1geHSo2UcXn8
-	 /V5ouy3zcFiEmc7Nq004fM92kfGRIfoxm9UEb7+2Fb5Rcvj/I48TcZjboVgRW1hCku
-	 JN4sUr6FvQWVtD2FLB8ptSIqwyx/MVbBVp1qeMrFLsqzoui4pwb93ahcBxCgA8XAcJ
-	 GpsovXWVIZsiw==
+	b=eFnYccCO7sP4FAvmvadwYkJhNVDQ0y0CDZ/ntq0mSKZhLsOSUDnrziTjyzwRjEmu+
+	 MGX5fEWaQN0qj4XykMm1r5G6/LoV6Op1a6f295F+bZl2iuGpj5rSH+Bn2EQ16k4Mk/
+	 gKlvBY8aVFwc4yMYxmBZL5Gn3qVp0i/+YcWcLI1VTLOSHJA48AnJW9BFZqMstae6xl
+	 gIRO2/Eg6NvPt2L2ubdpO0HsA6L4y/0wZV+jBMtVCC3h8wv1YR+h7y93+T4Ac03znK
+	 TV4mD+XfkF4s8oldCLfGHA4DhXE7WZUCSAHidBzBf3kNRsnLx2dDfjA3cZeWScRA97
+	 5AIJ6kvzcN+cQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z5p4M3SkZz4wj2;
-	Mon,  3 Mar 2025 16:57:23 +1100 (AEDT)
-Date: Mon, 3 Mar 2025 16:57:22 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z5r3P1lGKz4wcm;
+	Mon,  3 Mar 2025 18:26:41 +1100 (AEDT)
+Date: Mon, 3 Mar 2025 18:26:39 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Dan Carpenter
- <dan.carpenter@linaro.org>, Linux Kernel Mailing List
+To: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
+ <kw@linux.com>
+Cc: Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>, Shradha
+ Todi <shradha.t@samsung.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the gpio-brgl tree with the
- gpio-brgl-fixes tree
-Message-ID: <20250303165722.53c98069@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the pci tree
+Message-ID: <20250303182639.5e920622@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/teg/10zs3vEuA_CCwjOn01H";
+Content-Type: multipart/signed; boundary="Sig_/kV2jVTek5sdVoFJKnR6Yt71";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/teg/10zs3vEuA_CCwjOn01H
+--Sig_/kV2jVTek5sdVoFJKnR6Yt71
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the gpio-brgl tree got a conflict in:
+After merging the pci tree, today's linux-next build (htmldocs) produced
+this warning:
 
-  drivers/gpio/gpiolib.c
+Documentation/ABI/testing/debugfs-dwc-pcie:15: WARNING: Block quote ends wi=
+thout a blank line; unexpected unindent. [docutils]
 
-between commit:
+Introduced by commit
 
-  64407f4b5807 ("gpiolib: Fix Oops in gpiod_direction_input_nonotify()")
-
-from the gpio-brgl-fixes tree and commit:
-
-  e623c4303ed1 ("gpiolib: sanitize the return value of gpio_chip::get_direc=
-tion()")
-
-from the gpio-brgl tree.
-
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+  8562ae832769 ("PCI: dwc: Add debugfs based Error Injection support for DW=
+C")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpio/gpiolib.c
-index 8741600af7ef,d0108cf2ee0b..000000000000
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@@ -2737,15 -2804,14 +2804,14 @@@ int gpiod_direction_input_nonotify(stru
-  	 * assume we are in input mode after this.
-  	 */
-  	if (guard.gc->direction_input) {
-- 		ret =3D guard.gc->direction_input(guard.gc,
-- 						gpio_chip_hwgpio(desc));
-+ 		ret =3D gpiochip_direction_input(guard.gc,
-+ 					       gpio_chip_hwgpio(desc));
-  	} else if (guard.gc->get_direction) {
-- 		dir =3D guard.gc->get_direction(guard.gc,
-- 					      gpio_chip_hwgpio(desc));
- -		ret =3D gpiochip_get_direction(guard.gc, gpio_chip_hwgpio(desc));
- -		if (ret < 0)
- -			return ret;
-++		dir =3D gpiochip_get_direction(guard.gc, gpio_chip_hwgpio(desc));
- +		if (dir < 0)
- +			return dir;
- =20
- -		if (ret !=3D GPIO_LINE_DIRECTION_IN) {
- +		if (dir !=3D GPIO_LINE_DIRECTION_IN) {
-  			gpiod_warn(desc,
-  				   "%s: missing direction_input() operation and line is output\n",
-  				    __func__);
-@@@ -2762,9 -2828,30 +2828,30 @@@
-  	return ret;
-  }
- =20
-+ static int gpiochip_set(struct gpio_chip *gc, unsigned int offset, int va=
-lue)
-+ {
-+ 	int ret;
-+=20
-+ 	lockdep_assert_held(&gc->gpiodev->srcu);
-+=20
-+ 	if (WARN_ON(unlikely(!gc->set && !gc->set_rv)))
-+ 		return -EOPNOTSUPP;
-+=20
-+ 	if (gc->set_rv) {
-+ 		ret =3D gc->set_rv(gc, offset, value);
-+ 		if (ret > 0)
-+ 			ret =3D -EBADE;
-+=20
-+ 		return ret;
-+ 	}
-+=20
-+ 	gc->set(gc, offset, value);
-+ 	return 0;
-+ }
-+=20
-  static int gpiod_direction_output_raw_commit(struct gpio_desc *desc, int =
-value)
-  {
- -	int val =3D !!value, ret =3D 0;
- +	int val =3D !!value, ret =3D 0, dir;
- =20
-  	CLASS(gpio_chip_guard, guard)(desc);
-  	if (!guard.gc)
-@@@ -2788,12 -2875,12 +2875,12 @@@
-  	} else {
-  		/* Check that we are in output mode if we can */
-  		if (guard.gc->get_direction) {
-- 			dir =3D guard.gc->get_direction(guard.gc,
-- 						      gpio_chip_hwgpio(desc));
- -			ret =3D gpiochip_get_direction(guard.gc,
-++			dir =3D gpiochip_get_direction(guard.gc,
-+ 						     gpio_chip_hwgpio(desc));
- -			if (ret < 0)
- -				return ret;
- +			if (dir < 0)
- +				return dir;
- =20
- -			if (ret !=3D GPIO_LINE_DIRECTION_OUT) {
- +			if (dir !=3D GPIO_LINE_DIRECTION_OUT) {
-  				gpiod_warn(desc,
-  					   "%s: missing direction_output() operation\n",
-  					   __func__);
-
---Sig_/teg/10zs3vEuA_CCwjOn01H
+--Sig_/kV2jVTek5sdVoFJKnR6Yt71
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfFRMIACgkQAVBC80lX
-0GyNLQf5ASeJd7+RodT2UOprRcP1trQS2MsQtorDShYvIjM2vzsiTTE4fnz4/i2h
-IxwtEy0UiRvIO+oUHTq3VSKF5Hx2vPNf+TOOMXg6r/gZ9Y82TUqI2ljZ3KS0eAYN
-glgGTYLOCuDtHM4LzrHADTeIkbwoVyy6nBGwh9csRp4DB1XGmMVV8hTVUnmU7K2r
-ae7jC2D/HumqifbNg+1poxRFSt6YayHA/HC3hutBcd8hO+n245HOLT7Ujuo8pEt7
-nk8N2hdoBgBIoYNBvAa0ykdP3cSYmsH9wC63hSzgasIM+x5wHizR0CSkegEC112A
-PoZqSUVfubEO1B4BVrdsRtG0Vo0g0Q==
-=rJoE
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfFWa8ACgkQAVBC80lX
+0Gyvxwf+IUgj1fFhKvX4Y94ZR3BUXvqn0nfmHRRT5lY8Nq6wnjhFwsrSK0GQ0E1R
+S9M210O2YP1AiEmhU79ye0i5hmfuRWa3CVfss5JCwugis7/4Fztdlr+aI65Ta6Ru
+0b7C497h5KXP60Zrxtp07wSQV9Px9eVnTuZYoS3xWDovD7GDk2Raz5eCYFw7aqcX
+RRwoYiF0tm7TKy/+5FVX0DnhKAzgcuEg7ePKhAkWq6D4qY5RSsAGKbTyxcSwQ5fH
+oKMywYYPJgkloXFhtlwBbYhso/qNxhKKBdSbhTN7YuJN0enRBBUTJwSZG0svOgIi
+NSXHrSzu2h64LqzG5I78HtMoUozoww==
+=s/dP
 -----END PGP SIGNATURE-----
 
---Sig_/teg/10zs3vEuA_CCwjOn01H--
+--Sig_/kV2jVTek5sdVoFJKnR6Yt71--
 

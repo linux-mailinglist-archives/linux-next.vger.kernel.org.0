@@ -1,87 +1,87 @@
-Return-Path: <linux-next+bounces-5652-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5653-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38D84A4FAB9
-	for <lists+linux-next@lfdr.de>; Wed,  5 Mar 2025 10:54:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2415A4FB2B
+	for <lists+linux-next@lfdr.de>; Wed,  5 Mar 2025 11:06:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6ED1170B8A
-	for <lists+linux-next@lfdr.de>; Wed,  5 Mar 2025 09:54:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A35BB7A2E2F
+	for <lists+linux-next@lfdr.de>; Wed,  5 Mar 2025 10:05:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E029205E06;
-	Wed,  5 Mar 2025 09:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DAC91F3D30;
+	Wed,  5 Mar 2025 10:06:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZbuhRalR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C1SY/bqW"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5773A205514
-	for <linux-next@vger.kernel.org>; Wed,  5 Mar 2025 09:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D35D205E14
+	for <linux-next@vger.kernel.org>; Wed,  5 Mar 2025 10:06:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741168434; cv=none; b=Ej6rAokx7C9PHC2Dh2/dd7+jHrEyMF5XZo4Kbl5j1cs6pewws8wQJ6goy4zDKO0PflGf0o+Gs1dsOlDfX3UjPvYqFvCVKFCoqJeta/wCknT5Cz4TyUDTNJ0rRugcKpAsgR392GWN9U64vLp06uwInpsoVRn12AhE/7P5Ob/qwUw=
+	t=1741169166; cv=none; b=nQbCvqOE2pnlv0ZEIvBO+f5zMTeXrgOpxXD3U+z3A8FXn/PlRyrSxjAwLWqRzH3HwLFMXv46ZMe+BjIMdE0hEg93o0rUnPr9Bg78DSHYmKO4RYkicWL2cVQPgeQczNNE8vDwWWiRCW2Z1Ykl6gB6XXvxGP6Wx+XtGJkc18xlxzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741168434; c=relaxed/simple;
-	bh=61itoehDo/+0AMvhVCNYYRR2REnhSzSWwlWLoqMvDto=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F6mX6h/iaHOmxXSamrQw/prcGB99pQT+7PUAh2ms42NJ/Fdm1Yoj8RRbpTFHsmUo1ux2LBoQhBakcMiITQKJYnW1XCqhKl/KUABBGw605weE2ltRzwTWTMKOHc4Kq9arVdTNLWhnkWDa7vdrMTAuFrGBur+9CEesJhgHC3BnDbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZbuhRalR; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1741169166; c=relaxed/simple;
+	bh=WY+zIeVUgJIaWQiX/gYofVRzNoFUY/a9OcyVS0cUUHE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Qi4yh0xw/6R2eTtbiFjFrzJRcTPizeiQ9LIFDOuTayxKfxTF6gcuEdxJIts+0aReuW4zmKzyBmUd6EiAHul0JGQQ6bOrKN/SM66wXWgRGX+5n+UmLQcjTSE6mzSGBjt+caW4ejezxUVhFXk01/AdSuo8zcHh24V+si5WcVLmwrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C1SY/bqW; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741168431;
+	s=mimecast20190719; t=1741169163;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=KZUbRmh1B4qOIuBb44nafoTkzo3Y9FAH9V3whMAn34c=;
-	b=ZbuhRalRCkB6YBRe2dQNQ3irtFeETguVeVXDvcYlA38vYcwvtQpmCk2mdEwOFddW/Ym/sU
-	UAWW2bqKobj0KXyGFWwD/5Yxxwp/bBWn5wsdbfrvqm32uc2WP+yAEfpJVpBrCztyHaBihP
-	2XFOqNrpPxznvGgfmtvKF0T46Jce1o8=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=NNFkD3yJMXGsZ7dYT9vi/qSLfD1JtRCchFs48x32YvA=;
+	b=C1SY/bqWKL1GtaGMB06rn2rrP6SgGvI3FKw3njoVfgkSxAexF8nCUe3qWzkFll1bKEiSri
+	0ssxvRjBhOyV1UXzx9MEFtxGa+ReiE6c/IaySRZ1JMwqiYTd3GxjNvCT4I0B0jNlQQfPUa
+	HIEkT351U9G/yx0RdbTHO0lR3Ifn80Y=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-629-5nNEV4vCPxqfWjzdcbUCSQ-1; Wed, 05 Mar 2025 04:53:40 -0500
-X-MC-Unique: 5nNEV4vCPxqfWjzdcbUCSQ-1
-X-Mimecast-MFC-AGG-ID: 5nNEV4vCPxqfWjzdcbUCSQ_1741168419
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-ab7f6f6cd96so774864266b.2
-        for <linux-next@vger.kernel.org>; Wed, 05 Mar 2025 01:53:40 -0800 (PST)
+ us-mta-288-uXZc-CbyMr6r6zj-Kk6NVQ-1; Wed, 05 Mar 2025 05:05:57 -0500
+X-MC-Unique: uXZc-CbyMr6r6zj-Kk6NVQ-1
+X-Mimecast-MFC-AGG-ID: uXZc-CbyMr6r6zj-Kk6NVQ_1741169156
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43bc97e6360so11649585e9.3
+        for <linux-next@vger.kernel.org>; Wed, 05 Mar 2025 02:05:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741168419; x=1741773219;
+        d=1e100.net; s=20230601; t=1741169156; x=1741773956;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
+         :content-language:references:cc:to:from:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=KZUbRmh1B4qOIuBb44nafoTkzo3Y9FAH9V3whMAn34c=;
-        b=O5NOhfQGBpXs01pBbB4PsS/fsMr8/oVPUpDgQ2VKBT2A0LYoQa6xFzSiMxT9SS5tr9
-         YA/yTELrL2ixgKGlJgarWLV18TIc99NyBa97Kh5lNvraPR9jH2W2f7qYGTdpkYAgrJBY
-         J/FtzEy2LkCA84OXtfJKLnoBuqkkM/sa9mnSCCQm+XyeU4brlx8/tqRFdG0/qk8x+leI
-         7efHyFk+S008rlKOGqgq7G2icYj1W1TIFVXbuIkcHqu5s2ubPzpAIR1TKyWmx3LUBNbn
-         do1csvoe6qTncMD/mkPiz3FdM3g63kcVtF6nVz+j9NFQ6tn3Kc8f2LuOvzU0zQz93r3o
-         PxHw==
-X-Forwarded-Encrypted: i=1; AJvYcCXpMhEDPJ/f7PiW96ebrM3X3zmwAsOegB2X3yRe2k/x5rEP3xJolB0bA5FsJognVD24QWdk3FcGWQaa@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHLCk5zTloU+jcXgp5Fpa4OpsIyjl3yC8QIBDLggGprnysgL2C
-	mq0b9uJ+aFREkJm8A9aN52d5EH/Spgc4Tfmu3h+fkD2tpowvsQC1cJypEVjhEpQSnDTx72TcrZk
-	/RbKt7bnwtrZMsvY2pVj1Yr/+jQZwr/hqUdq0YmMzkH2+QM8444IDvcN7hmM=
-X-Gm-Gg: ASbGncuMuDRnlal/FsEzgF7BWgfDV25lPfST5AoVgfZrkmLeIzqEHvpn6C1jzU6Jcq4
-	bOnmONn5l0vpkbjduyshgI3SCmadX0IISBFZh3X8UadYlBEf+rs1rCHXaN8lXu1f2gp6NNdnMgo
-	RiE7/Y4JAm+J0EEhAQvEruHM7yVBf/ihOxY6z9QWZ/3IDF049q+f7af/RCWDGpZ4JbpjYk/Z9TF
-	c82gyNtCjm+iFj2at8biW/+xx08wEwsF4hgekVyavRGuBj0a84TJbdhHmJF1QGCohosDBNjniH+
-	Crj/UdZekICgT4T3aLhj//UvtNXM45eHosQl+3P4nn++blxXbQ==
-X-Received: by 2002:a17:907:9628:b0:ac1:f002:d85d with SMTP id a640c23a62f3a-ac20da4267fmr225772666b.6.1741168419164;
-        Wed, 05 Mar 2025 01:53:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF4fThcJunLaYFnyAZ4NBO3mfl6nINuYRG54xpBa6CGqbfms1JCJEFzRseCiwKWwERlTipSKw==
-X-Received: by 2002:a17:907:9628:b0:ac1:f002:d85d with SMTP id a640c23a62f3a-ac20da4267fmr225771166b.6.1741168418744;
-        Wed, 05 Mar 2025 01:53:38 -0800 (PST)
+        bh=NNFkD3yJMXGsZ7dYT9vi/qSLfD1JtRCchFs48x32YvA=;
+        b=bvgc7pySiO8wiOol1bEtT8acsv5r4nEciYTI/Uw1QbWZmwLVQYX1f6j385YoJdTate
+         ecUKNo4Cykz51Azl49jO0sna18C23CzWsg0jb2MjJD2N6tCF2LYuX/HthFJ5zCM1ziDw
+         7jmfvULcl9FCngF1eXEWRJAGVLW29zU1PLAnp8x7S9l8IsAcw0/4OjWQFpjeNz7UI17a
+         yEtbPoPDBqRRkZsvaSeVP1nA6YElBmbMqEsZGvABQvQVi6c0ZrJG+wzusyc/akoAqslY
+         CUsxu6of9DiyUiFLNTvBJbx7aReuu+ltVbPeZjvJk2o+w+W+Hj2m9cadWAdy84s/UzLg
+         zKTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXJTzTPdBOtl3b0XjVN0q9aBcxegfgcF7z3myfCiuQQyLjU1JpEgi7jc0EgO1Pfp+QlPMAkYaOh8Dhq@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+PNcqQY5M59/FwkyVGdDUdciim7qG7BmZEtpFLaoxXVBYaKH3
+	XAPyOC0s6G5beeKr4t8hjHnWMhtEbHdpfXLMrNG930jd8osuSXdX4NpN6KNq+FV9GVuK487oVYt
+	t/SdWiVDx/7tR5+GU0sWht2ODuXViJbMOOHIZ6JxJP9nP3ELjf9gitwQczxs=
+X-Gm-Gg: ASbGncuq0wsv/oe6NXIO87aSS/j94EKeHp3hgq5NWknYzg/u2pE/jHaa+f75SjDhCyH
+	VX4qtnvaOsTp882UvPcspubc6xJXBcYixJekou/5xN4wAmIHIV2GsoBiOIwTi2OeRPhRw32YPET
+	rcgM0FsYE6VCLXUdS/2oK+Z6ktUVy9bX9163slDv2ANgo4w1XmH8mcDaFXP9LZxUypmp1psYi9z
+	QYA9sKoetjHxWg2Kb1jztm9YPbUPwRIGiI3zKCTGx3oA82gkb8mMx5DSA8/6CceC1cc139GUGiN
+	ocwCJ73O/n4879UdRlff4ewKEyPaFSOZcT/rF0fbshafx5nh8A==
+X-Received: by 2002:a05:600c:510f:b0:43b:cf12:2ca5 with SMTP id 5b1f17b1804b1-43bd29bdf43mr16028505e9.8.1741169155945;
+        Wed, 05 Mar 2025 02:05:55 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHJeURn3xSuMkANSUI7T/FJM9SVUqsXBCIFmFMOgfPzlxfScJZ0uRgF6ZPa7hJFUZvSASU/LQ==
+X-Received: by 2002:a05:600c:510f:b0:43b:cf12:2ca5 with SMTP id 5b1f17b1804b1-43bd29bdf43mr16028335e9.8.1741169155644;
+        Wed, 05 Mar 2025 02:05:55 -0800 (PST)
 Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf5d0bcb77sm677668066b.49.2025.03.05.01.53.37
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bd429215asm12569075e9.11.2025.03.05.02.05.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Mar 2025 01:53:38 -0800 (PST)
-Message-ID: <016b7cb8-451c-4d81-b3c2-e98fa0bc330a@redhat.com>
-Date: Wed, 5 Mar 2025 10:53:37 +0100
+        Wed, 05 Mar 2025 02:05:55 -0800 (PST)
+Message-ID: <787bc86c-b49e-4120-9eb3-0c5e0156a5eb@redhat.com>
+Date: Wed, 5 Mar 2025 11:05:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -90,12 +90,13 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: linux-next: build warnings after merge of the mm tree
+From: David Hildenbrand <david@redhat.com>
 To: Stephen Rothwell <sfr@canb.auug.org.au>,
  Andrew Morton <akpm@linux-foundation.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
  Linux Next Mailing List <linux-next@vger.kernel.org>
 References: <20250305204243.0458b36e@canb.auug.org.au>
-From: David Hildenbrand <david@redhat.com>
+ <016b7cb8-451c-4d81-b3c2-e98fa0bc330a@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -142,33 +143,36 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250305204243.0458b36e@canb.auug.org.au>
+In-Reply-To: <016b7cb8-451c-4d81-b3c2-e98fa0bc330a@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 05.03.25 10:42, Stephen Rothwell wrote:
-> Hi all,
+On 05.03.25 10:53, David Hildenbrand wrote:
+> On 05.03.25 10:42, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the mm tree, today's linux-next build (htmldocs) produced
+>> these warnings:
+>>
+>> include/linux/mm_types.h:482: warning: Function parameter or struct member '_usable_1' not described in 'folio'
+>> include/linux/mm_types.h:482: warning: Function parameter or struct member '_mapcount_1' not described in 'folio'
+>> include/linux/mm_types.h:482: warning: Function parameter or struct member '_refcount_1' not described in 'folio'
+>>
+>> Introduced by commit
+>>
+>>     bbde3b621cf7 ("mm: let _folio_nr_pages overlay memcg_data in first tail page")
+>>
+>> from the mm-unstable branch of the mm tree.
 > 
-> After merging the mm tree, today's linux-next build (htmldocs) produced
-> these warnings:
+> Hm, we also don't document other dummy placeholders like:
 > 
-> include/linux/mm_types.h:482: warning: Function parameter or struct member '_usable_1' not described in 'folio'
-> include/linux/mm_types.h:482: warning: Function parameter or struct member '_mapcount_1' not described in 'folio'
-> include/linux/mm_types.h:482: warning: Function parameter or struct member '_refcount_1' not described in 'folio'
+> * _flags_1
+> * _head_1
+> * __page_1
 > 
-> Introduced by commit
-> 
->    bbde3b621cf7 ("mm: let _folio_nr_pages overlay memcg_data in first tail page")
-> 
-> from the mm-unstable branch of the mm tree.
+> So I assume there must be one way to silence these warnings, let me dig ...
 
-Hm, we also don't document other dummy placeholders like:
-
-* _flags_1
-* _head_1
-* __page_1
-
-So I assume there must be one way to silence these warnings, let me dig ...
+Ah, likely because they are part of the "private:" section.
 
 -- 
 Cheers,

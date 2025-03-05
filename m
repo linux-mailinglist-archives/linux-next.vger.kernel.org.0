@@ -1,104 +1,106 @@
-Return-Path: <linux-next+bounces-5649-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5650-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06C59A4FA8A
-	for <lists+linux-next@lfdr.de>; Wed,  5 Mar 2025 10:46:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 360B7A4FA99
+	for <lists+linux-next@lfdr.de>; Wed,  5 Mar 2025 10:50:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F7663A8DF6
-	for <lists+linux-next@lfdr.de>; Wed,  5 Mar 2025 09:46:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81111189257F
+	for <lists+linux-next@lfdr.de>; Wed,  5 Mar 2025 09:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8BAC1DDA0C;
-	Wed,  5 Mar 2025 09:46:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B203204F76;
+	Wed,  5 Mar 2025 09:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gOdJUsPP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O9wpaTGD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AEFA1FCCE8;
-	Wed,  5 Mar 2025 09:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5912AF19;
+	Wed,  5 Mar 2025 09:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741167974; cv=none; b=pCl0Nuhh+1kBJ35M+NHilQMnpEEHbYrMsc1+RjGyQ/Af68NnTDOAfD26eYY9a9RaltVZ0k5OuBCjlxCr67YvKqGg0re+/2cFPDCJbx3OtfoaeSywOFJYzcfwza1Y4qRs2UuyCpx6uh3zsBrkeDUOz4jyd+m6GmBty6xiyEHYmbs=
+	t=1741168251; cv=none; b=DkI/2N9LxSFRzGtI0rZnDUl6LqBSUCkC9zU2XjE9Ylo8yerMHFJlQXgEGUfIqkdkEKe+EVDedrr9Lqk/dIwFsh4MnsHSTs7sRO4zQtoI9hHN4AFgDh3BM2cePTq1L/NtriKKfcurH1LN0uWdArF1+vWhy4ly1mtrwtLuMRS6Rqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741167974; c=relaxed/simple;
-	bh=Kbh54lUmjGIQEV9Z+S046yWHQF6mX5mCkffxwogPYLM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lzo3Q/kLzQI+6cSDyMfV5IpU2qsp7zqizifgS8e8NskeJYnHmS6qDP4kh9RDOPbrs4yZcsm6Jl36fQw2Iaxtg8rntOocidHfx0j4wb6xgNbOy/jQq1+oPk7Fr0PTYYPpaeQIM/EnkBozqXhocNfKeP9jsR/NGQLPMCREsZG5GdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=gOdJUsPP; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741167970;
-	bh=0Gu1V4/nJxO2iA8JXqIJ5mOf1MVk4F+sy+iz/DXJbxY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=gOdJUsPP1k4kHTHRjNR/R6ovuXI8p4RNms5/SB0H8KVcBfrDee1Rca90hRfn1jcBc
-	 vxa353VK9s5rjK3spClxLuq3k5KVoIt7uCGem3qjOp+9S1A9tLSMhkkympBTwJHT0D
-	 ljNjPQt/tS76RGRMqysLBXH3+GZsZdEd3vOzjEkbdhSjKVvhNEr41FXm1WL06hxIJV
-	 YZowLCYxGpYzbpuhfJOem2Ax6fz7e9PWzGPyivpxkZwC8zm2cYO+/isXeG7PrFSCxi
-	 mzU5VlPyEHexmMTKGPhLjAoUwvi2OOfZGkQrb0n3PpNlwUoGOpJtaNfwwlus1A2XD0
-	 VuQxG/Qj+fmbw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z773Q4Vhzz4wgp;
-	Wed,  5 Mar 2025 20:46:10 +1100 (AEDT)
-Date: Wed, 5 Mar 2025 20:46:09 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: K Prateek Nayak <kprateek.nayak@amd.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of Linus' tree
-Message-ID: <20250305204609.5e64768e@canb.auug.org.au>
+	s=arc-20240116; t=1741168251; c=relaxed/simple;
+	bh=hnJRTEp2XkZ9SG0QTXH32cGwhu/TM3DNRhvETCrTwC4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iUo8TmsihWj/5hjP3EXsBYY2okC8yLNqrHg8IXwFloopPLdpC7Fs1cY/CwbutioYo+dVqxgVqb6/c3PxPwcu7seempfPaWplie8vG7XAO5dQGa6laIRXA6qBJ7Mz55ci/CgXpNHCMXSuzrDp9BnYA9Civ0kbRmoNxnb/RvBOpZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O9wpaTGD; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e4d18a2c51so800777a12.0;
+        Wed, 05 Mar 2025 01:50:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741168248; x=1741773048; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sy8FAWYaFbmXAZB/as+Gcpy61NGKNxmQZzWDH9kXc+I=;
+        b=O9wpaTGDsdHCxZTwCQhxgbEKPXrrZG+u1XcTwX7M9dVRF45yine0eBvK+bVuKUiOo/
+         YBukbzFAOKLpyO+2YVqr/JWAnMEr1KjktyRQdE551dz2Ze6uDhv74qPJO2rH/UZ4N1oE
+         u2N9pOPqoHVQrn9pxUD3ciBL2IEcsUlP+AEUrzOgz8V0YvPxvZ0QDTitVlMHk3+FkxFQ
+         YVXl5c05RtuSx7nO/Gd+5E0j3bmYmqqwDRKP3yZaGClmJYJoJq8fk8E5TMT1y6fDzDMr
+         Lm8jLm4tMXwP+hkYY3w6uS77xI6pXCfmdRTRJv9Z/l3kgA+e5lCuLrJLWuD743c1uAOC
+         BeJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741168248; x=1741773048;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sy8FAWYaFbmXAZB/as+Gcpy61NGKNxmQZzWDH9kXc+I=;
+        b=mf75xuaL3zdqQ1VOmz4Kz9cHdVSuHckWWkRDU25Frub798H9FB1A9/lgjLjfjSQBWu
+         Q90VBTMzMWSCwH1c3QxgUh5GCYU3ihcAT0VrbCjMrA31oODjj7LWJ7ZQ56fXqNdLJJL1
+         TobCiG+xAQNgTOHNfMM7jwY2rrXktRnhEz5zKtWKAl5AFeCV/VG1kbNpH68jDk0zyjNQ
+         6gGQN7g9ILaOmbyQymMosyb2g9qWyjAeuKGwwVPFH/BwZjS9XoitS4Ww8FOlY/m//Fk+
+         23s1Iy9LSvLs+Oe0kh3SarLGhi2fiS1ncUatxx5TFurScM7ckuxl9lxWOiqg+cNq5MQ1
+         qzLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCURs+8uwFg4mPXOhUTEUQ184gYpldNq9z7OR/9QW/PrsMYiATPRPB2lFxFOz//JstoBXX8IeolHUHI3jx0=@vger.kernel.org, AJvYcCXWkyjGIroGI9qiydSHLSK7A3NNGKvldqxPBqJIIPiEVzT1QUgHBUlPUPmJq5utxFO5AwIQMUDFLAkmtg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJ9Udl2xu8tPfoM+exU7Vn3w5k7oWV4W2xkrWv+En5ZtdQB//P
+	aIg6UfpRwGlSYUhIIO4aOoeigjFsUoPeUFuo+jE8+weOVVmRxKZ9Jv7LnihJVTSV9ckTio2blq0
+	MqWL+PjDAS8LHTs5LS18N5dWYjVM=
+X-Gm-Gg: ASbGncukZL2k2bZfvhr8t6XSaYWNTg6KSiTQNVM64BywZ+6ExZjCHcinsXFC3PdkRzc
+	hA+WRKzRotcga7OwJrm/uj3YzBSUTcjxa/MdCfpnJ0rVmuXK+DuaiPvLWS+mq3VSn5v5ZbZ00qs
+	cVwpIPPBuwlkXq8CJwcpCJLPtA
+X-Google-Smtp-Source: AGHT+IEQrgiOAdQNy2yBIyuqBwe9bX4LyjvCptdkUAZ9XPg9feuMNZ2nYBo0nMfB64Zz26Cd3qkdO1IcpskzU8aV5iY=
+X-Received: by 2002:a05:6402:28b5:b0:5e0:e845:c825 with SMTP id
+ 4fb4d7f45d1cf-5e59f4b6e4cmr709556a12.10.1741168247563; Wed, 05 Mar 2025
+ 01:50:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jjg3g/lzvcleZ9axxS/mtzj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20250305081848.4f3023e9@canb.auug.org.au>
+In-Reply-To: <20250305081848.4f3023e9@canb.auug.org.au>
+From: =?UTF-8?Q?Tomasz_Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
+Date: Wed, 5 Mar 2025 10:50:33 +0100
+X-Gm-Features: AQ5f1JoClPScNT6yozSEtd1Y5XwnYOA7-Pf9FF4yMEPlWpX6E32QLHyeIW0cL0I
+Message-ID: <CAFqprmzZ8ffg974PXLCCJs+Zwu3cCgX+Pzp+FPWVYnOXwCMDFw@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the hid tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
---Sig_/jjg3g/lzvcleZ9axxS/mtzj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 4 Mar 2025 at 22:18, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commits
+>
+>   e2fa0bdf08a7 ("HID: pidff: Fix set_device_control()")
+>   f98ecedbeca3 ("HID: pidff: Fix 90 degrees direction name North -> East")
+>
+> are missing a Signed-off-by from their authors.
 
-Hi all,
+Seems like I forgot to rebase with signoff after cleaning up commit
+messages. Sorry for the mess...
 
-After merging Linus' tree, today's linux-next build (htmldocs)
-produced this warning:
+What can I do to fix this now? Should I resend them with SOBs?
 
-include/linux/pipe_fs_i.h:118: warning: Function parameter or struct member=
- 'head_tail' not described in 'pipe_inode_info'
-
-Introduced by commit
-
-  3d252160b818 ("fs/pipe: Read pipe->{head,tail} atomically outside pipe->m=
-utex")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/jjg3g/lzvcleZ9axxS/mtzj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfIHWEACgkQAVBC80lX
-0Gy+mAf/Sx863aHt2WG2LV71U10QgzZ7PLG5zyJxcnhjryR8Z6Rk7qsdZsgKfwLh
-Rp6x63Wywk8DOgWh5ZzY/VmFdx8nIOuNp89hBXGDculcCE7N/VRdUEmMusNRGcCr
-1BzqMhFPUUYUXyYyeU03UgYW23zWJFRNeIJi7qFVFwTH6JN6KWEuDk2a7eoEivcg
-ap2kAXUE6Zzcuar/o7d5roPe+ilr18crSg74/F9yMHxpcKDoYfUK1+DzRGLZripi
-A5YrOHQA6RyIDjDNdFpCQ7TD+JVB+Gk/T3m2bg9D1rYfr+FrubYp3RgVMLEeUA1S
-BCOxvmqKyjXRncbyMH4onBn5v8hb5Q==
-=0X+q
------END PGP SIGNATURE-----
-
---Sig_/jjg3g/lzvcleZ9axxS/mtzj--
+Thanks, Tomasz
 

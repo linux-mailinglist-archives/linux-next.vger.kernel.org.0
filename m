@@ -1,154 +1,104 @@
-Return-Path: <linux-next+bounces-5675-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5676-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A33DAA5577C
-	for <lists+linux-next@lfdr.de>; Thu,  6 Mar 2025 21:33:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 028FBA5595E
+	for <lists+linux-next@lfdr.de>; Thu,  6 Mar 2025 23:06:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AD061719C1
-	for <lists+linux-next@lfdr.de>; Thu,  6 Mar 2025 20:33:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 655441897A97
+	for <lists+linux-next@lfdr.de>; Thu,  6 Mar 2025 22:06:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD361E2847;
-	Thu,  6 Mar 2025 20:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C396207DEB;
+	Thu,  6 Mar 2025 22:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GB+fsqCS"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="mFSeYwJv"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD9D249E5;
-	Thu,  6 Mar 2025 20:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC171E5B86;
+	Thu,  6 Mar 2025 22:06:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741293194; cv=none; b=FCb0Tf4A7KWxGaWCLavKd3DYbBwTeKqSAL4YspD2r70fk+9qsR9A+rnFIMhq1yE8/C7zCXHxVQY4TPDSKOYcYWbz6ATmEXN4CAITcV7+MGHVY6QA2jQEzY18GaFCQxJzjUYLV+Td7wjmG36NQKW0kX32tln9+sbQ4hAXIoKrPT4=
+	t=1741298807; cv=none; b=GlyEF8mmWwW7l5/fk7FA3yIaqrfbhBVT5Zmc5g2cCKckt0PriH+JxnsaCgzVpzxmRSPshykhTZ+b1sWt7WjJrHreGQqCh9HIPyGAAGwA3glZr+06TsnsVVZ2SN73EVZ8pwJF0SCO857juN0ZamY0ggJMyl4MDDGtzVvIKDTpDCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741293194; c=relaxed/simple;
-	bh=/B/dgHCaf/WXr+8smSFGBmSJjg34I4qZgAsvS3yMQzA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SLDmRu1e651Z9aNSp9aXXo8DhnzEYSsSlyBLWK60RCgD7HjFrcnjPKWJG6CaQFaQSA4dLYtyqVwljRuiiNATT1pC2Q504g0Ok7fjw6OLtXY5vg5/lmsBivc6fkFgWUAGBdIf5kCf/vDY+UFjZZ6IJKaQqKKJwgZq3VpfDOLBVkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GB+fsqCS; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1741298807; c=relaxed/simple;
+	bh=iTF8ppMN6fCiAQ5R8gaeHJUCHhVFNmTxr9N7FCNV8f8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n6gkIpGKXFAOR0MJIJxQ15PzF4QKAV6VHfPc8HWSAImVlgB2YQHRvK0sFicAz3VJ2D4DtXmsWxPDCI3/f1gZygO5Oi/sDeIuZkO4g3JGhzy7I5AM8PAx/n0NTddRAgvJND9WwsC55tOG2X+ByS0fYyEcm/CTNoxISlNHQowwsDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=mFSeYwJv; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741293182;
-	bh=wZ1HYhtvdyJIi1dGY0PXWUvMpUPQFuoHpk/qt5WIhys=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GB+fsqCS85X9n6B7t76eCBWvQBZdbJgXktO6hZba/Upm9QVHGoN9PjpOHVrqrIC/H
-	 J/QqEQAqROdJ69w4Xd3xUU1OCpT4SDjDuOOM1vv+NoUyOdD68CT9V3xtabJvlLNqAu
-	 jqnDyZuRUy93ZYf078/vvz6+WMYgHsL+YCowvLLZt7cC8wUBADEz1H+dgNB3Vs8qWE
-	 WZ3tDLBle/iCopB174oteHM28Xm0qKMvcRbz6acKYGBv0FJ/RYRppOd5fzQDdG/Abl
-	 4pb4pdZwErf0AtyomeioJnbe00rD7x1/h9RMoPvCDXk2oSMnuf8HhWSP2OFvIgy/GG
-	 ld9s+yTP5BW9g==
+	s=201702; t=1741298800;
+	bh=2oEQi1LZ6xfE0bhgFOyz7ltxkaGs8EDtR40dQPh+GcY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=mFSeYwJvFazdUS9+uw3atWdbT3EuD1iAivDF+iurlA/54ZUrzCx6dYZJOhrOfdla/
+	 PoU8EsZJI+xuC9SM0I8VMKkWskgRsmiqz+AzmpOmxJQtiGldfmzknnIQnRu+P6/3KI
+	 nWa/cWUmKlKZddqqQmsZrPVWgmfonNGRPGHxYIr2HEiZFgtcrkWvQpX6d0f/Zok0o7
+	 nquYHb5QWpEEYSvCH+GRhnWCYzLgi498JGBDpypNv1RKO+XQ0YSo0AaVqxN53Gh46Z
+	 ZDNUnklhkbxVRSDWicW8QiDv7BgtULNctD/1f7lo74jVGCLcrfTCA8dyYHiIEfbbR+
+	 1cbuL66kCHaAw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z81ML2vKfz4wcd;
-	Fri,  7 Mar 2025 07:33:02 +1100 (AEDT)
-Date: Fri, 7 Mar 2025 07:33:01 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z83RN28zMz4wcT;
+	Fri,  7 Mar 2025 09:06:39 +1100 (AEDT)
+Date: Fri, 7 Mar 2025 09:06:38 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Zhu Yanjun <yanjun.zhu@linux.dev>
-Cc: Doug Ledford <dledford@redhat.com>, Jason Gunthorpe <jgg@mellanox.com>,
- Leon Romanovsky <leon@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the rdma tree with the rdma-fixes
- tree
-Message-ID: <20250307073301.5f3da8be@canb.auug.org.au>
-In-Reply-To: <4d66668a-ff8e-48f6-a5e3-98ada08c5037@linux.dev>
-References: <20250306123733.5212bf69@canb.auug.org.au>
-	<4d66668a-ff8e-48f6-a5e3-98ada08c5037@linux.dev>
+To: Kevin Hilman <khilman@baylibre.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, ARM
+ <linux-arm-kernel@lists.infradead.org>
+Subject: linux-next: duplicate patch in the omap-fixes tree
+Message-ID: <20250307090638.50776e07@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8FoYGTOxuG7hwJhcjICqC/o";
+Content-Type: multipart/signed; boundary="Sig_/J8OBaT5jmFBD_wXUWwzJR+7";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/8FoYGTOxuG7hwJhcjICqC/o
+--Sig_/J8OBaT5jmFBD_wXUWwzJR+7
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Zhu,
+Hi all,
 
-On Thu, 6 Mar 2025 11:19:24 +0100 Zhu Yanjun <yanjun.zhu@linux.dev> wrote:
->
-> >    	rxe->max_ucontext			=3D RXE_MAX_UCONTEXT;
-> > +
-> > + 	if (IS_ENABLED(CONFIG_INFINIBAND_ON_DEMAND_PAGING)) {
-> > + 		rxe->attr.kernel_cap_flags |=3D IBK_ON_DEMAND_PAGING;
-> > +
-> > + 		/* IB_ODP_SUPPORT_IMPLICIT is not supported right now. */
-> > + 		rxe->attr.odp_caps.general_caps |=3D IB_ODP_SUPPORT;
-> > +
-> > + 		rxe->attr.odp_caps.per_transport_caps.ud_odp_caps |=3D IB_ODP_SUPPO=
-RT_SEND;
-> > + 		rxe->attr.odp_caps.per_transport_caps.ud_odp_caps |=3D IB_ODP_SUPPO=
-RT_RECV;
-> > + 		rxe->attr.odp_caps.per_transport_caps.ud_odp_caps |=3D IB_ODP_SUPPO=
-RT_SRQ_RECV;
-> > +
-> > + 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |=3D IB_ODP_SUPPO=
-RT_SEND;
-> > + 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |=3D IB_ODP_SUPPO=
-RT_RECV;
-> > + 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |=3D IB_ODP_SUPPO=
-RT_WRITE;
-> > + 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |=3D IB_ODP_SUPPO=
-RT_READ;
-> > + 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |=3D IB_ODP_SUPPO=
-RT_ATOMIC;
-> > + 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |=3D IB_ODP_SUPPO=
-RT_SRQ_RECV;
-> > + 	}
-> >    } =20
->=20
-> The above snippet is from on_demand paging commits. I do not why it is in=
-volved in this commit.
->=20
-> It should appear in on_demand_paging patchset.
+The following commit is also in the arm-soc-fixes tree as a different
+commit (but the same patch):
 
-That is not part of the conflict, but the change is there on one side
-of the merge.
+  c2a5f8c4f28f ("ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP")
 
-> >    /* initialize port attributes */
-> > @@@ -107,13 -141,18 +133,13 @@@ static void rxe_init_port_param(struct
-> >    /* initialize port state, note IB convention that HCA ports are alwa=
-ys
-> >     * numbered from 1
-> >     */
-> >   -static void rxe_init_ports(struct rxe_dev *rxe)
-> >   +static void rxe_init_ports(struct rxe_dev *rxe, struct net_device *n=
-dev) =20
->=20
-> In this snippet, the variable "struct net_device *ndev" is not used in th=
-e function rxe_init_ports, it should be removed.
+This is commit
 
-I have added that to my resolution.
+  98f3ab18a0a5 ("ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP")
+
+in te arm-soc-fixes tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/8FoYGTOxuG7hwJhcjICqC/o
+--Sig_/J8OBaT5jmFBD_wXUWwzJR+7
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfKBn0ACgkQAVBC80lX
-0GxmnQf+PyByGeLhdFZfc9oiY1Qz3JTJZ723VTNZyf523Mj+6J/GakL9fARnj3jI
-1kEORRWAWfkQIxPckZUoDT/XnmGsLhh4WXhBqrBkySelBKQGW1QgKaB7Pv5efShf
-4EQmOrRI6tJmFadSKO36mF2ZE3dSjzp8I8fHMXO0GPr4eH/bOREVVLT02S/uZ4oh
-Y11s2h0QG4Fu81yyEcks7Xrn3LyS9tn1la2gFmJc1Ouf1oVIgXMw/BYefjNqiHXh
-1aCeYaSwADuWrerEUij4BIokrJX2Tlx5vxbg3yu6yea6SFX/VSMZS1ccRRN6oqrO
-paPC9F8MHMooxQoVBis2ejgFhBWYkA==
-=o+r7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfKHG4ACgkQAVBC80lX
+0GwKVQgAmaElUzhxVDZCZ9+6iOJiUfdWkczTvDEGc9MM09eQVj1jOH4rqeUhQw+w
+3o8gY6W0Slpk0yDbA9UOpyALs26vbEC25ivA2dz+exhxqkIYgdIJvoi1jjP+G86k
+U+fbpV/2VoPQQbUiuI1tUfDQ5e5p1B3eBCtdI/ZeY71a/cVZ2m/EpimBwE/pikxa
+Es6c/I2ursNu1eZJaB2QzRFjZ+TC43IJ/hm3/SJovOnmMkYWeNm10iMRajM48aEF
+tEoH557wLxEzZTF6OMscOVIL8MhEiZoyzhR0uusBWSSnCqlaU99/rtMhZiaBTPWL
+RyifnRRP/WjVJp78vJSK9cdvEfP1vA==
+=n2Nr
 -----END PGP SIGNATURE-----
 
---Sig_/8FoYGTOxuG7hwJhcjICqC/o--
+--Sig_/J8OBaT5jmFBD_wXUWwzJR+7--
 

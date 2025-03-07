@@ -1,80 +1,70 @@
-Return-Path: <linux-next+bounces-5688-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5689-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 188FCA561AD
-	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 08:20:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5335AA56216
+	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 08:58:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FA403B3B5B
-	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 07:20:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 661847A5204
+	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 07:57:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7267C19CC3E;
-	Fri,  7 Mar 2025 07:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10D891A9B3E;
+	Fri,  7 Mar 2025 07:58:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="VkbXKxV8";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cGJ6YtS8"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="f1EOvKFG"
 X-Original-To: linux-next@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F3631A89;
-	Fri,  7 Mar 2025 07:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BFD1A8F95;
+	Fri,  7 Mar 2025 07:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741332034; cv=none; b=E10wYPAOTGT14szorzbhQKOIrJ58aln17ttkZoh4fzsNdLuwuuDCAlLKz3OVUvvBOxeITfpRehAyUiUF8nmDYV8TPDbvESIxmg9I2O2mkxptDV9vB83n9YEdZRmP328OAVJfO/ycuNpeiUGBUjwdSLFrj717I6EJes3bDNtAaI0=
+	t=1741334284; cv=none; b=kRFvR2t4uOPtHOq18hOJfmPkaUh1IDqvVsMkppKRXqLprTLcgVSPy+FTjr0uOIShKUbP4YAkrQxjwcihH2npCnl32qbVBvHas8q1bdSnA6D/8h5BQSRg35+GbXmoogoz/wQP78JP4EBiRUfXIM6zLDdD0Oto5egKDI/QVKXE3hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741332034; c=relaxed/simple;
-	bh=7zGI5yZLq64CnAlC+0CHrJw5wtsVAqpO1T1TOnMxXm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KKA0OsvXWKs6Yl63/7IcOwUMXwkGesFP2eHOBY1rvbO2S64NxHKFJzdwAaM2VOOla/9YX10JcfVULgDobppw/dD0DOv7v5zzmn7wAs30a3kT5/lb8FZApE5vfKoobxdBUb17TgqhvdPrjjrF+0ojFMZ3RicSsO4f3NhR9xcf3xU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=VkbXKxV8; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cGJ6YtS8; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 7 Mar 2025 08:20:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1741332028;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+AG5UruUxgLbWuATEg2BmmwXjmBgRveHzEkpzY1wPfk=;
-	b=VkbXKxV8MXuZrsifc8Sj8me2P5XnL3f8aiMKNa6vVBhEDWuwct1JyVpmlEelKwYiBXRolF
-	50nXZIAHVw9m0T8EUBpJ4oKq+OX6MZbH2pTI0dLupQHssCfzN+oUuyjpj8eaQ0DEDYyCLR
-	S/v50vv3rGlCHetFXoJAn6Pj7s9mwh0MCj8Ocg+itTyJZCy5RdYn++unslSEH1g0Z5sJyF
-	N9UFmLQEi1BphH4E+isneXKdrjBa4BKoT2BlNslo/xvGc6QEw8RXkPqJ5lFp13eCBikwn9
-	gojEC9SMdJHLP6hByEOTTR3ewtBKJAQ38Zdwxv/4bBhmtJww3bul1GDeAALPfA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1741332028;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+AG5UruUxgLbWuATEg2BmmwXjmBgRveHzEkpzY1wPfk=;
-	b=cGJ6YtS8XQY3gZzYJm/9YIFbFi2hl7gZQ1Raum4mCYQD1TThnufNJ34TiwTwhDSNbc8ylt
-	vel7hhOHHXQDjXAQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+	s=arc-20240116; t=1741334284; c=relaxed/simple;
+	bh=TTZ5b2b8XCNfyj5utGEHBLmrd1tViStOmfctcyMszsw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=aDl/6YTTYClhlpgD2+A6WVTqi2dqxNm3dLTE6pq6CAjvMvqzzz8UvOUUMRkj97R74LcClSkCpYI3D4HL9uUq2Ue9/OvOsUl8qshJWa/I7YXNuwNoa4FPyVeKMgk+Li2Uc/NezkewCx8v+4tb/DKfM0i+uNNQvo53RTaNem6J+yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=f1EOvKFG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C324EC4CED1;
+	Fri,  7 Mar 2025 07:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1741334283;
+	bh=TTZ5b2b8XCNfyj5utGEHBLmrd1tViStOmfctcyMszsw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=f1EOvKFGxbCRn7UJFzbNwqm2uiiTn5l860ao0aEnk4fQum4QBS6mlflEuZw+hDDu1
+	 iYu71EZzrokvZHE43M7HhhJBQU/sgaJ7fjkCTqBiaBHHqx0lS0YF7fOFuEtSXDsTRD
+	 9fsB3oudimM8QgnPJS9DVz5ea+kX6Qo0RcMvjcmA=
+Date: Thu, 6 Mar 2025 23:58:02 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Jeff Xu <jeffxu@chromium.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	Nam Cao <namcao@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Jeff Xu <jeffxu@chromium.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Nam Cao <namcao@linutronix.de>, Thomas
+ =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
 Subject: Re: linux-next: manual merge of the tip tree with the mm tree
-Message-ID: <20250307081733-c161a60a-a466-4f38-9024-0d89d7ff13d0@linutronix.de>
+Message-Id: <20250306235802.ff0f406acd0117bcfe927082@linux-foundation.org>
+In-Reply-To: <20250307151426.5f3c0c39@canb.auug.org.au>
 References: <20250307151426.5f3c0c39@canb.auug.org.au>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250307151426.5f3c0c39@canb.auug.org.au>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Stephen,
+On Fri, 7 Mar 2025 15:14:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-On Fri, Mar 07, 2025 at 03:14:26PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
 > Today's linux-next merge of the tip tree got a conflict in:
 > 
 >   arch/arm64/kernel/vdso.c
@@ -95,11 +85,22 @@ On Fri, Mar 07, 2025 at 03:14:26PM +1100, Stephen Rothwell wrote:
 > It looks like VM_SEALED_SYSMAP needs to be added to
 > vdso_install_vvar_mapping(), but that is generic across all the
 > architectures using GENERIC_VDSO_DATA_STORE.
+> 
+> and we have the same between commit
+> 
+>   035f34159d61 ("mseal sysmap: enable x86-64")
+> 
+> from the mm tre and commit
+> 
+>   dafde29605eb ("x86/vdso: Switch to generic storage implementation")
+> 
+> So I have reverted 035f34159d61 as well.
 
-This resolution should be correct.
-VM_SEALED_SYSMAP only does something if CONFIG_MSEAL_SYSTEM_MAPPINGS is set.
+Thanks.
 
-<snip>
+How about this?  I scooped Thomas's series into mm.git and merged
+Peter's mseal series on top.  I'll sort this out during the merge
+window, after the tip tree has merged.
 
-Thomas
+Pushed out now.  Peter, please check my handiwork.
 

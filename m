@@ -1,104 +1,201 @@
-Return-Path: <linux-next+bounces-5676-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5677-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 028FBA5595E
-	for <lists+linux-next@lfdr.de>; Thu,  6 Mar 2025 23:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C59D5A55B51
+	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 01:01:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 655441897A97
-	for <lists+linux-next@lfdr.de>; Thu,  6 Mar 2025 22:06:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3DAE1898B2B
+	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 00:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C396207DEB;
-	Thu,  6 Mar 2025 22:06:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD70020B81E;
+	Fri,  7 Mar 2025 00:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="mFSeYwJv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UTVYQ3F9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC171E5B86;
-	Thu,  6 Mar 2025 22:06:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5961202C44;
+	Fri,  7 Mar 2025 00:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741298807; cv=none; b=GlyEF8mmWwW7l5/fk7FA3yIaqrfbhBVT5Zmc5g2cCKckt0PriH+JxnsaCgzVpzxmRSPshykhTZ+b1sWt7WjJrHreGQqCh9HIPyGAAGwA3glZr+06TsnsVVZ2SN73EVZ8pwJF0SCO857juN0ZamY0ggJMyl4MDDGtzVvIKDTpDCI=
+	t=1741305624; cv=none; b=PLaqLq7eecBluNt+zR9xQMFbhQpucszrwQ5AIJJKGDTdbpoRhOU74jvi3ZE7OkdedSRWmyCT0aCy0q1IrddZmceGZi67nXI45fLDFNsgobjFeJyIcz/KYIkGZIlSMMGfpfE4JJRLPhbK1enxZOMcZeHPqP9iX2fU+DU8HXF5g44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741298807; c=relaxed/simple;
-	bh=iTF8ppMN6fCiAQ5R8gaeHJUCHhVFNmTxr9N7FCNV8f8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n6gkIpGKXFAOR0MJIJxQ15PzF4QKAV6VHfPc8HWSAImVlgB2YQHRvK0sFicAz3VJ2D4DtXmsWxPDCI3/f1gZygO5Oi/sDeIuZkO4g3JGhzy7I5AM8PAx/n0NTddRAgvJND9WwsC55tOG2X+ByS0fYyEcm/CTNoxISlNHQowwsDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=mFSeYwJv; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741298800;
-	bh=2oEQi1LZ6xfE0bhgFOyz7ltxkaGs8EDtR40dQPh+GcY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=mFSeYwJvFazdUS9+uw3atWdbT3EuD1iAivDF+iurlA/54ZUrzCx6dYZJOhrOfdla/
-	 PoU8EsZJI+xuC9SM0I8VMKkWskgRsmiqz+AzmpOmxJQtiGldfmzknnIQnRu+P6/3KI
-	 nWa/cWUmKlKZddqqQmsZrPVWgmfonNGRPGHxYIr2HEiZFgtcrkWvQpX6d0f/Zok0o7
-	 nquYHb5QWpEEYSvCH+GRhnWCYzLgi498JGBDpypNv1RKO+XQ0YSo0AaVqxN53Gh46Z
-	 ZDNUnklhkbxVRSDWicW8QiDv7BgtULNctD/1f7lo74jVGCLcrfTCA8dyYHiIEfbbR+
-	 1cbuL66kCHaAw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z83RN28zMz4wcT;
-	Fri,  7 Mar 2025 09:06:39 +1100 (AEDT)
-Date: Fri, 7 Mar 2025 09:06:38 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kevin Hilman <khilman@baylibre.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, ARM
- <linux-arm-kernel@lists.infradead.org>
-Subject: linux-next: duplicate patch in the omap-fixes tree
-Message-ID: <20250307090638.50776e07@canb.auug.org.au>
+	s=arc-20240116; t=1741305624; c=relaxed/simple;
+	bh=iyIR7Lu7scO0az/72iAv4+pIQLty4sEWKIC8oyRDQYo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Id+G5XVYZK/jarBpBH5mYZM8Bx+SK0wo287prNlFVbX7mRH5zCnPeSk1y27QY57g8d305r/GGAMaB1IQxGukGCtPTcnd2SSAZgywKriNu4vuRByD1H1VJBX7QC5Y1IL2Wqwss3Z3IwttO71ADLTz2q7Eoj5zSk8HWDZsunFxtPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UTVYQ3F9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1429AC4CEE8;
+	Fri,  7 Mar 2025 00:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741305624;
+	bh=iyIR7Lu7scO0az/72iAv4+pIQLty4sEWKIC8oyRDQYo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UTVYQ3F9vbaj3EcucvysnDwYLL21cUguDxM/YVi5slxSK1pdyHwFVINCY+3YHPblz
+	 4zijPdD93HN0PCux6PUpLs5tExx3Ak1J+7VFt7y6IW9KydEiguDCdXcRQNAs1rcHEG
+	 JX+XOq8Tve1UPIMo0YZluWzI4paM6CxZgfzbRZLwdBHu8HKp4Wesjcdg1MQw/KkIwn
+	 SnPdqz7g+k694FwOUj6ZcxIo35msgdH2dWfYkV0nZqiwMYFnUHreBZymqhRmHClbN8
+	 MDmC33ZwU/ier3Gvk3Sig/qMHEkq4iBAr4CUtx4lnbOhumHD0vMvCRGbpj0j5LcShG
+	 vZ8DeyP3JswSw==
+Received: from [165.225.242.197] (helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1tqL8X-00BE7m-EB;
+	Fri, 07 Mar 2025 00:00:22 +0000
+Date: Fri, 07 Mar 2025 00:00:15 +0000
+Message-ID: <87v7sl7lrk.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: 	Oliver Upton <oliver.upton@linux.dev>, Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Christoffer Dall
+	<cdall@cs.columbia.edu>,
+	Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List
+	<linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kvm-arm tree
+In-Reply-To: <6027e05e03474a87826217ee56f12761@huawei.com>
+References: <20250306164614.4ccb2e9d@canb.auug.org.au>
+	<6027e05e03474a87826217ee56f12761@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/J8OBaT5jmFBD_wXUWwzJR+7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/J8OBaT5jmFBD_wXUWwzJR+7
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 165.225.242.197
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, shameerali.kolothum.thodi@huawei.com, sfr@canb.auug.org.au, cdall@cs.columbia.edu, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi all,
+On Thu, 06 Mar 2025 09:56:32 +0000,
+Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com> wrote:
+> 
+> 
+> 
+> > -----Original Message-----
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Sent: Thursday, March 6, 2025 5:46 AM
+> > To: Christoffer Dall <cdall@cs.columbia.edu>; Marc Zyngier
+> > <maz@kernel.org>
+> > Cc: Oliver Upton <oliver.upton@linux.dev>; Shameerali Kolothum Thodi
+> > <shameerali.kolothum.thodi@huawei.com>; Linux Kernel Mailing List
+> > <linux-kernel@vger.kernel.org>; Linux Next Mailing List <linux-
+> > next@vger.kernel.org>
+> > Subject: linux-next: build failure after merge of the kvm-arm tree
+> > 
+> > Hi all,
+> > 
+> > After merging the kvm-arm tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> > 
+> > drivers/firmware/smccc/kvm_guest.c:58:14: warning: no previous prototype
+> > for 'kvm_arm_target_impl_cpu_init' [-Wmissing-prototypes]
+> >    58 | void  __init kvm_arm_target_impl_cpu_init(void)
+> >       |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > drivers/firmware/smccc/kvm_guest.c: In function
+> > 'kvm_arm_target_impl_cpu_init':
+> > drivers/firmware/smccc/kvm_guest.c:89:39: error: invalid application of
+> > 'sizeof' to incomplete type 'struct target_impl_cpu'
+> >    89 |         target = memblock_alloc(sizeof(*target) * max_cpus,
+> > __alignof__(*target));
+> >       |                                       ^
+> > drivers/firmware/smccc/kvm_guest.c:89:62: error: invalid application of
+> > '__alignof__' to incomplete type 'struct target_impl_cpu'
+> >    89 |         target = memblock_alloc(sizeof(*target) * max_cpus,
+> > __alignof__(*target));
+> >       |                                                              ^~~~~~~~~~~
+> > drivers/firmware/smccc/kvm_guest.c:102:23: error: invalid use of undefined
+> > type 'struct target_impl_cpu'
+> >   102 |                 target[i].midr = res.a1;
+> >       |                       ^
+> > drivers/firmware/smccc/kvm_guest.c:102:26: error: invalid use of undefined
+> > type 'struct target_impl_cpu'
+> >   102 |                 target[i].midr = res.a1;
+> >       |                          ^
+> > drivers/firmware/smccc/kvm_guest.c:103:23: error: invalid use of undefined
+> > type 'struct target_impl_cpu'
+> >   103 |                 target[i].revidr = res.a2;
+> >       |                       ^
+> > drivers/firmware/smccc/kvm_guest.c:103:26: error: invalid use of undefined
+> > type 'struct target_impl_cpu'
+> >   103 |                 target[i].revidr = res.a2;
+> >       |                          ^
+> > drivers/firmware/smccc/kvm_guest.c:104:23: error: invalid use of undefined
+> > type 'struct target_impl_cpu'
+> >   104 |                 target[i].aidr = res.a3;
+> >       |                       ^
+> > drivers/firmware/smccc/kvm_guest.c:104:26: error: invalid use of undefined
+> > type 'struct target_impl_cpu'
+> >   104 |                 target[i].aidr = res.a3;
+> >       |                          ^
+> > drivers/firmware/smccc/kvm_guest.c:107:14: error: implicit declaration of
+> > function 'cpu_errata_set_target_impl' [-Wimplicit-function-declaration]
+> >   107 |         if (!cpu_errata_set_target_impl(max_cpus, target)) {
+> >       |              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > drivers/firmware/smccc/kvm_guest.c:116:37: error: invalid application of
+> > 'sizeof' to incomplete type 'struct target_impl_cpu'
+> >   116 |         memblock_free(target, sizeof(*target) * max_cpus);
+> >       |                                     ^
+> > 
+> > Caused by commit
+> > 
+> >   86edf6bdcf05 ("smccc/kvm_guest: Enable errata based on implementation
+> > CPUs")
+> > 
+> > I have used the kvm-arm tree from next-20250305 for today.
+> 
+> Thanks for reporting this.
+> 
+> Hmm..kvm_guest.c gets build through HAVE_ARM_SMCCC_DISCOVERY 
+> which is selected by ARM_GIC_V3.
+> 
+> We could limit the kvm_arm_target_impl_cpu_init() to ARM64 to fix this
+> like below as these hypercall is only supported for KVM/ARM64.
+> 
+> Or is there a better way to handle this?
+> 
+> Thanks,
+> Shameer
+> 
+> ---8---
+> diff --git a/drivers/firmware/smccc/kvm_guest.c
+> b/drivers/firmware/smccc/kvm_guest.c
+> index 2f03b582c298..5767aed25cdc 100644
+> --- a/drivers/firmware/smccc/kvm_guest.c
+> +++ b/drivers/firmware/smccc/kvm_guest.c
+> @@ -55,6 +55,7 @@ bool kvm_arm_hyp_service_available(u32 func_id)
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_arm_hyp_service_available);
+> 
+> +#ifdef CONFIG_ARM64
+>  void  __init kvm_arm_target_impl_cpu_init(void)
+>  {
+>         int i;
+> @@ -115,3 +116,4 @@ void  __init kvm_arm_target_impl_cpu_init(void)
+>  mem_free:
+>         memblock_free(target, sizeof(*target) * max_cpus);
+>  }
+> +#endif
 
-The following commit is also in the arm-soc-fixes tree as a different
-commit (but the same patch):
+Yeah, that's probably best for now.
 
-  c2a5f8c4f28f ("ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP")
+Oliver, do you mind stashing this on top so that -next can build
+again? We can revisit this and have a better solution down the line.
 
-This is commit
+Thanks,
 
-  98f3ab18a0a5 ("ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP")
+	M.
 
-in te arm-soc-fixes tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/J8OBaT5jmFBD_wXUWwzJR+7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfKHG4ACgkQAVBC80lX
-0GwKVQgAmaElUzhxVDZCZ9+6iOJiUfdWkczTvDEGc9MM09eQVj1jOH4rqeUhQw+w
-3o8gY6W0Slpk0yDbA9UOpyALs26vbEC25ivA2dz+exhxqkIYgdIJvoi1jjP+G86k
-U+fbpV/2VoPQQbUiuI1tUfDQ5e5p1B3eBCtdI/ZeY71a/cVZ2m/EpimBwE/pikxa
-Es6c/I2ursNu1eZJaB2QzRFjZ+TC43IJ/hm3/SJovOnmMkYWeNm10iMRajM48aEF
-tEoH557wLxEzZTF6OMscOVIL8MhEiZoyzhR0uusBWSSnCqlaU99/rtMhZiaBTPWL
-RyifnRRP/WjVJp78vJSK9cdvEfP1vA==
-=n2Nr
------END PGP SIGNATURE-----
-
---Sig_/J8OBaT5jmFBD_wXUWwzJR+7--
+-- 
+Without deviation from the norm, progress is not possible.
 

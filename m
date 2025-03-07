@@ -1,107 +1,145 @@
-Return-Path: <linux-next+bounces-5681-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5682-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BB1FA55CE8
-	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 02:15:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 052A0A55D1C
+	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 02:30:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B85743A79D9
-	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 01:15:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 386921890DB6
+	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 01:30:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ABE642A8B;
-	Fri,  7 Mar 2025 01:15:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 333891531E9;
+	Fri,  7 Mar 2025 01:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="okvB4MVO"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tQFymny8"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E3310957;
-	Fri,  7 Mar 2025 01:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1A329408;
+	Fri,  7 Mar 2025 01:29:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741310119; cv=none; b=rUdwo82WywHggN+dyFGTG9ggiQjozyO93+SJLiMnbX5N5GajTJ9qqTwDM+p8CxX47xMbIf8Lz0EvVqs4GZvxIiU4BoYJtb+SFt2O/tsSfGmPYX3I9pSOJqjZlbHAcPK5KlyAxKmaCpvmJAl6NXyDB5/UhX3v+j5lvnZ4+PqjjtA=
+	t=1741311002; cv=none; b=W4ObWdvPXlZ1PnNvSr3B63L5Fhv4KXz1ablF90QdsBHiAlzYl4O04OulzsrZbRxy5wF1y4HVSw6jjW3fN9QwgtXSJVkPNWTqNwu8Z1sBe4hObTk20xujUsZwSGpXDjG3Mk6mn9x2bO3lb8aY8VQL2RJN8Rm1dx6kOQhC309KAAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741310119; c=relaxed/simple;
-	bh=Tn7EXR5xz/NfP+9nO88zOXSHYTkWmnjMLJqg5x0sSL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=o+TGiEULy1OZh3wVJXKKmm9xZ3g74UA2R9DLcJW/ExEcc+wOgE2lLPtoqqRrQF9AF48lwq31+tBSoMnwpJbvEBF8SqlXbPEAD7hFu8anyOjN3yvfI4aM4f+WOIJfJPqUhIpnnIaQLsgBnm5FcHIm8f6LnTzNIjf7JPTbJUgp1I8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=okvB4MVO; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1741311002; c=relaxed/simple;
+	bh=nIzILwBI/efRnEwRJEOpz5FhNWiACoYb5HPyYf5oDL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=P6+oeRGyNF9G8Hr1Hi3Bu9SE3DM1D8R5swsQj7O/HBln5ea497QpZIot4H6RhjTy5Ek2kuXA0+4zzXSs0tLFfDI+ShQ7a6hTzbX5s7/TLxNnYaPmPzR+g6ZMu8vnd17KMxHEY6ySpFCE+dALUkbzLniIxh3FYTBMVbIru6XEfng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tQFymny8; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741310113;
-	bh=rxfohd/24q2m0TM0jOBNK8SiI0OJ/yR4konJCniJ330=;
+	s=201702; t=1741310996;
+	bh=5cpQP0hzTZtWeA8C7im5cMACSxvJjY3jAmD/qE1TD94=;
 	h=Date:From:To:Cc:Subject:From;
-	b=okvB4MVOYZajPcs9G5Oln3/zTkauHrYQkfqRSTZ3/phgJHEEPbKJ0sE0V/9KKylJD
-	 TLxxHqZp/S70nrn+ehB2HLUhXsz2HawWOaAtbIfi1nzXYNECMOXXDbpcYQPLvSjcos
-	 I26qOBQUguQWyt1T1iloJpisACpXksHbq1VrTsP4+U+CaTqFSyVckOtVfamw/aCDJV
-	 d9N2LCvp7J1QKoaLft/cVhHgJnN0KCwCAewiYCMQoj3eAPoM6sGXW1H3cYam6/oEAM
-	 jz1LWq59IWyKNCFhMMsWFiTa2yca2DXbBjXjkglyiHAcx+lEbXwlq/OAzFnPkX3lKU
-	 e1DpGevmz/S9A==
+	b=tQFymny8vzXAhaB0lvfY56YP1R55MPd2x4Qa7tkXocWnEMgafn/RszcU0bgitrCFD
+	 9kijNNBVJCztmET7ZPJaYCV80E05/uMy+1quBGR0kYOlxDfReGR0PptEhwvjBGv/vx
+	 r4NduCuWGSSZlnJnz97T1qaezGx9C31rzYZymSUBreTPvtnA76a05RZLvDiAb/4qIy
+	 J7+kcXQDDMrgSi1yTFV2nppDHZCxjbG+fDB5g7mxb2r7b+lCMd5QOu2AIxNcE1SJPf
+	 gqp/cAwaVpbJgr+BfSWtzvRMZF/g2JG4TNthyi59w56GZdfyjNJzWA1otumyEp8h09
+	 mJuOMmuhcRLhA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z87cx0v3Hz4whq;
-	Fri,  7 Mar 2025 12:15:12 +1100 (AEDT)
-Date: Fri, 7 Mar 2025 12:15:12 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z87xv4qyhz4wcj;
+	Fri,  7 Mar 2025 12:29:55 +1100 (AEDT)
+Date: Fri, 7 Mar 2025 12:29:54 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Colin Cross <ccross@android.com>, Thierry Reding <treding@nvidia.com>,
- Arnd Bergmann <arnd@arndb.de>
-Cc: ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the tegra tree
-Message-ID: <20250307121512.5735349a@canb.auug.org.au>
+To: Lucas De Marchi <lucas.demarchi@intel.com>, Thomas =?UTF-8?B?SGVsbHN0?=
+ =?UTF-8?B?csO2bQ==?= <thomas.hellstrom@linux.intel.com>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: DRM XE List <intel-xe@lists.freedesktop.org>, Alistair Popple
+ <apopple@nvidia.com>, Balbir Singh <balbirs@nvidia.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Matthew Brost <matthew.brost@intel.com>
+Subject: linux-next: manual merge of the drm-xe tree with the mm tree
+Message-ID: <20250307122954.1ab65809@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DjRuCVHZy0gCdu/6S+BRLEK";
+Content-Type: multipart/signed; boundary="Sig_/A/UwyxC=0gWjqbYU.HO=+Ty";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/DjRuCVHZy0gCdu/6S+BRLEK
+--Sig_/A/UwyxC=0gWjqbYU.HO=+Ty
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the arm-soc tree as a different commit
-(but the same patch):
+Today's linux-next merge of the drm-xe tree got a conflict in:
 
-  90a1dc90d08b ("arm64: tegra: Remove unused and undocumented "regulator-ra=
-mp-delay-scale" property")
+  mm/memory.c
 
-This is commit
+between commit:
 
-  828678a1f638 ("arm64: dts: nvidia: Remove unused and undocumented "regula=
-tor-ramp-delay-scale" property")
+  089b22f60a0f ("mm: allow compound zone device pages")
 
-in the arm-soc tree.
+from the mm-unstable branch of the mm tree and commit:
+
+  1afaeb8293c9 ("mm/migrate: Trylock device page in do_swap_page")
+
+from the drm-xe tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/DjRuCVHZy0gCdu/6S+BRLEK
+diff --cc mm/memory.c
+index d21f6cded7e3,59b804f4bf3f..000000000000
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@@ -4473,11 -4348,15 +4473,16 @@@ vm_fault_t do_swap_page(struct vm_faul
+  			 * Get a page reference while we know the page can't be
+  			 * freed.
+  			 */
+- 			get_page(vmf->page);
+- 			pte_unmap_unlock(vmf->pte, vmf->ptl);
+- 			pgmap =3D page_pgmap(vmf->page);
+- 			ret =3D pgmap->ops->migrate_to_ram(vmf);
+- 			put_page(vmf->page);
++ 			if (trylock_page(vmf->page)) {
++ 				get_page(vmf->page);
++ 				pte_unmap_unlock(vmf->pte, vmf->ptl);
+ -				ret =3D vmf->page->pgmap->ops->migrate_to_ram(vmf);
+++				pgmap =3D page_pgmap(vmf->page);
+++				ret =3D pgmap->ops->migrate_to_ram(vmf);
++ 				unlock_page(vmf->page);
++ 				put_page(vmf->page);
++ 			} else {
++ 				pte_unmap_unlock(vmf->pte, vmf->ptl);
++ 			}
+  		} else if (is_hwpoison_entry(entry)) {
+  			ret =3D VM_FAULT_HWPOISON;
+  		} else if (is_pte_marker_entry(entry)) {
+
+--Sig_/A/UwyxC=0gWjqbYU.HO=+Ty
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfKSKAACgkQAVBC80lX
-0GxRMQf9Fv+jSV2kmmBDisN0YxBC0vJ8s/ufyPNnFsaJcZsq2qKxPhlWH5tveuco
-AtG1SF6b18LESJgKY3Gg5L1hv0Ghx6rFSMHxPunTee7wkRBXsJquFt/SWQM9Kwm5
-9dZOs+TVd6poHbwyB6Rf1DKx0bh0iMEvDOqXvHNzyZnepyfIWE2S2gSUPnJzNwg0
-gibqrKqdcSNQCi2tNDloBA8Bw8NEp4oCABJQwTx9pysqkeIM1cAumy2fNz9JTAUt
-X5gpxdvFPCn6B8x5//IKcZNEgC3PPnqe55RWBnTgFuW/WY+78RcTiRN8Q43l4cEx
-8m6BP33llGIiSeXaZVKUsr5vHfmFXA==
-=tXMm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfKTBMACgkQAVBC80lX
+0GwClgf/Q9BEVvi4igkfRfnzd88WJnP0/H1ZUBjUBg1JbqnhBVkVq7jC0M2uSkH1
+pqBP0dIZCLLz15is+6hsCvXnY9eHfwfz4J+zR8/UbIi4M2H4heU7VbePjXya7dnX
+gGdSkib3/aII3f7Q+ApSvhYthtaVCX6sVgM3uz9qXSXlIkNI4XHUCFAGYXWHmPFV
+342UUykdLzbXIlT3KPqNpU9ug66ZlF1utnRJDJhN9trCNdX706DsVKBm9tujGPaR
+cD+G/3lRZd1NwIfHye+kc1rmamZtw2kdz38BbP4oAcWnVZ6gU9ijwygvb8ZERx8L
+OF230OP5BYu2rsQPIQ26zj2kGvRqlw==
+=0lSR
 -----END PGP SIGNATURE-----
 
---Sig_/DjRuCVHZy0gCdu/6S+BRLEK--
+--Sig_/A/UwyxC=0gWjqbYU.HO=+Ty--
 

@@ -1,76 +1,104 @@
-Return-Path: <linux-next+bounces-5679-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5680-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C1B0A55C47
-	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 01:52:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BC68A55CB4
+	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 02:10:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5C9A170D17
-	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 00:52:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C57C01884748
+	for <lists+linux-next@lfdr.de>; Fri,  7 Mar 2025 01:10:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A270145B27;
-	Fri,  7 Mar 2025 00:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED3614A62A;
+	Fri,  7 Mar 2025 01:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OZF3h+dk"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BdRgdTRy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC249142E67
-	for <linux-next@vger.kernel.org>; Fri,  7 Mar 2025 00:51:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C80EAFA;
+	Fri,  7 Mar 2025 01:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741308721; cv=none; b=lULnRtk9CqSc/bNxTBPrQeXIiB7uMYoMzPu9th/llM2MLqweSWa4Sxx16MawflIptQJckuROqLbvh1KBGDBBiNuzgTCnyjCnvrqXLlQrnEvWdXnIDOnmKzqICr21fihgaZn5THNQYMEqY+FE14k0AaNnpGWG9yINLl4mRgNvWoo=
+	t=1741309802; cv=none; b=mZCkr6oPbB2CgdSUhX9BcjBLFnv6surpbvy9vzB+T/jpqCSVL1Ia4i5C+zDITfQ8q7gmEKz+BIKQsWlU6nGbXKTw9Wvlv4bmA4YfK3uXObXeEloTzpLsT+BH2DwKOp1RBIxCUHBgrZdJQSguhmqVkxEI1guEx4ALgms40ARMRkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741308721; c=relaxed/simple;
-	bh=BXBB04wruSjsqFFn7iA7+6wkH32COsBtXl98KdwCW/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sADOsM9J10+FiKCqfYFpGYY1m4E1/rQRNvjmJmg1ElIaXx6eKDdeDMYEI85MqmH8SiLTDzNGDeAOoG+Th0IGHJ81WJIsaYePM1190lPbq2E4Wbru3A1+b35CcKqUosW8lj8JGsEIo9f53vI4ztsvK26DVSJY9DRkDcAjeWt8a7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OZF3h+dk; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 6 Mar 2025 16:51:41 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1741308707;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BXBB04wruSjsqFFn7iA7+6wkH32COsBtXl98KdwCW/4=;
-	b=OZF3h+dk2amD8Mqt+kM60tYNjwWEE/OmZ5tSutHhC5IBsMNSMnMdJhNAUVHug/yAeXB0gQ
-	ZkYRR8DFc0Sf1T9fwkO5KvAm+Ac24a1xQQhVxaixBV0rotD7nwKt7eK638Ch7hR1qtUjMu
-	Li8y6H7BDHfEOdZdoCyZDhmODb7rBnU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Christoffer Dall <cdall@cs.columbia.edu>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kvm-arm tree
-Message-ID: <Z8pDHahUB5HpNq5E@linux.dev>
-References: <20250306164614.4ccb2e9d@canb.auug.org.au>
- <6027e05e03474a87826217ee56f12761@huawei.com>
- <87v7sl7lrk.wl-maz@kernel.org>
+	s=arc-20240116; t=1741309802; c=relaxed/simple;
+	bh=kQHiT/+tnGAjHfVOupwlmJRVRsTVouIUcyIsswwrwzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lS8MkHwFBkYwloCwDZaFB1uCJgUqzx9OLucOB3VIsRlBEu9yu9LtBYMBKujRyoRJV2lCwCpF514Jk9Zop0I+D2SMfvw8YTaucctzeE4M9PbwIP/PbUYw8stfcgDE2QjVFO4yOxzIKduRMHtpsR+UkjLfTfYUUkcEAcPsRye8lec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BdRgdTRy; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1741309796;
+	bh=BJ9FQjBK0iPM9zCWhA27A3nTc/CYXoM2APiu0/H6r18=;
+	h=Date:From:To:Cc:Subject:From;
+	b=BdRgdTRyYrCbHAlFXg8AovE6WI2vZfqis6FemK1c84GL5HZUuRI6yRUVlWuNNW6zo
+	 egn9uJkXrFkAahoTQSfEthy9BHkXcb+DnD4xjYTbwinpU3tTwsrdNTO4jDkU+9b7Sc
+	 +FPLRju5fI+hvzw2e7YaOrysL3VCg5wGnJFRy1zogv8124p5VtbZ3FYUIVbxN6PtKs
+	 o5gwZyMX9HJ0ABNhg0jpeHlJ0Cw/1UcUtUlxHiwWIIge3A5c11VAHq9kRXfivDTlVV
+	 QFJlSo27tKf2hQ1wSse8FsHJdZM21CGx7Mv/bvyJycVJG28D7mi+ZS4OcFDMYvpPei
+	 9c84dh0TMGSGw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z87Vq2lVXz4x3d;
+	Fri,  7 Mar 2025 12:09:55 +1100 (AEDT)
+Date: Fri, 7 Mar 2025 12:09:54 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Florian Fainelli <f.fainelli@gmail.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the broadcom tree
+Message-ID: <20250307120954.351dd8ae@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v7sl7lrk.wl-maz@kernel.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; boundary="Sig_/B=r6jVDdyEw7VYbERN.W4G1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Mar 07, 2025 at 12:00:15AM +0000, Marc Zyngier wrote:
-> Oliver, do you mind stashing this on top so that -next can build
-> again? We can revisit this and have a better solution down the line.
+--Sig_/B=r6jVDdyEw7VYbERN.W4G1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Done -- finally caught a break to open my laptop today.
+Hi all,
 
-Thanks,
-Oliver
+The following commit is also in the arm-soc-fixes tree as a different
+commit (but the same patch):
+
+  d0b7662f9a68 ("ARM: dts: bcm2711: Fix xHCI power-domain")
+
+This is commit
+
+  f44fa354a071 ("ARM: dts: bcm2711: Fix xHCI power-domain")
+
+in the arm-soc-fixes tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/B=r6jVDdyEw7VYbERN.W4G1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfKR2IACgkQAVBC80lX
+0GwqKgf/Vras2HyGkXQy8bLVkGjsZqBPaHc0hW+CFQwl8ZMBaKODtAbKzhcT7iUV
+COIY2btPkafkZ1KgjJpjQHLL0aRtYybs8oGlP2ne9VWbrj6FODc9oppSnk7ceDIm
+PX+eg93zbDEN99l99o1yPh12WcwOK+E7+ZaxRlA2OcgjpkWi81MdR89iAbjdEytF
+/SaPM1FJgzY3QUBSYevG2mJVvipsmwTA23utc0wKIVmX0nUgfeqdYjDLkoT3w4bO
+s4A7KcbgcwQSFB82+89gHhnf44fXGRVPpfew2z/aYS00EAJxzzq/3NErd2vgRBXh
+Z1pith6W28hKPEz/0jHk5pRhOOtiHg==
+=rEIt
+-----END PGP SIGNATURE-----
+
+--Sig_/B=r6jVDdyEw7VYbERN.W4G1--
 

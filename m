@@ -1,160 +1,121 @@
-Return-Path: <linux-next+bounces-5707-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5708-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD16EA5A69B
-	for <lists+linux-next@lfdr.de>; Mon, 10 Mar 2025 23:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 13C01A5A721
+	for <lists+linux-next@lfdr.de>; Mon, 10 Mar 2025 23:26:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63821188EA39
-	for <lists+linux-next@lfdr.de>; Mon, 10 Mar 2025 22:01:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 990D31884536
+	for <lists+linux-next@lfdr.de>; Mon, 10 Mar 2025 22:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0681DE2CE;
-	Mon, 10 Mar 2025 22:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09D131F4C9F;
+	Mon, 10 Mar 2025 22:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XZ2+0vFc"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="vzL5OshD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E301D63DA;
-	Mon, 10 Mar 2025 22:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2271E834D
+	for <linux-next@vger.kernel.org>; Mon, 10 Mar 2025 22:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741644094; cv=none; b=dWlflmYmfKEVhrLg/ZfnIwSFFJeT2c6Xy5Bph4fma2iw6yxql6UYYJcaG4IBNmMtAFNB/gT/wEsccQNip+xqqQ5/UOv+L+aJyBnL74oBXvkEGDUQsDKrcwQr8XedZVbCba5FSvvqWxdt9HBa4L/45RvrU3ZzXZVRDOHMalpittA=
+	t=1741645524; cv=none; b=l97Gogu5TP2nalIr2AfqjACClJYmCPWpE3uqiaG243/tdpATBZjlWHjMHuShwlxWC862f+zGe09xi6qUizc+SEoy5TpyCvbVgn8kwjQ9U4ROSuXO7qj3eK0+hPLKYPlNHkrtwAOTyM6xmaPnO6us1DbrQkunSw+/YH8lcRKKC6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741644094; c=relaxed/simple;
-	bh=pRupb2oNNzqFmYygFyIG8PcgTW0lNPekWKRuoiAiaa8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uWbI8nakoaiVcce6tD8fSPmcdTfa9aQrfSbRIzrM8m4GrRawsvQS8XoQUWw1zpD8fX/itlukOVq3pnGh/TuCvMd36fG0fXxT+SYJWuBaddYOQwmp3TjQR47ppM4rEZLSsO36uYH8N7qGEFaJR0JWnqsiCJ401SgX/+CT/c3oxcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XZ2+0vFc; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-47692b9d059so11960641cf.3;
-        Mon, 10 Mar 2025 15:01:32 -0700 (PDT)
+	s=arc-20240116; t=1741645524; c=relaxed/simple;
+	bh=4Gif14H/WjRTUhe9bIvPv3YGVJEzbO92IfYGUIfH5e8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IfBRvq64NbCyLr8u+lCOZaCYiL2u6f1dfppO+hsbvlFFKPTleOaFwtWskSGYn/6xHY0ecilQavd+r7aIL+TshQkzM2+fg1X/3z0Rr4sU1J43/MJ573lNQMGVOoKgch7Iq1ij0juo7f5m2A9jDRcL8tb/xdFh43nhd6+AHCiFJiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=vzL5OshD; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-85b4b18e51cso119070939f.3
+        for <linux-next@vger.kernel.org>; Mon, 10 Mar 2025 15:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741644092; x=1742248892; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HdvztV2UNV3iREuCFs0Tdfwyn+fNoCwFXjwdeFVOfSQ=;
-        b=XZ2+0vFc7NvqdZ3b22VFdllKwfmI3lwfAbfW7OIE6EgBV/w2PUgj3lYEYiZrbjVDh2
-         GvjJnInN4F023bGMXyV4ZKAgUwGY3aTpyROWpG2MrwSi6grDywG6M9AlsfmXjeN1hf8y
-         6LAbMLBi3ebMyA7bKUiaqScThPpOfLPIYB9+QKTo56RXeqKroZaTI3B4bBQcWC1RlvnL
-         vJUkHEkWoUZghDXhqtHWN1NleDbZuplIsk6YYFgw8VRZjxxXMX8WOa1qMI6GT2KmPsqc
-         vxwvARzMShIu8A7CxFPuEQFcipUSjmihDzPddHSotStI9srfuvaQ4uhhzzAidwd3MQqB
-         8Tug==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1741645521; x=1742250321; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gvP0SI37bvQbZpvOfs44QZ7UYY18+BQNpijliAFF6+A=;
+        b=vzL5OshD0738l4LnPCXhYm4NuFce5rmBhJ8pvOMSyFSD4U7aKXhygPFXAB0kGKUorP
+         FHffrRnuadeQecSWLo5CNyKQD1jfiK/0ywoPEUBMUhmOdQ21yDZguw9ROf3uiEb64w/K
+         4FNauvy2qTzGZeNr7Za9vPorvmoG3YxJzCN+II8s3xXLh4RqphoMYF7svTZKx2bsfSdn
+         lq7zY+ZKQb1L+pRh2j3GR2b6RofQWC6Xjgi5w6Vltvi4nDqMFlO2ACtt4MO+XNmOSwY+
+         1OLu20ZpCT8LkBJlMAE4JGIurX/WyYlH6Nithy95M9JkZ2hsCcZmch5G0vfi3xIpzH1m
+         CmzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741644092; x=1742248892;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HdvztV2UNV3iREuCFs0Tdfwyn+fNoCwFXjwdeFVOfSQ=;
-        b=IRpdlnEtoxWNkxvXA3ZzB1/2uIdfAghS9JkWYjYqHmAiSKU3fOgFZtBCwffFMc8FaS
-         31+TOb3zrJxC7xX7xIVWM/D7TbeuyPJc8f4m16b5ydJok2JU59it7XloEi1CBPTT+ta3
-         0cuQQisxozr70WcDVwCGL6SWO/WQKSSQEx7mfR5RgPvCchc/NzXmf7xbgClV5TXXqjZo
-         /lnZVmxKAdxD1wyoLkrARHCeRXK+0u2tpFdav6As1tSa6BYeLfqqBYWwiyhbP3858Mpw
-         4e4z1gm8jBwSmsSSHUPyZm3FnrVRwoLyCR7ADo3IoQTiMYO0aJNZG02CRUgcmxQ/Z3dZ
-         Qd/g==
-X-Forwarded-Encrypted: i=1; AJvYcCVFbQGeY/3rkjy0U3Aeo+oZBm+7qXGUPQbh3yjzfbPg8jv02f4+rD3MIYtGTGdygKDfARr8Yedf555gZWo=@vger.kernel.org, AJvYcCXdTfhKqIlUlKKHb1QbYEXOyhPKyQyQ9R6UQ0jz58gEMBdfk3KboYjpzUMt67Ap7G93CeqhScrN562YOw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFUQcbM9AxvuAOnNiBJ9KRLoZdJoMUkyVzEeNSqCfW7OEM30S+
-	TZKUj2K4Kj0xh03C/095fGQ4Yy+8klS7dhErbp6Sa87jOpUdSGbd
-X-Gm-Gg: ASbGncuWj01PEExYtA3eaFqMR60p/3e/Uq+R2har6IxN244pI90iGXQb5haZ9x3vJV9
-	OoJ7exQdF0Xr16EMpAyKpJc94uRCR+YUbjbrSKPwOGh687//bcyRcYcUso7qm8wZCJGugqFTZ/q
-	bM2GElyfr/UywBzr3reAAocx859i+k1wPxycTPpcV/J5Hb05vgcqwcPu/Gee6ZZ67sxHuef0TIN
-	cUmB3T5NBqwAv5YxS5FJchmMVflTstvYl4yZ2WGwG+HLaPIFQ2VNSXenOunfY9UbTShX0/0jYSV
-	WHqqNwfXNKyLK65kIyMN0dNnqxTyJLN97AThbxD3Le9SXzRmzPNBpE0vXRBtGfSTLANvwCXHwV7
-	qmGtYqOzdFlBUKn5Oq2yY1EN3gMP43omdC0I=
-X-Google-Smtp-Source: AGHT+IGgfkNiTKs8kRaKzx2N3m1Fc8TyKDQeFkvs47dX2/pWYXkac/Rft4eDWhDswO/2IL0+VU0SOQ==
-X-Received: by 2002:a05:6214:c83:b0:6e8:f0f8:67f7 with SMTP id 6a1803df08f44-6e9005f7742mr240510936d6.16.1741644091816;
-        Mon, 10 Mar 2025 15:01:31 -0700 (PDT)
-Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8f715b604sm62622926d6.77.2025.03.10.15.01.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Mar 2025 15:01:31 -0700 (PDT)
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfauth.phl.internal (Postfix) with ESMTP id E64ED120006A;
-	Mon, 10 Mar 2025 18:01:30 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Mon, 10 Mar 2025 18:01:30 -0400
-X-ME-Sender: <xms:OmHPZ2m0a_6OvXyfpt-LryyWqCFxc2N3PfzWiuqupdxkSeLFi7q6Kg>
-    <xme:OmHPZ91CtL4uFdiRLGsYEBiaobWKFfFnhVUDGrzhsVIKvLp613qVRUiMq7kyhVEGn
-    VpvTAU91ocJCXkCAQ>
-X-ME-Received: <xmr:OmHPZ0pe72fZpPP-RThW2PpFwZ1LcIapqNDg3ivvo7TApvHcIU6YTCXAzBM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvddtgeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrih
-    hlrdgtohhmqeenucggtffrrghtthgvrhhnpeehudfgudffffetuedtvdehueevledvhfel
-    leeivedtgeeuhfegueevieduffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgr
-    lhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppe
-    hgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepledpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrgh
-    drrghupdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    ohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjh
-    druhhprgguhhihrgihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehurhgviihkihes
-    ghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrd
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehjohgvlhgrghhnvghlfhesnhhvihguihgrrd
-    gtohhmpdhrtghpthhtohepsghoqhhunhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:OmHPZ6kNvaz28UEYti2nC-R6PoHx_vonAQGoerVIt2bNP3DSac3zPg>
-    <xmx:OmHPZ01r1Mim8dUjXYgWAWxLdFrEP9KQYxcxHQe3pAi7PrT7KwDtKg>
-    <xmx:OmHPZxt6u4xfk0UnRfTd-DaAVu7LfhPq5vLjM_9xKXlRJARC7ozeYw>
-    <xmx:OmHPZwXRCMmz4V33wK3nZjKxK9T-1Co5L6vQpGRfr1FozYsVy7l5kg>
-    <xmx:OmHPZ_1J2JPpJSilgX-3DfLM_pkQ3JfKMIO1ZUxoTtHYrj16y7vX0TQi>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Mar 2025 18:01:30 -0400 (EDT)
-Date: Mon, 10 Mar 2025 15:00:09 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the rcu tree
-Message-ID: <Z89g6ZXRHQUq8WyV@boqun-archlinux>
-References: <20250311081301.6a22ab25@canb.auug.org.au>
+        d=1e100.net; s=20230601; t=1741645521; x=1742250321;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gvP0SI37bvQbZpvOfs44QZ7UYY18+BQNpijliAFF6+A=;
+        b=F/M/M+C+T45kBbAC3iR/qx8+PN+wFhbGHg1u6dfOf2lxBMAlBpgFXPU0i/mT0vP9gc
+         8BEDnsVotg5VYgUnHujMqaCx0qZdHMlIjAlheG4a9IaPX/58XTWDUI+iFfDZh2shAFTk
+         phy0FkByxB3q+8U2/aUmTtxi2zFkb45jeex1ae/ywiLzZwbgkX1iloYiDAGcYNAaTtgl
+         1THYspU4BKWCRQGQ0oS7cvtF33geRaCwqJqmOF8FRDQjJFrha7++8KN8afGO4xUuyG1v
+         cC3S7DgoJoJ5JhkL0mNtnDwR/JciDfbMbtGJL1xY1FndscRjLmbflEdxDbqf7sdXDQq9
+         4fTw==
+X-Forwarded-Encrypted: i=1; AJvYcCVBTcTgfWdIGlvzUBvcvfs7Voc2f8Ua9Q4k2EFT0ovp2UIyl58NQkJGc16Y5hmu32Rw+b3bomtyg1Oq@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSze8DT0kAOdw2Tk3KY8zz53NtKsaDUkctj3xB+q/v7RJ5DOnL
+	0c2q6Jw7DxOusTxb0VVnnGG3BPaqwcc3ZqmG0IsExMSH0/n70bLB/O4YMjg4JLwwU2WrTpdlzhB
+	l
+X-Gm-Gg: ASbGncsyKy/YfLNNsn9IDpeKWP2qpHZlMCaN2xTlpw09v+EkPUF0OKbIE5y8MuWQ+tt
+	AoELI8DjmX6wppho+1kB0mZ9tE3dlUg8F2s9VNup5TjpOYedcc+NxNYOJtc9T+MaANfaSwKnp9z
+	wZwf7892t+bwtexRMCg3kMk/UjCQ6mN4Uc70i8137wsOmartfbdtLGqv6fECcOCcoa39Mr2CeRk
+	tArsRf7esvG3NbYqw3yKUlDS0NnPqTas+X81g4s/VA8yFlkTDMKoCmX8wQeL71lHa7HsMIOsPYo
+	gavUogUZfvdjxWqavNj0o5Y0Bw0Bq5ioi8CBRi8bfFsRxXn2PZvK
+X-Google-Smtp-Source: AGHT+IEC1FD4xPR8qaXBgzUTsr12sjtLQhuUzilQhtXARZV+vEM8pbEhSrVmYKg2tFns2Z7qZDO+Xg==
+X-Received: by 2002:a05:6602:4184:b0:85c:96a6:f3a with SMTP id ca18e2360f4ac-85d8e20578fmr152307839f.8.1741645521287;
+        Mon, 10 Mar 2025 15:25:21 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-85d9db4cec4sm2236539f.16.2025.03.10.15.25.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Mar 2025 15:25:20 -0700 (PDT)
+Message-ID: <6ea84ce7-d318-4ff1-a03a-e6252a5c8130@kernel.dk>
+Date: Mon, 10 Mar 2025 16:25:20 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250311081301.6a22ab25@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Ming Lei <ming.lei@redhat.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250311080946.64b06fcc@canb.auug.org.au>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20250311080946.64b06fcc@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 11, 2025 at 08:13:01AM +1100, Stephen Rothwell wrote:
+On 3/10/25 3:09 PM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Commits
+> In commit
 > 
->   fcb83ae12343 ("Revert "rcu/nocb: Fix rcuog wake-up from offline softirq"")
->   c37cf754ebf5 ("rcu: Remove swake_up_one_online() bandaid")
+>   cf2132935639 ("selftests: ublk: fix parsing '-a' argument")
 > 
-> are missing a Signed-off-by from their committer.
+> Fixes tag
 > 
+>   Fixes: ed5820a7e918 ("selftests: ublk: add ublk zero copy test")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: bedc9cbc5f97 ("selftests: ublk: add ublk zero copy test")
 
-Thanks for spotting this. These two are likely for the next next merge
-windows (i.e. for 6.16), and presumably they will be handled by Joel
-(Cced), so I deliberately avoid putting my SoB there.
+Didn't catch that - fixed it up in-tree now, thanks.
 
-But I guess it won't hurt to add my SoB for -next purpose. Will fix this
-later.
-
-Regards,
-Boqun
-
-> -- 
-> Cheers,
-> Stephen Rothwell
-
+-- 
+Jens Axboe
 
 

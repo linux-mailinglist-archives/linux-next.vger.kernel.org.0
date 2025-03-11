@@ -1,113 +1,120 @@
-Return-Path: <linux-next+bounces-5752-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5753-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59ED8A5D1AF
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 22:24:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 150BEA5D201
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 22:51:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 943AD179A1B
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 21:24:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85C4A7A28E8
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 21:50:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3466C22A4D3;
-	Tue, 11 Mar 2025 21:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BDCC264A68;
+	Tue, 11 Mar 2025 21:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dUKvmBw1"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="L1OwFySP"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD26199FBA;
-	Tue, 11 Mar 2025 21:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBFE228C8D;
+	Tue, 11 Mar 2025 21:51:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741728293; cv=none; b=iQ7erWjZQ/iOjZc4fOSBeRd5JQwwSVxbHPc1J5xNr4MIi3DDgag5cxyv5gdGg0/zQAKAVzyCAauWpNj38Xdui3gKbQPc5Bx9tG9InabwtFknw4hxVHsbCi5DXYVWr8qf9fSdTGlGzV5B1L8qtccbLyGr68a64lWRm/i7+Hk/UF4=
+	t=1741729870; cv=none; b=bX3ZwO9d/HlB+qi8mc3W1gBhq5PK/W2t5eW+i/wZS2MV35UqjsVhi3rdDNElGNdC77wWO7jSBcFiE/1Wub+YCApDwfoG0PmVYRVhcMvK1iVvvvmgLXSTRxc8v2vPdR2zU3YI5DtRTPLdDtgV3Sfs+fTib6BFmoXPwW8ZPo67awA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741728293; c=relaxed/simple;
-	bh=1fLXz1Z17KdztB9Xq5D8pNArueYNUOphN1H9sPeg3Ps=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=UUElfGxzPEchPHqHwd0uDkSSfSBqgGBYIvPPF9ORHrL3KrexkMo0YpSAvVBqzlhXCUBOYWypkdwdvuv/SKh2o164A4gh9sa4XQZ5d5a6HjuLs1s0rBfm+kzcJfS0Wd+GiTGbUzH2DugHQGnqDYxZrf0RB0wcWRURDoUDv188GZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dUKvmBw1; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1741729870; c=relaxed/simple;
+	bh=iPijpG+Ein0l65BI0jDKoR2fUUogRl5NRwPh6/WZaI4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Yqseo+ndzNbf2NAvkNHeF7+kPEj4+b6COuRB44LXK2oocQwr4RJq35513kpKP3cq/FcTc2uSSzgqdyNYWZse9LOjsp3mPIoh7d9Qp6kptnRsWXtc2Fu0iuHAvIDTrpVrIoosgTDqLngHrNv27yIqC9tVfGaxFT/yRLE2lzDiOPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=L1OwFySP; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741728280;
-	bh=ZsmVQ5DlB1ZpsAtkvACr0C5cAsnPSC+0UeEEHIOW8ag=;
-	h=Date:From:To:Cc:Subject:From;
-	b=dUKvmBw1VfF/PNWUYgg9DkUPZ7pnXd7LKELZ4C4nucQMlyoWydL54MYS/02G+MYkm
-	 OB/bwrIX214zDu7cqQ204+vEeC6K66BrFuQjYuuyijyxiJUIYmJ+A11CEFt6IOgYV2
-	 XJVCrlG7THfIlw6U9q7jmJELOXeXuSY5mFNjutPpILbu+oUkkOeRFMmMTQ+faqJXTK
-	 h9fpLRbQBDT6/CAju1v4MwiVmjL7t4b+2Xhbbba4JYMmLyrh2Qhuezsq8EEBtm4WKu
-	 rAgeuw8P1P6qkpWc2sQpyMaO12KXnqamuBxSKlO/i66i4QhTfmYZZePZGt64z2/vSL
-	 J+09IRaR/g9jQ==
+	s=201702; t=1741729863;
+	bh=Jn9nRcpdljEQSc2Pubr9/mhILU/2Se6kmSyL0z/RxvA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=L1OwFySPcoRPj25ahpMT27FgIeAV5k7JdpXSIY/cgdjf5BiTeypCTsCJ5yiffwmUr
+	 5lyZpRH1gW9nH/0pgmNq79guntxK81z8vwKCz7kR0nut1hNSHjbsAb2lqKcsqb/xic
+	 Jmw6JelKXAMFEypUkJFpGe8Xh35yoRwxuw4MZgwQgjbH6xaF9HTtD8pJw4pqBzwx4N
+	 PzCFclANprpXoLaUP3oKczsu9aucsdufP3KHUODzAJ3I3EgGApMTrFjXnUsO5/98R5
+	 XtTi665uqqjnJSL+IkngD8B+pmepmlbZfFVo94P+ktcCBjKMC0G8cBWky1+XCBA9Tv
+	 z12LF+jc/DpEw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZC6Gc19pLz4x8R;
-	Wed, 12 Mar 2025 08:24:40 +1100 (AEDT)
-Date: Wed, 12 Mar 2025 08:24:39 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZC6s21ZXQz4xD9;
+	Wed, 12 Mar 2025 08:51:02 +1100 (AEDT)
+Date: Wed, 12 Mar 2025 08:51:01 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the sunxi tree
-Message-ID: <20250312082439.098124ee@canb.auug.org.au>
+To: Detlev Casanova <detlev.casanova@collabora.com>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, Heiko Stuebner
+ <heiko@sntech.de>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, Shawn Lin <shawn.lin@rock-chips.com>
+Subject: Re: linux-next: manual merge of the scsi tree with the rockchip
+ tree
+Message-ID: <20250312085101.58cdd1e5@canb.auug.org.au>
+In-Reply-To: <6134949.lOV4Wx5bFT@earth>
+References: <20250311183524.38989e83@canb.auug.org.au>
+	<6134949.lOV4Wx5bFT@earth>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/43b010ypr4rpN6VAbDG1lFe";
+Content-Type: multipart/signed; boundary="Sig_/FN7Hn/ikkX16Gy1WEVHGBJi";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/43b010ypr4rpN6VAbDG1lFe
+--Sig_/FN7Hn/ikkX16Gy1WEVHGBJi
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Detlev,
 
-Commits
+On Tue, 11 Mar 2025 12:24:25 -0400 Detlev Casanova <detlev.casanova@collabo=
+ra.com> wrote:
+>
+> Unfortunately, this fix is incorrect as nodes must be in address order, s=
+o=20
+> ufshc: ufshc@2a2d0000 must be above sfc1: spi@2a300000.
 
-  575464821eb0 ("clk: sunxi-ng: add support for the A523/T527 PRCM CCU")
-  9c8d960c13ab ("clk: sunxi-ng: a523: add reset lines")
-  4548c0414839 ("clk: sunxi-ng: a523: add bus clock gates")
-  680f52d723e2 ("clk: sunxi-ng: a523: remaining mod clocks")
-  5fd7421770fb ("clk: sunxi-ng: a523: add USB mod clocks")
-  dd19c52e686e ("clk: sunxi-ng: a523: add interface mod clocks")
-  9bc061e57b4d ("clk: sunxi-ng: a523: add system mod clocks")
-  4b759de121c4 ("clk: sunxi-ng: a523: add video mod clocks")
-  2d47dae93981 ("clk: sunxi-ng: a523: Add support for bus clocks")
-  04f6ff49525a ("clk: sunxi-ng: Add support for the A523/T527 CCU PLLs")
-  38ea575784d3 ("clk: sunxi-ng: Add support for update bit")
-  24ad1a7e8a3e ("clk: sunxi-ng: mp: provide wrappers for setting feature fl=
-ags")
-  af7a221c1213 ("clk: sunxi-ng: mp: introduce dual-divider clock")
-  17bed1817f11 ("dt-bindings: clk: sunxi-ng: document two Allwinner A523 CC=
-Us")
+OK, I have switched it around in my resolution.
 
-are missing a Signed-off-by from their committers.
+> As we are close the the merge window, I won't mind if the patches have to=
+ be=20
+> postponed to the next cycle, but some device trees won't build anymore.
+>=20
+> This can also be left as is with a new patch to fix the order (to be back=
+ported=20
+> if needed)
+
+This merge resolution will be redone by Linus when the trees are merged
+during the merge window.  Someone just needs to mention it to him.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/43b010ypr4rpN6VAbDG1lFe
+--Sig_/FN7Hn/ikkX16Gy1WEVHGBJi
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfQqhcACgkQAVBC80lX
-0Gw+cAf/dGLRCMVZP5QcNYjLoiNw/RnVlBRIWKujXiZ0Ls2SIFnpjHIzYCsbpQpF
-3U/bqqDF0Bk8xgy8oZVtvCPcLaadd2AzRdWXScgnc7hgsjYjUp8oaiQGruB5euEd
-SE6npbR3T5c34oea2eR6NWNCapf/0NyVL68RAljl3izSSyjKzy63i46Db8qyX0zH
-QVyhZpJi3/QIXK7fwZt1RG24naL9jszb0bN3IkSSPQiig3bveQt5fb28yoeADUG5
-6k1dlH74v3X3aPK2MqC6uHjHob3pXrACuzfRAai6HYdL2JFmFeQzq4h2vOzICJYp
-qmkUFzyJjpcGm8iL+iQjUN+0GHvu7w==
-=306N
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfQsEUACgkQAVBC80lX
+0Gz7JAf8Cr8W6S71rnAzMEatJm4e/1EyZ4wa2VCifV0GXp8uDevRFwYDvTLvarLf
+DS+Z3zqv07TMkHaVTtonHloI+Kx52IC4PIvFa5S+98VJtQ2Uid56FHuMCwmsQm0U
+K6Ved+GpKYm2Kx7kxhHjcVhiePlMb1/ALbfzM009yORFFhKm1JrW1589tSXWYnr0
+VcVRzCSUaiFvFY26UOvlEWbyhlzSlTUyLMQZaFHqq0q/oKKUEZ6Ah+Z6Iv1aCMMe
+3YC/6l+FtPSVdVoeFDTxwN2C0cHN+K87bRXfEA6z+GEbckrCN9R6HbBU6YBXGgIq
+pz9ltSKtuCxknO6vTVZkdh5Zg6+Rlg==
+=EcRW
 -----END PGP SIGNATURE-----
 
---Sig_/43b010ypr4rpN6VAbDG1lFe--
+--Sig_/FN7Hn/ikkX16Gy1WEVHGBJi--
 

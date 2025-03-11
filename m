@@ -1,106 +1,157 @@
-Return-Path: <linux-next+bounces-5713-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5714-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E50F4A5B66C
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 03:05:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23337A5B685
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 03:12:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F2837A74B2
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 02:04:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C38A83A3572
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 02:12:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 682AC1E2307;
-	Tue, 11 Mar 2025 02:04:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA6AC1DE3BA;
+	Tue, 11 Mar 2025 02:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GJOH5+2l"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fNPJBRQU"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14373FD1;
-	Tue, 11 Mar 2025 02:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5A83FD1;
+	Tue, 11 Mar 2025 02:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741658695; cv=none; b=sXlYh0E6w7GsVontdiKljQDRsRnE74CE9jT8Lmq1F7FoW251teZ1MOZmFVKQZOukI2fXlzw1bWRmQkawTwEKtR9L9xndCPcow+b+xfG0dL/3bjaeo+os+XwEXHgT0Juns3HwFtSx1xfpjnh3kIp0OUbxYG0YwXKmxvlJPxiSNFM=
+	t=1741659140; cv=none; b=a3uKVEGraAQKSuEitdUhEKyRFIBEu49zqQ39ttqbHHdKVukdEsaE/a8qTWyeP7asfkGBRIHHqPromiHC+gMGnd3gXnU477fuY6JFwrI0CAWfByaEXTBJQCu/a4SXzYiHXXWy1WdYRwQapoZMhQBDCdVsQ1dl2YIpBk9HK4OUkyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741658695; c=relaxed/simple;
-	bh=VHMrKqhpYUmRanfgiEYjl4Dpa9ZGizbuJ2E9zZatBEE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lY8A3HnWErCN0+BpFr81RmFWQpovIW/It6+p1Jws1NQLGQhkhOZpzPh4OVF6rbZzqcx72F6AFiT8a/oNWdnI8KR7R3KikKqkuh1qJoE8/gOoXUQhydtm3Yfna/mPtISJrHECfsIcdi8lHa+HBUFGEkd2mrOSMXn/EDNU0yKiSeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GJOH5+2l; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1741659140; c=relaxed/simple;
+	bh=9BewszbnyKceG31QbpOA8h948LA+GGo/buud95D3c/E=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=L3MRq1M1J2wKjA0sZVK9T/vb7aPkXY5EOcFaA8pR8Sv8cO1LWa8o38DSEdPcfLFpZ8LzwCHM35HML4Yoh+YuOJDe2o9gcs9vZxFd1DoJ/wzVJ3cyB4YBRDRhUxYx4Anb/6mAXThyJV2tP36oZqAXcAlY97Y05vzIP4oOXBvYIJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fNPJBRQU; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741658688;
-	bh=53y+lO1WpbMGCgaxDUAvybBmVxTmGb+/kXbwt+Wj+Vk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=GJOH5+2l1mKlsSU3ovhdYk9E70/dBalkUOIEGPx3lv/j2cTsmNHgG5rAXSBznrhDS
-	 ib2iU9evvg4xuknksQmrEO1kV9E7c6eXcF4HYwZHZS44DcEg2Jw+pzPLKH0MlHJFtS
-	 gWYzMtxNSfx8ycXA//qbPiC5XpOCPRLONIT2HdeuV7X1atm2BzCYNvFm2ZKB6Wx9Pm
-	 FmbvgBaQ+oXuAQC8YZtqfmLSX0cNe9BvO6byJFBLflfv32ZlDIfQ7E06M3SEwu6jb1
-	 X6eZqbO5tNgSy1I+88q74Nb8IkD7wLF0+ndVOb6KuzzpwGWHD4rZy2mbU27Cx66q79
-	 HCF6a7mrEHpWw==
+	s=201702; t=1741659135;
+	bh=sPRc+SLGGmBsjVapsNsec//vcORc+A/EDQ02Tjp9hxk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fNPJBRQUlWyQoZ4l+yuMk9PjEFga7EpUUJBxPHBvL/78UNUd5LK9ekyvB0VfzcNbX
+	 8kRos6qJs5Fjh8LdO1KnzQCq5XHhg+v3Cu9q6LRv0TxoTHHlQUX6g+r8Mbg7pC/xpP
+	 I0AGq+wOL2qBzOUdyt3UHC8zkIxtoMZbO7+bhy/F1p3BYGyw3iSSrEeMMF6mqFnwZB
+	 ZCpsM6U7WQJ0zdnz/IF9v78uRkO/9tsWcNFLRA7HNRhdFdc3F7bNHvguKTYuh4qo9C
+	 INEq465rvxTzR+io+c4V2G5PgDbqRTOuL2gq4ilIypqLGcOcDQXtKboS72TlqFbmNA
+	 WZZ2wCuXZVUTw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBcXG2vDTz4wcw;
-	Tue, 11 Mar 2025 13:04:46 +1100 (AEDT)
-Date: Tue, 11 Mar 2025 13:04:44 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBchv00qfz4wcw;
+	Tue, 11 Mar 2025 13:12:14 +1100 (AEDT)
+Date: Tue, 11 Mar 2025 13:12:14 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
- <johan.hedberg@gmail.com>, David Miller <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+To: Andrew Morton <akpm@linux-foundation.org>, Dave Airlie
+ <airlied@redhat.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>, Thomas =?UTF-8?B?SGVsbHN0?=
+ =?UTF-8?B?csO2bQ==?= <thomas.hellstrom@linux.intel.com>, DRM XE List
+ <intel-xe@lists.freedesktop.org>, Alistair Popple <apopple@nvidia.com>,
+ Balbir Singh <balbirs@nvidia.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20250311130444.0baf2349@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Matthew Brost <matthew.brost@intel.com>, DRI
+ <dri-devel@lists.freedesktop.org>
+Subject: Re: linux-next: manual merge of the drm-xe tree with the mm tree
+Message-ID: <20250311131214.530934a4@canb.auug.org.au>
+In-Reply-To: <20250307122954.1ab65809@canb.auug.org.au>
+References: <20250307122954.1ab65809@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Xah6Fz0YMHfx9/W.cfM2V.P";
+Content-Type: multipart/signed; boundary="Sig_//FZSXrmCnoUDnIwitfLYCfG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Xah6Fz0YMHfx9/W.cfM2V.P
+--Sig_//FZSXrmCnoUDnIwitfLYCfG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the net tree as different commits
-(but the same patches):
+On Fri, 7 Mar 2025 12:29:54 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Hi all,
+>=20
+> Today's linux-next merge of the drm-xe tree got a conflict in:
+>=20
+>   mm/memory.c
+>=20
+> between commit:
+>=20
+>   089b22f60a0f ("mm: allow compound zone device pages")
+>=20
+> from the mm-unstable branch of the mm tree and commit:
+>=20
+>   1afaeb8293c9 ("mm/migrate: Trylock device page in do_swap_page")
+>=20
+> from the drm-xe tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc mm/memory.c
+> index d21f6cded7e3,59b804f4bf3f..000000000000
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@@ -4473,11 -4348,15 +4473,16 @@@ vm_fault_t do_swap_page(struct vm_faul
+>   			 * Get a page reference while we know the page can't be
+>   			 * freed.
+>   			 */
+> - 			get_page(vmf->page);
+> - 			pte_unmap_unlock(vmf->pte, vmf->ptl);
+> - 			pgmap =3D page_pgmap(vmf->page);
+> - 			ret =3D pgmap->ops->migrate_to_ram(vmf);
+> - 			put_page(vmf->page);
+> + 			if (trylock_page(vmf->page)) {
+> + 				get_page(vmf->page);
+> + 				pte_unmap_unlock(vmf->pte, vmf->ptl);
+>  -				ret =3D vmf->page->pgmap->ops->migrate_to_ram(vmf);
+> ++				pgmap =3D page_pgmap(vmf->page);
+> ++				ret =3D pgmap->ops->migrate_to_ram(vmf);
+> + 				unlock_page(vmf->page);
+> + 				put_page(vmf->page);
+> + 			} else {
+> + 				pte_unmap_unlock(vmf->pte, vmf->ptl);
+> + 			}
+>   		} else if (is_hwpoison_entry(entry)) {
+>   			ret =3D VM_FAULT_HWPOISON;
+>   		} else if (is_pte_marker_entry(entry)) {
 
-  01aa72784e50 ("Bluetooth: SCO: fix sco_conn refcounting on sco_conn_ready=
-")
-  8da76b2ac810 ("Revert "Bluetooth: hci_core: Fix sleeping function called =
-from invalid context"")
-  c01c0d443bcd ("Bluetooth: btusb: Configure altsetting for HCI_USER_CHANNE=
-L")
-  c7c65369f5a3 ("Bluetooth: hci_event: Fix enabling passive scanning")
+This is now conflict between the mm tree and the drm tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Xah6Fz0YMHfx9/W.cfM2V.P
+--Sig_//FZSXrmCnoUDnIwitfLYCfG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfPmjwACgkQAVBC80lX
-0GxK4gf/aF/kTXC5O+8SZutLdatEAYMaJWUSECGcZlmLOHvwVmhADNY7qe6EDPOd
-BgCaanmwm64JNV5nNu7r/orlgNul33bhSBpqusoW/D0Io2Ucd4e9QPKTRVJL+XrM
-fTXAyFdtdNj3W9iZ/53C47RZNuQOPryvWIKO/K9VfXa6fcpC8CrGZ/diD/3/UGyo
-ixbozTAyydXc+1sLuivRubr7NWGaRSVz4hDrqCqPOrWP553mdreMaJH+tn5fOC6V
-AQzwD7PgQ4Fveuu1HnDcVFpQr6uqvd1obXP2HCIWH24iPqHR0oxMdiPVHAqi3LOa
-uo8lTH57R/pwTsBGxPYuG3oy7jRijg==
-=12wp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfPm/4ACgkQAVBC80lX
+0GwWgwf/dqiOYAQOJABrMGZlP96+Re5v5AI0/oZmQI8+MQRGYeeXMNCjKfQiMaTb
+zvZ12zDkJ3vfTd4aNBcO8uGO+rxiq9vH1w4vCyGhq+IHGITnDwos5pxLegtaUI/p
+69kuQNxO+iQL41EBii0t7w+tEUj0UEkUyfwi1zyPlPaunLtDVpEL05t2n8aD9A0O
+NKYrvND55PlC2OMncDvOwhy3B66KtUgFB3EyG1UdWYIPwlcwg3qiI1XBumb1pWFX
+/MihC/1QVJbzim3rbNmljyQM8GhBaz++2D7lf6LInAnVRwavcPHZoi0kKep12oYn
+vev33M8do2498+8JyrckThlnZnqxqQ==
+=Zw5K
 -----END PGP SIGNATURE-----
 
---Sig_/Xah6Fz0YMHfx9/W.cfM2V.P--
+--Sig_//FZSXrmCnoUDnIwitfLYCfG--
 

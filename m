@@ -1,109 +1,130 @@
-Return-Path: <linux-next+bounces-5726-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5727-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6103A5BB93
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 10:03:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93B43A5BBDB
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 10:17:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CBD53A3597
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 09:02:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA737188C8C5
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 09:17:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861761C1ADB;
-	Tue, 11 Mar 2025 09:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2972B22B8AB;
+	Tue, 11 Mar 2025 09:17:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="mTA+meW2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="beWikhIv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472A02AD20;
-	Tue, 11 Mar 2025 09:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7460D1D8E07;
+	Tue, 11 Mar 2025 09:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741683762; cv=none; b=TjCPa1yv/lXD5FxRs++BfyUI0PBUWKYcyGrGt+nWrME5cSjxce6i6SjBTn9AJskhFToap3HcYCjQUMG3KcsOcARRWRpfgEgKlq6XX1++6oLFl1u4n8fi0OKtutl4n4ymsmKKTYxdX1kAMYhL/4xoZih/X+xjTrisvbArs8gIZzU=
+	t=1741684657; cv=none; b=fOljxF+lJUQJyncse3xb+LImxoovXuMB0RH9qYh+CC1tqKW17VhdyHnIQxl8T8vLm+DB35D0sxhfcEPVqgKljaK09dxd/d7kfH7MkNnLUxpSt8CQXC1U09PK5N2NJbGGHEK+dCVhjVBSQTEwAJFnIHDnzyROaY2DLR3VC4URz1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741683762; c=relaxed/simple;
-	bh=xHVnyu0Wj20hm/ACoGgPI8gDN90oW8OoELTpSDn11go=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Bpy3kwdPWweLmlZyZZO/wWgSaUr43zlwWciqB542KdAfyVvBHte6i5BiSV1Is1R877F4BZOQ4sy6q74qSafBAfCJSNLMXa6DVxGsCdorV3wtIghyKmGRFi0/sTE1imGKsbVk1ixUgSujJdLl9Rz4FAmSMio8SdRDtEkOgH0dwxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=mTA+meW2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2CDC4CEE9;
-	Tue, 11 Mar 2025 09:02:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1741683761;
-	bh=xHVnyu0Wj20hm/ACoGgPI8gDN90oW8OoELTpSDn11go=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mTA+meW2I1gRK9wLMCCbdi8zjdJsPLqyfo17Vpt+sbU1r9Gu9lKKdpqW4VL0Vmukh
-	 LjyDwUllo5ACUaoV3JXDufPBaCaL4V5+/3tEslbsnwx3bqd3Oc596FuZBo23/4qV5M
-	 mwtbayb7BKVG1cWSbVVmw1tK6BjKhRyiSOw2iu2c=
-Date: Tue, 11 Mar 2025 02:02:40 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the tip tree
-Message-Id: <20250311020240.3b8c34b155f76fff5cccee01@linux-foundation.org>
-In-Reply-To: <20250311150847.5a63db36@canb.auug.org.au>
-References: <20250311150847.5a63db36@canb.auug.org.au>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1741684657; c=relaxed/simple;
+	bh=mo2VOE5Pdost2IrWBbeMn+NGtDeyaW/lhYvg8WhS0/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=mTGXRj9jAXBi91Q2xANceq+FIKBXDFudn2ZcV/cnlQOHdNSbUY36xggDMRzxGlSw3hMi76TCGchu/ZtKKIK4F+nplmujoak2lQIe7hOY3q3vAXLwmbRx+IaFEh63j20p/pv4OrXcBtwYR7JiDs+0ss8BkafEA6fdmF9esU1adVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=beWikhIv; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1741684649;
+	bh=+7rgICWy4cnzwX384jJ8pJ+8ukLphTwXiqmF9tmuYq0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=beWikhIvVfDpgOHMSRKU+GaukBeI+pGQvSxaxfWyKXfTtM6G4uJh4535HoKathiRY
+	 jOaLixcdE/RtxGl8W/6hSbpoj3W4qgZOyPjXSScwJzVlcPHywi0uqlruAwNnunGOIE
+	 XU4Ua0PBlBmcDnlD3BX8+xT+JasPZ/wZr8+8rxoQn9+zW490Z1rmIXMxge7uDUkhr6
+	 JaCGwkZsABkHpI1e33srrA1rF72uvkmxR1YEOF0fmK2i+DWkapNVHDx3LmaC/wJD+C
+	 Jf/lm1wEIeLOjdo2ufN+GK+BuwkQHv/iMAfN06XBv1lZXkTxWmqp3v44HLpnnmTTHB
+	 CVMEpAf13Ee+g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBp7X62VWz4x3p;
+	Tue, 11 Mar 2025 20:17:27 +1100 (AEDT)
+Date: Tue, 11 Mar 2025 20:17:26 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Miguel Ojeda <ojeda@kernel.org>, Dave Airlie <airlied@redhat.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, Jocelyn Falempe
+ <jfalempe@redhat.com>, DRI <dri-devel@lists.freedesktop.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the rust tree with the drm tree
+Message-ID: <20250311201726.3f45cc67@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/WRC61WYquP.DU.LnirxUgyK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/WRC61WYquP.DU.LnirxUgyK
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 11 Mar 2025 15:08:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi all,
 
-> Hi all,
-> 
-> The following commits are also in the mm tree as different commits
-> (but the same patches):
-> 
->   0b3bc3354eb9 ("arm64: vdso: Switch to generic storage implementation")
->   127b0e05c166 ("vdso: Rename included Makefile")
->   30533a55ec8e ("parisc: Remove unused symbol vdso_data")
->   31e9fa2ba9ad ("arm: vdso: Switch to generic storage implementation")
->   365841e1557a ("vdso: Add generic architecture-specific data storage")
->   3ef32d90cdaa ("x86/vdso: Fix latent bug in vclock_pages calculation")
->   46fe55b204bf ("riscv: vdso: Switch to generic storage implementation")
->   51d6ca373f45 ("vdso: Add generic random data storage")
->   5b47aba85810 ("vdso: Introduce vdso/align.h")
->   69896119dc9d ("MIPS: vdso: Switch to generic storage implementation")
->   9729dceab17b ("x86/vdso/vdso2c: Remove page handling")
->   998a8a260819 ("vdso: Remove remnants of architecture-specific random state storage")
->   ac1a42f4e4e2 ("vdso: Remove remnants of architecture-specific time storage")
->   d2862bb9d9ca ("LoongArch: vDSO: Switch to generic storage implementation")
->   dafde29605eb ("x86/vdso: Switch to generic storage implementation")
->   df7fcbefa710 ("vdso: Add generic time data storage")
-> 
-> These are causing the following conflicts:
-> 
-> CONFLICT (content): Merge conflict in arch/arm64/include/asm/vdso/compat_gettim
-> ofday.h
-> CONFLICT (content): Merge conflict in arch/arm64/include/asm/vdso/vsyscall.h
-> CONFLICT (content): Merge conflict in arch/powerpc/include/asm/vdso/gettimeofday.h
-> CONFLICT (content): Merge conflict in arch/s390/kernel/time.c
-> CONFLICT (content): Merge conflict in arch/x86/include/asm/vdso/gettimeofday.h
-> CONFLICT (content): Merge conflict in include/asm-generic/vdso/vsyscall.h
-> CONFLICT (content): Merge conflict in include/vdso/datapage.h
-> CONFLICT (content): Merge conflict in include/vdso/helpers.h
-> CONFLICT (content): Merge conflict in kernel/time/namespace.c
-> CONFLICT (content): Merge conflict in kernel/time/vsyscall.c
-> CONFLICT (add/add): Merge conflict in lib/vdso/datastore.c
-> CONFLICT (content): Merge conflict in lib/vdso/gettimeofday.c
+Today's linux-next merge of the rust tree got a conflict in:
 
-Yup, thanks.  I trust it's not too much effort to simply skip the
-mm.git copies?
+  drivers/gpu/drm/drm_panic_qr.rs
 
-There's presumably a better way of doing this, but it's really the
-first time it has happened in N years so it isn't obviously worth
-investing in setting something up.
+between commit:
 
+  dbed4a797e00 ("drm/panic: Better binary encoding in QR code")
+
+from the drm tree and commit:
+
+  fc2f191f850d ("panic_qr: use new #[export] macro")
+
+from the rust tree.
+
+I fixed it up (I guess - see below) and can carry the fix as necessary.
+This is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/drm_panic_qr.rs
+index 5d21f6d10bcb,ecd87e8ffe05..000000000000
+--- a/drivers/gpu/drm/drm_panic_qr.rs
++++ b/drivers/gpu/drm/drm_panic_qr.rs
+@@@ -27,7 -26,8 +27,7 @@@
+  //! * <https://github.com/erwanvivien/fast_qr>
+  //! * <https://github.com/bjguillot/qr>
+ =20
+- use kernel::str::CStr;
+ -use core::cmp;
++ use kernel::{prelude::*, str::CStr};
+ =20
+  #[derive(Debug, Clone, Copy, PartialEq, Eq, Ord, PartialOrd)]
+  struct Version(usize);
+
+--Sig_/WRC61WYquP.DU.LnirxUgyK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfP/6YACgkQAVBC80lX
+0GwUWAf/cQViY4ylwkS/1xzQYSshSANM8Mdpc2O/hl93LFKTqI8CF5tz1s3Dnsxv
+2Ds3e0pQED2VnOw2OAStVpKgJg/Mq48TCIiCpXV/5LYZ+/3pcChKI1X67KfXo6Cc
+ZP9DPeJ6UoVQytvYSzzzAbvPm/HUHlIEkygRcTFvS/VhzsdnQ20w2JtcCqWGkv5D
+P05bDe2xfremGB0zndwq8/GgQImITGSfQXaKy9htzlDqHubY270OYZlvqM/hYYbx
+J9z/Dx4nPQnTQ5QtMKeVXPkYN+uIU235nebW+hQznrn8BV85Z026T9nuLROYwWmX
+KVEgdPK6N7NJeHXiOqM5YO4JpIMfSg==
+=O7nl
+-----END PGP SIGNATURE-----
+
+--Sig_/WRC61WYquP.DU.LnirxUgyK--
 

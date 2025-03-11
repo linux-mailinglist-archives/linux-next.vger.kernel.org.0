@@ -1,134 +1,228 @@
-Return-Path: <linux-next+bounces-5721-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5722-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91B30A5B882
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 06:27:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBFE1A5B8F4
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 07:01:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 122E83A9E86
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 05:27:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8375416E409
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 06:01:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1DD1EB5C9;
-	Tue, 11 Mar 2025 05:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A49AD22258E;
+	Tue, 11 Mar 2025 05:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Qa5IQytx"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LttAcm9D"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2057.outbound.protection.outlook.com [40.107.243.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F74F1E9B36;
-	Tue, 11 Mar 2025 05:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741670856; cv=none; b=lg+rclYZm3GXSx+48Y4A9VTmkWg8T3UKT1xXx6ap5FV7TDjlAGLZ6LT15Jtc+7ofmwi4VFjhO7E7s7uZR09Bq/580EEtnox2CB+yE58S9/5eXO1eG9z4WqrdK2wPUe35MpYNeQBX1fY5AT7txSfXtserK+2msaoIe5ZPgsN7Z0U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741670856; c=relaxed/simple;
-	bh=swyYk98GCb1QjGqyzf5ZJBUAE1q9FAtVlZRh92bxtG4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tYWD9Szsbc+v4finjERTgLEioy6YzvzMjJSmWzaIVseW3ngDRIdgfkKF7uM/aqevl/j5LfzwE6HzMP9Tsa2+NDJx+QVnK1AYrFkXzIbgquaONsaxk1/b/O2Q5jAA2LUVAzz80ngOmyQQ6IrAoIgwspKgV4+/iwQ8QdXZfj5Lu8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Qa5IQytx; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741670851;
-	bh=y5fr0UTLOJJIqeRgg8Vg/OLNcU8T9+K3GX1Wh/1F2B4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Qa5IQytxImhu5nKdjyD20z/IqtKjdbO83gSYGxtozrj6LJz5KcJE8JnlfWs+jrbU9
-	 v04/GnEzQTxmNx+vmxt0HR8Azbg+HelZOiDflDh9WxO18AWY4NzQQpc9IlzgKQlybq
-	 1XQISVFlH5dkFwKFN7Jb26If/ls7wZvjl8rSewIlISjvAaiEvK6to/3M26zZ9wsblL
-	 zK94ghNvKB6rC7yayrc0L/U2HJfoyLmEaEU2L5zMFbcnupQGpYCqqO748FAKh0mVrO
-	 Rcqiw1TWGrdmy+N9xrk+zT+HmSgFwq0U/R/bdSEP+vIcB0UU6CXoh3h+cSyhFcBCwr
-	 Zx3X04y3EpuRA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBj2C2nwjz4xCW;
-	Tue, 11 Mar 2025 16:27:31 +1100 (AEDT)
-Date: Tue, 11 Mar 2025 16:27:30 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the ftrace tree
-Message-ID: <20250311162730.2762bbd0@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4F71EFF88;
+	Tue, 11 Mar 2025 05:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741672685; cv=fail; b=WIxDtHtENtHexuKGr6IscuU7szpSZ1I+wVRbCsYt3pdiXiuwFkgR3YiltacURoiIY6SpSyNJrFvso5/iUo0nku8dlW8UBdQsbbm/aQvkZEEWEO6qWRePEPKLwLmfBGnIsayIM118ed3sBOqE314eEQmTULRMpm2O5YWZO0XKC58=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741672685; c=relaxed/simple;
+	bh=k0eIq7RYkOrEq4YjGpihOyPX1a90gIteNjnoeUMPVLc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=LeaRV6kY3x5UIp1XKj30QPG9Sq6/vlWB57qD4FM+l+ytDFsaGp6Pgk7Ng1+dNdIgp0bL31eLT1YI7/JDhhEtW75LcsVsZ9ZzJJ4Sl9qYGE8N+J9OF9jn6IpHIlijgw4iJ4WRwFE3S7CyzCsZHUBxpVr4sClXsT8M9AziMihMRHY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LttAcm9D; arc=fail smtp.client-ip=40.107.243.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RJYSoxdmGqct8NQpYEUs+N/YC1lPq0q+A9aJy7khsM70k6cg7w001eU+0lLWjSMSED3F70+jnLh/wGBC6XeS8SKiPv/XeDCmzRAxZGgYfNclNtzpRhRysWPOYZi7Hh5fQlt9AIXwQ5fFb0NvclKar8q19B9y54i2vaOQG+UAlZ+g8+dHS+edw+uPnmNH2xG6CXxWpVh8FN4qDBg+736cw2hqCUBRr87v9HRkNny7HQk2y5txY+zf2tctWaceeyn9n/yymvoXVLsZV/ibgHXHKkdcJSI04b1YmsAwVQHHrPFNb8SGh5Xxv/UvsEQ+R6BOnF/9QhbbnAnEX5Wk98kBkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=54adK4GQMIVneA7wT+l2vGzVk0FH6mmIiF3divPfbuA=;
+ b=hFMom3i8B/Rj7QKc72ZItL+NUU8SR6HLjX3tC3/tJduk46amBCXwgQIfIUeOm5KjNcNKqjBxphLCOSiJYHaxnHM5TJ9Dw5tHuw0mJE7tUNnOrbt2mcnIsfyFM/jeirr0Sm8gt128QjR5Wlwr//YpQ0HlQhkq2hTff+Q1DrUKPJKRUm1LMpSDOknD3CJ6ncKxj3Vk27IXQFJtPK1jy3YeJL7l94H9kZlZlx9Sths56OC3SBCCzNvZsuhoKLaO5xh2Q/3/dV7XeWt0eSBJGxjg4MGCW5VmPEumg1sXY+NsMFszgX5P9AnW5ohWfBc0th/g45QlxWH0Avso0ADoj+cDcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=54adK4GQMIVneA7wT+l2vGzVk0FH6mmIiF3divPfbuA=;
+ b=LttAcm9DwZyWhSRAS/LaBrW/RjgrLtNDHPyE6gKQREpE7AuOoPo2m/XKmR0/TwAH1CDzw3h8I2j9AF1jO9Su43qY0vFXiUTjcPU5p8UGHG1mUv6PWlgkWUPKaESLmRdaW5GDeKDWy1XUBCtnC5YeGWbwB+du7Ekigr3h1HXcg4mHvWNNOh4bZ8RLkwa9F4fNB2WFO6O3Q74WCXEGllGgE8TfMMnp1TayxtPbXpzBSW00wrbFBv5I3UL+DPxYt6dN5kKQiSlFIyLr6ZnI6dZUFetvHB29CPi/kt6JW1SI2b4Ox1cU2aUPmLTNmzmz6qIR6pXdk83Ogvq63aIZXDgSIg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS0PR12MB7726.namprd12.prod.outlook.com (2603:10b6:8:130::6) by
+ SN7PR12MB7955.namprd12.prod.outlook.com (2603:10b6:806:34d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Tue, 11 Mar
+ 2025 05:58:01 +0000
+Received: from DS0PR12MB7726.namprd12.prod.outlook.com
+ ([fe80::953f:2f80:90c5:67fe]) by DS0PR12MB7726.namprd12.prod.outlook.com
+ ([fe80::953f:2f80:90c5:67fe%6]) with mapi id 15.20.8511.025; Tue, 11 Mar 2025
+ 05:58:00 +0000
+Date: Tue, 11 Mar 2025 16:57:49 +1100
+From: Alistair Popple <apopple@nvidia.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Dave Airlie <airlied@redhat.com>, Lucas De Marchi <lucas.demarchi@intel.com>, 
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, DRM XE List <intel-xe@lists.freedesktop.org>, 
+	Balbir Singh <balbirs@nvidia.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	DRI <dri-devel@lists.freedesktop.org>
+Subject: Re: linux-next: manual merge of the drm-xe tree with the mm tree
+Message-ID: <kk4fmefhwnis4lwlvssgu6t54o5mkahgyz4cm3wjh2hgtriexh@x3xseg5v7nrm>
+References: <20250307122954.1ab65809@canb.auug.org.au>
+ <20250311131214.530934a4@canb.auug.org.au>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250311131214.530934a4@canb.auug.org.au>
+X-ClientProxiedBy: MEVPR01CA0003.ausprd01.prod.outlook.com
+ (2603:10c6:220:204::12) To DS0PR12MB7726.namprd12.prod.outlook.com
+ (2603:10b6:8:130::6)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/z38POeWRo690QIe.Zl/IXxD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB7726:EE_|SN7PR12MB7955:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49068d9d-793c-4c1e-3f57-08dd6061ae26
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?V7iVb75IxU+2uVLSdkd9iJASdwtPqHm4Q0FK6UE7LV2zsAQboGmNEPiiu3rx?=
+ =?us-ascii?Q?clt+cEJalM6SU8yWH10D+Ks/Vy6QT5Au+qOTy3mSEYGOoxcCAXpw9NtfMnKZ?=
+ =?us-ascii?Q?ir+v0G0GMGWYCsEhxBcD1eDYpDRv07gYYXyZxWBLSsfk+VLr1MXR0tvXqPHx?=
+ =?us-ascii?Q?AE8u7SRZVJ0K4x6oN++70agPqlj/lAARUe8MePJZ++ku4f6tJyrriutgmCj2?=
+ =?us-ascii?Q?MY62VMpjqroIf4DF+Vaf48f6jfmMG4YbhKSlKDfs2jkHJAx0ZskuUcmTMBb0?=
+ =?us-ascii?Q?q9qeflbIoZ9NEdcSFKLFs3SSpiRom74a9d83qPbkGCWikh09yiOPXfYHvRzb?=
+ =?us-ascii?Q?OqPzF39YlzPx0hfhjLEDYCcAznL5aG5v9CSSBz0KYrFXpugyj/hCiq2dV4Dy?=
+ =?us-ascii?Q?udRC1X762asxOM+jUEVtaQFE8JCprNWMf5y5jSvpcqJuRFHMHgiobEMGfgKF?=
+ =?us-ascii?Q?3+361BGSUqHrodhjgSq8LAPLdkEUCYMtGnqTRhFLTEX9fisGVQqESpJN3k9T?=
+ =?us-ascii?Q?s0jMaBgde3im6QaTtPgckZA7/qwN9s24Hr3fw7e4hyYd7N9Xpe2FPI5FCOaH?=
+ =?us-ascii?Q?cq9dTxWSlK5BIPK8ze68DHqISYpw93O3WZfKH3+ptt1rq/HU5CYsnqukIFjX?=
+ =?us-ascii?Q?BcU43f6VVl0CkpsqoLdT0gvQbR7zAADIIPnKDJ6kB+dpy67pGgJ2iUBUnXrt?=
+ =?us-ascii?Q?A96q04Zb1Mofsdj/GzRAdldu1d+OXHSIld7SHOsd0c3PFU/YAJGD3nMcylYC?=
+ =?us-ascii?Q?tGtngAjdXCgiiuPbLn/xQB4rAjOGxaFlZurZKo8PlMnAt0/ls99lR074MAS9?=
+ =?us-ascii?Q?BU27oc5dbGldJAiLgYrrYR9bodTCyJQy+Nm/lpuGSYdtUnhPo36vokgPN2/O?=
+ =?us-ascii?Q?XcCCs/SBeA1knLFm1vpa5yOkjgFFu7whktiE+JqKZNrGluinJf8CoylemF2/?=
+ =?us-ascii?Q?4Gx85mV99NZdYTFth60lVbk21SlhH0JK4f/Zrn6IkvZCfu2SRY8MkYOpRlps?=
+ =?us-ascii?Q?RxRHUAmc2/D2rIwQvimsqpSAC7NESKN3zxc9RmkKQLSmcdEFRKNKF+WLE3JO?=
+ =?us-ascii?Q?BsxW3ZiRHnMAPtPDHUt0XzB8ennsQc0ABxbZqbWL9UJgVXnSuZ7u745T/dUH?=
+ =?us-ascii?Q?lKApS4x7uJGH26v4nxcxDdmBNWXewa3zBJj1SDJGnOlefsg8VHI0nYiwwHuM?=
+ =?us-ascii?Q?u9nSS/D76p/tDus41x+udJh0JXCEgBfnAZwGydQZKmjv7+rpI4lbA22yhPnS?=
+ =?us-ascii?Q?0fSbVn33WlIPgnEoI34IyCqn5ujwIt+STrjT9J7Zua9WzIoyHQwgto2SNVNz?=
+ =?us-ascii?Q?ZFUORYihMs1fj0yE04eH6mL0qtyv8+Qd9W56tlKy9dI5KM8whst0oPR7EuSV?=
+ =?us-ascii?Q?OzgnHURunThg/iXSSmwPc+eQEylw?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7726.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Pexou/Eu/wPkez/DJYpjegEm9XMfZa5gLdl+09Kls99jW9fRxoV6YCKdbUiv?=
+ =?us-ascii?Q?NjelrBAOpCQQ9+4C6QCM2y+cVq5ucQvxYn70m5wCtWNiPcDfq5EVi4daeT+J?=
+ =?us-ascii?Q?cQVSJjVi6Mk7FxULHSOa7kIZPcW14dqPYgnAWYm1waVCXa9TtxoxY5DjuR1Y?=
+ =?us-ascii?Q?VoDeDKkIXZCeg0w+6iYUyhD90zueQTWeLf3z6SU+IfwUSNUfdbkWJJv4xprA?=
+ =?us-ascii?Q?easW/pbbGB1vZ1VRsyM60wrpLR3m1u1/Ye0dCTk2r914G7xk1TTGvvdctEzK?=
+ =?us-ascii?Q?qRhGxjdqSC/IyRLaqerzjvEdWzH4XR1Mh+DWSnTjtoYklT/G3l1M89aa6ADe?=
+ =?us-ascii?Q?T5jzb831uAdtPbxPPAiD86F8SRMUYySBQQ9LXj0fM83ZpDiDl7vj1z3lP91M?=
+ =?us-ascii?Q?ysQn0FzVfXxbuQ8fmziuB0Vaws9AEAgnd6AV/lGl0zIln9bRM0Nq3yne8XDu?=
+ =?us-ascii?Q?Qjsp+U6+FhlFVXgISVByHOb8idfkz0MSGm16tgl5aWJ7HASlWQ3gWTgP+csQ?=
+ =?us-ascii?Q?LLsDba9pSfJ40vgyjCnFNK1Bn2QYzbFiS44MbawAb/CaLBy+btyaGwjGrRSL?=
+ =?us-ascii?Q?onlTe2BRG6GnzOBGmj8s8omcCEzPzHhDmrp2rxT0cbqe95zgqy24dgz5nF9p?=
+ =?us-ascii?Q?edjtaiWpNlF1soR+bh2d6JwLIEW1uXuZxaEOpWsGbwmq/ZuHT1n4ZA13NoBT?=
+ =?us-ascii?Q?AtZVxtWno8zhvpNQYwqOxaBJDzu2OLctx8jIn6QhuPtR+nuRi2Ho+nQYKpun?=
+ =?us-ascii?Q?EMhN1W5wyftQwqklF4+wBMsHLqPhDAndSNd4OJTqohsbp71vXJ7VM/4tTsGp?=
+ =?us-ascii?Q?0QxsZ3r0BGndujyhmkuLm56Xyf2VSb4q9w136MIpyZdp8iPAwCdX1rLOQtZb?=
+ =?us-ascii?Q?SA38cwCLGun0kx9qboMaLLFBto43fT/vworj4nODwh9NbVQHRuUtFyUNnfAZ?=
+ =?us-ascii?Q?cysbfQuPxdgLSjr6RLDGjHr1j9r+hyGrv+S6GgJPYWqowSa3anYCV/uFnk3v?=
+ =?us-ascii?Q?UPFxHD9jCR3y4ZAtIe+aaQGsMlthXvKZSVQA6iSZLcqw2BYl6Bm3eCgQrmBv?=
+ =?us-ascii?Q?CGTiWV5p68p77WpKQZjXGJETC6GsDPxFrpEsKb33ukMTwTMFem/Nr1tXhp3i?=
+ =?us-ascii?Q?8qicoB32AGegB6yrjxSMaD/gEPa0+yfT2R5clsnLhl/bjjyt6AUmi2eniz3Q?=
+ =?us-ascii?Q?U0OeWi4kZ3EgkKTSpPWLvDvwvs6D+GUGi91h3ivy3W85mbG/TATWuOHu63yc?=
+ =?us-ascii?Q?KbcyTjqkLjT+8klIC4r75d15CH9V9JpmIR0ZhUBCkBUTieyUObPwPjRS5bhI?=
+ =?us-ascii?Q?d8Pzwrb4ZB43L6y5b6tx1P6zll29m+LkDYccjPcQGL9EfyLPsf+cjokwmvpm?=
+ =?us-ascii?Q?gAx4uA7dEO6hWtuM7U8iroadwL+2Ext7znLiHPuZKtqixHhvkCwqXhaJ2We/?=
+ =?us-ascii?Q?q6rJghGcsUryW+a5250mIFGsnReujKa8V5dPOgGn9oszIr48UxveUAevaaf/?=
+ =?us-ascii?Q?BQouwIhty4neeRsfuTqK1wWsczdKTb07jyecyFOFOrr64CQFIZah5mmDjOA5?=
+ =?us-ascii?Q?dHaO+P3+JuPYUhAxhZHMHIfehlZxm8THdJNAaWBZ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49068d9d-793c-4c1e-3f57-08dd6061ae26
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7726.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2025 05:58:00.8622
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6hFSTMVgJR8sVIFgPaCSpSR1iiBcHDvvS2i135lVsY/5wLzq19iqTlB6Ip6lpPpzqXoFKHTEcYeRCxJ/2mlO4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7955
 
---Sig_/z38POeWRo690QIe.Zl/IXxD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 11, 2025 at 01:12:14PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Fri, 7 Mar 2025 12:29:54 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> > 
+> > Today's linux-next merge of the drm-xe tree got a conflict in:
+> > 
+> >   mm/memory.c
+> > 
+> > between commit:
+> > 
+> >   089b22f60a0f ("mm: allow compound zone device pages")
+> > 
+> > from the mm-unstable branch of the mm tree and commit:
+> > 
+> >   1afaeb8293c9 ("mm/migrate: Trylock device page in do_swap_page")
+> > 
+> > from the drm-xe tree.
 
-Hi all,
+I'm not sure what the process is here, but having either reviewed or authored
+these patches I can add that the fix up carried below looks correct.
 
-After merging the ftrace tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+ - Alistair
 
-In file included from arch/arm/include/asm/page.h:185,
-                 from arch/arm/include/asm/thread_info.h:14,
-                 from include/linux/thread_info.h:60,
-                 from include/asm-generic/preempt.h:5,
-                 from ./arch/arm/include/generated/asm/preempt.h:1,
-                 from include/linux/preempt.h:79,
-                 from include/linux/alloc_tag.h:11,
-                 from include/linux/percpu.h:5,
-                 from include/linux/context_tracking_state.h:5,
-                 from include/linux/hardirq.h:5,
-                 from include/linux/interrupt.h:11,
-                 from include/linux/trace_recursion.h:5,
-                 from kernel/trace/ring_buffer.c:7:
-kernel/trace/ring_buffer.c: In function '__rb_map_vma':
-kernel/trace/ring_buffer.c:7137:59: error: passing argument 1 of 'virt_to_p=
-fn' makes pointer from integer without a cast [-Wint-conversion]
- 7137 |                 if (virt_addr_valid(cpu_buffer->subbuf_ids[s]))
-      |                                     ~~~~~~~~~~~~~~~~~~~~~~^~~
-      |                                                           |
-      |                                                           long unsi=
-gned int
-arch/arm/include/asm/memory.h:386:66: note: in definition of macro 'virt_ad=
-dr_valid'
-  386 |                                         && pfn_valid(virt_to_pfn(ka=
-ddr)))
-      |                                                                  ^~=
-~~~
-arch/arm/include/asm/memory.h:290:53: note: expected 'const void *' but arg=
-ument is of type 'long unsigned int'
-  290 | static inline unsigned long virt_to_pfn(const void *p)
-      |                                         ~~~~~~~~~~~~^
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> > 
+> > diff --cc mm/memory.c
+> > index d21f6cded7e3,59b804f4bf3f..000000000000
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@@ -4473,11 -4348,15 +4473,16 @@@ vm_fault_t do_swap_page(struct vm_faul
+> >   			 * Get a page reference while we know the page can't be
+> >   			 * freed.
+> >   			 */
+> > - 			get_page(vmf->page);
+> > - 			pte_unmap_unlock(vmf->pte, vmf->ptl);
+> > - 			pgmap = page_pgmap(vmf->page);
+> > - 			ret = pgmap->ops->migrate_to_ram(vmf);
+> > - 			put_page(vmf->page);
+> > + 			if (trylock_page(vmf->page)) {
+> > + 				get_page(vmf->page);
+> > + 				pte_unmap_unlock(vmf->pte, vmf->ptl);
+> >  -				ret = vmf->page->pgmap->ops->migrate_to_ram(vmf);
+> > ++				pgmap = page_pgmap(vmf->page);
+> > ++				ret = pgmap->ops->migrate_to_ram(vmf);
+> > + 				unlock_page(vmf->page);
+> > + 				put_page(vmf->page);
+> > + 			} else {
+> > + 				pte_unmap_unlock(vmf->pte, vmf->ptl);
+> > + 			}
+> >   		} else if (is_hwpoison_entry(entry)) {
+> >   			ret = VM_FAULT_HWPOISON;
+> >   		} else if (is_pte_marker_entry(entry)) {
+> 
+> This is now conflict between the mm tree and the drm tree.
+>
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Caused by commit
 
-  10a299da2c2b ("ring-buffer: Allow persistent ring buffers to be mmapped")
-
-I used the ftrace tree from next-20250307 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/z38POeWRo690QIe.Zl/IXxD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfPycIACgkQAVBC80lX
-0GwrDQf/QjVf9xAVRW965OaKz0OQnGhYnNsgbVIYAzDpSGWPRdss/QYb2qiT0DtR
-+4OeytEp9G1rgAQJEFKTiLbEtl7mloBiOUykppnv1BhnFj895VVzcKBLHYrOS0l/
-BG9kqzdbXtlMDyDuFcs5tBwsI9UXBegUOzWIQ5uGo69PTv5R6pTMyXMMmT6RQyVt
-gO+2dqnfGKkNmMwjcr8C5cPap7/aClTTanxmGV8qmdBZEZHEU1jpYyHWLweeJe/P
-kl1qBQFbxLWf+TKEa9SQegex/RLSvP2mMxtobNv0CdAE7hC1nt60gsjcRhcHzMB5
-h5EDQoYHQ9CpQ3XxSm6TQ2WsAnJYAA==
-=rWfU
------END PGP SIGNATURE-----
-
---Sig_/z38POeWRo690QIe.Zl/IXxD--
 

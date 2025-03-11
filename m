@@ -1,164 +1,109 @@
-Return-Path: <linux-next+bounces-5725-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5726-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EB81A5B9F8
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 08:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A6103A5BB93
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 10:03:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7C5E3B041C
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 07:36:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CBD53A3597
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 09:02:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69CA22423D;
-	Tue, 11 Mar 2025 07:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861761C1ADB;
+	Tue, 11 Mar 2025 09:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="R48GsdkS"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="mTA+meW2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AA3223300;
-	Tue, 11 Mar 2025 07:35:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472A02AD20;
+	Tue, 11 Mar 2025 09:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741678533; cv=none; b=SkgpWcNOfSbP/K9iz9Gm2WGfkqp3R1IiJjkaZ2qgtS+QR2qBymItL7kV+OpchIGdzHnZGriVUWI4ErbW/lEvneBx1S5NLHu7odMmOCDWU7Nb3yLaV1kNPO/7w+h+Ojp4SNfZiCnTVkKVOkYMhgc60EgI+RVqJhio5X7JLj12tD0=
+	t=1741683762; cv=none; b=TjCPa1yv/lXD5FxRs++BfyUI0PBUWKYcyGrGt+nWrME5cSjxce6i6SjBTn9AJskhFToap3HcYCjQUMG3KcsOcARRWRpfgEgKlq6XX1++6oLFl1u4n8fi0OKtutl4n4ymsmKKTYxdX1kAMYhL/4xoZih/X+xjTrisvbArs8gIZzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741678533; c=relaxed/simple;
-	bh=POjYP11ijGhrMQ/irsFz8LQK3UogA6nQt9n5S4M0ExI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DbBjIAJNVtoCXL0Ialb+NJ8hKLK9V0lv6o1XtUeOg8MOsV180j+C6oiprC3QgfeK9gZQCaE1Z0nLSz7tVSW0/rj09UPRoKUUwSxgqaWDD1xEcIDNYeJzPY6CPfg4SLHV0KPBkk81NQOuXhG2mizQnP3WckIZgUxSJ6rjR6CLBi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=R48GsdkS; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741678527;
-	bh=+di+w3XDN0XK7wrSBYa8FBFLbOobo94ufMhlAR2ajB4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=R48GsdkSaKsBUSen7yRgRbAsbomrVay2i55ADnrXg4oPTiip9u3WNsJPAT5cP9SAA
-	 6wdl5DeduraEHDzpv70bx0EVLCkAMKrYPfuJ21UIpCiIB/78myPJSbD6zD2HaDxztj
-	 VCPj68NRbK0VMEqKPSZ66pEQenHkiOQEYnwlbOhL65U60Deocfewp0yZMgDf/HtaQG
-	 o8Z4ImbwVjYBTASsXJ5SFVeyOLVpi0r31p4OgvxcJJulPCmtGxIxRVtscu68FcoRwV
-	 YPUu95U0LaaXAcouzYVzPMLleJiuueuXTO4i4ovb5M4L2wIKBqdo9TTCMLoJPjg7ZL
-	 V6USCma8wtvIw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBlsn4cW4z4xD9;
-	Tue, 11 Mar 2025 18:35:25 +1100 (AEDT)
-Date: Tue, 11 Mar 2025 18:35:24 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>, Heiko Stuebner
- <heiko@sntech.de>
-Cc: Detlev Casanova <detlev.casanova@collabora.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, "Martin K. Petersen"
- <martin.petersen@oracle.com>, Shawn Lin <shawn.lin@rock-chips.com>
-Subject: linux-next: manual merge of the scsi tree with the rockchip tree
-Message-ID: <20250311183524.38989e83@canb.auug.org.au>
+	s=arc-20240116; t=1741683762; c=relaxed/simple;
+	bh=xHVnyu0Wj20hm/ACoGgPI8gDN90oW8OoELTpSDn11go=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Bpy3kwdPWweLmlZyZZO/wWgSaUr43zlwWciqB542KdAfyVvBHte6i5BiSV1Is1R877F4BZOQ4sy6q74qSafBAfCJSNLMXa6DVxGsCdorV3wtIghyKmGRFi0/sTE1imGKsbVk1ixUgSujJdLl9Rz4FAmSMio8SdRDtEkOgH0dwxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=mTA+meW2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2CDC4CEE9;
+	Tue, 11 Mar 2025 09:02:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1741683761;
+	bh=xHVnyu0Wj20hm/ACoGgPI8gDN90oW8OoELTpSDn11go=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=mTA+meW2I1gRK9wLMCCbdi8zjdJsPLqyfo17Vpt+sbU1r9Gu9lKKdpqW4VL0Vmukh
+	 LjyDwUllo5ACUaoV3JXDufPBaCaL4V5+/3tEslbsnwx3bqd3Oc596FuZBo23/4qV5M
+	 mwtbayb7BKVG1cWSbVVmw1tK6BjKhRyiSOw2iu2c=
+Date: Tue, 11 Mar 2025 02:02:40 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the tip tree
+Message-Id: <20250311020240.3b8c34b155f76fff5cccee01@linux-foundation.org>
+In-Reply-To: <20250311150847.5a63db36@canb.auug.org.au>
+References: <20250311150847.5a63db36@canb.auug.org.au>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aRgCxtyZ6Cad2=.Ts_IQDNO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/aRgCxtyZ6Cad2=.Ts_IQDNO
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+On Tue, 11 Mar 2025 15:08:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Today's linux-next merge of the scsi tree got a conflict in:
+> Hi all,
+> 
+> The following commits are also in the mm tree as different commits
+> (but the same patches):
+> 
+>   0b3bc3354eb9 ("arm64: vdso: Switch to generic storage implementation")
+>   127b0e05c166 ("vdso: Rename included Makefile")
+>   30533a55ec8e ("parisc: Remove unused symbol vdso_data")
+>   31e9fa2ba9ad ("arm: vdso: Switch to generic storage implementation")
+>   365841e1557a ("vdso: Add generic architecture-specific data storage")
+>   3ef32d90cdaa ("x86/vdso: Fix latent bug in vclock_pages calculation")
+>   46fe55b204bf ("riscv: vdso: Switch to generic storage implementation")
+>   51d6ca373f45 ("vdso: Add generic random data storage")
+>   5b47aba85810 ("vdso: Introduce vdso/align.h")
+>   69896119dc9d ("MIPS: vdso: Switch to generic storage implementation")
+>   9729dceab17b ("x86/vdso/vdso2c: Remove page handling")
+>   998a8a260819 ("vdso: Remove remnants of architecture-specific random state storage")
+>   ac1a42f4e4e2 ("vdso: Remove remnants of architecture-specific time storage")
+>   d2862bb9d9ca ("LoongArch: vDSO: Switch to generic storage implementation")
+>   dafde29605eb ("x86/vdso: Switch to generic storage implementation")
+>   df7fcbefa710 ("vdso: Add generic time data storage")
+> 
+> These are causing the following conflicts:
+> 
+> CONFLICT (content): Merge conflict in arch/arm64/include/asm/vdso/compat_gettim
+> ofday.h
+> CONFLICT (content): Merge conflict in arch/arm64/include/asm/vdso/vsyscall.h
+> CONFLICT (content): Merge conflict in arch/powerpc/include/asm/vdso/gettimeofday.h
+> CONFLICT (content): Merge conflict in arch/s390/kernel/time.c
+> CONFLICT (content): Merge conflict in arch/x86/include/asm/vdso/gettimeofday.h
+> CONFLICT (content): Merge conflict in include/asm-generic/vdso/vsyscall.h
+> CONFLICT (content): Merge conflict in include/vdso/datapage.h
+> CONFLICT (content): Merge conflict in include/vdso/helpers.h
+> CONFLICT (content): Merge conflict in kernel/time/namespace.c
+> CONFLICT (content): Merge conflict in kernel/time/vsyscall.c
+> CONFLICT (add/add): Merge conflict in lib/vdso/datastore.c
+> CONFLICT (content): Merge conflict in lib/vdso/gettimeofday.c
 
-  arch/arm64/boot/dts/rockchip/rk3576.dtsi
+Yup, thanks.  I trust it's not too much effort to simply skip the
+mm.git copies?
 
-between commit:
+There's presumably a better way of doing this, but it's really the
+first time it has happened in N years so it isn't obviously worth
+investing in setting something up.
 
-  36299757129c ("arm64: dts: rockchip: Add SFC nodes for rk3576")
-
-from the rockchip tree and commit:
-
-  c75e5e010fef ("scsi: arm64: dts: rockchip: Add UFS support for RK3576 SoC=
-")
-
-from the scsi tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/boot/dts/rockchip/rk3576.dtsi
-index edfa0326f299,bd55bd8a67cb..000000000000
---- a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-@@@ -1334,17 -1221,30 +1334,41 @@@
-  			};
-  		};
- =20
- +		sfc1: spi@2a300000 {
- +			compatible =3D "rockchip,sfc";
- +			reg =3D <0x0 0x2a300000 0x0 0x4000>;
- +			interrupts =3D <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
- +			clocks =3D <&cru SCLK_FSPI1_X2>, <&cru HCLK_FSPI1>;
- +			clock-names =3D "clk_sfc", "hclk_sfc";
- +			#address-cells =3D <1>;
- +			#size-cells =3D <0>;
- +			status =3D "disabled";
- +		};
- +
-+ 		ufshc: ufshc@2a2d0000 {
-+ 			compatible =3D "rockchip,rk3576-ufshc";
-+ 			reg =3D <0x0 0x2a2d0000 0x0 0x10000>,
-+ 			      <0x0 0x2b040000 0x0 0x10000>,
-+ 			      <0x0 0x2601f000 0x0 0x1000>,
-+ 			      <0x0 0x2603c000 0x0 0x1000>,
-+ 			      <0x0 0x2a2e0000 0x0 0x10000>;
-+ 			reg-names =3D "hci", "mphy", "hci_grf", "mphy_grf", "hci_apb";
-+ 			clocks =3D <&cru ACLK_UFS_SYS>, <&cru PCLK_USB_ROOT>, <&cru PCLK_MPHY>,
-+ 				 <&cru CLK_REF_UFS_CLKOUT>;
-+ 			clock-names =3D "core", "pclk", "pclk_mphy", "ref_out";
-+ 			assigned-clocks =3D <&cru CLK_REF_OSC_MPHY>;
-+ 			assigned-clock-parents =3D <&cru CLK_REF_MPHY_26M>;
-+ 			interrupts =3D <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH>;
-+ 			power-domains =3D <&power RK3576_PD_USB>;
-+ 			pinctrl-0 =3D <&ufs_refclk>;
-+ 			pinctrl-names =3D "default";
-+ 			resets =3D <&cru SRST_A_UFS_BIU>, <&cru SRST_A_UFS_SYS>,
-+ 				 <&cru SRST_A_UFS>, <&cru SRST_P_UFS_GRF>;
-+ 			reset-names =3D "biu", "sys", "ufs", "grf";
-+ 			reset-gpios =3D <&gpio4 RK_PD0 GPIO_ACTIVE_LOW>;
-+ 			status =3D "disabled";
-+ 		};
-+=20
-  		sdmmc: mmc@2a310000 {
-  			compatible =3D "rockchip,rk3576-dw-mshc";
-  			reg =3D <0x0 0x2a310000 0x0 0x4000>;
-
---Sig_/aRgCxtyZ6Cad2=.Ts_IQDNO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfP57wACgkQAVBC80lX
-0GzxFwf/ZQHt+LZ57HYlfjCOG9PcocowM3cypC8pAZTlZM4H+uzN+hwk4EO2GQFl
-qZgQAMqCW5CAEOCOqVWJQKBMMPGh57ybcf/Pu2qvv+crEEW/jvWdZcu3/pueVNNa
-nteVTeYlQUkojBjkxMwBsS/MVCRic1X4hHB2wWxXy/frnWPKBC4ZsZ4kI+Aew5n0
-fFabnvPBxW6s82tRFZ5VkFkO5ckbXRmdFnuBbpqlymZej7fH5WYeZEVx3J5GCYvm
-1S2McWGYDajhd+P1X0vQmmSfLdF9/+EcRVIGJTSY17bXhGCwPjSLHakrmqNMDLEf
-BftrG7Wo0cClTwu6E2UhnKAwkMinng==
-=wlQu
------END PGP SIGNATURE-----
-
---Sig_/aRgCxtyZ6Cad2=.Ts_IQDNO--
 

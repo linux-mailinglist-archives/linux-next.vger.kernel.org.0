@@ -1,57 +1,56 @@
-Return-Path: <linux-next+bounces-5746-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5744-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EC6DA5C7B3
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 16:38:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38BCCA5C4A8
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 16:06:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C724C7AA14E
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 15:37:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A0B0178BBD
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 15:05:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6159325F790;
-	Tue, 11 Mar 2025 15:37:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19C7E25E816;
+	Tue, 11 Mar 2025 15:05:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="Jv1XkV52"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fW0qzI9U"
 X-Original-To: linux-next@vger.kernel.org
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 872181A5BA4;
-	Tue, 11 Mar 2025 15:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E623625D908;
+	Tue, 11 Mar 2025 15:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741707469; cv=none; b=YDMjj7OOSlhzwKFTglL4shancixdDrsPfZI31o0jyp2HirBATm9xyzktKuGJCclspjZYoSIE3T39c9C5aAsEKz1JWpFiRfzdkNHL+/RWq+z6ogq4BfQmlKMCahNbUT6CXrreTEu2JIAJykdzXHnHr4dOGp5pTVoYh6xywUCS8yg=
+	t=1741705502; cv=none; b=Ov3oTmRqXgp/ySdsdyjxICTr03NrEgWe84azoHVnPasRxsWf9fIQfzTzV3+fbMESYAQiIjFfteiSJQRh8QxDm5KZrPxry69/I/HfonY/Z5WW9xHwsmqr1EofZqtAglMfbiLsWnNvfTEcmREJXF2qdOaiNTUzWUleGy7Yzo9AIi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741707469; c=relaxed/simple;
-	bh=NIvIQnZyKMdfbTLiQV0uVSuNbprUBl4vVdOd4Nh2Swo=;
+	s=arc-20240116; t=1741705502; c=relaxed/simple;
+	bh=hVRGAaROVstkuDKcIwRl5NfstUXXW5m6OJ5hohHyGd0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z5lMu1R4r627m0BFaYFbUd6fNQQBW/v0pAuyVMrM/iEeaRLASlcnyiwBdQj2JL623QGKRUJMpnE6NDFgDj5Xd0VywhAtf+vuEg5icK+NZ6ODw7eG8fOY52WTDP3qq6cLcJOJIfTWPLECXI2LdNwOPuu/v8vu8cHQOMAbDy6nB7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=Jv1XkV52; arc=none smtp.client-ip=185.87.125.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 2864F40A03; Tue, 11 Mar 2025 15:54:34 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 2864F40A03
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1741704874;
-	bh=NIvIQnZyKMdfbTLiQV0uVSuNbprUBl4vVdOd4Nh2Swo=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=BompavNeKbmpFSvMZtEmYoBlRVIkIfnzeXstArEwYV/vZOQYZ4Hv7BUqJC4ptq55uQm3fDrsc2mo9reWGNrRIR6UuXwVndKJ7uJCuSbT9mt/z/CypPJ/UNG1F+x0PsTylrIkC4YVCYO5SkFZ63f2pLzu60acYaPkmk0YtsM7PuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fW0qzI9U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CCA4C4CEED;
+	Tue, 11 Mar 2025 15:05:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741705501;
+	bh=hVRGAaROVstkuDKcIwRl5NfstUXXW5m6OJ5hohHyGd0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jv1XkV52px8Lw7oYfjz+Ho/EFbHhizTaj5dRe1sTWYzpxbvRZtLILqBvRHCZEcNwF
-	 i2sn3H+fw+kbl4Xucp+LUh3SZ5Em3mxG5SxAUDhkiWZ5i9UtnPjcjC0offAwK70zBg
-	 HoocK5V425mqscB0KJXYgEhxRJ2EjNCvaS6w/P2c=
-Date: Tue, 11 Mar 2025 15:54:33 +0100
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Wim Van Sebroeck <wim@iguana.be>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	b=fW0qzI9Ug1LUYTGx2ldIkXjmsPHXN6o1Us204AY/fdfW5KgMD5V2Qwz6eLouDAkxP
+	 kSv2QTWMGCU+xJNoejzgz9xE0biRkUfj3rlfNnIhIilYx9z2XoZNE0FJjtpDnCY8Gy
+	 RW7E0EIfFev76w4hcGTkdr+iH2CmdOHvfhwMIDQE5JMLAoHnq0WyDUgSg8BghLW/Ta
+	 RUukNYdTrfn72wYxfQx1WEv12lgtbWkSWH4ziF/c1wyk8pk/jgBjF2/2QjFjCU97Fr
+	 7Y3yhmQdKSgiIIQ164jcaWX6wAmMSV6Sel7oqrozX3UL15Ht42HVPLnotkcvDYfyeI
+	 PgvKN/O+xSRXg==
+Date: Tue, 11 Mar 2025 15:05:00 +0000
+From: Wei Liu <wei.liu@kernel.org>
+To: Helge Deller <deller@gmx.de>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Wei Liu <wei.liu@kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the watchdog tree
-Message-ID: <20250311145433.GA5107@www.linux-watchdog.org>
-References: <20250311210305.3c5a2313@canb.auug.org.au>
- <3da76007-31f0-404a-a324-dd3068e339c5@app.fastmail.com>
+Subject: Re: linux-next: duplicate patch in the fbdev tree
+Message-ID: <Z9BRHCZq_iXN818e@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
+References: <20250311143021.0cc40c0e@canb.auug.org.au>
+ <efa8ffb6-2d6f-4007-94d9-2e41b4e7410a@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -60,78 +59,25 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3da76007-31f0-404a-a324-dd3068e339c5@app.fastmail.com>
-User-Agent: Mutt/1.5.20 (2009-12-10)
+In-Reply-To: <efa8ffb6-2d6f-4007-94d9-2e41b4e7410a@gmx.de>
 
-Hi Stephen, Mark,
-
-> Thanks Stephen,
-> 
-> On Tue, Mar 11, 2025, at 6:03 AM, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the watchdog tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >
-> > drivers/watchdog/lenovo_se30_wdt.c: In function 'lenovo_se30_wdt_probe':
-> > drivers/watchdog/lenovo_se30_wdt.c:272:31: error: implicit declaration 
-> > of function 'devm_ioremap' [-Wimplicit-function-declaration]
-> >   272 |         priv->shm_base_addr = devm_ioremap(dev, base_phys, 
-> > SHM_WIN_SIZE);
-> >       |                               ^~~~~~~~~~~~
-> > drivers/watchdog/lenovo_se30_wdt.c:272:29: error: assignment to 
-> > 'unsigned char *' from 'int' makes pointer from integer without a cast 
-> > [-Wint-conversion]
-> >   272 |         priv->shm_base_addr = devm_ioremap(dev, base_phys, 
-> > SHM_WIN_SIZE);
-> >       |                             ^
-> >
-> > Caused by commit
-> >
-> >   c284153a2c55 ("watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo 
-> > SE30 platform")
-> >
-> > Somewhere alogn the way a change to some include file means that
-> > linux/io.h is no longer implicitly included.  I have added the following
-> > patch for today.
-> >
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Tue, 11 Mar 2025 20:50:05 +1100
-> > Subject: [PATCH] watchdog: lenovo_se30_wdt: include io.h for devm_ioremap()
-> >
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/watchdog/lenovo_se30_wdt.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/watchdog/lenovo_se30_wdt.c 
-> > b/drivers/watchdog/lenovo_se30_wdt.c
-> > index f25429da0cec..024b842499b3 100644
-> > --- a/drivers/watchdog/lenovo_se30_wdt.c
-> > +++ b/drivers/watchdog/lenovo_se30_wdt.c
-> > @@ -5,6 +5,7 @@
+On Tue, Mar 11, 2025 at 07:22:00AM +0100, Helge Deller wrote:
+> On 3/11/25 04:30, Stephen Rothwell wrote:
+> > The following commit is also in the hyperv-fixes tree as a different
+> > commit (but the same patch):
 > > 
-> >  #define dev_fmt(fmt) KBUILD_MODNAME ": " fmt
+> >    f2b558988c7d ("fbdev: hyperv_fb: Fix hang in kdump kernel when on Hyper-V Gen 2 VMs")
 > > 
-> > +#include <linux/io.h>
-> >  #include <linux/dmi.h>
-> >  #include <linux/delay.h>
-> >  #include <linux/iommu.h>
-> > -- 
-> > 2.45.2
-> >
-> > -- 
-> Appreciate you getting this done so fast - it was on my todo list for today.
-> Apologies for the build break.
+> > This is comment
+> > 
+> >    304386373007 ("fbdev: hyperv_fb: Fix hang in kdump kernel when on Hyper-V Gen 2 VMs")
+> > 
+> > in the hyperv-fixes tree.
 > 
-> Change looks good to me.
-> Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+> I've dropped that patch from the fbdev tree.
+
+Thank you!
+
 > 
-> Mark
-
-Patch added to linux-watchdog-next.
-
-Kind regards,
-Wim.
-
+> Helge
 

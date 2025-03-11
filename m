@@ -1,145 +1,161 @@
-Return-Path: <linux-next+bounces-5719-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5720-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49461A5B7F8
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 05:24:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D11CA5B83C
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 06:08:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBD203AE81A
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 04:24:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7CDF188FA7B
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 05:09:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472581E47D9;
-	Tue, 11 Mar 2025 04:24:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 387FC1EB1B9;
+	Tue, 11 Mar 2025 05:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="k5kjrihH"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="b4RSTFMD"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C74C211C;
-	Tue, 11 Mar 2025 04:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9FB1CA9C;
+	Tue, 11 Mar 2025 05:08:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741667076; cv=none; b=dOHThffO/gvhu1o/VXwCvM+xiqC2jlgaOM7TR+uYNt9TK734a4Akhg0nef/0zideTrBc0Ec0EzFj467a+VEXq9urZW+ZVDJe8klGC8a1N37nvESndTcl//+Yf0xMbpT+brQcI/y6yMr4GuDj1egLC2gPQ2FS2vK26QPVgkFasI4=
+	t=1741669728; cv=none; b=paaJXx+WWZDMZQTyvnircKeQPPA/wuppiJ4tEtvBSOcK1gzuG/sdDMrkNX3Pqx3znO/EP9MreOs9vOsE3FWeIKkYWXgfATBmZYnwgPROLztA60owmHGqPbgWqIYyMri3aS22fTOnwPE2/BgnoTI86Wi3uZpZ3RICpD0mcbc9QCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741667076; c=relaxed/simple;
-	bh=N/dz40FusKN1fPJKtVtrTGzTJII7BRLTXwZvN9oFI78=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n5nAlYGDHm2+QX6v5PqwZFgLlj8sbiza30EZv4f6OHmn7a3JLLFjeCSHlIpq8DkQVp2m5PHDyca51QkoLjSyvNWr4Qy4XZv4yuh/Raycc1xsE8unQhbnIs+xoLoQfH36tPpFTkvkOh61Mfd1pZoehjloe9Av11nlevbaR4j5yW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=k5kjrihH; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1741669728; c=relaxed/simple;
+	bh=otZ3TQRBrKXoY/r6j9Eg5rw4zZXMFMzqxwqcSrMLmsc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uimQShjq+cNNPATrTbAcvtiLmkznPqnJpDYZA9LqFAocHooP/gXANa4B3cz0St25dfoTohpBr8b57gUFiSjrbLQsneuD7GHg5ZQSfpzbl9+4SAHdfQpM5V1dLPvmvgSeUYUBhzaBriRQegAQ5Gla9b5qBb+K/iL2zxNfuAQ5EBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=b4RSTFMD; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741667070;
-	bh=39vmfxyigmhXmG+tSPWqPCcU3OrlS6v+EgO1BTs8zIo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=k5kjrihHlRFrYpBDCbGjbWMcWJEjvymP2SQxtuHr7zeX30i7+FOmqmYzb4nWwtM+n
-	 6b4ib0kLu6FoPdgxD7Yl6D775Kxl7cT/i+/ywa2fmICEQkqngho7IAhgw+R4u/NYNn
-	 9qbxHevUeoZP27/u1nmaBrEFhqAN2WQlgCnX3XGFAct2I/vmLQL3ZtJZscgy3u1TY6
-	 EsfLupGvVWCAASEu4kiKrDdCMzANoQgZn5DM+w9ufJnyESzm7StqlNGSzqwmFjJwdQ
-	 aK4lBGnEKRLuAxHZO3Xe71JrKPYdHQaiwWia5c+7kS68NL2n1lY1ZY9jD/z651PGTU
-	 sFLPZyGVDu2IQ==
+	s=201702; t=1741669717;
+	bh=NnfwfeOIQyHPFQlIIwggaOgZOoeuywrf9oWDddPwvBM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=b4RSTFMDajAI42IeglauZnmepdOxuSdKlksOGrtw6iZ9LN/Db9edmtad3mmUosG07
+	 vISj1ROczggwi+SmRwzp1Z0Lq3C7xuHdXdJcwVbC6oJsXOfs1L9tyFPOgf2wcaqDhC
+	 liFxy7x9IDnFNoNw5blFYgp5OdhVznM1BSuw8watEZD9alPQHqwHGPcqxUepAcsXu2
+	 na9gd1M8hMpNpjl/e5y1dUY4Gg4SGT2P0fe04GmOJ8b2m0Q4RQvxrlPnqby+lUottX
+	 CZdDIiYS6A61X4uUvD5F1nOX8eniZ/JTkGz+iYFm2/yK9Z47jM4KgRtTNdxNs9N6qb
+	 X8g6AwHSDQbzQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBgdV2MV2z4xF1;
-	Tue, 11 Mar 2025 15:24:30 +1100 (AEDT)
-Date: Tue, 11 Mar 2025 15:24:29 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBhcP0HwYz4x89;
+	Tue, 11 Mar 2025 16:08:36 +1100 (AEDT)
+Date: Tue, 11 Mar 2025 16:08:34 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
+ <peterz@infradead.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20250311152429.32d9f824@canb.auug.org.au>
-In-Reply-To: <20250306152516.32df7764@canb.auug.org.au>
-References: <20250304162402.475eb3bc@canb.auug.org.au>
-	<20250306152516.32df7764@canb.auug.org.au>
+ Mailing List <linux-next@vger.kernel.org>, "Mike Rapoport (Microsoft)"
+ <rppt@kernel.org>
+Subject: linux-next: manual merge of the ftrace tree with the tip tree
+Message-ID: <20250311160834.5ae8c9b9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ehviUIGckpzk0DGgo3KRKVR";
+Content-Type: multipart/signed; boundary="Sig_/3+m5UqZaYguCLgFxVmK3rBC";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/ehviUIGckpzk0DGgo3KRKVR
+--Sig_/3+m5UqZaYguCLgFxVmK3rBC
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 6 Mar 2025 15:25:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> On Tue, 4 Mar 2025 16:25:31 +1100 Stephen Rothwell <sfr@canb.auug.org.au>=
- wrote:
-> >
-> > After merging the tip tree, today's linux-next build (x86_64 allmodconf=
-ig)
-> > failed like this:
-> >=20
-> > In file included from include/asm-generic/percpu.h:7,
-> >                  from arch/x86/include/asm/percpu.h:597,
-> >                  from arch/x86/include/asm/preempt.h:6,
-> >                  from include/linux/preempt.h:79,
-> >                  from include/linux/spinlock.h:56,
-> >                  from include/linux/wait.h:9,
-> >                  from include/linux/wait_bit.h:8,
-> >                  from include/linux/fs.h:7,
-> >                  from kernel/events/core.c:11:
-> > kernel/events/core.c: In function 'this_cpc':
-> > include/linux/percpu-defs.h:220:45: error: initialization from pointer =
-to non-enclosed address space
-> >   220 |         const void __percpu *__vpp_verify =3D (typeof((ptr) + 0=
-))NULL;    \
-> >       |                                             ^
-> > include/linux/percpu-defs.h:251:9: note: in expansion of macro '__verif=
-y_pcpu_ptr'
-> >   251 |         __verify_pcpu_ptr(ptr);                                =
-         \
-> >       |         ^~~~~~~~~~~~~~~~~
-> > kernel/events/core.c:1222:17: note: in expansion of macro 'this_cpu_ptr'
-> >  1222 |         return *this_cpu_ptr(pmu->cpu_pmu_context);
-> >       |                 ^~~~~~~~~~~~
-> >=20
-> > (and many more similar)
-> >=20
-> > Presumably caused by commit
-> >=20
-> >   f67d1ffd841f ("perf/core: Detach 'struct perf_cpu_pmu_context' and 's=
-truct pmu' lifetimes")
-> >=20
-> > I have used the tip tree from next-20250303 for today. =20
->=20
-> I am still seeing this build failure.
+Today's linux-next merge of the ftrace tree got a conflict in:
 
-Ditto.  Anything happening with this?
+  include/linux/module.h
 
-I am still using the tip tree from next-20250303.
+between commits:
+
+  c287c0723329 ("module: switch to execmem API for remapping as RW and rest=
+oring ROX")
+  602df3712979 ("module: drop unused module_writable_address()")
+
+from the tip tree and commit:
+
+  186a3d01d596 ("module: Add module_for_each_mod() function")
+
+from the ftrace tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ehviUIGckpzk0DGgo3KRKVR
+diff --cc include/linux/module.h
+index d9a5183a9fe7,9a71dd2cb11f..000000000000
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@@ -771,6 -772,18 +771,8 @@@ static inline bool is_livepatch_module(
+ =20
+  void set_module_sig_enforced(void);
+ =20
+ -void *__module_writable_address(struct module *mod, void *loc);
+ -
+ -static inline void *module_writable_address(struct module *mod, void *loc)
+ -{
+ -	if (!IS_ENABLED(CONFIG_ARCH_HAS_EXECMEM_ROX) || !mod ||
+ -	    mod->state !=3D MODULE_STATE_UNFORMED)
+ -		return loc;
+ -	return __module_writable_address(mod, loc);
+ -}
+ -
++ void module_for_each_mod(int(*func)(struct module *mod, void *data), void=
+ *data);
++=20
+  #else /* !CONFIG_MODULES... */
+ =20
+  static inline struct module *__module_address(unsigned long addr)
+@@@ -878,6 -891,15 +880,10 @@@ static inline bool module_is_coming(str
+  {
+  	return false;
+  }
++=20
+ -static inline void *module_writable_address(struct module *mod, void *loc)
+ -{
+ -	return loc;
+ -}
+ -
++ static inline void module_for_each_mod(int(*func)(struct module *mod, voi=
+d *data), void *data)
++ {
++ }
+  #endif /* CONFIG_MODULES */
+ =20
+  #ifdef CONFIG_SYSFS
+
+--Sig_/3+m5UqZaYguCLgFxVmK3rBC
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfPuv0ACgkQAVBC80lX
-0GxvDQf/an8wikRuEKrAip4sB8G/5zas154qsuG+LFKZDxCKUp9ZfOSKtSteemYC
-5JVF0kcYz7gwqRDpcJCglQjhuSPxexMqLyQne4F4Gy34TUOdqPkUGEDo7sc95ty2
-vzmm1bz8S0D1f6QJ2xSjVmLrXWxLgvg3q9JhyagR8UhM7OKEUKuznfqB7fWb6dd3
-rsC7WtkRIOnUqaywSXRyYywxBlc2VMDxyHljfHOYjKKLYXhsRi6r4jGH/FWaNhEx
-D/Nj991XIpi/50feqpxdJjlcf/lHEZESuIJyXOUM9yP42Yd6wGSQWCD1zIC4k56F
-oCOWEr59ivGmICDPaMC123mh2HkpaA==
-=NapL
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfPxVIACgkQAVBC80lX
+0GyvQQf+L499S9KM35C1ug3/QlbIoPeQbkewFJ4c2aeXXeoWhPPaEsGko+aSCWJ9
+xBaACAixAZLGPJxVRVsfxVfkUXbBjxLjV/KmrARGJiWOpBDYIL+ZkY/z/2vC1ykc
+BQwS+eLFx40ruD0ZW8UJaWH5IXR5pNEbOiEf1L2F80nRVK4A2tRVx7q/lwS5oE2I
+ugk0jSAR0ZLCTu0vPnwCfKQIuTI8Xyv0tSubaLkjiCFMEGUYOwxyprhD8vs7pYDI
+hoW6D5ef+MZwZ+r7pCG5MgfBWKXI/1LqOzISrhAXCnA3GFyJiLnZTxejFh+o/CGV
++e290LNZJgf5xDMYMTSfVBNRyJxNyw==
+=l0RN
 -----END PGP SIGNATURE-----
 
---Sig_/ehviUIGckpzk0DGgo3KRKVR--
+--Sig_/3+m5UqZaYguCLgFxVmK3rBC--
 

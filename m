@@ -1,113 +1,164 @@
-Return-Path: <linux-next+bounces-5724-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5725-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25346A5B980
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 08:02:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EB81A5B9F8
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 08:36:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6322D170ADC
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 07:02:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7C5E3B041C
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 07:36:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41C3F1EB9E5;
-	Tue, 11 Mar 2025 07:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69CA22423D;
+	Tue, 11 Mar 2025 07:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LPJoIPRW"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="R48GsdkS"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFF81AB52D;
-	Tue, 11 Mar 2025 07:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AA3223300;
+	Tue, 11 Mar 2025 07:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741676554; cv=none; b=hOmI4I0dIkKgjiZJUjcN5xXkpNDUeJyAxtWR/r2J7ex1Oh56Fj8NiT/7ksFEqqk/YEIw/rLQnyTdhFIwsIbwhkjuvV8NShNbCmk3Nn6MHqeAa/LSKYtH5e9/DMekQ5LF4GM98bJ9X+j2HyWCSGosaIURCvVo9ZyeyObtHCWkLRg=
+	t=1741678533; cv=none; b=SkgpWcNOfSbP/K9iz9Gm2WGfkqp3R1IiJjkaZ2qgtS+QR2qBymItL7kV+OpchIGdzHnZGriVUWI4ErbW/lEvneBx1S5NLHu7odMmOCDWU7Nb3yLaV1kNPO/7w+h+Ojp4SNfZiCnTVkKVOkYMhgc60EgI+RVqJhio5X7JLj12tD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741676554; c=relaxed/simple;
-	bh=4/xmULi6eu65ZqipJf3D744X61ZyPi7RnHbWhmlHIrw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KcnHWRmYgfyBAm/jHfKWGl6PVsd4m2Q0p/YFnASUm1MvxyT6yuCn8qjCbkBc6ZYfzXczVYbiiH3h6dkjS+7pVrsELrWQGQAhXTbjRFt1xL9wA9ery+732pWCdj21P7ZX/BWCy6eUQ9nir7q0+Y/mCAZIE0pRmnI0R5hHVEXtmFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LPJoIPRW; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1741678533; c=relaxed/simple;
+	bh=POjYP11ijGhrMQ/irsFz8LQK3UogA6nQt9n5S4M0ExI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DbBjIAJNVtoCXL0Ialb+NJ8hKLK9V0lv6o1XtUeOg8MOsV180j+C6oiprC3QgfeK9gZQCaE1Z0nLSz7tVSW0/rj09UPRoKUUwSxgqaWDD1xEcIDNYeJzPY6CPfg4SLHV0KPBkk81NQOuXhG2mizQnP3WckIZgUxSJ6rjR6CLBi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=R48GsdkS; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741676545;
-	bh=DfdQmhz8vbCPv39uRzeCg19ZNOajPR1ntgBF6+oNJgw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LPJoIPRWz/N89oXfAe5rOqflM3A+CGl8AkDYy0zX0wKcp7jGcwZBVqt/Nl/6iWkly
-	 UGF8QFsmvln6Nx0PH19VBn0aY4ePZ2v6omKzKa9g/loFI85NY86qg+6ppmT3Iqbhhp
-	 M0BJTM8w0CAREss2+AiAszH236HafDTlqyDTgD1BT94ksQD9KtPKJOvAb+U4TPgIfK
-	 QcXmgz+Tc8rfLIms4KxqiMN5v5mIcIGVfE9QeS3m+Ajw0vLgz+lhkVXUEAOMK1WI9g
-	 jIS4HXbvnvc4ONpk7hqYGYngEvJcXWjtlNOenVyDl+ZA5OxYX+BZ7b5PG7aZ8pGunk
-	 WZtIpz6jAsQog==
+	s=201702; t=1741678527;
+	bh=+di+w3XDN0XK7wrSBYa8FBFLbOobo94ufMhlAR2ajB4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=R48GsdkSaKsBUSen7yRgRbAsbomrVay2i55ADnrXg4oPTiip9u3WNsJPAT5cP9SAA
+	 6wdl5DeduraEHDzpv70bx0EVLCkAMKrYPfuJ21UIpCiIB/78myPJSbD6zD2HaDxztj
+	 VCPj68NRbK0VMEqKPSZ66pEQenHkiOQEYnwlbOhL65U60Deocfewp0yZMgDf/HtaQG
+	 o8Z4ImbwVjYBTASsXJ5SFVeyOLVpi0r31p4OgvxcJJulPCmtGxIxRVtscu68FcoRwV
+	 YPUu95U0LaaXAcouzYVzPMLleJiuueuXTO4i4ovb5M4L2wIKBqdo9TTCMLoJPjg7ZL
+	 V6USCma8wtvIw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBl7h5F2cz4x04;
-	Tue, 11 Mar 2025 18:02:24 +1100 (AEDT)
-Date: Tue, 11 Mar 2025 18:02:02 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBlsn4cW4z4xD9;
+	Tue, 11 Mar 2025 18:35:25 +1100 (AEDT)
+Date: Tue, 11 Mar 2025 18:35:24 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alistair Popple <apopple@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Dave Airlie
- <airlied@redhat.com>, Lucas De Marchi <lucas.demarchi@intel.com>, Thomas
- =?UTF-8?B?SGVsbHN0csO2bQ==?= <thomas.hellstrom@linux.intel.com>, DRM XE
- List <intel-xe@lists.freedesktop.org>, Balbir Singh <balbirs@nvidia.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Matthew Brost
- <matthew.brost@intel.com>, DRI <dri-devel@lists.freedesktop.org>
-Subject: Re: linux-next: manual merge of the drm-xe tree with the mm tree
-Message-ID: <20250311180202.058334d5@canb.auug.org.au>
-In-Reply-To: <kk4fmefhwnis4lwlvssgu6t54o5mkahgyz4cm3wjh2hgtriexh@x3xseg5v7nrm>
-References: <20250307122954.1ab65809@canb.auug.org.au>
-	<20250311131214.530934a4@canb.auug.org.au>
-	<kk4fmefhwnis4lwlvssgu6t54o5mkahgyz4cm3wjh2hgtriexh@x3xseg5v7nrm>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>, Heiko Stuebner
+ <heiko@sntech.de>
+Cc: Detlev Casanova <detlev.casanova@collabora.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, Shawn Lin <shawn.lin@rock-chips.com>
+Subject: linux-next: manual merge of the scsi tree with the rockchip tree
+Message-ID: <20250311183524.38989e83@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+2hsQUYER6lr60l67w3/fL2";
+Content-Type: multipart/signed; boundary="Sig_/aRgCxtyZ6Cad2=.Ts_IQDNO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/+2hsQUYER6lr60l67w3/fL2
+--Sig_/aRgCxtyZ6Cad2=.Ts_IQDNO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Alistair,
+Hi all,
 
-On Tue, 11 Mar 2025 16:57:49 +1100 Alistair Popple <apopple@nvidia.com> wro=
-te:
->
-> I'm not sure what the process is here, but having either reviewed or auth=
-ored
-> these patches I can add that the fix up carried below looks correct.
+Today's linux-next merge of the scsi tree got a conflict in:
 
-Thanks.  This means that people can have a bit more confidence in the
-resulting linux-next tree (and so can I :-)) and when the merge
-requests are sent to Linus, they can just reference my resolution.
+  arch/arm64/boot/dts/rockchip/rk3576.dtsi
+
+between commit:
+
+  36299757129c ("arm64: dts: rockchip: Add SFC nodes for rk3576")
+
+from the rockchip tree and commit:
+
+  c75e5e010fef ("scsi: arm64: dts: rockchip: Add UFS support for RK3576 SoC=
+")
+
+from the scsi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+2hsQUYER6lr60l67w3/fL2
+diff --cc arch/arm64/boot/dts/rockchip/rk3576.dtsi
+index edfa0326f299,bd55bd8a67cb..000000000000
+--- a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+@@@ -1334,17 -1221,30 +1334,41 @@@
+  			};
+  		};
+ =20
+ +		sfc1: spi@2a300000 {
+ +			compatible =3D "rockchip,sfc";
+ +			reg =3D <0x0 0x2a300000 0x0 0x4000>;
+ +			interrupts =3D <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
+ +			clocks =3D <&cru SCLK_FSPI1_X2>, <&cru HCLK_FSPI1>;
+ +			clock-names =3D "clk_sfc", "hclk_sfc";
+ +			#address-cells =3D <1>;
+ +			#size-cells =3D <0>;
+ +			status =3D "disabled";
+ +		};
+ +
++ 		ufshc: ufshc@2a2d0000 {
++ 			compatible =3D "rockchip,rk3576-ufshc";
++ 			reg =3D <0x0 0x2a2d0000 0x0 0x10000>,
++ 			      <0x0 0x2b040000 0x0 0x10000>,
++ 			      <0x0 0x2601f000 0x0 0x1000>,
++ 			      <0x0 0x2603c000 0x0 0x1000>,
++ 			      <0x0 0x2a2e0000 0x0 0x10000>;
++ 			reg-names =3D "hci", "mphy", "hci_grf", "mphy_grf", "hci_apb";
++ 			clocks =3D <&cru ACLK_UFS_SYS>, <&cru PCLK_USB_ROOT>, <&cru PCLK_MPHY>,
++ 				 <&cru CLK_REF_UFS_CLKOUT>;
++ 			clock-names =3D "core", "pclk", "pclk_mphy", "ref_out";
++ 			assigned-clocks =3D <&cru CLK_REF_OSC_MPHY>;
++ 			assigned-clock-parents =3D <&cru CLK_REF_MPHY_26M>;
++ 			interrupts =3D <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH>;
++ 			power-domains =3D <&power RK3576_PD_USB>;
++ 			pinctrl-0 =3D <&ufs_refclk>;
++ 			pinctrl-names =3D "default";
++ 			resets =3D <&cru SRST_A_UFS_BIU>, <&cru SRST_A_UFS_SYS>,
++ 				 <&cru SRST_A_UFS>, <&cru SRST_P_UFS_GRF>;
++ 			reset-names =3D "biu", "sys", "ufs", "grf";
++ 			reset-gpios =3D <&gpio4 RK_PD0 GPIO_ACTIVE_LOW>;
++ 			status =3D "disabled";
++ 		};
++=20
+  		sdmmc: mmc@2a310000 {
+  			compatible =3D "rockchip,rk3576-dw-mshc";
+  			reg =3D <0x0 0x2a310000 0x0 0x4000>;
+
+--Sig_/aRgCxtyZ6Cad2=.Ts_IQDNO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfP3+oACgkQAVBC80lX
-0GyEawf/W7+vuzzj0fSnm+S5FH7jSA1QIbUR9kArWxLNAKFTLaoKzFjwOu3Ii9xK
-hSzdS6Rr672C8QpgKciVVP3a2L2yvYNcRo5LxXIy1Fe3wJB+HbWKi9FeWw9TQTa7
-y+uKgCUMj/6Jsc0lkJneV5i8SDIT5MRr7oUHwMUS6WBjJvUujCf45nuBYJ0KcINN
-T0063JuMfyjsWmpfBrMrvC/Pk1RmyFAojsyPLBImkG+ZNwQc560slfgk7bdSf9/H
-pAhSw0UMejBPlSfPByOKOv3vA+At1ScwpLoUbQfQD4VBp+s62GSwuAfCDdi5lzJ2
-VWqc6oMUQg5wjK1HYGRil0DNy4fmzg==
-=j6TV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfP57wACgkQAVBC80lX
+0GzxFwf/ZQHt+LZ57HYlfjCOG9PcocowM3cypC8pAZTlZM4H+uzN+hwk4EO2GQFl
+qZgQAMqCW5CAEOCOqVWJQKBMMPGh57ybcf/Pu2qvv+crEEW/jvWdZcu3/pueVNNa
+nteVTeYlQUkojBjkxMwBsS/MVCRic1X4hHB2wWxXy/frnWPKBC4ZsZ4kI+Aew5n0
+fFabnvPBxW6s82tRFZ5VkFkO5ckbXRmdFnuBbpqlymZej7fH5WYeZEVx3J5GCYvm
+1S2McWGYDajhd+P1X0vQmmSfLdF9/+EcRVIGJTSY17bXhGCwPjSLHakrmqNMDLEf
+BftrG7Wo0cClTwu6E2UhnKAwkMinng==
+=wlQu
 -----END PGP SIGNATURE-----
 
---Sig_/+2hsQUYER6lr60l67w3/fL2--
+--Sig_/aRgCxtyZ6Cad2=.Ts_IQDNO--
 

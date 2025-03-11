@@ -1,175 +1,95 @@
-Return-Path: <linux-next+bounces-5737-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5738-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D434A5C079
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 13:17:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EB0CA5C1AE
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 13:56:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87BB17AA86B
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 12:16:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B71043AE089
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 12:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF58125487A;
-	Tue, 11 Mar 2025 12:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BD832505DF;
+	Tue, 11 Mar 2025 12:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="GqYb6bsJ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NPJWyz8l"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bXATl3Ow";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="he0iUTbS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE72F2566CE;
-	Tue, 11 Mar 2025 12:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B34225A32;
+	Tue, 11 Mar 2025 12:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741695188; cv=none; b=ZZ30sn3L4l9bgBIfQWdevO6B1UXKl7lbL1zktZsvIUh1ZqdQLSwGxOgBaZIlZeGVU0zwUnZmp90FNvUMBAw6XACGS0c+cajqyyUcha7KTXyGWkjUiFQJcSZ7FzmwI7CZuj3vg4xNo+tkVcHHCz18mgvxbYeKWD2nMbZpq1fRfF8=
+	t=1741697769; cv=none; b=mQMT5eezB0K4Fz4Hy02bC8v0ErDlpYKU/xc0Ej2CBA1wvNURGP8+Ly9ChyJ6XC1U3QpQG2PX3tC5o46nZzLvo2/0XhujQ2lqmfBZ8GQkTS/YdaodUEiDuZqykloF+ieiqV8dz5XXkgSthhCmwZ0YrpDm2PvQVYAm3FzYCnXpigo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741695188; c=relaxed/simple;
-	bh=+k3q52EoqcvtqGv2M5AyIbDO/KKx1hnebaimGmGMPto=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ISlcdbYkX2FW9C7uZHOjqotJSzyNZFQ2E5bRz1p3jySpCA987ocPYIDMMMNV1XBSdozSl1TdkIAU424UsRWa4H/Vtyu184I5doWDLQVEqxF1dUzh/uodjAZ/nw4v0KD3w0wUuWXFjMK35DuMSgl4aQSRrrT25BgGhZQzkic6K20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=GqYb6bsJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NPJWyz8l; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id ACAA21382D3C;
-	Tue, 11 Mar 2025 08:13:04 -0400 (EDT)
-Received: from phl-imap-10 ([10.202.2.85])
-  by phl-compute-06.internal (MEProxy); Tue, 11 Mar 2025 08:13:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1741695184;
-	 x=1741781584; bh=N9k2geTZznb7unSBRl52sG1fsJRfFqOnHSENCpmQupI=; b=
-	GqYb6bsJG/XDec6cqMgYuwqBkLNwqIbUfcVt82v7UYZZdStk5efYoxFdQry4AnUY
-	piOmCbPrnHM1aUa/5Kf7ZRyTCOkmQHJSKfkdmiw69V4WLk1J83J496i+m2QB8uM7
-	877XpFm3wCkLNKR6mAK0sLbOtTjxYnp4axIE3ENabXQrbnCR+UIOFt3kjrEKvZ6o
-	71yL72DwFU2yS5GuQoODgBGShkUgZcoxaWRa39rsOX1YqSokPBwz592ilyiXMURi
-	bwfUkwKNeZUpMYut3JORQb9WUE+DLo2W64SDINl1AZ91ZvBjg6d12QwOd84uDcmg
-	VwyKQ+bICpaX5ItEqsLObA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1741695184; x=
-	1741781584; bh=N9k2geTZznb7unSBRl52sG1fsJRfFqOnHSENCpmQupI=; b=N
-	PJWyz8lvu4yPLD+haZwKOTRW3fFe/KG/d++IxMYYzgEu4ev0yBN94QY3FYF8jy9E
-	6c/XHZTwNWT/coEDBxg3BUhe/GOa1dBsI99oI9Rz04wpoFL6sQKm75viF4ePS+aM
-	Ak0dcnk3B9CwV55wMoDSpL/OBemdE3onWlWM7HNeZBYg1YR/+sY9CKmIDJb1rgbF
-	q72CfM30EuRtVEpZGBzsQX1DEuuedofDq49Or/afXO0X+GeYVDx1lXdNhUSKeEfL
-	lAAS84e51pGkYMv9O6SnSpT9v9q83DLuFAoBtskOkhqXOmMOIVicpPcmOPWCYlF1
-	mJmuA4lz3tuQcH6GXWLbw==
-X-ME-Sender: <xms:zyjQZzGqo-wU_Y-tooqMiGJyD8Quy1J-8qHGH_9dSP2SRruDg2u8Ow>
-    <xme:zyjQZwWZuXcPOdes61Z_pSpfHTM3PEd5ytL7aWrVHfZY8MrRSBLqrSQsQ-mZcYSr3
-    MX5lgJ5NJBqk8XUELA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvddvvddtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedfofgrrhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlh
-    gvnhhovhhosehsqhhuvggssgdrtggrqeenucggtffrrghtthgvrhhnpefhuedvheetgeeh
-    tdehtdevheduvdejjefggfeijedvgeekhfefleehkeehvdffheenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhho
-    vhhosehsqhhuvggssgdrtggrpdhnsggprhgtphhtthhopeeipdhmohguvgepshhmthhpoh
-    huthdprhgtphhtthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphht
-    thhopeifihhmsehighhurghnrgdrsggvpdhrtghpthhtohepfihimheslhhinhhugidqfi
-    grthgthhguohhgrdhorhhgpdhrtghpthhtoheplhhinhhugiesrhhovggtkhdquhhsrdhn
-    vghtpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrd
-    horhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdho
-    rhhg
-X-ME-Proxy: <xmx:zyjQZ1L9fBcUf_r4M78cN7rw3f5_TGyY6ctLYGLxOAKhkq8YWW-KIQ>
-    <xmx:zyjQZxH0SjR0xUyeSBfvyV3y2dqXhVzXucVuMKmadArUJF-uGYU7uw>
-    <xmx:zyjQZ5X1IJUx1XgrxHRL97AaZZ5wPGo7hvh8rcRzi0XzuJJsdJDa4A>
-    <xmx:zyjQZ8MK7zesPTlwto_pP63yDp49VdRi3CW_aGzzw-EyeI_dzHnOYQ>
-    <xmx:0CjQZ3f49f1j6zYKE0mqWyCVXIuflxAbhyhcgL7Qv6NLwHnflLt9QmgG>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id ED28F3C0066; Tue, 11 Mar 2025 08:13:02 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1741697769; c=relaxed/simple;
+	bh=LnKPXToH14oLYpbZUXfvUBr9Oc+J111e2HIOb4Gn8+Q=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=jXckrRaI9DLUVDDg3RrvSNfUDseo29V4ZCsCfcYHLS+Jc2i+2CyRFLbxJao5kutq8N3IjP8FTeEaX5MN8jS05Ie2iedNU2GtR925fOQ19lwEgwe7L0DLvNvYw5kSoGXquW92rL4irCWRxR0bjCduWeajoBHZAz1f9jcHxBvLTUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bXATl3Ow; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=he0iUTbS; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1741697763;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gnsf0FrT5DicBhAB6QKWi/9sPeTz7JHcJEUdjBYndj4=;
+	b=bXATl3OwQliRn+OKl1rhZntDdylx01g9/qQMSSFwM41wimHdT5lcYLjoQ+Q4kPyIAQWTyb
+	M+Nm3qtDTSZJ1xj+y7C6uULo89HIcy/cG/dupiPmuhRXtCMMO/gSuDKVsJ4w5Qpz+EvQIq
+	3wGJ7Cc8cJaoXIRThMEoutv4q1gwhoBfQU0UcdDAWGAi5Wcp05kj8M2iv0v6KiJjBsaWkj
+	3HfVpPqzx4f7Q7G+sI+c/r0/6+Mz3vumS8L/aXghWqSzKhxuSkS/RDJiJXMgGWVlqJukxx
+	0fdCbA/3l8yLaQKVTpAvgxKtXS6MytI4+yWtIATSOUa0LTLBXiyZta2eYoK4Zw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1741697763;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gnsf0FrT5DicBhAB6QKWi/9sPeTz7JHcJEUdjBYndj4=;
+	b=he0iUTbS42CamtFt8rurJ6mYgkH/PQbjINAlxo+BUQT+tRtXag5G18nUDaMvFyPvFAABdi
+	0gtVEIGEDcfPaPBA==
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Peter
+ Zijlstra <peterz@infradead.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the tip tree
+In-Reply-To: <20250311224338.4baf583c@canb.auug.org.au>
+References: <20250311150847.5a63db36@canb.auug.org.au>
+ <20250311020240.3b8c34b155f76fff5cccee01@linux-foundation.org>
+ <20250311224338.4baf583c@canb.auug.org.au>
+Date: Tue, 11 Mar 2025 13:56:02 +0100
+Message-ID: <878qpb20bh.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 11 Mar 2025 08:12:41 -0400
-From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To: "Stephen Rothwell" <sfr@canb.auug.org.au>,
- "Wim Van Sebroeck" <wim@iguana.be>
-Cc: "Guenter Roeck" <linux@roeck-us.net>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- "Linux Next Mailing List" <linux-next@vger.kernel.org>
-Message-Id: <3da76007-31f0-404a-a324-dd3068e339c5@app.fastmail.com>
-In-Reply-To: <20250311210305.3c5a2313@canb.auug.org.au>
-References: <20250311210305.3c5a2313@canb.auug.org.au>
-Subject: Re: linux-next: build failure after merge of the watchdog tree
 Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-Thanks Stephen,
+On Tue, Mar 11 2025 at 22:43, Stephen Rothwell wrote:
+> On Tue, 11 Mar 2025 02:02:40 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+>> There's presumably a better way of doing this, but it's really the
+>> first time it has happened in N years so it isn't obviously worth
+>> investing in setting something up.
+>
+> This is why we have shared stable branches.  If the tip guys have all
+> those commits in a branch that they guarantee will not rebase (or be
+> rewritten), then you could fetch that branch and merge it into your
+> tree somewhere.
 
-On Tue, Mar 11, 2025, at 6:03 AM, Stephen Rothwell wrote:
-> Hi all,
->
-> After merging the watchdog tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/watchdog/lenovo_se30_wdt.c: In function 'lenovo_se30_wdt_probe':
-> drivers/watchdog/lenovo_se30_wdt.c:272:31: error: implicit declaration 
-> of function 'devm_ioremap' [-Wimplicit-function-declaration]
->   272 |         priv->shm_base_addr = devm_ioremap(dev, base_phys, 
-> SHM_WIN_SIZE);
->       |                               ^~~~~~~~~~~~
-> drivers/watchdog/lenovo_se30_wdt.c:272:29: error: assignment to 
-> 'unsigned char *' from 'int' makes pointer from integer without a cast 
-> [-Wint-conversion]
->   272 |         priv->shm_base_addr = devm_ioremap(dev, base_phys, 
-> SHM_WIN_SIZE);
->       |                             ^
->
-> Caused by commit
->
->   c284153a2c55 ("watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo 
-> SE30 platform")
->
-> Somewhere alogn the way a change to some include file means that
-> linux/io.h is no longer implicitly included.  I have added the following
-> patch for today.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 11 Mar 2025 20:50:05 +1100
-> Subject: [PATCH] watchdog: lenovo_se30_wdt: include io.h for devm_ioremap()
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/watchdog/lenovo_se30_wdt.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/watchdog/lenovo_se30_wdt.c 
-> b/drivers/watchdog/lenovo_se30_wdt.c
-> index f25429da0cec..024b842499b3 100644
-> --- a/drivers/watchdog/lenovo_se30_wdt.c
-> +++ b/drivers/watchdog/lenovo_se30_wdt.c
-> @@ -5,6 +5,7 @@
-> 
->  #define dev_fmt(fmt) KBUILD_MODNAME ": " fmt
-> 
-> +#include <linux/io.h>
->  #include <linux/dmi.h>
->  #include <linux/delay.h>
->  #include <linux/iommu.h>
-> -- 
-> 2.45.2
->
-> -- 
-Appreciate you getting this done so fast - it was on my todo list for today.
-Apologies for the build break.
+tip timers/vdso is stable and won't be rebased. It might get delta fixes
+on top, but that should be not a problem.
 
-Change looks good to me.
-Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+Andrew, feel free to pull that in.
 
-Mark
+Thanks,
+
+        tglx
 

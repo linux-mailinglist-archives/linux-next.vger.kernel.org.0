@@ -1,120 +1,113 @@
-Return-Path: <linux-next+bounces-5751-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5752-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BF76A5D1A7
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 22:17:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59ED8A5D1AF
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 22:24:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DBFC17CAD5
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 21:17:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 943AD179A1B
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 21:24:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C587B229B01;
-	Tue, 11 Mar 2025 21:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3466C22A4D3;
+	Tue, 11 Mar 2025 21:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dUKvmBw1"
 X-Original-To: linux-next@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58BC226545;
-	Tue, 11 Mar 2025 21:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD26199FBA;
+	Tue, 11 Mar 2025 21:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741727828; cv=none; b=c8y0f+yFUY0KgPpMPgUPZZvkQk1b4DZFr1c0lfhAPfAz4bHIG2Sr3fg9MjOLS7i+BUoeQ34EDAQ3RtY+VsQEHOmbIXDX250qIhcQ1Rk4yT11RB+mvNFqu7y8xGDsUsn1SIc+CMPCGrClVgxfZHmMgZtrW/4jaZGmbqCxYMAbpIU=
+	t=1741728293; cv=none; b=iQ7erWjZQ/iOjZc4fOSBeRd5JQwwSVxbHPc1J5xNr4MIi3DDgag5cxyv5gdGg0/zQAKAVzyCAauWpNj38Xdui3gKbQPc5Bx9tG9InabwtFknw4hxVHsbCi5DXYVWr8qf9fSdTGlGzV5B1L8qtccbLyGr68a64lWRm/i7+Hk/UF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741727828; c=relaxed/simple;
-	bh=mZDR/Pcsay1EeTp2DTUelSVI1Nq0MB+aAtVqD7intt0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fl4/+iYR3aPeszd9Gq/R4FhMFf3Tgjr4N84GopA0DXa8mOfREYzRMOAj91na7JSfcqI8/E3mIvb7QJVPashQ2P7Ll487JN7W1kpVnuG/9+jnGFeJqOckYbR4Dvwtv2gE2GE47xLpbPhhEN6G+byw7E90eybPC34oPc2D92J9xCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27CBB152B;
-	Tue, 11 Mar 2025 14:17:17 -0700 (PDT)
-Received: from bogus (unknown [10.57.39.33])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E4F3D3F673;
-	Tue, 11 Mar 2025 14:17:03 -0700 (PDT)
-Date: Tue, 11 Mar 2025 21:17:00 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Stuart Yoder <stuart.yoder@arm.com>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>, jarkko@kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lenb@kernel.org, rafael@kernel.org, jgg@ziepe.ca, peterhuewe@gmx.de,
-	linux-integrity@vger.kernel.org,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: Build error on -next due to tpm_crb.c changes?
-Message-ID: <20250311211700.bwizwecxyxorrwql@bogus>
-References: <20250305173611.74548-1-stuart.yoder@arm.com>
- <0ad035ff-400e-4b15-8b8f-40b69152ec46@leemhuis.info>
- <92bc0a65-608f-4307-bb1c-16d8836d42e5@arm.com>
- <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
- <23c77291-7c6e-45ea-b1ad-952c01882579@arm.com>
+	s=arc-20240116; t=1741728293; c=relaxed/simple;
+	bh=1fLXz1Z17KdztB9Xq5D8pNArueYNUOphN1H9sPeg3Ps=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=UUElfGxzPEchPHqHwd0uDkSSfSBqgGBYIvPPF9ORHrL3KrexkMo0YpSAvVBqzlhXCUBOYWypkdwdvuv/SKh2o164A4gh9sa4XQZ5d5a6HjuLs1s0rBfm+kzcJfS0Wd+GiTGbUzH2DugHQGnqDYxZrf0RB0wcWRURDoUDv188GZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dUKvmBw1; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1741728280;
+	bh=ZsmVQ5DlB1ZpsAtkvACr0C5cAsnPSC+0UeEEHIOW8ag=;
+	h=Date:From:To:Cc:Subject:From;
+	b=dUKvmBw1VfF/PNWUYgg9DkUPZ7pnXd7LKELZ4C4nucQMlyoWydL54MYS/02G+MYkm
+	 OB/bwrIX214zDu7cqQ204+vEeC6K66BrFuQjYuuyijyxiJUIYmJ+A11CEFt6IOgYV2
+	 XJVCrlG7THfIlw6U9q7jmJELOXeXuSY5mFNjutPpILbu+oUkkOeRFMmMTQ+faqJXTK
+	 h9fpLRbQBDT6/CAju1v4MwiVmjL7t4b+2Xhbbba4JYMmLyrh2Qhuezsq8EEBtm4WKu
+	 rAgeuw8P1P6qkpWc2sQpyMaO12KXnqamuBxSKlO/i66i4QhTfmYZZePZGt64z2/vSL
+	 J+09IRaR/g9jQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZC6Gc19pLz4x8R;
+	Wed, 12 Mar 2025 08:24:40 +1100 (AEDT)
+Date: Wed, 12 Mar 2025 08:24:39 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the sunxi tree
+Message-ID: <20250312082439.098124ee@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23c77291-7c6e-45ea-b1ad-952c01882579@arm.com>
+Content-Type: multipart/signed; boundary="Sig_/43b010ypr4rpN6VAbDG1lFe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Mar 11, 2025 at 01:25:50PM -0500, Stuart Yoder wrote:
-> 
-> 
-> On 3/11/25 11:51 AM, Thorsten Leemhuis wrote:
-> > On 11.03.25 16:53, Stuart Yoder wrote:
-> > > On 3/11/25 10:21 AM, Thorsten Leemhuis wrote:
-> > > > On 05.03.25 18:36, Stuart Yoder wrote:
-> > > [...]
-> > > So, it should not be possible on one had have
-> > > CONFIG_TCG_ARM_CRB_FFA being true when building tpm_crb.c
-> > > and false resulting in the tpm_crb_ffa.o not being
-> > > picked up in the build.
-> > 
-> > Many thx for the answer. Maybe Fedora's way to prepare the .config files
-> > (which my package builds use to be close to Fedora's official packages)
-> > is doing something odd/wrong. Will take a closer look and report back.
-> 
-> I've been experimenting with some different build config combinations
-> and have reproduced what must be the issue.
-> 
-> This works fine:
-> <*>   TPM 2.0 CRB Interface                                         < >
-> TPM CRB over Arm FF-A Transport
-> 
-> This works fine:
-> < >   TPM 2.0 CRB Interface                                         <*>
-> TPM CRB over Arm FF-A Transport
-> 
-> This works fine:
-> <*>   TPM 2.0 CRB Interface                                         <*>
-> TPM CRB over Arm FF-A Transport
-> 
-> This works fine:
-> <M>   TPM 2.0 CRB Interface                                         <M>
-> TPM CRB over Arm FF-A Transport
-> 
-> This fails:
-> <*>   TPM 2.0 CRB Interface                                         <M>
-> TPM CRB over Arm FF-A Transport
-> 
-> The 2 drivers are coupled, so we can't have one built as a module
-> and the other built-in.
-> 
-> I'm not a Kconfig expert, and need to do some fiddling to see
-> if I can find a Kconfig syntax that prevents that failure scenario.
-> 
+--Sig_/43b010ypr4rpN6VAbDG1lFe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-	default y if (TCG_CRB && ARM_FFA_TRANSPORT)
+Hi all,
 
-is the issue here. You can select it as built-in if either or one of the
-TCG_CRB and ARM_FFA_TRANSPORT is a module, but that is exactly what happens.
-Not sure if default value is a must for you. But just depends on each of
-these should be good enough and enable it in defconfig if needed. Or
-you can have multiple default at least 4 combinations I can see. Both
-are =y and either and both are =m
+Commits
 
---
-Regards,
-Sudeep
+  575464821eb0 ("clk: sunxi-ng: add support for the A523/T527 PRCM CCU")
+  9c8d960c13ab ("clk: sunxi-ng: a523: add reset lines")
+  4548c0414839 ("clk: sunxi-ng: a523: add bus clock gates")
+  680f52d723e2 ("clk: sunxi-ng: a523: remaining mod clocks")
+  5fd7421770fb ("clk: sunxi-ng: a523: add USB mod clocks")
+  dd19c52e686e ("clk: sunxi-ng: a523: add interface mod clocks")
+  9bc061e57b4d ("clk: sunxi-ng: a523: add system mod clocks")
+  4b759de121c4 ("clk: sunxi-ng: a523: add video mod clocks")
+  2d47dae93981 ("clk: sunxi-ng: a523: Add support for bus clocks")
+  04f6ff49525a ("clk: sunxi-ng: Add support for the A523/T527 CCU PLLs")
+  38ea575784d3 ("clk: sunxi-ng: Add support for update bit")
+  24ad1a7e8a3e ("clk: sunxi-ng: mp: provide wrappers for setting feature fl=
+ags")
+  af7a221c1213 ("clk: sunxi-ng: mp: introduce dual-divider clock")
+  17bed1817f11 ("dt-bindings: clk: sunxi-ng: document two Allwinner A523 CC=
+Us")
+
+are missing a Signed-off-by from their committers.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/43b010ypr4rpN6VAbDG1lFe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfQqhcACgkQAVBC80lX
+0Gw+cAf/dGLRCMVZP5QcNYjLoiNw/RnVlBRIWKujXiZ0Ls2SIFnpjHIzYCsbpQpF
+3U/bqqDF0Bk8xgy8oZVtvCPcLaadd2AzRdWXScgnc7hgsjYjUp8oaiQGruB5euEd
+SE6npbR3T5c34oea2eR6NWNCapf/0NyVL68RAljl3izSSyjKzy63i46Db8qyX0zH
+QVyhZpJi3/QIXK7fwZt1RG24naL9jszb0bN3IkSSPQiig3bveQt5fb28yoeADUG5
+6k1dlH74v3X3aPK2MqC6uHjHob3pXrACuzfRAai6HYdL2JFmFeQzq4h2vOzICJYp
+qmkUFzyJjpcGm8iL+iQjUN+0GHvu7w==
+=306N
+-----END PGP SIGNATURE-----
+
+--Sig_/43b010ypr4rpN6VAbDG1lFe--
 

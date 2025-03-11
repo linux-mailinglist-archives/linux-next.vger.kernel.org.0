@@ -1,95 +1,66 @@
-Return-Path: <linux-next+bounces-5738-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5739-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EB0CA5C1AE
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 13:56:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AAEFA5C26E
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 14:22:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B71043AE089
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 12:56:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C00616FED6
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 13:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BD832505DF;
-	Tue, 11 Mar 2025 12:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bXATl3Ow";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="he0iUTbS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B846F199237;
+	Tue, 11 Mar 2025 13:22:30 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B34225A32;
-	Tue, 11 Mar 2025 12:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B95B74BED;
+	Tue, 11 Mar 2025 13:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741697769; cv=none; b=mQMT5eezB0K4Fz4Hy02bC8v0ErDlpYKU/xc0Ej2CBA1wvNURGP8+Ly9ChyJ6XC1U3QpQG2PX3tC5o46nZzLvo2/0XhujQ2lqmfBZ8GQkTS/YdaodUEiDuZqykloF+ieiqV8dz5XXkgSthhCmwZ0YrpDm2PvQVYAm3FzYCnXpigo=
+	t=1741699350; cv=none; b=pUgUjv0kXU+KF5dysvJ/6Yz74ViR3PCSP9Wa2bJnd6yiuPNW0mZ1ovoh4BQYla7rSPAjle3CyLKOJkPMCYSCcH1tXwM77wHumAwSNBllLZWilAu3rYZZaZHAkyZhQr3yWUfHJsK+462KVWtAfJhAbnUZeEmqrHR7AlHU8QmB11U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741697769; c=relaxed/simple;
-	bh=LnKPXToH14oLYpbZUXfvUBr9Oc+J111e2HIOb4Gn8+Q=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jXckrRaI9DLUVDDg3RrvSNfUDseo29V4ZCsCfcYHLS+Jc2i+2CyRFLbxJao5kutq8N3IjP8FTeEaX5MN8jS05Ie2iedNU2GtR925fOQ19lwEgwe7L0DLvNvYw5kSoGXquW92rL4irCWRxR0bjCduWeajoBHZAz1f9jcHxBvLTUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bXATl3Ow; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=he0iUTbS; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1741697763;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gnsf0FrT5DicBhAB6QKWi/9sPeTz7JHcJEUdjBYndj4=;
-	b=bXATl3OwQliRn+OKl1rhZntDdylx01g9/qQMSSFwM41wimHdT5lcYLjoQ+Q4kPyIAQWTyb
-	M+Nm3qtDTSZJ1xj+y7C6uULo89HIcy/cG/dupiPmuhRXtCMMO/gSuDKVsJ4w5Qpz+EvQIq
-	3wGJ7Cc8cJaoXIRThMEoutv4q1gwhoBfQU0UcdDAWGAi5Wcp05kj8M2iv0v6KiJjBsaWkj
-	3HfVpPqzx4f7Q7G+sI+c/r0/6+Mz3vumS8L/aXghWqSzKhxuSkS/RDJiJXMgGWVlqJukxx
-	0fdCbA/3l8yLaQKVTpAvgxKtXS6MytI4+yWtIATSOUa0LTLBXiyZta2eYoK4Zw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1741697763;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gnsf0FrT5DicBhAB6QKWi/9sPeTz7JHcJEUdjBYndj4=;
-	b=he0iUTbS42CamtFt8rurJ6mYgkH/PQbjINAlxo+BUQT+tRtXag5G18nUDaMvFyPvFAABdi
-	0gtVEIGEDcfPaPBA==
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Peter
- Zijlstra <peterz@infradead.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the tip tree
-In-Reply-To: <20250311224338.4baf583c@canb.auug.org.au>
-References: <20250311150847.5a63db36@canb.auug.org.au>
- <20250311020240.3b8c34b155f76fff5cccee01@linux-foundation.org>
- <20250311224338.4baf583c@canb.auug.org.au>
-Date: Tue, 11 Mar 2025 13:56:02 +0100
-Message-ID: <878qpb20bh.ffs@tglx>
+	s=arc-20240116; t=1741699350; c=relaxed/simple;
+	bh=WguRmOB8IXWeKyTiumivP2L8VdW68o5oI2d4pEwwHKk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=X5k37AMZJsjIU1L8sQOaA5V2uBi7EKw6c9BW/7wJ6q7UQNZPKcBjlYdGL5JgDDIdTFREIBbRj5LIZc5TU742jE/B2X2kL+0WW0pprmz3g4of2zEPU4BkzUJ8uOY3goRvdS5VrDryQgdpJMSdbmVCk+nUfgLAE9JcqNGkzd8fNlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 770C6C4CEE9;
+	Tue, 11 Mar 2025 13:22:28 +0000 (UTC)
+Date: Tue, 11 Mar 2025 09:22:24 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the ftrace tree
+Message-ID: <20250311092224.33e3873d@batman.local.home>
+In-Reply-To: <20250311162730.2762bbd0@canb.auug.org.au>
+References: <20250311162730.2762bbd0@canb.auug.org.au>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 11 2025 at 22:43, Stephen Rothwell wrote:
-> On Tue, 11 Mar 2025 02:02:40 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
->> There's presumably a better way of doing this, but it's really the
->> first time it has happened in N years so it isn't obviously worth
->> investing in setting something up.
->
-> This is why we have shared stable branches.  If the tip guys have all
-> those commits in a branch that they guarantee will not rebase (or be
-> rewritten), then you could fetch that branch and merge it into your
-> tree somewhere.
+On Tue, 11 Mar 2025 16:27:30 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-tip timers/vdso is stable and won't be rebased. It might get delta fixes
-on top, but that should be not a problem.
+> Hi all,
+> 
+> After merging the ftrace tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
 
-Andrew, feel free to pull that in.
+Yep, this was already reported. I'm currently testing this patch, and
+will be pushing to my next branch after it finishes the tests.
 
-Thanks,
+  https://lore.kernel.org/linux-trace-kernel/20250308123649.1330e9ca@batman.local.home/
 
-        tglx
+-- Steve
 

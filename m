@@ -1,105 +1,135 @@
-Return-Path: <linux-next+bounces-5717-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5718-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9F67A5B738
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 04:30:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D88FEA5B7B9
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 05:09:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DA147A7869
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 03:29:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E22D188E16E
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 04:09:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2BC211C;
-	Tue, 11 Mar 2025 03:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5284A1E9B09;
+	Tue, 11 Mar 2025 04:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="aC3s4kOz"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tWSDOW+s"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB7029A5;
-	Tue, 11 Mar 2025 03:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD5C1DEFC6;
+	Tue, 11 Mar 2025 04:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741663831; cv=none; b=UArKa9ODE73S9lLNbMkev0S+A1Lk/mTfxEArQGGsUQb413+M9U+ThNsQDMsat2yoGDQnvxZ3OWBA/FVr7/V5ZOLSoalVNqxuDeIJA1Wad7MU+VjRkf3+W+jQXjaQ4dP6R8Fen2cBKEsEj1g8nFU99/BCIVrl4X+5tqjsycb+nBA=
+	t=1741666135; cv=none; b=OV8tU6+vPfe/e+BNfOxfQc5YC4G4OC4zeJYGwPXtIbXq9eCeK9wpyVOpwkwbetF/iqtCgatbvEaVTNfHll6x5gyqar0xEYuhwNkyH8aZbCVIhCUqDcEClf4RTuTAN+B1xcWXw3+mSG0aGkoSE40M+xggskf7bM5Ol9k3WuLNKoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741663831; c=relaxed/simple;
-	bh=ZwlHK79J9MRZ8GAjNji2yf54K0qSzD0Bnew96CWQ67Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BZ3gENW1UFjhDCPDGAj+O/oannQlfKtOJWOw2OnP8ct4dE9H1EfhsNt5nrCU7a6gZR6njNg5LLvMDpMmBlcma5JFLzRCUBti7PrsiQNo0vV809qa2KKeNe8pX8Osz5JmSzCHqwMTNCO1lBHM5yk8i6zujMqL7j1F6eOh2VrdQV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=aC3s4kOz; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1741666135; c=relaxed/simple;
+	bh=Qja134C/wJaCaQVYpuecIUYuehH+ojbX9undd3UV3w4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n1m/kIUbVFNeh/wHnDKVpcPg2vHLrxWf8ZwZb6s9XAUArSbaV09Fsn7CqME5m9ou7+HI/AEsOendT+Rr2KPhYcLgB6Sfixtf7IUWhzdTKec1IgXm9Ryg9m0BnsggY/d00NXagvA90Z4Sjjk+CbZjovLzJElDpRwFIl88dIY0tTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tWSDOW+s; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741663823;
-	bh=VrA8PNa9ZyfbBtfKogV1XjtYw0Uaew9jDpjWMnVpYbA=;
+	s=201702; t=1741666129;
+	bh=G9LZex+ScjyCa4n4xpxmhtKckQVblnzbw8xzpeAVBcs=;
 	h=Date:From:To:Cc:Subject:From;
-	b=aC3s4kOzgejSodTWOo4/7suz2CmWJ7n5agPKJlU2exKsyq2RB2y/cgNO/T8PKCJlc
-	 uK9NFkYDl3WU/QMzywR20aaadV3U96uaN3GJrsKD5TadP+1F1aEIjHe9i1lt7taevz
-	 1PQOwZNQS3DQleIeofmpG264OwJ/mPFm/13kqZBSgia0iCxvsnJmboqymc9u057Ihq
-	 gwQLwzp1IIS9ny8FYt7aa/aeadhrloCQm88K9605dtZS2ai75+N1Sel/1CFK6K7Try
-	 xQA0UTl2QFVcrUD9ir787z7fIG4S/AE7FxHMfwxwlMMkNOrcci27ZbDNmCnVt7sLKZ
-	 hn2YgQ77Kn/9w==
+	b=tWSDOW+sgBIAyUOZIOCnVnb4NF6wpjiCeJ6+pccKYFHOuOfuxDVs4qQn5pA7DE5J9
+	 pJnIMu1Y0UBUKbsgPMIS88yHPAPHNmvCYuJruhv3w9lvQAvfKIrlVNw1B23cQaL+/T
+	 qG4z2AfvE+Nunzsqtkcn5VBaYjb5yIYuXsdunQ1pWNfScZ6tueiUz3kYDkzUG/ARSO
+	 wfsyjZzojlxrKi+YbjVpQPvrhmt1asVFFUBHkYIzneVOKBQmOint8cDCW5M5XzwwuA
+	 2THWlUMzRt9XTuc7o13bzu/6300qYVqiWsxE/GdMc41FTJg/O/cOvd/DeCWK8iAnIY
+	 QZPR6zlmlh6Dw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBfR32XNPz4x2g;
-	Tue, 11 Mar 2025 14:30:22 +1100 (AEDT)
-Date: Tue, 11 Mar 2025 14:30:21 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBgHN3WjYz4x3J;
+	Tue, 11 Mar 2025 15:08:48 +1100 (AEDT)
+Date: Tue, 11 Mar 2025 15:08:47 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Helge Deller <deller@gmx.de>, Wei Liu <wei.liu@kernel.org>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the fbdev tree
-Message-ID: <20250311143021.0cc40c0e@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the tip tree
+Message-ID: <20250311150847.5a63db36@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sFifZ.i3FC_wKdJpDqQqC7m";
+Content-Type: multipart/signed; boundary="Sig_/J7lZN/VrH1F73ucDQL7skho";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/sFifZ.i3FC_wKdJpDqQqC7m
+--Sig_/J7lZN/VrH1F73ucDQL7skho
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the hyperv-fixes tree as a different
-commit (but the same patch):
+The following commits are also in the mm tree as different commits
+(but the same patches):
 
-  f2b558988c7d ("fbdev: hyperv_fb: Fix hang in kdump kernel when on Hyper-V=
- Gen 2 VMs")
+  0b3bc3354eb9 ("arm64: vdso: Switch to generic storage implementation")
+  127b0e05c166 ("vdso: Rename included Makefile")
+  30533a55ec8e ("parisc: Remove unused symbol vdso_data")
+  31e9fa2ba9ad ("arm: vdso: Switch to generic storage implementation")
+  365841e1557a ("vdso: Add generic architecture-specific data storage")
+  3ef32d90cdaa ("x86/vdso: Fix latent bug in vclock_pages calculation")
+  46fe55b204bf ("riscv: vdso: Switch to generic storage implementation")
+  51d6ca373f45 ("vdso: Add generic random data storage")
+  5b47aba85810 ("vdso: Introduce vdso/align.h")
+  69896119dc9d ("MIPS: vdso: Switch to generic storage implementation")
+  9729dceab17b ("x86/vdso/vdso2c: Remove page handling")
+  998a8a260819 ("vdso: Remove remnants of architecture-specific random stat=
+e storage")
+  ac1a42f4e4e2 ("vdso: Remove remnants of architecture-specific time storag=
+e")
+  d2862bb9d9ca ("LoongArch: vDSO: Switch to generic storage implementation")
+  dafde29605eb ("x86/vdso: Switch to generic storage implementation")
+  df7fcbefa710 ("vdso: Add generic time data storage")
 
-This is comment
+These are causing the following conflicts:
 
-  304386373007 ("fbdev: hyperv_fb: Fix hang in kdump kernel when on Hyper-V=
- Gen 2 VMs")
-
-in the hyperv-fixes tree.
+CONFLICT (content): Merge conflict in arch/arm64/include/asm/vdso/compat_ge=
+ttim
+ofday.h
+CONFLICT (content): Merge conflict in arch/arm64/include/asm/vdso/vsyscall.h
+CONFLICT (content): Merge conflict in arch/powerpc/include/asm/vdso/gettime=
+ofday.h
+CONFLICT (content): Merge conflict in arch/s390/kernel/time.c
+CONFLICT (content): Merge conflict in arch/x86/include/asm/vdso/gettimeofda=
+y.h
+CONFLICT (content): Merge conflict in include/asm-generic/vdso/vsyscall.h
+CONFLICT (content): Merge conflict in include/vdso/datapage.h
+CONFLICT (content): Merge conflict in include/vdso/helpers.h
+CONFLICT (content): Merge conflict in kernel/time/namespace.c
+CONFLICT (content): Merge conflict in kernel/time/vsyscall.c
+CONFLICT (add/add): Merge conflict in lib/vdso/datastore.c
+CONFLICT (content): Merge conflict in lib/vdso/gettimeofday.c
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/sFifZ.i3FC_wKdJpDqQqC7m
+--Sig_/J7lZN/VrH1F73ucDQL7skho
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfPrk0ACgkQAVBC80lX
-0GyVDAgApglYHJihrS6svQEk6Oopn1hn0njljUjcgLZmbB1xuGJsJP/Jpd/Ygwz+
-voGgvls3x0TnGLbff2stUpbo/cskXnKreweKB8usNFxmsYvxKD8cnYQY8bIY7VW0
-qCZFen96wuPT1bCAP2OrGjqDF6yBNJQov+okzpa9PPPyIJW62LysgJi05APRMed1
-uVuJIaueyxWfYX3OW6kbftHhvUx6NgmbW3zJFzXOtkZPLPaJ5ZCovkRrCTV0Hlhu
-WEbCg2R4fNX5Mf5zdJKXaE3BA6k7+ginqfFbUirHvD1bmwLeq6iHbSRKlHf8UH7K
-j1hewWN5vAUpVFeipaXSRyhMLrHGZQ==
-=VzzT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfPt08ACgkQAVBC80lX
+0GzfgAgAmvrAVvzQ2WRGG+crhNP+sNzrx6ggNxtH67ERhqXktto89uk0ydSbxW0b
+sbDFwTYfXl232Zwz52KlVmtrqatWOHjnizqXHNPXkEAikEBxyGgEbur1p7G9AZoS
+OsBoWkLT+nDv5KmMofVxQIr0gqt4Iyq14keQsIw44VNmfYt9qId9W1lVvlH3PnLX
+fqVc2LBXL9ffIwPdCiQIcBSRjuJV1bTaIhumuY/30CdIF/9Kj42IBn0GoE5Q82Le
+kpbrxv6GpMb/K5jfz66V/Z4CIRgBw75eYnp55znFNMGHGpuouVU8Pg2vfhSW0vCe
+I0Zy28lzWhznxUQ0I0PpeEBrhRedBA==
+=cYsq
 -----END PGP SIGNATURE-----
 
---Sig_/sFifZ.i3FC_wKdJpDqQqC7m--
+--Sig_/J7lZN/VrH1F73ucDQL7skho--
 

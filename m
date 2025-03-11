@@ -1,164 +1,175 @@
-Return-Path: <linux-next+bounces-5710-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5711-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DD47A5AFE6
-	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 00:54:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E0D8A5B583
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 01:58:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DAE357A6319
-	for <lists+linux-next@lfdr.de>; Mon, 10 Mar 2025 23:53:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43AA23ADE73
+	for <lists+linux-next@lfdr.de>; Tue, 11 Mar 2025 00:58:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F9A208990;
-	Mon, 10 Mar 2025 23:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735381DE3B1;
+	Tue, 11 Mar 2025 00:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KWSWwiTU"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="mh+hyh4D"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5031922C0;
-	Mon, 10 Mar 2025 23:54:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B952B9CD;
+	Tue, 11 Mar 2025 00:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741650867; cv=none; b=bYLMYuqx3VwrLijZFRHvQT2YeQIZqN7ffehXl4kztF8MOerHEDQLGI/eRwUX+KoYo1FEg9djZoi/LoFs/gtEAwkvGiUjWuQFyrrri596mVOao2NWfDLxgf+L8Nk1Mfbidm2lOswiIBC1sOZTEAvrgxIp/wPIHsup+a62fK8JPf8=
+	t=1741654688; cv=none; b=q3LLr2yXNGb53wGiMbPYN+k038cptQCVIPwpHj2XE4+PXOWCDO3CXeGvIDIzFxdlZvrsTa0Qq9906PBgamr23Iz3ywYNlMULQGiS6z/2CVrtT5kbm9o5bVQ7K18hawaqyCJ43UCEFWaKIaY0YTZkKXxBXaJUgIdgkPGpIFY6Hco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741650867; c=relaxed/simple;
-	bh=PtJcIGFFYfvdj1xMsCOxKWZ8G0BNBa+0xQdenVhQAfE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TnK+aOuBfSc3ibHA14bpkcA7IV41cDPZFpIbbYGgRpzZGo5vyBfEahmi00lz0G11pdCEirhIH5Sa5/UHV3LCt/gf7yqfeo2wgqBAs5YtgWsVfyD55Mdj5o4NWclR8/pPf+r5DKb26TadShfXLHHNzKaTmkZ2d0SpYjeO1MPrWyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KWSWwiTU; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6ddcff5a823so30949826d6.0;
-        Mon, 10 Mar 2025 16:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741650865; x=1742255665; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aG2r2z6d7BuYAc7VjFnwY6uGPFpAxoshbTsTk9qhJZ4=;
-        b=KWSWwiTU58OUBr93tMHYc5SnSDRws85YQD9V9XKoJLPNGC3uDgx4uLWxDARttZttWJ
-         KK28eOaHag1kcJUbMao8atx681DK/0feAMjgUa8tDF8KVEDV/WUg6K1PkEKTUj6fBF+u
-         lkJ9nikipvs1oMpmZjWtXuzOgm6VKXV6/tK9N9BVfx4KEEI1sZQQ6vdsBnzGYZisFShJ
-         7HXrcyWkx6AIp3Yyjf/udvqWNZQp3FKhJ293Nse6MmZf9/o9sXic+IDM2aHbssIsNgvN
-         dciQaVUc/GxE3Dh22fmq6E9c1yTRFeAaEYuVjnM5lQZ98snfQw1Bpgyvzt/wVLAzHan1
-         UMGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741650865; x=1742255665;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aG2r2z6d7BuYAc7VjFnwY6uGPFpAxoshbTsTk9qhJZ4=;
-        b=AY8ercDa5FqTTuEtIsIa3UpllJIILeaHwP/7Ji7/J57mD9YcJV84SIoiilN3SoWtLP
-         bCVD9WiIaw9S7WMv6MwY24SevjPZmMsBdFcL7XgjSlJUwrfm8GMKfCg6POjKBbI1bwEW
-         VBslLdz7x9+XdQqL5ZF9bJUy9jDxi4xXskDrHPF91dy5DoEKA1ELvBiGQzBX9pp8CuM1
-         PcA4ETpTSB2umGyNccEo72tMg0ZPyVJhDK6fPNRRJvoqm5jp8PRjey68EDDy5IIi2nh3
-         hpblabYNCilEB1LwNZsgjforx2cVMipVCeFZyz+/KFdQrYEiPivI14Cvr2qAgK9mva8Z
-         fW4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUbduOfc5TJh+hrEFAu3iW76BVIGHIroR4A8j2aqGNC/6IaFiBF4IXB4B1K8fpCLspXbAORKRzmdgc8Jw==@vger.kernel.org, AJvYcCV3oc+nyHrOlC+KWJWUd5vmjWQ9JW+KjlRq9/Wm/662qyugkLBKxYYN8QUYGiG3yqXn8WQp1USyzBhoD9M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXj++Qy28Og041ntysk3eNY8ExPkzftTrfcB9yBxT6z7SCJq2i
-	A0Ptz2HFhYHPHBuh15pF63aTNx10hMeUnNVBUkESQ7Vx15Y3PJ7D
-X-Gm-Gg: ASbGncuIbTx9LzrO8N9H96kbZ7q0BLx5pGxzzJYyTgnRLyDZXJTuZGHhx9TejIqOWRp
-	6fc0gacm+PyiYv71+8/5ht1fJ9gepX381IivFX5ts7HI/T4osNwTZhH0IX900hmxM0imlzuPTK+
-	XvIhYbd3ix14HXwaL7SCsMbAcYKh9NZvz2fElV6SdxPivjtNFLKUP2dVpEKwZxpQ+hAwOTuqqXy
-	UqlLHX+SZUYx+ek3k0HmHBK7tI64LLLF5rPGj30Nc3TYU0o0UNEciLRlAvMG31RUHO206PwxV+7
-	8YqOEOXOrt0j9SubYBKoIpbupw5ZN9sWjl8m930rVdjOHC5xTpHgh0AVIWFtos3+76XGzq8HxDI
-	vy4GyhspIO0oNrEjxXu/LuE5NOI+tfgcvtog=
-X-Google-Smtp-Source: AGHT+IE8b1YSYyJ5vnh8bMNcWfJg+aj6n7MpvB271ePK9VC+EtvXpHegIwCTIcxSME5/3h+U1xHJhw==
-X-Received: by 2002:ad4:4eed:0:b0:6e6:6bd8:3a86 with SMTP id 6a1803df08f44-6e9005be42bmr198614916d6.6.1741650864801;
-        Mon, 10 Mar 2025 16:54:24 -0700 (PDT)
-Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8f707c267sm63927486d6.17.2025.03.10.16.54.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Mar 2025 16:54:24 -0700 (PDT)
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfauth.phl.internal (Postfix) with ESMTP id DF2FE120006A;
-	Mon, 10 Mar 2025 19:54:23 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Mon, 10 Mar 2025 19:54:23 -0400
-X-ME-Sender: <xms:r3vPZ8SmoMBGv30iRePzhlOyWaQKHFrnquezIKpDVO7mmyYfFHkiJw>
-    <xme:r3vPZ5w14VZb8u7DA8uaZfrYCJjSUeXsjuNlXbCA1UYXiNOgwtAx9ola0juSQKBir
-    L3O_zRvmUHLiIAfrw>
-X-ME-Received: <xmr:r3vPZ51TPv8D9lg-9N1DN5GGW5Dtu4FllLHFo6ncCckBjILjoEeiT5D4LRA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvddtjedvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrih
-    hlrdgtohhmqeenucggtffrrghtthgvrhhnpeehudfgudffffetuedtvdehueevledvhfel
-    leeivedtgeeuhfegueevieduffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgr
-    lhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppe
-    hgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepledpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrgh
-    drrghupdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    ohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjh
-    druhhprgguhhihrgihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehurhgviihkihes
-    ghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrd
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehjohgvlhgrghhnvghlfhesnhhvihguihgrrd
-    gtohhmpdhrtghpthhtohepsghoqhhunhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:r3vPZwAUSCzZzsxOT_xc7PG9ytNG2qSEtGWexgHwIy82sd80lr2Npw>
-    <xmx:r3vPZ1hI7Eigj8kllebjwlff4AGiTeqqWXpczqrzykMx8os3GppYfg>
-    <xmx:r3vPZ8p5oNcpYlXBB6iubcu5_5JtqSvPgRoFRLNoPCBUCABjVZtL2A>
-    <xmx:r3vPZ4jolOEB65bfMrBcwkaQfYKPVVgwhfRq75EM14G_WfPmNa7vgA>
-    <xmx:r3vPZ8T-YSsgQsZAH32-O1flRLSEDKgXhy1y_4rDKJTswrXulZHgf8qc>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Mar 2025 19:54:23 -0400 (EDT)
-Date: Mon, 10 Mar 2025 16:53:02 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the rcu tree
-Message-ID: <Z897XqnvB30aWHHk@boqun-archlinux>
-References: <20250311081301.6a22ab25@canb.auug.org.au>
- <Z89g6ZXRHQUq8WyV@boqun-archlinux>
- <20250311093752.703b3069@canb.auug.org.au>
+	s=arc-20240116; t=1741654688; c=relaxed/simple;
+	bh=yrwlOhq+ZRcjiXGImE8uhCgFDpxCiuS1JASxcgvaR/w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DQKmYMlFDgWh0sUUzQ7GwXxatoQ0gjvKGgHqGNriob3cUzRZBmihPQ0YIYGac85HBBX3sbIyFL0qslfiVcSgUru0Ea9lTQRh3Qf0KqUc3RA5NvnfOiu9Ex9GdjHEDnpqCQr+fgN4nXqciH+SQq4A1bez2u5fbNFlU5vUSmd7Q6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=mh+hyh4D; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1741654680;
+	bh=Tr8Re72/EpoDmlqgqK+IWGfFqUbG5OiC/9Y0ptmLfX4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=mh+hyh4DA1FK3VIMRM3Eit2rGw93paimh2wvfKs3vv90GqPDH9X1gvrk5XYdNQ6SM
+	 os7GV/GJgv172g2UYvr36Awlutyrxdbn4YYiJ5npgN3ZTCIcfNToYMJLwx5M1a+CFA
+	 RbcUqGKfRqlWXogH+FVMjFn3L2HgIgi90Cny1rsha7GIll+oDDKBpuDHXnt/ZmEeeY
+	 qBdF9T8kW9aUlO0bcjXb+wKHO1pJjIg+vweTycL5/jQ/PeXjDkioRp9dQSlIh5N6ll
+	 2T+2GYup4VxTWPkoQmze2f7+KNrKbHry91Mo8NEaIDVVm7SvzPwkKWwndScZY0F5rx
+	 nkmwHGOlnq/kQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZBb3D3V47z4x3p;
+	Tue, 11 Mar 2025 11:57:59 +1100 (AEDT)
+Date: Tue, 11 Mar 2025 11:57:58 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Taehee Yoo <ap420073@gmail.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20250311115758.17a1d414@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250311093752.703b3069@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/Xh.a4=HiB=xr7=J45lWXPTJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Mar 11, 2025 at 09:37:52AM +1100, Stephen Rothwell wrote:
-> Hi Boqun,
-> 
-> On Mon, 10 Mar 2025 15:00:09 -0700 Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > Thanks for spotting this. These two are likely for the next next merge
-> > windows (i.e. for 6.16), and presumably they will be handled by Joel
-> > (Cced), so I deliberately avoid putting my SoB there.
-> 
-> The next merge window (starting in a couple of weeks) will be for
-> v6.15, so if the commits are intended for v6.16, then they should not
-> be in linux-next (yet).  If they are intended for v6.15, then they need
-> to have SoBs.
-> 
+--Sig_/Xh.a4=HiB=xr7=J45lWXPTJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Got it. Given we may still decide putting them into v6.15, I will add my
-SoBs and update the next branch of rcu repo.
+Hi all,
 
-Apologies for the extra trouble.
+Today's linux-next merge of the net-next tree got a conflict in:
 
-Regards,
-Boqun
+  tools/testing/selftests/drivers/net/ping.py
 
-> -- 
-> Cheers,
-> Stephen Rothwell
+between commit:
 
+  75cc19c8ff89 ("selftests: drv-net: add xdp cases for ping.py")
 
+from the net tree and commit:
+
+  de94e8697405 ("selftests: drv-net: store addresses in dict indexed by ipv=
+er")
+
+from the net-next tree.
+
+I fixed it up (I think - see below) and can carry the fix as necessary.
+This is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/drivers/net/ping.py
+index 93f4b411b378,17dc11e9b6dd..000000000000
+--- a/tools/testing/selftests/drivers/net/ping.py
++++ b/tools/testing/selftests/drivers/net/ping.py
+@@@ -1,34 -1,27 +1,34 @@@
+  #!/usr/bin/env python3
+  # SPDX-License-Identifier: GPL-2.0
+ =20
+ +import os
+ +import random, string, time
+  from lib.py import ksft_run, ksft_exit
+ -from lib.py import ksft_eq
+ -from lib.py import NetDrvEpEnv
+ +from lib.py import ksft_eq, KsftSkipEx, KsftFailEx
+ +from lib.py import EthtoolFamily, NetDrvEpEnv
+  from lib.py import bkg, cmd, wait_port_listen, rand_port
+ +from lib.py import ethtool, ip
+ =20
+ +remote_ifname=3D""
+ +no_sleep=3DFalse
+ =20
+ -def test_v4(cfg) -> None:
+ +def _test_v4(cfg) -> None:
+-     cfg.require_v4()
++     cfg.require_ipver("4")
+ =20
+-     cmd(f"ping -c 1 -W0.5 {cfg.remote_v4}")
+-     cmd(f"ping -c 1 -W0.5 {cfg.v4}", host=3Dcfg.remote)
+-     cmd(f"ping -s 65000 -c 1 -W0.5 {cfg.remote_v4}")
+-     cmd(f"ping -s 65000 -c 1 -W0.5 {cfg.v4}", host=3Dcfg.remote)
++     cmd("ping -c 1 -W0.5 " + cfg.remote_addr_v["4"])
++     cmd("ping -c 1 -W0.5 " + cfg.addr_v["4"], host=3Dcfg.remote)
+++    cmd("ping -s 65000 -c 1 -W0.5 " + cfg.remote_addr_v["4"])
+++    cmd("ping -s 65000 -c 1 -W0.5 " + cfg.addr_v["4"], host=3Dcfg.remote)
+ =20
+ -
+ -def test_v6(cfg) -> None:
+ +def _test_v6(cfg) -> None:
+-     cfg.require_v6()
++     cfg.require_ipver("6")
+ =20
+-     cmd(f"ping -c 1 -W5 {cfg.remote_v6}")
+-     cmd(f"ping -c 1 -W5 {cfg.v6}", host=3Dcfg.remote)
+-     cmd(f"ping -s 65000 -c 1 -W0.5 {cfg.remote_v6}")
+-     cmd(f"ping -s 65000 -c 1 -W0.5 {cfg.v6}", host=3Dcfg.remote)
+ -    cmd("ping -c 1 -W0.5 " + cfg.remote_addr_v["6"])
+ -    cmd("ping -c 1 -W0.5 " + cfg.addr_v["6"], host=3Dcfg.remote)
+++    cmd("ping -c 1 -W5 " + cfg.remote_addr_v["6"])
+++    cmd("ping -c 1 -W5 " + cfg.addr_v["6"], host=3Dcfg.remote)
+++    cmd("ping -s 65000 -c 1 -W0.5 " + cfg.remote_addr_v["6"])
+++    cmd("ping -s 65000 -c 1 -W0.5 " + cfg.addr_v["6"], host=3Dcfg.remote)
+ =20
+ -
+ -def test_tcp(cfg) -> None:
+ +def _test_tcp(cfg) -> None:
+      cfg.require_cmd("socat", remote=3DTrue)
+ =20
+      port =3D rand_port()
+
+--Sig_/Xh.a4=HiB=xr7=J45lWXPTJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfPipYACgkQAVBC80lX
+0GzWDggAgM42FnvaOpoJ/dMw/49iAJyBuTmdXODYwnTgLOX7sjE9/4Gja8wozXH9
+ZpapqpQSzMi+9vb8ga/femxMuHxjXLF4yDnjqVsZrOInVL+PpjfWr8XiIYrIITHC
+POTYopCU8SMLLrmHMwceH8mjbkZv7yfaqAhtsoI4uo+YRfcZivgtIEse4KF9xHpl
+eGtsVxdBv1T3fGVnIemjSVd9M6LrtKexX+x8PF9RIk+JUSnWgt2BeiJbaDiSNM0T
+057k1akAFXYrM2JN5O8AvwwANUfV1Bte2kKmH/O8Lb48DWEu7c/Jz2rDBeIPaIhD
+GNwuT7QaFeqpnL0HZwr4yEY03rNRKA==
+=WhCx
+-----END PGP SIGNATURE-----
+
+--Sig_/Xh.a4=HiB=xr7=J45lWXPTJ--
 

@@ -1,141 +1,235 @@
-Return-Path: <linux-next+bounces-5759-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5760-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46429A5D483
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 03:53:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DFC0A5D4DD
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 04:53:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE9703B4877
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 02:53:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFC751737E0
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 03:53:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A51018C937;
-	Wed, 12 Mar 2025 02:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128881D63C5;
+	Wed, 12 Mar 2025 03:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jHvZ/WIX"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AxHIzS5J"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC5B7E107;
-	Wed, 12 Mar 2025 02:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74534685;
+	Wed, 12 Mar 2025 03:52:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741747993; cv=none; b=djFkl1pcfwRc2yXCa166xLehOwDbyWRa1TGbf0qvtZb48Tqiwwxn16jE6KWYhHAeK8PKRE3wwnUOz14YQ8GA4VL8hik1mCJVJThC7cvgIjnqDQJbyy28yToq/5c7o4RJDmtz3e/LzRLraE3qTh1FrySKBhGi/sVH1ScKr0YMxPg=
+	t=1741751578; cv=none; b=rG3mVsGXuPG+2swhAwDHwpaUZh5OGx6XLVcuoAhZ4R1xiBWT0y8B/+jfwh0wdxyFhi9/2dJ+9wT4vdfy1D9p8/uzma25Nvt8383a1d1/cdyilkx34VCh95NTyvlZH9hdyAX31yVrYR12kXK/K9sRpvne6cP4WF20qhuToQA0jJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741747993; c=relaxed/simple;
-	bh=mGmp/6rLQXNQ7sV5BTurEpkMGQe9WfCi9GE2Knd3SNI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Lwfq1cBBgCm2XRG3nM7D1WS0ny1LNvSzoc8Td4g1Z1+EkIqAs7ZvJ0e8RHkydCrpA4xwseeKtlEjl9VHzZsc3EAtzXI8YldWpf722QklZm5fesN1ev7r8L9n60KFD1oQbJtNg2W+O4j89HYgfZw+XETNXSCQbb8OresG9NeS1C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jHvZ/WIX; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1741751578; c=relaxed/simple;
+	bh=sLKqKjYLtwBaRwxi4pI2AP0lZkLdOBbifFarCNv34ug=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=JyX8cLOsb4wgutVjEwmnMAzTIxNYXzZiZY11F7GOAJEuhbhU1JvjfKRXa025iqAD3Tbmh/MTg6I/E/eLlppxSM88LG5eOodP/Ed93/iTe0EaaDUK66miAzfXCEib0Cklg0otBKYXWKrA3dy24Ue4sYdP0yp7Bb8+yWRYwXjF0QY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AxHIzS5J; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741747987;
-	bh=ocD8+DIcFrFjovCogZxWvHcJ/XR+gJFJJkV27YdINP4=;
+	s=201702; t=1741751571;
+	bh=csLI6VHnfoRTbr9Hhw1hlQTjIqbLO4KYY8VWFZt9+8w=;
 	h=Date:From:To:Cc:Subject:From;
-	b=jHvZ/WIXI1d7OSUuwkGPxzvetRINzrGfSbTNRXaTijUEirV9NEzoNCLcKu8gxQBDz
-	 xVf7kvBTV+GMykJjGZTQVYUzx+YMm424he6aLKKvhNrrDhwanPA2JZeNeb6hT6U4ND
-	 QrsNOtFYPIUMiCrJwyzIdpnE1f1jydWRyFMtsrFxJhOw3U4XrdWwdtcs8dFF4+1Liv
-	 0NNaPh8/SWJ/D/QjOxtq6h61bvEeHetWlQBCNt2sW9MttU4T5K7P9oD8gvEO5YZwjK
-	 kThja3vO2UazkFq4awpxtmkLEsEJAbXSio8u9FWCvoVlCUVfzXjyIQoRrz++vy5PX7
-	 VRGicuy6orZlQ==
+	b=AxHIzS5J2+9Jp8BHuQmJ852mWt5T25ssDBoOpK2hnU5Dry6iHvJI7WEUu1tESqRdg
+	 J6Um/4FPtb9OXbJ0Sc9FPdVv06BJfR2RJNSB3I/gX8aQudFCUFEf69j3Ee4KrnEEPN
+	 tNtGC5FL8hH67953uZ/S3ehEpxpKAVMiaUnYtxx1sS+Flqkn3XQXKbj7QJ6tyRmcPa
+	 K7yTUPvNDGTe8tGi6ZTzCEpijCUBIJOaJbCkiXEbeqsJkl6Xnk8MEuI0nb249hyfDB
+	 sYBrzWqefi35hyvRCXdC7QExcaQgvIGjLipfATuFGsUbFf2HvDL8Yq6DUbiPh7qU5+
+	 1vxCsMEArvekg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZCFYZ6tn9z4wgp;
-	Wed, 12 Mar 2025 13:53:06 +1100 (AEDT)
-Date: Wed, 12 Mar 2025 13:53:06 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZCGtV19Hfz4xCW;
+	Wed, 12 Mar 2025 14:52:49 +1100 (AEDT)
+Date: Wed, 12 Mar 2025 14:52:47 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kalle Valo <kvalo@kernel.org>, Johannes Berg <johannes@sipsolutions.net>
-Cc: Johannes Berg <johannes.berg@intel.com>, Wireless
- <linux-wireless@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Miri Korenblit
- <miriam.rachel.korenblit@intel.com>
-Subject: linux-next: manual merge of the wireless-next tree with Linus' and
- the wireless trees
-Message-ID: <20250312135306.2cd270b3@canb.auug.org.au>
+To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>, Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>, Vlastimil Babka <vbabka@suse.cz>, bpf
+ <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20250312145247.380c2aa5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CODNmu9F1CFzIxmj5c1pl7o";
+Content-Type: multipart/signed; boundary="Sig_/Agm1aDa=ntrjh5CZDTyBZLk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/CODNmu9F1CFzIxmj5c1pl7o
+--Sig_/Agm1aDa=ntrjh5CZDTyBZLk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the wireless-next tree got a conflict in:
+After merging the bpf-next tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  net/wireless/nl80211.c
+In file included from include/asm-generic/percpu.h:7,
+                 from arch/powerpc/include/asm/percpu.h:28,
+                 from arch/powerpc/include/asm/smp.h:26,
+                 from include/linux/smp.h:119,
+                 from include/linux/lockdep.h:14,
+                 from include/linux/radix-tree.h:14,
+                 from include/linux/idr.h:15,
+                 from include/linux/cgroup-defs.h:13,
+                 from mm/memcontrol.c:28:
+mm/memcontrol.c: In function 'memcg_hotplug_cpu_dead':
+include/linux/percpu-defs.h:242:2: error: passing argument 1 of 'local_lock=
+_acquire' from incompatible pointer type [-Wincompatible-pointer-types]
+  242 | ({                                                                 =
+     \
+      | ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~
+      |  |
+      |  localtry_lock_t *
+  243 |         __verify_pcpu_ptr(ptr);                                    =
+     \
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~
+  244 |         arch_raw_cpu_ptr(ptr);                                     =
+     \
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~
+  245 | })
+      | ~~
+include/linux/percpu-defs.h:254:27: note: in expansion of macro 'raw_cpu_pt=
+r'
+  254 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+      |                           ^~~~~~~~~~~
+include/linux/local_lock_internal.h:105:36: note: in expansion of macro 'th=
+is_cpu_ptr'
+  105 |                 local_lock_acquire(this_cpu_ptr(lock));         \
+      |                                    ^~~~~~~~~~~~
+include/linux/local_lock.h:31:9: note: in expansion of macro '__local_lock_=
+irqsave'
+   31 |         __local_lock_irqsave(lock, flags)
+      |         ^~~~~~~~~~~~~~~~~~~~
+mm/memcontrol.c:1960:9: note: in expansion of macro 'local_lock_irqsave'
+ 1960 |         local_lock_irqsave(&memcg_stock.stock_lock, flags);
+      |         ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/local_lock.h:5,
+                 from include/linux/mmzone.h:24,
+                 from include/linux/gfp.h:7,
+                 from include/linux/xarray.h:16,
+                 from include/linux/radix-tree.h:21:
+include/linux/local_lock_internal.h:59:53: note: expected 'local_lock_t *' =
+but argument is of type 'localtry_lock_t *'
+   59 | static inline void local_lock_acquire(local_lock_t *l) { }
+      |                                       ~~~~~~~~~~~~~~^
+include/linux/percpu-defs.h:242:2: error: passing argument 1 of 'local_lock=
+_release' from incompatible pointer type [-Wincompatible-pointer-types]
+  242 | ({                                                                 =
+     \
+      | ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~
+      |  |
+      |  localtry_lock_t *
+  243 |         __verify_pcpu_ptr(ptr);                                    =
+     \
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~
+  244 |         arch_raw_cpu_ptr(ptr);                                     =
+     \
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~
+  245 | })
+      | ~~
+include/linux/percpu-defs.h:254:27: note: in expansion of macro 'raw_cpu_pt=
+r'
+  254 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+      |                           ^~~~~~~~~~~
+include/linux/local_lock_internal.h:122:36: note: in expansion of macro 'th=
+is_cpu_ptr'
+  122 |                 local_lock_release(this_cpu_ptr(lock));         \
+      |                                    ^~~~~~~~~~~~
+include/linux/local_lock.h:52:9: note: in expansion of macro '__local_unloc=
+k_irqrestore'
+   52 |         __local_unlock_irqrestore(lock, flags)
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+mm/memcontrol.c:1962:9: note: in expansion of macro 'local_unlock_irqrestor=
+e'
+ 1962 |         local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~
+include/linux/local_lock_internal.h:61:53: note: expected 'local_lock_t *' =
+but argument is of type 'localtry_lock_t *'
+   61 | static inline void local_lock_release(local_lock_t *l) { }
+      |                                       ~~~~~~~~~~~~~~^
 
-between commits:
+Caused by commits
 
-  1f860eb4cdda ("wifi: nl80211: disable multi-link reconfiguration")
+  0aaddfb06882 ("locking/local_lock: Introduce localtry_lock_t")
+  01d37228d331 ("memcg: Use trylock to access memcg stock_lock.")
 
-from Linus' tree and
+interacting with commit
 
-  2e85829ac7fb ("wifi: nl80211: fix assoc link handling")
+  885aa5fe7b1d ("memcg: drain obj stock on cpu hotplug teardown")
 
-from the wireless tree and commits:
+from the mm-hotfixes tree.
 
-  a096a8602f4f ("wifi: cfg80211: move link reconfig parameters into a struc=
-t")
-  969241371f06 ("wifi: cfg80211: allow setting extended MLD capa/ops")
+I applied the following merge fix patch.
 
-from the wireless-next tree.
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 12 Mar 2025 14:18:03 +1100
+Subject: [PATCH] fix up for "memcg: Use trylock to access memcg stock_lock"
 
-I fixed it up (see below and I used the latter for the later hunk) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+interacting with "memcg: drain obj stock on cpu hotplug teardown" from
+the mm-hotfixes tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ mm/memcontrol.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 8f88b8dd8097..87544df4c3b8 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -1957,9 +1957,9 @@ static int memcg_hotplug_cpu_dead(unsigned int cpu)
+ 	stock =3D &per_cpu(memcg_stock, cpu);
+=20
+ 	/* drain_obj_stock requires stock_lock */
+-	local_lock_irqsave(&memcg_stock.stock_lock, flags);
++	localtry_lock_irqsave(&memcg_stock.stock_lock, flags);
+ 	old =3D drain_obj_stock(stock);
+-	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
++	localtry_unlock_irqrestore(&memcg_stock.stock_lock, flags);
+=20
+ 	drain_stock(stock);
+ 	obj_cgroup_put(old);
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc net/wireless/nl80211.c
-index 34c0dfeeb7fc,aee49d43cf86..000000000000
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@@ -16512,10 -16518,7 +16524,10 @@@ static int nl80211_assoc_ml_reconf(stru
- =20
-  	add_links =3D 0;
-  	if (info->attrs[NL80211_ATTR_MLO_LINKS]) {
-- 		err =3D nl80211_process_links(rdev, links,
- -		err =3D nl80211_process_links(rdev, req.add_links, NULL, 0, info);
-++		err =3D nl80211_process_links(rdev, req.add_links,
- +					    /* mark as MLO, but not assoc */
- +					    IEEE80211_MLD_MAX_NUM_LINKS,
- +					    NULL, 0, info);
-  		if (err)
-  			return err;
- =20
-
---Sig_/CODNmu9F1CFzIxmj5c1pl7o
+--Sig_/Agm1aDa=ntrjh5CZDTyBZLk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfQ9xIACgkQAVBC80lX
-0GwhVwf/WeQFTELYbJ3He6NlIHLV6eD/IsbKmQiY5CMKHzY2tjMwfrjE4ll5EUyr
-3GKAd64sdd1d9MdqYP83GYmNnJfwd2cM0yXSPJzTcB3tn/ufqbUsFydD+qrK7i0K
-q+EnvL0K8L/GiO3CLPInIQfTUtfSRq8Q3YOUbxkS1oauw7INuhzpuhaxOvhDMH4j
-+dml7bRPkIKyUsv53zpaBcgI5FKp/U63fgB3sNHU9bBXhVE7r1zdQikacjhmFO3k
-RMhDKv2ZoLSVSIHLM1MXJCGQucfINuzWlsyzoElRGOmXZlq6ySWxGdvyya5NPAKf
-btXMM/+KWrotydtYo2XyThqTD6jE6Q==
-=3IZd
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfRBQ8ACgkQAVBC80lX
+0Gwhjgf/SY1L6EY7sBqFhnP+flnrFZsbc+TyMvDrzfsz2JbnfFgufgdHuzR8+jcA
+aE/25UdSpp2x6Qfbe3AWyt5mn/XeMoEermZsV2axGhViqfGhQ8MKOMzD5UYVRUIX
+c2I4cY/mhJwdpDwy3SwLHuvvsKH61GRwxd7LIGgQGH8EdYbdhcfuInCu/owZgfGS
+dcTfqXg93FuwUEOWJAUEq/sJKbPUZxPA1EUUsz8GM9v7CGeAYY9X1X45ejfvO9nA
+pOq7ihS02sh/QbXbkatGZZF5b4s1VpxiV3LTCmqJqzYqRh1RPEdjOxodmXV58R2j
+3/8LfPHpQzkSoWaeL+kZIvEGRSwjwA==
+=KxSD
 -----END PGP SIGNATURE-----
 
---Sig_/CODNmu9F1CFzIxmj5c1pl7o--
+--Sig_/Agm1aDa=ntrjh5CZDTyBZLk--
 

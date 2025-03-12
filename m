@@ -1,129 +1,144 @@
-Return-Path: <linux-next+bounces-5780-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5781-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8B5EA5E501
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 21:07:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6869A5E59A
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 21:47:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EB283A75A9
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 20:07:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1351717B257
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 20:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 527F11EB1A1;
-	Wed, 12 Mar 2025 20:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZbzIfjSt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F241E5711;
+	Wed, 12 Mar 2025 20:47:14 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA6C1ADC6C;
-	Wed, 12 Mar 2025 20:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 537E6258A;
+	Wed, 12 Mar 2025 20:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741810055; cv=none; b=fCkJ28muIg8r3UgJnfa3PyD6c3wB3LDfmDTZ2ehL0x/opuAUugfvEDTeji3IYALtzILQUKuf4HDkxDP8/uSE00TpXFlk6tUBU8+CFXgnuWOBK8AMoBlYkJqvVVLMt2rEf1m/uSczkpP4CFV6scN111+0zjqBMuBnTVcOozIJMSg=
+	t=1741812434; cv=none; b=MVG1jIR8uRJ9O1qlNDwd59MLRsRVjG7w4+nachT/H+8PJOxpU/gDBxC0gUZErDHWTbGD7oNw8DQiodOtRVG57nZG+IJ1/iRfsC+Qwei3qAitCz+ccrv1aH9p//EfVe4Bww4epBSCAIWkw87rH2oh5Wa0AtRiDCI5f6nYmpV3F84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741810055; c=relaxed/simple;
-	bh=AAj1WohNGpVntpbLCYIMfXYBSA1bw1W1ywTKwXFLj1M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BLDwYFG0MWouCxGmaJIkEk0gzIzTchM/GEnIikKxUVUPfcZ2qn5a1/lGndv3UwJFAuk+xIMC4BPOKxLQRWdhEzNKeXxFvhlTi2ap3fU8YOxcKsU/APxC1VqWtxLswUwDS1CaUnUf8TXRU5ilUFS0wfNwOE3zt8EzJytaCjw8EuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZbzIfjSt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A86C4CEEA;
-	Wed, 12 Mar 2025 20:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741810054;
-	bh=AAj1WohNGpVntpbLCYIMfXYBSA1bw1W1ywTKwXFLj1M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZbzIfjStT03wY2zFOxCagp4rgvx9+Auxn4LoiqSIaeuBOwQ1eNRT+xMk7/4GkP38b
-	 KPnpcxlJ8uLNU/lWqtXn8Q6cb0KA6Lgl37ySgRg9l088XzOORDhQTrYTcAEr4WG2UP
-	 xKgrFGKLC79EHjDFAcJw5Kepw3SG8evjW7ZSnv9tbRBt/Zgfkxkmg/ydyBS27KtSep
-	 CpZGgBxw7j1FXAyAD9nshox8Mgmzw3uaIJIKu7zxgFELSqiPE2XiqqGhcpux1+bEhj
-	 D4bniiHaJRjj07LmCVSlpaM028R1YH9Gbfyfyl5Y27R4EfeqUrskTGbvd6reOprZmz
-	 6eWJFGSYjmEfg==
-Date: Wed, 12 Mar 2025 21:07:30 +0100
-From: Danilo Krummrich <dakr@kernel.org>
-To: Greg KH <greg@kroah.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Fiona Behrens <me@kloenk.dev>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <Z9Hpggn_HE3uMGCo@cassiopeiae>
-References: <20250312220950.28ed9ad7@canb.auug.org.au>
- <2025031235-trailside-unexpired-88c6@gregkh>
+	s=arc-20240116; t=1741812434; c=relaxed/simple;
+	bh=oHoaylZ0+e02kulPIew6Nn6BhlI26LCAOEVuoJmwZY4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qapxFJ8kRCzPJZczyJuxV2Hm5LqJ3A9gtjk4vejrWOEEw9LVQctoWcBoX3LipnKW42A+mqjjlU6e6+qQrn2Kz2uY2GJe2t9Yh5DO+zDyHJSciv9hWg3uJ62iUAcfegv1yjgGCPebkqiU+ZmfKRMzoMYERdEdoap2lcxo8yrBH/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E338015A1;
+	Wed, 12 Mar 2025 13:47:21 -0700 (PDT)
+Received: from [10.118.111.35] (G9L3377F54.austin.arm.com [10.118.111.35])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E4ABA3F673;
+	Wed, 12 Mar 2025 13:47:10 -0700 (PDT)
+Message-ID: <25269252-e45f-4692-a519-a0703b6800a1@arm.com>
+Date: Wed, 12 Mar 2025 15:47:10 -0500
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025031235-trailside-unexpired-88c6@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Build error on -next due to tpm_crb.c changes?
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Thorsten Leemhuis <linux@leemhuis.info>, jarkko@kernel.org,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, lenb@kernel.org,
+ rafael@kernel.org, jgg@ziepe.ca, peterhuewe@gmx.de,
+ linux-integrity@vger.kernel.org,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250305173611.74548-1-stuart.yoder@arm.com>
+ <0ad035ff-400e-4b15-8b8f-40b69152ec46@leemhuis.info>
+ <92bc0a65-608f-4307-bb1c-16d8836d42e5@arm.com>
+ <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
+ <23c77291-7c6e-45ea-b1ad-952c01882579@arm.com>
+ <20250311211700.bwizwecxyxorrwql@bogus>
+Content-Language: en-US
+From: Stuart Yoder <stuart.yoder@arm.com>
+In-Reply-To: <20250311211700.bwizwecxyxorrwql@bogus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 12, 2025 at 06:20:45PM +0100, Greg KH wrote:
-> On Wed, Mar 12, 2025 at 10:09:50PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the driver-core tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> > 
-> > error[E0599]: no method named `readl` found for reference `&Bar<8>` in the current scope
-> >   --> drivers/gpu/nova-core/regs.rs:38:18
-> >    |
-> > 38 |         Self(bar.readl(BOOT0_OFFSET))
-> >    |                  ^^^^^
-> >    |
-> > help: there is a method `read8` with a similar name
-> >    |
-> > 38 |         Self(bar.read8(BOOT0_OFFSET))
-> >    |                  ~~~~~
-> > 
-> > error: aborting due to 1 previous error
-> > 
-> > For more information about this error, try `rustc --explain E0599`.
-> > 
-> > Caused by commit
-> > 
-> >   354fd6e86fac ("rust: io: rename `io::Io` accessors")
-> > 
-> > interacting with commit
-> > 
-> >   54e6baf123fd ("gpu: nova-core: add initial driver stub")
-> > 
-> > from the drm-nova tree.
-> > 
-> > I applied the following merge fix patch for today.
-> > 
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Wed, 12 Mar 2025 21:36:48 +1100
-> > Subject: [PATCH] fix up for "rust: io: rename `io::Io` accessors"
-> > 
-> > interacting with "gpu: nova-core: add initial driver stub"
-> > 
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/gpu/nova-core/regs.rs | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/nova-core/regs.rs b/drivers/gpu/nova-core/regs.rs
-> > index 50aefb150b0b..b1a25b86ef17 100644
-> > --- a/drivers/gpu/nova-core/regs.rs
-> > +++ b/drivers/gpu/nova-core/regs.rs
-> > @@ -35,7 +35,7 @@
-> >  impl Boot0 {
-> >      #[inline]
-> >      pub(crate) fn read(bar: &Bar0) -> Self {
-> > -        Self(bar.readl(BOOT0_OFFSET))
-> > +        Self(bar.read32(BOOT0_OFFSET))
-> >      }
-> >  
-> >      #[inline]
-> > -- 
-> > 2.45.2
-> > 
+
+
+On 3/11/25 4:17 PM, Sudeep Holla wrote:
+> On Tue, Mar 11, 2025 at 01:25:50PM -0500, Stuart Yoder wrote:
+>>
+>>
+>> On 3/11/25 11:51 AM, Thorsten Leemhuis wrote:
+>>> On 11.03.25 16:53, Stuart Yoder wrote:
+>>>> On 3/11/25 10:21 AM, Thorsten Leemhuis wrote:
+>>>>> On 05.03.25 18:36, Stuart Yoder wrote:
+>>>> [...]
+>>>> So, it should not be possible on one had have
+>>>> CONFIG_TCG_ARM_CRB_FFA being true when building tpm_crb.c
+>>>> and false resulting in the tpm_crb_ffa.o not being
+>>>> picked up in the build.
+>>>
+>>> Many thx for the answer. Maybe Fedora's way to prepare the .config files
+>>> (which my package builds use to be close to Fedora's official packages)
+>>> is doing something odd/wrong. Will take a closer look and report back.
+>>
+>> I've been experimenting with some different build config combinations
+>> and have reproduced what must be the issue.
+>>
+>> This works fine:
+>> <*>   TPM 2.0 CRB Interface                                         < >
+>> TPM CRB over Arm FF-A Transport
+>>
+>> This works fine:
+>> < >   TPM 2.0 CRB Interface                                         <*>
+>> TPM CRB over Arm FF-A Transport
+>>
+>> This works fine:
+>> <*>   TPM 2.0 CRB Interface                                         <*>
+>> TPM CRB over Arm FF-A Transport
+>>
+>> This works fine:
+>> <M>   TPM 2.0 CRB Interface                                         <M>
+>> TPM CRB over Arm FF-A Transport
+>>
+>> This fails:
+>> <*>   TPM 2.0 CRB Interface                                         <M>
+>> TPM CRB over Arm FF-A Transport
+>>
+>> The 2 drivers are coupled, so we can't have one built as a module
+>> and the other built-in.
+>>
+>> I'm not a Kconfig expert, and need to do some fiddling to see
+>> if I can find a Kconfig syntax that prevents that failure scenario.
+>>
 > 
-> Fix looks good to me, thanks!
+> 	default y if (TCG_CRB && ARM_FFA_TRANSPORT)
+> 
+> is the issue here. You can select it as built-in if either or one of the
+> TCG_CRB and ARM_FFA_TRANSPORT is a module, but that is exactly what happens.
+> Not sure if default value is a must for you. But just depends on each of
+> these should be good enough and enable it in defconfig if needed. Or
+> you can have multiple default at least 4 combinations I can see. Both
+> are =y and either and both are =m
 
-+1, thanks for fixing it up!
+I would like a default, because if someone enables both
+ARM_FFA_TRANSPORT and TPM_CRB I don't want them to forget to
+turn on TCG_ARM_CRB_FFA.
+
+I've experimented with a few ways of doing this and I think
+this is simplest and gives the behavior we want:
+
+config TCG_ARM_CRB_FFA
+         tristate "TPM CRB over Arm FF-A Transport"
+         depends on ARM_FFA_TRANSPORT && TCG_CRB
+         default TCG_CRB
+
+The TCG_ARM_CRB_FFA option only appears if both FFA and
+TPM_CRB are enabled. And the default tracks the value
+of TPM_CRB.
+
+Thanks,
+Stuart
+
+
+
 

@@ -1,235 +1,120 @@
-Return-Path: <linux-next+bounces-5760-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5761-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DFC0A5D4DD
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 04:53:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF887A5D577
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 06:20:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFC751737E0
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 03:53:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B75C6189AD17
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 05:20:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128881D63C5;
-	Wed, 12 Mar 2025 03:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AxHIzS5J"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48C5E1DE2BD;
+	Wed, 12 Mar 2025 05:20:35 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74534685;
-	Wed, 12 Mar 2025 03:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010CB1DB546;
+	Wed, 12 Mar 2025 05:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741751578; cv=none; b=rG3mVsGXuPG+2swhAwDHwpaUZh5OGx6XLVcuoAhZ4R1xiBWT0y8B/+jfwh0wdxyFhi9/2dJ+9wT4vdfy1D9p8/uzma25Nvt8383a1d1/cdyilkx34VCh95NTyvlZH9hdyAX31yVrYR12kXK/K9sRpvne6cP4WF20qhuToQA0jJU=
+	t=1741756835; cv=none; b=BEpgoIePj5veloCpgEFi3h0sizYt0xioCLT1gXH2pL2Wr4otYoJ8gz+CLlR1ZMHd4I9ASOw7jG54UDK047KyFo5+1pcaYsMGdodn0ULOYAxHRq8eo1c4XwejpwDOnEHmCCeEDHfcIY/tf2XOyshEdMRrEWpF0rn4RfUEoqWQlbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741751578; c=relaxed/simple;
-	bh=sLKqKjYLtwBaRwxi4pI2AP0lZkLdOBbifFarCNv34ug=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=JyX8cLOsb4wgutVjEwmnMAzTIxNYXzZiZY11F7GOAJEuhbhU1JvjfKRXa025iqAD3Tbmh/MTg6I/E/eLlppxSM88LG5eOodP/Ed93/iTe0EaaDUK66miAzfXCEib0Cklg0otBKYXWKrA3dy24Ue4sYdP0yp7Bb8+yWRYwXjF0QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AxHIzS5J; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741751571;
-	bh=csLI6VHnfoRTbr9Hhw1hlQTjIqbLO4KYY8VWFZt9+8w=;
-	h=Date:From:To:Cc:Subject:From;
-	b=AxHIzS5J2+9Jp8BHuQmJ852mWt5T25ssDBoOpK2hnU5Dry6iHvJI7WEUu1tESqRdg
-	 J6Um/4FPtb9OXbJ0Sc9FPdVv06BJfR2RJNSB3I/gX8aQudFCUFEf69j3Ee4KrnEEPN
-	 tNtGC5FL8hH67953uZ/S3ehEpxpKAVMiaUnYtxx1sS+Flqkn3XQXKbj7QJ6tyRmcPa
-	 K7yTUPvNDGTe8tGi6ZTzCEpijCUBIJOaJbCkiXEbeqsJkl6Xnk8MEuI0nb249hyfDB
-	 sYBrzWqefi35hyvRCXdC7QExcaQgvIGjLipfATuFGsUbFf2HvDL8Yq6DUbiPh7qU5+
-	 1vxCsMEArvekg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZCGtV19Hfz4xCW;
-	Wed, 12 Mar 2025 14:52:49 +1100 (AEDT)
-Date: Wed, 12 Mar 2025 14:52:47 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>, Sebastian Andrzej Siewior
- <bigeasy@linutronix.de>, Vlastimil Babka <vbabka@suse.cz>, bpf
- <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <20250312145247.380c2aa5@canb.auug.org.au>
+	s=arc-20240116; t=1741756835; c=relaxed/simple;
+	bh=0RD6gH9Lv2P9oq2nmKtG/bmzdj0u7M/C3FoVgNguHpg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cRwRTrZjwxZBL9cJSSt4oqqqB40qOF/TxHui9B+Xi+HweMzu/mV/DH82GTJ/8xievpifTacKLIcKa5kLO7kMMxsO5tSVKci55HwBC5TXMIrjrO0wf2NKGQAr+pi9AtGokJmZJTc/bkkPM1t0xCEYmubidYxPimoagfHUuCkIh/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-30bf1d48843so52821631fa.2;
+        Tue, 11 Mar 2025 22:20:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741756830; x=1742361630;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8CBACq7pupfTR3y0YA4S4UUPtz5mEsdij9kTTqAVipQ=;
+        b=ZWd2rXN5U8Tg0FU6hBKlTYo43+cC6jF3LyVNvgPNowsLSeKpCJvu9yyiuuIV9b+HLu
+         Mv56TGwbHwFIsV5xrA/w05Kb0kH9+swmFckwgfcn5xveBhcj3g2vk50JQ9IwAseLY3ps
+         v13ftmx4Xv0SFw+XcXOx5OWQPeXPixtJBb/5CcB5hfuB3vvRfBNNjeIxatOFrU4M50r3
+         AAqqbWYzB+pI/p+q/lQVEUcyPkYmo+czjmiUMAkBlFhtB8qx3YvkQkNsPdAXwLpuT3ZY
+         gtrSVXMGoW1Bgi6cwguZxaoZK0eDtesbCJCYjioz9qLfecz4Q0fyx0GdQyb/2+19BQU3
+         y/Tw==
+X-Forwarded-Encrypted: i=1; AJvYcCUmUfhgOZ+u9oEwhfS8spQSZZBbMQjq10Mrlrgszh/sI/SDyXoTIX1CZKFcll4q8fhm00HI6aDgqGo3Xug=@vger.kernel.org, AJvYcCVDWY5TcRucKBYTm/gQvwzNJPkkoSUU0DJQmcl50SavYApU5FEcg2IymE4Cf36xws8f96wmGw1Xm0+iHw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJXXEjtkOobwqfh4n5liyFGkq+0WkOxLtavFIRrfCypQKOpACc
+	0E/ZYbIKI7aZb0je86EopggfhspR9l68HLisoKF62S4vBSMVwjnQzd5DHySS/xw=
+X-Gm-Gg: ASbGncti/w3Jkw7PNnFoOSjqSE+iB0E5BLzbThkg6iHD5vF/8cL4HSXbVBezUL7sUki
+	lxlNjJXp+h1ShUwmkcc3bdjV8eXjeVovjE33/IEqUdtCy1TNET+oLgHsa9xcbyYFS9ElbQX1IKL
+	JkfaJK769uWh35lPgDzRIpEQ5vQg1sOhzYfzPoiFH3veBUhnnWkwq49tUzMayVF3PWPDNTnbAJl
+	7yxv7JlV456m5dZxGvH+rglBAAXjBkZ1vPTpqKSicp1aHISyz8fcNInPBEpZn7FlCSDZO9btQPx
+	yurFV7SPRPHPa66nOReHfiTR4/W4PdtJxts182uviQMwJWKOhlR++JqHmrhzFsqXAGiQ07mhyEN
+	chA==
+X-Google-Smtp-Source: AGHT+IHpCZP/WjNyaut9R2gUdNQzRM4xfRXCsxSkv//24TyqrDGyqp3IzN4edW/MdM6BmY1/Kfe2aQ==
+X-Received: by 2002:a05:6512:3ca0:b0:549:39b1:65c2 with SMTP id 2adb3069b0e04-549910cbf59mr7023801e87.48.1741756829771;
+        Tue, 11 Mar 2025 22:20:29 -0700 (PDT)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5498ae58079sm2002012e87.68.2025.03.11.22.20.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Mar 2025 22:20:27 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-30bf8632052so48464311fa.0;
+        Tue, 11 Mar 2025 22:20:27 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVYQDZ2DgytjmH5bFlgLYoAvlGR/4aeJOyXC9So3M1T9WdaJC9vDEq5LxG3gmGn4bVuOIBpDVho/R74+w==@vger.kernel.org, AJvYcCX8F0Ut/wxjEVDp8l5yq2yXs8wTTXN+8cdlXFMD3d6Jgo5qebF1+OOBVBDbQe8Los2Z/9eiKUwBTIYPkic=@vger.kernel.org
+X-Received: by 2002:a2e:a78a:0:b0:30c:160b:c766 with SMTP id
+ 38308e7fff4ca-30c160bd6b9mr33439021fa.14.1741756827524; Tue, 11 Mar 2025
+ 22:20:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Agm1aDa=ntrjh5CZDTyBZLk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/Agm1aDa=ntrjh5CZDTyBZLk
-Content-Type: text/plain; charset=US-ASCII
+References: <20250312082439.098124ee@canb.auug.org.au>
+In-Reply-To: <20250312082439.098124ee@canb.auug.org.au>
+Reply-To: wens@csie.org
+From: Chen-Yu Tsai <wens@csie.org>
+Date: Wed, 12 Mar 2025 13:20:13 +0800
+X-Gmail-Original-Message-ID: <CAGb2v679nTazoZP8B4OL2ECfbGgfvc32wX-J3CNMgCOj5HFPGg@mail.gmail.com>
+X-Gm-Features: AQ5f1Jq6bdeuhVByVrSeDNB55NlgeKvj1SgnufsGBOVGRQxm2spFN6BuEZrBSpM
+Message-ID: <CAGb2v679nTazoZP8B4OL2ECfbGgfvc32wX-J3CNMgCOj5HFPGg@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the sunxi tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Maxime Ripard <mripard@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Wed, Mar 12, 2025 at 5:31=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> Commits
+>
+>   575464821eb0 ("clk: sunxi-ng: add support for the A523/T527 PRCM CCU")
+>   9c8d960c13ab ("clk: sunxi-ng: a523: add reset lines")
+>   4548c0414839 ("clk: sunxi-ng: a523: add bus clock gates")
+>   680f52d723e2 ("clk: sunxi-ng: a523: remaining mod clocks")
+>   5fd7421770fb ("clk: sunxi-ng: a523: add USB mod clocks")
+>   dd19c52e686e ("clk: sunxi-ng: a523: add interface mod clocks")
+>   9bc061e57b4d ("clk: sunxi-ng: a523: add system mod clocks")
+>   4b759de121c4 ("clk: sunxi-ng: a523: add video mod clocks")
+>   2d47dae93981 ("clk: sunxi-ng: a523: Add support for bus clocks")
+>   04f6ff49525a ("clk: sunxi-ng: Add support for the A523/T527 CCU PLLs")
+>   38ea575784d3 ("clk: sunxi-ng: Add support for update bit")
+>   24ad1a7e8a3e ("clk: sunxi-ng: mp: provide wrappers for setting feature =
+flags")
+>   af7a221c1213 ("clk: sunxi-ng: mp: introduce dual-divider clock")
+>   17bed1817f11 ("dt-bindings: clk: sunxi-ng: document two Allwinner A523 =
+CCUs")
+>
+> are missing a Signed-off-by from their committers.
 
-After merging the bpf-next tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Thanks for the heads up. I used the wrong command when applying them.
+All fixed now.
 
-In file included from include/asm-generic/percpu.h:7,
-                 from arch/powerpc/include/asm/percpu.h:28,
-                 from arch/powerpc/include/asm/smp.h:26,
-                 from include/linux/smp.h:119,
-                 from include/linux/lockdep.h:14,
-                 from include/linux/radix-tree.h:14,
-                 from include/linux/idr.h:15,
-                 from include/linux/cgroup-defs.h:13,
-                 from mm/memcontrol.c:28:
-mm/memcontrol.c: In function 'memcg_hotplug_cpu_dead':
-include/linux/percpu-defs.h:242:2: error: passing argument 1 of 'local_lock=
-_acquire' from incompatible pointer type [-Wincompatible-pointer-types]
-  242 | ({                                                                 =
-     \
-      | ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~
-      |  |
-      |  localtry_lock_t *
-  243 |         __verify_pcpu_ptr(ptr);                                    =
-     \
-      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~
-  244 |         arch_raw_cpu_ptr(ptr);                                     =
-     \
-      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~
-  245 | })
-      | ~~
-include/linux/percpu-defs.h:254:27: note: in expansion of macro 'raw_cpu_pt=
-r'
-  254 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
-      |                           ^~~~~~~~~~~
-include/linux/local_lock_internal.h:105:36: note: in expansion of macro 'th=
-is_cpu_ptr'
-  105 |                 local_lock_acquire(this_cpu_ptr(lock));         \
-      |                                    ^~~~~~~~~~~~
-include/linux/local_lock.h:31:9: note: in expansion of macro '__local_lock_=
-irqsave'
-   31 |         __local_lock_irqsave(lock, flags)
-      |         ^~~~~~~~~~~~~~~~~~~~
-mm/memcontrol.c:1960:9: note: in expansion of macro 'local_lock_irqsave'
- 1960 |         local_lock_irqsave(&memcg_stock.stock_lock, flags);
-      |         ^~~~~~~~~~~~~~~~~~
-In file included from include/linux/local_lock.h:5,
-                 from include/linux/mmzone.h:24,
-                 from include/linux/gfp.h:7,
-                 from include/linux/xarray.h:16,
-                 from include/linux/radix-tree.h:21:
-include/linux/local_lock_internal.h:59:53: note: expected 'local_lock_t *' =
-but argument is of type 'localtry_lock_t *'
-   59 | static inline void local_lock_acquire(local_lock_t *l) { }
-      |                                       ~~~~~~~~~~~~~~^
-include/linux/percpu-defs.h:242:2: error: passing argument 1 of 'local_lock=
-_release' from incompatible pointer type [-Wincompatible-pointer-types]
-  242 | ({                                                                 =
-     \
-      | ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~
-      |  |
-      |  localtry_lock_t *
-  243 |         __verify_pcpu_ptr(ptr);                                    =
-     \
-      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~
-  244 |         arch_raw_cpu_ptr(ptr);                                     =
-     \
-      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~
-  245 | })
-      | ~~
-include/linux/percpu-defs.h:254:27: note: in expansion of macro 'raw_cpu_pt=
-r'
-  254 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
-      |                           ^~~~~~~~~~~
-include/linux/local_lock_internal.h:122:36: note: in expansion of macro 'th=
-is_cpu_ptr'
-  122 |                 local_lock_release(this_cpu_ptr(lock));         \
-      |                                    ^~~~~~~~~~~~
-include/linux/local_lock.h:52:9: note: in expansion of macro '__local_unloc=
-k_irqrestore'
-   52 |         __local_unlock_irqrestore(lock, flags)
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-mm/memcontrol.c:1962:9: note: in expansion of macro 'local_unlock_irqrestor=
-e'
- 1962 |         local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-include/linux/local_lock_internal.h:61:53: note: expected 'local_lock_t *' =
-but argument is of type 'localtry_lock_t *'
-   61 | static inline void local_lock_release(local_lock_t *l) { }
-      |                                       ~~~~~~~~~~~~~~^
-
-Caused by commits
-
-  0aaddfb06882 ("locking/local_lock: Introduce localtry_lock_t")
-  01d37228d331 ("memcg: Use trylock to access memcg stock_lock.")
-
-interacting with commit
-
-  885aa5fe7b1d ("memcg: drain obj stock on cpu hotplug teardown")
-
-from the mm-hotfixes tree.
-
-I applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 12 Mar 2025 14:18:03 +1100
-Subject: [PATCH] fix up for "memcg: Use trylock to access memcg stock_lock"
-
-interacting with "memcg: drain obj stock on cpu hotplug teardown" from
-the mm-hotfixes tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/memcontrol.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 8f88b8dd8097..87544df4c3b8 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1957,9 +1957,9 @@ static int memcg_hotplug_cpu_dead(unsigned int cpu)
- 	stock =3D &per_cpu(memcg_stock, cpu);
-=20
- 	/* drain_obj_stock requires stock_lock */
--	local_lock_irqsave(&memcg_stock.stock_lock, flags);
-+	localtry_lock_irqsave(&memcg_stock.stock_lock, flags);
- 	old =3D drain_obj_stock(stock);
--	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
-+	localtry_unlock_irqrestore(&memcg_stock.stock_lock, flags);
-=20
- 	drain_stock(stock);
- 	obj_cgroup_put(old);
---=20
-2.45.2
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Agm1aDa=ntrjh5CZDTyBZLk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfRBQ8ACgkQAVBC80lX
-0Gwhjgf/SY1L6EY7sBqFhnP+flnrFZsbc+TyMvDrzfsz2JbnfFgufgdHuzR8+jcA
-aE/25UdSpp2x6Qfbe3AWyt5mn/XeMoEermZsV2axGhViqfGhQ8MKOMzD5UYVRUIX
-c2I4cY/mhJwdpDwy3SwLHuvvsKH61GRwxd7LIGgQGH8EdYbdhcfuInCu/owZgfGS
-dcTfqXg93FuwUEOWJAUEq/sJKbPUZxPA1EUUsz8GM9v7CGeAYY9X1X45ejfvO9nA
-pOq7ihS02sh/QbXbkatGZZF5b4s1VpxiV3LTCmqJqzYqRh1RPEdjOxodmXV58R2j
-3/8LfPHpQzkSoWaeL+kZIvEGRSwjwA==
-=KxSD
------END PGP SIGNATURE-----
-
---Sig_/Agm1aDa=ntrjh5CZDTyBZLk--
+ChenYu
 

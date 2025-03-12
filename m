@@ -1,60 +1,57 @@
-Return-Path: <linux-next+bounces-5763-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5764-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C547A5D5DD
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 07:05:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CCE8A5D5E9
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 07:16:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B2D33B7749
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 06:04:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A0C81895D3D
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 06:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C581E1DE3D6;
-	Wed, 12 Mar 2025 06:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A6F1E32B7;
+	Wed, 12 Mar 2025 06:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H6nauwB5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QUdYp4LJ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931582F43;
-	Wed, 12 Mar 2025 06:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1331DE4E5;
+	Wed, 12 Mar 2025 06:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741759504; cv=none; b=XAwe8eoYyHQcWpj7MS0oFxkr6xzGCSFMJTPisQ51oPwaqlsMkFWnPUX6hciIad/kB3+lNoiO/7gKkiMFe9MHeUWEq+AVFuU3SAvs++rK/rRWcE+23flVvb+X3Ooe76jRvyphCk/g9q5wdETT5M2y7lmhN6k4v7xwOw5ziTuwLGw=
+	t=1741760182; cv=none; b=Pi15kkOcTndL1Rb22V9MAwZE/+fF7BPrvJGwbUp0+DrX0Yki9qisTIHedAvqAyZ2DeGRrBn2DI4twSw7iJP062eDKZ5bKP+aLRqbgRaWnlLf6Wu5tVDZveVQ3vpAK0VySTqsBrnkJNo4gVr26LNhqnCYbvEm6GXHI/ZYrKDCJpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741759504; c=relaxed/simple;
-	bh=tTPJy5dbtZoiQ5S+mA09sM3UbyaOYXFq6tULwTF/oms=;
+	s=arc-20240116; t=1741760182; c=relaxed/simple;
+	bh=5OIZHiUS41zEorBwAslUlm9u8r3ucK5UHVlhhqJqcTI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CG3Pyu/Fi3uFM3y2I4rC/GPfAl4sCqHpa2jbn9L1h5AH7LT2hrv1e8wMI1oSHe2ZdfW9uymQHc1ol3ZGNX7l0zl4HLx05PeVCg8RCgj38hk93HW6xcw+fKFsL2jdd4c+qRFxSwCEgu5rDr+8xWz/WfZh228zDSiMVMfaI0/z7ZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H6nauwB5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84FF3C4CEEB;
-	Wed, 12 Mar 2025 06:05:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=VWFnnMNHqT+2J65Ja2PBeciM49Ub5I9QYpKLpcqSLttI5mNEHwLnGVUoyIKtWNFohYAg+eRbTrbUiYjrqhElomGiWmvrYauOoIMI2zwiKJwYzP3fMwq+mXVAPa2Uh8BQMXQ7OjvNGBcw+vKA3O8JTzRNL8S8IoUIt+7DLBDpFiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QUdYp4LJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E398C4CEED;
+	Wed, 12 Mar 2025 06:16:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741759504;
-	bh=tTPJy5dbtZoiQ5S+mA09sM3UbyaOYXFq6tULwTF/oms=;
+	s=k20201202; t=1741760182;
+	bh=5OIZHiUS41zEorBwAslUlm9u8r3ucK5UHVlhhqJqcTI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H6nauwB5Yh9QHZb0W+YCfce97rMcWUiBa9TdK1Z4jW1gK64sNnIdd4BGxql1UuXvT
-	 LhOnof7SZisXcApApmBmdHf4/9R0Mz4jXeThOp81Ovfm6f5cKQBMKOBVx0VYUhmgFw
-	 kfl3XKuVx5oBSM8mWKIEh8UcO9usW8jNsPVVywu7fbFD38PqrM09JqJoJMz2BZYVcr
-	 bH9q6st8AzDxfbT3IzP0uiHdOp0oW3/RMQZuM/73tC5UPi1S/BK2zq9LFavCUtgkeT
-	 ztyJIJLSnBOIApCSfZzxIAk6gh9h1dnNbeQc63r/RSkHzXbehq1tbWA+DvVNwbHkFK
-	 hB8sg2bKT08BQ==
-Date: Wed, 12 Mar 2025 08:05:00 +0200
+	b=QUdYp4LJbwzhdFAOYNKZsahUk4Kc/Qv0XoD8f2i+oN0Sv7AyZmzaofHOYj4dg7wZc
+	 68dCpWRZaEKyZ4CJeVKtrDwo+y1qA6wXI19rky0hUPlj7e9y4rLC8GwyaFDwbsfnXC
+	 da+4/cEzd+XSXikm9K/YL9bQmfcYnsG67KONbRYeeFQLsugxmGdzTF7OC0aTdg4nEd
+	 JK4/Pw+jy11rurEK+HFwbuPsoPVuXyPc7KID7YzVw+rO+3oyWx+dQz8ozzc2gPen+M
+	 K/oHl9i0fvNRlyTzHTpnDN3Oh7R8oEE0y4QFUg2Me+UOknV5O8kOqh2TPYwS7OydZW
+	 TjFhgOKtEOvKg==
+Date: Wed, 12 Mar 2025 08:16:18 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Stuart Yoder <stuart.yoder@arm.com>, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lenb@kernel.org, rafael@kernel.org,
-	jgg@ziepe.ca, peterhuewe@gmx.de, sudeep.holla@arm.com,
-	linux-integrity@vger.kernel.org,
+To: Stuart Yoder <stuart.yoder@arm.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: Build error on -next due to tpm_crb.c changes?
-Message-ID: <Z9EkDKi8XrwD-i_0@kernel.org>
-References: <20250305173611.74548-1-stuart.yoder@arm.com>
- <0ad035ff-400e-4b15-8b8f-40b69152ec46@leemhuis.info>
- <92bc0a65-608f-4307-bb1c-16d8836d42e5@arm.com>
- <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
+Subject: Re: linux-next: build warning after merge of the tpmdd tree
+Message-ID: <Z9EmsiwrbieZWugn@kernel.org>
+References: <20250311210011.18b7ab80@canb.auug.org.au>
+ <Z9AMEZw1dm80mwx0@kernel.org>
+ <affd759b-d84a-4aaa-8de2-812558f1ff49@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -63,26 +60,41 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
+In-Reply-To: <affd759b-d84a-4aaa-8de2-812558f1ff49@arm.com>
 
-On Tue, Mar 11, 2025 at 05:51:17PM +0100, Thorsten Leemhuis wrote:
-> On 11.03.25 16:53, Stuart Yoder wrote:
-> > On 3/11/25 10:21 AM, Thorsten Leemhuis wrote:
-> >> On 05.03.25 18:36, Stuart Yoder wrote:
-> > [...]
-> > So, it should not be possible on one had have
-> > CONFIG_TCG_ARM_CRB_FFA being true when building tpm_crb.c
-> > and false resulting in the tpm_crb_ffa.o not being
-> > picked up in the build.
+On Tue, Mar 11, 2025 at 09:21:49AM -0500, Stuart Yoder wrote:
 > 
-> Many thx for the answer. Maybe Fedora's way to prepare the .config files
-> (which my package builds use to be close to Fedora's official packages)
-> is doing something odd/wrong. Will take a closer look and report back.
+> 
+> On 3/11/25 5:10 AM, Jarkko Sakkinen wrote:
+> > On Tue, Mar 11, 2025 at 09:00:11PM +1100, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > After merging the tpmdd tree, today's linux-next build (htmldocs)
+> > > produced this warning:
+> > > 
+> > > Documentation/security/tpm/tpm_ffa_crb.rst: WARNING: document isn't included in any toctree
+> > > 
+> > > Introduced by commit
+> > > 
+> > >    115be78c0bfe ("Documentation: tpm: add documentation for the CRB FF-A interface")
+> > > 
+> > > -- 
+> > > Cheers,
+> > > Stephen Rothwell
+> > 
+> > Stuart, could you send a replacement patch and I'll repeal and replace?
+> 
+> Replacement patch is set.  I just sent v7 patch 5/5.  If you need me to
+> resend the entire series as v7 I'll do that.
 
-I don't have bandwidth for analysing the kconfig issue (except pointing
-out those obvious issues that I spotted).
+Yeah, so the build issue needs to be sorted. Also Sudeep's request on
+ACPICA feedback was legit. No worries but I'd feel that it'd be the
+safest call to postpone to 6.16 and get a bit more feedback before
+moving forward.
 
-> Ciao, Thorsten
+> 
+> Thanks!
+> Stuart
 
 BR, Jarkko
 

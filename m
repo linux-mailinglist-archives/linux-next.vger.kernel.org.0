@@ -1,94 +1,125 @@
-Return-Path: <linux-next+bounces-5777-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5778-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62159A5E03D
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 16:24:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22165A5E245
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 18:08:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3034C189480C
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 15:25:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B82E3B6A9E
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 17:08:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABBB91D5CFB;
-	Wed, 12 Mar 2025 15:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 539761D9688;
+	Wed, 12 Mar 2025 17:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Yyt9NHql"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sQWGO+sN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F53F1422DD;
-	Wed, 12 Mar 2025 15:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BF926AE4
+	for <linux-next@vger.kernel.org>; Wed, 12 Mar 2025 17:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741793093; cv=none; b=jDx7bGw4ggurCqgKpzyP4a3WTl3bMV/oK/DTwL5ywj9G2n5xHleJO4AiwX5yf5nE5Daf4O99v/pRcijQSP8VWuw+wpCASZ+qzegfJYGgkPcV4pGGVPY3DSh+/H16LtF9n+5Ycmc4myqTJajwJf7OTbQaD7DwRWGGyq0GA3bPHgk=
+	t=1741799307; cv=none; b=lx0bPZQXFVOf4Nu0ANKj7/i1TBHWxaWCdlu55yICx9gLZF/BHxcW8vrxQxE3fL2efC8webx8B1L1Niej3jtAQPyW2mlUIACHe5gUTzTKGl/+YCEzcYC5Tbh7mC93RczzDREeXcrbx5PovPgyigysHEneWniWthV0D9yQ+UEA3UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741793093; c=relaxed/simple;
-	bh=mEoDUVPPutgutXY1Vzi7nEKf5bB8dmOAKFe3iaVICh8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=rotdI9FCLTMhlON5HPnSw6xMop0ueqKLCMHmBLX+5BLL4u0Fb7kHTlBfCBe0sVVXmrBcG6Plz+nQG2KnHCT/mME8UFdT536cvjk+96EKWbUpgCm7fXcGbkv/8vRR5OEvaUWnppsWjL7XJr9hcFxHmiXmHenPJTbSXrPArigk7Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Yyt9NHql; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC20BC4CEEF;
-	Wed, 12 Mar 2025 15:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1741793092;
-	bh=mEoDUVPPutgutXY1Vzi7nEKf5bB8dmOAKFe3iaVICh8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Yyt9NHqlBvi1bxR3t/vaSfVWiH3aX6Rxmw8yamzc2tohbz9cqewH3+lFfn1e1LtAv
-	 +LFoi2w+EEGEGofpMQeB2/uXTCQv1DxwRddH6e+LQFAevPYVMj6NSWufjidBw/jlf5
-	 w1oivhJ2Ud/53c+b9jKofDEQAmqGJVJVx4UGlWGw=
-Date: Wed, 12 Mar 2025 08:24:52 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Wei Yang <richard.weiyang@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-Id: <20250312082452.604def384a3adf379625cacb@linux-foundation.org>
-In-Reply-To: <20250312113612.31ac808e@canb.auug.org.au>
-References: <20250312113612.31ac808e@canb.auug.org.au>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1741799307; c=relaxed/simple;
+	bh=bPsKMZUNYSyEYPTyDCLCiUGg8XwxLlR+pt/vu1V9yVo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q2swZthJW3JR075iEg1MF3q/SElTePZKbmCCWJBZRLFfna53PXqxYoPFLfT03kAD7UI1xdYcXhTjZ1fn2RZxGKqpWlF96W3UGD9P/aFyAMuzVBevYRvGEv/FedR/ydYNwj+QhpFMDLtNV3A2G8FhE6Dg3vb8mfH5amvHcPL92DY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sQWGO+sN; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Wed, 12 Mar 2025 10:07:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1741799292;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aflXbUBMG7+wwgxQnz4SMxZVe2Y4wHlg9MqggF7eQ18=;
+	b=sQWGO+sN7wlgrZ+J/1jbeQmLml931+fGqdcVUO+N4s2hJ7V2/Qm6a65j2ZgyJTrkjUn5ze
+	OZ/CH+HWG4XJkpndkQSKKw0Zj1Z/VPOND+b38l9K7zmY9uMDGb5T9k8mizjGtt3+EKz1MD
+	pEcL5dLYQPNSB/liX6nQdycb8ZZ/eeY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Will Deacon <will@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Christoffer Dall <cdall@cs.columbia.edu>,
+	Marc Zyngier <maz@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm-perf
+ tree
+Message-ID: <Z9G_aKHzs4GFe4O5@linux.dev>
+References: <20250312201853.0d75d9fe@canb.auug.org.au>
+ <20250312124501.GA6181@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250312124501.GA6181@willie-the-truck>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 12 Mar 2025 11:36:12 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-
-> After merging the mm tree, today's linux-next build (native powerpc perf)
-> failed like this:
+On Wed, Mar 12, 2025 at 12:45:02PM +0000, Will Deacon wrote:
+> On Wed, Mar 12, 2025 at 08:18:53PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the kvm-arm tree got a conflict in:
+> > 
+> >   drivers/perf/apple_m1_cpu_pmu.c
+> > 
+> > between commit:
+> > 
+> >   c2e793da59fc ("perf: apple_m1: Don't disable counter in m1_pmu_enable_event()")
+> > 
+> > from the arm-perf tree and commit:
+> > 
+> >   75ecffc361bb ("drivers/perf: apple_m1: Refactor event select/filter configuration")
+> > 
+> > from the kvm-arm tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> > 
+> > -- 
+> > Cheers,
+> > Stephen Rothwell
+> > 
+> > diff --cc drivers/perf/apple_m1_cpu_pmu.c
+> > index 39349ecec3c1,6be703619a97..000000000000
+> > --- a/drivers/perf/apple_m1_cpu_pmu.c
+> > +++ b/drivers/perf/apple_m1_cpu_pmu.c
+> > @@@ -396,7 -428,11 +428,7 @@@ static void m1_pmu_enable_event(struct 
+> >   	user = event->hw.config_base & M1_PMU_CFG_COUNT_USER;
+> >   	kernel = event->hw.config_base & M1_PMU_CFG_COUNT_KERNEL;
+> >   
+> > - 	m1_pmu_configure_counter(event->hw.idx, evt, user, kernel);
+> >  -	m1_pmu_disable_counter_interrupt(event->hw.idx);
+> >  -	m1_pmu_disable_counter(event->hw.idx);
+> >  -	isb();
+> >  -
+> > + 	m1_pmu_configure_counter(event->hw.idx, event->hw.config_base);
+> >   	m1_pmu_enable_counter(event->hw.idx);
+> >   	m1_pmu_enable_counter_interrupt(event->hw.idx);
+> >   	isb();
 > 
-> In file included from arch/powerpc/util/../../../util/pmu.h:5,
->                  from arch/powerpc/util/pmu.c:5:
-> tools/include/linux/bitmap.h: In function 'bitmap_alloc':
-> tools/include/linux/bitmap.h:83:69: error: unused parameter 'flags' [-Werror=unused-parameter]
->    83 | static inline unsigned long *bitmap_alloc(unsigned int nbits, gfp_t flags)
->       |                                                               ~~~~~~^~~~~
-> cc1: all warnings being treated as errors
+> Looks fine to me but I'd also be happy to stick the first two patches
+> on a shared branch to avoid this. Oliver?
 
-Maybe we should turn off -Wno-unused-parameter for tools/.  The rest of
-the kernel extensively expects that unused parameters to inlined
-functions are acceptable, for stuff like this:
+Agreed!
 
-#else /* CONFIG_SWAP */
-static inline struct swap_info_struct *swp_swap_info(swp_entry_t entry)
-{
-	return NULL;
-}
+  git://git.kernel.org/pub/scm/linux/kernel/git/oupton/linux.git perf/m1-guest-events
 
-static inline struct swap_info_struct *get_swap_device(swp_entry_t entry)
-{
-	return NULL;
-}
-
-static inline void put_swap_device(struct swap_info_struct *si)
-{
-}
-
-so why do we make tools/ different?
+Thanks,
+Oliver
 

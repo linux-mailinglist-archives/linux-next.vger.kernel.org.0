@@ -1,83 +1,141 @@
-Return-Path: <linux-next+bounces-5758-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5759-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCCB2A5D481
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 03:52:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46429A5D483
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 03:53:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 477333B5FF1
-	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 02:51:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE9703B4877
+	for <lists+linux-next@lfdr.de>; Wed, 12 Mar 2025 02:53:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8867518DF6D;
-	Wed, 12 Mar 2025 02:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A51018C937;
+	Wed, 12 Mar 2025 02:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jHvZ/WIX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB7D165F13;
-	Wed, 12 Mar 2025 02:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC5B7E107;
+	Wed, 12 Mar 2025 02:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741747915; cv=none; b=qgMSmChBJ/JwkwszhU2SFiTAKAMB3DVmVVp3pav+7eMzGWK1UZ7c6ZVhcBqiDtqGQJ1w0JFvAqH0CeTCl2j95gD5Wzus8LFxAHbff3dBOZmek1T0OdrkENHjnC2cSj8f3vVVO61f5KowmmTR+lhvTbNakSj9fUlFxAdGQS+Rb7w=
+	t=1741747993; cv=none; b=djFkl1pcfwRc2yXCa166xLehOwDbyWRa1TGbf0qvtZb48Tqiwwxn16jE6KWYhHAeK8PKRE3wwnUOz14YQ8GA4VL8hik1mCJVJThC7cvgIjnqDQJbyy28yToq/5c7o4RJDmtz3e/LzRLraE3qTh1FrySKBhGi/sVH1ScKr0YMxPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741747915; c=relaxed/simple;
-	bh=odQu+YbNOqP4hHDB4GXFaIIi08qe4rGyQ0NRo1CGb5A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nmLDvoG/zMQSUfIH2tTAK4FzqF8KVFDQmXttK5+yF+YKjcv4hCsIoZzdRg+VRgrElixauGcwc2CnMoJirxn4aN5nsVT/QAUhBFJjrCZfV+xvlzyg9nEsYGVuzp5ARBFfiERYQnerUH+JqCExTZKm17yQU4tFlrJszF73rAjNyII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4252E152B;
-	Tue, 11 Mar 2025 19:52:02 -0700 (PDT)
-Received: from [10.119.39.65] (unknown [10.119.39.65])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 794B73F673;
-	Tue, 11 Mar 2025 19:51:50 -0700 (PDT)
-Message-ID: <635af7df-be7c-4eb1-95d7-cad26a2af787@arm.com>
-Date: Tue, 11 Mar 2025 21:51:49 -0500
+	s=arc-20240116; t=1741747993; c=relaxed/simple;
+	bh=mGmp/6rLQXNQ7sV5BTurEpkMGQe9WfCi9GE2Knd3SNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Lwfq1cBBgCm2XRG3nM7D1WS0ny1LNvSzoc8Td4g1Z1+EkIqAs7ZvJ0e8RHkydCrpA4xwseeKtlEjl9VHzZsc3EAtzXI8YldWpf722QklZm5fesN1ev7r8L9n60KFD1oQbJtNg2W+O4j89HYgfZw+XETNXSCQbb8OresG9NeS1C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jHvZ/WIX; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1741747987;
+	bh=ocD8+DIcFrFjovCogZxWvHcJ/XR+gJFJJkV27YdINP4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=jHvZ/WIXI1d7OSUuwkGPxzvetRINzrGfSbTNRXaTijUEirV9NEzoNCLcKu8gxQBDz
+	 xVf7kvBTV+GMykJjGZTQVYUzx+YMm424he6aLKKvhNrrDhwanPA2JZeNeb6hT6U4ND
+	 QrsNOtFYPIUMiCrJwyzIdpnE1f1jydWRyFMtsrFxJhOw3U4XrdWwdtcs8dFF4+1Liv
+	 0NNaPh8/SWJ/D/QjOxtq6h61bvEeHetWlQBCNt2sW9MttU4T5K7P9oD8gvEO5YZwjK
+	 kThja3vO2UazkFq4awpxtmkLEsEJAbXSio8u9FWCvoVlCUVfzXjyIQoRrz++vy5PX7
+	 VRGicuy6orZlQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZCFYZ6tn9z4wgp;
+	Wed, 12 Mar 2025 13:53:06 +1100 (AEDT)
+Date: Wed, 12 Mar 2025 13:53:06 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Kalle Valo <kvalo@kernel.org>, Johannes Berg <johannes@sipsolutions.net>
+Cc: Johannes Berg <johannes.berg@intel.com>, Wireless
+ <linux-wireless@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Miri Korenblit
+ <miriam.rachel.korenblit@intel.com>
+Subject: linux-next: manual merge of the wireless-next tree with Linus' and
+ the wireless trees
+Message-ID: <20250312135306.2cd270b3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Build error on -next due to tpm_crb.c changes?
-To: Thorsten Leemhuis <linux@leemhuis.info>, jarkko@kernel.org
-Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
- lenb@kernel.org, rafael@kernel.org, jgg@ziepe.ca, peterhuewe@gmx.de,
- sudeep.holla@arm.com, linux-integrity@vger.kernel.org,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250305173611.74548-1-stuart.yoder@arm.com>
- <0ad035ff-400e-4b15-8b8f-40b69152ec46@leemhuis.info>
- <92bc0a65-608f-4307-bb1c-16d8836d42e5@arm.com>
- <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
-Content-Language: en-US
-From: Stuart Yoder <stuart.yoder@arm.com>
-In-Reply-To: <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/CODNmu9F1CFzIxmj5c1pl7o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/CODNmu9F1CFzIxmj5c1pl7o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 3/11/25 11:51 AM, Thorsten Leemhuis wrote:
-> On 11.03.25 16:53, Stuart Yoder wrote:
->> On 3/11/25 10:21 AM, Thorsten Leemhuis wrote:
->>> On 05.03.25 18:36, Stuart Yoder wrote:
->> [...]
->> So, it should not be possible on one had have
->> CONFIG_TCG_ARM_CRB_FFA being true when building tpm_crb.c
->> and false resulting in the tpm_crb_ffa.o not being
->> picked up in the build.
-> 
-> Many thx for the answer. Maybe Fedora's way to prepare the .config files
-> (which my package builds use to be close to Fedora's official packages)
-> is doing something odd/wrong. Will take a closer look and report back.
+Today's linux-next merge of the wireless-next tree got a conflict in:
 
-It would help to be able to see the .config to see how the relevant
-config options were set.
+  net/wireless/nl80211.c
 
-Thanks,
-Stuart
+between commits:
 
+  1f860eb4cdda ("wifi: nl80211: disable multi-link reconfiguration")
+
+from Linus' tree and
+
+  2e85829ac7fb ("wifi: nl80211: fix assoc link handling")
+
+from the wireless tree and commits:
+
+  a096a8602f4f ("wifi: cfg80211: move link reconfig parameters into a struc=
+t")
+  969241371f06 ("wifi: cfg80211: allow setting extended MLD capa/ops")
+
+from the wireless-next tree.
+
+I fixed it up (see below and I used the latter for the later hunk) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/wireless/nl80211.c
+index 34c0dfeeb7fc,aee49d43cf86..000000000000
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@@ -16512,10 -16518,7 +16524,10 @@@ static int nl80211_assoc_ml_reconf(stru
+ =20
+  	add_links =3D 0;
+  	if (info->attrs[NL80211_ATTR_MLO_LINKS]) {
+- 		err =3D nl80211_process_links(rdev, links,
+ -		err =3D nl80211_process_links(rdev, req.add_links, NULL, 0, info);
+++		err =3D nl80211_process_links(rdev, req.add_links,
+ +					    /* mark as MLO, but not assoc */
+ +					    IEEE80211_MLD_MAX_NUM_LINKS,
+ +					    NULL, 0, info);
+  		if (err)
+  			return err;
+ =20
+
+--Sig_/CODNmu9F1CFzIxmj5c1pl7o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfQ9xIACgkQAVBC80lX
+0GwhVwf/WeQFTELYbJ3He6NlIHLV6eD/IsbKmQiY5CMKHzY2tjMwfrjE4ll5EUyr
+3GKAd64sdd1d9MdqYP83GYmNnJfwd2cM0yXSPJzTcB3tn/ufqbUsFydD+qrK7i0K
+q+EnvL0K8L/GiO3CLPInIQfTUtfSRq8Q3YOUbxkS1oauw7INuhzpuhaxOvhDMH4j
++dml7bRPkIKyUsv53zpaBcgI5FKp/U63fgB3sNHU9bBXhVE7r1zdQikacjhmFO3k
+RMhDKv2ZoLSVSIHLM1MXJCGQucfINuzWlsyzoElRGOmXZlq6ySWxGdvyya5NPAKf
+btXMM/+KWrotydtYo2XyThqTD6jE6Q==
+=3IZd
+-----END PGP SIGNATURE-----
+
+--Sig_/CODNmu9F1CFzIxmj5c1pl7o--
 

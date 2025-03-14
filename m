@@ -1,117 +1,115 @@
-Return-Path: <linux-next+bounces-5790-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5791-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11358A60833
-	for <lists+linux-next@lfdr.de>; Fri, 14 Mar 2025 06:06:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C851FA60843
+	for <lists+linux-next@lfdr.de>; Fri, 14 Mar 2025 06:25:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4744917B77A
-	for <lists+linux-next@lfdr.de>; Fri, 14 Mar 2025 05:06:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 125FD3BA2B6
+	for <lists+linux-next@lfdr.de>; Fri, 14 Mar 2025 05:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4EF2AF1D;
-	Fri, 14 Mar 2025 05:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E07E126C03;
+	Fri, 14 Mar 2025 05:25:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="bB7hjzhC"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WXkffR6R"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07396291E;
-	Fri, 14 Mar 2025 05:06:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26BA423B0;
+	Fri, 14 Mar 2025 05:24:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741928811; cv=none; b=up9MScbqcnRMAqwt2BOLXS3unv0cmwleZeM7bClwIGtbWep5izfTKN9z4kXMCNJx7OxwkMPxAersUKcOZVlZm1w3+No05ruSZF1a7H7UHaJWnkL4k4q5Ajrv3S5qxN4mvtz0B8XD0HYciANIvnQbBw4QtpOWpFmXK9H6rzit9DU=
+	t=1741929900; cv=none; b=Gb791U/+6mxW2c0iPGwY8dOteplcBuNh/dtyg2C9dL6OkrzyqjdY/vsmKdJfW+UNWf3XC+VRcNM67mV+Q/BLSS8vpchEiZi3EfHGwQBk2vkh179I5KPXJ2+HDRCg4ypjp7WheyN0odYOdar5ocx09n+Ac++zjnWIsUVimKnqWHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741928811; c=relaxed/simple;
-	bh=VlXyYZuG0LOcv/5DxNqtCSdR4rg8+a/QFY9xlbeenAw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Hjg+R3Ak/9RUoVCqwJ1bpussRDNGN9gSiYdqT81vzHfOSg0YYRJmvwzu1up+Vb9QlcCocvSi98nCcNGBDOupNhrfWuDHGlf1kv1Z8MP8djlOrcV8Ummgzfpvbw4JxO6aRtseSSCvEVyu0VANJzqucsPBRpMnsbp9CoySAvJHO3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=bB7hjzhC; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1741929900; c=relaxed/simple;
+	bh=+fVoc7XNeFKCZ37Rccm/HbLIlhNX1vUMUUE0C/R2huo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WYDrxlYXSuWbvVl+zs2DEA/tUm12FzIHHrIsRMwM5eV+Y3esysgA8lhLbYoB3t7zVXnTHDdQXnPhdMUJfP9GowEKnU0Aey9GNI7vZThylKLyEz/VpOPN/7SD+gn9PFEhi6zklTTrpHCs+rhWSCkUjrj0lg/7FO5Wm9dhnLvxo5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=WXkffR6R; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741928803;
-	bh=mglcVmp8++3UgAePrCYq8kbNIONWiv0crZ17MOyH+94=;
+	s=201702; t=1741929893;
+	bh=MRyOq7tFhofYkpJafqzsLR7vzTIeaFHuxhMekUeg5uQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=bB7hjzhCNMfxy/nx8URX1fwIzkO57Dw/TqCav3jAdfoyd6U6mYIRZ+FIs2jlOUdwa
-	 7hJXbfwny+vhyNAhux9M5lhQpBoDTapLIJRVCyQo/Hh5P0xShgS+FPgM1/hl5qxvTS
-	 Mo/9c+qOCvby5wTn8fYo8Izxbe21PzK51KRWLoS47twhsqyXXqO5ead/PUJ7biQ36U
-	 r2byKmbrOQTqHSO35Bez8hAAVDW2Tyq/NSZ7zgJe7jM/6b637dUyFKkqHCgtJAluQ3
-	 UER86gSU8JecBTVnuxAycUqCrekjpfjssTGxNVvt0ypPSejUOPjYt8Q/zsIKJcPNsD
-	 l/5lqR2IRXGyg==
+	b=WXkffR6RZo1kLt2wYoQxEY2HTAmRV3i+l6xQdeo2Mb/6y0QFfls5jQ9wS1D+c3EM8
+	 E1YJHCqZjM/P9t82dKxLQ9GZAtwEV73OPFjl4bQyPtc416F0xeNJkncNa+F00KYAB3
+	 2UWWJYnyO4du2Ubd4tuHMOb1k6tHGGzYt9qjF9WLEeeGAmiIPHbZ5R5p4f7GcqAsWO
+	 hDBmawcG7KHlPJVla4KU79y6Rjs3rRHUxkWK57xCdrb84wq3ad9/XyJQeXziKNNQDp
+	 nvlt0dIM6dsWtDs7GHy0Ux2PTlF8IhkzowLUNGpdONeWSvgJVb1WGnK/H9YD1zoyiN
+	 bWxOs4Cr+DMTA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZDXQq02Jrz4wyl;
-	Fri, 14 Mar 2025 16:06:42 +1100 (AEDT)
-Date: Fri, 14 Mar 2025 16:06:41 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZDXqn0pLtz4wcy;
+	Fri, 14 Mar 2025 16:24:53 +1100 (AEDT)
+Date: Fri, 14 Mar 2025 16:24:52 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the gpio-brgl tree with the
- gpio-brgl-fixes tree
-Message-ID: <20250314160641.75afdc79@canb.auug.org.au>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the pinctrl tree
+Message-ID: <20250314162452.2657f42b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ElDMQMoeOGFCb1x_6lAg4oy";
+Content-Type: multipart/signed; boundary="Sig_/gMNTSVF9wFxhsQHf+TrXvTL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/ElDMQMoeOGFCb1x_6lAg4oy
+--Sig_/gMNTSVF9wFxhsQHf+TrXvTL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the gpio-brgl tree got a conflict in:
+After merging the pinctrl tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-  drivers/gpio/gpiolib.c
+drivers/pinctrl/bcm/pinctrl-bcm281xx.c:1576:35: error: redefinition of 'bcm=
+281xx_pinctrl_regmap_config'
+ 1576 | static const struct regmap_config bcm281xx_pinctrl_regmap_config =
+=3D {
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/pinctrl/bcm/pinctrl-bcm281xx.c:963:35: note: previous definition of=
+ 'bcm281xx_pinctrl_regmap_config' with type 'const struct regmap_config'
+  963 | static const struct regmap_config bcm281xx_pinctrl_regmap_config =
+=3D {
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  0102fbf52b93 ("gpiolib: don't check the retval of get_direction() when re=
-gistering a chip")
+  a40b63c773c2 ("Merge branch 'devel' into for-next")
 
-from the gpio-brgl-fixes tree and commit:
+Each of the parents of that commit has only one definition, so something
+went wrong with the merge :-(
 
-  9becde08f1bc ("gpiolib: don't use gpiochip_get_direction() when registeri=
-ng a chip")
-
-from the gpio-brgl tree.
-
-I fixed it up (I used the latter as the conflict was just in a comment)
-and can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+I have used the pinctrl tree from next-20250313 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ElDMQMoeOGFCb1x_6lAg4oy
+--Sig_/gMNTSVF9wFxhsQHf+TrXvTL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfTuWEACgkQAVBC80lX
-0GwY8gf/Ry62qL0o+dkrbbSlTNy5rgwq2+kdBGMmFg9nHRPmOHmKqyGzQbkIQFan
-bR5w0IP/SdXHn1J9+H6XWbnBKXttxhC0Bx9Cuhhb7nvV4zySlslY7B3o68uKzf/T
-TWSfWtG3aAlpQ3ygv1kDl0tupnpIyDERsUzVijoI6n8INPFuQVcE6mm/l0dyD8oS
-ojs/IFmjACd6YUyf8eLV/Gd6h1Spt3O+THkq/Qbm/eH3HfxTg9fAvNPNYc/oI2Aa
-vLyFGSmniGEQXg3g9orWGkHli4bu220ifVWN+pCBqNK+Kk0x4pqsBBRrvz/LaW/a
-3H/gXkTdwRN5v1Mfq59595nP/aDrnA==
-=gyZb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfTvaQACgkQAVBC80lX
+0GyTkAgAkGJgQ1qRzlLsL4c6gHy2eofz6mjgYAwoDtkXml67kiji5oQkXweOxSU3
+Pvq7bwC2U2Xa09tCOpVE8g92i5mGoO58qOEZ+SJR00NH8/5oxtbH/FgOp6fDZ/4h
+cLF6pZOpxwiDhwS4+JamauJx2XpPEMTCwJJpooXOu9tNuyUO/GAbvUVdS32Qtd48
+OgFuteqWV8lo8p2sOTq8KTxrvp6alja8uas3xFKioWlJSrZ7ZuTlx39kpli9Y6OC
+9W12F2m7LQecTchVKTgSgbpL/0i0ZZV7AllA9jyuSYvrOOk6DcarL7qfguOiouTq
+zLGRgwBfdDWEp7i/9JVSj479uCEg8w==
+=t5Zj
 -----END PGP SIGNATURE-----
 
---Sig_/ElDMQMoeOGFCb1x_6lAg4oy--
+--Sig_/gMNTSVF9wFxhsQHf+TrXvTL--
 

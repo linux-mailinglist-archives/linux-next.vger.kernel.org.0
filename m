@@ -1,91 +1,104 @@
-Return-Path: <linux-next+bounces-5799-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5800-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8B19A637A7
-	for <lists+linux-next@lfdr.de>; Sun, 16 Mar 2025 23:06:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A15F0A63807
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 00:27:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4A393ADF6B
-	for <lists+linux-next@lfdr.de>; Sun, 16 Mar 2025 22:05:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBE1A188D5B5
+	for <lists+linux-next@lfdr.de>; Sun, 16 Mar 2025 23:27:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09B1A1922ED;
-	Sun, 16 Mar 2025 22:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04C6819E966;
+	Sun, 16 Mar 2025 23:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="K5uSbpnQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="h7VCvoBy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from submarine.notk.org (submarine.notk.org [62.210.214.84])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E442F20322;
-	Sun, 16 Mar 2025 22:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.210.214.84
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74BA1624E9;
+	Sun, 16 Mar 2025 23:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742162755; cv=none; b=DgEBm6KGQ7jv0woK92o4l3uL152ze5h/4fr06gPrYG2uaogDEb9q4+16HnMFSqwiq/3d83xm0yN1zInYmhKhYjno9JHgR/pCAAYlT1qAoOnq/6UayUtqcgylQuUT6MOQ79NYbl2PYRyyEby0dmHubHXLgLHXNJ4gDFLTAqVddLs=
+	t=1742167622; cv=none; b=Ja8T1JF8xzAv5k2PKQ2obkgGNdf4+KnaMmL/7nPr7S3ocLsc1xCq+QkN6Qy29CJrFUXrtbzrVm+WXvGwXRjBXFHZQ3hPdz2dbUSxio2uZ7WXM9Nalmw8z5Be6FhRBXLOiV02ZGdmGsg9FeU1sjZtZ+6Yo4pRjGxa5rt4CTUeTL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742162755; c=relaxed/simple;
-	bh=4YQB9O/l4SnD/+FoCa2+ROiK738rGwWx+wZu4Xqsx4I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UAH1y5gk32HcArqluSgnCnPXhHylVCKfEEX5ifs9KG2gh3CKhgOI0URI7YGl2gy9bVfHo1lNkqQuDM33xHAQyhCi5qNhgDe+IpC4/jik4c/nwFh+QWMIN8fjgx912QEX+S/XD5N6wsEVbAm5vup1A5vapGjz+RDqXKZ9YkdxF5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=K5uSbpnQ; arc=none smtp.client-ip=62.210.214.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
-Received: from gaia.codewreck.org (localhost [127.0.0.1])
-	by submarine.notk.org (Postfix) with ESMTPS id A7E7A14C2D3;
-	Sun, 16 Mar 2025 23:05:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
-	s=2; t=1742162752;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uzvQtiLYOOAKkvimXIM4DAqvSSPNecA7UynsyQMLLVM=;
-	b=K5uSbpnQ+5UF4uaB0IxXHa+A9hMHJquiEu/SqIKOXf/wUwiqRiVqO/UIHx78JrNCQH7yaz
-	Yh/wEgu88NPuhtuGwkUwbfZj/5BqUO0lreg03m1WtMPEkPig0W+z7NzhmLTWzi3KLulkxJ
-	v3yl4aTWc0Gxfcp9QFniVDU1LBGzSkYnwkbfWzgdcG7BukcMDtCkEGw42L9XdWfBDATQXh
-	uF613yq6sfWSNtQruVmR9biwyXLcQzC9W7oO+6H1mSv2TCTOnWCa5gubhCtSylEWW7k5oG
-	1Vc/Jpo7HjSVxxfdyXSx6WI4231bnK8h0HrWOZqWTRgHqNxZEV4gDC2MbpAyLg==
-Received: from localhost (gaia.codewreck.org [local])
-	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 8cda1c83;
-	Sun, 16 Mar 2025 22:05:49 +0000 (UTC)
-Date: Mon, 17 Mar 2025 07:05:34 +0900
-From: Dominique Martinet <asmadeus@codewreck.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the v9fs tree
-Message-ID: <Z9dLLvafxdnN13al@codewreck.org>
-References: <20250317090001.2e111aeb@canb.auug.org.au>
+	s=arc-20240116; t=1742167622; c=relaxed/simple;
+	bh=otIfGeh0p14BkcIdhlfG4PdkQsddX2Hy+nvvNM4gfOM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ILBvIhbONsE6Efjmdch5EPLZXZwwm997VP8wnFuVhC0PaR3CcBsBrlg/V5RvW4pcMv3azcFbnIeCe4QxfeTAAUvZDE1NYcOd/kYnXmb0vHzlo/zWuzbe8H7DEY0hapAvFvBf18GBu33jMSCLk2i9ahh8TsxECstQ9xP+4VDTGxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=h7VCvoBy; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1742167613;
+	bh=tlZ6DSNgDKIfcL+uxKhjn0E0cjYFmBYfcKaYiLOkozM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=h7VCvoBySJJ8T5bqCG2Hhm8xPDDqyQAnyuBwaog02dxZHdqXe3bXSMFG9o20u/yWC
+	 VctkxdUu+k+rtchQBlXeeR9ArPvajDkLwyJS/kByMK8ggtzLRf2vgGuE/rAmvvuW3/
+	 /ejcMM+b0J0xqpfalXh94rGd8pVDuCHXsZFec4IWXAfKzY+CkRvxbndRvBXYFjm8H1
+	 y9M28sIzytsfG3Yq8ckgb2Vzm4VtJPJC+Y89LT7oxOb168LxIDJGNcasX2I75H/o7K
+	 wjvXFe41DxvJa+9CW62pTkafpi/WqLAY8BJRv+W8u1kFv7bErrGBupDXBCR49j/48V
+	 xuK0e7ZlMB5rA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGDlJ0pk6z4wnp;
+	Mon, 17 Mar 2025 10:26:52 +1100 (AEDT)
+Date: Mon, 17 Mar 2025 10:26:51 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the drivers-memory-fixes tree
+Message-ID: <20250317102651.37c64e42@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250317090001.2e111aeb@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/9gKmwGkEWS0FApJI.JfhCsM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Stephen Rothwell wrote on Mon, Mar 17, 2025 at 09:00:01AM +1100:
-> Fixes tag
-> 
->   Fixes: dafbe689736 ('9p fid refcount: cleanup p9_fid_put calls')
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
+--Sig_/9gKmwGkEWS0FApJI.JfhCsM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, I've amended that.
-(Also changed single quotes to double quotes even if that probably
-doesn't matter, that's what I have in my pretty.fixes entry:
-```
-[pretty]
-    fixes = Fixes: %h (\"%s\") 
-```
-)
+Hi all,
 
--- 
-Dominique Martinet | Asmadeus
+The following commit is also in the arm-soc-fixes tree as a different
+commit (but the same patch):
+
+  304e6c02b76f ("memory: omap-gpmc: drop no compatible check")
+
+This is commit
+
+  edcccc6892f6 ("memory: omap-gpmc: drop no compatible check")
+
+in the arm-soc-fixes tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9gKmwGkEWS0FApJI.JfhCsM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfXXjsACgkQAVBC80lX
+0GyxCgf+Ps9FrIvUG8t7s7gXc4DaITlZQTKtYmBdkbXerx7v+r6q6am0qRKHZ5h2
+S2pEibEUIyNy8Ycp1IcVVbEU/VyDjETaoL5mFqrX3NIKgRvOc92B+m0TUIYnTd5v
+wzw1rPiQAwmTDX/yE550Q07cx5WKhQOyfalZoKglkALMwikQYN037JhOTw/QxYhq
+U2VjotpkGUYPMqDD7EpI7hq20O0zUMpc9uFHGy8SqmEKiz6Qvxbv/aklgn2n5exJ
+K+y3wsGq2Nd87++Hmbwa9FrnLcagmbmNTmecjfDbZiDVubOJgFT6Gtl6KIYd6IsU
+FUs8nDaOaEQdt5Bh/Pzh2xLjyJw10Q==
+=gm35
+-----END PGP SIGNATURE-----
+
+--Sig_/9gKmwGkEWS0FApJI.JfhCsM--
 

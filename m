@@ -1,127 +1,112 @@
-Return-Path: <linux-next+bounces-5835-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5836-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF7DA65E18
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 20:37:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D122A6602A
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 22:10:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C4997ABC3F
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 19:36:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 700541892008
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 21:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377011E8352;
-	Mon, 17 Mar 2025 19:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 932AE1F5852;
+	Mon, 17 Mar 2025 21:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TxPVOShy"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PqjKNESz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702F11C6FF7;
-	Mon, 17 Mar 2025 19:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B221B393A;
+	Mon, 17 Mar 2025 21:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742240249; cv=none; b=ThI8C/tjFgSLDkTQEMSYJhBlw45NQqJ1CzWomi5nsBO4Hq/nl1GOXMOhPJUFNIM8yDWCqYNX9BCWJ08hQi/aB1yU/smNYI5Ltw1X1puEQG5VTfnriVPqtMGC4gBZoIsf3WxgLhqn9Yj1FHHuA975VxXnwvxIyIfUIROEvgxj7wU=
+	t=1742245801; cv=none; b=CWGei4uZaFHMcoJkhcr+ZuYO81LDx9OVL3mctK2IcEB/chbPZBsUkTRH3Z3D5gOoKqt3Tq01NNtQ27TRHNls+nmGuJaWuIilMW2V+rvd7CFpvjjbz/7RTas0BUCQbNay0O93P4eDIQ/+f5waae+JX4aHm+0tmy6KhXlvbhqhyZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742240249; c=relaxed/simple;
-	bh=48OxUMxPHQABF9d/aTYX30rMMKk5IS0OEGcms7nIWr0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dg4Nwtk7ksrSeRI1FKXpf5EC3O5MUG8VHiksIzABvavSRKS6a6GdQnTnoQoscQ+dWQjsEdOSmQzCTTvnkpVwu1NLyTggqfD6jc1FwnzT5SfXqyJySoZLcrrZIZZAUx1AZ4lW5sy9o/3epB3mHVWFepfYjsWXV3tsmTsqtSTpy+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TxPVOShy; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-30144a72db9so782978a91.1;
-        Mon, 17 Mar 2025 12:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742240247; x=1742845047; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NzFLPpauAjmtDRR9KbufCnHsExEXTbmFfTCN7TBMzCE=;
-        b=TxPVOShy7oL3SLzqw8ZAE18r2IVijwbYmWq6ewc9Fd0t+hs703hBAKvrGu9f5DFcT2
-         /cYnrloigmtGLgvpnVfrjUR3ZR4g1CgRYo9lPW1zQNkhkorERLO3HCEOMBH6iyD4Qfwc
-         TXJIVMMQfP+9El+HSqLqhvWQvsDf4Ra6d3ZIJZKZoH4zybWSmIO/xVfoXAUa745fk8sP
-         jV1Us64VQdKI3B7u8LnsaQw0gjdU+xwtgyD/1t3NmbKPx9AiqsWJxURTsCCxSooIZ0Wh
-         mlQeQmg2+FEVjPad02f7ZrqErLJC4nP2W1M4PdgGuctYGO7NzkwIXBP40HZ3Yw4LRDut
-         6zgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742240247; x=1742845047;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NzFLPpauAjmtDRR9KbufCnHsExEXTbmFfTCN7TBMzCE=;
-        b=K6EeB5cUAv7Oi0Ac1o/jUSCs/as9qkgFKLbk9JKngZRY7wUjNYhu9zKFZWUHXengTZ
-         3G28/kclxyotiXfDFyK3u5wHoBfqPvupvCelGKvxYx+Y2D/vTjmZvS1na4ZWW2Yspntr
-         HXBdQntAZ2Oha7uzgJDENmbIsSJr5PxO4O64aSuUmi16joA762egmWBI//BlfQV4BZpe
-         0BHVgWkFn9EwUVJ+RuYnuQno+C/PMh647tcHrhAnTaprvtYSNf1ShsHzL51zE7SHNedq
-         ncMhoW0Ls4/sXHttUFv6+nH19+5jfoLU32o638ugQ9UCdoY173RnWRUhQFiOAdB0vuvN
-         DAHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWIubUbr0XSQf1qXG6ICG0JO6K6QHCHFSQw9TCdhnEEFDNJMLZqvKlRzUscI07Qg8Z5GzgUmKZdOPxL78M=@vger.kernel.org, AJvYcCWlZdJu6kuTZb+KoGeufKCFdx6i4lci4ggeH7ISk8ubbFPPITFfThHohhQ4P5miuCDre4ORirREZEy1CA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyD/sBt/sPW7N7wEp/TfNbbQTcu9GTgJgw4IWBGy8jJrowWb/t/
-	ponAk6l9qU5L+xNmyE71KWGBV2aqnmzo69dvcASkjup4LCylV16kDq+6uYKiUNIo8o1hZflx+4y
-	B6rbKfeYHROcwVeQohKlvXbc6Ago=
-X-Gm-Gg: ASbGncveOyNY5d6lfdq89HFI9/VXymlE/5JGY9ECNnaWRrIMbTMIxGJSw9Hf6yJ6SbP
-	OMXLC6ud5ocQRyf6Kjiv9PjZAoN9Kj+ANDoM+2i2Fy9Sj6riXXfk1+w8+FOP9dc3Aq7nBQSWPsE
-	zTKGwcDMGaikrRgMEyMakdncXNeg==
-X-Google-Smtp-Source: AGHT+IGoOpPo/zhhexF8sP8etMp1/pbpwFpj7QfRZdqLQXhk0v5/ongpMnTE3wJOrfaiCTd6ivElDIFN4AwOwN4BUxQ=
-X-Received: by 2002:a17:90b:4d07:b0:2ee:f59a:94d3 with SMTP id
- 98e67ed59e1d1-301519cbb06mr6641930a91.0.1742240246634; Mon, 17 Mar 2025
- 12:37:26 -0700 (PDT)
+	s=arc-20240116; t=1742245801; c=relaxed/simple;
+	bh=RV4zKHuWdRwFrOoGAOvvfhFQFF/Jzow9rIzlvPpUUjs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aNrKxEWi4VPrfdcQCUpWxO/hJY72f3edcsQ0gj8zTAmPweOqEPnZ4hlvVGGgD9ZPUVn99401NQYl4W8Fuzps854f+AkIRPOl5LpUHFtOQCv/YGSBUu4TdDFwxa69rz9GU7UbBIN/Ly3TUmqUfNpnrQYiqosXNMyZpYzCjioCZww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PqjKNESz; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1742245793;
+	bh=HWJgiIhzJR50/ZGvS8R6AHJ6tWeVJoPnp8wm7ibd6g4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PqjKNESz/JMeILtnxZvMVLT1LGl/tCPVUfXfggag8g6Jpe+rY2JOjNnoBIk+wDh8c
+	 wk0bcpwFHGT1QhoEdEVfiGSk0Y6jqfW89+eozgO1YwsmQEQfe6nvmlHia3iyTYN6kE
+	 UslF894CxHfrxx+UX2WHZIpExnLDmNw1lo8SFLwktDM5ak6fwKHtZaEr/hDDnJ0VUk
+	 gOgOLoyPO90qZg2JRJi4hZnlim8lSzg+CkrY9DW9Laq83FSFlcFyPji1genOWsrvbO
+	 KeupUD+YAtBEN7xhGSsz9NzqImemn4NsDAqALklzMGtVuInwg3X/udRHHkZ21kMnAC
+	 3hESwlZHJ66Iw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGnfn3LWRz4xCy;
+	Tue, 18 Mar 2025 08:09:53 +1100 (AEDT)
+Date: Tue, 18 Mar 2025 08:09:51 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Theodore Ts'o <tytso@mit.edu>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the ext4 tree
+Message-ID: <20250318080951.71772135@canb.auug.org.au>
+In-Reply-To: <20250318000658.29a791b4@canb.auug.org.au>
+References: <20250318000658.29a791b4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317212047.46580935@canb.auug.org.au>
-In-Reply-To: <20250317212047.46580935@canb.auug.org.au>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 17 Mar 2025 20:37:14 +0100
-X-Gm-Features: AQ5f1JqQGjyQhMp7QXPMnvtHKZrY64h7hi3RD207uSY001ucP1t2Pn9M4ej6lxo
-Message-ID: <CANiq72nD2ezPVHH_mZhB4+FmD_Un90dGL+q5-Np+zUDj97UWCQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with Linus' tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alban Kurti <kurti@invicto.ai>, 
-	Benno Lossin <benno.lossin@proton.me>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/TLYwLWuBjI22vqvc8uVuc.p";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/TLYwLWuBjI22vqvc8uVuc.p
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 17, 2025 at 11:20=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
->
-> Today's linux-next merge of the rust tree got a conflict in:
->
->   rust/kernel/init.rs
->   rust/pin-init/src/macros.rs
->
-> between commits:
->
->   df27cef15360 ("rust: init: fix `Zeroable` implementation for `Option<No=
-nNull<T>>` and `Option<KBox<T>>`")
->   6933c1067fe6 ("rust: init: add missing newline to pr_info! calls")
->
-> from Linus' tree and commit:
->
->   fbf8fb328d1b ("rust: move pin-init API into its own directory")
->
-> and following ones from the rust tree.
->
-> I fixed it up (I just used the latter version and applied the following
-> patch) and can carry the fix as necessary. This is now fixed as far as
-> linux-next is concerned, but any non trivial conflicts should be
-> mentioned to your upstream maintainer when your tree is submitted for
-> merging.  You may also want to consider cooperating with the maintainer
-> of the conflicting tree to minimise any particularly complex conflicts.
->
-> More (or less) may be needed :-(
+Hi all,
 
-The part you did here looks OK, though we will need another line fixed
-elsewhere, since the equivalent to that line is now elsewhere. Please
-see the resolution in the last message.
+On Tue, 18 Mar 2025 00:06:58 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Commits
+>=20
+>   400bb71a00da ("ext4: fix out-of-bound read in ext4_xattr_inode_dec_ref_=
+all()")
+>   4d6eb75d2364 ("ext4: introduce ITAIL helper")
+>=20
+> are missing a Signed-off-by from their committer.
 
+These are now commits
+
+  850d8d9ff97a ("ext4: fix out-of-bound read in ext4_xattr_inode_dec_ref_al=
+l()")
+  8bffe40e9e9c ("ext4: introduce ITAIL helper")
+
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/TLYwLWuBjI22vqvc8uVuc.p
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfYj58ACgkQAVBC80lX
+0Gwj9Qf9EOQ1HjQA2wp2+lwy3IrVd9FmapKSscm5TEgNad3kAgHBeu9ZC29l/ZGy
+R5k/U4KUMSsVE78dc9XLPhpQTqgN9lDJl9QjYl23NZUTvmLGGmP6GidMwIesm/Rd
+9W6K8YHMQnSVD6l8cjLK792E3XszbbTRBxpO98KZbr2wPo2uLon0eaWbDyBBM5Cz
+p0uhhyyfVMLpuTdyBf2MKVxxuSAAX+82PHjVQmyOR4Wp/xug7Z5yjALDls+FbLap
+ItFXDcd5xOwe+VoCd85fSNqi3D/+tJ8twqxmFTc43rwGpC59tr2d9c+Uw02St7zV
+hyMTxeIwpK5sPg/ZeKfVg+yZX74oKw==
+=C3b1
+-----END PGP SIGNATURE-----
+
+--Sig_/TLYwLWuBjI22vqvc8uVuc.p--
 

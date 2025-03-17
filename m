@@ -1,140 +1,115 @@
-Return-Path: <linux-next+bounces-5828-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5829-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AFEBA650C6
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 14:26:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F2E5A650D0
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 14:28:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6681C7A3F49
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 13:25:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E63B1669E9
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 13:28:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1842C23C8CE;
-	Mon, 17 Mar 2025 13:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0150023F39C;
+	Mon, 17 Mar 2025 13:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="i51ZQllL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZNTNn934"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2464238D22
-	for <linux-next@vger.kernel.org>; Mon, 17 Mar 2025 13:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEA5EBE
+	for <linux-next@vger.kernel.org>; Mon, 17 Mar 2025 13:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742218009; cv=none; b=i582jkhjFNKy7wJqspIJD1dmUcGaFNLjhnWv0UlGJGj9aW+IDcKgBbWFUg4Z1xIqu4BQJgEDub2WIo8uAYyimXUZAIdBUOmLkssTJqConf7E/b0Sn7h6L2sa6YOMEpZpFkIKilpg17Q5QRU/H22r1prQr/AG+oJuczUhAtM2dVs=
+	t=1742218112; cv=none; b=aKQTF3WsMZdB8I/QweucXly0Z8MaNBjz7nufx+VoQHawXi98fGozPHp6e5Zj/o8XpF3HVIWzxTia8QD8MejFKWEV5VkVbRfp3xAI8WuV4HqvHGWfw0AKpU9OsAZISQWiOkSdVCKZnl9W0hU7AQf6oofJAX+Izu+9lC7ychA3HkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742218009; c=relaxed/simple;
-	bh=9A+UYAcKTh2jrO8mWJ1WdZYuUshtxZIYsSvXqU68wm8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dwal/QDWaY2bgxpxY6zGZwT/smDVk3IW8uLc9/HRixYpQOBT6YTT4kx/Jop3AiMZPzlGa4XEuj0eZwoelgr+yPQwUMwzrIVZ0V8VSzkD8dD9tyDbZ+Lh9bQ1K/d80KksbUmEkvA1f3A3u3p5hFtPcSAFhhdI+/AXRcjTTIAGnQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=i51ZQllL; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742218004;
-	bh=JLIHgAMxnwRLZG/obQ6vS4uXsd9KMOYOozy4YCRS9iE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=i51ZQllL8WkzUZQrqgD10mrWnp3ZYuN+acasktV6ddtEx793/Mq2rcaCYAB8yrnlP
-	 9SdlizXx6LDhkMBq+KPHhe7DQwDp3eR2dn2C+JJ/UjXHFPM+4Uij4HQk6L4xlL/kLy
-	 Kew1CGlU04xFVs7ehXV1dwMTeaAuWpBW175EO7u0ZliZSByrvOcYP0pjcurhuLB+b2
-	 VOCs3QM9UNVwG9h7CwSWegLLQgoE/X+eHBUzpIpYjgaLHZOQzYf2YoBKY5M4zHWjri
-	 heW6wq15RHnfgoN+qBK5xp3bafr2NcOEgY1cwiwCM41Mvx3+WfsNAWB9NEodlPeveM
-	 fZi3eNJydq0SQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGbNM5zhgz4wcZ;
-	Tue, 18 Mar 2025 00:26:43 +1100 (AEDT)
-Date: Tue, 18 Mar 2025 00:26:43 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: maddy@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, Linux Next Mailing
- List <linux-next@vger.kernel.org>, Andrew Donnellan <ajd@linux.ibm.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: Please add powerpc topic/cxl branch to linux-next
-Message-ID: <20250318002643.71ef29f1@canb.auug.org.au>
-In-Reply-To: <87y0x3dibs.fsf@mpe.ellerman.id.au>
-References: <87y0x3dibs.fsf@mpe.ellerman.id.au>
+	s=arc-20240116; t=1742218112; c=relaxed/simple;
+	bh=lEmfNyIA6RNJ3ny5+YoC3NGJhAIqHrv/+7Ma+TDB3uE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Rl7jRpmwno5EvitE5MrCbPhJrE5cHygEAmclXgoUwB/Pc1sed0qJwomDA5mXWQS4XU1Wl5o7ddPJ+2xGTvlnyxz3JcfBW4ho11nXDrUvU3tOPNAOzNeZUVSDkGkAlU+gQ9A2UdZ53xqXtyugKwoR0qbGr2aTSUcSiKdK2mSdNCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZNTNn934; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5499b18d704so4423318e87.0
+        for <linux-next@vger.kernel.org>; Mon, 17 Mar 2025 06:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742218106; x=1742822906; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wCb4df9E2zGdFeYXN7RFk9uBy6N11qlE25jYcmNSEUM=;
+        b=ZNTNn934T0vMmGq8TugDom9m98NBkAy2UN0yw+1/yHAf4dUzjAISv6yww3avgTzb9r
+         Fnu+XXIsnzzVxNjb3epLPT+PY7xIHlY+986vPyGjOjRUeuGwGKmdvK6N2deLaDPh05Wb
+         TBui02AWR4m1sJsEaXaveiqjEF5uNW2WJQDPGGV3g13nFfHP10Vyl86IWQh9t0DK29/B
+         HNK6gzjhT5Q1Nd6Re6vHnqDbFJR51JFEvpbWdm1rD3/I9wMwOERL9axWpbkGCgt+XE+o
+         VypVQ71erJbccO6I9im9kgq7rHZh1dooM70W6/cDYJSuKAjm74fNBrYsLdaWfE0zQWpL
+         a+4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742218106; x=1742822906;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wCb4df9E2zGdFeYXN7RFk9uBy6N11qlE25jYcmNSEUM=;
+        b=ZjUnvRsTbNH5vsZFmHIX0s+5VXSWDiczEr4F+4am9RBI2/ViwSmr2mj+CIUQBReEXL
+         lqRmn7obDfg++0pOFPJRYBn/vHsCRWP1eMzh4KzjXir/h6tvu88PkLv4jnEWlocHlcaR
+         bJ88uVCqKlNTbjyiDTdE3cpo3NOkOJUwRKclxKdM2gfp+bZN2BugR6d/7GF9c7FbduaC
+         hTZPKiV3VZmtdmYoJG2JKUwg5tJ6SQXm4cMAlN/ksYcrXC2yCNBoMHzorvChv+0jKPn9
+         qZ6GAfliJIUa7LYWizi7z+R9HudqsiEDWJa7KwhCQsxZoOXvAdpRqS9Yp9iyll9rS/dT
+         dZkA==
+X-Forwarded-Encrypted: i=1; AJvYcCWsS1qJk8ySt0jj7XoemJAznSKBON2epd391aT2bfgM4wjZUccckvl/pmTJb8MWSbWjRYGqrASQQzn6@vger.kernel.org
+X-Gm-Message-State: AOJu0YwE2gA171bZb7JFahoZIElfKny+rzS0lP3sO3Qw3ySFshlpGbUt
+	U8nC3RQtfMCAtlGMI1VrgT5mydnmyemydUr3c1V7nuEe0yWfUU49dq+/Z0rj4oz8x4xt7aGyOfv
+	Yy6kXVdFzUSgHgsLa5lk13bUYMqU0vwMpdY8ShC/aTyHY+cJU
+X-Gm-Gg: ASbGncujMgP4JsON5miI1dg8NLZABjUwbIoXmD8V4TAXdFplgdCu+lzcErFOfXT9Dcl
+	XPjTqDdLpHnJL4ueqMhg0dzBGzIBH0OxoKBOrDVmlsrgCwyfddQdH5WbUhqBNienZVxMcSiOweF
+	eYmzQ5n4fwUh3xVFkmRRFBCxAnN2dLxsQ+6g==
+X-Google-Smtp-Source: AGHT+IHfDvwh0B6r6tp0N3rPaDV+ueRiI+e16YoknvYQYEn15rtBX3cLUUUSuskc9RIR+xdHm27WD7RcqnQ3U6ffaps=
+X-Received: by 2002:a05:6512:128a:b0:545:3037:a73a with SMTP id
+ 2adb3069b0e04-549c39045f1mr6739117e87.13.1742218106136; Mon, 17 Mar 2025
+ 06:28:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/O2rrYCitA=n4c8uYnDf2KW9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/O2rrYCitA=n4c8uYnDf2KW9
-Content-Type: text/plain; charset=US-ASCII
+References: <20250317084331.032c61d9@canb.auug.org.au>
+In-Reply-To: <20250317084331.032c61d9@canb.auug.org.au>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 17 Mar 2025 14:28:15 +0100
+X-Gm-Features: AQ5f1JpHY_xjtnDU5i4KEaQWMkGw18yj3KS7YcrQUBJ62FogfFBiv04Z1Kwj2Es
+Message-ID: <CACRpkdYMo7wdnahe8rCtUB0epSz4j=0d5r8GxZn0AbrLdU_yXg@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the pinctrl tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Prathamesh Shete <pshete@nvidia.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Michael,
+On Sun, Mar 16, 2025 at 10:43=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:
 
-On Mon, 17 Mar 2025 22:09:43 +1100 Michael Ellerman <mpe@ellerman.id.au> wr=
-ote:
+
+> In commit
 >
-> Could you please add the topic/cxl branch of the powerpc tree to
-> linux-next for the next few weeks, it's targeted for the next merge
-> window.
->=20
->   https://web.git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/l=
-og/?h=3Dtopic/cxl
+>   a906b771499a ("pinctrl: tegra: Set SFIO mode to Mux Register")
+>
+> Fixes tag
+>
+>   Fixes: 59b67585e242 ("pinctrl: add a driver for NVIDIA Tegra")
+>
+> has these problem(s):
+>
+>   - Target SHA1 does not exist
+>
+> Maybe you meant
+>
+> Fixes: 971dac7123c7 ("pinctrl: add a driver for NVIDIA Tegra")
 
-Translated to git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.g=
-it#topic/cxl
+I went in and fixed it!
 
-:-)
-
-> It contains a topic branch of sorts to hold the cxl removal. It has a
-> few commits from the SCSI tree, up to and including the cxlflash
-> removal, then it merges powerpc/fixes to get a Documentation/ patch that
-> touches cxl, and then the cxl removal patch from Andrew.
->=20
-> The plan will be to send it to Linus after the powerpc and SCSI trees
-> have been merged, during the merge window.
-
-OK, added from later today.  I have added it late in the merges.  Let me
-know when you are finished with it.
-
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
-
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
-
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
-
---=20
-Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
-
---Sig_/O2rrYCitA=n4c8uYnDf2KW9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfYIxMACgkQAVBC80lX
-0GxdGAf+IpjmJzMze0AoOSyixrs+k1fUAntWwPH+G4HCg8TaJUN8UE/x73SnylPE
-jueJYBe/I82pIX1GxpTZ2ydIW5pP1VoRERv13tcpkX0Xb52THt7EGNIfCehDjWPo
-Ly3i1fXIAjcOPEs1cxy2o+ULZ8cuX9f3+xzRYec9DBdbopCWAc0ot0MDnGxlQn1o
-xiVo9OLQkPROzlKriofin1NNnLdy/83IIxzRU1j7fUjRPCTGVIDUyq5UKw8VI2J8
-DTiacyVsBC7kw3p2SWFFbZNGR4GpHWx0MM8RfMVO1PDO/X+1ncxprk38BpoSNCNy
-wYp/j0R44VIG2SuiGwB83e6+FwacVg==
-=d1ND
------END PGP SIGNATURE-----
-
---Sig_/O2rrYCitA=n4c8uYnDf2KW9--
+Yours,
+Linus Walleij
 

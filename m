@@ -1,135 +1,99 @@
-Return-Path: <linux-next+bounces-5810-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5811-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A025FA645B7
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 09:36:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6805A6463D
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 09:51:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F0843A520E
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 08:36:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFC7D16829F
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 08:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A18E21D3D6;
-	Mon, 17 Mar 2025 08:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F06961B412B;
+	Mon, 17 Mar 2025 08:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SrJ9y8rU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iPqOLVeN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B04191499;
-	Mon, 17 Mar 2025 08:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBB838B
+	for <linux-next@vger.kernel.org>; Mon, 17 Mar 2025 08:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742200591; cv=none; b=DfzlRDLyxshKzVlUVzesX0anuFPbs2RJzznY5keFXrUbDkHIndxQ/nrV78fgTE/g6EYWysGwJ5C9IXyEuAU8M3+BHtBmz2HJF3hTRTI/IuDFXYPN1F1kLDr/X5aWQ7r5C5K5Zapw3LRQnUyUfBSfPQC2XFfguaNFq4sTyp/N1x4=
+	t=1742201486; cv=none; b=BkmqwdWXX5Ls3C44U0YRTeGgW4wKXH0iYdkHu8Et01vWR3Za5RjJvl0+X6vKj1xXXaU30w2pNRECvhYBaBmVXy72hTEM+yGRyBlJOc5kQYGuemVozQfHaCuTbtOLkaJks9M2I+gTipNE9fsfdYHuv3zKk3i5PCvzhkR/X8xQbMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742200591; c=relaxed/simple;
-	bh=UyhuXGln5+ft1pHnigfzjGcRIc5uKiAk+wUegpAjsWU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TX6y9tpuCe2wt2uZ1Rq+DpQaDyIys8xMImnLV3SgTGrQUn6a//oJxl78ksAvLOKvRwlWBvgaHs/9gFEz2+Zwp7maFlXg+9hQa+CFxw+PMhrtTNn7Mw7Clmm9g4p5zf3YMLA9mS3HRqbNT9uEoUb2oh9g3SWK7OAa3YXCoSrKlhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SrJ9y8rU; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742200583;
-	bh=IlfGdgJfr6ZKNTbJzXvUWKXaP17H/CCBQIKz//mIQUo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=SrJ9y8rUvMqGAYe4zCOIMoEri5bXSJa+ibKim4l+9avRSb4foS9OiLqBxxIKYBOSw
-	 fbt5gY/CUFGbeU0QdV5hXXyTK8eOmdQG5VelBgyWX9l7e7QIycTJfCBUo4b0jqxFxa
-	 NQ5EIj7rZH/shro/c1hf/2byHxDSwm5/Qo23zj9hZHw/mqbiShizkls4hggCz2hVPq
-	 lZqaWT7OKOvly8IAEM33kfgEBm2q/mGCT5FyRsE+4JG9I8gVQtAHyiKNdGmvm7/tgN
-	 HwOM1YaHrvN2GoEGNg5B6mL6D9nTc0+eJQgWMWpTWervwdAvPtMC/CFewyZfOi+z67
-	 H6opdCmvPiZKQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGSxL4DJCz4wcZ;
-	Mon, 17 Mar 2025 19:36:22 +1100 (AEDT)
-Date: Mon, 17 Mar 2025 19:36:21 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Shuah Khan <skhan@linuxfoundation.org>, Brendan Higgins
- <brendanhiggins@google.com>, David Miller <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Sergio =?UTF-8?B?R29uesOhbGV6?= Collado
- <sergio.collado@gmail.com>, Shuah Khan <shuah@kernel.org>, Tamir Duberstein
- <tamird@gmail.com>
-Subject: linux-next: manual merge of the kunit-next tree with the net-next
- tree
-Message-ID: <20250317193621.4b4db936@canb.auug.org.au>
+	s=arc-20240116; t=1742201486; c=relaxed/simple;
+	bh=YdpNjgpsWfiA+3YU5HMfVyLuB8fkFSSgiLN33pnGq5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KvxxFLWcw8H0NqPUlPuc+mokRlICdCPBkl08jRSK8UhVewkOMlBlpyKheRPMb/tooTneaxnS4sC42pTMMYYwEQ/EHQYYOh4oNpQPEz/vk/zlhY6tk4vMWbdtI6KtJDAvDkmrf4UBM3193S+xdAVt/FCZtOGyRw7y7VP1Zs0sTyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iPqOLVeN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADF3DC4CEEC;
+	Mon, 17 Mar 2025 08:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742201486;
+	bh=YdpNjgpsWfiA+3YU5HMfVyLuB8fkFSSgiLN33pnGq5Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iPqOLVeNAwsnumG9YoSEG60RI3QF4+VL9rKV/Qfw5bACpakQma2TPsq9VqJU4eiep
+	 VRQegI4X4ZR+NHbdS2ZpcT+Vjc5z5mvdYFbvMijAxpBKnNlCYoZ80xR/K1S4133SdE
+	 g5BzFxeoHNYh7mJYP93e7j20ct5iT59jnFiiM2ZKsFn+A8AaewlZ7csuBJGshN/32u
+	 Ao9KwdxF+y8I/a+UDN+nVh2mjineGGp4iLEVllEmV+q/wPQMUgYFq+g4FKKmW2bn32
+	 2giLMc8GNAVZd05aE51M5u6w54DCwRotgkPYsjWHL+Uj00WcanLfIpvKOVaxaLjHdl
+	 YuYHEfFdTsfLg==
+Date: Mon, 17 Mar 2025 08:51:22 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Kalle Niemi <kaleposti@gmail.com>
+Cc: linux-next@vger.kernel.org
+Subject: Re: linux-next: BeagleBone Black won't boot
+Message-ID: <91c2ff0d-a341-49ac-aa71-703d96c8ef64@sirena.org.uk>
+References: <fb5a1e5b-8182-46f3-9996-2faed39c1082@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/076mAxA_l.m86nRuWPP6JiL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gafaw4pH7VAv2N3o"
+Content-Disposition: inline
+In-Reply-To: <fb5a1e5b-8182-46f3-9996-2faed39c1082@gmail.com>
+X-Cookie: Did I SELL OUT yet??
 
---Sig_/076mAxA_l.m86nRuWPP6JiL
-Content-Type: text/plain; charset=US-ASCII
+
+--gafaw4pH7VAv2N3o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Fri, Mar 14, 2025 at 10:13:37AM +0200, Kalle Niemi wrote:
 
-Today's linux-next merge of the kunit-next tree got a conflict in:
+> The linux-next tree have contained a bug for a couple of days, where
+> BeagleBone Black booting process jamms early.
+>=20
+> With "earlycon" and "debug" this is where the prints stop:
 
-  lib/Makefile
+Reported here:
 
-between commit:
+   https://lore.kernel.org/r/cee346ec-5fa5-4d0b-987b-413ee585dbaa@sirena.or=
+g.uk
 
-  b341f6fd45ab ("blackhole_dev: convert self-test to KUnit")
+It should hopefully be fixed in today's -next when it appears.
 
-from the net-next tree and commit:
-
-  c104c16073b7 ("Kunit to check the longest symbol length")
-
-from the kunit-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc lib/Makefile
-index 66e44569b141,e8fec9defec2..000000000000
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@@ -392,7 -393,8 +392,9 @@@ obj-$(CONFIG_FORTIFY_KUNIT_TEST) +=3D for
-  obj-$(CONFIG_CRC_KUNIT_TEST) +=3D crc_kunit.o
-  obj-$(CONFIG_SIPHASH_KUNIT_TEST) +=3D siphash_kunit.o
-  obj-$(CONFIG_USERCOPY_KUNIT_TEST) +=3D usercopy_kunit.o
- +obj-$(CONFIG_BLACKHOLE_DEV_KUNIT_TEST) +=3D blackhole_dev_kunit.o
-+ obj-$(CONFIG_LONGEST_SYM_KUNIT_TEST) +=3D longest_symbol_kunit.o
-+ CFLAGS_longest_symbol_kunit.o +=3D $(call cc-disable-warning, missing-pro=
-totypes)
- =20
-  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) +=3D devmem_is_allowed.o
- =20
-
---Sig_/076mAxA_l.m86nRuWPP6JiL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--gafaw4pH7VAv2N3o
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfX3wUACgkQAVBC80lX
-0GxZ6Qf/YnRsriB0q7CmcrCIeHwVxkGTJqlm6L6TY0FG9rK3ef3TiQ6ey6zvOQIN
-iwCs0PeK0YT31xf5hqVXyrXcJPj++ikGocTBmRm+OxbSBl1eyeTKoQLggZDmtBLf
-HsJBKVxAmCQ8fH49jknv+OThgC7dcUij3Z5j86i8J2X3fNpbx4vvLQAF5y7eybCh
-xSxzKsU75Io8P+34bG9T00M6DYt04HO3amGbYBBhwQuqDZ74Q2QAAkxKTFGPq/Ct
-mhyS232pNuT1sJ6IXisTHkTkPJ2FBcK5DAY9Ar4ARllIPM7u7tqc2pRz5dQD71lk
-7wZ6IiTHL4OiAoXZrSX2Su+/rWjDbg==
-=Mtze
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfX4ooACgkQJNaLcl1U
+h9B1HAf+KZaPNFtV/jtJWaGWmq+JzEv1Newz95wenJJuMrQR/WolBVsM/zCqRGTz
+kdNrxESdWYfyMdVD0FJIngUd9Sotdfz8tLCMDhIMwow7YqYH8IErUuKWsQ8U9Rgw
++x/CkH+ZyJJZGv0BbPeEoArDBKAOGeRC2zHqGP+hdYa/IoTylY5YzJJRTTtHhFM6
+BipIK4jnufHTl4OnGWLpnI114FDdMSVf6zQuOPHOE/JBfSDstnVZPEf7V88o4yaZ
+rN0eE/kPAi7Lk+S2BWwZ4R52Qg9f2E3JnshmzA+Kqs/0vgMTE8A2QPCy4EvG3uVB
+LPf692r6/Wa93p//PrEevAFbBv+glg==
+=MzMT
 -----END PGP SIGNATURE-----
 
---Sig_/076mAxA_l.m86nRuWPP6JiL--
+--gafaw4pH7VAv2N3o--
 

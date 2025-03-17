@@ -1,205 +1,131 @@
-Return-Path: <linux-next+bounces-5844-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5845-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EDF7A6627D
-	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 00:13:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7640A662C4
+	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 00:35:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80F98189D6E5
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 23:13:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C019917029C
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 23:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089871F5825;
-	Mon, 17 Mar 2025 23:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB68B204840;
+	Mon, 17 Mar 2025 23:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kugGxdG2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="apWNZs+A"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC2D19C552;
-	Mon, 17 Mar 2025 23:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921441A7249;
+	Mon, 17 Mar 2025 23:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742253183; cv=none; b=dZl5kviCl8iz8AaIg2YhjEeFL7CI9E0CWMWACai5cPU5e17XP2OEsiuRdBEc0UnBdAt9KVSry1bBImy/f11Gn7t3MuCXvKcpWPsQ+M29BhdY1vkJ9E3Su/lL532iJUZK88NvY6Il6LmNS8rlDy2GnDeW10VmruQxlmwKKmPY0iE=
+	t=1742254513; cv=none; b=lANDMxzHN5StjhyP9+eC25p2k7KrjEnT3Oynzmy7K88ACOFu3wvwnH1uGbJE1l+SCdtA7ttujY9kz5MvlHGaqnwH6idNJwGEzct3UsPtLW0z9S8DxUpve1Rhf7VxX4ArBVyP0ytzZB97vWqNag2FvLqv8wX/ZBmGjPEIspWhFjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742253183; c=relaxed/simple;
-	bh=mjlo0s9uKqeN+AyutGb8sbFEHXsg9/EyNHDZmcaEgRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ug+KSWewCyCzdDYNevZojA846xybYnWrOGGMTujC5k94xo6oaL/CuraI09P7ox+fnfrxpXg9Bp3LQsodaGm9M1PGAqr2LKLC3pm7sO8qOkAMFK3+VigMRuieEEFazXAp8D7F4/3ScJZ9654Fl/2x0GwemSdpj1A2wcLOmmNs0hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kugGxdG2; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1742254513; c=relaxed/simple;
+	bh=7UoWRwyHzqBBehirgFLNvlLP+45LmrF4dy3eicA0GKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AbApUtxHsMYn5rKNQ9zjgPM5DSawOEwrbWCWkfO8X0XgZLOwe4k8Y6JnXVL7H1oQwhBz0dtf4EaRWzJI3y78FrdgOaD9ZX0ATIhkf47JWPAu2My+Cl1R7BVx6z8xsVBmyL2bOjyO3sBakB/IuEuum+/eDgdlVw5m8B3xDy9ZNTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=apWNZs+A; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742253178;
-	bh=Uckx7R/fU+ylEA47K7W0MSDuIT5YzmBXe9rE/SUjzQ4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=kugGxdG2D4h1rCk2T2VkYIR0bWEOl+M2q3ac3QzFOpSVyv6ZX3pSC/C3gShRwm/Tj
-	 YMUk+R3UYveJTf/q81s3vSCFEoPTZR6OPCSGM9thiH6OlyGmfQ+yZdniP6fcgOh9BK
-	 B0vEh5l1JE9NxR/xCiLh2sYwhH3JJFFqoZDDQGAE5SWZfC8GO69Yz6jzYLc0/UZAVM
-	 WqsOm32ee1077WQYXF9wEyqNaFTq8Eyal775A/nGjLs7RMOBMbp5HHZC3V3zTBADZl
-	 kjourYZpDciCC8PeJ6DtOrEoG3u3R5sOVjsmz8E72MsFYMTDyu55fvbDU6LhpJM50N
-	 yEZ+toHqOt+mQ==
+	s=201702; t=1742254505;
+	bh=D7cfFiiScayhlIqzpWBB2VE4W5qnbzK4TlXB83dimwI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=apWNZs+An410bWexLMvKI1PqEU5bKoqoqgzmjQqlKvLalzSqVo2NIr7isDReItup7
+	 OFbrUBiwXs0NXJRZlw19Mdz7x773fxlnq7u8Al2fUb27zeidh3dzwGdYOMzkJ2XZav
+	 IsbVBbADCeaEOymDQNEJS8anIh760QcaierVykwEc7TOpXyLg6EXzvAslx8zcBF/mG
+	 X1QjEbxGxc0K8qy470rBuMOh+ulBdfHVHWzp6tXHNuYiihxD9pQUB/mtEoXNv9o6lh
+	 dtVynLCqZIDwxw78duupYzYGROJ89CApezEo30CEwA4yQKmandPb9odYfq5jixhwBP
+	 YqctC1X65PPwg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGrNn3WWWz4wnp;
-	Tue, 18 Mar 2025 10:12:57 +1100 (AEDT)
-Date: Tue, 18 Mar 2025 10:12:56 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGrtK0QcRz4wcd;
+	Tue, 18 Mar 2025 10:35:05 +1100 (AEDT)
+Date: Tue, 18 Mar 2025 10:35:04 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>, Mike Marshall
- <hubcap@omnibond.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>, Linux Kernel Mailing List
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20250318101256.01afbb47@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the rust tree
+Message-ID: <20250318103504.4cbfe7e1@canb.auug.org.au>
+In-Reply-To: <CANiq72n05i322FfpSjFX=Wz3-9AgVRKLkKs1CHa-LxzWQ7-pew@mail.gmail.com>
+References: <20250317215757.2412aef1@canb.auug.org.au>
+	<CANiq72n05i322FfpSjFX=Wz3-9AgVRKLkKs1CHa-LxzWQ7-pew@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/epXjtVmT63.yM.OeyKbuJtE";
+Content-Type: multipart/signed; boundary="Sig_/awfpBApde4zvnA23wkvrEX2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/epXjtVmT63.yM.OeyKbuJtE
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/awfpBApde4zvnA23wkvrEX2
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Miguel,
 
-After merging the vfs-brauner tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Mon, 17 Mar 2025 23:35:54 +0100 Miguel Ojeda <miguel.ojeda.sandonis@gmai=
+l.com> wrote:
+>
+> On Mon, Mar 17, 2025 at 11:58=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.=
+org.au> wrote:
+> >
+> > Presumably this is caused by my merge resolutions :-(  Please have a
+> > look and let me know what te resolutions should be. =20
+>=20
+> No, it is due to hrtimer-next, which I still have to merge on my side.
+> I have created an example merge of hrtimer-next into rust-next which
+> should solve you mention error above -- but please feel free to drop
+> hrtimer-next today if you prefer, since I will be pushing to rust-next
+> the proper merge if linux-next goes well, so you will get it:
+>=20
+>     https://github.com/ojeda/linux.git rust-next-merge-hrtimer
+>=20
+> For the other things mentioned in the other threads, I have also
+> created two branches, one merging rust-next into Linus, and another
+> into next-20250317 -- not sure which is the one you usually prefer:
+>=20
+>     https://github.com/ojeda/linux.git linus-merge-rust-next
+>     https://github.com/ojeda/linux.git next-merge-rust-next
+>=20
+> It is a bit subtle because we have to "redo" a fix from mainline in 2
+> different places since the lines of the fix are moved in rust-next.
+>=20
+> I build-tested the branches a bit -- I hope they are all OK.
+>=20
+> I didn't modify anything in rust-next today to avoid further issues
+> and get this part over with.
 
-fs/orangefs/orangefs-debugfs.c:101:8: error: redefinition of 'struct __keyw=
-ord_mask_s'
-  101 | struct __keyword_mask_s {
-      |        ^~~~~~~~~~~~~~~~
-fs/orangefs/orangefs-debugfs.c:48:8: note: originally defined here
-   48 | struct __keyword_mask_s {
-      |        ^~~~~~~~~~~~~~~~
-fs/orangefs/orangefs-debugfs.c:119:32: error: conflicting types for 's_kmod=
-_keyword_mask_map'; have 'struct __keyword_mask_s[]'
-  119 | static struct __keyword_mask_s s_kmod_keyword_mask_map[] =3D {
-      |                                ^~~~~~~~~~~~~~~~~~~~~~~
-fs/orangefs/orangefs-debugfs.c:66:32: note: previous definition of 's_kmod_=
-keyword_mask_map' with type 'struct __keyword_mask_s[18]'
-   66 | static struct __keyword_mask_s s_kmod_keyword_mask_map[] =3D {
-      |                                ^~~~~~~~~~~~~~~~~~~~~~~
-fs/orangefs/orangefs-debugfs.c:140:18: error: redefinition of 'num_kmod_key=
-word_mask_map'
-  140 | static const int num_kmod_keyword_mask_map =3D (int)
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-fs/orangefs/orangefs-debugfs.c:87:18: note: previous definition of 'num_kmo=
-d_keyword_mask_map' with type 'int'
-   87 | static const int num_kmod_keyword_mask_map =3D (int)
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-Caused by commit
-
-  50fb0a7f43c0 ("orangefs: Move s_kmod_keyword_mask_map to orangefs-debugfs=
-.c")
-
-merging badly with commit
-
-  063f8013373a ("orangefs: move s_kmod_keyword_mask_map[] into debugfs.c")
-
-from the orangefs tree.
-
-I have applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 18 Mar 2025 09:43:37 +1100
-Subject: [PATCH] fix up for bad merge of "orangefs: Move
- s_kmod_keyword_mask_map to orangefs-debugfs.c"
-
-with "orangefs: move s_kmod_keyword_mask_map[] into debugfs.c" from the
-oragngefs tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- fs/orangefs/orangefs-debugfs.c | 43 ----------------------------------
- 1 file changed, 43 deletions(-)
-
-diff --git a/fs/orangefs/orangefs-debugfs.c b/fs/orangefs/orangefs-debugfs.c
-index 98b52ceaf011..f7095c91660c 100644
---- a/fs/orangefs/orangefs-debugfs.c
-+++ b/fs/orangefs/orangefs-debugfs.c
-@@ -97,49 +97,6 @@ static const int num_kmod_keyword_mask_map =3D (int)
- #define ORANGEFS_VERBOSE "verbose"
- #define ORANGEFS_ALL "all"
-=20
--/* a private internal type */
--struct __keyword_mask_s {
--	const char *keyword;
--	__u64 mask_val;
--};
--
--/*
-- * Map all kmod keywords to kmod debug masks here. Keep this
-- * structure "packed":
-- *
-- *   "all" is always last...
-- *
-- *   keyword     mask_val     index
-- *     foo          1           0
-- *     bar          2           1
-- *     baz          4           2
-- *     qux          8           3
-- *      .           .           .
-- */
--static struct __keyword_mask_s s_kmod_keyword_mask_map[] =3D {
--	{"super", GOSSIP_SUPER_DEBUG},
--	{"inode", GOSSIP_INODE_DEBUG},
--	{"file", GOSSIP_FILE_DEBUG},
--	{"dir", GOSSIP_DIR_DEBUG},
--	{"utils", GOSSIP_UTILS_DEBUG},
--	{"wait", GOSSIP_WAIT_DEBUG},
--	{"acl", GOSSIP_ACL_DEBUG},
--	{"dcache", GOSSIP_DCACHE_DEBUG},
--	{"dev", GOSSIP_DEV_DEBUG},
--	{"name", GOSSIP_NAME_DEBUG},
--	{"bufmap", GOSSIP_BUFMAP_DEBUG},
--	{"cache", GOSSIP_CACHE_DEBUG},
--	{"debugfs", GOSSIP_DEBUGFS_DEBUG},
--	{"xattr", GOSSIP_XATTR_DEBUG},
--	{"init", GOSSIP_INIT_DEBUG},
--	{"sysfs", GOSSIP_SYSFS_DEBUG},
--	{"none", GOSSIP_NO_DEBUG},
--	{"all", GOSSIP_MAX_DEBUG}
--};
--
--static const int num_kmod_keyword_mask_map =3D (int)
--	(ARRAY_SIZE(s_kmod_keyword_mask_map));
--
- /*
-  * An array of client_debug_mask will be built to hold debug keyword/mask
-  * values fetched from userspace.
---=20
-2.45.2
+Thanks, I will see what I can come up with.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/epXjtVmT63.yM.OeyKbuJtE
+--Sig_/awfpBApde4zvnA23wkvrEX2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfYrHgACgkQAVBC80lX
-0GyP4QgAorupdk/+8bmVGzTp1Vf8gWe62CpNh9rd8Nkecn0SUl4pGZTcoJ1CCayx
-hFo/YlwWHqR6CDQj7hYA2S0xhyPLyAIoWpi2hJUFmJBQywpE7U0U0W+vj3va/A4y
-IPklRI3F/LpGJB9S7RcOD3Bushe3YfMk8H4wccbcYWO9Rc6TSMk2YByLmnp1BGPV
-iic+ksmuwJ/3TT4p3WRvvI/TZ9sDZ/kuZKt9pOxoJTK4eqmaiSrvMl/D1X6rObn5
-8LgcB9ww/q8P7RfTr/U3ctJ671cs1qaqkmrRapyEZx1DRNqpwXWv4K/R7IkOXBWl
-sk0iMxOXCcob3EmBVTJ2PSd57LXGVA==
-=aKFm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfYsagACgkQAVBC80lX
+0GyFDggAnJI5y/xmdhW+fSnakrNZbJSAtyEClpUNHb+FdbYWROVYKHavH5FdXEDb
+BYTYu/zdelGpYmiWOwIpy9icsC1TiHt0byogLv4f/oPSwr5VNa6G1uJWIq+LhWnf
+c9/pIVUC58gPFkyoSuhDVwKrGnItq1uIFipxuE1xuUp5gDKxtRV+RBIUdcf4nYqf
+/mvDvwkSArp1CpeuN0zBiqNaYzd8fAX7emUSvsqcilf537be74l1LHTpMCh3yant
+a+Q2dLkL59Lp3cllHTA+dQVsPGy9/TDOKk6Z0qC6qx9HPiXQG1s3yH+VmdgO9LVg
+cRqPqLfoGz9mfYed3reM3ya6vUG2QQ==
+=gpVy
 -----END PGP SIGNATURE-----
 
---Sig_/epXjtVmT63.yM.OeyKbuJtE--
+--Sig_/awfpBApde4zvnA23wkvrEX2--
 

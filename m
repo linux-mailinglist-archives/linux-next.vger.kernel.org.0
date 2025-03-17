@@ -1,69 +1,69 @@
-Return-Path: <linux-next+bounces-5815-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5816-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3BA3A648B6
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 11:05:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BF3AA649C0
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 11:27:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABB933A40B9
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 10:05:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F0FE1895675
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 10:25:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564062253E4;
-	Mon, 17 Mar 2025 10:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB5623816F;
+	Mon, 17 Mar 2025 10:20:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LcB1Mrb7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Inc2k5Oo"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD84A142E67;
-	Mon, 17 Mar 2025 10:05:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FE12E3373;
+	Mon, 17 Mar 2025 10:20:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742205926; cv=none; b=bFyxmAGniQo6U705XexbDLbT/8aYDTlMOuUDaxsmcX5sE0wSN6IpOpsTAMRUky6u+mlKY/tVgSZhNvZovH/5d3j30dThBGDvyjbt84TvCqI3A0IzX10XcIuJjRXRwHuswvAKvRWhwDUmzVDSWjI2zEiYEPvyHvXJA3q23K8heVc=
+	t=1742206854; cv=none; b=HRSLVWYQyR/zRRudD1d1gVTE06NpttYbdp2iN0fBO5jFbpomJ3cn4f7ucHE1OQ3ItAOOSJxBYiu8cYyC9Ct7nZDp32oUDaWbCagZJto5XxvnfL+dj+7USEyFtC1jgWlSRlWtzuR2eB2Dw18dm82erPSIXJnilJKa5I1pd8Fkkn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742205926; c=relaxed/simple;
-	bh=GuLrLeGuWtF9otaYpx1pubF8qiYT7k0+sIhm9qGLWEU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=O77rtQje2QonxiibGxBLBKR7HbIdkkE4aW7nCfwNM5hp66jNoAlsxlB+bRBfj46+I91YYAsQdekOuhPMQTAZlDTNifGu42aBJrYOLuRdMSFzc6f5uAHXPaa5pzKY2reDuQO8je64mAWbyYB6bxS4rUrXhd1K+YhCbdYnN8yDHGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LcB1Mrb7; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1742206854; c=relaxed/simple;
+	bh=Vfxm/VS6MThIEmj1NooHYgGirDykhwnBgrzXiaYLB2U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=caLhYFf4iK4Rzijazjf1IkkbqFW8+yTSRpX0TKz+6H4n+LIQWokOQ9xvZaGs+JbhL116RFe1mbnuaJpyCoq/yVRPVtX5XrsTOtIEW76EFrkaLR8EPQopvzpA6SXveqFjlCFbMjdEYl9ITR5QlJi39jGu0gzNPlHfiiUzK/P23Ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Inc2k5Oo; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742205919;
-	bh=v3dicJvYxgbmXYrQzi/KchK0gl0zLQlQjFZAt77e1jI=;
+	s=201702; t=1742206849;
+	bh=vBkrHPBpB5I3CJhiuvURGb6f9Nt1C7x4BoMDG32F5UM=;
 	h=Date:From:To:Cc:Subject:From;
-	b=LcB1Mrb7JswiNuHxjRrFFvRH+DsMimFpSRMxUYA17wHGyALAeNWZND4yuc4Sk5rOP
-	 r76NY0tnGy1y/WCGSrUnGQQBey8GEj080/pJyyMl1rhiEBfC4P/mU2hj4Z2uDzfb+Z
-	 X2wDcx0YwrQ2CB1sB6p9jgok1WrP9PKEv6c1R0d0L+Yidr3hRv8rBvL/mAvYnbZ0MQ
-	 tjvkiTLlc6PyGyco578IJ88zLdvRtPAdqheRxOmqZMIWZwCqqFNvkFTsiS6M7QhgDe
-	 9yVyQI41KS0VL4FeEW/GpGuufzpVxVywG0pED89vHG91sWeSfPwEkbnVh0cXKty+ud
-	 yR8s9GISR89hQ==
+	b=Inc2k5OoCtFF2szEBd9Q+0pVyCJ/Lswukx3A47XeqJw/Ib8imtg+OKP/HcQ2GwFuT
+	 tScMQmIqYdCWo01KqIc7xCkk1IcMY8QvBUxGie7dqSdK+2mmBzmpmIFToGuAxP98+Y
+	 k9qCAaBxBgszuUIZmFv+luFVE1DLihlm4D1XeBmqPEziP7dFV6LjtAHgHNh7plODLt
+	 MAKEZGlRRy5EMtJzMxCWujTv76l+SekV8vlTnv86EYUnV0gLFTSjbNLjCl8At5M4Bj
+	 jkjIsXf4vxR+Gc27VJ5+2R8kmlACdoxdcgYdNags8ELX4lQmUIJ9ua7WliNB+qbVB7
+	 yB0yRJpGXBGJw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGVvz3SH3z4wbv;
-	Mon, 17 Mar 2025 21:05:19 +1100 (AEDT)
-Date: Mon, 17 Mar 2025 21:05:18 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGWFr4MB9z4wcD;
+	Mon, 17 Mar 2025 21:20:48 +1100 (AEDT)
+Date: Mon, 17 Mar 2025 21:20:47 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Benno Lossin <benno.lossin@proton.me>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Tamir Duberstein <tamird@gmail.com>
+Cc: Alban Kurti <kurti@invicto.ai>, Benno Lossin <benno.lossin@proton.me>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
 Subject: linux-next: manual merge of the rust tree with Linus' tree
-Message-ID: <20250317210518.01aad634@canb.auug.org.au>
+Message-ID: <20250317212047.46580935@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7xdb3gVryb/9bPhTeywP9Yz";
+Content-Type: multipart/signed; boundary="Sig_/cO5x9zXH8CKLxgbbSVBJH8s";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/7xdb3gVryb/9bPhTeywP9Yz
+--Sig_/cO5x9zXH8CKLxgbbSVBJH8s
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -71,118 +71,93 @@ Hi all,
 
 Today's linux-next merge of the rust tree got a conflict in:
 
-  scripts/generate_rust_analyzer.py
+  rust/kernel/init.rs
+  rust/pin-init/src/macros.rs
 
 between commits:
 
-  d1f928052439 ("scripts: generate_rust_analyzer: add missing include_dirs")
-  a1eb95d6b5f4 ("scripts: generate_rust_analyzer: add uapi crate")
+  df27cef15360 ("rust: init: fix `Zeroable` implementation for `Option<NonN=
+ull<T>>` and `Option<KBox<T>>`")
+  6933c1067fe6 ("rust: init: add missing newline to pr_info! calls")
 
-from Linus' tree and commits:
+from Linus' tree and commit:
 
-  d7659acca7a3 ("rust: add pin-init crate build infrastructure")
-  dbd5058ba60c ("rust: make pin-init its own crate")
+  fbf8fb328d1b ("rust: move pin-init API into its own directory")
 
-from the rust tree.
+and following ones from the rust tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I just used the latter version and applied the following
+patch) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be
+mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
+
+More (or less) may be needed :-(
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 17 Mar 2025 21:16:57 +1100
+Subject: [PATCH] fix up for "rust: init: fix `Zeroable` implementation for
+ `Option<NonNull<T>>` and `Option<KBox<T>>`"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ rust/pin-init/src/lib.rs | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/rust/pin-init/src/lib.rs b/rust/pin-init/src/lib.rs
+index f36b8f8e8730..9cd822388ba2 100644
+--- a/rust/pin-init/src/lib.rs
++++ b/rust/pin-init/src/lib.rs
+@@ -1446,16 +1446,14 @@ macro_rules! impl_zeroable {
+     // SAFETY: `T: Zeroable` and `UnsafeCell` is `repr(transparent)`.
+     {<T: ?Sized + Zeroable>} UnsafeCell<T>,
+=20
+-    // SAFETY: All zeros is equivalent to `None` (option layout optimizati=
+on guarantee).
++    // SAFETY: All zeros is equivalent to `None` (option layout optimizati=
+on guarantee:
++    // https://doc.rust-lang.org/stable/std/option/index.html#representati=
+on).
+     Option<NonZeroU8>, Option<NonZeroU16>, Option<NonZeroU32>, Option<NonZ=
+eroU64>,
+     Option<NonZeroU128>, Option<NonZeroUsize>,
+     Option<NonZeroI8>, Option<NonZeroI16>, Option<NonZeroI32>, Option<NonZ=
+eroI64>,
+     Option<NonZeroI128>, Option<NonZeroIsize>,
+=20
+-    // SAFETY: All zeros is equivalent to `None` (option layout optimizati=
+on guarantee).
+-    //
+-    // In this case we are allowed to use `T: ?Sized`, since all zeros is =
+the `None` variant.
+-    {<T: ?Sized>} Option<NonNull<T>>,
++    {<T>} Option<NonNull<T>>,
+=20
+     // SAFETY: `null` pointer is valid.
+     //
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc scripts/generate_rust_analyzer.py
-index adae71544cbd,54228e87e577..000000000000
---- a/scripts/generate_rust_analyzer.py
-+++ b/scripts/generate_rust_analyzer.py
-@@@ -97,29 -85,43 +97,44 @@@ def generate_crates(srctree, objtree, s
-          ["core", "compiler_builtins"],
-      )
- =20
- -    append_crate(
- -        "bindings",
- -        srctree / "rust"/ "bindings" / "lib.rs",
- -        ["core"],
- -        cfg=3Dcfg,
- -    )
- -    crates[-1]["env"]["OBJTREE"] =3D str(objtree.resolve(True))
- +    def append_crate_with_generated(
- +        display_name,
- +        deps,
- +    ):
- +        append_crate(
- +            display_name,
- +            srctree / "rust"/ display_name / "lib.rs",
- +            deps,
- +            cfg=3Dcfg,
- +        )
- +        crates[-1]["env"]["OBJTREE"] =3D str(objtree.resolve(True))
- +        crates[-1]["source"] =3D {
- +            "include_dirs": [
- +                str(srctree / "rust" / display_name),
- +                str(objtree / "rust")
- +            ],
- +            "exclude_dirs": [],
- +        }
- +
- +    append_crate_with_generated("bindings", ["core"])
- +    append_crate_with_generated("uapi", ["core"])
- +    append_crate_with_generated("kernel", ["core", "macros", "build_error=
-", "bindings", "uapi"])
- =20
-+     append_crate(
-+         "pin_init_internal",
-+         srctree / "rust" / "pin-init" / "internal" / "src" / "lib.rs",
-+         [],
-+         cfg=3D["kernel"],
-+         is_proc_macro=3DTrue,
-+     )
-+=20
-+     append_crate(
-+         "pin_init",
-+         srctree / "rust" / "pin-init" / "src" / "lib.rs",
-+         ["core", "pin_init_internal", "macros"],
-+         cfg=3D["kernel"],
-+     )
-+=20
- -    append_crate(
- -        "kernel",
- -        srctree / "rust" / "kernel" / "lib.rs",
- -        ["core", "macros", "build_error", "bindings", "pin_init"],
- -        cfg=3Dcfg,
- -    )
- -    crates[-1]["source"] =3D {
- -        "include_dirs": [
- -            str(srctree / "rust" / "kernel"),
- -            str(objtree / "rust")
- -        ],
- -        "exclude_dirs": [],
- -    }
- -
-      def is_root_crate(build_file, target):
-          try:
-              return f"{target}.o" in open(build_file).read()
-
---Sig_/7xdb3gVryb/9bPhTeywP9Yz
+--Sig_/cO5x9zXH8CKLxgbbSVBJH8s
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfX894ACgkQAVBC80lX
-0GwFnQgAm2kjJW2eL3wyGhUbvJlufeGI/SA6X5o0KWRxuPVoNuqR03VejgktzrYv
-HiGgoBCeyDWf1ao2C1P8bQhvR/4hYXGEZYD/A+qd5pXcEez4gLuVtn4TeJS9Clzy
-z00A47W/l9g47lSasdHRyK+TIGRxX7dT3h59eG+SsqyuA6Gr7IYoov4DC9SWlX4e
-NBKAjxelppl38K1K5BSDy3tAz9SxHxPPAI6jmJin5gR0ip6bMMIERMmT7yjOBbAQ
-eqUevOSXABeaqRmEO5qpUj+33cLOnzc0UXDF0AETR7r3jXmhko92E915qcsqXAES
-bZ+hCdFCl1yduxl/KgGvEsfnPwTGVQ==
-=UXEL
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfX938ACgkQAVBC80lX
+0GxnUQf7BCSCxl1e3GF7AI+lxNe5WpKLr14HVCPFiKPwhwBxVyqVvZx1T4AAbP0Q
+PDgFQfxUF9wFE/UTevetK53jDPlM6x1fiTIP3z249yMYnXiY1xQNoOGCQNWsiDA5
+UesM58qbJtXMJm81OpdzpJbfKD0odUF8qanlb+mDUBU9G9R0wQluuERBSQMyrlWQ
+uwa5kg7uNZrA7kP744GiKlrbPzmJDvbwsZsEn05f91K1FzJQcl7itNJ9Z9+4iw4E
+N1XooxSVEp4IZg3QWZXqr20lmXSBf8D2eKIM4GBPyUblpODsc+OSDFm3gxQoWBCU
+ASjAKbw7zDC5SclLaSTiXY+YIHYXaQ==
+=+ka5
 -----END PGP SIGNATURE-----
 
---Sig_/7xdb3gVryb/9bPhTeywP9Yz--
+--Sig_/cO5x9zXH8CKLxgbbSVBJH8s--
 

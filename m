@@ -1,125 +1,82 @@
-Return-Path: <linux-next+bounces-5821-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5822-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAEB9A64BF9
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 12:11:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E40D8A64BDA
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 12:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 736233A56C9
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 11:08:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 186831885393
+	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 11:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF89233141;
-	Mon, 17 Mar 2025 11:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 339B4230BC9;
+	Mon, 17 Mar 2025 11:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RM4/S9vS"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="EVq82bFL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DBB1990B7;
-	Mon, 17 Mar 2025 11:08:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924A5233127
+	for <linux-next@vger.kernel.org>; Mon, 17 Mar 2025 11:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742209713; cv=none; b=ZQGDLUQnA06Bm5C1qnEuEC+8CMduA8Zxxt9qhWz+yM7IrlnTi2+fLJGEde/2WnHW1N55OWziINOo/auS6+B0zHTAx/xUXnHRrDUajxqyaN3qUfoJOxFxRamrYQWi+dTcw0WvqE2h2QuALLFSJf82+rbAcxKAyUWdReBHuA2IvZ4=
+	t=1742209791; cv=none; b=pg9wLN8rQOHPhDu6yMH6vcMBY1WBD+1vNdamvEGvdP5JEDiyyjo4wgNThGLOnec6ZwCInxE9nswkSHAj6sr9YdlaH0u5mgInsZbwe/Cg4lHNcSsqofOqIDJG5nXtoCdn3tP1A0ihv/P8lZLqth8rWqWISIaLs7aNLcZooKzkx5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742209713; c=relaxed/simple;
-	bh=vD80iwdiMAGzs4naZ/VRoajC/AaqYf0/78u4RZKwmKc=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b5N9I3X+nXaaov5gPI1lCIiT7BoGAVy58wLmMNVTFwYBgDcUehD/uLH88Jp2tQUoLni5F0BWA+cQJmVLyTboxNJh+LLIUV16npqW1BzZ2o1XaALN+qYLlHOMnB9sRIHhwfNhAKTb4M8WMjLIkJcv9crEUAZXmum7VkbdGIr4V6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RM4/S9vS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED487C4CEE3;
-	Mon, 17 Mar 2025 11:08:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742209713;
-	bh=vD80iwdiMAGzs4naZ/VRoajC/AaqYf0/78u4RZKwmKc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=RM4/S9vSKlLErShJGXGSJO3O7OGbCoHyj6fao5LlD32rs3aJaoIjPh6mr86sIYxsr
-	 HMxU73du7cVPFxd1jE/gxIV34MEtDXRf9uvE9zAQ8mTJMiTgOgzmmDTxvWP3mFKLwY
-	 EkC9mL4m4WvCdGbeSVPJZfnN66EIQAgc3pzZeeBGka74aQv1mCPNdM8o1Srwk3Y9fW
-	 GQx/cXx4OouQYGgxZADEchkIDE1AqRmWBQFM5Au4kaP1TbzboE0iONnCMXd+w0I947
-	 PT6zaSY5gElvKZWBS2HhimvAj8slpYd2Sg6u83MALSPf5WWmR0k4jr0SV8TEXw8+Ip
-	 0MLNf/mnVb1bA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1tu8Kc-00EGSs-Py;
-	Mon, 17 Mar 2025 11:08:30 +0000
-Date: Mon, 17 Mar 2025 11:08:30 +0000
-Message-ID: <86zfhjnccx.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Oliver Upton <oliver.upton@linux.dev>
-Cc: Christoffer Dall <cdall@cs.columbia.edu>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next
- Mailing List <linux-next@vger.kernel.org>,
-	Mark Rutland
- <mark.rutland@arm.com>,
-	Shameer
- Kolothum <shameerali.kolothum.thodi@huawei.com>
-Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-In-Reply-To: <20250317172102.55f7c4d9@canb.auug.org.au>
-References: <20250317172102.55f7c4d9@canb.auug.org.au>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1742209791; c=relaxed/simple;
+	bh=fC1biwLTAdIi8RJqmE+ARw0t9iZUOkgq/ONQO22Lvy8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=k3wv3Hx4tbjEgA+c4UVOiZLYC9oHUNdcx0mhcDp+vV9j4KCzJeb0OTBZsb0AHn0wNMxxQ7eir3O0NX/sdHRV+X04VDnMp+CuQaE1qQJTK5qSKWxHJlRYchFifVaL5MDx49NvGxnYIu2P0FSWRDDxlDTg6Qud0pEPjQeOkafxGvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=EVq82bFL; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1742209786;
+	bh=zqbOzGR/S1NqZVeaOkKz/a3SBP5r2fF1Gtl6KlZ7yBc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EVq82bFLVWAwnFiYN0xCZZwDgOF0En0/B6KlIlF0AL70U0X3pAwg0xxKx62byv3ge
+	 aMe1twjF8tvlPeanOl4hAHlpb1/ZelXSr6SlIfwTIhCwSrKJvfv0PlLnv9+PM23D6W
+	 +Uq+vA1jF/DjtjhyJZAzsBy72YdW636f4Wu+2nmdrAATaKX5g8x/5ucNOYrYkXrOzx
+	 ahnp4XaUQl4zwqgyghzPmR/X4I5Z6idikh8as2ab6ioTZQdagjMs2WRXT8X0+JFr1B
+	 ipffAUWJh25DmOUXvjbNHhFnIW/gFii9V9Dh1tSZ2JxW9yQd1NA7yQ/ao+sJDeckIP
+	 fwNVy8VQhP65w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGXLL2Y2Pz4x1t;
+	Mon, 17 Mar 2025 22:09:46 +1100 (AEDT)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, maddy@linux.ibm.com
+Cc: linuxppc-dev@lists.ozlabs.org, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Andrew Donnellan <ajd@linux.ibm.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: Please add powerpc topic/cxl branch to linux-next
+Date: Mon, 17 Mar 2025 22:09:43 +1100
+Message-ID: <87y0x3dibs.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, oliver.upton@linux.dev, cdall@cs.columbia.edu, catalin.marinas@arm.com, will@kernel.org, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, mark.rutland@arm.com, shameerali.kolothum.thodi@huawei.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain
 
-Hi Stephen,
+Hi sfr,
 
-On Mon, 17 Mar 2025 06:21:02 +0000,
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> Hi all,
-> 
-> Today's linux-next merge of the kvm-arm tree got a conflict in:
-> 
->   arch/arm64/kvm/hypercalls.c
-> 
-> between commit:
-> 
->   d2c173acbf93 ("KVM: arm64: expose SMCCC_ARCH_WORKAROUND_4 to guests")
-> 
-> from the arm64 tree and commit:
-> 
->   c0000e58c74e ("KVM: arm64: Introduce KVM_REG_ARM_VENDOR_HYP_BMAP_2")
-> 
-> from the kvm-arm tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Could you please add the topic/cxl branch of the powerpc tree to
+linux-next for the next few weeks, it's targeted for the next merge
+window.
 
-Thanks for resolving all 3 conflicts, which look good to me.
+  https://web.git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=topic/cxl
 
-Oliver, would you consider picking the following arm64 branches:
+It contains a topic branch of sorts to hold the cxl removal. It has a
+few commits from the SCSI tree, up to and including the cxlflash
+removal, then it merges powerpc/fixes to get a Documentation/ patch that
+touches cxl, and then the cxl removal patch from Andrew.
 
-- arm64/for-next/leaky-prefetcher
-- arm64/for-next/spectre-bhb-assume-vulnerable
+The plan will be to send it to Linus after the powerpc and SCSI trees
+have been merged, during the merge window.
 
-so that these conflicts are solved on our end?
-
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+cheers
 

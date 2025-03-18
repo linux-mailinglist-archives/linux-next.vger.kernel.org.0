@@ -1,123 +1,175 @@
-Return-Path: <linux-next+bounces-5863-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5864-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0682CA67823
-	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 16:42:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C27DA67965
+	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 17:30:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90E9C1883819
-	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 15:42:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4EB077ADAAD
+	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 16:29:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020A320F065;
-	Tue, 18 Mar 2025 15:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2638B21148B;
+	Tue, 18 Mar 2025 16:27:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=omnibond-com.20230601.gappssmtp.com header.i=@omnibond-com.20230601.gappssmtp.com header.b="tUJxnqu8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PmTzDc0U"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C426720B80C
-	for <linux-next@vger.kernel.org>; Tue, 18 Mar 2025 15:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9EF21147D;
+	Tue, 18 Mar 2025 16:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742312549; cv=none; b=Y+dD+2Wgvf+xfJUBiD+Ffg/gubzBr1OoUmg+pCEut/OoT3FZwIB6z6drvLoqnO3JnRLs6dKUTS3WuXlQl/22b1PjTTe5gnmccPC7ZhyeaJemzuKN7iWh18rDvD90Wac0RZ+6gNCi/0fB8RS5RC4q8l7epq+CUpcYzVE64QLcq0U=
+	t=1742315251; cv=none; b=dVBL74tkd+S113rcQ41KPvg3FTlQCcy3xhYo0b+b/z6G9Uxhx9HXV8kqWWvYQzsUV88QndTHKqN9LonHsdVhBlDRN7GPt3zGISMgwOVX0EvzD7j5nziKwvTuInV45CT0UJIV2CTY46OL3r+Bne4myxgN+tl1q5osQu9vECsyv0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742312549; c=relaxed/simple;
-	bh=Hwdtp4nHusm0bzMZH2sjJxFzaX4iEMDSAD2WQE8AUow=;
+	s=arc-20240116; t=1742315251; c=relaxed/simple;
+	bh=+XDY1qmtYjm5+RghuCBaSd2Ai8Ppy/IYl9QmZA0YIPk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ne7ucglr1JJRtNpvnZeIG/hALW/q9HdrFDYEwqxfmxbuhOWx2zYjvDbqtcRmpKqSoHSn4W80zN58Xsh8b6eOiuoK9Bg/ZwWnoS4wshQ8YAVEG01GqjLb4r2OHPz9H9s+ERE+mSh7OzXb4i4KQmW/dbz3ZLdcRpY0sRXuzIzMJA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omnibond.com; spf=pass smtp.mailfrom=omnibond.com; dkim=pass (2048-bit key) header.d=omnibond-com.20230601.gappssmtp.com header.i=@omnibond-com.20230601.gappssmtp.com header.b=tUJxnqu8; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omnibond.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omnibond.com
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3d571ac3d7eso5590105ab.2
-        for <linux-next@vger.kernel.org>; Tue, 18 Mar 2025 08:42:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=omnibond-com.20230601.gappssmtp.com; s=20230601; t=1742312547; x=1742917347; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bhhBaUByL11Eg/L/aJ0UGIONk2f7UqBYF49j1/2iJBc=;
-        b=tUJxnqu8S0+oEDg6jzoJrNoRRn9bstd1RHp0l+lDmdoYKRBxqWFOm9RoLIGMtlmEkG
-         7W1tYwXt7IbjuFgUw0I4KpBWZQOt3QfZqxF/SlpB3qMp7iAP3ENrgBNYRZ+INnIasbiB
-         AMhw/ulidChlErQzuqcghPHF45oahhb7LYz7aooAMlZ9HJjl9rtL2BVLUAzxULtpt8OH
-         Ypx0aHoMFVnzillnrIc1gbRLwobSGlFGCHxrzL63MhFelgapc+eL9k6sKgY7dzuutela
-         YlyCuljIzmatLNCnTkHTGfiQ8E5RWg9kcoKDNuOB7riTa14NPdoZE7rUuGIL1OIHFqY/
-         tSCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742312547; x=1742917347;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bhhBaUByL11Eg/L/aJ0UGIONk2f7UqBYF49j1/2iJBc=;
-        b=MoL3wvrtNTkqRtn/c2Fgufa6K9kubP8hghYJqqBx/9J1JxA59hpgTMYYE16QChWzd9
-         29Vldx4oIeRrJZp87xPELRhG5dPnhX+L5XjSyLyuUOWP4n5was9mwkj0Kczhg2KONcgR
-         qTM4BDxVAAvh7lJLgvwANHBHvC2OntvCkHZoDj5yDqkUa0rBWJr61cWxt6iZ0Pq58Z8g
-         /qNRgJHhaRZiGpJCENMlpZhJzcbLBzv+DcPq4UqYc2jabn0MEQSzxLF4S+P8gGd1f7h4
-         yMJk0/2COSCMlQl/Do7N4KePbmrxCeLTVhVo4XIjI/kYF22QDRMq6e9yDBDYy5C3Jc+F
-         m50w==
-X-Forwarded-Encrypted: i=1; AJvYcCUOLD2anP1Gi6iEdErZPsBelGdohHJn2nQpUxOARpMMm25TxMu6x15zCq9U+vSXD85elf4kyAvHG21W@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxs/wTG7Bb/I7q4X3WTXMCaKpCDJN6PjX3EUHAcxsj0ZLkVy68J
-	zzcjBi1pAKAsvYiwXp+KCowOhCDXgMNQgITxGiR3Xl7W3Owa78/DIvK2nzHzDaLLm8KEt7aY1b3
-	beNkunMcZPxXl3jDd0cEvDfxTbr1lwBIU+TUb
-X-Gm-Gg: ASbGncsfNzVf6sLt6Po8H2h8CH5YX8XZTOBs4iOfcpbsERGxiKjh8Fa1gbjplpPp32r
-	xQrrB6wi/odlj+0ykGT9kgElL4cesNg5uneS68naYaj8SX6uE118eRLSn4WhEKaP5Qx04ndv3Ne
-	af8Xp2BW+J2zOeZNWb3RoinIYQo1flIKjht+e/6wzOYv4b/pLR
-X-Google-Smtp-Source: AGHT+IFxnYvCAuvPU42m6/QC1ywQA85OXr0FTCGOwuudEBHkzLK3cxIzbtf8pL2zy7+O30GTiOC2JUsE+fj6fWoxR44=
-X-Received: by 2002:a05:6e02:198b:b0:3d3:e2a1:1f23 with SMTP id
- e9e14a558f8ab-3d483a75f20mr199628305ab.20.1742312546859; Tue, 18 Mar 2025
- 08:42:26 -0700 (PDT)
+	 To:Cc:Content-Type; b=LXNNVN3DUoxFhiTdGN9XkNLmrrgH7LcFLTHlfzfawcLA3UAOL6nu00lZUTuniukMkuuyOZyozYKjclhz1Q61VKtS8UxLgRWZFTDFxNJww7QGThblKHVA3Zg2MuGAr71pdoK/WwBNvx/bxeqOHsmBKPFGPGvK7OxCS1dOJSzVkLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PmTzDc0U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A7FC4AF0B;
+	Tue, 18 Mar 2025 16:27:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742315250;
+	bh=+XDY1qmtYjm5+RghuCBaSd2Ai8Ppy/IYl9QmZA0YIPk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PmTzDc0U8a+w7hMQzYch4lHlEPYdUTBNUNyDqDzV8jA9fae0jd7tX+Qt8zKx+T1XG
+	 kW1H8eXVUwXeVG71+SsuyTQVfejCWJHj/N4it+hCT29BybVAEJPGaxoB+zMHMzJdlP
+	 2Erx9kaVNvoGNTXqBPqYTXbM0B2gppjvWQowP7t8feu2NerK6WUpg6sfzw6faU1dM/
+	 Gfg0n6IDes10FycfVG9m/nkKRJUXe0+EwksdmDVUAp4i9kVVPwqQqbDIpkD9haDwao
+	 U4ooqm+Iss1qyVHHbd0EdmgQJobzAWastktzq7YZq9D1c0WZP5frBUDzBIdUyQo5dM
+	 BnygybhvBIz5Q==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-54954fa61c9so7213930e87.1;
+        Tue, 18 Mar 2025 09:27:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUgdQCbls+wLFt9lCsHceypI8X0eEk+D78G2uS0bdDwCgAAV3S3K+8U9nuva6Duy8xh0rw7uXPSMVp1Ufhb@vger.kernel.org, AJvYcCW8alOn10/YJ9q/Xo3rIcsZ3P56Df4evA8qQFaFNIY7WKubi+2Qo5XlbiQz9KYQyiYRNxWEWaE8IXrQWfg=@vger.kernel.org, AJvYcCWZ1R9W3TJpyX3FcPnlPbK/7U2PJIe0izU2IaopISXQ/IStNbcy94z3horRva6sYauSwbkwyYhfM0rAqA==@vger.kernel.org, AJvYcCWcmQ3H1XiTM/hW1B//zjmv/O68JWu3o7SPUuDeYVV9PQmn0HzgO8yLHogCh1a1GHLpO1v0jjf7clwdtw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNCGjMG5A51tA092UtLYWYGdf/B6BuAtoxELXeoput2EXyxdhN
+	WQha4vqn+y3CY35bKNYqpyAw/wF9m0vW4ELQPHnciJJVkjADrE4o9HtjxmdEkUd3Wat/GD849Rv
+	TgxS8RaYn3XoQ4psabuJs9AtMc/I=
+X-Google-Smtp-Source: AGHT+IHl+OsJqKBm4A4NcSbJwQrqJRpHwt/4YBmuHBd1yTofEmsxOMxZLSR8ZBbiYP3ugXHJWcUzR5d6OdpkdeVxzaI=
+X-Received: by 2002:a05:6512:2245:b0:545:cc5:be90 with SMTP id
+ 2adb3069b0e04-549c398cf85mr10055980e87.35.1742315249162; Tue, 18 Mar 2025
+ 09:27:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250318101256.01afbb47@canb.auug.org.au> <CAOg9mSTNLVWjqU4DnHFhBjAfJ7Do_Lfj1Oxe0cn55TBb-hYPwA@mail.gmail.com>
- <09c18763-7a60-4eea-b77b-85260b8b6b02@app.fastmail.com>
-In-Reply-To: <09c18763-7a60-4eea-b77b-85260b8b6b02@app.fastmail.com>
-From: Mike Marshall <hubcap@omnibond.com>
-Date: Tue, 18 Mar 2025 11:42:15 -0400
-X-Gm-Features: AQ5f1JrPIfXgu_k4Po3vsh9qy_T5bnnvC4odhum41Kh6EH0sFSxEyeqjpkgtViw
-Message-ID: <CAOg9mSRB05JSF9nfruWov+Os8tfXE8KyE4GVk5Pgp3pnA-4jow@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Christian Brauner <brauner@kernel.org>, 
-	Matthew Wilcox <willy@infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-next <linux-next@vger.kernel.org>, 
-	Mike Marshall <hubcap@omnibond.com>
+References: <20250311110616.148682-9-ardb+git@google.com> <202503131715.Fb6CfjhT-lkp@intel.com>
+ <CAMj1kXGBLV6W7mJcELmsQuDUi0u-DofyD985znmVoHoZKZTuxA@mail.gmail.com>
+ <CAMj1kXEZccymq1OhXErSK+prS3L7sygm7_5_1v+j2cypncQuzA@mail.gmail.com>
+ <CAK7LNAT_NRio2pkR1Km5Nq8KM38zYF7VCoGP0OjEP_Owg-ukpQ@mail.gmail.com>
+ <20250318081753.8448Abd-hca@linux.ibm.com> <CAMj1kXHoCgRu5werVnEJs+w4nkuiHA1SAyhwxqPyPF6Mk6Js3w@mail.gmail.com>
+In-Reply-To: <CAMj1kXHoCgRu5werVnEJs+w4nkuiHA1SAyhwxqPyPF6Mk6Js3w@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 19 Mar 2025 01:26:52 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATSABs3GkhGB_27=5m37_d-gNoZ-keuct7GMGOtnMt0Cg@mail.gmail.com>
+X-Gm-Features: AQ5f1JowlnLK7HIqJP34ij3N2k8jfBhKfw1DJz1JIi7Wfp2LDQRTI5vQVU3bNcI
+Message-ID: <CAK7LNATSABs3GkhGB_27=5m37_d-gNoZ-keuct7GMGOtnMt0Cg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux build with
+ relocations preserved
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Heiko Carstens <hca@linux.ibm.com>, kernel test robot <lkp@intel.com>, 
+	Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org, x86@kernel.org, 
+	Ingo Molnar <mingo@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org, linux-next@vger.kernel.org, 
+	Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Arnd... thanks, I'll get 'er done...
-
--Mike
-
-On Tue, Mar 18, 2025 at 11:38=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
+On Tue, Mar 18, 2025 at 5:27=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wr=
+ote:
+>
+> On Tue, 18 Mar 2025 at 09:18, Heiko Carstens <hca@linux.ibm.com> wrote:
+> >
+> > On Thu, Mar 13, 2025 at 07:29:41PM +0900, Masahiro Yamada wrote:
+> > > On Thu, Mar 13, 2025 at 7:18=E2=80=AFPM Ard Biesheuvel <ardb@kernel.o=
+rg> wrote:
+> > > > On Thu, 13 Mar 2025 at 10:34, Ard Biesheuvel <ardb@kernel.org> wrot=
 e:
->
-> On Tue, Mar 18, 2025, at 16:24, Mike Marshall wrote:
-> > Hi Stephen... is there something I should do differently? I might be
-> > using an older
-> > version of the patch, it was sent to me around three weeks ago.
+> > > > > On Thu, 13 Mar 2025 at 10:21, kernel test robot <lkp@intel.com> w=
+rote:
+> > > > > > kernel test robot noticed the following build errors:
+> > > > > >
+> > > > > > [auto build test ERROR on masahiroy-kbuild/for-next]
+> > > > > > [also build test ERROR on masahiroy-kbuild/fixes tip/x86/core s=
+390/features linus/master v6.14-rc6 next-20250312]
+> > > > > > [If your patch is applied to the wrong git tree, kindly drop us=
+ a note.
+> > > > > > And when submitting patch, we suggest to use '--base' as docume=
+nted in
+> > > > > > https://git-scm.com/docs/git-format-patch#_base_tree_informatio=
+n]
+> > > > > >
+> > > > > > url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Bies=
+heuvel/Kbuild-link-vmlinux-sh-Make-output-file-name-configurable/20250311-1=
+90926
+> > > > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahir=
+oy/linux-kbuild.git for-next
+> > > > > > patch link:    https://lore.kernel.org/r/20250311110616.148682-=
+9-ardb%2Bgit%40google.com
+> > > > > > patch subject: [PATCH v2 3/4] Kbuild: Create intermediate vmlin=
+ux build with relocations preserved
+> > > > > > config: x86_64-randconfig-076-20250313 (https://download.01.org=
+/0day-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/config)
+> > > > > > compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> > > > > > reproduce (this is a W=3D1 build): (https://download.01.org/0da=
+y-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/reproduce)
+> > > > > >
+> > > > > > If you fix the issue in a separate patch/commit (i.e. not just =
+a new version of
+> > > > > > the same patch/commit), kindly add following tags
+> > > > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202503131715.Fb=
+6CfjhT-lkp@intel.com/
+> > > > > >
+> > > > > > All errors (new ones prefixed by >>):
+> > > > > >
+> > > > > > >> gawk: scripts/generate_builtin_ranges.awk:82: fatal: cannot =
+open file `vmlinux.map' for reading: No such file or directory
+> > > > > >
+> > > > >
+> > > > > Hmm it seems I missed some things in link-vmlinux.sh - I will tak=
+e a look.
+> > > >
+> > > > We'd need something like the below applied on top - shall I send a =
+v3?
+> > >
+> > > I will insert this before you patch set.
+> > > https://lore.kernel.org/linux-kbuild/20250313102604.1491732-1-masahir=
+oy@kernel.org/T/#u
+> > ...
+> > > > --- a/scripts/link-vmlinux.sh
+> > > > +++ b/scripts/link-vmlinux.sh
+> > ...
+> > > > -vmlinux_link "${VMLINUX}"
+> > > > +vmlinux_link "${VMLINUX}" vmlinux.map
+> > > >
+> > > >  # fill in BTF IDs
+> > > >  if is_enabled CONFIG_DEBUG_INFO_BTF; then
 > >
-> >>>Caused by commit
-> >  >> 50fb0a7f43c0 ("orangefs: Move s_kmod_keyword_mask_map to
-> > orangefs-debugfs.c")
-> >>>merging badly with commit
-> >  >> 063f8013373a ("orangefs: move s_kmod_keyword_mask_map[] into debugf=
-s.c")
+> > Building linux-next breaks on s390 with DEBUG_INFO_BTF enabled because
+> > of this; just where your addon patch ends:
 > >
-> > One has "Move" the one I'm using has "move", as if the author (Arnd)
-> > made an update
-> > to the patch and maybe I missed it...?
 >
-> The earlier patch was from Matthew Wilcox. Our two patches are
-> almost identical (they add the same data in different parts of the
-> file) but sent independently, and the problem was that both got
-> applied instead of just one. I think the easiest fix would be
-> if you just drop my patch from your tree.
+> Apologies for the breakage - this should already have been fixed in
+> the kbuild tree [0] but the fix does not appear to have landed yet.
 >
->      Arnd
+> [0] https://lore.kernel.org/all/202503161833.ytx1ivfu-lkp@intel.com
+>
+>
+> Masahiro?
+
+Sorry, I had applied the fix-up locally, but
+forgot to do "git push".
+
+The correct one is now available, and I hope
+tomorrow's linux-next will be OK.
+
+--=20
+Best Regards
+Masahiro Yamada
 

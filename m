@@ -1,163 +1,113 @@
-Return-Path: <linux-next+bounces-5851-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5852-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAB24A66F21
-	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 09:56:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ECADA67158
+	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 11:34:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C83111899DA8
-	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 08:56:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D994F17D325
+	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 10:34:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D42204F85;
-	Tue, 18 Mar 2025 08:56:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 507FA206F18;
+	Tue, 18 Mar 2025 10:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="grJqnVi0"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="sWjC9ieY"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B18F1A3029;
-	Tue, 18 Mar 2025 08:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B75202997;
+	Tue, 18 Mar 2025 10:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742288163; cv=none; b=Mb8Q/YZe3jfuESkrECUpeagIWKbCzlP4VPR5XCi3YD1eI/LPQe0ZbbA/KcwswBPXjiqDqwvQHQKTxdUNQef5WmYr+F9vE5ryEpjWMrtTv/SglGAQiLv0ixxBsr6koj6WYKiFRomw98N32q4VD9mloTol4D8B9JGxPpRBg3UrEI8=
+	t=1742294049; cv=none; b=JQtYJ5VuLHM6psTSbzQy3njeHVHxnuPTywyDBFqRdm21gOyuzCgKENnA/EpzDdY3lJXh2mSFjW5DztHO+el6lM8fC/3Hy8YTdt0aOCQRgL8twruteEByXd7CBXemDe3EZkcGYNcIOndEYDBEHEUVtgVPWxOo+gOsi5+cQ7DcL+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742288163; c=relaxed/simple;
-	bh=351VADBxcA8G0TVQkPiO4YdsXS2AUSp+41hNQz1iCu8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RwCs9X3B1zQefFEaIW/oNmVFrqBA/5PCNSH+hvbo8cbmqLakSxzZvOyuWh62AcMcd9rwI09TCfRzsCh9LnYzKMF6puaqi/h7hYGkIbjOLxLRTEIyIr/tgboEk3HIiRN0oMTUyiiBG8CYkSOZelMQCr/+nhbcKb1K0ZVzpBFqd6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=grJqnVi0; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1742294049; c=relaxed/simple;
+	bh=boUEFzR2f+gmED/G0my55hRnXnTJIW1CJbJohJHSlhM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kFaChX74RHFwwhSUgrrP+8FotdFzzlBkMf0YXHqzvBxF21O9l+eQistOFywJu+DPJc2L3CQemmC+wK4GMXaOtVpROMOBqdFiTCB7lChSh4kUVc1ZM922naiPEvB/6ZHAiJehNP+h9lap35CW2SKYva4qvJdUrAgycFF7CZmwHRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=sWjC9ieY; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742288156;
-	bh=lZVo1AIJavhSTe49lqBICSvxw2ghWK3kQflifTtOJSA=;
+	s=201702; t=1742294041;
+	bh=U6fXIqmOMeSnP6qCMOFoMy4ZX3nWJvC/usPFupz0kJU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=grJqnVi0elTuUd52y2f8wSvD45apNamTINUW08cVi+CSxhhG2Urotwq4D0bfZ0Zna
-	 KQBBjqNj/hSR1f4ELhEJ+IEStaqKUn5DDfgI/X69xrb/GZPPfjx3R7e+Xk8gVwvdPK
-	 0umbGjdz1fKklfFjrqIXM56xiZvJBm3idQemr439iMWVSRWHiqzWF903Gq9wljFjFO
-	 SyE2L0v2L6SSBpC+77YjZP2nthZKkZ1PhgiKZrKMk0JvfjQR91V4v0EjAH8dUZdGKq
-	 fIh7enjqxw9eTFYwD4IfYMoXjqDjbOge+XBb+p/iWdoUyH1a/maFWNPkrOwcLHs4Yp
-	 xjAzbx6947IBw==
+	b=sWjC9ieYga1YPQkFBfspQQDbIFTcMzwQ6o4eeGEl4A47yyw8rZIjP39EmOhRTQV44
+	 Pz8esQJF7x0K9GQGz6cIVPYf6Mflf87RIMwLpzeaPDtWqBgaTdR9rhodlYz3nU/Nic
+	 f1jRdjCOKSFIBkZkaqCN42KXqYWwh5vCF/lagZeKxEC2BO4n1ORFwJlGZ/SAOnuspU
+	 3MSv9HmU7SHYLWYLINjmm+jt3opgQE3rpbgAkX5lrm6+TLvB4pskmLqGqdNulgCOGB
+	 e6YQDh/FUDHA7epbhF/1kh+0k6OuzK/X6Ax4VB/WRaPnnhSNTA7jhEQucDC6xX1dTD
+	 f3uApC0Ho3ATQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZH5KR2ZWRz4x3p;
-	Tue, 18 Mar 2025 19:55:55 +1100 (AEDT)
-Date: Tue, 18 Mar 2025 19:55:54 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZH7Vc6jHtz4x2c;
+	Tue, 18 Mar 2025 21:34:00 +1100 (AEDT)
+Date: Tue, 18 Mar 2025 21:33:59 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Miguel Ojeda <ojeda@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, Peter
- Zijlstra <peterz@infradead.org>
-Cc: Benno Lossin <benno.lossin@proton.me>, Boqun Feng
- <boqun.feng@gmail.com>, Linux Kernel Mailing List
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Mitchell Levy <levymitchell0@gmail.com>
-Subject: linux-next: manual merge of the rust tree with the tip tree
-Message-ID: <20250318195554.0ae541e0@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the iommufd tree
+Message-ID: <20250318213359.5dc56fd1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vHBCovO1dUts/PRDbiOsvwl";
+Content-Type: multipart/signed; boundary="Sig_/yagRj.NRlkk_8/gAVtHDkDz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/vHBCovO1dUts/PRDbiOsvwl
+--Sig_/yagRj.NRlkk_8/gAVtHDkDz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the rust tree got conflicts in:
+After merging the iommufd tree, today's linux-next build (htmldocs)
+produced this warning:
 
-  rust/kernel/sync/condvar.rs
-  rust/kernel/sync/lock.rs
+Documentation/userspace-api/iommufd:323: include/uapi/linux/iommufd.h:1033:=
+ CRITICAL: Unexpected section title or transition.
 
-between commit:
+------------------------------------------------------------------------- [=
+docutils]
+WARNING: kernel-doc 'scripts/kernel-doc -rst -enable-lineno include/uapi/li=
+nux/iommufd.h' processing failed with: Documentation/userspace-api/iommufd:=
+323: include/uapi/linux/iommufd.h:1033: (SEVERE/4) Unexpected section title=
+ or transition.
 
-  f73ca66f0d7f ("rust: lockdep: Use Pin for all LockClassKey usages")
+-------------------------------------------------------------------------
 
-from the tip tree and commit:
+Introduced by commit
 
-  dbd5058ba60c ("rust: make pin-init its own crate")
-
-from the rust tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  50c842dd6cd3 ("iommufd: Add IOMMUFD_OBJ_VEVENTQ and IOMMUFD_CMD_VEVENTQ_A=
+LLOC")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc rust/kernel/sync/condvar.rs
-index fbf68ada582f,c2535db9e0f8..000000000000
---- a/rust/kernel/sync/condvar.rs
-+++ b/rust/kernel/sync/condvar.rs
-@@@ -8,17 -8,14 +8,15 @@@
-  use super::{lock::Backend, lock::Guard, LockClassKey};
-  use crate::{
-      ffi::{c_int, c_long},
--     init::PinInit,
--     pin_init,
-      str::CStr,
- -    task::{MAX_SCHEDULE_TIMEOUT, TASK_INTERRUPTIBLE, TASK_NORMAL, TASK_UN=
-INTERRUPTIBLE},
- +    task::{
- +        MAX_SCHEDULE_TIMEOUT, TASK_FREEZABLE, TASK_INTERRUPTIBLE, TASK_NO=
-RMAL, TASK_UNINTERRUPTIBLE,
- +    },
-      time::Jiffies,
-      types::Opaque,
-  };
- -use core::marker::PhantomPinned;
- -use core::ptr;
- +use core::{marker::PhantomPinned, pin::Pin, ptr};
-- use macros::pin_data;
-+ use pin_init::{pin_data, pin_init, PinInit};
- =20
-  /// Creates a [`CondVar`] initialiser with the given name and a newly-cre=
-ated lock class.
-  #[macro_export]
-diff --cc rust/kernel/sync/lock.rs
-index 360a10a9216d,7f611b59ac57..000000000000
---- a/rust/kernel/sync/lock.rs
-+++ b/rust/kernel/sync/lock.rs
-@@@ -10,10 -10,8 +10,8 @@@ use crate::
-      str::CStr,
-      types::{NotThreadSafe, Opaque, ScopeGuard},
-  };
- -use core::{cell::UnsafeCell, marker::PhantomPinned};
- +use core::{cell::UnsafeCell, marker::PhantomPinned, pin::Pin};
-- use macros::pin_data;
-+ use pin_init::{pin_data, pin_init, PinInit};
- =20
-  pub mod mutex;
-  pub mod spinlock;
-
---Sig_/vHBCovO1dUts/PRDbiOsvwl
+--Sig_/yagRj.NRlkk_8/gAVtHDkDz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfZNRoACgkQAVBC80lX
-0Gz5YQf8D8vp+Ws7lw8BDrjTYUgNp30qKtjlG7b5tHpXMjdON9KXQMsCl6H3fz+r
-e/czATUqPoqmjqiIC0dKt9yTSvd13EwGlJ4B4WjX/k/jw+Fn4x5V1sLBLE0vV2mV
-1tnzlJ0mxwEYmCf9EKsBFXJTOyp68jxZ/4Icaiefth7aPiJ8n7RPXlExwcGP/52x
-qvwfNPb+URZpBeJjQKXI5oQ7c/qxpOb6zbivQoSBdkFlPlVvAf9fV9pELLOBBdwo
-/WjHQDQxEpEO/WBl0/VVBlUlAc217mmDK9DCIOhzTkiiQLT43n1HRpka5ZujZpb1
-yMjVZBPmwkl8vILuQbu480H36BZzuQ==
-=qb7g
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfZTBcACgkQAVBC80lX
+0GyQ0wf/YG2NkK17x00l4bzgm4oOUwYig9fxAoG7lCNNa4YEgkUjw/fwarJJRdkw
+4p9BJmtioBKrBXf/HAJvu0r+LB3Xsk8Y7htVTbm7bPijjeqQqc2anN9p++WpwRCA
+7maeAATp4SDCeX8P2rLwJ5X7h+gnGzkzNPG1jm5ZT4aya7jQ2ZbwgZ6a14vPkfKP
+qZuB76E4yil3K84iJgf/7LfrCB/HDVl/KJ+b8kfTII5/lPgsphYwu3udFG5448Of
+j+jOdwwDbo5bN5d/CnL1JvfLWm2XipIc7Au1iNFRgjc/yUqFUVZf0JQ+WXLGJ6Vr
+phqQzArquFwmY5DacW3bcPSAx6netQ==
+=6N5C
 -----END PGP SIGNATURE-----
 
---Sig_/vHBCovO1dUts/PRDbiOsvwl--
+--Sig_/yagRj.NRlkk_8/gAVtHDkDz--
 

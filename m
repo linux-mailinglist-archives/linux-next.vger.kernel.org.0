@@ -1,131 +1,104 @@
-Return-Path: <linux-next+bounces-5845-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5846-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7640A662C4
-	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 00:35:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9C68A66440
+	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 01:54:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C019917029C
-	for <lists+linux-next@lfdr.de>; Mon, 17 Mar 2025 23:35:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04F281897625
+	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 00:54:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB68B204840;
-	Mon, 17 Mar 2025 23:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8527A52F88;
+	Tue, 18 Mar 2025 00:54:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="apWNZs+A"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="g0B+aYh3"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921441A7249;
-	Mon, 17 Mar 2025 23:35:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF5B17E0;
+	Tue, 18 Mar 2025 00:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742254513; cv=none; b=lANDMxzHN5StjhyP9+eC25p2k7KrjEnT3Oynzmy7K88ACOFu3wvwnH1uGbJE1l+SCdtA7ttujY9kz5MvlHGaqnwH6idNJwGEzct3UsPtLW0z9S8DxUpve1Rhf7VxX4ArBVyP0ytzZB97vWqNag2FvLqv8wX/ZBmGjPEIspWhFjE=
+	t=1742259270; cv=none; b=HvMVMSqiCK1iHrUSQjNTmNZo2eiPQtQ0EFhdNOYDFaDLR6gyM6je9ymfdB1YZW4z/u/17DmaEcpMcFtqqHCFV878kmNij7NT/xPuPTPDgD/M4KU02rYzMj/lFhKepoloWggVrQzxRzNQkwu2CsrS4zyiC5T5RTYwGwTBwNcQ2WU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742254513; c=relaxed/simple;
-	bh=7UoWRwyHzqBBehirgFLNvlLP+45LmrF4dy3eicA0GKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AbApUtxHsMYn5rKNQ9zjgPM5DSawOEwrbWCWkfO8X0XgZLOwe4k8Y6JnXVL7H1oQwhBz0dtf4EaRWzJI3y78FrdgOaD9ZX0ATIhkf47JWPAu2My+Cl1R7BVx6z8xsVBmyL2bOjyO3sBakB/IuEuum+/eDgdlVw5m8B3xDy9ZNTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=apWNZs+A; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1742259270; c=relaxed/simple;
+	bh=tTLztvLpHSbre/jffyVGfz19TUtNfWXMTPAYeg0VTQc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iEY1WQB02roq58z0ULrIW5ui3/ipRms0J9yOaBd1LKZWsXxpn0vzL7a9xGZSEx0UP4+SEG0uW+0NYImZa3aAfJOuifjFRqzUhaYitSwuQs974UJa5An16V3ZUZes1/69zp61kNqwPstKWehEE88CW3ghZPpF72THOaSvj18DkgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=g0B+aYh3; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742254505;
-	bh=D7cfFiiScayhlIqzpWBB2VE4W5qnbzK4TlXB83dimwI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=apWNZs+An410bWexLMvKI1PqEU5bKoqoqgzmjQqlKvLalzSqVo2NIr7isDReItup7
-	 OFbrUBiwXs0NXJRZlw19Mdz7x773fxlnq7u8Al2fUb27zeidh3dzwGdYOMzkJ2XZav
-	 IsbVBbADCeaEOymDQNEJS8anIh760QcaierVykwEc7TOpXyLg6EXzvAslx8zcBF/mG
-	 X1QjEbxGxc0K8qy470rBuMOh+ulBdfHVHWzp6tXHNuYiihxD9pQUB/mtEoXNv9o6lh
-	 dtVynLCqZIDwxw78duupYzYGROJ89CApezEo30CEwA4yQKmandPb9odYfq5jixhwBP
-	 YqctC1X65PPwg==
+	s=201702; t=1742259262;
+	bh=d7Jy5p5z9GCVX/nrV24oFxCR4XhMykM8P4W1MmsWpTU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=g0B+aYh3jXchfS54W+zspenJeIj/v5uKghtsC+nMWSn3pXevY2ZLOXLhMu7ltkNDr
+	 t5SYrhbn8B5JSedhmY8LDuXDNok5LBCIpgfZEE18VLlP+1alfR5f564Q/h8dgnnFae
+	 EQwgOzsLhin0aPymrFhZxHngUcPZc+APEPRw6i5utthCHHXihQ6sxRf0s228sAdmL+
+	 S8VmPNcZaFHldLhw8NDJ+nLcJ5arFzZahWgWxbTWUPlfBttXDrWWhqsi2KICSRxHBM
+	 Scgnb6DSd9iUPMIwRQKAiieRV14Kam8yFJPi8c7O7ncMZbIGLPjFqL28eO4n1D6yNU
+	 rD5aARgXXvAkQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGrtK0QcRz4wcd;
-	Tue, 18 Mar 2025 10:35:05 +1100 (AEDT)
-Date: Tue, 18 Mar 2025 10:35:04 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZGtdm6cLLz4wnp;
+	Tue, 18 Mar 2025 11:54:20 +1100 (AEDT)
+Date: Tue, 18 Mar 2025 11:54:19 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Linux Kernel Mailing List
+To: Kevin Hilman <khilman@baylibre.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rust tree
-Message-ID: <20250318103504.4cbfe7e1@canb.auug.org.au>
-In-Reply-To: <CANiq72n05i322FfpSjFX=Wz3-9AgVRKLkKs1CHa-LxzWQ7-pew@mail.gmail.com>
-References: <20250317215757.2412aef1@canb.auug.org.au>
-	<CANiq72n05i322FfpSjFX=Wz3-9AgVRKLkKs1CHa-LxzWQ7-pew@mail.gmail.com>
+Subject: linux-next: duplicate patch in the omap tree
+Message-ID: <20250318115419.53442fce@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/awfpBApde4zvnA23wkvrEX2";
+Content-Type: multipart/signed; boundary="Sig_/GyS5PWTOv7lEnLYQwhaSAt=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/awfpBApde4zvnA23wkvrEX2
-Content-Type: text/plain; charset=UTF-8
+--Sig_/GyS5PWTOv7lEnLYQwhaSAt=
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Miguel,
+Hi all,
 
-On Mon, 17 Mar 2025 23:35:54 +0100 Miguel Ojeda <miguel.ojeda.sandonis@gmai=
-l.com> wrote:
->
-> On Mon, Mar 17, 2025 at 11:58=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.=
-org.au> wrote:
-> >
-> > Presumably this is caused by my merge resolutions :-(  Please have a
-> > look and let me know what te resolutions should be. =20
->=20
-> No, it is due to hrtimer-next, which I still have to merge on my side.
-> I have created an example merge of hrtimer-next into rust-next which
-> should solve you mention error above -- but please feel free to drop
-> hrtimer-next today if you prefer, since I will be pushing to rust-next
-> the proper merge if linux-next goes well, so you will get it:
->=20
->     https://github.com/ojeda/linux.git rust-next-merge-hrtimer
->=20
-> For the other things mentioned in the other threads, I have also
-> created two branches, one merging rust-next into Linus, and another
-> into next-20250317 -- not sure which is the one you usually prefer:
->=20
->     https://github.com/ojeda/linux.git linus-merge-rust-next
->     https://github.com/ojeda/linux.git next-merge-rust-next
->=20
-> It is a bit subtle because we have to "redo" a fix from mainline in 2
-> different places since the lines of the fix are moved in rust-next.
->=20
-> I build-tested the branches a bit -- I hope they are all OK.
->=20
-> I didn't modify anything in rust-next today to avoid further issues
-> and get this part over with.
+The following commit is also in the arm-soc-fixes tree as a different
+commit (but the same patch):
 
-Thanks, I will see what I can come up with.
+  c2a5f8c4f28f ("ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP")
+
+This is commit
+
+  98f3ab18a0a5 ("ARM: OMAP1: select CONFIG_GENERIC_IRQ_CHIP")
+
+in the arm-soc fixes tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/awfpBApde4zvnA23wkvrEX2
+--Sig_/GyS5PWTOv7lEnLYQwhaSAt=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfYsagACgkQAVBC80lX
-0GyFDggAnJI5y/xmdhW+fSnakrNZbJSAtyEClpUNHb+FdbYWROVYKHavH5FdXEDb
-BYTYu/zdelGpYmiWOwIpy9icsC1TiHt0byogLv4f/oPSwr5VNa6G1uJWIq+LhWnf
-c9/pIVUC58gPFkyoSuhDVwKrGnItq1uIFipxuE1xuUp5gDKxtRV+RBIUdcf4nYqf
-/mvDvwkSArp1CpeuN0zBiqNaYzd8fAX7emUSvsqcilf537be74l1LHTpMCh3yant
-a+Q2dLkL59Lp3cllHTA+dQVsPGy9/TDOKk6Z0qC6qx9HPiXQG1s3yH+VmdgO9LVg
-cRqPqLfoGz9mfYed3reM3ya6vUG2QQ==
-=gpVy
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfYxDsACgkQAVBC80lX
+0GxZ7gf9EVa5YyMhA2eFkrV70jnl1DUE8w33WPAh3HTioLvopneQvWltgf4W6VOb
+q4CvSmEadc+occOdQZMTDyTE467Sb///oHda6HyOP0nG2eQp5pFbEE9AkuiCgldk
+ZQzf2NrIsdHgGcZ2GwoM2ZalPEVOFUrUolLDHXdNvBLhh+Kdtcr2AjMCfVeVmP38
+EAx8e5COjtniKXP/70tOUUBdNf/NgafGd9kyRTc1cMtsTqQ9Jd4nvHCELiTRKEzn
+AInoY9zpAXUv8gpLnCJxdYvTtTcqbXZKjQs1RcFrxN/gQnqxhyUemEE47fq2MLIA
+Oi9F/GhDeOFag4a09qjkW/jkFKOEJA==
+=fgij
 -----END PGP SIGNATURE-----
 
---Sig_/awfpBApde4zvnA23wkvrEX2--
+--Sig_/GyS5PWTOv7lEnLYQwhaSAt=--
 

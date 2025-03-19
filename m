@@ -1,169 +1,206 @@
-Return-Path: <linux-next+bounces-5876-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5877-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42D52A68483
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 06:12:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19E7BA68707
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 09:38:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE747189F262
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 05:11:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 312783B6AA0
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 08:38:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C5424EF8A;
-	Wed, 19 Mar 2025 05:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24422512FE;
+	Wed, 19 Mar 2025 08:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="anjnhgmp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O5Kty4YT"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E873824EF85
-	for <linux-next@vger.kernel.org>; Wed, 19 Mar 2025 05:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798092512F5;
+	Wed, 19 Mar 2025 08:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742361057; cv=none; b=g0Sd9URpTCOxXvvS2Fo5k+Bcekfrf3EqPfvzcLhbxAMESm330iHP/LhqturTVf4YKn/cG87VlO7/htFp8c/4RBQqligY5M4BSkmI7ynKr7IiRawS02X5LasojiCZqpy2Aa6iWL+BcmlwdSDszFnpW7nYCaPWh0J/3w33C4hw7Nw=
+	t=1742373511; cv=none; b=pEziPHs8t9yLEViu90zAyNGvhMqdM5V5zgbXeprGaOLlD/ie50A/xqW3EecSjGTV0C5/JatGgDEL15o+4PQ+2ZftxfhTgGD9C8yzOJENECe7pHD8Fh0iRHvbvT18UwausB8H1h6tNoMpXUCeUp1K/vpS6bFZN0z3vBWE1m2zW5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742361057; c=relaxed/simple;
-	bh=+RdiNraqzQ5LRn6NoE9WzXl2qsV8/YeCyb1zRG+8xn4=;
+	s=arc-20240116; t=1742373511; c=relaxed/simple;
+	bh=ievVbUAi3XaG8KKFxAZRoaEhX4nigxZ+7FrxcjLYGUo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q8ZcoEJ/qTHu5CwjBHkZJf+997tVuOtkzKqB8hXBP7cXy6TqD3b3raHwxjDKenzwgEULlD0rb0pU3ozPAzwZyB0VRAFfRDCzBfev363gmfdJBKVhPn8gUMcMYg4dl0wkzVFWkxnO2rB1mPjpUFJCWHZGTCrm2u+lb+6z3KGZW0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=anjnhgmp; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2ff65d88103so8264393a91.2
-        for <linux-next@vger.kernel.org>; Tue, 18 Mar 2025 22:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742361055; x=1742965855; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bMzGfQs6vuXpVCFaTFm1aL0gd7m40j7hpQkBujJ95pQ=;
-        b=anjnhgmpOUhWbZSlV/U6RAU1hrpIP0UC6RghQFNHXqpKIDKvrSG2xMAS1b/OEGDTzO
-         G1jt+NNhNVLYeoTDihQDR49WoFpsIg6drRELVBrfLX12Y7DCYHZFJ2DbE5X+ePHh5z50
-         syxn9X3ZokhyN6Daiim83hA14C9Y51DPQI4az4nMR+Mn7u5bgx4nLcHX/neOwLUTgdB4
-         d0JI7HilcjAZKEFZvq30ksIvcWnqPvMe64FEoeBmC15jcYYZOHac9KkI6TVOyBm89s2w
-         Ufhv9gK2LJoupQnpvpKewtlNTANPCVqPnauX+GK1GNsPZ/55zQwl4spFrmhDZd10EhQ0
-         syxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742361055; x=1742965855;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bMzGfQs6vuXpVCFaTFm1aL0gd7m40j7hpQkBujJ95pQ=;
-        b=PUTuIWylBjB5PtlmQ88khntb6BkNRNw+pIen/15GDqZMyEt5IOeqRf1h4dU5+4vh8H
-         zX9usHVjTJU/vj5BZgO8sNrm8tsE0OD1bEkV6eCQVDwKIgILU4JPZIxig8DeTADsNGEV
-         hnY3TLQv77zHEDcHsfZIidROi645oni9hJjI/qVDk034EjATGGRfP4DuGMl6NfmVikGE
-         s1kr/o5sVqpXBfzMPlFhAqNDHqoxO2AzsU0XOlm6EhgXj9WiYD8nwO1Fo7gjnlq5d8Xy
-         PF8CdR7G1qhMw24j26tib8nZXr2dq7BwJX0ZIYT7C2Igrg1ie5VCM4K+xStwm4q0Rnph
-         4uoA==
-X-Forwarded-Encrypted: i=1; AJvYcCVn53wlpTn3BsYOc0YeJkr8G+G7kg9nigwSh7hYhjvDv9dGZwxHPnp88PFnhmllshkukHnbORSiR91h@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu7Ynvgmqga51SQ+Gc6zZsxUR0aD/E9zVNYWfC5hjMAKEeG/84
-	WF0XmqvO25pgQ/Nir4NlXFQ8YgiDkudhCAiqomwvrO+JHU/JbK+cJxp29j9/yCJTIJ8AYsd1Mq1
-	KYfZTQcuQhdpWy5OXWgWXc6sB/5/39LGE4luh
-X-Gm-Gg: ASbGncvNNCsaZXE2KMNjawHGXJTS9Wp+gPtMBul3M1+BC5xJnQH3c5hc8SsK493kqIp
-	desUsn6HRt2VQP7WCDaMMWPAl4b9+lGkQCcRvKyJKvxAOxeECszUXDy8xL8bRw3hzuspyk8uZe5
-	vpp63lA9i/C1hf62AK3r0I6oeDRXOwetTPy2I=
-X-Google-Smtp-Source: AGHT+IGC9KiCoo5cdqU/hWW2POhQr9hqyDJZ2CEU177bGBNKSzOv1YHHFPcq1ojEzuO3AlqI6Wf/QjlU9ILJKR6cUx4=
-X-Received: by 2002:a17:90b:2541:b0:2f2:ab09:c256 with SMTP id
- 98e67ed59e1d1-301be2341edmr2584841a91.33.1742361054821; Tue, 18 Mar 2025
- 22:10:54 -0700 (PDT)
+	 To:Cc:Content-Type; b=YOzqCeYFmnAmNbcuKDMlKo7fZgh8kDhn1gMNKTIQoP/lTygt6fdQa+s2hgiHGf/Pm4dzNbq20H7Ah9s7xEhE4FnHVhoB5xeLmen1BBhQmgPOurG54eDi72SDX2zWQetwXruAJN6HZnuaGLK/1xSj5sHlf0TTPAElWaZEdmujhls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O5Kty4YT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E436AC4CEEA;
+	Wed, 19 Mar 2025 08:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742373510;
+	bh=ievVbUAi3XaG8KKFxAZRoaEhX4nigxZ+7FrxcjLYGUo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=O5Kty4YTSwFrb7gMF4W37Gh46Lez+KsBNRR4piL7V2aMHzxOm75OZ0NAyx79Aw2+w
+	 n1avxxGbov/idMipwuFIJsSxb4yoGwfJVuvTYbHdWSG2ZyGP1drpCbLl1/gRDsFI/f
+	 4lS2n9JCbmTkLkRwaUMvGaR0tWSnAU6r07Y3APnbKTP2cWqruoDUcxJYXJH6UBkM1j
+	 gkjwuBF3u81s7Zr04pkJlwDFL8p6BJ0iNaqURSFOgC4oulDotn9zDlmv6117+8mXTw
+	 Lx+07A/0pEjjRuInP/zAc16VnHU/4eziaAdeH6eDAZlM9K+rPpPIYhpxOJxO8RG+WP
+	 ahdFi9ISo0wcQ==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-547bcef2f96so7294487e87.1;
+        Wed, 19 Mar 2025 01:38:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVFW/u3vs5SR6AL/ahXq0zSr3XHZxI59yDJhqI4OfyxPl6rr/os3jrf2L5ELEdjObePfAo0FMbI/2PytQ==@vger.kernel.org, AJvYcCW7cs5SRQooHWSeDkO3sAcjYa9UojB4l4zEXbIKvTeSzCquBlUbluLxLreYqInponNRZhrJUkQtwnz6OdI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz14/DrWKk7Ok/a6s5XETQP4Tgho6p0WLHnlgw4Skd8GKwVsIdl
+	Voe5BCI9c8ePB1G1UCKioN3Q6LOhaRofAILhK9HkHemc00aQMSMXkoA7WfCenfe70DiHUvtbvPn
+	pbUvtLlotPhEJBH/2NvLRNZW5ytM=
+X-Google-Smtp-Source: AGHT+IEX8R1IAsDIIpwOQTrRaHYVLBWqksclVFT2coT/UbsLQIdheCvRK3piRIyPj79woDLXOZosQKkrQVaN4vqWueI=
+X-Received: by 2002:a05:6512:4010:b0:549:8f97:dd6a with SMTP id
+ 2adb3069b0e04-54acb1baca5mr606144e87.16.1742373509230; Wed, 19 Mar 2025
+ 01:38:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <67bab9f0.050a0220.bbfd1.000e.GAE@google.com>
-In-Reply-To: <67bab9f0.050a0220.bbfd1.000e.GAE@google.com>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Tue, 18 Mar 2025 22:10:43 -0700
-X-Gm-Features: AQ5f1JrGKsBTlQOOVtqaudGfn2jZIztiGHxnCWE4tMmF_rV_zUuBZWrrkUqx7Mk
-Message-ID: <CANp29Y6MOsEyXmR8Z_aA+3xQMQQFSWzsGfJUXohdeN6fG6EwRA@mail.gmail.com>
+References: <67bab9f0.050a0220.bbfd1.000e.GAE@google.com> <CANp29Y6MOsEyXmR8Z_aA+3xQMQQFSWzsGfJUXohdeN6fG6EwRA@mail.gmail.com>
+In-Reply-To: <CANp29Y6MOsEyXmR8Z_aA+3xQMQQFSWzsGfJUXohdeN6fG6EwRA@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 19 Mar 2025 09:38:18 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXH2JUWsxgd67+EHPgbo++OiGkx6TAu+8YcOcKjGR7ShRg@mail.gmail.com>
+X-Gm-Features: AQ5f1Jpm251oz7-tEO49EiCn9uqTgWEZ9zc99AR8u7TCbsK1FUi5mUR-A3PJ6ls
+Message-ID: <CAMj1kXH2JUWsxgd67+EHPgbo++OiGkx6TAu+8YcOcKjGR7ShRg@mail.gmail.com>
 Subject: Re: [syzbot] linux-next build error (20)
-To: syzbot <syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com>, 
-	brgerst@gmail.com
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+To: Aleksandr Nogikh <nogikh@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>
+Cc: syzbot <syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com>, 
+	brgerst@gmail.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
 	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com, 
-	Dmitry Vyukov <dvyukov@google.com>, ardb@kernel.org
+	Dmitry Vyukov <dvyukov@google.com>, Ingo Molnar <mingo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 22, 2025 at 10:02=E2=80=AFPM syzbot
-<syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com> wrote:
+(cc Sami, Masahiro)
+
+On Wed, 19 Mar 2025 at 06:10, Aleksandr Nogikh <nogikh@google.com> wrote:
 >
-> Hello,
+> On Sat, Feb 22, 2025 at 10:02=E2=80=AFPM syzbot
+> <syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    d4b0fd87ff0d Add linux-next specific files for 20250221
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D17a5bae4580=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D76d7299d728=
+19017
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D06fd1a3613c50=
+d36129e
+> > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for D=
+ebian) 2.40
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+> > Reported-by: syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com
+> >
+> > <stdin>:4:15: error: use of undeclared identifier '__ref_stack_chk_guar=
+d'
 >
-> syzbot found the following issue on:
+> Manual bisection pointed to the commits from this patch series:
 >
-> HEAD commit:    d4b0fd87ff0d Add linux-next specific files for 20250221
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D17a5bae458000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D76d7299d72819=
-017
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D06fd1a3613c50d3=
-6129e
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Deb=
-ian) 2.40
+> [PATCH v5 00/16] x86-64: Stack protector and percpu improvements
+> https://lore.kernel.org/lkml/20241105155801.1779119-1-brgerst@gmail.com/
 >
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com
+> Brian, could you please take a look at this syzbot report?
+>
+> The latest build log (for next-20250318) is here:
+> https://syzkaller.appspot.com/text?tag=3DCrashLog&x=3D10a745e4580000
+>
+> It failed with the following error:
 >
 > <stdin>:4:15: error: use of undeclared identifier '__ref_stack_chk_guard'
+> EXPORT_SYMBOL(__ref_stack_chk_guard);
+>               ^
+> 1 error generated.
+> make[4]: *** [scripts/Makefile.build:335: arch/x86/entry/entry.o] Error 1
+> make[4]: *** Deleting file 'arch/x86/entry/entry.o'
+> make[4]: *** Waiting for unfinished jobs....
+>
 
-Manual bisection pointed to the commits from this patch series:
+This appears to be an interaction with gendwarfksyms:
 
-[PATCH v5 00/16] x86-64: Stack protector and percpu improvements
-https://lore.kernel.org/lkml/20241105155801.1779119-1-brgerst@gmail.com/
-
-Brian, could you please take a look at this syzbot report?
-
-The latest build log (for next-20250318) is here:
-https://syzkaller.appspot.com/text?tag=3DCrashLog&x=3D10a745e4580000
-
-It failed with the following error:
-
+# AS      arch/x86/entry/entry.o
+  clang-15 -Wp,-MMD,arch/x86/entry/.entry.o.d -nostdinc
+-I/usr/local/google/home/ardb/linux/arch/x86/include
+-I./arch/x86/include/generated
+-I/usr/local/google/home/ardb/linux/include -I./include
+-I/usr/local/google/home/ardb/linux/arch/x86/include/uapi
+-I./arch/x86/include/generated/uapi
+-I/usr/local/google/home/ardb/linux/include/uapi
+-I./include/generated/uapi -include
+/usr/local/google/home/ardb/linux/include/linux/compiler-version.h
+-include /usr/local/google/home/ardb/linux/include/linux/kconfig.h
+-D__KERNEL__ --target=3Dx86_64-linux-gnu -fintegrated-as
+-Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument
+-Werror=3Doption-ignored -Werror=3Dunused-command-line-argument
+-fmacro-prefix-map=3D/usr/local/google/home/ardb/linux/=3D -D__ASSEMBLY__
+-fno-PIE -m64 -g -gdwarf-4
+-I/usr/local/google/home/ardb/linux/arch/x86/entry -Iarch/x86/entry
+-DKBUILD_MODFILE=3D'"arch/x86/entry/entry"' -DKBUILD_MODNAME=3D'"entry"'
+-D__KBUILD_MODNAME=3Dkmod_entry -c -o arch/x86/entry/entry.o
+/usr/local/google/home/ardb/linux/arch/x86/entry/entry.S
+# cmd_gen_symversions_S arch/x86/entry/entry.o
+  if llvm-nm-15 arch/x86/entry/entry.o 2>/dev/null | grep -q '
+__export_symbol_'; then { echo "#include <linux/kernel.h>" ; echo
+"#include <linux/string.h>" ; echo "#include <asm/asm-prototypes.h>" ;
+llvm-nm-15 arch/x86/entry/entry.o | sed -n 's/.*
+__export_symbol_\(.*\)/EXPORT_SYMBOL(\1);/p' ; } | clang-15 ... -c -o
+arch/x86/entry/entry.gendwarfksyms.o -xc -; llvm-nm-15
+arch/x86/entry/entry.o | sed -n 's/.* __export_symbol_\(.*\)/\1/p' |
+./scripts/gendwarfksyms/gendwarfksyms
+arch/x86/entry/entry.gendwarfksyms.o >> arch/x86/entry/.entry.o.cmd;
+fi
 <stdin>:4:15: error: use of undeclared identifier '__ref_stack_chk_guard'
 EXPORT_SYMBOL(__ref_stack_chk_guard);
               ^
 1 error generated.
-make[4]: *** [scripts/Makefile.build:335: arch/x86/entry/entry.o] Error 1
-make[4]: *** Deleting file 'arch/x86/entry/entry.o'
-make[4]: *** Waiting for unfinished jobs....
 
---=20
-Aleksandr
+The issue here is that we deliberately hide __ref_stack_chk_guard from
+the compiler, because Clang will otherwise generate incorrect code.
+[0]
+
+I managed to work around this issue using the hack below, but I'm not
+too familiar with the gendwarfksyms code, so I'll leave it up to Sami
+and Masahiro to decide whether this is the right approach before
+sending out a patch.
 
 
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> If the report is already addressed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
->
-> If you want to overwrite report's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
->
-> If the report is a duplicate of another one, reply with:
-> #syz dup: exact-subject-of-another-report
->
-> If you want to undo deduplication, reply with:
-> #syz undup
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion visit https://groups.google.com/d/msgid/syzkaller=
--bugs/67bab9f0.050a0220.bbfd1.000e.GAE%40google.com.
+--- a/arch/x86/include/asm/asm-prototypes.h
++++ b/arch/x86/include/asm/asm-prototypes.h
+@@ -20,6 +20,7 @@
+ extern void cmpxchg8b_emu(void);
+ #endif
+
+-#if defined(__GENKSYMS__) && defined(CONFIG_STACKPROTECTOR)
++#if (defined(__GENKSYMS__) || defined(__GENDWARFKSYMS__)) \
++       && defined(CONFIG_STACKPROTECTOR)
+ extern unsigned long __ref_stack_chk_guard;
+ #endif
+
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -311,7 +311,8 @@
+ ifdef CONFIG_GENDWARFKSYMS
+ cmd_gensymtypes_S =3D                                                    \
+        $(getasmexports) |                                              \
+-       $(CC) $(c_flags) -c -o $(@:.o=3D.gendwarfksyms.o) -xc -;          \
++       $(CC) -D__GENDWARFKSYMS__                                       \
++               $(c_flags) -c -o $(@:.o=3D.gendwarfksyms.o) -xc -;        \
+        $(call getexportsymbols,\1) |                                   \
+        $(gendwarfksyms) $(@:.o=3D.gendwarfksyms.o)
+ else
+
+(Note that simply #define'ing __GENKSYMS__ here and relying on that in
+asm-prototypes.h doesn't work.)
+
+
+[0] 577c134d311b ("x86/stackprotector: Work around strict Clang TLS
+symbol requirements")
 

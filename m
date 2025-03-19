@@ -1,73 +1,73 @@
-Return-Path: <linux-next+bounces-5890-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5891-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 660E8A69348
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 16:27:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E2EFA692B9
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 16:15:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E78E61BA33FC
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 15:03:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8073D7AA6FB
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 15:12:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C0721ADC7;
-	Wed, 19 Mar 2025 14:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 069541D61B9;
+	Wed, 19 Mar 2025 15:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iDaDc+xj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IgI/j4U0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925251DEFD7;
-	Wed, 19 Mar 2025 14:55:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2B41D5AD9;
+	Wed, 19 Mar 2025 15:11:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742396153; cv=none; b=t4smvNPzQmxUI+uet5S+LddicLtkoXUdk87oU+7qeYwwdt+VA9UacE+LNmaRndEqfBUj4iOHgCyd0aGlfnxXJT9EaXnELNZhLTnD1pApPk5O1HaPc8/njZCUaKfTW419MzYIxIPFKcOhthdQIYu9OBmPMYASH7uvTnjaMAP0u84=
+	t=1742397084; cv=none; b=ZwSA36E/GR8fk/wK8GSxjU3B8S2vcm5ycYywc3bZeguf/68+9RqF/p3X3ebkFhzzxx8PWG9ND1CduEWuEIaurTiqD44siSMFwiKBRNIiz+9D+A5Z/NhnjQLZfAni4wraMGvmYmdliTaOu3Qy/2vYoqAfDUEW/W7Y1Hl5p8dh2wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742396153; c=relaxed/simple;
-	bh=cqlvzY55RcwBDFprNdjw52JF3DSZ7waUI40/fMoYc1E=;
+	s=arc-20240116; t=1742397084; c=relaxed/simple;
+	bh=zZCVUvBcP8zvDTA17qjcEna0PARMpjfKQbWossFdjHM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HLP9AVdDsZEhjfuPnfwyJqCNV2L/ss6obFdprMydiTS786Qhe7ZbpJv+HAK4IE9e+xuaEDPmDyvnN88tTmdgB/2w6guP1m8b+lZsmhhxBv5gxRdoW0ueKf2t2H5FWnHso7FMz6KBL8BzlbA/Ok61BJhiEqInDGu6XTHoQ8/mnXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iDaDc+xj; arc=none smtp.client-ip=209.85.128.43
+	 To:Cc:Content-Type; b=ECP4VHdzI9PGogfzENcFXLMx7vaKgMGa0d+ZOywyFrYVY448GdEHoSGhAHr9SA+kB5MlfstO1VWB1Fah72YlFUUMzNCfogkaYbgOGwb/dawhsRdaw9Xdm2Y0DgRDiTpBfUzT6dX9aPsNoOWPUaZ+nk0Oe11IgdyVv53k/XXIiNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IgI/j4U0; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4393dc02b78so31478885e9.3;
-        Wed, 19 Mar 2025 07:55:51 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-391342fc148so4538810f8f.2;
+        Wed, 19 Mar 2025 08:11:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742396150; x=1743000950; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742397081; x=1743001881; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cqlvzY55RcwBDFprNdjw52JF3DSZ7waUI40/fMoYc1E=;
-        b=iDaDc+xjqcmW12fdXmNfysGPv9rHR8V6Gt3jU+Vj9tQiidGInxfb5bO9vl9oo/m4Ry
-         LhH2Ip1IgzJ7zvUgV5JDKE8DMF4Xa3amrKjqvWqM5h+SQIs+AzuSl+dBWezf3Rv/4nxs
-         z1zP2NEJ7jfYzuezTKPoQcuqb4g7If0HYkPbe94hZJtQjmUKRDkPcqtrhQXFuIPstcr9
-         GutAgGbiwK1L5n9T3e0Y1eR3j5S+iThWmbKP0T0ugAS/VV3T+IFOutPgYBZFqoVVTv0T
-         YFJv2XJ0voKBNK7SAG01vTJKpxPBt4CAb1yeKdNbpEe7fs72pJBVAaIsMaqA4lHrTm5F
-         lIJg==
+        bh=zZCVUvBcP8zvDTA17qjcEna0PARMpjfKQbWossFdjHM=;
+        b=IgI/j4U0guncUhWsaVlLg3ng61A69ZdRKp9MGE5YKfye9/1usXrFAHU3tnFWJiEsQs
+         cxy6w4pOy/wk50h6nvotUre7dSfqUDQ30hZXBxN+c+mUB3KP5oQq+1GCM8zI8fVKr1al
+         xUbOPXLLSVBtGB74dR84njjS5mTqyjfTL0wFZo1Okkmq+91rm5z3b2smjbnsqC2YdHEg
+         +uj0l9QcDOWU2py3g9YpvGpBUT99YQ8xAkixUyPnPtcB/FtI+lIdfMzu1xbvZ8qNOnX6
+         x0+bOqgpMDKkNePP1EpWlnur2VUlexzUGnBm4NFwEeUrjh3Bjlzl1mNKJBCdKFHdIE/q
+         BkHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742396150; x=1743000950;
+        d=1e100.net; s=20230601; t=1742397081; x=1743001881;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cqlvzY55RcwBDFprNdjw52JF3DSZ7waUI40/fMoYc1E=;
-        b=mw8kEwzgjFwpZhrJ8eb4JZ0yUqXPAYVUetmzsUDoAh1ioNvrOZfCnI0V3ReogqPzEp
-         6YutrD+EOBpwIWMupSX3Oej1BOmzc/RiCYCP6yGqKcO4ZuvHRq1D0etnTYEdpJBVmy15
-         eV3HAM2+ygWkoxUy5lHBQNyRj7odhBfvz5YClwOsCn7eLLsEGcK0yodbVX5UpSQ+tQlF
-         VkJZQX9YaciZZFJLCl3kgPm4qNdTlAUWS5YsRPyqL+b3f9zRpU+Znk0PHvB5gQILVLTf
-         63qtHAjLBmxdmkaik4KYyuzB4N+e0eDIVSmzvTlrVNFjB1o5W4fJ64ve04WdmIN6Xcu8
-         ffIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV7UhxPc2mEDTR0F2k5NvdNjj5Vj1KV4nUWqr5NfNcKP5QmbmY9rNUpcoSf2QngaQ1HGo3OQcznnzlq9w==@vger.kernel.org, AJvYcCVHV5BSE445FJw6KSV+jX8R27IiHu6v+FabQMytefA3V7R8flHfaigJoiFevEqaueBLe+M=@vger.kernel.org, AJvYcCWL6OfAaCQcawx+G9RbcQmXcLrVP3Q6k/mnxGYYyNU8OdaemECCeEU8Nlw5w1WLmYltHD3itNeMTvfNKCe1@vger.kernel.org, AJvYcCWmJmtQo/X89AZah0t/a8fEnkWCgfeMsLg+92aIH21d9gYPSnEB70xecvLOS8s4YHuGbSHW07Op@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoVN/5w4gtacK1hzGySVME2TKTCQVYoZE3lMd+qrkTXv1jn9th
-	eA/FQfn0sNFw9OECFuHTpHkbsjFjb1s+Z4GTBf6VmN3+7UKmsM8RWnoke/xzQ5CqESlhezTS7wH
-	WOdB1AhdPYYQAKzcFnU11O03OGfg=
-X-Gm-Gg: ASbGnctBe0PN9PVxAzUpltHy1oBcGHAXrQf/2ZK1U6Vz4LoYni3NYhyvMEwVaRiZfk1
-	8LqtQbHsBBywfAh5b4AH74zuovA5Wz34IV/SFY4IVP2aBVQF/6BipHTYAt52sLnru8zKOf/n7Mh
-	G4MgDamOAfh0A+IIptgRukLtcqejP5WJv4s4tbVPHC272uaMPkNi9f32HnBhY=
-X-Google-Smtp-Source: AGHT+IFYLJulgyA42kMSpPcMFV1BLWkjwnsRvgCvCmWo2WTkZJgZ47MI8MQWGFGPtZ9EU0QvFVF22Njp4qnWSDBleeU=
-X-Received: by 2002:a05:600c:1d15:b0:43c:ec4c:25b4 with SMTP id
- 5b1f17b1804b1-43d4378b3ddmr23619225e9.10.1742396149442; Wed, 19 Mar 2025
- 07:55:49 -0700 (PDT)
+        bh=zZCVUvBcP8zvDTA17qjcEna0PARMpjfKQbWossFdjHM=;
+        b=G2+hj4OUiCsg18qyADgKsvXrFvV8z4BRjroutfuyciy8EXJzd59JNrGZRlaiDVLeM4
+         qv4k97wc6sC0wOGa1uzG+gbaNtSWxdcxZJf+4xZN0qN1I+d+oJ4JrDsIlRyoxHj6OZkG
+         kjDB1R0jX0DWpQYQtNzYse9dvpKOE2az0UKk38dDYYXR7zRlnHR2Vz922kDL4fFE2OZb
+         ic3uOOwxhh2Gt5QUYup/L3etg8dll/v1NqXeqbMogDdnqvKg8/5xcNeS2/ltSjMxgtAF
+         R0VRkijp2hkTJ6osK5JYr2ASs7MO5/b2iWlfUl0NYZqPk60wnwYtqMdojq6jJ5xANkx0
+         5J2A==
+X-Forwarded-Encrypted: i=1; AJvYcCV3B4/hu5vaWwiLr+kpXfjC5nEredZDthnMj7uECeMUZNLTPqKWAWxguy3+LP004Rq5yYhIF7zw@vger.kernel.org, AJvYcCVkGw4Tedlq3bFHkI7HKTifQpEm4APwTKciilEbVsjNGLDt3+SIwqfcdL89VEhVgDHjv4w=@vger.kernel.org, AJvYcCXMJchwVzWuG8H/3aGIb/eeU6Q0EyFDn8eSTLxhcGj1ppSL2+bC6NeIiOoMcQzND6p9vtinAc78nv7ebA==@vger.kernel.org, AJvYcCXcXbU9dsICjqU40f0TE28YX7MxvbwUCrKqvb15+uh021yBQFCfqc29PEA/hrhPy5Kf7t5MAQDPjeys68KO@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJ4jBEAlp1pw+w2ruwmChkary3+DLwowea02X4puaicSt+yqb8
+	gIfvU8JkXJPlmBAUmJv4pnTmGJeO4UtJRingP9RDqXWvfkr6plEK8HB6f8vAQBQBRnyhui/3vCt
+	8jXG+ZkVzaM/FR1xbUJfoXkQCbmxsAg==
+X-Gm-Gg: ASbGncsMHKum9K9lXUGhpMmBqGvuEqMV+0jMP0OzZUiaXyVI72D1WEw+zwQNLtWGJjj
+	YL2hd91I+xFQC3auiCN+IeIzKEmORzfKP1zf/JfExRC+OETKWRdR9rEvtFiX7sZHOAJ6JykNPGb
+	YylbGowXIn7KeIVJAN8OwNkxLaCxRzKTn+RQKGrIQ7I1Px6eaWavKsjQzVvf0=
+X-Google-Smtp-Source: AGHT+IFnc1HvWZNKDa1JjpjU3I8fOCgeRNWqualgxF/qAnNf22Qp7WInhotCXWObWjh82fDQsdgR62KCXEdbFD7m70E=
+X-Received: by 2002:a05:6000:1a87:b0:390:fbba:e65e with SMTP id
+ ffacd0b85a97d-399739db618mr2775842f8f.32.1742397081245; Wed, 19 Mar 2025
+ 08:11:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -76,12 +76,13 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250319133309.6fce6404@canb.auug.org.au> <CAADnVQKotSrp8CkVpFw-y800NJ_R7An-iw-twrQZaOdYUeRtqQ@mail.gmail.com>
  <CAP01T76CqOxzEiMLKJ2y_YD=qDgWq+Fq5Zy-fnKP4AAyS30Dwg@mail.gmail.com>
- <CAP01T77_qMiMmyeyizud=-sbBH5q1jvY_Jkj-QLZqM1zh0a2hg@mail.gmail.com> <CAP01T77St7cpkvJ7w+5d3Ji-ULdz04QhZDxQWdNSBX9W7vXJCw@mail.gmail.com>
-In-Reply-To: <CAP01T77St7cpkvJ7w+5d3Ji-ULdz04QhZDxQWdNSBX9W7vXJCw@mail.gmail.com>
+ <CAP01T77_qMiMmyeyizud=-sbBH5q1jvY_Jkj-QLZqM1zh0a2hg@mail.gmail.com>
+ <CAP01T77St7cpkvJ7w+5d3Ji-ULdz04QhZDxQWdNSBX9W7vXJCw@mail.gmail.com> <CAADnVQ+8apdQtyvMO=SKXCE_HWpQEo3CaTUwd39ekYEj-D4TQA@mail.gmail.com>
+In-Reply-To: <CAADnVQ+8apdQtyvMO=SKXCE_HWpQEo3CaTUwd39ekYEj-D4TQA@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 19 Mar 2025 07:55:37 -0700
-X-Gm-Features: AQ5f1JrUGFyb55SOF2EzAAJYS9bLqfvB0QpPJ5iTTYTfSGUGnuhAmOsJWefBzbE
-Message-ID: <CAADnVQ+8apdQtyvMO=SKXCE_HWpQEo3CaTUwd39ekYEj-D4TQA@mail.gmail.com>
+Date: Wed, 19 Mar 2025 08:11:09 -0700
+X-Gm-Features: AQ5f1JoTSmjrjETVwKdEgE1TiaZzPsz3fltpYyrN8w-q9tqLVyk3QrkAHbP9Rm8
+Message-ID: <CAADnVQK8E5JucnGoHAUQiHURpErQYtNJvWOWBottOZf1edT7JA@mail.gmail.com>
 Subject: Re: linux-next: build failure after merge of the bpf-next tree
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -93,25 +94,35 @@ Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Borkmann <daniel@iogearbox.n
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 19, 2025 at 7:36=E2=80=AFAM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
+On Wed, Mar 19, 2025 at 7:55=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
+> On Wed, Mar 19, 2025 at 7:36=E2=80=AFAM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+> >
+> > > >
+> > > > I've sent a fix [0], but unfortunately I was unable to reproduce th=
+e
+> > > > problem with an LLVM >=3D 19 build, idk why. I will try with GCC >=
+=3D 14
+> > > > as the patches require to confirm, but based on the error I am 99%
+> > > > sure it will fix the problem.
 > > >
-> > > I've sent a fix [0], but unfortunately I was unable to reproduce the
-> > > problem with an LLVM >=3D 19 build, idk why. I will try with GCC >=3D=
- 14
-> > > as the patches require to confirm, but based on the error I am 99%
-> > > sure it will fix the problem.
+> > > Probably because __seg_gs has CC_HAS_NAMED_AS depends on CC_IS_GCC.
+> > > Let me give it a go with GCC.
+> > >
 > >
-> > Probably because __seg_gs has CC_HAS_NAMED_AS depends on CC_IS_GCC.
-> > Let me give it a go with GCC.
-> >
+> > Can confirm now that this fixes it, I just did a build with GCC 14
+> > where Uros's __percpu checks kick in.
 >
-> Can confirm now that this fixes it, I just did a build with GCC 14
-> where Uros's __percpu checks kick in.
+> Great. Thanks for checking and quick fix.
+>
+> btw clang supports it with __attribute__((address_space(256))),
+> so CC_IS_GCC probably should be relaxed.
 
-Great. Thanks for checking and quick fix.
+Stephen,
 
-btw clang supports it with __attribute__((address_space(256))),
-so CC_IS_GCC probably should be relaxed.
+bpf-next/for-next is force pushed with the fix.
+
+Thank you for flagging it quickly! Appreciate it.
 

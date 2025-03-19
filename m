@@ -1,98 +1,104 @@
-Return-Path: <linux-next+bounces-5896-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5897-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AD35A699CC
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 20:51:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B456AA69B27
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 22:46:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59B9E19C3221
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 19:51:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C67808A7EF9
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 21:46:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8381A21516E;
-	Wed, 19 Mar 2025 19:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C551A8F61;
+	Wed, 19 Mar 2025 21:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yag1Smwp"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VcAtit/A"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B95A214815;
-	Wed, 19 Mar 2025 19:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8F91AAA1E;
+	Wed, 19 Mar 2025 21:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742413850; cv=none; b=EIE6gD6inD5f4TL3L8Z3mTplWyZv/qDd969HHMeNW5ctc569okBn9TkEUfpXhkamotZ42S88U76v0XMSswYGRpQRFVCcS7I56cj3pY2rBTCvEtSmht8iQD7Jda9Ii3/DiUndCjsBqiMJbnFsFLm+kXRLtHbHacP7BX3AlV8RwnU=
+	t=1742420803; cv=none; b=QsPJOkwljEw2VUbDeOf15a6G9V1XNh/A4L5ttXpMAOzM7Iqbq+821pCwe+7Kpik2fCTUo1L1eqRD4/hTLl8vrKrdmdkpJQJtH0dB2mi2DOqbwmg8ZVgOroSZQNG4/vHVX8kP9nrRifGXn7DlqvOvh0ZUJ6f9p5I1m/MfsznHo0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742413850; c=relaxed/simple;
-	bh=oHXR9R91Yn4c/ZsQE+sUV7KlNHhvMM6CsaoeWM+g31s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mA/rRiE+dWrnUOwUfASTT+U40eU/tj60ZmkXq/7A/1moZo9QzR84sA5QucFAZozRVrjRsiopKWAGMgHS8O1jDUzS6A2srHpi9abNCpMtzhcbE3l7vlRqI0WETuRtA7ZnAwtXC8WLLyhqmNb5b6t/UPnsF6HBZOWxrG0vQB98FuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yag1Smwp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E6DC4CEE4;
-	Wed, 19 Mar 2025 19:50:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742413849;
-	bh=oHXR9R91Yn4c/ZsQE+sUV7KlNHhvMM6CsaoeWM+g31s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yag1SmwpzXeOXRKFNmFzgUSB/IAuBM1uEKxvhbNklyhv3t/Ymo6qprDgN/821Z0YK
-	 W0cyzSbvVjMPT6ESsRjHD4yinlobhgeTL/+JjWkiDIOD6ZemoYDfxWth/hF/Z68Va/
-	 yQlUqkcrgf6a5D0u1v421G1X72MIv50Sr/IGX4DoppTy6eyiDv2Zo4vSYJnXksNqYw
-	 K+fqksngJG+ewJCFj8NjJBz9fyUUDC4JfX+Ii9pxB+p0ZLNDt6yDKyIh0j0yH6DDqI
-	 jntbuABJd3Y5WyOjSuFcvIGJm7x5AtTlaeyv18q1OPDhFaocKn9MlwY/nW3+mrApv/
-	 /auRlFVfABtrg==
-Date: Wed, 19 Mar 2025 20:50:44 +0100
-From: Ingo Molnar <mingo@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@de.ibm.com>,
-	Joel Granados <joel.granados@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tip tree with the s390 tree
-Message-ID: <Z9sgFGya_MDbfSQ6@gmail.com>
-References: <20250319155410.3cdf01cb@canb.auug.org.au>
+	s=arc-20240116; t=1742420803; c=relaxed/simple;
+	bh=VFAKtITzodv3SmsXgpvhY8eS3eRopokxysc6RiHf8jY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MSzr9TT/bQd72ELDBTfrFPnbJWl7xtkAToiwf6/ly1hZx/CWPdZ334ERYdfGjGLWBlFsVuftVXxmmgttJnBJDfU10ggyH6JWqyE+Jq2PC4hoFrAduOj34ZzkDv76zsL29AkmcM4SDSTZJ/1P84fHFVSUvkxXh+HxEL98axvxlTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VcAtit/A; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1742420793;
+	bh=DhkwltGQfv0v1NF2C9vEBJYwHE8H3JqzngSddiXQyT0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=VcAtit/Adu9UyaSNmbQEHPBMvz62MmrkNn1aDXaQjUh6v4wfpPdtfdvhgKxOj/Kcb
+	 7OWVVjAVgVR7H1UOgIeD6rjiNyJsQFvIxtX1SrxV5jkJv/uFf8fpISEi3qoWb2xEiS
+	 +8GSbYw8lXmDvuyyTOIKgM2Q4DaCJE7UkJydUsMblYYSpvWaCQDd0DEOGwEViAI360
+	 o3OpotPWvfNlHjXmdnudOtJTB0RhMcDlpox+TcjVf1Yc+L54AbclN3hsW1QS6LTz0A
+	 RSpU1f+PFj8CfcZ43Z2Wb/FW191coCQkBh5U4qOvrZScyBofP9Ozvs/uMoJZmNSqjE
+	 vzxYBcys0MWCA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZJ2N92ChLz4x04;
+	Thu, 20 Mar 2025 08:46:32 +1100 (AEDT)
+Date: Thu, 20 Mar 2025 08:46:31 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Miklos Szeredi <miklos@szeredi.hu>, Christian Brauner
+ <brauner@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the fuse tree
+Message-ID: <20250320084631.281d4bc6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250319155410.3cdf01cb@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/xxXYAbDNRWiz4fLO_SYjWfq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/xxXYAbDNRWiz4fLO_SYjWfq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi all,
 
-> Hi all,
-> 
-> Today's linux-next merge of the tip tree got a conflict in:
-> 
->   kernel/sysctl.c
-> 
-> between commit:
-> 
->   20de8f8d3178 ("s390: Move s390 sysctls into their own file under arch/s390")
-> 
-> from the s390 tree and commit:
-> 
->   c305a4e98378 ("x86: Move sysctls into arch/x86")
-> 
-> from the tip tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+The following commit is also in the vfs-brauner-fixes tree as a different
+commit (but the same patch):
 
-Thank you Stephen!
+  1196418e3fc0 ("fuse: fix uring race condition for null dereference of fc")
 
-	Ingo
+This is commit
+
+  d9ecc77193ca ("fuse: fix uring race condition for null dereference of fc")
+
+in the vfs-brauner-fixes tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/xxXYAbDNRWiz4fLO_SYjWfq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfbOzcACgkQAVBC80lX
+0GyaKQgApNQfL1mcaKRAYvwIgiukvh8crsHZlf2sEIyFTCwwkW1uEGRImKU6WBrE
+AYqZO80+s784LJPjGiyFwgxx0qisCvew0KlKWHCcOOGoeKdGuTJ2L6R8eowZfR+p
+B6hXMEnhOHwlTD75IvqoGWjR6YiU64WXoxYX6pdxeX6RvadEb8LCzcKDlmt9y1ys
+A1tXr9T7aye7W1AhyUgGOqFfgs0TyLc7sELCA6unq0f4yIFlEORCgak3LPumUAnO
+IeNbBIzqxHKHxCk1+Ze1fPAEtvYMtCTFOroJwMk/gxWGYNChxvxhgUWXTLvecTdD
+tao0mYsHGHbAcDrV2IHMLhqeZbWJ9Q==
+=ETGR
+-----END PGP SIGNATURE-----
+
+--Sig_/xxXYAbDNRWiz4fLO_SYjWfq--
 

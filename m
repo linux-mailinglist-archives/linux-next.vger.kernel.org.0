@@ -1,139 +1,164 @@
-Return-Path: <linux-next+bounces-5870-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5871-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20CEAA680EF
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 00:56:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7325A6832A
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 03:33:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E69C63B7D45
-	for <lists+linux-next@lfdr.de>; Tue, 18 Mar 2025 23:55:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2105219C7724
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 02:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19A3B1E1E0C;
-	Tue, 18 Mar 2025 23:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A693420D4F8;
+	Wed, 19 Mar 2025 02:33:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oAMWXYQG"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="JdzJkkTE"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF34420967A;
-	Tue, 18 Mar 2025 23:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852B04A0F;
+	Wed, 19 Mar 2025 02:33:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742342164; cv=none; b=pgIY+0REFXlHYvBveGAJ3eEdv7qAkLZSsQIkcWpc0wchVlnwVplUQWPol//N5025bZvMEV4zWJueDaWz0y8ctD+kiuPMBlM/Y8nrMj5SHZPPFXCsI85jG+VdRx8fOEGbNnzbg67qjFgknPmOnW1FeV3x1Kqt+UBUBCTYb8ZfE+g=
+	t=1742351598; cv=none; b=F+DiaLdeZ/ss+HY6zktsAgCbov6alDAs7xA5Dagj5L9OWnu3BwgNzXLEgr5bvNRnC1uI4NVA410zJlpJI3lvXjrXJqOEmM0xEGDu2Cnp8P6CFcfoR9s6MadHKgas8GfLijaWymOXt+NAXhIFQ6wyUYhA79A+qzWfxVIODd/AbQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742342164; c=relaxed/simple;
-	bh=M0gI/4yjsvGQVF80+iuvHPQ2LddemwiHvGAalbEGVzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SzfN7Qk33F9AacI0py5EjgxGruCIK+CkVSL2efoOVFlcd5wIukjmnP4qqrGtpiSdv4Dwm6mI5Ip3GNslUAl+oV4plUasVrQkGIqfGUoqHDlfjfY7l7wPO4AtcBfUO5yERHMEroTSdTjFg9+SIAZdxqFKpvz4Y44P809csh9MzGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oAMWXYQG; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1742351598; c=relaxed/simple;
+	bh=6xL28zKwqqpaaQr96mvoCi/cHiNgZCp4DtV4hOlawxM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=g4OUNEREObpY52jt1DNHy/M8rNzXghDR2FsN0qXXTrpxKAe1YgYLhTNDdnA+6O9oKDLIcN+xh36g01tN0L+KLkp2kzKmm0LT7jr25dw9rqzoJ5m34V1cENiKfCaeglj1xfpUjgrwOmAsZsa9tNMwRTZJTRuWy/HrhF5Wg6rPSGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=JdzJkkTE; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742342156;
-	bh=J+V8rL9jz+n7gilDgiJ+rGR+wB5H9KQjnGPL4rL+1jU=;
+	s=201702; t=1742351591;
+	bh=rKs3jHDYafir4OmGXqHNXlXukWNzDtXkTOv1IbjF/rA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=oAMWXYQGnCQnXK20OJd00XTnWeyhLDdaa2D8RR74drtGUDYgmIFvFtNVbTYUsPay3
-	 DaDrlvGGIWpzngm7CYkaJuGXn0nTYOQqLkhsiHu0CcsRL7IE+BRJ394Jfm0dmdONx4
-	 CkzrLwDtKbV7xGh2F49rzLVHcXpPdd4/ujnqBgzPKJqwKUJWYJ+x/SUURHJ3+zu4E+
-	 88ije4+T/nhugIpZgWku6XVm8mpfqbJBaroxaim9R04RQ/GpWKkoqJN1BwYw2iiQR4
-	 7h8+fTG3oXnSrD7w2xSO3wDg99nz2rhh1TzGBHAoNKwodCcOZwEIMCMyAAL+3UpOge
-	 KGvBZg2tvsSFg==
+	b=JdzJkkTER65/Vsm2h1n9ZFEsXDB8dvCYrScSh/NX2Ueb4pVCvwkemrdXY+A6Q8E4E
+	 tcBth4Zjzk6IdvAA8e7JM1yovhe3mYvQPOeElcFJ+Vs4gW+/1j/2XzINnAWnTIs7sp
+	 C+VlMQqI5237+aaWEScypKrdX9CbkixZh9+9ZqIg0nVDO5PC01f3rl0pKjcNvQ6QJu
+	 GoRyfMSmVYosvbqnxVby+T5JPvqAKXB1LyL3SWphmPDSYi6YIiB0Jm1kyPSuYJbnKk
+	 oFiz9nTqG3xZg782pPYJOHs0E4ZcC5DqOYwTLv5yskNGlYrBZvW/WnvVsjaScVEqaA
+	 AO0JBUdUg4CRA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZHTHw0c3wz4wcQ;
-	Wed, 19 Mar 2025 10:55:55 +1100 (AEDT)
-Date: Wed, 19 Mar 2025 10:55:54 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZHXnM1pZkz4x21;
+	Wed, 19 Mar 2025 13:33:10 +1100 (AEDT)
+Date: Wed, 19 Mar 2025 13:33:09 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Richard Weinberger <richard@nod.at>, Andrew Morton
+To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Andrew Morton
  <akpm@linux-foundation.org>
-Cc: Johannes Berg <johannes.berg@intel.com>, Linux Kernel Mailing List
+Cc: Uros Bizjak <ubizjak@gmail.com>, bpf <bpf@vger.kernel.org>, Networking
+ <netdev@vger.kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, "Mike Rapoport (Microsoft)"
- <rppt@kernel.org>, Tiwei Bie <tiwei.btw@antgroup.com>
-Subject: linux-next: manual merge of the uml tree with the mm-stable tree
-Message-ID: <20250319105554.2e2f3aab@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20250319133309.6fce6404@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZbAnwmoEY9mjMjheWg_Q+84";
+Content-Type: multipart/signed; boundary="Sig_/4j/4fli8+U065xjQkm.vCz=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/ZbAnwmoEY9mjMjheWg_Q+84
+--Sig_/4j/4fli8+U065xjQkm.vCz=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the uml tree got a conflict in:
+After merging the bpf-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  arch/um/kernel/mem.c
+In file included from include/asm-generic/percpu.h:7,
+                 from arch/x86/include/asm/percpu.h:630,
+                 from arch/x86/include/asm/preempt.h:6,
+                 from include/linux/preempt.h:79,
+                 from include/linux/smp.h:116,
+                 from kernel/locking/qspinlock.c:16:
+kernel/locking/qspinlock.h: In function 'decode_tail':
+include/linux/percpu-defs.h:219:45: error: initialization from pointer to n=
+on-enclosed address space
+  219 |         const void __percpu *__vpp_verify =3D (typeof((ptr) + 0))NU=
+LL;    \
+      |                                             ^
+include/linux/percpu-defs.h:237:9: note: in expansion of macro '__verify_pc=
+pu_ptr'
+  237 |         __verify_pcpu_ptr(ptr);                                    =
+     \
+      |         ^~~~~~~~~~~~~~~~~
+kernel/locking/qspinlock.h:67:16: note: in expansion of macro 'per_cpu_ptr'
+   67 |         return per_cpu_ptr(&qnodes[idx].mcs, cpu);
+      |                ^~~~~~~~~~~
+include/linux/percpu-defs.h:219:45: note: expected 'const __seg_gs void *' =
+but pointer is of type 'struct mcs_spinlock *'
+  219 |         const void __percpu *__vpp_verify =3D (typeof((ptr) + 0))NU=
+LL;    \
+      |                                             ^
+include/linux/percpu-defs.h:237:9: note: in expansion of macro '__verify_pc=
+pu_ptr'
+  237 |         __verify_pcpu_ptr(ptr);                                    =
+     \
+      |         ^~~~~~~~~~~~~~~~~
+kernel/locking/qspinlock.h:67:16: note: in expansion of macro 'per_cpu_ptr'
+   67 |         return per_cpu_ptr(&qnodes[idx].mcs, cpu);
+      |                ^~~~~~~~~~~
+kernel/locking/qspinlock.c: In function 'native_queued_spin_lock_slowpath':
+kernel/locking/qspinlock.c:285:41: error: passing argument 2 of 'decode_tai=
+l' from pointer to non-enclosed address space
+  285 |                 prev =3D decode_tail(old, qnodes);
+      |                                         ^~~~~~
+In file included from kernel/locking/qspinlock.c:30:
+kernel/locking/qspinlock.h:62:79: note: expected 'struct qnode *' but argum=
+ent is of type '__seg_gs struct qnode *'
+   62 | static inline __pure struct mcs_spinlock *decode_tail(u32 tail, str=
+uct qnode *qnodes)
+      |                                                                 ~~~=
+~~~~~~~~~~~^~~~~~
+In file included from kernel/locking/qspinlock.c:401:
+kernel/locking/qspinlock.c: In function '__pv_queued_spin_lock_slowpath':
+kernel/locking/qspinlock.c:285:41: error: passing argument 2 of 'decode_tai=
+l' from pointer to non-enclosed address space
+  285 |                 prev =3D decode_tail(old, qnodes);
+      |                                         ^~~~~~
+kernel/locking/qspinlock.h:62:79: note: expected 'struct qnode *' but argum=
+ent is of type '__seg_gs struct qnode *'
+   62 | static inline __pure struct mcs_spinlock *decode_tail(u32 tail, str=
+uct qnode *qnodes)
+      |                                                                 ~~~=
+~~~~~~~~~~~^~~~~~
 
-between commits:
+Caused by the resilient-queued-spin-lock branch of the bpf-next tree
+interacting with the "Enable strict percpu address space checks" series
+form the mm-stable tree.
 
-  0d98484ee333 ("arch, mm: introduce arch_mm_preinit")
-  8afa901c147a ("arch, mm: make releasing of memory to page allocator more =
-explicit")
-
-from the mm-stable tree and commit:
-
-  e82cf3051e61 ("um: Update min_low_pfn to match changes in uml_reserved")
-
-from the uml tree.
-
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I don't know why this happens, but reverting that branch inf the bpf-next
+tree makes the failure go away, so I have done that for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/um/kernel/mem.c
-index 379f33a1babf,61b5a5ede01c..000000000000
---- a/arch/um/kernel/mem.c
-+++ b/arch/um/kernel/mem.c
-@@@ -66,11 -68,11 +68,12 @@@ void __init arch_mm_preinit(void
-  	map_memory(brk_end, __pa(brk_end), uml_reserved - brk_end, 1, 1, 0);
-  	memblock_free((void *)brk_end, uml_reserved - brk_end);
-  	uml_reserved =3D brk_end;
-+ 	min_low_pfn =3D PFN_UP(__pa(uml_reserved));
- -
- -	/* this will put all low memory onto the freelists */
- -	memblock_free_all();
-  	max_pfn =3D max_low_pfn;
- +}
- +
- +void __init mem_init(void)
- +{
-  	kmalloc_ok =3D 1;
-  }
- =20
-
---Sig_/ZbAnwmoEY9mjMjheWg_Q+84
+--Sig_/4j/4fli8+U065xjQkm.vCz=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfaCAoACgkQAVBC80lX
-0GxyOQf9H+NJWWL+iQJXJt2VQZpnbu+VnCzNDN5IQVVuPdKmRvHHozBNHy+Tc/8R
-nZEHDazzyshpBzKl+bB9RibZ0zS3mxyojwG9wByMqLJvdlZgDGJ3zrMGGUocZRTj
-ksQlxXRaFt+Pb8yfSWLzdjIzV9uq5G0JnnpW+ctmvvhX474vhfXAnNXSSDF2FjXC
-Nf0giahocLujA1uI+amEsMn0svjVC5fpICRSOEBWCac31QgFhte5Rb46fsLr7vZI
-1HoIEUJzkqjrG3jiPPBpeXatrKQuyJHsilLxP75gRrhy5bMlXda5mpR3wwejoPAR
-yU7o0BWLGWD+HUSMdFL/7cZqwxeicQ==
-=iPYZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfaLOUACgkQAVBC80lX
+0GxA1Af8ClVgV4Tw7MRGpMw9u4BMEfuIRZMHArqVyDjMpZH+kqPVLcvr17FpQ5VG
+y0TKdNRYPfRSraCkhl9p/Vl79IbyVDmO67c3yJW2XuzuL8+b4QS1UOcyG9Z5k/sG
+z4I1ydwEj9forxebZMporvffFG16/wcHu63Uhv7JU0ZpNRTOWCyDev8qybUX/SC8
+qNQX/3Tlf0RLwpp0IZk/DKNhJiDfDTqVpGXrGjFAsGahX2PjfFJjX/BF1UtrLFpr
+w8lxwN61a+O0a/8BgRJ2tFQrKIK/Y8snhUr2Q1FqwQ6sKsZyFk1k6Oujjz2/dOGL
+NcgN8V8EYTn3l/lkloycRKyvkQHBuQ==
+=FYd3
 -----END PGP SIGNATURE-----
 
---Sig_/ZbAnwmoEY9mjMjheWg_Q+84--
+--Sig_/4j/4fli8+U065xjQkm.vCz=--
 

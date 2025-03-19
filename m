@@ -1,107 +1,110 @@
-Return-Path: <linux-next+bounces-5880-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5881-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44457A687C8
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 10:21:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B996A6888C
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 10:47:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96405884347
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 09:18:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85792178BF8
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 09:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D2DE24EABA;
-	Wed, 19 Mar 2025 09:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E2E2571CF;
+	Wed, 19 Mar 2025 09:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IfpxFysR"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ifISZfNv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B241F9A8B;
-	Wed, 19 Mar 2025 09:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7993725335B;
+	Wed, 19 Mar 2025 09:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742375936; cv=none; b=ikK7GY3LLXHN3oG83ejhOpS3d5+oi/Es+MnYNsvBCVzm2WxuzW8+0yCylaU/0neX9R3lg19nKPsrEv18fqlen7jxjMQDaV+de99NaShsjItzCXwmRnGckdqHOD+pkAI+7CqyVZ2aR39aRfjx4YOknraHlCHLhg0+uVVcv3yF6E8=
+	t=1742376895; cv=none; b=SUNg32ZD6egbNnzyxjdu6oVYxAAAnXcIJSPIHaN8XQOicB5DrixiTM8M8O3uQ0QWn3+euIg7HzK/wKrAmbZeIhwO43no/ybhHJkG2n/JaMNCulxd5HLNbiAXrMTRXvbm3eTueVgeQV2xOaXp+1cchZcF8HfowkGg/nSK4BBv0sA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742375936; c=relaxed/simple;
-	bh=KM1AxHbidghPqRaUFmnkbcPrb2YE42FPjfHLnbCwyEQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u0UJV5SwbVTBt/ixEs+hWTD0tuXg/3RN+gzecYsFywoCsHWmKni9y0y1yk82wIyZIz1wv3Ixj352kzHEnFeK6xuYyhdMj3C+EpXlZtSn7jeiXUB8FCDpICoLAuDe+xvPMVN7q6RlMkJX/CWj7rYFIhlcEFlWWrm3USBgXW4iSMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IfpxFysR; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-301317939a0so1085778a91.2;
-        Wed, 19 Mar 2025 02:18:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742375934; x=1742980734; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KM1AxHbidghPqRaUFmnkbcPrb2YE42FPjfHLnbCwyEQ=;
-        b=IfpxFysR5ADk06TCei/fKGEjcYP+63igGqUyH6mdLo/Jc1CMZCDVnDHHN6ieG1kRVC
-         sCr5EeyoHyvKgIQwzNIhA4RbkqrJba489bD2wecn2v9NaBG8paipqoh2MitFVcJy8qkh
-         +GGDPSDkFJMR6UC2e4SECN5puGvlZrlFM+vpwdbIZYWtVfqciwNBc85CGBmVyg/I98BD
-         bFTmiOuYTY/VRhxju+pEO8RR8dBDCGeaGyi28drODKeb+W1tSKg1ZDgZHVYxbp3Um8iX
-         DNt/xZjaci7Iz9UAEwCKEO7LDp/rHWZvwqwDgBCCiVpD5WCi6hrPoWLsSAexU1YelqJZ
-         LyDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742375934; x=1742980734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KM1AxHbidghPqRaUFmnkbcPrb2YE42FPjfHLnbCwyEQ=;
-        b=XFM7+YUgU9afQTPzAf55O3nwZxmqzY9SIy2gkP2oknY4A3xPwv3cpmhUgbxzZrcUgz
-         a+K5D5SismvLwx/g0kLQZ4Ecufxx0dzrzasfa9fgaRyzrjkWYvX5h2gTOFimmKNwgFj7
-         xMc3Ahx84hbVIKcuHpmGLMWSZH01VGWn4tN4ZZhHoMa6SLZN3aPiyAsvss6O2LDGLARE
-         S9u+bRvpQqQ1xh0PdrwKDa0qnEVW4z+wivf6MwTCykIMAMvZ5HiW08ZEWt2YVa9OWq2L
-         o0iAC7exers3BltNhqXm9DHjBkFUwdHOUpDCgLkJpYs8+G2kDma9urmVqa3mdWquu9Kt
-         1YUg==
-X-Forwarded-Encrypted: i=1; AJvYcCUOt4p2su5cpQHHOc4wKwa7WW3nSIBdisycscQqeWzKgXGWVr4in9EG0GYj8i9QQNhKmbaX1gSqF89tag==@vger.kernel.org, AJvYcCW39ypMsay/Lf2cKrEqbGEv2D0RUKAbPtiOBwRKewgZ5uumY1m1a4qUKTH6X3Apf6l9R4VUuTFkkJU5OnY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfqFZ+kZvB5MlbsvO0pQyswuB0qyxx+zOjXTahm4xNqYJDUQEy
-	0hs62qFzW778U5k7KsQhrRm0f39PnZmt/c18I6g6R6PvFqH8YFjAZob3ks2ohymWI/CJq4QqG1V
-	/VHUmDiurlR8K78hH9Ws7BG8MHfB9z2z8
-X-Gm-Gg: ASbGncuuReojWzcKoKRdqDoaSiFigC/CDi5inH6m0Mt4d6LENl9sSw8DsNfuWdjiLJ5
-	6r1qHzZb2O3oXRg18y+NCsY9q3TgyZvvlEtjWLyGCXkYWIl9BKWwfEXYxy3P35Kub6mzcmNA4sH
-	uOZwr0Yv86FL0rQbW8XcQzbfs5nw==
-X-Google-Smtp-Source: AGHT+IFnt8uA9es7r6lYwd9oimpAlUZnHzxDyksRBXShpZ+oXB9iJLOfPFINcQ+VNCruwVVQL4sHX/e6w54Lh24gouw=
-X-Received: by 2002:a17:90b:1e11:b0:2ff:5540:bb48 with SMTP id
- 98e67ed59e1d1-301bfd3b33emr817665a91.8.1742375933933; Wed, 19 Mar 2025
- 02:18:53 -0700 (PDT)
+	s=arc-20240116; t=1742376895; c=relaxed/simple;
+	bh=7iRreKMp4uv/ls+Knss8Xl20fKJ+g1JXIencg+k8WvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=EFMmUq69HeIZ3KKmpYShcYNjF7XtgGdxuD6NmtGX5EKcHzeh1xkPnosW0RIepIHRVNEtExRsOmyqTvCnuf1gMxLJQJSEsCZrtV5z3uL75FUgKLnxdp2ucMllBJQH8rDh/AvtngGG2ZV/yKmuFHocaqrObslOXbATIT91CSvk9zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ifISZfNv; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1742376890;
+	bh=7/MohhKR+11sDnpcy7Mo7u2pOk44eb1iqGi8YTyP2OU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ifISZfNvBzOcoKcqoobxYqft580v5hIwR2bKz7EmnR9ocp1cVjOZVZ8C7XkGj3qOt
+	 d+9xQN/MHLModwJMBVLxa313BXESjoZy67s57nWHHKw8rf/0aQL7s3h3C1hHJSjMwR
+	 Mea+OIeNUWtLu+tGLsWVCCEISp4RwLRcP7+NiyIB7f3rI9KvDL+d0hAGZvXUE58HTH
+	 Yw8Xkn5P0gnvenMAQDXQi95KTwSf4lzauk+blE9K7TT+eAO9cldoCUWyfspv/s4BfY
+	 lKUgXjH9/lgpD8Xihwt/lj032iAOfOyl9bXXWALpaqjlLjTqW6n23n11AOeahlIpPB
+	 YdTKpzLmWPwRw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZHk7t1YF1z4wxh;
+	Wed, 19 Mar 2025 20:34:50 +1100 (AEDT)
+Date: Wed, 19 Mar 2025 20:34:49 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alex Deucher <alexdeucher@gmail.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>, Dominik Kaszewski
+ <dominik.kaszewski@amd.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20250319203449.386f9e00@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317215757.2412aef1@canb.auug.org.au> <CANiq72n05i322FfpSjFX=Wz3-9AgVRKLkKs1CHa-LxzWQ7-pew@mail.gmail.com>
- <20250318103504.4cbfe7e1@canb.auug.org.au> <20250318223706.604bc4c5@canb.auug.org.au>
- <CANiq72=mC67W_O9u6-HpAnqmy5L_A+-t9fW0YYR_0UR+hFvopQ@mail.gmail.com> <20250319200642.05825b39@canb.auug.org.au>
-In-Reply-To: <20250319200642.05825b39@canb.auug.org.au>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 19 Mar 2025 10:18:41 +0100
-X-Gm-Features: AQ5f1JrGKWGBw09fST4dQGGrtPWmYf6MNOiXFvMYiHJQGZ35kEAiinuJ6fXNLyw
-Message-ID: <CANiq72mFUA+1Ez7jL7ND9SE7SgH9zzicGGTEmgStagEgnnHX-w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the rust tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miguel Ojeda <ojeda@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Benno Lossin <benno.lossin@proton.me>, 
-	Boqun Feng <boqun.feng@gmail.com>, Andreas Hindborg <a.hindborg@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Y5jd7EzePGe44WaoDpwtojz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/Y5jd7EzePGe44WaoDpwtojz
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 19, 2025 at 10:07=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
->
-> Thanks for checking it out.
->
-> I have a look into it.
->
-> I added all three to my resolution today.
+Hi all,
 
-Thanks a lot!
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced this warning:
 
+drivers/gpu/drm/amd/include/amd_shared.h:369: warning: Incorrect use of ker=
+nel-doc format:          * @DC_HDCP_LC_ENABLE_SW_FALLBACK If set, upon HDCP=
+ Locality Check FW
+drivers/gpu/drm/amd/include/amd_shared.h:369: warning: Incorrect use of ker=
+nel-doc format:          * @DC_HDCP_LC_ENABLE_SW_FALLBACK If set, upon HDCP=
+ Locality Check FW
+drivers/gpu/drm/amd/include/amd_shared.h:373: warning: Enum value 'DC_HDCP_=
+LC_ENABLE_SW_FALLBACK' not described in enum 'DC_DEBUG_MASK'
+
+Introduced by commit
+
+  84ff5895399c ("drm/amdgpu: Add debug masks for HDCP LC FW testing")
+
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/Y5jd7EzePGe44WaoDpwtojz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfaj7kACgkQAVBC80lX
+0Gz2WAgAgnoUl8mSLdeV+mhYllVtD/RjjnVAneK/Aija7k1FBaqX5DC9LIdt6EXS
+mUC+ZyLU+xD8Hoa0ULI8Cy7yhtrUI5LS/a7uLxWrAq5POfCUFX5yPg6xnP+G41EI
+5M/5ytJ/Ogf2MEU8P1aeWlp3sY7+wNZmGjnvrgvzgwFz4IChkZ2iuboRKUdSRmZu
+fJEl4qvPaegyPiiFAtqvlLDWO3F+LrDhkkposAX8tzWCDN59dcxr1238GxKrZDcX
+EAgc6K0Jyu1TqY0gcAHuI/W7AU1wlQ2Xeto4UzCvAeniQV4rSD4Dgrt3Y+TshNxI
+AJxiz+ssuVg8gF7R/IhTronmrcyvmA==
+=l7mo
+-----END PGP SIGNATURE-----
+
+--Sig_/Y5jd7EzePGe44WaoDpwtojz--
 

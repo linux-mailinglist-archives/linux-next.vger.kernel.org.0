@@ -1,111 +1,169 @@
-Return-Path: <linux-next+bounces-5875-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5876-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDD55A68457
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 06:04:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42D52A68483
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 06:12:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 431B4188D164
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 05:04:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE747189F262
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 05:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B5F1DEFDA;
-	Wed, 19 Mar 2025 05:04:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C5424EF8A;
+	Wed, 19 Mar 2025 05:10:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FgMa4xPM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="anjnhgmp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A54FA29;
-	Wed, 19 Mar 2025 05:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E873824EF85
+	for <linux-next@vger.kernel.org>; Wed, 19 Mar 2025 05:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742360654; cv=none; b=BnzFk0FEzVFQWs53gVEsyC+sAb9dt+zJu/UsgyB/SHGE1fiX7CE2XQ9TpZ8Ys+CrOlw3gadUBDaDzOOUAfeJHctNuu4kjnys4IG3IVpaFEgOz5v3NKSXkPWtPdvETVOQJX1fu+Pi1XwEfvmp9E/V/FtAKHDftA2XAjwjJAyum4U=
+	t=1742361057; cv=none; b=g0Sd9URpTCOxXvvS2Fo5k+Bcekfrf3EqPfvzcLhbxAMESm330iHP/LhqturTVf4YKn/cG87VlO7/htFp8c/4RBQqligY5M4BSkmI7ynKr7IiRawS02X5LasojiCZqpy2Aa6iWL+BcmlwdSDszFnpW7nYCaPWh0J/3w33C4hw7Nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742360654; c=relaxed/simple;
-	bh=K9cqEsrg10sN2hEPIv2LuuniTdu3Pv38pnqwmx25GQQ=;
+	s=arc-20240116; t=1742361057; c=relaxed/simple;
+	bh=+RdiNraqzQ5LRn6NoE9WzXl2qsV8/YeCyb1zRG+8xn4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p4sz1efzecza5RhAcinfDJYLCUyMvBTKurnMqWq25whyhgkVqzkQXEqhNFdfNE6PfRpIKfzuydi92Ya7/bILLcQQHuQFZs/RZaBnbr6uHE6kCy8XNDF05ygwFy4KdZD5qbLZdfiPcI40Jk905t4bDCim9CdEsQlk0NyrUsWDvwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FgMa4xPM; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-30613802a04so72445801fa.2;
-        Tue, 18 Mar 2025 22:04:12 -0700 (PDT)
+	 To:Cc:Content-Type; b=q8ZcoEJ/qTHu5CwjBHkZJf+997tVuOtkzKqB8hXBP7cXy6TqD3b3raHwxjDKenzwgEULlD0rb0pU3ozPAzwZyB0VRAFfRDCzBfev363gmfdJBKVhPn8gUMcMYg4dl0wkzVFWkxnO2rB1mPjpUFJCWHZGTCrm2u+lb+6z3KGZW0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=anjnhgmp; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2ff65d88103so8264393a91.2
+        for <linux-next@vger.kernel.org>; Tue, 18 Mar 2025 22:10:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742360650; x=1742965450; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1742361055; x=1742965855; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K9cqEsrg10sN2hEPIv2LuuniTdu3Pv38pnqwmx25GQQ=;
-        b=FgMa4xPMm6bLClFkXK6ufTLTjRQy1aS++DLqbPSOcnA0moTI9asQPqX6IXJiv8HPE+
-         ySH2RKu3fqx55COJMbh3HTOVt1DPhnvtwBqtXdeX86dXVEcBfwuBDu9D/02yms4sAvpG
-         1qkMrAEE9qyNz2SltmasxBbTPCofFL5nHwaqqu6daRXtmOrtwKnp6tenzahBsPDFR3ob
-         /V9+Y9imGnbAT1Ndi/yxW5v+5z2iNh568H3HpZDBJTwS0gnvQi6XRwSz84CmScgZT450
-         vrIDL1Nn+d+dGxpN4rwPDgguyEFPpdDrrBeo5EINRYjV3+XKnz/85Ps66B9awd+e+/Z+
-         +O1w==
+        bh=bMzGfQs6vuXpVCFaTFm1aL0gd7m40j7hpQkBujJ95pQ=;
+        b=anjnhgmpOUhWbZSlV/U6RAU1hrpIP0UC6RghQFNHXqpKIDKvrSG2xMAS1b/OEGDTzO
+         G1jt+NNhNVLYeoTDihQDR49WoFpsIg6drRELVBrfLX12Y7DCYHZFJ2DbE5X+ePHh5z50
+         syxn9X3ZokhyN6Daiim83hA14C9Y51DPQI4az4nMR+Mn7u5bgx4nLcHX/neOwLUTgdB4
+         d0JI7HilcjAZKEFZvq30ksIvcWnqPvMe64FEoeBmC15jcYYZOHac9KkI6TVOyBm89s2w
+         Ufhv9gK2LJoupQnpvpKewtlNTANPCVqPnauX+GK1GNsPZ/55zQwl4spFrmhDZd10EhQ0
+         syxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742360650; x=1742965450;
+        d=1e100.net; s=20230601; t=1742361055; x=1742965855;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K9cqEsrg10sN2hEPIv2LuuniTdu3Pv38pnqwmx25GQQ=;
-        b=nqqvKFXdx5OxEEZbZYSBfXHDFLbHp1PyQa32La2oHPralig7qivTBCtiOD7F9GjzxG
-         bNvSVCkq5Gs+D6/xHtufbl5J3XnQ+dwFiDVddc+3oS0NH/5wUtFv3IVKY51xu20+36dr
-         HpNs+zNaU5Qn4hPe9hoMJtSKRCj3jcl3BMd4UPds93skb9P1QL/0WADNzBsZk6wmgTRg
-         iTB+HGwLtHEttrxXsclxkDfkpbtmosdWG4dxJurVewO8JZAh4977RQ189YXgChaQN2cL
-         zF27DV0nTKDWQOCejWwVAtxGdv+4lqxVfMQrUkLbh6dL6tsVhDtxhkHolxAsCNQqocWb
-         DaQw==
-X-Forwarded-Encrypted: i=1; AJvYcCUP8ZGwDoEjKaiGQ1uxz/mSmeS3C0uUUcpIXidxbEfxfawfvgEKUAIwjE5P4vI+fMSx88A=@vger.kernel.org, AJvYcCV0+O/h58HYtPl+022QR7u/T1VDRalBW1lKUHe8OYd4oMaerfKgKBCeC5ZeiNsl3pu7ptrBhyYH@vger.kernel.org, AJvYcCVFg4usg5yESJp0NgBjRdeO09dk7KZn+SZnhrvLh3kmwcZ2npTU+6VkwwjwF/4ffhoD5Et9eib8dfKb+Q==@vger.kernel.org, AJvYcCWuSEeSLLsL8EOVijMLPukuzzujhSy38mzqUVlR+UavcEwQcrt1paf+dhSEk41qUmk4136JbmpG6xohyWbA@vger.kernel.org
-X-Gm-Message-State: AOJu0YziHhOVqzO2IzhlNdUSiA4cPsXkPC6XbeaWajvfZbD7hnvhNTsX
-	Ec8EY4RdkGBB3jk/dOD6AxWzP3yTDhBzmQQ5biEk7SuKisywvAiW8dBPbSlwM+Lky/uRexSqcfZ
-	WMatdoXDZMPzDyHLk8fVcrJfbecBAys0a
-X-Gm-Gg: ASbGncuCzc7C7CfPV9LnmM8CVFKigcIyJD5RxKnTDJYKRoWvPDEYtqd8BtzObQoshPp
-	kmLVQtrIAi0PsphuG0NZQOjNNzSzLFfLTHSycsPy8tbcUOntgdEz7cKeyl6zqMMYFxGcHfzFx2K
-	06iDIfpHNwulFdX0X4inDPMd5LnA==
-X-Google-Smtp-Source: AGHT+IFBEKm7QSYXMFei+Jt2Q0kxGJr9qdw9JtrNW3V3AckRCmRUVFTGuZniOmWNfxwEKa+V9BlU7nHb9lygs5woRiA=
-X-Received: by 2002:a2e:3812:0:b0:30b:ef0f:81f1 with SMTP id
- 38308e7fff4ca-30d6a411061mr3691261fa.20.1742360650242; Tue, 18 Mar 2025
- 22:04:10 -0700 (PDT)
+        bh=bMzGfQs6vuXpVCFaTFm1aL0gd7m40j7hpQkBujJ95pQ=;
+        b=PUTuIWylBjB5PtlmQ88khntb6BkNRNw+pIen/15GDqZMyEt5IOeqRf1h4dU5+4vh8H
+         zX9usHVjTJU/vj5BZgO8sNrm8tsE0OD1bEkV6eCQVDwKIgILU4JPZIxig8DeTADsNGEV
+         hnY3TLQv77zHEDcHsfZIidROi645oni9hJjI/qVDk034EjATGGRfP4DuGMl6NfmVikGE
+         s1kr/o5sVqpXBfzMPlFhAqNDHqoxO2AzsU0XOlm6EhgXj9WiYD8nwO1Fo7gjnlq5d8Xy
+         PF8CdR7G1qhMw24j26tib8nZXr2dq7BwJX0ZIYT7C2Igrg1ie5VCM4K+xStwm4q0Rnph
+         4uoA==
+X-Forwarded-Encrypted: i=1; AJvYcCVn53wlpTn3BsYOc0YeJkr8G+G7kg9nigwSh7hYhjvDv9dGZwxHPnp88PFnhmllshkukHnbORSiR91h@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzu7Ynvgmqga51SQ+Gc6zZsxUR0aD/E9zVNYWfC5hjMAKEeG/84
+	WF0XmqvO25pgQ/Nir4NlXFQ8YgiDkudhCAiqomwvrO+JHU/JbK+cJxp29j9/yCJTIJ8AYsd1Mq1
+	KYfZTQcuQhdpWy5OXWgWXc6sB/5/39LGE4luh
+X-Gm-Gg: ASbGncvNNCsaZXE2KMNjawHGXJTS9Wp+gPtMBul3M1+BC5xJnQH3c5hc8SsK493kqIp
+	desUsn6HRt2VQP7WCDaMMWPAl4b9+lGkQCcRvKyJKvxAOxeECszUXDy8xL8bRw3hzuspyk8uZe5
+	vpp63lA9i/C1hf62AK3r0I6oeDRXOwetTPy2I=
+X-Google-Smtp-Source: AGHT+IGC9KiCoo5cdqU/hWW2POhQr9hqyDJZ2CEU177bGBNKSzOv1YHHFPcq1ojEzuO3AlqI6Wf/QjlU9ILJKR6cUx4=
+X-Received: by 2002:a17:90b:2541:b0:2f2:ab09:c256 with SMTP id
+ 98e67ed59e1d1-301be2341edmr2584841a91.33.1742361054821; Tue, 18 Mar 2025
+ 22:10:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250319133309.6fce6404@canb.auug.org.au>
-In-Reply-To: <20250319133309.6fce6404@canb.auug.org.au>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Wed, 19 Mar 2025 06:03:58 +0100
-X-Gm-Features: AQ5f1JrBsC7ZnHFadNWISPWdsbiOW1kMeosysAWck6DOgmlA0PRxbvzsNi9Gfvc
-Message-ID: <CAFULd4aaOPYMpSWN=FNueoqXDKKfLu7P0NLr2DU1J2HKgxr_8A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <67bab9f0.050a0220.bbfd1.000e.GAE@google.com>
+In-Reply-To: <67bab9f0.050a0220.bbfd1.000e.GAE@google.com>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Tue, 18 Mar 2025 22:10:43 -0700
+X-Gm-Features: AQ5f1JrGKsBTlQOOVtqaudGfn2jZIztiGHxnCWE4tMmF_rV_zUuBZWrrkUqx7Mk
+Message-ID: <CANp29Y6MOsEyXmR8Z_aA+3xQMQQFSWzsGfJUXohdeN6fG6EwRA@mail.gmail.com>
+Subject: Re: [syzbot] linux-next build error (20)
+To: syzbot <syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com>, 
+	brgerst@gmail.com
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com, 
+	Dmitry Vyukov <dvyukov@google.com>, ardb@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 19, 2025 at 3:33=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
-> Caused by the resilient-queued-spin-lock branch of the bpf-next tree
-> interacting with the "Enable strict percpu address space checks" series
-> form the mm-stable tree.
+On Sat, Feb 22, 2025 at 10:02=E2=80=AFPM syzbot
+<syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com> wrote:
 >
-> I don't know why this happens, but reverting that branch inf the bpf-next
-> tree makes the failure go away, so I have done that for today.
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    d4b0fd87ff0d Add linux-next specific files for 20250221
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D17a5bae458000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D76d7299d72819=
+017
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D06fd1a3613c50d3=
+6129e
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Deb=
+ian) 2.40
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+06fd1a3613c50d36129e@syzkaller.appspotmail.com
+>
+> <stdin>:4:15: error: use of undeclared identifier '__ref_stack_chk_guard'
 
-percpu pointers are now checked by the compiler, and their address
-spaces have to be handled properly. It is like "sparse" rule, but now
-enforced by the compiler.
+Manual bisection pointed to the commits from this patch series:
 
-This functionality was in fact introduced to catch programming errors like =
-this.
+[PATCH v5 00/16] x86-64: Stack protector and percpu improvements
+https://lore.kernel.org/lkml/20241105155801.1779119-1-brgerst@gmail.com/
 
-Thanks,
-Uros.
+Brian, could you please take a look at this syzbot report?
+
+The latest build log (for next-20250318) is here:
+https://syzkaller.appspot.com/text?tag=3DCrashLog&x=3D10a745e4580000
+
+It failed with the following error:
+
+<stdin>:4:15: error: use of undeclared identifier '__ref_stack_chk_guard'
+EXPORT_SYMBOL(__ref_stack_chk_guard);
+              ^
+1 error generated.
+make[4]: *** [scripts/Makefile.build:335: arch/x86/entry/entry.o] Error 1
+make[4]: *** Deleting file 'arch/x86/entry/entry.o'
+make[4]: *** Waiting for unfinished jobs....
+
+--=20
+Aleksandr
+
+
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+>
+> If you want to overwrite report's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+>
+> If the report is a duplicate of another one, reply with:
+> #syz dup: exact-subject-of-another-report
+>
+> If you want to undo deduplication, reply with:
+> #syz undup
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion visit https://groups.google.com/d/msgid/syzkaller=
+-bugs/67bab9f0.050a0220.bbfd1.000e.GAE%40google.com.
 

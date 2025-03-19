@@ -1,157 +1,98 @@
-Return-Path: <linux-next+bounces-5895-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5896-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA5EAA699AA
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 20:45:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AD35A699CC
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 20:51:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D510719C04C5
-	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 19:44:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59B9E19C3221
+	for <lists+linux-next@lfdr.de>; Wed, 19 Mar 2025 19:51:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE4A212FBD;
-	Wed, 19 Mar 2025 19:44:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8381A21516E;
+	Wed, 19 Mar 2025 19:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lH6rwQhR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yag1Smwp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315561DE8BF;
-	Wed, 19 Mar 2025 19:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B95A214815;
+	Wed, 19 Mar 2025 19:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742413450; cv=none; b=Ayd1GmVAvEuIJ4qGh7OwXy7rhoRKijqVXw1/pj/oQQn0rOrGeJAYv2Bmg5mCsUjmKowiwzsad52Y23JAZlpew7F/3AzLg7NrWdgXdfCwIcb/DWX1I6FO8vMjGvetqgyGch26iDvVIquYU55/kawBwQ5KLbQi0L7fZ7pJLsB2CMQ=
+	t=1742413850; cv=none; b=EIE6gD6inD5f4TL3L8Z3mTplWyZv/qDd969HHMeNW5ctc569okBn9TkEUfpXhkamotZ42S88U76v0XMSswYGRpQRFVCcS7I56cj3pY2rBTCvEtSmht8iQD7Jda9Ii3/DiUndCjsBqiMJbnFsFLm+kXRLtHbHacP7BX3AlV8RwnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742413450; c=relaxed/simple;
-	bh=lLaat7az9MH7ezrPmTZOat/1ILwtVsbzCqb6WBBS0xo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=peEx9nBrcVl8cN+CeIFSO0A/Hx4P9M2U5RLDow0HkUbHPU/OAKBAZ/zlrKCOW0WMEXJ9gWX9ImhNq10FSkCLXGRwCtJcf3IV97/PKDEhTucAmJOXxiRMqLnXNMhYx1o3QgDdVCwa1I2UbbHGQtBQYnQF7uvrtbAKE9XHSl0dbMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lH6rwQhR; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-30761be8fcfso900111fa.0;
-        Wed, 19 Mar 2025 12:44:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742413446; x=1743018246; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dhYCmAWKpYLqMT/P3WekE89t5CCM6z3es1ZH5Zq+OZE=;
-        b=lH6rwQhRqerh4Is+DTiJ02aPWFisBvD6Qit2LeRTKMkx4DxS9tUvESarSidTFULtaa
-         KyDwPDm2EiQJvJ1TfYtGnjiS4+gIxjlP3FyyzmiyhFUecLSf4T8badx+oThL9q+NPhdv
-         4AM1TQVyouq7+CzeFablf0+klkhAIA75sWpFjM2vMsmXIjuj3V6QdhPef0FkvRCAvvwD
-         RVh8/dwpEpkupx9vlB7bycVzxsLxn/sG0y7KjzP7UtFzzfBHSTzHYomW1OwiNMft0N/G
-         YU7npD9BarQsXsl6wK+n3sobnYrOyUUKUzST2HW8JvartW16yWq7FNC0HjVxpMbROw31
-         rDdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742413446; x=1743018246;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dhYCmAWKpYLqMT/P3WekE89t5CCM6z3es1ZH5Zq+OZE=;
-        b=NF0IxbWIvukcAHg12Nlyuna6izgv6APFfW3WLq0Or28W9xpvYj0vTBh5xALUWZQGZ2
-         0NWEeHVmy3GtFNdSUoUJLslJFEn07Lz0oDjHJZuI44Y89E8WJPPPcFz4o/JamuBrerjq
-         JMHEJwUUtV+MU7glIs/MDv+VKgcDm7PSwCKD11foRfTH9u0gFwoLd/XdpeSazJmjCn5L
-         FwQWCH6HS5YfFDdtYZoH/YwYR8ek6nlXSIHlqta+fVMtFGF7G/qr/w1QrpvCIc3REIxG
-         +tloAK/sAZeJb7lxwqBKmjZgTyWtIqr+YG79MDGH7tCSwPOH9Cew70cIgh1hUl/nzl1w
-         CD4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWIp0FfPmrSkNSuuO8OL2jKMc0S9r4+jjmw7Dkk1toyeIWG6ajw7MiM6gTvSsOY88hhFcoRyb77D2jGPQ==@vger.kernel.org, AJvYcCXFVZGbhfXAXWqUTsQaPJjIOXgobe3iumRA1J+2qKboliW6CtslbCJHnVrpvjquRVLXXmE=@vger.kernel.org, AJvYcCXSVrfNdRR1+1EolQiV3Oly5PS2BM8bM9Qkq/4wLku9D76JdUcsK7ynSEgRm7VyNq5Ltx0wuHGG@vger.kernel.org, AJvYcCXfFlIRME9iJ02AwKQwodCbW6nhPzl+guzriAENLbBJVySI+fq3OUId44SyOmAXA/fwkB0vAFulvoPrXGCe@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqBCN8RmWY4e33lXp8qxLR5ot3gRB/lBxgjmaWkBvrp0E4Q1pi
-	704lpiT/itP6msAJU3msIS1NJIoylFQ6/DDMFzI5s/XllZZ2g5i+lBgXYxsqF4sM1sw9bVmbMMa
-	aBPa5QDznTUIxkQReU3yhSf202+YhoeaJ2S7XpQ==
-X-Gm-Gg: ASbGncsoM4uuZtXAQ9c+ZXGdKdzWYKG76GrKQHh6sXV128rEjIvYCIVLcBkIyDtv4xa
-	P3mi07shB3dzrZMTMdziAxQq/1HGpsHfbftE0oXPi5oL+Yg1hLlGF1gml/KB5x/XooJEkmUCpMU
-	IFmR7YWaeN01QaAJNrv7rWFeEVug==
-X-Google-Smtp-Source: AGHT+IEqb8DYNNrbGP7rciW1niUuSjBxj6+DvYT/JveS26p0kxZ66Mnhoo+Sfd+hkXEbRXMLTPNGW4rQ78klTXJrpGI=
-X-Received: by 2002:a05:651c:2119:b0:30b:bf6f:66a3 with SMTP id
- 38308e7fff4ca-30d6a40c9b2mr17799441fa.17.1742413445934; Wed, 19 Mar 2025
- 12:44:05 -0700 (PDT)
+	s=arc-20240116; t=1742413850; c=relaxed/simple;
+	bh=oHXR9R91Yn4c/ZsQE+sUV7KlNHhvMM6CsaoeWM+g31s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mA/rRiE+dWrnUOwUfASTT+U40eU/tj60ZmkXq/7A/1moZo9QzR84sA5QucFAZozRVrjRsiopKWAGMgHS8O1jDUzS6A2srHpi9abNCpMtzhcbE3l7vlRqI0WETuRtA7ZnAwtXC8WLLyhqmNb5b6t/UPnsF6HBZOWxrG0vQB98FuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yag1Smwp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E6DC4CEE4;
+	Wed, 19 Mar 2025 19:50:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742413849;
+	bh=oHXR9R91Yn4c/ZsQE+sUV7KlNHhvMM6CsaoeWM+g31s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Yag1SmwpzXeOXRKFNmFzgUSB/IAuBM1uEKxvhbNklyhv3t/Ymo6qprDgN/821Z0YK
+	 W0cyzSbvVjMPT6ESsRjHD4yinlobhgeTL/+JjWkiDIOD6ZemoYDfxWth/hF/Z68Va/
+	 yQlUqkcrgf6a5D0u1v421G1X72MIv50Sr/IGX4DoppTy6eyiDv2Zo4vSYJnXksNqYw
+	 K+fqksngJG+ewJCFj8NjJBz9fyUUDC4JfX+Ii9pxB+p0ZLNDt6yDKyIh0j0yH6DDqI
+	 jntbuABJd3Y5WyOjSuFcvIGJm7x5AtTlaeyv18q1OPDhFaocKn9MlwY/nW3+mrApv/
+	 /auRlFVfABtrg==
+Date: Wed, 19 Mar 2025 20:50:44 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@de.ibm.com>,
+	Joel Granados <joel.granados@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tip tree with the s390 tree
+Message-ID: <Z9sgFGya_MDbfSQ6@gmail.com>
+References: <20250319155410.3cdf01cb@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250319133309.6fce6404@canb.auug.org.au> <CAADnVQKotSrp8CkVpFw-y800NJ_R7An-iw-twrQZaOdYUeRtqQ@mail.gmail.com>
- <CAP01T76CqOxzEiMLKJ2y_YD=qDgWq+Fq5Zy-fnKP4AAyS30Dwg@mail.gmail.com>
- <CAP01T77_qMiMmyeyizud=-sbBH5q1jvY_Jkj-QLZqM1zh0a2hg@mail.gmail.com>
- <CAP01T77St7cpkvJ7w+5d3Ji-ULdz04QhZDxQWdNSBX9W7vXJCw@mail.gmail.com>
- <CAADnVQ+8apdQtyvMO=SKXCE_HWpQEo3CaTUwd39ekYEj-D4TQA@mail.gmail.com>
- <CAFULd4brsMuNX3-jJ44JyyRZqN1PO9FwJX7N3mvMwRzi8XYLag@mail.gmail.com> <CAADnVQ+7GTN0Tn_5XSZKGDwrjW=v3R6MyGrcDnos2QpkNSidAw@mail.gmail.com>
-In-Reply-To: <CAADnVQ+7GTN0Tn_5XSZKGDwrjW=v3R6MyGrcDnos2QpkNSidAw@mail.gmail.com>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Wed, 19 Mar 2025 20:43:53 +0100
-X-Gm-Features: AQ5f1JoUJCMzHHENT_TDzaIDzJZhTJniayHR3OV_fr-rf4VmnbYHKYqMpdSbmXo
-Message-ID: <CAFULd4aHiEaJkJANNGwv1ae7T0oLd+r9_4+tozgAq0EZhS16Tw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250319155410.3cdf01cb@canb.auug.org.au>
 
-On Wed, Mar 19, 2025 at 7:56=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Mar 19, 2025 at 9:06=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> w=
-rote:
-> >
-> > On Wed, Mar 19, 2025 at 3:55=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Wed, Mar 19, 2025 at 7:36=E2=80=AFAM Kumar Kartikeya Dwivedi
-> > > <memxor@gmail.com> wrote:
-> > > >
-> > > > > >
-> > > > > > I've sent a fix [0], but unfortunately I was unable to reproduc=
-e the
-> > > > > > problem with an LLVM >=3D 19 build, idk why. I will try with GC=
-C >=3D 14
-> > > > > > as the patches require to confirm, but based on the error I am =
-99%
-> > > > > > sure it will fix the problem.
-> > > > >
-> > > > > Probably because __seg_gs has CC_HAS_NAMED_AS depends on CC_IS_GC=
-C.
-> > > > > Let me give it a go with GCC.
-> > > > >
-> > > >
-> > > > Can confirm now that this fixes it, I just did a build with GCC 14
-> > > > where Uros's __percpu checks kick in.
-> > >
-> > > Great. Thanks for checking and quick fix.
-> > >
-> > > btw clang supports it with __attribute__((address_space(256))),
-> > > so CC_IS_GCC probably should be relaxed.
-> >
-> > https://github.com/llvm/llvm-project/issues/93449
-> >
-> > needs to be fixed first. Also, the feature has to be thoroughly tested
-> > (preferably by someone having a deep knowledge of clang) before it is
-> > enabled by default.
->
-> clang error makes sense to me.
 
-It is not an error, but an internal compiler error. This should never happe=
-n.
+* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-> What does it even mean to do addr space cast from percpu to normal addres=
-s:
->
-> __typeof__(int __seg_gs) const_pcpu_hot;
-> void *__attribute____UNIQUE_ID___addressable_const_pcpu_hot612 =3D
->     (void *)(long)&const_pcpu_hot;
+> Hi all,
+> 
+> Today's linux-next merge of the tip tree got a conflict in:
+> 
+>   kernel/sysctl.c
+> 
+> between commit:
+> 
+>   20de8f8d3178 ("s390: Move s390 sysctls into their own file under arch/s390")
+> 
+> from the s390 tree and commit:
+> 
+>   c305a4e98378 ("x86: Move sysctls into arch/x86")
+> 
+> from the tip tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Please see [1] for an explanation.
+Thank you Stephen!
 
-[1] https://gcc.gnu.org/onlinedocs/gcc/Named-Address-Spaces.html#x86-Named-=
-Address-Spaces
-
-Uros.
+	Ingo
 

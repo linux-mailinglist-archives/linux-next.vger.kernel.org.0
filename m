@@ -1,127 +1,104 @@
-Return-Path: <linux-next+bounces-5910-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5911-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44E83A6A490
-	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 12:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E4174A6A770
+	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 14:43:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5BC319C0790
-	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 11:13:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FED11B60D6E
+	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 13:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4134021CA1D;
-	Thu, 20 Mar 2025 11:13:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE14A21CC55;
+	Thu, 20 Mar 2025 13:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IdZZksW+"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B2CDebSS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163D221CA16;
-	Thu, 20 Mar 2025 11:13:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED08623C9
+	for <linux-next@vger.kernel.org>; Thu, 20 Mar 2025 13:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742469223; cv=none; b=pP9VysvAVdr7XwwblhXyIhhVm5GDX4Ge+u3X9LVI7+ql/2lE1FSToYlRPSHkMDqf17b8S51T5Nct2tV78fCkR1yRmPOSaE5Lmx6WuEtTEPH1g83XgdAQI5PELvBc6HnD3S91zk7cUYrj+zr3kdvp80NjoTXIZVBQtOYL9rrfNXc=
+	t=1742477746; cv=none; b=oITgeK8nqJ+4GJm2qfh33jsQ3xA/Iv1DfPZb2B0GLlWbo3P8TIwAPHyp12jo8e8U94cSjjginD+bqYHLGSt5UWTwvMz/GL2q3ELqTAgIbPFwvfJY7IEp5zjOyjn1v9jHzi6Ddt0Fgz+8E5+s/aE57W7TwAc2vb1f/Yk63T4IZqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742469223; c=relaxed/simple;
-	bh=O2z0npzN9UJqqUiE4QePeNQ1qVjw1xYdUvMfUZMQVAo=;
+	s=arc-20240116; t=1742477746; c=relaxed/simple;
+	bh=Vc7ZkIzv8oxEJ6+goncNLTFMvXYEeeE5ytAwHO+0mLI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ggTDcnqTJFQ+9qrNT33hQ0vhMxe5Dg7NXhP/uWMApKKbs8UxRzhi6no3xCzkIUcrbuqa7TJKPhYRpvoW0t/9WRDbt+5uiDjAFZXwi8Z6n47Yrpfk/FxFopOCtlSI/jtaV/HFwFlZBJm7VZuVMfacFXkNAegVPRq/G5G76VcKBDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IdZZksW+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FBC2C4CEDD;
-	Thu, 20 Mar 2025 11:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742469222;
-	bh=O2z0npzN9UJqqUiE4QePeNQ1qVjw1xYdUvMfUZMQVAo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IdZZksW+KWOtThlHG/zyCjFZJ9tYfnzNMSYQng03fYVlGhjG6+Fm2KoYzD/WcVQ4G
-	 hxnv9PltZEYfqiFcv7Ry0rk1wagCYHI+Yk6GHIenZDGWgKpLr4wEuQFhBjz6JmAwez
-	 C19tVa0bgaX45sG7rieA0QokzIfZeqcOBCBxLgClwn4KwrPvdhOyebmpstTTNesjCn
-	 5ItiMkaIXwDw6YK+SI+JjsUpRsuBxOyffJSQNCB9bO6K2ibIf2zk2PbTmfowdekdKH
-	 yE1UJojznH7XLPcMXQedNMUlVzVKQFOA6GayncR9ru2Yyamrz0hM5x9Jp/wz/lYEKu
-	 3CMLCIocbixGQ==
-Date: Thu, 20 Mar 2025 11:13:38 +0000
-From: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=h+GgyRtzE9Sb+bCub/qrjtZ1Xrxb6Tug2RvjEKhLOjEpMBFunOA0OtmZfMHUZxm5tv7sB0WnpJwzLerK7JiERgyJh5YKDEizhWntXTqUS9EpCnSajllJBpTotFi54kvmGNKez8aeljD522JJ/UverNmwKo+1NfMvXkArL6n1PjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B2CDebSS; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 20 Mar 2025 06:35:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1742477733;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OZwUz6QZstkoXHa6zv2WBNC3kFaN1c29ScZyOwFuwuQ=;
+	b=B2CDebSSLH2AF34xHfzkuc/XnnMSxIQwb3jQFJyXO4XUzeGS83OBG24MKkE/3yb/Y97Pr+
+	sKnl0AoQmIGtVx2g3chtdV8PXnP4p2IPfe9yt8SngOx0WS5I4vFjqfaTU2R72wn2VNz5L1
+	uEXPH6ZozCXMbaA9/K60DGEragrZKjA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
+Cc: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the tip tree
-Message-ID: <8f9822a8-59cf-4cba-b44e-dc65939221e5@sirena.org.uk>
-References: <20250320204617.0eb018d7@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the kvm-arm tree
+Message-ID: <Z9wZm388iYM0Cnrd@linux.dev>
+References: <20250320203203.1de92b98@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sKkocEAb7oa7Ygk7"
-Content-Disposition: inline
-In-Reply-To: <20250320204617.0eb018d7@canb.auug.org.au>
-X-Cookie: Do not fold, spindle or mutilate.
-
-
---sKkocEAb7oa7Ygk7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250320203203.1de92b98@canb.auug.org.au>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 20, 2025 at 08:46:17PM +1100, Stephen Rothwell wrote:
+Hi,
+
+On Thu, Mar 20, 2025 at 08:32:03PM +1100, Stephen Rothwell wrote:
 > Hi all,
->=20
-> The following commits are also in the sound-asoc tree as different commits
-> (but the same patches):
->=20
->   4476e7f81467 ("x86/amd_node: Add a smn_read_register() helper")
->   9c19cc1f5f57 ("x86/amd_node: Add support for debugfs access to SMN regi=
-sters")
->   83518453074d ("x86/amd_node: Add SMN offsets to exclusive region access=
-")
->   8a3dc0f7c4cc ("x86/amd_node, platform/x86/amd/hsmp: Have HSMP use SMN t=
-hrough AMD_NODE")
->   ad5a3a8f41aa ("x86/mtrr: Use str_enabled_disabled() helper in print_mtr=
-r_state()")
->   d55f31e29047 ("x86/entry: Add __init to ia32_emulation_override_cmdline=
-()")
->=20
-> These are commits
->=20
->   c893ee3f95f1 ("x86/amd_node: Add a smn_read_register() helper")
->   6b06755af667 ("x86/amd_node: Add support for debugfs access to SMN regi=
-sters")
->   bebe0afb7451 ("x86/amd_node: Add SMN offsets to exclusive region access=
-")
->   735049b801cf ("x86/amd_node, platform/x86/amd/hsmp: Have HSMP use SMN t=
-hrough AMD_NODE")
->   e3cd85963a20 ("x86/mtrr: Use str_enabled_disabled() helper in print_mtr=
-r_state()")
->   b2f10aa2eb18 ("x86/entry: Add __init to ia32_emulation_override_cmdline=
-()")
->=20
-> in the sound-asoc tree.
+> 
+> After merging the kvm-arm tree, today's linux-next build (arm64 defconfig)
+> failed like this:
+> 
+> arch/arm64/kernel/cpu_errata.c: In function 'has_impdef_pmuv3':
+> arch/arm64/kernel/cpu_errata.c:279:38: error: passing argument 1 of 'is_midr_in_range_list' makes pointer from integer without a cast [-Wint-conversion]
+>   279 |         return is_midr_in_range_list(read_cpuid_id(), impdef_pmuv3_cpus);
+>       |                                      ^~~~~~~~~~~~~~~
+>       |                                      |
+>       |                                      u32 {aka unsigned int}
+> arch/arm64/kernel/cpu_errata.c:47:53: note: expected 'const struct midr_range *' but argument is of type 'u32' {aka 'unsigned int'}
+>    47 | bool is_midr_in_range_list(struct midr_range const *ranges)
+>       |                            ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+> arch/arm64/kernel/cpu_errata.c:279:16: error: too many arguments to function 'is_midr_in_range_list'
+>   279 |         return is_midr_in_range_list(read_cpuid_id(), impdef_pmuv3_cpus);
+>       |                ^~~~~~~~~~~~~~~~~~~~~
+> arch/arm64/kernel/cpu_errata.c:47:6: note: declared here
+>    47 | bool is_midr_in_range_list(struct midr_range const *ranges)
+>       |      ^~~~~~~~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   1f561ad4b8f5 ("Merge branch 'kvm-arm64/pv-cpuid' into new-next")
+> 
+> The merge missed fixing up this instance from commit
+> 
+>   e1231aacb065 ("arm64: Enable IMP DEF PMUv3 traps on Apple M*")
+> 
+> I have applied the following patch for today (but this should go into
+> the kvm-arm tree (perhaps squashed into the above merge).
 
-This was a branch I was given by the AMD people to base some work that
-uses SMNs on - looks like it's been rebased?
+Thanks Stephen for the fix. Looks like I forgot to push /next when I
+pushed out the tag, addressing now.
 
---sKkocEAb7oa7Ygk7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfb+GEACgkQJNaLcl1U
-h9DCqgf/WmDnR/fv8jCGBWSD85ubKMZY/STlHd52SbjEYRhiroqXhVDTPUA8zuPj
-UL4GxQ6vRObXzwNYW/DTkbrDZ4piaqq4uj/AXd1M+kb9Io5ksINdJJrvRaS2Ylrb
-KUb5DXGgucEFCStP7Td0fqwBgxgF8D3aTLGlOgIjT8Nxn4WwYuF+CCu4/7lfrM4b
-S3tpMHWwnRL6dPrEKkE2sCpG5yUw2in7uZKJnS2bokR0kmWXLKtongIuIlOlSWsJ
-g2/nkXI7EtuywGIWTRyMV0jIcX/Qls8PMccuJE1KW+FG5UbnnlnYc63n6uO/m+Xy
-cRFeOhVVdglU5NqYZkW4xnOElMxRhw==
-=i1BG
------END PGP SIGNATURE-----
-
---sKkocEAb7oa7Ygk7--
+Thanks,
+Oliver
 

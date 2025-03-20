@@ -1,192 +1,275 @@
-Return-Path: <linux-next+bounces-5913-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5914-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63216A6B091
-	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 23:17:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A27A6A6B183
+	for <lists+linux-next@lfdr.de>; Fri, 21 Mar 2025 00:18:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2D2888148E
-	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 22:13:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 088D617EAAC
+	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 23:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 806F822CBEC;
-	Thu, 20 Mar 2025 22:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5DE219A91;
+	Thu, 20 Mar 2025 23:18:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BefyprBK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mBRO045p"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8929222B8CF;
-	Thu, 20 Mar 2025 22:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1DBF1F5F6;
+	Thu, 20 Mar 2025 23:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742508725; cv=none; b=K9Tn20YKjAXifbiNmpAjNd6ck8uibESNuQd6VE6NIMgoan16Qb9KL4pkPfzSgav25GlAk+6LW0pQ3IM8RiGXZtPuaaDlTZN7vd4mCQECH51Pnkhhn8ICeO31whR7lM2OjJt0//NRb4T8OGyictyF2BlI4FUsjvhagVTmZdCMuzc=
+	t=1742512689; cv=none; b=gXcME0HuBsOssK9Fxvl98Y9yMvmB8p/3NVjO+fMcE5PfyMcJ6v0v6cQbSlV9oHZjxCj69WF7wr/ibv4qTSCrkDviqv62S9kiJMuOCu02SQxPRXGzyRMELSrBmMicRdKPp1LFfkYWIrwe1K1EsSxUvV863w/yUXT7fOZhysEpQqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742508725; c=relaxed/simple;
-	bh=g5WhN1kaJc3DZrVUcAVFbCSMm/AF4jRsxs4A6kF4qyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Uwv18nQZ9fta0pSQziGO6z66VVf8vmzu0OuUxq5K/owkT4p3zW6m0PszQLBL+476xbY8JbnrbE5a76jpCz9exYAf7wd771Fhb8ObguOOxiV/OgvbwTjBzkZGpbzwDf/XBbSLswKiUJoMregoQ8teDwcGjZRpJLM4u10o15WaYe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BefyprBK; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742508713;
-	bh=OOMeDXo90kI2nkrrwrVdw5XdOncRSe/tkf1VEuf51PM=;
-	h=Date:From:To:Cc:Subject:From;
-	b=BefyprBKB0OtCuRaXhK29kCKYtgDdkb89Ya+XllMfxmbXleuwb0sTBE3jmNtiOUY/
-	 Uc+EGKaMaSg9wwc/PNwM63Dv9hjXWaRQPyMYgRXI1hohrr4SmTi7OkGdALy1Cc1QWD
-	 3w4Jz4wz9Dn7zrN/EAxQe5NtnETJH7oLWiWcNrPrIBHSlQKTDhEFm5XpzdNcs9326R
-	 1pj09DfY+jQSXmUHgsvO6DRGU3WNMY9osi+RzRHhwSymi9KLk8B8yw39bLdZgFwwck
-	 FrCuwOr9Rz8t7/AEgQrEKaexeRtnEIqqxice21KvSQjE4qYiAcO4CuSCkJl3CwcFDs
-	 dwT4zy/EmzMQw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZJftx1nNmz4x5k;
-	Fri, 21 Mar 2025 09:11:53 +1100 (AEDT)
-Date: Fri, 21 Mar 2025 09:11:51 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Chuck Lever <chuck.lever@oracle.com>, Trond Myklebust
- <trondmy@gmail.com>
-Cc: Jeff Layton <jlayton@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Trond Myklebust
- <trond.myklebust@hammerspace.com>
-Subject: linux-next: manual merge of the nfsd tree with the nfs tree
-Message-ID: <20250321091151.2fd07db3@canb.auug.org.au>
+	s=arc-20240116; t=1742512689; c=relaxed/simple;
+	bh=Shct0J1ZfLdiyYTPiJs/NDiX5WgQ987PjZ8Sz0X5RvE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lsUYRb6cNn4n3sbOZUSppDRM3N+rrQCtPdZsvsLa8ocIMsyuaujZNGCIj7Fdfw3GA1vvU0hrxxc6P7EE5PAKO/ZcUBlcdx3Dl2tz31ul6HmENi5zCSlPr4buteJS1QvPutz1w2yUr4YmlDa6y4r3f0oreJ9VhL0UbcOWT9QfwEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mBRO045p; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cfdc2c8c9so8291195e9.2;
+        Thu, 20 Mar 2025 16:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742512686; x=1743117486; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DeQb6JD+b4uxVzrEwo0wfvjSmHJVE4hCfjBEIgdDhpo=;
+        b=mBRO045p6hg6GFiuvm89fhmlENsTMK/E7H6TvTl6tOer6M0RbWAVHnxK0ml1FW2/bF
+         aCvNVK6ffHkPXLC6rtpBIus6iS6ZevRboeJcUDfETH0lypMgCILj2ntKI1T6/Hl5ciqA
+         cKjckBC44DPcdQmo9ObgMwPul5qxtZdm9Ubm5q7bXrWrjgQWl9JvUraO3hQGQ7Za4BSj
+         zf7+cGOy3SWg4M2aQ2ueBASbSK7hWN69MLaDJTbyaV/h2HDcIMTZ7uX09V7frnVlt0rx
+         MqqNqA1IDCcg1R0Wj7C/D2l0g8u4PQwtnqh8bpcOOVp+ifEOSbPbkNoOAVdwmehddURn
+         stsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742512686; x=1743117486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DeQb6JD+b4uxVzrEwo0wfvjSmHJVE4hCfjBEIgdDhpo=;
+        b=awZVgQ1gNJuyDfja1ucYeSXTKRUOC1Bv+kRvXs63Cn0PbvdiXYp93zCylMfs9aD6cN
+         ySP3wD3QScft2/bp77m+nbvm4bRBJtZKoFFShP9L1XFQmtt4J5XuPpi9jpn1rJuBUAdD
+         kFgskhLSWKRyy7bTGDBaWfCbo3oFZv4ilZpDww7aTvR25wUIclSE32mBg2dCi8r4qvgm
+         VoyftGudYSTSPdz6scmAesaIqAACwCiiqc0ZVdqB0AnLSFAc9tX3JmjDaX0l2hdk7CjY
+         vqbemcSLbsuxXprV5kKTQwK198riRoj1ugCI6PzWPtDQGWbAakhgeSW//TZzkS5MYbE4
+         GYGg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8t7se4ZUeGUmPsaPUhk1NYNX7F8QtKbXCHHT9uwvAZOXrrNb78A1xhzPWiPE4DV1H6WE=@vger.kernel.org, AJvYcCV5vmodkSlbCtD/TRGqKV4gNPBoW8kLQuRKAmkqjrCj/FQ28ZKm3jI31B5fT7e4wWFvIiigdQnS08czeg==@vger.kernel.org, AJvYcCVn7X1q7GFzlY9BrAUKPOAVFmptbQ6TefevDvto23R5LM3gjCc0O/IPk++gKV/4tlW+ZEsgQQg7@vger.kernel.org, AJvYcCVtoV9XmwtcS66JHDB4208PBXUmez48rs6bmJUdxRiYutlSgSSPa+HgQ8/4c13n99oCZQRVymre8y0zqHCN@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3tPGm6gIHECbm1mwkW8DU3n4H+G/c7i89xhN5c1aKnq3E0wwR
+	4JHuMb0HBFj8KHeBRubauSsDKsVI0ZQon62Q6mbuWutjS4Wvi0gPWBy0N7EcJOBOkoy8FQLI3tR
+	ie54pYOgv4+ojS8lwVfHyuO0Cxz4=
+X-Gm-Gg: ASbGncuL7lp3IhUB/31WY6XRX2ZepNiWrMCGwHV1vEAdhM4E9jigZkSXq4AQ02byo3U
+	ZhfklMbbQoIBKA0LC0glk0lZ9dCnZkZG5slkjqbz6oioH5Wi76D+cv1vgXOrZI239/DRj6RnPjO
+	vjIZYIQxW4HeUmE/Irpg5O/smgZuoJNk991JKY4aOqPqAzmW9Z4Hm9YMUTFw==
+X-Google-Smtp-Source: AGHT+IFO9Zrkw1uCcybgYfUsNWbsOgMRahB84uq7DpwdoQTVjaz+k8iO2DulmaUISDMPlEsjobMJV3tr1Ilr4HheGEA=
+X-Received: by 2002:a05:600c:468a:b0:43c:fe15:41d4 with SMTP id
+ 5b1f17b1804b1-43d509f4d2fmr8630675e9.18.1742512685640; Thu, 20 Mar 2025
+ 16:18:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pt/SlpRsCD7HOeNW+SSr8SO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/pt/SlpRsCD7HOeNW+SSr8SO
-Content-Type: text/plain; charset=US-ASCII
+References: <20250319133309.6fce6404@canb.auug.org.au> <CAADnVQKotSrp8CkVpFw-y800NJ_R7An-iw-twrQZaOdYUeRtqQ@mail.gmail.com>
+ <CAP01T76CqOxzEiMLKJ2y_YD=qDgWq+Fq5Zy-fnKP4AAyS30Dwg@mail.gmail.com>
+ <CAP01T77_qMiMmyeyizud=-sbBH5q1jvY_Jkj-QLZqM1zh0a2hg@mail.gmail.com>
+ <CAP01T77St7cpkvJ7w+5d3Ji-ULdz04QhZDxQWdNSBX9W7vXJCw@mail.gmail.com>
+ <CAADnVQ+8apdQtyvMO=SKXCE_HWpQEo3CaTUwd39ekYEj-D4TQA@mail.gmail.com>
+ <CAFULd4brsMuNX3-jJ44JyyRZqN1PO9FwJX7N3mvMwRzi8XYLag@mail.gmail.com>
+ <CAADnVQ+7GTN0Tn_5XSZKGDwrjW=v3R6MyGrcDnos2QpkNSidAw@mail.gmail.com>
+ <CAFULd4aHiEaJkJANNGwv1ae7T0oLd+r9_4+tozgAq0EZhS16Tw@mail.gmail.com>
+ <CAADnVQJ56-W--rdeRyRSXVjy5beQpt5scuRuTK9nDUPqdjMQ=w@mail.gmail.com> <CAFULd4bv+j8qomULWzcU_SV8zPtvxefFN6NgPu-WQiHaTR8HCg@mail.gmail.com>
+In-Reply-To: <CAFULd4bv+j8qomULWzcU_SV8zPtvxefFN6NgPu-WQiHaTR8HCg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 20 Mar 2025 16:17:53 -0700
+X-Gm-Features: AQ5f1JpnjSNktuEaUMFlnP7r4sXuDi2tnnP4ZbzUHz3HLqaxRxdVpU4R4sNm5DM
+Message-ID: <CAADnVQ+Aq85fJJGkurLopdAwjyTEnXAb8=u-ni6mjm-swpEYjQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Thu, Mar 20, 2025 at 12:49=E2=80=AFAM Uros Bizjak <ubizjak@gmail.com> wr=
+ote:
+>
+> On Thu, Mar 20, 2025 at 12:17=E2=80=AFAM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Wed, Mar 19, 2025 at 12:44=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com=
+> wrote:
+> > >
+> > > On Wed, Mar 19, 2025 at 7:56=E2=80=AFPM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Wed, Mar 19, 2025 at 9:06=E2=80=AFAM Uros Bizjak <ubizjak@gmail.=
+com> wrote:
+> > > > >
+> > > > > On Wed, Mar 19, 2025 at 3:55=E2=80=AFPM Alexei Starovoitov
+> > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > >
+> > > > > > On Wed, Mar 19, 2025 at 7:36=E2=80=AFAM Kumar Kartikeya Dwivedi
+> > > > > > <memxor@gmail.com> wrote:
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > I've sent a fix [0], but unfortunately I was unable to re=
+produce the
+> > > > > > > > > problem with an LLVM >=3D 19 build, idk why. I will try w=
+ith GCC >=3D 14
+> > > > > > > > > as the patches require to confirm, but based on the error=
+ I am 99%
+> > > > > > > > > sure it will fix the problem.
+> > > > > > > >
+> > > > > > > > Probably because __seg_gs has CC_HAS_NAMED_AS depends on CC=
+_IS_GCC.
+> > > > > > > > Let me give it a go with GCC.
+> > > > > > > >
+> > > > > > >
+> > > > > > > Can confirm now that this fixes it, I just did a build with G=
+CC 14
+> > > > > > > where Uros's __percpu checks kick in.
+> > > > > >
+> > > > > > Great. Thanks for checking and quick fix.
+> > > > > >
+> > > > > > btw clang supports it with __attribute__((address_space(256))),
+> > > > > > so CC_IS_GCC probably should be relaxed.
+> > > > >
+> > > > > https://github.com/llvm/llvm-project/issues/93449
+> > > > >
+> > > > > needs to be fixed first. Also, the feature has to be thoroughly t=
+ested
+> > > > > (preferably by someone having a deep knowledge of clang) before i=
+t is
+> > > > > enabled by default.
+> > > >
+> > > > clang error makes sense to me.
+> > >
+> > > It is not an error, but an internal compiler error. This should never=
+ happen.
+> >
+> > Not quite. llvm backends don't have a good way to explain the error,
+> > but this is invalid condition.
+> > Arguably llvm should do a better job in such cases instead of
+> > printing stack trace.
+> >
+> > >
+> > > > What does it even mean to do addr space cast from percpu to normal =
+address:
+> > > >
+> > > > __typeof__(int __seg_gs) const_pcpu_hot;
+> > > > void *__attribute____UNIQUE_ID___addressable_const_pcpu_hot612 =3D
+> > > >     (void *)(long)&const_pcpu_hot;
+> > >
+> > > Please see [1] for an explanation.
+> > >
+> > > [1] https://gcc.gnu.org/onlinedocs/gcc/Named-Address-Spaces.html#x86-=
+Named-Address-Spaces
+> >
+> > You didn't answer my question.
+>
+> Actually, the above link explains and documents the issue:
+>
+> "... these address spaces are not considered to be subspaces of the
+> generic (flat) address space. This means that explicit casts are
+> required to convert pointers between these address spaces and the
+> generic address space. In practice the application should cast to
+> uintptr_t and apply the segment base offset that it installed
+> previously."
+>
+> IOW, for __seg_gs address space, there exists no (known) offset that
+> would define it as a subspace of the generic space. It is gs: prefix
+> that results in segment override that "switches" to __seg_gs address
+> space. So, to convert the pointer from __seg_gs to (nonsensical!)
+> generic address space, GCC allows explicit (void *)(uintptr_t) cast
+> that in effect just strips gs: prefix from the address. You can then
+> use the pointer as a pointer to a generic space, but you can't use it
+> to dereference data from __seg_gs address space - this would be
+> nonsensical, so (__seg_gs void *)(uintptr_t) cast is needed to convert
+> pointer back to __seg_gs AS.
 
-Today's linux-next merge of the nfsd tree got a conflict in:
+tbh, I don't see how the above doc sentence means "just strip gs:".
+But ok, if that's what gcc folks clarified as true intent and it's
+not going to change.
+btw both compilers disallow automatic variables with address space
+qualifier and that makes sense, but if "just strip gs:" would be
+the rule then auto var with gs should have meant "just strip" too.
+Weird.
 
-  fs/nfsd/nfs4callback.c
+> > As suspected, gcc is producing garbage code.
+>
+> Nope, this is expected and well documented behavior.
+>
+> > See:
+> > https://godbolt.org/z/ozozYY3nv
+> >
+> > For
+> > void *ptr =3D (void *)(long)&pcpu_hot;
+> >
+> > gcc emits
+> > .quad pcpu_hot
+> > which is nonsensical, while clang refuses to produce garbage
+> > and dumps stack.
+> >
+> > Sadly, both compilers produce garbage for ret_addr()
+>
+> No, they are correct. The pointer is explicitly cast to generic
+> address space and this is what you get.
+>
+> > and both compilers produce correct code for ret_value().
+> > At least something.
+> >
+> > Uros,
+> > your percpu code is broken.
+> > you shouldn't rely on gcc producing garbage.
+> > Sooner or later gcc will start erroring on it just as clang.
+>
+> It won't. It is well documented behavior, as documented in [1].
+> Regarding linux code, you "should not" pass a pointer to generic
+> address space to dereference percpu data. Currently,
+> __verify_percpu_ptr() only triggers a warning when sparse checking is
+> used, but my patchset will now enforce this as a compile-time error
+> (this was a much sought feature, and it was possible to implement only
+> recently by using the newly introduced typeof_unqual() operator).
 
-between commit:
+That value proposition of the patch is clear. It's a good check,
+no doubt. My point that compilers could have done it just fine
+without using this "just strip gs:" rule for global percpu variables.
+I suspect it should be possible to craft the macro
+without assigning (void *)(long)&pcpu_hot into global var.
+And both compilers would have worked.
 
-  11a149e09d58 ("sunrpc: make rpc_restart_call() and rpc_restart_call_prepa=
-re() void return")
+> Rest
+> assured, before enabling this feature in linux, plenty of people
+> unsuccessfully tried to poke a hole in this functionality and long
+> threads are archived where address space functionality was discussed
+> to death. ;)
+>
+> BTW: You can use:
+>
+> --cut here--
+> diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.=
+h
+> index 474d648bca9a..e6a7525c9db9 100644
+> --- a/arch/x86/include/asm/percpu.h
+> +++ b/arch/x86/include/asm/percpu.h
+> @@ -105,6 +105,10 @@
+>  # define __my_cpu_type(var)    typeof(var) __percpu_seg_override
+>  # define __my_cpu_ptr(ptr)    (__my_cpu_type(*(ptr))*)(__force uintptr_t=
+)(ptr)
+>  # define __my_cpu_var(var)    (*__my_cpu_ptr(&(var)))
+> +
+> +# if __has_attribute(address_space) && defined(USE_TYPEOF_UNQUAL)
+> +#  define __percpu_qual        __attribute__((address_space(3)))
 
-from the nfs tree and commits:
-
-  6c1cefb84b3d ("nfsd: lift NFSv4.0 handling out of nfsd4_cb_sequence_done(=
-)")
-  f049911b5b98 ("nfsd: only check RPC_SIGNALLED() when restarting rpc_task")
-
-from the nfsd tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/nfsd/nfs4callback.c
-index 654bee80acef,ec6539cec0fe..000000000000
---- a/fs/nfsd/nfs4callback.c
-+++ b/fs/nfsd/nfs4callback.c
-@@@ -1381,41 -1384,42 +1384,43 @@@ static bool nfsd4_cb_sequence_done(stru
-  		fallthrough;
-  	case -NFS4ERR_BADSESSION:
-  		nfsd4_mark_cb_fault(cb->cb_clp);
-- 		ret =3D false;
-- 		goto need_restart;
-+ 		goto requeue;
-  	case -NFS4ERR_DELAY:
-  		cb->cb_seq_status =3D 1;
- -		if (RPC_SIGNALLED(task) || !rpc_restart_call(task))
- +		rpc_restart_call(task);
-++		if (RPC_SIGNALLED(task))
-+ 			goto requeue;
-  		rpc_delay(task, 2 * HZ);
-  		return false;
-- 	case -NFS4ERR_BADSLOT:
-- 		goto retry_nowait;
-  	case -NFS4ERR_SEQ_MISORDERED:
-- 		if (session->se_cb_seq_nr[cb->cb_held_slot] !=3D 1) {
-- 			session->se_cb_seq_nr[cb->cb_held_slot] =3D 1;
-- 			goto retry_nowait;
-- 		}
-- 		break;
-+ 	case -NFS4ERR_BADSLOT:
-+ 		/*
-+ 		 * A SEQ_MISORDERED or BADSLOT error means that the client and
-+ 		 * server are out of sync as to the backchannel parameters. Mark
-+ 		 * the backchannel faulty and restart the RPC, but leak the slot
-+ 		 * so that it's no longer used.
-+ 		 */
-+ 		nfsd4_mark_cb_fault(cb->cb_clp);
-+ 		cb->cb_held_slot =3D -1;
-+ 		goto retry_nowait;
-  	default:
-  		nfsd4_mark_cb_fault(cb->cb_clp);
-  	}
-  	trace_nfsd_cb_free_slot(task, cb);
-  	nfsd41_cb_release_slot(cb);
--=20
-- 	if (RPC_SIGNALLED(task))
-- 		goto need_restart;
-- out:
-  	return ret;
-  retry_nowait:
-- 	rpc_restart_call_prepare(task);
-- 	ret =3D false;
-- 	goto out;
-- need_restart:
-- 	if (!test_bit(NFSD4_CLIENT_CB_KILL, &clp->cl_flags)) {
-- 		trace_nfsd_cb_restart(clp, cb);
-- 		task->tk_status =3D 0;
-- 		cb->cb_need_restart =3D true;
-+ 	/*
-+ 	 * RPC_SIGNALLED() means that the rpc_client is being torn down and
-+ 	 * (possibly) recreated. Requeue the call in that case.
-+ 	 */
-+ 	if (!RPC_SIGNALLED(task)) {
- -		if (rpc_restart_call_prepare(task))
- -			return false;
-++		rpc_restart_call_prepare(task);
-++		return false;
-  	}
-+ requeue:
-+ 	nfsd41_cb_release_slot(cb);
-+ 	nfsd4_requeue_cb(task, cb);
-  	return false;
-  }
- =20
-
---Sig_/pt/SlpRsCD7HOeNW+SSr8SO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfckqcACgkQAVBC80lX
-0GyHsQf/a82OdNJhslNGCmWKz0sdUJknuoSrNbCxI3HEpKyHez/TKE8LhDp4WIrQ
-9gY18K7KBWKAzLnlLXng+4yLUX9BBderkWBn57wZ5mgceue0uzv4j27RS9c4oeN4
-qpHVs19SBSOPOQMtLbDaxzLqZH51qSnCW/sK4pDBVrQmc7cOvRnpye4/ouNzp+jJ
-l0aG4Brt4gN5D2donK7I2cy/DA7RiAiHRYNbfJ/+qqPb2AmRPaZuLCyxZIvM7ru1
-j/Nb+rDr1DG5tt4tQ/GhKToVy76c9DhCwnWUdDq8zGFUsTAtGcq2jSJESn/oksHf
-5ECloZ3tiTXTZuAb+zIoP7o9ZXJCHA==
-=gBQ5
------END PGP SIGNATURE-----
-
---Sig_/pt/SlpRsCD7HOeNW+SSr8SO--
+I see, so for undefined addr spaces clang x86 just ignores it.
+Weird. But ok.
 

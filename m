@@ -1,104 +1,109 @@
-Return-Path: <linux-next+bounces-5911-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5912-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4174A6A770
-	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 14:43:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56522A6AFA4
+	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 22:09:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FED11B60D6E
-	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 13:36:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B841F3B35F5
+	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 21:09:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE14A21CC55;
-	Thu, 20 Mar 2025 13:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDF8422A4E1;
+	Thu, 20 Mar 2025 21:09:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B2CDebSS"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lJrX4Nvu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED08623C9
-	for <linux-next@vger.kernel.org>; Thu, 20 Mar 2025 13:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B996A214228;
+	Thu, 20 Mar 2025 21:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742477746; cv=none; b=oITgeK8nqJ+4GJm2qfh33jsQ3xA/Iv1DfPZb2B0GLlWbo3P8TIwAPHyp12jo8e8U94cSjjginD+bqYHLGSt5UWTwvMz/GL2q3ELqTAgIbPFwvfJY7IEp5zjOyjn1v9jHzi6Ddt0Fgz+8E5+s/aE57W7TwAc2vb1f/Yk63T4IZqg=
+	t=1742504967; cv=none; b=qe3ISQGmAQ0REL8B2APwvZXtNRSs3tWThWcJYymEDZeT8PtVoPTlLSjfdhC7miwVYIBcsP13M3x0TYRTHF56ZhPdC+DXtlT+BiaZgYA+mS5CnIsV495+infEuD/FUvP1jha5V6BiOIOvzy1Sb+1CU2qT73ZvObayynln5EszwhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742477746; c=relaxed/simple;
-	bh=Vc7ZkIzv8oxEJ6+goncNLTFMvXYEeeE5ytAwHO+0mLI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h+GgyRtzE9Sb+bCub/qrjtZ1Xrxb6Tug2RvjEKhLOjEpMBFunOA0OtmZfMHUZxm5tv7sB0WnpJwzLerK7JiERgyJh5YKDEizhWntXTqUS9EpCnSajllJBpTotFi54kvmGNKez8aeljD522JJ/UverNmwKo+1NfMvXkArL6n1PjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B2CDebSS; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 20 Mar 2025 06:35:23 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1742477733;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OZwUz6QZstkoXHa6zv2WBNC3kFaN1c29ScZyOwFuwuQ=;
-	b=B2CDebSSLH2AF34xHfzkuc/XnnMSxIQwb3jQFJyXO4XUzeGS83OBG24MKkE/3yb/Y97Pr+
-	sKnl0AoQmIGtVx2g3chtdV8PXnP4p2IPfe9yt8SngOx0WS5I4vFjqfaTU2R72wn2VNz5L1
-	uEXPH6ZozCXMbaA9/K60DGEragrZKjA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kvm-arm tree
-Message-ID: <Z9wZm388iYM0Cnrd@linux.dev>
-References: <20250320203203.1de92b98@canb.auug.org.au>
+	s=arc-20240116; t=1742504967; c=relaxed/simple;
+	bh=aHUCiz/luza8anYRC+g90cr420DkkPgL53m21zU1PKw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MDTzZt1wctzXeauMMTs5ao3m9bUhosZUgKcHocQTA54pCYnCsGk0gPlBCXzfMhUlHP9J0dLF4SQ7qi4/Q1SHTfpVUNNRknXnPmXNcfNNkfKBe4taet4aL4afiiUSqJaiclsBS0nyS53q5teLU4xgL6vqAt1j3NDkPDMs1umvRCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lJrX4Nvu; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1742504960;
+	bh=HiAErZUmmCH5UZ5j5dSg5BWwK6OUolzWIng5mm+7FR4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lJrX4Nvub7tlAER2gicrqBE88d+eOdGd68a018oKuWIT1wA1coeyjYcnkxQydJG77
+	 U7kp8V6C3tMmiIiP/hDULKPVE1tsJ9154mnDgKhZuxV2XNad0XBUQkzd75nyl1mf1+
+	 aJPEWGbe5gauMf7j2d5u6a1IeMDQQCjP7LLnPnUEHKQ1FzdDk/q8F6PPVhj0xA9s5y
+	 Ihb9STGiQ+S1HPa0Pjvs0tL3ZHyhGLvnBV8U+L4vxMQo8mObOB3kpQScJ9zW8TmzQi
+	 vEKl704jGg+i6zIOFsOsgmNTvIM2sg5t7KPXBMQqK0eVqs3O+mlqNUeQ9BfKFjBWmE
+	 IxK+PHC4/qhBg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZJdVm0hFxz4x5g;
+	Fri, 21 Mar 2025 08:09:20 +1100 (AEDT)
+Date: Fri, 21 Mar 2025 08:09:18 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Avri Altman <avri.altman@sandisk.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mmc tree
+Message-ID: <20250321080918.1f8b90c4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250320203203.1de92b98@canb.auug.org.au>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; boundary="Sig_/QzDQ3t466VDkT4tZk2NytQf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi,
+--Sig_/QzDQ3t466VDkT4tZk2NytQf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 20, 2025 at 08:32:03PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the kvm-arm tree, today's linux-next build (arm64 defconfig)
-> failed like this:
-> 
-> arch/arm64/kernel/cpu_errata.c: In function 'has_impdef_pmuv3':
-> arch/arm64/kernel/cpu_errata.c:279:38: error: passing argument 1 of 'is_midr_in_range_list' makes pointer from integer without a cast [-Wint-conversion]
->   279 |         return is_midr_in_range_list(read_cpuid_id(), impdef_pmuv3_cpus);
->       |                                      ^~~~~~~~~~~~~~~
->       |                                      |
->       |                                      u32 {aka unsigned int}
-> arch/arm64/kernel/cpu_errata.c:47:53: note: expected 'const struct midr_range *' but argument is of type 'u32' {aka 'unsigned int'}
->    47 | bool is_midr_in_range_list(struct midr_range const *ranges)
->       |                            ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-> arch/arm64/kernel/cpu_errata.c:279:16: error: too many arguments to function 'is_midr_in_range_list'
->   279 |         return is_midr_in_range_list(read_cpuid_id(), impdef_pmuv3_cpus);
->       |                ^~~~~~~~~~~~~~~~~~~~~
-> arch/arm64/kernel/cpu_errata.c:47:6: note: declared here
->    47 | bool is_midr_in_range_list(struct midr_range const *ranges)
->       |      ^~~~~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   1f561ad4b8f5 ("Merge branch 'kvm-arm64/pv-cpuid' into new-next")
-> 
-> The merge missed fixing up this instance from commit
-> 
->   e1231aacb065 ("arm64: Enable IMP DEF PMUv3 traps on Apple M*")
-> 
-> I have applied the following patch for today (but this should go into
-> the kvm-arm tree (perhaps squashed into the above merge).
+Hi all,
 
-Thanks Stephen for the fix. Looks like I forgot to push /next when I
-pushed out the tag, addressing now.
+In commit
 
-Thanks,
-Oliver
+  79055e47336e ("mmc: core: Remove redundant null check")
+
+Fixes tag
+
+  Fixes: 737d220bb2be ("mmc: core: Add open-ended Ext memory addressing")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 403a0293f1c2 ("mmc: core: Add open-ended Ext memory addressing")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/QzDQ3t466VDkT4tZk2NytQf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfcg/4ACgkQAVBC80lX
+0GwtEAgAlNf2SQMl5FGDKe2N4I/cW/PCHMTJHrGQFgIJNxaJPBgRwcrTDA2s2Ner
+ET3W4Uv8qs8WJnPR9LwM44qTNfjDHA2OiIgsgVJo04IewXfVQukSx0PVCOqFlASe
+f4i9fVcs0IZlPj8BjJcWqpcwaJSEHuochRAdTU+6imAYh5xVK5QN2hlKFEHAhfCU
+a1kUVf0VciHKHZZIShhq2CjAX6KFeYSHgxmz5LkaWT8+B2SHByVR7np1x6PN6FyJ
+itMIy+5SjrcR0Mw5qKmOROuqDuafWe9FZXDSKW3hRGPB3lK1Gn8q0zit6yFUzvh1
+W1GwcZG5mB05f3jF1dGSqPjgrGmoKQ==
+=kjdW
+-----END PGP SIGNATURE-----
+
+--Sig_/QzDQ3t466VDkT4tZk2NytQf--
 

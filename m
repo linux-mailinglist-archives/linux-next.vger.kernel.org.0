@@ -1,123 +1,103 @@
-Return-Path: <linux-next+bounces-5907-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5908-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEF16A6A2ED
-	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 10:46:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BD94A6A359
+	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 11:12:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B705716FD2B
-	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 09:46:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FE5719C0D08
+	for <lists+linux-next@lfdr.de>; Thu, 20 Mar 2025 10:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 883931A072A;
-	Thu, 20 Mar 2025 09:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24D0209695;
+	Thu, 20 Mar 2025 10:11:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Zjnc24fP"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BcftOn3a"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12AF23A0;
-	Thu, 20 Mar 2025 09:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615431A238C;
+	Thu, 20 Mar 2025 10:11:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742463982; cv=none; b=q9/jRWXuhrXBDP9Mbw7Cn61v7jWvUgfgX0QHOKa9FvqcKZK5tRc2xTWVx3HXghwxkL4hvuXzUMmPpBoabz2dzHfKdvMaPJobqU3yHI8ZaKrXlPXvG3UJgMBo9aW5NmgbDx97sS+lTZxYyfbHI1d3h9tXoEOTyqr1TdndBG27+0M=
+	t=1742465516; cv=none; b=ql3ca/FBzNswTBZ8VspFXo9A1PMLlzb6nnWWEB4pgwNu7uxAkWNfoFJAijhaD+5SoI4flicMm1uugCU9csehSWgamyaZBC/1FawvTgcCXcgc3aWcxbYcWO4bQLZUBbLtSD3hDt92vHHDfJbMBvFiypYtlNrp0HangIfviAWYpAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742463982; c=relaxed/simple;
-	bh=HjjeJHDtUkVUarYre9BeuRlFYh+6ovLkqsdUDFDsvck=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Jtdu4zClFvf9sVtlA/wq0fOzFdlRy9yM8tVSRlMqn/aNkBqS6VtD2lzdVm2vBQUAtJPees/+8wZEbI6k0VPoxGx3WKw77WLwWh9sHHOhjGSlqgqlIkh/SytWadWkl85aQHkXA6hP6JcQ1e8JwwivpH9uO3mDWt0YZ0JhxQpXh78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Zjnc24fP; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1742465516; c=relaxed/simple;
+	bh=TRB5BlQU4Cp6zal6foWk6PzkRwn6zrit+sIUxqzqbsw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=LFO1StfpkrnWhBWLbdPFwLb9fEz1I3exFyJDaDofUf1Bb9eNNhEY7GWkf2AK0yGCLXHIRE0YAWal2nPkMr5U3uLcpe15cMmAuhoV0vZKF2IG3MTuZNoe8qjya+IfXiIw9viYrOL+Jmx/0xaP61X9gxxskrYRZjU1BFR4cqjBeB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BcftOn3a; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742463978;
-	bh=JJCp/KolsElAx886sONaXJibOqwCSkK7iWXAUETHXHw=;
+	s=201702; t=1742465511;
+	bh=rlyafHr7D94ajSyM6b5t9bMDuqDoPoOjsklUoBRviXo=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Zjnc24fP2gcUXSnRM76B2xgR+hMUcjTZED2tKMwGluUrXYo6tizY6VfgJAQg6nuGe
-	 MNOZylJPmeNG4I41SKGgu13oP+fyRAop+8QNQhNU9IHwNTkglMwn0jSHJC4MSEflUb
-	 hLlEzCHxrGvCxSEZ92Tt+uuELwLVHFy3NnoVZ6LbWw6mB76ooRDQUtk3FitRAnDCfC
-	 fcuYKgCYFoWc+z0f9aKvBkAra2ILrGHjMTFYLfRTt/LX8Vl4y+1Hr9xFU3lTzgEtSg
-	 VSvSX0zlq85GXzQeGsr+9UrFstTH8/AJGffjz/rjrToyS/pFGdcfRtp/LwQSbFhC0C
-	 6qKmIUS05se6g==
+	b=BcftOn3aCYpMCCo1TeAZtiCvB2x7YtS0MvHB0K8T+g5vQmt1ZoG6wRaHyYPBBXdJv
+	 GkLl2n/X/B8afTwPbKVf5tmNGjLkQQowZGneg0RivVrIV5DQyr0uBMJ4GbmFs1hHKu
+	 BsPgkZHcSg4TPHK91fuHB2cESZ5LHFGQ/XZ2j/EqpSlkzeS5W1gV4Ix6y5rq6UcYGf
+	 YRcavZuRNdE+RYUjfJo4wDjXHTJ+2ruZOzsr8l8EbLhgfglC9btbQAi/39XARHGQ5L
+	 lHbeK39mo3DwZINzfaA4KIwYulOqBRwwKgFISfU5xZMuGKJycwrLHsqQCXe1Cn3Cyq
+	 0FxGUxaQZE0yA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZJLLd6BDVz4x2g;
-	Thu, 20 Mar 2025 20:46:17 +1100 (AEDT)
-Date: Thu, 20 Mar 2025 20:46:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZJLw744tjz4wcd;
+	Thu, 20 Mar 2025 21:11:51 +1100 (AEDT)
+Date: Thu, 20 Mar 2025 21:11:50 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>
+To: Kevin Hilman <khilman@baylibre.com>, Neil Armstrong
+ <neil.armstrong@linaro.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the tip tree
-Message-ID: <20250320204617.0eb018d7@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the amlogic tree
+Message-ID: <20250320211150.3d09eb46@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T_XwzEeppB7I_/0.H8kNiv3";
+Content-Type: multipart/signed; boundary="Sig_/heoi6zxF/ZHbBm0dPgthFTT";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/T_XwzEeppB7I_/0.H8kNiv3
+--Sig_/heoi6zxF/ZHbBm0dPgthFTT
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the sound-asoc tree as different commits
-(but the same patches):
+Commits
 
-  4476e7f81467 ("x86/amd_node: Add a smn_read_register() helper")
-  9c19cc1f5f57 ("x86/amd_node: Add support for debugfs access to SMN regist=
-ers")
-  83518453074d ("x86/amd_node: Add SMN offsets to exclusive region access")
-  8a3dc0f7c4cc ("x86/amd_node, platform/x86/amd/hsmp: Have HSMP use SMN thr=
-ough AMD_NODE")
-  ad5a3a8f41aa ("x86/mtrr: Use str_enabled_disabled() helper in print_mtrr_=
-state()")
-  d55f31e29047 ("x86/entry: Add __init to ia32_emulation_override_cmdline()=
-")
+  5ed591a0d5dd ("MAINTAINERS: Add an entry for Amlogic pinctrl driver")
+  7c17ddbb050e ("pinctrl: Add driver support for Amlogic SoCs")
+  793d454f91e7 ("pinctrl: pinconf-generic: Add API for pinmux propertity in=
+ DTS file")
+  f2ecac49778e ("dt-bindings: pinctrl: Add support for Amlogic A4 SoC")
 
-These are commits
-
-  c893ee3f95f1 ("x86/amd_node: Add a smn_read_register() helper")
-  6b06755af667 ("x86/amd_node: Add support for debugfs access to SMN regist=
-ers")
-  bebe0afb7451 ("x86/amd_node: Add SMN offsets to exclusive region access")
-  735049b801cf ("x86/amd_node, platform/x86/amd/hsmp: Have HSMP use SMN thr=
-ough AMD_NODE")
-  e3cd85963a20 ("x86/mtrr: Use str_enabled_disabled() helper in print_mtrr_=
-state()")
-  b2f10aa2eb18 ("x86/entry: Add __init to ia32_emulation_override_cmdline()=
-")
-
-in the sound-asoc tree.
+are missing a Signed-off-by from their committers.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/T_XwzEeppB7I_/0.H8kNiv3
+--Sig_/heoi6zxF/ZHbBm0dPgthFTT
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfb4+kACgkQAVBC80lX
-0GzCdQf9GQEXMRbyUAhHykyT6vOguSRbQadFvGDHMJjHqdqv3o4i67Ljx/cTcwCM
-0/GNFpUNdvW2cjrvbNtlH2/4S2LGp3mGvUmXqsHzYWh0dfW89ssH3tZYSwHyoh41
-JHmCG6GHbfIO/huAdyHGy8G2b4+WicKUeu98ro4tPVkYf19RV0bEpuXBrdQoIjsg
-gX2Sjga2ijHxBAX4nEg2RPf4GQ5JlhcU7Yhk33V3GcCzlg/1a4c24vxNu6nM7/ss
-eub86lQSQmFP94kqaubrNBeDadg4xUaglL60QhspzaVPWN1Rxy+wU2C8uR71rfpJ
-ZGKO4Svpa0zq2tFO/fqv6ffEKnbBiw==
-=aVYf
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfb6ecACgkQAVBC80lX
+0GzhXAf/cVSd+tK7wq1IOwrWv4w3GD3LUHTpUVqtBerk03XsdvZxwmn+10s2Cpgl
+xfSsxTXocWPpbGSvfWsbxYrkLy8OMKtuFFLBry36ZE94KW4wXo4l0GoIQUIl4vbA
+PF3epuhPOKrfXc3stGx6OjAoW6vV5BTw5j+q/lyzQzKkvbNnmqU7TF7PZynPHSbc
+AM0EbFyCFe72L6y4ATgAP5p1ccagH77E1+eD9SlnzKnLWGnb2VMBA28kM+SdeFHr
+6r6YFaFb/+OUx3KdU2q4RRe5EGlQrH4EU1r6fI255IyH6nIh48b8trpPPZoYHHkN
+/nRNtxrQFJl9sbvO+uOmoTG0a7Fo9A==
+=6Ha4
 -----END PGP SIGNATURE-----
 
---Sig_/T_XwzEeppB7I_/0.H8kNiv3--
+--Sig_/heoi6zxF/ZHbBm0dPgthFTT--
 

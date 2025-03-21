@@ -1,134 +1,135 @@
-Return-Path: <linux-next+bounces-5925-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5926-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 377C0A6B66A
-	for <lists+linux-next@lfdr.de>; Fri, 21 Mar 2025 09:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F3BC3A6B66C
+	for <lists+linux-next@lfdr.de>; Fri, 21 Mar 2025 09:56:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63CF03BD9CA
-	for <lists+linux-next@lfdr.de>; Fri, 21 Mar 2025 08:53:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE66C3BDE6A
+	for <lists+linux-next@lfdr.de>; Fri, 21 Mar 2025 08:55:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9C9D1F03D4;
-	Fri, 21 Mar 2025 08:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8B01EFF96;
+	Fri, 21 Mar 2025 08:55:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NDMx7gzo"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="C/jeYx/a";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="reWrdfSz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069681EFFB9
-	for <linux-next@vger.kernel.org>; Fri, 21 Mar 2025 08:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E836A8BEE;
+	Fri, 21 Mar 2025 08:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742547217; cv=none; b=niww0G2eec397UzgH6gddvOZlsOQ5aCFuB8Xe96vYPyYhxnT02hJlKXewvNtVLx+SiV5pwCxpSiAvCOFXvdBqbBIfScLNHS++16ypuRCQ5WDVEOAD79B24n32k4JlgSvTREox/LW+csaQfoKvnnzLhucAUSoUo1IrgmzjU1V/NA=
+	t=1742547340; cv=none; b=PYsAFgmg+VXIaNkwMwBF/dLPvo5TPwzjdxurtqd4YKbytDTKdoR5mmaRadzuzLA44NMYroF1LlPVcRWT/yEoAcBeD94nNtL356CmIbKxAU3flJGJ125wohAvQ9cXT/kSgk/wM6RcjNXbsjagfeK7miP7DT4NfnG6tu0rul8IIiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742547217; c=relaxed/simple;
-	bh=vIw+xo/RVlg0K7NewC2ds9CYeI22kvETCWi6z+XQAyE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eGb28KuoxH1sTM4XrypGEuLPYak96W0w0BCoLoOWIIxZeypReVBGJpaSGMUlspqTkVe8hBLNsatDO+fmUKgl4u+qRlW52EjBk9ld2FpMulllJ2/IjBAzuEux1x6Qg9PA5xzoohZzX3yuCZFqAadFfF5xJVtB4hse2L32SdCVG+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NDMx7gzo; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-700b17551cdso14937657b3.0
-        for <linux-next@vger.kernel.org>; Fri, 21 Mar 2025 01:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742547215; x=1743152015; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rgcCLbhKsmIYAOgp/Js66iyzZCDf/tFpLepP96oubhU=;
-        b=NDMx7gzoF2arimACgLXmWu/4aMLGWSlQ6LK8NNwmbWSyPeWAvl6qFUFAsh6Zg3WzOB
-         By2XV12XUyegTE/TwGoKP7kYEyKuKdZPkDC5+1zTKL4JwbTR+WDSPxSS4TSR6079kEGE
-         ZF7vaIknVYipfeheJUZj7rDp804VRPz2HWVg3Clt/H5ZJVpZR+Zvv5HLxd5CFxYVVvyD
-         4+SYg4UpJVJF6JdqTUuEEroH1cEY3SasXx35s1Nlrhz13neY5wLV1qhNA4CJnJt3cuNd
-         EjAX8BGGzrhC23eyHZXEkEr2by5RbF6NA8owH8B+KcuM+WTOv3Ay+3ZqNfYZcZKxG/db
-         9eDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742547215; x=1743152015;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rgcCLbhKsmIYAOgp/Js66iyzZCDf/tFpLepP96oubhU=;
-        b=pnx4GlCon/cm70b9BfoJwF9FLFUxw6VFtRDKj8LPXKoZfG/d0tI1IVX848qGm3NnrT
-         g0cTliLndaPyFaXiLBenzMXHyMkXOX92KtjvjMhevx/H3vgex7hsdwlY1c+PdHhxl/Gs
-         SkprG2O10AqSETygHfi7/jS27O9+uh+EfuIETG61HmdQwNB6LSZqUApbM6Nsgp0K0Fjg
-         pXhqCh/OmSIowf377aGYbp5kX3Ygcz34Uo8bb3j6fFfAGWEkONumsnpq8a4Z2tADa2cC
-         vk6GZXrQfdcKma+ZmncP9N9bJDec9Hm9Smi7W3h0suLQViT1ZzC6gg9cujgGXmzD2ssE
-         KGGg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZwrBQtf28nwKZJDeJNbwa8TeyGqGYRgWble5cvWiYAwCq5HTpNavS/vJT53OtYTC4HofBkMmWQpa6@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaUXUxvU/eW2rGZC13dGy70CRQdLMzZrrZ/vxOVMW3Ncr8sJjt
-	pj8x3fz9V53OYmAeqRBkPPqbcxoP+cbEGSllI7TKj4nGVGx3BMHSbICZU1HMcZ2u+KLjKOaOPao
-	asH2QCAcXsb1fbr5IqzndGyBUmLfykMozU1m/dQ==
-X-Gm-Gg: ASbGncv/lC10gd+we1rsYjy7Fm7P+HEEEzQg/imLgeGSF8KpGf8IwyfGObj7lvuzQSr
-	U7eusdCymiu72AUexie3T309u1qPC0JWOvxSVwIxQQvWCJHm40qif0egRq3EDHb6gO43vlIVpER
-	yq+fHJS6abJqiQvLUil/iNE/eL8X32yMZCtbQQ/L99HYLE/dtCohVID5x5Wkg=
-X-Google-Smtp-Source: AGHT+IGIA5O54XjDs3NqQwJeGdMi36x/C9LukWoKZoxYY9+RYJ4sWd1HYzkWqNeyhwHHu+idCoD8F4Fq7IsvO+NBSkE=
-X-Received: by 2002:a05:690c:67c6:b0:6fb:9c08:4980 with SMTP id
- 00721157ae682-700bacd6ac1mr34010717b3.27.1742547214831; Fri, 21 Mar 2025
- 01:53:34 -0700 (PDT)
+	s=arc-20240116; t=1742547340; c=relaxed/simple;
+	bh=gwz97SF+Ob89YKHD3lqRsYHSxYmlKfH/i7SV1WoHMwU=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=eqzaZeVs2MflfFRTyOpNUyfXq64lR+fdXIDS41ec+2Y5Y5EZjkZWyDamUsuapsTdApBVzY+BvHosKwrbtJqr2ML4cCHtVTu21rYHjB++trJie2ArHjAVB52gfhxpBFTNaiwHZDc+pxcFRhLpaJWBLGeaY5FuDmSi+BPEYENlvGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=C/jeYx/a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=reWrdfSz; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id F38D11140143;
+	Fri, 21 Mar 2025 04:55:37 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Fri, 21 Mar 2025 04:55:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1742547337;
+	 x=1742633737; bh=WsFBUXiH8o16pSj0PWVq1s5XJ9ooiQqZ0HXBk5az69Y=; b=
+	C/jeYx/aa3rbvcxPAVVFtu72F8p7M4V81P3r6HKNZ3E5ZmMkV9uGYclPfAGKhW9d
+	BIhQMJ3DrwKlrIE6tpN3AwRGL0HaXnQRT37oK8jHxupkVvCdC/78xiXx43OxvBrU
+	aT0GiDpAVJ8gvsoYAhG1nQq0wQuZqgbdslfKq51GCoHbN7uhcByCDQ2lp3Q3DB90
+	gr5kqSxwZDJ2eUKq8fgIbV53qH43hLrySWiGDBEcXLlNxbskuHrUFr/BE+RwdE2Y
+	Gbrb8xVrasPrh8M75H0euKxPh0gQEaqSZirhxcYPGrQXOGx93HWoIcfCu8gFmCA2
+	zKKrBn6C06hLwk3MgGowvg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742547337; x=
+	1742633737; bh=WsFBUXiH8o16pSj0PWVq1s5XJ9ooiQqZ0HXBk5az69Y=; b=r
+	eWrdfSzSZkxz3/2t+G9UlXu/9DpQqJDgutuHy2FwE1hcHyLFYcJkLyFxxZttWYeP
+	50vcXEsfXCcBe6ulmf/ZL0ml+DkLIcmTUEkWhbeUJJ2VBUMi6k3vZ5PminvfxnSQ
+	rMe0ZYlaXHzafxfut9lKISbVKdtKEdE4OB2M4/2d8GEvYNb6XlYgphzdGlRvuUp/
+	3PXeuq0GK5M1851onYg1KKl0dM/G0qG5GaqOg8m3usRlEcSlO/dfFi9eWFcD5PyG
+	SFhgDVdxMTM2OC2aYmJ2Kk2zWY2LPXJlIlXY919/PANKdCaFGKDc8wKGmgf+gnhl
+	9x19t1AA80r8NbULxlDHw==
+X-ME-Sender: <xms:iSndZ-AJ1dwMzdn1_uYJzPPqx6MhDid4fCxep7rT-Qjr_Bjt2nN-tg>
+    <xme:iSndZ4iQChBiKtU4o4KyZ2ldxaZveBxCxxFK4J1ZdNazobnlrCwAcxAUSMSfCPTw8
+    s29byk61_3YSV5_Vxk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduhedtieeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    hedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhugh
+    drohhrghdrrghupdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrug
+    drohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlh
+    drohhrgh
+X-ME-Proxy: <xmx:iSndZxkSGnfU1YuwFS-XzLWPJ9CLO78zW959QBtWJ5zMn8iQIc0Dfg>
+    <xmx:iSndZ8yWS8TnciT3flYa4l-_uURahtMecdk7IgX4iNaWhePgjuJ1DQ>
+    <xmx:iSndZzRB_qWnPwGHhcifyxRrwijC5mJ0VwjneZ3sQynVB4E0YFxPYQ>
+    <xmx:iSndZ3YXrdAHM8AFGDC7nTmkCSFJpZcLApE4QL0UyJohia38-OfM_A>
+    <xmx:iSndZxM2LEDJbbuGzhDU3rRKl_Rhq78T45nhu_ftTrJCqFNo9iqReJZ0>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 5BFDD2220073; Fri, 21 Mar 2025 04:55:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250321080918.1f8b90c4@canb.auug.org.au> <PH7PR16MB6196A1D9A7043FE4E69D8AFAE5DB2@PH7PR16MB6196.namprd16.prod.outlook.com>
- <PH7PR16MB6196B4BE63D7ED4D91E66BD3E5DB2@PH7PR16MB6196.namprd16.prod.outlook.com>
-In-Reply-To: <PH7PR16MB6196B4BE63D7ED4D91E66BD3E5DB2@PH7PR16MB6196.namprd16.prod.outlook.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 21 Mar 2025 09:52:57 +0100
-X-Gm-Features: AQ5f1Joyy04hP5ZqLNHiPsqFX5pzDqdwo1UJMfxtCqFw2cJyFhvslvysOB8BsFc
-Message-ID: <CAPDyKFoMZbr+CDf0LeyQ_WxpTW=b_gGp5q8y-PPo+0MBNnyJJQ@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the mmc tree
-To: Avri Altman <Avri.Altman@sandisk.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-ThreadId: T03b4c03f0ce6f6fd
+Date: Fri, 21 Mar 2025 09:55:17 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Stephen Rothwell" <sfr@canb.auug.org.au>, "Rob Herring" <robh@kernel.org>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ linux-next <linux-next@vger.kernel.org>
+Message-Id: <1eda0df7-a797-43b9-b3d0-3d1855b58e38@app.fastmail.com>
+In-Reply-To: <20250321153800.639f03c5@canb.auug.org.au>
+References: <20250321153800.639f03c5@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patches in the devicetree tree
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, 21 Mar 2025 at 08:33, Avri Altman <Avri.Altman@sandisk.com> wrote:
+On Fri, Mar 21, 2025, at 05:38, Stephen Rothwell wrote:
+> Hi all,
 >
-> > > Hi all,
-> > >
-> > > In commit
-> > >
-> > >   79055e47336e ("mmc: core: Remove redundant null check")
-> > >
-> > > Fixes tag
-> > >
-> > >   Fixes: 737d220bb2be ("mmc: core: Add open-ended Ext memory
-> > > addressing")
-> > >
-> > > has these problem(s):
-> > >
-> > >   - Target SHA1 does not exist
-> > I was using Ulf's for/next branch, as I always do, and their the sha1 is
-> > 737d220bb2be.
-> > Should I be using different tree/branch ?
-> I apologize.  Looks like 403a0293f1c2 does exist and presumably point to the same commit (impossible):
+> The following commits are also in the arm-soc tree as different commits
+> (but the same patches):
 >
-> commit 737d220bb2bef9efd43267c757faff003533b631
-> Author: Avri Altman <avri.altman@wdc.com>
-> Date:   Sun Oct 6 08:11:42 2024 +0300
+>   a78f7a337bc7 ("docs: process: maintainer-soc-clean-dts: linux-next is 
+> decisive")
+>   b31cc6af1bb1 ("docs: dt: submitting-patches: Document sending DTS 
+> patches")
 >
->     mmc: core: Add open-ended Ext memory addressing
+> These are commits
 >
-> commit 403a0293f1c230524e0185b31f69c02a6aed12c7
-> Author: Avri Altman <avri.altman@wdc.com>
-> Date:   Sun Oct 6 08:11:42 2024 +0300
+>   a42d2d53a6d7 ("docs: process: maintainer-soc-clean-dts: linux-next is 
+> decisive")
+>   d98d35d99e0f ("docs: dt: submitting-patches: Document sending DTS 
+> patches")
 >
->     mmc: core: Add open-ended Ext memory addressing
->
-> I guess something in the metadata is different.
+> in the arm-soc tree.
 
-Sometimes I am re-basing my tree, so I am guessing the sha is from an
-old tree/branch.
+My mistake, I saw them in the patchwork backlog and applied them.
 
-Anway I have moved to use 403a0293f1c2 as that should be the correct one.
+I dropped them again now as they were still on the top of my branch.
 
-[...]
-
-Kind regards
-Uffe
+    Arnd
 

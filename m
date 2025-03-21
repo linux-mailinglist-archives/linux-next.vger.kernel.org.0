@@ -1,118 +1,123 @@
-Return-Path: <linux-next+bounces-5933-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5934-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED0ABA6BFE8
-	for <lists+linux-next@lfdr.de>; Fri, 21 Mar 2025 17:29:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B90CAA6C4AA
+	for <lists+linux-next@lfdr.de>; Fri, 21 Mar 2025 21:55:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 958A617ED71
-	for <lists+linux-next@lfdr.de>; Fri, 21 Mar 2025 16:29:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0CE367A2177
+	for <lists+linux-next@lfdr.de>; Fri, 21 Mar 2025 20:54:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299C222AE75;
-	Fri, 21 Mar 2025 16:29:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3304622FE13;
+	Fri, 21 Mar 2025 20:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="Hyupkqa7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cgxp1b5H"
 X-Original-To: linux-next@vger.kernel.org
-Received: from 003.mia.mailroute.net (003.mia.mailroute.net [199.89.3.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7462422ACFA;
-	Fri, 21 Mar 2025 16:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B201513C695;
+	Fri, 21 Mar 2025 20:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742574572; cv=none; b=OYxNWHt9J964EZJJrLhrt52kgcldarrS9ow2Gzt0Ayeeql5Fy8OBhHnMs8oIAh0OTvG+s72yLPERvSXZT5c5nGT59JDf8OEmt1EOWtmd/uNFPbyM1dH74olZTPFXoJ1IEwUNbQXRByNznZvbvDmXCmDADCT6r9wBdSPZoLVVT+c=
+	t=1742590508; cv=none; b=YPQKhbI9pNLHmKOZMOKNXMjC4CQwdSrh+FGM6zUb55PXzXk3OZSFIbHA4TdoKs5ZM5zokSkPXUqVcl5TV8CzfJlv4nvjWs8nmHJBn3eDSmRI/cTQn4sjXOkMrmT4MZricGwr/AIzzE5BjMCRjilw1n3gwfsF+SpGHor5mJqgqMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742574572; c=relaxed/simple;
-	bh=yIlBkQjeOtg1iUXRHxsVtlu2CYMWRHEH9LFbJxghFQY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rQvm9AKBij93mrKES05Fe6wgnZYtyomQGJgL0t9Ekfhl9sf6UV9WRIrLm8Jiqn/47P7yF4rb4xnQA2Jr1x40EaWWEZWGAd0CJ6CAx+xu2LWw9Qmfk3o2shAfz/cMWoJZC8W+CgkF9E8CKg8YulvaIjfAaZEt7TczcwP0MKf3e6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=Hyupkqa7; arc=none smtp.client-ip=199.89.3.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 003.mia.mailroute.net (Postfix) with ESMTP id 4ZK7FP2Rhzzm8Sbk;
-	Fri, 21 Mar 2025 16:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1742574568; x=1745166569; bh=pOvlZLMOQ8fE6fKCTKrLrZUU
-	3Ly0UNC8CD8E1c9yvtU=; b=Hyupkqa7tNtLocFangibn62O0k0Sacu+cXVEFmzC
-	HfzoXjf3+JCPhhNc8GfD0MojGr+7A4WxOBBv26OszWSHdHW8UEzT8Jmg80ypQBbG
-	DbI4SVc3vMkyoVsHjWY/Ejm/ehgvEQWsAAQ2m9epdzkkd4dJgG2gEZTXlIm7mhaw
-	PxIU1xqJK/VcjHjNgU595qEOnUmjwj99n0lUfeTt4qhvzkfgxQ3drBDkj8bzwg0K
-	PLORPcZpEFkJIbDzxdTDjZsvUuubkOLiGNphFR3JyscWysbkPD+3x/p+5kx027Pp
-	es9acIe5XiMZu0K+e6g2Ig1E12Nl3NYDUokAxQCHH3/1uw==
-X-Virus-Scanned: by MailRoute
-Received: from 003.mia.mailroute.net ([127.0.0.1])
- by localhost (003.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id tqnhyV38ubUR; Fri, 21 Mar 2025 16:29:28 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 003.mia.mailroute.net (Postfix) with ESMTPSA id 4ZK7FJ6c04zm98pg;
-	Fri, 21 Mar 2025 16:29:22 +0000 (UTC)
-Message-ID: <6e024a8c-5d54-44dd-8ab9-cb1d269c288a@acm.org>
-Date: Fri, 21 Mar 2025 09:29:20 -0700
+	s=arc-20240116; t=1742590508; c=relaxed/simple;
+	bh=MVawJ+uRuf5qJyFi5lAM7ITVcCh8q7Tko+q2Mk4Nb+I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DtUhC4R79qHYA6dryoBJwdBU/vwAH5NNEUfF+HddhQxzQMf6p8LMdKDSNSLzT9uh0GGJbeYXKeR2jkFFp3zClVxAys6+TSFbZZHqUUg38z935gAdq0l7vyHJZI/IugHkubU0MN2XaWkGuBb7cS5QGdOB6zeJzP1ZcDtfn6UM/ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cgxp1b5H; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2ff53b26af2so645106a91.0;
+        Fri, 21 Mar 2025 13:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742590505; x=1743195305; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A92tVAeSYZBweGivFYxCcNKXj/GHAJth/Pmm7NFfrYc=;
+        b=Cgxp1b5HYqE173QGX1j3Iq8K/706RmvyZVYuXLPrUTiPTh5Xlvhifqjfq295KWw55Z
+         C/2New2VAyDbr5CWtn+qR+KvRBKdTzJ/lnFbeDaYorYpFic/ZfJ+QQYM1nAp+SREtqEa
+         rIsD4629ktZU+bmo9YzYublbtuFZIWeFW67k9OKPQufvfRo7cDuJHrwpll0fZFat55dd
+         muvJ+hr8uresYYB49r61Vaz2m3lKaXc4TWh6w95nBdVinyj3mY/eDyudos0Je+4f3w0H
+         xWiJrI6CghMtY7M55OYBKve/A2ndJSzamenQlebxRGYNFDDYqp8f6zpdyf0226zd9WkQ
+         +6eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742590505; x=1743195305;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A92tVAeSYZBweGivFYxCcNKXj/GHAJth/Pmm7NFfrYc=;
+        b=MwNeHXQGY2cddUBc4SPHbHlM6j4MnK34MdWTptwyn5dJSBmoPZQT6XBhnsIxmPGxrE
+         s5kBwvljGYM1CM7x3wsd4TmREALY38MaNwU8PpAVUMBLd7xLxSEyMBNVhbrejTvr8KO7
+         mqBMV6l3Mq50twiLh6YZItUVok7qFxjHDf+VdWDMhecvW2/u9kPT5qxEgGm3VeHF+RYT
+         HjyLUatLmzHZvrBnxLtyLG0eLheF/8zBjNpGjIT3JxovO4IiPD/wTz+X2FOWTz4PD4qX
+         G5gShQLnAotOuSrUg5eMhkLoS2RBSVBWGu0gfnXdd+uJE4OUN3Tq7no5kvx4Rf9E/S1J
+         07FQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5YOivDg8LpJqva2izPewS40t/GNoV111IqGGr20wirYr6D97LhUERh3ILThqUJVFloMvjSzLGtxkY5Q==@vger.kernel.org, AJvYcCXAz30Liug/Bjoyk7enAKnq0LmjLtl5sIEFvGYjuCT7Fq+K3rrfF0SpSB8oLwIfAa7KwE1vIDAZu5E/ORU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwB4ry6cp6S3bBINeNIjUVD8JWr7c13LUJeUR7o4TlEjCJ3d+36
+	hhxmVn61e2DFSBNOuvEcrxbtXxodKSVelfhIUgMDEZn8Bbs1vSgHTQYrlsl2wyNZNF4rjYx0MYi
+	iOAu10UcGHaMSukSodITJemtJgt4=
+X-Gm-Gg: ASbGncuao1zEfymRj2NKjVCRGfnIfnG1AfmclaP0V9PQv636KKQTpq2Q1HvCswl1iP7
+	Noav317T1ddUSC/WXf4Vugqu+AJWYIUIVzDo1uOvgSJCzBlg1tH0q3BHiDJsF972Z7W+qnXy5gc
+	XxPjhRwdBsdHvqlrP8fAGic/78eA==
+X-Google-Smtp-Source: AGHT+IF72bezPVTt+Bwr+E5Kw+h8sXNz8ywq21FjjEMo2IOeV33umLOwEl8IQcCzNZYC8pQga0VB/BbY4VQSWZYvlCo=
+X-Received: by 2002:a17:90b:1b0a:b0:301:1c11:aa7a with SMTP id
+ 98e67ed59e1d1-3030fedf3e5mr2544199a91.3.1742590504899; Fri, 21 Mar 2025
+ 13:55:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the scsi-mkp tree with Linus' tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-References: <20250321164700.477efe5c@canb.auug.org.au>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250321164700.477efe5c@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250321185630.566dc075@canb.auug.org.au>
+In-Reply-To: <20250321185630.566dc075@canb.auug.org.au>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 21 Mar 2025 21:54:51 +0100
+X-Gm-Features: AQ5f1JpLxFtrBj1igOP5SIzY8-Fl-cncCY913l3brOXrQqIuFHUW_pW6F9SgpvY
+Message-ID: <CANiq72n_W50ZeS7xpiH7OL1DMUy4Z5FM2Kwjui_z2aiuJh9+BA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the driver-core tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Greg KH <greg@kroah.com>, 
+	Abdiel Janulgue <abdiel.janulgue@gmail.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/20/25 10:47 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the scsi-mkp tree got a conflict in:
-> 
->    drivers/ufs/core/ufshcd.c
-> 
+On Fri, Mar 21, 2025 at 8:56=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Today's linux-next merge of the rust tree got a semantic conflict in:
+>
+>   samples/rust/rust_dma.rs
+>
 > between commit:
-> 
->    fe06b7c07f3f ("scsi: ufs: core: Set default runtime/system PM levels before ufshcd_hba_init()")
-> 
-> from Linus' tree and commit:
-> 
->    20b97acc4caf ("scsi: ufs: core: Fix a race condition related to device commands")
-> 
-> from the scsi-mkp tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>
+>   7b948a2af6b5 ("rust: pci: fix unrestricted &mut pci::Device")
+>
+> from the driver-core tree and commit:
+>
+>   9901addae63b ("samples: rust: add Rust dma test sample driver")
+>
+> from the rust tree.
+>
+> I fixed it up (I applied the following supplied resolution, thanks Danilo=
+)
+> and can carry the fix as necessary. This is now fixed as far as linux-nex=
+t
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
 
-Hi Stephen,
+Looks like it worked from my test builds, thanks!
 
-Thank you for having resolved this conflict. While the conflict 
-resolution looks good to me and should result in working code, it may
-be desirable to resolve it differently (init_completion() before the
-ufs_get_desired_pm_lvl_for_dev_link_state() calls). This way the
-spin_lock_init() and init_completion() calls stay close to each other.
-
-Thanks,
-
-Bart.
-
-
+Cheers,
+Miguel
 

@@ -1,95 +1,131 @@
-Return-Path: <linux-next+bounces-5978-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5979-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51443A6E157
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 18:46:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA7CAA6E180
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 18:50:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB8677A782C
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 17:45:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0C101894158
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 17:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2190F264A8B;
-	Mon, 24 Mar 2025 17:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012532641C5;
+	Mon, 24 Mar 2025 17:38:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ub1bqiEE"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="DXmzlsWg";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HhLS0TR7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC58264606;
-	Mon, 24 Mar 2025 17:34:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8378026463B;
+	Mon, 24 Mar 2025 17:38:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742837649; cv=none; b=ATCovYIkRfF5lUP34vuK6X7/nqNMJz+9mYbDClWyAlX3wxpmKnI7kInRqv1Hye2A6O7dy8aIErtlHZHcw2NZJbBvOv9EQmaiOxpiUIo/vxcXkOcUDHDcvH32sZUNGkAm6VKZToBPHLQmmzqcK7bKDbqGjpXfWWEpFVfECHFvLdc=
+	t=1742837891; cv=none; b=u80IsG8cKMONyx+vdpMv0a+MC2EmBX7iz5DR8GsZhiVog25viskB39rW4j0/RsAZuaL0WqKdw/UoauudVlZUBEiudOcOMj5i7g+NkNeZRoNG985r1gtCMngcfjTcXvQU8KnuTvyBuf6PPyPcjJOKblzGeVWXhVpstnkASyISO9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742837649; c=relaxed/simple;
-	bh=P+YyLdz/Q4o7XHw/EVthVYAiVp695B0DaQNdJuq/L6c=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=s+ZATaBaRzJpcrgffrCHiMSZQc/PlUN02jY3Z2v689ZXcprRnR9T2T6Pk+xxmo7C1UUV12vp7YwPRGLWawDZhbb36dKxulkfQvDDNH3pKzbMNTAyI95659TfJzWwX2M+jIeocqDgwiQkH0bR19SimM3toIVt9Ph9fGDAioL3xaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ub1bqiEE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02908C4CEE4;
-	Mon, 24 Mar 2025 17:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742837648;
-	bh=P+YyLdz/Q4o7XHw/EVthVYAiVp695B0DaQNdJuq/L6c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ub1bqiEEGqms0sapfE7KOL399pEjcevd5Z2JnNlKNgmSBsZS9QovXFtFqHmQ79ZUn
-	 FoApyLw3ITA1UZbdjxFo7893adzHGJRHjsHAl/ns3sNdvnsj6LuFpbL3HVwiM3JJxl
-	 wAaBB0YZ3pK4oyYMe1qpheNNJvi+9GQ00X1keG2PXFTvKb6FbDUTsq5RJSYYWlEI3y
-	 Qyw3dKRH2Tp2Binc+BadYYG4HzvV8fbvNecgbueBFJqXSK0Z7NOJymG3y7P+XipCk4
-	 HUPOn3P58LuuStXlZt5QNm/iTomib63qkrywqCOHWMw7NI7YTH0usPUpNZRVyH2/8M
-	 H36ffCIyYBekQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	linux-next@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Rae Moar <rmoar@google.com>,
-	Pei Xiao <xiaopei01@kylinos.cn>,
-	Feng Tang <feng.79.tang@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 10/10] kunit: slub: add module description
-Date: Mon, 24 Mar 2025 18:32:35 +0100
-Message-Id: <20250324173242.1501003-10-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250324173242.1501003-1-arnd@kernel.org>
-References: <20250324173242.1501003-1-arnd@kernel.org>
+	s=arc-20240116; t=1742837891; c=relaxed/simple;
+	bh=Pl8ZVDDj01kH0entjLJU7sWrwBBGgSDZhTkUajTovBM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=jbIh1LCzaznTgT1vPTJBc0nBXzRL+1O+Il/pRkPbKFhYD+upLlm2kFH6lXdwP+BnM+GYbfMwUMvNwt6W3wQq5uPqzMFVRFFrjYQ4utyGccdHlF48jcW0vqxH3HhxYCd55oZY8edBdcV6wgrYoGHrzhBg0Xm5MBvtgQDJAeMZGp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=DXmzlsWg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HhLS0TR7; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 7DB531140163;
+	Mon, 24 Mar 2025 13:38:08 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Mon, 24 Mar 2025 13:38:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1742837888;
+	 x=1742924288; bh=0ikk+C+FnOn4DT6thNF5NrWTB/loSybHk2l4v3CzNfQ=; b=
+	DXmzlsWgRAVmHzXqk4SjUmKq3FroqR3wamyO1xhLiIoH1BCtOwRp/723XkJr+IWS
+	YfNDkxGPljYRF1L3FsB1aIwgHGp2lLmC51X6Ajl/l2nH1urg+dmGolpPfHGibzb8
+	FP+nSUCqE6G/ULs93aa1prZF4bVcT8FMOOJBbPisuq4/hQ52dc3DoqUCYa9LLpvP
+	lHt5eJdW/AvRxH+o4icyrQpXBNNiNzlnAru8j6yl2CvXv/O231cxeKvakDjw9iPw
+	buqv8dNt7V/dIBenTiWIezoPI7Bq3lJ9Pdw2BfDUQp/Zs+ppzT8QWr8NhRpwLX/a
+	g1EJza4BtYJWUQnZwM5lUw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1742837888; x=
+	1742924288; bh=0ikk+C+FnOn4DT6thNF5NrWTB/loSybHk2l4v3CzNfQ=; b=H
+	hLS0TR7gvCubWTavhyXtaYcVxakySgop13VtLB2oOw7mNiKDiCHYiaOdiEib0rvA
+	sLzLyq9hk5VU3+HI6za+sK9GfNuc1U1aPxujcnhAVZwSve4aR6Aze3Rt1+D+oHnb
+	9GRto9q/POQaUXq5jPbpZIoeXQHKrCy95Q9FFITyVQFPUx5dfyMHIVSDYDojvM85
+	FGulHEuOMVMJ5oUlyyFDZ6J8jI2XJ0WQypyn8QOz0kHxGE2U0HM8wlwxN8wZXQej
+	VSh1GRBcwuzfTfLqHuc78SB8Kv12sLg/j45SVDaJnNNJaxbSGYD+ieEFQnJdzZ8e
+	xRwXI/sDmmAulywlKnCjw==
+X-ME-Sender: <xms:f5jhZ1zjV0SjtJpFsHeYs74lk2MifsgWnORrRrtZfj-ULvkKNwhReQ>
+    <xme:f5jhZ1SSdrjuFsLhI9OGt4VposD2bNUcbcqUfRewKRnk7Jl0xn_p968CTwFc9JIN3
+    lhRlruqxXjJcLamcLo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduiedtfeelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    ledpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhugh
+    drohhrghdrrghupdhrtghpthhtohepghhlihhtthgrohesghhmrghilhdrtghomhdprhgt
+    phhtthhopehmrghsrghhihhrohihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrkh
+    hpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepjhgvfhhf
+    rdhjohhhnhhsohhnsehoshhsrdhquhgrlhgtohhmmhdrtghomhdprhgtphhtthhopegrtg
+    grrhhmihhnrgesrhgvughhrghtrdgtohhmpdhrtghpthhtoheplhhinhhugiesrhhovggt
+    khdquhhsrdhnvghtpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgv
+    rhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:f5jhZ_UdxMaTbbr822PQ4ilOV-zNjLhEOUvKq9Z_gSC20B_Mq6rlEA>
+    <xmx:f5jhZ3hLKi3uMXlmdhtnNrz87fog1yed7I4Cx6l1rMd8cRDo2VDVHA>
+    <xmx:f5jhZ3C2sxlh8WcCEfiJBiGliLCLbvCfDfkgMTPpIKXVA2oCRqY7vA>
+    <xmx:f5jhZwLqkzeD6YExqg5GyBFZYrosCjHPc7FfcZ3RiEQ_s2M-VnSIdA>
+    <xmx:gJjhZzs6yRsRSLuVgAaWmuRqhGbDXrpkemStinyl8WRzuRVM8K71hlu9>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 8773E2220072; Mon, 24 Mar 2025 13:38:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Mon, 24 Mar 2025 18:37:47 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jeff Johnson" <jeff.johnson@oss.qualcomm.com>,
+ "Stephen Rothwell" <sfr@canb.auug.org.au>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>
+Cc: "Oliver Glitta" <glittao@gmail.com>,
+ "Alessandro Carminati" <acarmina@redhat.com>,
+ "Guenter Roeck" <linux@roeck-us.net>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ linux-next <linux-next@vger.kernel.org>
+Message-Id: <5d58bda3-4f6f-435e-962d-a8a5724112f5@app.fastmail.com>
+In-Reply-To: <9faf14a1-ba47-46bf-9ddb-629782b8b52d@oss.qualcomm.com>
+References: <20250324103048.3d8230f9@canb.auug.org.au>
+ <9faf14a1-ba47-46bf-9ddb-629782b8b52d@oss.qualcomm.com>
+Subject: Re: linux-next: build failure after merge of the kbuild tree
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Mar 24, 2025, at 14:52, Jeff Johnson wrote:
+> On 3/23/2025 4:30 PM, Stephen Rothwell wrote:
+>> 
+>> I have temporarily reverted the latter commit until the former are
+>> fixed up.
+>> 
+>
+> +Arnd, will you post your changes for these?
 
-Modules without a description now cause a warning:
+I have sent out the last 10 module description patches
+I had in my tree now.
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/tests/slub_kunit.o
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- lib/tests/slub_kunit.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
-index d47c472b0520..848b682a2d70 100644
---- a/lib/tests/slub_kunit.c
-+++ b/lib/tests/slub_kunit.c
-@@ -325,4 +325,5 @@ static struct kunit_suite test_suite = {
- };
- kunit_test_suite(test_suite);
- 
-+MODULE_DESCRIPTION("Kunit tests for slub allocator");
- MODULE_LICENSE("GPL");
--- 
-2.39.5
-
+      Arnd
 

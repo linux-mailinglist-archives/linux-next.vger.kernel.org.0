@@ -1,85 +1,262 @@
-Return-Path: <linux-next+bounces-5988-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5989-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C51D7A6E6C4
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 23:46:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18720A6E762
+	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 01:00:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 739AA7A5D05
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 22:45:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21B8F3B1F0A
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 23:58:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D157D1EFFA2;
-	Mon, 24 Mar 2025 22:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="iZhstfqn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 213711F1519;
+	Mon, 24 Mar 2025 23:58:34 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F17C1EF368;
-	Mon, 24 Mar 2025 22:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CED51F0E4A
+	for <linux-next@vger.kernel.org>; Mon, 24 Mar 2025 23:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742856412; cv=none; b=DkaNvcP83/3PrqX68Z4O+gfwK3fxzUyq7Y95E6uRPBG5jdB/pCUU8JVMGwRlDQbnnQ+PMTlTYrLC9txJzm3+tYvizNzKm0/TP5MC0cfqfrLsruQWubiukPmppUd66deJCBY4VkZv2ku2rbw1CTM8n4FsZGaa5wIB5oGCdx6kSDs=
+	t=1742860714; cv=none; b=f7FljC1wvTdDxGeMHv7XS1QDP1yr0v1dGKI+fPf0SE3coKTKq8BSNhg0zQzjmjI1k7Y4KWnOwLbN9Ml+tLv8HZcFhV78GXv/iWv/0lP+bfNUQy2GiY2PWx6ul9FVBjaWdxM+spFJClamiI6bu2Bg1V48S3VD073ITuMY1ykA7eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742856412; c=relaxed/simple;
-	bh=RrIyOfXD0GJNcypng7Wh9WiSWTk5eKrBUjsfZTrr0NE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AUMql2O7vBVluHgESrERmi0pHMlelI2N1LPno6lqwyaLmrkOZl1arsLXPqLwS/QqM6HdvCv2M+PmG+37UwqLu2vrQ2Sx5DbPPh5IqQ0xbVuqvBy86Mq+hS9Zpf+wLwfi05e3xbTYt1Kk2gjs6gA3lqBKDCdDEDGWoLLoqWhUmIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=iZhstfqn; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=8ZmTbketZ54QzeXCl26c7EEbeq37wz1sgZSmUcG15uI=; b=iZhstfqnCuvnLFoT9bPcLs3/u6
-	ut/w2MtVGTo0F6T/umLB/1+ZIGMm93mM5OZeh/ttjOBtBDDftP8Jc+rguMdeKV5Xz8nJiUjMDdpvt
-	wB43MG5f/xdjYGjrdSdwRUr4QVjECpYR+bLTjiaZJ4SDU9KdfU2pmsXsI0a57ovJE1O82dHAZj6Ya
-	hdrn34MROSl/vvQEMajxxMXm4rQ07pSQgBdEvGwtWNF/vh1X8/AqYkedvof6pTCAQujVYRs4v40vz
-	5cx1bPMBQ5VPBNNiTi+iCjK4CWFqmEa/COK4s7tMuYLvqmIMrj2kkfyFkoqPFIhQM9/eBSV7sRPU0
-	6X6GBUcg==;
-Received: from [50.53.2.24] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1twqZC-00000005Jfx-1c0u;
-	Mon, 24 Mar 2025 22:46:47 +0000
-Message-ID: <90eb07a0-1490-40af-9858-d357b922bbb8@infradead.org>
-Date: Mon, 24 Mar 2025 15:46:42 -0700
+	s=arc-20240116; t=1742860714; c=relaxed/simple;
+	bh=3yJ448z3JGIAuadfwPRagw+WU0K+n0QcDLRFcGjMoHY=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=FSSxPH1rezUNm/V8HETLhr+TCe18xTqkD/4RY0owhUW7klWNfNf0eY806nt3kiKHAweEhsOHxXuR6QYoHjLuPvNIevPn96Zxaq6RXfLsehNz/dpzdqNoWFYrcLPh1MId9dselU24v0glMduNoqXqiXdsuVGT70eCjf35gX/Sy84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3d44dc8a9b4so47039155ab.3
+        for <linux-next@vger.kernel.org>; Mon, 24 Mar 2025 16:58:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742860711; x=1743465511;
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mpF9gzQ/SYKkbKjtJllNByBKYiRK+kwj/tJYgNpzlqg=;
+        b=kIWJ7vo8o5VWN8p2K5Hpa6swMh2Lp1ukbAnx9jJ0CMAd+wKlU8+qEyNf6Vah38+zUW
+         O2xIJJ6LVKLKjfUGXvZKv4wPTkl/pW5nvCFo3nsOe9nEMp4I0FDKPvl/gg/pd0oiqoRm
+         8FkxuEyMcXbveDfpys3w1JDUkfk7AfuYlIbPlqTbGweE1/U7jouvRpolrHHRVNt8UzKj
+         TdNsutIEJD3yspaj7+BM8iyn3iiLuH1Fn+a1n6lkdjHVbTqfX7dlnWMGlmDShI+yUrEh
+         tLfIS41yeGAeb+50W48dhfKF2WArXQ08QeW+KCIEc/eWAwjLEoYNBfd7qYTi2XYgLvGI
+         dMhA==
+X-Forwarded-Encrypted: i=1; AJvYcCUM1ZQvSzEyDQ1vID8/8G4bcFUymVw/G0+m+atuJNLYjAnQjlgB2r9hhSYvXJw/l9Q5KGh2U2u4QHul@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaMfU+cY36NrHqBN3eD9/IuyMkdHlUxYY+TGmCdu9S1XJFDli9
+	pllphLFF5zN1vTGxSrnpTFQr9cs5A3L/cqz1WXX5kKL4oNYwsYLhXFagf6L5htsJFmHFuSU/fUP
+	zLZakZopbJbIigBOWRD+/iiVSW5EUSWEp0FPkQPN3IEfOXtWmk2ueQ74=
+X-Google-Smtp-Source: AGHT+IF0rPKg1aVrmMsgebqF6lhFExAlqbZ6W66CtGYEeA8dqz7U2tON6sS3Ea2wSrOgGXyK//1rha0y0mHCf0XLpL6AiM2QczkB
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Mar 24 (drm/xe/xe_migrate)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20250324230122.106602ef@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250324230122.106602ef@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a92:cd85:0:b0:3d3:e29c:a1a5 with SMTP id
+ e9e14a558f8ab-3d596175043mr141994725ab.18.1742860711193; Mon, 24 Mar 2025
+ 16:58:31 -0700 (PDT)
+Date: Mon, 24 Mar 2025 16:58:31 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67e1f1a7.050a0220.a7ebc.0032.GAE@google.com>
+Subject: [syzbot] [pci?] linux-next test error: general protection fault in msix_capability_init
+From: syzbot <syzbot+d33642573545e529ab61@syzkaller.appspotmail.com>
+To: bhelgaas@google.com, linux-kernel@vger.kernel.org, 
+	linux-next@vger.kernel.org, linux-pci@vger.kernel.org, sfr@canb.auug.org.au, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    882a18c2c14f Add linux-next specific files for 20250324
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=3D17d24804580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3D30e7faf61be4d27=
+e
+dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd33642573545e529a=
+b61
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debia=
+n) 2.40
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ea720fb0d677/disk-=
+882a18c2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/723a320ec217/vmlinux-=
+882a18c2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/4f23b2e1eb2c/bzI=
+mage-882a18c2.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit=
+:
+Reported-by: syzbot+d33642573545e529ab61@syzkaller.appspotmail.com
+
+ntfs3: Enabled Linux POSIX ACLs support
+ntfs3: Read-only LZX/Xpress compression included
+efs: 1.0a - http://aeschi.ch.eu.org/efs/
+jffs2: version 2.2. (NAND) (SUMMARY)  =C2=A9 2001-2006 Red Hat, Inc.
+romfs: ROMFS MTD (C) 2007 Red Hat, Inc.
+QNX4 filesystem 0.2.3 registered.
+qnx6: QNX6 filesystem 1.0.0 registered.
+fuse: init (API version 7.43)
+orangefs_debugfs_init: called with debug mask: :none: :0:
+orangefs_init: module version upstream loaded
+JFS: nTxBlock =3D 8192, nTxLock =3D 65536
+SGI XFS with ACLs, security attributes, realtime, quota, no debug enabled
+9p: Installing v9fs 9p2000 file system support
+NILFS version 2 loaded
+befs: version: 0.9.3
+ocfs2: Registered cluster interface o2cb
+ocfs2: Registered cluster interface user
+OCFS2 User DLM kernel interface loaded
+gfs2: GFS2 installed
+ceph: loaded (mds proto 32)
+NET: Registered PF_ALG protocol family
+xor: automatically using best checksumming function   avx      =20
+async_tx: api initialized (async)
+Key type asymmetric registered
+Asymmetric key parser 'x509' registered
+Asymmetric key parser 'pkcs8' registered
+Key type pkcs7_test registered
+Block layer SCSI generic (bsg) driver version 0.4 loaded (major 238)
+io scheduler mq-deadline registered
+io scheduler kyber registered
+io scheduler bfq registered
+input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+ACPI: button: Power Button [PWRF]
+input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
+ACPI: button: Sleep Button [SLPF]
+ioatdma: Intel(R) QuickData Technology Driver 5.00
+ACPI: \_SB_.LNKC: Enabled at IRQ 11
+virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKD: Enabled at IRQ 10
+virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKB: Enabled at IRQ 10
+virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+N_HDLC line discipline registered with maxframe=3D4096
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+00:03: ttyS0 at I/O 0x3f8 (irq =3D 4, base_baud =3D 115200) is a 16550A
+00:04: ttyS1 at I/O 0x2f8 (irq =3D 3, base_baud =3D 115200) is a 16550A
+00:05: ttyS2 at I/O 0x3e8 (irq =3D 6, base_baud =3D 115200) is a 16550A
+00:06: ttyS3 at I/O 0x2e8 (irq =3D 7, base_baud =3D 115200) is a 16550A
+Non-volatile memory driver v1.3
+Oops: general protection fault, probably for non-canonical address 0xdffffc=
+0000000000: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.14.0-rc7-next-20250324-s=
+yzkaller #0 PREEMPT(full)=20
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Goo=
+gle 02/12/2025
+RIP: 0010:msix_prepare_msi_desc drivers/pci/msi/msi.c:616 [inline]
+RIP: 0010:msix_setup_msi_descs drivers/pci/msi/msi.c:640 [inline]
+RIP: 0010:msix_setup_interrupts drivers/pci/msi/msi.c:680 [inline]
+RIP: 0010:msix_capability_init+0x7a9/0x1550 drivers/pci/msi/msi.c:743
+Code: 10 00 74 0f e8 28 9f de fc 48 ba 00 00 00 00 00 fc ff df 48 89 9c 24 =
+d0 00 00 00 48 89 9c 24 98 01 00 00 4c 89 f0 48 c1 e8 03 <0f> b6 04 10 84 c=
+0 0f 85 86 02 00 00 41 8b 1e be 00 00 40 00 21 de
+RSP: 0000:ffffc90000066ee0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffffc9000009e008 RCX: ffff8881412b8000
+RDX: dffffc0000000000 RSI: 0000000000000000 RDI: ffffc90000067078
+RBP: ffffc90000067138 R08: ffffffff854ea585 R09: 0000000000000000
+R10: ffffc90000067020 R11: fffff5200000ce10 R12: 0000000000000000
+R13: 0000000000000101 R14: 0000000000000000 R15: 1ffff9200000ce0d
+FS:  0000000000000000(0000) GS:ffff888124fc0000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000eb38000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __pci_enable_msix_range+0x5c7/0x710 drivers/pci/msi/msi.c:851
+ pci_alloc_irq_vectors_affinity+0x10e/0x2b0 drivers/pci/msi/api.c:270
+ vp_request_msix_vectors drivers/virtio/virtio_pci_common.c:160 [inline]
+ vp_find_vqs_msix+0x5da/0xeb0 drivers/virtio/virtio_pci_common.c:417
+ vp_find_vqs+0xa0/0x7e0 drivers/virtio/virtio_pci_common.c:525
+ virtio_find_vqs include/linux/virtio_config.h:226 [inline]
+ virtio_find_single_vq include/linux/virtio_config.h:237 [inline]
+ probe_common+0x37b/0x6b0 drivers/char/hw_random/virtio-rng.c:155
+ virtio_dev_probe+0x931/0xc80 drivers/virtio/virtio.c:341
+ really_probe+0x2b9/0xad0 drivers/base/dd.c:658
+ __driver_probe_device+0x1a2/0x390 drivers/base/dd.c:800
+ driver_probe_device+0x50/0x430 drivers/base/dd.c:830
+ __driver_attach+0x45f/0x710 drivers/base/dd.c:1216
+ bus_for_each_dev+0x23e/0x2b0 drivers/base/bus.c:370
+ bus_add_driver+0x346/0x670 drivers/base/bus.c:678
+ driver_register+0x23a/0x320 drivers/base/driver.c:249
+ do_one_initcall+0x24a/0x940 init/main.c:1257
+ do_initcall_level+0x157/0x210 init/main.c:1319
+ do_initcalls+0x71/0xd0 init/main.c:1335
+ kernel_init_freeable+0x432/0x5d0 init/main.c:1567
+ kernel_init+0x1d/0x2b0 init/main.c:1457
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:153
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:msix_prepare_msi_desc drivers/pci/msi/msi.c:616 [inline]
+RIP: 0010:msix_setup_msi_descs drivers/pci/msi/msi.c:640 [inline]
+RIP: 0010:msix_setup_interrupts drivers/pci/msi/msi.c:680 [inline]
+RIP: 0010:msix_capability_init+0x7a9/0x1550 drivers/pci/msi/msi.c:743
+Code: 10 00 74 0f e8 28 9f de fc 48 ba 00 00 00 00 00 fc ff df 48 89 9c 24 =
+d0 00 00 00 48 89 9c 24 98 01 00 00 4c 89 f0 48 c1 e8 03 <0f> b6 04 10 84 c=
+0 0f 85 86 02 00 00 41 8b 1e be 00 00 40 00 21 de
+RSP: 0000:ffffc90000066ee0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffffc9000009e008 RCX: ffff8881412b8000
+RDX: dffffc0000000000 RSI: 0000000000000000 RDI: ffffc90000067078
+RBP: ffffc90000067138 R08: ffffffff854ea585 R09: 0000000000000000
+R10: ffffc90000067020 R11: fffff5200000ce10 R12: 0000000000000000
+R13: 0000000000000101 R14: 0000000000000000 R15: 1ffff9200000ce0d
+FS:  0000000000000000(0000) GS:ffff8881250c0000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000eb38000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	10 00                	adc    %al,(%rax)
+   2:	74 0f                	je     0x13
+   4:	e8 28 9f de fc       	call   0xfcde9f31
+   9:	48 ba 00 00 00 00 00 	movabs $0xdffffc0000000000,%rdx
+  10:	fc ff df
+  13:	48 89 9c 24 d0 00 00 	mov    %rbx,0xd0(%rsp)
+  1a:	00
+  1b:	48 89 9c 24 98 01 00 	mov    %rbx,0x198(%rsp)
+  22:	00
+  23:	4c 89 f0             	mov    %r14,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	0f b6 04 10          	movzbl (%rax,%rdx,1),%eax <-- trapping instruct=
+ion
+  2e:	84 c0                	test   %al,%al
+  30:	0f 85 86 02 00 00    	jne    0x2bc
+  36:	41 8b 1e             	mov    (%r14),%ebx
+  39:	be 00 00 40 00       	mov    $0x400000,%esi
+  3e:	21 de                	and    %ebx,%esi
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On 3/24/25 5:01 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20250321:
-> 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-on i386:
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-linux-next-20250324/X32/drivers/gpu/drm/xe/xe_migrate.c:1561:(.text+0x3074): undefined reference to `__udivdi3'
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
--- 
-~Randy
-
+If you want to undo deduplication, reply with:
+#syz undup
 

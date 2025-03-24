@@ -1,144 +1,153 @@
-Return-Path: <linux-next+bounces-5939-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5940-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 080E4A6D33A
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 04:06:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C963A6D38F
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 05:37:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 163843AC5A5
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 03:06:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B78B3B122A
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 04:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD1F1F5FD;
-	Mon, 24 Mar 2025 03:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB58018B03;
+	Mon, 24 Mar 2025 04:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hM6PkbTU"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="o3aYJ2ZB"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24DDD134D4;
-	Mon, 24 Mar 2025 03:06:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617842E3383;
+	Mon, 24 Mar 2025 04:37:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742785575; cv=none; b=LVmqpDi3NLuXfZUYGS70/UK0yJ3B8GTaRXuUMKqeEeLH9V/gcr7zmhaI8d4A0XS/WlWd178VZ9uAcL28v9pU+oxFnXjNxN7tDAvHbJAubXPJmHdXAEpLw9oGs2cysJ0Jv96Q5ZpR1QI3WSJbCDnuAf41ETBvHQa2s/uSeNjm5/I=
+	t=1742791041; cv=none; b=qF0e4NPXS9jBEkEcvWORP5EV39BTV9sSdw/agBI8Q73CiMsbTCjvmvETor/v5wL0OGNzVAf99Uzcs7krb1gtUsNzOUsr2UytCHZ9+3MloUcYl9FwV04mcd1aXttvEUHdUDghaxuEQ8tsfI1WRTT1fcY6KKhZZqDnI2TsagEru/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742785575; c=relaxed/simple;
-	bh=VjAArbcein7n6jkxA8kkItfJAVHkEUWAu1U00aP4eCg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=R96lvGJjE5Ja6krqXGr6CP5IFI6KU0WhZv3gUzqZAoOm19GyqBIogq6DdWgNazJjsWm3/yhvQeQMiOkY9ZAKqnL5av+NIDwW07MIt0sYeVSw3ADqmOI3gh1Q7W2wLDF7WyWNwLeH5djQU50XAKyEWbCoiJZ3uMTlOp2SGI8wDQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=hM6PkbTU; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1742791041; c=relaxed/simple;
+	bh=fggBk4XxrkKKYlWFVtskALGh/abGCavWLxQiPl9syOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=t/bVCrudWu4Yg0ux8N3qKUyepMTV+vZm8y74MfqgxZ/hSHMFkML3J60QZ/YbscfKFJi0gBlihxpeMxQOsPX699+UdTrrdrY6xjlgPzic71tg8rxeyWtOt9pPTCsfKAKwOoWqHilBXtDs5Dz3tLIcSjIQIWGdl0JQwCsIduxybxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=o3aYJ2ZB; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742785567;
-	bh=PDcit8P670kcmY2ktuwUGkkvaDYFCfnPTpn5lWSchjQ=;
+	s=201702; t=1742791034;
+	bh=oTscpH4djTLQPl9PzPMEVPDXJUvfjeXgqJhMtetg+R4=;
 	h=Date:From:To:Cc:Subject:From;
-	b=hM6PkbTUO9UQVE5Ii9MmQgHfOe/UqN1aoJCBq32qVpe5nHjnUBWbVP9C+hIeqTPFz
-	 dkHYcIxpDnH1Jb86JesSjRoPKaZ/H7InudTD0Y4Wm6OmkFfCjsAVhjB6514o5V7PFr
-	 zvVQQKE+OxjK5l6b5vvG732vACnM40tVQVNSH7l/5Ry6TmtJtg9OovsEbM6slTpUgq
-	 +tojH5XHGcqvo7rF5K6VfqUo1oJij4Ol27YVRdkXmRhz5KE1mr7fpeRgoIK2nMGIZj
-	 53V2YGFyBjbAhY8N1YiShl9e8w7z8018ojLHHfH81FWRy7vNkBhBBHMBdf7AQwMCsa
-	 FG65ALZNZpnbQ==
+	b=o3aYJ2ZBgmUXE4YIBW2yFkHxr8icWLTXgdkQy5RemFUNTsBbaOR6soX34oy+0s/4m
+	 hkKjWJgvYBPkZ9ejUFE9/vQ8qyfe+xgiTm42TwwhqoVmE8WY32tVfvJco6Q29ZOIpu
+	 khNr559dIggftOU9lw3FysHScVLOwxJ76bVfSw2O/gS+alhf4Fz8Ji/pg7HHdJggdd
+	 e130v8SrHsp21fB9AMnns9hqbi9uWT5QzaJHdgdSOziyxqHOsaJqTALrMDuXY9834K
+	 xnCobm0BNAHitD3Jh54hlgpARh1ZT59Mt/EsacfKmiB87bIBJxgKL592Wvh0ct83r0
+	 2WT0CyduXqx5Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZLdH24pSHz4wc4;
-	Mon, 24 Mar 2025 14:06:06 +1100 (AEDT)
-Date: Mon, 24 Mar 2025 14:06:06 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZLgJ93vfqz4wcZ;
+	Mon, 24 Mar 2025 15:37:13 +1100 (AEDT)
+Date: Mon, 24 Mar 2025 15:37:12 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dave Airlie <airlied@redhat.com>, DRI <dri-devel@lists.freedesktop.org>
-Cc: Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?=
- <thomas.hellstrom@linux.intel.com>, Tomasz Rusinowicz
- <tomasz.rusinowicz@intel.com>
-Subject: linux-next: manual merge of the drm tree with Linus' tree
-Message-ID: <20250324140606.7b87b0a2@canb.auug.org.au>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Luo Gengkun <luogengkun@huaweicloud.com>, Ingo Molnar
+ <mingo@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Ravi Bangoria
+ <ravi.bangoria@amd.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the security tree
+Message-ID: <20250324153712.6a2b2a5c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/y4rNmdJV7kst=r8jX9Qxs3f";
+Content-Type: multipart/signed; boundary="Sig_/SQO_sz4ZsQqxbJaMZTZyPSj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/y4rNmdJV7kst=r8jX9Qxs3f
+--Sig_/SQO_sz4ZsQqxbJaMZTZyPSj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm tree got a conflict in:
+After merging the security tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  drivers/gpu/drm/xe/xe_bo.h
+arch/x86/events/amd/ibs.c: In function 'perf_ibs_handle_irq':
+arch/x86/events/amd/ibs.c:1207:13: error: too many arguments to function 'p=
+erf_allow_kernel'
+ 1207 |             perf_allow_kernel(&event->attr)) {
+      |             ^~~~~~~~~~~~~~~~~
+In file included from arch/x86/events/amd/ibs.c:9:
+include/linux/perf_event.h:1675:5: note: declared here
+ 1675 | int perf_allow_kernel(void);
+      |     ^~~~~~~~~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  50af7cab7520 ("drm/xe: Fix exporting xe buffers multiple times")
+  9ec84f79c5a7 ("perf: Remove unnecessary parameter of security check")
 
-from Linus' tree and commit:
+interacting with commit
 
-  00c8efc3180f ("drm/xe: Add a shrinker for xe bos")
+  50a53b60e141 ("perf/amd/ibs: Prevent leaking sensitive data to userspace")
 
-from the drm tree.
+=46rom Linus' tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have applied the following merge resolution patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 24 Mar 2025 15:25:18 +1100
+Subject: [PATCH] fix up for "perf: Remove unnecessary parameter of security=
+ check"
+
+interacting with commit
+
+  50a53b60e141 ("perf/amd/ibs: Prevent leaking sensitive data to userspace")
+
+=46rom Linus' tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/x86/events/amd/ibs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index e36c9c63c97c..30157ab98cea 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -1204,7 +1204,7 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_=
+ibs, struct pt_regs *iregs)
+ 	 * unprivileged users.
+ 	 */
+ 	if ((event->attr.sample_type & PERF_SAMPLE_RAW) &&
+-	    perf_allow_kernel(&event->attr)) {
++	    perf_allow_kernel()) {
+ 		perf_ibs_phyaddr_clear(perf_ibs, &ibs_data);
+ 	}
+=20
+--=20
+2.45.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/xe/xe_bo.h
-index 43bf6f140d40,bda3fdd408da..000000000000
---- a/drivers/gpu/drm/xe/xe_bo.h
-+++ b/drivers/gpu/drm/xe/xe_bo.h
-@@@ -341,6 -391,21 +391,20 @@@ static inline unsigned int xe_sg_segmen
-  	return round_down(max / 2, PAGE_SIZE);
-  }
- =20
-+ /**
-+  * struct xe_bo_shrink_flags - flags governing the shrink behaviour.
-+  * @purge: Only purging allowed. Don't shrink if bo not purgeable.
-+  * @writeback: Attempt to immediately move content to swap.
-+  */
-+ struct xe_bo_shrink_flags {
-+ 	u32 purge : 1;
-+ 	u32 writeback : 1;
-+ };
-+=20
-+ long xe_bo_shrink(struct ttm_operation_ctx *ctx, struct ttm_buffer_object=
- *bo,
-+ 		  const struct xe_bo_shrink_flags flags,
-+ 		  unsigned long *scanned);
-+=20
- -#if IS_ENABLED(CONFIG_DRM_XE_KUNIT_TEST)
-  /**
-   * xe_bo_is_mem_type - Whether the bo currently resides in the given
-   * TTM memory type
-
---Sig_/y4rNmdJV7kst=r8jX9Qxs3f
+--Sig_/SQO_sz4ZsQqxbJaMZTZyPSj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfgzB4ACgkQAVBC80lX
-0GzWjwf/bSrWDiwsCQOcVwYqZOEZwlgGSQiLzZlhQHa/w4wfQ52F+dI2yGGrB16v
-ROfYg0icwyqz3Mpb72yrT0/TSIBz1RPDgAd2iZkexA/d+TCyuzKbsgGnKUwMCu91
-CsNHQ2NJFwnOhP5dylVqgrq9JcfHSUp3MCst5VmhAYpNEhoKiO+K7VEcQcxRKNRq
-aeG4xyeBmdNUK9gs6TT11+tV49nKxNjjuPkW3M+4l1Ws7BfAqhUhAtzYh5ZvJ/E2
-uHKCGuY5Z6Mr68JpoggLcwArqp9+wIx/x53HboCUYxGDA6THWzte0zs0zReM38ff
-TLmYkjDQchaRbr2+iVuFifu9C1x8LA==
-=RhGm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfg4XgACgkQAVBC80lX
+0GxCoAf/bkjXdjn49ey9ErEFeWe7xhSBdWZSq1LYbtcGPpvApio0Y3A8aiOvHvjy
+R4sKn9/L/m8jFXIDj53D5to9Tw+XMdn/Tsh3vJR1OR1xX1iPn0ST5baBZr8gWau/
+B6aZHBD3AHq+n1zz2/XW3PTTT9eAV/5KHTp802nFc2RarQgobzjrnIDxwhG0K3nX
+A0D/wh2jVg9UQjmK7RAC8oaQfmpF9rOFYMA3HUO5loiTVFF9ucWXLTj22rlR5Wba
+eeEG28OCiFvds7AyzqVczngdDLMrrPXh0kkqDIYYXae5VtulZNXJnuKy1utv37uY
+3ZwPMk8IvZm1gD1d7Ny25iM43hPn8Q==
+=+1Nm
 -----END PGP SIGNATURE-----
 
---Sig_/y4rNmdJV7kst=r8jX9Qxs3f--
+--Sig_/SQO_sz4ZsQqxbJaMZTZyPSj--
 

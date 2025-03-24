@@ -1,148 +1,260 @@
-Return-Path: <linux-next+bounces-5962-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5963-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E43CCA6DC22
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 14:52:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEF6EA6DC2B
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 14:54:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8098816B50F
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 13:52:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16931188C717
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 13:54:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5A7725EF90;
-	Mon, 24 Mar 2025 13:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEABC14F9FB;
+	Mon, 24 Mar 2025 13:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cjuVdss9"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="kEXltbdT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Q9qafpuQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3998F25DAF7
-	for <linux-next@vger.kernel.org>; Mon, 24 Mar 2025 13:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D832E338C;
+	Mon, 24 Mar 2025 13:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742824361; cv=none; b=l7LRP8t6FiBDHN4Svplc78gcKNtXtbhzp0Dt4KhxtLHZDCOqer4st/HLFiDPgzk7eI1rusC6poA0B7Irba/EJMglcIbBBHBM+k3NI5TnsSHVvY0r8EW+2WV5mgS/Rl9X1eUdjLpeUPOwYuiFB4jm8lhAk+XmxBw7WlIlx8GPZCw=
+	t=1742824443; cv=none; b=EduOs39g6FwYqTVuY2w+DWRA9WD/qzXYT1/ytIehb+mEkNsRi/lXC0CrrQP12xEPGQj+PHq6dHMeNFbs7uRscuihJgKUtTBXoampkrZYUmzTnTZJjdZVpSinZYXBTEiM8M8heVK26oi45cEJ76ltAIFBl6igHOJy/kM8plhddlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742824361; c=relaxed/simple;
-	bh=cCcpMPMYcC+FGUxw3pn4s2VgODhnv5UmUO39fyS3Nug=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Roel0ZAbMSfbhKGWuzWypm3nf0bRPTHbcLuk9mUC5+k4q5zjPP7zvo1C8g724+lc+euv5tp6B1aD0IdCRbAUEYzVGB3A2cg6RRIHSXE1xkCggaBxemwilIGmtT94bGOr5TTszWiRMJO7snubvYVM3tXSJ0Ql+pbxgf3EYvdwa0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cjuVdss9; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52O9PVPK030746
-	for <linux-next@vger.kernel.org>; Mon, 24 Mar 2025 13:52:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	/UD3W4jqq06DgOfRCtMG3oWGQAJktkFgKzna85q3z8o=; b=cjuVdss9qW6kSW80
-	Y6jJaDkuzXtyfhGecLnpKvEZN9QXZhQXQo7xBdOXhCapx/DgYC3Fqsh3PSlMWoOt
-	L9ATqSeJIj4fJuQmAV65E8fqCSGoT0vgomjEtjcV6RIz+fiSrT4Z+HSx5ouIipDR
-	jN+GtH2B2+Mwel4Rk3EWkv+A8GLB3lZp+hzSpx1A0yFvOLgayWe/gkT+IslrJWqh
-	zs6cuXDSJaJrjH++y+24isNvVtG4wtZh9b5cG3Bxm9wUCaqIvDK9zTAfMXSCHHdQ
-	bFFXjvdsZ+tRe8zp9OxmKINLMvD162dGwNvLZMC/FWrs4p193t+dowW+Uou+4cCc
-	CUr28g==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45hpgbcfpj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-next@vger.kernel.org>; Mon, 24 Mar 2025 13:52:39 +0000 (GMT)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2ff8119b436so6969680a91.0
-        for <linux-next@vger.kernel.org>; Mon, 24 Mar 2025 06:52:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742824358; x=1743429158;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/UD3W4jqq06DgOfRCtMG3oWGQAJktkFgKzna85q3z8o=;
-        b=O6wbJOV2G/Daa1IjYNhhuxuQREfqA9UYBSVsMfgDcfBmCvJYEXNtyUVUXGWXSfTGHu
-         kSSayTXNB1aEsl6JXc26UVjfVFmr84Kh+O0Wj8PRb+cTqmdRu58DsMyn6Zwcnic1DFrO
-         6tMU9yvxive7JeuQhNFNok8i6uZ+zoQSZVpzXnf5HuwKiai2h8bIaF6uU0VVSd7io/1Z
-         LHOSuaPiWBNBhqZh/zRbCvLSEAkMLUIaZMjPjBAzoVezL9c+q0HSFtELiRx24vpTuAhj
-         cMDVwIkX9L8P0OUIceoYTGJ52HhNpIzSbDMVESnX+q6KNZeVMk7gsTvi+mW5EKAwnm9o
-         tlgw==
-X-Forwarded-Encrypted: i=1; AJvYcCVPVC8bZTcWAocXqC2OdvhohHyGwDHhabZacj827GcHeBeA7Fm3l2FoZGevZu3rCsvKocmTFZIoz2ul@vger.kernel.org
-X-Gm-Message-State: AOJu0YwozjeqWntplQqcamQDbCuXppd8cKFePEiO+ji9X9+Rjw06DJle
-	pRKYP1ztNArSHuR6fuScv2mNOn3Ncnhlkr7l6rk1ZpgNnxmmpnD9vdhjcRKXVQPXvV6EomU/QI3
-	/HVJ8FS5tmCJ1j9hbBhc1R4lgROdnX7l6ZHUWKIjRLclf9nFKEn53iSIJyAcG
-X-Gm-Gg: ASbGncs+kzDJ0nvw4aEFM9lyKUgYWifMWDP9j5nEevAetbrnFD9hmCX0/zweM181pI3
-	ofxyqeOfF3l7tPG2jXXK37BCiq+RgKrXQX5sI4LKWk3hPQPL81//KpPxMSJS2HdLirTFM3vP1MH
-	QYiLDDeT1+BMb/1LkgvPDhj/hQX8PSv0568TlXDFuSGq7TNUN0OCR/TezHeHLMiaqR+i5DEJiY9
-	YHOdUUbjbK1hZy9KnVmeUyFgqfkb7Pzav7+DxeKaiymvs/GgEXwr6lLP3y6XbAFOrfya14uygb7
-	R6bDis47bNbH8ETYESfA8TbuIu3BGZzFbG9Ln1W/ycPZZ2QVKjV2PMAweinOowejxNorHrE=
-X-Received: by 2002:a17:90b:2743:b0:2ee:c04a:4276 with SMTP id 98e67ed59e1d1-3030fe75769mr18922003a91.5.1742824358147;
-        Mon, 24 Mar 2025 06:52:38 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHvTPFmjQo+xxh11gqrWMfkyIACXf50EIP4OUpHJj/V2D298Z5CE/Ft/u3GcrvffooO1TB3Mw==
-X-Received: by 2002:a17:90b:2743:b0:2ee:c04a:4276 with SMTP id 98e67ed59e1d1-3030fe75769mr18921954a91.5.1742824357497;
-        Mon, 24 Mar 2025 06:52:37 -0700 (PDT)
-Received: from [10.227.110.203] (i-global254.qualcomm.com. [199.106.103.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301bf576c65sm12203927a91.10.2025.03.24.06.52.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Mar 2025 06:52:37 -0700 (PDT)
-Message-ID: <9faf14a1-ba47-46bf-9ddb-629782b8b52d@oss.qualcomm.com>
-Date: Mon, 24 Mar 2025 06:52:35 -0700
+	s=arc-20240116; t=1742824443; c=relaxed/simple;
+	bh=Kmp7q7muijy5PDUpTqYUFZH+1Bc9SWa2MmawQDIz7VE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tWhE0dGpaXclhhWHhr8AonTouLJKikQm0C6HwT8Pkb7LRAv5yAfwAgas5KiTPvF851Ws/NXfT4yn0g9d7S5Jw9y6/Fg4o24p+06dtPkK9/seWuCqNHd3g3LMvR/AZHbGlLNHYzjd4zAETHhMsmqTxFYin5Wu3R/EFwwjWX739bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=kEXltbdT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Q9qafpuQ; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfout.phl.internal (Postfix) with ESMTP id AA49F13833C9;
+	Mon, 24 Mar 2025 09:54:00 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-07.internal (MEProxy); Mon, 24 Mar 2025 09:54:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1742824440; x=1742910840; bh=Bl6gkTxvIB
+	0xJ6m+Hxm4tvymVdUpWUDWjHTmY2yGdC0=; b=kEXltbdTavVfT0dMJ7NIzAXaiL
+	b0EtMHPJfjq7FdKEcm5Rd6q3MdR5uq6XidOMYByD9PUGXrCZEpZuI3C6L7t9O8N2
+	gkH2giBU76gPsgj2biiT3NR/Q6BDr8u3e6NKbeOpUeHmqypvLcM3b1/Mi4Q9efZd
+	0g1qXzqb6wnAkWrivwTyUjqHbwKx6haZ3S7vty5l53debxMoLfeEoS9wIgHMiWv7
+	9cut1HFvtH1RPmiMfszBQG9baW6W4dutNlOMP8pESrW5QmD0kRoSA3yOzKSLoq0c
+	uQrutA/JniVeLJdhikXGiyE0E7zpoeJkC510rCueDrPW1p6p1ByZp5QoVRJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1742824440; x=1742910840; bh=Bl6gkTxvIB0xJ6m+Hxm4tvymVdUpWUDWjHT
+	mY2yGdC0=; b=Q9qafpuQ5yXQgxKhWm0GxevoNGkUF3kvNRANShVorPVCxQGPrMD
+	lCuFNjM2oYXPgsNoFAPDzLMyqjpt2mMtt9AYFA6J3g3gGmLxqqMUccCOQvQqbTfr
+	1okRYcg4GCoPGfOhyh2Vgr5+1LENYVC/cmRoQp1LMyBaAgcsB4lhVF1e3lkBsk9U
+	3qRSaL10syYE3PodVBulXwbBs8UnR+0IEsGzwrHtMmZnSx3dzGTHTCBiA+I50B6b
+	4iJ8ifkJHtiqkVDCERg8fz7TW6wuTYjmGRolz5rRLkOBUk0RFbPck+uTZyHWnCMX
+	8KBRVuhMAbv91GT2caV8jNHk4oIBeary+IA==
+X-ME-Sender: <xms:92PhZwNLofVLNhuOOSyRPhDDQEYnQUeIx1HEB9rSjMOpwopFCoQsow>
+    <xme:92PhZ2--y4dHMbCLXkR33UsIoCD1pboJG8J7dFHXM0M3UZGAkk_0wWt4BTNSMPSGn
+    O44RiC5iXkjow>
+X-ME-Received: <xmr:92PhZ3QnjKapyDkSorPVzvw1WhTm0FwzR0VBsh8YBrlNxrHwyKTI5xSGPXON>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheelleegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecugg
+    ftrfgrthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeu
+    fefhgfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopedutddpmhhouggv
+    pehsmhhtphhouhhtpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtph
+    htthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopehojhgv
+    uggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvh
+    hgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhg
+    vghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:92PhZ4tw8hAYCmJwbo7XnXENuGdMm-N2U_SUtcjAZlvaVmpJc_u6Ew>
+    <xmx:92PhZ4eRvo5ZqIwakaP8PQq9gwlNLQQ_RmyWDTcSyepEzw04ROJUdw>
+    <xmx:92PhZ83cPblPzzrxRBOFOJaBknYyfgk-BsiFsxbWtt77YGZZhBb04A>
+    <xmx:92PhZ8_CUDmlEXae0KYYYBh_SZJwEahNGj3_ouqd_QfHG_D3vnWBKQ>
+    <xmx:-GPhZ5WTGN1AK7P8VSlaEZsweMMrcO4waavaK5YRwzH5ol-tnnGSJyGM>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 24 Mar 2025 09:53:59 -0400 (EDT)
+Date: Mon, 24 Mar 2025 06:52:38 -0700
+From: Greg KH <greg@kroah.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the rust tree
+Message-ID: <2025032429-curliness-unblock-7240@gregkh>
+References: <20250324215702.1515ba92@canb.auug.org.au>
+ <20250324220629.1665236b@canb.auug.org.au>
+ <Z-FJH628-j2HCuaE@cassiopeiae>
+ <2025032443-recharger-legacy-93bf@gregkh>
+ <Z-Fhf3Cn8w2oh1_z@cassiopeiae>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the kbuild tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Oliver Glitta <glittao@gmail.com>,
-        Alessandro Carminati <acarmina@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250324103048.3d8230f9@canb.auug.org.au>
-From: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <20250324103048.3d8230f9@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=BoydwZX5 c=1 sm=1 tr=0 ts=67e163a7 cx=c_pps a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=_BF6GIfXpBVThKZNOKYA:9 a=QEXdDO2ut3YA:10 a=uKXjsCUrEbL0IQVhDsJ9:22
-X-Proofpoint-GUID: NB4jhMJzu8R8H58qXiGR-6dmmvXwMfMy
-X-Proofpoint-ORIG-GUID: NB4jhMJzu8R8H58qXiGR-6dmmvXwMfMy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-24_04,2025-03-21_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- spamscore=0 adultscore=0 bulkscore=0 clxscore=1011 malwarescore=0
- impostorscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
- suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2503240100
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z-Fhf3Cn8w2oh1_z@cassiopeiae>
 
-On 3/23/2025 4:30 PM, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Mar 24, 2025 at 02:43:27PM +0100, Danilo Krummrich wrote:
+> On Mon, Mar 24, 2025 at 06:29:30AM -0700, Greg KH wrote:
+> > On Mon, Mar 24, 2025 at 12:59:27PM +0100, Danilo Krummrich wrote:
+> > > Hi Stephen,
+> > > 
+> > > On Mon, Mar 24, 2025 at 10:06:29PM +1100, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > > 
+> > > > On Mon, 24 Mar 2025 21:57:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > > >
+> > > > > After merging the rust tree, today's linux-next build (x86_64
+> > > > > allmodconfig) failed like this:
+> > > > > 
+> > > > > error[E0277]: `*mut MyStruct` cannot be sent between threads safely
+> > > > >   --> samples/rust/rust_dma.rs:47:22  
+> > > > >    |
+> > > > > 47 | impl pci::Driver for DmaSampleDriver {
+> > > > >    |                      ^^^^^^^^^^^^^^^ `*mut MyStruct` cannot be sent between threads safely
+> > > > >    |
+> > > > >    = help: within `DmaSampleDriver`, the trait `Send` is not implemented for `*mut MyStruct`, which is required by `DmaSampleDriver: Send`
+> > > > > note: required because it appears within the type `CoherentAllocation<MyStruct>`
+> > > > >   --> rust/kernel/dma.rs:132:12  
+> > > > > note: required because it appears within the type `DmaSampleDriver`
+> > > > >   --> samples/rust/rust_dma.rs:9:8  
+> > > > >    |
+> > > > > 9  | struct DmaSampleDriver {
+> > > > >    |        ^^^^^^^^^^^^^^^
+> > > > > note: required by a bound in `kernel::pci::Driver`
+> > > > >   --> rust/kernel/pci.rs:225:1  
+> > > > > 
+> > > > > error: aborting due to 1 previous error
+> > > > > 
+> > > > > For more information about this error, try `rustc --explain E0277`.
+> > > > > 
+> > > > > I have no idea what caused this - it built in next-20250321, but that
+> > > > > no longer builds, so I have reset to the version of the rust tree in
+> > > > > next-20250320 (commit 4a47eec07be6).
+> > > > 
+> > > > Actually, the driver-core tree gained these commits over the weekend:
+> > > > 
+> > > >   51d0de7596a4 ("rust: platform: require Send for Driver trait implementers")
+> > > >   935e1d90bf6f ("rust: pci: require Send for Driver trait implementers")
+> > > >   455943aa187f ("rust: platform: impl Send + Sync for platform::Device")
+> > > >   e2942bb4e629 ("rust: pci: impl Send + Sync for pci::Device")
+> > > > 
+> > > > A heads up would have been nice ... and maybe even a test merge and
+> > > > build against -next (given how late we are in the cycle).
+> > > 
+> > > Commit 935e1d90bf6f ("rust: pci: require Send for Driver trait implementers")
+> > > from the driver-core tree fixes a missing concurrency requirement, which commit
+> > > 9901addae63b ("samples: rust: add Rust dma test sample driver") from the Rust
+> > > tree did not yet consider.
+> > > 
+> > > Technically, it did what it is supposed to do -- catch a concurrency issue at
+> > > compile time. However, since I was involved into both sides, I could have
+> > > thought of this, but unfortunately in this case it was too subtle for me to
+> > > spot -- sorry.
+> > > 
+> > > There are two options, 1. simply drop the commit [1] that introduces the
+> > > affected sample DMA code, or 2. apply the fix below to [2]. My preference would
+> > > be (2).
+> > > 
+> > > --
+> > > 
+> > > diff --git a/rust/kernel/dma.rs b/rust/kernel/dma.rs
+> > > index 9d00f9c49f47..18de693c4924 100644
+> > > --- a/rust/kernel/dma.rs
+> > > +++ b/rust/kernel/dma.rs
+> > > @@ -301,6 +301,10 @@ fn drop(&mut self) {
+> > >      }
+> > >  }
+> > > 
+> > > +// SAFETY: It is safe to send a `CoherentAllocation` to another thread if `T`
+> > > +// can be send to another thread.
+> > > +unsafe impl<T: AsBytes + FromBytes + Send> Send for CoherentAllocation<T> {}
+> > > +
+> > >  /// Reads a field of an item from an allocated region of structs.
+> > >  ///
+> > >  /// # Examples
+> > > 
+> > 
+> > I can't "drop" anything here as that would be a mess.
 > 
-> After merging the kbuild tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+> It's the DMA commit that has a bug, that was revealed by the fix in the
+> driver-core tree. So, the patch to drop is in the rust tree (not sure if Miguel
+> changes history at this point though).
 > 
-> ERROR: modpost: missing MODULE_DESCRIPTION() in lib/kunit/backtrace-suppression-test.o
-> ERROR: modpost: missing MODULE_DESCRIPTION() in lib/slub_kunit.o
+> Anyways, I think the fix is simple enough.
 > 
-> Caused by commits
+> > Maybe we just
+> > consider a merge of the driver core and rust trees at this point in time
+> > and fix things up and do a combined pull request to Linus so he doesn't
+> > have to deal with the fixups?
 > 
->   19f3496e6241 ("kunit: add test cases for backtrace warning suppression")
+> I think it's not that bad, the full diff for the conflicts between driver-core
+> and rust is:
 > 
-> from the mm-nonmm-unstable branch of the mm tree and
+> diff --git a/rust/kernel/dma.rs b/rust/kernel/dma.rs
+> index 9d00f9c49f47..18de693c4924 100644
+> --- a/rust/kernel/dma.rs
+> +++ b/rust/kernel/dma.rs
+> @@ -301,6 +301,10 @@ fn drop(&mut self) {
+>      }
+>  }
 > 
->   1f9f78b1b376 ("mm/slub, kunit: add a KUnit test for SLUB debugging functionality")
+> +// SAFETY: It is safe to send a `CoherentAllocation` to another thread if `T`
+> +// can be send to another thread.
+> +unsafe impl<T: AsBytes + FromBytes + Send> Send for CoherentAllocation<T> {}
+> +
+>  /// Reads a field of an item from an allocated region of structs.
+>  ///
+>  /// # Examples
+> diff --git a/samples/rust/rust_dma.rs b/samples/rust/rust_dma.rs
+> index 908acd34b8db..874c2c964afa 100644
+> --- a/samples/rust/rust_dma.rs
+> +++ b/samples/rust/rust_dma.rs
+> @@ -4,10 +4,10 @@
+>  //!
+>  //! To make this driver probe, QEMU must be run with `-device pci-testdev`.
 > 
-> from Linus' tree (in v5.14rc1) interacting with commit
+> -use kernel::{bindings, dma::CoherentAllocation, pci, prelude::*};
+> +use kernel::{bindings, device::Core, dma::CoherentAllocation, pci, prelude::*, types::ARef};
 > 
->   6c6c1fc09de3 ("modpost: require a MODULE_DESCRIPTION()")
+>  struct DmaSampleDriver {
+> -    pdev: pci::Device,
+> +    pdev: ARef<pci::Device>,
+>      ca: CoherentAllocation<MyStruct>,
+>  }
 > 
-> from the kbuild tree.
+> @@ -48,7 +48,7 @@ impl pci::Driver for DmaSampleDriver {
+>      type IdInfo = ();
+>      const ID_TABLE: pci::IdTable<Self::IdInfo> = &PCI_TABLE;
 > 
-> I have temporarily reverted the latter commit until the former are
-> fixed up.
+> -    fn probe(pdev: &mut pci::Device, _info: &Self::IdInfo) -> Result<Pin<KBox<Self>>> {
+> +    fn probe(pdev: &pci::Device<Core>, _info: &Self::IdInfo) -> Result<Pin<KBox<Self>>> {
+>          dev_info!(pdev.as_ref(), "Probe DMA test driver.\n");
 > 
+>          let ca: CoherentAllocation<MyStruct> =
+> @@ -64,7 +64,7 @@ fn probe(pdev: &mut pci::Device, _info: &Self::IdInfo) -> Result<Pin<KBox<Self>>
+> 
+>          let drvdata = KBox::new(
+>              Self {
+> -                pdev: pdev.clone(),
+> +                pdev: pdev.into(),
+>                  ca,
+>              },
+>              GFP_KERNEL,
 
-+Arnd, will you post your changes for these?
+Ok, let's just leave it as-is for now...
 

@@ -1,139 +1,110 @@
-Return-Path: <linux-next+bounces-5946-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5947-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC440A6D49F
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 08:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 962AFA6D5D3
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 09:06:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3E1B7A4FEB
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 07:09:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95C227A4641
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 08:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55AE12505D8;
-	Mon, 24 Mar 2025 07:10:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B932512D8;
+	Mon, 24 Mar 2025 08:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nz8YaSND"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="RMbVjH32"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AEF62505D0;
-	Mon, 24 Mar 2025 07:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1D41A29A;
+	Mon, 24 Mar 2025 08:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742800221; cv=none; b=QJgn0v+gwrp2jbF10Vaj4cOTtYWqTglal+iXe6vi+P4eELTcVywIkF5CHa27Zy137MEw+OrWu01xdMiO8x0aOrVkkbXr1urzBZzt1VEv8I+dRY0JLBrFiyWuYQKExOcslEqh9LK+0nona8YUoyF/54ma+4/6GFEaJUwAabDQfQ8=
+	t=1742803599; cv=none; b=DL6MYWYcmKeVZTM1p/BRiFHIZzBOZIw45zP05sR3Uh3AqopWMogmePjUcDQvMiK5BRt1sNnfiDhNtH7enAbIXSkgapevqD4ZE+XKCaJ5DWSTpy6C1tl8srRiaeg3DZSnuRsL0VabDXXx7v68HlX3IXV3lkCeuzSI7zj8j55gkrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742800221; c=relaxed/simple;
-	bh=UIsw1b5m6uMJag5sPnM5q6dT6WmJz47wbQ47reQR9BY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bgc9O6tE0/wvw2HtF2ohglARP3KKvrqAFPMnZr+LlOHdcBIPjLgeJnklRi8mnOHtHxWhgQWaLQ5OgEr0+TIUaQbTe69ZM/nO9MdTB/EoaZnq4A1pDzDVIxLwpibaNu+StiaBxVcS0vlKZkGyikKtVVpzIPdFdGX2YktrD7mDlH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nz8YaSND; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9082EC4CEDD;
-	Mon, 24 Mar 2025 07:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742800220;
-	bh=UIsw1b5m6uMJag5sPnM5q6dT6WmJz47wbQ47reQR9BY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nz8YaSND7XUHRJi0FzpeAAbgk3kHwGY3+QQmsbuoXXtlvLLT2CTi1Zv0rYjyUn1+2
-	 ho/VS0p+xgRb8m1P+b6fBzIR/eULXgHD9DJk9h7WT7GAcw2qQEZIzkN6bkbb+wQgQ+
-	 O2j1Gx7WCX7smtUSm9YrkcRD1oFW4BxPLWisJ0o61j861yXYO8vi5Mg0LFLX0+k99H
-	 xt4hS8PwZrGEAbDO4gyBMAeIIKDBdKkHlt9GMyfI0LHKw/PEVP+XEHzmemixxNGExs
-	 aDB/xLTln7/mG5tc+vYR+Q+qEYzj7qJDDM5V51htOrMd8bJK6to7CUPN/oaPXt/AV2
-	 QkZkIPWVDItaA==
-Date: Mon, 24 Mar 2025 08:10:00 +0100
-From: Ingo Molnar <mingo@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
+	s=arc-20240116; t=1742803599; c=relaxed/simple;
+	bh=WRwEIFnMFcpnOe7siwvKwKO4oJuyeDQLZhXegJTNvnQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tXjQzvG5mpNSYOzLMqQ8p5ncf868s0mf+nDSLkDYFog7iNyVdzM8yj9SNproO20xEldJkqWqHT02p1YQ6JCvjflVxlkRV8qTUeGOYezbFewI+QPMk3+vJBQULf21qIR0rEnSBPPflUEXSOxzMsfA/k3/Wg0DZ4LxyqDdh+coiO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=RMbVjH32; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1742803591;
+	bh=0BLmab/b6DMzdbpIBb1abNGketzgbGJinHHG4HOv8Gc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=RMbVjH32940LLEvokq7Peb34d/30lVZztiRKdfEJK9w9qkYwZIpTK9ayKu+ZtdvX5
+	 7esqWSfFN9FmGOPpn9Otn5bmf+vdIZtQah0YgrV3FH+SwIKDtWfjQKuFKtEfcDXpo7
+	 KVTP2Nsepw/VPlsx0zAGdy2z9wQ3HMfPkiym3+xSkM36P0Q2pkhAL5yOYqX8I2fw98
+	 VHMm5mxfzSTLZ0JOoZnvPzTUqZGki50o6r4QgSYS8xvOCWKuVJwSzz2mIFgeXPq0mW
+	 3Z1AFpXKW5juF9HiLQu7eNMovfag6VfiXs3MTlVKKwfrQa1jdL2zewqgRNTyTp5Po0
+	 fl0xyzWM1k4Nw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZLlxd5tdlz4wcd;
+	Mon, 24 Mar 2025 19:06:29 +1100 (AEDT)
+Date: Mon, 24 Mar 2025 19:06:28 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Ingo Molnar <mingo@kernel.org>
 Cc: "H. Peter Anvin" <hpa@zytor.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Tor Vic <torvic9@mailbox.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH] x86/kbuild/64: Test for the availability of the
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Tor
+ Vic <torvic9@mailbox.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] x86/kbuild/64: Test for the availability of the
  -mtune=native compiler flag
-Message-ID: <Z-EFSKxiqbGPT9CQ@gmail.com>
+Message-ID: <20250324190628.3e8802b6@canb.auug.org.au>
+In-Reply-To: <Z-EFSKxiqbGPT9CQ@gmail.com>
 References: <20250324172723.49fb0416@canb.auug.org.au>
- <6227FBC4-AF53-4992-9E29-C0D1DCAFA136@zytor.com>
- <20250324174141.7b3c4a70@canb.auug.org.au>
+	<6227FBC4-AF53-4992-9E29-C0D1DCAFA136@zytor.com>
+	<20250324174141.7b3c4a70@canb.auug.org.au>
+	<Z-EFSKxiqbGPT9CQ@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250324174141.7b3c4a70@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/8p4QVvkBuZCKZrXtIWvOuVR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/8p4QVvkBuZCKZrXtIWvOuVR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi Ingo,
 
-> Hi,
-> 
-> On Sun, 23 Mar 2025 23:29:20 -0700 "H. Peter Anvin" <hpa@zytor.com> wrote:
-> >
-> > >$ x86_64-linux-gnu-gcc --version
-> > >x86_64-linux-gnu-gcc (Debian 14.2.0-12) 14.2.0
-> > >
-> > >cross build - ppc hosted
-> > >  
-> > 
-> > Cross compiling?
-> 
-> Yes (see above :-))
+On Mon, 24 Mar 2025 08:10:00 +0100 Ingo Molnar <mingo@kernel.org> wrote:
+>
+> Does the patch below fix the bug?
 
-Does the patch below fix the bug?
+Yes, it does.  Thanks.
 
-Thanks,
+Tested-by: Stephen Rothwell <sfr@canb.auug.org.au> # build test
 
-	Ingo
+--=20
+Cheers,
+Stephen Rothwell
 
-=====================>
-From: Ingo Molnar <mingo@kernel.org>
-Date: Mon, 24 Mar 2025 08:05:19 +0100
-Subject: [PATCH] x86/kbuild/64: Test for the availability of the -mtune=native compiler flag
+--Sig_/8p4QVvkBuZCKZrXtIWvOuVR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Stephen reported this build failure when cross-compiling:
+-----BEGIN PGP SIGNATURE-----
 
-  cc1: error: bad value 'native' for '-march=' switch
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfhEoUACgkQAVBC80lX
+0GxPQwf9HUE4HsWT2s3jf04xzAAyIiTFiB+2EgJu4ZIo45DKW3CFZ2D01rRe4cfW
++YtM9JW/3+j4VCfh8r64gUKXqdQPe243NsiVSHZsAfD2FA/OZWGf6QsXiyiyWAys
+HTHeYtuOS5JXEFlLmhWVyRDBhR7y3cc1BSCiC13L2/5FV372UUVLny3jmcWh9/Sj
+t3iQehmbSNDsWlmwYEplR8ZRtOmaLm44AfHcoBvFQalPw8HWjVzxk1GJ5VtJrYYc
+zFkLZlRfxCeRY/utsTDv5PEjO+DRpQF0m4OF64+3VU/A6GOkd+tjzjuGxvYFlzJ3
+j5TU/SkKm2UpZwij13Cgn5mUnCnnFA==
+=njif
+-----END PGP SIGNATURE-----
 
-Test for the availability of the -march=native flag.
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Cc: Tor Vic <torvic9@mailbox.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Brian Gerst <brgerst@gmail.com>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: H. Peter Anvin <hpa@zytor.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Link: https://lore.kernel.org/r/20250324172723.49fb0416@canb.auug.org.au
----
- arch/x86/Kconfig.cpu | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
-index 9d108a54c30a..87bede96e800 100644
---- a/arch/x86/Kconfig.cpu
-+++ b/arch/x86/Kconfig.cpu
-@@ -245,10 +245,14 @@ config MATOM
- 
- endchoice
- 
-+config CC_HAS_MARCH_NATIVE
-+	# This flag might not be available in cross-compilers:
-+	def_bool $(cc-option, -march=native)
-+
- config X86_NATIVE_CPU
- 	bool "Build and optimize for local/native CPU"
- 	depends on X86_64
--	default n
-+	depends on CC_HAS_MARCH_NATIVE
- 	help
- 	  Optimize for the current CPU used to compile the kernel.
- 	  Use this option if you intend to build the kernel for your
-
+--Sig_/8p4QVvkBuZCKZrXtIWvOuVR--
 

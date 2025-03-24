@@ -1,123 +1,140 @@
-Return-Path: <linux-next+bounces-5954-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5955-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB2B4A6D8BC
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 11:57:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB4C1A6D8EA
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 12:10:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B6463B1081
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 10:57:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D8B118930C3
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 11:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D42D25DCFB;
-	Mon, 24 Mar 2025 10:57:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BB6425DAFA;
+	Mon, 24 Mar 2025 11:06:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FaYYKqrh"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WaG5Isex"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DC125DD1C;
-	Mon, 24 Mar 2025 10:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6E425EFAB;
+	Mon, 24 Mar 2025 11:06:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742813830; cv=none; b=VztPbJJZKUx/bN0MZoZmCfvXXQSFdIqNSnEZeQYdAD5JRCO+i4vqeAc1SJwsvJO2fKp5tVm1XBJkoWjjD4U2lT/EHFYZmOQzaKR+DtHgDs4j/RFRUvKPGzqjlM8KyyiKPL+N+ZKeTfesjIMHsik0xQrgQQSPp3AxnuF+KYxRO7w=
+	t=1742814395; cv=none; b=TeQeXGMPRnNpowDGuR1OpeUqSM+ctKrSGldYSQGtVUhe3e5gnjCnVBKuV0btZWw0Ogc75G5SFcqTFeJSOLK7ljbQDuCZZXE8l4k6BfEAQLgTKqAimNySr1lenW3AQd8ZrrA+eTFCGxcHhEhAk1w9Ln3YAUhhQbjzbQRqEHIreJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742813830; c=relaxed/simple;
-	bh=nokVEstSgYL4s/ZEqAsrD7W8PeiAIohj0Aw/3oR39dA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GYOhhD7o49Xoi+nCvcuehkoVh3QM0Y3vXNwAjxYiSsgA7uSyZWZN3r5w42LKChphyXCIfxeQn2bhqVnEIl2t5BKogS2dGCA3Pi+DR4EXx7JyxpCvsyH3HW27dnGHTgc7XPrIGxGALSJBqMYESW6rpVLqBa/tLywbR+5W3Qq87o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FaYYKqrh; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1742814395; c=relaxed/simple;
+	bh=AJaKPNEfK8+vcbZlzVDNFlAvYVFydMBoBukOTMRkdeU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GgwbqrFUMLDM7lQ8KR1mrJ+YXXdpEqUSV8wsYF3Uq2YzhHBMom8BwQNDAwIBDH/jQmEaDfr6XXLYflkMAlKXzneCWgzTkYK7KHfstttYMiQdyTcmLU/PCGEcNyDxXTqfZGfeXYMYbmmKAOE9v2/fFldKlUEHUxvBlA7CVogUdNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=WaG5Isex; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742813824;
-	bh=lnWrbRDEFzpa2MhPXPMfR9xSFD+lXHsCZW0mVk1hzy4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=FaYYKqrhdx0+tRfiS+RSrtcbhJ2SwxT2uVx6pW1KgwBKWBOobcbG9ydh2xCXYAujE
-	 xC+tn9PX8yFSj8pP2BfRW9W0NIhTnWjdaB4sQQtiKH9XE6TPBR+iU4S90hqEV60Z1e
-	 DDJzF0nyaZjQm61eKdiKDy4UzGib3HAHbW3fKhJy0Pd0fU+zbmg0lOkNegpHTM5KsJ
-	 JrZPIZkFAvhdH2l2JnZxixd8WE5O26Q2+/EtgwJ1WVOHA9EJGuNvo7BCCSdec5Z2sf
-	 Qzx1pPeL7c4ViWBaem8GsjuaICbqbTUHqJkp6Wv/CjbX0tm3pNRRN9/DCsv5pY6/Mb
-	 8x2wjusnbYnCA==
+	s=201702; t=1742814390;
+	bh=0JI4Ym7vI68n0/W0jZxFNaj+ei/yHnSlaQAfikqusM0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=WaG5IsexH1MDaUFQFjCU+hvVw/UcXb2nyklMQ/hM8GzU0/6uWoJ8kAT0vcd4gvlxf
+	 t5ac+/+nbXpCuYZ2MBKX5ZDVq3HcfVRDlFSYaTX/4b4du39ZyEJlM3octS7XVDhafy
+	 mTeoemMtQQv/7c5xp/XjceyJZhu1nxrg5u1HgbGEthRdj7miLrFJITrMSRXrYsMFUD
+	 EXU0WmKfg9P+ULgIurV6y7pM7UMI6z9BXZ8AwjTksaASVr9d9t9/lgdBwH+YKFTSf5
+	 vywUYQKOErr3n08NGWnpVlSgc/qYOI9qRWbmEnnQ97dUdSxHxaX+W5RGXM7mvBMT0X
+	 RnmoyM7s9dpMw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZLqkS12ktz4wvb;
-	Mon, 24 Mar 2025 21:57:04 +1100 (AEDT)
-Date: Mon, 24 Mar 2025 21:57:02 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZLqxL0h8mz4x0s;
+	Mon, 24 Mar 2025 22:06:30 +1100 (AEDT)
+Date: Mon, 24 Mar 2025 22:06:29 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Miguel Ojeda <ojeda@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>, Greg KH <greg@kroah.com>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the rust tree
-Message-ID: <20250324215702.1515ba92@canb.auug.org.au>
+ Mailing List <linux-next@vger.kernel.org>, Danilo Krummrich
+ <dakr@kernel.org>
+Subject: Re: linux-next: build failure after merge of the rust tree
+Message-ID: <20250324220629.1665236b@canb.auug.org.au>
+In-Reply-To: <20250324215702.1515ba92@canb.auug.org.au>
+References: <20250324215702.1515ba92@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ea3hjHqZcT1wdYKn_ICJI5F";
+Content-Type: multipart/signed; boundary="Sig_/gPEUir/XdEBFjsCj8z+Xt9h";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/ea3hjHqZcT1wdYKn_ICJI5F
+--Sig_/gPEUir/XdEBFjsCj8z+Xt9h
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the rust tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Mon, 24 Mar 2025 21:57:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the rust tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> error[E0277]: `*mut MyStruct` cannot be sent between threads safely
+>   --> samples/rust/rust_dma.rs:47:22 =20
+>    |
+> 47 | impl pci::Driver for DmaSampleDriver {
+>    |                      ^^^^^^^^^^^^^^^ `*mut MyStruct` cannot be sent =
+between threads safely
+>    |
+>    =3D help: within `DmaSampleDriver`, the trait `Send` is not implemente=
+d for `*mut MyStruct`, which is required by `DmaSampleDriver: Send`
+> note: required because it appears within the type `CoherentAllocation<MyS=
+truct>`
+>   --> rust/kernel/dma.rs:132:12 =20
+> note: required because it appears within the type `DmaSampleDriver`
+>   --> samples/rust/rust_dma.rs:9:8 =20
+>    |
+> 9  | struct DmaSampleDriver {
+>    |        ^^^^^^^^^^^^^^^
+> note: required by a bound in `kernel::pci::Driver`
+>   --> rust/kernel/pci.rs:225:1 =20
+>=20
+> error: aborting due to 1 previous error
+>=20
+> For more information about this error, try `rustc --explain E0277`.
+>=20
+> I have no idea what caused this - it built in next-20250321, but that
+> no longer builds, so I have reset to the version of the rust tree in
+> next-20250320 (commit 4a47eec07be6).
 
-error[E0277]: `*mut MyStruct` cannot be sent between threads safely
-  --> samples/rust/rust_dma.rs:47:22
-   |
-47 | impl pci::Driver for DmaSampleDriver {
-   |                      ^^^^^^^^^^^^^^^ `*mut MyStruct` cannot be sent be=
-tween threads safely
-   |
-   =3D help: within `DmaSampleDriver`, the trait `Send` is not implemented =
-for `*mut MyStruct`, which is required by `DmaSampleDriver: Send`
-note: required because it appears within the type `CoherentAllocation<MyStr=
-uct>`
-  --> rust/kernel/dma.rs:132:12
-note: required because it appears within the type `DmaSampleDriver`
-  --> samples/rust/rust_dma.rs:9:8
-   |
-9  | struct DmaSampleDriver {
-   |        ^^^^^^^^^^^^^^^
-note: required by a bound in `kernel::pci::Driver`
-  --> rust/kernel/pci.rs:225:1
+Actually, the driver-core tree gained these commits over the weekend:
 
-error: aborting due to 1 previous error
+  51d0de7596a4 ("rust: platform: require Send for Driver trait implementers=
+")
+  935e1d90bf6f ("rust: pci: require Send for Driver trait implementers")
+  455943aa187f ("rust: platform: impl Send + Sync for platform::Device")
+  e2942bb4e629 ("rust: pci: impl Send + Sync for pci::Device")
 
-For more information about this error, try `rustc --explain E0277`.
-
-I have no idea what caused this - it built in next-20250321, but that
-no longer builds, so I have reset to the version of the rust tree in
-next-20250320 (commit 4a47eec07be6).
-
+A heads up would have been nice ... and maybe even a test merge and
+build against -next (given how late we are in the cycle).
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ea3hjHqZcT1wdYKn_ICJI5F
+--Sig_/gPEUir/XdEBFjsCj8z+Xt9h
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfhOn4ACgkQAVBC80lX
-0GyE6Qf/Td6nkXIEwjJJgo38ikJyqdQL4T0fOHnn4YAugQ9p73tHAuLFYawKwVjK
-/PmCxTARDe1lz0mUcqo6+Mc+4u9vf6ZYRHs+2kbPdQSDpto95UcDZ9jW0XTH0zrH
-62lQPE8YUbiuALCAvQdRb4AXTHWfJjNTjUE6aXNTwyP1MCRhVKgmxJW0lHBuX9S+
-Bt4svh4IHtv4zIRKKw2prhcY0uM/fc59qfKBRzslTgpcKbpP0kjROISg1mdRAud6
-RglW8Lx0DQGyNsfCCQTh2DB2Y3kOm8d9uJw+xqaqd35tTqyILsZCrccid0Tmz1zH
-uTbuQTxMVghVAoAvuYe7Y9skcXhH/w==
-=cAyV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfhPLUACgkQAVBC80lX
+0GxfxggApZMatWGfB8ptEpZX0ZCycuBcB087oVx6vbjK4S6qXAF4eHM8grEz+N9b
++wiz/mUMJtak3XgqTjETVxI//2JEOujOBRUameDHuEMBKz12vYZNDmfVtZO0xfv3
+B6AvnDB9aj1T25TFhA3qttMsx82VEtM7q/miABclhPLzc3fAUYHReOOW/vhHuqHw
+F5Tyh6HHMKKlfxgTPpEV24BpxTCfjm11nTxROH+VbYKvuHfYEObM7mdNXcv2jD+k
+1g8a1jcVoH7sGnefaOPhSjMzE+5QEXAVT6hHV/szrk2JqqF1PqKUPdSUj2OkukUY
+CxIktVNWjRHP+KhOj3f4juhEdNQ1fQ==
+=C9+C
 -----END PGP SIGNATURE-----
 
---Sig_/ea3hjHqZcT1wdYKn_ICJI5F--
+--Sig_/gPEUir/XdEBFjsCj8z+Xt9h--
 

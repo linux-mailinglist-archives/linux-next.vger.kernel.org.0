@@ -1,153 +1,148 @@
-Return-Path: <linux-next+bounces-5940-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5941-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C963A6D38F
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 05:37:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCA3BA6D3B8
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 06:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B78B3B122A
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 04:37:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1776167954
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 05:34:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB58018B03;
-	Mon, 24 Mar 2025 04:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A00122339;
+	Mon, 24 Mar 2025 05:34:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="o3aYJ2ZB"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="p8vQSKDr"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617842E3383;
-	Mon, 24 Mar 2025 04:37:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082982E337F;
+	Mon, 24 Mar 2025 05:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742791041; cv=none; b=qF0e4NPXS9jBEkEcvWORP5EV39BTV9sSdw/agBI8Q73CiMsbTCjvmvETor/v5wL0OGNzVAf99Uzcs7krb1gtUsNzOUsr2UytCHZ9+3MloUcYl9FwV04mcd1aXttvEUHdUDghaxuEQ8tsfI1WRTT1fcY6KKhZZqDnI2TsagEru/A=
+	t=1742794465; cv=none; b=cHD0Wck5wzh7NZqd4clj/C5ATFL+r6PTtidDvYC0FKiqqIOeluJ2/Q8cc161LJMGCPC9/aMjCceYlOHwWXz/j9ThcoTD4yi6s0XPm83Y3qD6gU88VIh9Matyio8LUei3fyrw3Dt2srq67v2dYDDF5vLXy2s9T8TRa1IT60aL/8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742791041; c=relaxed/simple;
-	bh=fggBk4XxrkKKYlWFVtskALGh/abGCavWLxQiPl9syOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=t/bVCrudWu4Yg0ux8N3qKUyepMTV+vZm8y74MfqgxZ/hSHMFkML3J60QZ/YbscfKFJi0gBlihxpeMxQOsPX699+UdTrrdrY6xjlgPzic71tg8rxeyWtOt9pPTCsfKAKwOoWqHilBXtDs5Dz3tLIcSjIQIWGdl0JQwCsIduxybxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=o3aYJ2ZB; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1742794465; c=relaxed/simple;
+	bh=0N4c2WZI8x4iQ2jgWASJraby+PyTVlH5TDkjYt1h7o4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gmrSXKdDMi5c+hGQRzW3EA7gU+NSfNKft/SWNZoyP/f2y/rseFbRz59z+0+C3P7+rK8M92SSZz+GwDtyDjvpD6HcM7qxH4jwzKYJHua4krwkfQSn3modLjvo8mh9qJhudZDcn5ifgxFfZLatBmTmecGqZp6Ds70yIx0fEJRXyHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=p8vQSKDr; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742791034;
-	bh=oTscpH4djTLQPl9PzPMEVPDXJUvfjeXgqJhMtetg+R4=;
+	s=201702; t=1742794460;
+	bh=B5Ws58J6CVirVIY6lproU4sIVTY4C6GXMtjU5lZ72Cs=;
 	h=Date:From:To:Cc:Subject:From;
-	b=o3aYJ2ZBgmUXE4YIBW2yFkHxr8icWLTXgdkQy5RemFUNTsBbaOR6soX34oy+0s/4m
-	 hkKjWJgvYBPkZ9ejUFE9/vQ8qyfe+xgiTm42TwwhqoVmE8WY32tVfvJco6Q29ZOIpu
-	 khNr559dIggftOU9lw3FysHScVLOwxJ76bVfSw2O/gS+alhf4Fz8Ji/pg7HHdJggdd
-	 e130v8SrHsp21fB9AMnns9hqbi9uWT5QzaJHdgdSOziyxqHOsaJqTALrMDuXY9834K
-	 xnCobm0BNAHitD3Jh54hlgpARh1ZT59Mt/EsacfKmiB87bIBJxgKL592Wvh0ct83r0
-	 2WT0CyduXqx5Q==
+	b=p8vQSKDrUWjVt0ooaRAhAx2WxD3SYxq2mSC43USi6QNO+3X4zBk08TYTwXHuSfXQ7
+	 u9jRFDud3olEXATxyuWEbParUKHfzQiJqYd+Edy2FEOSJKyt9DbEJ/V3lGB01jwtiC
+	 gs1Ix6OOT2iEttGCKySIdtI7qhbQGkH/E7IShDqFewM7q4mE6/I51Ehj0J8VXjjjjV
+	 tDgSdeFNNeYErvYL3Q7/iXpJBOkWRVtodKvW8FzAfYjKResyMaTWU5p59PxfSZFqGE
+	 iw67Djot8Z3Tc858Bfw+tgq9G4fFinwM8hUsfU2rsiqofGoOyiGx2HNcf089dfe7RQ
+	 p98A4okFukiBg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZLgJ93vfqz4wcZ;
-	Mon, 24 Mar 2025 15:37:13 +1100 (AEDT)
-Date: Mon, 24 Mar 2025 15:37:12 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZLhZ20QQMz4wcZ;
+	Mon, 24 Mar 2025 16:34:17 +1100 (AEDT)
+Date: Mon, 24 Mar 2025 16:34:17 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Luo Gengkun <luogengkun@huaweicloud.com>, Ingo Molnar
- <mingo@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Ravi Bangoria
- <ravi.bangoria@amd.com>, Linux Kernel Mailing List
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.cz>
+Cc: Ingo Molnar <mingo@kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the security tree
-Message-ID: <20250324153712.6a2b2a5c@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Nick Terrell <terrelln@meta.com>
+Subject: linux-next: manual merge of the tip tree with the btrfs, zstd trees
+Message-ID: <20250324163417.4b9e84d4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SQO_sz4ZsQqxbJaMZTZyPSj";
+Content-Type: multipart/signed; boundary="Sig_/czFsEbvN6wl_GngY3ZKjha.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/SQO_sz4ZsQqxbJaMZTZyPSj
+--Sig_/czFsEbvN6wl_GngY3ZKjha.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the security tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the tip tree got a conflict in:
 
-arch/x86/events/amd/ibs.c: In function 'perf_ibs_handle_irq':
-arch/x86/events/amd/ibs.c:1207:13: error: too many arguments to function 'p=
-erf_allow_kernel'
- 1207 |             perf_allow_kernel(&event->attr)) {
-      |             ^~~~~~~~~~~~~~~~~
-In file included from arch/x86/events/amd/ibs.c:9:
-include/linux/perf_event.h:1675:5: note: declared here
- 1675 | int perf_allow_kernel(void);
-      |     ^~~~~~~~~~~~~~~~~
+  lib/zstd/common/portability_macros.h
 
-Caused by commit
+between commit:
 
-  9ec84f79c5a7 ("perf: Remove unnecessary parameter of security check")
+  65d1f5507ed2 ("zstd: Import upstream v1.5.7")
 
-interacting with commit
+from the btrfs, zstd trees and commit:
 
-  50a53b60e141 ("perf/amd/ibs: Prevent leaking sensitive data to userspace")
+  1400c87e6cac ("zstd: Increase DYNAMIC_BMI2 GCC version cutoff from 4.8 to=
+ 11.0 to work around compiler segfault")
 
-=46rom Linus' tree.
+from the tip tree.
 
-I have applied the following merge resolution patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 24 Mar 2025 15:25:18 +1100
-Subject: [PATCH] fix up for "perf: Remove unnecessary parameter of security=
- check"
-
-interacting with commit
-
-  50a53b60e141 ("perf/amd/ibs: Prevent leaking sensitive data to userspace")
-
-=46rom Linus' tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/x86/events/amd/ibs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-index e36c9c63c97c..30157ab98cea 100644
---- a/arch/x86/events/amd/ibs.c
-+++ b/arch/x86/events/amd/ibs.c
-@@ -1204,7 +1204,7 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_=
-ibs, struct pt_regs *iregs)
- 	 * unprivileged users.
- 	 */
- 	if ((event->attr.sample_type & PERF_SAMPLE_RAW) &&
--	    perf_allow_kernel(&event->attr)) {
-+	    perf_allow_kernel()) {
- 		perf_ibs_phyaddr_clear(perf_ibs, &ibs_data);
- 	}
-=20
---=20
-2.45.2
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/SQO_sz4ZsQqxbJaMZTZyPSj
+diff --cc lib/zstd/common/portability_macros.h
+index 05286af72683,0dde8bf56595..000000000000
+--- a/lib/zstd/common/portability_macros.h
++++ b/lib/zstd/common/portability_macros.h
+@@@ -59,15 -53,15 +59,15 @@@
+   * Enabled for clang & gcc >=3D4.8 on x86 when BMI2 isn't enabled by defa=
+ult.
+   */
+  #ifndef DYNAMIC_BMI2
+ -  #if ((defined(__clang__) && __has_attribute(__target__)) \
+ +#  if ((defined(__clang__) && __has_attribute(__target__)) \
+        || (defined(__GNUC__) \
+-           && (__GNUC__ >=3D 5 || (__GNUC__ =3D=3D 4 && __GNUC_MINOR__ >=
+=3D 8)))) \
++           && (__GNUC__ >=3D 11))) \
+ -      && (defined(__x86_64__) || defined(_M_X64)) \
+ +      && (defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) ||=
+ defined(_M_X64)) \
+        && !defined(__BMI2__)
+ -  #  define DYNAMIC_BMI2 1
+ -  #else
+ -  #  define DYNAMIC_BMI2 0
+ -  #endif
+ +#    define DYNAMIC_BMI2 1
+ +#  else
+ +#    define DYNAMIC_BMI2 0
+ +#  endif
+  #endif
+ =20
+  /*
+
+--Sig_/czFsEbvN6wl_GngY3ZKjha.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfg4XgACgkQAVBC80lX
-0GxCoAf/bkjXdjn49ey9ErEFeWe7xhSBdWZSq1LYbtcGPpvApio0Y3A8aiOvHvjy
-R4sKn9/L/m8jFXIDj53D5to9Tw+XMdn/Tsh3vJR1OR1xX1iPn0ST5baBZr8gWau/
-B6aZHBD3AHq+n1zz2/XW3PTTT9eAV/5KHTp802nFc2RarQgobzjrnIDxwhG0K3nX
-A0D/wh2jVg9UQjmK7RAC8oaQfmpF9rOFYMA3HUO5loiTVFF9ucWXLTj22rlR5Wba
-eeEG28OCiFvds7AyzqVczngdDLMrrPXh0kkqDIYYXae5VtulZNXJnuKy1utv37uY
-3ZwPMk8IvZm1gD1d7Ny25iM43hPn8Q==
-=+1Nm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfg7tkACgkQAVBC80lX
+0GzDiAf+LsQ+E8/64x9fP1QR67r0pPVc3pnPZtHFlthPeQFifAgoynTjV9tSfk0l
+dbFpywkt4EPCq9bIT5gchrZfjy9rLnvtj41N82c3ycyaiLiMj3iBTq/HJyrzYXH7
+/guCk/GjvbImDyixsOQVo0rd8jYjoExofD+9mHkgu0FkZywIgZylE/C8sl0VEWeb
+cftbhroX1gHy12Gxeu8L+0dofaJ4r3NOynQ290bLbHMUtUB4nLdEpSn9Adc4QQH+
+8/afXxud+wT5YKZBh8HenSh8FYp6lQpiLPG97H5HzI7TFJYuwtkNjmUBu3Gc4wi6
+bTuSb/PeDCbxcDIh4m/d/lp9BB2wRQ==
+=/afS
 -----END PGP SIGNATURE-----
 
---Sig_/SQO_sz4ZsQqxbJaMZTZyPSj--
+--Sig_/czFsEbvN6wl_GngY3ZKjha.--
 

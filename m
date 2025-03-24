@@ -1,65 +1,64 @@
-Return-Path: <linux-next+bounces-5971-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5972-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67063A6E108
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 18:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 072DDA6E11F
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 18:40:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EFE21897E97
-	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 17:36:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9F6E1897AEA
+	for <lists+linux-next@lfdr.de>; Mon, 24 Mar 2025 17:38:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2ECD266F09;
-	Mon, 24 Mar 2025 17:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1534D267B62;
+	Mon, 24 Mar 2025 17:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TTLmt0U0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lmig1M0o"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE82266F01;
-	Mon, 24 Mar 2025 17:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993AD267B11;
+	Mon, 24 Mar 2025 17:33:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742837590; cv=none; b=c1vRnO051NTBUxyru4cco7QfQ0vXjerm0ojkPxCg4URZW9nSg1iSyl7vcBTlsmqNaWpNwPfYoGezRkLoqH0C2XA2/SdhRMQu6Jt9zgv5ImAWRltFs3hz9zslVDFo7w3dQ4Qaj7uJaLO+dM87cEd0BfeSalk6KS09eq+veL/ESO8=
+	t=1742837600; cv=none; b=REVXqQS5o9LZ4EoyQ4/8bDCbpd266GYNz/QCLI4JM1ugnb0c9zYDc4zRKLisMhZQ54ytifugVzhOFZ7KWjX6DN+zUojkkakiM/93s7hxheFGwxm3rrFDeF+0tvPh8jlBeT+WvAHrW5E3cerrSPU9gWUBFQpr0vRkyhAwS4+enQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742837590; c=relaxed/simple;
-	bh=6z1jVV/yKXBtpI1jJEON4mBcVHyI6frM0d76FlbA/Cc=;
+	s=arc-20240116; t=1742837600; c=relaxed/simple;
+	bh=5PgJCWrmA1a2uCozek4IhhKjd8jMGQnwBUzXUFNdLdc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iPvkWdYZmedSlKljKtscit7VkqrGVns9WDhP/pbTx0R7hZwq4ovl+dannSa95Eat88VI27koedLoClZuf/SUOExkoy3SLPiIjngziPYucGgFQRyJO1lTOXDfrp9kjrYCxJ0/ed1pqyEJf1AnRvCtJrPkFZGHHZubxCsO5Nbh0Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TTLmt0U0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3094EC4CEED;
-	Mon, 24 Mar 2025 17:33:07 +0000 (UTC)
+	 MIME-Version; b=F+Cg+tTQOG8g+wT8QV9vbgXmCd6tw/gsdFB5uGGiLnTySIT2KBe4elZQpNhWlmDYliwomn29yoM8W+kYEJx42Npm1iFGFahFPD8WH2e2SyWXV5ygIL8aeY0Bk1aKzcNqwQrNHP0vEiNgiVKfZ0XkdxU33QlPkUvKpnLRsH+23HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lmig1M0o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B0D7C4CEE4;
+	Mon, 24 Mar 2025 17:33:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742837590;
-	bh=6z1jVV/yKXBtpI1jJEON4mBcVHyI6frM0d76FlbA/Cc=;
+	s=k20201202; t=1742837600;
+	bh=5PgJCWrmA1a2uCozek4IhhKjd8jMGQnwBUzXUFNdLdc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TTLmt0U0lb/WjNY3npIyMTIsK0uZkYSq5v4j3ttcma+yWik+b8gfSyRnC0SudDq1c
-	 lleOlzWq4F814O3jZPPFKDz9Guw8uzqcYKThypwFesTCb9NX9TJ+gxECoA9JDx6mBn
-	 m57z8frYgyQv0rLXGwagCrbZo4JcPGK5EA9L5hbrpYJ45TX+THcOmoXIIiChrcFF62
-	 /Pr9wXdZbYfZcGliCKARwh4ycVJtUOTz1BPu8E8wI8dMTQm+AVlsLnLasBiC8Diq39
-	 fF4MV1ew7is8TOnR+Yod+WNklpqmS9YWh7lvrch5zKMavSn5YavlOEENonT8End3vs
-	 FdLiawokJYNvg==
+	b=lmig1M0ocMObm4YsaaDsh0k/5azy/Ys46N/oK536aHhWpeuNf/tHfUFRiMEcztSqU
+	 yk3A9AExIdhs6jZw1Jfbzx3u7clE17drz+0vtou+c4GHOgJqPSUV7y+KO6szBRIy26
+	 khN9wuKwlvHv9ZZkG4pOyhHwdQgELSvX4Z1BRJzRe7As5xWgRac7trN6s6INMRe9Gx
+	 aFebhacfWG++vBWqYxX9DScuWmlCJcTxwswfXuh7teBmZbmI22Azrho7h4gvAfca1X
+	 q4/EGf9cmUQaWPuf2vN1FcdBZIIYxV2IHLxTo60ByRvF4H+5Nj8WruvCFml9+Plhd4
+	 A8AnAJQ3VfY8w==
 From: Arnd Bergmann <arnd@kernel.org>
 To: Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Masahiro Yamada <masahiroy@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>
+	Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>
 Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
 	linux-next@vger.kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Easwar Hariharan <eahariha@linux.microsoft.com>,
-	live-patching@vger.kernel.org,
+	Tom Rix <trix@redhat.com>,
+	Marco Pagani <marpagan@redhat.com>,
+	Russ Weight <russ.weight@linux.dev>,
+	linux-fpga@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 03/10] samples/livepatch: add module descriptions
-Date: Mon, 24 Mar 2025 18:32:28 +0100
-Message-Id: <20250324173242.1501003-3-arnd@kernel.org>
+Subject: [PATCH 04/10] fpga: tests: add module descriptions
+Date: Mon, 24 Mar 2025 18:32:29 +0100
+Message-Id: <20250324173242.1501003-4-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250324173242.1501003-1-arnd@kernel.org>
 References: <20250324173242.1501003-1-arnd@kernel.org>
@@ -73,82 +72,49 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Every module should have a description, so add one for each of these modules.
+Modules without a description now cause a warning:
+
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- samples/livepatch/livepatch-callbacks-busymod.c | 1 +
- samples/livepatch/livepatch-callbacks-demo.c    | 1 +
- samples/livepatch/livepatch-callbacks-mod.c     | 1 +
- samples/livepatch/livepatch-sample.c            | 1 +
- samples/livepatch/livepatch-shadow-fix1.c       | 1 +
- samples/livepatch/livepatch-shadow-fix2.c       | 1 +
- 6 files changed, 6 insertions(+)
+ drivers/fpga/tests/fpga-bridge-test.c | 1 +
+ drivers/fpga/tests/fpga-mgr-test.c    | 1 +
+ drivers/fpga/tests/fpga-region-test.c | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/samples/livepatch/livepatch-callbacks-busymod.c b/samples/livepatch/livepatch-callbacks-busymod.c
-index 69105596e72e..4d6030739fcb 100644
---- a/samples/livepatch/livepatch-callbacks-busymod.c
-+++ b/samples/livepatch/livepatch-callbacks-busymod.c
-@@ -56,4 +56,5 @@ static void livepatch_callbacks_mod_exit(void)
+diff --git a/drivers/fpga/tests/fpga-bridge-test.c b/drivers/fpga/tests/fpga-bridge-test.c
+index b9ab29809e96..124ba40e32b1 100644
+--- a/drivers/fpga/tests/fpga-bridge-test.c
++++ b/drivers/fpga/tests/fpga-bridge-test.c
+@@ -170,4 +170,5 @@ static struct kunit_suite fpga_bridge_suite = {
  
- module_init(livepatch_callbacks_mod_init);
- module_exit(livepatch_callbacks_mod_exit);
-+MODULE_DESCRIPTION("Live patching demo for (un)patching callbacks");
- MODULE_LICENSE("GPL");
-diff --git a/samples/livepatch/livepatch-callbacks-demo.c b/samples/livepatch/livepatch-callbacks-demo.c
-index 11c3f4357812..9e69d9caed25 100644
---- a/samples/livepatch/livepatch-callbacks-demo.c
-+++ b/samples/livepatch/livepatch-callbacks-demo.c
-@@ -192,5 +192,6 @@ static void livepatch_callbacks_demo_exit(void)
+ kunit_test_suite(fpga_bridge_suite);
  
- module_init(livepatch_callbacks_demo_init);
- module_exit(livepatch_callbacks_demo_exit);
-+MODULE_DESCRIPTION("Live patching demo for (un)patching callbacks");
++MODULE_DESCRIPTION("KUnit test for the FPGA Bridge");
  MODULE_LICENSE("GPL");
- MODULE_INFO(livepatch, "Y");
-diff --git a/samples/livepatch/livepatch-callbacks-mod.c b/samples/livepatch/livepatch-callbacks-mod.c
-index 2a074f422a51..d1851b471ad9 100644
---- a/samples/livepatch/livepatch-callbacks-mod.c
-+++ b/samples/livepatch/livepatch-callbacks-mod.c
-@@ -38,4 +38,5 @@ static void livepatch_callbacks_mod_exit(void)
+diff --git a/drivers/fpga/tests/fpga-mgr-test.c b/drivers/fpga/tests/fpga-mgr-test.c
+index 9cb37aefbac4..8748babb0504 100644
+--- a/drivers/fpga/tests/fpga-mgr-test.c
++++ b/drivers/fpga/tests/fpga-mgr-test.c
+@@ -330,4 +330,5 @@ static struct kunit_suite fpga_mgr_suite = {
  
- module_init(livepatch_callbacks_mod_init);
- module_exit(livepatch_callbacks_mod_exit);
-+MODULE_DESCRIPTION("Live patching demo for (un)patching callbacks, support module");
- MODULE_LICENSE("GPL");
-diff --git a/samples/livepatch/livepatch-sample.c b/samples/livepatch/livepatch-sample.c
-index cd76d7ebe598..5263a2f31c48 100644
---- a/samples/livepatch/livepatch-sample.c
-+++ b/samples/livepatch/livepatch-sample.c
-@@ -66,5 +66,6 @@ static void livepatch_exit(void)
+ kunit_test_suite(fpga_mgr_suite);
  
- module_init(livepatch_init);
- module_exit(livepatch_exit);
-+MODULE_DESCRIPTION("Kernel Live Patching Sample Module");
++MODULE_DESCRIPTION("KUnit test for the FPGA Manager");
  MODULE_LICENSE("GPL");
- MODULE_INFO(livepatch, "Y");
-diff --git a/samples/livepatch/livepatch-shadow-fix1.c b/samples/livepatch/livepatch-shadow-fix1.c
-index f3f153895d6c..cbf68ca40097 100644
---- a/samples/livepatch/livepatch-shadow-fix1.c
-+++ b/samples/livepatch/livepatch-shadow-fix1.c
-@@ -168,5 +168,6 @@ static void livepatch_shadow_fix1_exit(void)
+diff --git a/drivers/fpga/tests/fpga-region-test.c b/drivers/fpga/tests/fpga-region-test.c
+index 6a108cafded8..020ceac48509 100644
+--- a/drivers/fpga/tests/fpga-region-test.c
++++ b/drivers/fpga/tests/fpga-region-test.c
+@@ -214,4 +214,5 @@ static struct kunit_suite fpga_region_suite = {
  
- module_init(livepatch_shadow_fix1_init);
- module_exit(livepatch_shadow_fix1_exit);
-+MODULE_DESCRIPTION("Live patching demo for shadow variables");
- MODULE_LICENSE("GPL");
- MODULE_INFO(livepatch, "Y");
-diff --git a/samples/livepatch/livepatch-shadow-fix2.c b/samples/livepatch/livepatch-shadow-fix2.c
-index 361046a4f10c..b99122cb221f 100644
---- a/samples/livepatch/livepatch-shadow-fix2.c
-+++ b/samples/livepatch/livepatch-shadow-fix2.c
-@@ -128,5 +128,6 @@ static void livepatch_shadow_fix2_exit(void)
+ kunit_test_suite(fpga_region_suite);
  
- module_init(livepatch_shadow_fix2_init);
- module_exit(livepatch_shadow_fix2_exit);
-+MODULE_DESCRIPTION("Live patching demo for shadow variables");
++MODULE_DESCRIPTION("KUnit test for the FPGA Region");
  MODULE_LICENSE("GPL");
- MODULE_INFO(livepatch, "Y");
 -- 
 2.39.5
 

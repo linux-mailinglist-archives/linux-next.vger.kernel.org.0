@@ -1,120 +1,127 @@
-Return-Path: <linux-next+bounces-6006-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6007-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55E52A70DAE
-	for <lists+linux-next@lfdr.de>; Wed, 26 Mar 2025 00:39:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AD7AA70DD8
+	for <lists+linux-next@lfdr.de>; Wed, 26 Mar 2025 00:57:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 984673BC4CD
-	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 23:38:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAE3E188A48C
+	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 23:57:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F068E1DEFD7;
-	Tue, 25 Mar 2025 23:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BEB3269CFD;
+	Tue, 25 Mar 2025 23:57:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IRZiowHK"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="j3i+yTRJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MVc27JQa"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9659A18A6A8;
-	Tue, 25 Mar 2025 23:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1EC19067C;
+	Tue, 25 Mar 2025 23:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742945941; cv=none; b=gvcaCEfcUaNgwHSCm7KAm6vIStrQvXTuI7QUXDit/TETITcVGgffhc4mK3Am8ZMLLiM2iieuvRwDWpfeuc+vcFsiV868lrHy5RCXmVclCvbC2hfcO2ieMAUd3MgLMxDfcQS83otcyWA7jIdxRUPLp+RNQra7XZsb9XcQm9CgUDc=
+	t=1742947053; cv=none; b=GOXQcBli8SKxUEKaAujwtudC6n1rTSFIAhX2Vr4+B1N0V0oZE7NiXtkBZfbkuapozKu421ae0J9I7JW4V5yTFIUtLBKQxaYWsgBrd4l6++YznczO5Q5m7J15HuLk8j3wTibmL3zB42Wy3nM9B4AFDR6y6F2CHnbw8vwCMfXAbHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742945941; c=relaxed/simple;
-	bh=KDrSbAJqMLnDB/8t2Mm0VghI0h21RNyKGidQ4EM+LZg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cpPGOCmMm8Dp4AWR/vtAEw5FYa4QbyZSe6RJx0boCX+X8aer8qiPiHUHz/LamlvcHNR+I4nN49m4kL7SW6G510C5Pl2ZelXMeGFGxVLwknLjEgux1ddf0tubVGoVEHk/NMi+Vw26n1WavnhklTuDJaKYYdAtCMPqNVf1C76iEns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IRZiowHK; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1742945936;
-	bh=ofjW4FLKRx2ZxcY07rp0Sdj8ojIDQZhJLvWqQPeCnH0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=IRZiowHKPR6Yyt+Ydc/EUJQydDcgHOeLWK2Q66QZH2gE7FDTqAsBNaiq4DQYbAR/a
-	 aqdv3NKfCdL2UNrF2ccUvCtOXxrK+8rFsIBTjtH9/131xdZGrRIh/9fNLm2FU25fo9
-	 SfVTRO/uMceAYoQUprxacom03JIgdip9PoPcw0BxSs0FAWvVSBlE4J2KIfyXrGPF6W
-	 jthxlxkUIg8VuOV9Yz+BnOFrCdSn6Opb2/NTBoy39B8KZYCi3wsBiZ3Z35NlWIjc3b
-	 q8qMHUK/G5UhGRRqZl8oxkoMfm8zO3FQck18RYBcoKCMhslJf/Jr0ehzEUx8C0UfjH
-	 lUUKxYE5yIrRA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZMmb40DZyz4x21;
-	Wed, 26 Mar 2025 10:38:55 +1100 (AEDT)
-Date: Wed, 26 Mar 2025 10:38:54 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip-fixes tree
-Message-ID: <20250326103854.309e3c60@canb.auug.org.au>
+	s=arc-20240116; t=1742947053; c=relaxed/simple;
+	bh=ulqDgHJi9xktfMH9rS+A6qVuAla4HJJ12RSIL32wVVU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V1e9fffriTlbUtF6yahvYQntcEhiV0AO7pk9DoDzLb9EJ7QCYT1mF/NQw08VRZb8fu5CtGHk6SQtU25/WSaCtCpyY/hcWPj/vUGetaCfpcCx/8mw9/ojKqMgBB4lzUcwHZ81IkDkyigT469QjaqN+oDj2baDMBOj03JZbH8+ktE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=j3i+yTRJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MVc27JQa; arc=none smtp.client-ip=202.12.124.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id A0A012540103;
+	Tue, 25 Mar 2025 19:57:29 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Tue, 25 Mar 2025 19:57:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1742947049; x=1743033449; bh=53epuMkGW7
+	VVw4kHXV3f2OBjzCS034p7lIo4scoUYY4=; b=j3i+yTRJqHHE3+spz2ow3pS9QO
+	c8D7CXpevtAimcUH1unY8ZecbCsNzuAj6IHCZ7qY12SgfImzUrL3g04q3D4H7FkL
+	1vlvK+67YjFPEbKZcI2LNN2xn47K38YeoeYFP2aEolMtED4YHC4y3jQyPeGDisoB
+	Y6h4cOxGoyybTwFkqefcjZzbBBu9p1vseh6y+HWQwsrEVVFsBWNxIf9HYeeBg4gW
+	7NGEWubVTjlG/qx1VmcJ6NDGFF1r/729e4+ZhzLminl3/VCpKzzEsCD8fl57R/lh
+	3J1kGY5TV60YwjLVZlh/LIsoUcWAiAVR7KFXPKqB9Gbe6vw3W5Ro4X69tH1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1742947049; x=1743033449; bh=53epuMkGW7VVw4kHXV3f2OBjzCS034p7lIo
+	4scoUYY4=; b=MVc27JQauJVoYrbojetHAZ9nUNDhSMUNKb/U7UHeH98I8Hacjwt
+	/gfb2V8m4GTMOvLH1UfckM3Jte8H/1QOmivThiGrVmM3U3SJw8Hd7ND9IoOYvJEc
+	qNB1huBXQlvNfe9sGKaewNfUKsbTO0M5B5c20xFQ9k8uQwRjWqAY8Drz+ntfpXom
+	p4GRWwExNpUgmzlvEj9az2539foimIMC4RjeN7ZlROBgItlZOzImWzzDR2vqixCO
+	4oSgu0YQGKZanZApQJifRFVxypQxiaf92VOkdJnlADyGK/RfmKJATKEC7uFO4+3S
+	INseQD/ylabewCylLflMPoZOjiCktk22Y3w==
+X-ME-Sender: <xms:6ELjZ5C2HyAO_6tHWf3aVhbyyVnDFYdweMcK5RJO8d_fJ6UA4KoBNw>
+    <xme:6ELjZ3g3PKCKY3BcCc0svPCCLB5Ti26iL-GkQdkFXvbFsQ4xmn_zNXvHeWxFLXgBD
+    fhdrmeljUSxvQ>
+X-ME-Received: <xmr:6ELjZ0nGeX3lJFhBJmfzwrfGRtKArx-S9sTteSDw8wL8i0CNW73nntwyfiSD>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieegtdefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecugg
+    ftrfgrthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeu
+    fefhgfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopedugedpmhhouggv
+    pehsmhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrg
+    hupdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthho
+    pehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgrsggvnhhisehrvgguhh
+    grthdrtghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhr
+    gh
+X-ME-Proxy: <xmx:6ELjZzxvLjOKHCf2KhELkxcfewZeR8Eychfx7mgoQAvSmHkDfvFmLw>
+    <xmx:6ELjZ-QISVIqjaytnPUJ0ivBUiG5CMXFboYet_PGTOqoniZap2MvLA>
+    <xmx:6ELjZ2Y9LBJDbrDU7blyiW122iZ2bs0QRYDisDCx63CiaVTbACR5SQ>
+    <xmx:6ELjZ_RZpfwy7HWQvwbQg1438y3NhaEPLBqI9ka_w0VNZXvHFC37WQ>
+    <xmx:6ULjZ6qQTmsLQoB8y9BbrKlKjZKm4q__H6uFBgK3dZEIWRg-khRSLYiS>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 25 Mar 2025 19:57:28 -0400 (EDT)
+Date: Tue, 25 Mar 2025 19:56:07 -0400
+From: Greg KH <greg@kroah.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Networking <netdev@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the tty tree
+Message-ID: <2025032501-ominous-mongoose-e772@gregkh>
+References: <20250325173133.7dd68fb1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MqB5uhYn2YpiKFeF+/2rm+a";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250325173133.7dd68fb1@canb.auug.org.au>
 
---Sig_/MqB5uhYn2YpiKFeF+/2rm+a
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 25, 2025 at 05:31:33PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commit is also in the net-next tree as a different commit
+> (but the same patch):
+> 
+>   3c3cede051cd ("tty: caif: removed unused function debugfs_tx()")
+> 
+> This is commit
+> 
+>   29abdf662597 ("tty: caif: removed unused function debugfs_tx()")
+> 
+> in the net-next tree.
 
-Hi all,
+Should be fine, thanks!
 
-After merging the tip-fixes tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-In file included from builtin-check.c:16:
-In function 'save_argv',
-    inlined from 'objtool_run' at builtin-check.c:296:2:
-tools/objtool/include/objtool/warn.h:47:17: error: '%s' directive argument =
-is null [-Werror=3Dformat-overflow=3D]
-   47 |                 "%s%s%s: objtool: " format "\n",        \
-      |                 ^~~~~~~~~~~~~~~~~~~
-tools/objtool/include/objtool/warn.h:92:9: note: in expansion of macro 'WAR=
-N'
-   92 |         WARN("%s: " format " failed: %s", __func__, ##__VA_ARGS__, =
-strerror(errno))
-      |         ^~~~
-builtin-check.c:241:25: note: in expansion of macro 'WARN_GLIBC'
-  241 |                         WARN_GLIBC("strdup(%s)", orig_argv[i]);
-      |                         ^~~~~~~~~~
-cc1: all warnings being treated as errors
-
-Caused (or exposed?) by commit
-
-  c5995abe1547 ("objtool: Improve error handling")
-
-I have used the tip-fixes tree from next-20250325 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MqB5uhYn2YpiKFeF+/2rm+a
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfjPo4ACgkQAVBC80lX
-0GwuEAf8C3bC7t4VGfjB9S9KVGgC35exEa6z6MoU9WAPMy2xG/CpiVRGTvrSMlDS
-TA27RvIOMNBNAVxjH2L2LxQILj1Tvgr1CKds5OtGLXdUdNOYi8iGwgg49pvnOpNh
-zDw1azFfHtr2gaqyQJqbpyiD6wtthy3I3AxvFxoab6b+AMZOQb8qQS604bLh2F97
-6Y9SypHIgcpWRPsl0NBkiUrqGTxR/cqXRZFXmcwo1vvfRIr6BfI0co2Eopkwx3ca
-zp6vdjh2HTu5e7mmaEnY7I+A4bjED6OLhFgSwAzkWTyEfniEYhTeoG4U4+QrP9Nw
-4VTKO17gJV18sOE5KOGXhkx+FIbZRA==
-=dfm0
------END PGP SIGNATURE-----
-
---Sig_/MqB5uhYn2YpiKFeF+/2rm+a--
+greg k-h
 

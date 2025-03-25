@@ -1,98 +1,168 @@
-Return-Path: <linux-next+bounces-6001-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6002-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D069A709BB
-	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 19:59:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53C45A70C5E
+	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 22:48:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E965919A0F95
-	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 18:52:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCE86170873
+	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 21:48:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C1E1F099F;
-	Tue, 25 Mar 2025 18:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDB51DD0F6;
+	Tue, 25 Mar 2025 21:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.co.jp header.i=@amazon.co.jp header.b="C9xCpXD/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EgFswtrb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6BD1EEA33;
-	Tue, 25 Mar 2025 18:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.188.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C10269816;
+	Tue, 25 Mar 2025 21:48:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742928569; cv=none; b=C+BhYYDIVoJJWScrHClP+cHRnKkoCOQWhBTidmV8j7DCT3FyRY2S2muDElx3ZmAA+Krt4r1n3PhGq0LDTEnJLOIgur9zgd7Qm+CF8FMOaUJXYGceghJ0DLrKE1UEHvhCmldYZfnuoTVYmcW/NiiaXaQA7rNsUN0RNTqWcLAd/y4=
+	t=1742939286; cv=none; b=Q/hHX6Y8X7UzmoPBcCqNSfpod+He0hu+xYto/yaW0djmfj3nahjASkDYI71vflMRr2LyIAarD3L+YZVmQhfkWJZhnTWbXwwhV9/9Z5Bsg6n4bm265B6X+YUOkEajmOSdAjztHlfxZ7gJ5S0NmzcQVb90vz9BeM6GLqhMzQVDqFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742928569; c=relaxed/simple;
-	bh=XgDj0Di+eeIry852R2GnUTi+rR8sbqw6aKuA6K7yA90=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kIt4o0DRWuOSCH/fzs/aK2YUBLxYDcH9et0sDGr4dtGaLj08UwJqHD1aDhWYz92YCqbTiUSKj49OySih9NRmZRRsLsMQ7ip2YpFJVuKEZW/Ia8O7PCE9QjjUVNEOOTib4FGgVNyVKJogWnVv6irvU5uhqkAlSduDl7ihzju432o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.jp; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.co.jp header.i=@amazon.co.jp header.b=C9xCpXD/; arc=none smtp.client-ip=207.171.188.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1742928568; x=1774464568;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JD6sTKoX3EKujTqY4AfZRs3b8uuJh68B1d1wrI3KDxg=;
-  b=C9xCpXD/Eqel0k67PrvXDJSXOdMOCYInYTC1CEK2eD9OncTFwEefHdGq
-   uEQx5VHjYuOwg+aPF8rqIqPxHyHTTyh9nu8XGRmBaRS20h+oSQ+qUGdx1
-   jmI3Zuw0vn2oVS/C9e9uAF2pzKNJPV2KFMl2oR+yYWniofZoYoiRFm7GL
-   w=;
-X-IronPort-AV: E=Sophos;i="6.14,275,1736812800"; 
-   d="scan'208";a="810472843"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
-  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2025 18:49:27 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [10.0.21.151:23246]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.26.232:2525] with esmtp (Farcaster)
- id 52821a66-889d-4c0a-8d94-c24f240e5145; Tue, 25 Mar 2025 18:49:27 +0000 (UTC)
-X-Farcaster-Flow-ID: 52821a66-889d-4c0a-8d94-c24f240e5145
-Received: from EX19D005ANA004.ant.amazon.com (10.37.240.178) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 25 Mar 2025 18:49:26 +0000
-Received: from 80a9974c3af6.amazon.com (10.37.245.7) by
- EX19D005ANA004.ant.amazon.com (10.37.240.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 25 Mar 2025 18:49:23 +0000
-From: Takamitsu Iwai <takamitz@amazon.co.jp>
-To: <sraithal@amd.com>
-CC: <bhelgaas@google.com>, <linux-kernel@vger.kernel.org>,
-	<linux-next@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-	<sfr@canb.auug.org.au>,
-	<syzbot+d33642573545e529ab61@syzkaller.appspotmail.com>,
-	<syzkaller-bugs@googlegroups.com>, <takamitz@amazon.com>
-Subject:
-Date: Wed, 26 Mar 2025 03:49:14 +0900
-Message-ID: <20250325184914.85065-1-takamitz@amazon.co.jp>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <f5c68bc9-3c47-49a1-b336-4fe19a9f407f@amd.com>
-References: <f5c68bc9-3c47-49a1-b336-4fe19a9f407f@amd.com>
+	s=arc-20240116; t=1742939286; c=relaxed/simple;
+	bh=04IRWgg/HpQRshpMYk9gujXG5ORwtlf+6cMMWI85m4Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iodD2iI9Lk5HZ6uS1uwP/8HFy2nSLBxa2zdbXCPxZukc30u50Js6kwJg4EEKP6magAAnPZxutndzaiyBjRkvPIlo8uJnZdVvuoG/KI7AYuiM13itllUp79ZORs22PVOLiwSRwELZ68Fs0sPB1trcqHTjoxmdNNwtzWnlRjspSBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EgFswtrb; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1742939279;
+	bh=S/Lk7HTCz1mH7CxSdiTT8+k2unHQol0PXqqHmsW9bCs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EgFswtrbMJibtXncdinzuy8fhAR0s72uqBclF27D1ZKmu7HM6UoGvjA6jM4FUGt2e
+	 0RQ1FvPwmGDANzlAAVzq9gcmZxXoXVwQqRzjrZo5zWaQbMMP6u+2i4fRuBkEdfBcn3
+	 5LRXgpIXi5FdllJg7esXORgiwZUlQ7lbKPQvGFJjvLMwBnIk6ZA2gIT5x/dEjH24ks
+	 WmzjcYaxQcwjtdkWuSRNiRCa5+x6dgUZoBvFO+MOHpnQHVVdUR+V5Ytln2/QpvAQ7g
+	 HK9KlIrNngRMpTnWTJ33NGSoiZ0HbrLfLdBOHXogSIVSAD0OF5zFSWQQ8Wv0WmSCkG
+	 bQEbaFQar3oWg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZMk721z93z4x21;
+	Wed, 26 Mar 2025 08:47:57 +1100 (AEDT)
+Date: Wed, 26 Mar 2025 08:47:56 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the tip tree
+Message-ID: <20250326084756.6554a6a0@canb.auug.org.au>
+In-Reply-To: <20250311150847.5a63db36@canb.auug.org.au>
+References: <20250311150847.5a63db36@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D043UWA004.ant.amazon.com (10.13.139.41) To
- EX19D005ANA004.ant.amazon.com (10.37.240.178)
+Content-Type: multipart/signed; boundary="Sig_/t3Oy3LpV2mq0cUEnQ7sfoNo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Subject: Re: [syzbot] [pci?] linux-next test error: general protection fault in msix_capability_init
+--Sig_/t3Oy3LpV2mq0cUEnQ7sfoNo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-> I tried booting host with my host config, there I am seeing different 
-> issue but host crashes
+On Tue, 11 Mar 2025 15:08:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> The following commits are also in the mm tree as different commits
+> (but the same patches):
+>=20
+>   0b3bc3354eb9 ("arm64: vdso: Switch to generic storage implementation")
+>   127b0e05c166 ("vdso: Rename included Makefile")
+>   30533a55ec8e ("parisc: Remove unused symbol vdso_data")
+>   31e9fa2ba9ad ("arm: vdso: Switch to generic storage implementation")
+>   365841e1557a ("vdso: Add generic architecture-specific data storage")
+>   3ef32d90cdaa ("x86/vdso: Fix latent bug in vclock_pages calculation")
+>   46fe55b204bf ("riscv: vdso: Switch to generic storage implementation")
+>   51d6ca373f45 ("vdso: Add generic random data storage")
+>   5b47aba85810 ("vdso: Introduce vdso/align.h")
+>   69896119dc9d ("MIPS: vdso: Switch to generic storage implementation")
+>   9729dceab17b ("x86/vdso/vdso2c: Remove page handling")
+>   998a8a260819 ("vdso: Remove remnants of architecture-specific random st=
+ate storage")
+>   ac1a42f4e4e2 ("vdso: Remove remnants of architecture-specific time stor=
+age")
+>   d2862bb9d9ca ("LoongArch: vDSO: Switch to generic storage implementatio=
+n")
+>   dafde29605eb ("x86/vdso: Switch to generic storage implementation")
+>   df7fcbefa710 ("vdso: Add generic time data storage")
 
-This issue is also reported in [0] that it is related to the commit
-"d9f2164238d8" (PCI/MSI: Convert pci_msi_ignore_mask to per MSI domain
-flag).
+Those patches are now in Linus' tree.
 
-The new patch is prepared in [1].
+> These are causing the following conflicts:
+>=20
+> CONFLICT (content): Merge conflict in arch/arm64/include/asm/vdso/compat_=
+gettim
+> ofday.h
+> CONFLICT (content): Merge conflict in arch/arm64/include/asm/vdso/vsyscal=
+l.h
+> CONFLICT (content): Merge conflict in arch/powerpc/include/asm/vdso/getti=
+meofday.h
+> CONFLICT (content): Merge conflict in arch/s390/kernel/time.c
+> CONFLICT (content): Merge conflict in arch/x86/include/asm/vdso/gettimeof=
+day.h
+> CONFLICT (content): Merge conflict in include/asm-generic/vdso/vsyscall.h
+> CONFLICT (content): Merge conflict in include/vdso/datapage.h
+> CONFLICT (content): Merge conflict in include/vdso/helpers.h
+> CONFLICT (content): Merge conflict in kernel/time/namespace.c
+> CONFLICT (content): Merge conflict in kernel/time/vsyscall.c
+> CONFLICT (add/add): Merge conflict in lib/vdso/datastore.c
+> CONFLICT (content): Merge conflict in lib/vdso/gettimeofday.c
 
-[0] https://lore.kernel.org/all/qn7fzggcj6qe6r6gdbwcz23pzdz2jx64aldccmsuheabhmjgrt@tawf5nfwuvw7/
-[1] https://lore.kernel.org/all/87v7rxzct0.ffs@tglx/
+The duplicates in the mm-unstable branch of the mm tree are
+
+  93b9079e691e ("vdso: remove remnants of architecture-specific time storag=
+e")
+  82d8b6446a79 ("vdso: remove remnants of architecture-specific random stat=
+e storage")
+  f37aec9ec784 ("x86/vdso/vdso2c: remove page handling")
+  dd2e8659933d ("x86/vdso: switch to generic storage implementation")
+  9ac741560b0b ("powerpc/vdso: switch to generic storage implementation")
+  4ca30cfeffb7 ("MIPS: vdso: switch to generic storage implementation")
+  b9e3ec578ed5 ("s390/vdso: switch to generic storage implementation")
+  64ed071644a8 ("arm: vdso: switch to generic storage implementation")
+  af0452ad92f5 ("LoongArch: vDSO: switch to generic storage implementation")
+  f3f0b0bb602e ("riscv: vdso: switch to generic storage implementation")
+  74100951337a ("arm64: vdso: switch to generic storage implementation")
+  08652b7a1b59 ("vdso: add generic architecture-specific data storage")
+  0ab86f7ece6f ("vdso: add generic random data storage")
+  f3b11eb27436 ("vdso: add generic time data storage")
+  4559a06ae7c1 ("vdso: rename included Makefile")
+  0f187d7ac318 ("vdso: introduce vdso/align.h")
+  2d1b4965384c ("parisc: remove unused symbol vdso_data")
+  837f2f1a07ad ("x86/vdso: fix latent bug in vclock_pages calculation")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/t3Oy3LpV2mq0cUEnQ7sfoNo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfjJIwACgkQAVBC80lX
+0Gzzhwf/d42uHL9S7Wgd6/niqTAoAfIupwk7fGPhcY5CpLjDYx/r+xjvdtSbykJl
+aTXMU4xQgju4qEo6R8jjPxY/2v9P44vwH3bMOZfQ+Rja5vGSywnBl3LlSAUOoAx0
+uvVoJ+sgs1szSJ2QWRs027UlL4dRbojO8Aanmb+zLxoBZIhdKMYufhfyASvS1rXm
+h727+CHBk0IYUYXPAi0dglPb0BrBPQMaPSOn3XhbXaMgfdw22ROKMTCBfANnuqJH
+CPEtvyT3/dHcY7pHW+1hs98WF8BwhcP0YWvGbrLwO28UYSv2LDK0zMMCjqr4SOuf
+Uz7I84ppUpuYea0bbXHVnPCbfG19cQ==
+=s6ZR
+-----END PGP SIGNATURE-----
+
+--Sig_/t3Oy3LpV2mq0cUEnQ7sfoNo--
 

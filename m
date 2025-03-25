@@ -1,154 +1,139 @@
-Return-Path: <linux-next+bounces-5996-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-5997-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A09D8A6ED48
-	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 11:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EDDCA70273
+	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 14:46:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1434170319
-	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 10:02:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0650517A589
+	for <lists+linux-next@lfdr.de>; Tue, 25 Mar 2025 13:36:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 425CA19DF41;
-	Tue, 25 Mar 2025 10:02:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE99781732;
+	Tue, 25 Mar 2025 13:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Q6pRMQhu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ndT6DZJu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6E5254857
-	for <linux-next@vger.kernel.org>; Tue, 25 Mar 2025 10:01:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B81259CA2;
+	Tue, 25 Mar 2025 13:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742896921; cv=none; b=Q3fwJblXs7ShB1ipeOchLclhkl94I8PCTuRjWNDgyBqnfRL5Aq9JxKehHNW82pyi6Z9E8EjMIP7mpyqthHMiuYTUdx0qoAiqPcUG5WNKoFpDM+8/qV8XmHhsVQATugIp1tb/FRzbL7KKHDAxNoAKY1ZfxLUhr9MKtBRlzE6Wa6k=
+	t=1742909601; cv=none; b=FRpNEfMvYOX5987wJv0GdB/joG1GGmBQvozvNzQKlRGuXXpdlW/onhxHAnekGJCMR5VnjTiBuB9hnIyemRV/tyRkX2q6J7iR5ykYqX7F6wctmTIDPVzhWLZe6PLUKxEBg35AnkICGzBHpeiFFPEWHc1KGFDGbHioyHMU0vX5oT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742896921; c=relaxed/simple;
-	bh=u1Az67vlS+7L2hZ01L/haLmuxE5Ik84O0pup0jtGQxo=;
+	s=arc-20240116; t=1742909601; c=relaxed/simple;
+	bh=BKF23zGSOyZlQEQGc6GyJrf5li3gckRHl1ef5SAMu58=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z6f+RFyuvWXjhcQQmoTx+oQcmBWOH+Bhi6M6hz6pxZuqbwsedmrHTlnOUI9Yjwy1qqyltNQtQRAFOc3p8GrbC4EAz7IO8U/sJPtDlc1qu2cRhmOVem40GPsS/2j523vtiOLC9YgFKSJ4T7BgyycF2dAweftes9xBy2sy+LDxSU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Q6pRMQhu; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-390f5f48eafso2952416f8f.0
-        for <linux-next@vger.kernel.org>; Tue, 25 Mar 2025 03:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1742896917; x=1743501717; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nMblP3h4cEOnPAdB6DxVK+neSqUEhMjzJVpUeyv9ozY=;
-        b=Q6pRMQhuY5w1lgGP3RAnEhj2bUvSQvVqSf0VwOB5N4X8fZeEQv2FzOXTncTnjzPlOD
-         +YwtLXGovUiUb2M5rQVIMmxiMIB4oR7zAv0bsNh8WNZs3qJ9Nk7AyB0V45Kpdow/TTRK
-         G4NMaqLH8ayOXxNYvFkYXmKKJ5iYSt8WGfGyj5kfkT50J4eCo04uw5pIsxErlhCEHJd6
-         oqIwYO5DPMagCq+sIXM8ZLcgX4+7tkT/+98SDputthj0Rpp87aTs1J9mYZoy4kXx37r5
-         oXny+7Pjlv0Uk6UXRoXrLdkKyRh5zF8UxN1sfd/TLZFtIol18bDK29eE2UVHvhH21YnJ
-         qWig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742896917; x=1743501717;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nMblP3h4cEOnPAdB6DxVK+neSqUEhMjzJVpUeyv9ozY=;
-        b=OeG6fzioCj3S5b2ploT/kgwXD6F/4AyXgDcM5LzZr7t6Ey2C7l7TnsRkbZsTtwAL/f
-         P95V3+70kQ4ckOLUWg/US52EuVuT9XfIVqG+zYLc03+HWwTI4u+s8G9I9fDRwnh9h7ic
-         MkdldENjZjYEuV9Veapr6yKHUtMNBMOch1ZwMyVYi+BqCl+/wOMbx23aKilpEXg/uDix
-         FdZeDub6S+f6rn2xph/y++jXjQOEMyCl9Ww/biYADd/5RoyUeTfqfKSPyJbj9qg7w8Te
-         dA94BXchdChGR7HYKTFKYZFeVU7R0qRC9LFp6Qi1ZCD2JyWidYAyWTNon5+GPNAN0Zfv
-         2+yQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJAEAFns67eHJgKcNPbKaNklwOcWgRajOpwK+SjOGeUjKkVl4HpmlljVSB7U+5frt5Ia7AdYwsvwZ+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzonj9Fgy8ZRvWMqaUVQskvIUpl0zJlxST5I3PYlLHNJBQweNla
-	dfnDrvVsIi4AbQypu7LlrNDzGATFMoVXoNC4P3Z1JRuXe3cMbkTakh1D9H1kSsA=
-X-Gm-Gg: ASbGncubTNVmWuxWCmyjjeG5EbJdXZP0OrlypfVLWL6qJ0e84XAVpkIrvPWZe6vurTb
-	g8s0IrVKU5A9AuJzioGPzo7SOjCU0f2shWtelKO20ASRBiFwyNM1tgqTZzx6hNM0vbLKKIho5nV
-	d1A+L5wd3l5Au1kiFKqLn8JzVZYimqtlauYaOnGlkUNE/HhpgZ2NRgUvYrMiiOTvdXfAk5ejyv3
-	GYsRj+T8eZvGe0T4o9Rndowaag/nXM2tM7hymrOoPoRvVWjm76noLm5EMjMujZvsq8dta0rE7AI
-	FecY+oRsNHp9UZhptziZTf/pc1O6OuoxqZaFnLl81462
-X-Google-Smtp-Source: AGHT+IENT/IPKbT6Qsm0wWCiMdCWIBWfOpP5sfGyY1vKH3mW6SLMa0nz4G3RYr9l3qhX6nvzCnZKNA==
-X-Received: by 2002:a5d:6d08:0:b0:390:e889:d1cf with SMTP id ffacd0b85a97d-3997f92da8fmr12375291f8f.37.1742896913536;
-        Tue, 25 Mar 2025 03:01:53 -0700 (PDT)
-Received: from pathway.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d440ed793sm200277465e9.39.2025.03.25.03.01.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 03:01:53 -0700 (PDT)
-Date: Tue, 25 Mar 2025 11:01:51 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Stephen Rothwell <sfr@canb.auug.org.au>, linux-next@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Easwar Hariharan <eahariha@linux.microsoft.com>,
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/10] samples/livepatch: add module descriptions
-Message-ID: <Z-J--iv8LzgArWAX@pathway.suse.cz>
-References: <20250324173242.1501003-1-arnd@kernel.org>
- <20250324173242.1501003-3-arnd@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jmspOQmmDVRUtAnHDk8st6PHtrVhPq4gTZ8saMpk3pEvfxn6DTyU+PcBY5YUQG+Hmcm2RvCQgiVeMNmT4ug0oNaIdneC4HC0wucoETz+kiR2aVL9JT9Mq6L2DCNoggljfugAbf+Gfhnq6237oSDFaSnWVn1jD/31GX99lo1Yjh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ndT6DZJu; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742909600; x=1774445600;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=BKF23zGSOyZlQEQGc6GyJrf5li3gckRHl1ef5SAMu58=;
+  b=ndT6DZJu9CXhUVysvXTCd3Q0/suIBz/+wYZPMUt3lX+x+oAAr/Xtoz++
+   Q9keG1g9FzMIu2hKv5wUbykoMK/unZNIQMRlbF8iOXJc1kRzJd9yJHOT7
+   tF95W39tRILxcmm4c2HXgVzGxmS0koo4jDkVhGcjjEe3NxZClMDwaA01p
+   IZ2jjGnmCatFzoN7h2BK7bXB2ydrPU8mfFds/8sK+dbKcN1sbtVZXTDZ2
+   gpiPo/vRcMUMxNdpOnclE3WeAWtvK/dMGYlEpr8uFMNqwryRDZzp8BDG5
+   G8FjDAoZa8dj6Pk50rqSA6juERgNLBwyHns5Watqivg37K26ytebGyWt1
+   A==;
+X-CSE-ConnectionGUID: kFwRKtEMQVe38NoRWWr+Ug==
+X-CSE-MsgGUID: rzEhD69rQ0SZ1ggFrb280Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11384"; a="31759281"
+X-IronPort-AV: E=Sophos;i="6.14,275,1736841600"; 
+   d="scan'208";a="31759281"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2025 06:33:18 -0700
+X-CSE-ConnectionGUID: ByO82vrGR8mAPXI+Zm8Xow==
+X-CSE-MsgGUID: Z44/HhGBRQKJKMmZjXOKsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,275,1736841600"; 
+   d="scan'208";a="129489361"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa004.fm.intel.com with ESMTP; 25 Mar 2025 06:33:17 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+	id DB770367; Tue, 25 Mar 2025 15:33:15 +0200 (EET)
+Date: Tue, 25 Mar 2025 15:33:15 +0200
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To: "Aithal, Srikanth" <sraithal@amd.com>
+Cc: Linux-Next Mailing List <linux-next@vger.kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>, "Lendacky, Thomas" <Thomas.Lendacky@amd.com>, 
+	"Roth, Michael" <Michael.Roth@amd.com>
+Subject: Re: linux-next regression: SNP Guest boot hangs with certain cpu/mem
+ config combination
+Message-ID: <rar5bkfy7iplfhitsbna3b2dmxbk7nunlaiclwars6kffdetl4@lzm7iualliua>
+References: <363f8293-23e3-44d3-8005-b31eb5b7f975@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250324173242.1501003-3-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <363f8293-23e3-44d3-8005-b31eb5b7f975@amd.com>
 
-On Mon 2025-03-24 18:32:28, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Mar 25, 2025 at 02:40:00PM +0530, Aithal, Srikanth wrote:
+> Hello,
 > 
-> Every module should have a description, so add one for each of these modules.
 > 
-> --- a/samples/livepatch/livepatch-callbacks-busymod.c
-> +++ b/samples/livepatch/livepatch-callbacks-busymod.c
-> @@ -56,4 +56,5 @@ static void livepatch_callbacks_mod_exit(void)
->  
->  module_init(livepatch_callbacks_mod_init);
->  module_exit(livepatch_callbacks_mod_exit);
-> +MODULE_DESCRIPTION("Live patching demo for (un)patching callbacks");
+> Starting linux-next build next-20250312, including recent build 20250324, we
+> are seeing an issue where the SNP guest boot hangs at the "boot smp config"
+> step:
+> 
+> 
+>  [ 2.294722] smp: Bringing up secondary CPUs ...
+> [    2.295211] smpboot: Parallel CPU startup disabled by the platform
+> [    2.309687] smpboot: x86: Booting SMP configuration:
+> [    2.310214] .... node  #0, CPUs:          #1   #2   #3   #4 #5   #6  
+> #7   #8   #9  #10  #11  #12  #13  #14  #15  #16  #17 #18  #19  #20  #21 
+> #22  #23  #24  #25  #26  #27  #28  #29  #30 #31  #32  #33  #34  #35  #36 
+> #37  #38  #39  #40  #41  #42  #43 #44  #45  #46  #47  #48  #49  #50  #51 
+> #52  #53  #54  #55  #56 #57  #58  #59  #60  #61  #62  #63  #64  #65  #66 
+> #67  #68  #69 #70  #71  #72  #73  #74  #75  #76  #77  #78  #79  #80  #81 
+> #82 #83  #84  #85  #86  #87  #88  #89  #90  #91  #92  #93  #94  #95 #96 
+> #97  #98  #99 #100 #101 #102 #103 #104 #105 #106 #107 #108 #109 #110 #111
+> #112 #113 #114 #115 #116 #117 #118 #119 #120 #121 #122 #123 #124 #125 #126
+> #127 #128 #129 #130 #131 #132 #133 #134 #135 #136 #137 #138 #139 #140 #141
+> #142 #143 #144 #145 #146 #147 #148 #149 #150 #151 #152 #153 #154 #155 #156
+> #157 #158 #159 #160 #161 #162 #163 #164 #165 #166 #167 #168 #169 #170 #171
+> #172 #173 #174 #175 #176 #177 #178 #179 #180 #181 #182 #183 #184 #185 #186
+> #187 #188 #189 #190 #191 #192 #193 #194 #195 #196 #197 #198
+> --> The guest hangs forever at this point.
+> 
+> 
+> I have observed that certain vCPU and memory combinations work, while others
+> do not. The VM configuration I am using does not have any NUMA nodes.
+> 
+> vcpus             Mem        SNP guest boot
+> <=240            19456M    Boots fine
+> >=241,<255   19456M    Hangs
+> 1-255              2048M    Boots fine
+> 1-255              4096M    Boots fine
+> >71                 8192M    Hangs
+> >41                 6144M    Hangs
+> 
+> When I bisected this issue, it pointed to the following commit :
+> 
+> 
+> *commit 800f1059c99e2b39899bdc67a7593a7bea6375d8*
+> Author: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Date:   Mon Mar 10 10:28:55 2025 +0200
+> 
+>     mm/page_alloc: fix memory accept before watermarks gets initialized
 
-This is another support module similar to livepatch-callbacks-mod.c.
-I would use the same description, here:
+Hm. It is puzzling for me. I don't see how this commit can cause the hang.
 
-MODULE_DESCRIPTION("Live patching demo for (un)patching callbacks, support module");
+Could you track down where hang happens?
 
->  MODULE_LICENSE("GPL");
-> diff --git a/samples/livepatch/livepatch-callbacks-demo.c b/samples/livepatch/livepatch-callbacks-demo.c
-> index 11c3f4357812..9e69d9caed25 100644
-> --- a/samples/livepatch/livepatch-callbacks-demo.c
-> +++ b/samples/livepatch/livepatch-callbacks-demo.c
-> @@ -192,5 +192,6 @@ static void livepatch_callbacks_demo_exit(void)
->  
->  module_init(livepatch_callbacks_demo_init);
->  module_exit(livepatch_callbacks_demo_exit);
-> +MODULE_DESCRIPTION("Live patching demo for (un)patching callbacks");
->  MODULE_LICENSE("GPL");
->  MODULE_INFO(livepatch, "Y");
-> diff --git a/samples/livepatch/livepatch-callbacks-mod.c b/samples/livepatch/livepatch-callbacks-mod.c
-> index 2a074f422a51..d1851b471ad9 100644
-> --- a/samples/livepatch/livepatch-callbacks-mod.c
-> +++ b/samples/livepatch/livepatch-callbacks-mod.c
-> @@ -38,4 +38,5 @@ static void livepatch_callbacks_mod_exit(void)
->  
->  module_init(livepatch_callbacks_mod_init);
->  module_exit(livepatch_callbacks_mod_exit);
-> +MODULE_DESCRIPTION("Live patching demo for (un)patching callbacks, support module");
->  MODULE_LICENSE("GPL");
-
-The rest looks good. With the above change:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Thanks a lot for fixing this.
-
-Arnd, should I push this via the livepatch tree or would you prefer to push
-the entire patchset together? Both ways work for me.
-
-Best Regards,
-Petr
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
 
